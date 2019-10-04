@@ -52,14 +52,14 @@ class EE:
 # Defining the class for the flow of Water
 class Water:
     def __init__(self):
-        self.rate=1.0 # (e.g. vol flow rate m^3/s)
+        self.rate=1.0 # (e.g. velocity)
         self.effort=1.0 # (e.g. pressure)
         #here we will define a different state, viscosity, to illustrate conditional faults
-        self.visc=1.0 
+        self.area=1.0 
         #level is the water level--if there is no water, nothing can flow
         self.level=1.0
     def status(self):
-        status={'rate':self.rate, 'effort':self.effort, 'viscosity': self.visc, 'level': self.level}
+        status={'rate':self.rate, 'effort':self.effort, 'area': self.area, 'level': self.level}
         return status.copy()
 # Defining the class for the flow of Signal
 class Signal:
@@ -145,7 +145,7 @@ class exportWater:
         self.faults=set(['nom'])
     def behavior(self):
         if self.faults.intersection(set(['block'])): #here the fault is some sort of blockage
-            self.Watin.visc=5.0
+            self.Watin.area=0.0
 
     def updatefxn(self,faults=['nom'], time=0): 
         self.faults.update(faults)  
@@ -215,8 +215,8 @@ class moveWat:
             self.EEin.rate=1.0*self.Sigin.power*self.EEin.effort
             self.effstate=1.0 
             
-        self.Watout.effort=self.Sigin.power*self.effstate*self.Watin.level*self.Watout.visc
-        self.Watout.rate=self.Sigin.power*self.effstate*self.Watin.level/self.Watout.visc
+        self.Watout.effort=self.Sigin.power*self.effstate*self.Watin.level/self.Watout.area
+        self.Watout.rate=self.Sigin.power*self.effstate*self.Watin.level*self.Watout.area
         
         self.Watin.effort=self.Watout.effort
         self.Watin.rate=self.Watout.rate
@@ -297,5 +297,7 @@ def findclassification(resgraph, endfaults, endflows, scen):
     expcost=rate*life*totcost
     
     return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
+
+    
 
     
