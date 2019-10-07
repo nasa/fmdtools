@@ -141,7 +141,7 @@ class Direc:
         return status.copy()
 
 class storeEE:
-    def __init__(self, name,EEout, FS, Hsig, Rsig):
+    def __init__(self, name,EEout, FS, Hsig, Rsig, archtype):
         self.type='function'
         self.EEout=EEout
         self.Hsig=Hsig
@@ -150,17 +150,23 @@ class storeEE:
         self.effstate=1.0
         self.ratestate=1.0
         self.soc=2000
-        self.faultmodes={'short':{'rate':'moderate', 'rcost':'major'}, \
-                         'degr':{'rate':'moderate', 'rcost':'minor'}, \
-                         'break':{'rate':'common', 'rcost':'moderate'}, \
-                         'nocharge':{'rate':'moderate','rcost':'minor'}, \
+        self.faultmodes={'nocharge':{'rate':'moderate','rcost':'minor'}, \
                          'lowcharge':{'rate':'moderate','rcost':'minor'}}
+        
+        if archtype=='normal':
+            #architecture: 1 for controllers? + cells in Series & Parallel
+            #Batctl=battery('ctl')
+            Bat00=battery('00')
+            Bat01=battery('01')
+            Bat10=battery('10')
+            Bat11=battery('11')
+            self.batteries=[Bat00, Bat01, Bat10, Bat11]
+            
+        for bat in self.batteries:
+            self.faultmodes.update(bat.faultmodes) 
+        
         self.faults=set(['nom'])
     def condfaults(self):
-        if self.FS.value<1.0:
-            self.faults.update(['break'])
-        if self.EEout.rate>2:
-            self.faults.add('break')
         if self.soc<20:
             self.faults.add('lowcharge')
         if self.soc<1:
@@ -168,24 +174,66 @@ class storeEE:
             self.faults.add('nocharge')
         return 0
     def behavior(self, time):
-        if self.faults.intersection(set(['short'])):
-            self.effstate=0.0
-        elif self.faults.intersection(set(['break'])):
-            self.effstate=0.0
-        elif self.faults.intersection(set(['degr'])):
-            self.effstate=0.5
-        
-        if self.faults.intersection(set(['nocharge'])):
-            self.soc=0.0
-            self.effstate=0.0
+        EE={}
+        soc={}
+        for bat in self.batteries:
+            for fault in self.faults:
+                if fault in bat.faultmodes:
+                    bat.faults.update([fault])
             
-        self.EEout.effort=self.effstate
-        self.soc=self.soc-self.EEout.rate*time
+            bat.behavior(self.FS.value, self.EEout.rate, time)
+            self.faults.update(bat.faults)
+            EE[bat.name]=bat.EEoute
+            soc[bat.name]=bat.soc
+            
+        self.EEout.effort=(np.mean([EE['00'],EE['01']])+np.mean([EE['10'],EE['11']]))/2.0
+        self.soc=np.mean([soc['00'],soc['01'],soc['10'],soc['11']])
     def updatefxn(self,faults=['nom'],opermode=[], time=0):
         self.faults.update(faults)
         self.condfaults()
         self.behavior(time)
-        return 
+        return
+
+class battery:
+    def __init__(self, name):
+        self.soc=2000
+        self.name=name
+        self.t1=1.0
+        self.EEoute=1.0
+        self.faultmodes={name+'short':{'rate':'moderate', 'rcost':'major'}, \
+                         name+'degr':{'rate':'moderate', 'rcost':'minor'}, \
+                         name+'break':{'rate':'common', 'rcost':'moderate'}, \
+                         name+'nocharge':{'rate':'moderate','rcost':'minor'}, \
+                         name+'lowcharge':{'rate':'moderate','rcost':'minor'}}
+        self.faults=set(['nom'])
+        self.effstate=1.0
+    def behavior(self, FS, EEoutr, time):
+        if FS <1.0:
+            self.faults.update([self.name+'break'])
+        if EEoutr>2:
+            self.faults.add(self.name+'break')
+        if self.soc<20:
+            self.faults.add(self.name+'lowcharge')
+        if self.soc<1:
+            self.faults.remove(self.name+'lowcharge')
+            self.faults.add(self.name+'nocharge')
+
+        if self.faults.intersection(set([self.name+'short'])):
+            self.effstate=0.0
+        elif self.faults.intersection(set([self.name+'break'])):
+            self.effstate=0.0
+        elif self.faults.intersection(set([self.name+'degr'])):
+            self.effstate=0.5
+        
+        if self.faults.intersection(set([self.name+'nocharge'])):
+            self.soc=0.0
+            self.effstate=0.0
+            
+        self.EEoute=self.effstate
+        if time > self.t1:
+            self.soc=self.soc-EEoutr*(time-self.t1)
+            self.t1=time
+        return self.EEoute
 
 class distEE:
     def __init__(self,EEin,EEmot,EEctl,FS):
@@ -675,7 +723,7 @@ def initialize():
     ManageHealth=manageHealth(EEctl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj)
     g.add_node('ManageHealth', obj=ManageHealth)
     
-    StoreEE=storeEE('StoreEE',EE_1, Force_ST, HSig_Bat, RSig_Bat)
+    StoreEE=storeEE('StoreEE',EE_1, Force_ST, HSig_Bat, RSig_Bat, 'normal')
     g.add_node('StoreEE', obj=StoreEE)
     
     DistEE=distEE(EE_1,EEmot,EEctl, Force_ST)
