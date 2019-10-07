@@ -54,6 +54,25 @@ class Sig:
         status={'forward':self.forward, 'upward':self.upward}
         return status.copy() 
 
+class HSig:
+    def __init__(self,name):
+        self.flowtype='Health Signal'
+        self.name=name
+        self.health={"nominal":"nominal"}
+        self.healths={1:{"nominal":"nominal"}, 2:{"degraded":"mode"},3:{"failed":"mode"}}
+    def status(self):
+        status={'Health State':self.health}
+        return status.copy() 
+
+class RSig:
+    def __init__(self,name):
+        self.flowtype='Reconfiguration Signal'
+        self.name=name
+        self.mode=1 # 1 nominal, 2+ reconfigured
+    def status(self):
+        status={'Reconfiguration Mode': self.mode}
+        return status.copy() 
+
 class DOF:
     def __init__(self,name):
         self.flowtype='DOF'
@@ -122,9 +141,11 @@ class Direc:
         return status.copy()
 
 class storeEE:
-    def __init__(self, name,EEout, FS):
+    def __init__(self, name,EEout, FS, Hsig, Rsig):
         self.type='function'
         self.EEout=EEout
+        self.Hsig=Hsig
+        self.Rsig=Rsig
         self.FS=FS
         self.effstate=1.0
         self.ratestate=1.0
@@ -214,7 +235,7 @@ class engageLand:
         self.forceout=Forceout
         self.fstate=1.0
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
-                         'deform':{'rate':'moderate', 'rcost':'minor'}, }
+                         'deform':{'rate':'moderate', 'rcost':'minor'}}
         self.faults=set(['nom'])
     def condfaults(self):
         if self.forceout.value<-1.4:
@@ -236,7 +257,48 @@ class engageLand:
         self.condfaults()
         self.behavior(time)
         return 
-
+    
+class manageHealth:
+    def __init__(self, EECtl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj):
+        self.DOFshealth=HSig_DOFs
+        self.Bathealth=HSig_Bat
+        self.DOFconfig=RSig_DOFs
+        self.Batconfig=RSig_Bat
+        self.Ctlconfig=RSig_Ctl
+        self.Trajconfig=RSig_Traj
+        self.FS=Force_ST
+        self.EECtl=EECtl
+        
+        self.faultmodes={'falsemaintenance':{'rate':'moderate', 'rcost':'minor'},\
+                         'falsemasking':{'rate':'rare', 'rcost': 'major'},\
+                         'falseemland':{'rate':'rare', 'rcost': 'major'},\
+                         'lostfunction':{'rate':'rare', 'rcost':'minor'}} 
+        #need to add joint-fault modes of not catching faults?
+        self.faults=set(['nom'])
+    def condfaults(self):
+        if self.FS.value<0.5 or self.EECtl.effort>2.0:
+            self.faults.update(['lostfunction'])
+    def behavior(self):
+        
+        if self.EECtl.effort>0.5 or self.faults.intersection(set(['lostfunction'])):
+            self.DOFconfig=1
+            self.Batconfig=1
+            self.Ctlconfig=1
+            self.Trajconfig=1
+        else:
+            if self.DOFshealth=='degraded':
+                self.DOFconfig=2
+            if self.DOFshealth=='degraded':
+                self.DOFconfig=2
+            if self.DOFshealth=='degraded':
+                self.DOFconfig=2
+        
+    def updatefxn(self,faults=['nom'],opermode=[], time=0):
+        self.faults.update(faults)
+        self.condfaults()
+        self.behavior()
+        return     
+            
 class holdPayload:
     def __init__(self,name, Force_gr,Force_air, Force_struct):
         self.name=name
@@ -270,8 +332,10 @@ class holdPayload:
         return 
     
 class affectDOF:
-    def __init__(self, name, EEin, Ctlin, DOFout,Force, archtype):
+    def __init__(self, name, EEin, Ctlin, DOFout,Force, Hsig, Rsig, archtype):
         self.type='function'
+        self.Hsig=Hsig
+        self.Rsig=Rsig
         self.EEin=EEin
         self.Ctlin=Ctlin
         self.DOF=DOFout
@@ -401,9 +465,10 @@ class line:
         self.EE_in=aux.m2to1([EEin,self.elecstate_in])     
     
 class ctlDOF:
-    def __init__(self, name,EEin, Dir, Ctl, DOFs, FS):
+    def __init__(self, name,EEin, Dir, Ctl, DOFs, FS, Rsig):
         self.type='function'
         self.EEin=EEin
+        self.Rsig=Rsig
         self.Ctl=Ctl
         self.Dir=Dir
         self.DOFs=DOFs
@@ -461,9 +526,10 @@ class ctlDOF:
         self.behavior(time)
 
 class planpath:
-    def __init__(self, name,EEin, Env, Dir, FS):
+    def __init__(self, name,EEin, Env, Dir, FS, Rsig):
         self.type='function'
         self.EEin=EEin
+        self.Rsig=Rsig
         self.Env=Env
         self.Dir=Dir
         self.FS=FS
@@ -587,32 +653,46 @@ def initialize():
     g=nx.DiGraph()
     
     Force_ST=Force('Force_ST')
-    EE_1=EE('EE_1')
-    StoreEE=storeEE('StoreEE',EE_1, Force_ST)
-    g.add_node('StoreEE', obj=StoreEE)
+    Force_Air=Force('Force_Air')
     
+    HSig_DOFs=HSig("HSig_DOFs")
+    HSig_Bat=HSig("HSig_Bat")
+    
+    RSig_DOFs=RSig("RSig_DOFs")
+    RSig_Bat=RSig("RSig_Bat")
+    RSig_Ctl=RSig("RSig_Ctl")
+    RSig_Traj=RSig("RSig_Traj")
+    
+    EE_1=EE('EE_1')
     EEmot=EE('EEmot')
     EEctl=EE('EEctl')
+    
+    Ctl1=Sig('Ctl1')
+    DOFs=DOF('DOFs')
+    Dir1=Direc('Dir1')
+    Env1=Env('Env1')
+    
+    ManageHealth=manageHealth(EEctl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj)
+    g.add_node('ManageHealth', obj=ManageHealth)
+    
+    StoreEE=storeEE('StoreEE',EE_1, Force_ST, HSig_Bat, RSig_Bat)
+    g.add_node('StoreEE', obj=StoreEE)
     
     DistEE=distEE(EE_1,EEmot,EEctl, Force_ST)
     g.add_node('DistEE', obj=DistEE)
     g.add_edge('StoreEE','DistEE', EE_1=EE_1)
     
-    Ctl1=Sig('Ctl1')
-    DOFs=DOF('DOFs')
-    
-    Force_Air=Force('Force_Air')
-    AffectDOF=affectDOF('AffectDOF',EEmot,Ctl1,DOFs,Force_Air, 'quad')
+    AffectDOF=affectDOF('AffectDOF',EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs, 'quad')
     g.add_node('AffectDOF', obj=AffectDOF)
-    Dir1=Direc('Dir1')
-    CtlDOF=ctlDOF('CtlDOF',EEctl, Dir1, Ctl1, DOFs, Force_ST)
+    
+    CtlDOF=ctlDOF('CtlDOF',EEctl, Dir1, Ctl1, DOFs, Force_ST, RSig_Ctl)
     g.add_node('CtlDOF', obj=CtlDOF)
     g.add_edge('DistEE','AffectDOF', EEmot=EEmot)
     g.add_edge('DistEE','CtlDOF', EEctl=EEctl)
     g.add_edge('CtlDOF','AffectDOF', Ctl1=Ctl1,DOFs=DOFs)
 
-    Env1=Env('Env1')
-    Planpath=planpath('Planpath',EEctl, Env1,Dir1, Force_ST)
+    
+    Planpath=planpath('Planpath',EEctl, Env1,Dir1, Force_ST, RSig_Traj)
     g.add_node('Planpath', obj=Planpath)
     g.add_edge('DistEE','Planpath', EEctl=EEctl)
     g.add_edge('Planpath','CtlDOF', Dir1=Dir1)
@@ -639,6 +719,13 @@ def initialize():
     g.add_edge('HoldPayload', 'DistEE', Force_ST=Force_ST)
     g.add_edge('HoldPayload', 'Planpath', Force_ST=Force_ST)
     g.add_edge('HoldPayload', 'CtlDOF', Force_ST=Force_ST)
+    g.add_edge('HoldPayload', 'ManageHealth', Force_ST=Force_ST)
+    
+    g.add_edge('DistEE', 'ManageHealth', EEctl=EEctl)
+    g.add_edge('AffectDOF','ManageHealth', HSig_DOFs=HSig_DOFs, RSig_DOFs=RSig_DOFs)
+    g.add_edge('StoreEE','ManageHealth', HSig_Bat=HSig_Bat, RSig_Bat=RSig_Bat)
+    g.add_edge('ManageHealth', 'CtlDOF', RSig_Ctl=RSig_Ctl)
+    g.add_edge('ManageHealth', 'Planpath', RSig_Traj=RSig_Traj)
     
     return g
 
