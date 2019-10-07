@@ -16,7 +16,7 @@ graph=mdl.initialize()
 
 #scenlist=fp.listinitfaults(graph, mdl.times)
 
-endresults, resgraph, flowhist3, ghist3=fp.runnominal(mdl, track={'DOFs','Dir1', 'Env1', 'Force_LG'})
+endresults1, resgraph, flowhist3, ghist3=fp.runnominal(mdl, track={'DOFs','Dir1', 'Env1', 'Force_LG'})
 fp.showgraph(resgraph)
 fp.plotflowhist(flowhist3, 'N/A', time=0)
 
