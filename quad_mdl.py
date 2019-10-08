@@ -59,24 +59,24 @@ class Env:
         self.start=[0.0,0.0]
         self.start_xw=5
         self.start_yw=5
-        self.start_area=aux.square(self.start,self.start_xw, self.start_yw)
+        self.start_area=square(self.start,self.start_xw, self.start_yw)
         self.flyelev=30
         self.poi_center=[0,150]
         self.poi_xw=50
         self.poi_yw=50
-        self.poi_area=aux.square(self.poi_center, self.poi_xw, self.poi_yw)
+        self.poi_area=square(self.poi_center, self.poi_xw, self.poi_yw)
         self.dang_center=[0,150]
         self.dang_xw=150
         self.dang_yw=150
-        self.dang_area=aux.square(self.dang_center, self.dang_xw, self.dang_yw)
+        self.dang_area=square(self.dang_center, self.dang_xw, self.dang_yw)
         self.safe1_center=[-25,100]
         self.safe1_xw=10
         self.safe1_yw=10
-        self.safe1_area=aux.square(self.safe1_center, self.safe1_xw, self.safe1_yw)
+        self.safe1_area=square(self.safe1_center, self.safe1_xw, self.safe1_yw)
         self.safe2_center=[25,50]
         self.safe2_xw=10
         self.safe2_yw=10
-        self.safe2_area=aux.square(self.safe2_center, self.safe2_xw, self.safe2_yw)
+        self.safe2_area=square(self.safe2_center, self.safe2_xw, self.safe2_yw)
         self.nominal={'elev':1.0, 'x':1.0, 'y':1.0}
     def status(self):
         status={'elev':self.elev, 'x':self.x, 'y':self.y}
@@ -201,7 +201,7 @@ class distEE(fxnblock):
         self.EEmot.effort=self.effstate*self.EEin.effort
         self.EEctl.effort=self.effstate*self.EEin.effort
         
-        self.EEin.rate=aux.m2to1([ self.EEin.effort, self.ratestate, max(self.EEmot.rate,self.EEctl.rate)])
+        self.EEin.rate=m2to1([ self.EEin.effort, self.ratestate, max(self.EEmot.rate,self.EEctl.rate)])
 
 class engageLand(fxnblock):
     def __init__(self,name, Forcein, Forceout):
@@ -210,7 +210,6 @@ class engageLand(fxnblock):
         self.fstate=1.0
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}}
-        self.faults=set(['nom'])
     def condfaults(self, time):
         if self.forceout.value<-1.4:
             self.faults.update(['break'])
@@ -396,8 +395,8 @@ class line:
         elif self.faults.intersection(set([self.name+'propwarp'])):
             self.propstate=0.5
         
-        self.Airout=aux.m2to1([EEin,self.elecstate,Ctlin.upward*cmds['up']+Ctlin.forward*cmds['for'],self.ctlstate,self.mechstate,self.propstate])
-        self.EE_in=aux.m2to1([EEin,self.elecstate_in])     
+        self.Airout=m2to1([EEin,self.elecstate,Ctlin.upward*cmds['up']+Ctlin.forward*cmds['for'],self.ctlstate,self.mechstate,self.propstate])
+        self.EE_in=m2to1([EEin,self.elecstate_in])     
     
 class ctlDOF(fxnblock):
     def __init__(self, name,EEin, Dir, Ctl, DOFs, FS, Rsig):
@@ -633,21 +632,19 @@ def initialize():
     
     return g
 
-#def environment(DOF,t):
-#    if DOF.stab
     
 def findclassification(g, endfaults, endflows, scen):
     
     Env=fp.getflow('Env1', g)
     
     #may need to redo this
-    if  aux.inrange(Env.start_area, Env.x, Env.y):
+    if  inrange(Env.start_area, Env.x, Env.y):
         landloc='nominal'
         area=1
-    elif aux.inrange(Env.safe1_area, Env.x, Env.y) or aux.inrange(Env.safe2_area, Env.x, Env.y):
+    elif inrange(Env.safe1_area, Env.x, Env.y) or inrange(Env.safe2_area, Env.x, Env.y):
         landloc='emsafe'
         area=1000
-    elif aux.inrange(Env.dang_area, Env.x, Env.y):
+    elif inrange(Env.dang_area, Env.x, Env.y):
         landloc='emdang'
         area=100000
     else:
@@ -655,7 +652,7 @@ def findclassification(g, endfaults, endflows, scen):
         area=10000
         
     repaircosts=fp.listfaultsprops(endfaults, g, 'rcost')
-    maxcost=aux.textmax(repaircosts.values())
+    maxcost=textmax(repaircosts.values())
     
     if maxcost=='major':
         repcost=10000
@@ -675,3 +672,44 @@ def findclassification(g, endfaults, endflows, scen):
     expcost=totcost*rate*1e5
     
     return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
+
+## BASE FUNCTIONS
+
+#translates L, R, and C into Left, Right, and Center
+def rlc(x):
+    y='NA'
+    if x=='R': y='Right'
+    if x=='L': y='Left'
+    if x=='C': y='Center'
+    return y
+
+# creates list of corner coordinates for a square, given a center, xwidth, and ywidth
+def square(center,xw,yw):
+    square=[[center[0]-xw/2,center[1]-yw/2],\
+            [center[0]+xw/2,center[1]-yw/2], \
+            [center[0]+xw/2,center[1]+yw/2],\
+            [center[0]-xw/2,center[1]+yw/2]]
+    return square
+
+from shapely.geometry import Point
+from shapely.geometry.polygon import Polygon
+
+#checks to see if a point with x-y coordinates is in the area a
+def inrange(area, x, y):
+    point=Point(x,y)
+    polygon=Polygon(area)
+    return polygon.contains(point)
+
+#takes the maximum of a variety of classifications given a list of strings
+def textmax(texts):
+    if 'major' in texts:
+        maxt='major'
+    elif 'moderate' in texts:
+        maxt='moderate'
+    elif 'minor' in texts:
+        maxt='minor'
+    elif 'replacement' in texts:
+        maxt='replacement'
+    else:
+        maxt='none'
+    return maxt
