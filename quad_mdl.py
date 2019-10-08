@@ -90,13 +90,9 @@ class Direc(flow):
         status={'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': self.power}
         return status.copy()
 
-class storeEE:
+class storeEE(fxnblock):
     def __init__(self, name,EEout, FS, Hsig, Rsig, archtype):
-        self.type='function'
-        self.EEout=EEout
-        self.Hsig=Hsig
-        self.Rsig=Rsig
-        self.FS=FS
+        super().__init__({'EEout':EEout, 'FS':FS, 'Hsig':Hsig, 'Rsig': Rsig})
         self.effstate=1.0
         self.ratestate=1.0
         self.soc=2000
@@ -116,7 +112,7 @@ class storeEE:
             self.faultmodes.update(bat.faultmodes) 
         
         self.faults=set(['nom'])
-    def condfaults(self):
+    def condfaults(self, time):
         if self.soc<20:
             self.faults.add('lowcharge')
         if self.soc<1:
@@ -138,13 +134,8 @@ class storeEE:
             
         self.EEout.effort=(np.mean([EE['00'],EE['01']])+np.mean([EE['10'],EE['11']]))/2.0
         self.soc=np.mean([soc['00'],soc['01'],soc['10'],soc['11']])
-    def updatefxn(self,faults=['nom'],opermode=[], time=0):
-        self.faults.update(faults)
-        self.condfaults()
-        self.behavior(time)
-        return
 
-class battery:
+class battery(fxnblock):
     def __init__(self, name):
         self.soc=2000
         self.name=name
@@ -185,21 +176,15 @@ class battery:
             self.t1=time
         return self.EEoute
 
-class distEE:
+class distEE(fxnblock):
     def __init__(self,EEin,EEmot,EEctl,FS):
-        self.useprop=1.0
-        self.type='function'
-        self.EEin=EEin
-        self.EEmot=EEmot
-        self.EEctl=EEctl
-        self.FS=FS
+        super().__init__({'EEin':EEin, 'EEmot':EEmot,'EEctl':EEctl,'FS':FS})
         self.effstate=1.0
         self.ratestate=1.0
         self.faultmodes={'short':{'rate':'moderate', 'rcost':'major'}, \
                          'degr':{'rate':'moderate', 'rcost':'minor'}, \
                          'break':{'rate':'common', 'rcost':'moderate'}}
-        self.faults=set(['nom'])
-    def condfaults(self):
+    def condfaults(self, time):
         if self.FS.value<0.5:
             self.faults.update(['break'])
         if max(self.EEmot.rate,self.EEctl.rate)>2:
@@ -217,25 +202,16 @@ class distEE:
         self.EEctl.effort=self.effstate*self.EEin.effort
         
         self.EEin.rate=aux.m2to1([ self.EEin.effort, self.ratestate, max(self.EEmot.rate,self.EEctl.rate)])
-        
-    def updatefxn(self,faults=['nom'],opermode=[], time=0):
-        self.faults.update(faults)
-        self.condfaults()
-        self.behavior(time)
-        return 
 
-class engageLand:
+class engageLand(fxnblock):
     def __init__(self,name, Forcein, Forceout):
-        self.useprop=1.0
+        super().__init__({'forcein':Forcein, 'forceout':Forceout})
         self.name=name
-        self.type='function'
-        self.forcein=Forcein
-        self.forceout=Forceout
         self.fstate=1.0
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}}
         self.faults=set(['nom'])
-    def condfaults(self):
+    def condfaults(self, time):
         if self.forceout.value<-1.4:
             self.faults.update(['break'])
         elif self.forceout.value<-1.2:
@@ -247,37 +223,24 @@ class engageLand:
             self.fstate=2.0
         else:
             self.fstate=1.0
-            
         self.forceout.value=self.fstate*min([-2.0,self.forcein.value])*0.2
-            
-    def updatefxn(self,faults=['nom'],opermode=[], time=0):
-        self.faults.update(faults)
-        self.condfaults()
-        self.behavior(time)
-        return 
     
-class manageHealth:
+class manageHealth(fxnblock):
     def __init__(self, EECtl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj):
-        self.DOFshealth=HSig_DOFs
-        self.Bathealth=HSig_Bat
-        self.DOFconfig=RSig_DOFs
-        self.Batconfig=RSig_Bat
-        self.Ctlconfig=RSig_Ctl
-        self.Trajconfig=RSig_Traj
-        self.FS=Force_ST
-        self.EECtl=EECtl
+        
+        flows={'DOFshealth':HSig_DOFs, 'Bathealth':HSig_Bat, 'DOFconfig':RSig_DOFs, 'Batconfig':RSig_Bat, \
+               'Ctlconfig':RSig_Ctl, 'Trajconfig':RSig_Traj, 'FS':Force_ST, 'EECtl':EECtl}
+        super().__init__(flows)
         
         self.faultmodes={'falsemaintenance':{'rate':'moderate', 'rcost':'minor'},\
                          'falsemasking':{'rate':'rare', 'rcost': 'major'},\
                          'falseemland':{'rate':'rare', 'rcost': 'major'},\
                          'lostfunction':{'rate':'rare', 'rcost':'minor'}} 
         #need to add joint-fault modes of not catching faults?
-        self.faults=set(['nom'])
-    def condfaults(self):
+    def condfaults(self, time):
         if self.FS.value<0.5 or self.EECtl.effort>2.0:
             self.faults.update(['lostfunction'])
-    def behavior(self):
-        
+    def behavior(self, time):
         if self.EECtl.effort>0.5 or self.faults.intersection(set(['lostfunction'])):
             self.DOFconfig=1
             self.Batconfig=1
@@ -289,27 +252,16 @@ class manageHealth:
             if self.DOFshealth=='degraded':
                 self.DOFconfig=2
             if self.DOFshealth=='degraded':
-                self.DOFconfig=2
-        
-    def updatefxn(self,faults=['nom'],opermode=[], time=0):
-        self.faults.update(faults)
-        self.condfaults()
-        self.behavior()
-        return     
+                self.DOFconfig=2    
             
-class holdPayload:
+class holdPayload(fxnblock):
     def __init__(self,name, Force_gr,Force_air, Force_struct):
         self.name=name
-        self.useprop=1.0
-        self.type='function'
-        self.FG=Force_gr
-        self.FA=Force_air
-        self.FS=Force_struct
+        super().__init__({'FG':Force_gr, 'FA':Force_air, 'FS':Force_struct})
         self.fstate=1.0
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}, }
-        self.faults=set(['nom'])
-    def condfaults(self):
+    def condfaults(self, time):
         if abs(self.FG.value)>1.6:
             self.faults.update(['break'])
         elif abs(self.FG.value)>1.4:
@@ -323,21 +275,11 @@ class holdPayload:
             self.fstate=1.0
         self.FA.value=self.fstate
         self.FS.value=self.fstate
-    def updatefxn(self,faults=['nom'],opermode=[], time=0):
-        self.faults.update(faults)
-        self.condfaults()
-        self.behavior(time)
-        return 
     
-class affectDOF:
+class affectDOF(fxnblock):
     def __init__(self, name, EEin, Ctlin, DOFout,Force, Hsig, Rsig, archtype):
-        self.type='function'
-        self.Hsig=Hsig
-        self.Rsig=Rsig
-        self.EEin=EEin
-        self.Ctlin=Ctlin
-        self.DOF=DOFout
-        self.Force=Force
+        flows={'Hsig':Hsig, 'Rsig':Rsig, 'EEin':EEin, 'Ctlin':Ctlin,'DOF':DOFout,'Force':Force}
+        super().__init__(flows)
         self.archtype=archtype
         self.faultmodes={}
         if archtype=='quad':
@@ -350,7 +292,6 @@ class affectDOF:
             self.forward=[0.5,0.5,-0.5,-0.5]
         for lin in self.lines:
             self.faultmodes.update(lin.faultmodes)  
-        self.faults={'nom'}
     def behavior(self, time):
         Air={}
         EEin={}
@@ -399,10 +340,6 @@ class affectDOF:
         
         #need to expand on this, add directional velocity, etc
         return
-    def updatefxn(self,faults=['nom'],opermode=[], time=0):
-        self.faults.update(faults)
-        self.behavior(time)
-        return 
 
 class line:
     def __init__(self, name):
@@ -462,22 +399,15 @@ class line:
         self.Airout=aux.m2to1([EEin,self.elecstate,Ctlin.upward*cmds['up']+Ctlin.forward*cmds['for'],self.ctlstate,self.mechstate,self.propstate])
         self.EE_in=aux.m2to1([EEin,self.elecstate_in])     
     
-class ctlDOF:
+class ctlDOF(fxnblock):
     def __init__(self, name,EEin, Dir, Ctl, DOFs, FS, Rsig):
-        self.type='function'
-        self.EEin=EEin
-        self.Rsig=Rsig
-        self.Ctl=Ctl
-        self.Dir=Dir
-        self.DOFs=DOFs
-        self.FS=FS
+        super().__init__({'EEin':EEin,'Rsig':Rsig,'Ctl':Ctl,'Dir':Dir,'DOFs':DOFs,'FS':FS})
         self.vel=0.0
         self.t1=0
         self.ctlstate=1.0
         self.faultmodes={'noctl':{'rate':'rare', 'rcost':'high'}, \
                          'degctl':{'rate':'rare', 'rcost':'high'}}
-        self.faults=set(['nom'])
-    def condfaults(self):
+    def condfaults(self, time):
         if self.FS.value<0.5:
             self.faults.update(['noctl'])
     def behavior(self, time):
@@ -518,24 +448,13 @@ class ctlDOF:
         self.Ctl.forward=self.EEin.effort*self.ctlstate*forwardthrottle*pwr
         self.Ctl.upward=self.EEin.effort*self.ctlstate*upthrottle*pwr
 
-    def updatefxn(self,faults=['nom'],opermode=[], time=0):
-        self.condfaults()
-        self.faults.update(faults)
-        self.behavior(time)
-
-class planpath:
+class planpath(fxnblock):
     def __init__(self, name,EEin, Env, Dir, FS, Rsig):
-        self.type='function'
-        self.EEin=EEin
-        self.Rsig=Rsig
-        self.Env=Env
-        self.Dir=Dir
-        self.FS=FS
+        super().__init__({'EEin':EEin,'Rsig':Rsig,'Env':Env,'Dir':Dir,'FS':FS})
         self.mode='taxi'
         self.faultmodes={'noloc':{'rate':'rare', 'rcost':'high'}, \
                          'degloc':{'rate':'rare', 'rcost':'high'}}
-        self.faults=set(['nom'])
-    def condfaults(self):
+    def condfaults(self, time):
         if self.FS.value<0.5:
             self.faults.update(['noloc'])
     def behavior(self, t):
@@ -592,57 +511,43 @@ class planpath:
         if self.EEin.effort<0.5:
             self.Dir.power=0.0
             self.Dir.traj=[0,0,0]
-        
-    def updatefxn(self,faults=['nom'],opermode=[], time=0):
-        self.condfaults()
-        self.faults.update(faults)
-        self.behavior(time)
 
-class trajectory:
+class trajectory(fxnblock):
     def __init__(self, name, Env, DOF, Land, Dir, Force_LG):
         self.type='environment'
-        self.Env=Env
-        self.DOF=DOF
-        self.Land=Land
-        self.Dir=Dir
-        self.Force_LG=Force_LG
+        super().__init__({'Env':Env,'DOF':DOF,'Land':Land, 'Dir': Dir, 'Force_LG': Force_LG})
         self.lasttime=0
         self.t1=0.0
         self.faultmodes={'nom':{'rate':'common', 'rcost':'NA'}, }
-        self.faults=set(['nom'])
-    def condfaults(self):
-        return 0
     def behavior(self, time):
-        maxvel=20.0
-        maxpvel=5.0
         
-        if self.Env.elev<=0.0:
-            self.Force_LG.value=min(-2.0, (self.DOF.vertvel-self.DOF.planvel)/3)
-            flight=0.0
-        else:
-            self.Force_LG.value=0.0
-            flight=1.0
-        
-        if time>self.t1:
-            sign=np.sign(self.DOF.vertvel)
-            damp=-0.02*sign*np.power(self.DOF.vertvel, 2)-0.1*self.DOF.vertvel
-            acc=10*(self.DOF.uppwr-flight)
-            self.DOF.vertvel=self.DOF.vertvel+acc+damp
-            if self.Env.elev<=0.0:
-                self.DOF.vertvel=max(0,self.DOF.vertvel)
-            self.t1=time
-        
-        self.DOF.planvel=flight*maxpvel*self.DOF.planpwr
-                
-        self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
-        self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]
-        self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
-        
-    def updatefxn(self,faults=['nom'],opermode=[], time=0):
         if time>self.lasttime:
-            self.behavior(time)
+            maxvel=20.0
+            maxpvel=5.0
+            
+            if self.Env.elev<=0.0:
+                self.Force_LG.value=min(-2.0, (self.DOF.vertvel-self.DOF.planvel)/3)
+                flight=0.0
+            else:
+                self.Force_LG.value=0.0
+                flight=1.0
+            
+            if time>self.t1:
+                sign=np.sign(self.DOF.vertvel)
+                damp=-0.02*sign*np.power(self.DOF.vertvel, 2)-0.1*self.DOF.vertvel
+                acc=10*(self.DOF.uppwr-flight)
+                self.DOF.vertvel=self.DOF.vertvel+acc+damp
+                if self.Env.elev<=0.0:
+                    self.DOF.vertvel=max(0,self.DOF.vertvel)
+                self.t1=time
+            
+            self.DOF.planvel=flight*maxpvel*self.DOF.planpwr
+                    
+            self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
+            self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]
+            self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
+            
             self.lasttime=time
-        self.condfaults()
 
 ##future: try to automate this part so you don't have to do it in a wierd order
 def initialize():
