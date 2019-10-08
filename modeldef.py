@@ -6,9 +6,10 @@ Created: October 2019
 
 Description: A module to simplify model definition
 """
+import numpy as np
 
-
-#Function class
+# MAJOR CLASSES
+#Function superclass 
 class fxnblock(object):
     def __init__(self,flows):
         self.type = 'function'
@@ -25,6 +26,7 @@ class fxnblock(object):
         self.behavior(time)
         return
 
+#Flow superclass
 class flow(object):
     def __init__(self, attributes):
         self.type='flow'
@@ -32,52 +34,46 @@ class flow(object):
             setattr(self, attribute, attributes[attribute])
     def status(self):
         return vars(self).copy()
+    
+# mode constructor????
+def mode(rate,rcost):
+    return {'rate':rate,'rcost':rcost}
 
-#class EE:
-#    #attributes of the flow are defined during initialization
-#    def __init__(self):
-#        #arbitrary states for the flows can be defined. 
-#        #in this case, rate is the analogue to flow (e.g. current)
-#        #while effort is the analogue to force (e.g. voltage)
-#        self.rate=1.0
-#        self.effort=1.0
-#    #each flow has a status function that relays the values of important states when queried
-#    def status(self):
-#        #each state must be returned in this dictionary to be able to see it in the results
-#        status={'rate':self.rate, 'effort':self.effort}
-#        return status.copy()
-#    
-#def associate(flownames,flowobjs):
-#    flows={}
-#    for i in length(flownames):
-#        flows[flowname[i]]=flowobj
-#    return flows
-#    
-#EE_1=EE()
-#EE_2=EE()
-#
-#class dosomething(fxnblock):
-#    def __init__(self,EE1, EE2):
-#        self.faults=set('nom')
-#        flows={'EE1':EE1,'EE1':EE2}
-#        super().__init__(flows)
-#    def condfaults(self,time):
-#        #A good boss nurtures talent making employees happy!
-#        print("The employees feel all warm and fuzzy then put their talents to good use.")
-#    def behavior(self,time):
-#        #A good boss encourages their employees!
-#        print("The team cheers, starts shouting awesome slogans then gets back to work.")
-#
-#class doless(fxnblock):
-#    def __init__(self,EE1, EE2):
-#        self.faults=set('nom')
-#        flows={'EE1':EE1,'EE1':EE2}
-#        super().__init__(flows)
-#    def behavior(self,time):
-#        #A good boss encourages their employees!
-#        print("The team cheers, starts shouting awesome slogans then gets back to work.")
-#    
-#    
-#testfxn=dosomething(EE_1,EE_2)
-#
-#testfxn2=doless(1,2)
+
+# USEFUL FUNCTIONS FOR MODEL CONSTRUCTION
+#m2to1
+# multiplies a list of numbers which may take on the values infinity or zero
+# in deciding if num is inf or zero, the earlier values take precedence
+def m2to1(x):
+    if np.size(x)>2:
+        x=[x[0], m2to1(x[1:])]
+    if x[0]==np.inf:
+        y=np.inf
+    elif x[1]==np.inf:
+        if x[0]==0.0:
+            y=0.0
+        else:
+            y=np.inf
+    else:
+        y=x[0]*x[1]
+    return y
+
+#trunc
+# truncates a value to 2 (useful if behavior unchanged by increases)
+def trunc(x):
+    if x>2.0:
+        y=2.0
+    else:
+        y=x
+    return y
+
+#truncn
+# truncates a value to n (useful if behavior unchanged by increases)
+def truncn(x, n):
+    if x>n:
+        y=n
+    else:
+        y=x
+    return y
+
+    

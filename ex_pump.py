@@ -25,7 +25,6 @@ The flows are:
 import networkx as nx
 import numpy as np
 
-import auxfunctions as aux
 import faultprop as fp
 from modeldef import *
 
