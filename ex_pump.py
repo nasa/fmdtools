@@ -27,6 +27,7 @@ import numpy as np
 
 import auxfunctions as aux
 import faultprop as fp
+from modeldef import *
 
 #Declare time range to run model over
 times=[0,3, 55]
@@ -92,13 +93,13 @@ class importEE:
     #condfaults changes the state of the system if there is a change in state in a flow
     # using a condfaults method is optional but helpful for delinating between
     # the determination of a fault and the behavior that results
-    def condfaults(self):
+    def condfaults(self,time):
         #in this case, if the current is too high, the line becomes an open circuit
         # (e.g. due to a fuse or line burnout)
         if self.EEout.rate>5.0:
             self.faults.update(['no_v'])
     #behavior defines the behavior of the function
-    def behavior(self):
+    def behavior(self,time):
         #here we can define how the function will behave with different faults
         if self.faults.intersection(set(['no_v'])):
             self.EEout.effort=0.0 #an open circuit means no voltage is exported
@@ -110,54 +111,52 @@ class importEE:
     #generally, leave this part as-is
     def updatefxn(self,faults=['nom'], time=0): #fxns take faults and time as input
         self.faults.update(faults)  #if there is a fault, it is instantiated in the function
-        self.condfaults()           #conditional faults and behavior are then run
-        self.behavior()
+        self.condfaults(time)           #conditional faults and behavior are then run
+        self.behavior(time)
         return 
 
+#A more efficient (and less error-prone) way to define these models is to use 
+#the fxnblock superclass, which adds the common aspects of the function objects:
+# - flows added to .flow
+# - faults set to nominal
+# - the updatefxn() method (and dummy versions of the behavior and confaults method)
+#This will be done for the next models.
+
 # Import Water is the pipe with water going into the pump
-class importWater:
+# We define it here as a subclass of the fxnblock superclass (imported from modeldef.py)
+class importWater(fxnblock):
     #Initializing the function requires the flows going in and out of the function
     def __init__(self,Watout):
-        #flows going into/out of the function need to be made properties of the function
-        self.Watout=Watout
+        #init requires a dictionary of flows with the internal variable name and
+        # the object reference
+        super().__init__({'Watout':Watout})
         self.faultmodes={'no_wat':{'rate':'moderate', 'rcost':'major'}}
-        self.faults=set(['nom'])
-    #in this function, no conditional faults are modelled, so we can remove the method
-    #as well as the corresponding line in updatefxn()
-    def behavior(self):
+    #in this function, no conditional faults are modelled, so we don't need to include it
+    #a dummy version is used in the fxnblock superclass
+    def behavior(self,time):
         #here we can define how the function will behave with different faults
         if self.faults.intersection(set(['no_wat'])):
             self.Watout.level=0.0 #an open circuit means no voltage is exported
         else:
             self.Watout.level=1.0
-    def updatefxn(self,faults=['nom'], time=0): 
-        self.faults.update(faults)  
-        self.behavior()
-        return 
 
 # Import Water is the pipe with water going into the pump
-class exportWater:
+class exportWater(fxnblock):
     #Initializing the function requires the flows going in and out of the function
     def __init__(self,Watin):
         #flows going into/out of the function need to be made properties of the function
-        self.Watin=Watin
+        super().__init__({'Watin':Watin})
         self.faultmodes={'block':{'rate':'moderate', 'rcost':'major'}}
-        self.faults=set(['nom'])
-    def behavior(self):
+    def behavior(self,time):
         if self.faults.intersection(set(['block'])): #here the fault is some sort of blockage
-            self.Watin.area=0.0
+            self.Watin.area=0.1
 
-    def updatefxn(self,faults=['nom'], time=0): 
-        self.faults.update(faults)  
-        self.behavior()
-        return 
 # Import Signal is the on/off switch
-class importSig:
+class importSig(fxnblock):
     def __init__(self,Sigout):
         #flows going into/out of the function need to be made properties of the function
-        self.Sigout=Sigout
+        super().__init__({'Sigout':Sigout})
         self.faultmodes={'no_sig':{'rate':'moderate', 'rcost':'major'}}
-        self.faults=set(['nom'])
     #when the behavior changes over time (and not just internal state) time must
     # be given as an input
     def behavior(self, time):
@@ -173,22 +172,15 @@ class importSig:
                 self.Sigout.power=1.0
             else:
                 self.Sigout.power=0.0
-    def updatefxn(self,faults=['nom'], time=0): 
-        self.faults.update(faults)  
-        self.behavior(time)
-        return 
 
 # Move Water is the pump itself. While one could decompose this further,
 # one function is used for simplicity
-class moveWat:
+class moveWat(fxnblock):
     def __init__(self,EEin, Sigin, Watin, Watout):
-        self.EEin=EEin
-        self.Sigin=Sigin
-        self.Watin=Watin
-        self.Watout=Watout
+        flows={'EEin':EEin, 'Sigin':Sigin, 'Watin':Watin, 'Watout':Watout}
+        super().__init__(flows)
         self.faultmodes={'mech_break':{'rate':'moderate', 'rcost':'major'}, \
                          'short':{'rate':'rare', 'rcost':'major'}}
-        self.faults=set(['nom'])
         #timers can be set by adding variables to functions also
         self.t1=0.0
         self.t2=0.0
@@ -220,12 +212,6 @@ class moveWat:
         
         self.Watin.effort=self.Watout.effort
         self.Watin.rate=self.Watout.rate
-
-    def updatefxn(self,faults=['nom'], time=0): #fxns take faults and time as input
-        self.faults.update(faults)  #if there is a fault, it is instantiated in the function
-        self.condfaults(time)           #conditional faults and behavior are then run
-        self.behavior(time)
-        return 
     
 #INSTANTIATE MODEL
 #the model is initialized using an initialize function
@@ -298,6 +284,10 @@ def findclassification(resgraph, endfaults, endflows, scen):
     
     return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
 
+EE_1=EE()
+Wat_1=Water()
+Wat_2=Water()
+Sig_1=Signal()
     
-
+Move_Wat=moveWat(EE_1, Sig_1, Wat_1, Wat_2)
     
