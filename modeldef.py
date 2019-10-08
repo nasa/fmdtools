@@ -8,7 +8,7 @@ Description: A module to simplify model definition
 """
 
 
-#add timers?
+#Function class
 class fxnblock(object):
     def __init__(self,flows):
         self.type = 'function'
@@ -24,6 +24,14 @@ class fxnblock(object):
         self.condfaults(time)           #conditional faults and behavior are then run
         self.behavior(time)
         return
+
+class flow(object):
+    def __init__(self, attributes):
+        self.type='flow'
+        for attribute in attributes.keys():
+            setattr(self, attribute, attributes[attribute])
+    def status(self):
+        return vars(self).copy()
 
 #class EE:
 #    #attributes of the flow are defined during initialization

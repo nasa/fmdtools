@@ -42,7 +42,7 @@ class EE:
         #arbitrary states for the flows can be defined. 
         #in this case, rate is the analogue to flow (e.g. current)
         #while effort is the analogue to force (e.g. voltage)
-        self.rate=1.0
+        self.rate=0.0
         self.effort=1.0
     #each flow has a status function that relays the values of important states when queried
     def status(self):
@@ -51,26 +51,19 @@ class EE:
         return status.copy()
     
 # Defining the class for the flow of Water
-class Water:
+# this time, we use the flow superclass in modeldef.py to do the same thing
+class Water(flow):
     def __init__(self):
-        self.rate=1.0 # (e.g. velocity)
-        self.effort=1.0 # (e.g. pressure)
-        #here we will define a different state, viscosity, to illustrate conditional faults
-        self.area=1.0 
-        #level is the water level--if there is no water, nothing can flow
-        self.level=1.0
-    def status(self):
-        status={'rate':self.rate, 'effort':self.effort, 'area': self.area, 'level': self.level}
-        return status.copy()
-# Defining the class for the flow of Signal
-class Signal:
-    def __init__(self):
-        #here we define signal as just an on/off state
-        self.power=1.0
-    def status(self):
-        status={'power':self.power}
-        return status.copy()
+        attributes={'rate':1.0, \
+                    'effort':1.0, \
+                    'area':1.0, \
+                    'level':1.0}
+        super().__init__(attributes)
 
+# Defining the class for the flow of Signal
+class Signal(flow):
+    def __init__(self):
+        super().__init__({'power':1.0})
 
 ##DEFINE MODEL FUNCTIONS
 # Functions are, again, defined using Python classes that are instantiated as objects
