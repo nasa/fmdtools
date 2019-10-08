@@ -11,95 +11,48 @@ import numpy as np
 
 import auxfunctions as aux
 import faultprop as fp
+from modeldef import *
 
 #Declare time range to run model over
 times=[0,3, 55]
 
 ##Define flows for model
-class EE:
-    def __init__(self,name):
-        self.rate=1.0
-        self.effort=1.0
-    def status(self):
-        status={'rate':self.rate, 'effort':self.effort}
-        return status.copy()
+class EE(flow):
+    def __init__(self):
+        super().__init__({'rate':1.0, 'effort':1.0})
     
-class Force:
-    def __init__(self,name):
-        self.flowtype='Force'
-        self.name=name
-        self.value=1.0
-    def status(self):
-        status={'value':self.value}
-        return status.copy()
+class Force(flow):
+    def __init__(self):
+        super().__init__({'value':1.0})
 
-class ME:
-    def __init__(self,name):
-        self.flowtype='ME'
-        self.name=name
-        self.rate=1.0
-        self.effort=1.0
-        self.nominal={'rate':1.0, 'effort':1.0}
-    def status(self):
-        status={'rate':self.rate, 'effort':self.effort}
-        return status.copy() 
+class ME(flow):
+    def __init__(self):
+        super().__init__({'rate':1.0, 'effort':1.0})
 
-class Sig:
-    def __init__(self,name):
-        self.flowtype='Sig'
-        self.name=name
-        self.forward=0.0
-        self.upward=0.0
-    def status(self):
-        status={'forward':self.forward, 'upward':self.upward}
-        return status.copy() 
+class Sig(flow):
+    def __init__(self):
+        super().__init__({'forward':0.0, 'upward':1.0}) 
 
-class HSig:
-    def __init__(self,name):
-        self.flowtype='Health Signal'
-        self.name=name
-        self.health={"nominal":"nominal"}
-        self.healths={1:{"nominal":"nominal"}, 2:{"degraded":"mode"},3:{"failed":"mode"}}
-    def status(self):
-        status={'Health State':self.health}
-        return status.copy() 
+class HSig(flow):
+    def __init__(self):
+        super().__init__({'hstate':'nominal'})
 
-class RSig:
-    def __init__(self,name):
-        self.flowtype='Reconfiguration Signal'
-        self.name=name
-        self.mode=1 # 1 nominal, 2+ reconfigured
-    def status(self):
-        status={'Reconfiguration Mode': self.mode}
-        return status.copy() 
+class RSig(flow):
+    def __init__(self):
+        super().__init__({'mode':1}) 
 
-class DOF:
-    def __init__(self,name):
-        self.flowtype='DOF'
-        self.name=name
-        self.stab=1.0
-        self.vertvel=0.0
-        self.planvel=0.0
-        self.uppwr=0.0
-        self.planpwr=0.0
-    def status(self):
-        status={'stab':self.stab, 'vertvel':self.vertvel, 'planvel':self.planvel, 'planpwr':self.planpwr, 'uppwr':self.uppwr}
-        return status.copy() 
-class Land:
-    def __init__(self,name):
-        self.flowtype='Land'
-        self.name=name
-        self.stat='landed'
-        self.area='start'
-        self.nominal={'status':'landed', 'area':'start'}
-    def status(self):
-        status={'status':self.stat, 'area':self.area}
-        return status.copy() 
+class DOF(flow):
+    def __init__(self):
+        attributes={'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0}
+        super().__init__(attributes) 
+        
+class Land(flow):
+    def __init__(self):
+        super().__init__({'status':'landed', 'area':'start'})
 
 class Env:
-    def __init__(self,name):
+    def __init__(self):
         self.flowtype='Env'
-        self.name=name
         self.elev=0.0
         self.x=0.0
         self.y=0.0
@@ -129,13 +82,10 @@ class Env:
         status={'elev':self.elev, 'x':self.x, 'y':self.y}
         return status.copy()
 
-class Direc:
-    def __init__(self,name):
-        self.flowtype='Dir'
-        self.name=name
+class Direc(flow):
+    def __init__(self):
         self.traj=[0,0,0]
-        self.power=1
-        self.nominal={'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1}
+        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1})
     def status(self):
         status={'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': self.power}
         return status.copy()
@@ -700,25 +650,29 @@ def initialize():
     #initialize graph
     g=nx.DiGraph()
     
-    Force_ST=Force('Force_ST')
-    Force_Air=Force('Force_Air')
+    Force_ST=Force()
+    Force_Air=Force()
     
-    HSig_DOFs=HSig("HSig_DOFs")
-    HSig_Bat=HSig("HSig_Bat")
+    HSig_DOFs=HSig()
+    HSig_Bat=HSig()
     
-    RSig_DOFs=RSig("RSig_DOFs")
-    RSig_Bat=RSig("RSig_Bat")
-    RSig_Ctl=RSig("RSig_Ctl")
-    RSig_Traj=RSig("RSig_Traj")
+    RSig_DOFs=RSig()
+    RSig_Bat=RSig()
+    RSig_Ctl=RSig()
+    RSig_Traj=RSig()
     
-    EE_1=EE('EE_1')
-    EEmot=EE('EEmot')
-    EEctl=EE('EEctl')
+    EE_1=EE()
+    EEmot=EE()
+    EEctl=EE()
     
-    Ctl1=Sig('Ctl1')
-    DOFs=DOF('DOFs')
-    Dir1=Direc('Dir1')
-    Env1=Env('Env1')
+    Ctl1=Sig()
+    DOFs=DOF()
+    Dir1=Direc()
+    Env1=Env()
+    
+    Land1=Land()
+    Force_GR=Force()
+    Force_LG=Force()
     
     ManageHealth=manageHealth(EEctl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj)
     g.add_node('ManageHealth', obj=ManageHealth)
@@ -745,9 +699,6 @@ def initialize():
     g.add_edge('DistEE','Planpath', EEctl=EEctl)
     g.add_edge('Planpath','CtlDOF', Dir1=Dir1)
     
-    Land1=Land('Land')
-    Force_GR=Force('Force_GR')
-    Force_LG=Force('Force_LG')
     Trajectory=trajectory('Trajectory',Env1,DOFs,Land1,Dir1, Force_GR)
     g.add_node('Trajectory', obj=Trajectory)
     g.add_edge('Trajectory','AffectDOF',DOFs=DOFs)
