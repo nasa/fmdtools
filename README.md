@@ -30,6 +30,7 @@ It also uses the following packages to be installed on Python 3:
 - `mpl_toolkits`
 - `numpy`
 - `astropy`
+- `shapely` (for `quad_mdl` only)
 
 so make sure to install (e.g. using `pip install packagename`) them before running any of the codes.
 
