@@ -25,16 +25,35 @@ class fxnblock(object):
         self.condfaults(time)           #conditional faults and behavior are then run
         self.behavior(time)
         return
+    def hasfault(self,fault):
+        return self.faults.intersection(set([fault]))
+    def hasfaults(self,faults):
+        return self.faults.intersection(set(faults))
+    def addfault(self,fault):
+        self.faults.update([fault])
+    def addfaults(self,faults):
+        self.faults.update(faults)
+    def replacefault(self, fault_to_replace,fault_to_add):
+        self.faults.add(fault_to_add)
+        self.faults.remove(fault_to_replace)
 
 #Flow superclass
 class flow(object):
     def __init__(self, attributes, name):
         self.type='flow'
         self.flow=name
-        for attribute in attributes.keys():
+        self._initattributes=attributes.copy()
+        self._attributes=attributes.keys()
+        for attribute in self._attributes:
             setattr(self, attribute, attributes[attribute])
+    def reset(self):
+        for attribute in self._initattributes:
+            setattr(self, attribute, self._initattributes[attribute])
     def status(self):
-        return vars(self).copy()
+        attributes={}
+        for attribute in self._attributes:
+            attributes[attribute]=getattr(self,attribute)
+        return attributes.copy()
     
 # mode constructor????
 def mode(rate,rcost):
