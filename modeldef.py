@@ -19,6 +19,7 @@ class fxnblock(object):
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
+        self.time=0.0
     def condfaults(self,time):
         return 0
     def behavior(self,time):
@@ -27,6 +28,7 @@ class fxnblock(object):
         self.faults.update(faults)  #if there is a fault, it is instantiated in the function
         self.condfaults(time)           #conditional faults and behavior are then run
         self.behavior(time)
+        self.time=time
         return
     def hasfault(self,fault):
         return self.faults.intersection(set([fault]))
@@ -54,6 +56,7 @@ class component(object):
         self.type = 'component'
         self.name = name
         self.faults=set(['nom'])
+        self.time=0.0
     def behavior(self,time):
         return 0
     def hasfault(self,fault):

@@ -97,7 +97,6 @@ class battery(component):
     def __init__(self, name):
         super().__init__(name)
         self.soc=2000
-        self.t1=1.0
         self.EEoute=1.0
         self.faultmodes={name+'short':{'rate':'moderate', 'rcost':'major'}, \
                          name+'degr':{'rate':'moderate', 'rcost':'minor'}, \
@@ -122,9 +121,9 @@ class battery(component):
             self.effstate=0.0
             
         self.EEoute=self.effstate
-        if time > self.t1:
-            self.soc=self.soc-EEoutr*(time-self.t1)
-            self.t1=time
+        if time > self.time:
+            self.soc=self.soc-EEoutr*(time-self.time)
+            self.time=time
         return self.EEoute
 
 class distEE(fxnblock):
@@ -315,7 +314,6 @@ class line(component):
 class ctlDOF(fxnblock):
     def __init__(self, name,EEin, Dir, Ctl, DOFs, FS, Rsig):
         super().__init__({'EEin':EEin,'Rsig':Rsig,'Ctl':Ctl,'Dir':Dir,'DOFs':DOFs,'FS':FS}, {'vel':0.0, 'Cs':1.0})
-        self.t1=0
         self.faultmodes={'noctl':{'rate':'rare', 'rcost':'high'}, \
                          'degctl':{'rate':'rare', 'rcost':'high'}}
     def condfaults(self, time):
@@ -324,9 +322,8 @@ class ctlDOF(fxnblock):
         if self.hasfault('noctl'):    self.Cs=0.0
         elif self.hasfault('degctl'): self.Cs=0.5
         
-        if time>self.t1:
+        if time>self.time:
             self.vel=self.DOFs.vertvel
-            self.t1=time
         
         upthrottle=1.0
         
@@ -406,12 +403,10 @@ class planpath(fxnblock):
 class trajectory(fxnblock):
     def __init__(self, name, Env, DOF, Land, Dir, Force_LG):
         super().__init__({'Env':Env,'DOF':DOF,'Land':Land, 'Dir': Dir, 'Force_LG': Force_LG}, {'flight':0.0})
-        self.lasttime=0
-        self.t1=0.0
         self.faultmodes={'nom':{'rate':'common', 'rcost':'NA'}, }
     def behavior(self, time):
         
-        if time>self.lasttime:
+        if time>self.time:
             maxvel=20.0
             maxpvel=5.0
             
@@ -422,22 +417,18 @@ class trajectory(fxnblock):
                 self.Force_LG.value=0.0
                 self.flight=1.0
             
-            if time>self.t1:
-                sign=np.sign(self.DOF.vertvel)
-                damp=-0.02*sign*np.power(self.DOF.vertvel, 2)-0.1*self.DOF.vertvel
-                acc=10*(self.DOF.uppwr-self.flight)
-                self.DOF.vertvel=self.DOF.vertvel+acc+damp
-                if self.Env.elev<=0.0:
-                    self.DOF.vertvel=max(0,self.DOF.vertvel)
-                self.t1=time
+            sign=np.sign(self.DOF.vertvel)
+            damp=-0.02*sign*np.power(self.DOF.vertvel, 2)-0.1*self.DOF.vertvel
+            acc=10*(self.DOF.uppwr-self.flight)
+            self.DOF.vertvel=self.DOF.vertvel+acc+damp
+            if self.Env.elev<=0.0:
+                self.DOF.vertvel=max(0,self.DOF.vertvel)
             
             self.DOF.planvel=self.flight*maxpvel*self.DOF.planpwr
                     
             self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
             self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]
             self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
-            
-            self.lasttime=time
 
 ##future: try to automate this part so you don't have to do it in a wierd order
 def initialize():
