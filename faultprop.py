@@ -490,6 +490,23 @@ def getflow(flowname, g):
                     flowobj=flows[flow]
     return flowobj
 
+#resetgraph
+# resets the graph to nominal conditions (WARNING: UNTESTED & EXPERIMENTAL)
+# may not work with graphs with components!
+def resetgraph(g):
+    #reset flows
+    for edge in g.edges:
+        flows=g.get_edge_data(edge[0],edge[1])
+        for flowname in flows:
+            flow=flows[flowname]['obj']
+            flow.reset()
+    #reset functions
+    for fxnname in g.nodes:
+        fxn=getfxn(fxnname, g)
+        fxn.reset()
+        
+            
+
 
 
     
