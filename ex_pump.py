@@ -57,12 +57,10 @@ class Water(flow):
                     'effort':1.0, \
                     'area':1.0, \
                     'level':1.0}
-        super().__init__(attributes)
+        super().__init__(attributes, 'Water')
 
-# Defining the class for the flow of Signal
-class Signal(flow):
-    def __init__(self):
-        super().__init__({'power':1.0})
+# flows can also be defined using just the superclass, as will be done for the signal
+# flow below.
 
 ##DEFINE MODEL FUNCTIONS
 # Functions are, again, defined using Python classes that are instantiated as objects
@@ -215,7 +213,9 @@ def initialize():
     EE_1=EE()
     Wat_1=Water()
     Wat_2=Water()
-    Sig_1=Signal()
+    #as shown below, flows are often simple enough that they don't need to be defined
+    #as classes at all, but can instead be instantiated directly from the flow class
+    Sig_1=flow({'power':1.0}, 'Signal')
     
     #function objects take their respective flows as input 
     Imp_EE=importEE(EE_1)
@@ -275,11 +275,4 @@ def findclassification(resgraph, endfaults, endflows, scen):
     expcost=rate*life*totcost
     
     return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
-
-EE_1=EE()
-Wat_1=Water()
-Wat_2=Water()
-Sig_1=Signal()
-    
-Move_Wat=moveWat(EE_1, Sig_1, Wat_1, Wat_2)
     
