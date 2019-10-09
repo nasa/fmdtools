@@ -36,54 +36,44 @@ times=[0,3, 55]
 # Functions are, again, defined using Python classes that are instantiated as objects
 
 # Import EE is the line of electricity going into the pump
-class importEE:
+# We define it here as a subclass of the fxnblock superclass (imported from modeldef.py)
+#the fxnblock superclass, which adds the common aspects of the function objects:
+# - flows added to .flow
+# - faults set to nominal
+# - a number of useful methods added for dealing with internal faults (e.g. addfault()) and fault
+# propagation (e.g. updatefxn()) are added to the object
+class importEE(fxnblock):
     #Initializing the function requires the flows going in and out of the function
     def __init__(self,EEout):
-        #flows going into/out of the function need to be made properties of the function
-        self.EEout=EEout
+        #this initializes the fault state of the system and adds needed flows
+        #self.faults will be used to store which faults are in the function
+        #flows will now be attibutes with names given by the keys in the input
+        # dict, e.g. {'EEout':EEout} means self.EEout will be the EEout flow
+        super().__init__({'EEout':EEout})
+
         #fault modes that originate in the function are listed here in a dictionary
         #these modes will be used to generate a list of scenarios
         #each fault can be given arbitrary properties in a dictionary
         #in this case, rate and repair cost information
         self.faultmodes={'no_v':{'rate':'moderate', 'rcost':'major'}, \
                          'inf_v':{'rate':'rare', 'rcost':'major'}}
-        #this initializes the fault state of the system
-        #self.faults will be used to store which faults are in the function
-        self.faults=set(['nom'])
+        
     #condfaults changes the state of the system if there is a change in state in a flow
     # using a condfaults method is optional but helpful for delinating between
     # the determination of a fault and the behavior that results
     def condfaults(self,time):
         #in this case, if the current is too high, the line becomes an open circuit
         # (e.g. due to a fuse or line burnout)
-        if self.EEout.rate>5.0:
-            self.faults.update(['no_v'])
+        if self.EEout.rate>5.0: self.addfault('no_v')
     #behavior defines the behavior of the function
     def behavior(self,time):
         #here we can define how the function will behave with different faults
-        if self.faults.intersection(set(['no_v'])):
-            self.EEout.effort=0.0 #an open circuit means no voltage is exported
-        elif self.faults.intersection(set(['inf_v'])):
-            self.effstate=100.0 #a voltage spike means voltage is much higher
-        else:
-            self.effstate=1.0 #normally, voltage is 1.0
-    #the updatefxn method defines how the function is seen by the fault propogation code
-    #generally, leave this part as-is
-    def updatefxn(self,faults=['nom'], time=0): #fxns take faults and time as input
-        self.faults.update(faults)  #if there is a fault, it is instantiated in the function
-        self.condfaults(time)           #conditional faults and behavior are then run
-        self.behavior(time)
-        return 
-
-#A more efficient (and less error-prone) way to define these models is to use 
-#the fxnblock superclass, which adds the common aspects of the function objects:
-# - flows added to .flow
-# - faults set to nominal
-# - the updatefxn() method (and dummy versions of the behavior and confaults method)
-#This will be done for the next models.
+        if self.hasfault('no_v'): self.EEout.effort=0.0 #an open circuit means no voltage is exported
+        elif self.hasfault('inf_v'): self.effstate=100.0 #a voltage spike means voltage is much higher
+        else: self.effstate=1.0 #normally, voltage is 1.0
 
 # Import Water is the pipe with water going into the pump
-# We define it here as a subclass of the fxnblock superclass (imported from modeldef.py)
+
 class importWater(fxnblock):
     #Initializing the function requires the flows going in and out of the function
     def __init__(self,Watout):

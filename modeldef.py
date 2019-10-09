@@ -36,6 +36,11 @@ class fxnblock(object):
     def replacefault(self, fault_to_replace,fault_to_add):
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
+    def reset(self):            #reset requires flows to be cleared first
+        self.faults.clear()
+        self.faults.add('nom')
+        self.updatefxn(faults=['nom'], time=0)
+        
 
 #Flow superclass
 class flow(object):
