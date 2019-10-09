@@ -15,36 +15,11 @@ from modeldef import *
 #Declare time range to run model over
 times=[0,3, 55]
 
-##Define flows for model
-class EE(flow):
-    def __init__(self):
-        super().__init__({'rate':1.0, 'effort':1.0})
-class Force(flow):
-    def __init__(self):
-        super().__init__({'value':1.0})
-class ME(flow):
-    def __init__(self):
-        super().__init__({'rate':1.0, 'effort':1.0})
-class Sig(flow):
-    def __init__(self):
-        super().__init__({'forward':0.0, 'upward':1.0}) 
-class HSig(flow):
-    def __init__(self):
-        super().__init__({'hstate':'nominal'})
-class RSig(flow):
-    def __init__(self):
-        super().__init__({'mode':1}) 
-class DOF(flow):
-    def __init__(self):
-        attributes={'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0}
-        super().__init__(attributes)      
-class Land(flow):
-    def __init__(self):
-        super().__init__({'status':'landed', 'area':'start'})
-#specialized flows
+#Define specialized flows
 class Env:
     def __init__(self):
-        self.flowtype='Env'
+        self.type = 'flow'
+        self.flow='Environment'
         self.elev=0.0
         self.x=0.0
         self.y=0.0
@@ -76,11 +51,12 @@ class Env:
 class Direc(flow):
     def __init__(self):
         self.traj=[0,0,0]
-        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1})
+        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1}, 'Trajectory')
     def status(self):
         status={'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': self.power}
         return status.copy()
 
+#Define functions
 class storeEE(fxnblock):
     def __init__(self, name,EEout, FS, Hsig, Rsig, archtype):
         super().__init__({'EEout':EEout, 'FS':FS, 'Hsig':Hsig, 'Rsig': Rsig})
@@ -494,27 +470,28 @@ def initialize():
     
     #initialize graph
     g=nx.DiGraph()
-    
-    #initialize flows
-    Force_ST=Force()
-    Force_Air=Force()
-    HSig_DOFs=HSig()
-    HSig_Bat=HSig()
-    RSig_DOFs=RSig()
-    RSig_Bat=RSig()
-    RSig_Ctl=RSig()
-    RSig_Traj=RSig()
-    EE_1=EE()
-    EEmot=EE()
-    EEctl=EE()
-    Ctl1=Sig()
-    DOFs=DOF()
+    ##Define flows for model
+    #initialize one-line flows
+    Force_ST=flow({'value':1.0},'Force')
+    Force_Air=flow({'value':1.0},'Force')
+    Force_GR=flow({'value':1.0},'Force')
+    Force_LG=flow({'value':1.0},'Force')
+    HSig_DOFs=flow({'hstate':'nominal'}, 'Health Signal')
+    HSig_Bat=flow({'hstate':'nominal'}, 'Health Signal')
+    RSig_DOFs=flow({'mode':1}, 'Reconfiguration Signal')
+    RSig_Bat=flow({'mode':1}, 'Reconfig Signal')
+    RSig_Ctl=flow({'mode':1}, 'Reconfig Signal')
+    RSig_Traj=flow({'mode':1}, 'Reconfig Signal')
+    EE_1=flow({'rate':1.0, 'effort':1.0}, 'EE')
+    EEmot=flow({'rate':1.0, 'effort':1.0}, 'EE')
+    EEctl=flow({'rate':1.0, 'effort':1.0}, 'EE')
+    Ctl1=flow({'forward':0.0, 'upward':1.0}, 'Direction Signal')
+    DOFs=flow({'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0}, 'DOFs')
+    Land1=flow({'status':'landed', 'area':'start'}, 'Land')
+    #specialized flows
     Dir1=Direc()
     Env1=Env()
-    Land1=Land()
-    Force_GR=Force()
-    Force_LG=Force()
-    
+
     ManageHealth=manageHealth(EEctl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj)
     g.add_node('ManageHealth', obj=ManageHealth)
     

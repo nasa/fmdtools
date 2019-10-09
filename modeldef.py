@@ -28,8 +28,9 @@ class fxnblock(object):
 
 #Flow superclass
 class flow(object):
-    def __init__(self, attributes):
+    def __init__(self, attributes, name):
         self.type='flow'
+        self.flow=name
         for attribute in attributes.keys():
             setattr(self, attribute, attributes[attribute])
     def status(self):
