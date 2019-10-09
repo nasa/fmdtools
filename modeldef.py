@@ -52,11 +52,14 @@ class fxnblock(object):
         return states.copy(), self.faults
         
 class component(object):
-    def __init__(self,name):
+    def __init__(self,name, states={}):
         self.type = 'component'
         self.name = name
         self.faults=set(['nom'])
         self.time=0.0
+        self._states=states.keys()
+        for state in states.keys():
+            setattr(self, state,states[state])
     def behavior(self,time):
         return 0
     def hasfault(self,fault):

@@ -65,11 +65,7 @@ class storeEE(fxnblock):
         if archtype=='normal':
             #architecture: 1 for controllers? + cells in Series & Parallel
             #Batctl=battery('ctl')
-            Bat00=battery('00')
-            Bat01=battery('01')
-            Bat10=battery('10')
-            Bat11=battery('11')
-            self.batteries=[Bat00, Bat01, Bat10, Bat11]
+            self.batteries=[battery('00'), battery('01'), battery('10'), battery('11')]
             
         for bat in self.batteries:
             self.faultmodes.update(bat.faultmodes)  
@@ -87,7 +83,7 @@ class storeEE(fxnblock):
             
             bat.behavior(self.FS.value, self.EEout.rate, time)
             self.faults.update(bat.faults)
-            EE[bat.name]=bat.EEoute
+            EE[bat.name]=bat.Et
             soc[bat.name]=bat.soc
             
         self.EEout.effort=(np.mean([EE['00'],EE['01']])+np.mean([EE['10'],EE['11']]))/2.0
@@ -95,36 +91,32 @@ class storeEE(fxnblock):
 
 class battery(component):
     def __init__(self, name):
-        super().__init__(name)
-        self.soc=2000
-        self.EEoute=1.0
+        super().__init__(name, {'soc':2000, 'EEe':1.0, 'Et':1.0})
         self.faultmodes={name+'short':{'rate':'moderate', 'rcost':'major'}, \
                          name+'degr':{'rate':'moderate', 'rcost':'minor'}, \
                          name+'break':{'rate':'common', 'rcost':'moderate'}, \
                          name+'nocharge':{'rate':'moderate','rcost':'minor'}, \
                          name+'lowcharge':{'rate':'moderate','rcost':'minor'}}
-        self.effstate=1.0
     def behavior(self, FS, EEoutr, time):
-        if FS <1.0: self.faults.update([self.name+'break'])
-        if EEoutr>2: self.faults.add(self.name+'break')
-        if self.soc<20: self.faults.add(self.name+'lowcharge')
+        if FS <1.0: self.addfault(self.name+'break')
+        if EEoutr>2: self.addfault(self.name+'break')
+        if self.soc<20: self.addfault(self.name+'lowcharge')
         if self.soc<1:
-            self.faults.remove(self.name+'lowcharge')
-            self.faults.add(self.name+'nocharge')
+            self.removefault(self.name+'lowcharge')
+            self.addfault(self.name+'nocharge')
 
-        if self.faults.intersection(set([self.name+'short'])): self.effstate=0.0
-        elif self.faults.intersection(set([self.name+'break'])): self.effstate=0.0
-        elif self.faults.intersection(set([self.name+'degr'])): self.effstate=0.5
+        if self.hasfault(self.name+'short'): self.Et=0.0
+        elif self.hasfault(self.name+'break'): self.Et=0.0
+        elif self.hasfault(self.name+'degr'): self.Et=0.5
         
-        if self.faults.intersection(set([self.name+'nocharge'])):
+        if self.hasfault(self.name+'nocharge'):
             self.soc=0.0
-            self.effstate=0.0
+            self.Et=0.0
             
-        self.EEoute=self.effstate
         if time > self.time:
             self.soc=self.soc-EEoutr*(time-self.time)
             self.time=time
-        return self.EEoute
+        return self.Et
 
 class distEE(fxnblock):
     def __init__(self,EEin,EEmot,EEctl,FS):
@@ -176,7 +168,7 @@ class manageHealth(fxnblock):
     def condfaults(self, time):
         if self.FS.value<0.5 or self.EECtl.effort>2.0: self.addfault('lostfunction')
     def behavior(self, time):
-        if self.EECtl.effort>0.5 or self.faults.intersection(set(['lostfunction'])):
+        if self.EECtl.effort>0.5 or self.hasfault('lostfunction'):
             self.DOFconfig=1
             self.Batconfig=1
             self.Ctlconfig=1
@@ -260,13 +252,7 @@ class affectDOF(fxnblock):
 
 class line(component):
     def __init__(self, name):
-        super().__init__(name)
-        self.elecstate=1.0
-        self.elecstate_in=1.0
-        self.ctlstate=1.0
-        self.mechstate=1.0
-        self.propstate=1.0
-        self.Airout=1.0
+        super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0})
         self.faultmodes={name+'short':{'rate':'moderate', 'rcost':'major'}, \
                          name+'openc':{'rate':'moderate', 'rcost':'major'}, \
                          name+'ctlup':{'rate':'moderate', 'rcost':'minor'}, \
@@ -279,37 +265,31 @@ class line(component):
                          name+'propbreak':{'rate':'veryrare', 'rcost':'replacement'}
                          }
     def behavior(self, EEin, Ctlin, cmds, Force):
-        if Force<=0.0:   self.faults.update([self.name+'mechbreak', self.name+'propbreak'])
-        elif Force<=0.5: self.faults.update([self.name+'mechfriction'])
+        if Force<=0.0:   self.addfaults([self.name+'mechbreak', self.name+'propbreak'])
+        elif Force<=0.5: self.addfault(self.name+'mechfriction')
             
-        if self.faults.intersection(set([self.name+'short'])):
-            self.elecstate=0.0
-            self.elecstate_in=np.inf
-        elif self.faults.intersection(set([self.name+'openc'])):
-            self.elecstate=0.0
-            self.elecstate_in=0.0
-        if self.faults.intersection(set([self.name+'ctlbreak'])):
-            self.ctlstate=0.0
-        elif self.faults.intersection(set([self.name+'ctldn'])):
-            self.ctlstate=0.5
-        elif self.faults.intersection(set([self.name+'ctlup'])):
-            self.ctlstate=2.0
-        if self.faults.intersection(set([self.name+'mechbreak'])):
-            self.mechstate=0.0
-        elif self.faults.intersection(set([self.name+'mechfriction'])):
-            self.mechstate=0.5
-            self.elecstate_in=2.0
-        if self.faults.intersection(set([self.name+'propstuck'])):
-            self.propstate=0.0
-            self.mechstate=0.0
-            self.elecstate_in=4.0
-        elif self.faults.intersection(set([self.name+'propbreak'])):
-            self.propstate=0.0
-        elif self.faults.intersection(set([self.name+'propwarp'])):
-            self.propstate=0.5
+        if self.hasfault(self.name+'short'):
+            self.Eti=0.0
+            self.Eto=np.inf
+        elif self.hasfault(self.name+'openc'):
+            self.Eti=0.0
+            self.Et0=0.0
+        if self.hasfault(self.name+'ctlbreak'): self.Ct=0.0
+        elif self.hasfault(self.name+'ctldn'):  self.Ct=0.5
+        elif self.hasfault(self.name+'ctlup'):  self.Ct=2.0
+        if self.hasfault(self.name+'mechbreak'): self.Mt=0.0
+        elif self.hasfault(self.name+'mechfriction'):
+            self.Mt=0.5
+            self.Eti=2.0
+        if self.hasfault(self.name+'propstuck'):
+            self.Pt=0.0
+            self.Mt=0.0
+            self.Eti=4.0
+        elif self.hasfault(self.name+'propbreak'): self.Pt=0.0
+        elif self.hasfault(self.name+'propwarp'):  self.Pt=0.5
         
-        self.Airout=m2to1([EEin,self.elecstate,Ctlin.upward*cmds['up']+Ctlin.forward*cmds['for'],self.ctlstate,self.mechstate,self.propstate])
-        self.EE_in=m2to1([EEin,self.elecstate_in])     
+        self.Airout=m2to1([EEin,self.Eti,Ctlin.upward*cmds['up']+Ctlin.forward*cmds['for'],self.Ct,self.Mt,self.Pt])
+        self.EE_in=m2to1([EEin,self.Eto])     
     
 class ctlDOF(fxnblock):
     def __init__(self, name,EEin, Dir, Ctl, DOFs, FS, Rsig):
@@ -371,28 +351,15 @@ class planpath(fxnblock):
         elif self.mode=='descend' and self.Env.elev<10: self.mode='land'
         elif self.mode=='land' and self.Env.elev<1: self.mode='taxi'
         
+        self.Dir.power=1.0
         if self.mode=='taxi':  self.Dir.power=0.0
-        elif self.mode=='takeoff':
-            self.Dir.power=1.0
-            self.Dir.traj=[0,0,1]
-        elif self.mode=='climb':
-            self.Dir.power=1.0
-            self.Dir.traj=[0,0,1]
-        elif self.mode=='hover':
-            self.Dir.power=1.0
-            self.Dir.traj=[0,0,0]
-        elif self.mode=='forward':
-            self.Dir.power=1.0
-            self.Dir.traj=[0,1,0]
-        elif self.mode=='backward':
-            self.Dir.power=1.0
-            self.Dir.traj=[0,-1,0]
-        elif self.mode=='descend':
-            self.Dir.power=1.0
-            self.Dir.traj=[0,0,-1]
-        elif self.mode=='land':
-            self.Dir.power=1.0
-            self.Dir.traj=[0,0,-0.1]
+        elif self.mode=='takeoff': self.Dir.traj=[0,0,1]
+        elif self.mode=='climb': self.Dir.traj=[0,0,1]
+        elif self.mode=='hover': self.Dir.traj=[0,0,0]           
+        elif self.mode=='forward': self.Dir.traj=[0,1,0]           
+        elif self.mode=='backward': self.Dir.traj=[0,-1,0]
+        elif self.mode=='descend': self.Dir.traj=[0,0,-1]
+        elif self.mode=='land': self.Dir.traj=[0,0,-0.1]
             
         if self.hasfault('noloc'): self.Dir.traj=[0,0,0]
         elif self.hasfault('degloc'): self.Dir.traj=[0,0,-1]
