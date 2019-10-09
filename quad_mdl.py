@@ -59,10 +59,9 @@ class Direc(flow):
 #Define functions
 class storeEE(fxnblock):
     def __init__(self, name,EEout, FS, Hsig, Rsig, archtype):
-        super().__init__({'EEout':EEout, 'FS':FS, 'Hsig':Hsig, 'Rsig': Rsig})
+        super().__init__({'EEout':EEout, 'FS':FS, 'Hsig':Hsig, 'Rsig': Rsig}, {'soc': 2000})
         self.faultmodes={'nocharge':{'rate':'moderate','rcost':'minor'}, \
                          'lowcharge':{'rate':'moderate','rcost':'minor'}}
-        self.soc=2000
         if archtype=='normal':
             #architecture: 1 for controllers? + cells in Series & Parallel
             #Batctl=battery('ctl')
@@ -151,19 +150,17 @@ class distEE(fxnblock):
 
 class engageLand(fxnblock):
     def __init__(self,name, Forcein, Forceout):
-        super().__init__({'forcein':Forcein, 'forceout':Forceout})
-        self.name=name
-        self.fstate=1.0
+        super().__init__({'forcein':Forcein, 'forceout':Forceout}, {'Ft':1.0})
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}}
     def condfaults(self, time):
         if self.forceout.value<-1.4: self.addfault('break')
         elif self.forceout.value<-1.2: self.addfault('deform')
     def behavior(self, time):
-        if self.hasfault('break'): self.fstate=4.0
-        elif self.hasfault('deform'): self.fstate=2.0
-        else: self.fstate=1.0
-        self.forceout.value=self.fstate*min([-2.0,self.forcein.value])*0.2
+        if self.hasfault('break'): self.Ft=4.0
+        elif self.hasfault('deform'): self.Ft=2.0
+        else: self.Ft=1.0
+        self.forceout.value=self.Ft*min([-2.0,self.forcein.value])*0.2
     
 class manageHealth(fxnblock):
     def __init__(self, EECtl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj):
@@ -193,19 +190,18 @@ class manageHealth(fxnblock):
 class holdPayload(fxnblock):
     def __init__(self,name, Force_gr,Force_air, Force_struct):
         self.name=name
-        super().__init__({'FG':Force_gr, 'FA':Force_air, 'FS':Force_struct})
-        self.fstate=1.0
+        super().__init__({'FG':Force_gr, 'FA':Force_air, 'FS':Force_struct}, {'Ft': 1.0})
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}, }
     def condfaults(self, time):
         if abs(self.FG.value)>1.6: self.addfault('break')
         elif abs(self.FG.value)>1.4: self.addfault('deform')
     def behavior(self, time):
-        if self.hasfault('break'): self.fstate=0.0
-        elif self.hasfault('deform'): self.fstate=0.5
-        else: self.fstate=1.0
-        self.FA.value=self.fstate
-        self.FS.value=self.fstate
+        if self.hasfault('break'): self.Ft=0.0
+        elif self.hasfault('deform'): self.Ft=0.5
+        else: self.Ft=1.0
+        self.FA.value=self.Ft
+        self.FS.value=self.Ft
     
 class affectDOF(fxnblock):
     def __init__(self, name, EEin, Ctlin, DOFout,Force, Hsig, Rsig, archtype):
@@ -318,17 +314,15 @@ class line(component):
     
 class ctlDOF(fxnblock):
     def __init__(self, name,EEin, Dir, Ctl, DOFs, FS, Rsig):
-        super().__init__({'EEin':EEin,'Rsig':Rsig,'Ctl':Ctl,'Dir':Dir,'DOFs':DOFs,'FS':FS})
-        self.vel=0.0
+        super().__init__({'EEin':EEin,'Rsig':Rsig,'Ctl':Ctl,'Dir':Dir,'DOFs':DOFs,'FS':FS}, {'vel':0.0, 'Cs':1.0})
         self.t1=0
-        self.ctlstate=1.0
         self.faultmodes={'noctl':{'rate':'rare', 'rcost':'high'}, \
                          'degctl':{'rate':'rare', 'rcost':'high'}}
     def condfaults(self, time):
         if self.FS.value<0.5: self.addfault('noctl')
     def behavior(self, time):
-        if self.hasfault('noctl'):    self.ctlstate=0.0
-        elif self.hasfault('degctl'): self.ctlstate=0.5
+        if self.hasfault('noctl'):    self.Cs=0.0
+        elif self.hasfault('degctl'): self.Cs=0.5
         
         if time>self.t1:
             self.vel=self.DOFs.vertvel
@@ -356,8 +350,8 @@ class ctlDOF(fxnblock):
         else: forwardthrottle=1.0
         
         pwr=self.Dir.power
-        self.Ctl.forward=self.EEin.effort*self.ctlstate*forwardthrottle*pwr
-        self.Ctl.upward=self.EEin.effort*self.ctlstate*upthrottle*pwr
+        self.Ctl.forward=self.EEin.effort*self.Cs*forwardthrottle*pwr
+        self.Ctl.upward=self.EEin.effort*self.Cs*upthrottle*pwr
 
 class planpath(fxnblock):
     def __init__(self, name,EEin, Env, Dir, FS, Rsig):
@@ -411,8 +405,7 @@ class planpath(fxnblock):
 
 class trajectory(fxnblock):
     def __init__(self, name, Env, DOF, Land, Dir, Force_LG):
-        self.type='environment'
-        super().__init__({'Env':Env,'DOF':DOF,'Land':Land, 'Dir': Dir, 'Force_LG': Force_LG})
+        super().__init__({'Env':Env,'DOF':DOF,'Land':Land, 'Dir': Dir, 'Force_LG': Force_LG}, {'flight':0.0})
         self.lasttime=0
         self.t1=0.0
         self.faultmodes={'nom':{'rate':'common', 'rcost':'NA'}, }
@@ -424,21 +417,21 @@ class trajectory(fxnblock):
             
             if self.Env.elev<=0.0:
                 self.Force_LG.value=min(-2.0, (self.DOF.vertvel-self.DOF.planvel)/3)
-                flight=0.0
+                self.flight=0.0
             else:
                 self.Force_LG.value=0.0
-                flight=1.0
+                self.flight=1.0
             
             if time>self.t1:
                 sign=np.sign(self.DOF.vertvel)
                 damp=-0.02*sign*np.power(self.DOF.vertvel, 2)-0.1*self.DOF.vertvel
-                acc=10*(self.DOF.uppwr-flight)
+                acc=10*(self.DOF.uppwr-self.flight)
                 self.DOF.vertvel=self.DOF.vertvel+acc+damp
                 if self.Env.elev<=0.0:
                     self.DOF.vertvel=max(0,self.DOF.vertvel)
                 self.t1=time
             
-            self.DOF.planvel=flight*maxpvel*self.DOF.planpwr
+            self.DOF.planvel=self.flight*maxpvel*self.DOF.planpwr
                     
             self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
             self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]

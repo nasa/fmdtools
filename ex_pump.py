@@ -128,7 +128,10 @@ class importSig(fxnblock):
 class moveWat(fxnblock):
     def __init__(self,EEin, Sigin, Watin, Watout):
         flows={'EEin':EEin, 'Sigin':Sigin, 'Watin':Watin, 'Watout':Watout}
-        super().__init__(flows)
+        #here we also define the states of a model, which are also added as 
+        #attributes to the function
+        states={'eff':1.0} #effectiveness state
+        super().__init__(flows,states)
         self.faultmodes={'mech_break':{'rate':'moderate', 'rcost':'major'}, \
                          'short':{'rate':'rare', 'rcost':'major'}}
         #timers can be set by adding variables to functions also
@@ -149,16 +152,16 @@ class moveWat(fxnblock):
         #here we can define how the function will behave with different faults
         if self.hasfault('mech_break'):
             self.EEin.rate=0.1*self.Sigin.power*self.EEin.effort
-            self.effstate=0.0
+            self.eff=0.0
         if self.hasfault('short'):
             self.EEin.rate=500*self.Sigin.power*self.EEin.effort
-            self.effstate=0.0
+            self.eff=0.0
         else:
             self.EEin.rate=1.0*self.Sigin.power*self.EEin.effort
-            self.effstate=1.0 
+            self.eff=1.0 
             
-        self.Watout.effort=self.Sigin.power*self.effstate*self.Watin.level/self.Watout.area
-        self.Watout.rate=self.Sigin.power*self.effstate*self.Watin.level*self.Watout.area
+        self.Watout.effort=self.Sigin.power*self.eff*self.Watin.level/self.Watout.area
+        self.Watout.rate=self.Sigin.power*self.eff*self.Watin.level*self.Watout.area
         
         self.Watin.effort=self.Watout.effort
         self.Watin.rate=self.Watout.rate
