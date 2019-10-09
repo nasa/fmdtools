@@ -135,15 +135,12 @@ class moveWat(fxnblock):
         self.faultmodes={'mech_break':{'rate':'moderate', 'rcost':'major'}, \
                          'short':{'rate':'rare', 'rcost':'major'}}
         #timers can be set by adding variables to functions also
-        self.t1=0.0
-        self.t2=0.0
         self.timer=0.0
     def condfaults(self, time):
         # here we define a conditional fault that only occurs after a state 
         # is present after 10 seconds
         if self.Watout.effort>5.0:
-            if self.t1>time:
-                self.t1=time
+            if self.time>time:
                 self.timer+=1
             if self.timer>10.0:
                 self.addfault('mech_break')
