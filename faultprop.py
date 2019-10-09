@@ -78,9 +78,18 @@ def showgraph(g, faultscen=[], time=[]):
     
     faults=findfaults(g)   
     faultflows,faultedges=findfaultflows(g)
-    nx.draw_networkx_nodes(g, pos, nodelist=faults.keys(),node_color = 'r',\
+    
+    if list(g.nodes(data='status'))[0][1]:
+        statuses=dict(g.nodes(data='status', default='Nominal'))
+        faultnodes=[node for node,status in statuses.items() if status=='Faulty']
+        
+        degradednodes=[node for node,status in statuses.items() if status=='Degraded']
+        
+        nx.draw_networkx_nodes(g, pos, nodelist=degradednodes,node_color = 'y',\
                           node_shape='s',width=3, font_weight='bold', node_size = 2000)
-    nx.draw_networkx_edges(g,pos,edgelist=faultedges.keys(), edge_color='r', width=2)
+        nx.draw_networkx_nodes(g, pos, nodelist=faultnodes,node_color = 'r',\
+                          node_shape='s',width=3, font_weight='bold', node_size = 2000)
+        nx.draw_networkx_edges(g,pos,edgelist=faultedges.keys(), edge_color='r', width=2)
     
     nx.draw_networkx_edge_labels(g,pos,edge_labels=labels)
     
@@ -379,6 +388,15 @@ def makeresultsgraph(g, nomg):
     for node in g.nodes:
         faults=findfault(node, g)
         rg.nodes[node]['faults']=faults
+        fxn=getfxn(node, g)
+        state, _ =fxn.returnstates()
+        nomfxn=getfxn(node, nomg)
+        nomstate, _ =nomfxn.returnstates()
+        if faults: status='Faulty' 
+        elif state!=nomstate: status='Degraded'
+        else: status='Nominal'
+        rg.nodes[node]['state']=state
+        rg.nodes[node]['status']=status
     return rg
 
 #findfaultflows

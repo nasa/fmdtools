@@ -15,6 +15,7 @@ class fxnblock(object):
         self.type = 'function'
         for flow in flows.keys():
             setattr(self, flow,flows[flow])
+        self._states=states.keys()
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
@@ -42,6 +43,11 @@ class fxnblock(object):
         self.faults.clear()
         self.faults.add('nom')
         self.updatefxn(faults=['nom'], time=0)
+    def returnstates(self):
+        states={}
+        for state in self._states:
+            states[state]=getattr(self,state)
+        return states.copy(), self.faults
         
 class component(object):
     def __init__(self,name):
