@@ -41,6 +41,28 @@ class fxnblock(object):
         self.faults.add('nom')
         self.updatefxn(faults=['nom'], time=0)
         
+class component(object):
+    def __init__(self,name):
+        self.type = 'component'
+        self.name = name
+        self.faults=set(['nom'])
+    def behavior(self,time):
+        return 0
+    def hasfault(self,fault):
+        return self.faults.intersection(set([fault]))
+    def hasfaults(self,faults):
+        return self.faults.intersection(set(faults))
+    def addfault(self,fault):
+        self.faults.update([fault])
+    def addfaults(self,faults):
+        self.faults.update(faults)
+    def replacefault(self, fault_to_replace,fault_to_add):
+        self.faults.add(fault_to_add)
+        self.faults.remove(fault_to_replace)
+    def reset(self):            #reset requires flows to be cleared first
+        self.faults.clear()
+        self.faults.add('nom')
+        self.updatefxn(faults=['nom'], time=0)
 
 #Flow superclass
 class flow(object):

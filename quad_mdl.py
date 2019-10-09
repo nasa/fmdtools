@@ -97,10 +97,10 @@ class storeEE(fxnblock):
         self.EEout.effort=(np.mean([EE['00'],EE['01']])+np.mean([EE['10'],EE['11']]))/2.0
         self.soc=np.mean([soc['00'],soc['01'],soc['10'],soc['11']])
 
-class battery(fxnblock):
+class battery(component):
     def __init__(self, name):
+        super().__init__(name)
         self.soc=2000
-        self.name=name
         self.t1=1.0
         self.EEoute=1.0
         self.faultmodes={name+'short':{'rate':'moderate', 'rcost':'major'}, \
@@ -108,7 +108,6 @@ class battery(fxnblock):
                          name+'break':{'rate':'common', 'rcost':'moderate'}, \
                          name+'nocharge':{'rate':'moderate','rcost':'minor'}, \
                          name+'lowcharge':{'rate':'moderate','rcost':'minor'}}
-        self.faults=set(['nom'])
         self.effstate=1.0
     def behavior(self, FS, EEoutr, time):
         if FS <1.0: self.faults.update([self.name+'break'])
@@ -269,10 +268,9 @@ class affectDOF(fxnblock):
         #need to expand on this, add directional velocity, etc
         return
 
-class line:
+class line(component):
     def __init__(self, name):
-        self.type='component'
-        self.name=name 
+        super().__init__(name)
         self.elecstate=1.0
         self.elecstate_in=1.0
         self.ctlstate=1.0
@@ -290,9 +288,7 @@ class line:
                          name+'propstuck':{'rate':'veryrare', 'rcost':'replacement'}, \
                          name+'propbreak':{'rate':'veryrare', 'rcost':'replacement'}
                          }
-        self.faults=set(['nom'])
     def behavior(self, EEin, Ctlin, cmds, Force):
-        
         if Force<=0.0:   self.faults.update([self.name+'mechbreak', self.name+'propbreak'])
         elif Force<=0.5: self.faults.update([self.name+'mechfriction'])
             
