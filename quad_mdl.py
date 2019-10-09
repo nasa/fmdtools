@@ -60,12 +60,9 @@ class Direc(flow):
 class storeEE(fxnblock):
     def __init__(self, name,EEout, FS, Hsig, Rsig, archtype):
         super().__init__({'EEout':EEout, 'FS':FS, 'Hsig':Hsig, 'Rsig': Rsig})
-        self.effstate=1.0
-        self.ratestate=1.0
-        self.soc=2000
         self.faultmodes={'nocharge':{'rate':'moderate','rcost':'minor'}, \
                          'lowcharge':{'rate':'moderate','rcost':'minor'}}
-        
+        self.soc=2000
         if archtype=='normal':
             #architecture: 1 for controllers? + cells in Series & Parallel
             #Batctl=battery('ctl')
@@ -95,7 +92,7 @@ class storeEE(fxnblock):
             soc[bat.name]=bat.soc
             
         self.EEout.effort=(np.mean([EE['00'],EE['01']])+np.mean([EE['10'],EE['11']]))/2.0
-        self.soc=np.mean([soc['00'],soc['01'],soc['10'],soc['11']])
+        self.soc=np.mean(list(soc.values()))
 
 class battery(component):
     def __init__(self, name):
@@ -133,9 +130,7 @@ class battery(component):
 
 class distEE(fxnblock):
     def __init__(self,EEin,EEmot,EEctl,FS):
-        super().__init__({'EEin':EEin, 'EEmot':EEmot,'EEctl':EEctl,'FS':FS})
-        self.effstate=1.0
-        self.ratestate=1.0
+        super().__init__({'EEin':EEin, 'EEmot':EEmot,'EEctl':EEctl,'FS':FS}, {'EEtr':1.0, 'EEte':1.0})
         self.faultmodes={'short':{'rate':'moderate', 'rcost':'major'}, \
                          'degr':{'rate':'moderate', 'rcost':'minor'}, \
                          'break':{'rate':'common', 'rcost':'moderate'}}
@@ -144,15 +139,15 @@ class distEE(fxnblock):
             self.addfault('break')
     def behavior(self, time):
         if self.hasfault('short'): 
-            self.effstate=0.0
-            self.ratestate=np.inf
-        elif self.hasfault('break'): self.effstate=0.0
-        elif self.hasfault('degr'): self.effstate=0.5
-        self.EEin.rate=self.ratestate*self.EEin.effort
-        self.EEmot.effort=self.effstate*self.EEin.effort
-        self.EEctl.effort=self.effstate*self.EEin.effort
-        
-        self.EEin.rate=m2to1([ self.EEin.effort, self.ratestate, max(self.EEmot.rate,self.EEctl.rate)])
+            self.EEte=0.0
+            self.EEre=np.inf
+        elif self.hasfault('break'): 
+            self.EEte=0.0
+            self.EEre=0.0
+        elif self.hasfault('degr'): self.EEte=0.5
+        self.EEmot.effort=self.EEte*self.EEin.effort
+        self.EEctl.effort=self.EEte*self.EEin.effort
+        self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, max(self.EEmot.rate,self.EEctl.rate)])
 
 class engageLand(fxnblock):
     def __init__(self,name, Forcein, Forceout):
