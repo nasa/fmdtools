@@ -11,10 +11,12 @@ import numpy as np
 # MAJOR CLASSES
 #Function superclass 
 class fxnblock(object):
-    def __init__(self,flows):
+    def __init__(self,flows, states={}):
         self.type = 'function'
         for flow in flows.keys():
             setattr(self, flow,flows[flow])
+        for state in states.keys():
+            setattr(self, state,states[state])
         self.faults=set(['nom'])
     def condfaults(self,time):
         return 0
