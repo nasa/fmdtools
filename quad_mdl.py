@@ -76,14 +76,10 @@ class storeEE(fxnblock):
             self.batteries=[Bat00, Bat01, Bat10, Bat11]
             
         for bat in self.batteries:
-            self.faultmodes.update(bat.faultmodes) 
-        
-        self.faults=set(['nom'])
+            self.faultmodes.update(bat.faultmodes)  
     def condfaults(self, time):
-        if self.soc<20: self.faults.add('lowcharge')
-        if self.soc<1:
-            self.faults.remove('lowcharge')
-            self.faults.add('nocharge')
+        if self.soc<20: self.addfault('lowcharge')
+        if self.soc<1: self.replacefault('lowcharge','nocharge')
         return 0
     def behavior(self, time):
         EE={}
@@ -145,18 +141,14 @@ class distEE(fxnblock):
                          'degr':{'rate':'moderate', 'rcost':'minor'}, \
                          'break':{'rate':'common', 'rcost':'moderate'}}
     def condfaults(self, time):
-        if self.FS.value<0.5:
-            self.faults.update(['break'])
-        if max(self.EEmot.rate,self.EEctl.rate)>2:
-            self.faults.add('break') 
+        if self.FS.value<0.5 or max(self.EEmot.rate,self.EEctl.rate)>2:
+            self.addfault('break')
     def behavior(self, time):
-        if self.faults.intersection(set(['short'])):
+        if self.hasfault('short'): 
+            self.effstate=0.0
             self.ratestate=np.inf
-            self.effstate=0.0
-        elif self.faults.intersection(set(['break'])):
-            self.effstate=0.0
-        elif self.faults.intersection(set(['degr'])):
-            self.effstate=0.5
+        elif self.hasfault('break'): self.effstate=0.0
+        elif self.hasfault('degr'): self.effstate=0.5
         self.EEin.rate=self.ratestate*self.EEin.effort
         self.EEmot.effort=self.effstate*self.EEin.effort
         self.EEctl.effort=self.effstate*self.EEin.effort
@@ -171,11 +163,11 @@ class engageLand(fxnblock):
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}}
     def condfaults(self, time):
-        if self.forceout.value<-1.4: self.faults.update(['break'])
-        elif self.forceout.value<-1.2: self.faults.update(['deform'])
+        if self.forceout.value<-1.4: self.addfault('break')
+        elif self.forceout.value<-1.2: self.addfault('deform')
     def behavior(self, time):
-        if self.faults.intersection(set(['break'])): self.fstate=4.0
-        elif self.faults.intersection(set(['deform'])): self.fstate=2.0
+        if self.hasfault('break'): self.fstate=4.0
+        elif self.hasfault('deform'): self.fstate=2.0
         else: self.fstate=1.0
         self.forceout.value=self.fstate*min([-2.0,self.forcein.value])*0.2
     
@@ -192,7 +184,7 @@ class manageHealth(fxnblock):
                          'lostfunction':{'rate':'rare', 'rcost':'minor'}} 
         #need to add joint-fault modes of not catching faults?
     def condfaults(self, time):
-        if self.FS.value<0.5 or self.EECtl.effort>2.0: self.faults.update(['lostfunction'])
+        if self.FS.value<0.5 or self.EECtl.effort>2.0: self.addfault('lostfunction')
     def behavior(self, time):
         if self.EECtl.effort>0.5 or self.faults.intersection(set(['lostfunction'])):
             self.DOFconfig=1
@@ -212,11 +204,11 @@ class holdPayload(fxnblock):
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}, }
     def condfaults(self, time):
-        if abs(self.FG.value)>1.6: self.faults.update(['break'])
-        elif abs(self.FG.value)>1.4: self.faults.update(['deform'])
+        if abs(self.FG.value)>1.6: self.addfault('break')
+        elif abs(self.FG.value)>1.4: self.addfault('deform')
     def behavior(self, time):
-        if self.faults.intersection(set(['break'])): self.fstate=0.0
-        elif self.faults.intersection(set(['deform'])): self.fstate=0.5
+        if self.hasfault('break'): self.fstate=0.0
+        elif self.hasfault('deform'): self.fstate=0.5
         else: self.fstate=1.0
         self.FA.value=self.fstate
         self.FS.value=self.fstate
@@ -342,11 +334,10 @@ class ctlDOF(fxnblock):
         self.faultmodes={'noctl':{'rate':'rare', 'rcost':'high'}, \
                          'degctl':{'rate':'rare', 'rcost':'high'}}
     def condfaults(self, time):
-        if self.FS.value<0.5:
-            self.faults.update(['noctl'])
+        if self.FS.value<0.5: self.addfault('noctl')
     def behavior(self, time):
-        if self.faults.intersection(set(['noctl'])):    self.ctlstate=0.0
-        elif self.faults.intersection(set(['degctl'])): self.ctlstate=0.5
+        if self.hasfault('noctl'):    self.ctlstate=0.0
+        elif self.hasfault('degctl'): self.ctlstate=0.5
         
         if time>self.t1:
             self.vel=self.DOFs.vertvel
@@ -384,8 +375,7 @@ class planpath(fxnblock):
         self.faultmodes={'noloc':{'rate':'rare', 'rcost':'high'}, \
                          'degloc':{'rate':'rare', 'rcost':'high'}}
     def condfaults(self, time):
-        if self.FS.value<0.5:
-            self.faults.update(['noloc'])
+        if self.FS.value<0.5: self.addfault('noloc')
     def behavior(self, t):
             
         if t<1: self.mode='taxi'
@@ -422,8 +412,8 @@ class planpath(fxnblock):
             self.Dir.power=1.0
             self.Dir.traj=[0,0,-0.1]
             
-        if self.faults.intersection(set(['noloc'])): self.Dir.traj=[0,0,0]
-        elif self.faults.intersection(set(['degloc'])): self.Dir.traj=[0,0,-1]
+        if self.hasfault('noloc'): self.Dir.traj=[0,0,0]
+        elif self.hasfault('degloc'): self.Dir.traj=[0,0,-1]
         if self.EEin.effort<0.5:
             self.Dir.power=0.0
             self.Dir.traj=[0,0,0]

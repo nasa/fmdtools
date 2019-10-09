@@ -31,36 +31,6 @@ from modeldef import *
 #Declare time range to run model over
 times=[0,3, 55]
 
-##DEFINE MODEL FLOWS
-# Flows are defined using Python classes that are instantiated as objects
-
-# Below defines the class for Electrical Energy
-class EE:
-    #attributes of the flow are defined during initialization
-    def __init__(self):
-        #arbitrary states for the flows can be defined. 
-        #in this case, rate is the analogue to flow (e.g. current)
-        #while effort is the analogue to force (e.g. voltage)
-        self.rate=0.0
-        self.effort=1.0
-    #each flow has a status function that relays the values of important states when queried
-    def status(self):
-        #each state must be returned in this dictionary to be able to see it in the results
-        status={'rate':self.rate, 'effort':self.effort}
-        return status.copy()
-    
-# Defining the class for the flow of Water
-# this time, we use the flow superclass in modeldef.py to do the same thing
-class Water(flow):
-    def __init__(self):
-        attributes={'rate':1.0, \
-                    'effort':1.0, \
-                    'area':1.0, \
-                    'level':1.0}
-        super().__init__(attributes, 'Water')
-
-# flows can also be defined using just the superclass, as will be done for the signal
-# flow below.
 
 ##DEFINE MODEL FUNCTIONS
 # Functions are, again, defined using Python classes that are instantiated as objects
@@ -125,7 +95,7 @@ class importWater(fxnblock):
     #a dummy version is used in the fxnblock superclass
     def behavior(self,time):
         #here we can define how the function will behave with different faults
-        if self.faults.intersection(set(['no_wat'])):
+        if self.hasfault('no_wat'):
             self.Watout.level=0.0 #an open circuit means no voltage is exported
         else:
             self.Watout.level=1.0
@@ -138,7 +108,7 @@ class exportWater(fxnblock):
         super().__init__({'Watin':Watin})
         self.faultmodes={'block':{'rate':'moderate', 'rcost':'major'}}
     def behavior(self,time):
-        if self.faults.intersection(set(['block'])): #here the fault is some sort of blockage
+        if self.hasfault('block'): #here the fault is some sort of blockage
             self.Watin.area=0.1
 
 # Import Signal is the on/off switch
@@ -150,7 +120,7 @@ class importSig(fxnblock):
     #when the behavior changes over time (and not just internal state) time must
     # be given as an input
     def behavior(self, time):
-        if self.faults.intersection(set(['no_sig'])):
+        if self.hasfault('no_sig'):
             self.Sigout.power=0.0 #an open circuit means no voltage is exported
         else:
             #Since the signal *generally* defines the operational profile of the system,
@@ -183,14 +153,14 @@ class moveWat(fxnblock):
                 self.t1=time
                 self.timer+=1
             if self.timer>10.0:
-                self.faults.update(['mech_break'])
+                self.addfault('mech_break')
     #behavior defines the behavior of the function
     def behavior(self, time):
         #here we can define how the function will behave with different faults
-        if self.faults.intersection(set(['mech_break'])):
+        if self.hasfault('mech_break'):
             self.EEin.rate=0.1*self.Sigin.power*self.EEin.effort
             self.effstate=0.0
-        if self.faults.intersection(set(['short'])):
+        if self.hasfault('short'):
             self.EEin.rate=500*self.Sigin.power*self.EEin.effort
             self.effstate=0.0
         else:
@@ -202,20 +172,41 @@ class moveWat(fxnblock):
         
         self.Watin.effort=self.Watout.effort
         self.Watin.rate=self.Watout.rate
+
+##DEFINE CUSTOM MODEL FLOWS
+# Flows can be defined using Python classes that are instantiated as objects
+# Most flows are defined in the initialize() function, however custom flows can
+# also be defined here as needed
+    
+# Defining the class for the flow of Water
+# here the flow is given the custom attribute of 'hello'--further attributes
+# and methods could be given here if desired.
+class Water(flow):
+    def __init__(self):
+        attributes={'rate':1.0, \
+                    'effort':1.0, \
+                    'area':1.0, \
+                    'level':1.0}
+        super().__init__(attributes, 'Water')
+        self.customattribute='hello'
     
 #INSTANTIATE MODEL
 #the model is initialized using an initialize function
 def initialize():
     #INITIALIZE FUNCTION AND FLOW OBJECTS
     
+    
     #Flows must be instantiated prior to the functions that use them, since
     # the functions take them as input
-    EE_1=EE()
+    #As shown below, flows are often simple enough that they don't need to be defined
+    #as classes at all, but can instead be instantiated directly from the flow class
+    EE_1=flow({'rate':1.0, 'effort':1.0}, 'EE')
+    Sig_1=flow({'power':1.0}, 'Signal')
+    
+    #Here we instantiate the custom flows defined 
     Wat_1=Water()
     Wat_2=Water()
-    #as shown below, flows are often simple enough that they don't need to be defined
-    #as classes at all, but can instead be instantiated directly from the flow class
-    Sig_1=flow({'power':1.0}, 'Signal')
+    
     
     #function objects take their respective flows as input 
     Imp_EE=importEE(EE_1)
