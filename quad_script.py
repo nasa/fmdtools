@@ -11,8 +11,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 import quad_mdl as mdl
-
-graph=mdl.initialize()
+import time
 
 #scenlist=fp.listinitfaults(graph, mdl.times)
 
@@ -20,21 +19,9 @@ endresults1, resgraph, flowhist3, ghist3=fp.runnominal(mdl, track={'DOFs','Dir1'
 fp.showgraph(resgraph)
 fp.plotflowhist(flowhist3, 'N/A', time=0)
 
-#x=flowhist3['nominal']['Env1']['x']
-#y=flowhist3['nominal']['Env1']['y']
-#z=flowhist3['nominal']['Env1']['elev']
-#
-#fig = plt.figure()
-#ax = fig.add_subplot(111, projection='3d')
-#ax.set_xlim3d(-100, 100)
-#ax.set_ylim3d(-100,100)
-#ax.set_zlim3d(0,100)
-#ax.plot(x,y,z)
-#plt.close()
-
 #Check various scenarios individually
 
-endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'})
+endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'}, graph=graph)
 fp.showgraph(resgraph)
 
 fp.plotflowhist(flowhist, 'StoreEE short', time=5)
@@ -65,6 +52,23 @@ ax2.legend(['Nominal Flightpath','Faulty Flighpath'], loc=4)
 plt.show()
 plt.close()
 
+fullresults, resultstab=fp.proplist(mdl,reuse=True)
+print(resultstab)
+resultstab.write('tab4.ecsv', overwrite=True)
+
+
+#Doing a time test
+#t1=time.time()
+#fullresults, resultstab=fp.proplist(mdl,reuse=True)
+#t2=time.time()
+#
 #fullresults, resultstab=fp.proplist(mdl)
-#print(resultstab)
-# resultstab.write('tab.ecsv', overwrite=True)
+#t3=time.time()
+#
+#t_reused=t2-t1
+#t_copied=t3-t2
+#print(t_reused)
+#print(t_copied)
+# based on this test, it appears reusing the model is actually slightly slower
+# than copying. Not sure why. However, it's probably the case that execution is
+# probably the biggest bottleneck

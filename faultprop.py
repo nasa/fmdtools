@@ -166,7 +166,7 @@ def runnominal(mdl, track={}, gtrack={}):
 #   - resgraph, a graph object with function faults and degraded flows noted
 #   - flowhist, a dictionary with the history of the flow over time
 #   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
-def proponefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={}):
+def proponefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}):
     graph=mdl.initialize()
     nomscen=constructnomscen(graph)
     scen=nomscen.copy()
@@ -177,7 +177,7 @@ def proponefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={}):
     scen['properties']['rate']=getfaultprops(fxnname, faultmode, graph, prop='rate')
     scen['properties']['time']=time
     
-    endresults, resgraph, flowhist, graphhist =runonefault(mdl, scen, track, gtrack)
+    endresults, resgraph, flowhist, graphhist =runonefault(mdl, scen, track, gtrack, graph)
     
     return endresults,resgraph, flowhist, graphhist
 
@@ -212,7 +212,7 @@ def listinitfaults(g, times=[0]):
 # input: mdl, the module where the model was set up
 # output: resultsdict, a dictionary with the results (may be deprecated in the future?)
 #         resultstab, a FMEA-style table of results
-def proplist(mdl):
+def proplist(mdl, reuse=False):
     
     graph=mdl.initialize()
     times=mdl.times
@@ -228,10 +228,13 @@ def proplist(mdl):
     rates=np.zeros(numofscens, dtype=float)
     costs=np.zeros(numofscens, dtype=float)
     expcosts=np.zeros(numofscens, dtype=float)
-
+    
+    graph=mdl.initialize()
     for i, scen in enumerate(scenlist):
-        
-        endresults, resgraph, flowhist, graphhist=runonefault(mdl, scen)
+        if reuse: 
+            endresults, resgraph, flowhist, graphhist=runonefault(mdl, scen, graph=graph)  
+            resetgraph(graph)
+        else: endresults, resgraph, flowhist, graphhist=runonefault(mdl, scen)
         
         resultsdict[scen['properties']['function'],scen['properties']['fault'], scen['properties']['time']]=endresults
         
@@ -278,10 +281,10 @@ def classifyresults(mdl,resgraph, scen):
 #   - resgraph, a graph object with function faults and degraded flows noted
 #   - flowhist, a dictionary with the history of the flow over time
 #   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
-def runonefault(mdl, scen, track={}, gtrack={}):
+def runonefault(mdl, scen, track={}, gtrack={}, graph={}):
     nomgraph=mdl.initialize()
     nomscen=constructnomscen(nomgraph)
-    graph=mdl.initialize()
+    if not graph: graph=mdl.initialize()
     timerange=mdl.times
     flowhist={}
     graphhist={}
@@ -516,7 +519,7 @@ def resetgraph(g):
     for edge in g.edges:
         flows=g.get_edge_data(edge[0],edge[1])
         for flowname in flows:
-            flow=flows[flowname]['obj']
+            flow=flows[flowname]
             flow.reset()
     #reset functions
     for fxnname in g.nodes:

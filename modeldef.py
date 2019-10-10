@@ -9,74 +9,75 @@ Description: A module to simplify model definition
 import numpy as np
 
 # MAJOR CLASSES
-#Function superclass 
-class fxnblock(object):
-    def __init__(self,flows, states={}):
-        self.type = 'function'
-        for flow in flows.keys():
-            setattr(self, flow,flows[flow])
+
+class block(object):
+    def __init__(self, states={}):
         self._states=states.keys()
+        self._initstates=states.copy()
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
         self.time=0.0
+    def hasfault(self,fault):
+        return self.faults.intersection(set([fault]))
+    def hasfaults(self,faults):
+        return self.faults.intersection(set(faults))
+    def addfault(self,fault):
+        self.faults.update([fault])
+    def addfaults(self,faults):
+        self.faults.update(faults)
+    def replacefault(self, fault_to_replace,fault_to_add):
+        self.faults.add(fault_to_add)
+        self.faults.remove(fault_to_replace)
+    def reset(self):            #reset requires flows to be cleared first
+        self.faults.clear()
+        self.faults.add('nom')
+        for state in self._initstates.keys():
+            setattr(self, state,self._initstates[state])
+        self.time=0
+    def returnstates(self):
+        states={}
+        for state in self._states:
+            states[state]=getattr(self,state)
+        return states.copy(), self.faults
+
+#Function superclass 
+class fxnblock(block):
+    def __init__(self,flows, states={}, components={}):
+        self.type = 'function'
+        for flow in flows.keys():
+            setattr(self, flow,flows[flow])
+        self.components=components
+        for cname in components:
+            self.faultmodes.update(components[cname].faultmodes)
+        super().__init__(states)
     def condfaults(self,time):
         return 0
     def behavior(self,time):
         return 0
+    def reset(self):            #reset requires flows to be cleared first
+        self.faults.clear()
+        self.faults.add('nom')
+        for state in self._initstates.keys():
+            setattr(self, state,self._initstates[state])
+        for name, component in self.components.items():
+            component.reset()
+        self.time=0
+        self.updatefxn(faults=['nom'], time=0)
     def updatefxn(self,faults=['nom'], time=0): #fxns take faults and time as input
         self.faults.update(faults)  #if there is a fault, it is instantiated in the function
         self.condfaults(time)           #conditional faults and behavior are then run
         self.behavior(time)
         self.time=time
         return
-    def hasfault(self,fault):
-        return self.faults.intersection(set([fault]))
-    def hasfaults(self,faults):
-        return self.faults.intersection(set(faults))
-    def addfault(self,fault):
-        self.faults.update([fault])
-    def addfaults(self,faults):
-        self.faults.update(faults)
-    def replacefault(self, fault_to_replace,fault_to_add):
-        self.faults.add(fault_to_add)
-        self.faults.remove(fault_to_replace)
-    def reset(self):            #reset requires flows to be cleared first
-        self.faults.clear()
-        self.faults.add('nom')
-        self.updatefxn(faults=['nom'], time=0)
-    def returnstates(self):
-        states={}
-        for state in self._states:
-            states[state]=getattr(self,state)
-        return states.copy(), self.faults
         
-class component(object):
+class component(block):
     def __init__(self,name, states={}):
         self.type = 'component'
         self.name = name
-        self.faults=set(['nom'])
-        self.time=0.0
-        self._states=states.keys()
-        for state in states.keys():
-            setattr(self, state,states[state])
+        super().__init__(states)
     def behavior(self,time):
         return 0
-    def hasfault(self,fault):
-        return self.faults.intersection(set([fault]))
-    def hasfaults(self,faults):
-        return self.faults.intersection(set(faults))
-    def addfault(self,fault):
-        self.faults.update([fault])
-    def addfaults(self,faults):
-        self.faults.update(faults)
-    def replacefault(self, fault_to_replace,fault_to_add):
-        self.faults.add(fault_to_add)
-        self.faults.remove(fault_to_replace)
-    def reset(self):            #reset requires flows to be cleared first
-        self.faults.clear()
-        self.faults.add('nom')
-        self.updatefxn(faults=['nom'], time=0)
 
 #Flow superclass
 class flow(object):
