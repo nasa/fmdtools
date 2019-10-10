@@ -16,38 +16,6 @@ from modeldef import *
 times=[0,3, 55]
 
 #Define specialized flows
-class Env:
-    def __init__(self):
-        self.type = 'flow'
-        self.flow='Environment'
-        self.elev=0.0
-        self.x=0.0
-        self.y=0.0
-        self.start=[0.0,0.0]
-        self.start_xw=5
-        self.start_yw=5
-        self.start_area=square(self.start,self.start_xw, self.start_yw)
-        self.flyelev=30
-        self.poi_center=[0,150]
-        self.poi_xw=50
-        self.poi_yw=50
-        self.poi_area=square(self.poi_center, self.poi_xw, self.poi_yw)
-        self.dang_center=[0,150]
-        self.dang_xw=150
-        self.dang_yw=150
-        self.dang_area=square(self.dang_center, self.dang_xw, self.dang_yw)
-        self.safe1_center=[-25,100]
-        self.safe1_xw=10
-        self.safe1_yw=10
-        self.safe1_area=square(self.safe1_center, self.safe1_xw, self.safe1_yw)
-        self.safe2_center=[25,50]
-        self.safe2_xw=10
-        self.safe2_yw=10
-        self.safe2_area=square(self.safe2_center, self.safe2_xw, self.safe2_yw)
-        self.nominal={'elev':1.0, 'x':1.0, 'y':1.0}
-    def status(self):
-        status={'elev':self.elev, 'x':self.x, 'y':self.y}
-        return status.copy()
 class Direc(flow):
     def __init__(self):
         self.traj=[0,0,0]
@@ -59,16 +27,14 @@ class Direc(flow):
 #Define functions
 class storeEE(fxnblock):
     def __init__(self, name,EEout, FS, Hsig, Rsig, archtype):
-        super().__init__({'EEout':EEout, 'FS':FS, 'Hsig':Hsig, 'Rsig': Rsig}, {'soc': 2000})
-        self.faultmodes={'nocharge':{'rate':'moderate','rcost':'minor'}, \
-                         'lowcharge':{'rate':'moderate','rcost':'minor'}}
+        flows={'EEout':EEout, 'FS':FS, 'Hsig':Hsig, 'Rsig': Rsig}
         if archtype=='normal':
             #architecture: 1 for controllers? + cells in Series & Parallel
             #Batctl=battery('ctl')
-            self.batteries=[battery('00'), battery('01'), battery('10'), battery('11')]
-            
-        for bat in self.batteries:
-            self.faultmodes.update(bat.faultmodes)  
+            components={'00':battery('00'), '01':battery('01'), '10':battery('10'), '11':battery('11')}
+        self.faultmodes={'nocharge':{'rate':'moderate','rcost':'minor'}, \
+                         'lowcharge':{'rate':'moderate','rcost':'minor'}} 
+        super().__init__(flows, {'soc': 2000}, components)
     def condfaults(self, time):
         if self.soc<20: self.addfault('lowcharge')
         if self.soc<1: self.replacefault('lowcharge','nocharge')
@@ -76,7 +42,7 @@ class storeEE(fxnblock):
     def behavior(self, time):
         EE={}
         soc={}
-        for bat in self.batteries:
+        for batname, bat in self.components.items():
             for fault in self.faults:
                 if fault in bat.faultmodes:
                     bat.faults.update([fault])
@@ -101,9 +67,7 @@ class battery(component):
         if FS <1.0: self.addfault(self.name+'break')
         if EEoutr>2: self.addfault(self.name+'break')
         if self.soc<20: self.addfault(self.name+'lowcharge')
-        if self.soc<1:
-            self.removefault(self.name+'lowcharge')
-            self.addfault(self.name+'nocharge')
+        if self.soc<1: self.replacefault(self.name+'lowcharge',self.name+'nocharge')
 
         if self.hasfault(self.name+'short'): self.Et=0.0
         elif self.hasfault(self.name+'break'): self.Et=0.0
@@ -196,31 +160,24 @@ class holdPayload(fxnblock):
     
 class affectDOF(fxnblock):
     def __init__(self, name, EEin, Ctlin, DOFout,Force, Hsig, Rsig, archtype):
-        flows={'Hsig':Hsig, 'Rsig':Rsig, 'EEin':EEin, 'Ctlin':Ctlin,'DOF':DOFout,'Force':Force}
-        super().__init__(flows)
+        flows={'Hsig':Hsig, 'Rsig':Rsig, 'EEin':EEin, 'Ctlin':Ctlin,'DOF':DOFout,'Force':Force}        
         self.archtype=archtype
         self.faultmodes={}
         if archtype=='quad':
-            LineRF=line('RF')
-            LineLF=line('LF')
-            LineLR=line('LR')
-            LineRR=line('RR')
-            self.lines=[LineRF,LineLF,LineLR, LineRR]
-            self.upward=[1,1,1,1]
-            self.forward=[0.5,0.5,-0.5,-0.5]
-        for lin in self.lines:
-            self.faultmodes.update(lin.faultmodes)  
+            components={'RF':line('RF'), 'LF':line('LF'), 'LR':line('LR'), 'RR':line('RR')}
+            self.upward={'RF':1,'LF':1,'LR':1,'RR':1}
+            self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5}
+        super().__init__(flows,{}, components) 
     def behavior(self, time):
         Air={}
         EEin={}
         #injects faults into lines
-        for lin in self.lines:
+        for linname,lin in self.components.items():
             for fault in self.faults:
                 if fault in lin.faultmodes:
-                    lin.faults.update([fault])
+                    lin.addfault(fault)
             
-            ind=self.lines.index(lin)
-            cmds={'up':self.upward[ind], 'for':self.forward[ind]}
+            cmds={'up':self.upward[linname], 'for':self.forward[linname]}
             lin.behavior(self.EEin.effort, self.Ctlin, cmds, self.Force.value)
             self.faults.update(lin.faults)  
             Air[lin.name]=lin.Airout
@@ -420,9 +377,9 @@ def initialize():
     Ctl1=flow({'forward':0.0, 'upward':1.0}, 'Direction Signal')
     DOFs=flow({'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0}, 'DOFs')
     Land1=flow({'status':'landed', 'area':'start'}, 'Land')
+    Env1=flow({'x':0.0,'y':0.0,'elev':0.0}, 'Environment')
     #specialized flows
     Dir1=Direc()
-    Env1=Env()
 
     ManageHealth=manageHealth(EEctl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj)
     g.add_node('ManageHealth', obj=ManageHealth)
@@ -475,19 +432,41 @@ def initialize():
     
     return g
 
+
     
 def findclassification(g, endfaults, endflows, scen):
+    
+    start=[0.0,0.0]
+    start_xw=5
+    start_yw=5
+    start_area=square(start,start_xw, start_yw)
+    flyelev=30
+    poi_center=[0,150]
+    poi_xw=50
+    poi_yw=50
+    dang_center=[0,150]
+    dang_xw=150
+    dang_yw=150
+    dang_area=square(dang_center, dang_xw, dang_yw)
+    safe1_center=[-25,100]
+    safe1_xw=10
+    safe1_yw=10
+    safe1_area=square(safe1_center, safe1_xw, safe1_yw)
+    safe2_center=[25,50]
+    safe2_xw=10
+    safe2_yw=10
+    safe2_area=square(safe2_center, safe2_xw, safe2_yw)
     
     Env=fp.getflow('Env1', g)
     
     #may need to redo this
-    if  inrange(Env.start_area, Env.x, Env.y):
+    if  inrange(start_area, Env.x, Env.y):
         landloc='nominal'
         area=1
-    elif inrange(Env.safe1_area, Env.x, Env.y) or inrange(Env.safe2_area, Env.x, Env.y):
+    elif inrange(safe1_area, Env.x, Env.y) or inrange(safe2_area, Env.x, Env.y):
         landloc='emsafe'
         area=1000
-    elif inrange(Env.dang_area, Env.x, Env.y):
+    elif inrange(dang_area, Env.x, Env.y):
         landloc='emdang'
         area=100000
     else:
@@ -517,14 +496,6 @@ def findclassification(g, endfaults, endflows, scen):
     return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
 
 ## BASE FUNCTIONS
-
-#translates L, R, and C into Left, Right, and Center
-def rlc(x):
-    y='NA'
-    if x=='R': y='Right'
-    if x=='L': y='Left'
-    if x=='C': y='Center'
-    return y
 
 # creates list of corner coordinates for a square, given a center, xwidth, and ywidth
 def square(center,xw,yw):
