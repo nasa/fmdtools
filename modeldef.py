@@ -43,14 +43,20 @@ class block(object):
 
 #Function superclass 
 class fxnblock(block):
-    def __init__(self,flows, states={}, components={}):
+    def __init__(self,flownames,flows, states={}, components={}):
         self.type = 'function'
-        for flow in flows.keys():
-            setattr(self, flow,flows[flow])
+        flowdict=self.makeflowdict(flownames,flows)
+        for flow in flowdict.keys():
+            setattr(self, flow,flowdict[flow])
         self.components=components
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
         super().__init__(states)
+    def makeflowdict(self,flownames,flows):
+        flowdict={}
+        for ind, flowname in enumerate(flownames):
+            flowdict[flowname]=flows[ind]
+        return flowdict
     def condfaults(self,time):
         return 0
     def behavior(self,time):
@@ -96,7 +102,26 @@ class flow(object):
         for attribute in self._attributes:
             attributes[attribute]=getattr(self,attribute)
         return attributes.copy()
-    
+
+#Model superclass    
+class model(object):
+    def __init__(self):
+        self.type='model'
+        self.flows={}
+        self.fxns={}
+    def addflow(self,flowdict,flowtype,flowname):
+        if type(flowdict) == dict:
+            self.flows[flowname]=flow(flowdict, flowtype)
+        elif type(flowdict) == flow:
+            self.flows[flowname]
+        else: raise Exception('Invalid flow. Must be dict or flow')
+    def addfxn(self,name,classobj, flownames, *args):
+        flows=self.getflows(flownames)
+        if args: self.fxns[name]=classobj(flows,args)
+        else: self.fxns[name]=classobj(flows)
+    def getflows(self,flownames):
+        return [self.flows[flowname] for flowname in flownames]
+        
 # mode constructor????
 def mode(rate,rcost):
     return {'rate':rate,'rcost':rcost}
