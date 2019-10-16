@@ -7,6 +7,7 @@ Created: October 2019
 Description: A module to simplify model definition
 """
 import numpy as np
+import networkx as nx
 
 # MAJOR CLASSES
 
@@ -109,18 +110,43 @@ class model(object):
         self.type='model'
         self.flows={}
         self.fxns={}
-    def addflow(self,flowdict,flowtype,flowname):
+        self._fxnflows=[]
+    def addflow(self,flowname, flowtype, flowdict):
         if type(flowdict) == dict:
             self.flows[flowname]=flow(flowdict, flowtype)
-        elif type(flowdict) == flow:
-            self.flows[flowname]
+        elif isinstance(flowdict, flow):
+            self.flows[flowname] = flowdict
         else: raise Exception('Invalid flow. Must be dict or flow')
     def addfxn(self,name,classobj, flownames, *args):
         flows=self.getflows(flownames)
         if args: self.fxns[name]=classobj(flows,args)
         else: self.fxns[name]=classobj(flows)
+        for flowname in flownames:
+            self._fxnflows.append((name, flowname))
     def getflows(self,flownames):
         return [self.flows[flowname] for flowname in flownames]
+    def constructgraph(self):
+        self.bipartite=nx.Graph()
+        self.bipartite.add_nodes_from(self.fxns, bipartite=0)
+        self.bipartite.add_nodes_from(self.flows, bipartite=1)
+        self.bipartite.add_edges_from(self._fxnflows)
+        self.multgraph = nx.projected_graph(self.bipartite, self.fxns,multigraph=True)
+        self.graph = nx.projected_graph(self.bipartite, self.fxns)
+        attrs={}
+        for edge in self.graph.edges:
+            midedges=list(self.multgraph.subgraph(edge).edges)
+            flows= [midedge[2] for midedge in midedges]
+            flowdict={}
+            for flow in flows:
+                flowdict[flow]=self.flows[flow]
+            attrs[edge]=flowdict
+        nx.set_edge_attributes(self.graph, attrs)
+        
+        nx.set_node_attributes(self.graph, self.fxns, 'obj')
+        #self.graph=nx.DiGraph()
+        #self.graph.add_nodes_from(self.fxn)
+        #self.graph=
+        return self.graph
         
 # mode constructor????
 def mode(rate,rcost):

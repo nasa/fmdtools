@@ -27,7 +27,7 @@ class Direc(flow):
 #Define functions
 class storeEE(fxnblock):
     def __init__(self, flows, archtype):
-        if archtype=='normal':
+        if archtype[0]=='normal':
             #architecture: 1 for controllers? + cells in Series & Parallel
             #Batctl=battery('ctl')
             components={'00':battery('00'), '01':battery('01'), '10':battery('10'), '11':battery('11')}
@@ -158,7 +158,7 @@ class affectDOF(fxnblock): #EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs
     def __init__(self, flows, archtype):     
         self.archtype=archtype
         self.faultmodes={}
-        if archtype=='quad':
+        if archtype[0]=='quad':
             components={'RF':line('RF'), 'LF':line('LF'), 'LR':line('LR'), 'RR':line('RR')}
             self.upward={'RF':1,'LF':1,'LR':1,'RR':1}
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5}
@@ -353,107 +353,119 @@ class quadrotor(model):
     def __init__(self):
         super().__init__()
         #add flows to the model
-        self.addflow({'value':1.0},'Force','Force_ST')
-        self.addflow({'value':1.0},'Force', 'Force_Air')
-        self.addflow({'value':1.0},'Force', 'Force_GR')
-        self.addflow({'value':1.0},'Force', 'Force_LG')
-        self.addflow({'hstate':'nominal'}, 'Health Signal', 'HSig_DOFs')
-        self.addflow({'hstate':'nominal'}, 'Health Signal', 'HSig_Bat')
-        self.addflow({'mode':1}, 'Reconfiguration Signal', 'RSig_DOFs')
-        self.addflow({'mode':1}, 'Reconfiguration Signal', 'RSig_Bat')
-        self.addflow({'mode':1}, 'Reconfiguration Signal', 'RSig_Ctl')
-        self.addflow({'mode':1}, 'Reconfiguration Signal', 'RSig_Traj')
-        self.addflow({'rate':1.0, 'effort':1.0}, 'EE', 'EE_1')
-        self.addflow({'rate':1.0, 'effort':1.0}, 'EE', 'EEmot')
-        self.addflow({'rate':1.0, 'effort':1.0}, 'EE', 'EEctl')
-        self.addflow({'forward':0.0, 'upward':1.0}, 'Direction Signal', 'Ctl1')
-        self.addflow({'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0}, 'DOFs', 'DOFs')
-        self.addflow({'status':'landed', 'area':'start'}, 'Land', 'Land1')
-        self.addflow({'x':0.0,'y':0.0,'elev':0.0}, 'Environment', 'Env1')
+        self.addflow('Force_ST', 'Force', {'value':1.0})
+        self.addflow('Force_Air','Force', {'value':1.0} )
+        self.addflow('Force_GR','Force', {'value':1.0} )
+        self.addflow('Force_LG','Force', {'value':1.0})
+        self.addflow('HSig_DOFs','Health Signal', {'hstate':'nominal'})
+        self.addflow('HSig_Bat','Health Signal', {'hstate':'nominal'} )
+        self.addflow('RSig_DOFs','Reconfiguration Signal', {'mode':1} )
+        self.addflow('RSig_Bat','Reconfiguration Signal', {'mode':1} )
+        self.addflow('RSig_Ctl','Reconfiguration Signal', {'mode':1})
+        self.addflow('RSig_Traj','Reconfiguration Signal', {'mode':1})
+        self.addflow('EE_1', 'EE', {'rate':1.0, 'effort':1.0})
+        self.addflow('EEmot', 'EE', {'rate':1.0, 'effort':1.0})
+        self.addflow('EEctl', 'EE', {'rate':1.0, 'effort':1.0})
+        self.addflow('Ctl1','Direction Signal', {'forward':0.0, 'upward':1.0})
+        self.addflow('DOFs', 'DOFs',{'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0})
+        self.addflow('Land1','Land', {'status':'landed', 'area':'start'} )
+        self.addflow('Env1','Environment', {'x':0.0,'y':0.0,'elev':0.0} )
+        # custom flows
+        self.addflow('Dir1', 'Direction', Direc())
         #add functions to the model
         flows=['EEctl', 'Force_ST', 'HSig_DOFs', 'HSig_Bat', 'RSig_DOFs', 'RSig_Bat', 'RSig_Ctl', 'RSig_Traj']
         self.addfxn('ManageHealth',manageHealth,flows)
+        self.addfxn('StoreEE',storeEE,['EE_1', 'Force_ST', 'HSig_Bat', 'RSig_Bat'], 'normal')
+        self.addfxn('DistEE',distEE, ['EE_1','EEmot','EEctl', 'Force_ST'])
+        self.addfxn('AffectDOF',affectDOF,['EEmot','Ctl1','DOFs','Force_Air', 'HSig_DOFs', 'RSig_DOFs'], 'quad')
+        self.addfxn('CtlDOF', ctlDOF,['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST', 'RSig_Ctl'])
+        self.addfxn('Planpath', planpath, ['EEctl', 'Env1','Dir1', 'Force_ST', 'RSig_Traj'])
+        self.addfxn('Trajectory', trajectory,['Env1','DOFs','Land1','Dir1', 'Force_GR'] )
+        self.addfxn('EngageLand', engageLand,['Force_GR', 'Force_LG'])
+        self.addfxn('HoldPayload', holdPayload,['Force_LG', 'Force_Air', 'Force_ST'])
 
-
+def initialize():
+    q=quadrotor()
+    return q.constructgraph()
 
 ##future: try to automate this part so you don't have to do it in a wierd order
-def initialize():
-    
-    #initialize graph
-    g=nx.DiGraph()
-    ##Define flows for model
-    #initialize one-line flows
-    Force_ST=flow({'value':1.0},'Force')
-    Force_Air=flow({'value':1.0},'Force')
-    Force_GR=flow({'value':1.0},'Force')
-    Force_LG=flow({'value':1.0},'Force')
-    HSig_DOFs=flow({'hstate':'nominal'}, 'Health Signal')
-    HSig_Bat=flow({'hstate':'nominal'}, 'Health Signal')
-    RSig_DOFs=flow({'mode':1}, 'Reconfiguration Signal')
-    RSig_Bat=flow({'mode':1}, 'Reconfig Signal')
-    RSig_Ctl=flow({'mode':1}, 'Reconfig Signal')
-    RSig_Traj=flow({'mode':1}, 'Reconfig Signal')
-    EE_1=flow({'rate':1.0, 'effort':1.0}, 'EE')
-    EEmot=flow({'rate':1.0, 'effort':1.0}, 'EE')
-    EEctl=flow({'rate':1.0, 'effort':1.0}, 'EE')
-    Ctl1=flow({'forward':0.0, 'upward':1.0}, 'Direction Signal')
-    DOFs=flow({'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0}, 'DOFs')
-    Land1=flow({'status':'landed', 'area':'start'}, 'Land')
-    Env1=flow({'x':0.0,'y':0.0,'elev':0.0}, 'Environment')
-    
-    #specialized flows
-    Dir1=Direc()
-
-    ManageHealth=manageHealth([EEctl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj])
-    g.add_node('ManageHealth', obj=ManageHealth)
-    
-    StoreEE=storeEE([EE_1, Force_ST, HSig_Bat, RSig_Bat], 'normal')
-    g.add_node('StoreEE', obj=StoreEE)
-    
-    DistEE=distEE([EE_1,EEmot,EEctl, Force_ST])
-    g.add_node('DistEE', obj=DistEE)
-    g.add_edge('StoreEE','DistEE', EE_1=EE_1)
-    
-    AffectDOF=affectDOF([EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs], 'quad')
-    g.add_node('AffectDOF', obj=AffectDOF)
-    
-    CtlDOF=ctlDOF([EEctl, Dir1, Ctl1, DOFs, Force_ST, RSig_Ctl])
-    g.add_node('CtlDOF', obj=CtlDOF)
-    g.add_edge('DistEE','AffectDOF', EEmot=EEmot)
-    g.add_edge('DistEE','CtlDOF', EEctl=EEctl)
-    g.add_edge('CtlDOF','AffectDOF', Ctl1=Ctl1,DOFs=DOFs)
-
-    Planpath=planpath([EEctl, Env1,Dir1, Force_ST, RSig_Traj])
-    g.add_node('Planpath', obj=Planpath)
-    g.add_edge('DistEE','Planpath', EEctl=EEctl)
-    g.add_edge('Planpath','CtlDOF', Dir1=Dir1)
-    
-    Trajectory=trajectory([Env1,DOFs,Land1,Dir1, Force_GR])
-    g.add_node('Trajectory', obj=Trajectory)
-    g.add_edge('Trajectory','AffectDOF',DOFs=DOFs)
-    g.add_edge('Planpath', 'Trajectory', Dir1=Dir1, Env1=Env1)
-    
-    EngageLand=engageLand([Force_GR, Force_LG])
-    g.add_node('EngageLand', obj=EngageLand)
-    g.add_edge('Trajectory', 'EngageLand', Force_GR=Force_GR)
-    
-    HoldPayload=holdPayload([Force_LG, Force_Air, Force_ST])
-    g.add_node('HoldPayload', obj=HoldPayload)
-    g.add_edge('EngageLand','HoldPayload', Force_LG=Force_LG)
-    g.add_edge('HoldPayload', 'AffectDOF', Force_Air=Force_Air)
-    g.add_edge('HoldPayload', 'StoreEE', Force_ST=Force_ST)
-    g.add_edge('HoldPayload', 'DistEE', Force_ST=Force_ST)
-    g.add_edge('HoldPayload', 'Planpath', Force_ST=Force_ST)
-    g.add_edge('HoldPayload', 'CtlDOF', Force_ST=Force_ST)
-    g.add_edge('HoldPayload', 'ManageHealth', Force_ST=Force_ST)
-    
-    g.add_edge('DistEE', 'ManageHealth', EEctl=EEctl)
-    g.add_edge('AffectDOF','ManageHealth', HSig_DOFs=HSig_DOFs, RSig_DOFs=RSig_DOFs)
-    g.add_edge('StoreEE','ManageHealth', HSig_Bat=HSig_Bat, RSig_Bat=RSig_Bat)
-    g.add_edge('ManageHealth', 'CtlDOF', RSig_Ctl=RSig_Ctl)
-    g.add_edge('ManageHealth', 'Planpath', RSig_Traj=RSig_Traj)
-    
-    return g
+#def initialize():
+#    
+#    #initialize graph
+#    g=nx.DiGraph()
+#    ##Define flows for model
+#    #initialize one-line flows
+#    Force_ST=flow({'value':1.0},'Force')
+#    Force_Air=flow({'value':1.0},'Force')
+#    Force_GR=flow({'value':1.0},'Force')
+#    Force_LG=flow({'value':1.0},'Force')
+#    HSig_DOFs=flow({'hstate':'nominal'}, 'Health Signal')
+#    HSig_Bat=flow({'hstate':'nominal'}, 'Health Signal')
+#    RSig_DOFs=flow({'mode':1}, 'Reconfiguration Signal')
+#    RSig_Bat=flow({'mode':1}, 'Reconfig Signal')
+#    RSig_Ctl=flow({'mode':1}, 'Reconfig Signal')
+#    RSig_Traj=flow({'mode':1}, 'Reconfig Signal')
+#    EE_1=flow({'rate':1.0, 'effort':1.0}, 'EE')
+#    EEmot=flow({'rate':1.0, 'effort':1.0}, 'EE')
+#    EEctl=flow({'rate':1.0, 'effort':1.0}, 'EE')
+#    Ctl1=flow({'forward':0.0, 'upward':1.0}, 'Direction Signal')
+#    DOFs=flow({'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0}, 'DOFs')
+#    Land1=flow({'status':'landed', 'area':'start'}, 'Land')
+#    Env1=flow({'x':0.0,'y':0.0,'elev':0.0}, 'Environment')
+#    
+#    #specialized flows
+#    Dir1=Direc()
+#
+#    ManageHealth=manageHealth([EEctl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj])
+#    g.add_node('ManageHealth', obj=ManageHealth)
+#    
+#    StoreEE=storeEE([EE_1, Force_ST, HSig_Bat, RSig_Bat], ['normal'])
+#    g.add_node('StoreEE', obj=StoreEE)
+#    
+#    DistEE=distEE([EE_1,EEmot,EEctl, Force_ST])
+#    g.add_node('DistEE', obj=DistEE)
+#    g.add_edge('StoreEE','DistEE', EE_1=EE_1)
+#    
+#    AffectDOF=affectDOF([EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs], ['quad'])
+#    g.add_node('AffectDOF', obj=AffectDOF)
+#    
+#    CtlDOF=ctlDOF([EEctl, Dir1, Ctl1, DOFs, Force_ST, RSig_Ctl])
+#    g.add_node('CtlDOF', obj=CtlDOF)
+#    g.add_edge('DistEE','AffectDOF', EEmot=EEmot)
+#    g.add_edge('DistEE','CtlDOF', EEctl=EEctl)
+#    g.add_edge('CtlDOF','AffectDOF', Ctl1=Ctl1,DOFs=DOFs)
+#
+#    Planpath=planpath([EEctl, Env1,Dir1, Force_ST, RSig_Traj])
+#    g.add_node('Planpath', obj=Planpath)
+#    g.add_edge('DistEE','Planpath', EEctl=EEctl)
+#    g.add_edge('Planpath','CtlDOF', Dir1=Dir1)
+#    
+#    Trajectory=trajectory([Env1,DOFs,Land1,Dir1, Force_GR])
+#    g.add_node('Trajectory', obj=Trajectory)
+#    g.add_edge('Trajectory','AffectDOF',DOFs=DOFs)
+#    g.add_edge('Planpath', 'Trajectory', Dir1=Dir1, Env1=Env1)
+#    
+#    EngageLand=engageLand([Force_GR, Force_LG])
+#    g.add_node('EngageLand', obj=EngageLand)
+#    g.add_edge('Trajectory', 'EngageLand', Force_GR=Force_GR)
+#    
+#    HoldPayload=holdPayload([Force_LG, Force_Air, Force_ST])
+#    g.add_node('HoldPayload', obj=HoldPayload)
+#    g.add_edge('EngageLand','HoldPayload', Force_LG=Force_LG)
+#    g.add_edge('HoldPayload', 'AffectDOF', Force_Air=Force_Air)
+#    g.add_edge('HoldPayload', 'StoreEE', Force_ST=Force_ST)
+#    g.add_edge('HoldPayload', 'DistEE', Force_ST=Force_ST)
+#    g.add_edge('HoldPayload', 'Planpath', Force_ST=Force_ST)
+#    g.add_edge('HoldPayload', 'CtlDOF', Force_ST=Force_ST)
+#    g.add_edge('HoldPayload', 'ManageHealth', Force_ST=Force_ST)
+#    
+#    g.add_edge('DistEE', 'ManageHealth', EEctl=EEctl)
+#    g.add_edge('AffectDOF','ManageHealth', HSig_DOFs=HSig_DOFs, RSig_DOFs=RSig_DOFs)
+#    g.add_edge('StoreEE','ManageHealth', HSig_Bat=HSig_Bat, RSig_Bat=RSig_Bat)
+#    g.add_edge('ManageHealth', 'CtlDOF', RSig_Ctl=RSig_Ctl)
+#    g.add_edge('ManageHealth', 'Planpath', RSig_Traj=RSig_Traj)
+#    
+#    return g
 
 
     

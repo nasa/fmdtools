@@ -334,7 +334,7 @@ def propagate(g, initfaults, time):
     flowhist={}
     for fxnname in fxnnames:
         tests[fxnname]=0
-        edges=list(g.in_edges(fxnname))+list(g.out_edges(fxnname))
+        edges=list(g.edges(fxnname))
         for big, end in edges:
             flows=g.edges[big,end]
             for flow in flows:
@@ -352,7 +352,7 @@ def propagate(g, initfaults, time):
             fxn=getfxn(fxnname, g)
             fxn.updatefxn(time=time)
             test=0
-            edges=list(g.in_edges(fxnname))+list(g.out_edges(fxnname))
+            edges=list(g.edges(fxnname))
             for big, end in edges:
                 flows=g.edges[big,end]
                 for flow in flows:
