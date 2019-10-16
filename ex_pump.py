@@ -44,12 +44,12 @@ times=[0,3, 55]
 # propagation (e.g. updatefxn()) are added to the object
 class importEE(fxnblock):
     #Initializing the function requires the flows going in and out of the function
-    def __init__(self,EEout):
+    def __init__(self,flows):
         #this initializes the fault state of the system and adds needed flows
         #self.faults will be used to store which faults are in the function
         #flows will now be attibutes with names given by the keys in the input
         # dict, e.g. {'EEout':EEout} means self.EEout will be the EEout flow
-        super().__init__({'EEout':EEout})
+        super().__init__(['EEout'],flows)
 
         #fault modes that originate in the function are listed here in a dictionary
         #these modes will be used to generate a list of scenarios
@@ -76,10 +76,10 @@ class importEE(fxnblock):
 
 class importWater(fxnblock):
     #Initializing the function requires the flows going in and out of the function
-    def __init__(self,Watout):
+    def __init__(self,flows):
         #init requires a dictionary of flows with the internal variable name and
         # the object reference
-        super().__init__({'Watout':Watout})
+        super().__init__(['Watout'],flows)
         self.faultmodes={'no_wat':{'rate':'moderate', 'rcost':'major'}}
     #in this function, no conditional faults are modelled, so we don't need to include it
     #a dummy version is used in the fxnblock superclass
@@ -93,9 +93,9 @@ class importWater(fxnblock):
 # Import Water is the pipe with water going into the pump
 class exportWater(fxnblock):
     #Initializing the function requires the flows going in and out of the function
-    def __init__(self,Watin):
+    def __init__(self,flows):
         #flows going into/out of the function need to be made properties of the function
-        super().__init__({'Watin':Watin})
+        super().__init__(['Watin'], flows)
         self.faultmodes={'block':{'rate':'moderate', 'rcost':'major'}}
     def behavior(self,time):
         if self.hasfault('block'): #here the fault is some sort of blockage
@@ -103,9 +103,9 @@ class exportWater(fxnblock):
 
 # Import Signal is the on/off switch
 class importSig(fxnblock):
-    def __init__(self,Sigout):
+    def __init__(self,flows):
         #flows going into/out of the function need to be made properties of the function
-        super().__init__({'Sigout':Sigout})
+        super().__init__(['Sigout'],flows)
         self.faultmodes={'no_sig':{'rate':'moderate', 'rcost':'major'}}
     #when the behavior changes over time (and not just internal state) time must
     # be given as an input
@@ -126,12 +126,12 @@ class importSig(fxnblock):
 # Move Water is the pump itself. While one could decompose this further,
 # one function is used for simplicity
 class moveWat(fxnblock):
-    def __init__(self,EEin, Sigin, Watin, Watout):
-        flows={'EEin':EEin, 'Sigin':Sigin, 'Watin':Watin, 'Watout':Watout}
+    def __init__(self,flows):
+        flownames=['EEin', 'Sigin', 'Watin', 'Watout']
         #here we also define the states of a model, which are also added as 
         #attributes to the function
         states={'eff':1.0} #effectiveness state
-        super().__init__(flows,states)
+        super().__init__(flownames,flows,states)
         self.faultmodes={'mech_break':{'rate':'moderate', 'rcost':'major'}, \
                          'short':{'rate':'rare', 'rcost':'major'}}
         #timers can be set by adding variables to functions also
@@ -199,11 +199,11 @@ def initialize():
     
     
     #function objects take their respective flows as input 
-    Imp_EE=importEE(EE_1)
-    Imp_Wat=importWater(Wat_1)
-    Imp_Sig=importSig(Sig_1)
-    Move_Wat=moveWat(EE_1, Sig_1, Wat_1, Wat_2)
-    Exp_Wat=exportWater(Wat_2)
+    Imp_EE=importEE([EE_1])
+    Imp_Wat=importWater([Wat_1])
+    Imp_Sig=importSig([Sig_1])
+    Move_Wat=moveWat([EE_1, Sig_1, Wat_1, Wat_2])
+    Exp_Wat=exportWater([Wat_2])
     
     #INITIALIZE AND ASSOCIATE OBJECTS WITH GRAPH
     #initializing the graph

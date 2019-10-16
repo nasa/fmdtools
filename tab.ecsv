@@ -1,0 +1,13 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Function, datatype: string}
+# - {name: Mode, datatype: string}
+# - {name: Time, datatype: int32}
+# - {name: Effects, datatype: string}
+# - {name: Rate, datatype: float64}
+# - {name: Cost, datatype: float64}
+# - {name: Expected Cost, datatype: float64}
+# schema: astropy-2.0
+Function Mode Time Effects Rate Cost "Expected Cost"
+"Export Water" block 10 "['EE_1', 'Import EE', 'Move Water']" 1e-07 20000.0 200.0

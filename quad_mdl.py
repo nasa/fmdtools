@@ -26,15 +26,14 @@ class Direc(flow):
 
 #Define functions
 class storeEE(fxnblock):
-    def __init__(self, name,EEout, FS, Hsig, Rsig, archtype):
-        flows={'EEout':EEout, 'FS':FS, 'Hsig':Hsig, 'Rsig': Rsig}
+    def __init__(self, flows, archtype):
         if archtype=='normal':
             #architecture: 1 for controllers? + cells in Series & Parallel
             #Batctl=battery('ctl')
             components={'00':battery('00'), '01':battery('01'), '10':battery('10'), '11':battery('11')}
         self.faultmodes={'nocharge':{'rate':'moderate','rcost':'minor'}, \
                          'lowcharge':{'rate':'moderate','rcost':'minor'}} 
-        super().__init__(flows, {'soc': 2000}, components)
+        super().__init__(['EEout', 'FS', 'Hsig', 'Rsig'], flows, {'soc': 2000}, components)
     def condfaults(self, time):
         if self.soc<20: self.addfault('lowcharge')
         if self.soc<1: self.replacefault('lowcharge','nocharge')
@@ -83,8 +82,8 @@ class battery(component):
         return self.Et
 
 class distEE(fxnblock):
-    def __init__(self,EEin,EEmot,EEctl,FS):
-        super().__init__({'EEin':EEin, 'EEmot':EEmot,'EEctl':EEctl,'FS':FS}, {'EEtr':1.0, 'EEte':1.0})
+    def __init__(self,flows):
+        super().__init__(['EEin','EEmot','EEctl','FS'],flows, {'EEtr':1.0, 'EEte':1.0})
         self.faultmodes={'short':{'rate':'moderate', 'rcost':'major'}, \
                          'degr':{'rate':'moderate', 'rcost':'minor'}, \
                          'break':{'rate':'common', 'rcost':'moderate'}}
@@ -104,8 +103,8 @@ class distEE(fxnblock):
         self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, max(self.EEmot.rate,self.EEctl.rate)])
 
 class engageLand(fxnblock):
-    def __init__(self,name, Forcein, Forceout):
-        super().__init__({'forcein':Forcein, 'forceout':Forceout}, {'Ft':1.0})
+    def __init__(self,flows):
+        super().__init__(['forcein', 'forceout'],flows, {'Ft':1.0})
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}}
     def condfaults(self, time):
@@ -118,11 +117,9 @@ class engageLand(fxnblock):
         self.forceout.value=self.Ft*min([-2.0,self.forcein.value])*0.2
     
 class manageHealth(fxnblock):
-    def __init__(self, EECtl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj):
-        
-        flows={'DOFshealth':HSig_DOFs, 'Bathealth':HSig_Bat, 'DOFconfig':RSig_DOFs, 'Batconfig':RSig_Bat, \
-               'Ctlconfig':RSig_Ctl, 'Trajconfig':RSig_Traj, 'FS':Force_ST, 'EECtl':EECtl}
-        super().__init__(flows)
+    def __init__(self,flows):
+        flownames=['EECtl','FS','DOFshealth', 'Bathealth','DOFconfig','Batconfig','Ctlconfig', 'Trajconfig' ]
+        super().__init__(flownames, flows)
         
         self.faultmodes={'falsemaintenance':{'rate':'moderate', 'rcost':'minor'},\
                          'falsemasking':{'rate':'rare', 'rcost': 'major'},\
@@ -143,9 +140,8 @@ class manageHealth(fxnblock):
             if self.DOFshealth=='degraded': self.DOFconfig=2    
             
 class holdPayload(fxnblock):
-    def __init__(self,name, Force_gr,Force_air, Force_struct):
-        self.name=name
-        super().__init__({'FG':Force_gr, 'FA':Force_air, 'FS':Force_struct}, {'Ft': 1.0})
+    def __init__(self,flows):
+        super().__init__(['FG', 'FA', 'FS'],flows, {'Ft': 1.0})
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}, }
     def condfaults(self, time):
@@ -158,16 +154,15 @@ class holdPayload(fxnblock):
         self.FA.value=self.Ft
         self.FS.value=self.Ft
     
-class affectDOF(fxnblock):
-    def __init__(self, name, EEin, Ctlin, DOFout,Force, Hsig, Rsig, archtype):
-        flows={'Hsig':Hsig, 'Rsig':Rsig, 'EEin':EEin, 'Ctlin':Ctlin,'DOF':DOFout,'Force':Force}        
+class affectDOF(fxnblock): #EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs
+    def __init__(self, flows, archtype):     
         self.archtype=archtype
         self.faultmodes={}
         if archtype=='quad':
             components={'RF':line('RF'), 'LF':line('LF'), 'LR':line('LR'), 'RR':line('RR')}
             self.upward={'RF':1,'LF':1,'LR':1,'RR':1}
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5}
-        super().__init__(flows,{}, components) 
+        super().__init__(['EEin', 'Ctlin','DOF','Force','Hsig', 'Rsig'], flows,{}, components) 
     def behavior(self, time):
         Air={}
         EEin={}
@@ -249,8 +244,8 @@ class line(component):
         self.EE_in=m2to1([EEin,self.Eto])     
     
 class ctlDOF(fxnblock):
-    def __init__(self, name,EEin, Dir, Ctl, DOFs, FS, Rsig):
-        super().__init__({'EEin':EEin,'Rsig':Rsig,'Ctl':Ctl,'Dir':Dir,'DOFs':DOFs,'FS':FS}, {'vel':0.0, 'Cs':1.0})
+    def __init__(self, flows):
+        super().__init__(['EEin','Dir','Ctl','DOFs','FS','Rsig'],flows, {'vel':0.0, 'Cs':1.0})
         self.faultmodes={'noctl':{'rate':'rare', 'rcost':'high'}, \
                          'degctl':{'rate':'rare', 'rcost':'high'}}
     def condfaults(self, time):
@@ -288,8 +283,8 @@ class ctlDOF(fxnblock):
         self.Ctl.upward=self.EEin.effort*self.Cs*upthrottle*pwr
 
 class planpath(fxnblock):
-    def __init__(self, name,EEin, Env, Dir, FS, Rsig):
-        super().__init__({'EEin':EEin,'Rsig':Rsig,'Env':Env,'Dir':Dir,'FS':FS})
+    def __init__(self, flows):
+        super().__init__(['EEin','Env','Dir','FS','Rsig'], flows)
         self.mode='taxi'
         self.faultmodes={'noloc':{'rate':'rare', 'rcost':'high'}, \
                          'degloc':{'rate':'rare', 'rcost':'high'}}
@@ -325,8 +320,8 @@ class planpath(fxnblock):
             self.Dir.traj=[0,0,0]
 
 class trajectory(fxnblock):
-    def __init__(self, name, Env, DOF, Land, Dir, Force_LG):
-        super().__init__({'Env':Env,'DOF':DOF,'Land':Land, 'Dir': Dir, 'Force_LG': Force_LG}, {'flight':0.0})
+    def __init__(self, flows):
+        super().__init__(['Env','DOF','Land', 'Dir', 'Force_LG'], flows, {'flight':0.0})
         self.faultmodes={'nom':{'rate':'common', 'rcost':'NA'}, }
     def behavior(self, time):
         
@@ -353,6 +348,33 @@ class trajectory(fxnblock):
             self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
             self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]
             self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
+            
+class quadrotor(model):
+    def __init__(self):
+        super().__init__()
+        #add flows to the model
+        self.addflow({'value':1.0},'Force','Force_ST')
+        self.addflow({'value':1.0},'Force', 'Force_Air')
+        self.addflow({'value':1.0},'Force', 'Force_GR')
+        self.addflow({'value':1.0},'Force', 'Force_LG')
+        self.addflow({'hstate':'nominal'}, 'Health Signal', 'HSig_DOFs')
+        self.addflow({'hstate':'nominal'}, 'Health Signal', 'HSig_Bat')
+        self.addflow({'mode':1}, 'Reconfiguration Signal', 'RSig_DOFs')
+        self.addflow({'mode':1}, 'Reconfiguration Signal', 'RSig_Bat')
+        self.addflow({'mode':1}, 'Reconfiguration Signal', 'RSig_Ctl')
+        self.addflow({'mode':1}, 'Reconfiguration Signal', 'RSig_Traj')
+        self.addflow({'rate':1.0, 'effort':1.0}, 'EE', 'EE_1')
+        self.addflow({'rate':1.0, 'effort':1.0}, 'EE', 'EEmot')
+        self.addflow({'rate':1.0, 'effort':1.0}, 'EE', 'EEctl')
+        self.addflow({'forward':0.0, 'upward':1.0}, 'Direction Signal', 'Ctl1')
+        self.addflow({'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0}, 'DOFs', 'DOFs')
+        self.addflow({'status':'landed', 'area':'start'}, 'Land', 'Land1')
+        self.addflow({'x':0.0,'y':0.0,'elev':0.0}, 'Environment', 'Env1')
+        #add functions to the model
+        flows=['EEctl', 'Force_ST', 'HSig_DOFs', 'HSig_Bat', 'RSig_DOFs', 'RSig_Bat', 'RSig_Ctl', 'RSig_Traj']
+        self.addfxn('ManageHealth',manageHealth,flows)
+
+
 
 ##future: try to automate this part so you don't have to do it in a wierd order
 def initialize():
@@ -378,43 +400,44 @@ def initialize():
     DOFs=flow({'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0}, 'DOFs')
     Land1=flow({'status':'landed', 'area':'start'}, 'Land')
     Env1=flow({'x':0.0,'y':0.0,'elev':0.0}, 'Environment')
+    
     #specialized flows
     Dir1=Direc()
 
-    ManageHealth=manageHealth(EEctl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj)
+    ManageHealth=manageHealth([EEctl, Force_ST, HSig_DOFs, HSig_Bat, RSig_DOFs, RSig_Bat, RSig_Ctl, RSig_Traj])
     g.add_node('ManageHealth', obj=ManageHealth)
     
-    StoreEE=storeEE('StoreEE',EE_1, Force_ST, HSig_Bat, RSig_Bat, 'normal')
+    StoreEE=storeEE([EE_1, Force_ST, HSig_Bat, RSig_Bat], 'normal')
     g.add_node('StoreEE', obj=StoreEE)
     
-    DistEE=distEE(EE_1,EEmot,EEctl, Force_ST)
+    DistEE=distEE([EE_1,EEmot,EEctl, Force_ST])
     g.add_node('DistEE', obj=DistEE)
     g.add_edge('StoreEE','DistEE', EE_1=EE_1)
     
-    AffectDOF=affectDOF('AffectDOF',EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs, 'quad')
+    AffectDOF=affectDOF([EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs], 'quad')
     g.add_node('AffectDOF', obj=AffectDOF)
     
-    CtlDOF=ctlDOF('CtlDOF',EEctl, Dir1, Ctl1, DOFs, Force_ST, RSig_Ctl)
+    CtlDOF=ctlDOF([EEctl, Dir1, Ctl1, DOFs, Force_ST, RSig_Ctl])
     g.add_node('CtlDOF', obj=CtlDOF)
     g.add_edge('DistEE','AffectDOF', EEmot=EEmot)
     g.add_edge('DistEE','CtlDOF', EEctl=EEctl)
     g.add_edge('CtlDOF','AffectDOF', Ctl1=Ctl1,DOFs=DOFs)
 
-    Planpath=planpath('Planpath',EEctl, Env1,Dir1, Force_ST, RSig_Traj)
+    Planpath=planpath([EEctl, Env1,Dir1, Force_ST, RSig_Traj])
     g.add_node('Planpath', obj=Planpath)
     g.add_edge('DistEE','Planpath', EEctl=EEctl)
     g.add_edge('Planpath','CtlDOF', Dir1=Dir1)
     
-    Trajectory=trajectory('Trajectory',Env1,DOFs,Land1,Dir1, Force_GR)
+    Trajectory=trajectory([Env1,DOFs,Land1,Dir1, Force_GR])
     g.add_node('Trajectory', obj=Trajectory)
     g.add_edge('Trajectory','AffectDOF',DOFs=DOFs)
     g.add_edge('Planpath', 'Trajectory', Dir1=Dir1, Env1=Env1)
     
-    EngageLand=engageLand('EngageLand',Force_GR, Force_LG)
+    EngageLand=engageLand([Force_GR, Force_LG])
     g.add_node('EngageLand', obj=EngageLand)
     g.add_edge('Trajectory', 'EngageLand', Force_GR=Force_GR)
     
-    HoldPayload=holdPayload('HoldPayload',Force_LG, Force_Air, Force_ST)
+    HoldPayload=holdPayload([Force_LG, Force_Air, Force_ST])
     g.add_node('HoldPayload', obj=HoldPayload)
     g.add_edge('EngageLand','HoldPayload', Force_LG=Force_LG)
     g.add_edge('HoldPayload', 'AffectDOF', Force_Air=Force_Air)

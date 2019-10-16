@@ -21,7 +21,7 @@ fp.plotflowhist(flowhist3, 'N/A', time=0)
 
 #Check various scenarios individually
 
-endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'}, graph=graph)
+endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'})
 fp.showgraph(resgraph)
 
 fp.plotflowhist(flowhist, 'StoreEE short', time=5)
