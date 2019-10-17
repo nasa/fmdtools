@@ -179,54 +179,42 @@ class Water(flow):
                     'level':1.0}
         super().__init__(attributes, 'Water')
         self.customattribute='hello'
+
+##DEFINE MODEL OBJECT
+# The model is also made an object to aid graph construction
+class pump(model):
+    def __init__(self):
+        super().__init__()
+        #Flows must be added prior to the functions that use them, since
+        # the functions take them as input
+        #As shown below, flows are often simple enough that they don't need to be defined
+        #as classes at all, but can instead be instantiated directly from the flow class
+        #Here addflow takes as input a unique name for the flow "flowname", a type for the flow, "flowtype"
+        # and either:   a dict with the initial flow attributes, OR
+        #               a flow object defined in the model file
+        self.addflow('EE_1', 'EE', {'rate':1.0, 'effort':1.0})
+        self.addflow('Sig_1', 'Signal', {'power':1.0})
+        # custom flows which we defined earlier can be added also:
+        self.addflow('Wat_1', 'Water', Water())
+        self.addflow('Wat_2', 'Water', Water())
+        
+        #Flows are added to the model using the addfxn function, which needs:
+        #   - a unique function name 
+        #   - the class to instantiate the function with (defined above)
+        #   - a list of flow names corresponding to the inputs to the flow
+        #       -the *order* of which corresponds to those in the function definition
+        #       -the *name* of which corresponds to the name defined above for the flow
+        self.addfxn('ImportEE',importEE,['EE_1'])
+        self.addfxn('ImportWater',importWater,['Wat_1'])
+        self.addfxn('ImportSignal',importSig,['Sig_1'])
+        self.addfxn('MoveWater', moveWat, ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'])
+        self.addfxn('ExportWater', exportWater, ['Wat_2'])
     
 #INSTANTIATE MODEL
 #the model is initialized using an initialize function
 def initialize():
-    #INITIALIZE FUNCTION AND FLOW OBJECTS
-    
-    
-    #Flows must be instantiated prior to the functions that use them, since
-    # the functions take them as input
-    #As shown below, flows are often simple enough that they don't need to be defined
-    #as classes at all, but can instead be instantiated directly from the flow class
-    EE_1=flow({'rate':1.0, 'effort':1.0}, 'EE')
-    Sig_1=flow({'power':1.0}, 'Signal')
-    
-    #Here we instantiate the custom flows defined 
-    Wat_1=Water()
-    Wat_2=Water()
-    
-    
-    #function objects take their respective flows as input 
-    Imp_EE=importEE([EE_1])
-    Imp_Wat=importWater([Wat_1])
-    Imp_Sig=importSig([Sig_1])
-    Move_Wat=moveWat([EE_1, Sig_1, Wat_1, Wat_2])
-    Exp_Wat=exportWater([Wat_2])
-    
-    #INITIALIZE AND ASSOCIATE OBJECTS WITH GRAPH
-    #initializing the graph
-    g=nx.DiGraph()
-    
-    #add nodes. The first argument gives the node a name. 
-    #obj=fxn gives the graph structure the object instantiated for the function
-    g.add_node('Import EE', obj=Imp_EE)
-    g.add_node('Import Water', obj=Imp_Wat)
-    g.add_node('Import Signal', obj=Imp_Sig)
-    g.add_node('Move Water', obj=Move_Wat)
-    g.add_node('Export Water', obj=Exp_Wat)
-    
-    #connect the notes with edges
-    # flow_1=flow_1 associates a given flow with the edge
-    #note that multiple flows can be added to edges using 
-    #flow_1=flow_1, flow_2=flow_2 ... etc
-    g.add_edge('Import EE', 'Move Water', EE_1=EE_1)
-    g.add_edge('Import Signal', 'Move Water', Sig_1=Sig_1)
-    g.add_edge('Import Water', 'Move Water', Wat_1=Wat_1)
-    g.add_edge('Move Water', 'Export Water', Wat_2=Wat_2)
-    
-    return g
+    p=pump()
+    return p.constructgraph()
 
 #PROVIDE MEANS OF CLASSIFYING RESULTS
 # this function classifies the faults into severities based on the state of faults
