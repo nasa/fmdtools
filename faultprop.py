@@ -325,6 +325,8 @@ def propagate(mdl, initfaults, time):
     tests={}
     flowhist={}
     g=mdl.graph
+    #Step 1: Find out what the current value of the flows are, determine how many
+    # flows need to be checked for a function
     for fxnname in fxnnames:
         tests[fxnname]=0
         edges=list(g.edges(fxnname))
@@ -333,16 +335,17 @@ def propagate(mdl, initfaults, time):
             for flow in flows:
                 flowhist[big, end,flow]=g.edges[big, end][flow].status()
                 tests[fxnname]+=1
-     #initialize fault           
+    #Step 2: Inject faults if present     
     for fxnname in initfaults:
         if initfaults[fxnname]!='nom':
-            fxn=getfxn(fxnname, g)
+            fxn=mdl.fxns[fxnname]
             fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
+    #Step 3: Propagate faults through graph
     n=0
     while activefxns:
         funclist=list(activefxns).copy()
         for fxnname in funclist:
-            fxn=getfxn(fxnname, g)
+            fxn=mdl.fxns[fxnname]
             fxn.updatefxn(time=time)
             test=0
             edges=list(g.edges(fxnname))
@@ -503,21 +506,6 @@ def getflow(flowname, g):
                 else:
                     flowobj=flows[flow]
     return flowobj
-
-#resetgraph
-# resets the graph to nominal conditions (WARNING: UNTESTED & EXPERIMENTAL)
-# may not work with graphs with components!
-def resetgraph(g):
-    #reset flows
-    for edge in g.edges:
-        flows=g.get_edge_data(edge[0],edge[1])
-        for flowname in flows:
-            flow=flows[flowname]
-            flow.reset()
-    #reset functions
-    for fxnname in g.nodes:
-        fxn=getfxn(fxnname, g)
-        fxn.reset()
         
             
 
