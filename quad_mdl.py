@@ -12,9 +12,6 @@ import numpy as np
 import faultprop as fp
 from modeldef import *
 
-#Declare time range to run model over
-times=[0,3, 55]
-
 #Define specialized flows
 class Direc(flow):
     def __init__(self):
@@ -383,71 +380,71 @@ class quadrotor(model):
         self.addfxn('Trajectory', trajectory,['Env1','DOFs','Land1','Dir1', 'Force_GR'] )
         self.addfxn('EngageLand', engageLand,['Force_GR', 'Force_LG'])
         self.addfxn('HoldPayload', holdPayload,['Force_LG', 'Force_Air', 'Force_ST'])
-
-def initialize():
-    q=quadrotor()
-    return q.constructgraph()
-    
-def findclassification(g, endfaults, endflows, scen):
-    
-    start=[0.0,0.0]
-    start_xw=5
-    start_yw=5
-    start_area=square(start,start_xw, start_yw)
-    flyelev=30
-    poi_center=[0,150]
-    poi_xw=50
-    poi_yw=50
-    dang_center=[0,150]
-    dang_xw=150
-    dang_yw=150
-    dang_area=square(dang_center, dang_xw, dang_yw)
-    safe1_center=[-25,100]
-    safe1_xw=10
-    safe1_yw=10
-    safe1_area=square(safe1_center, safe1_xw, safe1_yw)
-    safe2_center=[25,50]
-    safe2_xw=10
-    safe2_yw=10
-    safe2_area=square(safe2_center, safe2_xw, safe2_yw)
-    
-    Env=fp.getflow('Env1', g)
-    
-    #may need to redo this
-    if  inrange(start_area, Env.x, Env.y):
-        landloc='nominal'
-        area=1
-    elif inrange(safe1_area, Env.x, Env.y) or inrange(safe2_area, Env.x, Env.y):
-        landloc='emsafe'
-        area=1000
-    elif inrange(dang_area, Env.x, Env.y):
-        landloc='emdang'
-        area=100000
-    else:
-        landloc='emunsanc'
-        area=10000
         
-    repaircosts=fp.listfaultsprops(endfaults, g, 'rcost')
-    maxcost=textmax(repaircosts.values())
+        self.constructgraph()
+        
+        #Declare time range to run model over
+        self.times=[0,3, 55]
+    def findclassification(self, g, endfaults, endflows, scen):
+        
+        start=[0.0,0.0]
+        start_xw=5
+        start_yw=5
+        start_area=square(start,start_xw, start_yw)
+        flyelev=30
+        poi_center=[0,150]
+        poi_xw=50
+        poi_yw=50
+        dang_center=[0,150]
+        dang_xw=150
+        dang_yw=150
+        dang_area=square(dang_center, dang_xw, dang_yw)
+        safe1_center=[-25,100]
+        safe1_xw=10
+        safe1_yw=10
+        safe1_area=square(safe1_center, safe1_xw, safe1_yw)
+        safe2_center=[25,50]
+        safe2_xw=10
+        safe2_yw=10
+        safe2_area=square(safe2_center, safe2_xw, safe2_yw)
+        
+        Env=fp.getflow('Env1', g)
+        
+        #may need to redo this
+        if  inrange(start_area, Env.x, Env.y):
+            landloc='nominal'
+            area=1
+        elif inrange(safe1_area, Env.x, Env.y) or inrange(safe2_area, Env.x, Env.y):
+            landloc='emsafe'
+            area=1000
+        elif inrange(dang_area, Env.x, Env.y):
+            landloc='emdang'
+            area=100000
+        else:
+            landloc='emunsanc'
+            area=10000
+            
+        repaircosts=fp.listfaultsprops(endfaults, g, 'rcost')
+        maxcost=textmax(repaircosts.values())
+        
+        if maxcost=='major':
+            repcost=10000
+        elif maxcost=='moderate':
+            repcost=3000
+        elif maxcost=='minor':
+            repcost=500
+        elif maxcost=='replacement':
+            repcost=250
+        else:
+            repcost=0
     
-    if maxcost=='major':
-        repcost=10000
-    elif maxcost=='moderate':
-        repcost=3000
-    elif maxcost=='minor':
-        repcost=500
-    elif maxcost=='replacement':
-        repcost=250
-    else:
-        repcost=0
-
-    totcost=repcost+area
-    
-    rate=1e-6
-    
-    expcost=totcost*rate*1e5
-    
-    return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
+        totcost=repcost+area
+        
+        rate=1e-6
+        
+        expcost=totcost*rate*1e5
+        
+        return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
 
 ## BASE FUNCTIONS
 
