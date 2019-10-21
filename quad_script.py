@@ -10,13 +10,11 @@ import faultprop as fp
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-import quad_mdl as mdl
+from quad_mdl import *
 import time
 
 #scenlist=fp.listinitfaults(graph, mdl.times)
-
-q = mdl.quadrotor()
-g=q.constructgraph()
+mdl = quadrotor()
 
 # =============================================================================
 endresults1, resgraph, flowhist3, ghist3=fp.runnominal(mdl, track={'DOFs','Dir1', 'Env1', 'Force_LG'})
@@ -58,7 +56,7 @@ plt.close()
 
 fullresults, resultstab=fp.proplist(mdl,reuse=True)
 print(resultstab)
-resultstab.write('tab4.ecsv', overwrite=True)
+#resultstab.write('tab4.ecsv', overwrite=True)
 
 
 #Doing a time test
