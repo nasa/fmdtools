@@ -10,7 +10,9 @@ Description: A simple example of I/O using faultprop.py and the pump model in ex
 
 #First, import the fault propogation library as well as the model
 import faultprop as fp
-import ex_pump as mdl
+from ex_pump import * #required to import entire module
+
+mdl = pump()
 
 
 #Before seeing how faults propogate, it's useful to see how the model performs
@@ -21,28 +23,28 @@ import ex_pump as mdl
 #   -do any faults occur in the nominal state?
 #   -do all the flow states proceed as desired over time?
 
-endresults, resgraph, flowhist, ghist=fp.runnominal(mdl, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
-fp.showgraph(resgraph)
-fp.plotflowhist(flowhist, 'Nominal')
-
-#We might further query the faults to see what happens to the various states
-endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'MoveWater', 'short', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
-fp.showgraph(resgraph)
-fp.plotflowhist(flowhist, 'short', time=10)
-t=fp.printresult('MoveWater', 'short', 10, endresults)
-print(t)
-#in addition to these visualizations, we can also look at the final results 
-#to see which specific faults were caused, as well as the flow states
-print(endresults)
-
-#we can also look at other faults
-#endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'Export Water', 'block', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
-fp.showgraph(resgraph)
-fp.plotflowhist(flowhist, 'blockage', time=10)
-t=fp.printresult('ExportWater', 'block', 10, endresults)
-print(t)
-#you can save to a csv this with:
-t.write('tab.ecsv', overwrite=True)
+#endresults, resgraph, flowhist, ghist=fp.runnominal(mdl, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
+#fp.showgraph(resgraph)
+#fp.plotflowhist(flowhist, 'Nominal')
+#
+##We might further query the faults to see what happens to the various states
+#endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'MoveWater', 'short', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
+#fp.showgraph(resgraph)
+#fp.plotflowhist(flowhist, 'short', time=10)
+#t=fp.printresult('MoveWater', 'short', 10, endresults)
+#print(t)
+##in addition to these visualizations, we can also look at the final results 
+##to see which specific faults were caused, as well as the flow states
+#print(endresults)
+#
+##we can also look at other faults
+##endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'Export Water', 'block', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
+#fp.showgraph(resgraph)
+#fp.plotflowhist(flowhist, 'blockage', time=10)
+#t=fp.printresult('ExportWater', 'block', 10, endresults)
+#print(t)
+##you can save to a csv this with:
+#t.write('tab.ecsv', overwrite=True)
 
 
 #finally, to get the results of all of the scenarios, we can go through the list
