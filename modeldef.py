@@ -147,6 +147,11 @@ class model(object):
         #self.graph.add_nodes_from(self.fxn)
         #self.graph=
         return self.graph
+    def reset(self):
+        for flowname, flow in self.flows.items():
+            flow.reset()
+        for fxnname, fxn in self.fxns.items():
+            fxn.reset()
         
 # mode constructor????
 def mode(rate,rcost):

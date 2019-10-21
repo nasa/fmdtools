@@ -28,9 +28,6 @@ import numpy as np
 import faultprop as fp
 from modeldef import *
 
-#Declare time range to run model over
-times=[0,3, 55]
-
 
 ##DEFINE MODEL FUNCTIONS
 # Functions are, again, defined using Python classes that are instantiated as objects
@@ -209,6 +206,40 @@ class pump(model):
         self.addfxn('ImportSignal',importSig,['Sig_1'])
         self.addfxn('MoveWater', moveWat, ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'])
         self.addfxn('ExportWater', exportWater, ['Wat_2'])
+        
+        self.constructgraph()
+        
+        #Declare time range to run model over
+        self.times=[0,3, 55]
+        
+    #PROVIDE MEANS OF CLASSIFYING RESULTS
+    # this function classifies the faults into severities based on the state of faults
+    # in this case, we will just use the repair costs and the probability
+    def findclassification(self,resgraph, endfaults, endflows, scen):
+        
+        #get fault costs and rates
+        repcosts=fp.listfaultsprops(endfaults, resgraph, 'rcost')
+        costs=repcosts.values()
+        costkey={'major': 10000, 'minor': 1000}
+        totcost=0.0
+        
+        for cost in costs:
+            totcost=totcost+costkey[cost]
+        
+        life=100
+        
+        if scen['properties']['type']=='nominal':
+            rate=1.0
+        else:
+            qualrate=scen['properties']['rate']
+            ratekey={'rare': 1e-7, 'moderate': 1e-5}
+            rate=ratekey[qualrate]
+        
+        life=1e5
+        
+        expcost=rate*life*totcost
+        
+        return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
     
 #INSTANTIATE MODEL
 #the model is initialized using an initialize function
@@ -216,32 +247,5 @@ def initialize():
     p=pump()
     return p.constructgraph()
 
-#PROVIDE MEANS OF CLASSIFYING RESULTS
-# this function classifies the faults into severities based on the state of faults
-# in this case, we will just use the repair costs and the probability
-def findclassification(resgraph, endfaults, endflows, scen):
-    
-    #get fault costs and rates
-    repcosts=fp.listfaultsprops(endfaults, resgraph, 'rcost')
-    costs=repcosts.values()
-    costkey={'major': 10000, 'minor': 1000}
-    totcost=0.0
-    
-    for cost in costs:
-        totcost=totcost+costkey[cost]
-    
-    life=100
-    
-    if scen['properties']['type']=='nominal':
-        rate=1.0
-    else:
-        qualrate=scen['properties']['rate']
-        ratekey={'rare': 1e-7, 'moderate': 1e-5}
-        rate=ratekey[qualrate]
-    
-    life=1e5
-    
-    expcost=rate*life*totcost
-    
-    return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
+
     
