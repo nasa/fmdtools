@@ -172,6 +172,16 @@ class model(object):
         nx.set_node_attributes(graph, fxnstates, 'states')
         nx.set_node_attributes(graph, fxnmodes, 'modes')
         return graph
+    def returnfaultmodes(self):
+        modes={}
+        fxns={}
+        for fxnname, fxn in self.fxns.items():
+            modes[fxnname]=dict.fromkeys(fxn.faults.copy())
+            for mode in modes[fxnname]:
+                if mode!='nom': 
+                    modes[fxnname][mode] = fxn.faultmodes[mode]
+                    fxns.update(fxnname)
+        return modes, fxns
         
         
         

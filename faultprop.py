@@ -27,21 +27,26 @@ from astropy.table import Table, Column
 #   - fault, name of the fault that was injected (for the titles)
 #   - time, the time in which the fault was initiated (so that time is displayed on the graph)
 def plotflowhist(flowhist, fault='', time=0):
-    for flow in flowhist['faulty']:
+    if 'nominal' not in flowhist:
+        flowhist['nominal']=flowhist
+    
+    for flow in flowhist['nominal']:
         fig = plt.figure()
-        plots=len(flowhist['faulty'][flow])
+        plots=len(flowhist['nominal'][flow])
         fig.add_subplot(np.ceil((plots+1)/2),2,plots)
         plt.tight_layout(pad=2.5, w_pad=2.5, h_pad=2.5, rect=[0, 0.03, 1, 0.95])
         n=1
-        for var in flowhist['faulty'][flow]:
+        for var in flowhist['nominal'][flow]:
             plt.subplot(np.ceil((plots+1)/2),2,n)
             n+=1
-            a, =plt.plot(flowhist['faulty'][flow][var], color='r')
-            b, =plt.plot(flowhist['nominal'][flow][var], color='b')
-            c =plt.axvline(x=time, color='k')
+            a, =plt.plot(flowhist['nominal'][flow][var], color='b')
+            if 'faulty' in flowhist:
+                b, = plt.plot(flowhist['faulty'][flow][var], color='r')
+                c = plt.axvline(x=time, color='k')
             plt.title(var)
         plt.subplot(np.ceil((plots+1)/2),2,n)
-        plt.legend([a,b],['faulty', 'nominal'])
+        if 'faulty' in flowhist:
+            plt.legend([a,b],['faulty', 'nominal'])
         fig.suptitle('Dynamic Response of '+flow+' to fault'+' '+fault)
         plt.show()
 
@@ -75,9 +80,7 @@ def showgraph(g, faultscen=[], time=[]):
     
     nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color='g', \
                      width=3, font_weight='bold')
-    
-    faults=findfaults(g)   
-    faultflows,faultedges=findfaultflows(g)
+    nx.draw_networkx_edge_labels(g,pos,edge_labels=labels)
     
     if list(g.nodes(data='status'))[0][1]:
         statuses=dict(g.nodes(data='status', default='Nominal'))
@@ -90,10 +93,9 @@ def showgraph(g, faultscen=[], time=[]):
         nx.draw_networkx_nodes(g, pos, nodelist=faultnodes,node_color = 'r',\
                           node_shape='s',width=3, font_weight='bold', node_size = 2000)
         nx.draw_networkx_edges(g,pos,edgelist=faultedges.keys(), edge_color='r', width=2)
-    
-    nx.draw_networkx_edge_labels(g,pos,edge_labels=labels)
-    
-    nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedges, font_color='r')
+        
+        faultflows,faultedges=findfaultflows(g)
+        nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedges, font_color='r')
     
     if faultscen:
         plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
@@ -146,8 +148,16 @@ def runnominal(mdl, track={}, gtrack={}):
     nomscen=constructnomscen(mdl)
     scen=nomscen.copy()
     flowhist, graphhist =proponescen(mdl, scen, track, gtrack)
+    
+    resgraph = mdl.returnstategraph()   
+    endfaults, _ = mdl.returnfaultmodes()
+    endflows={}
+    endclass=mdl.findclassification(resgraph, endfaults, endflows, scen)
+    
+    endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}
+    
     mdl.reset()
-    return flowhist, graphhist
+    return endresults, resgraph, flowhist, graphhist
 
 #proponefault
 # runs the model given a single function and fault mode
@@ -260,7 +270,7 @@ def proplist(mdl, reuse=False):
 #   - endclass, a dict with the classification of the scenario, which includes rate, cost, expected cost
 def classifyresults(mdl,resgraph, scen):
     endflows,endedges=findfaultflows(resgraph)
-    endfaults=findfaults(resgraph)
+    endfaults, =mdl.returnfaultmodes()
     endclass=mdl.findclassification(resgraph, endfaults, endflows, scen)
     return endflows, endfaults, endclass
 
