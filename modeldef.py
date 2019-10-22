@@ -40,7 +40,7 @@ class block(object):
         states={}
         for state in self._states:
             states[state]=getattr(self,state)
-        return states.copy(), self.faults
+        return states.copy(), self.faults.copy()
 
 #Function superclass 
 class fxnblock(block):
@@ -133,6 +133,7 @@ class model(object):
         self.multgraph = nx.projected_graph(self.bipartite, self.fxns,multigraph=True)
         self.graph = nx.projected_graph(self.bipartite, self.fxns)
         attrs={}
+        #do we still need to do this for the objects? maybe not--I don't think we use the info anymore
         for edge in self.graph.edges:
             midedges=list(self.multgraph.subgraph(edge).edges)
             flows= [midedge[2] for midedge in midedges]
@@ -152,6 +153,28 @@ class model(object):
             flow.reset()
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
+    def returnstategraph(self):
+        graph=nx.projected_graph(self.bipartite, self.fxns)
+        edgevals={}
+        fxnmodes={}
+        fxnstates={}
+        for edge in graph.edges:
+            midedges=list(self.multgraph.subgraph(edge).edges)
+            flows= [midedge[2] for midedge in midedges]
+            flowdict={}
+            for flow in flows: 
+                flowdict[flow]=self.flows[flow].status()
+            edgevals[edge]=flowdict
+        for fxnname, fxn in self.fxns.items():
+            fxnstates[fxnname], fxnmodes[fxnname] = fxn.returnstates()
+            del graph.nodes[fxnname]['bipartite']
+        nx.set_edge_attributes(graph, edgevals)
+        nx.set_node_attributes(graph, fxnstates, 'states')
+        nx.set_node_attributes(graph, fxnmodes, 'modes')
+        return graph
+        
+        
+        
         
 # mode constructor????
 def mode(rate,rcost):

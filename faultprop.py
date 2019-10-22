@@ -145,9 +145,9 @@ def constructnomscen(mdl):
 def runnominal(mdl, track={}, gtrack={}):
     nomscen=constructnomscen(mdl)
     scen=nomscen.copy()
-    endresults, resgraph, flowhist, graphhist =runonefault(mdl, scen, track, gtrack)
+    flowhist, graphhist =proponescen(mdl, scen, track, gtrack)
     mdl.reset()
-    return endresults,resgraph, flowhist, graphhist
+    return flowhist, graphhist
 
 #proponefault
 # runs the model given a single function and fault mode
@@ -219,6 +219,8 @@ def proplist(mdl, reuse=False):
     rates=np.zeros(numofscens, dtype=float)
     costs=np.zeros(numofscens, dtype=float)
     expcosts=np.zeros(numofscens, dtype=float)
+    
+    
     
     for i, scen in enumerate(scenlist):
         if reuse: 
@@ -313,6 +315,31 @@ def runonefault(mdl, scen, track={}, gtrack={}):
     endflows, endfaults, endclass = classifyresults(mdl,resgraph, scen)
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}
     return endresults, resgraph, flowhist, graphhist
+
+def proponescen(mdl, scen, track={}, gtrack={}):
+    
+    timerange= range(mdl.times[0], mdl.times[-1]+1) 
+    # initialize dict of tracked flows
+    flowhist={}
+    if track:
+        for flowname in track:
+                flowhist[flowname]=mdl.flows[flowname].status()
+                for var in flowhist[flowname]:
+                    flowhist[flowname][var]=[{} for _ in timerange]
+    # run model through the time range defined in the object
+    nomscen=constructnomscen(mdl)
+    graphhist=[]
+    for rtime in timerange:
+       # inject fault when it occurs, track defined flow states and graph
+        if rtime==scen['properties']['time']: propagate(mdl, scen['faults'], rtime)
+        else: propagate(mdl,nomscen['faults'],rtime)
+        if track:
+            for flowname in track:
+                for var in mdl.flows[flowname].status():
+                    flowhist[flowname][var][rtime]=[mdl.flows[flowname].status()[var]]
+        if rtime in gtrack:
+            graphhist[rtime]=mdl.returnstategraph()
+    return flowhist, graphhist
 
 #propogate
 # propagates faults through the graph at one time-step
