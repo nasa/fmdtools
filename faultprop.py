@@ -322,12 +322,10 @@ def propagate(mdl, initfaults, time):
     #set up history of flows to see if any has changed
     tests={}
     flowhist={}
-    #Step 1: Find out what the current value of the flows are, determine how many
-    # flows need to be checked for a function
+    newflowhist={}
+    #Step 1: Find out what the current value of the flows are
     for flowname, flow in mdl.flows.items():
         flowhist[flowname]=flow.status()
-    for fxnname in mdl.fxns:
-        tests[fxnname]=mdl.multgraph.degree(fxnname)
     #Step 2: Inject faults if present     
     for fxnname in initfaults:
         if initfaults[fxnname]!='nom':
@@ -336,25 +334,21 @@ def propagate(mdl, initfaults, time):
     #Step 3: Propagate faults through graph
     n=0
     activefxns=set(mdl.fxns)
+    nextfxns=set()
     while activefxns:
         for fxnname in list(activefxns).copy():
             #Update functions with new values
             fxn=mdl.fxns[fxnname]
             fxn.updatefxn(time=time)
-            #Check to see if the flows connected to the function have new vals
-            #If not, remove from list, otherwise add the other connected functions
-            test=0
-            for adjfxn, flowview in mdl.multgraph.adj[fxnname].items():
-                flowname=list(flowview)[0]
-                if mdl.flows[flowname].status()!=flowhist[flowname]:
-                    activefxns.add(fxnname)
-                    activefxns.add(adjfxn)
-                else:
-                    test+=1
-                flowhist[flowname]=mdl.flows[flowname].status()
-                if test>=tests[fxnname]:
-                    activefxns.discard(fxnname)
+        #Check to see what flows have new values and add connected functions
+        for flowname, flow in mdl.flows.items():
+            if flowhist[flowname]!=flow.status():
+                nextfxns.update(set([n for n in mdl.bipartite.neighbors(flowname)]))
+            flowhist[flowname]=flow.status()
+        activefxns=nextfxns.copy()
+        nextfxns.clear()
         n+=1
+        
         if n>1000: #break if this is going for too long
             print("Undesired looping in function")
             print(initfaults)
