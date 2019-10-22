@@ -64,7 +64,7 @@ class battery(component):
         if EEoutr>2: self.addfault(self.name+'break')
         if self.soc<20: self.addfault(self.name+'lowcharge')
         if self.soc<1: self.replacefault(self.name+'lowcharge',self.name+'nocharge')
-
+        self.Et=1.0 #default
         if self.hasfault(self.name+'short'): self.Et=0.0
         elif self.hasfault(self.name+'break'): self.Et=0.0
         elif self.hasfault(self.name+'degr'): self.Et=0.5
@@ -365,7 +365,7 @@ class quadrotor(model):
         self.addflow('EEctl', 'EE', {'rate':1.0, 'effort':1.0})
         self.addflow('Ctl1','Direction Signal', {'forward':0.0, 'upward':1.0})
         self.addflow('DOFs', 'DOFs',{'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0})
-        self.addflow('Land1','Land', {'status':'landed', 'area':'start'} )
+        self.addflow('Land1','Land', {'state':'landed', 'area':'start'} )
         self.addflow('Env1','Environment', {'x':0.0,'y':0.0,'elev':0.0} )
         # custom flows
         self.addflow('Dir1', 'Direction', Direc())
@@ -384,12 +384,12 @@ class quadrotor(model):
         self.constructgraph()
         
         #Declare time range to run model over
-        self.times=[0,3, 55]
+        self.times=[0,20, 55]
     def findclassification(self, g, endfaults, endflows, scen):
         
         start=[0.0,0.0]
-        start_xw=5
-        start_yw=5
+        start_xw=10
+        start_yw=10
         start_area=square(start,start_xw, start_yw)
         flyelev=30
         poi_center=[0,150]
