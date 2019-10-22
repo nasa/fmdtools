@@ -109,12 +109,12 @@ def showgraph(g, faultscen=[], time=[]):
 #   - endresult: the results dict given by the model after propagation
 def printresult(function, mode, time, endresult):
     
-    #FUNCTION  | MODE  | TIME  | EFFECTS  |  RATE  |  COST  |  EXP COST
-    vals=  [[function],[mode],[time],\
-            [str(list(endresult['flows'].keys())+list(endresult['faults'].keys()))],\
+    #FUNCTION  | MODE  | TIME  | FAULT EFFECTS | FLOW EFFECTS |  RATE  |  COST  |  EXP COST
+    vals=  [[function],[mode],[time], [str(list(endresult['faults'].keys()))], \
+            [str(list(endresult['flows'].keys()))] ,\
             [endresult['classification']['rate']], \
             [endresult['classification']['cost']],[endresult['classification']['expected cost']]]
-    cnames=['Function', 'Mode', 'Time', 'Effects', 'Rate', 'Cost', 'Expected Cost']
+    cnames=['Function', 'Mode', 'Time', 'End Faults', 'End Flow Effects', 'Rate', 'Cost', 'Expected Cost']
     t = Table(vals, names=cnames)
     return t
 
@@ -214,7 +214,8 @@ def proplist(mdl, reuse=False):
     fxns=np.zeros(numofscens, dtype='S25')
     modes=np.zeros(numofscens, dtype='S25')
     times=np.zeros(numofscens, dtype=int)
-    effects=['']*numofscens
+    floweffects=['']*numofscens
+    faulteffects=['']*numofscens
     rates=np.zeros(numofscens, dtype=float)
     costs=np.zeros(numofscens, dtype=float)
     expcosts=np.zeros(numofscens, dtype=float)
@@ -232,13 +233,14 @@ def proplist(mdl, reuse=False):
         fxns[i]=scen['properties']['function']
         modes[i]=scen['properties']['fault']
         times[i]=scen['properties']['time']
-        effects[i]=str(endresults['flows'])+str(endresults['faults'])        
+        floweffects[i] = str(endresults['flows'])
+        faulteffects[i] = str(endresults['faults'])        
         rates[i]=endresults['classification']['rate']
         costs[i]=endresults['classification']['cost']
         expcosts[i]=endresults['classification']['expected cost']
     
-    vals=[fxns, modes, times, effects, rates, costs, expcosts]
-    cnames=['Function', 'Mode', 'Time', 'Effects', 'Rate', 'Cost', 'Expected Cost']
+    vals=[fxns, modes, times, faulteffects, floweffects, rates, costs, expcosts]
+    cnames=['Function', 'Mode', 'Time', 'End Faults', 'End Flow Effects', 'Rate', 'Cost', 'Expected Cost']
     resultstab = Table(vals, names=cnames)
     mdl.reset()
     
