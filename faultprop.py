@@ -40,10 +40,10 @@ def plotflowhist(flowhist, fault='', time=0):
         for var in flowhists['nominal'][flow]:
             plt.subplot(np.ceil((plots+1)/2),2,n)
             n+=1
-            a, =plt.plot(flowhists['nominal'][flow][var], color='b')
             if 'faulty' in flowhists:
                 b, = plt.plot(flowhists['faulty'][flow][var], color='r')
                 c = plt.axvline(x=time, color='k')
+            a, =plt.plot(flowhists['nominal'][flow][var], color='b')
             plt.title(var)
         if 'faulty' in flowhists:
             plt.subplot(np.ceil((plots+1)/2),2,n)
@@ -93,9 +93,9 @@ def showgraph(g, faultscen=[], time=[]):
                           node_shape='s',width=3, font_weight='bold', node_size = 2000)
         nx.draw_networkx_nodes(g, pos, nodelist=faultnodes,node_color = 'r',\
                           node_shape='s',width=3, font_weight='bold', node_size = 2000)
-        nx.draw_networkx_edges(g,pos,edgelist=faultedges.keys(), edge_color='r', width=2)
-        
         faultflows,faultedges=findfaultflows(g)
+        nx.draw_networkx_edges(g,pos,edgelist=faultedges.keys(), edge_color='r', width=2)
+
         nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedges, font_color='r')
     
     if faultscen:

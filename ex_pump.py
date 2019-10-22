@@ -219,7 +219,7 @@ class pump(model):
         
         #get fault costs and rates
         modes = self.returnfaultmodes()
-        repcosts = [mode['rcost'] for fxnname,mode in modes.items()]
+        repcosts = [ c['rcost'] for f,m in modes.items() for a, c in m.items()]
         
         costs=repcosts
         costkey={'major': 10000, 'minor': 1000}
