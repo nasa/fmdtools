@@ -408,7 +408,7 @@ class quadrotor(model):
         safe2_yw=10
         safe2_area=square(safe2_center, safe2_xw, safe2_yw)
         
-        Env=fp.getflow('Env1', g)
+        Env=self.flows['Env1']
         
         #may need to redo this
         if  inrange(start_area, Env.x, Env.y):
@@ -423,9 +423,9 @@ class quadrotor(model):
         else:
             landloc='emunsanc'
             area=10000
-            
-        repaircosts=fp.listfaultsprops(endfaults, g, 'rcost')
-        maxcost=textmax(repaircosts.values())
+        modes = self.returnfaultmodes()
+        repaircosts=[ c['rcost'] for f,m in modes.items() for a, c in m.items()]
+        maxcost=textmax(repaircosts)
         
         if maxcost=='major':
             repcost=10000
