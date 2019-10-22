@@ -319,22 +319,15 @@ def runonefault(mdl, scen, track={}, gtrack={}):
 #   initfaults, the faults (or lack of faults) to initiate in the model
 #   time, the time propogation occurs at
 def propagate(mdl, initfaults, time):
-    fxnnames=mdl.fxns
-    activefxns=set(fxnnames)
     #set up history of flows to see if any has changed
     tests={}
     flowhist={}
-    g=mdl.graph
     #Step 1: Find out what the current value of the flows are, determine how many
     # flows need to be checked for a function
-    for fxnname in fxnnames:
-        tests[fxnname]=0
-        edges=list(g.edges(fxnname))
-        for big, end in edges:
-            flows=g.edges[big,end]
-            for flow in flows:
-                flowhist[big, end,flow]=g.edges[big, end][flow].status()
-                tests[fxnname]+=1
+    for flowname, flow in mdl.flows.items():
+        flowhist[flowname]=flow.status()
+    for fxnname in mdl.fxns:
+        tests[fxnname]=mdl.multgraph.degree(fxnname)
     #Step 2: Inject faults if present     
     for fxnname in initfaults:
         if initfaults[fxnname]!='nom':
@@ -342,26 +335,27 @@ def propagate(mdl, initfaults, time):
             fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
     #Step 3: Propagate faults through graph
     n=0
+    activefxns=set(mdl.fxns)
     while activefxns:
-        funclist=list(activefxns).copy()
-        for fxnname in funclist:
+        for fxnname in list(activefxns).copy():
+            #Update functions with new values
             fxn=mdl.fxns[fxnname]
             fxn.updatefxn(time=time)
+            #Check to see if the flows connected to the function have new vals
+            #If not, remove from list, otherwise add the other connected functions
             test=0
-            edges=list(g.edges(fxnname))
-            for big, end in edges:
-                flows=g.edges[big,end]
-                for flow in flows:
-                    if g.edges[big, end][flow].status()!=flowhist[big, end, flow]:
-                        activefxns.add(big)
-                        activefxns.add(end)
-                    else:
-                        test+=1
-                    flowhist[big, end, flow]=g.edges[big, end][flow].status()
+            for adjfxn, flowview in mdl.multgraph.adj[fxnname].items():
+                flowname=list(flowview)[0]
+                if mdl.flows[flowname].status()!=flowhist[flowname]:
+                    activefxns.add(fxnname)
+                    activefxns.add(adjfxn)
+                else:
+                    test+=1
+                flowhist[flowname]=mdl.flows[flowname].status()
                 if test>=tests[fxnname]:
                     activefxns.discard(fxnname)
         n+=1
-        if n>1000:
+        if n>1000: #break if this is going for too long
             print("Undesired looping in function")
             print(initfaults)
             print(fxnname)
