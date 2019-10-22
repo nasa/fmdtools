@@ -218,8 +218,10 @@ class pump(model):
     def findclassification(self,resgraph, endfaults, endflows, scen):
         
         #get fault costs and rates
-        repcosts=fp.listfaultsprops(endfaults, resgraph, 'rcost')
-        costs=repcosts.values()
+        modes, fxns = self.returnfaultmodes()
+        repcosts = [modes[fxn]['rcost'] for fxn in fxns]
+        
+        costs=repcosts
         costkey={'major': 10000, 'minor': 1000}
         totcost=0.0
         
