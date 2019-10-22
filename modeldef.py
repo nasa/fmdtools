@@ -174,14 +174,12 @@ class model(object):
         return graph
     def returnfaultmodes(self):
         modes={}
-        fxns={}
         for fxnname, fxn in self.fxns.items():
-            modes[fxnname]=dict.fromkeys(fxn.faults.copy())
-            for mode in modes[fxnname]:
-                if mode!='nom': 
-                    modes[fxnname][mode] = fxn.faultmodes[mode]
-                    fxns.update(fxnname)
-        return modes, fxns
+            fxnmodes=dict.fromkeys(fxn.faults.copy())
+            if any([m!='nom' for m in fxnmodes]): modes[fxnname] = {}
+            for mode in fxnmodes:
+                if mode!='nom': modes[fxnname][mode] = fxn.faultmodes[mode]
+        return modes
         
         
         
