@@ -27,25 +27,26 @@ from astropy.table import Table, Column
 #   - fault, name of the fault that was injected (for the titles)
 #   - time, the time in which the fault was initiated (so that time is displayed on the graph)
 def plotflowhist(flowhist, fault='', time=0):
-    if 'nominal' not in flowhist:
-        flowhist['nominal']=flowhist
+    flowhists={}
+    if 'nominal' not in flowhist: flowhists['nominal']=flowhist
+    else: flowhists=flowhist
     
-    for flow in flowhist['nominal']:
+    for flow in flowhists['nominal']:
         fig = plt.figure()
-        plots=len(flowhist['nominal'][flow])
+        plots=len(flowhists['nominal'][flow])
         fig.add_subplot(np.ceil((plots+1)/2),2,plots)
         plt.tight_layout(pad=2.5, w_pad=2.5, h_pad=2.5, rect=[0, 0.03, 1, 0.95])
         n=1
-        for var in flowhist['nominal'][flow]:
+        for var in flowhists['nominal'][flow]:
             plt.subplot(np.ceil((plots+1)/2),2,n)
             n+=1
-            a, =plt.plot(flowhist['nominal'][flow][var], color='b')
-            if 'faulty' in flowhist:
-                b, = plt.plot(flowhist['faulty'][flow][var], color='r')
+            a, =plt.plot(flowhists['nominal'][flow][var], color='b')
+            if 'faulty' in flowhists:
+                b, = plt.plot(flowhists['faulty'][flow][var], color='r')
                 c = plt.axvline(x=time, color='k')
             plt.title(var)
-        plt.subplot(np.ceil((plots+1)/2),2,n)
-        if 'faulty' in flowhist:
+        if 'faulty' in flowhists:
+            plt.subplot(np.ceil((plots+1)/2),2,n)
             plt.legend([a,b],['faulty', 'nominal'])
         fig.suptitle('Dynamic Response of '+flow+' to fault'+' '+fault)
         plt.show()
@@ -150,7 +151,7 @@ def runnominal(mdl, track={}, gtrack={}):
     flowhist, graphhist =proponescen(mdl, scen, track, gtrack)
     
     resgraph = mdl.returnstategraph()   
-    endfaults, _ = mdl.returnfaultmodes()
+    endfaults = mdl.returnfaultmodes()
     endflows={}
     endclass=mdl.findclassification(resgraph, endfaults, endflows, scen)
     
@@ -270,7 +271,7 @@ def proplist(mdl, reuse=False):
 #   - endclass, a dict with the classification of the scenario, which includes rate, cost, expected cost
 def classifyresults(mdl,resgraph, scen):
     endflows,endedges=findfaultflows(resgraph)
-    endfaults, =mdl.returnfaultmodes()
+    endfaults =mdl.returnfaultmodes()
     endclass=mdl.findclassification(resgraph, endfaults, endflows, scen)
     return endflows, endfaults, endclass
 
