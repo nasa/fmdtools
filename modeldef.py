@@ -46,9 +46,9 @@ class block(object):
 class fxnblock(block):
     def __init__(self,flownames,flows, states={}, components={}):
         self.type = 'function'
-        flowdict=self.makeflowdict(flownames,flows)
-        for flow in flowdict.keys():
-            setattr(self, flow,flowdict[flow])
+        self.flows=self.makeflowdict(flownames,flows)
+        for flow in self.flows.keys():
+            setattr(self, flow,self.flows[flow])
         self.components=components
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
@@ -71,6 +71,13 @@ class fxnblock(block):
             component.reset()
         self.time=0
         self.updatefxn(faults=['nom'], time=0)
+    def copy(self, newflows, *attr):
+        copy = self.__class__(newflows, *attr)
+        copy.faults = self.faults.copy()
+        for state in self._initstates.keys():
+            setattr(copy, state, self._initstates[state])
+        copy.time=self.time
+        return copy
     def updatefxn(self,faults=['nom'], time=0): #fxns take faults and time as input
         self.faults.update(faults)  #if there is a fault, it is instantiated in the function
         self.condfaults(time)           #conditional faults and behavior are then run
@@ -103,6 +110,17 @@ class flow(object):
         for attribute in self._attributes:
             attributes[attribute]=getattr(self,attribute)
         return attributes.copy()
+    def copy(self):
+        attributes={}
+        for attribute in self._attributes:
+            attributes[attribute]=getattr(self,attribute)
+        if self.__class__==flow:
+            copy = self.__class__(attributes, self.flow)
+        else:
+            copy = self.__class__()
+            for attribute in self._attributes:
+                setattr(copy, attribute, getattr(self,attribute))
+        return copy
 
 #Model superclass    
 class model(object):
@@ -111,6 +129,7 @@ class model(object):
         self.flows={}
         self.fxns={}
         self._fxnflows=[]
+        self._fxninput={}
     def addflow(self,flowname, flowtype, flowdict):
         if type(flowdict) == dict:
             self.flows[flowname]=flow(flowdict, flowtype)
@@ -119,8 +138,12 @@ class model(object):
         else: raise Exception('Invalid flow. Must be dict or flow')
     def addfxn(self,name,classobj, flownames, *args):
         flows=self.getflows(flownames)
-        if args: self.fxns[name]=classobj(flows,args)
-        else: self.fxns[name]=classobj(flows)
+        if args: 
+            self.fxns[name]=classobj(flows,args)
+            self._fxninput[name]={'flows': flownames, 'args': args}
+        else: 
+            self.fxns[name]=classobj(flows)
+            self._fxninput[name]={'flows': flownames, 'args': []}
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
     def getflows(self,flownames):
@@ -180,6 +203,18 @@ class model(object):
             for mode in fxnmodes:
                 if mode!='nom': modes[fxnname][mode] = fxn.faultmodes[mode]
         return modes
+    def copy(self):
+        copy = self.__class__()
+        for flowname, flow in self.flows.items():
+            copy.flows[flowname]=flow.copy()
+        for fxnname, fxn in self.fxns.items():
+            flownames=self._fxninput[fxnname]['flows']
+            args=self._fxninput[fxnname]['args']
+            flows = copy.getflows(flownames)
+            if args:    copy.fxns[fxnname]=fxn.copy(flows, args)
+            else:       copy.fxns[fxnname]=fxn.copy(flows)
+        graph = copy.constructgraph()
+        return copy
         
         
         

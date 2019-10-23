@@ -62,14 +62,14 @@ plt.close()
 #Doing a time test
 #t1=time.time()
 #fullresults, resultstab=fp.proplist(mdl,reuse=True)
-t2=time.time()
+#t2=time.time()
 
-resultstab=fp.runlist(mdl)
-print(resultstab)
-t3=time.time()
+#resultstab=fp.runlist(mdl)
+#print(resultstab)
+#t3=time.time()
 #
 #t_reused=t2-t1
-t_copied=t3-t2
+#t_copied=t3-t2
 #print(t_reused)
 #print(t_copied)
 # based on this test, it appears reusing the model is actually slightly slower
