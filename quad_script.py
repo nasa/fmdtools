@@ -23,12 +23,12 @@ fp.plotflowhist(flowhist3, 'N/A', time=0)
 # 
 # #Check various scenarios individually
 # 
-endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'})
+endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'})
 fp.showgraph(resgraph)
 ## 
 fp.plotflowhist(flowhist, 'StoreEE short', time=5)
 ## 
-endresults, resgraph, flowhist2, ghist2=fp.proponefault(mdl, 'AffectDOF', 'RFshort', time=13, track={'DOFs', 'Env1', 'Dir1', 'Force_Air'}, gtrack=[10,13,20,40])
+endresults, resgraph, flowhist2, ghist2=fp.runonefault(mdl, 'AffectDOF', 'RFshort', time=13, track={'DOFs', 'Env1', 'Dir1', 'Force_Air'}, gtrack=[10,13,20,40])
 fp.showgraph(resgraph)
 fp.plotflowhist(flowhist2, 'RFshort', time=13)
 fp.plotghist(ghist2, 't=13 RFshort')
@@ -54,21 +54,22 @@ ax2.legend(['Nominal Flightpath','Faulty Flighpath'], loc=4)
 plt.show()
 plt.close()
 
-fullresults, resultstab=fp.proplist(mdl,reuse=True)
-print(resultstab)
+#resultstab=fp.proplist(mdl,reuse=True)
+
 #resultstab.write('tab4.ecsv', overwrite=True)
 
 
 #Doing a time test
 #t1=time.time()
 #fullresults, resultstab=fp.proplist(mdl,reuse=True)
-#t2=time.time()
-#
-#fullresults, resultstab=fp.proplist(mdl)
-#t3=time.time()
+t2=time.time()
+
+resultstab=fp.runlist(mdl)
+print(resultstab)
+t3=time.time()
 #
 #t_reused=t2-t1
-#t_copied=t3-t2
+t_copied=t3-t2
 #print(t_reused)
 #print(t_copied)
 # based on this test, it appears reusing the model is actually slightly slower
