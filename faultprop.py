@@ -147,7 +147,7 @@ def constructnomscen(mdl):
 def runnominal(mdl, track={}, gtrack={}):
     nomscen=constructnomscen(mdl)
     scen=nomscen.copy()
-    flowhist, graphhist =proponescen(mdl, scen, track, gtrack)
+    flowhist, graphhist, _ =proponescen(mdl, scen, track, gtrack)
     
     resgraph = mdl.returnstategraph()   
     endfaults = mdl.returnfaultmodes()
@@ -178,7 +178,7 @@ def runonefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}):
     
     #run model nominally, get relevant results
     nomscen=constructnomscen(mdl)
-    nomflowhist, nomgraphhist = proponescen(mdl, nomscen, track, gtrack)
+    nomflowhist, nomgraphhist, _ = proponescen(mdl, nomscen, track, gtrack)
     nomresgraph = mdl.returnstategraph()
     mdl.reset()
     #run with fault present, get relevant results
@@ -190,7 +190,7 @@ def runonefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}):
     scen['properties']['rate']=mdl.fxns[fxnname].faultmodes[faultmode]['rate']
     scen['properties']['time']=time
     
-    faultflowhist, faultgraphhist = proponescen(mdl, scen, track, gtrack)
+    faultflowhist, faultgraphhist, _ = proponescen(mdl, scen, track, gtrack)
     faultresgraph = mdl.returnstategraph()
     
     #process model run
@@ -250,13 +250,13 @@ def runlist(mdl, reuse=False):
     
     #run model nominally, get relevant results
     nomscen=constructnomscen(mdl)
-    nomflowhist, nomgraphhist = proponescen(mdl, nomscen, {}, {})
+    nomflowhist, nomgraphhist, c_mdl = proponescen(mdl, nomscen, {}, {})
     nomresgraph = mdl.returnstategraph()
     mdl.reset()
     
     for i, scen in enumerate(scenlist):
         #run model with fault scenario
-        endresults, resgraph, =proponescen(mdl, scen, {}, {})
+        endresults, resgraph, _ =proponescen(mdl, scen, {}, {})
         endfaults = mdl.returnfaultmodes()
         resgraph = mdl.returnstategraph()
         
@@ -287,14 +287,20 @@ def runlist(mdl, reuse=False):
 #   - scen, the fault scenario for a given model
 #   - track, a list of flows to track
 #   - gtrack, the times to take a snapshot of the graph 
+#   - staged, the starting time for the propagation
+#   - ctime, the time to copy the models 
 # outputs:
 #   - flowhist, a dictionary with the history of the flow over time
 #   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
 #   (note, this causes changes in the model of interest, also)
+#   - c_mdls, copies of the model object taken at each time listed in ctime
 
-def proponescen(mdl, scen, track={}, gtrack={}):
-    
-    timerange= range(mdl.times[0], mdl.times[-1]+1) 
+def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctime={}):
+    #if staged, we want it to start a new run from the starting time of the scenario,
+    # using a copy of the input model (which is the nominal run) at this time
+    if staged:
+        timerange=range(scen['properties']['time'], mdl.times[-1]+1)
+    else: timerange= range(mdl.times[0], mdl.times[-1]+1) 
     # initialize dict of tracked flows
     flowhist={}
     if track:
@@ -305,6 +311,7 @@ def proponescen(mdl, scen, track={}, gtrack={}):
     # run model through the time range defined in the object
     nomscen=constructnomscen(mdl)
     graphhist=[]
+    c_mdl=[]
     for rtime in timerange:
        # inject fault when it occurs, track defined flow states and graph
         if rtime==scen['properties']['time']: propagate(mdl, scen['faults'], rtime)
@@ -313,9 +320,9 @@ def proponescen(mdl, scen, track={}, gtrack={}):
             for flowname in track:
                 for var in mdl.flows[flowname].status():
                     flowhist[flowname][var][rtime]=mdl.flows[flowname].status()[var]
-        if rtime in gtrack:
-            graphhist=graphhist+[mdl.returnstategraph()]
-    return flowhist, graphhist
+        if rtime in gtrack: graphhist=graphhist+[mdl.returnstategraph()]
+        if rtime in ctime: c_mdl.append(mdl.copy())
+    return flowhist, graphhist, c_mdl
 
 #propogate
 # propagates faults through the graph at one time-step
