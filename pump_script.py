@@ -51,6 +51,6 @@ print(t)
 #note that this will propogate faults based on the times vector put in the model,
 # e.g. times=[0,3,15,55] will propogate the faults at the begining, end, and at
 # t=15 and t=15
-resultsdict, resultstab=fp.proplist(mdl)
+resultstab=fp.runlist(mdl)
 print(resultstab)
 #resultstab.write('tab.ecsv', overwrite=True)

@@ -174,7 +174,7 @@ def runnominal(mdl, track={}, gtrack={}):
 #   - resgraph, a graph object with function faults and degraded flows noted
 #   - flowhist, a dictionary with the history of the flow over time
 #   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
-def proponefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}):
+def runonefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}):
     
     #run model nominally, get relevant results
     nomscen=constructnomscen(mdl)
@@ -231,9 +231,8 @@ def listinitfaults(mdl):
 #proplist
 # creates and propagates a list of failure scenarios in a model
 # input: mdl, the module where the model was set up
-# output: resultsdict, a dictionary with the results (may be deprecated in the future?)
-#         resultstab, a FMEA-style table of results
-def proplist(mdl, reuse=False):
+# output: resultstab, a FMEA-style table of results
+def runlist(mdl, reuse=False):
 
     scenlist=listinitfaults(mdl)
     resultsdict={} 
@@ -249,101 +248,37 @@ def proplist(mdl, reuse=False):
     costs=np.zeros(numofscens, dtype=float)
     expcosts=np.zeros(numofscens, dtype=float)
     
-    
+    #run model nominally, get relevant results
+    nomscen=constructnomscen(mdl)
+    nomflowhist, nomgraphhist = proponescen(mdl, nomscen, {}, {})
+    nomresgraph = mdl.returnstategraph()
+    mdl.reset()
     
     for i, scen in enumerate(scenlist):
-        if reuse: 
-            endresults, resgraph, flowhist, graphhist=runonefault(mdl, scen)  
-            mdl.reset()
-        else: 
-            endresults, resgraph, flowhist, graphhist=runonefault(mdl, scen)
-            mdl = mdl.__class__()
+        #run model with fault scenario
+        endresults, resgraph, =proponescen(mdl, scen, {}, {})
+        endfaults = mdl.returnfaultmodes()
+        resgraph = mdl.returnstategraph()
         
-        resultsdict[scen['properties']['function'],scen['properties']['fault'], scen['properties']['time']]=endresults
-        
+        endflows = comparegraphflows(resgraph, nomresgraph)
+        endclass = mdl.findclassification(resgraph, endfaults, endflows, scen)
+        if reuse: mdl.reset()
+        else: mdl = mdl.__class__()
+        #populate columns for results table
         fxns[i]=scen['properties']['function']
         modes[i]=scen['properties']['fault']
         times[i]=scen['properties']['time']
-        floweffects[i] = str(endresults['flows'])
-        faulteffects[i] = str(endresults['faults'])        
-        rates[i]=endresults['classification']['rate']
-        costs[i]=endresults['classification']['cost']
-        expcosts[i]=endresults['classification']['expected cost']
-    
+        floweffects[i] = str(endflows)
+        faulteffects[i] = str(endfaults)        
+        rates[i]=endclass['rate']
+        costs[i]=endclass['cost']
+        expcosts[i]=endclass['expected cost']
+    #create results table
     vals=[fxns, modes, times, faulteffects, floweffects, rates, costs, expcosts]
     cnames=['Function', 'Mode', 'Time', 'End Faults', 'End Flow Effects', 'Rate', 'Cost', 'Expected Cost']
     resultstab = Table(vals, names=cnames)
-    mdl.reset()
     
-    return resultsdict, resultstab
-
-#classifyresults
-# finds whether conditional faults have been added, flows are degraded, and how bad that is per the model definition
-# inputs:
-#   - mdl, the model module defined in mdl.py
-#   - resgraph, the graph object with a particular result
-#   - scen, the fault scenario for a given model
-# outputs:
-#   - endflows, a dictionary of degraded flows at t=end
-#   - endfaults, a dictionary of faults present in the model at t=end
-#   - endclass, a dict with the classification of the scenario, which includes rate, cost, expected cost
-def classifyresults(mdl,resgraph, scen):
-    endflows,endedges=findfaultflows(resgraph)
-    endfaults =mdl.returnfaultmodes()
-    endclass=mdl.findclassification(resgraph, endfaults, endflows, scen)
-    return endflows, endfaults, endclass
-
-#runonefault
-# runs a single fault scenario in the model over time
-# inputs:
-#   - mdl, the model module defined in mdl.py
-#   - scen, the fault scenario for a given model
-#   - track, a list of flows to track
-#   - gtrack, the times to take a snapshot of the graph 
-# outputs:
-#   - endresults, a dictionary summary of results at the end of the simulation with structure
-#    {flows:{flow:attribute:value},faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val} }
-#   - resgraph, a graph object with function faults and degraded flows noted
-#   - flowhist, a dictionary with the history of the flow over time
-#   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
-def runonefault(mdl, scen, track={}, gtrack={}):
-    nomscen=constructnomscen(mdl)
-    nommdl = mdl.__class__()
-    
-    timerange=mdl.times
-    flowhist={}
-    graphhist={}
-    time=scen['properties']['time']
-    if track:
-        for runtype in ['nominal','faulty']:
-            flowhist[runtype]={}
-            for flow in track:
-                flowobj=mdl.flows[flow]
-                flowhist[runtype][flow]=flowobj.status()
-                for var in flowobj.status():
-                    flowhist[runtype][flow][var]=np.array()
-    
-    for rtime in range(timerange[0], timerange[-1]+1):
-        propagate(nommdl, nomscen['faults'], rtime)
-        if rtime==time:
-            propagate(mdl, scen['faults'], rtime)
-        else:
-            propagate(mdl,nomscen['faults'],rtime)
-        if track:
-            for flow in track:
-                flowobj=mdl.flows[flow]
-                nomflowobj=nommdl.flows[flow]
-                for var in flowobj.status():
-                    flowhist['nominal'][flow][var].append(nomflowobj.status()[var])
-                    flowhist['faulty'][flow][var].append(flowobj.status()[var])
-        if rtime in gtrack:
-            rgraph=makeresultsgraph(mdl.graph,nommdl.graph)
-            graphhist[rtime]=rgraph
-            
-    resgraph=makeresultsgraph(mdl.returnstategraph(),nommdl.returnstategraph())        
-    endflows, endfaults, endclass = classifyresults(mdl,resgraph, scen)
-    endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}
-    return endresults, resgraph, flowhist, graphhist
+    return resultstab
 
 #proponescen
 # runs a single fault scenario in the model over time
@@ -493,54 +428,6 @@ def findfaultflows(g, nomg=[]):
                 endedges[edge]=flowedges    
     return endflows, endedges
 
-#USEFUL MISC FUNCTIONS
-
-#findfaults
-# generates a dict of faults present in each function endfaults given graph g
-def findfaults(g):
-    endfaults=dict()
-    fxnnames=list(g.nodes)
-    #extract list of faults present
-    for fxnname in fxnnames:
-        faults=findfault(fxnname, g)
-        if len(faults) > 0:
-            endfaults[fxnname]=faults
-    return endfaults
-
-#findfault
-#find an individual fault in a given function
-def findfault(fxnname, g):
-    if 'faults' in g.nodes[fxnname]:
-        faults=g.nodes[fxnname]['faults']
-    else:
-        fxn=getfxn(fxnname, g)
-        faults=fxn.faults.copy()
-        if faults.issuperset({'nom'}):
-            faults.remove('nom')
-        if faults.issuperset({'nominal'}):
-            faults.remove('nominal')
-    return faults
-#getfxn
-# gets the function object fxn in the model graph with the name fxnname
-def getfxn(fxnname, graph):
-    fxn=graph.nodes(data='obj')[fxnname]
-    return fxn
-
-
-#DEPRECATED???
-#getflow
-# gets the flow object flowobj in the model graph g with the name flowname
-def getflow(flowname, g):
-    for edge in g.edges:
-        flows=g.get_edge_data(edge[0],edge[1])
-        #flows=list(g.get_edge_data(edge[0],edge[1]).keys())
-        for flow in flows:
-            if flow==flowname:
-                if type(flows[flow]) is dict:
-                    flowobj=flows[flow]['obj']
-                else:
-                    flowobj=flows[flow]
-    return flowobj
         
             
 
