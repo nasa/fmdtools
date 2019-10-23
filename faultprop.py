@@ -176,8 +176,14 @@ def runnominal(mdl, track={}, gtrack={}):
 #   - flowhist, a dictionary with the history of the flow over time
 #   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
 def proponefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}):
+    
+    #run model nominally, get relevant results
     nomscen=constructnomscen(mdl)
-    scen=nomscen.copy()
+    nomflowhist, nomgraphhist = proponescen(mdl, nomscen, track, gtrack)
+    nomresgraph = mdl.returnstategraph()
+    mdl.reset()
+    #run with fault present, get relevant results
+    scen=nomscen.copy() #note: this is a shallow copy, so don't define it earlier
     scen['faults'][fxnname]=faultmode
     scen['properties']['type']='single fault'
     scen['properties']['function']=fxnname
@@ -185,9 +191,18 @@ def proponefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}):
     scen['properties']['rate']=mdl.fxns[fxnname].faultmodes[faultmode]['rate']
     scen['properties']['time']=time
     
-    endresults, resgraph, flowhist, graphhist =runonefault(mdl, scen, track, gtrack)
+    faultflowhist, faultgraphhist = proponescen(mdl, scen, track, gtrack)
+    resgraph = mdl.returnstategraph()
+    endfaults = mdl.returnfaultmodes()
+    #process model run
+    endflows = comparegraphflows(resgraph, nomresgraph)
+    endclass=mdl.findclassification(resgraph, endfaults, endflows, scen)
+    flowhist={'nominal':nomflowhist, 'faulty':faultflowhist}
+    
+    endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
+    
     mdl.reset()
-    return endresults,resgraph, flowhist, graphhist
+    return endresults,resgraph, flowhist, faultgraphhist
 
 #listinitfaults
 # creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
@@ -327,6 +342,18 @@ def runonefault(mdl, scen, track={}, gtrack={}):
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}
     return endresults, resgraph, flowhist, graphhist
 
+#proponescen
+# runs a single fault scenario in the model over time
+# inputs:
+#   - mdl, the model object 
+#   - scen, the fault scenario for a given model
+#   - track, a list of flows to track
+#   - gtrack, the times to take a snapshot of the graph 
+# outputs:
+#   - flowhist, a dictionary with the history of the flow over time
+#   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
+#   (note, this causes changes in the model of interest, also)
+
 def proponescen(mdl, scen, track={}, gtrack={}):
     
     timerange= range(mdl.times[0], mdl.times[-1]+1) 
@@ -426,6 +453,20 @@ def makeresultsgraph(g, nomg):
         rg.nodes[node]['status']=status
     return rg
 
+#comparegraphflows
+# extracts non-nominal flows by comparing the a results graph with a nominal results graph
+# inputs:   g, a graph of results, with states of each flow in each provided
+#           nomg, the same graph for the nominal system
+# outputs:  endflows, a dictionary of degraded flows
+# (maybe do this for values also???)
+def comparegraphflows(g, nomg):
+    endflows=dict()
+    for edge in g.edges:
+        flows=g.get_edge_data(edge[0],edge[1])
+        nomflows=nomg.get_edge_data(edge[0],edge[1])
+        for flow in flows:
+            if flows[flow]!=nomflows[flow]: endflows[flow]=flows[flow]
+    return endflows
 #findfaultflows
 # extracts non-nominal flow paths by comparing the graph with a nominal version of the graph
 # inputs: g, the graph, and nomg, the graph in its nominal state
@@ -456,39 +497,6 @@ def findfaultflows(g, nomg=[]):
     return endflows, endedges
 
 #USEFUL MISC FUNCTIONS
-
-#listfaultsprops
-# gets the properties of a list of faults
-# inputs:
-#       - endfaults, a dictionary {function:fault} of the faults
-#       - g, the model graph
-#       - prop, the property to list (if not all)
-# outputs:
-#       - faultlist, a dict of properties for each fault 
-def listfaultsprops(endfaults,g, prop='all'):
-    faultlist=dict()
-    for fxnname in endfaults:
-        for faultname in endfaults[fxnname]:
-            if prop==all:
-                faultlist[fxnname+' '+faultname]=getfaultprops(fxnname,faultname,g)
-            else:
-                faultlist[fxnname+' '+faultname]=getfaultprops(fxnname,faultname,g, prop)
-    return faultlist
-
-#getfaultprops
-# inputs:
-#       -fxnname, the name of the function
-#       -faultname, the name of the fault
-#       -g, the model graph
-#       -prop, the property to find
-# outputs: faultprops, the properties of that fault in a dict
-def getfaultprops(fxnname, faultname, g, prop='all'):
-    fxn=getfxn(fxnname, g)
-    if prop=='all':
-        faultprops=fxn.faultmodes[faultname]
-    else:
-        faultprops=fxn.faultmodes[faultname][prop]
-    return faultprops
 
 #findfaults
 # generates a dict of faults present in each function endfaults given graph g
@@ -521,6 +529,8 @@ def getfxn(fxnname, graph):
     fxn=graph.nodes(data='obj')[fxnname]
     return fxn
 
+
+#DEPRECATED???
 #getflow
 # gets the flow object flowobj in the model graph g with the name flowname
 def getflow(flowname, g):
