@@ -60,8 +60,7 @@ def plotflowhist(flowhist, fault='', time=0):
 #           - graphobject is the snapshot of the graph at that time
 #    - faultscen, the name of the fault scenario where this graph occured
 def plotghist(ghist,faultscen=[]):
-    for time in ghist:
-        graph=ghist[time]
+    for time, graph in enumerate(ghist):
         showgraph(graph, faultscen, time)
 
 #showgraph
@@ -192,17 +191,21 @@ def proponefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}):
     scen['properties']['time']=time
     
     faultflowhist, faultgraphhist = proponescen(mdl, scen, track, gtrack)
-    resgraph = mdl.returnstategraph()
-    endfaults = mdl.returnfaultmodes()
+    faultresgraph = mdl.returnstategraph()
+    
     #process model run
-    endflows = comparegraphflows(resgraph, nomresgraph)
-    endclass=mdl.findclassification(resgraph, endfaults, endflows, scen)
+    endfaults = mdl.returnfaultmodes()
+    endflows = comparegraphflows(faultresgraph, nomresgraph)
+    endclass = mdl.findclassification(faultresgraph, endfaults, endflows, scen)
+    resgraph = makeresultsgraph(faultresgraph, nomresgraph)
+    resgraphhist = makeresultsgraphs(faultgraphhist, nomgraphhist)
+    
     flowhist={'nominal':nomflowhist, 'faulty':faultflowhist}
     
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
     
     mdl.reset()
-    return endresults,resgraph, flowhist, faultgraphhist
+    return endresults,resgraph, flowhist, resgraphhist
 
 #listinitfaults
 # creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
@@ -318,7 +321,7 @@ def runonefault(mdl, scen, track={}, gtrack={}):
                 flowobj=mdl.flows[flow]
                 flowhist[runtype][flow]=flowobj.status()
                 for var in flowobj.status():
-                    flowhist[runtype][flow][var]=[]
+                    flowhist[runtype][flow][var]=np.array()
     
     for rtime in range(timerange[0], timerange[-1]+1):
         propagate(nommdl, nomscen['faults'], rtime)
@@ -331,13 +334,13 @@ def runonefault(mdl, scen, track={}, gtrack={}):
                 flowobj=mdl.flows[flow]
                 nomflowobj=nommdl.flows[flow]
                 for var in flowobj.status():
-                    flowhist['nominal'][flow][var]=flowhist['nominal'][flow][var]+[nomflowobj.status()[var]]
-                    flowhist['faulty'][flow][var]=flowhist['faulty'][flow][var]+[flowobj.status()[var]]
+                    flowhist['nominal'][flow][var].append(nomflowobj.status()[var])
+                    flowhist['faulty'][flow][var].append(flowobj.status()[var])
         if rtime in gtrack:
             rgraph=makeresultsgraph(mdl.graph,nommdl.graph)
             graphhist[rtime]=rgraph
             
-    resgraph=makeresultsgraph(mdl.graph,nommdl.graph)        
+    resgraph=makeresultsgraph(mdl.returnstategraph(),nommdl.returnstategraph())        
     endflows, endfaults, endclass = classifyresults(mdl,resgraph, scen)
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}
     return endresults, resgraph, flowhist, graphhist
@@ -374,9 +377,9 @@ def proponescen(mdl, scen, track={}, gtrack={}):
         if track:
             for flowname in track:
                 for var in mdl.flows[flowname].status():
-                    flowhist[flowname][var][rtime]=[mdl.flows[flowname].status()[var]]
+                    flowhist[flowname][var][rtime]=mdl.flows[flowname].status()[var]
         if rtime in gtrack:
-            graphhist[rtime]=mdl.returnstategraph()
+            graphhist=graphhist+[mdl.returnstategraph()]
     return flowhist, graphhist
 
 #propogate
@@ -430,28 +433,22 @@ def propagate(mdl, initfaults, time):
 def makeresultsgraph(g, nomg):
     rg=g.copy() 
     for edge in g.edges:
-        for flow in list(g.edges[edge].keys()):
-            flowobj=g.edges[edge][flow]
-            nomflowobj=nomg.edges[edge][flow]
-            
-            if flowobj.status()!=nomflowobj.status():
-                status='Degraded'
-            else:
-                status='Nominal'
-            rg.edges[edge][flow]={'values':flowobj.status(),'status':status, 'obj':flowobj}
-    for node in g.nodes:
-        faults=findfault(node, g)
-        rg.nodes[node]['faults']=faults
-        fxn=getfxn(node, g)
-        state, _ =fxn.returnstates()
-        nomfxn=getfxn(node, nomg)
-        nomstate, _ =nomfxn.returnstates()
-        if faults: status='Faulty' 
-        elif state!=nomstate: status='Degraded'
+        for flow in list(g.edges[edge].keys()):            
+            if g.edges[edge][flow]!=nomg.edges[edge][flow]: status='Degraded'
+            else:                               status='Nominal' 
+            rg.edges[edge][flow]={'values':g.edges[edge][flow],'status':status}
+    for node in g.nodes:        
+        if g.nodes[node]['modes'].difference(['nom']): status='Faulty' 
+        elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
         else: status='Nominal'
-        rg.nodes[node]['state']=state
         rg.nodes[node]['status']=status
     return rg
+
+def makeresultsgraphs(ghist, nomghist):
+    rghist = [None]*len(ghist)
+    for i,rg in enumerate(rghist):
+        rghist[i] = makeresultsgraph(ghist[i],nomghist[i])
+    return rghist
 
 #comparegraphflows
 # extracts non-nominal flows by comparing the a results graph with a nominal results graph
