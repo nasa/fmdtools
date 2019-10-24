@@ -183,7 +183,7 @@ def runonefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}, s
         nomflowhist, nomgraphhist, mdls = proponescen(mdl, nomscen, track, gtrack, ctimes=[time])
         nomresgraph = mdl.returnstategraph()
         mdl.reset()
-        mdl = mdls[0]
+        mdl = mdls[time]
     else:
         nomflowhist, nomgraphhist, _ = proponescen(mdl, nomscen, track, gtrack)
         nomresgraph = mdl.returnstategraph()
@@ -239,7 +239,11 @@ def listinitfaults(mdl):
 # creates and propagates a list of failure scenarios in a model
 # input: mdl, the module where the model was set up
 # output: resultstab, a FMEA-style table of results
-def runlist(mdl, reuse=False):
+def runlist(mdl, reuse=False, staged=False):
+    
+    if reuse and staged:
+        print("invalid to use reuse and staged options at the same time. Using staged")
+        reuse=False
 
     scenlist=listinitfaults(mdl)
     resultsdict={} 
@@ -257,19 +261,27 @@ def runlist(mdl, reuse=False):
     
     #run model nominally, get relevant results
     nomscen=constructnomscen(mdl)
-    nomflowhist, nomgraphhist, c_mdl = proponescen(mdl, nomscen, {}, {})
+    if staged:
+        nomflowhist, nomgraphhist, c_mdl = proponescen(mdl, nomscen, {}, {}, ctimes=mdl.times)
+    else:
+        nomflowhist, nomgraphhist, c_mdl = proponescen(mdl, nomscen, {}, {})
     nomresgraph = mdl.returnstategraph()
     mdl.reset()
     
     for i, scen in enumerate(scenlist):
         #run model with fault scenario
-        endresults, resgraph, _ =proponescen(mdl, scen, {}, {})
+        if staged:
+            mdl=c_mdl[scen['properties']['time']].copy()
+            endresults, resgraph, _ =proponescen(mdl, scen, {}, {}, staged=True)
+        else:
+            endresults, resgraph, _ =proponescen(mdl, scen, {}, {})
         endfaults = mdl.returnfaultmodes()
         resgraph = mdl.returnstategraph()
         
         endflows = comparegraphflows(resgraph, nomresgraph)
         endclass = mdl.findclassification(resgraph, endfaults, endflows, scen)
         if reuse: mdl.reset()
+        elif staged: _
         else: mdl = mdl.__class__()
         #populate columns for results table
         fxns[i]=scen['properties']['function']
@@ -321,7 +333,7 @@ def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhis
                         flowhist[flowname][var]=[{} for _ in timerange]
     # run model through the time range defined in the object
     nomscen=constructnomscen(mdl)
-    c_mdl=[]
+    c_mdl=dict.fromkeys(ctimes)
     for rtime in timerange:
        # inject fault when it occurs, track defined flow states and graph
         if rtime==scen['properties']['time']: propagate(mdl, scen['faults'], rtime)
@@ -331,7 +343,7 @@ def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhis
                 for var in mdl.flows[flowname].status():
                     flowhist[flowname][var][rtime]=mdl.flows[flowname].status()[var]
         if rtime in gtrack: graphhist[rtime]=mdl.returnstategraph()
-        if rtime in ctimes: c_mdl.append(mdl.copy())
+        if rtime in ctimes: c_mdl[rtime]=mdl.copy()
     return flowhist, graphhist, c_mdl
 
 #propogate
