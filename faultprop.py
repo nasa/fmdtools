@@ -42,9 +42,9 @@ def plotflowhist(flowhist, fault='', time=0):
             plt.subplot(np.ceil((plots+1)/2),2,n)
             n+=1
             if 'faulty' in flowhists:
-                b, = plt.plot(flowhists['faulty'][flow][var], color='r')
+                a, = plt.plot(flowhists['faulty'][flow][var], color='r')
                 c = plt.axvline(x=time, color='k')
-            a, =plt.plot(flowhists['nominal'][flow][var], color='b')
+            b, =plt.plot(flowhists['nominal'][flow][var], color='b')
             plt.title(var)
         if 'faulty' in flowhists:
             plt.subplot(np.ceil((plots+1)/2),2,n)
@@ -61,7 +61,7 @@ def plotflowhist(flowhist, fault='', time=0):
 #           - graphobject is the snapshot of the graph at that time
 #    - faultscen, the name of the fault scenario where this graph occured
 def plotghist(ghist,faultscen=[]):
-    for time, graph in enumerate(ghist):
+    for time, graph in ghist.items():
         showgraph(graph, faultscen, time)
 
 #showgraph
@@ -182,6 +182,7 @@ def runonefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}, s
     if staged:
         nomflowhist, nomgraphhist, mdls = proponescen(mdl, nomscen, track, gtrack, ctimes=[time])
         nomresgraph = mdl.returnstategraph()
+        mdl.reset()
         mdl = mdls[0]
     else:
         nomflowhist, nomgraphhist, _ = proponescen(mdl, nomscen, track, gtrack)
@@ -196,7 +197,7 @@ def runonefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}, s
     scen['properties']['rate']=mdl.fxns[fxnname].faultmodes[faultmode]['rate']
     scen['properties']['time']=time
     
-    faultflowhist, faultgraphhist, _ = proponescen(mdl, scen, track, gtrack, staged=staged, prevhist=nomflowhist)
+    faultflowhist, faultgraphhist, _ = proponescen(mdl, scen, track, gtrack, staged=staged, prevhist=nomflowhist, prevghist=nomgraphhist)
     faultresgraph = mdl.returnstategraph()
     
     #process model run
@@ -301,16 +302,18 @@ def runlist(mdl, reuse=False):
 #   (note, this causes changes in the model of interest, also)
 #   - c_mdls, copies of the model object taken at each time listed in ctime
 
-def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhist={}):
+def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhist={}, prevghist={}):
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     if staged:
         timerange=range(scen['properties']['time'], mdl.times[-1]+1)
         flowhist=copy.deepcopy(prevhist)
+        graphhist=copy.deepcopy(prevghist)
     else: 
         timerange= range(mdl.times[0], mdl.times[-1]+1) 
         # initialize dict of tracked flows
         flowhist={}
+        graphhist=dict.fromkeys(gtrack)
         if track:
             for flowname in track:
                     flowhist[flowname]=mdl.flows[flowname].status()
@@ -318,7 +321,6 @@ def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhis
                         flowhist[flowname][var]=[{} for _ in timerange]
     # run model through the time range defined in the object
     nomscen=constructnomscen(mdl)
-    graphhist=[]
     c_mdl=[]
     for rtime in timerange:
        # inject fault when it occurs, track defined flow states and graph
@@ -328,7 +330,7 @@ def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhis
             for flowname in track:
                 for var in mdl.flows[flowname].status():
                     flowhist[flowname][var][rtime]=mdl.flows[flowname].status()[var]
-        if rtime in gtrack: graphhist=graphhist+[mdl.returnstategraph()]
+        if rtime in gtrack: graphhist[rtime]=mdl.returnstategraph()
         if rtime in ctimes: c_mdl.append(mdl.copy())
     return flowhist, graphhist, c_mdl
 
@@ -395,8 +397,8 @@ def makeresultsgraph(g, nomg):
     return rg
 
 def makeresultsgraphs(ghist, nomghist):
-    rghist = [None]*len(ghist)
-    for i,rg in enumerate(rghist):
+    rghist = dict.fromkeys(ghist.keys())
+    for i,rg in rghist.items():
         rghist[i] = makeresultsgraph(ghist[i],nomghist[i])
     return rghist
 

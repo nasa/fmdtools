@@ -23,12 +23,12 @@ fp.plotflowhist(flowhist3, 'N/A', time=0)
 # 
 # #Check various scenarios individually
 # 
-endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'})
+endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'}, staged=True)
 fp.showgraph(resgraph)
 ## 
 fp.plotflowhist(flowhist, 'StoreEE short', time=5)
 ## 
-endresults, resgraph, flowhist2, ghist2=fp.runonefault(mdl, 'AffectDOF', 'RFshort', time=13, track={'DOFs', 'Env1', 'Dir1', 'Force_Air'}, gtrack=[10,13,20,40])
+endresults, resgraph, flowhist2, ghist2=fp.runonefault(mdl, 'AffectDOF', 'RFshort', time=13, track={'DOFs', 'Env1', 'Dir1', 'Force_Air'}, gtrack=[10,13,20,40], staged=True)
 fp.showgraph(resgraph)
 fp.plotflowhist(flowhist2, 'RFshort', time=13)
 fp.plotghist(ghist2, 't=13 RFshort')
