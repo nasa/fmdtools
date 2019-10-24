@@ -28,7 +28,7 @@ fp.showgraph(resgraph)
 fp.plotflowhist(flowhist, 'Nominal')
 #
 ##We might further query the faults to see what happens to the various states
-endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'MoveWater', 'short', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
+endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'MoveWater', 'short', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'}, staged=True)
 fp.showgraph(resgraph)
 fp.plotflowhist(flowhist, 'short', time=10)
 t=fp.printresult('MoveWater', 'short', 10, endresults)
@@ -38,7 +38,7 @@ print(t)
 print(endresults)
 #
 ##we can also look at other faults
-endresults, resgraph, flowhist, ghist=fp.proponefault(mdl, 'ExportWater', 'block', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
+endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'ExportWater', 'block', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'}, staged=True)
 fp.showgraph(resgraph)
 fp.plotflowhist(flowhist, 'blockage', time=10)
 t=fp.printresult('ExportWater', 'block', 10, endresults)
