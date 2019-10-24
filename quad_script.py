@@ -54,7 +54,7 @@ ax2.legend(['Nominal Flightpath','Faulty Flighpath'], loc=4)
 plt.show()
 plt.close()
 
-#resultstab=fp.proplist(mdl,reuse=True)
+resultstab=fp.runlist(mdl,staged=True)
 
 #resultstab.write('tab4.ecsv', overwrite=True)
 
