@@ -12,13 +12,14 @@ import networkx as nx
 # MAJOR CLASSES
 
 class block(object):
-    def __init__(self, states={}):
+    def __init__(self, states={}, timely=True):
+        self.timely=timely
         self._states=states.keys()
         self._initstates=states.copy()
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
-        self.time=0.0
+        if timely: self.time=0.0
     def hasfault(self,fault):
         return self.faults.intersection(set([fault]))
     def hasfaults(self,faults):
@@ -44,7 +45,7 @@ class block(object):
 
 #Function superclass 
 class fxnblock(block):
-    def __init__(self,flownames,flows, states={}, components={}):
+    def __init__(self,flownames,flows, states={}, components={}, timely=True):
         self.type = 'function'
         self.flows=self.makeflowdict(flownames,flows)
         for flow in self.flows.keys():
@@ -52,7 +53,7 @@ class fxnblock(block):
         self.components=components
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
-        super().__init__(states)
+        super().__init__(states, timely)
     def makeflowdict(self,flownames,flows):
         flowdict={}
         for ind, flowname in enumerate(flownames):
@@ -76,7 +77,7 @@ class fxnblock(block):
         copy.faults = self.faults.copy()
         for state in self._initstates.keys():
             setattr(copy, state, self._initstates[state])
-        copy.time=self.time
+        if hasattr(self, 'time'): copy.time=self.time
         return copy
     def updatefxn(self,faults=['nom'], time=0): #fxns take faults and time as input
         self.faults.update(faults)  #if there is a fault, it is instantiated in the function
@@ -86,10 +87,10 @@ class fxnblock(block):
         return
         
 class component(block):
-    def __init__(self,name, states={}):
+    def __init__(self,name, states={}, timely=True):
         self.type = 'component'
         self.name = name
-        super().__init__(states)
+        super().__init__(states, timely)
     def behavior(self,time):
         return 0
 
@@ -128,6 +129,7 @@ class model(object):
         self.type='model'
         self.flows={}
         self.fxns={}
+        self.timelyfxns=set()
         self._fxnflows=[]
         self._fxninput={}
     def addflow(self,flowname, flowtype, flowdict):
@@ -146,6 +148,7 @@ class model(object):
             self._fxninput[name]={'flows': flownames, 'args': []}
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
+        if self.fxns[name].timely: self.timelyfxns.update([name])
     def getflows(self,flownames):
         return [self.flows[flowname] for flowname in flownames]
     def constructgraph(self):
@@ -196,13 +199,15 @@ class model(object):
         nx.set_node_attributes(graph, fxnmodes, 'modes')
         return graph
     def returnfaultmodes(self):
+        modeprops=dict.fromkeys(self.fxns)
         modes={}
         for fxnname, fxn in self.fxns.items():
-            fxnmodes=dict.fromkeys(fxn.faults.copy())
-            if any([m!='nom' for m in fxnmodes]): modes[fxnname] = {}
-            for mode in fxnmodes:
-                if mode!='nom': modes[fxnname][mode] = fxn.faultmodes[mode]
-        return modes
+            modes[fxnname]=[m for m in fxn.faults.copy() if m!='nom']
+            if any(modes[fxnname]): modeprops[fxnname] = {}
+            for mode in modes[fxnname]:
+                if mode!='nom': 
+                    modeprops[fxnname][mode] = fxn.faultmodes[mode]
+        return modes, modeprops
     def copy(self):
         copy = self.__class__()
         for flowname, flow in self.flows.items():

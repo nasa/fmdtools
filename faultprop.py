@@ -151,9 +151,9 @@ def runnominal(mdl, track={}, gtrack={}):
     flowhist, graphhist, _ =proponescen(mdl, scen, track, gtrack)
     
     resgraph = mdl.returnstategraph()   
-    endfaults = mdl.returnfaultmodes()
+    endfaults, endfaultprops = mdl.returnfaultmodes()
     endflows={}
-    endclass=mdl.findclassification(resgraph, endfaults, endflows, scen)
+    endclass=mdl.findclassification(resgraph, endfaultprops, endflows, scen)
     
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}
     
@@ -201,9 +201,9 @@ def runonefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}, s
     faultresgraph = mdl.returnstategraph()
     
     #process model run
-    endfaults = mdl.returnfaultmodes()
+    endfaults, endfaultprops = mdl.returnfaultmodes()
     endflows = comparegraphflows(faultresgraph, nomresgraph)
-    endclass = mdl.findclassification(faultresgraph, endfaults, endflows, scen)
+    endclass = mdl.findclassification(faultresgraph, endfaultprops, endflows, scen)
     resgraph = makeresultsgraph(faultresgraph, nomresgraph)
     resgraphhist = makeresultsgraphs(faultgraphhist, nomgraphhist)
     
@@ -275,11 +275,11 @@ def runlist(mdl, reuse=False, staged=False):
             endresults, resgraph, _ =proponescen(mdl, scen, {}, {}, staged=True)
         else:
             endresults, resgraph, _ =proponescen(mdl, scen, {}, {})
-        endfaults = mdl.returnfaultmodes()
+        endfaults, endfaultprops = mdl.returnfaultmodes()
         resgraph = mdl.returnstategraph()
         
         endflows = comparegraphflows(resgraph, nomresgraph)
-        endclass = mdl.findclassification(resgraph, endfaults, endflows, scen)
+        endclass = mdl.findclassification(resgraph, endfaultprops, endflows, scen)
         if reuse: mdl.reset()
         elif staged: _
         else: mdl = mdl.__class__()
@@ -334,14 +334,15 @@ def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhis
     # run model through the time range defined in the object
     nomscen=constructnomscen(mdl)
     c_mdl=dict.fromkeys(ctimes)
+    flowstates={}
     for rtime in timerange:
        # inject fault when it occurs, track defined flow states and graph
-        if rtime==scen['properties']['time']: propagate(mdl, scen['faults'], rtime)
-        else: propagate(mdl,nomscen['faults'],rtime)
+        if rtime==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], rtime, flowstates)
+        else: flowstates = propagate(mdl,nomscen['faults'],rtime, flowstates)
         if track:
             for flowname in track:
-                for var in mdl.flows[flowname].status():
-                    flowhist[flowname][var][rtime]=mdl.flows[flowname].status()[var]
+                for var in flowstates[flowname]:
+                    flowhist[flowname][var][rtime]=flowstates[flowname][var]
         if rtime in gtrack: graphhist[rtime]=mdl.returnstategraph()
         if rtime in ctimes: c_mdl[rtime]=mdl.copy()
     return flowhist, graphhist, c_mdl
@@ -352,43 +353,44 @@ def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhis
 #   g, the graph object of the model
 #   initfaults, the faults (or lack of faults) to initiate in the model
 #   time, the time propogation occurs at
-def propagate(mdl, initfaults, time):
+#   flowstates, if generated in the last iteration
+def propagate(mdl, initfaults, time, flowstates={}):
     #set up history of flows to see if any has changed
-    tests={}
-    flowhist={}
-    newflowhist={}
-    #Step 1: Find out what the current value of the flows are
-    for flowname, flow in mdl.flows.items():
-        flowhist[flowname]=flow.status()
+    n=0
+    activefxns=mdl.timelyfxns.copy()
+    nextfxns=set()
+    #Step 1: Find out what the current value of the flows are (if not generated in the last iteration)
+    if not flowstates:
+        for flowname, flow in mdl.flows.items():
+            flowstates[flowname]=flow.status()
     #Step 2: Inject faults if present     
     for fxnname in initfaults:
         if initfaults[fxnname]!='nom':
             fxn=mdl.fxns[fxnname]
             fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
+            activefxns.update([fxnname])
     #Step 3: Propagate faults through graph
-    n=0
-    activefxns=set(mdl.fxns)
-    nextfxns=set()
     while activefxns:
         for fxnname in list(activefxns).copy():
-            #Update functions with new values
-            fxn=mdl.fxns[fxnname]
-            fxn.updatefxn(time=time)
+            #Update functions with new values, check to see if new faults or states
+            oldstates, oldfaults = mdl.fxns[fxnname].returnstates()
+            mdl.fxns[fxnname].updatefxn(time=time)
+            newstates, newfaults = mdl.fxns[fxnname].returnstates() 
+            if oldstates != newstates or oldfaults != newfaults: nextfxns.update([fxnname])
         #Check to see what flows have new values and add connected functions
         for flowname, flow in mdl.flows.items():
-            if flowhist[flowname]!=flow.status():
+            if flowstates[flowname]!=flow.status():
                 nextfxns.update(set([n for n in mdl.bipartite.neighbors(flowname)]))
-            flowhist[flowname]=flow.status()
+            flowstates[flowname]=flow.status()
         activefxns=nextfxns.copy()
         nextfxns.clear()
         n+=1
-        
         if n>1000: #break if this is going for too long
             print("Undesired looping in function")
             print(initfaults)
             print(fxnname)
             break
-    return
+    return flowstates
 
 #makeresultsgraph
 # creates a snapshot of the graph structure with model results superimposed

@@ -80,7 +80,7 @@ class battery(component):
 
 class distEE(fxnblock):
     def __init__(self,flows):
-        super().__init__(['EEin','EEmot','EEctl','FS'],flows, {'EEtr':1.0, 'EEte':1.0})
+        super().__init__(['EEin','EEmot','EEctl','FS'],flows, {'EEtr':1.0, 'EEte':1.0}, timely=False)
         self.faultmodes={'short':{'rate':'moderate', 'rcost':'major'}, \
                          'degr':{'rate':'moderate', 'rcost':'minor'}, \
                          'break':{'rate':'common', 'rcost':'moderate'}}
@@ -101,7 +101,7 @@ class distEE(fxnblock):
 
 class engageLand(fxnblock):
     def __init__(self,flows):
-        super().__init__(['forcein', 'forceout'],flows, {'Ft':1.0})
+        super().__init__(['forcein', 'forceout'],flows, {'Ft':1.0}, timely=False)
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}}
     def condfaults(self, time):
@@ -138,7 +138,7 @@ class manageHealth(fxnblock):
             
 class holdPayload(fxnblock):
     def __init__(self,flows):
-        super().__init__(['FG', 'FA', 'FS'],flows, {'Ft': 1.0})
+        super().__init__(['FG', 'FA', 'FS'],flows, {'Ft': 1.0}, timely=False)
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}, }
     def condfaults(self, time):
@@ -159,7 +159,7 @@ class affectDOF(fxnblock): #EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs
             components={'RF':line('RF'), 'LF':line('LF'), 'LR':line('LR'), 'RR':line('RR')}
             self.upward={'RF':1,'LF':1,'LR':1,'RR':1}
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5}
-        super().__init__(['EEin', 'Ctlin','DOF','Force','Hsig', 'Rsig'], flows,{}, components) 
+        super().__init__(['EEin', 'Ctlin','DOF','Force','Hsig', 'Rsig'], flows,{}, components, timely=False) 
     def behavior(self, time):
         Air={}
         EEin={}
@@ -201,7 +201,7 @@ class affectDOF(fxnblock): #EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs
 
 class line(component):
     def __init__(self, name):
-        super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0})
+        super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, timely=False)
         self.faultmodes={name+'short':{'rate':'moderate', 'rcost':'major'}, \
                          name+'openc':{'rate':'moderate', 'rcost':'major'}, \
                          name+'ctlup':{'rate':'moderate', 'rcost':'minor'}, \
@@ -423,8 +423,8 @@ class quadrotor(model):
         else:
             landloc='emunsanc'
             area=10000
-        modes = self.returnfaultmodes()
-        repaircosts=[ c['rcost'] for f,m in modes.items() for a, c in m.items()]
+        modes, modeprops = self.returnfaultmodes()
+        repaircosts=[ c['rcost'] for f,m in modeprops.items() for a, c in m.items()]
         maxcost=textmax(repaircosts)
         
         if maxcost=='major':
