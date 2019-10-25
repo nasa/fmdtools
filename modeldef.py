@@ -199,12 +199,14 @@ class model(object):
         nx.set_node_attributes(graph, fxnmodes, 'modes')
         return graph
     def returnfaultmodes(self):
-        modeprops=dict.fromkeys(self.fxns)
         modes={}
+        modeprops={}
         for fxnname, fxn in self.fxns.items():
-            modes[fxnname]=[m for m in fxn.faults.copy() if m!='nom']
-            if any(modes[fxnname]): modeprops[fxnname] = {}
-            for mode in modes[fxnname]:
+            ms = [m for m in fxn.faults.copy() if m!='nom']
+            if ms: 
+                modeprops[fxnname] = {}
+                modes[fxnname] = ms
+            for mode in ms:
                 if mode!='nom': 
                     modeprops[fxnname][mode] = fxn.faultmodes[mode]
         return modes, modeprops

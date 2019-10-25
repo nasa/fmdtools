@@ -12,3 +12,6 @@ __pycache__/quad_mdl.cpython-36.pyc
 #ignore output tables
 *.ecsv
 *csv
+
+#profiling
+profiling.py
