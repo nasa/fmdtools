@@ -428,7 +428,11 @@ def comparegraphflows(g, nomg):
         flows=g.get_edge_data(edge[0],edge[1])
         nomflows=nomg.get_edge_data(edge[0],edge[1])
         for flow in flows:
-            if flows[flow]!=nomflows[flow]: endflows[flow]=flows[flow]
+            if flows[flow]!=nomflows[flow]:
+                endflows[flow]={}
+                vals=flows[flow]
+                for val in vals:
+                    if vals[val]!=nomflows[flow][val]: endflows[flow][val]=flows[flow][val]
     return endflows
 #findfaultflows
 # extracts non-nominal flow paths by comparing the graph with a nominal version of the graph
