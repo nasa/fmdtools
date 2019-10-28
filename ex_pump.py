@@ -128,26 +128,27 @@ class moveWat(fxnblock):
         #here we also define the states of a model, which are also added as 
         #attributes to the function
         states={'eff':1.0} #effectiveness state
-        super().__init__(flownames,flows,states)
+        super().__init__(flownames,flows,states, timers={'timer'})
         self.faultmodes={'mech_break':{'rate':'moderate', 'rcost':'major'}, \
                          'short':{'rate':'rare', 'rcost':'major'}}
         #timers can be set by adding variables to functions also
-        self.timer=0.0
     def condfaults(self, time):
         # here we define a conditional fault that only occurs after a state 
         # is present after 10 seconds
         if self.Watout.effort>5.0:
-            if self.time>time:
-                self.timer+=1
-            if self.timer>10.0:
+            if time>self.time:
+                #increment timer: default is 1 second, if we use self.tstep, the time
+                # will increment as desired even if we change model timestep
+                self.timer.inc(self.tstep)  
+            if self.timer.time>10.0:
                 self.addfault('mech_break')
     #behavior defines the behavior of the function
     def behavior(self, time):
         #here we can define how the function will behave with different faults
-        if self.hasfault('mech_break'):
+        if self.hasfault('short'):
             self.EEin.rate=0.1*self.Sigin.power*self.EEin.effort
             self.eff=0.0
-        if self.hasfault('short'):
+        elif self.hasfault('mech_break'):
             self.EEin.rate=500*self.Sigin.power*self.EEin.effort
             self.eff=0.0
         else:
@@ -182,6 +183,17 @@ class Water(flow):
 class pump(model):
     def __init__(self):
         super().__init__()
+        
+        
+        #Declare time range to run model over
+        self.times=[0,20, 55]
+        self.tstep = 1 #Stepsize: (change at your own risk, because this changes how the model will execute)
+        # Timestep at the moment must be an integer.
+        # In this model, because every time we've entered occurs at a factor of 5,
+        # and there aren't any complicated controls/dynamics interactions that would need to be 
+        # tuned, we can easily use the timestep t=1 OR t=5. HOWEVER, if any time (e.g. in the behavior)
+        # does not occur on the timestep, it will be missed, so proceed with caution.
+        
         #Flows must be added prior to the functions that use them, since
         # the functions take them as input
         #As shown below, flows are often simple enough that they don't need to be defined
@@ -208,9 +220,6 @@ class pump(model):
         self.addfxn('ExportWater', exportWater, ['Wat_2'])
         
         self.constructgraph()
-        
-        #Declare time range to run model over
-        self.times=[0,3, 55]
         
     #PROVIDE MEANS OF CLASSIFYING RESULTS
     # this function classifies the faults into severities based on the state of faults

@@ -290,7 +290,7 @@ class planpath(fxnblock):
     def behavior(self, t):
             
         if t<1: self.mode='taxi'
-        elif self.mode=='taxi' and t<2: self.mode='climb'
+        elif self.mode=='taxi' and t<10: self.mode='climb'
         elif self.mode=='climb' and self.Env.elev>=50: self.mode='hover'
         elif self.mode=='hover' and self.Env.y==0 and t<20: self.mode='forward'
         elif self.mode=='forward' and self.Env.y>50: self.mode='hover'
@@ -334,9 +334,9 @@ class trajectory(fxnblock):
                 self.flight=1.0
             
             sign=np.sign(self.DOF.vertvel)
-            damp=-0.02*sign*np.power(self.DOF.vertvel, 2)-0.1*self.DOF.vertvel
+            damp=(-0.02*sign*np.power(self.DOF.vertvel, 2)-0.1*self.DOF.vertvel)
             acc=10*(self.DOF.uppwr-self.flight)
-            self.DOF.vertvel=self.DOF.vertvel+acc+damp
+            self.DOF.vertvel=self.DOF.vertvel+(acc+damp)
             if self.Env.elev<=0.0:
                 self.DOF.vertvel=max(0,self.DOF.vertvel)
             
@@ -349,6 +349,11 @@ class trajectory(fxnblock):
 class quadrotor(model):
     def __init__(self):
         super().__init__()
+        
+        #Declare time range to run model over
+        self.times=[0,20, 55]
+        self.tstep = 1 #Stepsize: (change at your own risk--any accumulated value will need to change)
+        
         #add flows to the model
         self.addflow('Force_ST', 'Force', {'value':1.0})
         self.addflow('Force_Air','Force', {'value':1.0} )
@@ -383,8 +388,6 @@ class quadrotor(model):
         
         self.constructgraph()
         
-        #Declare time range to run model over
-        self.times=[0,20, 55]
     def findclassification(self, g, endfaults, endflows, scen):
         
         start=[0.0,0.0]
