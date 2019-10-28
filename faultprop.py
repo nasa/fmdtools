@@ -42,9 +42,9 @@ def plotflowhist(flowhist, fault='', time=0):
             plt.subplot(np.ceil((plots+1)/2),2,n)
             n+=1
             if 'faulty' in flowhists:
-                a, = plt.plot(flowhists['faulty'][flow][var], color='r')
+                a, = plt.plot(list(flowhists['faulty'][flow][var].keys()), list(flowhists['faulty'][flow][var].values()), color='r')
                 c = plt.axvline(x=time, color='k')
-            b, =plt.plot(flowhists['nominal'][flow][var], color='b')
+            b, =plt.plot(list(flowhists['nominal'][flow][var].keys()), list(flowhists['nominal'][flow][var].values()), color='b')
             plt.title(var)
         if 'faulty' in flowhists:
             plt.subplot(np.ceil((plots+1)/2),2,n)
@@ -318,11 +318,11 @@ def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhis
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     if staged:
-        timerange=range(scen['properties']['time'], mdl.times[-1]+1)
+        timerange=range(scen['properties']['time'], mdl.times[-1]+1, mdl.tstep)
         flowhist=copy.deepcopy(prevhist)
         graphhist=copy.deepcopy(prevghist)
     else: 
-        timerange= range(mdl.times[0], mdl.times[-1]+1) 
+        timerange= range(mdl.times[0], mdl.times[-1]+1, mdl.tstep) 
         # initialize dict of tracked flows
         flowhist={}
         graphhist=dict.fromkeys(gtrack)
@@ -330,7 +330,7 @@ def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhis
             for flowname in track:
                     flowhist[flowname]=mdl.flows[flowname].status()
                     for var in flowhist[flowname]:
-                        flowhist[flowname][var]=[{} for _ in timerange]
+                        flowhist[flowname][var]={i:[] for i in timerange}
     # run model through the time range defined in the object
     nomscen=constructnomscen(mdl)
     c_mdl=dict.fromkeys(ctimes)

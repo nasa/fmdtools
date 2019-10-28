@@ -45,7 +45,7 @@ class block(object):
 
 #Function superclass 
 class fxnblock(block):
-    def __init__(self,flownames,flows, states={}, components={}, timely=True):
+    def __init__(self,flownames,flows, states={}, components={},timers={}, timely=True):
         self.type = 'function'
         self.flows=self.makeflowdict(flownames,flows)
         for flow in self.flows.keys():
@@ -53,6 +53,9 @@ class fxnblock(block):
         self.components=components
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
+        self.timers = timers
+        for timername in timers:
+            setattr(self, timername, timer(timername))
         super().__init__(states, timely)
     def makeflowdict(self,flownames,flows):
         flowdict={}
@@ -70,7 +73,10 @@ class fxnblock(block):
             setattr(self, state,self._initstates[state])
         for name, component in self.components.items():
             component.reset()
-        self.time=0
+        for timername in self.timers:
+            getattr(self, timername).reset()
+        if hasattr(self, 'time'): self.time=0.0
+        if hasattr(self, 'tstep'): self.tstep=self.tstep
         self.updatefxn(faults=['nom'], time=0)
     def copy(self, newflows, *attr):
         copy = self.__class__(newflows, *attr)
@@ -78,6 +84,7 @@ class fxnblock(block):
         for state in self._initstates.keys():
             setattr(copy, state, self._initstates[state])
         if hasattr(self, 'time'): copy.time=self.time
+        if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
     def updatefxn(self,faults=['nom'], time=0): #fxns take faults and time as input
         self.faults.update(faults)  #if there is a fault, it is instantiated in the function
@@ -149,6 +156,7 @@ class model(object):
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
         if self.fxns[name].timely: self.timelyfxns.update([name])
+        self.fxns[name].tstep=self.tstep
     def getflows(self,flownames):
         return [self.flows[flowname] for flowname in flownames]
     def constructgraph(self):
@@ -220,11 +228,20 @@ class model(object):
             flows = copy.getflows(flownames)
             if args:    copy.fxns[fxnname]=fxn.copy(flows, args)
             else:       copy.fxns[fxnname]=fxn.copy(flows)
-        graph = copy.constructgraph()
+        _ = copy.constructgraph()
         return copy
-        
-        
-        
+
+#class for model timers (e.g. for conditional faults)    
+class timer():
+    def __init__(self, name, tstep=1.0):
+        self.name=name
+        self.time=0
+    def t(self):
+        return self.time
+    def inc(self, tstep):
+        self.time+=tstep
+    def reset(self):
+        self.time=0
         
 # mode constructor????
 def mode(rate,rcost):
