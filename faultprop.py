@@ -70,11 +70,13 @@ def plotghist(ghist,faultscen=[]):
 #   - g, the graph object
 #   - faultscen, the name of the fault scenario (for the title)
 #   - time, the time of the fault scenario (also for the title)
-def showgraph(g, faultscen=[], time=[]):
+#   - showfaultprops, whether to list the faults occuring on functions and list degraded flows
+#       #(only works well for relatively simple models)
+def showgraph(g, faultscen=[], time=[], showfaultlabels=True):
     labels=dict()
     for edge in g.edges:
         flows=list(g.get_edge_data(edge[0],edge[1]).keys())
-        labels[edge[0],edge[1]]=flows
+        labels[edge[0],edge[1]]=''.join(flow for flow in flows)
     
     pos=nx.shell_layout(g)
     #Add ability to label modes/values
@@ -85,6 +87,7 @@ def showgraph(g, faultscen=[], time=[]):
     
     if list(g.nodes(data='status'))[0][1]:
         statuses=dict(g.nodes(data='status', default='Nominal'))
+        
         faultnodes=[node for node,status in statuses.items() if status=='Faulty']
         
         degradednodes=[node for node,status in statuses.items() if status=='Degraded']
@@ -93,10 +96,18 @@ def showgraph(g, faultscen=[], time=[]):
                           node_shape='s',width=3, font_weight='bold', node_size = 2000)
         nx.draw_networkx_nodes(g, pos, nodelist=faultnodes,node_color = 'r',\
                           node_shape='s',width=3, font_weight='bold', node_size = 2000)
-        faultflows,faultedges=findfaultflows(g)
-        nx.draw_networkx_edges(g,pos,edgelist=faultedges.keys(), edge_color='r', width=2)
-
-        nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedges, font_color='r')
+        
+        
+        faultedges = [edge for edge in g.edges if any([g.edges[edge][flow]['status']=='Degraded' for flow in g.edges[edge]])]
+        faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
+        nx.draw_networkx_edges(g,pos,edgelist=faultedges, edge_color='r', width=2)
+        
+        if showfaultlabels:
+            faults=dict(g.nodes(data='modes', default={'nom'}))
+            faultlabels = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faults.items() if fault!={'nom'}}
+            nx.draw_networkx_labels(g, pos, labels=faultlabels, font_size=12, font_color='k')
+            nx.draw_networkx_edge_labels(g,pos,edge_labels=faultflows, font_color='r')
+            
     
     if faultscen:
         plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
@@ -434,34 +445,6 @@ def comparegraphflows(g, nomg):
                 for val in vals:
                     if vals[val]!=nomflows[flow][val]: endflows[flow][val]=flows[flow][val]
     return endflows
-#findfaultflows
-# extracts non-nominal flow paths by comparing the graph with a nominal version of the graph
-# inputs: g, the graph, and nomg, the graph in its nominal state
-# outputs: 
-#           -endflows, a dict of degraded flows
-#           -endedges, a dict of degraded edges
-def findfaultflows(g, nomg=[]):
-    endflows=dict()
-    endedges=dict()
-    for edge in g.edges:
-        flows=g.get_edge_data(edge[0],edge[1])
-        flowedges=[]
-        #if comparing a nominal with a non-nominal
-        if nomg:
-            nomflows=nomg.get_edge_data(edge[0],edge[1])
-            for flow in flows:
-                if flows[flow].status()!=nomflows[flow].status():
-                    endflows[flow]=flows[flow].status()
-                    flowedges=flowedges+[flow]
-        #if results are already in the graph structure
-        else:
-            for flow in flows:
-                if flows[flow]['status']=='Degraded':
-                    endflows[flow]=flows[flow]['values']
-                    flowedges=flowedges+[flow]
-        if flowedges:
-                endedges[edge]=flowedges    
-    return endflows, endedges
 
         
             

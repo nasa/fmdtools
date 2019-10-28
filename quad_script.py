@@ -18,7 +18,7 @@ mdl = quadrotor()
 
 # =============================================================================
 endresults1, resgraph, flowhist3, ghist3=fp.runnominal(mdl, track={'DOFs','Dir1', 'Env1', 'Force_LG'})
-fp.showgraph(resgraph)
+fp.showgraph(resgraph, showfaultlabels=False)
 fp.plotflowhist(flowhist3, 'N/A', time=0)
 ## 
 ## #Check various scenarios individually
@@ -28,8 +28,8 @@ fp.plotflowhist(flowhist3, 'N/A', time=0)
 ### 
 #fp.plotflowhist(flowhist, 'StoreEE short', time=5)
 ### 
-#endresults, resgraph, flowhist2, ghist2=fp.runonefault(mdl, 'AffectDOF', 'RFshort', time=13, track={'DOFs', 'Env1', 'Dir1', 'Force_Air'}, gtrack=[10,13,20,40], staged=True)
-#fp.showgraph(resgraph)
+endresults, resgraph, flowhist2, ghist2=fp.runonefault(mdl, 'AffectDOF', 'RFshort', time=13, track={'DOFs', 'Env1', 'Dir1', 'Force_Air'}, gtrack=[10,13,20,40], staged=True)
+fp.showgraph(resgraph)
 #fp.plotflowhist(flowhist2, 'RFshort', time=13)
 #fp.plotghist(ghist2, 't=13 RFshort')
 #
