@@ -39,7 +39,7 @@ def plotflowhist(flowhist, fault='', time=0):
         plt.tight_layout(pad=2.5, w_pad=2.5, h_pad=2.5, rect=[0, 0.03, 1, 0.95])
         n=1
         for var in flowhists['nominal'][flow]:
-            plt.subplot(np.ceil((plots+1)/2),2,n)
+            plt.subplot(np.ceil((plots+1)/2),2,n, label=flow+var)
             n+=1
             if 'faulty' in flowhists:
                 a, = plt.plot(list(flowhists['faulty'][flow][var].keys()), list(flowhists['faulty'][flow][var].values()), color='r')
@@ -47,7 +47,7 @@ def plotflowhist(flowhist, fault='', time=0):
             b, =plt.plot(list(flowhists['nominal'][flow][var].keys()), list(flowhists['nominal'][flow][var].values()), color='b')
             plt.title(var)
         if 'faulty' in flowhists:
-            plt.subplot(np.ceil((plots+1)/2),2,n)
+            plt.subplot(np.ceil((plots+1)/2),2,n, label=flow+'legend')
             plt.legend([a,b],['faulty', 'nominal'])
         fig.suptitle('Dynamic Response of '+flow+' to fault'+' '+fault)
         plt.show()
@@ -131,6 +131,13 @@ def printresult(function, mode, time, endresult):
     cnames=['Function', 'Mode', 'Time', 'End Faults', 'End Flow Effects', 'Rate', 'Cost', 'Expected Cost']
     t = Table(vals, names=cnames)
     return t
+
+def showbipartite(mdl):
+    
+    labels={node:node for node in mdl.bipartite.nodes}
+    nx.draw(mdl.bipartite, labels=labels,font_size=6, node_size=700)
+    plt.show()
+
 
 ## FAULT PROPAGATION
 
