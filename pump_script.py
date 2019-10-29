@@ -26,6 +26,10 @@ mdl = pump()
 endresults, resgraph, flowhist, ghist=fp.runnominal(mdl, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
 fp.showgraph(resgraph)
 fp.plotflowhist(flowhist, 'Nominal')
+
+endresults_bip, resgraph_bip, flowhist, ghist=fp.runnominal(mdl, gtype='bipartite')
+fp.showbipartite(resgraph_bip, scale=2)
+
 #
 ##We might further query the faults to see what happens to the various states
 endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'MoveWater', 'short', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'}, staged=True)
@@ -41,6 +45,11 @@ print(endresults)
 endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'ExportWater', 'block', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'}, staged=True)
 fp.showgraph(resgraph)
 fp.plotflowhist(flowhist, 'blockage', time=10)
+# we can also view the results as a bipartite graph
+endresults, resgraph_bip2, flowhist, ghist=fp.runonefault(mdl, 'ExportWater', 'block', time=10, gtype='bipartite')
+fp.showbipartite(resgraph_bip2, faultscen='ExportWater block', time=10, scale=2)
+
+
 t=fp.printresult('ExportWater', 'block', 10, endresults)
 print(t)
 ##you can save to a csv this with:
