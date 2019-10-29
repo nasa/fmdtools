@@ -17,8 +17,6 @@ import time
 mdl = quadrotor()
 
 
-fp.showbipartite(mdl)
-
 # =============================================================================
 #endresults1, resgraph, flowhist3, ghist3=fp.runnominal(mdl, track={'DOFs','Dir1', 'Env1', 'Force_LG'})
 #fp.showgraph(resgraph, showfaultlabels=False)
@@ -26,8 +24,8 @@ fp.showbipartite(mdl)
 ## 
 ## #Check various scenarios individually
 ## 
-#endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'}, staged=True)
-#fp.showgraph(resgraph)
+endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'}, staged=True, gtype='bipartite')
+fp.showbipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
 #fp.plotflowhist(flowhist, 'StoreEE short', time=5)
 ### 

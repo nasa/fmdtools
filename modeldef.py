@@ -187,24 +187,35 @@ class model(object):
             flow.reset()
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
-    def returnstategraph(self):
-        graph=nx.projected_graph(self.bipartite, self.fxns)
+    def returnstategraph(self, gtype='normal'):
+        if gtype=='normal':
+            graph=nx.projected_graph(self.bipartite, self.fxns)
+        elif gtype=='bipartite':
+            graph=self.bipartite.copy()
         edgevals={}
         fxnmodes={}
         fxnstates={}
-        for edge in graph.edges:
-            midedges=list(self.multgraph.subgraph(edge).edges)
-            flows= [midedge[2] for midedge in midedges]
-            flowdict={}
-            for flow in flows: 
-                flowdict[flow]=self.flows[flow].status()
-            edgevals[edge]=flowdict
+        flowstates={}
+        if gtype=='normal': #set edge values for normal graph
+            for edge in graph.edges:
+                midedges=list(self.multgraph.subgraph(edge).edges)
+                flows= [midedge[2] for midedge in midedges]
+                flowdict={}
+                for flow in flows: 
+                    flowdict[flow]=self.flows[flow].status()
+                edgevals[edge]=flowdict
+            nx.set_edge_attributes(graph, edgevals) 
+        elif gtype=='bipartite': #set flow node values for bipartite graph
+            for flowname, flow in self.flows.items():
+                flowstates[flowname]=flow.status()
+            nx.set_node_attributes(graph, flowstates, 'states')
+        #set node values for functions
         for fxnname, fxn in self.fxns.items():
             fxnstates[fxnname], fxnmodes[fxnname] = fxn.returnstates()
-            del graph.nodes[fxnname]['bipartite']
-        nx.set_edge_attributes(graph, edgevals)
+            if gtype=='normal': del graph.nodes[fxnname]['bipartite']
         nx.set_node_attributes(graph, fxnstates, 'states')
-        nx.set_node_attributes(graph, fxnmodes, 'modes')
+        nx.set_node_attributes(graph, fxnmodes, 'modes')            
+        
         return graph
     def returnfaultmodes(self):
         modes={}
