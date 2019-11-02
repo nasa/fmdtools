@@ -10,7 +10,6 @@ import numpy as np
 import networkx as nx
 
 # MAJOR CLASSES
-
 class block(object):
     def __init__(self, states={}, timely=True):
         self.timely=timely
@@ -102,6 +101,7 @@ class component(block):
         return 0
 
 #Flow superclass
+# - replace with attribute dictionary???
 class flow(object):
     def __init__(self, attributes, name):
         self.type='flow'
