@@ -11,6 +11,7 @@ Description: A simple example of I/O using faultprop.py and the pump model in ex
 #First, import the fault propogation library as well as the model
 import faultprop as fp
 from ex_pump import * #required to import entire module
+import time
 
 mdl = pump()
 
@@ -23,16 +24,23 @@ mdl = pump()
 #   -do any faults occur in the nominal state?
 #   -do all the flow states proceed as desired over time?
 
+
 endresults, resgraph, flowhist, ghist=fp.runnominal(mdl, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
+
+
 fp.showgraph(resgraph)
 fp.plotflowhist(flowhist, 'Nominal')
 
+
 endresults_bip, resgraph_bip, flowhist, ghist=fp.runnominal(mdl, gtype='bipartite')
+
 fp.showbipartite(resgraph_bip, scale=2)
 
-#
+a = time.time()
 ##We might further query the faults to see what happens to the various states
-endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'MoveWater', 'short', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'}, staged=True)
+endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'MoveWater', 'short', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'}, staged=False)
+b = time.time()
+
 fp.showgraph(resgraph)
 fp.plotflowhist(flowhist, 'short', time=10)
 t=fp.printresult('MoveWater', 'short', 10, endresults)
@@ -62,4 +70,5 @@ print(t)
 # t=15 and t=15
 resultstab=fp.runlist(mdl)
 print(resultstab)
+print(b-a)
 #resultstab.write('tab.ecsv', overwrite=True)
