@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 from astropy.table import Table, Column
+import pandas as pd
 
 
 ##PLOTTING AND RESULTS DISPLAY
@@ -348,7 +349,6 @@ def runlist(mdl, reuse=False, staged=False):
 #   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
 #   (note, this causes changes in the model of interest, also)
 #   - c_mdls, copies of the model object taken at each time listed in ctime
-
 def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhist={}, prevghist={}, gtype='normal'):
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
@@ -427,6 +427,28 @@ def propagate(mdl, initfaults, time, flowstates={}):
             break
     return flowstates
 
+def makeflowhist(mdl, timerange):
+    flowhist={}
+    for flowname, flow in mdl.flows.items():
+        atts=flow.status()
+        flowhist[flowname] = {}
+        for att, val in atts.items():
+            flowhist[flowname][att] = [val for i in timerange]
+    return flowhist
+
+def makeflowtable(flowhist):
+    df = pd.DataFrame()
+    labels= []
+    for flow, atts in flowhist.items():
+        for att, val in atts.items():
+            label=(flow,att)
+            labels=labels+[label]
+            df[label]=val
+    index = pd.MultiIndex.from_tuples(labels)
+    df = df.reindex(index, axis="columns")
+    return df
+            
+
 #makeresultsgraph
 # creates a snapshot of the graph structure with model results superimposed
 # inputs: g, the graph, and nomg, the graph in its nominal state
@@ -483,7 +505,6 @@ def comparegraphflows(g, nomg, gtype='normal'):
     elif gtype=='bipartite':
         for node in g.nodes:
             if g.nodes[node]['bipartite']==1: #only flow states
-                print(node)
                 if g.nodes[node]['states']!=nomg.nodes[node]['states']:
                     endflows[node]={}
                     vals=g.nodes[node]['states']

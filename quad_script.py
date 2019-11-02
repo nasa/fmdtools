@@ -29,8 +29,8 @@ fp.showbipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=Fal
 ### 
 #fp.plotflowhist(flowhist, 'StoreEE short', time=5)
 ### 
-#endresults, resgraph, flowhist2, ghist2=fp.runonefault(mdl, 'AffectDOF', 'RFshort', time=13, track={'DOFs', 'Env1', 'Dir1', 'Force_Air'}, gtrack=[10,13,20,40], staged=True)
-#fp.showgraph(resgraph)
+endresults, resgraph, flowhist2, ghist2=fp.runonefault(mdl, 'AffectDOF', 'RFshort', time=13, track={'DOFs', 'Env1', 'Dir1', 'Force_Air'}, gtrack=[10,13,20,40], staged=True)
+fp.showgraph(resgraph)
 #fp.plotflowhist(flowhist2, 'RFshort', time=13)
 #fp.plotghist(ghist2, 't=13 RFshort')
 #
@@ -63,14 +63,13 @@ fp.showbipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=Fal
 #Doing a time test
 #t1=time.time()
 #fullresults, resultstab=fp.proplist(mdl,reuse=True)
-#t2=time.time()
+t2=time.time()
 
-#resultstab=fp.runlist(mdl, staged=True)
-#print(resultstab)
-#t3=time.time()
+resultstab=fp.runlist(mdl, staged=True)
+t3=time.time()
 #
 #t_reused=t2-t1
-#t_copied=t3-t2
+t_copied=t3-t2
 #print(t_reused)
 #print(t_copied)
 # based on this test, it appears reusing the model is actually slightly slower
