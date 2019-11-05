@@ -427,7 +427,32 @@ def propagate(mdl, initfaults, time, flowstates={}):
             break
     return flowstates
 
-def makeflowhist(mdl, timerange):
+#updatemdlhist
+# find a way to make faster (e.g. by automatically getting values by reference)
+def updatemdlhist(mdl, mdlhist, t):
+    updateflowhist(mdl, mdlhist, t)
+    updatefxnhist(mdl, mdlhist, t)
+def updateflowhist(mdl, mdlhist, t):
+    for flowname, flow in mdl.flows.items():
+        atts=flow.status()
+        for att, val in atts.items():
+            mdlhist["flows"][flowname][att][t] = val
+def updatefxnhist(mdl, mdlhist, t):
+    for fxnname, fxn in mdl.fxns.items():
+        states, faults = fxn.returnstates()
+        mdlhist["flows"][fxnname]["faults"][t]=faults
+        for state, value in states.items():
+            mdlhist["functions"][fxnname][state][t] = value 
+
+#initmdlhist
+# initialize history of model
+def initmdlhist(mdl, timerange):
+    mdlhist={}
+    mdlhist["flows"]=initflowhist(mdl, timerange)
+    mdlhist["functions"]=initfxnhist(mdl, timerange)
+    mdlhist["time"]=[i for i in timerange]
+    return mdlhist
+def initflowhist(mdl, timerange):
     flowhist={}
     for flowname, flow in mdl.flows.items():
         atts=flow.status()
@@ -435,15 +460,34 @@ def makeflowhist(mdl, timerange):
         for att, val in atts.items():
             flowhist[flowname][att] = [val for i in timerange]
     return flowhist
+def initfxnhist(mdl, timerange):
+    fxnhist = {}
+    for fxnname, fxn in mdl.fxns.items():
+        states, faults = fxn.returnstates()
+        fxnhist[fxnname]={}
+        fxnhist[fxnname]["faults"]=[faults for i in timerange]
+        for state, value in states.items():
+            fxnhist[fxnname][state] = [value for i in timerange]
+    return fxnhist
 
-def makeflowtable(flowhist):
+#makehisttable
+# put history in a tabular format
+def makehisttable(mdlhist):
     df = pd.DataFrame()
-    labels= []
-    for flow, atts in flowhist.items():
+    label = ("Time", "t")
+    labels= [label]
+    df[label]=mdlhist["time"]
+    for flow, atts in mdlhist["flows"].items():
         for att, val in atts.items():
             label=(flow,att)
             labels=labels+[label]
             df[label]=val
+    for fxn, atts in mdlhist["functions"].items():
+        for att, val in atts.items():
+            label=(fxn, att)
+            labels=labels+[label]
+            df[label]=val
+    
     index = pd.MultiIndex.from_tuples(labels)
     df = df.reindex(index, axis="columns")
     return df
