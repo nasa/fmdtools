@@ -24,13 +24,13 @@ mdl = quadrotor()
 ## 
 ## #Check various scenarios individually
 ## 
-endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'DistEE', 'short', time=5, track={'EE_1', 'Env1'}, staged=True, gtype='bipartite')
+endresults, resgraph, mdlhist = fp.runonefault(mdl, 'DistEE', 'short', time=5, staged=True, gtype='bipartite')
 
 fp.showbipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
-#fp.plotflowhist(flowhist, 'StoreEE short', time=5)
+fp.plotmdlhist(mdlhist, 'StoreEE short', time=5) #, fxnflows=['StoreEE'])
 ### 
-endresults, resgraph, flowhist2, ghist2=fp.runonefault(mdl, 'AffectDOF', 'RFshort', time=13, track={'DOFs', 'Env1', 'Dir1', 'Force_Air'}, gtrack=[10,13,20,40], staged=True)
+endresults, resgraph, mdlhist2=fp.runonefault(mdl, 'AffectDOF', 'RFshort', time=13, staged=True)
 fp.showgraph(resgraph)
 #fp.plotflowhist(flowhist2, 'RFshort', time=13)
 #fp.plotghist(ghist2, 't=13 RFshort')

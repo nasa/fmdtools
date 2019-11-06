@@ -40,7 +40,7 @@ class block(object):
         states={}
         for state in self._states:
             states[state]=getattr(self,state)
-        return states.copy(), self.faults.copy()
+        return states, self.faults.copy()
 
 #Function superclass 
 class fxnblock(block):
@@ -117,7 +117,7 @@ class flow(object):
         attributes={}
         for attribute in self._attributes:
             attributes[attribute]=getattr(self,attribute)
-        return attributes.copy()
+        return attributes
     def copy(self):
         attributes={}
         for attribute in self._attributes:

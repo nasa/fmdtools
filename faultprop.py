@@ -28,30 +28,47 @@ import pandas as pd
 #           - values is a list of values that attribute takes over time
 #   - fault, name of the fault that was injected (for the titles)
 #   - time, the time in which the fault was initiated (so that time is displayed on the graph)
-def plotflowhist(flowhist, fault='', time=0):
-    flowhists={}
-    if 'nominal' not in flowhist: flowhists['nominal']=flowhist
-    else: flowhists=flowhist
+#   - objs, the functions/flows to plot
+def plotmdlhist(mdlhist, fault='', time=0, fxnflows=[]):
+    mdlhists={}
+    if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
+    else: mdlhists=mdlhist
+    times = mdlhists["nominal"]["time"]
     
-    for flow in flowhists['nominal']:
-        fig = plt.figure()
-        plots=len(flowhists['nominal'][flow])
-        fig.add_subplot(np.ceil((plots+1)/2),2,plots)
-        plt.tight_layout(pad=2.5, w_pad=2.5, h_pad=2.5, rect=[0, 0.03, 1, 0.95])
-        n=1
-        for var in flowhists['nominal'][flow]:
-            plt.subplot(np.ceil((plots+1)/2),2,n, label=flow+var)
-            n+=1
-            if 'faulty' in flowhists:
-                a, = plt.plot(list(flowhists['faulty'][flow][var].keys()), list(flowhists['faulty'][flow][var].values()), color='r')
-                c = plt.axvline(x=time, color='k')
-            b, =plt.plot(list(flowhists['nominal'][flow][var].keys()), list(flowhists['nominal'][flow][var].values()), color='b')
-            plt.title(var)
-        if 'faulty' in flowhists:
-            plt.subplot(np.ceil((plots+1)/2),2,n, label=flow+'legend')
-            plt.legend([a,b],['faulty', 'nominal'])
-        fig.suptitle('Dynamic Response of '+flow+' to fault'+' '+fault)
-        plt.show()
+    for objtype in ["flows", "functions"]:
+        for fxnflow in mdlhists['nominal'][objtype]:
+            if fxnflows: #if in the list 
+                if fxnflow not in fxnflows:
+                    break
+            
+            if objtype =="flows":
+                nomhist=mdlhists['nominal']["flows"][fxnflow]
+                if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
+            elif objtype=="functions":
+                nomhist=mdlhists['nominal']["functions"][fxnflow]
+                del nomhist['faults']
+                if 'faulty' in mdlhists: 
+                    hist = mdlhists['faulty']["functions"][fxnflow]
+                    del hist['faults']
+            plots=len(nomhist)
+            if plots:
+                fig = plt.figure()
+                fig.add_subplot(np.ceil((plots+1)/2),2,plots)
+                plt.tight_layout(pad=2.5, w_pad=2.5, h_pad=2.5, rect=[0, 0.03, 1, 0.95])
+                n=1
+                for var in nomhist:
+                    plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+var)
+                    n+=1
+                    if 'faulty' in mdlhists:
+                        a, = plt.plot(times, hist[var], color='r')
+                        c = plt.axvline(x=time, color='k')
+                    b, =plt.plot(times, nomhist[var], color='b')
+                    plt.title(var)
+                if 'faulty' in mdlhists:
+                    plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+'legend')
+                    plt.legend([a,b],['faulty', 'nominal'])
+                fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
+                plt.show()
 
 #plotghist
 # displays plots of the graph over time
@@ -171,28 +188,26 @@ def constructnomscen(mdl):
 # runs the model over time in the nominal scenario
 # inputs:
 #   - mdl, the python model module set up in mdl.py
-#   - track, the flows to track (a list of strings)
-#   - gtrack, the times to snapshot the graph
+#   - track, whether or not to track flows
+#   - gtype, the type of graph to return
 # outputs:
 #   - endresults, a dictionary summary of results at the end of the simulation with structure
-#    {flows:{flow:attribute:value},faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val} }
+#    {faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val} }
 #   - resgraph, a graph object with function faults and degraded flows noted
-#   - flowhist, a dictionary with the history of the flow over time
-#   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
-def runnominal(mdl, track={}, gtrack={}, gtype='normal'):
+#   - mdlhist, a dictionary with the history modelstates
+def runnominal(mdl, track=True, gtype='normal'):
     nomscen=constructnomscen(mdl)
     scen=nomscen.copy()
-    flowhist, graphhist, _ =proponescen(mdl, scen, track, gtrack, gtype=gtype)
+    mdlhist, _ = proponescen(mdl, nomscen, track=track, staged=False)
     
     resgraph = mdl.returnstategraph(gtype)   
     endfaults, endfaultprops = mdl.returnfaultmodes()
-    endflows={}
-    endclass=mdl.findclassification(resgraph, endfaultprops, endflows, scen)
+    endclass=mdl.findclassification(resgraph, endfaultprops, {}, scen)
     
-    endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}
+    endresults={'faults': endfaults, 'classification':endclass}
     
     mdl.reset()
-    return endresults, resgraph, flowhist, graphhist
+    return endresults, resgraph, mdlhist
 
 #proponefault
 # runs the model given a single function and fault mode
@@ -209,17 +224,17 @@ def runnominal(mdl, track={}, gtrack={}, gtype='normal'):
 #   - resgraph, a graph object with function faults and degraded flows noted
 #   - flowhist, a dictionary with the history of the flow over time
 #   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
-def runonefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}, staged=False, gtype='normal'):
+def runonefault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gtype = 'normal'):
     
     #run model nominally, get relevant results
     nomscen=constructnomscen(mdl)
     if staged:
-        nomflowhist, nomgraphhist, mdls = proponescen(mdl, nomscen, track, gtrack, ctimes=[time])
+        nommdlhist, mdls = proponescen(mdl, nomscen, track=track, staged=staged, ctimes=[time])
         nomresgraph = mdl.returnstategraph(gtype)
         mdl.reset()
         mdl = mdls[time]
     else:
-        nomflowhist, nomgraphhist, _ = proponescen(mdl, nomscen, track, gtrack)
+        nommdlhist, _ = proponescen(mdl, nomscen, track=track, staged=staged)
         nomresgraph = mdl.returnstategraph(gtype)
         mdl.reset()
     #run with fault present, get relevant results
@@ -231,7 +246,7 @@ def runonefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}, s
     scen['properties']['rate']=mdl.fxns[fxnname].faultmodes[faultmode]['rate']
     scen['properties']['time']=time
     
-    faultflowhist, faultgraphhist, _ = proponescen(mdl, scen, track, gtrack, staged=staged, prevhist=nomflowhist, prevghist=nomgraphhist)
+    faultmdlhist, _ = proponescen(mdl, scen, track=track, staged=staged, prevhist=nommdlhist)
     faultresgraph = mdl.returnstategraph(gtype)
     
     #process model run
@@ -241,14 +256,13 @@ def runonefault(mdl, fxnname, faultmode, time=0, track={}, gtrack={},graph={}, s
     endclass = mdl.findclassification(faultresgraph, endfaultprops, endflows, scen)
     if gtype=='normal': resgraph = makeresultsgraph(faultresgraph, nomresgraph)
     elif gtype=='bipartite': resgraph = makebipresultsgraph(faultresgraph, nomresgraph)
-    resgraphhist = makeresultsgraphs(faultgraphhist, nomgraphhist, gtype)
     
-    flowhist={'nominal':nomflowhist, 'faulty':faultflowhist}
+    mdlhists={'nominal':nommdlhist, 'faulty':faultmdlhist}
     
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
     
     mdl.reset()
-    return endresults,resgraph, flowhist, resgraphhist
+    return endresults,resgraph, mdlhists
 
 #listinitfaults
 # creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
@@ -282,7 +296,6 @@ def runlist(mdl, reuse=False, staged=False):
         reuse=False
 
     scenlist=listinitfaults(mdl)
-    resultsdict={} 
     
     numofscens=len(scenlist)
     
@@ -298,9 +311,9 @@ def runlist(mdl, reuse=False, staged=False):
     #run model nominally, get relevant results
     nomscen=constructnomscen(mdl)
     if staged:
-        nomflowhist, nomgraphhist, c_mdl = proponescen(mdl, nomscen, {}, {}, ctimes=mdl.times)
+        nomflowhist, c_mdl = proponescen(mdl, nomscen, {}, {}, ctimes=mdl.times)
     else:
-        nomflowhist, nomgraphhist, c_mdl = proponescen(mdl, nomscen, {}, {})
+        nomflowhist, c_mdl = proponescen(mdl, nomscen, {}, {})
     nomresgraph = mdl.returnstategraph()
     mdl.reset()
     
@@ -308,9 +321,9 @@ def runlist(mdl, reuse=False, staged=False):
         #run model with fault scenario
         if staged:
             mdl=c_mdl[scen['properties']['time']].copy()
-            endresults, resgraph, _ =proponescen(mdl, scen, {}, {}, staged=True)
+            _, _ =proponescen(mdl, scen, track=False, staged=True, prevhist=nomflowhist)
         else:
-            endresults, resgraph, _ =proponescen(mdl, scen, {}, {})
+            _, _ =proponescen(mdl, scen, track=False)
         endfaults, endfaultprops = mdl.returnfaultmodes()
         resgraph = mdl.returnstategraph()
         
@@ -340,47 +353,38 @@ def runlist(mdl, reuse=False, staged=False):
 # inputs:
 #   - mdl, the model object 
 #   - scen, the fault scenario for a given model
-#   - track, a list of flows to track
-#   - gtrack, the times to take a snapshot of the graph 
+#   - track, whether to track states over time
 #   - staged, the starting time for the propagation
-#   - ctimes, the time to copy the models 
+#   - ctimes, the time to copy the models
+#   - prevhist, the previous results hist (if running staged)
 # outputs:
-#   - flowhist, a dictionary with the history of the flow over time
-#   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
-#   (note, this causes changes in the model of interest, also)
+#   - mdlhist, a dictionary with the history of the model states over time
 #   - c_mdls, copies of the model object taken at each time listed in ctime
-def proponescen(mdl, scen, track={}, gtrack={}, staged=False, ctimes=[], prevhist={}, prevghist={}, gtype='normal'):
+def proponescen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     if staged:
-        timerange=range(scen['properties']['time'], mdl.times[-1]+1, mdl.tstep)
-        flowhist=copy.deepcopy(prevhist)
-        graphhist=copy.deepcopy(prevghist)
+        timerange=np.arange(scen['properties']['time'], mdl.times[-1]+1, mdl.tstep)
+        shift = len(np.arange(mdl.times[0], scen['properties']['time'], mdl.tstep))
+        if track: 
+            if prevhist:    mdlhist = copy.deepcopy(prevhist)
+            else:           mdlhist = initmdlhist(mdl, timerange)
     else: 
-        timerange= range(mdl.times[0], mdl.times[-1]+1, mdl.tstep) 
-        # initialize dict of tracked flows
-        flowhist={}
-        graphhist=dict.fromkeys(gtrack)
-        if track:
-            for flowname in track:
-                    flowhist[flowname]=mdl.flows[flowname].status()
-                    for var in flowhist[flowname]:
-                        flowhist[flowname][var]={i:[] for i in timerange}
+        timerange = np.arange(mdl.times[0], mdl.times[-1]+1, mdl.tstep)
+        shift = 0
+        if track:  mdlhist = initmdlhist(mdl, timerange)
+    if not track: mdlhist={}
     # run model through the time range defined in the object
     nomscen=constructnomscen(mdl)
     c_mdl=dict.fromkeys(ctimes)
     flowstates={}
-    for rtime in timerange:
+    for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
-        if rtime==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], rtime, flowstates)
-        else: flowstates = propagate(mdl,nomscen['faults'],rtime, flowstates)
-        if track:
-            for flowname in track:
-                for var in flowstates[flowname]:
-                    flowhist[flowname][var][rtime]=flowstates[flowname][var]
-        if rtime in gtrack: graphhist[rtime]=mdl.returnstategraph(gtype)
-        if rtime in ctimes: c_mdl[rtime]=mdl.copy()
-    return flowhist, graphhist, c_mdl
+        if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
+        else: flowstates = propagate(mdl,nomscen['faults'],t, flowstates)
+        if track: updatemdlhist(mdl, mdlhist, t_ind+shift)
+        if t in ctimes: c_mdl[t]=mdl.copy()
+    return mdlhist, c_mdl
 
 #propogate
 # propagates faults through the graph at one time-step
@@ -429,20 +433,20 @@ def propagate(mdl, initfaults, time, flowstates={}):
 
 #updatemdlhist
 # find a way to make faster (e.g. by automatically getting values by reference)
-def updatemdlhist(mdl, mdlhist, t):
-    updateflowhist(mdl, mdlhist, t)
-    updatefxnhist(mdl, mdlhist, t)
-def updateflowhist(mdl, mdlhist, t):
+def updatemdlhist(mdl, mdlhist, t_ind):
+    updateflowhist(mdl, mdlhist, t_ind)
+    updatefxnhist(mdl, mdlhist, t_ind)
+def updateflowhist(mdl, mdlhist, t_ind):
     for flowname, flow in mdl.flows.items():
         atts=flow.status()
         for att, val in atts.items():
-            mdlhist["flows"][flowname][att][t] = val
-def updatefxnhist(mdl, mdlhist, t):
+            mdlhist["flows"][flowname][att][t_ind] = val
+def updatefxnhist(mdl, mdlhist, t_ind):
     for fxnname, fxn in mdl.fxns.items():
         states, faults = fxn.returnstates()
-        mdlhist["flows"][fxnname]["faults"][t]=faults
+        mdlhist["functions"][fxnname]["faults"][t_ind]=faults
         for state, value in states.items():
-            mdlhist["functions"][fxnname][state][t] = value 
+            mdlhist["functions"][fxnname][state][t_ind] = value 
 
 #initmdlhist
 # initialize history of model
@@ -473,6 +477,7 @@ def initfxnhist(mdl, timerange):
 #makehisttable
 # put history in a tabular format
 def makehisttable(mdlhist):
+    if "nominal" in mdlhist.keys(): mdlhist=mdlhist['faulty']
     df = pd.DataFrame()
     label = ("Time", "t")
     labels= [label]
