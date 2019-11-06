@@ -25,24 +25,26 @@ mdl = pump()
 #   -do all the flow states proceed as desired over time?
 
 
-endresults, resgraph, flowhist, ghist=fp.runnominal(mdl, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'})
-
+endresults, resgraph, mdlhist=fp.runnominal(mdl, track=True)
+nominal_state_table = fp.makehisttable(mdlhist)
 
 fp.showgraph(resgraph)
-fp.plotflowhist(flowhist, 'Nominal')
+fp.plotmdlhist(mdlhist, 'Nominal')
 
 
-endresults_bip, resgraph_bip, flowhist, ghist=fp.runnominal(mdl, gtype='bipartite')
+endresults_bip, resgraph_bip, mdlhist2=fp.runnominal(mdl, gtype='bipartite')
 
 fp.showbipartite(resgraph_bip, scale=2)
 
 a = time.time()
 ##We might further query the faults to see what happens to the various states
-endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'MoveWater', 'short', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'}, staged=False)
+endresults, resgraph, mdlhist=fp.runonefault(mdl, 'MoveWater', 'short', time=10, staged=False)
 b = time.time()
+short_state_table = fp.makehisttable(mdlhist)
+#short_state_table.to_csv("test.csv")
 
 fp.showgraph(resgraph)
-fp.plotflowhist(flowhist, 'short', time=10)
+fp.plotmdlhist(mdlhist, 'short', time=10, fxnflows=['Wat_1','Wat_2', 'EE_1', 'Sig_1'])
 t=fp.printresult('MoveWater', 'short', 10, endresults)
 print(t)
 ##in addition to these visualizations, we can also look at the final results 
@@ -50,11 +52,11 @@ print(t)
 print(endresults)
 #
 ##we can also look at other faults
-endresults, resgraph, flowhist, ghist=fp.runonefault(mdl, 'ExportWater', 'block', time=10, track={'Wat_1','Wat_2', 'EE_1', 'Sig_1'}, staged=True)
+endresults, resgraph, mdlhist=fp.runonefault(mdl, 'ExportWater', 'block', time=10, staged=True)
 fp.showgraph(resgraph)
-fp.plotflowhist(flowhist, 'blockage', time=10)
+fp.plotmdlhist(mdlhist, 'blockage', time=10, fxnflows=['Wat_1','Wat_2', 'EE_1'])
 # we can also view the results as a bipartite graph
-endresults, resgraph_bip2, flowhist, ghist=fp.runonefault(mdl, 'ExportWater', 'block', time=10, gtype='bipartite')
+endresults, resgraph_bip2, mdlhist=fp.runonefault(mdl, 'ExportWater', 'block', time=10, gtype='bipartite')
 fp.showbipartite(resgraph_bip2, faultscen='ExportWater block', time=10, scale=2)
 
 
