@@ -474,29 +474,6 @@ def initfxnhist(mdl, timerange):
             fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist
 
-#makehisttable
-# put history in a tabular format
-def makehisttable(mdlhist):
-    if "nominal" in mdlhist.keys(): mdlhist=mdlhist['faulty']
-    df = pd.DataFrame()
-    label = ("Time", "t")
-    labels= [label]
-    df[label]=mdlhist["time"]
-    for flow, atts in mdlhist["flows"].items():
-        for att, val in atts.items():
-            label=(flow,att)
-            labels=labels+[label]
-            df[label]=val
-    for fxn, atts in mdlhist["functions"].items():
-        for att, val in atts.items():
-            label=(fxn, att)
-            labels=labels+[label]
-            df[label]=val
-    
-    index = pd.MultiIndex.from_tuples(labels)
-    df = df.reindex(index, axis="columns")
-    return df
-
 #comparehist
 #find non-nominal states over time
 def comparehist(mdlhist):
@@ -534,11 +511,13 @@ def comparefxnhist(mdlhist):
             faulty  = mdlhist['faulty']['functions'][fxnname][state]
             nominal = mdlhist['nominal']['functions'][fxnname][state] 
             fxnhist[fxnname][state] = 1* (faulty == nominal)
-        if fxnhist[fxnname]: fxnhist[fxnname]['status'] = np.prod(np.array(list(fxnhist[fxnname].values())), axis = 0) 
-        else: fxnhist[fxnname]['status'] = np.ones(len(mdlhist['faulty']['functions'][fxnname]['faults']), dtype=int) #should empty be given 1 or nothing?
+        if fxnhist[fxnname]: status = np.prod(np.array(list(fxnhist[fxnname].values())), axis = 0) 
+        else: status = np.ones(len(mdlhist['faulty']['functions'][fxnname]['faults']), dtype=int) #should empty be given 1 or nothing?
         fxnhist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname]['faults']
         faults = mdlhist['faulty']['functions'][fxnname]['faults']
         fxnhist[fxnname]['numfaults']=np.array(list(map(lambda f: len(f.difference(['nom'])), faults)))
+        faulty = 1 - 1*(fxnhist[fxnname]['numfaults']>0)
+        fxnhist[fxnname]['status'] = status*faulty
         faulthist[fxnname]=fxnhist[fxnname]['numfaults']
         deghist[fxnname] = fxnhist[fxnname]['status']
         if 0 in deghist[fxnname] or any(0 < faulthist[fxnname]): degfxns+=[fxnname]
@@ -546,29 +525,65 @@ def comparefxnhist(mdlhist):
     numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
     return fxnhist, numfaults, degfxns, numdegfxns
 
+#makehisttable
+# put history in a tabular format
+def makehisttable(mdlhist):
+    if "nominal" in mdlhist.keys(): mdlhist=mdlhist['faulty']
+    if any(isinstance(i,dict) for i in mdlhist['flows'].values()):
+        flowtable =  makeobjtable(mdlhist, 'flows')
+    else:
+        flowtable = makeobjtable(mdlhist, 'flowvals')
+    fxntable  =  makeobjtable(mdlhist, 'functions')
+    timetable = pd.DataFrame()
+    timetable['time', 't'] = mdlhist['time']
+    timetable.reindex([('time', 't')], axis="columns")
+    histtable = pd.concat([timetable, fxntable, flowtable], axis =1)
+    index = pd.MultiIndex.from_tuples(histtable.columns)
+    histtable = histtable.reindex(index, axis='columns')
+    return histtable
+
 def makestatstable(reshist):
     table = pd.DataFrame(reshist['stats'])
     table.insert(0, 'time', reshist['time'])
     return table
 def makedegflowstable(reshist):
-    table = pd.DataFrame(reshist['stats'])
+    table = pd.DataFrame(reshist['flows'])
     table.insert(0, 'time', reshist['time'])
     return table
 def makedegflowvalstable(reshist):
+    table = makeobjtable(reshist, 'flowvals')
+    table.insert(0, 'time', reshist['time'])
+    return table
+def makedegfxnstable(reshist):
+    table = pd.DataFrame()
+    for fxnname in reshist['functions']:
+        table[fxnname]=reshist['functions'][fxnname]['status']
+    table.insert(0, 'time', reshist['time'])
+    return table
+def makedeghisttable(reshist, withstats=False):
+    fxnstable = makedegfxnstable(reshist)
+    flowstable = pd.DataFrame(reshist['flows'])
+    if withstats:
+        statstable = pd.DataFrame(reshist['stats'])
+        return pd.concat([fxnstable, flowstable, statstable], axis =1)
+    else:
+        return pd.concat([fxnstable, flowstable], axis =1)
+    
+# make table of function OR flow value attributes - objtype = 'function' or 'flow'
+def makeobjtable(hist, objtype):
     df = pd.DataFrame()
-    label = ("Time", "t")
-    labels= [label]
-    df[label]=reshist["time"]
-    for flow, atts in reshist["flowvals"].items():
+    labels = []
+    for fxn, atts in hist[objtype].items():
         for att, val in atts.items():
-            label=(flow,att)
+            label=(fxn, att)
             labels=labels+[label]
             df[label]=val
     index = pd.MultiIndex.from_tuples(labels)
     df = df.reindex(index, axis="columns")
     return df
-# need to make degraded functions table
     
+# need to make degraded functions table
+# also need to make table summary of just functions/flows degraded
 def makesummarytable(summary):
     return pd.DataFrame.from_dict(summary, orient = 'index')
     

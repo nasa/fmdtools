@@ -43,6 +43,8 @@ b = time.time()
 short_state_table = fp.makehisttable(mdlhist)
 #short_state_table.to_csv("test.csv")
 
+reshist = comparefxnhist(mdlhist)
+
 fp.showgraph(resgraph)
 fp.plotmdlhist(mdlhist, 'short', time=10, fxnflows=['Wat_1','Wat_2', 'EE_1', 'Sig_1'])
 t=fp.printresult('MoveWater', 'short', 10, endresults)
