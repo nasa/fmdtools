@@ -462,7 +462,7 @@ def initflowhist(mdl, timerange):
         atts=flow.status()
         flowhist[flowname] = {}
         for att, val in atts.items():
-            flowhist[flowname][att] = [val for i in timerange]
+            flowhist[flowname][att] = np.full([len(timerange)], val)
     return flowhist
 def initfxnhist(mdl, timerange):
     fxnhist = {}
@@ -471,7 +471,7 @@ def initfxnhist(mdl, timerange):
         fxnhist[fxnname]={}
         fxnhist[fxnname]["faults"]=[faults for i in timerange]
         for state, value in states.items():
-            fxnhist[fxnname][state] = [value for i in timerange]
+            fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist
 
 #makehisttable
@@ -496,8 +496,53 @@ def makehisttable(mdlhist):
     index = pd.MultiIndex.from_tuples(labels)
     df = df.reindex(index, axis="columns")
     return df
-            
 
+#comparehist
+#find non-nominal states over time
+def comparehist(mdlhist):
+    reshist = {}
+    reshist['time'] = mdlhist['nominal']['time']
+    reshist['flowvals'], reshist['flows'], numflows = compareflowhist(mdlhist)
+    reshist['functions'], numfaults, numdegfxns = comparefxnhist(mdlhist)
+    reshist['summary'] = {'degraded flows': numflows, 'degraded functions': numdegfxns, 'total faults': numfaults}
+    return reshist
+
+def compareflowhist(mdlhist):
+    flowhist = {}
+    summhist = {}
+    for flowname in mdlhist['nominal']['flows']:
+        flowhist[flowname]={}
+        for att in mdlhist['nominal']['flows'][flowname]:
+            faulty  = mdlhist['faulty']['flows'][flowname][att]
+            nominal = mdlhist['nominal']['flows'][flowname][att]
+            flowhist[flowname][att] = 1* (faulty == nominal)
+        summhist[flowname] = np.prod(np.array(list(flowhist[flowname].values())), axis = 0)
+    numdegflows = len(summhist) - np.sum(np.array(list(summhist.values())), axis=0) 
+    return flowhist, summhist, numdegflows
+def comparefxnhist(mdlhist):
+    fxnhist = {}
+    faulthist = {}
+    deghist = {}
+    for fxnname in mdlhist['nominal']['functions']:
+        fhist = copy.copy(mdlhist['faulty']['functions'][fxnname])
+        del fhist['faults']
+        fxnhist[fxnname] = {}
+        for state in fhist:
+            faulty  = mdlhist['faulty']['functions'][fxnname][state]
+            nominal = mdlhist['nominal']['functions'][fxnname][state] 
+            fxnhist[fxnname][state] = 1* (faulty == nominal)
+        if fxnhist[fxnname]: fxnhist[fxnname]['status'] = np.prod(np.array(list(fxnhist[fxnname].values())), axis = 0) 
+        else: fxnhist[fxnname]['status'] = np.ones(len(mdlhist['faulty']['functions'][fxnname]['faults']), dtype=int) #should empty be given 1 or nothing?
+        fxnhist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname]['faults']
+        faults = mdlhist['faulty']['functions'][fxnname]['faults']
+        fxnhist[fxnname]['numfaults']=np.array(list(map(lambda f: len(f.difference(['nom'])), faults)))
+        faulthist[fxnname]=fxnhist[fxnname]['numfaults']
+        deghist[fxnname] = fxnhist[fxnname]['status']
+    numfaults = np.sum(np.array(list(faulthist.values())), axis=0)
+    numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
+    return fxnhist, numfaults, numdegfxns
+    
+    
 #makeresultsgraph
 # creates a snapshot of the graph structure with model results superimposed
 # inputs: g, the graph, and nomg, the graph in its nominal state
