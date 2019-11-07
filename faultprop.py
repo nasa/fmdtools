@@ -502,14 +502,15 @@ def makehisttable(mdlhist):
 def comparehist(mdlhist):
     reshist = {}
     reshist['time'] = mdlhist['nominal']['time']
-    reshist['flowvals'], reshist['flows'], numflows = compareflowhist(mdlhist)
-    reshist['functions'], numfaults, numdegfxns = comparefxnhist(mdlhist)
-    reshist['summary'] = {'degraded flows': numflows, 'degraded functions': numdegfxns, 'total faults': numfaults}
-    return reshist
-
+    reshist['flowvals'], reshist['flows'], degflows, numdegflows = compareflowhist(mdlhist)
+    reshist['functions'], numfaults, degfxns, numdegfxns = comparefxnhist(mdlhist)
+    reshist['stats'] = {'degraded flows': numdegflows, 'degraded functions': numdegfxns, 'total faults': numfaults}
+    summary = {'degraded functions': degfxns, 'degraded flows': degflows}
+    return reshist, summary
 def compareflowhist(mdlhist):
     flowhist = {}
     summhist = {}
+    degflows = []
     for flowname in mdlhist['nominal']['flows']:
         flowhist[flowname]={}
         for att in mdlhist['nominal']['flows'][flowname]:
@@ -517,12 +518,14 @@ def compareflowhist(mdlhist):
             nominal = mdlhist['nominal']['flows'][flowname][att]
             flowhist[flowname][att] = 1* (faulty == nominal)
         summhist[flowname] = np.prod(np.array(list(flowhist[flowname].values())), axis = 0)
-    numdegflows = len(summhist) - np.sum(np.array(list(summhist.values())), axis=0) 
-    return flowhist, summhist, numdegflows
+        if 0 in summhist[flowname]: degflows+=[flowname]
+    numdegflows = len(summhist) - np.sum(np.array(list(summhist.values())), axis=0)
+    return flowhist, summhist, degflows, numdegflows
 def comparefxnhist(mdlhist):
     fxnhist = {}
     faulthist = {}
     deghist = {}
+    degfxns = []
     for fxnname in mdlhist['nominal']['functions']:
         fhist = copy.copy(mdlhist['faulty']['functions'][fxnname])
         del fhist['faults']
@@ -538,10 +541,36 @@ def comparefxnhist(mdlhist):
         fxnhist[fxnname]['numfaults']=np.array(list(map(lambda f: len(f.difference(['nom'])), faults)))
         faulthist[fxnname]=fxnhist[fxnname]['numfaults']
         deghist[fxnname] = fxnhist[fxnname]['status']
+        if 0 in deghist[fxnname] or any(0 < faulthist[fxnname]): degfxns+=[fxnname]
     numfaults = np.sum(np.array(list(faulthist.values())), axis=0)
     numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
-    return fxnhist, numfaults, numdegfxns
+    return fxnhist, numfaults, degfxns, numdegfxns
+
+def makestatstable(reshist):
+    table = pd.DataFrame(reshist['stats'])
+    table.insert(0, 'time', reshist['time'])
+    return table
+def makedegflowstable(reshist):
+    table = pd.DataFrame(reshist['stats'])
+    table.insert(0, 'time', reshist['time'])
+    return table
+def makedegflowvalstable(reshist):
+    df = pd.DataFrame()
+    label = ("Time", "t")
+    labels= [label]
+    df[label]=reshist["time"]
+    for flow, atts in reshist["flowvals"].items():
+        for att, val in atts.items():
+            label=(flow,att)
+            labels=labels+[label]
+            df[label]=val
+    index = pd.MultiIndex.from_tuples(labels)
+    df = df.reindex(index, axis="columns")
+    return df
+# need to make degraded functions table
     
+def makesummarytable(summary):
+    return pd.DataFrame.from_dict(summary, orient = 'index')
     
 #makeresultsgraph
 # creates a snapshot of the graph structure with model results superimposed
