@@ -117,18 +117,16 @@ def showgraph(g, faultscen=[], time=[], showfaultlabels=True):
         pos=nx.shell_layout(g)
         nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color='g', \
                      width=3, font_weight='bold')
-        nx.draw_networkx_edge_labels(g,pos,edge_labels=labels)
+        nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows)
     else:
-        
         statuses=dict(g.nodes(data='status', default='Nominal'))
         faultnodes=[node for node,status in statuses.items() if status=='Faulty']
         degradednodes=[node for node,status in statuses.items() if status=='Degraded']
         faultedges = [edge for edge in g.edges if any([g.edges[edge][flow]['status']=='Degraded' for flow in g.edges[edge]])]
         faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
-        faultedgeflows=dict(g.nodes(data='modes', default={'nom'}))
         faults=dict(g.nodes(data='modes', default={'nom'}))
         faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
-        plotnormgraph(g, labels, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[])
+        plotnormgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[])
         
 
 def showbipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True):
