@@ -49,6 +49,8 @@ print(short_state_table)
 
 #We can further process this table to get tables that show what degraded over time
 reshist, summary = fp.comparehist(mdlhist)
+fp.plotresultsgraphfrom(mdl, reshist, 50)
+fp.plotresultsgraphfrom(mdl, reshist, 50, gtype='normal')
 #summary gives a dict of which functions and flows degraded over time, while reshist
 # gives a history of the processed results. We can view the summary in a table
 summary_table = fp.makesummarytable(reshist)
