@@ -15,7 +15,7 @@ import time
 
 mdl = pump()
 
-
+##NOMINAL PLOTS
 #Before seeing how faults propogate, it's useful to see how the model performs
 #in the nominal state to check to see that the model has been defined correctly.
 # Some things worth checking:
@@ -23,28 +23,48 @@ mdl = pump()
 #   -are the functions connected with the correct flows?
 #   -do any faults occur in the nominal state?
 #   -do all the flow states proceed as desired over time?
-
-
 endresults, resgraph, mdlhist=fp.runnominal(mdl, track=True)
-nominal_state_table = fp.makehisttable(mdlhist)
-
+#plot graph
 fp.showgraph(resgraph)
+#plot the flows over time
 fp.plotmdlhist(mdlhist, 'Nominal')
+#we can also look at the value of states over time with a table
+nominal_state_table = fp.makehisttable(mdlhist)
+print(nominal_state_table)
+#this table is a pandas dataframe we can export with:
+# nominal_state_table.to_csv("filename.csv")
 
-
+#plots can be made on the bipartite version of the graph
 endresults_bip, resgraph_bip, mdlhist2=fp.runnominal(mdl, gtype='bipartite')
-
 fp.showbipartite(resgraph_bip, scale=2)
 
-a = time.time()
+##SINGLE-FAULT PLOTS
+## SCENARIO 1
 ##We might further query the faults to see what happens to the various states
 endresults, resgraph, mdlhist=fp.runonefault(mdl, 'MoveWater', 'short', time=10, staged=False)
-b = time.time()
+#Here we again make a plot of states--however, looking at this might not tell us what degraded/failed
 short_state_table = fp.makehisttable(mdlhist)
+print(short_state_table)
 #short_state_table.to_csv("test.csv")
 
-reshist = comparefxnhist(mdlhist)
+#We can further process this table to get tables that show what degraded over time
+reshist, summary = fp.comparehist(mdlhist)
+#summary gives a dict of which functions and flows degraded over time, while reshist
+# gives a history of the processed results. We can view the summary in a table
+summary_table = fp.makesummarytable(reshist)
+print(summary_table)
 
+#If we want to know precisely what degraded, when:
+short_state_table_processed = fp.makehisttable(reshist)
+print(short_state_table_processed)
+#We might also be interested in a simpler view with just the functions/flows that degraded
+short_state_table_simple = fp.makedeghisttable(reshist)
+print(short_state_table_simple)
+# As well as statistics
+short_state_table_stats = fp.makestatstable(reshist)
+print(short_state_table_stats)
+
+#Here, we plot flows and functions of interest of the model
 fp.showgraph(resgraph)
 fp.plotmdlhist(mdlhist, 'short', time=10, fxnflows=['Wat_1','Wat_2', 'EE_1', 'Sig_1'])
 t=fp.printresult('MoveWater', 'short', 10, endresults)
@@ -74,5 +94,10 @@ print(t)
 # t=15 and t=15
 resultstab=fp.runlist(mdl)
 print(resultstab)
+
+#time test
+a = time.time()
+endresults, resgraph, mdlhist=fp.runonefault(mdl, 'MoveWater', 'short', time=10, staged=False)
+b = time.time()
 print(b-a)
 #resultstab.write('tab.ecsv', overwrite=True)

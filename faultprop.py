@@ -578,6 +578,11 @@ def makeobjtable(hist, objtype):
             label=(fxn, att)
             labels=labels+[label]
             df[label]=val
+        if objtype =='functions':
+            if hist[objtype][fxn].get('faults'):
+                label=(fxn, 'faults')
+                labels+=[label]
+                df[label]=hist[objtype][fxn]['faults']
     index = pd.MultiIndex.from_tuples(labels)
     df = df.reindex(index, axis="columns")
     return df
