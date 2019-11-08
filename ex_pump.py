@@ -146,10 +146,10 @@ class moveWat(fxnblock):
     def behavior(self, time):
         #here we can define how the function will behave with different faults
         if self.hasfault('short'):
-            self.EEin.rate=0.1*self.Sigin.power*self.EEin.effort
+            self.EEin.rate=500*self.Sigin.power*self.EEin.effort
             self.eff=0.0
         elif self.hasfault('mech_break'):
-            self.EEin.rate=500*self.Sigin.power*self.EEin.effort
+            self.EEin.rate=5*self.Sigin.power*self.EEin.effort
             self.eff=0.0
         else:
             self.EEin.rate=1.0*self.Sigin.power*self.EEin.effort
