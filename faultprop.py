@@ -10,144 +10,10 @@ Description: functions to propagate faults through a user-defined fault model
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation
 import copy
 from astropy.table import Table, Column
 import pandas as pd
-
-
-##PLOTTING AND RESULTS DISPLAY
-
-#plotflowhist
-# displays plots of a history of flow states over time
-# inputs: 
-#   - flowhist, the history of one or more flows over time stored in a dictionary with structure:
-#       {nominal/faulty: {flow: {attribute: [values]}}}, where
-#           - nominal/nominal keeps the history ifor both faulty and nominal flows
-#           - flow is all flows that were tracked 
-#           - attribute is the defined attributes of that flow (e.g. rate/effort/etc)
-#           - values is a list of values that attribute takes over time
-#   - fault, name of the fault that was injected (for the titles)
-#   - time, the time in which the fault was initiated (so that time is displayed on the graph)
-#   - objs, the functions/flows to plot
-def plotmdlhist(mdlhist, fault='', time=0, fxnflows=[]):
-    mdlhists={}
-    if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
-    else: mdlhists=mdlhist
-    times = mdlhists["nominal"]["time"]
-    
-    for objtype in ["flows", "functions"]:
-        for fxnflow in mdlhists['nominal'][objtype]:
-            if fxnflows: #if in the list 
-                if fxnflow not in fxnflows:
-                    break
-            
-            if objtype =="flows":
-                nomhist=mdlhists['nominal']["flows"][fxnflow]
-                if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
-            elif objtype=="functions":
-                nomhist=mdlhists['nominal']["functions"][fxnflow]
-                del nomhist['faults']
-                if 'faulty' in mdlhists: 
-                    hist = mdlhists['faulty']["functions"][fxnflow]
-                    del hist['faults']
-            plots=len(nomhist)
-            if plots:
-                fig = plt.figure()
-                fig.add_subplot(np.ceil((plots+1)/2),2,plots)
-                plt.tight_layout(pad=2.5, w_pad=2.5, h_pad=2.5, rect=[0, 0.03, 1, 0.95])
-                n=1
-                for var in nomhist:
-                    plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+var)
-                    n+=1
-                    if 'faulty' in mdlhists:
-                        a, = plt.plot(times, hist[var], color='r')
-                        c = plt.axvline(x=time, color='k')
-                    b, =plt.plot(times, nomhist[var], color='b')
-                    plt.title(var)
-                if 'faulty' in mdlhists:
-                    plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+'legend')
-                    plt.legend([a,b],['faulty', 'nominal'])
-                fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
-                plt.show()
-                
-#printresult (maybe find a better name?)
-# prints the results of a run in a nice FMEA-style table
-# inputs:
-#   - function: the function the mode occured in
-#   - mode: the mode of the scenario
-#   - time: the time the fault occured in
-#   - endresult: the results dict given by the model after propagation
-def printresult(function, mode, time, endresult):
-    
-    #FUNCTION  | MODE  | TIME  | FAULT EFFECTS | FLOW EFFECTS |  RATE  |  COST  |  EXP COST
-    vals=  [[function],[mode],[time], [str(list(endresult['faults'].keys()))], \
-            [str(list(endresult['flows'].keys()))] ,\
-            [endresult['classification']['rate']], \
-            [endresult['classification']['cost']],[endresult['classification']['expected cost']]]
-    cnames=['Function', 'Mode', 'Time', 'End Faults', 'End Flow Effects', 'Rate', 'Cost', 'Expected Cost']
-    t = Table(vals, names=cnames)
-    return t
-
-#plotghist
-# displays plots of the graph over time
-# inputs:
-#   - ghist, a dictionary of the history of the graph over time with structure:
-#       {time: graphobject}, where
-#           - time is the time where the snapshot of the graph was recorded
-#           - graphobject is the snapshot of the graph at that time
-#    - faultscen, the name of the fault scenario where this graph occured
-def plotghist(ghist,faultscen=[]):
-    for time, graph in ghist.items():
-        showgraph(graph, faultscen, time)
-
-#showgraph
-# plots a single graph at a single time
-# inputs:
-#   - g, the graph object
-#   - faultscen, the name of the fault scenario (for the title)
-#   - time, the time of the fault scenario (also for the title)
-#   - showfaultprops, whether to list the faults occuring on functions and list degraded flows
-#       #(only works well for relatively simple models)
-def showgraph(g, faultscen=[], time=[], showfaultlabels=True):
-    edgeflows=dict()
-    for edge in g.edges:
-        flows=list(g.get_edge_data(edge[0],edge[1]).keys())
-        edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
-    if not list(g.nodes(data='status'))[0][1]:    
-        pos=nx.shell_layout(g)
-        nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color='g', \
-                     width=3, font_weight='bold')
-        nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows)
-    else:
-        statuses=dict(g.nodes(data='status', default='Nominal'))
-        faultnodes=[node for node,status in statuses.items() if status=='Faulty']
-        degradednodes=[node for node,status in statuses.items() if status=='Degraded']
-        faultedges = [edge for edge in g.edges if any([g.edges[edge][flow]['status']=='Degraded' for flow in g.edges[edge]])]
-        faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
-        faults=dict(g.nodes(data='modes', default={'nom'}))
-        faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
-        plotnormgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[])
-        
-
-def showbipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True):
-    labels={node:node for node in g.nodes}
-    if not list(g.nodes(data='status'))[0][1]:
-        nodesize=scale*700
-        fontsize=scale*6
-        pos=nx.spring_layout(g)
-        pos=nx.spring_layout(g)
-        nx.draw(g, pos, labels=labels,font_size=fontsize, node_size=nodesize,node_color = 'g', font_weight='bold')
-        if faultscen:
-            plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-        plt.show()
-    else: 
-        statuses=dict(g.nodes(data='status', default='Nominal'))
-        faultnodes=[node for node,status in statuses.items() if status=='Faulty']
-        degradednodes=[node for node,status in statuses.items() if status=='Degraded']
-        faults=dict(g.nodes(data='modes', default={'nom'}))
-        faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
-        plotbipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale)
-
 
 ## FAULT PROPAGATION
 
@@ -451,6 +317,8 @@ def initfxnhist(mdl, timerange):
             fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist
 
+## PROCESSING RESULTS
+    
 #comparehist
 #find non-nominal states over time
 def comparehist(mdlhist):
@@ -502,6 +370,70 @@ def comparefxnhist(mdlhist):
     numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
     return fxnhist, numfaults, degfxns, numdegfxns
 
+#comparegraphflows
+# extracts non-nominal flows by comparing the a results graph with a nominal results graph
+# inputs:   g, a graph of results, with states of each flow in each provided
+#           nomg, the same graph for the nominal system
+# outputs:  endflows, a dictionary of degraded flows
+# (maybe do this for values also???)
+def comparegraphflows(g, nomg, gtype='normal'):
+    endflows=dict()
+    if gtype=='normal':
+        for edge in g.edges:
+            flows=g.get_edge_data(edge[0],edge[1])
+            nomflows=nomg.get_edge_data(edge[0],edge[1])
+            for flow in flows:
+                if flows[flow]!=nomflows[flow]:
+                    endflows[flow]={}
+                    vals=flows[flow]
+                    for val in vals:
+                        if vals[val]!=nomflows[flow][val]: endflows[flow][val]=flows[flow][val]
+    elif gtype=='bipartite':
+        for node in g.nodes:
+            if g.nodes[node]['bipartite']==1: #only flow states
+                if g.nodes[node]['states']!=nomg.nodes[node]['states']:
+                    endflows[node]={}
+                    vals=g.nodes[node]['states']
+                    for val in vals:
+                        if vals[val]!=nomg.nodes[node]['states'][val]: endflows[node][val]=vals[val]     
+    return endflows
+#makeresultsgraph
+# creates a snapshot of the graph structure with model results superimposed
+# inputs: g, the graph, and nomg, the graph in its nominal state
+# outputs: rg, the graph snapshot
+def makeresultsgraph(g, nomg):
+    rg=g.copy() 
+    for edge in g.edges:
+        for flow in list(g.edges[edge].keys()):            
+            if g.edges[edge][flow]!=nomg.edges[edge][flow]: status='Degraded'
+            else:                               status='Nominal' 
+            rg.edges[edge][flow]={'values':g.edges[edge][flow],'status':status}
+    for node in g.nodes:        
+        if g.nodes[node]['modes'].difference(['nom']): status='Faulty' 
+        elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
+        else: status='Nominal'
+        rg.nodes[node]['status']=status
+    return rg
+def makebipresultsgraph(g, nomg):
+    rg=g.copy() 
+    for node in g.nodes:        
+        if g.nodes[node]['bipartite']==0: #condition only checked for functions
+            if g.nodes[node].get('modes').difference(['nom']): status='Faulty'
+            else: status='Nominal'
+        elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
+        else: status='Nominal'
+        rg.nodes[node]['status']=status
+    return rg
+
+def makeresultsgraphs(ghist, nomghist, gtype='normal'):
+    rghist = dict.fromkeys(ghist.keys())
+    for i,rg in rghist.items():
+        if gtype=='normal': rghist[i] = makeresultsgraph(ghist[i],nomghist[i])
+        elif  gtype=='bipartite': rghist[i] = makebipresultsgraph(ghist[i],nomghist[i])
+    return rghist
+
+## MAKE TABLES
+    
 #makehisttable
 # put history in a tabular format
 def makehisttable(mdlhist):
@@ -568,44 +500,140 @@ def makeobjtable(hist, objtype):
 # also need to make table summary of just functions/flows degraded
 def makesummarytable(summary):
     return pd.DataFrame.from_dict(summary, orient = 'index')
+#printresult (maybe find a better name?)
+# prints the results of a run in a nice FMEA-style table
+# inputs:
+#   - function: the function the mode occured in
+#   - mode: the mode of the scenario
+#   - time: the time the fault occured in
+#   - endresult: the results dict given by the model after propagation
+def printresult(function, mode, time, endresult):
     
-#makeresultsgraph
-# creates a snapshot of the graph structure with model results superimposed
-# inputs: g, the graph, and nomg, the graph in its nominal state
-# outputs: rg, the graph snapshot
-def makeresultsgraph(g, nomg):
-    rg=g.copy() 
+    #FUNCTION  | MODE  | TIME  | FAULT EFFECTS | FLOW EFFECTS |  RATE  |  COST  |  EXP COST
+    vals=  [[function],[mode],[time], [str(list(endresult['faults'].keys()))], \
+            [str(list(endresult['flows'].keys()))] ,\
+            [endresult['classification']['rate']], \
+            [endresult['classification']['cost']],[endresult['classification']['expected cost']]]
+    cnames=['Function', 'Mode', 'Time', 'End Faults', 'End Flow Effects', 'Rate', 'Cost', 'Expected Cost']
+    t = Table(vals, names=cnames)
+    return t
+
+##PLOTTING AND RESULTS DISPLAY
+
+#plotflowhist
+# displays plots of a history of flow states over time
+# inputs: 
+#   - flowhist, the history of one or more flows over time stored in a dictionary with structure:
+#       {nominal/faulty: {flow: {attribute: [values]}}}, where
+#           - nominal/nominal keeps the history ifor both faulty and nominal flows
+#           - flow is all flows that were tracked 
+#           - attribute is the defined attributes of that flow (e.g. rate/effort/etc)
+#           - values is a list of values that attribute takes over time
+#   - fault, name of the fault that was injected (for the titles)
+#   - time, the time in which the fault was initiated (so that time is displayed on the graph)
+#   - objs, the functions/flows to plot
+def plotmdlhist(mdlhist, fault='', time=0, fxnflows=[]):
+    mdlhists={}
+    if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
+    else: mdlhists=mdlhist
+    times = mdlhists["nominal"]["time"]
+    
+    for objtype in ["flows", "functions"]:
+        for fxnflow in mdlhists['nominal'][objtype]:
+            if fxnflows: #if in the list 
+                if fxnflow not in fxnflows:
+                    break
+            
+            if objtype =="flows":
+                nomhist=mdlhists['nominal']["flows"][fxnflow]
+                if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
+            elif objtype=="functions":
+                nomhist=mdlhists['nominal']["functions"][fxnflow]
+                del nomhist['faults']
+                if 'faulty' in mdlhists: 
+                    hist = mdlhists['faulty']["functions"][fxnflow]
+                    del hist['faults']
+            plots=len(nomhist)
+            if plots:
+                fig = plt.figure()
+                fig.add_subplot(np.ceil((plots+1)/2),2,plots)
+                plt.tight_layout(pad=2.5, w_pad=2.5, h_pad=2.5, rect=[0, 0.03, 1, 0.95])
+                n=1
+                for var in nomhist:
+                    plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+var)
+                    n+=1
+                    if 'faulty' in mdlhists:
+                        a, = plt.plot(times, hist[var], color='r')
+                        c = plt.axvline(x=time, color='k')
+                    b, =plt.plot(times, nomhist[var], color='b')
+                    plt.title(var)
+                if 'faulty' in mdlhists:
+                    plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+'legend')
+                    plt.legend([a,b],['faulty', 'nominal'])
+                fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
+                plt.show()
+    
+#plotghist
+# displays plots of the graph over time
+# inputs:
+#   - ghist, a dictionary of the history of the graph over time with structure:
+#       {time: graphobject}, where
+#           - time is the time where the snapshot of the graph was recorded
+#           - graphobject is the snapshot of the graph at that time
+#    - faultscen, the name of the fault scenario where this graph occured
+def plotghist(ghist,faultscen=[]):
+    for time, graph in ghist.items():
+        showgraph(graph, faultscen, time)
+
+#showgraph
+# plots a single graph at a single time
+# inputs:
+#   - g, the graph object
+#   - faultscen, the name of the fault scenario (for the title)
+#   - time, the time of the fault scenario (also for the title)
+#   - showfaultprops, whether to list the faults occuring on functions and list degraded flows
+#       #(only works well for relatively simple models)
+def showgraph(g, faultscen=[], time=[], showfaultlabels=True):
+    edgeflows=dict()
     for edge in g.edges:
-        for flow in list(g.edges[edge].keys()):            
-            if g.edges[edge][flow]!=nomg.edges[edge][flow]: status='Degraded'
-            else:                               status='Nominal' 
-            rg.edges[edge][flow]={'values':g.edges[edge][flow],'status':status}
-    for node in g.nodes:        
-        if g.nodes[node]['modes'].difference(['nom']): status='Faulty' 
-        elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
-        else: status='Nominal'
-        rg.nodes[node]['status']=status
-    return rg
-def makebipresultsgraph(g, nomg):
-    rg=g.copy() 
-    for node in g.nodes:        
-        if g.nodes[node]['bipartite']==0: #condition only checked for functions
-            if g.nodes[node].get('modes').difference(['nom']): status='Faulty'
-            else: status='Nominal'
-        elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
-        else: status='Nominal'
-        rg.nodes[node]['status']=status
-    return rg
+        flows=list(g.get_edge_data(edge[0],edge[1]).keys())
+        edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
+    if not list(g.nodes(data='status'))[0][1]:    
+        pos=nx.shell_layout(g)
+        nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color='g', \
+                     width=3, font_weight='bold')
+        nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows)
+    else:
+        statuses=dict(g.nodes(data='status', default='Nominal'))
+        faultnodes=[node for node,status in statuses.items() if status=='Faulty']
+        degradednodes=[node for node,status in statuses.items() if status=='Degraded']
+        faultedges = [edge for edge in g.edges if any([g.edges[edge][flow]['status']=='Degraded' for flow in g.edges[edge]])]
+        faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
+        faults=dict(g.nodes(data='modes', default={'nom'}))
+        faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
+        plotnormgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[])
+#same for bipartite graph     
+def showbipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True):
+    labels={node:node for node in g.nodes}
+    if not list(g.nodes(data='status'))[0][1]:
+        nodesize=scale*700
+        fontsize=scale*6
+        pos=nx.spring_layout(g)
+        pos=nx.spring_layout(g)
+        nx.draw(g, pos, labels=labels,font_size=fontsize, node_size=nodesize,node_color = 'g', font_weight='bold')
+        if faultscen:
+            plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+        plt.show()
+    else: 
+        statuses=dict(g.nodes(data='status', default='Nominal'))
+        faultnodes=[node for node,status in statuses.items() if status=='Faulty']
+        degradednodes=[node for node,status in statuses.items() if status=='Degraded']
+        faults=dict(g.nodes(data='modes', default={'nom'}))
+        faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
+        plotbipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale)
 
-def makeresultsgraphs(ghist, nomghist, gtype='normal'):
-    rghist = dict.fromkeys(ghist.keys())
-    for i,rg in rghist.items():
-        if gtype=='normal': rghist[i] = makeresultsgraph(ghist[i],nomghist[i])
-        elif  gtype=='bipartite': rghist[i] = makebipresultsgraph(ghist[i],nomghist[i])
-    return rghist
-
-
-#
+# plotresultsgraphfrom():
+# plots a representation of the graph at a specific time given a results history
 def plotresultsgraphfrom(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1):
     [[t_ind,],] = np.where(reshist['time']==time)
     if gtype=='bipartite':
@@ -619,7 +647,57 @@ def plotresultsgraphfrom(mdl, reshist, time, faultscen=[], gtype='bipartite', sh
         plotnormgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale)
     return 0
 
-def plotnormgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[]):
+# plotresultsgraphsfrom():
+# iteratively plots a representation of the graph at a specific time given a results history
+def plotresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1):
+    if times=='all':
+        t_inds= [i for i in range(0,len(reshist['time']))]
+    else:
+        t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
+    if gtype=='bipartite':
+        g = mdl.bipartite.copy()
+        pos=nx.spring_layout(g)
+        for t_ind in t_inds:
+            updatebipplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale)
+    elif gtype=='normal':
+        g = mdl.graph.copy()
+        pos=nx.shell_layout(g)
+        for t_ind in t_inds:
+            updategraphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale)
+    return 0
+# animateresultsgraphsfrom():
+# plots and returns an animation of the model graph
+# to view in spyder, make sure to set to display using: %matplotlib qt
+def animateresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1):
+    if times=='all':
+        t_inds= [i for i in range(0,len(reshist['time']))]
+    else:
+        t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
+    if gtype=='bipartite':
+        g = mdl.bipartite.copy()
+        pos=nx.spring_layout(g)
+        fig, ax = plt.subplots(figsize=(6,4))
+        ani = matplotlib.animation.FuncAnimation(fig, updatebipplot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False))
+        plt.show()
+    elif gtype=='normal':
+        g = mdl.graph.copy()
+        pos=nx.shell_layout(g)
+        fig, ax = plt.subplots(figsize=(6,4))
+        ani = matplotlib.animation.FuncAnimation(fig, updategraphplot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False))
+        plt.show()
+    return ani
+
+def updatebipplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True):
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = getplotlabels(g, reshist, t_ind)
+    degnodes = degfxns + degflows
+    plotbipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show)
+def updategraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True):
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = getplotlabels(g, reshist, t_ind)
+    plotnormgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show)
+
+def plotnormgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True):
     if not pos: pos=nx.shell_layout(g)
     nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color='g', \
                      width=3, font_weight='bold')
@@ -634,15 +712,12 @@ def plotnormgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedg
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=12, font_color='k')
         nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows, font_color='r')
-            
     if faultscen:
         plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    
-    plt.show()
-    
+    if show: plt.show()
     return 0
 
-def plotbipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[]):
+def plotbipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True):
     nodesize=scale*700
     fontsize=scale*6
     if not pos: pos=nx.spring_layout(g)
@@ -655,7 +730,7 @@ def plotbipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=fontsize, font_color='k')
     if faultscen:
             plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    plt.show()
+    if show: plt.show()
     return 0
 def getplotlabels(g, reshist, t_ind):
     labels={node:node for node in g.nodes}
@@ -683,33 +758,6 @@ def getplotlabels(g, reshist, t_ind):
     faultedgeflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if reshist['flows'][flow][t_ind]==0)]) for edge in faultedges}
     return labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgelabels
 
-#comparegraphflows
-# extracts non-nominal flows by comparing the a results graph with a nominal results graph
-# inputs:   g, a graph of results, with states of each flow in each provided
-#           nomg, the same graph for the nominal system
-# outputs:  endflows, a dictionary of degraded flows
-# (maybe do this for values also???)
-def comparegraphflows(g, nomg, gtype='normal'):
-    endflows=dict()
-    if gtype=='normal':
-        for edge in g.edges:
-            flows=g.get_edge_data(edge[0],edge[1])
-            nomflows=nomg.get_edge_data(edge[0],edge[1])
-            for flow in flows:
-                if flows[flow]!=nomflows[flow]:
-                    endflows[flow]={}
-                    vals=flows[flow]
-                    for val in vals:
-                        if vals[val]!=nomflows[flow][val]: endflows[flow][val]=flows[flow][val]
-    elif gtype=='bipartite':
-        for node in g.nodes:
-            if g.nodes[node]['bipartite']==1: #only flow states
-                if g.nodes[node]['states']!=nomg.nodes[node]['states']:
-                    endflows[node]={}
-                    vals=g.nodes[node]['states']
-                    for val in vals:
-                        if vals[val]!=nomg.nodes[node]['states'][val]: endflows[node][val]=vals[val]     
-    return endflows
 
         
             
