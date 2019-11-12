@@ -48,9 +48,19 @@ print(short_state_table)
 #short_state_table.to_csv("test.csv")
 
 #We can further process this table to get tables that show what degraded over time
-reshist, summary = fp.comparehist(mdlhist)
+reshist,diff1, summary = fp.comparehist(mdlhist)
 fp.plotresultsgraphfrom(mdl, reshist, 50)
 fp.plotresultsgraphfrom(mdl, reshist, 50, gtype='normal')
+# We can also look at heat maps of the effect of the flow over time
+heatmaps = fp.makeheatmaps(reshist, diff1)
+# this is the amount of time each are degraded
+fp.showbipartite(mdl.bipartite, heatmap=heatmaps['degtime'], scale=2)
+# or the number of faults in each function
+fp.showbipartite(mdl.bipartite, heatmap=heatmaps['maxfaults'], scale=2)
+# or the accumulated difference between the states of the nominal and this over time
+# note that this only counts states, not faults
+fp.showbipartite(mdl.bipartite, heatmap=heatmaps['intdiff'], scale=2)
+
 #summary gives a dict of which functions and flows degraded over time, while reshist
 # gives a history of the processed results. We can view the summary in a table
 summary_table = fp.makesummarytable(reshist)
