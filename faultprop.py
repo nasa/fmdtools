@@ -507,7 +507,11 @@ def makedeghisttable(reshist, withstats=False):
         return pd.concat([fxnstable, flowstable, statstable], axis =1)
     else:
         return pd.concat([fxnstable, flowstable], axis =1)
+def makeheatmapstable(heatmaps):
+    table = pd.DataFrame(heatmaps)
+    return table.transpose()
     
+
 # make table of function OR flow value attributes - objtype = 'function' or 'flow'
 def makeobjtable(hist, objtype):
     df = pd.DataFrame()
