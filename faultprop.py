@@ -324,38 +324,45 @@ def initfxnhist(mdl, timerange):
 def comparehist(mdlhist):
     reshist = {}
     reshist['time'] = mdlhist['nominal']['time']
-    reshist['flowvals'], reshist['flows'], degflows, numdegflows = compareflowhist(mdlhist)
-    reshist['functions'], numfaults, degfxns, numdegfxns = comparefxnhist(mdlhist)
+    reshist['flowvals'], reshist['flows'], degflows, numdegflows, flowdiff = compareflowhist(mdlhist)
+    reshist['functions'], numfaults, degfxns, numdegfxns, fxndiff = comparefxnhist(mdlhist)
     reshist['stats'] = {'degraded flows': numdegflows, 'degraded functions': numdegfxns, 'total faults': numfaults}
     summary = {'degraded functions': degfxns, 'degraded flows': degflows}
-    return reshist, summary
+    diff = {**fxndiff, **flowdiff}
+    return reshist, diff, summary
 def compareflowhist(mdlhist):
     flowhist = {}
     summhist = {}
     degflows = []
+    diff = {}
     for flowname in mdlhist['nominal']['flows']:
         flowhist[flowname]={}
+        diff[flowname]={}
         for att in mdlhist['nominal']['flows'][flowname]:
             faulty  = mdlhist['faulty']['flows'][flowname][att]
             nominal = mdlhist['nominal']['flows'][flowname][att]
             flowhist[flowname][att] = 1* (faulty == nominal)
+            diff[flowname][att] = nominal - faulty
         summhist[flowname] = np.prod(np.array(list(flowhist[flowname].values())), axis = 0)
         if 0 in summhist[flowname]: degflows+=[flowname]
     numdegflows = len(summhist) - np.sum(np.array(list(summhist.values())), axis=0)
-    return flowhist, summhist, degflows, numdegflows
+    return flowhist, summhist, degflows, numdegflows, diff
 def comparefxnhist(mdlhist):
     fxnhist = {}
     faulthist = {}
     deghist = {}
     degfxns = []
+    diff = {}
     for fxnname in mdlhist['nominal']['functions']:
         fhist = copy.copy(mdlhist['faulty']['functions'][fxnname])
         del fhist['faults']
         fxnhist[fxnname] = {}
+        diff[fxnname]={}
         for state in fhist:
             faulty  = mdlhist['faulty']['functions'][fxnname][state]
             nominal = mdlhist['nominal']['functions'][fxnname][state] 
             fxnhist[fxnname][state] = 1* (faulty == nominal)
+            diff[fxnname][state] = nominal - faulty
         if fxnhist[fxnname]: status = np.prod(np.array(list(fxnhist[fxnname].values())), axis = 0) 
         else: status = np.ones(len(mdlhist['faulty']['functions'][fxnname]['faults']), dtype=int) #should empty be given 1 or nothing?
         fxnhist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname]['faults']
@@ -368,8 +375,31 @@ def comparefxnhist(mdlhist):
         if 0 in deghist[fxnname] or any(0 < faulthist[fxnname]): degfxns+=[fxnname]
     numfaults = np.sum(np.array(list(faulthist.values())), axis=0)
     numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
-    return fxnhist, numfaults, degfxns, numdegfxns
-
+    return fxnhist, numfaults, degfxns, numdegfxns, diff
+def makeheatmaps(reshist, diff):
+    heatmaps = {'degtime':{},'maxdeg':{}, 'intdeg':{}, 'maxfaults':{}, 'intdiff':{}, 'maxdiff':{}}
+    len_time = len(reshist['time'])
+    for fxnname in reshist['functions'].keys():
+        heatmaps['degtime'][fxnname]=1.0-sum(reshist['functions'][fxnname]['status'])/len_time
+        heatmaps['maxfaults'][fxnname] = max(reshist['functions'][fxnname]['numfaults'])
+        if diff[fxnname]:
+            fxndiff =np.zeros(len(reshist['functions'][fxnname]['status']))
+            for valname in diff[fxnname].keys():
+                fxndiff = fxndiff + diff[fxnname][valname]   
+            heatmaps['intdiff'][fxnname] = sum(fxndiff) /( len_time * len(diff[fxnname].keys()))
+            heatmaps['maxdiff'][fxnname] = max(fxndiff) /( len_time * len(diff[fxnname].keys()))
+    for flowname in reshist['flows'].keys():
+        heatmaps['degtime'][flowname]=1.0 - sum(reshist['flows'][flowname])/len_time
+        degraded=np.zeros(len(reshist['flows'][flowname]))
+        flowdiff=np.zeros(len(reshist['flows'][flowname]))
+        for valname in reshist['flowvals'][flowname].keys():
+            degraded = degraded + reshist['flowvals'][flowname][valname]
+            flowdiff = flowdiff + diff[flowname][valname]
+        heatmaps['maxdeg'][flowname] = max(degraded)
+        heatmaps['intdeg'][flowname] = sum(degraded)/len_time
+        heatmaps['maxdiff'][flowname] = max(flowdiff) /( len_time * len(diff[flowname].keys()))
+        heatmaps['intdiff'][flowname] = sum(flowdiff) /( len_time * len(diff[flowname].keys()))
+    return heatmaps
 #comparegraphflows
 # extracts non-nominal flows by comparing the a results graph with a nominal results graph
 # inputs:   g, a graph of results, with states of each flow in each provided
@@ -613,18 +643,30 @@ def showgraph(g, faultscen=[], time=[], showfaultlabels=True):
         faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
         plotnormgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[])
 #same for bipartite graph     
-def showbipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True):
+def showbipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
     labels={node:node for node in g.nodes}
-    if not list(g.nodes(data='status'))[0][1]:
+    if heatmap:
         nodesize=scale*700
         fontsize=scale*6
         pos=nx.spring_layout(g)
+        #nx.draw(g, pos, node_size=nodesize,node_color = 'k', alpha=0.3)
+        colors = []
+        for node in labels.keys():
+            colors = colors + [heatmap.get(node, 0.0)]
+        nx.draw(g, pos, node_color=colors, cmap=plt.cm.coolwarm, alpha=0.6, node_size=nodesize)
+        nx.draw_networkx_labels(g, pos, labels=labels,font_size=fontsize, node_size=nodesize)
+        if faultscen:
+            plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+        plt.show()
+    elif not list(g.nodes(data='status'))[0][1]: #just plots graph if no status information 
+        nodesize=scale*700
+        fontsize=scale*6
         pos=nx.spring_layout(g)
         nx.draw(g, pos, labels=labels,font_size=fontsize, node_size=nodesize,node_color = 'g', font_weight='bold')
         if faultscen:
             plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
         plt.show()
-    else: 
+    else:                                      #plots graph with status information 
         statuses=dict(g.nodes(data='status', default='Nominal'))
         faultnodes=[node for node,status in statuses.items() if status=='Faulty']
         degradednodes=[node for node,status in statuses.items() if status=='Degraded']
