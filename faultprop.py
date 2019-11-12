@@ -12,7 +12,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation
 import copy
-from astropy.table import Table, Column
 import pandas as pd
 
 ## FAULT PROPAGATION
@@ -123,7 +122,7 @@ def listinitfaults(mdl):
                 newscen=nomscen.copy()
                 newscen['faults'][fxnname]=mode
                 rate=mdl.fxns[fxnname].faultmodes[mode]['rate']
-                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time}
+                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
                 faultlist.append(newscen)
 
     return faultlist
@@ -132,7 +131,7 @@ def listinitfaults(mdl):
 # creates and propagates a list of failure scenarios in a model
 # input: mdl, the module where the model was set up
 # output: resultstab, a FMEA-style table of results
-def runlist(mdl, reuse=False, staged=False):
+def runlist(mdl, reuse=False, staged=False, track=True):
     
     if reuse and staged:
         print("invalid to use reuse and staged options at the same time. Using staged")
@@ -140,56 +139,35 @@ def runlist(mdl, reuse=False, staged=False):
 
     scenlist=listinitfaults(mdl)
     
-    numofscens=len(scenlist)
-    
-    fxns=np.zeros(numofscens, dtype='S25')
-    modes=np.zeros(numofscens, dtype='S25')
-    times=np.zeros(numofscens, dtype=int)
-    floweffects=['']*numofscens
-    faulteffects=['']*numofscens
-    rates=np.zeros(numofscens, dtype=float)
-    costs=np.zeros(numofscens, dtype=float)
-    expcosts=np.zeros(numofscens, dtype=float)
-    
     #run model nominally, get relevant results
     nomscen=constructnomscen(mdl)
     if staged:
-        nomflowhist, c_mdl = proponescen(mdl, nomscen, {}, {}, ctimes=mdl.times)
+        nomhist, c_mdl = proponescen(mdl, nomscen, track=track, ctimes=mdl.times)
     else:
-        nomflowhist, c_mdl = proponescen(mdl, nomscen, {}, {})
+        nomhist, c_mdl = proponescen(mdl, nomscen, track=track)
     nomresgraph = mdl.returnstategraph()
     mdl.reset()
     
+    endclasses = {}
+    mdlhists = {}
+    mdlhists['nominal'] = nomhist
     for i, scen in enumerate(scenlist):
         #run model with fault scenario
         if staged:
             mdl=c_mdl[scen['properties']['time']].copy()
-            _, _ =proponescen(mdl, scen, track=False, staged=True, prevhist=nomflowhist)
+            mdlhists[scen['properties']['name']], _ =proponescen(mdl, scen, track=track, staged=True, prevhist=nomhist)
         else:
-            _, _ =proponescen(mdl, scen, track=False)
+            mdlhists[scen['properties']['name']], _ =proponescen(mdl, scen, track=track)
         endfaults, endfaultprops = mdl.returnfaultmodes()
         resgraph = mdl.returnstategraph()
         
         endflows = comparegraphflows(resgraph, nomresgraph)
-        endclass = mdl.findclassification(resgraph, endfaultprops, endflows, scen)
+        endclasses[scen['properties']['name']] = mdl.findclassification(resgraph, endfaultprops, endflows, scen)
+        
         if reuse: mdl.reset()
         elif staged: _
         else: mdl = mdl.__class__()
-        #populate columns for results table
-        fxns[i]=scen['properties']['function']
-        modes[i]=scen['properties']['fault']
-        times[i]=scen['properties']['time']
-        floweffects[i] = str(endflows)
-        faulteffects[i] = str(endfaults)        
-        rates[i]=endclass['rate']
-        costs[i]=endclass['cost']
-        expcosts[i]=endclass['expected cost']
-    #create results table
-    vals=[fxns, modes, times, faulteffects, floweffects, rates, costs, expcosts]
-    cnames=['Function', 'Mode', 'Time', 'End Faults', 'End Flow Effects', 'Rate', 'Cost', 'Expected Cost']
-    resultstab = Table(vals, names=cnames)
-    
-    return resultstab
+    return endclasses, mdlhists
 
 #proponescen
 # runs a single fault scenario in the model over time
@@ -319,9 +297,19 @@ def initfxnhist(mdl, timerange):
 
 ## PROCESSING RESULTS
     
+def comparehists(mdlhists):
+    reshists={}
+    diffs={}
+    summaries={}
+    nomhist = mdlhists.pop('nominal')
+    for scenname, hist in mdlhists.items():
+        reshists[scenname], diffs[scenname], summaries[scenname] = comparehist(hist, nomhist=nomhist)
+    return reshists, diffs, summaries
+    
 #comparehist
 #find non-nominal states over time
-def comparehist(mdlhist):
+def comparehist(mdlhist, nomhist={}):
+    if nomhist: mdlhist={'nominal':nomhist, 'faulty':mdlhist}
     reshist = {}
     reshist['time'] = mdlhist['nominal']['time']
     reshist['flowvals'], reshist['flows'], degflows, numdegflows, flowdiff = compareflowhist(mdlhist)
@@ -510,6 +498,14 @@ def makedeghisttable(reshist, withstats=False):
 def makeheatmapstable(heatmaps):
     table = pd.DataFrame(heatmaps)
     return table.transpose()
+def makesimplefmea(endclasses):
+    table = pd.DataFrame(endclasses)
+    return table.transpose()
+def makefullfmea(endclasses, summaries):
+    degradedtable = pd.DataFrame(summaries)
+    simplefmea=pd.DataFrame(endclasses)
+    fulltable = pd.concat([degradedtable, simplefmea])
+    return fulltable.transpose()
     
 
 # make table of function OR flow value attributes - objtype = 'function' or 'flow'
@@ -534,23 +530,6 @@ def makeobjtable(hist, objtype):
 # also need to make table summary of just functions/flows degraded
 def makesummarytable(summary):
     return pd.DataFrame.from_dict(summary, orient = 'index')
-#printresult (maybe find a better name?)
-# prints the results of a run in a nice FMEA-style table
-# inputs:
-#   - function: the function the mode occured in
-#   - mode: the mode of the scenario
-#   - time: the time the fault occured in
-#   - endresult: the results dict given by the model after propagation
-def printresult(function, mode, time, endresult):
-    
-    #FUNCTION  | MODE  | TIME  | FAULT EFFECTS | FLOW EFFECTS |  RATE  |  COST  |  EXP COST
-    vals=  [[function],[mode],[time], [str(list(endresult['faults'].keys()))], \
-            [str(list(endresult['flows'].keys()))] ,\
-            [endresult['classification']['rate']], \
-            [endresult['classification']['cost']],[endresult['classification']['expected cost']]]
-    cnames=['Function', 'Mode', 'Time', 'End Faults', 'End Flow Effects', 'Rate', 'Cost', 'Expected Cost']
-    t = Table(vals, names=cnames)
-    return t
 
 ##PLOTTING AND RESULTS DISPLAY
 
