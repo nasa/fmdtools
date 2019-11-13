@@ -297,28 +297,28 @@ def initfxnhist(mdl, timerange):
 
 ## PROCESSING RESULTS
     
-def comparehists(mdlhists):
+def comparehists(mdlhists, returndiff=True):
     reshists={}
     diffs={}
     summaries={}
     nomhist = mdlhists.pop('nominal')
     for scenname, hist in mdlhists.items():
-        reshists[scenname], diffs[scenname], summaries[scenname] = comparehist(hist, nomhist=nomhist)
+        reshists[scenname], diffs[scenname], summaries[scenname] = comparehist(hist, nomhist=nomhist, returndiff=returndiff)
     return reshists, diffs, summaries
     
 #comparehist
 #find non-nominal states over time
-def comparehist(mdlhist, nomhist={}):
+def comparehist(mdlhist, nomhist={}, returndiff=True):
     if nomhist: mdlhist={'nominal':nomhist, 'faulty':mdlhist}
     reshist = {}
     reshist['time'] = mdlhist['nominal']['time']
-    reshist['flowvals'], reshist['flows'], degflows, numdegflows, flowdiff = compareflowhist(mdlhist)
-    reshist['functions'], numfaults, degfxns, numdegfxns, fxndiff = comparefxnhist(mdlhist)
+    reshist['flowvals'], reshist['flows'], degflows, numdegflows, flowdiff = compareflowhist(mdlhist, returndiff=returndiff)
+    reshist['functions'], numfaults, degfxns, numdegfxns, fxndiff = comparefxnhist(mdlhist, returndiff=returndiff)
     reshist['stats'] = {'degraded flows': numdegflows, 'degraded functions': numdegfxns, 'total faults': numfaults}
     summary = {'degraded functions': degfxns, 'degraded flows': degflows}
     diff = {**fxndiff, **flowdiff}
     return reshist, diff, summary
-def compareflowhist(mdlhist):
+def compareflowhist(mdlhist, returndiff=True):
     flowhist = {}
     summhist = {}
     degflows = []
@@ -330,12 +330,12 @@ def compareflowhist(mdlhist):
             faulty  = mdlhist['faulty']['flows'][flowname][att]
             nominal = mdlhist['nominal']['flows'][flowname][att]
             flowhist[flowname][att] = 1* (faulty == nominal)
-            diff[flowname][att] = nominal - faulty
+            if returndiff: diff[flowname][att] = nominal - faulty
         summhist[flowname] = np.prod(np.array(list(flowhist[flowname].values())), axis = 0)
         if 0 in summhist[flowname]: degflows+=[flowname]
     numdegflows = len(summhist) - np.sum(np.array(list(summhist.values())), axis=0)
     return flowhist, summhist, degflows, numdegflows, diff
-def comparefxnhist(mdlhist):
+def comparefxnhist(mdlhist, returndiff=True):
     fxnhist = {}
     faulthist = {}
     deghist = {}
@@ -388,6 +388,28 @@ def makeheatmaps(reshist, diff):
         heatmaps['maxdiff'][flowname] = max(flowdiff) /( len_time * len(diff[flowname].keys()))
         heatmaps['intdiff'][flowname] = sum(flowdiff) /( len_time * len(diff[flowname].keys()))
     return heatmaps
+def makedegtimemap(reshist):
+    len_time = len(reshist['time'])
+    degtimemap={}
+    for fxnname in reshist['functions'].keys():
+        degtimemap[fxnname]=1.0-sum(reshist['functions'][fxnname]['status'])/len_time
+    for flowname in reshist['flows'].keys():
+        degtimemap[flowname]=1.0 - sum(reshist['flows'][flowname])/len_time
+    return degtimemap
+def makedegtimemaps(reshists):
+    degtimemaps=dict.fromkeys(reshists.keys())
+    for reshist in reshists:
+        degtimemaps[reshist]=makedegtimemap(reshists[reshist])
+    return degtimemaps
+def makeavgdegtimeheatmap(reshists):
+    degtimetable = pd.DataFrame(makedegtimemaps(reshists)).transpose()
+    return degtimetable.mean().to_dict()
+def makeexpdegtimeheatmap(reshists, endclasses):
+    degtimetable = pd.DataFrame(makedegtimemaps(reshists))
+    rates = list(pd.DataFrame(endclasses).transpose()['rate'])
+    expdegtimetable = degtimetable.multiply(rates).transpose()
+    return expdegtimetable.mean().to_dict()
+
 #comparegraphflows
 # extracts non-nominal flows by comparing the a results graph with a nominal results graph
 # inputs:   g, a graph of results, with states of each flow in each provided
@@ -442,7 +464,6 @@ def makebipresultsgraph(g, nomg):
         else: status='Nominal'
         rg.nodes[node]['status']=status
     return rg
-
 def makeresultsgraphs(ghist, nomghist, gtype='normal'):
     rghist = dict.fromkeys(ghist.keys())
     for i,rg in rghist.items():
@@ -501,12 +522,14 @@ def makeheatmapstable(heatmaps):
 def makesimplefmea(endclasses):
     table = pd.DataFrame(endclasses)
     return table.transpose()
+def makemaptable(mapping):
+    table = pd.DataFrame(mapping)
+    return table.transpose()
 def makefullfmea(endclasses, summaries):
     degradedtable = pd.DataFrame(summaries)
     simplefmea=pd.DataFrame(endclasses)
     fulltable = pd.concat([degradedtable, simplefmea])
     return fulltable.transpose()
-    
 
 # make table of function OR flow value attributes - objtype = 'function' or 'flow'
 def makeobjtable(hist, objtype):
