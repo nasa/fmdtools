@@ -634,12 +634,20 @@ def plotghist(ghist,faultscen=[]):
 #   - time, the time of the fault scenario (also for the title)
 #   - showfaultprops, whether to list the faults occuring on functions and list degraded flows
 #       #(only works well for relatively simple models)
-def showgraph(g, faultscen=[], time=[], showfaultlabels=True):
+def showgraph(g, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
     edgeflows=dict()
     for edge in g.edges:
         flows=list(g.get_edge_data(edge[0],edge[1]).keys())
         edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
-    if not list(g.nodes(data='status'))[0][1]:    
+    if heatmap:
+        pos=nx.shell_layout(g)
+        colors=[]
+        for node in g.nodes():
+            colors = colors +[heatmap.get(node,0.0)]
+        nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color=colors, \
+                     cmap=plt.cm.coolwarm, alpha=0.6, width=3, font_weight='bold')
+        nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows)
+    elif not list(g.nodes(data='status'))[0][1]:    
         pos=nx.shell_layout(g)
         nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color='g', \
                      width=3, font_weight='bold')
@@ -721,7 +729,9 @@ def plotresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite', 
 # animateresultsgraphsfrom():
 # plots and returns an animation of the model graph
 # to view in spyder, make sure to set to display using: %matplotlib qt
-def animateresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1):
+# to save (or do anything useful)h, make sure ffmpeg is installed  https://www.wikihow.com/Install-FFmpeg-on-Windows
+# use %matplotlib qt from spyder or %matplotlib notebook from jupyter
+def animateresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, show=False):
     if times=='all':
         t_inds= [i for i in range(0,len(reshist['time']))]
     else:
@@ -731,13 +741,13 @@ def animateresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite
         pos=nx.spring_layout(g)
         fig, ax = plt.subplots(figsize=(6,4))
         ani = matplotlib.animation.FuncAnimation(fig, updatebipplot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False))
-        plt.show()
+        if show: plt.show()
     elif gtype=='normal':
         g = mdl.graph.copy()
         pos=nx.shell_layout(g)
         fig, ax = plt.subplots(figsize=(6,4))
         ani = matplotlib.animation.FuncAnimation(fig, updategraphplot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False))
-        plt.show()
+        if show: plt.show()
     return ani
 
 def updatebipplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True):
@@ -788,7 +798,6 @@ def plotbipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time
 def getplotlabels(g, reshist, t_ind):
     labels={node:node for node in g.nodes}
     functions = reshist['functions'].keys()
-    flows = reshist['flows'].keys()
     
     faultfxns = []
     degfxns = []
@@ -804,6 +813,7 @@ def getplotlabels(g, reshist, t_ind):
             faultlabels[function] = reshist['functions']['ImportEE']['faults'][t_ind].difference('nom')
         if not reshist['functions'][function]['status'][t_ind]:
             degfxns+=[function]
+    flows = reshist['flows'].keys()
     for flow in flows:
         if not reshist['flows'][flow][t_ind]==1:
             degflows+=[flow] 
