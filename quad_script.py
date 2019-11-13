@@ -61,16 +61,24 @@ fp.showgraph(resgraph)
 #resultstab.write('tab4.ecsv', overwrite=True)
 
 
-#Doing a time test
-#t1=time.time()
-#fullresults, resultstab=fp.proplist(mdl,reuse=True)
-t2=time.time()
-
 resultstab=fp.runlist(mdl, staged=True)
+
+t2=time.time()
+endclasses, mdlhists=fp.runlist(mdl, staged=True)
+simplefmea = fp.makesimplefmea(endclasses)
+print(simplefmea)
+reshists, diffs, summaries = fp.comparehists(mdlhists, returndiff=False)
+
 t3=time.time()
-#
-#t_reused=t2-t1
-t_copied=t3-t2
+t_used =t3-t2
+fullfmea = fp.makefullfmea(endclasses, summaries)
+heatmap = fp.makeavgdegtimeheatmap(reshists)
+
+fp.showbipartite(mdl.bipartite, heatmap=heatmap, scale=2)
+
+heatmap2 = fp.makeexpdegtimeheatmap(reshists, endclasses)
+fp.showbipartite(mdl.bipartite, heatmap=heatmap2, scale=2)
+
 #print(t_reused)
 #print(t_copied)
 # based on this test, it appears reusing the model is actually slightly slower
