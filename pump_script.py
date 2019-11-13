@@ -61,6 +61,8 @@ fp.showbipartite(mdl.bipartite, heatmap=heatmaps['maxfaults'], scale=2)
 # note that this only counts states, not faults
 fp.showbipartite(mdl.bipartite, heatmap=heatmaps['intdiff'], scale=2)
 
+fp.showgraph(mdl.graph, heatmap=heatmaps['maxfaults'])
+
 #summary gives a dict of which functions and flows degraded over time, while reshist
 # gives a history of the processed results. We can view the summary in a table
 summary_table = fp.makesummarytable(reshist)
