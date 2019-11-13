@@ -63,14 +63,16 @@ fp.showgraph(resgraph)
 
 resultstab=fp.runlist(mdl, staged=True)
 
-t2=time.time()
+t1=time.time()
 endclasses, mdlhists=fp.runlist(mdl, staged=True)
 simplefmea = fp.makesimplefmea(endclasses)
+t2=time.time()
 print(simplefmea)
 reshists, diffs, summaries = fp.comparehists(mdlhists, returndiff=False)
 
 t3=time.time()
-t_used =t3-t2
+t_running = t2-t1
+t_processing =t3-t2
 fullfmea = fp.makefullfmea(endclasses, summaries)
 heatmap = fp.makeavgdegtimeheatmap(reshists)
 
