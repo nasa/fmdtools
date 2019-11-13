@@ -530,6 +530,11 @@ def makefullfmea(endclasses, summaries):
     simplefmea=pd.DataFrame(endclasses)
     fulltable = pd.concat([degradedtable, simplefmea])
     return fulltable.transpose()
+def makeresulttable(endresults, summary):
+    table = pd.DataFrame(endresults['classification'], index=[0])
+    table['degraded functions'] = [summary['degraded functions']]
+    table['degraded flows'] = [summary['degraded flows']]
+    return table
 
 # make table of function OR flow value attributes - objtype = 'function' or 'flow'
 def makeobjtable(hist, objtype):
@@ -800,7 +805,7 @@ def getplotlabels(g, reshist, t_ind):
         if not reshist['functions'][function]['status'][t_ind]:
             degfxns+=[function]
     for flow in flows:
-        if not reshist['flows'][flow][t_ind]:
+        if not reshist['flows'][flow][t_ind]==1:
             degflows+=[flow] 
     faultedges = [edge for edge in g.edges if any([reshist['flows'][flow][t_ind]==0 for flow in g.edges[edge].keys()])]
     faultedgeflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if reshist['flows'][flow][t_ind]==0)]) for edge in faultedges}

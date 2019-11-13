@@ -79,7 +79,7 @@ print(short_state_table_stats)
 #Here, we plot flows and functions of interest of the model
 fp.showgraph(resgraph)
 fp.plotmdlhist(mdlhist, 'short', time=10, fxnflows=['Wat_1','Wat_2', 'EE_1', 'Sig_1'])
-print(t)
+
 ##in addition to these visualizations, we can also look at the final results 
 ##to see which specific faults were caused, as well as the flow states
 print(endresults)
@@ -92,9 +92,8 @@ fp.plotmdlhist(mdlhist, 'blockage', time=10, fxnflows=['Wat_1','Wat_2', 'EE_1'])
 endresults, resgraph_bip2, mdlhist=fp.runonefault(mdl, 'ExportWater', 'block', time=10, gtype='bipartite')
 fp.showbipartite(resgraph_bip2, faultscen='ExportWater block', time=10, scale=2)
 
-print(t)
+
 #you can save to a csv this with:
-t.write('tab.ecsv', overwrite=True)
 
 
 #finally, to get the results of all of the scenarios, we can go through the list
