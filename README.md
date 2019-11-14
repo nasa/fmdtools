@@ -6,13 +6,15 @@ FFERMAT is a toolkit to enable the modelling and design of systems in the early 
 
 - graph-based fault propagation enabling forward and backward degradation of model flows
 - propagation of faults in a timeless sense or over time
-- display of a systems behavior in faulty or nominal states
+- visualization of the effect of faults on model parameters over time
+- visualization of model graph status over time and at given timesteps
 - ability to run through a list of scenarios and provide an FMEA-style table of faults, effects, rates, costs, and overall risk
+- quantification of average and expected resilience metrics (e.g. expected time degraded for model functions and flows)
 
 In the future, we would like to add features for:
 
+- probability modelling/uncertainty quantification
 - optimization
-- quantification of resilience 
 
 WARNING: This is a research code and is currently under development. Some features may not work as desired and may change during development.
 
