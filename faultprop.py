@@ -138,7 +138,7 @@ def runlist(mdl, reuse=False, staged=False, track=True):
         reuse=False
 
     scenlist=listinitfaults(mdl)
-    
+    mdl.reset() #make sure the model is actually starting from the beginning
     #run model nominally, get relevant results
     nomscen=constructnomscen(mdl)
     if staged:
@@ -409,6 +409,24 @@ def makeexpdegtimeheatmap(reshists, endclasses):
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expdegtimetable = degtimetable.multiply(rates).transpose()
     return expdegtimetable.mean().to_dict()
+def makefaultmap(reshist):
+    heatmap={}
+    for fxnname in reshist['functions'].keys():
+        heatmap[fxnname] = max(reshist['functions'][fxnname]['numfaults'])
+    return heatmap
+def makefaultmaps(reshists):
+    faulttimemaps=dict.fromkeys(reshists.keys())
+    for reshist in reshists:
+        faulttimemaps[reshist]=makefaultmap(reshists[reshist])
+    return faulttimemaps
+def makefaultsheatmap(reshists):
+    faulttable = pd.DataFrame(makefaultmaps(reshists)).transpose()
+    return faulttable.mean().to_dict()
+def makeexpfaultsheatmap(reshists, endclasses):
+    faulttable = pd.DataFrame(makefaultmaps(reshists))
+    rates = list(pd.DataFrame(endclasses).transpose()['rate'])
+    expfaulttable = faulttable.multiply(rates).transpose()
+    return expfaulttable.mean().to_dict()
 
 #comparegraphflows
 # extracts non-nominal flows by comparing the a results graph with a nominal results graph
@@ -535,6 +553,8 @@ def makeresulttable(endresults, summary):
     table['degraded functions'] = [summary['degraded functions']]
     table['degraded flows'] = [summary['degraded flows']]
     return table
+def makedicttable(dictionary):
+    return pd.DataFrame(dictionary, index=[0])
 
 # make table of function OR flow value attributes - objtype = 'function' or 'flow'
 def makeobjtable(hist, objtype):
@@ -644,9 +664,12 @@ def showgraph(g, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
         colors=[]
         for node in g.nodes():
             colors = colors +[heatmap.get(node,0.0)]
-        nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color=colors, \
-                     cmap=plt.cm.coolwarm, alpha=0.6, width=3, font_weight='bold')
-        nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows)
+            nx.draw_networkx_edges(g,pos, width=2)
+        nx.draw_networkx_nodes(g,pos,node_size=2000,node_shape='s', node_color=colors, \
+                     cmap=plt.cm.coolwarm, alpha=0.7)
+        nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows , font_weight='bold')
+        labels={node:node for node in g.nodes} 
+        nx.draw_networkx_labels(g, pos, labels=labels, font_weight='bold')
     elif not list(g.nodes(data='status'))[0][1]:    
         pos=nx.shell_layout(g)
         nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color='g', \
@@ -662,25 +685,24 @@ def showgraph(g, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
         faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
         plotnormgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[])
 #same for bipartite graph     
-def showbipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
+def showbipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True, heatmap={}, pos=[]):
     labels={node:node for node in g.nodes}
+    if not pos: pos=nx.spring_layout(g)
     if heatmap:
         nodesize=scale*700
         fontsize=scale*6
-        pos=nx.spring_layout(g)
         #nx.draw(g, pos, node_size=nodesize,node_color = 'k', alpha=0.3)
         colors = []
         for node in labels.keys():
             colors = colors + [heatmap.get(node, 0.0)]
         nx.draw(g, pos, node_color=colors, cmap=plt.cm.coolwarm, alpha=0.6, node_size=nodesize)
-        nx.draw_networkx_labels(g, pos, labels=labels,font_size=fontsize, node_size=nodesize)
+        nx.draw_networkx_labels(g, pos, labels=labels,font_size=fontsize, node_size=nodesize, font_weight='bold')
         if faultscen:
             plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
         plt.show()
     elif not list(g.nodes(data='status'))[0][1]: #just plots graph if no status information 
         nodesize=scale*700
         fontsize=scale*6
-        pos=nx.spring_layout(g)
         nx.draw(g, pos, labels=labels,font_size=fontsize, node_size=nodesize,node_color = 'g', font_weight='bold')
         if faultscen:
             plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
@@ -695,13 +717,13 @@ def showbipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True, heatm
 
 # plotresultsgraphfrom():
 # plots a representation of the graph at a specific time given a results history
-def plotresultsgraphfrom(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1):
+def plotresultsgraphfrom(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[]):
     [[t_ind,],] = np.where(reshist['time']==time)
     if gtype=='bipartite':
         g = mdl.bipartite.copy()
         labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = getplotlabels(g, reshist, t_ind)
         degnodes = degfxns + degflows
-        plotbipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale)
+        plotbipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos=pos)
     elif gtype=='normal':
         g = mdl.graph.copy()
         labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = getplotlabels(g, reshist, t_ind)
@@ -710,7 +732,7 @@ def plotresultsgraphfrom(mdl, reshist, time, faultscen=[], gtype='bipartite', sh
 
 # plotresultsgraphsfrom():
 # iteratively plots a representation of the graph at a specific time given a results history
-def plotresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1):
+def plotresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[]):
     if times=='all':
         t_inds= [i for i in range(0,len(reshist['time']))]
     else:
@@ -731,20 +753,20 @@ def plotresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite', 
 # to view in spyder, make sure to set to display using: %matplotlib qt
 # to save (or do anything useful)h, make sure ffmpeg is installed  https://www.wikihow.com/Install-FFmpeg-on-Windows
 # use %matplotlib qt from spyder or %matplotlib notebook from jupyter
-def animateresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, show=False):
+def animateresultsgraphsfrom(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, show=False, pos=[]):
     if times=='all':
         t_inds= [i for i in range(0,len(reshist['time']))]
     else:
         t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
     if gtype=='bipartite':
         g = mdl.bipartite.copy()
-        pos=nx.spring_layout(g)
+        if not pos: pos=nx.spring_layout(g)
         fig, ax = plt.subplots(figsize=(6,4))
         ani = matplotlib.animation.FuncAnimation(fig, updatebipplot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False))
         if show: plt.show()
     elif gtype=='normal':
         g = mdl.graph.copy()
-        pos=nx.shell_layout(g)
+        if not pos: pos=nx.shell_layout(g)
         fig, ax = plt.subplots(figsize=(6,4))
         ani = matplotlib.animation.FuncAnimation(fig, updategraphplot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False))
         if show: plt.show()

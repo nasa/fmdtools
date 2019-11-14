@@ -60,7 +60,7 @@ fp.showbipartite(mdl.bipartite, heatmap=heatmaps['maxfaults'], scale=2)
 # or the accumulated difference between the states of the nominal and this over time
 # note that this only counts states, not faults
 fp.showbipartite(mdl.bipartite, heatmap=heatmaps['intdiff'], scale=2)
-
+# max faults is best displayed on the graph view
 fp.showgraph(mdl.graph, heatmap=heatmaps['maxfaults'])
 
 #summary gives a dict of which functions and flows degraded over time, while reshist
