@@ -29,7 +29,8 @@ It also uses the following packages to be installed on Python 3:
 - `matplotlib`
 - `mpl_toolkits`
 - `numpy`
-- `astropy`
+- `pandas`
+- `ffmpeg` (for animations)
 - `shapely` (for `quad_mdl` only)
 
 so make sure to install (e.g. using `pip install packagename`) them before running any of the codes.
