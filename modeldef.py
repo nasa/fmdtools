@@ -8,6 +8,7 @@ Description: A module to simplify model definition
 """
 import numpy as np
 import networkx as nx
+from scipy.stats import binom
 
 # MAJOR CLASSES
 class block(object):
@@ -255,8 +256,61 @@ class timer():
         self.time=0
         
 # mode constructor????
-def mode(rate,rcost):
-    return {'rate':rate,'rcost':rcost}
+
+class mode():
+    def __init__(self, name, baserate, phases, modifiers=[], rateunits = 360):
+        self.name=name
+        self.baserate=baserate
+        self.phases = phases
+        if not self.modifiers:          self.modifiers = [1]*len(phases)
+        elif type(modifiers)== list:    self.modifiers = {phase: modifiers[i] for i,phase in enumerate(modifiers)}
+        else:                           self.modifiers = modifiers
+        self.rateunits = rateunits
+    def phaserates(self):
+        return {phase:self.baserate*self.modifiers[phase] for phase in self.phases}
+    def ratesperuse(self):
+        return {phase:self.baserate*self.modifiers[phase]*np.diff(inter)/self.rateunits for phase, inter in self.phases.items()}
+    def totrateperuse(self):
+        return sum(self.ratesperuse().values())
+    def ratespertime(self):
+        times = np.array(list(self.phases.values()))
+        tottime = np.max(times) - np.min(times)
+        return {phase:self.baserate*self.modifiers[phase]*np.diff(inter)/(tottime*self.rateunits) for phase, inter in self.phases.items()}
+    def totratepertime(self):
+        return sum(self.ratespertime().values())
+    def expnumsfromuses(self, uses):
+        userates = self.ratesperuse()
+        return {phase:userate*uses for phase, userate in userates.items()}
+    def totnumfromuses(self, uses):
+        return sum(self.expnumsfromuses.values())
+    def expnumsfromlifetime(self,lifetime):
+        timerates=self.ratespertime()
+        return {phase:timerate*lifetime for phase, timerate in timerates.items()}
+    def totnumfromlifetime(self,lifetime):
+        return sum(self.expnumsfromlifetime().values())
+    def probspertime(self):
+        return {phase: 1-np.exp(-rate) for phase, rate in self.ratespertime().items()}
+    def totprobpertime(self):
+        return sum(self.probspertime().values())
+    def totprobsfromtime(self,lifetime):
+        return {phase: 1-np.exp(-rate) for phase, rate in self.expnumsfromlifetime(lifetime).items()}
+    def totprobfromtime(self, lifetime):
+        return 1-np.exp(self.totnumfromlifetime(lifetime))
+    def probsperuses(self):
+        return {phase: 1-np.exp(-rate) for phase, rate in self.ratesperuse().items()}
+    def totprobsfromuses(self, uses):
+        return {phase: 1-binom.pdf(1,uses, prob) for phase, prob in self.probsperuses().items()}
+    def totprobfromuses(self, uses):
+        return sum(self.totprobsfromuses(uses).values())
+        
+    
+    
+def phases(times, names=[]):
+    if not names: names = range(len(times)-1)
+    return {names[i]:[times[i], times[i+1]] for (i, _) in enumerate(times) if i < len(times)-1}
+
+#def mode(rate,rcost):
+#    return {'rate':rate,'rcost':rcost}
 
 
 # USEFUL FUNCTIONS FOR MODEL CONSTRUCTION
