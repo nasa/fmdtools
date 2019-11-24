@@ -1,6 +1,6 @@
-# FFERMAT: Function-Failure Early Resilience Models And Tools
+# fmdkit: Fault Model Design toolKit
 
-FFERMAT is a toolkit to enable the modelling and design of systems in the early design phase. With it, one can model the dynamic effects of a fault over time in an engineered system and and then design the system to be more resilient based on rate and severity information. 
+fmdkit is a toolkit to enable the modelling and design of systems in the early design phase. With it, one can model the dynamic effects of a fault over time in an engineered system and and then design the system to be more resilient based on rate and severity information. 
 
 ##### Features include:
 
@@ -23,7 +23,7 @@ WARNING: This is a research code and is currently under development. Some featur
 
 ### Prerequisites
 
-FFERMAT requires Python 3 to run. 
+fmdkit requires Python 3 to run. 
 
 It also uses the following packages to be installed on Python 3:
 
@@ -58,4 +58,4 @@ MIT
 ----
 ## Acknowledgements
 
-FFERMAT was originally based on the IBFM code written by Matthew McIntire and available at https://github.com/DesignEngrLab/IBFM.
+fmdkit was originally based on the IBFM code written by Matthew McIntire and available at https://github.com/DesignEngrLab/IBFM.
