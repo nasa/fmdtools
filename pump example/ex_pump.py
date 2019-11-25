@@ -47,8 +47,12 @@ class ImportEE(FxnBlock):
         #these modes will be used to generate a list of scenarios
         #each fault can be given arbitrary properties in a dictionary
         #in this case, rate and repair cost information
-        self.faultmodes={'no_v':{'rate':'moderate', 'rcost':'major'}, \
-                         'inf_v':{'rate':'rare', 'rcost':'major'}}
+        self.failrate=1e-5
+        #add fault modes using self.assoc_modes, which takes a dict of structure:
+        # {faultname: [[distribution percentage], [opportunity vector], [repair cost]]}
+        # alternatively, modes may be associated by using:
+        # self.faultmodes = {modename: }
+        self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[[0.20], [0,1,0], 10000]})
         
     #condfaults changes the state of the system if there is a change in state in a flow
     # using a condfaults method is optional but helpful for delinating between
@@ -72,7 +76,8 @@ class ImportWater(FxnBlock):
         #init requires a dictionary of flows with the internal variable name and
         # the object reference
         super().__init__(['Watout'],flows)
-        self.faultmodes={'no_wat':{'rate':'moderate', 'rcost':'major'}}
+        self.failrate=1e-5
+        self.assoc_modes({'no_wat':[1.0, [1,1,1], 1000]})
     #in this function, no conditional faults are modelled, so we don't need to include it
     #a dummy version is used in the FxnBlock superclass
     def behavior(self,time):
@@ -88,7 +93,8 @@ class ExportWater(FxnBlock):
     def __init__(self,flows):
         #flows going into/out of the function need to be made properties of the function
         super().__init__(['Watin'], flows)
-        self.faultmodes={'block':{'rate':'moderate', 'rcost':'major'}}
+        self.failrate=1e-5
+        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 10000]})
     def behavior(self,time):
         if self.has_fault('block'): #here the fault is some sort of blockage
             self.Watin.area=0.1
@@ -98,7 +104,8 @@ class ImportSig(FxnBlock):
     def __init__(self,flows):
         #flows going into/out of the function need to be made properties of the function
         super().__init__(['Sigout'],flows)
-        self.faultmodes={'no_sig':{'rate':'moderate', 'rcost':'major'}}
+        self.failrate=1e-6
+        self.assoc_modes({'no_sig':[1.0, [1.5, 1.0, 1.0], 10000]})
     #when the behavior changes over time (and not just internal state) time must
     # be given as an input
     def behavior(self, time):
@@ -124,8 +131,8 @@ class MoveWat(FxnBlock):
         #attributes to the function
         states={'eff':1.0} #effectiveness state
         super().__init__(flownames,flows,states, timers={'timer'})
-        self.faultmodes={'mech_break':{'rate':'moderate', 'rcost':'major'}, \
-                         'short':{'rate':'rare', 'rcost':'major'}}
+        self.failrate=1e-5
+        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 10000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
         #timers can be set by adding variables to functions also
     def condfaults(self, time):
         # here we define a conditional fault that only occurs after a state 
@@ -181,6 +188,7 @@ class Pump(Model):
         
         
         #Declare time range to run model over
+        self.phases={'start':[0,5], 'on':[5, 50], 'end':[50,55]}
         self.times=[0,20, 55]
         self.tstep = 1 #Stepsize: (change at your own risk, because this changes how the model will execute)
         # Timestep at the moment must be an integer.

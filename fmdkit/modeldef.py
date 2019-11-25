@@ -20,6 +20,13 @@ class Block(object):
             setattr(self, state,states[state])
         self.faults=set(['nom'])
         if timely: self.time=0.0
+    def assoc_modes(self, modes):
+        self.faultmodes=dict.fromkeys(modes)
+        for mode in self.faultmodes:
+            self.faultmodes[mode]=dict.fromkeys(('dist', 'oppvect', 'rcost'))
+            self.faultmodes[mode]['dist'] =     modes[mode][0]
+            self.faultmodes[mode]['oppvect'] =  modes[mode][1]
+            self.faultmodes[mode]['rcost'] =    modes[mode][2]
     def has_fault(self,fault):
         return self.faults.intersection(set([fault]))
     def has_faults(self,faults):
@@ -262,7 +269,7 @@ class Mode():
         self.name=name
         self.baserate=baserate
         self.phases = phases
-        if not self.modifiers:          self.modifiers = [1]*len(phases)
+        if not modifiers:               self.modifiers = [1]*len(phases)
         elif type(modifiers)== list:    self.modifiers = {phase: modifiers[i] for i,phase in enumerate(modifiers)}
         else:                           self.modifiers = modifiers
         self.rateunits = rateunits
