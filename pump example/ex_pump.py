@@ -232,22 +232,14 @@ class Pump(Model):
         #get fault costs and rates
         modes, modeprops = self.return_faultmodes()
         repcosts = [ c['rcost'] for f,m in modeprops.items() for a, c in m.items()]
-        
-        costs=repcosts
-        costkey={'major': 10000, 'minor': 1000}
-        totcost=0.0
-        
-        for cost in costs:
-            totcost=totcost+costkey[cost]
+        totcost = sum(repcosts)
         
         life=100
         
         if scen['properties']['type']=='nominal':
             rate=1.0
         else:
-            qualrate=scen['properties']['rate']
-            ratekey={'rare': 1e-7, 'moderate': 1e-5}
-            rate=ratekey[qualrate]
+            rate=scen['properties']['rate']
         
         life=1e5
         

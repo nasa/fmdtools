@@ -81,7 +81,7 @@ def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gty
     scen['properties']['type']='single fault'
     scen['properties']['function']=fxnname
     scen['properties']['fault']=faultmode
-    scen['properties']['rate']=mdl.fxns[fxnname].faultmodes[faultmode]['rate']
+    scen['properties']['rate']=mdl.fxns[fxnname].failrate 
     scen['properties']['time']=time
     
     faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=staged, prevhist=nommdlhist)
@@ -118,7 +118,7 @@ def list_init_faults(mdl):
                 nomscen=construct_nomscen(mdl)
                 newscen=nomscen.copy()
                 newscen['faults'][fxnname]=mode
-                rate=mdl.fxns[fxnname].faultmodes[mode]['rate']
+                rate=mdl.fxns[fxnname].failrate
                 newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
                 faultlist.append(newscen)
 
