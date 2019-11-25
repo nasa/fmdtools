@@ -21,25 +21,20 @@ The flows are:
     - Signal input (on/off)
 """
 
-
-import networkx as nx
-import numpy as np
-
-import faultprop as fp
-from modeldef import *
+from fmdkit.modeldef import *
 
 
 ##DEFINE MODEL FUNCTIONS
 # Functions are, again, defined using Python classes that are instantiated as objects
 
 # Import EE is the line of electricity going into the pump
-# We define it here as a subclass of the fxnblock superclass (imported from modeldef.py)
-#the fxnblock superclass, which adds the common aspects of the function objects:
+# We define it here as a subclass of the FxnBlock superclass (imported from modeldef.py)
+#the FxnBlock superclass, which adds the common aspects of the function objects:
 # - flows added to .flow
 # - faults set to nominal
 # - a number of useful methods added for dealing with internal faults (e.g. addfault()) and fault
 # propagation (e.g. updatefxn()) are added to the object
-class importEE(fxnblock):
+class ImportEE(FxnBlock):
     #Initializing the function requires the flows going in and out of the function
     def __init__(self,flows):
         #this initializes the fault state of the system and adds needed flows
@@ -61,17 +56,17 @@ class importEE(fxnblock):
     def condfaults(self,time):
         #in this case, if the current is too high, the line becomes an open circuit
         # (e.g. due to a fuse or line burnout)
-        if self.EEout.rate>5.0: self.addfault('no_v')
+        if self.EEout.rate>5.0: self.add_fault('no_v')
     #behavior defines the behavior of the function
     def behavior(self,time):
         #here we can define how the function will behave with different faults
-        if self.hasfault('no_v'): self.EEout.effort=0.0 #an open circuit means no voltage is exported
-        elif self.hasfault('inf_v'): self.effstate=100.0 #a voltage spike means voltage is much higher
+        if self.has_fault('no_v'): self.EEout.effort=0.0 #an open circuit means no voltage is exported
+        elif self.has_fault('inf_v'): self.effstate=100.0 #a voltage spike means voltage is much higher
         else: self.effstate=1.0 #normally, voltage is 1.0
 
 # Import Water is the pipe with water going into the pump
 
-class importWater(fxnblock):
+class ImportWater(FxnBlock):
     #Initializing the function requires the flows going in and out of the function
     def __init__(self,flows):
         #init requires a dictionary of flows with the internal variable name and
@@ -79,27 +74,27 @@ class importWater(fxnblock):
         super().__init__(['Watout'],flows)
         self.faultmodes={'no_wat':{'rate':'moderate', 'rcost':'major'}}
     #in this function, no conditional faults are modelled, so we don't need to include it
-    #a dummy version is used in the fxnblock superclass
+    #a dummy version is used in the FxnBlock superclass
     def behavior(self,time):
         #here we can define how the function will behave with different faults
-        if self.hasfault('no_wat'):
+        if self.has_fault('no_wat'):
             self.Watout.level=0.0 #an open circuit means no voltage is exported
         else:
             self.Watout.level=1.0
 
 # Import Water is the pipe with water going into the pump
-class exportWater(fxnblock):
+class ExportWater(FxnBlock):
     #Initializing the function requires the flows going in and out of the function
     def __init__(self,flows):
         #flows going into/out of the function need to be made properties of the function
         super().__init__(['Watin'], flows)
         self.faultmodes={'block':{'rate':'moderate', 'rcost':'major'}}
     def behavior(self,time):
-        if self.hasfault('block'): #here the fault is some sort of blockage
+        if self.has_fault('block'): #here the fault is some sort of blockage
             self.Watin.area=0.1
 
 # Import Signal is the on/off switch
-class importSig(fxnblock):
+class ImportSig(FxnBlock):
     def __init__(self,flows):
         #flows going into/out of the function need to be made properties of the function
         super().__init__(['Sigout'],flows)
@@ -107,7 +102,7 @@ class importSig(fxnblock):
     #when the behavior changes over time (and not just internal state) time must
     # be given as an input
     def behavior(self, time):
-        if self.hasfault('no_sig'):
+        if self.has_fault('no_sig'):
             self.Sigout.power=0.0 #an open circuit means no voltage is exported
         else:
             #Since the signal *generally* defines the operational profile of the system,
@@ -122,7 +117,7 @@ class importSig(fxnblock):
 
 # Move Water is the pump itself. While one could decompose this further,
 # one function is used for simplicity
-class moveWat(fxnblock):
+class MoveWat(FxnBlock):
     def __init__(self,flows):
         flownames=['EEin', 'Sigin', 'Watin', 'Watout']
         #here we also define the states of a model, which are also added as 
@@ -141,14 +136,14 @@ class moveWat(fxnblock):
                 # will increment as desired even if we change model timestep
                 self.timer.inc(self.tstep)  
             if self.timer.time>10.0:
-                self.addfault('mech_break')
+                self.add_fault('mech_break')
     #behavior defines the behavior of the function
     def behavior(self, time):
         #here we can define how the function will behave with different faults
-        if self.hasfault('short'):
+        if self.has_fault('short'):
             self.EEin.rate=500*self.Sigin.power*self.EEin.effort
             self.eff=0.0
-        elif self.hasfault('mech_break'):
+        elif self.has_fault('mech_break'):
             self.EEin.rate=5*self.Sigin.power*self.EEin.effort
             self.eff=0.0
         else:
@@ -169,7 +164,7 @@ class moveWat(fxnblock):
 # Defining the class for the flow of Water
 # here the flow is given the custom attribute of 'hello'--further attributes
 # and methods could be given here if desired.
-class Water(flow):
+class Water(Flow):
     def __init__(self):
         attributes={'rate':1.0, \
                     'effort':1.0, \
@@ -180,7 +175,7 @@ class Water(flow):
 
 ##DEFINE MODEL OBJECT
 # The model is also made an object to aid graph construction
-class pump(model):
+class Pump(Model):
     def __init__(self):
         super().__init__()
         
@@ -201,11 +196,11 @@ class pump(model):
         #Here addflow takes as input a unique name for the flow "flowname", a type for the flow, "flowtype"
         # and either:   a dict with the initial flow attributes, OR
         #               a flow object defined in the model file
-        self.addflow('EE_1', 'EE', {'rate':1.0, 'effort':1.0})
-        self.addflow('Sig_1', 'Signal', {'power':1.0})
+        self.add_flow('EE_1', 'EE', {'rate':1.0, 'effort':1.0})
+        self.add_flow('Sig_1', 'Signal', {'power':1.0})
         # custom flows which we defined earlier can be added also:
-        self.addflow('Wat_1', 'Water', Water())
-        self.addflow('Wat_2', 'Water', Water())
+        self.add_flow('Wat_1', 'Water', Water())
+        self.add_flow('Wat_2', 'Water', Water())
         
         #Flows are added to the model using the addfxn function, which needs:
         #   - a unique function name 
@@ -213,21 +208,21 @@ class pump(model):
         #   - a list of flow names corresponding to the inputs to the flow
         #       -the *order* of which corresponds to those in the function definition
         #       -the *name* of which corresponds to the name defined above for the flow
-        self.addfxn('ImportEE',importEE,['EE_1'])
-        self.addfxn('ImportWater',importWater,['Wat_1'])
-        self.addfxn('ImportSignal',importSig,['Sig_1'])
-        self.addfxn('MoveWater', moveWat, ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'])
-        self.addfxn('ExportWater', exportWater, ['Wat_2'])
+        self.add_fxn('ImportEE',ImportEE,['EE_1'])
+        self.add_fxn('ImportWater',ImportWater,['Wat_1'])
+        self.add_fxn('ImportSignal',ImportSig,['Sig_1'])
+        self.add_fxn('MoveWater', MoveWat, ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'])
+        self.add_fxn('ExportWater', ExportWater, ['Wat_2'])
         
-        self.constructgraph()
+        self.construct_graph()
         
     #PROVIDE MEANS OF CLASSIFYING RESULTS
     # this function classifies the faults into severities based on the state of faults
     # in this case, we will just use the repair costs and the probability
-    def findclassification(self,resgraph, endfaults, endflows, scen):
+    def find_classification(self,resgraph, endfaults, endflows, scen):
         
         #get fault costs and rates
-        modes, modeprops = self.returnfaultmodes()
+        modes, modeprops = self.return_faultmodes()
         repcosts = [ c['rcost'] for f,m in modeprops.items() for a, c in m.items()]
         
         costs=repcosts
@@ -255,8 +250,8 @@ class pump(model):
 #INSTANTIATE MODEL
 #the model is initialized using an initialize function
 def initialize():
-    p=pump()
-    return p.constructgraph()
+    p=Pump()
+    return p.construct_graph()
 
 
     

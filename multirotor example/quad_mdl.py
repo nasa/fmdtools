@@ -5,15 +5,11 @@ Author: Daniel Hulse
 Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
-
-import networkx as nx
 import numpy as np
-
-import faultprop as fp
-from modeldef import *
+from fmdkit.modeldef import *
 
 #Define specialized flows
-class Direc(flow):
+class Direc(Flow):
     def __init__(self):
         self.traj=[0,0,0]
         super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1}, 'Trajectory')
@@ -22,17 +18,17 @@ class Direc(flow):
         return status.copy()
 
 #Define functions
-class storeEE(fxnblock):
+class StoreEE(FxnBlock):
     def __init__(self, flows, archtype):
         if archtype[0]=='normal':
             #architecture: 1 for controllers? + cells in Series & Parallel
             #Batctl=battery('ctl')
-            components={'00':battery('00'), '01':battery('01'), '10':battery('10'), '11':battery('11')}
+            components={'00':Battery('00'), '01':Battery('01'), '10':Battery('10'), '11':Battery('11')}
         self.faultmodes={'nocharge':{'rate':'moderate','rcost':'minor'}, \
                          'lowcharge':{'rate':'moderate','rcost':'minor'}} 
         super().__init__(['EEout', 'FS', 'Hsig', 'Rsig'], flows, {'soc': 2000}, components)
     def condfaults(self, time):
-        if self.soc<20: self.addfault('lowcharge')
+        if self.soc<20: self.add_fault('lowcharge')
         if self.soc<1: self.replacefault('lowcharge','nocharge')
         return 0
     def behavior(self, time):
@@ -51,7 +47,7 @@ class storeEE(fxnblock):
         self.EEout.effort=(np.mean([EE['00'],EE['01']])+np.mean([EE['10'],EE['11']]))/2.0
         self.soc=np.mean(list(soc.values()))
 
-class battery(component):
+class Battery(Component):
     def __init__(self, name):
         super().__init__(name, {'soc':2000, 'EEe':1.0, 'Et':1.0})
         self.faultmodes={name+'short':{'rate':'moderate', 'rcost':'major'}, \
@@ -60,16 +56,16 @@ class battery(component):
                          name+'nocharge':{'rate':'moderate','rcost':'minor'}, \
                          name+'lowcharge':{'rate':'moderate','rcost':'minor'}}
     def behavior(self, FS, EEoutr, time):
-        if FS <1.0: self.addfault(self.name+'break')
-        if EEoutr>2: self.addfault(self.name+'break')
-        if self.soc<20: self.addfault(self.name+'lowcharge')
-        if self.soc<1: self.replacefault(self.name+'lowcharge',self.name+'nocharge')
+        if FS <1.0: self.add_fault(self.name+'break')
+        if EEoutr>2: self.add_fault(self.name+'break')
+        if self.soc<20: self.add_fault(self.name+'lowcharge')
+        if self.soc<1: self.replace_fault(self.name+'lowcharge',self.name+'nocharge')
         self.Et=1.0 #default
-        if self.hasfault(self.name+'short'): self.Et=0.0
-        elif self.hasfault(self.name+'break'): self.Et=0.0
-        elif self.hasfault(self.name+'degr'): self.Et=0.5
+        if self.has_fault(self.name+'short'): self.Et=0.0
+        elif self.has_fault(self.name+'break'): self.Et=0.0
+        elif self.has_fault(self.name+'degr'): self.Et=0.5
         
-        if self.hasfault(self.name+'nocharge'):
+        if self.has_fault(self.name+'nocharge'):
             self.soc=0.0
             self.Et=0.0
             
@@ -78,7 +74,7 @@ class battery(component):
             self.time=time
         return self.Et
 
-class distEE(fxnblock):
+class DistEE(FxnBlock):
     def __init__(self,flows):
         super().__init__(['EEin','EEmot','EEctl','FS'],flows, {'EEtr':1.0, 'EEte':1.0}, timely=False)
         self.faultmodes={'short':{'rate':'moderate', 'rcost':'major'}, \
@@ -86,34 +82,34 @@ class distEE(fxnblock):
                          'break':{'rate':'common', 'rcost':'moderate'}}
     def condfaults(self, time):
         if self.FS.value<0.5 or max(self.EEmot.rate,self.EEctl.rate)>2:
-            self.addfault('break')
+            self.add_fault('break')
     def behavior(self, time):
-        if self.hasfault('short'): 
+        if self.has_fault('short'): 
             self.EEte=0.0
             self.EEre=np.inf
-        elif self.hasfault('break'): 
+        elif self.has_fault('break'): 
             self.EEte=0.0
             self.EEre=0.0
-        elif self.hasfault('degr'): self.EEte=0.5
+        elif self.has_fault('degr'): self.EEte=0.5
         self.EEmot.effort=self.EEte*self.EEin.effort
         self.EEctl.effort=self.EEte*self.EEin.effort
         self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, max(self.EEmot.rate,self.EEctl.rate)])
 
-class engageLand(fxnblock):
+class EngageLand(FxnBlock):
     def __init__(self,flows):
         super().__init__(['forcein', 'forceout'],flows, {'Ft':1.0}, timely=False)
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}}
     def condfaults(self, time):
-        if self.forceout.value<-1.4: self.addfault('break')
-        elif self.forceout.value<-1.2: self.addfault('deform')
+        if self.forceout.value<-1.4: self.add_fault('break')
+        elif self.forceout.value<-1.2: self.add_fault('deform')
     def behavior(self, time):
-        if self.hasfault('break'): self.Ft=4.0
-        elif self.hasfault('deform'): self.Ft=2.0
+        if self.has_fault('break'): self.Ft=4.0
+        elif self.has_fault('deform'): self.Ft=2.0
         else: self.Ft=1.0
         self.forceout.value=self.Ft*min([-2.0,self.forcein.value])*0.2
     
-class manageHealth(fxnblock):
+class ManageHealth(FxnBlock):
     def __init__(self,flows):
         flownames=['EECtl','FS','DOFshealth', 'Bathealth','DOFconfig','Batconfig','Ctlconfig', 'Trajconfig' ]
         super().__init__(flownames, flows)
@@ -124,9 +120,9 @@ class manageHealth(fxnblock):
                          'lostfunction':{'rate':'rare', 'rcost':'minor'}} 
         #need to add joint-fault modes of not catching faults?
     def condfaults(self, time):
-        if self.FS.value<0.5 or self.EECtl.effort>2.0: self.addfault('lostfunction')
+        if self.FS.value<0.5 or self.EECtl.effort>2.0: self.add_fault('lostfunction')
     def behavior(self, time):
-        if self.EECtl.effort>0.5 or self.hasfault('lostfunction'):
+        if self.EECtl.effort>0.5 or self.has_fault('lostfunction'):
             self.DOFconfig=1
             self.Batconfig=1
             self.Ctlconfig=1
@@ -136,27 +132,27 @@ class manageHealth(fxnblock):
             if self.DOFshealth=='degraded': self.DOFconfig=2
             if self.DOFshealth=='degraded': self.DOFconfig=2    
             
-class holdPayload(fxnblock):
+class HoldPayload(FxnBlock):
     def __init__(self,flows):
         super().__init__(['FG', 'FA', 'FS'],flows, {'Ft': 1.0}, timely=False)
         self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
                          'deform':{'rate':'moderate', 'rcost':'minor'}, }
     def condfaults(self, time):
-        if abs(self.FG.value)>1.6: self.addfault('break')
-        elif abs(self.FG.value)>1.4: self.addfault('deform')
+        if abs(self.FG.value)>1.6: self.add_fault('break')
+        elif abs(self.FG.value)>1.4: self.add_fault('deform')
     def behavior(self, time):
-        if self.hasfault('break'): self.Ft=0.0
-        elif self.hasfault('deform'): self.Ft=0.5
+        if self.has_fault('break'): self.Ft=0.0
+        elif self.has_fault('deform'): self.Ft=0.5
         else: self.Ft=1.0
         self.FA.value=self.Ft
         self.FS.value=self.Ft
     
-class affectDOF(fxnblock): #EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs
+class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs
     def __init__(self, flows, archtype):     
         self.archtype=archtype
         self.faultmodes={}
         if archtype[0]=='quad':
-            components={'RF':line('RF'), 'LF':line('LF'), 'LR':line('LR'), 'RR':line('RR')}
+            components={'RF':Line('RF'), 'LF':Line('LF'), 'LR':Line('LR'), 'RR':Line('RR')}
             self.upward={'RF':1,'LF':1,'LR':1,'RR':1}
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5}
         super().__init__(['EEin', 'Ctlin','DOF','Force','Hsig', 'Rsig'], flows,{}, components, timely=False) 
@@ -167,7 +163,7 @@ class affectDOF(fxnblock): #EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs
         for linname,lin in self.components.items():
             for fault in self.faults:
                 if fault in lin.faultmodes:
-                    lin.addfault(fault)
+                    lin.add_fault(fault)
             
             cmds={'up':self.upward[linname], 'for':self.forward[linname]}
             lin.behavior(self.EEin.effort, self.Ctlin, cmds, self.Force.value)
@@ -199,7 +195,7 @@ class affectDOF(fxnblock): #EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs
         #need to expand on this, add directional velocity, etc
         return
 
-class line(component):
+class Line(Component):
     def __init__(self, name):
         super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, timely=False)
         self.faultmodes={name+'short':{'rate':'moderate', 'rcost':'major'}, \
@@ -214,42 +210,42 @@ class line(component):
                          name+'propbreak':{'rate':'veryrare', 'rcost':'replacement'}
                          }
     def behavior(self, EEin, Ctlin, cmds, Force):
-        if Force<=0.0:   self.addfaults([self.name+'mechbreak', self.name+'propbreak'])
-        elif Force<=0.5: self.addfault(self.name+'mechfriction')
+        if Force<=0.0:   self.add_faults([self.name+'mechbreak', self.name+'propbreak'])
+        elif Force<=0.5: self.add_fault(self.name+'mechfriction')
             
-        if self.hasfault(self.name+'short'):
+        if self.has_fault(self.name+'short'):
             self.Eti=0.0
             self.Eto=np.inf
-        elif self.hasfault(self.name+'openc'):
+        elif self.has_fault(self.name+'openc'):
             self.Eti=0.0
             self.Et0=0.0
-        if self.hasfault(self.name+'ctlbreak'): self.Ct=0.0
-        elif self.hasfault(self.name+'ctldn'):  self.Ct=0.5
-        elif self.hasfault(self.name+'ctlup'):  self.Ct=2.0
-        if self.hasfault(self.name+'mechbreak'): self.Mt=0.0
-        elif self.hasfault(self.name+'mechfriction'):
+        if self.has_fault(self.name+'ctlbreak'): self.Ct=0.0
+        elif self.has_fault(self.name+'ctldn'):  self.Ct=0.5
+        elif self.has_fault(self.name+'ctlup'):  self.Ct=2.0
+        if self.has_fault(self.name+'mechbreak'): self.Mt=0.0
+        elif self.has_fault(self.name+'mechfriction'):
             self.Mt=0.5
             self.Eti=2.0
-        if self.hasfault(self.name+'propstuck'):
+        if self.has_fault(self.name+'propstuck'):
             self.Pt=0.0
             self.Mt=0.0
             self.Eti=4.0
-        elif self.hasfault(self.name+'propbreak'): self.Pt=0.0
-        elif self.hasfault(self.name+'propwarp'):  self.Pt=0.5
+        elif self.has_fault(self.name+'propbreak'): self.Pt=0.0
+        elif self.has_fault(self.name+'propwarp'):  self.Pt=0.5
         
         self.Airout=m2to1([EEin,self.Eti,Ctlin.upward*cmds['up']+Ctlin.forward*cmds['for'],self.Ct,self.Mt,self.Pt])
         self.EE_in=m2to1([EEin,self.Eto])     
     
-class ctlDOF(fxnblock):
+class CtlDOF(FxnBlock):
     def __init__(self, flows):
         super().__init__(['EEin','Dir','Ctl','DOFs','FS','Rsig'],flows, {'vel':0.0, 'Cs':1.0})
         self.faultmodes={'noctl':{'rate':'rare', 'rcost':'high'}, \
                          'degctl':{'rate':'rare', 'rcost':'high'}}
     def condfaults(self, time):
-        if self.FS.value<0.5: self.addfault('noctl')
+        if self.FS.value<0.5: self.add_fault('noctl')
     def behavior(self, time):
-        if self.hasfault('noctl'):    self.Cs=0.0
-        elif self.hasfault('degctl'): self.Cs=0.5
+        if self.has_fault('noctl'):    self.Cs=0.0
+        elif self.has_fault('degctl'): self.Cs=0.5
         
         if time>self.time:
             self.vel=self.DOFs.vertvel
@@ -279,14 +275,14 @@ class ctlDOF(fxnblock):
         self.Ctl.forward=self.EEin.effort*self.Cs*forwardthrottle*pwr
         self.Ctl.upward=self.EEin.effort*self.Cs*upthrottle*pwr
 
-class planpath(fxnblock):
+class PlanPath(FxnBlock):
     def __init__(self, flows):
         super().__init__(['EEin','Env','Dir','FS','Rsig'], flows)
         self.mode='taxi'
         self.faultmodes={'noloc':{'rate':'rare', 'rcost':'high'}, \
                          'degloc':{'rate':'rare', 'rcost':'high'}}
     def condfaults(self, time):
-        if self.FS.value<0.5: self.addfault('noloc')
+        if self.FS.value<0.5: self.add_fault('noloc')
     def behavior(self, t):
             
         if t<1: self.mode='taxi'
@@ -310,13 +306,13 @@ class planpath(fxnblock):
         elif self.mode=='descend': self.Dir.traj=[0,0,-1]
         elif self.mode=='land': self.Dir.traj=[0,0,-0.1]
             
-        if self.hasfault('noloc'): self.Dir.traj=[0,0,0]
-        elif self.hasfault('degloc'): self.Dir.traj=[0,0,-1]
+        if self.has_fault('noloc'): self.Dir.traj=[0,0,0]
+        elif self.has_fault('degloc'): self.Dir.traj=[0,0,-1]
         if self.EEin.effort<0.5:
             self.Dir.power=0.0
             self.Dir.traj=[0,0,0]
 
-class trajectory(fxnblock):
+class Trajectory(FxnBlock):
     def __init__(self, flows):
         super().__init__(['Env','DOF','Land', 'Dir', 'Force_LG'], flows, {'flight':0.0})
         self.faultmodes={'nom':{'rate':'common', 'rcost':'NA'}, }
@@ -346,7 +342,7 @@ class trajectory(fxnblock):
             self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]
             self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
             
-class quadrotor(model):
+class Quadrotor(Model):
     def __init__(self):
         super().__init__()
         
@@ -355,40 +351,40 @@ class quadrotor(model):
         self.tstep = 1 #Stepsize: (change at your own risk--any accumulated value will need to change)
         
         #add flows to the model
-        self.addflow('Force_ST', 'Force', {'value':1.0})
-        self.addflow('Force_Air','Force', {'value':1.0} )
-        self.addflow('Force_GR','Force', {'value':1.0} )
-        self.addflow('Force_LG','Force', {'value':1.0})
-        self.addflow('HSig_DOFs','Health Signal', {'hstate':'nominal'})
-        self.addflow('HSig_Bat','Health Signal', {'hstate':'nominal'} )
-        self.addflow('RSig_DOFs','Reconfiguration Signal', {'mode':1} )
-        self.addflow('RSig_Bat','Reconfiguration Signal', {'mode':1} )
-        self.addflow('RSig_Ctl','Reconfiguration Signal', {'mode':1})
-        self.addflow('RSig_Traj','Reconfiguration Signal', {'mode':1})
-        self.addflow('EE_1', 'EE', {'rate':1.0, 'effort':1.0})
-        self.addflow('EEmot', 'EE', {'rate':1.0, 'effort':1.0})
-        self.addflow('EEctl', 'EE', {'rate':1.0, 'effort':1.0})
-        self.addflow('Ctl1','Direction Signal', {'forward':0.0, 'upward':1.0})
-        self.addflow('DOFs', 'DOFs',{'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0})
-        self.addflow('Land1','Land', {'state':'landed', 'area':'start'} )
-        self.addflow('Env1','Environment', {'x':0.0,'y':0.0,'elev':0.0} )
+        self.add_flow('Force_ST', 'Force', {'value':1.0})
+        self.add_flow('Force_Air','Force', {'value':1.0} )
+        self.add_flow('Force_GR','Force', {'value':1.0} )
+        self.add_flow('Force_LG','Force', {'value':1.0})
+        self.add_flow('HSig_DOFs','Health Signal', {'hstate':'nominal'})
+        self.add_flow('HSig_Bat','Health Signal', {'hstate':'nominal'} )
+        self.add_flow('RSig_DOFs','Reconfiguration Signal', {'mode':1} )
+        self.add_flow('RSig_Bat','Reconfiguration Signal', {'mode':1} )
+        self.add_flow('RSig_Ctl','Reconfiguration Signal', {'mode':1})
+        self.add_flow('RSig_Traj','Reconfiguration Signal', {'mode':1})
+        self.add_flow('EE_1', 'EE', {'rate':1.0, 'effort':1.0})
+        self.add_flow('EEmot', 'EE', {'rate':1.0, 'effort':1.0})
+        self.add_flow('EEctl', 'EE', {'rate':1.0, 'effort':1.0})
+        self.add_flow('Ctl1','Direction Signal', {'forward':0.0, 'upward':1.0})
+        self.add_flow('DOFs', 'DOFs',{'stab':1.0, 'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0})
+        self.add_flow('Land1','Land', {'state':'landed', 'area':'start'} )
+        self.add_flow('Env1','Environment', {'x':0.0,'y':0.0,'elev':0.0} )
         # custom flows
-        self.addflow('Dir1', 'Direction', Direc())
+        self.add_flow('Dir1', 'Direction', Direc())
         #add functions to the model
         flows=['EEctl', 'Force_ST', 'HSig_DOFs', 'HSig_Bat', 'RSig_DOFs', 'RSig_Bat', 'RSig_Ctl', 'RSig_Traj']
-        self.addfxn('ManageHealth',manageHealth,flows)
-        self.addfxn('StoreEE',storeEE,['EE_1', 'Force_ST', 'HSig_Bat', 'RSig_Bat'], 'normal')
-        self.addfxn('DistEE',distEE, ['EE_1','EEmot','EEctl', 'Force_ST'])
-        self.addfxn('AffectDOF',affectDOF,['EEmot','Ctl1','DOFs','Force_Air', 'HSig_DOFs', 'RSig_DOFs'], 'quad')
-        self.addfxn('CtlDOF', ctlDOF,['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST', 'RSig_Ctl'])
-        self.addfxn('Planpath', planpath, ['EEctl', 'Env1','Dir1', 'Force_ST', 'RSig_Traj'])
-        self.addfxn('Trajectory', trajectory,['Env1','DOFs','Land1','Dir1', 'Force_GR'] )
-        self.addfxn('EngageLand', engageLand,['Force_GR', 'Force_LG'])
-        self.addfxn('HoldPayload', holdPayload,['Force_LG', 'Force_Air', 'Force_ST'])
+        self.add_fxn('ManageHealth',ManageHealth,flows)
+        self.add_fxn('StoreEE',StoreEE,['EE_1', 'Force_ST', 'HSig_Bat', 'RSig_Bat'], 'normal')
+        self.add_fxn('DistEE',DistEE, ['EE_1','EEmot','EEctl', 'Force_ST'])
+        self.add_fxn('AffectDOF',AffectDOF,['EEmot','Ctl1','DOFs','Force_Air', 'HSig_DOFs', 'RSig_DOFs'], 'quad')
+        self.add_fxn('CtlDOF', CtlDOF,['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST', 'RSig_Ctl'])
+        self.add_fxn('Planpath', PlanPath, ['EEctl', 'Env1','Dir1', 'Force_ST', 'RSig_Traj'])
+        self.add_fxn('Trajectory', Trajectory,['Env1','DOFs','Land1','Dir1', 'Force_GR'] )
+        self.add_fxn('EngageLand', EngageLand,['Force_GR', 'Force_LG'])
+        self.add_fxn('HoldPayload', HoldPayload,['Force_LG', 'Force_Air', 'Force_ST'])
         
-        self.constructgraph()
+        self.construct_graph()
         
-    def findclassification(self, g, endfaults, endflows, scen):
+    def find_classification(self, g, endfaults, endflows, scen):
         
         start=[0.0,0.0]
         start_xw=10
@@ -426,7 +422,7 @@ class quadrotor(model):
         else:
             landloc='emunsanc'
             area=10000
-        modes, modeprops = self.returnfaultmodes()
+        modes, modeprops = self.return_faultmodes()
         repaircosts=[ c['rcost'] for f,m in modeprops.items() for a, c in m.items()]
         maxcost=textmax(repaircosts)
         

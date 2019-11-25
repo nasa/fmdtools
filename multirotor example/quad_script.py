@@ -5,8 +5,11 @@ Author: Daniel Hulse
 Created: June 2019
 Description: I/O with the quadrotor model defined in quad_mdl.py
 """
+import sys
+sys.path.append('../')
 
-import faultprop as fp
+import fmdkit.faultprop as fp
+import fmdkit.resultproc as rp
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -14,7 +17,7 @@ from quad_mdl import *
 import time
 
 #scenlist=fp.listinitfaults(graph, mdl.times)
-mdl = quadrotor()
+mdl = Quadrotor()
 
 
 # =============================================================================
@@ -24,14 +27,14 @@ mdl = quadrotor()
 ## 
 ## #Check various scenarios individually
 ## 
-endresults, resgraph, mdlhist = fp.runonefault(mdl, 'DistEE', 'short', time=5, staged=True, gtype='bipartite')
+endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=5, staged=True, gtype='bipartite')
 
-fp.showbipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
+rp.show_bipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
-fp.plotmdlhist(mdlhist, 'StoreEE short', time=5) #, fxnflows=['StoreEE'])
+rp.plot_mdlhist(mdlhist, 'StoreEE short', time=5) #, fxnflows=['StoreEE'])
 ### 
-endresults, resgraph, mdlhist2=fp.runonefault(mdl, 'AffectDOF', 'RFshort', time=13, staged=True)
-fp.showgraph(resgraph)
+endresults, resgraph, mdlhist2=fp.run_one_fault(mdl, 'AffectDOF', 'RFshort', time=13, staged=True)
+rp.show_graph(resgraph)
 #fp.plotflowhist(flowhist2, 'RFshort', time=13)
 #fp.plotghist(ghist2, 't=13 RFshort')
 #
@@ -61,25 +64,25 @@ fp.showgraph(resgraph)
 #resultstab.write('tab4.ecsv', overwrite=True)
 
 
-resultstab=fp.runlist(mdl, staged=True)
+resultstab=fp.run_list(mdl, staged=True)
 
 t1=time.time()
-endclasses, mdlhists=fp.runlist(mdl, staged=True)
-simplefmea = fp.makesimplefmea(endclasses)
+endclasses, mdlhists=fp.run_list(mdl, staged=True)
+simplefmea = rp.make_simplefmea(endclasses)
 t2=time.time()
 print(simplefmea)
-reshists, diffs, summaries = fp.comparehists(mdlhists, returndiff=False)
+reshists, diffs, summaries = rp.compare_hists(mdlhists, returndiff=False)
 
 t3=time.time()
 t_running = t2-t1
 t_processing =t3-t2
-fullfmea = fp.makefullfmea(endclasses, summaries)
-heatmap = fp.makeavgdegtimeheatmap(reshists)
+fullfmea = rp.make_fullfmea(endclasses, summaries)
+heatmap = rp.make_avgdegtimeheatmap(reshists)
 
-fp.showbipartite(mdl.bipartite, heatmap=heatmap, scale=2)
+rp.show_bipartite(mdl.bipartite, heatmap=heatmap, scale=2)
 
-heatmap2 = fp.makeexpdegtimeheatmap(reshists, endclasses)
-fp.showbipartite(mdl.bipartite, heatmap=heatmap2, scale=2)
+heatmap2 = rp.make_expdegtimeheatmap(reshists, endclasses)
+rp.show_bipartite(mdl.bipartite, heatmap=heatmap2, scale=2)
 
 #print(t_reused)
 #print(t_copied)
