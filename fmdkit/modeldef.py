@@ -261,9 +261,41 @@ class Timer():
         self.time+=tstep
     def reset(self):
         self.time=0
+
+class Approach():
+    def __init__(self, mdl, apptype=[]):
+        self.phases = mdl.phases
+        self.tstep = mdl.tstep
+        self.fxnrates=dict.fromkeys(mdl.fxns)
+        self._fxnmodes={}
+        for fxnname, fxn in  mdl.fxns.items():
+            for mode, params in fxn.faultmodes.items():
+                self._fxnmodes[fxnname, mode]=params
+            self.fxnrates[fxnname]=fxn.failrate
+        self.init_rates()
+        self.create_sampletimes(apptype)
+    def init_rates(self):
+        self.rates=dict.fromkeys(self._fxnmodes)
+        for (fxnname, mode) in self._fxnmodes:
+            self.rates[fxnname, mode]=dict.fromkeys(self.phases)
+            for ind, (phase, times) in enumerate(self.phases.items()):
+                opp = self._fxnmodes[fxnname, mode]['oppvect'][ind]
+                dist = self._fxnmodes[fxnname, mode]['dist']
+                dt = float(times[1]-times[0])
+                self.rates[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist*dt
+    def create_sampletimes(self, apptype):
+        self.sampletimes=dict.fromkeys(self._fxnmodes)
+        for (fxnname, mode) in self._fxnmodes:
+            self.sampletimes[fxnname, mode]=dict.fromkeys(self.phases)
+            for phase, times in self.phases.items():
+                self.sampletimes[fxnname, mode][phase] = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
+    def list_modes(self):
+        return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
+    def list_moderates(self):
+        return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
+
         
 # mode constructor????
-
 class Mode():
     def __init__(self, name, baserate, phases, modifiers=[], rateunits = 360):
         self.name=name

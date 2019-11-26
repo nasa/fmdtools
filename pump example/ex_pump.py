@@ -52,7 +52,7 @@ class ImportEE(FxnBlock):
         # {faultname: [[distribution percentage], [opportunity vector], [repair cost]]}
         # alternatively, modes may be associated by using:
         # self.faultmodes = {modename: }
-        self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[[0.20], [0,1,0], 10000]})
+        self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[0.20, [0,1,0], 10000]})
         
     #condfaults changes the state of the system if there is a change in state in a flow
     # using a condfaults method is optional but helpful for delinating between
