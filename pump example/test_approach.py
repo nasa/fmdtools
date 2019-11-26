@@ -14,4 +14,8 @@ import time
 
 mdl = Pump()
 
-app = Approach(mdl)
+app_full = Approach(mdl, 'fullint')
+app_center = Approach(mdl, 'center')
+app_maxlike = Approach(mdl, 'maxlike')
+app_multipt = Approach(mdl, 'multi-pt')
+app_arand = Approach(mdl, 'arand')

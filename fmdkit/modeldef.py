@@ -7,6 +7,7 @@ Created: October 2019
 Description: A module to simplify model definition
 """
 import numpy as np
+import operator
 import networkx as nx
 from scipy.stats import binom
 
@@ -263,7 +264,7 @@ class Timer():
         self.time=0
 
 class Approach():
-    def __init__(self, mdl, apptype=[]):
+    def __init__(self, mdl, apptype, pts=3):
         self.phases = mdl.phases
         self.tstep = mdl.tstep
         self.fxnrates=dict.fromkeys(mdl.fxns)
@@ -273,7 +274,7 @@ class Approach():
                 self._fxnmodes[fxnname, mode]=params
             self.fxnrates[fxnname]=fxn.failrate
         self.init_rates()
-        self.create_sampletimes(apptype)
+        self.create_sampletimes(apptype,pts)
     def init_rates(self):
         self.rates=dict.fromkeys(self._fxnmodes)
         for (fxnname, mode) in self._fxnmodes:
@@ -283,16 +284,53 @@ class Approach():
                 dist = self._fxnmodes[fxnname, mode]['dist']
                 dt = float(times[1]-times[0])
                 self.rates[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist*dt
-    def create_sampletimes(self, apptype):
-        self.sampletimes=dict.fromkeys(self._fxnmodes)
-        for (fxnname, mode) in self._fxnmodes:
-            self.sampletimes[fxnname, mode]=dict.fromkeys(self.phases)
-            for phase, times in self.phases.items():
-                self.sampletimes[fxnname, mode][phase] = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
+    def create_sampletimes(self, apptype, pts=3):
+        self.sampletimes=dict.fromkeys(self.phases)
+        for phase, times in self.phases.items():
+            if apptype=='center':
+                phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
+                self.sampletimes[phase]={phasetime: []}
+                self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+            elif apptype=='fullint':
+                phasetimes = [i for i in np.arange(times[0], times[1],self.tstep)]
+                self.sampletimes[phase]=dict.fromkeys(phasetimes)
+                for phasetime in self.sampletimes[phase]:
+                    self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+            elif apptype=='maxlike':
+                phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
+                self.sampletimes[phase]={phasetime: []}
+                self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if phase==max(self.rates[fxnname,mode].items(), key=operator.itemgetter(1))[0]]
+            elif apptype=='multi-pt': 
+                phasetimes_unrounded = np.linspace(times[0], times[1], pts+1)[1:]
+                phasetimes= [round(time/self.tstep)*self.tstep for time in phasetimes_unrounded]
+                self.sampletimes[phase]=dict.fromkeys(phasetimes)
+                for phasetime in self.sampletimes[phase]:
+                    self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+            elif apptype=='randtimes':
+                possible_phasetimes = np.arange(times[0], times[1], self.tstep)
+                phasetimes= [possible_phasetimes[np.random.randint(len(possible_phasetimes))] for i in pts]
+                self.sampletimes[phase]=dict.fromkeys(phasetimes)
+                for phasetime in self.sampletimes[phase]:
+                    self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+            elif apptype=='arandtimes':
+                possible_phasetimes = np.arange(times[0], times[1], self.tstep)
+                phasetimes= [possible_phasetimes[np.random.randint(len(possible_phasetimes))] for i in pts]
+                self.sampletimes[phase]=dict.fromkeys(phasetimes)
+                for (fxnname, mode) in self._fxnmodes:
+                    if self.rates[fxnname, mode][phase]>0.0:
+                        for i in range(pts):
+                            phasetime=possible_phasetimes[np.random.randint(len(possible_phasetimes))]
+                            if self.sampletimes[phase].get(phasetime):
+                                self.sampletimes[phase][phasetime]=self.sampletimes[phase][phasetime]+[(fxnname, mode)]
+                            else:
+                                self.sampletimes[phase][phasetime]=[(fxnname, mode)]
+
     def list_modes(self):
         return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
     def list_moderates(self):
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
+    def create_scenarios(self):
+        return
 
         
 # mode constructor????
