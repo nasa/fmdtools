@@ -264,17 +264,27 @@ class Timer():
         self.time=0
 
 class Approach():
-    def __init__(self, mdl, apptype, pts=3):
+    def __init__(self, mdl, samptype, faults='all', jointfaults=[], numpts=3, condprob=0.1):
         self.phases = mdl.phases
         self.tstep = mdl.tstep
-        self.fxnrates=dict.fromkeys(mdl.fxns)
-        self._fxnmodes={}
-        for fxnname, fxn in  mdl.fxns.items():
-            for mode, params in fxn.faultmodes.items():
-                self._fxnmodes[fxnname, mode]=params
-            self.fxnrates[fxnname]=fxn.failrate
+        self.init_modelist(mdl,faults)
         self.init_rates()
-        self.create_sampletimes(apptype,pts)
+        self.create_sampletimes(samptype,numpts)
+        self.create_scenarios(jointfaults)
+    def init_modelist(self,mdl, faults):
+        if faults=='all':
+            self.fxnrates=dict.fromkeys(mdl.fxns)
+            self._fxnmodes={}
+            for fxnname, fxn in  mdl.fxns.items():
+                for mode, params in fxn.faultmodes.items():
+                    self._fxnmodes[fxnname, mode]=params
+                self.fxnrates[fxnname]=fxn.failrate
+        else:
+            self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
+            self._fxnmodes={}
+            for fxnname, mode in faults:
+                self._fxnmodes[fxnname, mode]=mdl.fxns[fxnname].faultmodes[mode]
+                self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
     def init_rates(self):
         self.rates=dict.fromkeys(self._fxnmodes)
         for (fxnname, mode) in self._fxnmodes:
@@ -284,53 +294,58 @@ class Approach():
                 dist = self._fxnmodes[fxnname, mode]['dist']
                 dt = float(times[1]-times[0])
                 self.rates[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist*dt
-    def create_sampletimes(self, apptype, pts=3):
+    def create_sampletimes(self, samptype, numpts=3):
         self.sampletimes=dict.fromkeys(self.phases)
         for phase, times in self.phases.items():
-            if apptype=='center':
+            if samptype=='center':
                 phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
                 self.sampletimes[phase]={phasetime: []}
                 self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
-            elif apptype=='fullint':
+            elif samptype=='fullint':
                 phasetimes = [i for i in np.arange(times[0], times[1],self.tstep)]
                 self.sampletimes[phase]=dict.fromkeys(phasetimes)
                 for phasetime in self.sampletimes[phase]:
                     self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
-            elif apptype=='maxlike':
-                phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
-                self.sampletimes[phase]={phasetime: []}
-                self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if phase==max(self.rates[fxnname,mode].items(), key=operator.itemgetter(1))[0]]
-            elif apptype=='multi-pt': 
-                phasetimes_unrounded = np.linspace(times[0], times[1], pts+1)[1:]
+            elif samptype=='maxlike':
+                modelist = [(fxnname,mode) for (fxnname, mode) in self._fxnmodes if phase==max(self.rates[fxnname,mode].items(), key=operator.itemgetter(1))[0]]
+                if modelist:
+                    phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
+                    self.sampletimes[phase]={phasetime: modelist}
+            elif samptype=='multi-pt': 
+                phasetimes_unrounded = np.linspace(times[0], times[1], numpts+1)[1:]
                 phasetimes= [round(time/self.tstep)*self.tstep for time in phasetimes_unrounded]
+                modelist = [(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+                if modelist:
+                    self.sampletimes[phase]=dict.fromkeys(phasetimes)
+                    for phasetime in self.sampletimes[phase]:
+                        self.sampletimes[phase][phasetime]=modelist
+            elif samptype=='randtimes':
+                possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
+                phasetimes= [possible_phasetimes.pop(np.random.randint(len(possible_phasetimes))) for i in range(numpts)]
                 self.sampletimes[phase]=dict.fromkeys(phasetimes)
                 for phasetime in self.sampletimes[phase]:
                     self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
-            elif apptype=='randtimes':
-                possible_phasetimes = np.arange(times[0], times[1], self.tstep)
-                phasetimes= [possible_phasetimes[np.random.randint(len(possible_phasetimes))] for i in pts]
-                self.sampletimes[phase]=dict.fromkeys(phasetimes)
-                for phasetime in self.sampletimes[phase]:
-                    self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
-            elif apptype=='arandtimes':
-                possible_phasetimes = np.arange(times[0], times[1], self.tstep)
-                phasetimes= [possible_phasetimes[np.random.randint(len(possible_phasetimes))] for i in pts]
-                self.sampletimes[phase]=dict.fromkeys(phasetimes)
+            elif samptype=='arandtimes':
+                possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
+                self.sampletimes[phase]={}
                 for (fxnname, mode) in self._fxnmodes:
                     if self.rates[fxnname, mode][phase]>0.0:
-                        for i in range(pts):
-                            phasetime=possible_phasetimes[np.random.randint(len(possible_phasetimes))]
+                        phasetimes=possible_phasetimes.copy()
+                        for i in range(numpts):
+                            phasetime=phasetimes.pop(np.random.randint(len(phasetimes)))
                             if self.sampletimes[phase].get(phasetime):
                                 self.sampletimes[phase][phasetime]=self.sampletimes[phase][phasetime]+[(fxnname, mode)]
                             else:
                                 self.sampletimes[phase][phasetime]=[(fxnname, mode)]
-
+            else: print("invalid option")
+    def create_scenarios(self,jointfaults): #need to add to create scenarios to run
+        if not jointfaults:
+            e=1
+        return
     def list_modes(self):
         return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
     def list_moderates(self):
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
-    def create_scenarios(self):
-        return
 
         
 # mode constructor????
