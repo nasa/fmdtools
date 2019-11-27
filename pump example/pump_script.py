@@ -9,7 +9,7 @@ Description: A simple example of I/O using faultprop.py and the pump model in ex
 #Using the model that was set up, we can now perform a few different operations
 
 #First, import the fault propogation library as well as the model
-#since the package is in a parallel locaiton to examples
+#since the package is in a parallel location to examples
 import sys
 sys.path.append('../')
 
