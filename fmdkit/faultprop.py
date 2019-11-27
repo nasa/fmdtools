@@ -16,8 +16,6 @@ import fmdkit.resultproc as rp
 # creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal
 def construct_nomscen(mdl):
     nomscen={'faults':{},'properties':{}}
-    for fxnname in mdl.fxns:
-        nomscen['faults'][fxnname]='nom'
     nomscen['properties']['time']=0.0
     nomscen['properties']['type']='nominal'
     return nomscen
@@ -193,13 +191,12 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
         if track:  mdlhist = init_mdlhist(mdl, timerange)
     if not track: mdlhist={}
     # run model through the time range defined in the object
-    nomscen=construct_nomscen(mdl)
     c_mdl=dict.fromkeys(ctimes)
     flowstates={}
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
         if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
-        else: flowstates = propagate(mdl,nomscen['faults'],t, flowstates)
+        else: flowstates = propagate(mdl,[],t, flowstates)
         if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
         if t in ctimes: c_mdl[t]=mdl.copy()
     return mdlhist, c_mdl
@@ -222,10 +219,9 @@ def propagate(mdl, initfaults, time, flowstates={}):
             flowstates[flowname]=flow.status()
     #Step 2: Inject faults if present     
     for fxnname in initfaults:
-        if initfaults[fxnname]!='nom':
-            fxn=mdl.fxns[fxnname]
-            fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
-            activefxns.update([fxnname])
+        fxn=mdl.fxns[fxnname]
+        fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
+        activefxns.update([fxnname])
     #Step 3: Propagate faults through graph
     while activefxns:
         for fxnname in list(activefxns).copy():

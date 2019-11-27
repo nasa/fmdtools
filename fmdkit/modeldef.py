@@ -296,6 +296,7 @@ class Approach():
                 self.rates[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist*dt
     def create_sampletimes(self, samptype, numpts=3):
         self.sampletimes=dict.fromkeys(self.phases)
+        self.numpts=numpts
         for phase, times in self.phases.items():
             if samptype=='center':
                 phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
@@ -338,9 +339,24 @@ class Approach():
                             else:
                                 self.sampletimes[phase][phasetime]=[(fxnname, mode)]
             else: print("invalid option")
+    def create_nomscen(self):
+        nomscen={'faults':{},'properties':{}}
+        for fxnname in mdl.fxns:
+            nomscen['faults'][fxnname]='nom'
+        nomscen['properties']['time']=0.0
+        nomscen['properties']['type']='nominal'
     def create_scenarios(self,jointfaults): #need to add to create scenarios to run
+        self.scenlist=[]
+        self.times = []
         if not jointfaults:
-            e=1
+            for phase, samples in self.sampletimes.items():
+                if samples:
+                    for time, faultlist in samples.items():
+                        self.times+=[time]
+                        for fxnname, mode in faultlist:
+                            scen={'faults':{fxnname:mode}, 'properties':{'type': 'single-fault', 'function': fxnname,\
+                                  'fault': mode, 'rate': self.rates[fxnname, mode][phase]/self.numpts, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}}
+                            self.scenlist=self.scenlist+[scen]
         return
     def list_modes(self):
         return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
