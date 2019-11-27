@@ -7,8 +7,8 @@ Created on Mon Nov 25 17:17:59 2019
 import sys
 sys.path.append('../')
 
-import fmdkit.faultprop as fp
-import fmdkit.resultproc as rp
+import fmdtools.faultprop as fp
+import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
 import time
 

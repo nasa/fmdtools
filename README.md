@@ -1,6 +1,6 @@
-# fmdkit: Fault Model Design toolKit
+# fmdtools: Fault Model Design Tools
 
-fmdkit is a toolkit to enable the modelling and design of systems in the early design phase. With it, one can model the dynamic effects of a fault over time in an engineered system and and then design the system to be more resilient based on rate and severity information. 
+fmdtools is a toolkit to enable the modelling and design of systems in the early design phase. With it, one can model the dynamic effects of a fault over time in an engineered system and and then design the system to be more resilient based on rate and severity information. 
 
 ##### Features include:
 
@@ -23,7 +23,7 @@ WARNING: This is a research code and is currently under development. Some featur
 
 ### Prerequisites
 
-fmdkit requires Python 3 to run. 
+fmdtools requires Python 3 to run. 
 
 It also uses the following packages to be installed on Python 3:
 
@@ -58,4 +58,4 @@ MIT
 ----
 ## Acknowledgements
 
-fmdkit was originally based on the IBFM code written by Matthew McIntire and available at https://github.com/DesignEngrLab/IBFM.
+fmdtools was originally based on the IBFM code written by Matthew McIntire and available at https://github.com/DesignEngrLab/IBFM.

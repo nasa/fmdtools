@@ -8,8 +8,8 @@ Description: I/O with the quadrotor model defined in quad_mdl.py
 import sys
 sys.path.append('../')
 
-import fmdkit.faultprop as fp
-import fmdkit.resultproc as rp
+import fmdtools.faultprop as fp
+import fmdtools.resultproc as rp
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 

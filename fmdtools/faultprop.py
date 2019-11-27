@@ -9,7 +9,7 @@ Description: functions to propagate faults through a user-defined fault model
 """
 import numpy as np
 import copy
-import fmdkit.resultproc as rp
+import fmdtools.resultproc as rp
 ## FAULT PROPAGATION
 
 #construct_nomscen

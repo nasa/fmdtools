@@ -6,7 +6,7 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdkit.modeldef import *
+from fmdtools.modeldef import *
 
 #Define specialized flows
 class Direc(Flow):
