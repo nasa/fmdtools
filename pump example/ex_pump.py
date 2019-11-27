@@ -21,7 +21,7 @@ The flows are:
     - Signal input (on/off)
 """
 
-from fmdkit.modeldef import *
+from fmdtools.modeldef import *
 
 
 ##DEFINE MODEL FUNCTIONS

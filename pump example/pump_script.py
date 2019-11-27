@@ -13,8 +13,8 @@ Description: A simple example of I/O using faultprop.py and the pump model in ex
 import sys
 sys.path.append('../')
 
-import fmdkit.faultprop as fp
-import fmdkit.resultproc as rp
+import fmdtools.faultprop as fp
+import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
 import time
 
