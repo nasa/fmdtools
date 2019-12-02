@@ -339,12 +339,13 @@ class Approach():
                             else:
                                 self.sampletimes[phase][phasetime]=[(fxnname, mode)]
             else: print("invalid option")
-    def create_nomscen(self):
+    def create_nomscen(self, mdl):
         nomscen={'faults':{},'properties':{}}
         for fxnname in mdl.fxns:
             nomscen['faults'][fxnname]='nom'
         nomscen['properties']['time']=0.0
         nomscen['properties']['type']='nominal'
+        return nomscen
     def create_scenarios(self,jointfaults): #need to add to create scenarios to run
         self.scenlist=[]
         self.times = []
@@ -354,8 +355,9 @@ class Approach():
                     for time, faultlist in samples.items():
                         self.times+=[time]
                         for fxnname, mode in faultlist:
+                            numpts = sum([(fxnname, mode) in samples[time] for time in samples])
                             scen={'faults':{fxnname:mode}, 'properties':{'type': 'single-fault', 'function': fxnname,\
-                                  'fault': mode, 'rate': self.rates[fxnname, mode][phase]/self.numpts, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}}
+                                  'fault': mode, 'rate': self.rates[fxnname, mode][phase]/numpts, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}}
                             self.scenlist=self.scenlist+[scen]
         return
     def list_modes(self):
