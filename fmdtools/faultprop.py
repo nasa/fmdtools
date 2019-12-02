@@ -164,6 +164,40 @@ def run_list(mdl, reuse=False, staged=False, track=True):
         else: mdl = mdl.__class__()
     return endclasses, mdlhists
 
+def run_approach(mdl, app, reuse=False, staged=False, track=True):
+    if reuse and staged:
+        print("invalid to use reuse and staged options at the same time. Using staged")
+        reuse=False
+    mdl.reset()
+    if staged:
+        nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times)
+    else:
+        nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track)
+    nomresgraph = mdl.return_stategraph()
+    mdl.reset()
+    
+    endclasses = {}
+    mdlhists = {}
+    mdlhists['nominal'] = nomhist
+    for i, scen in enumerate(app.scenlist):
+        #run model with fault scenario
+        if staged:
+            mdl=c_mdl[scen['properties']['time']].copy()
+            mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
+        else:
+            mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track)
+        endfaults, endfaultprops = mdl.return_faultmodes()
+        resgraph = mdl.return_stategraph()
+        
+        endflows = rp.compare_graphflows(resgraph, nomresgraph)
+        endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen)
+        
+        if reuse: mdl.reset()
+        elif staged: _
+        else: mdl = mdl.__class__()
+    return endclasses, mdlhists
+        
+
 #prop_one_scen
 # runs a single fault scenario in the model over time
 # inputs:
@@ -193,10 +227,11 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes)
     flowstates={}
+    faultfxns=set()
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
-        if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
-        else: flowstates = propagate(mdl,[],t, flowstates)
+        if t==scen['properties']['time']: flowstates, faultfxns = propagate(mdl, scen['faults'], t,faultfxns, flowstates)
+        else: flowstates = propagate(mdl,[],t,faultfxns, flowstates)
         if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
         if t in ctimes: c_mdl[t]=mdl.copy()
     return mdlhist, c_mdl
@@ -208,21 +243,17 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
 #   initfaults, the faults (or lack of faults) to initiate in the model
 #   time, the time propogation occurs at
 #   flowstates, if generated in the last iteration
-def propagate(mdl, initfaults, time, flowstates={}):
+def propagate(mdl, initfaults, time, faultfxns, flowstates={}):
     #set up history of flows to see if any has changed
     n=0
-    activefxns=mdl.timelyfxns.copy()
+    if not faultfxns: faultfxns=set()
+    activefxns=mdl.timelyfxns.copy().update(faultfxns)
     nextfxns=set()
     #Step 1: Find out what the current value of the flows are (if not generated in the last iteration)
     if not flowstates:
         for flowname, flow in mdl.flows.items():
             flowstates[flowname]=flow.status()
-    #Step 2: Inject faults if present     
-    for fxnname in initfaults:
-        fxn=mdl.fxns[fxnname]
-        fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
-        activefxns.update([fxnname])
-    #Step 3: Propagate faults through graph
+    #Step 2: Propagate faults through graph
     while activefxns:
         for fxnname in list(activefxns).copy():
             #Update functions with new values, check to see if new faults or states
@@ -243,7 +274,12 @@ def propagate(mdl, initfaults, time, flowstates={}):
             print(initfaults)
             print(fxnname)
             break
-    return flowstates
+    #Step 3: Inject faults if present     
+    for fxnname in initfaults:
+        fxn=mdl.fxns[fxnname]
+        fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
+        faultfxns.update([fxnname])
+    return flowstates, faultfxns
 
 #update_mdlhist
 # find a way to make faster (e.g. by automatically getting values by reference)
