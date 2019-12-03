@@ -239,7 +239,7 @@ class Model(object):
                     modeprops[fxnname][mode] = fxn.faultmodes[mode]
         return modes, modeprops
     def copy(self):
-        copy = self.__class__()
+        copy = self.__class__(params=self.params)
         for flowname, flow in self.flows.items():
             copy.flows[flowname]=flow.copy()
         for fxnname, fxn in self.fxns.items():

@@ -183,10 +183,10 @@ class Water(Flow):
 ##DEFINE MODEL OBJECT
 # The model is also made an object to aid graph construction
 class Pump(Model):
-    def __init__(self):
+    def __init__(self, params=[]):
         super().__init__()
         
-        
+        self.params=params
         #Declare time range to run model over
         self.phases={'start':[0,5], 'on':[5, 50], 'end':[50,55]}
         self.times=[0,20, 55]
@@ -227,14 +227,25 @@ class Pump(Model):
     #PROVIDE MEANS OF CLASSIFYING RESULTS
     # this function classifies the faults into severities based on the state of faults
     # in this case, we will just use the repair costs and the probability
-    def find_classification(self,resgraph, endfaults, endflows, scen):
+    def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
         
         #get fault costs and rates
         modes, modeprops = self.return_faultmodes()
-        repcosts = [ c['rcost'] for f,m in modeprops.items() for a, c in m.items()]
-        totcost = sum(repcosts)
+        if 'repair' in self.params: repcost = sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])
+        else: repcost = 0.0
         
-        life=100
+        if 'water' in self.params: 
+            lostwat = sum(mdlhists['nominal']['flows']['Wat_2']['rate'] - mdlhists['faulty']['flows']['Wat_2']['rate'])
+            watcost = lostwat * 100 * self.tstep
+        else: watcost = 0.0
+        
+        if 'ee' in self.params:
+            eespike = sum([spike for spike in mdlhists['faulty']['flows']['EE_1']['rate'] - mdlhists['nominal']['flows']['EE_1']['rate'] if spike >1.0])
+            eecost = eespike * 100 * self.tstep
+        else: eecost = 0.0
+        
+        totcost = repcost + watcost + eecost
+        
         
         if scen['properties']['type']=='nominal':
             rate=1.0

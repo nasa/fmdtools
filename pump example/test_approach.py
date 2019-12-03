@@ -12,7 +12,7 @@ import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
 import time
 
-mdl = Pump()
+mdl = Pump(params={'repair', 'ee', 'water'})
 
 app_full = SampleApproach(mdl, 'fullint')
 app_center = SampleApproach(mdl, 'center')
