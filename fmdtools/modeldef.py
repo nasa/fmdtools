@@ -263,7 +263,7 @@ class Timer():
     def reset(self):
         self.time=0
 
-class Approach():
+class SampleApproach():
     def __init__(self, mdl, samptype, faults='all', jointfaults=[], numpts=3, condprob=0.1):
         self.phases = mdl.phases
         self.tstep = mdl.tstep
@@ -297,6 +297,7 @@ class Approach():
     def create_sampletimes(self, samptype, numpts=3):
         self.sampletimes=dict.fromkeys(self.phases)
         self.numpts=numpts
+        self.samptype=samptype
         for phase, times in self.phases.items():
             if samptype=='center':
                 phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
@@ -356,8 +357,10 @@ class Approach():
                         self.times+=[time]
                         for fxnname, mode in faultlist:
                             numpts = sum([(fxnname, mode) in samples[time] for time in samples])
+                            if self.samptype=='maxlike': rate = sum(self.rates[fxnname, mode].values())
+                            else:                        rate = self.rates[fxnname, mode][phase]/numpts
                             scen={'faults':{fxnname:mode}, 'properties':{'type': 'single-fault', 'function': fxnname,\
-                                  'fault': mode, 'rate': self.rates[fxnname, mode][phase]/numpts, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}}
+                                  'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}}
                             self.scenlist=self.scenlist+[scen]
         return
     def list_modes(self):
