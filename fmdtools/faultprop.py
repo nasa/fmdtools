@@ -38,7 +38,7 @@ def run_nominal(mdl, track=True, gtype='normal'):
     
     resgraph = mdl.return_stategraph(gtype)   
     endfaults, endfaultprops = mdl.return_faultmodes()
-    endclass=mdl.find_classification(resgraph, endfaultprops, {}, scen)
+    endclass=mdl.find_classification(resgraph, endfaultprops, {}, scen, {'nominal': mdlhist, 'faulty':mdlhist})
     
     endresults={'faults': endfaults, 'classification':endclass}
     
@@ -87,14 +87,14 @@ def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gty
     
     #process model run
     endfaults, endfaultprops = mdl.return_faultmodes()
-    endflows = rp.compare_graphflows(faultresgraph, nomresgraph, gtype) 
+    endflows = rp.compare_graphflows(faultresgraph, nomresgraph, gtype)
     
-    endclass = mdl.find_classification(faultresgraph, endfaultprops, endflows, scen)
+    mdlhists={'nominal':nommdlhist, 'faulty':faultmdlhist}
+    
+    endclass = mdl.find_classification(faultresgraph, endfaultprops, endflows, scen, mdlhists)
     # note: in the future, put this in rp package so it doesn't need to be imported
     if gtype=='normal': resgraph = rp.make_resultsgraph(faultresgraph, nomresgraph) 
     elif gtype=='bipartite': resgraph = rp.make_bipresultsgraph(faultresgraph, nomresgraph)
-    
-    mdlhists={'nominal':nommdlhist, 'faulty':faultmdlhist}
     
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
     
@@ -155,13 +155,12 @@ def run_list(mdl, reuse=False, staged=False, track=True):
             mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track)
         endfaults, endfaultprops = mdl.return_faultmodes()
         resgraph = mdl.return_stategraph()
-        
         endflows = rp.compare_graphflows(resgraph, nomresgraph)
-        endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen)
+        endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
         if reuse: mdl.reset()
         elif staged: _
-        else: mdl = mdl.__class__()
+        else: mdl = mdl.__class__(params=mdl.params)
     return endclasses, mdlhists
 
 def run_approach(mdl, app, reuse=False, staged=False, track=True):
@@ -190,11 +189,11 @@ def run_approach(mdl, app, reuse=False, staged=False, track=True):
         resgraph = mdl.return_stategraph()
         
         endflows = rp.compare_graphflows(resgraph, nomresgraph)
-        endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen)
+        endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
         if reuse: mdl.reset()
         elif staged: _
-        else: mdl = mdl.__class__()
+        else: mdl = mdl.__class__(params=mdl.params)
     return endclasses, mdlhists
         
 

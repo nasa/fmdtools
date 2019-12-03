@@ -18,7 +18,7 @@ import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
 import time
 
-mdl = Pump()
+mdl = Pump(params={'repair', 'ee', 'water'})
 
 ##NOMINAL PLOTS
 #Before seeing how faults propogate, it's useful to see how the model performs
