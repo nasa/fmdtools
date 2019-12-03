@@ -128,7 +128,7 @@ def make_expdegtimeheatmap(reshists, endclasses):
     degtimetable = pd.DataFrame(make_degtimemaps(reshists))
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expdegtimetable = degtimetable.multiply(rates).transpose()
-    return expdegtimetable.mean().to_dict()
+    return expdegtimetable.sum().to_dict()
 def make_faultmap(reshist):
     heatmap={}
     for fxnname in reshist['functions'].keys():

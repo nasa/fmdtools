@@ -231,7 +231,7 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
         if t==scen['properties']['time']: flowstates, faultfxns = propagate(mdl, scen['faults'], t,faultfxns, flowstates)
-        else: flowstates = propagate(mdl,[],t,faultfxns, flowstates)
+        else: flowstates, faultfxns = propagate(mdl,[],t,faultfxns, flowstates)
         if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
         if t in ctimes: c_mdl[t]=mdl.copy()
     return mdlhist, c_mdl
@@ -247,7 +247,8 @@ def propagate(mdl, initfaults, time, faultfxns, flowstates={}):
     #set up history of flows to see if any has changed
     n=0
     if not faultfxns: faultfxns=set()
-    activefxns=mdl.timelyfxns.copy().update(faultfxns)
+    activefxns=mdl.timelyfxns.copy()
+    activefxns.update(faultfxns)
     nextfxns=set()
     #Step 1: Find out what the current value of the flows are (if not generated in the last iteration)
     if not flowstates:

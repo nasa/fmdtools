@@ -31,43 +31,23 @@ class CustApproach(Approach):
         jointfaultscens = {'on':(('ImportEE', 'inf_v'), ('ExportWater', 'block'))}
         super().__init__(mdl, 'maxlike')
         #self.addjointfaults(jointfaultscens) ???
-        
-endclasses_full, mdlhists_full = fp.run_approach(mdl, app_full)
 
-simplefmea_full = rp.make_simplefmea(endclasses_full)
-print(simplefmea_full)
-util_full=sum(simplefmea_full['expected cost'])
+def resilquant(approach, mdl):
+    endclasses, mdlhists = fp.run_approach(mdl, approach)
+    reshists, diffs, summaries = rp.compare_hists(mdlhists)
+    
+    simplefmea = rp.make_simplefmea(endclasses)
+    util=sum(simplefmea['expected cost'])
+    expdegtimes = rp.make_expdegtimeheatmap(reshists, endclasses)
+    return util, expdegtimes
 
 
-endclasses_center, mdlhists_center = fp.run_approach(mdl, app_center)
+util_full, expdegtimes_full= resilquant(app_full, mdl)
 
-simplefmea_center = rp.make_simplefmea(endclasses_center)
-print(simplefmea_center)
-util_center=sum(simplefmea_center['expected cost'])
+util_center, expdegtimes_center = resilquant(app_center, mdl)    
 
-endclasses_mp, mdlhists_mp = fp.run_approach(mdl, app_multipt)
-simplefmea_mp = rp.make_simplefmea(endclasses_mp)
-print(simplefmea_mp)
-util_mp=sum(simplefmea_mp['expected cost'])
+perc_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
 
-endclasses_arand, mdlhists_arand = fp.run_approach(mdl, app_arand)
-simplefmea_arand = rp.make_simplefmea(endclasses_arand)
-print(simplefmea_arand)
-util_arand=sum(simplefmea_arand['expected cost'])
+rp.show_bipartite(mdl.bipartite, heatmap=perc_error)
 
-endclasses_ml, mdlhists_ml = fp.run_approach(mdl, app_maxlike)
-simplefmea_ml = rp.make_simplefmea(endclasses_ml)
-print(simplefmea_ml)
-util_ml=sum(simplefmea_ml['expected cost'])
-
-#check first phase - no error
-simplefmea_full[0:25]['expected cost']
-simplefmea_center[0:5]['expected cost']
-#second phase - no error
-simplefmea_full[25:340]['expected cost']
-simplefmea_center[5:12]['expected cost']
-#last phase
-simplefmea_full[340:]['expected cost']
-simplefmea_center[12:]['expected cost']
-#importwater no_wat
-#note: rates are fine
+#note the percent error with/without the delay!!
