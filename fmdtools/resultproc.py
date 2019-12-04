@@ -343,8 +343,7 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
     for objtype in ["flows", "functions"]:
         for fxnflow in mdlhists['nominal'][objtype]:
             if fxnflows: #if in the list 
-                if fxnflow not in fxnflows:
-                    break
+                if fxnflow not in fxnflows: continue
             
             if objtype =="flows":
                 nomhist=mdlhists['nominal']["flows"][fxnflow]

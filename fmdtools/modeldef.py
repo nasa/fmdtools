@@ -313,9 +313,10 @@ class SampleApproach():
                 if modelist:
                     phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
                     self.sampletimes[phase]={phasetime: modelist}
-            elif samptype=='multi-pt': 
-                phasetimes_unrounded = np.linspace(times[0], times[1], numpts+2)[1:-1]
-                phasetimes= [round(time/self.tstep-0.0001)*self.tstep for time in phasetimes_unrounded]
+            elif samptype=='multi-pt':
+                possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
+                if numpts+2>len(possible_phasetimes): phasetimes = possible_phasetimes
+                else: phasetimes= [round(np.quantile(possible_phasetimes, p/(numpts+1))) for p in range(numpts+2)][1:-1]
                 modelist = [(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
                 if modelist:
                     self.sampletimes[phase]=dict.fromkeys(phasetimes)
@@ -323,7 +324,7 @@ class SampleApproach():
                         self.sampletimes[phase][phasetime]=modelist
             elif samptype=='randtimes':
                 possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
-                phasetimes= [possible_phasetimes.pop(np.random.randint(len(possible_phasetimes))) for i in range(numpts)]
+                phasetimes= [possible_phasetimes.pop(np.random.randint(len(possible_phasetimes))) for i in range(min(numpts, len(possible_phasetimes)))]
                 self.sampletimes[phase]=dict.fromkeys(phasetimes)
                 for phasetime in self.sampletimes[phase]:
                     self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]

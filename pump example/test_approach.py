@@ -18,7 +18,7 @@ mdl = Pump(params={'water'}) # should give identical utilities
 app_full = SampleApproach(mdl, 'fullint')
 app_center = SampleApproach(mdl, 'center')
 app_maxlike = SampleApproach(mdl, 'maxlike')
-app_multipt = SampleApproach(mdl, 'multi-pt', numpts=3)
+app_multipt = SampleApproach(mdl, 'multi-pt', numpts=9)
 app_rand = SampleApproach(mdl, 'randtimes')
 app_arand = SampleApproach(mdl, 'arandtimes')
 
@@ -38,29 +38,30 @@ def resilquant(approach, mdl):
     reshists, diffs, summaries = rp.compare_hists(mdlhists)
     
     fmea = rp.make_summfmea(endclasses, approach)
+    fmea2 = rp.make_phasefmea(endclasses, approach)
     util=sum(fmea['expected cost'])
     expdegtimes = rp.make_expdegtimeheatmap(reshists, endclasses)
-    return util, expdegtimes, fmea
+    return util, expdegtimes, fmea, fmea2
 
 
-util_short, expdegtimes_short, fmea_short = resilquant(app_short, mdl)
+util_short, expdegtimes_short, fmea_short, _ = resilquant(app_short, mdl)
 
-util_center, expdegtimes_center, fmea_center = resilquant(app_center, mdl)
+util_center, expdegtimes_center, fmea_center, f_c = resilquant(app_center, mdl)
 
 
-util_full, expdegtimes_full, fmea_full= resilquant(app_full, mdl)
+util_full, expdegtimes_full, fmea_full, f_f= resilquant(app_full, mdl)
 
 center_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
 
 rp.show_bipartite(mdl.bipartite, heatmap=center_error)
 
-util_maxlike, expdegtimes_maxlike, fmea_maxlike = resilquant(app_maxlike, mdl)
+util_maxlike, expdegtimes_maxlike, fmea_maxlike, f_m = resilquant(app_maxlike, mdl)
 
 maxlike_error = {i:(expdegtimes_full[i] - expdegtimes_maxlike[i])/expdegtimes_full[i] for i in expdegtimes_full}
 
 rp.show_bipartite(mdl.bipartite, heatmap=maxlike_error)
 
-util_multipt, expdegtimes_multipt, fmea_multipt = resilquant(app_multipt, mdl)
+util_multipt, expdegtimes_multipt, fmea_multipt, f_mi = resilquant(app_multipt, mdl)
 
 #note the percent error with/without the delay!!
 
