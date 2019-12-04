@@ -301,7 +301,7 @@ def make_samptimetable(sampletimes):
     for phase, times in sampletimes.items():
         table[phase]= [str(list(times.keys()))]
     return table.transpose()
-        
+
 
 # make table of function OR flow value attributes - objtype = 'function' or 'flow'
 def make_objtable(hist, objtype):
