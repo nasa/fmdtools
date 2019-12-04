@@ -50,15 +50,17 @@ util_center, expdegtimes_center, fmea_center = resilquant(app_center, mdl)
 
 util_full, expdegtimes_full, fmea_full= resilquant(app_full, mdl)
 
-#center_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
+center_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
 
-#rp.show_bipartite(mdl.bipartite, heatmap=center_error)
+rp.show_bipartite(mdl.bipartite, heatmap=center_error)
 
 util_maxlike, expdegtimes_maxlike, fmea_maxlike = resilquant(app_maxlike, mdl)
 
-#maxlike_error = {i:(expdegtimes_full[i] - expdegtimes_maxlike[i])/expdegtimes_full[i] for i in expdegtimes_full}
+maxlike_error = {i:(expdegtimes_full[i] - expdegtimes_maxlike[i])/expdegtimes_full[i] for i in expdegtimes_full}
 
-#rp.show_bipartite(mdl.bipartite, heatmap=maxlike_error)
+rp.show_bipartite(mdl.bipartite, heatmap=maxlike_error)
+
+util_multipt, expdegtimes_multipt, fmea_multipt = resilquant(app_multipt, mdl)
 
 #note the percent error with/without the delay!!
 

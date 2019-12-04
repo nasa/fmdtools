@@ -300,7 +300,7 @@ class SampleApproach():
         self.samptype=samptype
         for phase, times in self.phases.items():
             if samptype=='center':
-                phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
+                phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep)-0.0001)*self.tstep
                 self.sampletimes[phase]={phasetime: []}
                 self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
             elif samptype=='fullint':
@@ -314,8 +314,8 @@ class SampleApproach():
                     phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
                     self.sampletimes[phase]={phasetime: modelist}
             elif samptype=='multi-pt': 
-                phasetimes_unrounded = np.linspace(times[0], times[1], numpts+1)[1:]
-                phasetimes= [round(time/self.tstep)*self.tstep for time in phasetimes_unrounded]
+                phasetimes_unrounded = np.linspace(times[0], times[1], numpts+2)[1:-1]
+                phasetimes= [round(time/self.tstep-0.0001)*self.tstep for time in phasetimes_unrounded]
                 modelist = [(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
                 if modelist:
                     self.sampletimes[phase]=dict.fromkeys(phasetimes)
