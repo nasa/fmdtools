@@ -12,7 +12,8 @@ import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
 import time
 
-mdl = Pump(params={'repair', 'ee', 'water'})
+#mdl = Pump(params={'repair', 'ee', 'water', 'delay'})
+mdl = Pump(params={'water'}) # should give identical utilities
 
 app_full = SampleApproach(mdl, 'fullint')
 app_center = SampleApproach(mdl, 'center')
@@ -36,25 +37,28 @@ def resilquant(approach, mdl):
     endclasses, mdlhists = fp.run_approach(mdl, approach)
     reshists, diffs, summaries = rp.compare_hists(mdlhists)
     
-    fmea = rp.make_simplefmea(endclasses)
+    fmea = rp.make_phasefmea(endclasses, approach)
     util=sum(fmea['expected cost'])
     expdegtimes = rp.make_expdegtimeheatmap(reshists, endclasses)
     return util, expdegtimes, fmea
 
 
-util_full, expdegtimes_full, fmea_full= resilquant(app_full, mdl)
+util_short, expdegtimes_short, fmea_short = resilquant(app_short, mdl)
 
 util_center, expdegtimes_center, fmea_center = resilquant(app_center, mdl)
 
-center_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
 
-rp.show_bipartite(mdl.bipartite, heatmap=center_error)
+util_full, expdegtimes_full, fmea_full= resilquant(app_full, mdl)
+
+#center_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
+
+#rp.show_bipartite(mdl.bipartite, heatmap=center_error)
 
 util_maxlike, expdegtimes_maxlike, fmea_maxlike = resilquant(app_maxlike, mdl)
 
-maxlike_error = {i:(expdegtimes_full[i] - expdegtimes_maxlike[i])/expdegtimes_full[i] for i in expdegtimes_full}
+#maxlike_error = {i:(expdegtimes_full[i] - expdegtimes_maxlike[i])/expdegtimes_full[i] for i in expdegtimes_full}
 
-rp.show_bipartite(mdl.bipartite, heatmap=maxlike_error)
+#rp.show_bipartite(mdl.bipartite, heatmap=maxlike_error)
 
 #note the percent error with/without the delay!!
 

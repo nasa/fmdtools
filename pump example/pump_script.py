@@ -18,7 +18,7 @@ import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
 import time
 
-mdl = Pump(params={'repair', 'ee', 'water'})
+mdl = Pump(params={'water'})
 
 ##NOMINAL PLOTS
 #Before seeing how faults propogate, it's useful to see how the model performs
@@ -46,7 +46,7 @@ rp.show_bipartite(resgraph_bip, scale=2)
 ##SINGLE-FAULT PLOTS
 ## SCENARIO 1
 ##We might further query the faults to see what happens to the various states
-endresults, resgraph, mdlhist=fp.run_one_fault(mdl, 'MoveWater', 'short', time=10, staged=False)
+endresults, resgraph, mdlhist=fp.run_one_fault(mdl, 'MoveWater', 'short', time=10, staged=True)
 #Here we again make a plot of states--however, looking at this might not tell us what degraded/failed
 short_state_table = rp.make_histtable(mdlhist)
 print(short_state_table)
