@@ -20,7 +20,9 @@ app_center = SampleApproach(mdl, 'center')
 app_maxlike = SampleApproach(mdl, 'maxlike')
 app_multipt = SampleApproach(mdl, 'multi-pt', numpts=9)
 app_rand = SampleApproach(mdl, 'randtimes')
-app_arand = SampleApproach(mdl, 'arandtimes')
+app_arand = SampleApproach(mdl, 'arandtimes', numpts=9)
+
+tab=rp.make_samptimetable(app_multipt.sampletimes)
 
 app_short = SampleApproach(mdl, 'multi-pt', faults=[('ImportEE', 'inf_v')])
 
