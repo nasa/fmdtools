@@ -226,11 +226,10 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes)
     flowstates={}
-    faultfxns=set()
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
-        if t==scen['properties']['time']: flowstates, faultfxns = propagate(mdl, scen['faults'], t,faultfxns, flowstates)
-        else: flowstates, faultfxns = propagate(mdl,[],t,faultfxns, flowstates)
+        if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
+        else: flowstates = propagate(mdl,[],t, flowstates)
         if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
         if t in ctimes: c_mdl[t]=mdl.copy()
     return mdlhist, c_mdl
@@ -242,18 +241,21 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
 #   initfaults, the faults (or lack of faults) to initiate in the model
 #   time, the time propogation occurs at
 #   flowstates, if generated in the last iteration
-def propagate(mdl, initfaults, time, faultfxns, flowstates={}):
+def propagate(mdl, initfaults, time, flowstates={}):
     #set up history of flows to see if any has changed
     n=0
-    if not faultfxns: faultfxns=set()
     activefxns=mdl.timelyfxns.copy()
-    activefxns.update(faultfxns)
     nextfxns=set()
     #Step 1: Find out what the current value of the flows are (if not generated in the last iteration)
     if not flowstates:
         for flowname, flow in mdl.flows.items():
             flowstates[flowname]=flow.status()
-    #Step 2: Propagate faults through graph
+    #Step 2: Inject faults if present     
+    for fxnname in initfaults:
+        fxn=mdl.fxns[fxnname]
+        fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
+        activefxns.update([fxnname])
+    #Step 3: Propagate faults through graph
     while activefxns:
         for fxnname in list(activefxns).copy():
             #Update functions with new values, check to see if new faults or states
@@ -274,12 +276,7 @@ def propagate(mdl, initfaults, time, faultfxns, flowstates={}):
             print(initfaults)
             print(fxnname)
             break
-    #Step 3: Inject faults if present     
-    for fxnname in initfaults:
-        fxn=mdl.fxns[fxnname]
-        fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
-        faultfxns.update([fxnname])
-    return flowstates, faultfxns
+    return flowstates
 
 #update_mdlhist
 # find a way to make faster (e.g. by automatically getting values by reference)

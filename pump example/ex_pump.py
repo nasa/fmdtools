@@ -64,9 +64,10 @@ class ImportEE(FxnBlock):
     #behavior defines the behavior of the function
     def behavior(self,time):
         #here we can define how the function will behave with different faults
-        if self.has_fault('no_v'): self.EEout.effort=0.0 #an open circuit means no voltage is exported
+        if self.has_fault('no_v'): self.effstate=0.0 #an open circuit means no voltage is exported
         elif self.has_fault('inf_v'): self.effstate=100.0 #a voltage spike means voltage is much higher
         else: self.effstate=1.0 #normally, voltage is 1.0
+        self.EEout.effort=self.effstate
 
 # Import Water is the pipe with water going into the pump
 
@@ -125,11 +126,12 @@ class ImportSig(FxnBlock):
 # Move Water is the pump itself. While one could decompose this further,
 # one function is used for simplicity
 class MoveWat(FxnBlock):
-    def __init__(self,flows):
+    def __init__(self,flows, delay):
         flownames=['EEin', 'Sigin', 'Watin', 'Watout']
         #here we also define the states of a model, which are also added as 
         #attributes to the function
         states={'eff':1.0} #effectiveness state
+        self.delay=delay[0][0]
         super().__init__(flownames,flows,states, timers={'timer'})
         self.failrate=1e-5
         self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 10000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
@@ -137,13 +139,17 @@ class MoveWat(FxnBlock):
     def condfaults(self, time):
         # here we define a conditional fault that only occurs after a state 
         # is present after 10 seconds
-        if self.Watout.effort>5.0:
-            if time>self.time:
-                #increment timer: default is 1 second, if we use self.tstep, the time
-                # will increment as desired even if we change model timestep
-                self.timer.inc(self.tstep)  
-            if self.timer.time>5.0:
-                self.add_fault('mech_break')
+        if self.delay:
+            if self.Watout.effort>5.0:
+                if time>self.time:
+                    #increment timer: default is 1 second, if we use self.tstep, the time
+                    # will increment as desired even if we change model timestep
+                    self.timer.inc(self.tstep)  
+                if self.timer.time>5.0:
+                    self.add_fault('mech_break')
+        else: 
+            if self.Watout.effort>5.0: self.add_fault('mech_break')
+            
     #behavior defines the behavior of the function
     def behavior(self, time):
         #here we can define how the function will behave with different faults
@@ -157,8 +163,8 @@ class MoveWat(FxnBlock):
             self.EEin.rate=1.0*self.Sigin.power*self.EEin.effort
             self.eff=1.0 
             
-        self.Watout.effort=self.Sigin.power*self.eff*self.Watin.level/self.Watout.area
-        self.Watout.rate=self.Sigin.power*self.eff*self.Watin.level*self.Watout.area
+        self.Watout.effort=self.Sigin.power*self.eff*min(1.5, self.EEin.effort)*self.Watin.level/self.Watout.area
+        self.Watout.rate=self.Sigin.power*self.eff*min(1.5, self.EEin.effort)*self.Watin.level*self.Watout.area
         
         self.Watin.effort=self.Watout.effort
         self.Watin.rate=self.Watout.rate
@@ -183,7 +189,7 @@ class Water(Flow):
 ##DEFINE MODEL OBJECT
 # The model is also made an object to aid graph construction
 class Pump(Model):
-    def __init__(self, params=[]):
+    def __init__(self, params={'repair', 'ee', 'water', 'delay'}):
         super().__init__()
         
         self.params=params
@@ -219,7 +225,7 @@ class Pump(Model):
         self.add_fxn('ImportEE',ImportEE,['EE_1'])
         self.add_fxn('ImportWater',ImportWater,['Wat_1'])
         self.add_fxn('ImportSignal',ImportSig,['Sig_1'])
-        self.add_fxn('MoveWater', MoveWat, ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'])
+        self.add_fxn('MoveWater', MoveWat, ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'], ['delay' in self.params])
         self.add_fxn('ExportWater', ExportWater, ['Wat_2'])
         
         self.construct_graph()

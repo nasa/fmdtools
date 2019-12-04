@@ -346,10 +346,12 @@ class SampleApproach():
             nomscen['faults'][fxnname]='nom'
         nomscen['properties']['time']=0.0
         nomscen['properties']['type']='nominal'
+        nomscen['properties']['name']='nominal'
         return nomscen
     def create_scenarios(self,jointfaults): #need to add to create scenarios to run
         self.scenlist=[]
         self.times = []
+        self.scenids = {}
         if not jointfaults:
             for phase, samples in self.sampletimes.items():
                 if samples:
@@ -359,9 +361,12 @@ class SampleApproach():
                             numpts = sum([(fxnname, mode) in samples[time] for time in samples])
                             if self.samptype=='maxlike': rate = sum(self.rates[fxnname, mode].values())
                             else:                        rate = self.rates[fxnname, mode][phase]/numpts
+                            name = fxnname+' '+mode+', t='+str(time)
                             scen={'faults':{fxnname:mode}, 'properties':{'type': 'single-fault', 'function': fxnname,\
-                                  'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}}
+                                  'fault': mode, 'rate': rate, 'time': time, 'name': name}}
                             self.scenlist=self.scenlist+[scen]
+                            if self.scenids.get((fxnname,mode, phase)): self.scenids[fxnname,mode, phase] = self.scenids[fxnname,mode, phase] + [name]
+                            else: self.scenids[fxnname,mode, phase] = [name]
         return
     def list_modes(self):
         return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
