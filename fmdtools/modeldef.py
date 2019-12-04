@@ -324,7 +324,8 @@ class SampleApproach():
                         self.sampletimes[phase][phasetime]=modelist
             elif samptype=='randtimes':
                 possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
-                phasetimes= [possible_phasetimes.pop(np.random.randint(len(possible_phasetimes))) for i in range(min(numpts, len(possible_phasetimes)))]
+                if numpts>=len(possible_phasetimes): phasetimes = possible_phasetimes
+                else: phasetimes= [possible_phasetimes.pop(np.random.randint(len(possible_phasetimes))) for i in range(min(numpts, len(possible_phasetimes)))]
                 self.sampletimes[phase]=dict.fromkeys(phasetimes)
                 for phasetime in self.sampletimes[phase]:
                     self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
@@ -334,12 +335,17 @@ class SampleApproach():
                 for (fxnname, mode) in self._fxnmodes:
                     if self.rates[fxnname, mode][phase]>0.0:
                         phasetimes=possible_phasetimes.copy()
-                        for i in range(numpts):
-                            phasetime=phasetimes.pop(np.random.randint(len(phasetimes)))
-                            if self.sampletimes[phase].get(phasetime):
-                                self.sampletimes[phase][phasetime]=self.sampletimes[phase][phasetime]+[(fxnname, mode)]
-                            else:
-                                self.sampletimes[phase][phasetime]=[(fxnname, mode)]
+                        if numpts>=len(possible_phasetimes):
+                            self.sampletimes[phase]=dict.fromkeys(phasetimes)
+                            for phasetime in self.sampletimes[phase]:
+                                self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+                        else:
+                            for i in range(numpts):
+                                phasetime=phasetimes.pop(np.random.randint(len(phasetimes)))
+                                if self.sampletimes[phase].get(phasetime):
+                                    self.sampletimes[phase][phasetime]=self.sampletimes[phase][phasetime]+[(fxnname, mode)]
+                                else:
+                                    self.sampletimes[phase][phasetime]=[(fxnname, mode)]
             else: print("invalid option")
     def create_nomscen(self, mdl):
         nomscen={'faults':{},'properties':{}}
