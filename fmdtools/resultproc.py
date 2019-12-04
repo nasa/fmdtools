@@ -264,8 +264,8 @@ def make_phasefmea(endclasses, app):
     fmeadict = dict.fromkeys(app.scenids.keys())
     for modephase, ids in app.scenids.items():
         rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= sum([endclasses[scenid]['cost'] for scenid in ids])
-        expcost= np.mean([endclasses[scenid]['expected cost'] for scenid in ids])
+        cost= np.mean([endclasses[scenid]['cost'] for scenid in ids])
+        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
         fmeadict[modephase] = {'rate':rate, 'cost':cost, 'expected cost': expcost}
     table=pd.DataFrame(fmeadict)
     return table.transpose()
