@@ -265,8 +265,20 @@ def make_phasefmea(endclasses, app):
     for modephase, ids in app.scenids.items():
         rate= sum([endclasses[scenid]['rate'] for scenid in ids])
         cost= sum([endclasses[scenid]['cost'] for scenid in ids])
-        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
+        expcost= np.mean([endclasses[scenid]['expected cost'] for scenid in ids])
         fmeadict[modephase] = {'rate':rate, 'cost':cost, 'expected cost': expcost}
+    table=pd.DataFrame(fmeadict)
+    return table.transpose()
+def make_summfmea(endclasses, app):
+    fmeadict = dict()
+    for modephase, ids in app.scenids.items():
+        rate= sum([endclasses[scenid]['rate'] for scenid in ids])
+        cost= np.mean([endclasses[scenid]['cost'] for scenid in ids])
+        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
+        if not fmeadict.get(modephase[0:2]): fmeadict[modephase[0:2]]= {'rate': 0.0, 'cost':0.0, 'expected cost':0.0}
+        fmeadict[modephase[0:2]]['rate'] += rate
+        fmeadict[modephase[0:2]]['cost'] += cost/len([1.0 for (fxn,mode,phase) in app.scenids if (fxn, mode)==modephase[0:2]])
+        fmeadict[modephase[0:2]]['expected cost'] += expcost
     table=pd.DataFrame(fmeadict)
     return table.transpose()
 def make_maptable(mapping):
