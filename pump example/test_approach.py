@@ -37,7 +37,7 @@ def resilquant(approach, mdl):
     endclasses, mdlhists = fp.run_approach(mdl, approach)
     reshists, diffs, summaries = rp.compare_hists(mdlhists)
     
-    fmea = rp.make_phasefmea(endclasses, approach)
+    fmea = rp.make_summfmea(endclasses, approach)
     util=sum(fmea['expected cost'])
     expdegtimes = rp.make_expdegtimeheatmap(reshists, endclasses)
     return util, expdegtimes, fmea
