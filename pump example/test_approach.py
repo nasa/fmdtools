@@ -14,6 +14,7 @@ import time
 
 #mdl = Pump(params={'repair', 'ee', 'water', 'delay'})
 mdl = Pump(params={'water'}) # should give identical utilities
+mdl = Pump()
 
 app_full = SampleApproach(mdl, 'fullint')
 app_center = SampleApproach(mdl, 'center')
@@ -21,6 +22,7 @@ app_maxlike = SampleApproach(mdl, 'maxlike')
 app_multipt = SampleApproach(mdl, 'multi-pt', numpts=9)
 app_rand = SampleApproach(mdl, 'randtimes')
 app_arand = SampleApproach(mdl, 'arandtimes', numpts=9)
+app_symrand = SampleApproach(mdl, 'symrandtimes', numpts=9)
 
 tab=rp.make_samptimetable(app_multipt.sampletimes)
 
@@ -45,13 +47,16 @@ def resilquant(approach, mdl):
     expdegtimes = rp.make_expdegtimeheatmap(reshists, endclasses)
     return util, expdegtimes, fmea, fmea2
 
+util_full, expdegtimes_full, fmea_full, f_f= resilquant(app_full, mdl)
+
+util_symrand, expdegtimes_symrand, fmea_symrand, f_s = resilquant(app_center, mdl)
 
 util_short, expdegtimes_short, fmea_short, _ = resilquant(app_short, mdl)
 
 util_center, expdegtimes_center, fmea_center, f_c = resilquant(app_center, mdl)
 
 
-util_full, expdegtimes_full, fmea_full, f_f= resilquant(app_full, mdl)
+
 
 center_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
 

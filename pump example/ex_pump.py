@@ -145,7 +145,7 @@ class MoveWat(FxnBlock):
                     #increment timer: default is 1 second, if we use self.tstep, the time
                     # will increment as desired even if we change model timestep
                     self.timer.inc(self.tstep)  
-                if self.timer.time>5.0:
+                if self.timer.time>10.0:
                     self.add_fault('mech_break')
         else: 
             if self.Watout.effort>5.0: self.add_fault('mech_break')
