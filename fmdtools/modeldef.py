@@ -329,6 +329,21 @@ class SampleApproach():
                 self.sampletimes[phase]=dict.fromkeys(phasetimes)
                 for phasetime in self.sampletimes[phase]:
                     self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+            elif samptype=='symrandtimes':
+                possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
+                if numpts>=len(possible_phasetimes): phasetimes = possible_phasetimes
+                else: 
+                    if len(possible_phasetimes) %2 >0:
+                        phasetimes = [possible_phasetimes.pop(int(np.floor(len(possible_phasetimes)/2)))]
+                    possible_phasetimes_halved = np.reshape(possible_phasetimes, (2,int(len(possible_phasetimes)/2)))
+                    possible_phasetimes_halved[1] = np.flip(possible_phasetimes_halved[1])
+                    possible_inds = [i for i in range(int(len(possible_phasetimes)/2))]
+                    inds = [possible_inds.pop(np.random.randint(len(possible_inds))) for i in range(min(int(np.floor(numpts/2)), len(possible_inds)))]
+                    phasetimes= phasetimes+ [possible_phasetimes_halved[half][ind] for half in range(2) for ind in inds ]
+                    phasetimes.sort()
+                self.sampletimes[phase]=dict.fromkeys(phasetimes)
+                for phasetime in self.sampletimes[phase]:
+                    self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
             elif samptype=='arandtimes':
                 possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
                 self.sampletimes[phase]={}

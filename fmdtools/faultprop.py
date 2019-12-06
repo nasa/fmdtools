@@ -227,8 +227,8 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     c_mdl=dict.fromkeys(ctimes)
     flowstates={}
     for t_ind, t in enumerate(timerange):
-       # inject fault when it occurs, track defined flow states and graph
-        if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
+       # inject fault when it occurs, track defined flow states and graph (note:faults injected at the end of the timestep/beginning of next timestep)
+        if t==scen['properties']['time']+mdl.tstep: flowstates = propagate(mdl, scen['faults'], t, flowstates)
         else: flowstates = propagate(mdl,[],t, flowstates)
         if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
         if t in ctimes: c_mdl[t]=mdl.copy()
@@ -243,19 +243,25 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
 #   flowstates, if generated in the last iteration
 def propagate(mdl, initfaults, time, flowstates={}):
     #set up history of flows to see if any has changed
-    n=0
     activefxns=mdl.timelyfxns.copy()
     nextfxns=set()
     #Step 1: Find out what the current value of the flows are (if not generated in the last iteration)
     if not flowstates:
         for flowname, flow in mdl.flows.items():
             flowstates[flowname]=flow.status()
-    #Step 2: Inject faults if present     
+    #Step 2: Inject faults if present
+    if initfaults:
+        flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time)
     for fxnname in initfaults:
         fxn=mdl.fxns[fxnname]
         fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
         activefxns.update([fxnname])
     #Step 3: Propagate faults through graph
+    flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time)
+    return flowstates
+
+def prop_time(mdl, activefxns, nextfxns, flowstates, time):
+    n=0
     while activefxns:
         for fxnname in list(activefxns).copy():
             #Update functions with new values, check to see if new faults or states
