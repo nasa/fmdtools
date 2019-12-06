@@ -227,8 +227,8 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     c_mdl=dict.fromkeys(ctimes)
     flowstates={}
     for t_ind, t in enumerate(timerange):
-       # inject fault when it occurs, track defined flow states and graph (note:faults injected at the end of the timestep/beginning of next timestep)
-        if t==scen['properties']['time']+mdl.tstep: flowstates = propagate(mdl, scen['faults'], t, flowstates)
+       # inject fault when it occurs, track defined flow states and graph 
+        if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
         else: flowstates = propagate(mdl,[],t, flowstates)
         if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
         if t in ctimes: c_mdl[t]=mdl.copy()
@@ -251,16 +251,15 @@ def propagate(mdl, initfaults, time, flowstates={}):
             flowstates[flowname]=flow.status()
     #Step 2: Inject faults if present
     if initfaults:
-        flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time)
+        flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults)
     for fxnname in initfaults:
         fxn=mdl.fxns[fxnname]
         fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
         activefxns.update([fxnname])
     #Step 3: Propagate faults through graph
-    flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time)
+    flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults)
     return flowstates
-
-def prop_time(mdl, activefxns, nextfxns, flowstates, time):
+def prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults):
     n=0
     while activefxns:
         for fxnname in list(activefxns).copy():
