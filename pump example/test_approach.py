@@ -8,6 +8,7 @@ import sys
 sys.path.append('../')
 
 import numpy as np
+import quadpy
 import fmdtools.faultprop as fp
 import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
@@ -17,20 +18,27 @@ import time
 mdl = Pump(params={'water'}) # should give identical utilities
 mdl = Pump()
 
+app_quad = SampleApproach(mdl, 'quadrature', quadrature=quadpy.line_segment.gauss_patterson(1))
+
 app_full = SampleApproach(mdl, 'fullint')
 app_center = SampleApproach(mdl, 'center')
 app_maxlike = SampleApproach(mdl, 'maxlike')
-app_multipt = SampleApproach(mdl, 'multi-pt', numpts=9)
+app_multipt = SampleApproach(mdl, 'multi-pt', numpts=3)
 app_rand = SampleApproach(mdl, 'randtimes')
 app_arand = SampleApproach(mdl, 'arandtimes', numpts=9)
 app_symrand = SampleApproach(mdl, 'symrandtimes', numpts=9)
+
+
+
+
+
 
 tab=rp.make_samptimetable(app_multipt.sampletimes)
 
 app_short = SampleApproach(mdl, 'multi-pt', faults=[('ImportEE', 'inf_v')])
 
 
-newscenids = prune_app(app_full, mdl)
+#newscenids = prune_app(app_full, mdl)
 
 endclasses, mdlhists = fp.run_approach(mdl, app_full)
 app_full.prune_scenarios(endclasses)
@@ -63,7 +71,7 @@ util_short, expdegtimes_short, fmea_short, _ = resilquant(app_short, mdl)
 
 util_center, expdegtimes_center, fmea_center, f_c = resilquant(app_center, mdl)
 
-
+util_quad, expdegtimes_quad, fmea_quad, f_q= resilquant(app_quad, mdl)
 
 
 center_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
