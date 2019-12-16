@@ -7,6 +7,7 @@ Created on Mon Nov 25 17:17:59 2019
 import sys
 sys.path.append('../')
 
+import numpy as np
 import fmdtools.faultprop as fp
 import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
@@ -27,6 +28,13 @@ app_symrand = SampleApproach(mdl, 'symrandtimes', numpts=9)
 tab=rp.make_samptimetable(app_multipt.sampletimes)
 
 app_short = SampleApproach(mdl, 'multi-pt', faults=[('ImportEE', 'inf_v')])
+
+
+newscenids = prune_app(app_full, mdl)
+
+endclasses, mdlhists = fp.run_approach(mdl, app_full)
+app_full.prune_scenarios(endclasses)
+
 
 
 # adding joint faults could look something like this:
@@ -69,6 +77,21 @@ maxlike_error = {i:(expdegtimes_full[i] - expdegtimes_maxlike[i])/expdegtimes_fu
 rp.show_bipartite(mdl.bipartite, heatmap=maxlike_error)
 
 util_multipt, expdegtimes_multipt, fmea_multipt, f_mi = resilquant(app_multipt, mdl)
+
+def prune_app(app, mdl):
+    endclasses, mdlhists = fp.run_approach(mdl, app)
+    newscenids = dict.fromkeys(app.scenids.keys())
+    
+    for modeinphase in app.scenids:
+        costs= np.array([endclasses[scen]['cost'] for scen in app.scenids[modeinphase]])
+        fullint = np.mean(costs)
+        errs = abs(fullint - costs)
+        mins = np.where(errs == errs.min())[0]
+        newscenids[modeinphase] =  [app.scenids[modeinphase][mins[int(len(mins)/2)]]]
+    return newscenids
+
+
+
 
 #note the percent error with/without the delay!!
 
