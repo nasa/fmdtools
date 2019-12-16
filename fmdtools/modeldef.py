@@ -387,6 +387,26 @@ class SampleApproach():
                             if self.scenids.get((fxnname,mode, phase)): self.scenids[fxnname,mode, phase] = self.scenids[fxnname,mode, phase] + [name]
                             else: self.scenids[fxnname,mode, phase] = [name]
         return
+    def prune_scenarios(self,endclasses):
+        newscenids = dict.fromkeys(self.scenids.keys())
+        newsampletimes = {key:{} for key in self.sampletimes.keys()}
+        for modeinphase in self.scenids:
+            costs= np.array([endclasses[scen]['cost'] for scen in self.scenids[modeinphase]])
+            fullint = np.mean(costs)
+            errs = abs(fullint - costs)
+            mins = np.where(errs == errs.min())[0]
+            newscenids[modeinphase] =  [self.scenids[modeinphase][mins[int(len(mins)/2)]]]
+            newscen = [scen for scen in self.scenlist if scen['properties']['name']==newscenids[modeinphase][0]][0]   
+            1 == 1
+            if not newsampletimes[modeinphase[2]].get(newscen['properties']['time']):
+                newsampletimes[modeinphase[2]][newscen['properties']['time']] = [modeinphase[0:2]]
+            else:
+                newsampletimes[modeinphase[2]][newscen['properties']['time']] = newsampletimes[modeinphase[2]][newscen['properties']['time']] + [modeinphase[0:2]]
+        self.scenids = newscenids
+        self.sampletimes = newsampletimes
+        self.create_scenarios([])
+        self.samptype == 'pruned'
+        # fix scenlist + times + sampletimes
     def list_modes(self):
         return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
     def list_moderates(self):
