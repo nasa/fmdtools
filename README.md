@@ -35,6 +35,7 @@ It also uses the following packages to be installed on Python 3:
 - `pandas`
 - `ffmpeg` (for animations)
 - `shapely` (for `quad_mdl` only)
+- `quadpy` (for quadrature sampling)
 
 so make sure to install (e.g. using `pip install packagename`) them before running any of the codes.
 
@@ -55,7 +56,3 @@ Daniel Hulse
 
 MIT
 
-----
-## Acknowledgements
-
-fmdtools was originally based on the IBFM code written by Matthew McIntire and available at https://github.com/DesignEngrLab/IBFM.

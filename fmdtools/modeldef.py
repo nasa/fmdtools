@@ -264,13 +264,13 @@ class Timer():
         self.time=0
 
 class SampleApproach():
-    def __init__(self, mdl, samptype, faults='all', jointfaults=[], numpts=3, condprob=0.1):
+    def __init__(self, mdl, samptype, faults='all', jointfaults=[], numpts=3, condprob=0.1, quadrature={}):
         self.phases = mdl.phases
         self.tstep = mdl.tstep
         self.init_modelist(mdl,faults)
         self.init_rates()
-        self.create_sampletimes(samptype,numpts)
-        self.create_scenarios(jointfaults)
+        self.create_sampletimes(samptype,numpts, quadrature)
+        self.create_scenarios(jointfaults, quadrature)
     def init_modelist(self,mdl, faults):
         if faults=='all':
             self.fxnrates=dict.fromkeys(mdl.fxns)
@@ -294,11 +294,11 @@ class SampleApproach():
                 dist = self._fxnmodes[fxnname, mode]['dist']
                 dt = float(times[1]-times[0])
                 self.rates[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist*dt
-    def create_sampletimes(self, samptype, numpts=3):
+    def create_sampletimes(self, samptype, numpts=3, quadrature={}):
         self.sampletimes=dict.fromkeys(self.phases)
         self.numpts=numpts
         self.samptype=samptype
-        
+        self.weights=dict.fromkeys(self.phases)
         for phase, times in self.phases.items():
             possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
             if samptype=='center':
@@ -309,6 +309,17 @@ class SampleApproach():
                 self.sampletimes[phase]=dict.fromkeys(possible_phasetimes)
                 for phasetime in self.sampletimes[phase]:
                     self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+            elif samptype== 'quadrature':
+                quantiles = quadrature.points/2 +0.5
+                if len(quantiles) > len(possible_phasetimes): phasetimes = possible_phasetimes 
+                else: phasetimes= [round(np.quantile(possible_phasetimes, q)) for q in quantiles]
+                modelist = [(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+                if modelist:
+                    self.sampletimes[phase]=dict.fromkeys(phasetimes)
+                    for phasetime in self.sampletimes[phase]:
+                        self.sampletimes[phase][phasetime]=modelist
+                    if len(quantiles) > len(possible_phasetimes): self.weights[phase] = {time: 1/len(possible_phasetimes) for time in possible_phasetimes}
+                    else: self.weights[phase]={time:quadrature.weights[ind]/2 for (ind, time) in enumerate(self.sampletimes[phase])}
             elif samptype=='maxlike':
                 modelist = [(fxnname,mode) for (fxnname, mode) in self._fxnmodes if phase==max(self.rates[fxnname,mode].items(), key=operator.itemgetter(1))[0]]
                 if modelist:
@@ -366,8 +377,9 @@ class SampleApproach():
         nomscen['properties']['time']=0.0
         nomscen['properties']['type']='nominal'
         nomscen['properties']['name']='nominal'
+        nomscen['properties']['weight']=1.0
         return nomscen
-    def create_scenarios(self,jointfaults): #need to add to create scenarios to run
+    def create_scenarios(self,jointfaults, quadrature={}): #need to add to create scenarios to run
         self.scenlist=[]
         self.times = []
         self.scenids = {}
@@ -378,8 +390,12 @@ class SampleApproach():
                         self.times+=[time]
                         for fxnname, mode in faultlist:
                             numpts = sum([(fxnname, mode) in samples[time] for time in samples])
-                            if self.samptype=='maxlike': rate = sum(self.rates[fxnname, mode].values())
-                            else:                        rate = self.rates[fxnname, mode][phase]/numpts
+                            if self.samptype=='maxlike': 
+                                rate = sum(self.rates[fxnname, mode].values())
+                            elif quadrature:
+                                rate = self.rates[fxnname, mode][phase]*self.weights[phase][time]
+                            else:                        
+                                rate = self.rates[fxnname, mode][phase]/numpts
                             name = fxnname+' '+mode+', t='+str(time)
                             scen={'faults':{fxnname:mode}, 'properties':{'type': 'single-fault', 'function': fxnname,\
                                   'fault': mode, 'rate': rate, 'time': time, 'name': name}}
