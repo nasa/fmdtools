@@ -21,19 +21,16 @@ mdl = Pump()
 app_quad = SampleApproach(mdl, 'quadrature', quadrature=quadpy.line_segment.gauss_patterson(2))
 
 app_full = SampleApproach(mdl, 'fullint')
-app_center = SampleApproach(mdl, 'center')
 app_maxlike = SampleApproach(mdl, 'maxlike')
-app_multipt = SampleApproach(mdl, 'multi-pt', numpts=3)
+app_multipt = SampleApproach(mdl, 'evenspacing', numpts=3)
 app_rand = SampleApproach(mdl, 'randtimes')
-app_arand = SampleApproach(mdl, 'arandtimes', numpts=9)
 app_symrand = SampleApproach(mdl, 'symrandtimes', numpts=9)
 
-
-
+params = {(('ExportWater', 'block'), 'on'):{'samp':'fullint'}}
 
 tab=rp.make_samptimetable(app_multipt.sampletimes)
 
-app_short = SampleApproach(mdl, 'multi-pt', faults=[('ImportEE', 'inf_v')])
+app_short = SampleApproach(mdl, 'evenspacing', faults=[('ImportEE', 'inf_v')])
 
 
 #newscenids = prune_app(app_full, mdl)
@@ -70,11 +67,7 @@ def resilquant(approach, mdl):
 
 util_full, expdegtimes_full, fmea_full, f_f= resilquant(app_full, mdl)
 
-util_symrand, expdegtimes_symrand, fmea_symrand, f_s = resilquant(app_center, mdl)
-
 util_short, expdegtimes_short, fmea_short, _ = resilquant(app_short, mdl)
-
-util_center, expdegtimes_center, fmea_center, f_c = resilquant(app_center, mdl)
 
 util_quad, expdegtimes_quad, fmea_quad, f_q= resilquant(app_quad, mdl)
 
@@ -102,6 +95,9 @@ def prune_app(app, mdl):
         mins = np.where(errs == errs.min())[0]
         newscenids[modeinphase] =  [app.scenids[modeinphase][mins[int(len(mins)/2)]]]
     return newscenids
+
+
+sampparams = {'scen':{'numpts', 'type'}}
 
 
 

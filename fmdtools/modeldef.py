@@ -304,14 +304,18 @@ class SampleApproach():
         self.weights=dict.fromkeys(self.phases)
         for phase, times in self.phases.items():
             possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
-            if samptype=='center':
-                phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep)-0.0001)*self.tstep
-                self.sampletimes[phase]={phasetime: []}
-                self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
-            elif samptype=='fullint':
+            if samptype=='fullint':
                 self.sampletimes[phase]=dict.fromkeys(possible_phasetimes)
                 for phasetime in self.sampletimes[phase]:
                     self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+            elif samptype=='evenspacing':
+                if numpts+2>len(possible_phasetimes): phasetimes = possible_phasetimes
+                else: phasetimes= [round(np.quantile(possible_phasetimes, p/(numpts+1))) for p in range(numpts+2)][1:-1]
+                modelist = [(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
+                if modelist:
+                    self.sampletimes[phase]=dict.fromkeys(phasetimes)
+                    for phasetime in self.sampletimes[phase]:
+                        self.sampletimes[phase][phasetime]=modelist
             elif samptype== 'quadrature':
                 quantiles = quadrature.points/2 +0.5
                 if len(quantiles) > len(possible_phasetimes): phasetimes = possible_phasetimes 
@@ -328,14 +332,6 @@ class SampleApproach():
                 if modelist:
                     phasetime = times[0]+ round((times[1]-times[0])/(2*self.tstep))*self.tstep
                     self.sampletimes[phase]={phasetime: modelist}
-            elif samptype=='multi-pt':
-                if numpts+2>len(possible_phasetimes): phasetimes = possible_phasetimes
-                else: phasetimes= [round(np.quantile(possible_phasetimes, p/(numpts+1))) for p in range(numpts+2)][1:-1]
-                modelist = [(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
-                if modelist:
-                    self.sampletimes[phase]=dict.fromkeys(phasetimes)
-                    for phasetime in self.sampletimes[phase]:
-                        self.sampletimes[phase][phasetime]=modelist
             elif samptype=='randtimes':
                 if numpts>=len(possible_phasetimes): phasetimes = possible_phasetimes
                 else: phasetimes= [possible_phasetimes.pop(np.random.randint(len(possible_phasetimes))) for i in range(min(numpts, len(possible_phasetimes)))]
@@ -356,23 +352,28 @@ class SampleApproach():
                 self.sampletimes[phase]=dict.fromkeys(phasetimes)
                 for phasetime in self.sampletimes[phase]:
                     self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
-            elif samptype=='arandtimes':
-                self.sampletimes[phase]={}
-                for (fxnname, mode) in self._fxnmodes:
-                    if self.rates[fxnname, mode][phase]>0.0:
-                        phasetimes=possible_phasetimes.copy()
-                        if numpts>=len(possible_phasetimes):
-                            self.sampletimes[phase]=dict.fromkeys(phasetimes)
-                            for phasetime in self.sampletimes[phase]:
-                                self.sampletimes[phase][phasetime]=[(fxnname, mode) for (fxnname, mode) in self._fxnmodes if self.rates[fxnname, mode][phase]>0.0]
-                        else:
-                            for i in range(numpts):
-                                phasetime=phasetimes.pop(np.random.randint(len(phasetimes)))
-                                if self.sampletimes[phase].get(phasetime):
-                                    self.sampletimes[phase][phasetime]=self.sampletimes[phase][phasetime]+[(fxnname, mode)]
-                                else:
-                                    self.sampletimes[phase][phasetime]=[(fxnname, mode)]
             else: print("invalid option")
+    def create_sampletimes_ind(self, params={}, default={'samp':'evenspacing','numpts':1}):
+        for phase, times in self.phases.items():
+            possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
+            for fxnmode in self.rates:
+                param = params.get((fxnmode,phase), default)
+                if param['samp']=='fullint':
+                    self.add_phasetimes(fxnmode, phase, possible_phasetimes)
+                elif param['samp']=='evenspacing':
+                    if param['numpts']+2 > len(possible_phasetimes): phasetimes = possible_phasetimes
+                    else: phasetimes= [round(np.quantile(possible_phasetimes, p/(param['numpts']+1))) for p in range(param['numpts']+2)][1:-1]
+                    self.add_phasetimes(fxnmode, phase, phasetimes)
+                        
+    def add_phasetimes(self, fxnmode, phase, phasetimes):
+        for time in phasetimes:
+            if not self.sampletimes.get(phase): 
+                if self.rates[fxnmode][phase]==0.0:
+                    break
+                self.sampletimes[phase] = {time:[]} 
+            if self.sampletimes[phase].get(time): self.sampletimes[phase][time] = self.sampletimes[phase][time] + [fxnmode]
+            else: self.sampletimes[phase][time] = [fxnmode]
+        
     def create_nomscen(self, mdl):
         nomscen={'faults':{},'properties':{}}
         for fxnname in mdl.fxns:
