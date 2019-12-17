@@ -341,21 +341,24 @@ def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False):
         associated_scens = associated_scens + app.scenids.get((faultfxn, faultmode, phase), [])
     costs = np.array([endclasses[scen]['cost'] for scen in associated_scens])
     times = np.array([time  for phase, timemodes in app.sampletimes.items() for time, modes in timemodes.items() if (faultfxn, faultmode) in modes] )  
-    rates = np.array(list(app.rates[faultfxn, faultmode].values()))
+    rates = np.array(list(app.rates_timeless[faultfxn, faultmode].values()))
     
-    tPlot, axes = plt.subplots(2, 1, sharex=True, sharey=False, gridspec_kw={'height_ratios': [3, 1]})
+    tPlot, axes = plt.subplots(2, 1, sharey=False, gridspec_kw={'height_ratios': [3, 1]})
     phasetimes_start =[times[0] for phase, times in app.phases.items()]
     phasetimes_end =[times[1] for phase, times in app.phases.items()]
     ratetimes =[]
     ratesvect =[]
+    phaselocs = []
     for (ind, phasetime) in enumerate(phasetimes_start):
         axes[0].axvline(phasetime, color="black")        
-        middletime=(phasetimes_end[ind]-phasetimes_start[ind])/2 + phasetimes_start[ind]
+        phaselocs= phaselocs +[(phasetimes_end[ind]-phasetimes_start[ind])/2 + phasetimes_start[ind]]
 
         axes[1].axvline(phasetime, color="black") 
         ratetimes = ratetimes + [phasetimes_start[ind]] + [phasetimes_end[ind]]
         ratesvect = ratesvect + [rates[ind]] + [rates[ind]]
-        axes[1].text(middletime, 0.5*max(rates),  list(app.phases.keys())[ind], ha='center', backgroundcolor="white")
+        #axes[1].text(middletime, 0.5*max(rates),  list(app.phases.keys())[ind], ha='center', backgroundcolor="white")
+    axes[1].set_xticks(phaselocs)
+    axes[1].set_xticklabels(list(app.phases.keys()))
 
     if app.samptype=='fullint':
         axes[0].plot(times, costs, label="cost")
@@ -377,7 +380,7 @@ def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False):
     axes[1].set_xlim(phasetimes_start[0], phasetimes_end[-1])
     axes[1].set_ylim(0, np.max(ratesvect)*1.2 )
     axes[1].set_ylabel("Rate")
-    axes[0].set_xlabel("Time")
+    axes[1].set_xlabel("Time")
     axes[1].grid()
     
 

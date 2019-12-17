@@ -287,13 +287,16 @@ class SampleApproach():
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
     def init_rates(self):
         self.rates=dict.fromkeys(self._fxnmodes)
+        self.rates_timeless=dict.fromkeys(self._fxnmodes)
         for (fxnname, mode) in self._fxnmodes:
             self.rates[fxnname, mode]=dict.fromkeys(self.phases)
+            self.rates_timeless[fxnname, mode]=dict.fromkeys(self.phases)
             for ind, (phase, times) in enumerate(self.phases.items()):
                 opp = self._fxnmodes[fxnname, mode]['oppvect'][ind]
                 dist = self._fxnmodes[fxnname, mode]['dist']
                 dt = float(times[1]-times[0])
                 self.rates[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist*dt
+                self.rates_timeless[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist
     def create_sampletimes(self, samptype, numpts=3, quadrature={}):
         self.sampletimes=dict.fromkeys(self.phases)
         self.numpts=numpts
