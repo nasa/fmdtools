@@ -18,7 +18,7 @@ import time
 mdl = Pump(params={'water'}) # should give identical utilities
 mdl = Pump()
 
-app_quad = SampleApproach(mdl, 'quadrature', quadrature=quadpy.line_segment.gauss_patterson(1))
+app_quad = SampleApproach(mdl, 'quadrature', quadrature=quadpy.line_segment.gauss_patterson(2))
 
 app_full = SampleApproach(mdl, 'fullint')
 app_center = SampleApproach(mdl, 'center')
@@ -31,8 +31,6 @@ app_symrand = SampleApproach(mdl, 'symrandtimes', numpts=9)
 
 
 
-
-
 tab=rp.make_samptimetable(app_multipt.sampletimes)
 
 app_short = SampleApproach(mdl, 'multi-pt', faults=[('ImportEE', 'inf_v')])
@@ -40,9 +38,16 @@ app_short = SampleApproach(mdl, 'multi-pt', faults=[('ImportEE', 'inf_v')])
 
 #newscenids = prune_app(app_full, mdl)
 
-endclasses, mdlhists = fp.run_approach(mdl, app_full)
-app_full.prune_scenarios(endclasses)
+#endclasses, mdlhists = fp.run_approach(mdl, app_full)
 
+#rp.plot_samplecosts(app_full, endclasses)
+
+#app_full.prune_scenarios(endclasses)
+
+
+endclasses, mdlhists = fp.run_approach(mdl, app_quad)
+
+rp.plot_samplecosts(app_quad, endclasses)
 
 
 # adding joint faults could look something like this:

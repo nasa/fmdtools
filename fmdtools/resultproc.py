@@ -327,6 +327,59 @@ def make_summarytable(summary):
     return pd.DataFrame.from_dict(summary, orient = 'index')
 
 ##PLOTTING AND RESULTS DISPLAY
+    
+# plot_samplecost(app, endclasses, fault)
+
+def plot_samplecosts(app, endclasses):
+    scenids={}
+    for fxnmode in app.list_modes():
+        plot_samplecost(app, endclasses, fxnmode[0], fxnmode[1])
+def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False):
+    if not hold: plt.figure()
+    associated_scens=[]
+    for phase in app.phases:
+        associated_scens = associated_scens + app.scenids.get((faultfxn, faultmode, phase), [])
+    costs = np.array([endclasses[scen]['cost'] for scen in associated_scens])
+    times = np.array([time  for phase, timemodes in app.sampletimes.items() for time, modes in timemodes.items() if (faultfxn, faultmode) in modes] )  
+    rates = np.array(list(app.rates[faultfxn, faultmode].values()))
+    
+    tPlot, axes = plt.subplots(2, 1, sharex=True, sharey=False, gridspec_kw={'height_ratios': [3, 1]})
+    phasetimes_start =[times[0] for phase, times in app.phases.items()]
+    phasetimes_end =[times[1] for phase, times in app.phases.items()]
+    ratetimes =[]
+    ratesvect =[]
+    for (ind, phasetime) in enumerate(phasetimes_start):
+        axes[0].axvline(phasetime, color="black")        
+        middletime=(phasetimes_end[ind]-phasetimes_start[ind])/2 + phasetimes_start[ind]
+
+        axes[1].axvline(phasetime, color="black") 
+        ratetimes = ratetimes + [phasetimes_start[ind]] + [phasetimes_end[ind]]
+        ratesvect = ratesvect + [rates[ind]] + [rates[ind]]
+        axes[1].text(middletime, 0.5*max(rates),  list(app.phases.keys())[ind], ha='center', backgroundcolor="white")
+
+    if app.samptype=='fullint':
+        axes[0].plot(times, costs, label="cost")
+    else:
+        if any(app.weights.values()): 
+            sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for phase, timeweights in app.weights.items() for time, weight in timeweights.items() if time in times])
+            axes[0].scatter(times, costs,s=sizes, label="cost", alpha=0.5)
+        axes[0].stem(times, costs, label="cost", markerfmt=",")
+        
+    
+    axes[0].set_xlim(phasetimes_start[0], phasetimes_end[-1])
+    axes[0].set_ylim(0, 1.2*np.max(costs))
+    
+    axes[0].set_ylabel("Cost")
+    axes[0].grid()
+    axes[0].set_title("Cost function of "+faultfxn+": "+faultmode+" over time")
+    # rate plot
+    axes[1].plot(ratetimes, ratesvect)
+    axes[1].set_xlim(phasetimes_start[0], phasetimes_end[-1])
+    axes[1].set_ylim(0, np.max(ratesvect)*1.2 )
+    axes[1].set_ylabel("Rate")
+    axes[0].set_xlabel("Time")
+    axes[1].grid()
+    
 
 #plotflowhist
 # displays plots of a history of flow states over time
@@ -402,6 +455,7 @@ def plot_ghist(ghist,faultscen=[]):
 #       #(only works well for relatively simple models)
 def show_graph(g, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
     edgeflows=dict()
+    plt.figure()
     for edge in g.edges:
         flows=list(g.get_edge_data(edge[0],edge[1]).keys())
         edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
@@ -433,6 +487,7 @@ def show_graph(g, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
 #same for bipartite graph     
 def show_bipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True, heatmap={}, pos=[]):
     labels={node:node for node in g.nodes}
+    plt.figure()
     if not pos: pos=nx.spring_layout(g)
     if heatmap:
         nodesize=scale*700
