@@ -18,19 +18,20 @@ import time
 mdl = Pump(params={'water'}) # should give identical utilities
 mdl = Pump()
 
-app_quad = SampleApproach(mdl, 'quadrature', quadrature=quadpy.line_segment.gauss_patterson(2))
+app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad': quadpy.line_segment.gauss_patterson(1)})
 
-app_full = SampleApproach(mdl, 'fullint')
-app_maxlike = SampleApproach(mdl, 'maxlike')
-app_multipt = SampleApproach(mdl, 'evenspacing', numpts=3)
-app_rand = SampleApproach(mdl, 'randtimes')
-app_symrand = SampleApproach(mdl, 'symrandtimes', numpts=9)
+app_full = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
+#app_maxlike = SampleApproach(mdl, 'maxlike')
+app_multipt = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':3})
+app_rand = SampleApproach(mdl, defaultsamp={'samp':'randtimes', 'numpts':3})
+app_symrand = SampleApproach(mdl, defaultsamp={'samp':'symrandtimes', 'numpts':3})
 
-params = {(('ExportWater', 'block'), 'on'):{'samp':'fullint'}}
+
+app_cust = SampleApproach(mdl, sampparams={(('ExportWater', 'block'), 'on'):{'samp':'fullint'}})
 
 tab=rp.make_samptimetable(app_multipt.sampletimes)
 
-app_short = SampleApproach(mdl, 'evenspacing', faults=[('ImportEE', 'inf_v')])
+app_short = SampleApproach(mdl, faults=[('ImportEE', 'inf_v')], defaultsamp={'samp':'evenspacing', 'numpts':3})
 
 
 #newscenids = prune_app(app_full, mdl)
@@ -70,6 +71,8 @@ util_full, expdegtimes_full, fmea_full, f_f= resilquant(app_full, mdl)
 util_short, expdegtimes_short, fmea_short, _ = resilquant(app_short, mdl)
 
 util_quad, expdegtimes_quad, fmea_quad, f_q= resilquant(app_quad, mdl)
+
+util_cust, expdegtimes_cust, fmea_cust, f_c= resilquant(app_cust, mdl)
 
 
 center_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
