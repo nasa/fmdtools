@@ -333,15 +333,20 @@ def make_summarytable(summary):
 def plot_samplecosts(app, endclasses):
     scenids={}
     for fxnmode in app.list_modes():
-        sampisfull = any([true for (fm, phase), val in app.sampparams.items() if val['samp']=='fullint' and fm==fxnmode])
-        plot_samplecost(app, endclasses, fxnmode[0], fxnmode[1])
+        if any([True for (fm, phase), val in app.sampparams.items() if val['samp']=='fullint' and fm==fxnmode]):
+            st='fullint'
+        elif any([True for (fm, phase), val in app.sampparams.items() if val['samp']=='quadrature' and fm==fxnmode]):
+            st='quadrature'
+        else: 
+            st='std'
+        plot_samplecost(app, endclasses, fxnmode[0], fxnmode[1], samptype=st)
 def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False, samptype='std'):
     if not hold: plt.figure()
     associated_scens=[]
     for phase in app.phases:
         associated_scens = associated_scens + app.scenids.get((faultfxn, faultmode, phase), [])
     costs = np.array([endclasses[scen]['cost'] for scen in associated_scens])
-    times = np.array([time  for phase, timemodes in app.sampletimes.items() for time, modes in timemodes.items() if (faultfxn, faultmode) in modes] )  
+    times = np.array([time  for phase, timemodes in app.sampletimes.items() if timemodes for time in timemodes if (faultfxn, faultmode) in timemodes.get(time)] )  
     rates = np.array(list(app.rates_timeless[faultfxn, faultmode].values()))
     
     tPlot, axes = plt.subplots(2, 1, sharey=False, gridspec_kw={'height_ratios': [3, 1]})
@@ -364,7 +369,7 @@ def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False, samptype='
     if samptype=='fullint':
         axes[0].plot(times, costs, label="cost")
     else:
-        if any(app.weights[faultfxn, faultmode].values()): 
+        if samptype=='quadrature': 
             sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for phase, timeweights in app.weights[faultfxn, faultmode].items() for time, weight in timeweights.items() if time in times])
             axes[0].scatter(times, costs,s=sizes, label="cost", alpha=0.5)
         axes[0].stem(times, costs, label="cost", markerfmt=",")
