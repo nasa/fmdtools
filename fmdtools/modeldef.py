@@ -310,8 +310,11 @@ class SampleApproach():
                     self.add_phasetimes(fxnmode, phase, possible_phasetimes)
                 elif param['samp']=='evenspacing':
                     if param['numpts']+2 > len(possible_phasetimes): phasetimes = possible_phasetimes
-                    else: phasetimes= [round(np.quantile(possible_phasetimes, p/(param['numpts']+1))) for p in range(param['numpts']+2)][1:-1]
+                    else: phasetimes= [round(np.quantile(possible_phasetimes, p/(param['numpts']+1))/self.tstep)*self.tstep for p in range(param['numpts']+2)][1:-1]
                     self.add_phasetimes(fxnmode, phase, phasetimes)
+                elif param['samp']=='likeliest':
+                    if self.rates[fxnmode][phase] == max(list(self.rates[fxnmode].values())):
+                        self.add_phasetimes(fxnmode, phase, [round(np.quantile(possible_phasetimes, 0.5)/self.tstep)*self.tstep])
                 elif param['samp']=='quadrature':
                     quantiles = param['quad'].points/2 +0.5
                     if len(quantiles) > len(possible_phasetimes): phasetimes = possible_phasetimes 

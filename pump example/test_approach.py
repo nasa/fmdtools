@@ -21,7 +21,7 @@ mdl = Pump()
 app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad': quadpy.line_segment.gauss_patterson(1)})
 
 app_full = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
-#app_maxlike = SampleApproach(mdl, 'maxlike')
+app_maxlike = SampleApproach(mdl, defaultsamp={'samp':'likeliest'})
 app_multipt = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':3})
 app_rand = SampleApproach(mdl, defaultsamp={'samp':'randtimes', 'numpts':3})
 app_symrand = SampleApproach(mdl, defaultsamp={'samp':'symrandtimes', 'numpts':3})
@@ -44,8 +44,13 @@ app_short = SampleApproach(mdl, faults=[('ImportEE', 'inf_v')], defaultsamp={'sa
 
 
 endclasses, mdlhists = fp.run_approach(mdl, app_quad)
-
 rp.plot_samplecosts(app_quad, endclasses)
+
+endclasses, mdlhists = fp.run_approach(mdl, app_full)
+rp.plot_samplecosts(app_full, endclasses)
+
+endclasses, mdlhists = fp.run_approach(mdl, app_maxlike)
+rp.plot_samplecosts(app_maxlike, endclasses)
 
 
 # adding joint faults could look something like this:
