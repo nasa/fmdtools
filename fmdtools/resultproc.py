@@ -341,7 +341,7 @@ def plot_samplecosts(app, endclasses):
             st='std'
         plot_samplecost(app, endclasses, fxnmode[0], fxnmode[1], samptype=st)
 def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False, samptype='std'):
-    if not hold: plt.figure()
+    #if not hold: plt.figure()
     associated_scens=[]
     for phase in app.phases:
         associated_scens = associated_scens + app.scenids.get((faultfxn, faultmode, phase), [])
@@ -363,31 +363,31 @@ def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False, samptype='
         ratetimes = ratetimes + [phasetimes_start[ind]] + [phasetimes_end[ind]]
         ratesvect = ratesvect + [rates[ind]] + [rates[ind]]
         #axes[1].text(middletime, 0.5*max(rates),  list(app.phases.keys())[ind], ha='center', backgroundcolor="white")
+    #rate plots
     axes[1].set_xticks(phaselocs)
     axes[1].set_xticklabels(list(app.phases.keys()))
-
-    if samptype=='fullint':
-        axes[0].plot(times, costs, label="cost")
-    else:
-        if samptype=='quadrature': 
-            sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for phase, timeweights in app.weights[faultfxn, faultmode].items() for time, weight in timeweights.items() if time in times])
-            axes[0].scatter(times, costs,s=sizes, label="cost", alpha=0.5)
-        axes[0].stem(times, costs, label="cost", markerfmt=",")
-        
     
-    axes[0].set_xlim(phasetimes_start[0], phasetimes_end[-1])
-    axes[0].set_ylim(0, 1.2*np.max(costs))
-    
-    axes[0].set_ylabel("Cost")
-    axes[0].grid()
-    axes[0].set_title("Cost function of "+faultfxn+": "+faultmode+" over time")
-    # rate plot
     axes[1].plot(ratetimes, ratesvect)
     axes[1].set_xlim(phasetimes_start[0], phasetimes_end[-1])
     axes[1].set_ylim(0, np.max(ratesvect)*1.2 )
     axes[1].set_ylabel("Rate")
     axes[1].set_xlabel("Time")
     axes[1].grid()
+    #cost plots
+    axes[0].set_xlim(phasetimes_start[0], phasetimes_end[-1])
+    axes[0].set_ylim(0, 1.2*np.max(costs))
+    if samptype=='fullint':
+        axes[0].plot(times, costs, label="cost")
+    else:
+        if samptype=='quadrature': 
+            sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for phase, timeweights in app.weights[faultfxn, faultmode].items() for time, weight in timeweights.items() if time in times])
+            axes[0].scatter(times, costs,s=sizes, label="cost", alpha=0.5)
+        axes[0].stem(times, costs, label="cost", markerfmt=",", use_line_collection=True)
+    
+    axes[0].set_ylabel("Cost")
+    axes[0].grid()
+    axes[0].set_title("Cost function of "+faultfxn+": "+faultmode+" over time")
+    
     
 
 #plotflowhist

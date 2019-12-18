@@ -292,7 +292,7 @@ class SampleApproach():
             self.rates[fxnname, mode]=dict.fromkeys(self.phases)
             self.rates_timeless[fxnname, mode]=dict.fromkeys(self.phases)
             for ind, (phase, times) in enumerate(self.phases.items()):
-                opp = self._fxnmodes[fxnname, mode]['oppvect'][ind]
+                opp = self._fxnmodes[fxnname, mode]['oppvect'][ind]/sum(self._fxnmodes[fxnname, mode]['oppvect']) #forces to be a conditional probability
                 dist = self._fxnmodes[fxnname, mode]['dist']
                 dt = float(times[1]-times[0])
                 self.rates[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist*dt
