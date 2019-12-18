@@ -333,8 +333,9 @@ def make_summarytable(summary):
 def plot_samplecosts(app, endclasses):
     scenids={}
     for fxnmode in app.list_modes():
+        sampisfull = any([true for (fm, phase), val in app.sampparams.items() if val['samp']=='fullint' and fm==fxnmode])
         plot_samplecost(app, endclasses, fxnmode[0], fxnmode[1])
-def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False):
+def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False, samptype='std'):
     if not hold: plt.figure()
     associated_scens=[]
     for phase in app.phases:
@@ -360,11 +361,11 @@ def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False):
     axes[1].set_xticks(phaselocs)
     axes[1].set_xticklabels(list(app.phases.keys()))
 
-    if app.samptype=='fullint':
+    if samptype=='fullint':
         axes[0].plot(times, costs, label="cost")
     else:
-        if any(app.weights.values()): 
-            sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for phase, timeweights in app.weights.items() for time, weight in timeweights.items() if time in times])
+        if any(app.weights[faultfxn, faultmode].values()): 
+            sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for phase, timeweights in app.weights[faultfxn, faultmode].items() for time, weight in timeweights.items() if time in times])
             axes[0].scatter(times, costs,s=sizes, label="cost", alpha=0.5)
         axes[0].stem(times, costs, label="cost", markerfmt=",")
         
