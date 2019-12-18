@@ -381,22 +381,25 @@ class SampleApproach():
     def prune_scenarios(self,endclasses):
         newscenids = dict.fromkeys(self.scenids.keys())
         newsampletimes = {key:{} for key in self.sampletimes.keys()}
+        newweights = {fault:dict.fromkeys(phasetimes) for fault, phasetimes in self.weights.items()}
         for modeinphase in self.scenids:
             costs= np.array([endclasses[scen]['cost'] for scen in self.scenids[modeinphase]])
             fullint = np.mean(costs)
             errs = abs(fullint - costs)
             mins = np.where(errs == errs.min())[0]
             newscenids[modeinphase] =  [self.scenids[modeinphase][mins[int(len(mins)/2)]]]
-            newscen = [scen for scen in self.scenlist if scen['properties']['name']==newscenids[modeinphase][0]][0]   
+            newscen = [scen for scen in self.scenlist if scen['properties']['name']==newscenids[modeinphase][0]][0]
+            newweights[modeinphase[0:2]][modeinphase[2]] = {newscen['properties']['time']:1.0}
             if not newsampletimes[modeinphase[2]].get(newscen['properties']['time']):
                 newsampletimes[modeinphase[2]][newscen['properties']['time']] = [modeinphase[0:2]]
             else:
                 newsampletimes[modeinphase[2]][newscen['properties']['time']] = newsampletimes[modeinphase[2]][newscen['properties']['time']] + [modeinphase[0:2]]
         self.scenids = newscenids
+        self.weights = newweights
         self.sampletimes = newsampletimes
         self.create_scenarios([])
-        self.samptype == 'pruned'
-        # fix scenlist + times + sampletimes
+        self.sampparams={key:{'samp':'pruned'} for key in self.sampparams}
+
     def list_modes(self):
         return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
     def list_moderates(self):
