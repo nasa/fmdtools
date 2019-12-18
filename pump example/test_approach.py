@@ -23,9 +23,10 @@ app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad': quadpy.
 app_full = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
 app_maxlike = SampleApproach(mdl, defaultsamp={'samp':'likeliest'})
 app_multipt = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':3})
+app_center = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':1})
 app_rand = SampleApproach(mdl, defaultsamp={'samp':'randtimes', 'numpts':3})
 app_symrand = SampleApproach(mdl, defaultsamp={'samp':'symrandtimes', 'numpts':3})
-
+app_fullp = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
 
 app_cust = SampleApproach(mdl, sampparams={(('ExportWater', 'block'), 'on'):{'samp':'fullint'}})
 
@@ -47,9 +48,10 @@ rp.plot_samplecosts(app_quad, endclasses)
 endclasses, mdlhists = fp.run_approach(mdl, app_full)
 rp.plot_samplecosts(app_full, endclasses)
 
-app_full.prune_scenarios(endclasses)
-endclasses, mdlhists = fp.run_approach(mdl, app_full)
-rp.plot_samplecosts(app_full, endclasses)
+app_fullp.prune_scenarios(endclasses)
+endclasses, mdlhists = fp.run_approach(mdl, app_fullp)
+rp.plot_samplecosts(app_fullp, endclasses)
+
 
 endclasses, mdlhists = fp.run_approach(mdl, app_maxlike)
 rp.plot_samplecosts(app_maxlike, endclasses)
@@ -77,11 +79,15 @@ def resilquant(approach, mdl):
 
 util_full, expdegtimes_full, fmea_full, f_f= resilquant(app_full, mdl)
 
+util_fullp, expdegtimes_fullp, fmea_fullp, f_fp= resilquant(app_fullp, mdl)
+
 util_short, expdegtimes_short, fmea_short, _ = resilquant(app_short, mdl)
 
 util_quad, expdegtimes_quad, fmea_quad, f_q= resilquant(app_quad, mdl)
 
 util_cust, expdegtimes_cust, fmea_cust, f_c= resilquant(app_cust, mdl)
+
+util_enter, expdegtimes_center, fmea_center, f_ce= resilquant(app_center, mdl)
 
 
 center_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
