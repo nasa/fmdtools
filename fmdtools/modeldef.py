@@ -366,17 +366,17 @@ class SampleApproach():
                 if samples:
                     for time, faultlist in samples.items():
                         self.times+=[time]
-                        for fxnname, mode in faultlist:
-                            if self.sampparams[(fxnname, mode), phase]['samp']=='maxlike':    
-                                rate = sum(self.rates[fxnname, mode].values())
+                        for fxnmode in faultlist:
+                            if self.sampparams[fxnmode, phase]['samp']=='maxlike':    
+                                rate = sum(self.rates[fxnmode].values())
                             else: 
-                                rate = self.rates[fxnname, mode][phase] * self.weights[(fxnname, mode)][phase][time]
-                            name = fxnname+' '+mode+', t='+str(time)
-                            scen={'faults':{fxnname:mode}, 'properties':{'type': 'single-fault', 'function': fxnname,\
-                                  'fault': mode, 'rate': rate, 'time': time, 'name': name}}
+                                rate = self.rates[fxnmode][phase] * self.weights[fxnmode][phase][time]
+                            name = fxnmode[0]+' '+fxnmode[1]+', t='+str(time)
+                            scen={'faults':{fxnmode[0]:fxnmode[1]}, 'properties':{'type': 'single-fault', 'function': fxnmode[0],\
+                                  'fault': fxnmode[1], 'rate': rate, 'time': time, 'name': name}}
                             self.scenlist=self.scenlist+[scen]
-                            if self.scenids.get((fxnname,mode, phase)): self.scenids[fxnname,mode, phase] = self.scenids[fxnname,mode, phase] + [name]
-                            else: self.scenids[fxnname,mode, phase] = [name]
+                            if self.scenids.get((fxnmode, phase)): self.scenids[fxnmode, phase] = self.scenids[fxnmode, phase] + [name]
+                            else: self.scenids[fxnmode, phase] = [name]
         return
     def prune_scenarios(self,endclasses):
         newscenids = dict.fromkeys(self.scenids.keys())
@@ -385,6 +385,32 @@ class SampleApproach():
         for modeinphase in self.scenids:
             costs= np.array([endclasses[scen]['cost'] for scen in self.scenids[modeinphase]])
             fullint = np.mean(costs)
+            errs = abs(fullint - costs)
+            mins = np.where(errs == errs.min())[0]
+            newscenids[modeinphase] =  [self.scenids[modeinphase][mins[int(len(mins)/2)]]]
+            newscen = [scen for scen in self.scenlist if scen['properties']['name']==newscenids[modeinphase][0]][0]
+            newweights[modeinphase[0]][modeinphase[1]] = {newscen['properties']['time']:1.0}
+            if not newsampletimes[modeinphase[1]].get(newscen['properties']['time']):
+                newsampletimes[modeinphase[1]][newscen['properties']['time']] = [modeinphase[0]]
+            else:
+                newsampletimes[modeinphase[1]][newscen['properties']['time']] = newsampletimes[modeinphase[1]][newscen['properties']['time']] + [modeinphase[0]]
+        self.scenids = newscenids
+        self.weights = newweights
+        self.sampletimes = newsampletimes
+        self.create_scenarios([])
+        self.sampparams={key:{'samp':'pruned'} for key in self.sampparams}
+    def prune_scenarios2(self,endclasses, errthresh=.001, params={}, default={'samp':'evenspacing','numpts':1}):
+        newscenids = dict.fromkeys(self.scenids.keys())
+        newsampletimes = {key:{} for key in self.sampletimes.keys()}
+        newweights = {fault:dict.fromkeys(phasetimes) for fault, phasetimes in self.weights.items()}
+        for modeinphase in self.scenids:
+            param = params.get((fxnmode,phase), default)
+            self.sampparams[fxnmode, phase] = param
+            
+            costs= np.array([endclasses[scen]['cost'] for scen in self.scenids[modeinphase]])
+            fullint = np.mean(costs)
+            
+            [round(np.quantile(possible_phasetimes, p/(param['numpts']+1))/self.tstep)*self.tstep for p in range(param['numpts']+2)][1:-1]
             errs = abs(fullint - costs)
             mins = np.where(errs == errs.min())[0]
             newscenids[modeinphase] =  [self.scenids[modeinphase][mins[int(len(mins)/2)]]]
@@ -398,8 +424,6 @@ class SampleApproach():
         self.weights = newweights
         self.sampletimes = newsampletimes
         self.create_scenarios([])
-        self.sampparams={key:{'samp':'pruned'} for key in self.sampparams}
-
     def list_modes(self):
         return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
     def list_moderates(self):
