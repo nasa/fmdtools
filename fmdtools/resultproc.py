@@ -275,10 +275,10 @@ def make_summfmea(endclasses, app):
         rate= sum([endclasses[scenid]['rate'] for scenid in ids])
         cost= np.mean([endclasses[scenid]['cost'] for scenid in ids])
         expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
-        if not fmeadict.get(modephase[0:2]): fmeadict[modephase[0:2]]= {'rate': 0.0, 'cost':0.0, 'expected cost':0.0}
-        fmeadict[modephase[0:2]]['rate'] += rate
-        fmeadict[modephase[0:2]]['cost'] += cost/len([1.0 for (fxn,mode,phase) in app.scenids if (fxn, mode)==modephase[0:2]])
-        fmeadict[modephase[0:2]]['expected cost'] += expcost
+        if not fmeadict.get(modephase[0]): fmeadict[modephase[0]]= {'rate': 0.0, 'cost':0.0, 'expected cost':0.0}
+        fmeadict[modephase[0]]['rate'] += rate
+        fmeadict[modephase[0]]['cost'] += cost/len([1.0 for ((fxn,mode),phase) in app.scenids if (fxn, mode)==modephase[0]])
+        fmeadict[modephase[0]]['expected cost'] += expcost
     table=pd.DataFrame(fmeadict)
     return table.transpose()
 def make_maptable(mapping):
@@ -339,14 +339,14 @@ def plot_samplecosts(app, endclasses):
             st='quadrature'
         else: 
             st='std'
-        plot_samplecost(app, endclasses, fxnmode[0], fxnmode[1], samptype=st)
-def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False, samptype='std'):
+        plot_samplecost(app, endclasses, fxnmode, samptype=st)
+def plot_samplecost(app, endclasses, fxnmode, hold=False, samptype='std'):
     associated_scens=[]
     for phase in app.phases:
-        associated_scens = associated_scens + app.scenids.get((faultfxn, faultmode, phase), [])
+        associated_scens = associated_scens + app.scenids.get((fxnmode, phase), [])
     costs = np.array([endclasses[scen]['cost'] for scen in associated_scens])
-    times = np.array([time  for phase, timemodes in app.sampletimes.items() if timemodes for time in timemodes if (faultfxn, faultmode) in timemodes.get(time)] )  
-    rates = np.array(list(app.rates_timeless[faultfxn, faultmode].values()))
+    times = np.array([time  for phase, timemodes in app.sampletimes.items() if timemodes for time in timemodes if fxnmode in timemodes.get(time)] )  
+    rates = np.array(list(app.rates_timeless[fxnmode].values()))
     
     tPlot, axes = plt.subplots(2, 1, sharey=False, gridspec_kw={'height_ratios': [3, 1]})
     phasetimes_start =[times[0] for phase, times in app.phases.items()]
@@ -379,13 +379,14 @@ def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False, samptype='
         axes[0].plot(times, costs, label="cost")
     else:
         if samptype=='quadrature': 
-            sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for phase, timeweights in app.weights[faultfxn, faultmode].items() for time, weight in timeweights.items() if time in times])
+            sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for phase, timeweights in app.weights[fxnmode].items() for time, weight in timeweights.items() if time in times])
             axes[0].scatter(times, costs,s=sizes, label="cost", alpha=0.5)
         axes[0].stem(times, costs, label="cost", markerfmt=",", use_line_collection=True)
     
     axes[0].set_ylabel("Cost")
     axes[0].grid()
-    axes[0].set_title("Cost function of "+faultfxn+": "+faultmode+" over time")
+    if type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+fxnmode+" over time")
+    else:                       axes[0].set_title("Cost function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
     
     
 
