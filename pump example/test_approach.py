@@ -40,8 +40,6 @@ app_short = SampleApproach(mdl, faults=[('ImportEE', 'inf_v')], defaultsamp={'sa
 
 #rp.plot_samplecosts(app_full, endclasses)
 
-#app_full.prune_scenarios(endclasses)
-
 
 endclasses, mdlhists = fp.run_approach(mdl, app_quad)
 rp.plot_samplecosts(app_quad, endclasses)
@@ -49,8 +47,14 @@ rp.plot_samplecosts(app_quad, endclasses)
 endclasses, mdlhists = fp.run_approach(mdl, app_full)
 rp.plot_samplecosts(app_full, endclasses)
 
+app_full.prune_scenarios(endclasses)
+endclasses, mdlhists = fp.run_approach(mdl, app_full)
+rp.plot_samplecosts(app_full, endclasses)
+
 endclasses, mdlhists = fp.run_approach(mdl, app_maxlike)
 rp.plot_samplecosts(app_maxlike, endclasses)
+
+
 
 
 # adding joint faults could look something like this:
