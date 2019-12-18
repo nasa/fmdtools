@@ -341,7 +341,6 @@ def plot_samplecosts(app, endclasses):
             st='std'
         plot_samplecost(app, endclasses, fxnmode[0], fxnmode[1], samptype=st)
 def plot_samplecost(app, endclasses, faultfxn, faultmode, hold=False, samptype='std'):
-    #if not hold: plt.figure()
     associated_scens=[]
     for phase in app.phases:
         associated_scens = associated_scens + app.scenids.get((faultfxn, faultmode, phase), [])
