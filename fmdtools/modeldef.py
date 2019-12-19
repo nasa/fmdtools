@@ -386,7 +386,7 @@ class SampleApproach():
                             if self.scenids.get((fxnmode, phase)): self.scenids[fxnmode, phase] = self.scenids[fxnmode, phase] + [name]
                             else: self.scenids[fxnmode, phase] = [name]
         self.times.sort()
-    def prune_scenarios(self,endclasses,samptype='piecewise-linear'):
+    def prune_scenarios(self,endclasses,samptype='piecewise', threshold=0.1, sampparam={'samp':'evenspacing','numpts':1}):
         newscenids = dict.fromkeys(self.scenids.keys())
         newsampletimes = {key:{} for key in self.sampletimes.keys()}
         newweights = {fault:dict.fromkeys(phasetimes) for fault, phasetimes in self.weights.items()}
@@ -397,14 +397,14 @@ class SampleApproach():
                 mins = np.where(errs == errs.min())[0]
                 pts=[mins[int(len(mins)/2)]]
                 weights=[1]
-            elif samptype=='piecewise-linear':
+            elif samptype=='piecewise':
                 partlocs=[0, len(list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][1], self.tstep)))]
                 reset=False
                 for ind, cost in enumerate(costs[1:-1]): # find where fxn is no longer linear
                     if reset==True:
                         reset=False
                         continue
-                    if cost-costs[ind] != costs[ind+2]-cost:  
+                    if abs(((cost-costs[ind]) - (costs[ind+2]-cost))/(costs[ind+2]-cost + 0.0001)) > threshold:  
                         partlocs = partlocs + [ind+2]
                         reset=True
                 partlocs.sort()
@@ -412,7 +412,7 @@ class SampleApproach():
                 weights=[]
                 for (ind_part, partloc) in enumerate(partlocs[1:]): # add points in each section
                     partition = [i for i in range(partlocs[ind_part], partloc)]
-                    part_pts, part_weights = self.select_points({'samp':'evenspacing','numpts':1}, partition)
+                    part_pts, part_weights = self.select_points(sampparam, partition)
                     pts = pts + part_pts
                     overall_part_weight =  (partloc-partlocs[ind_part])/(partlocs[-1]-partlocs[0])
                     weights = weights + list(np.array(part_weights)*overall_part_weight)

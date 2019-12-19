@@ -14,13 +14,17 @@ import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
 import time
 
+#mdl = Pump(params={'repair', 'ee', 'water', 'delay'})
+mdl = Pump(params={'water'}) # should give identical utilities
+mdl = Pump()
+
 app_full_plin = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
 
 endclasses, mdlhists = fp.run_approach(mdl, app_full_plin)
 fmea = rp.make_phasefmea(endclasses, app_full_plin)
 rp.plot_samplecost(app_full_plin, endclasses, ('ExportWater','block'), samptype='fullint')
 
-app_full_plin.prune_scenarios(endclasses,samptype='piecewise-linear')
+app_full_plin.prune_scenarios(endclasses,samptype='piecewise')
 endclasses_plin, mdlhists_plin = fp.run_approach(mdl, app_full_plin)
 fmea_plin = rp.make_phasefmea(endclasses_plin, app_full_plin)
 
