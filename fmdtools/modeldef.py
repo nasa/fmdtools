@@ -306,48 +306,56 @@ class SampleApproach():
             for fxnmode in self.rates:
                 param = params.get((fxnmode,phase), default)
                 self.sampparams[fxnmode, phase] = param
-                if param['samp']=='fullint':
-                    self.add_phasetimes(fxnmode, phase, possible_phasetimes)
-                elif param['samp']=='evenspacing':
-                    if param['numpts']+2 > len(possible_phasetimes): phasetimes = possible_phasetimes
-                    else: phasetimes= [round(np.quantile(possible_phasetimes, p/(param['numpts']+1))/self.tstep)*self.tstep for p in range(param['numpts']+2)][1:-1]
-                    self.add_phasetimes(fxnmode, phase, phasetimes)
-                elif param['samp']=='likeliest':
+                if param['samp']=='likeliest':
+                    weights=[]
                     if self.rates[fxnmode][phase] == max(list(self.rates[fxnmode].values())):
-                        self.add_phasetimes(fxnmode, phase, [round(np.quantile(possible_phasetimes, 0.5)/self.tstep)*self.tstep])
-                elif param['samp']=='quadrature':
-                    quantiles = param['quad'].points/2 +0.5
-                    if len(quantiles) > len(possible_phasetimes): phasetimes = possible_phasetimes 
-                    else: phasetimes= [round(np.quantile(possible_phasetimes, q)) for q in quantiles]
-                    self.add_phasetimes(fxnmode,phase,phasetimes, weights=param['quad'].weights/2)
-                elif param['samp']=='randtimes':
-                    if param['numpts']>=len(possible_phasetimes): phasetimes = possible_phasetimes
-                    else: phasetimes= [possible_phasetimes.pop(np.random.randint(len(possible_phasetimes))) for i in range(min(param['numpts'], len(possible_phasetimes)))]
-                    self.add_phasetimes(fxnmode, phase, phasetimes)
-                elif param['samp']=='symrandtimes':
-                    if param['numpts']>=len(possible_phasetimes): phasetimes = possible_phasetimes
-                    else: 
-                        if len(possible_phasetimes) %2 >0:
-                            phasetimes = [possible_phasetimes.pop(int(np.floor(len(possible_phasetimes)/2)))]
-                        possible_phasetimes_halved = np.reshape(possible_phasetimes, (2,int(len(possible_phasetimes)/2)))
-                        possible_phasetimes_halved[1] = np.flip(possible_phasetimes_halved[1])
-                        possible_inds = [i for i in range(int(len(possible_phasetimes)/2))]
-                        inds = [possible_inds.pop(np.random.randint(len(possible_inds))) for i in range(min(int(np.floor(param['numpts']/2)), len(possible_inds)))]
-                        phasetimes= phasetimes+ [possible_phasetimes_halved[half][ind] for half in range(2) for ind in inds ]
-                        phasetimes.sort()
-                    self.add_phasetimes(fxnmode, phase, phasetimes)
-                else: print("invalid option: ", fxnmode, phase, param)
+                        phasetimes = [round(np.quantile(possible_phasetimes, 0.5)/self.tstep)*self.tstep]
+                    else: phasetimes = []
+                else: 
+                    pts, weights = self.select_points(param, [pt for pt, t in enumerate(possible_phasetimes)])
+                    phasetimes = [possible_phasetimes[pt] for pt in pts]
+                self.add_phasetimes(fxnmode, phase, phasetimes, weights=weights)
+    def select_points(self, param, possible_pts):
+        weights=[]
+        if param['samp']=='fullint': pts = possible_pts
+        elif param['samp']=='evenspacing':
+            if param['numpts']+2 > len(possible_pts): pts = possible_pts
+            else: pts= [int(round(np.quantile(possible_pts, p/(param['numpts']+1)))) for p in range(param['numpts']+2)][1:-1]
+        elif param['samp']=='quadrature':
+            quantiles = param['quad'].points/2 +0.5
+            if len(quantiles) > len(possible_pts): pts = possible_pts
+            else: 
+                pts= [int(round(np.quantile(possible_pts, q))) for q in quantiles]
+                weights=param['quad'].weights/2
+        elif param['samp']=='randtimes':
+            if param['numpts']>=len(possible_pts): pts = possible_pts
+            else: pts= [possible_pts.pop(np.random.randint(len(possible_pts))) for i in range(min(param['numpts'], len(possible_pts)))]
+        elif param['samp']=='symrandtimes':
+            if param['numpts']>=len(possible_pts): pts = possible_pts
+            else: 
+                if len(possible_pts) %2 >0:  pts = [possible_pts.pop(int(np.floor(len(possible_pts)/2)))]
+                else: pts = [] 
+                possible_pts_halved = np.reshape(possible_pts, (2,int(len(possible_pts)/2)))
+                possible_pts_halved[1] = np.flip(possible_pts_halved[1])
+                possible_inds = [i for i in range(int(len(possible_pts)/2))]
+                inds = [possible_inds.pop(np.random.randint(len(possible_inds))) for i in range(min(int(np.floor(param['numpts']/2)), len(possible_inds)))]
+                pts= pts+ [possible_pts_halved[half][ind] for half in range(2) for ind in inds ]
+                pts.sort()
+        else: print("invalid option: ", param)
+        if not any(weights): weights = [1/len(pts) for t in pts]
+        return pts, weights
     def add_phasetimes(self, fxnmode, phase, phasetimes, weights=[]):
-        if not self.weights[fxnmode].get(phase): self.weights[fxnmode][phase] = {t: 1/len(phasetimes) for t in phasetimes}
-        for (ind, time) in enumerate(phasetimes):
-            if self.rates[fxnmode][phase]==0.0:
-                break
-            if not self.sampletimes.get(phase): 
-                self.sampletimes[phase] = {time:[]}
-            if self.sampletimes[phase].get(time): self.sampletimes[phase][time] = self.sampletimes[phase][time] + [fxnmode]
-            else: self.sampletimes[phase][time] = [fxnmode]
-            if any(weights): self.weights[fxnmode][phase][time] = weights[ind]
-            else:       self.weights[fxnmode][phase][time] = 1/len(phasetimes)
+        if phasetimes:
+            if not self.weights[fxnmode].get(phase): self.weights[fxnmode][phase] = {t: 1/len(phasetimes) for t in phasetimes}
+            for (ind, time) in enumerate(phasetimes):
+                if self.rates[fxnmode][phase]==0.0:
+                    break
+                if not self.sampletimes.get(phase): 
+                    self.sampletimes[phase] = {time:[]}
+                if self.sampletimes[phase].get(time): self.sampletimes[phase][time] = self.sampletimes[phase][time] + [fxnmode]
+                else: self.sampletimes[phase][time] = [fxnmode]
+                if any(weights): self.weights[fxnmode][phase][time] = weights[ind]
+                else:       self.weights[fxnmode][phase][time] = 1/len(phasetimes)
     def create_nomscen(self, mdl):
         nomscen={'faults':{},'properties':{}}
         for fxnname in mdl.fxns:
@@ -399,18 +407,28 @@ class SampleApproach():
         self.sampletimes = newsampletimes
         self.create_scenarios([])
         self.sampparams={key:{'samp':'pruned'} for key in self.sampparams}
-    def prune_scenarios2(self,endclasses, errthresh=.001, params={}, default={'samp':'evenspacing','numpts':1}):
+    def prune_scenarios2(self,endclasses, errthresh=.001, maxintervals=5, params={}, default={'samp':'evenspacing','numpts':1}):
         newscenids = dict.fromkeys(self.scenids.keys())
         newsampletimes = {key:{} for key in self.sampletimes.keys()}
         newweights = {fault:dict.fromkeys(phasetimes) for fault, phasetimes in self.weights.items()}
         for modeinphase in self.scenids:
-            param = params.get((fxnmode,phase), default)
-            self.sampparams[fxnmode, phase] = param
-            
+            param = params.get(modeinphase, default)
+            self.sampparams[modeinphase] = param
             costs= np.array([endclasses[scen]['cost'] for scen in self.scenids[modeinphase]])
-            fullint = np.mean(costs)
-            
-            [round(np.quantile(possible_phasetimes, p/(param['numpts']+1))/self.tstep)*self.tstep for p in range(param['numpts']+2)][1:-1]
+            all_phasetimes = list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][0], self.tstep))
+            for n_int in range(maxintervals):
+                partitions = [np.quantile(all_phasetimes, p/(n_int+1)) for p in n_int+2]
+                for (part_ind, part) in enumerate(partitions[1:]):
+                    inds = [i for (i, time) in enumerate(all_phasetimes) if partitions[part_ind-1] < time < partitions[part_ind]]
+                    indcost = np.mean(costs[inds])
+                    pts, weights = self.select_phasetimes(self, param, all_phasetimes[inds])
+                    
+                    err=np.mean(costs[inds]) - sum(costs[pts]*costs(weights))
+                    
+                    
+                #partitions[1:-1] is variable to optimize
+                
+                
             errs = abs(fullint - costs)
             mins = np.where(errs == errs.min())[0]
             newscenids[modeinphase] =  [self.scenids[modeinphase][mins[int(len(mins)/2)]]]
