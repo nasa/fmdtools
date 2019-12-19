@@ -8,6 +8,7 @@ Description: A module to simplify model definition
 """
 import numpy as np
 import operator
+import itertools
 import networkx as nx
 from scipy.stats import binom
 
@@ -286,15 +287,13 @@ class SampleApproach():
                 self._fxnmodes[fxnname, mode]=mdl.fxns[fxnname].faultmodes[mode]
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
         if type(jointfaults['faults'])==int:
-            jointmodes =  [(fm, fm2) for fm in self._fxnmodes for fm2 in self._fxnmodes if fm!=fm2]
-            if jointfaults['faults']==2: self.jointmodes = jointmodes
-            else:
-                n=2
-                while n<jointfaults['faults']:
-                    jointmodes = [(jointmodes[i], fm) for (i, fm) in enumerate(self._fxnmodes) if fm not in jointmodes[i]]
-                    n+=1
-                self.jointmodes=jointmodes
-                    
+            self.jointmodes=[]
+            for numjoint in range(2, jointfaults['faults']+1):
+                jointmodes = list(itertools.combinations(self._fxnmodes, numjoint))
+                if not jointfaults.get('jointfuncs', False): 
+                    jointmodes = [jm for jm in jointmodes if not any([jm[i-1][0] ==j[0] for i in range(1, len(jm)) for j in jm[i:]])]
+                self.jointmodes = self.jointmodes + jointmodes
+        elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
     def init_rates(self, jointfaults={'faults':'None'}):
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
