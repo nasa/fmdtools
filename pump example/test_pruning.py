@@ -14,8 +14,21 @@ import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
 import time
 
-app_fullp = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
+app_full_plin = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
 
-endclasses, mdlhists = fp.run_approach(mdl, app_fullp)
+endclasses, mdlhists = fp.run_approach(mdl, app_full_plin)
+fmea = rp.make_phasefmea(endclasses, app_full_plin)
+rp.plot_samplecost(app_full_plin, endclasses, ('ExportWater','block'), samptype='fullint')
 
-app_fullp.prune_scenarios2(endclasses)
+app_full_plin.prune_scenarios(endclasses,samptype='piecewise-linear')
+endclasses_plin, mdlhists_plin = fp.run_approach(mdl, app_full_plin)
+fmea_plin = rp.make_phasefmea(endclasses_plin, app_full_plin)
+
+rp.plot_samplecost(app_full_plin, endclasses_plin, ('ExportWater','block'), samptype='pruned piecewise-linear')
+
+app_full_sing = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
+app_full_sing.prune_scenarios(endclasses,samptype='bestpt')
+endclasses_sing, mdlhists_sing = fp.run_approach(mdl, app_full_sing)
+fmea_sing = rp.make_phasefmea(endclasses_sing, app_full_sing)
+
+rp.plot_samplecost(app_full_sing, endclasses_sing, ('ExportWater','block'))
