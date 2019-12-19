@@ -415,29 +415,47 @@ class SampleApproach():
             param = params.get(modeinphase, default)
             self.sampparams[modeinphase] = param
             costs= np.array([endclasses[scen]['cost'] for scen in self.scenids[modeinphase]])
-            all_phasetimes = list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][0], self.tstep))
-            for n_int in range(maxintervals):
-                partitions = [np.quantile(all_phasetimes, p/(n_int+1)) for p in n_int+2]
-                for (part_ind, part) in enumerate(partitions[1:]):
-                    inds = [i for (i, time) in enumerate(all_phasetimes) if partitions[part_ind-1] < time < partitions[part_ind]]
-                    indcost = np.mean(costs[inds])
-                    pts, weights = self.select_phasetimes(self, param, all_phasetimes[inds])
-                    
-                    err=np.mean(costs[inds]) - sum(costs[pts]*costs(weights))
-                    
-                    
-                #partitions[1:-1] is variable to optimize
+            all_phasetimes = list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][1], self.tstep))
+            partlocs=[0, len(all_phasetimes)]
+            partloc=0
+            internal_pts = []
+            internal_weights = []
+            pts = []
+            weights= []
+            for i in all_phasetimes:
+                # check error in rightmost interval. If there is no error, break
+                external_part = [i for i in range(partlocs[-2]+partloc, partlocs[-1])]
+                external_pts, external_weights = self.select_points(param, external_part)
+                err=np.mean(costs[external_part]) - sum(costs[external_pts]*external_weights)
+                if err < errthresh:
+                    pts = pts + internal_pts + external_pts
+                    weights = weights + internal_weights + external_weights
+                    break
+                else:
+                    pts = pts + internal_pts
+                    weights = weights + internal_weights
+                # if error, split the rightmost interval in two and minimize error in the next-to-rightmost interval   
+                part_err = err
+                partloc = 0
+                while partloc<partlocs[-1]:
+                    prev_part_err=part_err
+                    partloc+=1
+                    internal_part = [i for i in range(partlocs[-2], partlocs[-2]+partloc)]
+                    internal_pts, internal_weights = self.select_points(param, internal_part)
+                    part_err=np.mean(costs[internal_part]) - sum(costs[internal_pts]*weights)
+                    if part_err<=prev_part_err:  partloc+=1
+                    else: break
+                partlocs = partlocs + [partloc]
+                partlocs.sort()
                 
-                
-            errs = abs(fullint - costs)
-            mins = np.where(errs == errs.min())[0]
-            newscenids[modeinphase] =  [self.scenids[modeinphase][mins[int(len(mins)/2)]]]
-            newscen = [scen for scen in self.scenlist if scen['properties']['name']==newscenids[modeinphase][0]][0]
-            newweights[modeinphase[0:2]][modeinphase[2]] = {newscen['properties']['time']:1.0}
-            if not newsampletimes[modeinphase[2]].get(newscen['properties']['time']):
-                newsampletimes[modeinphase[2]][newscen['properties']['time']] = [modeinphase[0:2]]
-            else:
-                newsampletimes[modeinphase[2]][newscen['properties']['time']] = newsampletimes[modeinphase[2]][newscen['properties']['time']] + [modeinphase[0:2]]
+            newscenids[modeinphase] =  [self.scenids[modeinphase][pt] for pt in pts]
+            newscens = [scen for scen in self.scenlist if scen['properties']['name']==newscenids[modeinphase][0]]
+            newweights[modeinphase[0:2]][modeinphase[2]] = {scen['properties']['time']:weights[ind] for (ind, scen) in enumerate(newscens)}
+            for newscen in newscens:
+                if not newsampletimes[modeinphase[2]].get(newscen['properties']['time']):
+                    newsampletimes[modeinphase[2]][newscen['properties']['time']] = [modeinphase[0:2]]
+                else:
+                    newsampletimes[modeinphase[2]][newscen['properties']['time']] = newsampletimes[modeinphase[2]][newscen['properties']['time']] + [modeinphase[0:2]]
         self.scenids = newscenids
         self.weights = newweights
         self.sampletimes = newsampletimes
