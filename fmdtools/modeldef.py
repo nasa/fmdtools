@@ -264,14 +264,14 @@ class Timer():
         self.time=0
 
 class SampleApproach():
-    def __init__(self, mdl, faults='all', jointfaults=[], condprob=0.1, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
+    def __init__(self, mdl, faults='all', jointfaults={'faults':'None'}, condprob=0.1, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
         self.phases = mdl.phases
         self.tstep = mdl.tstep
-        self.init_modelist(mdl,faults)
-        self.init_rates()
+        self.init_modelist(mdl,faults, jointfaults)
+        self.init_rates(jointfaults=jointfaults)
         self.create_sampletimes(sampparams, defaultsamp)
         self.create_scenarios(jointfaults)
-    def init_modelist(self,mdl, faults):
+    def init_modelist(self,mdl, faults, jointfaults={'faults':'None'}):
         if faults=='all':
             self.fxnrates=dict.fromkeys(mdl.fxns)
             self._fxnmodes={}
@@ -285,7 +285,17 @@ class SampleApproach():
             for fxnname, mode in faults:
                 self._fxnmodes[fxnname, mode]=mdl.fxns[fxnname].faultmodes[mode]
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
-    def init_rates(self):
+        if type(jointfaults['faults'])==int:
+            jointmodes =  [(fm, fm2) for fm in self._fxnmodes for fm2 in self._fxnmodes if fm!=fm2]
+            if jointfaults['faults']==2: self.jointmodes = jointmodes
+            else:
+                n=2
+                while n<jointfaults['faults']:
+                    jointmodes = [(jointmodes[i], fm) for (i, fm) in enumerate(self._fxnmodes) if fm not in jointmodes[i]]
+                    n+=1
+                self.jointmodes=jointmodes
+                    
+    def init_rates(self, jointfaults={'faults':'None'}):
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
         for (fxnname, mode) in self._fxnmodes:
