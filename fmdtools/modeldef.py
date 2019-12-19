@@ -306,6 +306,14 @@ class SampleApproach():
                 dt = float(times[1]-times[0])
                 self.rates[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist*dt
                 self.rates_timeless[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist
+        if getattr(self, 'jointmodes',False):
+            for jointmode in self.jointmodes:
+                self.rates.update({jointmode:dict.fromkeys(self.phases)})
+                self.rates_timeless.update({jointmode:dict.fromkeys(self.phases)})
+                for (phase, times) in self.phases.items():
+                    rates=[self.rates[fmode][phase] for fmode in jointmode]
+                    self.rates[jointmode][phase] = jointfaults['pcond']*max(rates)
+                    self.rates_timeless[jointmode][phase] = self.rates[jointmode][phase]/(times[1]-times[0])          
     def create_sampletimes(self, params={}, default={'samp':'evenspacing','numpts':1}):
         self.sampletimes=dict.fromkeys(self.phases.keys())
         self.weights={fxnmode:dict.fromkeys(rate) for fxnmode,rate in self.rates.items()}
