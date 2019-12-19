@@ -385,81 +385,52 @@ class SampleApproach():
                             self.scenlist=self.scenlist+[scen]
                             if self.scenids.get((fxnmode, phase)): self.scenids[fxnmode, phase] = self.scenids[fxnmode, phase] + [name]
                             else: self.scenids[fxnmode, phase] = [name]
-        return
-    def prune_scenarios(self,endclasses):
+        self.times.sort()
+    def prune_scenarios(self,endclasses,samptype='piecewise-linear'):
         newscenids = dict.fromkeys(self.scenids.keys())
         newsampletimes = {key:{} for key in self.sampletimes.keys()}
         newweights = {fault:dict.fromkeys(phasetimes) for fault, phasetimes in self.weights.items()}
         for modeinphase in self.scenids:
             costs= np.array([endclasses[scen]['cost'] for scen in self.scenids[modeinphase]])
-            fullint = np.mean(costs)
-            errs = abs(fullint - costs)
-            mins = np.where(errs == errs.min())[0]
-            newscenids[modeinphase] =  [self.scenids[modeinphase][mins[int(len(mins)/2)]]]
-            newscen = [scen for scen in self.scenlist if scen['properties']['name']==newscenids[modeinphase][0]][0]
-            newweights[modeinphase[0]][modeinphase[1]] = {newscen['properties']['time']:1.0}
-            if not newsampletimes[modeinphase[1]].get(newscen['properties']['time']):
-                newsampletimes[modeinphase[1]][newscen['properties']['time']] = [modeinphase[0]]
-            else:
-                newsampletimes[modeinphase[1]][newscen['properties']['time']] = newsampletimes[modeinphase[1]][newscen['properties']['time']] + [modeinphase[0]]
-        self.scenids = newscenids
-        self.weights = newweights
-        self.sampletimes = newsampletimes
-        self.create_scenarios([])
-        self.sampparams={key:{'samp':'pruned'} for key in self.sampparams}
-    def prune_scenarios2(self,endclasses, errthresh=.001, maxintervals=5, params={}, default={'samp':'evenspacing','numpts':1}):
-        newscenids = dict.fromkeys(self.scenids.keys())
-        newsampletimes = {key:{} for key in self.sampletimes.keys()}
-        newweights = {fault:dict.fromkeys(phasetimes) for fault, phasetimes in self.weights.items()}
-        for modeinphase in self.scenids:
-            param = params.get(modeinphase, default)
-            self.sampparams[modeinphase] = param
-            costs= np.array([endclasses[scen]['cost'] for scen in self.scenids[modeinphase]])
-            all_phasetimes = list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][1], self.tstep))
-            partlocs=[0, len(all_phasetimes)]
-            partloc=0
-            internal_pts = []
-            internal_weights = []
-            pts = []
-            weights= []
-            for i in all_phasetimes:
-                # check error in rightmost interval. If there is no error, break
-                external_part = [i for i in range(partlocs[-2]+partloc, partlocs[-1])]
-                external_pts, external_weights = self.select_points(param, external_part)
-                err=np.mean(costs[external_part]) - sum(costs[external_pts]*external_weights)
-                if err < errthresh:
-                    pts = pts + internal_pts + external_pts
-                    weights = weights + internal_weights + external_weights
-                    break
-                else:
-                    pts = pts + internal_pts
-                    weights = weights + internal_weights
-                # if error, split the rightmost interval in two and minimize error in the next-to-rightmost interval   
-                part_err = err
-                partloc = 0
-                while partloc<partlocs[-1]:
-                    prev_part_err=part_err
-                    partloc+=1
-                    internal_part = [i for i in range(partlocs[-2], partlocs[-2]+partloc)]
-                    internal_pts, internal_weights = self.select_points(param, internal_part)
-                    part_err=np.mean(costs[internal_part]) - sum(costs[internal_pts]*weights)
-                    if part_err<=prev_part_err:  partloc+=1
-                    else: break
-                partlocs = partlocs + [partloc]
+            if samptype=='bestpt':
+                errs = abs(np.mean(costs) - costs)
+                mins = np.where(errs == errs.min())[0]
+                pts=[mins[int(len(mins)/2)]]
+                weights=[1]
+            elif samptype=='piecewise-linear':
+                partlocs=[0, len(list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][1], self.tstep)))]
+                reset=False
+                for ind, cost in enumerate(costs[1:-1]): # find where fxn is no longer linear
+                    if reset==True:
+                        reset=False
+                        continue
+                    if cost-costs[ind] != costs[ind+2]-cost:  
+                        partlocs = partlocs + [ind+2]
+                        reset=True
                 partlocs.sort()
-                
+                pts=[]
+                weights=[]
+                for (ind_part, partloc) in enumerate(partlocs[1:]): # add points in each section
+                    partition = [i for i in range(partlocs[ind_part], partloc)]
+                    part_pts, part_weights = self.select_points({'samp':'evenspacing','numpts':1}, partition)
+                    pts = pts + part_pts
+                    overall_part_weight =  (partloc-partlocs[ind_part])/(partlocs[-1]-partlocs[0])
+                    weights = weights + list(np.array(part_weights)*overall_part_weight)
+                pts.sort()
             newscenids[modeinphase] =  [self.scenids[modeinphase][pt] for pt in pts]
-            newscens = [scen for scen in self.scenlist if scen['properties']['name']==newscenids[modeinphase][0]]
-            newweights[modeinphase[0:2]][modeinphase[2]] = {scen['properties']['time']:weights[ind] for (ind, scen) in enumerate(newscens)}
+            newscens = [scen for scen in self.scenlist if scen['properties']['name'] in newscenids[modeinphase]]
+            newweights[modeinphase[0]][modeinphase[1]] = {scen['properties']['time']:weights[ind] for (ind, scen) in enumerate(newscens)}
+            newscenids[modeinphase] =  [self.scenids[modeinphase][pt] for pt in pts]
             for newscen in newscens:
-                if not newsampletimes[modeinphase[2]].get(newscen['properties']['time']):
-                    newsampletimes[modeinphase[2]][newscen['properties']['time']] = [modeinphase[0:2]]
+                if not newsampletimes[modeinphase[1]].get(newscen['properties']['time']):
+                    newsampletimes[modeinphase[1]][newscen['properties']['time']] = [modeinphase[0]]
                 else:
-                    newsampletimes[modeinphase[2]][newscen['properties']['time']] = newsampletimes[modeinphase[2]][newscen['properties']['time']] + [modeinphase[0:2]]
+                    newsampletimes[modeinphase[1]][newscen['properties']['time']] = newsampletimes[modeinphase[1]][newscen['properties']['time']] + [modeinphase[0]]
         self.scenids = newscenids
         self.weights = newweights
         self.sampletimes = newsampletimes
         self.create_scenarios([])
+        self.sampparams={key:{'samp':'pruned '+samptype} for key in self.sampparams}
     def list_modes(self):
         return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
     def list_moderates(self):

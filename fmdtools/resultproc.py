@@ -264,7 +264,7 @@ def make_phasefmea(endclasses, app):
     fmeadict = dict.fromkeys(app.scenids.keys())
     for modephase, ids in app.scenids.items():
         rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= np.mean([endclasses[scenid]['cost'] for scenid in ids])
+        cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
         expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
         fmeadict[modephase] = {'rate':rate, 'cost':cost, 'expected cost': expcost}
     table=pd.DataFrame(fmeadict)
@@ -273,7 +273,7 @@ def make_summfmea(endclasses, app):
     fmeadict = dict()
     for modephase, ids in app.scenids.items():
         rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= np.mean([endclasses[scenid]['cost'] for scenid in ids])
+        cost= cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
         expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
         if not fmeadict.get(modephase[0]): fmeadict[modephase[0]]= {'rate': 0.0, 'cost':0.0, 'expected cost':0.0}
         fmeadict[modephase[0]]['rate'] += rate
@@ -378,7 +378,7 @@ def plot_samplecost(app, endclasses, fxnmode, hold=False, samptype='std'):
     if samptype=='fullint':
         axes[0].plot(times, costs, label="cost")
     else:
-        if samptype=='quadrature': 
+        if samptype=='quadrature' or samptype=='pruned piecewise-linear': 
             sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for phase, timeweights in app.weights[fxnmode].items() for time, weight in timeweights.items() if time in times])
             axes[0].scatter(times, costs,s=sizes, label="cost", alpha=0.5)
         axes[0].stem(times, costs, label="cost", markerfmt=",", use_line_collection=True)
