@@ -26,7 +26,6 @@ app_multipt = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':3}
 app_center = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':1})
 app_rand = SampleApproach(mdl, defaultsamp={'samp':'randtimes', 'numpts':3})
 app_symrand = SampleApproach(mdl, defaultsamp={'samp':'symrandtimes', 'numpts':3})
-app_fullp = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
 
 app_cust = SampleApproach(mdl, sampparams={(('ExportWater', 'block'), 'on'):{'samp':'fullint'}})
 
@@ -48,9 +47,8 @@ rp.plot_samplecosts(app_quad, endclasses)
 endclasses, mdlhists = fp.run_approach(mdl, app_full)
 rp.plot_samplecosts(app_full, endclasses)
 
-app_fullp.prune_scenarios(endclasses)
-endclasses, mdlhists = fp.run_approach(mdl, app_fullp)
-rp.plot_samplecosts(app_fullp, endclasses)
+#endclasses, mdlhists = fp.run_approach(mdl, app_fullp)
+#rp.plot_samplecosts(app_fullp, endclasses)
 
 
 endclasses, mdlhists = fp.run_approach(mdl, app_maxlike)
