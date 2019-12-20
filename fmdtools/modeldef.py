@@ -307,12 +307,18 @@ class SampleApproach():
                 self.rates[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist*dt
                 self.rates_timeless[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist
         if getattr(self, 'jointmodes',False):
-            for jointmode in self.jointmodes:
+            for (j_ind, jointmode) in enumerate(self.jointmodes):
                 self.rates.update({jointmode:dict.fromkeys(self.phases)})
                 self.rates_timeless.update({jointmode:dict.fromkeys(self.phases)})
                 for (phase, times) in self.phases.items():
                     rates=[self.rates[fmode][phase] for fmode in jointmode]
-                    self.rates[jointmode][phase] = jointfaults['pcond']*max(rates)
+                    if not jointfaults.get('pcond', False): # if no input, assume independence
+                        prob = np.prod(1-np.exp(-np.array(rates)))
+                        self.rates[jointmode][phase] = -np.log(1.0-prob)
+                    elif type(jointfaults['pcond'])==float:
+                        self.rates[jointmode][phase] = jointfaults['pcond']*max(rates)
+                    elif type(jointfaults['pcond'])==list:
+                        self.rates[jointmode][phase] = jointfaults['pcond'][j_ind]*max(rates)  
                     self.rates_timeless[jointmode][phase] = self.rates[jointmode][phase]/(times[1]-times[0])          
     def create_sampletimes(self, params={}, default={'samp':'evenspacing','numpts':1}):
         self.sampletimes=dict.fromkeys(self.phases.keys())
@@ -546,5 +552,15 @@ def truncn(x, n):
     else:
         y=x
     return y
+
+#union
+# calculates the union of two probabilities
+def union(probs):
+    while len(probs)>1:
+        if len(probs) % 2: 
+            p, probs = probs[0], probs[1:]
+            probs[0]=probs[0]+p -probs[0]*p
+        probs = [probs[i-1]+probs[i]-probs[i-1]*probs[i] for i in range(1, len(probs), 2)]
+    return probs[0]
 
     
