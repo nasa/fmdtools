@@ -146,6 +146,7 @@ class Model(object):
         self.type='model'
         self.flows={}
         self.fxns={}
+        self.params=getattr(self,'params',{})
         self.timelyfxns=set()
         self._fxnflows=[]
         self._fxninput={}
@@ -240,7 +241,7 @@ class Model(object):
                     modeprops[fxnname][mode] = fxn.faultmodes[mode]
         return modes, modeprops
     def copy(self):
-        copy = self.__class__(params=self.params)
+        copy = self.__class__(params=getattr(self, 'params', {}))
         for flowname, flow in self.flows.items():
             copy.flows[flowname]=flow.copy()
         for fxnname, fxn in self.fxns.items():
