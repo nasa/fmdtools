@@ -77,9 +77,9 @@ class Battery(Component):
 class DistEE(FxnBlock):
     def __init__(self,flows):
         super().__init__(['EEin','EEmot','EEctl','FS'],flows, {'EEtr':1.0, 'EEte':1.0}, timely=False)
-        self.faultmodes={'short':{'rate':'moderate', 'rcost':'major'}, \
-                         'degr':{'rate':'moderate', 'rcost':'minor'}, \
-                         'break':{'rate':'common', 'rcost':'moderate'}}
+        self.failrate=1e-5
+        self.assoc_modes({'short':[0.3,[0.2, 0.2,0.2,0.2,0.2],3000], 'degr':[0.5,[0.2, 0.2,0.2,0.2,0.2],1000],\
+                          'break':[0.2,[0.2, 0.2,0.2,0.2,0.2],2000]})
     def condfaults(self, time):
         if self.FS.value<0.5 or max(self.EEmot.rate,self.EEctl.rate)>2:
             self.add_fault('break')
@@ -98,8 +98,8 @@ class DistEE(FxnBlock):
 class EngageLand(FxnBlock):
     def __init__(self,flows):
         super().__init__(['forcein', 'forceout'],flows, {'Ft':1.0}, timely=False)
-        self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
-                         'deform':{'rate':'moderate', 'rcost':'minor'}}
+        self.failrate=1e-5
+        self.assoc_modes({'break':[0.2,[0.5,0.0,0.0,0.0,0.5], 1000], 'deform':[0.8,[0.5,0.0,0.0,0.0,0.5], 1000]})
     def condfaults(self, time):
         if self.forceout.value<-1.4: self.add_fault('break')
         elif self.forceout.value<-1.2: self.add_fault('deform')
@@ -114,10 +114,12 @@ class ManageHealth(FxnBlock):
         flownames=['EECtl','FS','DOFshealth', 'Bathealth','DOFconfig','Batconfig','Ctlconfig', 'Trajconfig' ]
         super().__init__(flownames, flows)
         
-        self.faultmodes={'falsemaintenance':{'rate':'moderate', 'rcost':'minor'},\
-                         'falsemasking':{'rate':'rare', 'rcost': 'major'},\
-                         'falseemland':{'rate':'rare', 'rcost': 'major'},\
-                         'lostfunction':{'rate':'rare', 'rcost':'minor'}} 
+        self.failrate=1e-5
+        self.assoc_modes({'falsemaintenance':[0.8,[1.0, 0.0,0.0,0.0,0.0],10000],\
+                         'falsemasking':[0.1,[1.0, 0.2,0.4,0.4,0.0],10000],\
+                         'falseemland':[0.05,[0.0, 0.2,0.4,0.4,0.0],10000],\
+                         'lostfunction':[0.05,[0.2, 0.2,0.2,0.2,0.2],10000]})
+        
         #need to add joint-fault modes of not catching faults?
     def condfaults(self, time):
         if self.FS.value<0.5 or self.EECtl.effort>2.0: self.add_fault('lostfunction')
@@ -135,8 +137,8 @@ class ManageHealth(FxnBlock):
 class HoldPayload(FxnBlock):
     def __init__(self,flows):
         super().__init__(['FG', 'FA', 'FS'],flows, {'Ft': 1.0}, timely=False)
-        self.faultmodes={'break':{'rate':'moderate', 'rcost':'major'}, \
-                         'deform':{'rate':'moderate', 'rcost':'minor'}, }
+        self.failrate=1e-6
+        self.assoc_modes({'break':[0.2, [0.2, 0.2, 0.2, 0.2,0.2], 10000], 'deform':[0.8, [0.2, 0.2, 0.2, 0.2,0.2], 10000]})
     def condfaults(self, time):
         if abs(self.FG.value)>1.6: self.add_fault('break')
         elif abs(self.FG.value)>1.4: self.add_fault('deform')
