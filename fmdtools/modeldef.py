@@ -271,7 +271,7 @@ class SampleApproach():
         self.init_modelist(mdl,faults, jointfaults)
         self.init_rates(jointfaults=jointfaults)
         self.create_sampletimes(sampparams, defaultsamp)
-        self.create_scenarios(jointfaults)
+        self.create_scenarios()
     def init_modelist(self,mdl, faults, jointfaults={'faults':'None'}):
         if faults=='all':
             self.fxnrates=dict.fromkeys(mdl.fxns)
@@ -388,26 +388,33 @@ class SampleApproach():
         nomscen['properties']['name']='nominal'
         nomscen['properties']['weight']=1.0
         return nomscen
-    def create_scenarios(self,jointfaults): #need to add to create scenarios to run
+    def create_scenarios(self): #need to add to create scenarios to run
         self.scenlist=[]
         self.times = []
         self.scenids = {}
-        if not jointfaults:
-            for phase, samples in self.sampletimes.items():
-                if samples:
-                    for time, faultlist in samples.items():
-                        self.times+=[time]
-                        for fxnmode in faultlist:
-                            if self.sampparams[fxnmode, phase]['samp']=='maxlike':    
-                                rate = sum(self.rates[fxnmode].values())
-                            else: 
-                                rate = self.rates[fxnmode][phase] * self.weights[fxnmode][phase][time]
+        for phase, samples in self.sampletimes.items():
+            if samples:
+                for time, faultlist in samples.items():
+                    self.times+=[time]
+                    for fxnmode in faultlist:
+                        if self.sampparams[fxnmode, phase]['samp']=='maxlike':    
+                            rate = sum(self.rates[fxnmode].values())
+                        else: 
+                            rate = self.rates[fxnmode][phase] * self.weights[fxnmode][phase][time]
+                        if type(fxnmode[0])==str:
                             name = fxnmode[0]+' '+fxnmode[1]+', t='+str(time)
                             scen={'faults':{fxnmode[0]:fxnmode[1]}, 'properties':{'type': 'single-fault', 'function': fxnmode[0],\
                                   'fault': fxnmode[1], 'rate': rate, 'time': time, 'name': name}}
-                            self.scenlist=self.scenlist+[scen]
-                            if self.scenids.get((fxnmode, phase)): self.scenids[fxnmode, phase] = self.scenids[fxnmode, phase] + [name]
-                            else: self.scenids[fxnmode, phase] = [name]
+                        else:
+                            name = ' '.join([fm[0]+': '+fm[1]+',' for fm in fxnmode])+' t='+str(time)
+                            faults = dict.fromkeys([fm[0] for fm in fxnmode])
+                            for fault in faults:
+                                faults[fault] = [fm[1] for fm in fxnmode if fm[0]==fault]
+                            scen = {'faults':faults, 'properties':{'type': str(len(fxnmode))+'-joint-faults', 'functions':{fm[0] for fm in fxnmode}, \
+                                    'modes':{fm[1] for fm in fxnmode}, 'rate': rate, 'time': time, 'name': name}}
+                        self.scenlist=self.scenlist+[scen]
+                        if self.scenids.get((fxnmode, phase)): self.scenids[fxnmode, phase] = self.scenids[fxnmode, phase] + [name]
+                        else: self.scenids[fxnmode, phase] = [name]
         self.times.sort()
     def prune_scenarios(self,endclasses,samptype='piecewise', threshold=0.1, sampparam={'samp':'evenspacing','numpts':1}):
         newscenids = dict.fromkeys(self.scenids.keys())
@@ -454,8 +461,11 @@ class SampleApproach():
         self.sampletimes = newsampletimes
         self.create_scenarios([])
         self.sampparams={key:{'samp':'pruned '+samptype} for key in self.sampparams}
-    def list_modes(self):
-        return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
+    def list_modes(self, joint=False):
+        if joint:
+            return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()] + self.jointmodes
+        else:
+            return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
     def list_moderates(self):
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
 

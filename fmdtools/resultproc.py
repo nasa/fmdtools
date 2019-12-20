@@ -24,6 +24,7 @@ def compare_hists(mdlhists, returndiff=True):
     nomhist = mdlhists.pop('nominal')
     for scenname, hist in mdlhists.items():
         reshists[scenname], diffs[scenname], summaries[scenname] = compare_hist(hist, nomhist=nomhist, returndiff=returndiff)
+    mdlhists['nominal']=nomhist
     return reshists, diffs, summaries
     
 #compare_hist
@@ -330,9 +331,9 @@ def make_summarytable(summary):
     
 # plot_samplecost(app, endclasses, fault)
 
-def plot_samplecosts(app, endclasses):
+def plot_samplecosts(app, endclasses, joint=False):
     scenids={}
-    for fxnmode in app.list_modes():
+    for fxnmode in app.list_modes(joint):
         if any([True for (fm, phase), val in app.sampparams.items() if val['samp']=='fullint' and fm==fxnmode]):
             st='fullint'
         elif any([True for (fm, phase), val in app.sampparams.items() if val['samp']=='quadrature' and fm==fxnmode]):
@@ -385,7 +386,7 @@ def plot_samplecost(app, endclasses, fxnmode, hold=False, samptype='std'):
     
     axes[0].set_ylabel("Cost")
     axes[0].grid()
-    if type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+fxnmode+" over time")
+    if type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+str(fxnmode)+" over time")
     else:                       axes[0].set_title("Cost function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
     
     
