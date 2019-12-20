@@ -254,7 +254,8 @@ def propagate(mdl, initfaults, time, flowstates={}):
         flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults)
     for fxnname in initfaults:
         fxn=mdl.fxns[fxnname]
-        fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
+        if type(initfaults[fxnname])==list: fxn.updatefxn(faults=initfaults[fxnname], time=time)
+        else:                               fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
         activefxns.update([fxnname])
     #Step 3: Propagate faults through graph
     flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults)
