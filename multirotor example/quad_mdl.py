@@ -239,8 +239,8 @@ class Line(Component):
 class CtlDOF(FxnBlock):
     def __init__(self, flows):
         super().__init__(['EEin','Dir','Ctl','DOFs','FS','Rsig'],flows, {'vel':0.0, 'Cs':1.0})
-        self.faultmodes={'noctl':{'rate':'rare', 'rcost':'high'}, \
-                         'degctl':{'rate':'rare', 'rcost':'high'}}
+        self.failrate=1e-5
+        self.assoc_modes({'noctl':[0.2, [0.4, 0.2, 0.3, 0.1,0.0], 10000], 'degctl':[0.8, [0.4, 0.2, 0.3, 0.1,0.0], 10000]})
     def condfaults(self, time):
         if self.FS.value<0.5: self.add_fault('noctl')
     def behavior(self, time):
@@ -279,8 +279,8 @@ class PlanPath(FxnBlock):
     def __init__(self, flows):
         super().__init__(['EEin','Env','Dir','FS','Rsig'], flows)
         self.mode='taxi'
-        self.faultmodes={'noloc':{'rate':'rare', 'rcost':'high'}, \
-                         'degloc':{'rate':'rare', 'rcost':'high'}}
+        self.failrate=1e-5
+        self.assoc_modes({'noloc':[0.2, [0.4, 0.2, 0.3, 0.1,0.0], 10000], 'degloc':[0.8, [0.4, 0.2, 0.3, 0.1,0.0], 10000]})
     def condfaults(self, time):
         if self.FS.value<0.5: self.add_fault('noloc')
     def behavior(self, t):
@@ -343,9 +343,9 @@ class Trajectory(FxnBlock):
             self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
             
 class Quadrotor(Model):
-    def __init__(self):
+    def __init__(self, params={}):
         super().__init__()
-        
+        self.phases={'taxi':[0,10], 'climb':[10,15],'forward':[15, 45], 'descend':[45,50], 'land':[50,55]}
         #Declare time range to run model over
         self.times=[0,20, 55]
         self.tstep = 1 #Stepsize: (change at your own risk--any accumulated value will need to change)
