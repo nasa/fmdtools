@@ -78,7 +78,7 @@ class FxnBlock(Block):
     def condfaults(self,time):
         return 0
     def behavior(self,time):
-        return 0
+        return 0        
     def reset(self):            #reset requires flows to be cleared first
         self.faults.clear()
         self.faults.add('nom')
@@ -197,6 +197,12 @@ class Model(object):
         #self.graph.add_nodes_from(self.fxn)
         #self.graph=
         return self.graph
+    def return_componentgraph(self, fxnname):
+        g = nx.Graph()
+        g.add_nodes_from([fxnname], bipartite=0)
+        g.add_nodes_from(self.fxns[fxnname].components, bipartite=1)
+        g.add_edges_from([(fxnname, component) for component in self.fxns[fxnname].components])        
+        return g
     def reset(self):
         for flowname, flow in self.flows.items():
             flow.reset()
@@ -207,10 +213,18 @@ class Model(object):
             graph=nx.projected_graph(self.bipartite, self.fxns)
         elif gtype=='bipartite':
             graph=self.bipartite.copy()
+        elif gtype=='component':
+            graph=self.bipartite.copy()
+            for fxnname, fxn in self.fxns.items():
+                graph.add_nodes_from(fxn.components, bipartite=1)
+                graph.add_edges_from([(fxnname, component) for component in fxn.components])     
         edgevals={}
         fxnmodes={}
         fxnstates={}
         flowstates={}
+        compmodes={}
+        compstates={}
+        comptypes={}
         if gtype=='normal': #set edge values for normal graph
             for edge in graph.edges:
                 midedges=list(self.multgraph.subgraph(edge).edges)
@@ -220,7 +234,7 @@ class Model(object):
                     flowdict[flow]=self.flows[flow].status()
                 edgevals[edge]=flowdict
             nx.set_edge_attributes(graph, edgevals) 
-        elif gtype=='bipartite': #set flow node values for bipartite graph
+        elif gtype=='bipartite' or gtype=='component': #set flow node values for bipartite graph
             for flowname, flow in self.flows.items():
                 flowstates[flowname]=flow.status()
             nx.set_node_attributes(graph, flowstates, 'states')
@@ -228,9 +242,22 @@ class Model(object):
         for fxnname, fxn in self.fxns.items():
             fxnstates[fxnname], fxnmodes[fxnname] = fxn.return_states()
             if gtype=='normal': del graph.nodes[fxnname]['bipartite']
+            if gtype=='component':
+                for mode in fxnmodes[fxnname].copy():
+                    for compname, comp in fxn.components.items():
+                        compstates[compname]={}
+                        comptypes[compname]=True
+                        if mode in comp.faultmodes:
+                            compmodes[compname]=compmodes.get(compname, set())
+                            compmodes[compname].update([mode])
+                            fxnmodes[fxnname].remove(mode)
+                            fxnmodes[fxnname].update(['Comp_Fault'])
         nx.set_node_attributes(graph, fxnstates, 'states')
-        nx.set_node_attributes(graph, fxnmodes, 'modes')            
-        
+        nx.set_node_attributes(graph, fxnmodes, 'modes')
+        if gtype=='component': 
+            nx.set_node_attributes(graph,compstates, 'states')
+            nx.set_node_attributes(graph, compmodes, 'modes') 
+            nx.set_node_attributes(graph, comptypes, 'iscomponent')
         return graph
     def return_faultmodes(self):
         modes={}

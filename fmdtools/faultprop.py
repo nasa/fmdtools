@@ -127,7 +127,7 @@ def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gty
     endclass = mdl.find_classification(faultresgraph, endfaultprops, endflows, scen, mdlhists)
     # note: in the future, put this in rp package so it doesn't need to be imported
     if gtype=='normal': resgraph = rp.make_resultsgraph(faultresgraph, nomresgraph) 
-    elif gtype=='bipartite': resgraph = rp.make_bipresultsgraph(faultresgraph, nomresgraph)
+    elif gtype=='bipartite' or gtype=='component': resgraph = rp.make_bipresultsgraph(faultresgraph, nomresgraph)
     
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
     
