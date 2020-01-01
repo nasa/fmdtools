@@ -196,7 +196,7 @@ def make_resultsgraph(g, nomg):
 def make_bipresultsgraph(g, nomg):
     rg=g.copy() 
     for node in g.nodes:        
-        if g.nodes[node]['bipartite']==0: #condition only checked for functions
+        if g.nodes[node]['bipartite']==0 or g.nodes[node].get('iscomponent', False): #condition only checked for functions
             if g.nodes[node].get('modes').difference(['nom']): status='Faulty'
             else: status='Nominal'
         elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
