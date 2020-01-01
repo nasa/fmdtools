@@ -3,35 +3,54 @@
 File name: faultprop.py
 Author: Daniel Hulse
 Created: December 2018
-Forked from the IBFM toolkit, original author Matthew McIntire
 
 Description: functions to propagate faults through a user-defined fault model
 """
+
 import numpy as np
 import copy
 import fmdtools.resultproc as rp
 ## FAULT PROPAGATION
 
-#construct_nomscen
-# creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal
 def construct_nomscen(mdl):
+    """
+    Creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal.
+
+    Parameters
+    ----------
+    mdl : Model
+
+    Returns
+    -------
+    nomscen : scen
+    """
     nomscen={'faults':{},'properties':{}}
     nomscen['properties']['time']=0.0
     nomscen['properties']['type']='nominal'
     return nomscen
 
-#run_nominal
-# runs the model over time in the nominal scenario
-# inputs:
-#   - mdl, the python model module set up in mdl.py
-#   - track, whether or not to track flows
-#   - gtype, the type of graph to return
-# outputs:
-#   - endresults, a dictionary summary of results at the end of the simulation with structure
-#    {faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val} }
-#   - resgraph, a graph object with function faults and degraded flows noted
-#   - mdlhist, a dictionary with the history modelstates
 def run_nominal(mdl, track=True, gtype='normal'):
+    """
+    Runs the model over time in the nominal scenario.
+
+    Parameters
+    ----------
+    mdl : Model
+        Model of the system
+    track : BOOL, optional
+        Whether or not to track flows. The default is True.
+    gtype : TYPE, optional
+        The type of graph to return (normal or bipartite). The default is 'normal'.
+
+    Returns
+    -------
+    endresults : Dict
+        A dictionary summary of results at the end of the simulation with structure {faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val} }
+    resgraph : MultiGraph
+        A networkx graph object with function faults and degraded flows as graph attributes
+    mdlhist : Dict
+        A dictionary with a history of modelstates
+    """
     nomscen=construct_nomscen(mdl)
     scen=nomscen.copy()
     mdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False)
@@ -45,23 +64,37 @@ def run_nominal(mdl, track=True, gtype='normal'):
     mdl.reset()
     return endresults, resgraph, mdlhist
 
-#proponefault
-# runs the model given a single function and fault mode
-# inputs:
-#   - mdl, the python model module set up in mdl.py
-#   - fxnname, the function the fault is initiated in
-#   - faultmode, the mode to initiate
-#   - time, the time when the mode is to be initiated
-#   - track, the flows to track (a list of strings)
-#   - gtrack, the times to snapshot the graph
-# outputs:
-#   - endresults, a dictionary summary of results at the end of the simulation with structure
-#    {flows:{flow:attribute:value},faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val} }
-#   - resgraph, a graph object with function faults and degraded flows noted
-#   - flowhist, a dictionary with the history of the flow over time
-#   - graphhist, a dictionary of results graph objects over time with structure {time:graph}
 def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gtype = 'normal'):
-    
+    """
+    Runs one fault in the model at a specified time.
+
+    Parameters
+    ----------
+    mdl : Model
+        The model to inject the fault in.
+    fxnname : str
+        Name of the function with the faultmode
+    faultmode : str
+        Name of the faultmode
+    time : float, optional
+        Time to inject fault. Must be in the range of model times (i.e. in range(0, end, mdl.tstep)). The default is 0.
+    track : bool, optional
+        Whether to track model states over time. The default is True.
+    staged : bool, optional
+        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). The default is False.
+    gtype : str, optional
+        The graph type to return ('bipartite' or 'normal'). The default is 'normal'.
+
+    Returns
+    -------
+    endresults : dict
+        A dictionary summary of results at the end of the simulation with structure {flows:{flow:attribute:value},faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val}
+    resgraph : networkx.classes.graph.Graph
+        A graph object with function faults and degraded flows noted as attributes
+    mdlhists : dict
+        A dictionary of the states of the model of each fault scenario over time.
+
+    """
     #run model nominally, get relevant results
     nomscen=construct_nomscen(mdl)
     if staged:
@@ -101,17 +134,24 @@ def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gty
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-#list_init_faults
-# creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
-# inputs: model graph, a vector of times for the scenarios to occur
-# outputs: a list of fault scenarios, where a scenario is defined as:
-#   {faults:{functions:faultmodes}, properties:{(changes depending scenario type)} }
 def list_init_faults(mdl):
+    """
+    Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
+
+    Parameters
+    ----------
+    mdl : Model
+        Model with list of times in mdl.times
+
+    Returns
+    -------
+    faultlist : list
+        A list of fault scenarios, where a scenario is defined as: {faults:{functions:faultmodes}, properties:{(changes depending scenario type)} }
+    """
     faultlist=[]
     for time in mdl.times:
         for fxnname, fxn in mdl.fxns.items():
             modes=fxn.faultmodes
-            
             for mode in modes:
                 nomscen=construct_nomscen(mdl)
                 newscen=nomscen.copy()
@@ -119,15 +159,30 @@ def list_init_faults(mdl):
                 rate=mdl.fxns[fxnname].failrate
                 newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
                 faultlist.append(newscen)
-
     return faultlist
 
-#proplist
-# creates and propagates a list of failure scenarios in a model
-# input: mdl, the module where the model was set up
-# output: resultstab, a FMEA-style table of results
 def run_list(mdl, reuse=False, staged=False, track=True):
-    
+    """
+    Creates and propagates a list of failure scenarios in a model
+
+    Parameters
+    ----------
+    mdl : model
+        The model to inject faults in
+    reuse : bool, optional
+        Whether to clear and re-use the same model over each run rather than copying (for less memory use). The default is False.
+    staged : bool, optional
+        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
+    track : bool, optional
+        Whether to track states over time. The default is True.
+
+    Returns
+    -------
+    endclasses : dict
+        A dictionary with the rate, cost, and expected cost of each scenario run with structure {scenname:{expected cost, cost, rate}}
+    mdlhists : dict
+        A dictionary with the history of all model states for each scenario (including the nominal)
+    """
     if reuse and staged:
         print("invalid to use reuse and staged options at the same time. Using staged")
         reuse=False
@@ -164,6 +219,29 @@ def run_list(mdl, reuse=False, staged=False, track=True):
     return endclasses, mdlhists
 
 def run_approach(mdl, app, reuse=False, staged=False, track=True):
+    """
+    Injects and propagates faults in the model defined by a given sample approach
+
+    Parameters
+    ----------
+    mdl : model
+        The model to inject faults in.
+    app : sampleapproach
+        SampleApproach used to define the list of faults and sample time for the model.
+    reuse : bool, optional
+        Whether to clear and re-use the same model over each run rather than copying (for less memory use). The default is False.
+    staged : bool, optional
+        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
+    track : bool, optional
+        Whether to track states over time. The default is True.
+
+    Returns
+    -------
+    endclasses : dict
+        A dictionary with the rate, cost, and expected cost of each scenario run with structure {scenname:{expected cost, cost, rate}}
+    mdlhists : dict
+        A dictionary with the history of all model states for each scenario (including the nominal)
+    """
     if reuse and staged:
         print("invalid to use reuse and staged options at the same time. Using staged")
         reuse=False
@@ -196,20 +274,32 @@ def run_approach(mdl, app, reuse=False, staged=False, track=True):
         else: mdl = mdl.__class__(params=mdl.params)
     return endclasses, mdlhists
         
-
-#prop_one_scen
-# runs a single fault scenario in the model over time
-# inputs:
-#   - mdl, the model object 
-#   - scen, the fault scenario for a given model
-#   - track, whether to track states over time
-#   - staged, the starting time for the propagation
-#   - ctimes, the time to copy the models
-#   - prevhist, the previous results hist (if running staged)
-# outputs:
-#   - mdlhist, a dictionary with the history of the model states over time
-#   - c_mdls, copies of the model object taken at each time listed in ctime
 def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
+    """
+    Runs a fault scenario in the model over time
+
+    Parameters
+    ----------
+    mdl : model
+        The model to inject faults in.
+    scen : Dict
+        The fault scenario to run. Has structure: {'faults':{fxn:fault}, 'properties':{rate, time, name, etc}}
+    track : bool, optional
+        Whether to track states over time. The default is True.
+    staged : bool, optional
+        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
+    ctimes : list, optional
+        List of times to copy the model (for use in staged execution). The default is [].
+    prevhist : dict, optional
+        The previous results hist (for used in staged execution). The default is {}.
+
+    Returns
+    -------
+    mdlhist : dict
+        A dictionary with a history of modelstates.
+    c_mdl : dict
+        A dictionary of models at each time given in ctimes with structure {time:model}
+    """
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     if staged:
@@ -234,14 +324,26 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
         if t in ctimes: c_mdl[t]=mdl.copy()
     return mdlhist, c_mdl
 
-#propogate
-# propagates faults through the graph at one time-step
-# inputs:
-#   g, the graph object of the model
-#   initfaults, the faults (or lack of faults) to initiate in the model
-#   time, the time propogation occurs at
-#   flowstates, if generated in the last iteration
 def propagate(mdl, initfaults, time, flowstates={}):
+    """
+    Injects and propagates faults through the graph at one time-step
+
+    Parameters
+    ----------
+    mdl : model
+        The model to propagate the fault in
+    initfaults : dict
+        The faults to inject in the model with structure {fxn:fault}
+    time : float
+        The current timestep.
+    flowstates : dict, optional
+        States of the model at the previous time-step (if used). The default is {}.
+
+    Returns
+    -------
+    flowstates : dict
+        States of the model at the current time-step.
+    """
     #set up history of flows to see if any has changed
     activefxns=mdl.timelyfxns.copy()
     nextfxns=set()
@@ -261,6 +363,29 @@ def propagate(mdl, initfaults, time, flowstates={}):
     flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults)
     return flowstates
 def prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults):
+    """
+    Propagates faults through model graph.
+
+    Parameters
+    ----------
+    mdl : model
+        Model to propagate faults in
+    activefxns : set
+        Set of functions that are active (must be checked, e.g. because a fault was injected)
+    nextfxns : set
+        Set of active functions for the next iteration.
+    flowstates : dict
+        States of each flow in the model.
+    time : float
+        Current time-step.
+    initfaults : dict
+        Faults to inject during this propagation step.
+
+    Returns
+    -------
+    flowstates : dict
+        States of each flow in the model after propagation
+    """
     n=0
     while activefxns:
         for fxnname in list(activefxns).copy():
@@ -287,29 +412,57 @@ def prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults):
 #update_mdlhist
 # find a way to make faster (e.g. by automatically getting values by reference)
 def update_mdlhist(mdl, mdlhist, t_ind):
+    """
+    Updates the model history at a given time.
+
+    Parameters
+    ----------
+    mdl : model
+        Model at the timestep
+    mdlhist : dict
+        History of model states (a dict with a vector of each state)
+    t_ind : float
+        The time to update the model history at.
+    """
     update_flowhist(mdl, mdlhist, t_ind)
     update_fxnhist(mdl, mdlhist, t_ind)
 def update_flowhist(mdl, mdlhist, t_ind):
+    """ Updates the flows in the model history at t_ind """
     for flowname, flow in mdl.flows.items():
         atts=flow.status()
         for att, val in atts.items():
             mdlhist["flows"][flowname][att][t_ind] = val
 def update_fxnhist(mdl, mdlhist, t_ind):
+    """ Updates the functions (faults and states) in the model history at t_ind """
     for fxnname, fxn in mdl.fxns.items():
         states, faults = fxn.return_states()
         mdlhist["functions"][fxnname]["faults"][t_ind]=faults
         for state, value in states.items():
             mdlhist["functions"][fxnname][state][t_ind] = value 
 
-#init_mdlhist
-# initialize history of model
 def init_mdlhist(mdl, timerange):
+    """
+    Initializes the model history over a given timerange
+
+    Parameters
+    ----------
+    mdl : model
+        the Model object
+    timerange : array
+        Numpy array of times to initialize in the dictionary.
+
+    Returns
+    -------
+    mdlhist : dict
+        A dictionary history of each model state over the given timerange.
+    """
     mdlhist={}
     mdlhist["flows"]=init_flowhist(mdl, timerange)
     mdlhist["functions"]=init_fxnhist(mdl, timerange)
     mdlhist["time"]=np.array([i for i in timerange])
     return mdlhist
 def init_flowhist(mdl, timerange):
+    """ Initializes the flow history flowhist of the model mdl over the time range timerange"""
     flowhist={}
     for flowname, flow in mdl.flows.items():
         atts=flow.status()
@@ -318,6 +471,7 @@ def init_flowhist(mdl, timerange):
             flowhist[flowname][att] = np.full([len(timerange)], val)
     return flowhist
 def init_fxnhist(mdl, timerange):
+    """Initializes the function state history fxnhist of the model mdl over the time range timerange"""
     fxnhist = {}
     for fxnname, fxn in mdl.fxns.items():
         states, faults = fxn.return_states()
@@ -327,17 +481,4 @@ def init_fxnhist(mdl, timerange):
             fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist
 
-#
-
-    
-
-
-        
-            
-
-
-
-    
-    
-    
     
