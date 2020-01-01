@@ -24,8 +24,9 @@ class StoreEE(FxnBlock):
             #architecture: 1 for controllers? + cells in Series & Parallel
             #Batctl=battery('ctl')
             components={'00':Battery('00'), '01':Battery('01'), '10':Battery('10'), '11':Battery('11')}
-        self.faultmodes={'nocharge':{'rate':'moderate','rcost':'minor'}, \
-                         'lowcharge':{'rate':'moderate','rcost':'minor'}} 
+        #failrate for function w- component only applies to function modes
+        self.failrate=1e-3
+        self.assoc_modes({'nocharge':[0.2,[0.6,0.1,0.1,0.1,0.1],300],'lowcharge':[0.7,[0.6,0.1,0.1,0.1,0.1],200]})
         super().__init__(['EEout', 'FS', 'Hsig', 'Rsig'], flows, {'soc': 2000}, components)
     def condfaults(self, time):
         if self.soc<20: self.add_fault('lowcharge')
@@ -50,11 +51,10 @@ class StoreEE(FxnBlock):
 class Battery(Component):
     def __init__(self, name):
         super().__init__(name, {'soc':2000, 'EEe':1.0, 'Et':1.0})
-        self.faultmodes={name+'short':{'rate':'moderate', 'rcost':'major'}, \
-                         name+'degr':{'rate':'moderate', 'rcost':'minor'}, \
-                         name+'break':{'rate':'common', 'rcost':'moderate'}, \
-                         name+'nocharge':{'rate':'moderate','rcost':'minor'}, \
-                         name+'lowcharge':{'rate':'moderate','rcost':'minor'}}
+        self.failrate=1e-3
+        self.assoc_modes({'short':[0.02,[0.2,0.2,0.2,0.2,0.2],2000], 'degr':[0.06,[0.2,0.2,0.2,0.2,0.2],2000],
+                          'break':[0.02,[0.2,0.2,0.2,0.2,0.2],2000], 'nocharge':[0.2,[0.6,0.1,0.1,0.1,0.1],300],
+                          'lowcharge':[0.7,[0.6,0.1,0.1,0.1,0.1],200]}, name=name)
     def behavior(self, FS, EEoutr, time):
         if FS <1.0: self.add_fault(self.name+'break')
         if EEoutr>2: self.add_fault(self.name+'break')
@@ -152,7 +152,6 @@ class HoldPayload(FxnBlock):
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs
     def __init__(self, flows, archtype):     
         self.archtype=archtype
-        self.faultmodes={}
         if archtype[0]=='quad':
             components={'RF':Line('RF'), 'LF':Line('LF'), 'LR':Line('LR'), 'RR':Line('RR')}
             self.upward={'RF':1,'LF':1,'LR':1,'RR':1}
@@ -200,17 +199,13 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Air, HSig_DOFs, RSig_DOFs
 class Line(Component):
     def __init__(self, name):
         super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, timely=False)
-        self.faultmodes={name+'short':{'rate':'moderate', 'rcost':'major'}, \
-                         name+'openc':{'rate':'moderate', 'rcost':'major'}, \
-                         name+'ctlup':{'rate':'moderate', 'rcost':'minor'}, \
-                         name+'ctldn':{'rate':'moderate', 'rcost':'minor'}, \
-                         name+'ctlbreak':{'rate':'common', 'rcost':'moderate'}, \
-                         name+'mechbreak':{'rate':'common', 'rcost':'moderate'}, \
-                         name+'mechfriction':{'rate':'common', 'rcost':'moderate'}, \
-                         name+'propwarp':{'rate':'veryrare', 'rcost':'replacement'}, \
-                         name+'propstuck':{'rate':'veryrare', 'rcost':'replacement'}, \
-                         name+'propbreak':{'rate':'veryrare', 'rcost':'replacement'}
-                         }
+        self.failrate=1e-4
+        self.assoc_modes({'short':[0.1, [0.2, 0.2, 0.2, 0.2,0.2], 200],'openc':[0.1, [0.2, 0.2, 0.2, 0.2,0.2], 200],\
+                          'ctlup':[0.2, [0.2, 0.2, 0.2, 0.2,0.2], 500],'ctldn':[0.2, [0.2, 0.2, 0.2, 0.2,0.2], 500],\
+                          'ctlbreak':[0.2, [0.2, 0.2, 0.2, 0.2,0.2], 1000], 'mechbreak':[0.1, [0.2, 0.2, 0.2, 0.2,0.2], 500],\
+                          'mechfriction':[0.05, [0.0, 0.2, 0.2, 0.2,0.2], 500],'propwarp':[0.01, [0.0, 0.2, 0.2, 0.2,0.2], 200],\
+                          'propstuck':[0.02, [0.0, 0.2, 0.2, 0.2,0.2], 200], 'propbreak':[0.03, [0.0, 0.2, 0.2, 0.2,0.2], 200]},name=name)
+
     def behavior(self, EEin, Ctlin, cmds, Force):
         if Force<=0.0:   self.add_faults([self.name+'mechbreak', self.name+'propbreak'])
         elif Force<=0.5: self.add_fault(self.name+'mechfriction')
@@ -385,8 +380,7 @@ class Quadrotor(Model):
         self.add_fxn('HoldPayload', HoldPayload,['Force_LG', 'Force_Air', 'Force_ST'])
         
         self.construct_graph()
-        
-    def find_classification(self, g, endfaults, endflows, scen):
+    def find_classification(self, g, endfaults, endflows, scen, mdlhist):
         
         start=[0.0,0.0]
         start_xw=10
