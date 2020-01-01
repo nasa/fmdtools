@@ -18,6 +18,7 @@ class Block(object):
         self.timely=timely
         self._states=states.keys()
         self._initstates=states.copy()
+        self.failrate = getattr(self, 'failrate', 0.0)
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
@@ -26,7 +27,7 @@ class Block(object):
         if not getattr(self, 'faultmodes', []): 
             if name: self.faultmodes=dict()
             else:    self.faultmodes=dict.fromkeys(modes)
-        for mode in self.faultmodes:
+        for mode in modes:
             self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost'))
             self.faultmodes[name+mode]['dist'] =     modes[mode][0]
             self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
@@ -62,6 +63,7 @@ class FxnBlock(Block):
         for flow in self.flows.keys():
             setattr(self, flow,self.flows[flow])
         self.components=components
+        if not getattr(self, 'faultmodes', []): self.faultmodes={}
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
         self.timers = timers
@@ -272,23 +274,25 @@ class SampleApproach():
         self.phases = mdl.phases
         self.tstep = mdl.tstep
         self.init_modelist(mdl,faults, jointfaults)
-        self.init_rates(jointfaults=jointfaults)
+        self.init_rates(mdl, jointfaults=jointfaults)
         self.create_sampletimes(sampparams, defaultsamp)
         self.create_scenarios()
     def init_modelist(self,mdl, faults, jointfaults={'faults':'None'}):
+        self.comprates={}
+        self._fxnmodes={}
         if faults=='all':
             self.fxnrates=dict.fromkeys(mdl.fxns)
-            self._fxnmodes={}
             for fxnname, fxn in  mdl.fxns.items():
                 for mode, params in fxn.faultmodes.items():
                     self._fxnmodes[fxnname, mode]=params
                 self.fxnrates[fxnname]=fxn.failrate
+                self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
         else:
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
-            self._fxnmodes={}
-            for fxnname, mode in faults:
+            for fxnname, mode in faults: 
                 self._fxnmodes[fxnname, mode]=mdl.fxns[fxnname].faultmodes[mode]
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
+                self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components}
         if type(jointfaults['faults'])==int:
             self.jointmodes=[]
             for numjoint in range(2, jointfaults['faults']+1):
@@ -297,18 +301,24 @@ class SampleApproach():
                     jointmodes = [jm for jm in jointmodes if not any([jm[i-1][0] ==j[0] for i in range(1, len(jm)) for j in jm[i:]])]
                 self.jointmodes = self.jointmodes + jointmodes
         elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
-    def init_rates(self, jointfaults={'faults':'None'}):
+    def init_rates(self,mdl, jointfaults={'faults':'None'}):
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
         for (fxnname, mode) in self._fxnmodes:
             self.rates[fxnname, mode]=dict.fromkeys(self.phases)
             self.rates_timeless[fxnname, mode]=dict.fromkeys(self.phases)
+            overallrate = self.fxnrates[fxnname]
+            if self.comprates[fxnname]:
+                for compname, component in mdl.fxns[fxnname].components.items():
+                    if mode in component.faultmodes:
+                        overallrate=self.comprates[fxnname][compname]
+            
             for ind, (phase, times) in enumerate(self.phases.items()):
                 opp = self._fxnmodes[fxnname, mode]['oppvect'][ind]/sum(self._fxnmodes[fxnname, mode]['oppvect']) #forces to be a conditional probability
                 dist = self._fxnmodes[fxnname, mode]['dist']
-                dt = float(times[1]-times[0])
-                self.rates[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist*dt
-                self.rates_timeless[fxnname, mode][phase] = self.fxnrates[fxnname]*opp*dist
+                dt = float(times[1]-times[0])              
+                self.rates[fxnname, mode][phase] = overallrate*opp*dist*dt
+                self.rates_timeless[fxnname, mode][phase] = overallrate*opp*dist
         if getattr(self, 'jointmodes',False):
             for (j_ind, jointmode) in enumerate(self.jointmodes):
                 self.rates.update({jointmode:dict.fromkeys(self.phases)})

@@ -20,6 +20,11 @@ import time
 mdl = Quadrotor()
 
 
+app = SampleApproach(mdl)
+endclasses, mdlhists = fp.run_approach(mdl, app)
+simplefmea = rp.make_simplefmea(endclasses)
+summfmea = rp.make_summfmea(endclasses, app)
+
 # =============================================================================
 #endresults1, resgraph, flowhist3, ghist3=fp.runnominal(mdl, track={'DOFs','Dir1', 'Env1', 'Force_LG'})
 #fp.showgraph(resgraph, showfaultlabels=False)
@@ -66,23 +71,25 @@ rp.show_graph(resgraph)
 
 resultstab=fp.run_list(mdl, staged=True)
 
-t1=time.time()
-endclasses, mdlhists=fp.run_list(mdl, staged=True)
-simplefmea = rp.make_simplefmea(endclasses)
-t2=time.time()
-print(simplefmea)
-reshists, diffs, summaries = rp.compare_hists(mdlhists, returndiff=False)
+#t1=time.time()
+#endclasses, mdlhists=fp.run_list(mdl, staged=True)
+#simplefmea = rp.make_simplefmea(endclasses)
+#t2=time.time()
+#print(simplefmea)
+#reshists, diffs, summaries = rp.compare_hists(mdlhists, returndiff=False)
 
-t3=time.time()
-t_running = t2-t1
-t_processing =t3-t2
-fullfmea = rp.make_fullfmea(endclasses, summaries)
-heatmap = rp.make_avgdegtimeheatmap(reshists)
+#t3=time.time()
+#t_running = t2-t1
+#t_processing =t3-t2
+#fullfmea = rp.make_fullfmea(endclasses, summaries)
+#heatmap = rp.make_avgdegtimeheatmap(reshists)
 
-rp.show_bipartite(mdl.bipartite, heatmap=heatmap, scale=2)
+#rp.show_bipartite(mdl.bipartite, heatmap=heatmap, scale=2)
 
-heatmap2 = rp.make_expdegtimeheatmap(reshists, endclasses)
-rp.show_bipartite(mdl.bipartite, heatmap=heatmap2, scale=2)
+#heatmap2 = rp.make_expdegtimeheatmap(reshists, endclasses)
+#rp.show_bipartite(mdl.bipartite, heatmap=heatmap2, scale=2)
+
+
 
 #print(t_reused)
 #print(t_copied)
