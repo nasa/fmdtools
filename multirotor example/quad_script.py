@@ -19,7 +19,6 @@ import time
 #scenlist=fp.listinitfaults(graph, mdl.times)
 mdl = Quadrotor()
 
-
 app = SampleApproach(mdl)
 endclasses, mdlhists = fp.run_approach(mdl, app)
 simplefmea = rp.make_simplefmea(endclasses)
