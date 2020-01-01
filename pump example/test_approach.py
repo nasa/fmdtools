@@ -77,7 +77,7 @@ def resilquant(approach, mdl):
 
 util_full, expdegtimes_full, fmea_full, f_f= resilquant(app_full, mdl)
 
-util_fullp, expdegtimes_fullp, fmea_fullp, f_fp= resilquant(app_fullp, mdl)
+#util_fullp, expdegtimes_fullp, fmea_fullp, f_fp= resilquant(app_fullp, mdl)
 
 util_short, expdegtimes_short, fmea_short, _ = resilquant(app_short, mdl)
 

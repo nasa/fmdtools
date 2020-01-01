@@ -312,7 +312,6 @@ class PlanPath(FxnBlock):
 class Trajectory(FxnBlock):
     def __init__(self, flows):
         super().__init__(['Env','DOF','Land', 'Dir', 'Force_LG'], flows, {'flight':0.0})
-        self.faultmodes={'nom':{'rate':'common', 'rcost':'NA'}, }
     def behavior(self, time):
         
         if time>self.time:
@@ -435,7 +434,7 @@ class Quadrotor(Model):
     
         totcost=repcost+area
         
-        rate=1e-6
+        rate=scen['properties']['rate']
         
         expcost=totcost*rate*1e5
         
