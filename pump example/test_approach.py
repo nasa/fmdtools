@@ -44,12 +44,14 @@ app_short = SampleApproach(mdl, faults=[('ImportEE', 'inf_v')], defaultsamp={'sa
 endclasses, mdlhists = fp.run_approach(mdl, app_quad)
 rp.plot_samplecosts(app_quad, endclasses)
 
-endclasses, mdlhists = fp.run_approach(mdl, app_full)
-rp.plot_samplecosts(app_full, endclasses)
+endclasses_full, mdlhists = fp.run_approach(mdl, app_full)
+rp.plot_samplecosts(app_full, endclasses_full)
 
 #endclasses, mdlhists = fp.run_approach(mdl, app_fullp)
 #rp.plot_samplecosts(app_fullp, endclasses)
-
+costovertime = rp.find_costovertime(endclasses_full, app_full)
+rp.plot_costovertime(endclasses_full, app_full)
+rp.plot_costovertime(endclasses_full, app_full, costtype='cost')
 
 endclasses, mdlhists = fp.run_approach(mdl, app_maxlike)
 rp.plot_samplecosts(app_maxlike, endclasses)

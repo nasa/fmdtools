@@ -448,6 +448,29 @@ def make_phasefmea(endclasses, app):
         fmeadict[modephase] = {'rate':rate, 'cost':cost, 'expected cost': expcost}
     table=pd.DataFrame(fmeadict)
     return table.transpose()
+def find_costovertime(endclasses, app):
+    """
+    Makes a table of the total cost, rate, and expected cost of all faults over time
+
+    Parameters
+    ----------
+    endclasses : dict
+        dict with rate,cost, and expected cost for each injected scenario
+    app : sampleapproach
+        sample approach used to generate the list of scenarios
+
+    Returns
+    -------
+    costovertime : dataframe
+        pandas dataframe with the total cost, rate, and expected cost for the set of scenarios
+    """
+    costovertime={'cost':{time:0.0 for time in app.times}, 'rate':{time:0.0 for time in app.times}, 'expected cost':{time:0.0 for time in app.times}}
+    for scen in app.scenlist:
+        costovertime['cost'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['cost']
+        costovertime['rate'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['rate']
+        costovertime['expected cost'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['expected cost'] 
+    return pd.DataFrame.from_dict(costovertime)
+        
 def make_summfmea(endclasses, app):
     """
     Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
@@ -505,6 +528,7 @@ def make_summarytable(summary):
     return pd.DataFrame.from_dict(summary, orient = 'index')
 
 ##PLOTTING AND RESULTS DISPLAY
+
 
 def plot_samplecosts(app, endclasses, joint=False):
     """
@@ -592,7 +616,26 @@ def plot_samplecost(app, endclasses, fxnmode, samptype='std'):
     axes[0].grid()
     if type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+str(fxnmode)+" over time")
     else:                       axes[0].set_title("Cost function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
-    
+def plot_costovertime(endclasses, app, costtype='expected cost'):
+    """
+    Plots the total cost or total expected cost of faults over time.
+
+    Parameters
+    ----------
+    endclasses : dict
+        dict with rate,cost, and expected cost for each injected scenario (e.g. from run_approach())
+    app : sampleapproach
+        sample approach used to generate the list of scenarios
+    costtype : str, optional
+        type of cost to plot ('cost', 'expected cost' or 'rate'). The default is 'expected cost'.
+    """
+    costovertime = find_costovertime(endclasses, app)
+    plt.plot(list(costovertime.index), costovertime[costtype])
+    plt.title('Total '+costtype+' of all faults over time.')
+    plt.ylabel(costtype)
+    plt.xlabel('time')
+    plt.grid()
+
 def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
     """
     Plots the states of a model over time given a history.
