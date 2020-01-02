@@ -4,9 +4,21 @@ File Name: resultproc.py
 Author: Daniel Hulse
 Created: November 2018
 
-Description: Results processing and plotting for single (or multiple) fault model runs
-    
-(module originally defined in faultprop.py--put here for organization)
+Description: Results processing and plotting for single (or multiple) fault model runs.
+
+This module has functions for the following:
+    - processing model histories (values over time) into fault information (e.g. when a function/flow went off-nominal)
+        - compare_hists(), compare_hist(), make_heatmaps(), etc.
+    - showing graph representations of the system with or without faults (using nx.graph), including animations over time (using matplotlib.animation)
+        - make_resultsgraph(), show_graph(), plot_resultsgraph_from(), animate_resultsgraphs_from(), 
+    - plotting system behaviors over time (using matplotlib)
+        - plot_mdlhist()
+    - plotting costs/rates of approach (using matplotlib)
+        - plot_samplecost, plot_samplecosts
+    - providing tables of the various states of the system over time (using pandas)
+        - make_histtable(), make_deghisttable(), make_statstable(), etc
+    - providing fmeas of faults (using pandas)
+        - make_fullfmea(), make_simplefmea(), make_summfmea(), etc
 """
 
 import networkx as nx
@@ -18,6 +30,25 @@ import pandas as pd
 
 ## PROCESSING RESULTS 
 def compare_hists(mdlhists, returndiff=True):
+    """
+    Processes a model histories for each scenario into results histories by comparing the states over time in each scenario with the states in the nominal scenario.
+
+    Parameters
+    ----------
+    mdlhists : dict
+        A dictionary of model histories for each scenario (e.g. from run_list or run_approach)
+    returndiff : bool, optional
+        Whether to return diffs, a dict of the differences between the values of the states in the nominal scenario and fault scenario. The default is True.
+
+    Returns
+    -------
+    reshists : dict
+        A dictionary of the results histories of each scenario over time.
+    diffs : dict
+        The difference between the nominal and fault scenario states (if returndiff is true--otherwise returns empty)
+    summaries : dict
+        A dict with all degraded functions and degraded flows resulting from the fault scenarios.
+    """
     reshists={}
     diffs={}
     summaries={}
@@ -26,10 +57,28 @@ def compare_hists(mdlhists, returndiff=True):
         reshists[scenname], diffs[scenname], summaries[scenname] = compare_hist(hist, nomhist=nomhist, returndiff=returndiff)
     mdlhists['nominal']=nomhist
     return reshists, diffs, summaries
-    
-#compare_hist
-#find non-nominal states over time
 def compare_hist(mdlhist, nomhist={}, returndiff=True):
+    """
+    Compares model history with the nominal model history over time to make a history of degradation.
+
+    Parameters
+    ----------
+    mdlhist : dict
+        the model fault history or a dict of both the nominal and fault histories {'nominal':nomhist, 'faulty':mdlhist}
+    nomhist : dict, optional
+        The model history in the nominal scenario (if not provided in mdlhist) The default is {}.
+    returndiff : bool, optional
+        Whether to return diffs, a dict of the differences between the values of the states in the nominal scenario and fault scenario. The default is True.
+
+    Returns
+    -------
+    reshist : dict
+        The results history over time.
+    diff : dict
+        The difference between the nominal and fault scenario states (if returndiff is true--otherwise returns empty)
+    summary : dict
+        A dict with all degraded functions and degraded flows.
+    """
     if nomhist: mdlhist={'nominal':nomhist, 'faulty':mdlhist}
     reshist = {}
     reshist['time'] = mdlhist['nominal']['time']
@@ -40,6 +89,7 @@ def compare_hist(mdlhist, nomhist={}, returndiff=True):
     diff = {**fxndiff, **flowdiff}
     return reshist, diff, summary
 def compare_flowhist(mdlhist, returndiff=True):
+    """ Compares the history of flow states in mdlhist over time."""
     flowhist = {}
     summhist = {}
     degflows = []
@@ -57,6 +107,7 @@ def compare_flowhist(mdlhist, returndiff=True):
     numdegflows = len(summhist) - np.sum(np.array(list(summhist.values())), axis=0)
     return flowhist, summhist, degflows, numdegflows, diff
 def compare_fxnhist(mdlhist, returndiff=True):
+    """ Compares the history of function states in mdlhist over time."""
     fxnhist = {}
     faulthist = {}
     deghist = {}
@@ -85,7 +136,147 @@ def compare_fxnhist(mdlhist, returndiff=True):
     numfaults = np.sum(np.array(list(faulthist.values())), axis=0)
     numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
     return fxnhist, numfaults, degfxns, numdegfxns, diff
+
+def compare_graphflows(g, nomg, gtype='normal'):
+    """
+    Extracts non-nominal flows by comparing the a results graph with a nominal results graph.
+
+    Parameters
+    ----------
+    g : networkx graph
+        The graph in the given fault scenario
+    nomg : networkx graph
+        The graph in the nominal fault scenario
+    gtype : str, optional
+        The type of graph to return ('normal' or 'bipartite') The default is 'normal'.
+
+    Returns
+    -------
+    endflows : dict
+        A dictionary of degraded flows.
+    """
+    endflows=dict()
+    if gtype=='normal':
+        for edge in g.edges:
+            flows=g.get_edge_data(edge[0],edge[1])
+            nomflows=nomg.get_edge_data(edge[0],edge[1])
+            for flow in flows:
+                if flows[flow]!=nomflows[flow]:
+                    endflows[flow]={}
+                    vals=flows[flow]
+                    for val in vals:
+                        if vals[val]!=nomflows[flow][val]: endflows[flow][val]=flows[flow][val]
+    elif gtype=='bipartite':
+        for node in g.nodes:
+            if g.nodes[node]['bipartite']==1: #only flow states
+                if g.nodes[node]['states']!=nomg.nodes[node]['states']:
+                    endflows[node]={}
+                    vals=g.nodes[node]['states']
+                    for val in vals:
+                        if vals[val]!=nomg.nodes[node]['states'][val]: endflows[node][val]=vals[val]     
+    return endflows
+
+def make_resultsgraph(g, nomg):
+    """
+    Makes a graph of nominal/non-nominal states by comparing the nominal graph states with the non-nominal graph states
+
+    Parameters
+    ----------
+    g : networkx Graph
+        multgraph for the fault scenario where the functions are nodes and flows are edges and with 'faults' and 'states' attributes
+    nomg : networkx Graph
+        multgraph for the nominal scenario where the functions are nodes and flows are edges and with 'faults' and 'states' attributes
+
+    Returns
+    -------
+    rg : networkx graph
+        multgraph copy of g with 'status' attributes added for faulty/degraded functions/flows
+    """
+    rg=g.copy() 
+    for edge in g.edges:
+        for flow in list(g.edges[edge].keys()):            
+            if g.edges[edge][flow]!=nomg.edges[edge][flow]: status='Degraded'
+            else:                               status='Nominal' 
+            rg.edges[edge][flow]={'values':g.edges[edge][flow],'status':status}
+    for node in g.nodes:        
+        if g.nodes[node]['modes'].difference(['nom']): status='Faulty' 
+        elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
+        else: status='Nominal'
+        rg.nodes[node]['status']=status
+    return rg
+def make_bipresultsgraph(g, nomg):
+    """
+    Makes a bipartite graph of nominal/non-nominal states by comparing the nominal graph states with the non-nominal graph states
+
+    Parameters
+    ----------
+    g : networkx Graph
+        bipartite graph for the fault scenario where the functions have 0 'bipartite' attributes and flows have 1 'bipartite' attribute
+    nomg : networkx Graph
+        bipartite graph for the nominal scenario where the functions have 0 'bipartite' attributes and flows have 1 'bipartite' attribute
+
+    Returns
+    -------
+    rg : networkx graph
+        bipartite copy of g with 'status' attributes added for faulty/degraded functions/flows/components
+    """
+    rg=g.copy() 
+    for node in g.nodes:        
+        if g.nodes[node]['bipartite']==0 or g.nodes[node].get('iscomponent', False): #condition only checked for functions
+            if g.nodes[node].get('modes').difference(['nom']): status='Faulty'
+            else: status='Nominal'
+        elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
+        else: status='Nominal'
+        rg.nodes[node]['status']=status
+    return rg
+def make_resultsgraphs(ghist, nomghist, gtype='normal'):
+    """
+    Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
+
+    Parameters
+    ----------
+    ghist : dict
+        dict history of the faulty graph
+    nomghist : dict
+        dict history of the nominal graph
+    gtype : str, optional
+        Type of graph provided/returned (bipartite, component, or normal). The default is 'normal'.
+
+    Returns
+    -------
+    rghist : dict
+        dict history of results graphs
+    """
+    rghist = dict.fromkeys(ghist.keys())
+    for i,rg in rghist.items():
+        if gtype=='normal': rghist[i] = make_resultsgraph(ghist[i],nomghist[i])
+        elif  gtype=='bipartite' or gtype=='component': rghist[i] = make_bipresultsgraph(ghist[i],nomghist[i])
+    return rghist
+
+
+##HEATMAP FUNCTIONS
 def make_heatmaps(reshist, diff):
+    """
+    Makes a dict of heatmaps given a results history and a history of the differences between nominal and faulty models.
+
+    Parameters
+    ----------
+    reshist : dict
+        The model results history (e.g. from compare_functionhist
+    diff : dict
+        The differences (e.g. from compare_functionhist(s))
+
+    Returns
+    -------
+    heatmaps : dict
+        A dict of heatmaps based on the results history, including:
+            - degtime, the time the function/flow was degraded
+            - maxdeg, the maximum degradation experienced by the function
+            - intdeg, the integral of degradation of the function over the time interval
+            - maxfaults, the maximum number of faults in the function
+            - intdiff, the integral of the differences between function/flow states of the nominal and faulty model over time.
+            - maxdiff, the maximum difference between function/flow states of the nominal and faulty model over time.
+    """
     heatmaps = {'degtime':{},'maxdeg':{}, 'intdeg':{}, 'maxfaults':{}, 'intdiff':{}, 'maxdiff':{}}
     len_time = len(reshist['time'])
     for fxnname in reshist['functions'].keys():
@@ -110,6 +301,7 @@ def make_heatmaps(reshist, diff):
         heatmaps['intdiff'][flowname] = sum(flowdiff) /( len_time * len(diff[flowname].keys()))
     return heatmaps
 def make_degtimemap(reshist):
+    """ Makes a heatmap dictionary of degraded time for functions given a result history"""
     len_time = len(reshist['time'])
     degtimemap={}
     for fxnname in reshist['functions'].keys():
@@ -118,103 +310,51 @@ def make_degtimemap(reshist):
         degtimemap[flowname]=1.0 - sum(reshist['flows'][flowname])/len_time
     return degtimemap
 def make_degtimemaps(reshists):
+    """ Makes a dict of heatmap dictionaries of degraded time for functions given results histories"""
     degtimemaps=dict.fromkeys(reshists.keys())
     for reshist in reshists:
         degtimemaps[reshist]=make_degtimemap(reshists[reshist])
     return degtimemaps
 def make_avgdegtimeheatmap(reshists):
+    """ Makes a heatmap dictionary of the average degraded heat time over a list of scenarios in the dict of results histories."""
     degtimetable = pd.DataFrame(make_degtimemaps(reshists)).transpose()
     return degtimetable.mean().to_dict()
 def make_expdegtimeheatmap(reshists, endclasses):
+    """ Makes a heatmap dictionary of the expected degraded heat time over a list of scenarios in the dict of results histories based on the rates in endclasses."""
     degtimetable = pd.DataFrame(make_degtimemaps(reshists))
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expdegtimetable = degtimetable.multiply(rates).transpose()
     return expdegtimetable.sum().to_dict()
 def make_faultmap(reshist):
+    """ Makes a heatmap dictionary of faults given a results history."""
     heatmap={}
     for fxnname in reshist['functions'].keys():
         heatmap[fxnname] = max(reshist['functions'][fxnname]['numfaults'])
     return heatmap
 def make_faultmaps(reshists):
+    """ Makes dict of heatmaps dictionaries of resulting faults given a results history."""
     faulttimemaps=dict.fromkeys(reshists.keys())
     for reshist in reshists:
         faulttimemaps[reshist]=make_faultmap(reshists[reshist])
     return faulttimemaps
 def make_faultsheatmap(reshists):
+    """Makes a heatmap dictionary of the average resulting faults over all scenarios"""
     faulttable = pd.DataFrame(make_faultmaps(reshists)).transpose()
     return faulttable.mean().to_dict()
 def make_expfaultsheatmap(reshists, endclasses):
+    """Makes a heatmap dictionary of the expected resulting faults over all scenarios"""
     faulttable = pd.DataFrame(make_faultmaps(reshists))
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expfaulttable = faulttable.multiply(rates).transpose()
     return expfaulttable.mean().to_dict()
 
-#compare_graphflows
-# extracts non-nominal flows by comparing the a results graph with a nominal results graph
-# inputs:   g, a graph of results, with states of each flow in each provided
-#           nomg, the same graph for the nominal system
-# outputs:  endflows, a dictionary of degraded flows
-# (maybe do this for values also???)
-def compare_graphflows(g, nomg, gtype='normal'):
-    endflows=dict()
-    if gtype=='normal':
-        for edge in g.edges:
-            flows=g.get_edge_data(edge[0],edge[1])
-            nomflows=nomg.get_edge_data(edge[0],edge[1])
-            for flow in flows:
-                if flows[flow]!=nomflows[flow]:
-                    endflows[flow]={}
-                    vals=flows[flow]
-                    for val in vals:
-                        if vals[val]!=nomflows[flow][val]: endflows[flow][val]=flows[flow][val]
-    elif gtype=='bipartite':
-        for node in g.nodes:
-            if g.nodes[node]['bipartite']==1: #only flow states
-                if g.nodes[node]['states']!=nomg.nodes[node]['states']:
-                    endflows[node]={}
-                    vals=g.nodes[node]['states']
-                    for val in vals:
-                        if vals[val]!=nomg.nodes[node]['states'][val]: endflows[node][val]=vals[val]     
-    return endflows
-#make_resultsgraph
-# creates a snapshot of the graph structure with model results superimposed
-# inputs: g, the graph, and nomg, the graph in its nominal state
-# outputs: rg, the graph snapshot
-def make_resultsgraph(g, nomg):
-    rg=g.copy() 
-    for edge in g.edges:
-        for flow in list(g.edges[edge].keys()):            
-            if g.edges[edge][flow]!=nomg.edges[edge][flow]: status='Degraded'
-            else:                               status='Nominal' 
-            rg.edges[edge][flow]={'values':g.edges[edge][flow],'status':status}
-    for node in g.nodes:        
-        if g.nodes[node]['modes'].difference(['nom']): status='Faulty' 
-        elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
-        else: status='Nominal'
-        rg.nodes[node]['status']=status
-    return rg
-def make_bipresultsgraph(g, nomg):
-    rg=g.copy() 
-    for node in g.nodes:        
-        if g.nodes[node]['bipartite']==0 or g.nodes[node].get('iscomponent', False): #condition only checked for functions
-            if g.nodes[node].get('modes').difference(['nom']): status='Faulty'
-            else: status='Nominal'
-        elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
-        else: status='Nominal'
-        rg.nodes[node]['status']=status
-    return rg
-def make_resultsgraphs(ghist, nomghist, gtype='normal'):
-    rghist = dict.fromkeys(ghist.keys())
-    for i,rg in rghist.items():
-        if gtype=='normal': rghist[i] = make_resultsgraph(ghist[i],nomghist[i])
-        elif  gtype=='bipartite': rghist[i] = make_bipresultsgraph(ghist[i],nomghist[i])
-    return rghist
 
 ## MAKE TABLES
     
 #makehisttable
 # put history in a tabular format
 def make_histtable(mdlhist):
+    """ Returns formatted pandas dataframe of model history"""
     if "nominal" in mdlhist.keys(): mdlhist=mdlhist['faulty']
     if any(isinstance(i,dict) for i in mdlhist['flows'].values()):
         flowtable =  make_objtable(mdlhist, 'flows')
@@ -228,84 +368,8 @@ def make_histtable(mdlhist):
     index = pd.MultiIndex.from_tuples(histtable.columns)
     histtable = histtable.reindex(index, axis='columns')
     return histtable
-
-def make_statstable(reshist):
-    table = pd.DataFrame(reshist['stats'])
-    table.insert(0, 'time', reshist['time'])
-    return table
-def make_degflowstable(reshist):
-    table = pd.DataFrame(reshist['flows'])
-    table.insert(0, 'time', reshist['time'])
-    return table
-def make_degflowvalstable(reshist):
-    table = make_objtable(reshist, 'flowvals')
-    table.insert(0, 'time', reshist['time'])
-    return table
-def make_degfxnstable(reshist):
-    table = pd.DataFrame()
-    for fxnname in reshist['functions']:
-        table[fxnname]=reshist['functions'][fxnname]['status']
-    table.insert(0, 'time', reshist['time'])
-    return table
-def make_deghisttable(reshist, withstats=False):
-    fxnstable = make_degfxnstable(reshist)
-    flowstable = pd.DataFrame(reshist['flows'])
-    if withstats:
-        statstable = pd.DataFrame(reshist['stats'])
-        return pd.concat([fxnstable, flowstable, statstable], axis =1)
-    else:
-        return pd.concat([fxnstable, flowstable], axis =1)
-def make_heatmapstable(heatmaps):
-    table = pd.DataFrame(heatmaps)
-    return table.transpose()
-def make_simplefmea(endclasses):
-    table = pd.DataFrame(endclasses)
-    return table.transpose()
-def make_phasefmea(endclasses, app):
-    fmeadict = dict.fromkeys(app.scenids.keys())
-    for modephase, ids in app.scenids.items():
-        rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
-        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
-        fmeadict[modephase] = {'rate':rate, 'cost':cost, 'expected cost': expcost}
-    table=pd.DataFrame(fmeadict)
-    return table.transpose()
-def make_summfmea(endclasses, app):
-    fmeadict = dict()
-    for modephase, ids in app.scenids.items():
-        rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
-        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
-        if not fmeadict.get(modephase[0]): fmeadict[modephase[0]]= {'rate': 0.0, 'cost':0.0, 'expected cost':0.0}
-        fmeadict[modephase[0]]['rate'] += rate
-        fmeadict[modephase[0]]['cost'] += cost/len([1.0 for ((fxn,mode),phase) in app.scenids if (fxn, mode)==modephase[0]])
-        fmeadict[modephase[0]]['expected cost'] += expcost
-    table=pd.DataFrame(fmeadict)
-    return table.transpose()
-def make_maptable(mapping):
-    table = pd.DataFrame(mapping)
-    return table.transpose()
-def make_fullfmea(endclasses, summaries):
-    degradedtable = pd.DataFrame(summaries)
-    simplefmea=pd.DataFrame(endclasses)
-    fulltable = pd.concat([degradedtable, simplefmea])
-    return fulltable.transpose()
-def make_resulttable(endresults, summary):
-    table = pd.DataFrame(endresults['classification'], index=[0])
-    table['degraded functions'] = [summary['degraded functions']]
-    table['degraded flows'] = [summary['degraded flows']]
-    return table
-def make_dicttable(dictionary):
-    return pd.DataFrame(dictionary, index=[0])
-def make_samptimetable(sampletimes):
-    table = pd.DataFrame()
-    for phase, times in sampletimes.items():
-        table[phase]= [str(list(times.keys()))]
-    return table.transpose()
-
-
-# make table of function OR flow value attributes - objtype = 'function' or 'flow'
 def make_objtable(hist, objtype):
+    """make table of function OR flow value attributes - objtype = 'function' or 'flow'"""
     df = pd.DataFrame()
     labels = []
     for fxn, atts in hist[objtype].items():
@@ -321,10 +385,123 @@ def make_objtable(hist, objtype):
     index = pd.MultiIndex.from_tuples(labels)
     df = df.reindex(index, axis="columns")
     return df
-    
-# need to make degraded functions table
-# also need to make table summary of just functions/flows degraded
+def make_statstable(reshist):
+    """Makes a table of #of degraded flows, # of degraded functions, and # of total faults over time given a single result history"""
+    table = pd.DataFrame(reshist['stats'])
+    table.insert(0, 'time', reshist['time'])
+    return table
+def make_degflowstable(reshist):
+    """Makes a table of flows over time, where 0 is degraded and 1 is nominal"""
+    table = pd.DataFrame(reshist['flows'])
+    table.insert(0, 'time', reshist['time'])
+    return table
+def make_degflowvalstable(reshist):
+    """Makes a table of individual flow state values over time, where 0 is degraded and 1 is nominal"""
+    table = make_objtable(reshist, 'flowvals')
+    table.insert(0, 'time', reshist['time'])
+    return table
+def make_degfxnstable(reshist):
+    """Makes a table showing which functions are degraded over time (0 for degraded, 1 for nominal)"""
+    table = pd.DataFrame()
+    for fxnname in reshist['functions']:
+        table[fxnname]=reshist['functions'][fxnname]['status']
+    table.insert(0, 'time', reshist['time'])
+    return table
+def make_deghisttable(reshist, withstats=False):
+    """Makes a table of all funcitons and flows that are degraded over time. If withstats=True, the total # of each type degraded is provided in the last columns """
+    fxnstable = make_degfxnstable(reshist)
+    flowstable = pd.DataFrame(reshist['flows'])
+    if withstats:
+        statstable = pd.DataFrame(reshist['stats'])
+        return pd.concat([fxnstable, flowstable, statstable], axis =1)
+    else:
+        return pd.concat([fxnstable, flowstable], axis =1)
+def make_heatmapstable(heatmaps):
+    """Makes a table of a heatmap dictionary"""
+    table = pd.DataFrame(heatmaps)
+    return table.transpose()
+def make_simplefmea(endclasses):
+    """Makes a simple fmea (rate, cost, expected cost) of the endclasses of a list of fault scenarios run"""
+    table = pd.DataFrame(endclasses)
+    return table.transpose()
+def make_phasefmea(endclasses, app):
+    """
+    Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
+
+    Parameters
+    ----------
+    endclasses : dict
+        dict of endclasses of the simulation runs
+    app : sampleapproach
+        sample approach used for the underlying probability model of the set of scenarios run
+
+    Returns
+    -------
+    table: dataframe
+        table with cost, rate, and expected cost of each fault in each phase
+    """
+    fmeadict = dict.fromkeys(app.scenids.keys())
+    for modephase, ids in app.scenids.items():
+        rate= sum([endclasses[scenid]['rate'] for scenid in ids])
+        cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
+        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
+        fmeadict[modephase] = {'rate':rate, 'cost':cost, 'expected cost': expcost}
+    table=pd.DataFrame(fmeadict)
+    return table.transpose()
+def make_summfmea(endclasses, app):
+    """
+    Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
+
+    Parameters
+    ----------
+    endclasses : dict
+        dict of endclasses of the simulation runs
+    app : sampleapproach
+        sample approach used for the underlying probability model of the set of scenarios run
+
+    Returns
+    -------
+    table: dataframe
+        table with cost, rate, and expected cost of each fault (over all phases)
+    """
+    fmeadict = dict()
+    for modephase, ids in app.scenids.items():
+        rate= sum([endclasses[scenid]['rate'] for scenid in ids])
+        cost= cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
+        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
+        if not fmeadict.get(modephase[0]): fmeadict[modephase[0]]= {'rate': 0.0, 'cost':0.0, 'expected cost':0.0}
+        fmeadict[modephase[0]]['rate'] += rate
+        fmeadict[modephase[0]]['cost'] += cost/len([1.0 for ((fxn,mode),phase) in app.scenids if (fxn, mode)==modephase[0]])
+        fmeadict[modephase[0]]['expected cost'] += expcost
+    table=pd.DataFrame(fmeadict)
+    return table.transpose()
+def make_maptable(mapping):
+    """Makes table of a generic map"""
+    table = pd.DataFrame(mapping)
+    return table.transpose()
+def make_fullfmea(endclasses, summaries):
+    """Makes full fmea table (degraded functions/flows, cost, rate, expected cost) of scenarios given endclasses dict (cost, rate, expected cost) and summaries dict (degraded functions, degraded flows)"""
+    degradedtable = pd.DataFrame(summaries)
+    simplefmea=pd.DataFrame(endclasses)
+    fulltable = pd.concat([degradedtable, simplefmea])
+    return fulltable.transpose()
+def make_resulttable(endresults, summary):
+    """Makes a table of results (degraded functions/flows, cost, rate, expected cost) of a single run"""
+    table = pd.DataFrame(endresults['classification'], index=[0])
+    table['degraded functions'] = [summary['degraded functions']]
+    table['degraded flows'] = [summary['degraded flows']]
+    return table
+def make_dicttable(dictionary):
+    """Makes table of a generic dictionary"""
+    return pd.DataFrame(dictionary, index=[0])
+def make_samptimetable(sampletimes):
+    """Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)"""
+    table = pd.DataFrame()
+    for phase, times in sampletimes.items():
+        table[phase]= [str(list(times.keys()))]
+    return table.transpose()
 def make_summarytable(summary):
+    """Makes a table of a summary dictionary from a given model run"""
     return pd.DataFrame.from_dict(summary, orient = 'index')
 
 ##PLOTTING AND RESULTS DISPLAY
@@ -642,8 +819,8 @@ def get_plotlabels(g, reshist, t_ind):
         edgelabels[edge[0],edge[1]]=''.join(flow for flow in flows)
     for function in functions:
         if reshist['functions'][function]['numfaults'][t_ind]:
-            faultfxns+=[function]
-            faultlabels[function] = reshist['functions']['ImportEE']['faults'][t_ind].difference('nom')
+            faultfxns+=[function] 
+            faultlabels[function] = reshist['functions'][function]['faults'][t_ind].difference('nom')
         if not reshist['functions'][function]['status'][t_ind]:
             degfxns+=[function]
     flows = reshist['flows'].keys()
