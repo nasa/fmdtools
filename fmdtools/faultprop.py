@@ -266,7 +266,7 @@ def run_approach(mdl, app, reuse=False, staged=False, track=True):
         endfaults, endfaultprops = mdl.return_faultmodes()
         resgraph = mdl.return_stategraph()
         
-        endflows = rp.compare_graphflows(resgraph, nomresgraph)
+        endflows = rp.compare_graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
         if reuse: mdl.reset()
