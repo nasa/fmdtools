@@ -505,11 +505,20 @@ def make_summarytable(summary):
     return pd.DataFrame.from_dict(summary, orient = 'index')
 
 ##PLOTTING AND RESULTS DISPLAY
-    
-# plot_samplecost(app, endclasses, fault)
 
 def plot_samplecosts(app, endclasses, joint=False):
-    scenids={}
+    """
+    Plots the costs and rates of a set of faults injected over time according to the approach app
+
+    Parameters
+    ----------
+    app : sampleapproach
+        The sample approach used to run the list of faults
+    endclasses : dict
+        A dict of results for each of the scenarios.
+    joint : bool, optional
+        Whether to include joint fault scenarios. The default is False.
+    """
     for fxnmode in app.list_modes(joint):
         if any([True for (fm, phase), val in app.sampparams.items() if val['samp']=='fullint' and fm==fxnmode]):
             st='fullint'
@@ -518,7 +527,25 @@ def plot_samplecosts(app, endclasses, joint=False):
         else: 
             st='std'
         plot_samplecost(app, endclasses, fxnmode, samptype=st)
-def plot_samplecost(app, endclasses, fxnmode, hold=False, samptype='std'):
+def plot_samplecost(app, endclasses, fxnmode, samptype='std'):
+    """
+    Plots the sample cost and rate of a given fault over the injection times defined in the app sampleapproach
+
+    Parameters
+    ----------
+    app : sampleapproach
+        Sample approach defining the underlying samples to take and probability model of the list of scenarios.
+    endclasses : dict
+        A dict with the end classification of each fault (costs, etc)
+    fxnmode : tuple
+        tuple (or tuple of tuples) with structure ('function name', 'mode name') defining the fault mode
+    samptype : str, optional
+        The type of sample approach used:
+            - 'std' for a single point for each interval
+            - 'quadrature' for a set of points with weights defined by a quadrature
+            - 'pruned piecewise-linear' for a set of points with weights defined by a pruned approach (from app.prune_scenarios())
+            - 'fullint' for the full integral (sampling every possible time)
+    """
     associated_scens=[]
     for phase in app.phases:
         associated_scens = associated_scens + app.scenids.get((fxnmode, phase), [])
@@ -566,21 +593,21 @@ def plot_samplecost(app, endclasses, fxnmode, hold=False, samptype='std'):
     if type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+str(fxnmode)+" over time")
     else:                       axes[0].set_title("Cost function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
     
-    
-
-#plotflowhist
-# displays plots of a history of flow states over time
-# inputs: 
-#   - flowhist, the history of one or more flows over time stored in a dictionary with structure:
-#       {nominal/faulty: {flow: {attribute: [values]}}}, where
-#           - nominal/nominal keeps the history ifor both faulty and nominal flows
-#           - flow is all flows that were tracked 
-#           - attribute is the defined attributes of that flow (e.g. rate/effort/etc)
-#           - values is a list of values that attribute takes over time
-#   - fault, name of the fault that was injected (for the titles)
-#   - time, the time in which the fault was initiated (so that time is displayed on the graph)
-#   - objs, the functions/flows to plot
 def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
+    """
+    Plots the states of a model over time given a history.
+
+    Parameters
+    ----------
+    mdlhist : dict
+        History of states over time. Can be just the scenario states or a dict of scenario states and nominal states per {'nominal':nomhist,'faulty':mdlhist}
+    fault : str, optional
+        Name of the fault (for the title). The default is ''.
+    time : float, optional
+        Time of fault injection. The default is 0.
+    fxnflows : list, optional
+        List of functions and flows to plot. The default is [], which returns all.
+    """
     mdlhists={}
     if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
     else: mdlhists=mdlhist
@@ -620,27 +647,40 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
                 fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
                 plt.show()
     
-#plot_ghist
-# displays plots of the graph over time
-# inputs:
-#   - ghist, a dictionary of the history of the graph over time with structure:
-#       {time: graphobject}, where
-#           - time is the time where the snapshot of the graph was recorded
-#           - graphobject is the snapshot of the graph at that time
-#    - faultscen, the name of the fault scenario where this graph occured
 def plot_ghist(ghist,faultscen=[]):
+    """
+    Displays plots of the graph over time given a dict history of graph objects
+
+    Parameters
+    ----------
+    ghist : dict
+        A dictionary of the history of the graph over time with structure:
+       {time: graphobject}, where
+           - time is the time where the snapshot of the graph was recorded
+           - graphobject is the snapshot of the graph at that time
+    faultscen : str, optional
+        Name of the fault scenario (for the title). The default is [] (no name).
+    """
     for time, graph in ghist.items():
         show_graph(graph, faultscen, time)
 
-#show_graph
-# plots a single graph at a single time
-# inputs:
-#   - g, the graph object
-#   - faultscen, the name of the fault scenario (for the title)
-#   - time, the time of the fault scenario (also for the title)
-#   - showfaultprops, whether to list the faults occuring on functions and list degraded flows
-#       #(only works well for relatively simple models)
 def show_graph(g, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
+    """
+    Plots a single graph object g.
+
+    Parameters
+    ----------
+    g : networkx graph
+        The multigraph to plot
+    faultscen : str, optional
+        Name of the fault scenario (for the title). The default is [].
+    time : float, optional
+        Time of fault injection. The default is [].
+    showfaultlabels : bool, optional
+        Whether or not to label the faults on the functions. The default is True.
+    heatmap : dict, optional
+        A heatmap dictionary to overlay on the plot. The default is {}.
+    """
     edgeflows=dict()
     plt.figure()
     for edge in g.edges:
@@ -673,6 +713,26 @@ def show_graph(g, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
         plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[])
 #same for bipartite graph     
 def show_bipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True, heatmap={}, pos=[]):
+    """
+    Plots a bipartite graph object g.
+
+    Parameters
+    ----------
+    g : networkx graph
+        Bipartite graph object (e.g. mdl.bipartite)
+    scale : float, optional
+        Scale factor for node/label size. The default is 1.
+    faultscen : str, optional
+        Name of the fault scenario (for the title). The default is [].
+    time : float, optional
+        Time the fault was injected. The default is [].
+    showfaultlabels : bool, optional
+        Whether or not to label the faults on functions. The default is True.
+    heatmap : dict, optional
+        Heatmap dictionary to overlay on plot. The default is {}.
+    pos : dict, optional
+        Dictionary of node positions (to be consistent with other plots). The default is [].
+    """
     labels={node:node for node in g.nodes}
     plt.figure()
     if not pos: pos=nx.spring_layout(g)
@@ -703,9 +763,29 @@ def show_bipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True, heat
         faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
         plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale)
 
-# plot_resultsgraph_from():
-# plots a representation of the graph at a specific time given a results history
 def plot_resultsgraph_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[]):
+    """
+    Plots a representation of the model graph at a specific time in the results history.
+
+    Parameters
+    ----------
+    mdl : model
+        The model the faults were run in.
+    reshist : dict
+        A dictionary of results (from compare_hists())
+    time : float
+        The time in the history to plot the graph at.
+    faultscen : str, optional
+        Name of the fault scenario. The default is [].
+    gtype : str, optional
+        The type of graph to plot (normal or bipartite). The default is 'bipartite'.
+    showfaultlabels : bool, optional
+        Whether or not to list faults on the plot. The default is True.
+    scale : float, optional
+        Scale factor for the node/label sizes. The default is 1.
+    pos : dict, optional
+        dict of node positions (if re-using positions). The default is [].
+    """
     [[t_ind,],] = np.where(reshist['time']==time)
     if gtype=='bipartite':
         g = mdl.bipartite.copy()
@@ -718,9 +798,29 @@ def plot_resultsgraph_from(mdl, reshist, time, faultscen=[], gtype='bipartite', 
         plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale)
     return 0
 
-# plot_resultsgraphs_from():
-# iteratively plots a representation of the graph at a specific time given a results history
 def plot_resultsgraphs_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[]):
+    """
+    Plots a set of representations of the model graph at given times in the results history.
+
+    Parameters
+    ----------
+    mdl : model
+        The model the faults were run in.
+    reshist : dict
+        A dictionary of results (from compare_hists())
+    times : list or 'all'
+        The times in the history to plot the graph at. If 'all', plots them all
+    faultscen : str, optional
+        Name of the fault scenario. The default is [].
+    gtype : str, optional
+        The type of graph to plot (normal or bipartite). The default is 'bipartite'.
+    showfaultlabels : bool, optional
+        Whether or not to list faults on the plot. The default is True.
+    scale : float, optional
+        Scale factor for the node/label sizes. The default is 1.
+    pos : dict, optional
+        dict of node positions (if re-using positions). The default is [].
+    """
     if times=='all':
         t_inds= [i for i in range(0,len(reshist['time']))]
     else:
@@ -736,12 +836,34 @@ def plot_resultsgraphs_from(mdl, reshist, times, faultscen=[], gtype='bipartite'
         for t_ind in t_inds:
             update_graphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale)
     return 0
-# animate_resultsgraphs_from():
-# plots and returns an animation of the model graph
-# to view in spyder, make sure to set to display using: %matplotlib qt
-# to save (or do anything useful)h, make sure ffmpeg is installed  https://www.wikihow.com/Install-FFmpeg-on-Windows
-# use %matplotlib qt from spyder or %matplotlib notebook from jupyter
+
 def animate_resultsgraphs_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, show=False, pos=[]):
+    """
+    Creates an animation of the model graph using results at given times in the results history.
+    To view, use %matplotlib qt from spyder or %matplotlib notebook from jupyter
+    To save (or do anything useful)h, make sure ffmpeg is installed  https://www.wikihow.com/Install-FFmpeg-on-Windows
+
+    Parameters
+    ----------
+    mdl : model
+        The model the faults were run in.
+    reshist : dict
+        A dictionary of results (from compare_hists())
+    times : list or 'all'
+        The times in the history to plot the graph at. If 'all', plots them all
+    faultscen : str, optional
+        Name of the fault scenario. The default is [].
+    gtype : str, optional
+        The type of graph to plot (normal or bipartite). The default is 'bipartite'.
+    showfaultlabels : bool, optional
+        Whether or not to list faults on the plot. The default is True.
+    scale : float, optional
+        Scale factor for the node/label sizes. The default is 1.
+    show : bool, optional
+        Whether to show the plot at the end (may be redundant). The default is True.
+    pos : dict, optional
+        dict of node positions (if re-using positions). The default is [].
+    """
     if times=='all':
         t_inds= [i for i in range(0,len(reshist['time']))]
     else:
@@ -759,18 +881,20 @@ def animate_resultsgraphs_from(mdl, reshist, times, faultscen=[], gtype='biparti
         ani = matplotlib.animation.FuncAnimation(fig, update_graphplot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False))
         if show: plt.show()
     return ani
-
 def update_bipplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True):
+    """Updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     degnodes = degfxns + degflows
     plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show)
 def update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True):
+    """Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show)
 
 def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True):
+    """ Plots a standard graph. Used in other functions"""
     if not pos: pos=nx.shell_layout(g)
     nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color='g', \
                      width=3, font_weight='bold')
@@ -791,6 +915,7 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
     return 0
 
 def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True):
+    """ Plots a bipartite graph. Used in other functions"""
     nodesize=scale*700
     fontsize=scale*6
     if not pos: pos=nx.spring_layout(g)
@@ -806,6 +931,37 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     if show: plt.show()
     return 0
 def get_plotlabels(g, reshist, t_ind):
+    """
+    Assigns labels to a graph g from reshist at time t so that it can be plotted
+
+    Parameters
+    ----------
+    g : networkx graph
+        The graph to get labels for
+    reshist : dict
+        The dict of results history over time (e.g. from compare_mdlhist)
+    t_ind : float
+        The time in reshist to update the graph at
+
+    Returns
+    -------
+    labels : dict
+        labels for the graph.
+    faultfxns : dict
+        functions with faults in them
+    degfxns : dict
+        functions that are degraded
+    degflows : dict
+        flows that are degraded
+    faultlabels : dict
+        names of each fault
+    faultedges : dict
+        edges with faults in them
+    faultedgeflows : dict
+        names of flows that are degraded on each edge
+    edgelabels : dict
+        labels of each edge
+    """
     labels={node:node for node in g.nodes}
     functions = reshist['functions'].keys()
     
