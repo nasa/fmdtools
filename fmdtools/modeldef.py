@@ -14,7 +14,37 @@ from scipy.stats import binom
 
 # MAJOR CLASSES
 class Block(object):
+    """ 
+    Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
+    
+    Attributes
+    ----------
+    timely : bool
+        Whether or not the block state depends on time (or just inputs and outputs)
+    failrate : float
+        Failure rate for the block
+    time : float
+        internal time of the function
+    faults : set
+        faults currently present in the block. If the function is nominal, set is {'nom'}
+    faultmodes : dict
+        faults possible to inject in the block and their properties. Has structure:
+            - faultname :
+                - dist : (float of % failures due to this fualt)
+                - oppvect : (list of relative probabilities of the fault occuring in each phase)
+                - rcost : cost of repairing the fault
+    """
     def __init__(self, states={}, timely=True):
+        """
+        Instance superclass. Called by FxnBlock and Component classes.
+
+        Parameters
+        ----------
+        states : dict, optional
+            Internal states (variables, essentially) of the block. The default is {}.
+        timely : bool, optional
+            Whether or not the function is dependent on time (or just inputs/outputs). The default is True.
+        """
         self.timely=timely
         self._states=states.keys()
         self._initstates=states.copy()
@@ -24,6 +54,16 @@ class Block(object):
         self.faults=set(['nom'])
         if timely: self.time=0.0
     def assoc_modes(self, modes, name=''):
+        """
+        Associates modes with the block when called in the function or component.
+
+        Parameters
+        ----------
+        modes : dict
+            Dictionary of modes with structure {faultname:[dist,oppvect, rcost]}
+        name : str, optional
+            (for components only) Name of the component. The default is ''.
+        """
         if not getattr(self, 'faultmodes', []): 
             if name: self.faultmodes=dict()
             else:    self.faultmodes=dict.fromkeys(modes)
@@ -32,24 +72,40 @@ class Block(object):
             self.faultmodes[name+mode]['dist'] =     modes[mode][0]
             self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
             self.faultmodes[name+mode]['rcost'] =    modes[mode][2]
-    def has_fault(self,fault):
+    def has_fault(self,fault): 
+        """Check if the block has fault (a str)"""
         return self.faults.intersection(set([fault]))
-    def has_faults(self,faults):
+    def has_faults(self,faults): 
+        """Check if the block has any in the list of faults"""
         return self.faults.intersection(set(faults))
-    def add_fault(self,fault):
+    def add_fault(self,fault): 
+        """Adds fault (a str) to the block"""
         self.faults.update([fault])
-    def add_faults(self,faults):
+    def add_faults(self,faults): 
+        """Adds list of faults to the block"""
         self.faults.update(faults)
-    def replace_fault(self, fault_to_replace,fault_to_add):
+    def replace_fault(self, fault_to_replace,fault_to_add): 
+        """Replaces fault_to_replace with fault_to_add in the set of faults"""
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
     def reset(self):            #reset requires flows to be cleared first
+        """ Resets the block to the initial state with no faults. Used (only for components) when resetting the model"""
         self.faults.clear()
         self.faults.add('nom')
         for state in self._initstates.keys():
             setattr(self, state,self._initstates[state])
         self.time=0
     def return_states(self):
+        """
+        Returns states of the block at the current state. Used (iteratively) to record states over time.
+
+        Returns
+        -------
+        states : dict
+            States (variables) of the block
+        faults : set
+            Faults present in the block
+        """
         states={}
         for state in self._states:
             states[state]=getattr(self,state)
@@ -57,7 +113,41 @@ class Block(object):
 
 #Function superclass 
 class FxnBlock(Block):
+    """
+    Superclass for functions.
+    
+    Attributes
+    ----------
+    type : str
+        labels the function as a function (may not be necessary) Default is 'function'
+    flows : dict
+        flows associated with the function. structured {flow:{value:XX}}
+    components : dict
+        component instantiations of the function (if any)
+    timers : set
+        names of timers to be used in the function (if any)
+    tstep : float
+        timestep of the model in the function (added in model definition)
+    """
     def __init__(self,flownames,flows, states={}, components={},timers={}, timely=True):
+        """
+        Intances the function superclass with the relevant parameters.
+
+        Parameters
+        ----------
+        flownames : list
+            Names of flows (in order) to use in the function 
+        flows :list
+            Flow objects to (in order correspoinding to flownames) associate with the function
+        states : dict, optional
+            Internal states to associate with the function. The default is {}.
+        components : dict, optional
+            Component objects to associate with the function. The default is {}.
+        timers : set, optional
+            Set of names of timers to use in the function. The default is {}.
+        timely : bool, optional
+            Whether or not the function depends on time (or just input/output). The default is True.
+        """
         self.type = 'function'
         self.flows=self.make_flowdict(flownames,flows)
         for flow in self.flows.keys():
@@ -71,15 +161,35 @@ class FxnBlock(Block):
             setattr(self, timername, Timer(timername))
         super().__init__(states, timely)
     def make_flowdict(self,flownames,flows):
+        """
+        Puts a list of flows with a list of flow names in a dictionary.
+
+        Parameters
+        ----------
+        flownames : list
+            names of flows corresponding to flows
+        flows : list
+            flows
+
+        Returns
+        -------
+        flowdict : dict
+            dict of flows indexed by flownames
+        """
         flowdict={}
         for ind, flowname in enumerate(flownames):
             flowdict[flowname]=flows[ind]
         return flowdict
     def condfaults(self,time):
+        """ Placeholder for function condfaults methods """
         return 0
     def behavior(self,time):
+        """ Placeholder for function behavior methods """
         return 0        
-    def reset(self):            #reset requires flows to be cleared first
+    def reset(self):            
+        """
+        Resets the internal states and faults of the function to the intial state. Used when reseting the model. Requires associated flows to be cleared first.
+        """
         self.faults.clear()
         self.faults.add('nom')
         for state in self._initstates.keys():
@@ -92,6 +202,21 @@ class FxnBlock(Block):
         if hasattr(self, 'tstep'): self.tstep=self.tstep
         self.updatefxn(faults=['nom'], time=0)
     def copy(self, newflows, *attr):
+        """
+        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.
+
+        Parameters
+        ----------
+        newflows : list
+            list of new flow objects to be associated with the copy of the function
+        *attr : any
+            arbitrary parameters to add (if funciton takes in more than flows e.g. design variables)
+
+        Returns
+        -------
+        copy : FxnBlock
+            Copy of the given function with new flows
+        """
         copy = self.__class__(newflows, *attr)
         copy.faults = self.faults.copy()
         for state in self._initstates.keys():
@@ -99,7 +224,17 @@ class FxnBlock(Block):
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
-    def updatefxn(self,faults=['nom'], time=0): #fxns take faults and time as input
+    def updatefxn(self,faults=['nom'], time=0):
+        """
+        Updates the state of the function at a given time and injects faults.
+
+        Parameters
+        ----------
+        faults : list, optional
+            Faults to inject in the function. The default is ['nom'].
+        time : float, optional
+            Model time. The default is 0.
+        """
         self.faults.update(faults)  #if there is a fault, it is instantiated in the function
         self.condfaults(time)           #conditional faults and behavior are then run
         self.behavior(time)
@@ -107,11 +242,27 @@ class FxnBlock(Block):
         return
         
 class Component(Block):
+    """
+    Superclass for components (most attributes and methods inherited from Block superclass)
+    """
     def __init__(self,name, states={}, timely=True):
+        """
+        Inherit the component class
+
+        Parameters
+        ----------
+        name : str
+            Unique name ID for the component
+        states : dict, optional
+            States to use in the component. The default is {}.
+        timely : bool, optional
+            Whether the component depends on time or just input/output behavior. The default is True.
+        """
         self.type = 'component'
         self.name = name
         super().__init__(states, timely)
     def behavior(self,time):
+        """ Placeholder for component behavior methods """
         return 0
 
 #Flow superclass
