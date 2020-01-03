@@ -273,7 +273,46 @@ def run_approach(mdl, app, reuse=False, staged=False, track=True):
         elif staged: _
         else: mdl = mdl.__class__(params=mdl.params)
     return endclasses, mdlhists
-        
+
+
+from pathos.pp import ParallelPool
+
+# =============================================================================
+# def run_approach_parallel(mdl, app, reuse=False, staged=False, track=True):
+#     if reuse and staged:
+#         print("invalid to use reuse and staged options at the same time. Using staged")
+#         reuse=False
+#     mdl.reset()
+#     if staged:
+#         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times)
+#     else:
+#         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track)
+#     nomresgraph = mdl.return_stategraph()
+#     mdl.reset()
+#     
+#     endclasses = {}
+#     mdlhists = {}
+#     mdlhists['nominal'] = nomhist
+#     mdls = [mdl.copy() for i, s in enumerate(app.scenlist)]
+#     
+#     pool = ParallelPool(nodes=4)
+#     
+#     outputs = pool.map(prop_one_scen, mdls, app.scenlist)
+#         
+#     for i, scen in enumerate(app.scenlist):
+#         mdlhists[scen['properties']['name']], _ = outputs[i]
+#         endfaults, endfaultprops = mdl.return_faultmodes()
+#         resgraph = mdl.return_stategraph()
+#         
+#         endflows = rp.compare_graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
+#         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
+#         
+#         if reuse: mdl.reset()
+#         elif staged: _
+#         else: mdl = mdl.__class__(params=mdl.params)
+#     return endclasses, mdlhists
+# =============================================================================
+       
 def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     """
     Runs a fault scenario in the model over time
