@@ -499,7 +499,7 @@ class SampleApproach():
         self.scenids = newscenids
         self.weights = newweights
         self.sampletimes = newsampletimes
-        self.create_scenarios([])
+        self.create_scenarios()
         self.sampparams={key:{'samp':'pruned '+samptype} for key in self.sampparams}
     def list_modes(self, joint=False):
         if joint:

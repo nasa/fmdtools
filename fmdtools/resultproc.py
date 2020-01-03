@@ -492,10 +492,12 @@ def make_summfmea(endclasses, app):
         rate= sum([endclasses[scenid]['rate'] for scenid in ids])
         cost= cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
         expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
-        if not fmeadict.get(modephase[0]): fmeadict[modephase[0]]= {'rate': 0.0, 'cost':0.0, 'expected cost':0.0}
-        fmeadict[modephase[0]]['rate'] += rate
-        fmeadict[modephase[0]]['cost'] += cost/len([1.0 for ((fxn,mode),phase) in app.scenids if (fxn, mode)==modephase[0]])
-        fmeadict[modephase[0]]['expected cost'] += expcost
+        if getattr(app, 'jointmodes', []):  index = str(modephase[0])
+        else:                               index = modephase[0]
+        if not fmeadict.get(modephase[0]): fmeadict[index]= {'rate': 0.0, 'cost':0.0, 'expected cost':0.0}
+        fmeadict[index]['rate'] += rate
+        fmeadict[index]['cost'] += cost/len([1.0 for (fxnmode,phase) in app.scenids if fxnmode==modephase[0]])
+        fmeadict[index]['expected cost'] += expcost
     table=pd.DataFrame(fmeadict)
     return table.transpose()
 def make_maptable(mapping):
@@ -650,6 +652,7 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
         Time of fault injection. The default is 0.
     fxnflows : list, optional
         List of functions and flows to plot. The default is [], which returns all.
+        
     """
     mdlhists={}
     if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
