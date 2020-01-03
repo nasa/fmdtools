@@ -265,10 +265,21 @@ class Component(Block):
         """ Placeholder for component behavior methods """
         return 0
 
-#Flow superclass
-# - replace with attribute dictionary???
 class Flow(object):
+    """
+    Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
+    """
     def __init__(self, attributes, name):
+        """
+        Instances the flow with given attributes.
+
+        Parameters
+        ----------
+        attributes : dict
+            attributes and their values to be associated with the flow
+        name : str
+            name of the flow
+        """
         self.type='flow'
         self.flow=name
         self._initattributes=attributes.copy()
@@ -276,14 +287,21 @@ class Flow(object):
         for attribute in self._attributes:
             setattr(self, attribute, attributes[attribute])
     def reset(self):
+        """ Resets the flow to the initial state"""
         for attribute in self._initattributes:
             setattr(self, attribute, self._initattributes[attribute])
     def status(self):
+        """
+        Returns a dict with the current states of the flow.
+        """
         attributes={}
         for attribute in self._attributes:
             attributes[attribute]=getattr(self,attribute)
         return attributes
     def copy(self):
+        """
+        Returns a copy of the flow object (used when copying the model)
+        """
         attributes={}
         for attribute in self._attributes:
             attributes[attribute]=getattr(self,attribute)
@@ -297,7 +315,30 @@ class Flow(object):
 
 #Model superclass    
 class Model(object):
+    """
+    Model superclass used to construct the model, return representations of the model, and copy and reset the model when run.
+    
+    Attributes
+    ----------
+    type : str
+        labels the model as a model (may not be necessary)
+    flows : dict
+        dictionary of flows objects in the model indexed by name
+    fxns : dict
+        dictionary of functions in the model indexed by name
+    params : dict
+        dictionary of (optional) parameters for a given instantiation of a model
+    timelyfxns : set
+        set of functions that are timely (depend on time, not just input/output)
+    bipartite : networkx graph
+        bipartite graph view of the functions and flows
+    graph : networkx graph
+        multigraph view of functions and flows
+    """
     def __init__(self):
+        """
+        Instantiates internal model attributes (as empty)
+        """
         self.type='model'
         self.flows={}
         self.fxns={}
@@ -306,12 +347,38 @@ class Model(object):
         self._fxnflows=[]
         self._fxninput={}
     def add_flow(self,flowname, flowtype, flowdict):
+        """
+        Adds a flow with given attributes to the model.
+
+        Parameters
+        ----------
+        flowname : str
+            Unique flow name to give the flow in the model
+        flowtype : str
+            Type of flow (e.g. EE, ME, etc)
+        flowdict : dict or Flow
+            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object
+        """
         if type(flowdict) == dict:
             self.flows[flowname]=Flow(flowdict, flowtype)
         elif isinstance(flowdict, Flow):
             self.flows[flowname] = flowdict
         else: raise Exception('Invalid flow. Must be dict or flow')
     def add_fxn(self,name,classobj, flownames, *args):
+        """
+        Instantiates a given function in the model.
+
+        Parameters
+        ----------
+        name : str
+            Name to give the function.
+        classobj : Class
+            Class to instantiate the function as.
+        flownames : list
+            List of flows to associate with the function.
+        *args : arbitrary
+            Other parameters to send to the __init__ method of the function class
+        """
         flows=self.get_flows(flownames)
         if args: 
             self.fxns[name]=classobj(flows,args)
@@ -324,8 +391,17 @@ class Model(object):
         if self.fxns[name].timely: self.timelyfxns.update([name])
         self.fxns[name].tstep=self.tstep
     def get_flows(self,flownames):
+        """ Returns a list of the model flow objects """
         return [self.flows[flowname] for flowname in flownames]
     def construct_graph(self):
+        """
+        Creates and returns a graph representation of the model
+
+        Returns
+        -------
+        graph : networkx graph
+            multgraph representation of the model functions and flows
+        """
         self.bipartite=nx.Graph()
         self.bipartite.add_nodes_from(self.fxns, bipartite=0)
         self.bipartite.add_nodes_from(self.flows, bipartite=1)
@@ -349,17 +425,38 @@ class Model(object):
         #self.graph=
         return self.graph
     def return_componentgraph(self, fxnname):
+        """
+        Returns a graph representation of the components associated with a given funciton
+
+        Parameters
+        ----------
+        fxnname : str
+            Name of the function (e.g. in mdl.fxns)
+
+        Returns
+        -------
+        g : networkx graph
+            Bipartite graph representation of the function with components.
+        """
         g = nx.Graph()
         g.add_nodes_from([fxnname], bipartite=0)
         g.add_nodes_from(self.fxns[fxnname].components, bipartite=1)
         g.add_edges_from([(fxnname, component) for component in self.fxns[fxnname].components])        
         return g
-    def reset(self):
-        for flowname, flow in self.flows.items():
-            flow.reset()
-        for fxnname, fxn in self.fxns.items():
-            fxn.reset()
     def return_stategraph(self, gtype='normal'):
+        """
+        Returns a graph representation of the current state of the model.
+
+        Parameters
+        ----------
+        gtype : str, optional
+            Type of graph to return (normal, bipartite, or component). The default is 'normal'.
+
+        Returns
+        -------
+        graph : networkx graph
+            Graph representation of the system with the modes and states added as attributes.
+        """
         if gtype=='normal':
             graph=nx.projected_graph(self.bipartite, self.fxns)
         elif gtype=='bipartite':
@@ -369,13 +466,7 @@ class Model(object):
             for fxnname, fxn in self.fxns.items():
                 graph.add_nodes_from(fxn.components, bipartite=1)
                 graph.add_edges_from([(fxnname, component) for component in fxn.components])     
-        edgevals={}
-        fxnmodes={}
-        fxnstates={}
-        flowstates={}
-        compmodes={}
-        compstates={}
-        comptypes={}
+        edgevals, fxnmodes, fxnstates, flowstates, compmodes, compstates, comptypes ={}, {}, {}, {}, {}, {}, {}
         if gtype=='normal': #set edge values for normal graph
             for edge in graph.edges:
                 midedges=list(self.multgraph.subgraph(edge).edges)
@@ -411,8 +502,17 @@ class Model(object):
             nx.set_node_attributes(graph, comptypes, 'iscomponent')
         return graph
     def return_faultmodes(self):
-        modes={}
-        modeprops={}
+        """
+        Returns faultmodes present in the model
+
+        Returns
+        -------
+        modes : dict
+            Fault modes present in the model indexed by function name
+        modeprops : dict
+            Fault mode properties (defined in the function definition) with structure {fxn:mode:properties}
+        """
+        modes, modeprops = {}, {}
         for fxnname, fxn in self.fxns.items():
             ms = [m for m in fxn.faults.copy() if m!='nom']
             if ms: 
@@ -423,6 +523,14 @@ class Model(object):
                     modeprops[fxnname][mode] = fxn.faultmodes[mode]
         return modes, modeprops
     def copy(self):
+        """
+        Copies the model at the current state.
+
+        Returns
+        -------
+        copy : Model
+            Copy of the curent model.
+        """
         copy = self.__class__(params=getattr(self, 'params', {}))
         for flowname, flow in self.flows.items():
             copy.flows[flowname]=flow.copy()
@@ -434,17 +542,26 @@ class Model(object):
             else:       copy.fxns[fxnname]=fxn.copy(flows)
         _ = copy.construct_graph()
         return copy
+    def reset(self):
+        """Resets the model to the initial state (with no faults, etc)"""
+        for flowname, flow in self.flows.items():
+            flow.reset()
+        for fxnname, fxn in self.fxns.items():
+            fxn.reset()
 
-#class for model timers (e.g. for conditional faults)    
 class Timer():
+    """class for model timers used in functions (e.g. for conditional faults) """
     def __init__(self, name, tstep=1.0):
         self.name=name
         self.time=0
     def t(self):
+        """ Returns the time elapsed """
         return self.time
     def inc(self, tstep):
+        """ Increments the time elapsed by tstep"""
         self.time+=tstep
     def reset(self):
+        """ Resets the time to zero"""
         self.time=0
 
 class SampleApproach():
