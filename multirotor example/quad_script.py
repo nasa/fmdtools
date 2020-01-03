@@ -31,7 +31,7 @@ summfmea = rp.make_summfmea(endclasses, app)
 ## 
 ## #Check various scenarios individually
 ## 
-endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=5, staged=True, gtype='bipartite')
+endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=5, staged=True, gtype='component')
 
 rp.show_bipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 

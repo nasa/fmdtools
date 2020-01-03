@@ -275,9 +275,10 @@ def run_approach(mdl, app, reuse=False, staged=False, track=True):
     return endclasses, mdlhists
 
 
-from pathos.pp import ParallelPool
+
 
 # =============================================================================
+# from pathos.pp import ParallelPool
 # def run_approach_parallel(mdl, app, reuse=False, staged=False, track=True):
 #     if reuse and staged:
 #         print("invalid to use reuse and staged options at the same time. Using staged")

@@ -30,10 +30,12 @@ app_list = SampleApproach(mdl, jointfaults={'faults':[(('ImportEE', 'inf_v'),('I
 endclasses, mdlhists = fp.run_approach(mdl, app_jf5)
 fmea = rp.make_phasefmea(endclasses, app_jf5).sort_values('expected cost', ascending=False)
 
+fmea_small = rp.make_summfmea(endclasses, app_jf5).sort_values('expected cost', ascending=False)
 
 endclasses, mdlhists = fp.run_approach(mdl, app_jf2)
 
 #rp.plot_samplecosts(app_jf2, endclasses, joint=True)
 reshists, diffs, summaries = rp.compare_hists(mdlhists)
 
-rp.plot_mdlhist({'nominal': mdlhists['nominal'], 'faulty':mdlhists['ImportEE: no_v, ImportWater: no_wat, MoveWater: mech_break, t=27']})
+mdlhist = {'nominal': mdlhists['nominal'], 'faulty':mdlhists['ImportEE: no_v, ImportWater: no_wat, MoveWater: mech_break, t=27']}
+rp.plot_mdlhist(mdlhist, fault='IE:no_v, IW: no_w, MW: m_b', time=27)
