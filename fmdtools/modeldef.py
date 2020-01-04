@@ -565,7 +565,70 @@ class Timer():
         self.time=0
 
 class SampleApproach():
-    def __init__(self, mdl, faults='all', jointfaults={'faults':'None'}, condprob=0.1, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
+    """
+    Class for defining the sample approach to be used for a set of faults.
+    
+    Attributes
+    ----------
+    phases : dict
+        phases defined in the model
+    tstep : float
+        timestep defined in the model
+    fxnrates : dict
+        overall failure rates for each function
+    comprates : dict
+        overall failure rates for each component
+    jointmodes : list
+        (if any) joint fault modes to be injected in the approach
+    rates : dict
+        rates of each mode (fxn, mode) in each phase, structured {fxnmode: {phase:rate}}
+    sampletimes : dict
+        faults to inject at each time in each phase, structured {phase:time:fnxmode}
+    weights : dict
+        weight to put on each time each fault was injected, structured {fxnmode:phase:time:weight}
+    sampparams : dict
+        parameters used to sample each mode
+    scenlist : list
+        list of fault scenarios (dicts of faults and properties) that fault propagation iterates through
+    scenids : dict
+        a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,phase):listofnames}
+    """
+    def __init__(self, mdl, faults='all', jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
+        """
+        Initializes the sample approach for a given model
+
+        Parameters
+        ----------
+        mdl : Model
+            Model to sample.
+        faults : str or list, optional
+            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'.
+        jointfaults : dict, optional
+            Defines how the approach considers joint faults. The default is {'faults':'None'}. Has structure:
+                - faults : float    
+                    # of joint faults to inject
+                - jointfuncs :  bool 
+                    determines whether more than one mode can be injected in a single function
+                - pcond (optional) : float in range (0,1) 
+                    conditional probabilities for joint faults. If not give, independence is assumed.
+        sampparams : dict, optional
+            Defines how specific modes in the model will be sampled over time. The default is {}. 
+            Has structure: {(fxnmode,phase): sampparam}, where sampparam has structure:
+                - 'samp' : str ('quad', 'fullint', 'evenspacing','randtimes','symrandtimes')
+                    sample strategy to use (quadrature, full integral, even spacing, random times, or symmetric random times)
+                - 'numpts' : float
+                    number of points to use (for evenspacing, randtimes, and symrandtimes only)
+                - 'quad' : quadpy quadrature
+                    quadrature object if the quadrature option is selected.
+        defaultsamp : TYPE, optional
+            Defines how the model will be sampled over time by default. The default is {'samp':'evenspacing','numpts':1}. Has structure:
+                - 'samp' : str ('quad', 'fullint', 'evenspacing','randtimes','symrandtimes')
+                    sample strategy to use (quadrature, full integral, even spacing, random times, or symmetric random times)
+                - 'numpts' : float
+                    number of points to use (for evenspacing, randtimes, and symrandtimes only)
+                - 'quad' : quadpy quadrature
+                    quadrature object if the quadrature option is selected.
+        """
         self.phases = mdl.phases
         self.tstep = mdl.tstep
         self.init_modelist(mdl,faults, jointfaults)
@@ -573,6 +636,7 @@ class SampleApproach():
         self.create_sampletimes(sampparams, defaultsamp)
         self.create_scenarios()
     def init_modelist(self,mdl, faults, jointfaults={'faults':'None'}):
+        """Initializes comprates, jointmodes internal list of modes"""
         self.comprates={}
         self._fxnmodes={}
         if faults=='all':
@@ -597,6 +661,7 @@ class SampleApproach():
                 self.jointmodes = self.jointmodes + jointmodes
         elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
     def init_rates(self,mdl, jointfaults={'faults':'None'}):
+        """ Initializes rates, rates_timeless"""
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
         for (fxnname, mode) in self._fxnmodes:
@@ -629,6 +694,7 @@ class SampleApproach():
                         self.rates[jointmode][phase] = jointfaults['pcond'][j_ind]*max(rates)  
                     self.rates_timeless[jointmode][phase] = self.rates[jointmode][phase]/(times[1]-times[0])          
     def create_sampletimes(self, params={}, default={'samp':'evenspacing','numpts':1}):
+        """ Initializes weights and sampletimes """
         self.sampletimes=dict.fromkeys(self.phases.keys())
         self.weights={fxnmode:dict.fromkeys(rate) for fxnmode,rate in self.rates.items()}
         self.sampparams={}
@@ -647,6 +713,29 @@ class SampleApproach():
                     phasetimes = [possible_phasetimes[pt] for pt in pts]
                 self.add_phasetimes(fxnmode, phase, phasetimes, weights=weights)
     def select_points(self, param, possible_pts):
+        """
+        Selects points in the list possible_points according to a given sample strategy.
+
+        Parameters
+        ----------
+        param : dict
+            Sample parameter. Has structure:
+                - 'samp' : str ('quad', 'fullint', 'evenspacing','randtimes','symrandtimes')
+                    sample strategy to use (quadrature, full integral, even spacing, random times, or symmetric random times)
+                - 'numpts' : float
+                    number of points to use (for evenspacing, randtimes, and symrandtimes only)
+                - 'quad' : quadpy quadrature
+                    quadrature object if the quadrature option is selected.
+        possible_pts : 
+            list of possible points in time.
+
+        Returns
+        -------
+        pts : list
+            selected points
+        weights : list
+            weights for each point
+        """
         weights=[]
         if param['samp']=='fullint': pts = possible_pts
         elif param['samp']=='evenspacing':
@@ -676,6 +765,7 @@ class SampleApproach():
         if not any(weights): weights = [1/len(pts) for t in pts]
         return pts, weights
     def add_phasetimes(self, fxnmode, phase, phasetimes, weights=[]):
+        """ Adds a set of times for a given mode to sampletimes"""
         if phasetimes:
             if not self.weights[fxnmode].get(phase): self.weights[fxnmode][phase] = {t: 1/len(phasetimes) for t in phasetimes}
             for (ind, time) in enumerate(phasetimes):
@@ -688,6 +778,7 @@ class SampleApproach():
                 if any(weights): self.weights[fxnmode][phase][time] = weights[ind]
                 else:       self.weights[fxnmode][phase][time] = 1/len(phasetimes)
     def create_nomscen(self, mdl):
+        """ Creates a nominal scenario """
         nomscen={'faults':{},'properties':{}}
         for fxnname in mdl.fxns:
             nomscen['faults'][fxnname]='nom'
@@ -696,7 +787,8 @@ class SampleApproach():
         nomscen['properties']['name']='nominal'
         nomscen['properties']['weight']=1.0
         return nomscen
-    def create_scenarios(self): #need to add to create scenarios to run
+    def create_scenarios(self):
+        """ Creates list of scenarios to be iterated over in fault injection. Added as scenlist and scenids """
         self.scenlist=[]
         self.times = []
         self.scenids = {}
@@ -725,6 +817,23 @@ class SampleApproach():
                         else: self.scenids[fxnmode, phase] = [name]
         self.times.sort()
     def prune_scenarios(self,endclasses,samptype='piecewise', threshold=0.1, sampparam={'samp':'evenspacing','numpts':1}):
+        """
+        Finds the best sample approach to approximate the full integral (given the approach was the full integral).
+
+        Parameters
+        ----------
+        endclasses : dict
+            dict of results (cost, rate, expected cost) for the model run indexed by scenid 
+        samptype : str ('piecewise' or 'bestpt'), optional
+            Method to use. 
+            If 'bestpt', finds the point in the interval that gives the average cost. 
+            If 'piecewise', attempts to split the inverval into sub-intervals of continuity
+            The default is 'piecewise'.
+        threshold : float, optional
+            If 'piecewise,' the threshold for detecting a discontinuity based on deviation from linearity. The default is 0.1.
+        sampparam : float, optional
+            If 'piecewise,' the sampparam sampparam to prune to. The default is {'samp':'evenspacing','numpts':1}, which would be a single point (optimal for linear).
+        """
         newscenids = dict.fromkeys(self.scenids.keys())
         newsampletimes = {key:{} for key in self.sampletimes.keys()}
         newweights = {fault:dict.fromkeys(phasetimes) for fault, phasetimes in self.weights.items()}
@@ -770,110 +879,56 @@ class SampleApproach():
         self.create_scenarios()
         self.sampparams={key:{'samp':'pruned '+samptype} for key in self.sampparams}
     def list_modes(self, joint=False):
+        """ Returns a list of modes in the approach """
         if joint:
             return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()] + self.jointmodes
         else:
             return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
     def list_moderates(self):
+        """ Returns the rates for each mode """
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
-
-        
-# mode constructor????
-class Mode():
-    def __init__(self, name, baserate, phases, modifiers=[], rateunits = 360):
-        self.name=name
-        self.baserate=baserate
-        self.phases = phases
-        if not modifiers:               self.modifiers = [1]*len(phases)
-        elif type(modifiers)== list:    self.modifiers = {phase: modifiers[i] for i,phase in enumerate(modifiers)}
-        else:                           self.modifiers = modifiers
-        self.rateunits = rateunits
-    def phaserates(self):
-        return {phase:self.baserate*self.modifiers[phase] for phase in self.phases}
-    def ratesperuse(self):
-        return {phase:self.baserate*self.modifiers[phase]*np.diff(inter)/self.rateunits for phase, inter in self.phases.items()}
-    def totrateperuse(self):
-        return sum(self.ratesperuse().values())
-    def ratespertime(self):
-        times = np.array(list(self.phases.values()))
-        tottime = np.max(times) - np.min(times)
-        return {phase:self.baserate*self.modifiers[phase]*np.diff(inter)/(tottime*self.rateunits) for phase, inter in self.phases.items()}
-    def totratepertime(self):
-        return sum(self.ratespertime().values())
-    def expnumsfromuses(self, uses):
-        userates = self.ratesperuse()
-        return {phase:userate*uses for phase, userate in userates.items()}
-    def totnumfromuses(self, uses):
-        return sum(self.expnumsfromuses.values())
-    def expnumsfromlifetime(self,lifetime):
-        timerates=self.ratespertime()
-        return {phase:timerate*lifetime for phase, timerate in timerates.items()}
-    def totnumfromlifetime(self,lifetime):
-        return sum(self.expnumsfromlifetime().values())
-    def probspertime(self):
-        return {phase: 1-np.exp(-rate) for phase, rate in self.ratespertime().items()}
-    def totprobpertime(self):
-        return sum(self.probspertime().values())
-    def totprobsfromtime(self,lifetime):
-        return {phase: 1-np.exp(-rate) for phase, rate in self.expnumsfromlifetime(lifetime).items()}
-    def totprobfromtime(self, lifetime):
-        return 1-np.exp(self.totnumfromlifetime(lifetime))
-    def probsperuses(self):
-        return {phase: 1-np.exp(-rate) for phase, rate in self.ratesperuse().items()}
-    def totprobsfromuses(self, uses):
-        return {phase: 1-binom.pdf(1,uses, prob) for phase, prob in self.probsperuses().items()}
-    def totprobfromuses(self, uses):
-        return sum(self.totprobsfromuses(uses).values())
-        
-    
     
 def phases(times, names=[]):
+    """ Creates named phases from a set of times defining the edges of hte intervals """
     if not names: names = range(len(times)-1)
     return {names[i]:[times[i], times[i+1]] for (i, _) in enumerate(times) if i < len(times)-1}
 
-#def mode(rate,rcost):
-#    return {'rate':rate,'rcost':rcost}
-
-
-# USEFUL FUNCTIONS FOR MODEL CONSTRUCTION
-#m2to1
-# multiplies a list of numbers which may take on the values infinity or zero
-# in deciding if num is inf or zero, the earlier values take precedence
 def m2to1(x):
-    if np.size(x)>2:
-        x=[x[0], m2to1(x[1:])]
-    if x[0]==np.inf:
-        y=np.inf
+    """
+    Multiplies a list of numbers which may take on the values infinity or zero. In deciding if num is inf or zero, the earlier values take precedence
+
+    Parameters
+    ----------
+    x : list 
+        numbers to multiply
+
+    Returns
+    -------
+    y : float
+        result of multiplication
+    """
+    if np.size(x)>2:    x=[x[0], m2to1(x[1:])]
+    if x[0]==np.inf:    y=np.inf
     elif x[1]==np.inf:
-        if x[0]==0.0:
-            y=0.0
-        else:
-            y=np.inf
-    else:
-        y=x[0]*x[1]
+        if x[0]==0.0:   y=0.0
+        else:           y=np.inf
+    else:               y=x[0]*x[1]
     return y
 
-#trunc
-# truncates a value to 2 (useful if behavior unchanged by increases)
 def trunc(x):
-    if x>2.0:
-        y=2.0
-    else:
-        y=x
+    """truncates a value to 2 (useful if behavior unchanged by increases)"""
+    if x>2.0:   y=2.0
+    else:       y=x
     return y
 
-#truncn
-# truncates a value to n (useful if behavior unchanged by increases)
 def truncn(x, n):
-    if x>n:
-        y=n
-    else:
-        y=x
+    """truncates a value to n (useful if behavior unchanged by increases)"""
+    if x>n: y=n
+    else:   y=x
     return y
 
-#union
-# calculates the union of two probabilities
 def union(probs):
+    """ Calculates the union of a list of probabilities [p_1, p_2, ... p_n] p = p_1 U p_2 U ... U p_n """
     while len(probs)>1:
         if len(probs) % 2: 
             p, probs = probs[0], probs[1:]
