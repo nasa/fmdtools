@@ -936,4 +936,17 @@ def union(probs):
         probs = [probs[i-1]+probs[i]-probs[i-1]*probs[i] for i in range(1, len(probs), 2)]
     return probs[0]
 
+def reseting_accumulate(vec):
+    """ Accummulates vector for all positive output (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,0,1,2])"""
+    newvec = vec
+    val=0
+    for ind, i in enumerate(vec):
+        if i > 0: val = i + val
+        else:    val = 0
+        newvec[ind] = val
+
+def accumulate(vec):
+    """ Accummulates vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])"""
+    return [sum(vec[:i+1]) for i in range(len(vec)) ]
+
     
