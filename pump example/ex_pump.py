@@ -235,6 +235,9 @@ class Pump(Model):
     # in this case, we will just use the repair costs and the probability
     def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
         
+        #accumulated loss function:
+        # sum([sum(vec[i:]) for i in range(len(vec))])
+        
         #get fault costs and rates
         modes, modeprops = self.return_faultmodes()
         if 'repair' in self.params: repcost = sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])

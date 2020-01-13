@@ -490,7 +490,7 @@ def make_summfmea(endclasses, app):
     fmeadict = dict()
     for modephase, ids in app.scenids.items():
         rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
+        cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
         expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
         if getattr(app, 'jointmodes', []):  index = str(modephase[0])
         else:                               index = modephase[0]
