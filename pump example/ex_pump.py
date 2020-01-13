@@ -237,6 +237,17 @@ class Pump(Model):
         
         #accumulated loss function:
         # sum([sum(vec[i:]) for i in range(len(vec))])
+        #squared accumulated loss function
+        # [sum(vec[i:])**2 for i in range(len(vec))]
+        #squared loss function
+        # sum(vec)
+        # need to check: 
+        #       - normal (linear) costs
+        #       - accumulated costs
+        #       - resetting accumulated costs
+        #       - costs w- degradation / no degradation 
+        #       - conditional faults triggered at different times
+        #       - squared costs
         
         #get fault costs and rates
         modes, modeprops = self.return_faultmodes()
