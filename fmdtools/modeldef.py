@@ -615,7 +615,7 @@ class SampleApproach():
             Defines how specific modes in the model will be sampled over time. The default is {}. 
             Has structure: {(fxnmode,phase): sampparam}, where sampparam has structure:
                 - 'samp' : str ('quad', 'fullint', 'evenspacing','randtimes','symrandtimes')
-                    sample strategy to use (quadrature, full integral, even spacing, random times, or symmetric random times)
+                    sample strategy to use (quadrature, full integral, even spacing, random times, likeliest, or symmetric random times)
                 - 'numpts' : float
                     number of points to use (for evenspacing, randtimes, and symrandtimes only)
                 - 'quad' : quadpy quadrature
@@ -623,7 +623,7 @@ class SampleApproach():
         defaultsamp : TYPE, optional
             Defines how the model will be sampled over time by default. The default is {'samp':'evenspacing','numpts':1}. Has structure:
                 - 'samp' : str ('quad', 'fullint', 'evenspacing','randtimes','symrandtimes')
-                    sample strategy to use (quadrature, full integral, even spacing, random times, or symmetric random times)
+                    sample strategy to use (quadrature, full integral, even spacing, random times,likeliest, or symmetric random times)
                 - 'numpts' : float
                     number of points to use (for evenspacing, randtimes, and symrandtimes only)
                 - 'quad' : quadpy quadrature
