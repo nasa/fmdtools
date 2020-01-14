@@ -15,7 +15,7 @@ from ex_pump import * #required to import entire module
 import time
 
 #mdl = Pump(params={'repair', 'ee', 'water', 'delay'})
-mdl = Pump(params={'water'}) # should give identical utilities
+mdl = Pump(params={'cost':'water', 'delay':10}) # should give identical utilities
 mdl = Pump()
 
 app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad': quadpy.line_segment.gauss_patterson(1)})

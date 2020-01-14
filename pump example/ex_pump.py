@@ -131,7 +131,7 @@ class MoveWat(FxnBlock):
         #here we also define the states of a model, which are also added as 
         #attributes to the function
         states={'eff':1.0} #effectiveness state
-        self.delay=delay[0][0]
+        self.delay=delay[0]
         super().__init__(flownames,flows,states, timers={'timer'})
         self.failrate=1e-5
         self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 10000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
@@ -145,7 +145,7 @@ class MoveWat(FxnBlock):
                     #increment timer: default is 1 second, if we use self.tstep, the time
                     # will increment as desired even if we change model timestep
                     self.timer.inc(self.tstep)  
-                if self.timer.time>10.0:
+                if self.timer.time>self.delay:
                     self.add_fault('mech_break')
         else: 
             if self.Watout.effort>5.0: self.add_fault('mech_break')
@@ -189,7 +189,7 @@ class Water(Flow):
 ##DEFINE MODEL OBJECT
 # The model is also made an object to aid graph construction
 class Pump(Model):
-    def __init__(self, params={'repair', 'ee', 'water', 'delay'}):
+    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10}):
         super().__init__()
         
         self.params=params
@@ -225,7 +225,7 @@ class Pump(Model):
         self.add_fxn('ImportEE',ImportEE,['EE_1'])
         self.add_fxn('ImportWater',ImportWater,['Wat_1'])
         self.add_fxn('ImportSignal',ImportSig,['Sig_1'])
-        self.add_fxn('MoveWater', MoveWat, ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'], ['delay' in self.params])
+        self.add_fxn('MoveWater', MoveWat, ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'], params['delay'])
         self.add_fxn('ExportWater', ExportWater, ['Wat_2'])
         
         self.construct_graph()
@@ -251,15 +251,18 @@ class Pump(Model):
         
         #get fault costs and rates
         modes, modeprops = self.return_faultmodes()
-        if 'repair' in self.params: repcost = sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])
+        if 'repair' in self.params['cost']: repcost = sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])
         else: repcost = 0.0
         
-        if 'water' in self.params: 
+        if 'water' in self.params['cost']: 
             lostwat = sum(mdlhists['nominal']['flows']['Wat_2']['rate'] - mdlhists['faulty']['flows']['Wat_2']['rate'])
             watcost = lostwat * 100 * self.tstep
+        elif 'water_exp' in self.params['cost']:
+            wat = mdlhists['nominal']['flows']['Wat_2']['rate'] - mdlhists['faulty']['flows']['Wat_2']['rate']
+            watcost = sum(np.array(accumulate(wat))**2) * self.tstep
         else: watcost = 0.0
         
-        if 'ee' in self.params:
+        if 'ee' in self.params['cost']:
             eespike = sum([spike for spike in mdlhists['faulty']['flows']['EE_1']['rate'] - mdlhists['nominal']['flows']['EE_1']['rate'] if spike >1.0])
             eecost = eespike * 100 * self.tstep
         else: eecost = 0.0
