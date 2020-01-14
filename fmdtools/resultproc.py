@@ -532,7 +532,7 @@ def make_summarytable(summary):
 ##PLOTTING AND RESULTS DISPLAY
 
 
-def plot_samplecosts(app, endclasses, joint=False):
+def plot_samplecosts(app, endclasses, joint=False, title=""):
     """
     Plots the costs and rates of a set of faults injected over time according to the approach app
 
@@ -552,8 +552,8 @@ def plot_samplecosts(app, endclasses, joint=False):
             st='quadrature'
         else: 
             st='std'
-        plot_samplecost(app, endclasses, fxnmode, samptype=st)
-def plot_samplecost(app, endclasses, fxnmode, samptype='std'):
+        plot_samplecost(app, endclasses, fxnmode, samptype=st, title="")
+def plot_samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     """
     Plots the sample cost and rate of a given fault over the injection times defined in the app sampleapproach
 
@@ -616,7 +616,8 @@ def plot_samplecost(app, endclasses, fxnmode, samptype='std'):
     
     axes[0].set_ylabel("Cost")
     axes[0].grid()
-    if type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+str(fxnmode)+" over time")
+    if title: axes[0].set_title(title)
+    elif type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+str(fxnmode)+" over time")
     else:                       axes[0].set_title("Cost function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
 def plot_costovertime(endclasses, app, costtype='expected cost'):
     """

@@ -52,7 +52,7 @@ class ImportEE(FxnBlock):
         # {faultname: [[distribution percentage], [opportunity vector], [repair cost]]}
         # alternatively, modes may be associated by using:
         # self.faultmodes = {modename: }
-        self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[0.20, [0,1,0], 10000]})
+        self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[0.20, [0,1,0], 5000]})
         
     #condfaults changes the state of the system if there is a change in state in a flow
     # using a condfaults method is optional but helpful for delinating between
@@ -95,7 +95,7 @@ class ExportWater(FxnBlock):
         #flows going into/out of the function need to be made properties of the function
         super().__init__(['Watin'], flows)
         self.failrate=1e-5
-        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 10000]})
+        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 5000]})
     def behavior(self,time):
         if self.has_fault('block'): #here the fault is some sort of blockage
             self.Watin.area=0.1
@@ -157,10 +157,10 @@ class MoveWat(FxnBlock):
             self.EEin.rate=500*self.Sigin.power*self.EEin.effort
             self.eff=0.0
         elif self.has_fault('mech_break'):
-            self.EEin.rate=5*self.Sigin.power*self.EEin.effort
+            self.EEin.rate=0.2*self.Sigin.power*self.EEin.effort
             self.eff=0.0
         else:
-            self.EEin.rate=1.0*self.Sigin.power*self.EEin.effort
+            self.EEin.rate=1.0*self.Sigin.power*self.EEin.effort*min(3.0, self.Watout.effort)
             self.eff=1.0 
             
         self.Watout.effort=self.Sigin.power*self.eff*min(1.5, self.EEin.effort)*self.Watin.level/self.Watout.area
@@ -263,8 +263,9 @@ class Pump(Model):
         else: watcost = 0.0
         
         if 'ee' in self.params['cost']:
-            eespike = sum([spike for spike in mdlhists['faulty']['flows']['EE_1']['rate'] - mdlhists['nominal']['flows']['EE_1']['rate'] if spike >1.0])
-            eecost = eespike * 100 * self.tstep
+            eespike = [spike for spike in mdlhists['faulty']['flows']['EE_1']['rate'] - mdlhists['nominal']['flows']['EE_1']['rate'] if spike >1.0]
+            if len(eespike)>0: eecost = 10 * sum(np.array(reseting_accumulate(eespike))) * self.tstep
+            else: eecost =0.0
         else: eecost = 0.0
         
         totcost = repcost + watcost + eecost
