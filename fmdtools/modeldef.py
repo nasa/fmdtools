@@ -746,7 +746,7 @@ class SampleApproach():
             if len(quantiles) > len(possible_pts): pts = possible_pts
             else: 
                 pts= [int(round(np.quantile(possible_pts, q))) for q in quantiles]
-                weights=param['quad'].weights/2
+                weights=param['quad'].weights/sum(param['quad'].weights)
         elif param['samp']=='randtimes':
             if param['numpts']>=len(possible_pts): pts = possible_pts
             else: pts= [possible_pts.pop(np.random.randint(len(possible_pts))) for i in range(min(param['numpts'], len(possible_pts)))]
