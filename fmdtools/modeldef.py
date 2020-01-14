@@ -944,6 +944,7 @@ def reseting_accumulate(vec):
         if i > 0: val = i + val
         else:    val = 0
         newvec[ind] = val
+    return newvec
 
 def accumulate(vec):
     """ Accummulates vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])"""
