@@ -105,13 +105,11 @@ Putting it all together means dynamically propogating a *set* of faults for the 
 # General Workflow
 
 1.) Define a model
-
 	- python file referencing the modeldef modules
 	
 	- create needed function, flow, model, and component classes for model
 	
 2.) Propagate Faults
-
 	- python script/jupyter notebook using the model file and faultprop module
 	
 	- instantiate model
@@ -121,7 +119,6 @@ Putting it all together means dynamically propogating a *set* of faults for the 
 	- run appropriate faultprop function
 	
 3.) Process/Visualize/Quantify Results
-
 	- (same python script)
 	
 	- use the function(s) corresponding to the analysis/visualization desired
