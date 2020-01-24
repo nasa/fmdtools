@@ -810,7 +810,7 @@ def show_bipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True, heat
         faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
         plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale)
 
-def plot_resultsgraph_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[]):
+def plot_resultsgraph_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[], retfig=False):
     """
     Plots a representation of the model graph at a specific time in the results history.
 
@@ -832,18 +832,21 @@ def plot_resultsgraph_from(mdl, reshist, time, faultscen=[], gtype='bipartite', 
         Scale factor for the node/label sizes. The default is 1.
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
+    retfig:, bool, optional
+        whether to return the figure and axis objects of the plot. The default is False.
     """
     [[t_ind,],] = np.where(reshist['time']==time)
     if gtype=='bipartite':
         g = mdl.bipartite.copy()
         labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
         degnodes = degfxns + degflows
-        plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos=pos)
+        
+        fig_axis = plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos=pos, retfig=retfig)
     elif gtype=='normal':
         g = mdl.graph.copy()
         labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-        plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale)
-    return 0
+        fig_axis= plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, retfig=retfig)
+    if retfig: return fig_axis
 
 def plot_resultsgraphs_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[]):
     """
@@ -882,7 +885,6 @@ def plot_resultsgraphs_from(mdl, reshist, times, faultscen=[], gtype='bipartite'
         pos=nx.shell_layout(g)
         for t_ind in t_inds:
             update_graphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale)
-    return 0
 
 def animate_resultsgraphs_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, show=False, pos=[]):
     """
@@ -940,7 +942,7 @@ def update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True,
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show)
 
-def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True):
+def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, retfig=False):
     """ Plots a standard graph. Used in other functions"""
     if not pos: pos=nx.shell_layout(g)
     nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color='g', \
@@ -958,10 +960,11 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
         nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows, font_color='r')
     if faultscen:
         plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    if show: plt.show()
-    return 0
+    if retfig:
+        return plt.gcf(), plt.gca()
+    elif show: plt.show()
 
-def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True):
+def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, retfig=False):
     """ Plots a bipartite graph. Used in other functions"""
     nodesize=scale*700
     fontsize=scale*6
@@ -975,8 +978,9 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=fontsize, font_color='k')
     if faultscen:
             plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    if show: plt.show()
-    return 0
+    if retfig:
+        return plt.gcf(), plt.gca()
+    elif show: plt.show()
 def get_plotlabels(g, reshist, t_ind):
     """
     Assigns labels to a graph g from reshist at time t so that it can be plotted
