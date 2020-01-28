@@ -763,6 +763,8 @@ class SampleApproach():
                 pts.sort()
         else: print("invalid option: ", param)
         if not any(weights): weights = [1/len(pts) for t in pts]
+        if len(pts)!=len(set(pts)):
+            raise Exception("Too many pts for quadrature at this discretization")
         return pts, weights
     def add_phasetimes(self, fxnmode, phase, phasetimes, weights=[]):
         """ Adds a set of times for a given mode to sampletimes"""
