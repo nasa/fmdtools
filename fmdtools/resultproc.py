@@ -639,7 +639,7 @@ def plot_costovertime(endclasses, app, costtype='expected cost'):
     plt.xlabel('time')
     plt.grid()
 
-def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
+def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True):
     """
     Plots the states of a model over time given a history.
 
@@ -653,13 +653,16 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
         Time of fault injection. The default is 0.
     fxnflows : list, optional
         List of functions and flows to plot. The default is [], which returns all.
-        
+    returnfigs: bool, optional
+        Whether to return the figure objects in a list. The default is False.
+    legend: bool, optional
+        Whether the plot should have a legend for faulty and nominal states. The default is true
     """
     mdlhists={}
     if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
     else: mdlhists=mdlhist
     times = mdlhists["nominal"]["time"]
-    
+    figs =[]
     for objtype in ["flows", "functions"]:
         for fxnflow in mdlhists['nominal'][objtype]:
             if fxnflows: #if in the list 
@@ -669,15 +672,18 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
                 nomhist=mdlhists['nominal']["flows"][fxnflow]
                 if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
             elif objtype=="functions":
-                nomhist=mdlhists['nominal']["functions"][fxnflow]
+                nomhist=copy.deepcopy(mdlhists['nominal']["functions"][fxnflow])
                 del nomhist['faults']
                 if 'faulty' in mdlhists: 
-                    hist = mdlhists['faulty']["functions"][fxnflow]
+                    hist = copy.deepcopy(mdlhists['faulty']["functions"][fxnflow])
                     del hist['faults']
             plots=len(nomhist)
             if plots:
                 fig = plt.figure()
-                fig.add_subplot(np.ceil((plots+1)/2),2,plots)
+                figs = figs +[fig]
+                if legend: fig.add_subplot(np.ceil((plots+1)/2),2,plots)
+                else: fig.add_subplot(np.ceil((plots)/2),2,plots)
+                
                 plt.tight_layout(pad=2.5, w_pad=2.5, h_pad=2.5, rect=[0, 0.03, 1, 0.95])
                 n=1
                 for var in nomhist:
@@ -686,13 +692,90 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
                     if 'faulty' in mdlhists:
                         a, = plt.plot(times, hist[var], color='r')
                         c = plt.axvline(x=time, color='k')
-                    b, =plt.plot(times, nomhist[var], color='b')
+                    b, =plt.plot(times, nomhist[var], ls='--', color='b')
                     plt.title(var)
                 if 'faulty' in mdlhists:
-                    plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+'legend')
-                    plt.legend([a,b],['faulty', 'nominal'])
-                fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
+                    fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
+                    if legend:
+                        ax_l = plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+'legend')
+                        plt.legend([a,b],['faulty', 'nominal'], loc='center')
+                        plt.box(on=None)
+                        ax_l.get_xaxis().set_visible(False)
+                        ax_l.get_yaxis().set_visible(False)
                 plt.show()
+    if returnfigs: return figs
+
+def plot_mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=False, legend=True):
+    """
+    Plots the states of a model over time given a history.
+
+    Parameters
+    ----------
+    mdlhist : dict
+        History of states over time. Can be just the scenario states or a dict of scenario states and nominal states per {'nominal':nomhist,'faulty':mdlhist}
+    fault : str, optional
+        Name of the fault (for the title). The default is ''.
+    time : float, optional
+        Time of fault injection. The default is 0.
+    fxnflowsvals : dict, optional
+        dict of flow values to plot with structure {fxnflow:[vals]}. The default is {}, which returns all.
+    cols: int, optional
+        columns to use in the figure. The default is 2.
+    returnfig: bool, optional
+        Whether to return the figure. The default is False.
+    legend: bool, optional
+        Whether the plot should have a legend for faulty and nominal states. The default is true
+        
+    """
+    mdlhists={}
+    if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
+    else: mdlhists=mdlhist
+    times = mdlhists["nominal"]["time"]
+    
+    if fxnflowvals: num_plots = sum([len(val) for k,val in enumerate(fxnflowvals)])
+    else: num_plots = sum([len(flow) for flow in mdlhist['nominal']['flows'].values()])+sum([len(f.keys())-1 for f in mdlhist['nominal']['functions'].values()])
+    fig = plt.figure(figsize=(cols*3, 2*num_plots/cols))
+    n=1
+    
+    for objtype in ["flows", "functions"]:
+        for fxnflow in mdlhists['nominal'][objtype]:
+            if fxnflowvals: #if in the list 
+                if fxnflow not in fxnflowvals: continue
+            
+            if objtype =="flows":
+                nomhist=mdlhists['nominal']["flows"][fxnflow]
+                if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
+            elif objtype=="functions":
+                nomhist=copy.deepcopy(mdlhists['nominal']["functions"][fxnflow])
+                del nomhist['faults']
+                if 'faulty' in mdlhists: 
+                    hist = copy.deepcopy(mdlhists['faulty']["functions"][fxnflow])
+                    del hist['faults']
+
+            for var in nomhist:
+                if fxnflowvals: #if in the list of values
+                    if var not in fxnflowvals[fxnflow]: continue
+                if legend: plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label=fxnflow+var)
+                else: plt.subplot(np.ceil((num_plots)/cols),cols,n, label=fxnflow+var)
+                n+=1
+                if 'faulty' in mdlhists:
+                    a, = plt.plot(times, hist[var], color='r')
+                    c = plt.axvline(x=time, color='k')
+                b, =plt.plot(times, nomhist[var], ls='--', color='b')
+                plt.title(fxnflow+": "+var)
+    if 'faulty' in mdlhists:
+        fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
+        if legend:
+            ax_l = plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label=fxnflow+'legend')
+            plt.legend([a,b],['faulty', 'nominal'], loc='center')
+            plt.box(on=None)
+            ax_l.get_xaxis().set_visible(False)
+            ax_l.get_yaxis().set_visible(False)
+    plt.tight_layout(pad=1)
+    plt.subplots_adjust(top=0.93)
+    if returnfig: return fig
+    else: plt.show()
+
     
 def plot_ghist(ghist,faultscen=[]):
     """
