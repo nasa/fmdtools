@@ -25,7 +25,7 @@ from fmdtools.modeldef import *
 
 
 ##DEFINE MODEL FUNCTIONS
-# Functions are, again, defined using Python classes that are instantiated as objects
+# Functions are defined using Python classes that are instantiated as objects
 
 # Import EE is the line of electricity going into the pump
 # We define it here as a subclass of the FxnBlock superclass (imported from modeldef.py)
@@ -95,7 +95,7 @@ class ExportWater(FxnBlock):
         #flows going into/out of the function need to be made properties of the function
         super().__init__(['Watin'], flows)
         self.failrate=1e-5
-        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 5000]})
+        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 7500]})
     def behavior(self,time):
         if self.has_fault('block'): #here the fault is some sort of blockage
             self.Watin.area=0.1
@@ -134,7 +134,7 @@ class MoveWat(FxnBlock):
         self.delay=delay[0]
         super().__init__(flownames,flows,states, timers={'timer'})
         self.failrate=1e-5
-        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 10000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
+        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 7500], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
         #timers can be set by adding variables to functions also
     def condfaults(self, time):
         # here we define a conditional fault that only occurs after a state 
