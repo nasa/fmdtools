@@ -639,7 +639,7 @@ def plot_costovertime(endclasses, app, costtype='expected cost'):
     plt.xlabel('time')
     plt.grid()
 
-def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True):
+def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel="time"):
     """
     Plots the states of a model over time given a history.
 
@@ -694,6 +694,7 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legen
                         c = plt.axvline(x=time, color='k')
                     b, =plt.plot(times, nomhist[var], ls='--', color='b')
                     plt.title(var)
+                    plt.xlabel(timelabel)
                 if 'faulty' in mdlhists:
                     fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
                     if legend:
@@ -705,7 +706,7 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legen
                 plt.show()
     if returnfigs: return figs
 
-def plot_mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=False, legend=True):
+def plot_mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=False, legend=True, timelabel="time"):
     """
     Plots the states of a model over time given a history.
 
@@ -763,6 +764,7 @@ def plot_mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfi
                     c = plt.axvline(x=time, color='k')
                 b, =plt.plot(times, nomhist[var], ls='--', color='b')
                 plt.title(fxnflow+": "+var)
+                plt.xlabel(timelabel)
     if 'faulty' in mdlhists:
         fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
         if legend:
