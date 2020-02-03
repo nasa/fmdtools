@@ -95,7 +95,7 @@ class ExportWater(FxnBlock):
         #flows going into/out of the function need to be made properties of the function
         super().__init__(['Watin'], flows)
         self.failrate=1e-5
-        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 7500]})
+        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 5000]})
     def behavior(self,time):
         if self.has_fault('block'): #here the fault is some sort of blockage
             self.Watin.area=0.01
@@ -134,7 +134,7 @@ class MoveWat(FxnBlock):
         self.delay=delay[0]
         super().__init__(flownames,flows,states, timers={'timer'})
         self.failrate=1e-5
-        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 7500], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
+        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
         #timers can be set by adding variables to functions also
     def condfaults(self, time):
         # here we define a conditional fault that only occurs after a state 
@@ -154,10 +154,10 @@ class MoveWat(FxnBlock):
     def behavior(self, time):
         #here we can define how the function will behave with different faults
         if self.has_fault('short'):
-            self.EEin.current=500*self.Sigin.power*self.EEin.voltage
+            self.EEin.current=500*10/5000*self.Sigin.power*self.EEin.voltage
             self.eff=0.0
         elif self.has_fault('mech_break'):
-            self.EEin.current=0.2*self.Sigin.power*self.EEin.voltage
+            self.EEin.current=0.2*10/5000*self.Sigin.power*self.EEin.voltage
             self.eff=0.0
         else:
             self.EEin.current=10/5000*self.Sigin.power*self.EEin.voltage*min(13.0, self.Watout.pressure)
@@ -256,15 +256,15 @@ class Pump(Model):
         
         if 'water' in self.params['cost']: 
             lostwat = sum(mdlhists['nominal']['flows']['Wat_2']['flowrate'] - mdlhists['faulty']['flows']['Wat_2']['flowrate'])
-            watcost = lostwat * 100 * self.tstep
+            watcost = 750 * lostwat  * self.tstep
         elif 'water_exp' in self.params['cost']:
             wat = mdlhists['nominal']['flows']['Wat_2']['flowrate'] - mdlhists['faulty']['flows']['Wat_2']['flowrate']
-            watcost = sum(np.array(accumulate(wat))**2) * self.tstep
+            watcost =100 *  sum(np.array(accumulate(wat))**2) * self.tstep
         else: watcost = 0.0
         
         if 'ee' in self.params['cost']:
             eespike = [spike for spike in mdlhists['faulty']['flows']['EE_1']['current'] - mdlhists['nominal']['flows']['EE_1']['current'] if spike >1.0]
-            if len(eespike)>0: eecost = 10 * sum(np.array(reseting_accumulate(eespike))) * self.tstep
+            if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.tstep
             else: eecost =0.0
         else: eecost = 0.0
         
