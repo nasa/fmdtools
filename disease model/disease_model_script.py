@@ -20,3 +20,7 @@ rp.show_graph(dm1.graph)
 endresults, resgraph, mdlhist = fp.run_nominal(dm1)
 
 rp.plot_mdlhist(mdlhist)
+
+nominal_state_table = rp.make_histtable(mdlhist)
+
+nominal_state_table.to_csv("nominal_simulation.csv")
