@@ -548,6 +548,9 @@ class Model(object):
             flow.reset()
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
+    def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
+        """Placeholder for model find_classification methods (for running nominal models)"""
+        return {'rate':1, 'cost': 1, 'expected cost': 1}
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) """

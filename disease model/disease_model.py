@@ -59,17 +59,17 @@ class Transit(FxnBlock):
             self.T_Living.Out_R  = L_to_D * self.T_Living.Stay_R          
             
             
-            self.T_Downtown.In_I = self.T_Downtown.Out_I
-            self.T_Downtown.In_S = self.T_Downtown.Out_S
-            self.T_Downtown.In_R  = self.T_Downtown.Out_R 
+            self.T_Downtown.In_I = self.T_Campus.Out_I
+            self.T_Downtown.In_S = self.T_Campus.Out_S
+            self.T_Downtown.In_R  = self.T_Campus.Out_R 
             
-            self.T_Downtown.In_I = self.T_Living.Out_I
-            self.T_Downtown.In_S = self.T_Living.Out_S
-            self.T_Downtown.In_R  = self.T_Living.Out_R  
+            self.T_Campus.In_I = self.T_Living.Out_I
+            self.T_Campus.In_S = self.T_Living.Out_S
+            self.T_Campus.In_R  = self.T_Living.Out_R  
             
-            self.T_Living.In_I = self.T_Campus.Out_I
-            self.T_Living.In_S = self.T_Campus.Out_S
-            self.T_Living.In_R  = self.T_Campus.Out_R 
+            self.T_Living.In_I = self.T_Downtown.Out_I
+            self.T_Living.In_S = self.T_Downtown.Out_S
+            self.T_Living.In_R  =  self.T_Downtown.Out_R 
             
             
         
@@ -93,9 +93,3 @@ class DiseaseModel(Model):
         
         self.construct_graph()
     
-    def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
-        rate=1
-        totcost=1
-        expcost=1
-        
-        return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
