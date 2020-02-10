@@ -2,6 +2,8 @@
 """
 Created on Mon Nov 25 17:17:59 2019
 
+Tests a variety of sampling methods 
+
 @author: Daniel Hulse
 """
 import sys
