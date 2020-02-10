@@ -1,6 +1,8 @@
 # fmdtools: Fault Model Design Tools
 
-fmdtools is a toolkit to enable the modelling and design of systems in the early design phase. With it, one can model the dynamic effects of a fault over time in an engineered system and and then design the system to be more resilient based on rate and severity information. 
+fmdtools is a toolkit to enable the modelling and design of systems in the early design phase. With it, one can model the dynamic effects of a fault over time in an engineered system and design the system to be more resilient. 
+
+[![DOI](https://zenodo.org/badge/212862445.svg)](https://zenodo.org/badge/latestdoi/212862445)
 
 ##### Features include:
 
