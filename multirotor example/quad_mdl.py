@@ -13,6 +13,11 @@ class Direc(Flow):
     def __init__(self):
         self.traj=[0,0,0]
         super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1}, 'Trajectory')
+    def assign(self, traj):
+        self.x=traj[0]
+        self.y=traj[1]
+        self.z=traj[2]
+        self.traj=traj
     def status(self):
         status={'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': self.power}
         return status.copy()
@@ -250,16 +255,16 @@ class CtlDOF(FxnBlock):
         upthrottle=1.0
         
         if self.Dir.traj[2]>=1: upthrottle=1.5
-        elif self.Dir.traj[2]>0 and self.Dir.traj[2]>1:
+        elif 0<self.Dir.traj[2]<1:
             upthrottle= 0.5 * self.Dir.traj[2] + 1.0
         elif self.Dir.traj[2]==0:
             damp=np.sign(self.vel)
             damp2=damp*min(1.0, np.power(self.vel, 2))
             upthrottle=1.0-0.2*damp2
-        elif self.Dir.traj[2]<=0.0 and self.Dir.traj[2]>-1.0:
+        elif -1<self.Dir.traj[2]<=0.0:
             maxdesc=-0.5
             damp=min(1.0, np.power(self.vel-maxdesc, 2))
-            upthrottle=0.75+0.4*damp
+            upthrottle=0.75+0.25*damp
         elif self.Dir.traj[2]<=-1.0:
             maxdesc=-5.0
             damp=min(0.75, np.power(self.vel-maxdesc, 2))
@@ -268,13 +273,12 @@ class CtlDOF(FxnBlock):
         if self.Dir.traj[0]==0 and self.Dir.traj[1]==0: forwardthrottle=0.0
         else: forwardthrottle=1.0
         
-        pwr=self.Dir.power
-        self.Ctl.forward=self.EEin.effort*self.Cs*forwardthrottle*pwr
-        self.Ctl.upward=self.EEin.effort*self.Cs*upthrottle*pwr
+        self.Ctl.forward=self.EEin.effort*self.Cs*forwardthrottle*self.Dir.power
+        self.Ctl.upward=self.EEin.effort*self.Cs*upthrottle*self.Dir.power
 
 class PlanPath(FxnBlock):
     def __init__(self, flows):
-        super().__init__(['EEin','Env','Dir','FS','Rsig'], flows,timers={'pause'})
+        super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0},timers={'pause'})
         self.mode='taxi'
         
         self.goals = {1:[0,0,0], 2:[0,0,50], 3:[100, 0, 50], 4:[100, 100, 50], 5:[150, 150, 50], 6:[0,0,50], 7:[0,0,0] }
@@ -287,10 +291,13 @@ class PlanPath(FxnBlock):
     def behavior(self, t):
         loc = [self.Env.x, self.Env.y, self.Env.elev]
         dist = finddist(loc, self.goal)
+        self.dx =  self.goal[0] - self.Env.x
+        self.dy =  self.goal[1] - self.Env.y 
+        self.dz =  self.goal[2] - self.Env.elev 
         if dist<10 and {'move', 'hover'}.issuperset({self.mode}):
             self.mode='hover'
             self.pause.inc(1)
-            if self.pause.t() > 10:
+            if self.pause.t() > 5:
                 self.goal = self.goals[self.queue.pop()]
                 self.pause.reset()
         elif dist<10 and len(self.queue)==0:
@@ -300,20 +307,23 @@ class PlanPath(FxnBlock):
         elif len(self.queue)==0:
             self.mode = 'descend'
         elif self.mode=='taxi' and t<2:
-            self.mode='hover'        
+            self.mode='hover'
+        elif dist>10:
+            self.mode='move'
         
         self.Dir.power=1.0
         if self.mode=='taxi':  self.Dir.power=0.0
-        elif self.mode=='hover': self.Dir.traj=[0,0,0]           
-        elif self.mode=='move': self.Dir.traj=vectdist(loc, self.goal)         
-        elif self.mode=='descend': self.Dir.traj=[0,0,-0.5]
-        elif self.mode=='land': self.Dir.traj=[0,0,-0.1]
+        elif self.mode=='hover': self.Dir.assign([0,0,0])           
+        elif self.mode=='move': 
+            self.Dir.assign(vectdir(self.goal, loc))     
+        elif self.mode=='descend': self.Dir.assign([0,0,-0.5])
+        elif self.mode=='land': self.Dir.assign([0,0,-0.1])
             
-        if self.has_fault('noloc'): self.Dir.traj=[0,0,0]
-        elif self.has_fault('degloc'): self.Dir.traj=[0,0,-1]
+        if self.has_fault('noloc'): self.Dir.assign([0,0,0])
+        elif self.has_fault('degloc'): self.Dir.assign([0,0,-1])
         if self.EEin.effort<0.5:
             self.Dir.power=0.0
-            self.Dir.traj=[0,0,0]
+            self.Dir.assign([0,0,0])
 
 class Trajectory(FxnBlock):
     def __init__(self, flows):
@@ -349,7 +359,7 @@ class Quadrotor(Model):
         super().__init__()
         self.phases={'taxi':[0,10], 'climb':[10,15],'forward':[15, 45], 'descend':[45,50], 'land':[50,55]}
         #Declare time range to run model over
-        self.times=[0,20, 55]
+        self.times=[0,200]
         self.tstep = 1 #Stepsize: (change at your own risk--any accumulated value will need to change)
         
         #add flows to the model
@@ -473,6 +483,9 @@ def calcdist(p1, p2):
 
 def vectdist(p1, p2):
     return [p1[0]-p2[0],p1[1]-p2[1],p1[2]-p2[2]]
+
+def vectdir(p1, p2):
+    return vectdist(p1,p2)/finddist(p1,p2)
 
 #takes the maximum of a variety of classifications given a list of strings
 def textmax(texts):

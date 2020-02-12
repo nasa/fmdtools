@@ -766,7 +766,7 @@ def plot_mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfi
                 plt.title(fxnflow+": "+var)
                 plt.xlabel(timelabel)
     if 'faulty' in mdlhists:
-        if fxnflowvals: fig.suptitle('Dynamic Response of '+list(fxnflowvals.keys())+' to fault'+' '+fault)
+        if fxnflowvals: fig.suptitle('Dynamic Response of '+str(list(fxnflowvals.keys()))+' to fault'+' '+fault)
         else:           fig.suptitle('Dynamic Response of Model States to fault'+' '+fault)
         if legend:
             ax_l = plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label=fxnflow+'legend')
