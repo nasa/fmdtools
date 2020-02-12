@@ -19,10 +19,10 @@ import time
 #scenlist=fp.listinitfaults(graph, mdl.times)
 mdl = Quadrotor()
 
-app = SampleApproach(mdl)
-endclasses, mdlhists = fp.run_approach(mdl, app)
-simplefmea = rp.make_simplefmea(endclasses)
-summfmea = rp.make_summfmea(endclasses, app)
+#app = SampleApproach(mdl)
+#endclasses, mdlhists = fp.run_approach(mdl, app)
+#simplefmea = rp.make_simplefmea(endclasses)
+#summfmea = rp.make_summfmea(endclasses, app)
 
 # =============================================================================
 #endresults1, resgraph, flowhist3, ghist3=fp.runnominal(mdl, track={'DOFs','Dir1', 'Env1', 'Force_LG'})
@@ -33,42 +33,41 @@ summfmea = rp.make_summfmea(endclasses, app)
 ## 
 endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=5, staged=True, gtype='component')
 
-rp.show_bipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
+#rp.show_bipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
-rp.plot_mdlhist(mdlhist, 'StoreEE short', time=5) #, fxnflows=['StoreEE'])
+rp.plot_mdlhistvals(mdlhist, 'DistEE short', time=5) #, fxnflows=['StoreEE'])
 ### 
 endresults, resgraph, mdlhist2=fp.run_one_fault(mdl, 'AffectDOF', 'RFshort', time=13, staged=True)
-rp.show_graph(resgraph)
+#rp.show_graph(resgraph)
 #fp.plotflowhist(flowhist2, 'RFshort', time=13)
 #fp.plotghist(ghist2, 't=13 RFshort')
 #
-#xnom=flowhist2['nominal']['Env1']['x']
-#ynom=flowhist2['nominal']['Env1']['y']
-#znom=flowhist2['nominal']['Env1']['elev']
+xnom=mdlhist2['nominal']['flows']['Env1']['x']
+ynom=mdlhist2['nominal']['flows']['Env1']['y']
+znom=mdlhist2['nominal']['flows']['Env1']['elev']
 #
-#x=flowhist2['faulty']['Env1']['x']
-#y=flowhist2['faulty']['Env1']['y']
-#z=flowhist2['faulty']['Env1']['elev']
+x=mdlhist2['faulty']['flows']['Env1']['x']
+y=mdlhist2['faulty']['flows']['Env1']['y']
+z=mdlhist2['faulty']['flows']['Env1']['elev']
 #
-#fig2 = plt.figure(2)
-#ax2 = fig2.add_subplot(111, projection='3d')
-#ax2.set_xlim3d(-100, 100)
-#ax2.set_ylim3d(-100,100)
-#ax2.set_zlim3d(0,100)
-#ax2.plot(xnom,ynom,znom)
-#ax2.plot(x,y,z)
-#ax2.set_title('Fault response to RFpropbreak fault at t=13')
-#ax2.legend(['Nominal Flightpath','Faulty Flighpath'], loc=4)
+fig2 = plt.figure(2)
+ax2 = fig2.add_subplot(111, projection='3d')
+ax2.set_xlim3d(-100, 100)
+ax2.set_ylim3d(-100,100)
+ax2.set_zlim3d(0,100)
+ax2.plot(xnom,ynom,znom)
+ax2.plot(x,y,z)
+ax2.set_title('Fault response to RFpropbreak fault at t=13')
+ax2.legend(['Nominal Flightpath','Faulty Flighpath'], loc=4)
 #
-#plt.show()
-#plt.close()
+plt.show()
 
 #resultstab=fp.runlist(mdl,staged=True)
 
 #resultstab.write('tab4.ecsv', overwrite=True)
 
 
-resultstab=fp.run_list(mdl, staged=True)
+#resultstab=fp.run_list(mdl, staged=True)
 
 #t1=time.time()
 #endclasses, mdlhists=fp.run_list(mdl, staged=True)
