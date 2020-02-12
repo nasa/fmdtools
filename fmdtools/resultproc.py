@@ -223,7 +223,7 @@ def make_bipresultsgraph(g, nomg):
     rg=g.copy() 
     for node in g.nodes:        
         if g.nodes[node]['bipartite']==0 or g.nodes[node].get('iscomponent', False): #condition only checked for functions
-            if g.nodes[node].get('modes').difference(['nom']): status='Faulty'
+            if g.nodes[node].get('modes', {'nom'}).difference(['nom']): status='Faulty'
             else: status='Nominal'
         elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
         else: status='Nominal'
@@ -766,7 +766,8 @@ def plot_mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfi
                 plt.title(fxnflow+": "+var)
                 plt.xlabel(timelabel)
     if 'faulty' in mdlhists:
-        fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
+        if fxnflowvals: fig.suptitle('Dynamic Response of '+list(fxnflowvals.keys())+' to fault'+' '+fault)
+        else:           fig.suptitle('Dynamic Response of Model States to fault'+' '+fault)
         if legend:
             ax_l = plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label=fxnflow+'legend')
             plt.legend([a,b],['faulty', 'nominal'], loc='center')

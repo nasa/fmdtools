@@ -274,33 +274,39 @@ class CtlDOF(FxnBlock):
 
 class PlanPath(FxnBlock):
     def __init__(self, flows):
-        super().__init__(['EEin','Env','Dir','FS','Rsig'], flows)
+        super().__init__(['EEin','Env','Dir','FS','Rsig'], flows,timers={'pause'})
         self.mode='taxi'
+        
+        self.goals = {1:[0,0,0], 2:[0,0,50], 3:[100, 0, 50], 4:[100, 100, 50], 5:[150, 150, 50], 6:[0,0,50], 7:[0,0,0] }
+        self.queue = list(self.goals.keys())
+        self.goal = self.goals[1]
         self.failrate=1e-5
         self.assoc_modes({'noloc':[0.2, [0.4, 0.2, 0.3, 0.1,0.0], 10000], 'degloc':[0.8, [0.4, 0.2, 0.3, 0.1,0.0], 10000]})
     def condfaults(self, time):
         if self.FS.value<0.5: self.add_fault('noloc')
     def behavior(self, t):
-            
-        if t<1: self.mode='taxi'
-        elif self.mode=='taxi' and t<10: self.mode='climb'
-        elif self.mode=='climb' and self.Env.elev>=50: self.mode='hover'
-        elif self.mode=='hover' and self.Env.y==0 and t<20: self.mode='forward'
-        elif self.mode=='forward' and self.Env.y>50: self.mode='hover'
-        elif self.mode=='hover' and self.Env.y>50: self.mode='backward'
-        elif self.mode=='backward' and self.Env.y<0: self.mode='hover'
-        elif self.mode=='hover' and self.Env.y<0: self.mode='descend'
-        elif self.mode=='descend' and self.Env.elev<10: self.mode='land'
-        elif self.mode=='land' and self.Env.elev<1: self.mode='taxi'
+        loc = [self.Env.x, self.Env.y, self.Env.elev]
+        dist = finddist(loc, self.goal)
+        if dist<10 and {'move', 'hover'}.issuperset({self.mode}):
+            self.mode='hover'
+            self.pause.inc(1)
+            if self.pause.t() > 10:
+                self.goal = self.goals[self.queue.pop()]
+                self.pause.reset()
+        elif dist<10 and len(self.queue)==0:
+            self.mode = 'land'
+        elif dist<1 and len(self.queue)==0:
+            self.mode = 'taxi'
+        elif len(self.queue)==0:
+            self.mode = 'descend'
+        elif self.mode=='taxi' and t<2:
+            self.mode='hover'        
         
         self.Dir.power=1.0
         if self.mode=='taxi':  self.Dir.power=0.0
-        elif self.mode=='takeoff': self.Dir.traj=[0,0,1]
-        elif self.mode=='climb': self.Dir.traj=[0,0,1]
         elif self.mode=='hover': self.Dir.traj=[0,0,0]           
-        elif self.mode=='forward': self.Dir.traj=[0,1,0]           
-        elif self.mode=='backward': self.Dir.traj=[0,-1,0]
-        elif self.mode=='descend': self.Dir.traj=[0,0,-1]
+        elif self.mode=='move': self.Dir.traj=vectdist(loc, self.goal)         
+        elif self.mode=='descend': self.Dir.traj=[0,0,-0.5]
         elif self.mode=='land': self.Dir.traj=[0,0,-0.1]
             
         if self.has_fault('noloc'): self.Dir.traj=[0,0,0]
@@ -458,6 +464,15 @@ def inrange(area, x, y):
     point=Point(x,y)
     polygon=Polygon(area)
     return polygon.contains(point)
+
+def finddist(p1, p2):
+    return np.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2+(p1[2]-p2[2])**2)
+
+def calcdist(p1, p2):
+    return np.sqrt((p1[0]-p2.x)**2+(p1[1]-p2.y)**2+(p1[2]-p2.elev)**2)
+
+def vectdist(p1, p2):
+    return [p1[0]-p2[0],p1[1]-p2[1],p1[2]-p2[2]]
 
 #takes the maximum of a variety of classifications given a list of strings
 def textmax(texts):
