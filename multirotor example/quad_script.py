@@ -31,26 +31,29 @@ mdl = Quadrotor()
 ## 
 ## #Check various scenarios individually
 ## 
-endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=5, staged=True, gtype='component')
+endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=20, staged=True, gtype='component')
 
 #rp.show_bipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
 rp.plot_mdlhistvals(mdlhist, 'DistEE short', time=5) #, fxnflows=['StoreEE'])
+rp.plot_mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Planpath':['dx','dy','dz']}, time=5)
 ### 
-endresults, resgraph, mdlhist2=fp.run_one_fault(mdl, 'AffectDOF', 'RFshort', time=13, staged=True)
+#endresults, resgraph, mdlhist2=fp.run_one_fault(mdl, 'AffectDOF', 'RFshort', time=13, staged=True)
+# is the model not being reset???
+
 #rp.show_graph(resgraph)
 #fp.plotflowhist(flowhist2, 'RFshort', time=13)
 #fp.plotghist(ghist2, 't=13 RFshort')
 #
-xnom=mdlhist2['nominal']['flows']['Env1']['x']
-ynom=mdlhist2['nominal']['flows']['Env1']['y']
-znom=mdlhist2['nominal']['flows']['Env1']['elev']
+xnom=mdlhist['nominal']['flows']['Env1']['x']
+ynom=mdlhist['nominal']['flows']['Env1']['y']
+znom=mdlhist['nominal']['flows']['Env1']['elev']
 #
-x=mdlhist2['faulty']['flows']['Env1']['x']
-y=mdlhist2['faulty']['flows']['Env1']['y']
-z=mdlhist2['faulty']['flows']['Env1']['elev']
+x=mdlhist['faulty']['flows']['Env1']['x']
+y=mdlhist['faulty']['flows']['Env1']['y']
+z=mdlhist['faulty']['flows']['Env1']['elev']
 #
-fig2 = plt.figure(2)
+fig2 = plt.figure()
 ax2 = fig2.add_subplot(111, projection='3d')
 ax2.set_xlim3d(-100, 100)
 ax2.set_ylim3d(-100,100)
