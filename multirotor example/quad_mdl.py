@@ -249,8 +249,7 @@ class CtlDOF(FxnBlock):
         if self.has_fault('noctl'):    self.Cs=0.0
         elif self.has_fault('degctl'): self.Cs=0.5
         
-        if time>self.time:
-            self.vel=self.DOFs.vertvel
+        if time>self.time: self.vel=self.DOFs.vertvel
         
         upthrottle=1.0
         
@@ -278,11 +277,11 @@ class CtlDOF(FxnBlock):
 
 class PlanPath(FxnBlock):
     def __init__(self, flows):
-        super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0},timers={'pause'})
-        self.mode='taxi'
+        super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'},timers={'pause'})
         
-        self.goals = {1:[0,0,0], 2:[0,0,50], 3:[100, 0, 50], 4:[100, 100, 50], 5:[150, 150, 50], 6:[0,0,50], 7:[0,0,0] }
+        self.goals = { 1:[0,0,50], 2:[100, 0, 50], 3:[100, 100, 50], 4:[150, 150, 50], 5:[0,0,50], 6:[0,0,0] }
         self.queue = list(self.goals.keys())
+        self.queue.reverse()
         self.goal = self.goals[1]
         self.failrate=1e-5
         self.assoc_modes({'noloc':[0.2, [0.4, 0.2, 0.3, 0.1,0.0], 10000], 'degloc':[0.8, [0.4, 0.2, 0.3, 0.1,0.0], 10000]})
@@ -290,37 +289,32 @@ class PlanPath(FxnBlock):
         if self.FS.value<0.5: self.add_fault('noloc')
     def behavior(self, t):
         loc = [self.Env.x, self.Env.y, self.Env.elev]
-        dist = finddist(loc, self.goal)
-        self.dx =  self.goal[0] - self.Env.x
-        self.dy =  self.goal[1] - self.Env.y 
-        self.dz =  self.goal[2] - self.Env.elev 
-        if dist<10 and {'move', 'hover'}.issuperset({self.mode}):
-            self.mode='hover'
-            self.pause.inc(1)
-            if self.pause.t() > 5:
-                self.goal = self.goals[self.queue.pop()]
-                self.pause.reset()
-        elif dist<10 and len(self.queue)==0:
-            self.mode = 'land'
-        elif dist<1 and len(self.queue)==0:
-            self.mode = 'taxi'
-        elif len(self.queue)==0:
-            self.mode = 'descend'
-        elif self.mode=='taxi' and t<2:
-            self.mode='hover'
-        elif dist>10:
-            self.mode='move'
+        dist = finddist(loc, self.goal)        
+        [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
         
+        
+        if self.mode=='taxi' and t>5: self.mode=='taxi'
+        elif dist<5 and {'move', 'hover'}.issuperset({self.mode}):
+            self.mode='hover'
+            if t>self.time:
+                self.pause.inc(1)
+                if self.pause.t() > 5:
+                    self.goal = self.goals[self.queue.pop()]
+                    self.pause.reset()
+        elif self.Env.elev<1 and len(self.queue)==0: self.mode = 'taxi'
+        elif dist<10 and len(self.queue)==0:         self.mode = 'land'
+        elif len(self.queue)==0 and {'move', 'hover'}.issuperset({self.mode}): self.mode = 'descend'
+        elif dist>10 and not(self.mode=='descend'):                       self.mode='move'
+        # nominal behaviors
         self.Dir.power=1.0
-        if self.mode=='taxi':  self.Dir.power=0.0
-        elif self.mode=='hover': self.Dir.assign([0,0,0])           
-        elif self.mode=='move': 
-            self.Dir.assign(vectdir(self.goal, loc))     
-        elif self.mode=='descend': self.Dir.assign([0,0,-0.5])
-        elif self.mode=='land': self.Dir.assign([0,0,-0.1])
-            
-        if self.has_fault('noloc'): self.Dir.assign([0,0,0])
-        elif self.has_fault('degloc'): self.Dir.assign([0,0,-1])
+        if self.mode=='taxi':       self.Dir.power=0.0
+        elif self.mode=='hover':    self.Dir.assign([0,0,0])           
+        elif self.mode=='move':     self.Dir.assign(vectdir(self.goal, loc))     
+        elif self.mode=='descend':  self.Dir.assign([0,0,-0.5])
+        elif self.mode=='land':     self.Dir.assign([0,0,-0.1])
+        # faulty behaviors    
+        if self.has_fault('noloc'):     self.Dir.assign([0,0,0])
+        elif self.has_fault('degloc'):  self.Dir.assign([0,0,-1])
         if self.EEin.effort<0.5:
             self.Dir.power=0.0
             self.Dir.assign([0,0,0])
@@ -359,7 +353,7 @@ class Quadrotor(Model):
         super().__init__()
         self.phases={'taxi':[0,10], 'climb':[10,15],'forward':[15, 45], 'descend':[45,50], 'land':[50,55]}
         #Declare time range to run model over
-        self.times=[0,200]
+        self.times=[0,300]
         self.tstep = 1 #Stepsize: (change at your own risk--any accumulated value will need to change)
         
         #add flows to the model
