@@ -733,7 +733,7 @@ def plot_mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfi
     else: mdlhists=mdlhist
     times = mdlhists["nominal"]["time"]
     
-    if fxnflowvals: num_plots = sum([len(val) for k,val in enumerate(fxnflowvals)])
+    if fxnflowvals: num_plots = sum([len(val) for k,val in fxnflowvals.items()])
     else: num_plots = sum([len(flow) for flow in mdlhists['nominal']['flows'].values()])+sum([len(f.keys())-1 for f in mdlhists['nominal']['functions'].values()])
     fig = plt.figure(figsize=(cols*3, 2*num_plots/cols))
     n=1
@@ -775,7 +775,7 @@ def plot_mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfi
             ax_l.get_xaxis().set_visible(False)
             ax_l.get_yaxis().set_visible(False)
     plt.tight_layout(pad=1)
-    plt.subplots_adjust(top=0.93)
+    plt.subplots_adjust(top=0.85)
     if returnfig: return fig
     else: plt.show()
 
