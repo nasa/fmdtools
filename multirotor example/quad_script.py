@@ -13,11 +13,11 @@ import fmdtools.resultproc as rp
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from quad_mdl import *
+from drone_mdl import *
 import time
 
 #scenlist=fp.listinitfaults(graph, mdl.times)
-mdl = Quadrotor()
+mdl = Drone()
 
 #app = SampleApproach(mdl)
 #endclasses, mdlhists = fp.run_approach(mdl, app)
@@ -30,7 +30,7 @@ rp.show_graph(resgraph) #, showfaultlabels=False)
 #fp.plotflowhist(flowhist3, 'N/A', time=0)
 ## 
 
-mdl = Quadrotor()
+mdl = Drone()
 ## #Check various scenarios individually
 ## 
 endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=20, staged=True, gtype='component')
