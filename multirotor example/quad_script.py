@@ -25,18 +25,22 @@ mdl = Quadrotor()
 #summfmea = rp.make_summfmea(endclasses, app)
 
 # =============================================================================
-#endresults1, resgraph, flowhist3, ghist3=fp.runnominal(mdl, track={'DOFs','Dir1', 'Env1', 'Force_LG'})
-#fp.showgraph(resgraph, showfaultlabels=False)
+endresults, resgraph, mdlhist =fp.run_nominal(mdl)
+rp.show_graph(resgraph) #, showfaultlabels=False)
 #fp.plotflowhist(flowhist3, 'N/A', time=0)
 ## 
+
+mdl = Quadrotor()
 ## #Check various scenarios individually
 ## 
 endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=20, staged=True, gtype='component')
 
-#rp.show_bipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
+rp.show_bipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
-rp.plot_mdlhistvals(mdlhist, 'DistEE short', time=5) #, fxnflows=['StoreEE'])
-rp.plot_mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Planpath':['dx','dy','dz']}, time=5)
+#rp.plot_mdlhistvals(mdlhist, 'DistEE short', time=20) #, fxnflows=['StoreEE'])
+rp.plot_mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Planpath':['dx','dy','dz']}, time=20)
+
+# mdlhist['nominal']['functions']['Planpath']
 ### 
 #endresults, resgraph, mdlhist2=fp.run_one_fault(mdl, 'AffectDOF', 'RFshort', time=13, staged=True)
 # is the model not being reset???
@@ -52,15 +56,25 @@ znom=mdlhist['nominal']['flows']['Env1']['elev']
 x=mdlhist['faulty']['flows']['Env1']['x']
 y=mdlhist['faulty']['flows']['Env1']['y']
 z=mdlhist['faulty']['flows']['Env1']['elev']
+
+time = mdlhist['nominal']['time']
+
 #
 fig2 = plt.figure()
+
+
 ax2 = fig2.add_subplot(111, projection='3d')
-ax2.set_xlim3d(-100, 100)
-ax2.set_ylim3d(-100,100)
+ax2.set_xlim3d(-50, 200)
+ax2.set_ylim3d(-50,200)
 ax2.set_zlim3d(0,100)
 ax2.plot(xnom,ynom,znom)
 ax2.plot(x,y,z)
-ax2.set_title('Fault response to RFpropbreak fault at t=13')
+
+for xx,yy,zz,tt in zip(xnom,ynom,znom,time):
+    if tt%15==0:
+        ax2.text(xx,yy,zz, 't='+str(tt))
+
+ax2.set_title('Fault response to RFpropbreak fault at t=20')
 ax2.legend(['Nominal Flightpath','Faulty Flighpath'], loc=4)
 #
 plt.show()
