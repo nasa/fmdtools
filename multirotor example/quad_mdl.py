@@ -252,21 +252,17 @@ class CtlDOF(FxnBlock):
         if time>self.time: self.vel=self.DOFs.vertvel
         
         upthrottle=1.0
-        
-        if self.Dir.traj[2]>=1: upthrottle=1.5
-        elif 0<self.Dir.traj[2]<1:
-            upthrottle= 0.5 * self.Dir.traj[2] + 1.0
+        if self.Dir.traj[2]>=1:     upthrottle=1.5
+        elif 0<self.Dir.traj[2]<1:  upthrottle= 0.5 * self.Dir.traj[2] + 1.0
         elif self.Dir.traj[2]==0:
             damp=np.sign(self.vel)
             damp2=damp*min(1.0, np.power(self.vel, 2))
             upthrottle=1.0-0.2*damp2
         elif -1<self.Dir.traj[2]<=0.0:
-            maxdesc=-0.5
-            damp=min(1.0, np.power(self.vel-maxdesc, 2))
+            damp=min(1.0, np.power(self.vel+0.5, 2))
             upthrottle=0.75+0.25*damp
         elif self.Dir.traj[2]<=-1.0:
-            maxdesc=-5.0
-            damp=min(0.75, np.power(self.vel-maxdesc, 2))
+            damp=min(0.75, np.power(self.vel+5.0, 2))
             upthrottle=0.75+0.15*damp
             
         if self.Dir.traj[0]==0 and self.Dir.traj[1]==0: forwardthrottle=0.0
@@ -321,29 +317,28 @@ class PlanPath(FxnBlock):
 
 class Trajectory(FxnBlock):
     def __init__(self, flows):
-        super().__init__(['Env','DOF','Land', 'Dir', 'Force_LG'], flows, {'flight':0.0})
+        super().__init__(['Env','DOF','Land', 'Dir', 'Force_LG'], flows)
     def behavior(self, time):
         
         if time>self.time:
             maxvel=20.0
             maxpvel=5.0
             
-            if self.Env.elev<=0.0:
+            if self.Env.elev<=0.0:  
                 self.Force_LG.value=min(-2.0, (self.DOF.vertvel-self.DOF.planvel)/3)
-                self.flight=0.0
-            else:
+                acc=10*self.DOF.uppwr
+            else:                   
                 self.Force_LG.value=0.0
-                self.flight=1.0
+                acc=10*(self.DOF.uppwr-1.0) 
             
             sign=np.sign(self.DOF.vertvel)
             damp=(-0.02*sign*np.power(self.DOF.vertvel, 2)-0.1*self.DOF.vertvel)
-            acc=10*(self.DOF.uppwr-self.flight)
             self.DOF.vertvel=self.DOF.vertvel+(acc+damp)
-            if self.Env.elev<=0.0:
+            self.DOF.planvel=maxpvel*self.DOF.planpwr            
+            if self.Env.elev<=0.0:  
                 self.DOF.vertvel=max(0,self.DOF.vertvel)
+                self.DOF.planvel=0.0
             
-            self.DOF.planvel=self.flight*maxpvel*self.DOF.planpwr
-                    
             self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
             self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]
             self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
