@@ -243,10 +243,10 @@ class CtlDOF(FxnBlock):
         self.Ctl.upward=self.EEin.effort*self.Cs*upthrottle*self.Dir.power
 
 class PlanPath(FxnBlock):
-    def __init__(self, flows):
+    def __init__(self, flows, params):
         super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'},timers={'pause'})
         
-        self.goals = { 1:[0,0,50], 2:[100, 0, 50], 3:[100, 100, 50], 4:[150, 150, 50], 5:[0,0,50], 6:[0,0,0] }
+        self.goals = params[0]['flightplan'] 
         self.queue = list(self.goals.keys())
         self.queue.reverse()
         self.goal = self.goals[1]
@@ -265,12 +265,13 @@ class PlanPath(FxnBlock):
             if t>self.time:
                 self.pause.inc(1)
                 if self.pause.t() > 5:
-                    self.goal = self.goals[self.queue.pop()]
+                    self.pt=self.queue.pop()
+                    self.goal = self.goals[self.pt]
                     self.pause.reset()
         elif self.Env.elev<1 and len(self.queue)==0: self.mode = 'taxi'
-        elif dist<10 and len(self.queue)==0:         self.mode = 'land'
+        elif dist<5 and len(self.queue)==0:         self.mode = 'land'
         elif len(self.queue)==0 and {'move', 'hover'}.issuperset({self.mode}): self.mode = 'descend'
-        elif dist>10 and not(self.mode=='descend'):                       self.mode='move'
+        elif dist>5 and not(self.mode=='descend'):                       self.mode='move'
         # nominal behaviors
         self.Dir.power=1.0
         if self.mode=='taxi':       self.Dir.power=0.0
@@ -309,14 +310,30 @@ class Trajectory(FxnBlock):
             self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
             self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]
             self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
+
+class ViewEnvironment(FxnBlock):
+    def __init__(self, flows, params):
+        super().__init__(['Env'], flows)
+        square=params[0]
+        self.viewingarea = {(x,y):'unviewed' for x in range(int(square[0][0]),int(square[1][0])+10,10) for y in range(int(square[0][1]),int(square[2][1])+10,10)}
+    def behavior(self, time):
+        area = square((self.Env.x, self.Env.y), 10, 10)
+        for spot in self.viewingarea:
+            if inrange(area, spot[0],spot[1]): self.viewingarea[spot]='viewed'
             
 class Drone(Model):
-    def __init__(self, params={}):
+    def __init__(self, params={'flightplan':{1:[0,0,50], 2:[100, 0, 50], 3:[100, 100, 50], 4:[150, 150, 50], 5:[0,0,50], 6:[0,0,0]} }):
         super().__init__()
+        self.params=params
         self.phases={'taxi':[0,10], 'climb':[10,15],'forward':[15, 45], 'descend':[45,50], 'land':[50,55]}
         #Declare time range to run model over
         self.times=[0,300]
         self.tstep = 1 #Stepsize: (change at your own risk--any accumulated value will need to change)
+        
+        self.start_area=square([0.0,0.0],10, 10) # coordinates, xwidth, ywidth
+        self.dang_area=square([0,150], 160, 160)
+        self.safe1_area=square([-25,100], 10, 10)
+        self.safe2_area=square([25,50], 10, 10)
         
         #add flows to the model
         self.add_flow('Force_ST', 'Force', {'support':1.0})
@@ -342,28 +359,29 @@ class Drone(Model):
         self.add_fxn('DistEE',DistEE, ['EE_1','EEmot','EEctl', 'Force_ST'])
         self.add_fxn('AffectDOF',AffectDOF,['EEmot','Ctl1','DOFs','Force_Lin', 'HSig_DOFs'], 'quad')
         self.add_fxn('CtlDOF', CtlDOF,['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST', 'RSig_Ctl'])
-        self.add_fxn('Planpath', PlanPath, ['EEctl', 'Env1','Dir1', 'Force_ST', 'RSig_Traj'])
+        self.add_fxn('Planpath', PlanPath, ['EEctl', 'Env1','Dir1', 'Force_ST', 'RSig_Traj'], params)
         self.add_fxn('Trajectory', Trajectory,['Env1','DOFs','Dir1', 'Force_GR'] )
         self.add_fxn('EngageLand', EngageLand,['Force_GR', 'Force_LG'])
         self.add_fxn('HoldPayload', HoldPayload,['Force_LG', 'Force_Lin', 'Force_ST'])
+        self.add_fxn('ViewEnv', ViewEnvironment, ['Env1'], self.dang_area)
         
         self.construct_graph()
+        
     def find_classification(self, g, endfaults, endflows, scen, mdlhist):
         #landing costs
-        start_area=square([0.0,0.0],10, 10) # coordinates, xwidth, ywidth
-        dang_area=square([0,150], 150, 150)
-        safe1_area=square([-25,100], 10, 10)
-        safe2_area=square([25,50], 10, 10)
+        
+        viewed = sum([1 for k,view in self.fxns['ViewEnv'].viewingarea.items() if view=='viewed'])
+        viewed_value = viewed*100
         
         Env=self.flows['Env1']
-        if  inrange(start_area, Env.x, Env.y): landcost = 1 # nominal landing
-        elif inrange(safe1_area, Env.x, Env.y) or inrange(safe2_area, Env.x, Env.y): landcost=1000 # emergency safe
-        elif inrange(dang_area, Env.x, Env.y):  landcost=100000 # emergency dangerous
+        if  inrange(self.start_area, Env.x, Env.y): landcost = 1 # nominal landing
+        elif inrange(self.safe1_area, Env.x, Env.y) or inrange(self.safe2_area, Env.x, Env.y): landcost=1000 # emergency safe
+        elif inrange(self.dang_area, Env.x, Env.y):  landcost=100000 # emergency dangerous
         else:                                    landcost=10000 # emergency unsanctioned
         #repair costs
         repcost=sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()])
 
-        totcost=repcost+landcost
+        totcost=repcost+landcost-viewed_value
         rate=scen['properties']['rate']
         expcost=totcost*rate*1e5
         

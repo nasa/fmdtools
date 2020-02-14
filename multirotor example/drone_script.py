@@ -25,15 +25,18 @@ mdl = Drone()
 #summfmea = rp.make_summfmea(endclasses, app)
 
 # =============================================================================
-endresults, resgraph, mdlhist =fp.run_nominal(mdl)
+endresults_nom, resgraph, mdlhist =fp.run_nominal(mdl)
 rp.show_graph(resgraph) #, showfaultlabels=False)
 #fp.plotflowhist(flowhist3, 'N/A', time=0)
 ## 
 
-mdl = Drone()
+params={'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20], 5:[0,0,50], 6:[0,0,0] }}
+
+#params={'flightplan':{ 1:[0,0,50], 2:[100, 0, 50], 3:[100, 100, 50], 4:[150, 150, 50], 5:[0,0,50], 6:[0,0,0] }}
+mdl = Drone(params)
 ## #Check various scenarios individually
 ## 
-endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=20, staged=True, gtype='component')
+endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=50, staged=True, gtype='component')
 
 rp.show_bipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
@@ -61,9 +64,8 @@ z=mdlhist['faulty']['flows']['Env1']['elev']
 
 time = mdlhist['nominal']['time']
 
-#
-fig2 = plt.figure()
 
+fig2 = plt.figure()
 
 ax2 = fig2.add_subplot(111, projection='3d')
 ax2.set_xlim3d(-50, 200)
@@ -73,12 +75,38 @@ ax2.plot(xnom,ynom,znom)
 ax2.plot(x,y,z)
 
 for xx,yy,zz,tt in zip(xnom,ynom,znom,time):
-    if tt%15==0:
-        ax2.text(xx,yy,zz, 't='+str(tt))
+    if tt%20==0:
+        ax2.text(xx,yy,zz, 't='+str(tt), fontsize=8)
+
+for goal,loc in params['flightplan'].items():
+    ax2.text(loc[0],loc[1],loc[2], str(goal), fontweight='bold', fontsize=12)
+    ax2.plot([loc[0]],[loc[1]],[loc[2]], marker='o', markersize=10, color='red', alpha=0.5)
 
 ax2.set_title('Fault response to RFpropbreak fault at t=20')
 ax2.legend(['Nominal Flightpath','Faulty Flighpath'], loc=4)
 #
+plt.show()
+
+
+plt.figure()
+plt.plot(x,y)
+plt.plot(xnom,ynom)
+
+
+xviewed = [x for (x,y),view in mdl.fxns['ViewEnv'].viewingarea.items() if view=='viewed']
+yviewed = [y for (x,y),view in mdl.fxns['ViewEnv'].viewingarea.items() if view=='viewed']
+xunviewed = [x for (x,y),view in mdl.fxns['ViewEnv'].viewingarea.items() if view=='unviewed']
+yunviewed = [y for (x,y),view in mdl.fxns['ViewEnv'].viewingarea.items() if view=='unviewed']
+
+plt.scatter(xviewed,yviewed, color='red')
+plt.scatter(xunviewed,yunviewed, color='grey')
+
+plt.fill([x[0] for x in mdl.start_area],[x[1] for x in mdl.start_area], color='blue')
+plt.fill([x[0] for x in mdl.dang_area],[x[1] for x in mdl.dang_area], alpha=0.2, color='red')
+plt.fill([x[0] for x in mdl.safe1_area],[x[1] for x in mdl.safe1_area], color='yellow')
+plt.fill([x[0] for x in mdl.safe2_area],[x[1] for x in mdl.safe2_area], color='yellow')
+
+
 plt.show()
 
 #resultstab=fp.runlist(mdl,staged=True)
