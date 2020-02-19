@@ -17,7 +17,7 @@ from ex_pump import * #required to import entire module
 import time
 
 #mdl = Pump(params={'repair', 'ee', 'water', 'delay'})
-mdl = Pump(params={'cost':{'ee'}, 'delay':10}) # should give identical utilities
+mdl = Pump(params={'cost':{'ee', 'repair', 'water'}, 'delay':10}) # should give identical utilities
 
 app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad': quadpy.line_segment.gauss_patterson(1)})
 
@@ -52,10 +52,10 @@ rp.plot_samplecosts(app_full, endclasses_full)
 #rp.plot_samplecosts(app_fullp, endclasses)
 costovertime = rp.find_costovertime(endclasses_full, app_full)
 rp.plot_costovertime(endclasses_full, app_full)
-rp.plot_costovertime(endclasses_full, app_full, costtype='cost')
+#rp.plot_costovertime(endclasses_full, app_full, costtype='cost')
 
-endclasses, mdlhists = fp.run_approach(mdl, app_maxlike)
-rp.plot_samplecosts(app_maxlike, endclasses)
+endclasses_ml, mdlhists = fp.run_approach(mdl, app_maxlike)
+rp.plot_samplecosts(app_maxlike, endclasses_ml)
 
 
 
