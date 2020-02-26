@@ -1,0 +1,791 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Untitled2}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} \PYZhy{}*\PYZhy{} coding: utf\PYZhy{}8 \PYZhy{}*\PYZhy{}}
+        \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{File name: faultprop.py}
+        \PY{l+s+sd}{Author: Daniel Hulse}
+        \PY{l+s+sd}{Created: December 2018}
+        \PY{l+s+sd}{Description: functions to propagate faults through a user\PYZhy{}defined fault model}
+        \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        \PY{k+kn}{import} \PY{n+nn}{copy}
+        \PY{k+kn}{import} \PY{n+nn}{fmdtools}\PY{n+nn}{.}\PY{n+nn}{resultproc} \PY{k}{as} \PY{n+nn}{rp}
+        \PY{c+c1}{\PYZsh{}\PYZsh{} FAULT PROPAGATION}
+        
+        \PY{k}{def} \PY{n+nf}{construct\PYZus{}nomscen}\PY{p}{(}\PY{n}{mdl}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal.}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : Model}
+        \PY{l+s+sd}{    Returns}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    nomscen : scen}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{n}{nomscen}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faults}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}\PY{p}{\PYZcb{}}
+            \PY{n}{nomscen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{l+m+mf}{0.0}
+            \PY{n}{nomscen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nominal}\PY{l+s+s1}{\PYZsq{}}
+            \PY{k}{return} \PY{n}{nomscen}
+        
+        \PY{k}{def} \PY{n+nf}{run\PYZus{}nominal}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{gtype}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{normal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Runs the model over time in the nominal scenario.}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : Model}
+        \PY{l+s+sd}{        Model of the system}
+        \PY{l+s+sd}{    track : BOOL, optional}
+        \PY{l+s+sd}{        Whether or not to track flows. The default is True.}
+        \PY{l+s+sd}{    gtype : TYPE, optional}
+        \PY{l+s+sd}{        The type of graph to return (normal or bipartite). The default is \PYZsq{}normal\PYZsq{}.}
+        \PY{l+s+sd}{    Returns}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    endresults : Dict}
+        \PY{l+s+sd}{        A dictionary summary of results at the end of the simulation with structure \PYZob{}faults:\PYZob{}function:\PYZob{}faults\PYZcb{}\PYZcb{}, classification:\PYZob{}rate:val, cost:val, expected cost: val\PYZcb{} \PYZcb{}}
+        \PY{l+s+sd}{    resgraph : MultiGraph}
+        \PY{l+s+sd}{        A networkx graph object with function faults and degraded flows as graph attributes}
+        \PY{l+s+sd}{    mdlhist : Dict}
+        \PY{l+s+sd}{        A dictionary with a history of modelstates}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{n}{nomscen}\PY{o}{=}\PY{n}{construct\PYZus{}nomscen}\PY{p}{(}\PY{n}{mdl}\PY{p}{)}
+            \PY{n}{scen}\PY{o}{=}\PY{n}{nomscen}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+            \PY{n}{mdlhist}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{nomscen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{,} \PY{n}{staged}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+            
+            \PY{n}{resgraph} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}stategraph}\PY{p}{(}\PY{n}{gtype}\PY{p}{)}   
+            \PY{n}{endfaults}\PY{p}{,} \PY{n}{endfaultprops} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}faultmodes}\PY{p}{(}\PY{p}{)}
+            \PY{n}{endclass}\PY{o}{=}\PY{n}{mdl}\PY{o}{.}\PY{n}{find\PYZus{}classification}\PY{p}{(}\PY{n}{resgraph}\PY{p}{,} \PY{n}{endfaultprops}\PY{p}{,} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{scen}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nominal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{mdlhist}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faulty}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{mdlhist}\PY{p}{\PYZcb{}}\PY{p}{)}
+            
+            \PY{n}{endresults}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faults}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{endfaults}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{classification}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{endclass}\PY{p}{\PYZcb{}}
+            
+            \PY{n}{mdl}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+            \PY{k}{return} \PY{n}{endresults}\PY{p}{,} \PY{n}{resgraph}\PY{p}{,} \PY{n}{mdlhist}
+        
+        \PY{k}{def} \PY{n+nf}{run\PYZus{}one\PYZus{}fault}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{fxnname}\PY{p}{,} \PY{n}{faultmode}\PY{p}{,} \PY{n}{time}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{staged}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{gtype} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{normal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Runs one fault in the model at a specified time.}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : Model}
+        \PY{l+s+sd}{        The model to inject the fault in.}
+        \PY{l+s+sd}{    fxnname : str}
+        \PY{l+s+sd}{        Name of the function with the faultmode}
+        \PY{l+s+sd}{    faultmode : str}
+        \PY{l+s+sd}{        Name of the faultmode}
+        \PY{l+s+sd}{    time : float, optional}
+        \PY{l+s+sd}{        Time to inject fault. Must be in the range of model times (i.e. in range(0, end, mdl.tstep)). The default is 0.}
+        \PY{l+s+sd}{    track : bool, optional}
+        \PY{l+s+sd}{        Whether to track model states over time. The default is True.}
+        \PY{l+s+sd}{    staged : bool, optional}
+        \PY{l+s+sd}{        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). The default is False.}
+        \PY{l+s+sd}{    gtype : str, optional}
+        \PY{l+s+sd}{        The graph type to return (\PYZsq{}bipartite\PYZsq{} or \PYZsq{}normal\PYZsq{}). The default is \PYZsq{}normal\PYZsq{}.}
+        \PY{l+s+sd}{    Returns}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    endresults : dict}
+        \PY{l+s+sd}{        A dictionary summary of results at the end of the simulation with structure \PYZob{}flows:\PYZob{}flow:attribute:value\PYZcb{},faults:\PYZob{}function:\PYZob{}faults\PYZcb{}\PYZcb{}, classification:\PYZob{}rate:val, cost:val, expected cost: val\PYZcb{}}
+        \PY{l+s+sd}{    resgraph : networkx.classes.graph.Graph}
+        \PY{l+s+sd}{        A graph object with function faults and degraded flows noted as attributes}
+        \PY{l+s+sd}{    mdlhists : dict}
+        \PY{l+s+sd}{        A dictionary of the states of the model of each fault scenario over time.}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{c+c1}{\PYZsh{}run model nominally, get relevant results}
+            \PY{n}{nomscen}\PY{o}{=}\PY{n}{construct\PYZus{}nomscen}\PY{p}{(}\PY{n}{mdl}\PY{p}{)}
+            \PY{k}{if} \PY{n}{staged}\PY{p}{:}
+                \PY{n}{nommdlhist}\PY{p}{,} \PY{n}{mdls} \PY{o}{=} \PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{nomscen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{,} \PY{n}{staged}\PY{o}{=}\PY{n}{staged}\PY{p}{,} \PY{n}{ctimes}\PY{o}{=}\PY{p}{[}\PY{n}{time}\PY{p}{]}\PY{p}{)}
+                \PY{n}{nomresgraph} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}stategraph}\PY{p}{(}\PY{n}{gtype}\PY{p}{)}
+                \PY{n}{mdl}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+                \PY{n}{mdl} \PY{o}{=} \PY{n}{mdls}\PY{p}{[}\PY{n}{time}\PY{p}{]}
+            \PY{k}{else}\PY{p}{:}
+                \PY{n}{nommdlhist}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{nomscen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{,} \PY{n}{staged}\PY{o}{=}\PY{n}{staged}\PY{p}{)}
+                \PY{n}{nomresgraph} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}stategraph}\PY{p}{(}\PY{n}{gtype}\PY{p}{)}
+                \PY{n}{mdl}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+            \PY{c+c1}{\PYZsh{}run with fault present, get relevant results}
+            \PY{n}{scen}\PY{o}{=}\PY{n}{nomscen}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{}note: this is a shallow copy, so don\PYZsq{}t define it earlier}
+            \PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faults}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{o}{=}\PY{n}{faultmode}
+            \PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{single fault}\PY{l+s+s1}{\PYZsq{}}
+            \PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{function}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{fxnname}
+            \PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fault}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{faultmode}
+            \PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{mdl}\PY{o}{.}\PY{n}{fxns}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{o}{.}\PY{n}{failrate} 
+            \PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{time}
+            
+            \PY{n}{faultmdlhist}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{scen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{,} \PY{n}{staged}\PY{o}{=}\PY{n}{staged}\PY{p}{,} \PY{n}{prevhist}\PY{o}{=}\PY{n}{nommdlhist}\PY{p}{)}
+            \PY{n}{faultresgraph} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}stategraph}\PY{p}{(}\PY{n}{gtype}\PY{p}{)}
+            
+            \PY{c+c1}{\PYZsh{}process model run}
+            \PY{n}{endfaults}\PY{p}{,} \PY{n}{endfaultprops} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}faultmodes}\PY{p}{(}\PY{p}{)}
+            \PY{n}{endflows} \PY{o}{=} \PY{n}{rp}\PY{o}{.}\PY{n}{compare\PYZus{}graphflows}\PY{p}{(}\PY{n}{faultresgraph}\PY{p}{,} \PY{n}{nomresgraph}\PY{p}{,} \PY{n}{gtype}\PY{p}{)}
+            
+            \PY{n}{mdlhists}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nominal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{nommdlhist}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faulty}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{faultmdlhist}\PY{p}{\PYZcb{}}
+            
+            \PY{n}{endclass} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{find\PYZus{}classification}\PY{p}{(}\PY{n}{faultresgraph}\PY{p}{,} \PY{n}{endfaultprops}\PY{p}{,} \PY{n}{endflows}\PY{p}{,} \PY{n}{scen}\PY{p}{,} \PY{n}{mdlhists}\PY{p}{)}
+            \PY{c+c1}{\PYZsh{} note: in the future, put this in rp package so it doesn\PYZsq{}t need to be imported}
+            \PY{k}{if} \PY{n}{gtype}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{normal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{resgraph} \PY{o}{=} \PY{n}{rp}\PY{o}{.}\PY{n}{make\PYZus{}resultsgraph}\PY{p}{(}\PY{n}{faultresgraph}\PY{p}{,} \PY{n}{nomresgraph}\PY{p}{)} 
+            \PY{k}{elif} \PY{n}{gtype}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bipartite}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{or} \PY{n}{gtype}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{component}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{resgraph} \PY{o}{=} \PY{n}{rp}\PY{o}{.}\PY{n}{make\PYZus{}bipresultsgraph}\PY{p}{(}\PY{n}{faultresgraph}\PY{p}{,} \PY{n}{nomresgraph}\PY{p}{)}
+            
+            \PY{n}{endresults}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{flows}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{endflows}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faults}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{endfaults}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{classification}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{endclass}\PY{p}{\PYZcb{}}  
+            
+            \PY{n}{mdl}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+            \PY{k}{return} \PY{n}{endresults}\PY{p}{,}\PY{n}{resgraph}\PY{p}{,} \PY{n}{mdlhists}
+        
+        \PY{k}{def} \PY{n+nf}{list\PYZus{}init\PYZus{}faults}\PY{p}{(}\PY{n}{mdl}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Creates a list of single\PYZhy{}fault scenarios for the graph, given the modes set up in the fault model}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : Model}
+        \PY{l+s+sd}{        Model with list of times in mdl.times}
+        \PY{l+s+sd}{    Returns}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    faultlist : list}
+        \PY{l+s+sd}{        A list of fault scenarios, where a scenario is defined as: \PYZob{}faults:\PYZob{}functions:faultmodes\PYZcb{}, properties:\PYZob{}(changes depending scenario type)\PYZcb{} \PYZcb{}}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{n}{faultlist}\PY{o}{=}\PY{p}{[}\PY{p}{]}
+            \PY{k}{for} \PY{n}{time} \PY{o+ow}{in} \PY{n}{mdl}\PY{o}{.}\PY{n}{times}\PY{p}{:}
+                \PY{k}{for} \PY{n}{fxnname}\PY{p}{,} \PY{n}{fxn} \PY{o+ow}{in} \PY{n}{mdl}\PY{o}{.}\PY{n}{fxns}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                    \PY{n}{modes}\PY{o}{=}\PY{n}{fxn}\PY{o}{.}\PY{n}{faultmodes}
+                    \PY{k}{for} \PY{n}{mode} \PY{o+ow}{in} \PY{n}{modes}\PY{p}{:}
+                        \PY{n}{nomscen}\PY{o}{=}\PY{n}{construct\PYZus{}nomscen}\PY{p}{(}\PY{n}{mdl}\PY{p}{)}
+                        \PY{n}{newscen}\PY{o}{=}\PY{n}{nomscen}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+                        \PY{n}{newscen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faults}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{o}{=}\PY{n}{mode}
+                        \PY{n}{rate}\PY{o}{=}\PY{n}{mdl}\PY{o}{.}\PY{n}{fxns}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{o}{.}\PY{n}{failrate}
+                        \PY{n}{newscen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{single\PYZhy{}fault}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{function}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{fxnname}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fault}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{mode}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{rate}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{time}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{fxnname}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+}\PY{n}{mode}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{, t=}\PY{l+s+s1}{\PYZsq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n}{time}\PY{p}{)}\PY{p}{\PYZcb{}}
+                        \PY{n}{faultlist}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{newscen}\PY{p}{)}
+            \PY{k}{return} \PY{n}{faultlist}
+        
+        \PY{k}{def} \PY{n+nf}{run\PYZus{}list}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{reuse}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{staged}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Creates and propagates a list of failure scenarios in a model}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : model}
+        \PY{l+s+sd}{        The model to inject faults in}
+        \PY{l+s+sd}{    reuse : bool, optional}
+        \PY{l+s+sd}{        Whether to clear and re\PYZhy{}use the same model over each run rather than copying (for less memory use). The default is False.}
+        \PY{l+s+sd}{    staged : bool, optional}
+        \PY{l+s+sd}{        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.}
+        \PY{l+s+sd}{    track : bool, optional}
+        \PY{l+s+sd}{        Whether to track states over time. The default is True.}
+        \PY{l+s+sd}{    Returns}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    endclasses : dict}
+        \PY{l+s+sd}{        A dictionary with the rate, cost, and expected cost of each scenario run with structure \PYZob{}scenname:\PYZob{}expected cost, cost, rate\PYZcb{}\PYZcb{}}
+        \PY{l+s+sd}{    mdlhists : dict}
+        \PY{l+s+sd}{        A dictionary with the history of all model states for each scenario (including the nominal)}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{k}{if} \PY{n}{reuse} \PY{o+ow}{and} \PY{n}{staged}\PY{p}{:}
+                \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{invalid to use reuse and staged options at the same time. Using staged}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                \PY{n}{reuse}\PY{o}{=}\PY{k+kc}{False}
+        
+            \PY{n}{scenlist}\PY{o}{=}\PY{n}{list\PYZus{}init\PYZus{}faults}\PY{p}{(}\PY{n}{mdl}\PY{p}{)}
+            \PY{n}{mdl}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{}make sure the model is actually starting from the beginning}
+            \PY{c+c1}{\PYZsh{}run model nominally, get relevant results}
+            \PY{n}{nomscen}\PY{o}{=}\PY{n}{construct\PYZus{}nomscen}\PY{p}{(}\PY{n}{mdl}\PY{p}{)}
+            \PY{k}{if} \PY{n}{staged}\PY{p}{:}
+                \PY{n}{nomhist}\PY{p}{,} \PY{n}{c\PYZus{}mdl} \PY{o}{=} \PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{nomscen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{,} \PY{n}{ctimes}\PY{o}{=}\PY{n}{mdl}\PY{o}{.}\PY{n}{times}\PY{p}{)}
+            \PY{k}{else}\PY{p}{:}
+                \PY{n}{nomhist}\PY{p}{,} \PY{n}{c\PYZus{}mdl} \PY{o}{=} \PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{nomscen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{)}
+            \PY{n}{nomresgraph} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}stategraph}\PY{p}{(}\PY{p}{)}
+            \PY{n}{mdl}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+            
+            \PY{n}{endclasses} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+            \PY{n}{mdlhists} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+            \PY{n}{mdlhists}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nominal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{nomhist}
+            \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{scen} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{scenlist}\PY{p}{)}\PY{p}{:}
+                \PY{c+c1}{\PYZsh{}run model with fault scenario}
+                \PY{k}{if} \PY{n}{staged}\PY{p}{:}
+                    \PY{n}{mdl}\PY{o}{=}\PY{n}{c\PYZus{}mdl}\PY{p}{[}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+                    \PY{n}{mdlhists}\PY{p}{[}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=}\PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{scen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{,} \PY{n}{staged}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{prevhist}\PY{o}{=}\PY{n}{nomhist}\PY{p}{)}
+                \PY{k}{else}\PY{p}{:}
+                    \PY{n}{mdlhists}\PY{p}{[}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=}\PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{scen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{)}
+                \PY{n}{endfaults}\PY{p}{,} \PY{n}{endfaultprops} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}faultmodes}\PY{p}{(}\PY{p}{)}
+                \PY{n}{resgraph} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}stategraph}\PY{p}{(}\PY{p}{)}
+                \PY{n}{endflows} \PY{o}{=} \PY{n}{rp}\PY{o}{.}\PY{n}{compare\PYZus{}graphflows}\PY{p}{(}\PY{n}{resgraph}\PY{p}{,} \PY{n}{nomresgraph}\PY{p}{)}
+                \PY{n}{endclasses}\PY{p}{[}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{find\PYZus{}classification}\PY{p}{(}\PY{n}{resgraph}\PY{p}{,} \PY{n}{endfaultprops}\PY{p}{,} \PY{n}{endflows}\PY{p}{,} \PY{n}{scen}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nominal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{nomhist}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faulty}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{mdlhists}\PY{p}{[}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{)}
+                
+                \PY{k}{if} \PY{n}{reuse}\PY{p}{:} \PY{n}{mdl}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+                \PY{k}{elif} \PY{n}{staged}\PY{p}{:} \PY{n}{\PYZus{}}
+                \PY{k}{else}\PY{p}{:} \PY{n}{mdl} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}class\PYZus{}\PYZus{}}\PY{p}{(}\PY{n}{params}\PY{o}{=}\PY{n}{mdl}\PY{o}{.}\PY{n}{params}\PY{p}{)}
+            \PY{k}{return} \PY{n}{endclasses}\PY{p}{,} \PY{n}{mdlhists}
+        
+        \PY{k}{def} \PY{n+nf}{run\PYZus{}approach}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{app}\PY{p}{,} \PY{n}{reuse}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{staged}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Injects and propagates faults in the model defined by a given sample approach}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : model}
+        \PY{l+s+sd}{        The model to inject faults in.}
+        \PY{l+s+sd}{    app : sampleapproach}
+        \PY{l+s+sd}{        SampleApproach used to define the list of faults and sample time for the model.}
+        \PY{l+s+sd}{    reuse : bool, optional}
+        \PY{l+s+sd}{        Whether to clear and re\PYZhy{}use the same model over each run rather than copying (for less memory use). The default is False.}
+        \PY{l+s+sd}{    staged : bool, optional}
+        \PY{l+s+sd}{        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.}
+        \PY{l+s+sd}{    track : bool, optional}
+        \PY{l+s+sd}{        Whether to track states over time. The default is True.}
+        \PY{l+s+sd}{    Returns}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    endclasses : dict}
+        \PY{l+s+sd}{        A dictionary with the rate, cost, and expected cost of each scenario run with structure \PYZob{}scenname:\PYZob{}expected cost, cost, rate\PYZcb{}\PYZcb{}}
+        \PY{l+s+sd}{    mdlhists : dict}
+        \PY{l+s+sd}{        A dictionary with the history of all model states for each scenario (including the nominal)}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{k}{if} \PY{n}{reuse} \PY{o+ow}{and} \PY{n}{staged}\PY{p}{:}
+                \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{invalid to use reuse and staged options at the same time. Using staged}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                \PY{n}{reuse}\PY{o}{=}\PY{k+kc}{False}
+            \PY{n}{mdl}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+            \PY{k}{if} \PY{n}{staged}\PY{p}{:}
+                \PY{n}{nomhist}\PY{p}{,} \PY{n}{c\PYZus{}mdl} \PY{o}{=} \PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{app}\PY{o}{.}\PY{n}{create\PYZus{}nomscen}\PY{p}{(}\PY{n}{mdl}\PY{p}{)}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{,} \PY{n}{ctimes}\PY{o}{=}\PY{n}{app}\PY{o}{.}\PY{n}{times}\PY{p}{)}
+            \PY{k}{else}\PY{p}{:}
+                \PY{n}{nomhist}\PY{p}{,} \PY{n}{c\PYZus{}mdl} \PY{o}{=} \PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{app}\PY{o}{.}\PY{n}{create\PYZus{}nomscen}\PY{p}{(}\PY{n}{mdl}\PY{p}{)}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{)}
+            \PY{n}{nomresgraph} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}stategraph}\PY{p}{(}\PY{p}{)}
+            \PY{n}{mdl}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+            
+            \PY{n}{endclasses} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+            \PY{n}{mdlhists} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+            \PY{n}{mdlhists}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nominal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{nomhist}
+            \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{scen} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{app}\PY{o}{.}\PY{n}{scenlist}\PY{p}{)}\PY{p}{:}
+                \PY{c+c1}{\PYZsh{}run model with fault scenario}
+                \PY{k}{if} \PY{n}{staged}\PY{p}{:}
+                    \PY{n}{mdl}\PY{o}{=}\PY{n}{c\PYZus{}mdl}\PY{p}{[}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+                    \PY{n}{mdlhists}\PY{p}{[}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=}\PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{scen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{,} \PY{n}{staged}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{prevhist}\PY{o}{=}\PY{n}{nomhist}\PY{p}{)}
+                \PY{k}{else}\PY{p}{:}
+                    \PY{n}{mdlhists}\PY{p}{[}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=}\PY{n}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{scen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{n}{track}\PY{p}{)}
+                \PY{n}{endfaults}\PY{p}{,} \PY{n}{endfaultprops} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}faultmodes}\PY{p}{(}\PY{p}{)}
+                \PY{n}{resgraph} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{return\PYZus{}stategraph}\PY{p}{(}\PY{p}{)}
+                
+                \PY{n}{endflows} \PY{o}{=} \PY{n}{rp}\PY{o}{.}\PY{n}{compare\PYZus{}graphflows}\PY{p}{(}\PY{n}{resgraph}\PY{p}{,} \PY{n}{nomresgraph}\PY{p}{)} \PY{c+c1}{\PYZsh{}TODO: supercede this with something in faultprop?}
+                \PY{n}{endclasses}\PY{p}{[}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{find\PYZus{}classification}\PY{p}{(}\PY{n}{resgraph}\PY{p}{,} \PY{n}{endfaultprops}\PY{p}{,} \PY{n}{endflows}\PY{p}{,} \PY{n}{scen}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nominal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{nomhist}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faulty}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{mdlhists}\PY{p}{[}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{)}
+                
+                \PY{k}{if} \PY{n}{reuse}\PY{p}{:} \PY{n}{mdl}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+                \PY{k}{elif} \PY{n}{staged}\PY{p}{:} \PY{n}{\PYZus{}}
+                \PY{k}{else}\PY{p}{:} \PY{n}{mdl} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n+nv+vm}{\PYZus{}\PYZus{}class\PYZus{}\PYZus{}}\PY{p}{(}\PY{n}{params}\PY{o}{=}\PY{n}{mdl}\PY{o}{.}\PY{n}{params}\PY{p}{)}
+            \PY{k}{return} \PY{n}{endclasses}\PY{p}{,} \PY{n}{mdlhists}
+        
+        
+        
+        
+        \PY{c+c1}{\PYZsh{} =============================================================================}
+        \PY{c+c1}{\PYZsh{} from pathos.pp import ParallelPool}
+        \PY{c+c1}{\PYZsh{} def run\PYZus{}approach\PYZus{}parallel(mdl, app, reuse=False, staged=False, track=True):}
+        \PY{c+c1}{\PYZsh{}     if reuse and staged:}
+        \PY{c+c1}{\PYZsh{}         print(\PYZdq{}invalid to use reuse and staged options at the same time. Using staged\PYZdq{})}
+        \PY{c+c1}{\PYZsh{}         reuse=False}
+        \PY{c+c1}{\PYZsh{}     mdl.reset()}
+        \PY{c+c1}{\PYZsh{}     if staged:}
+        \PY{c+c1}{\PYZsh{}         nomhist, c\PYZus{}mdl = prop\PYZus{}one\PYZus{}scen(mdl, app.create\PYZus{}nomscen(mdl), track=track, ctimes=app.times)}
+        \PY{c+c1}{\PYZsh{}     else:}
+        \PY{c+c1}{\PYZsh{}         nomhist, c\PYZus{}mdl = prop\PYZus{}one\PYZus{}scen(mdl, app.create\PYZus{}nomscen(mdl), track=track)}
+        \PY{c+c1}{\PYZsh{}     nomresgraph = mdl.return\PYZus{}stategraph()}
+        \PY{c+c1}{\PYZsh{}     mdl.reset()}
+        \PY{c+c1}{\PYZsh{}     }
+        \PY{c+c1}{\PYZsh{}     endclasses = \PYZob{}\PYZcb{}}
+        \PY{c+c1}{\PYZsh{}     mdlhists = \PYZob{}\PYZcb{}}
+        \PY{c+c1}{\PYZsh{}     mdlhists[\PYZsq{}nominal\PYZsq{}] = nomhist}
+        \PY{c+c1}{\PYZsh{}     mdls = [mdl.copy() for i, s in enumerate(app.scenlist)]}
+        \PY{c+c1}{\PYZsh{}     }
+        \PY{c+c1}{\PYZsh{}     pool = ParallelPool(nodes=4)}
+        \PY{c+c1}{\PYZsh{}     }
+        \PY{c+c1}{\PYZsh{}     outputs = pool.map(prop\PYZus{}one\PYZus{}scen, mdls, app.scenlist)}
+        \PY{c+c1}{\PYZsh{}         }
+        \PY{c+c1}{\PYZsh{}     for i, scen in enumerate(app.scenlist):}
+        \PY{c+c1}{\PYZsh{}         mdlhists[scen[\PYZsq{}properties\PYZsq{}][\PYZsq{}name\PYZsq{}]], \PYZus{} = outputs[i]}
+        \PY{c+c1}{\PYZsh{}         endfaults, endfaultprops = mdl.return\PYZus{}faultmodes()}
+        \PY{c+c1}{\PYZsh{}         resgraph = mdl.return\PYZus{}stategraph()}
+        \PY{c+c1}{\PYZsh{}         }
+        \PY{c+c1}{\PYZsh{}         endflows = rp.compare\PYZus{}graphflows(resgraph, nomresgraph) \PYZsh{}TODO: supercede this with something in faultprop?}
+        \PY{c+c1}{\PYZsh{}         endclasses[scen[\PYZsq{}properties\PYZsq{}][\PYZsq{}name\PYZsq{}]] = mdl.find\PYZus{}classification(resgraph, endfaultprops, endflows, scen, \PYZob{}\PYZsq{}nominal\PYZsq{}:nomhist, \PYZsq{}faulty\PYZsq{}:mdlhists[scen[\PYZsq{}properties\PYZsq{}][\PYZsq{}name\PYZsq{}]]\PYZcb{})}
+        \PY{c+c1}{\PYZsh{}         }
+        \PY{c+c1}{\PYZsh{}         if reuse: mdl.reset()}
+        \PY{c+c1}{\PYZsh{}         elif staged: \PYZus{}}
+        \PY{c+c1}{\PYZsh{}         else: mdl = mdl.\PYZus{}\PYZus{}class\PYZus{}\PYZus{}(params=mdl.params)}
+        \PY{c+c1}{\PYZsh{}     return endclasses, mdlhists}
+        \PY{c+c1}{\PYZsh{} =============================================================================}
+               
+        \PY{k}{def} \PY{n+nf}{prop\PYZus{}one\PYZus{}scen}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{scen}\PY{p}{,} \PY{n}{track}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{staged}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{ctimes}\PY{o}{=}\PY{p}{[}\PY{p}{]}\PY{p}{,} \PY{n}{prevhist}\PY{o}{=}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Runs a fault scenario in the model over time}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : model}
+        \PY{l+s+sd}{        The model to inject faults in.}
+        \PY{l+s+sd}{    scen : Dict}
+        \PY{l+s+sd}{        The fault scenario to run. Has structure: \PYZob{}\PYZsq{}faults\PYZsq{}:\PYZob{}fxn:fault\PYZcb{}, \PYZsq{}properties\PYZsq{}:\PYZob{}rate, time, name, etc\PYZcb{}\PYZcb{}}
+        \PY{l+s+sd}{    track : bool, optional}
+        \PY{l+s+sd}{        Whether to track states over time. The default is True.}
+        \PY{l+s+sd}{    staged : bool, optional}
+        \PY{l+s+sd}{        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.}
+        \PY{l+s+sd}{    ctimes : list, optional}
+        \PY{l+s+sd}{        List of times to copy the model (for use in staged execution). The default is [].}
+        \PY{l+s+sd}{    prevhist : dict, optional}
+        \PY{l+s+sd}{        The previous results hist (for used in staged execution). The default is \PYZob{}\PYZcb{}.}
+        \PY{l+s+sd}{    Returns}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdlhist : dict}
+        \PY{l+s+sd}{        A dictionary with a history of modelstates.}
+        \PY{l+s+sd}{    c\PYZus{}mdl : dict}
+        \PY{l+s+sd}{        A dictionary of models at each time given in ctimes with structure \PYZob{}time:model\PYZcb{}}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{c+c1}{\PYZsh{}if staged, we want it to start a new run from the starting time of the scenario,}
+            \PY{c+c1}{\PYZsh{} using a copy of the input model (which is the nominal run) at this time}
+            \PY{k}{if} \PY{n}{staged}\PY{p}{:}
+                \PY{n}{timerange}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{mdl}\PY{o}{.}\PY{n}{times}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{mdl}\PY{o}{.}\PY{n}{tstep}\PY{p}{)}
+                \PY{n}{shift} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{mdl}\PY{o}{.}\PY{n}{times}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{mdl}\PY{o}{.}\PY{n}{tstep}\PY{p}{)}\PY{p}{)}
+                \PY{k}{if} \PY{n}{track}\PY{p}{:} 
+                    \PY{k}{if} \PY{n}{prevhist}\PY{p}{:}    \PY{n}{mdlhist} \PY{o}{=} \PY{n}{copy}\PY{o}{.}\PY{n}{deepcopy}\PY{p}{(}\PY{n}{prevhist}\PY{p}{)}
+                    \PY{k}{else}\PY{p}{:}           \PY{n}{mdlhist} \PY{o}{=} \PY{n}{init\PYZus{}mdlhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{timerange}\PY{p}{)}
+            \PY{k}{else}\PY{p}{:} 
+                \PY{n}{timerange} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{mdl}\PY{o}{.}\PY{n}{times}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{mdl}\PY{o}{.}\PY{n}{times}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{mdl}\PY{o}{.}\PY{n}{tstep}\PY{p}{)}
+                \PY{n}{shift} \PY{o}{=} \PY{l+m+mi}{0}
+                \PY{k}{if} \PY{n}{track}\PY{p}{:}  \PY{n}{mdlhist} \PY{o}{=} \PY{n}{init\PYZus{}mdlhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{timerange}\PY{p}{)}
+            \PY{k}{if} \PY{o+ow}{not} \PY{n}{track}\PY{p}{:} \PY{n}{mdlhist}\PY{o}{=}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+            \PY{c+c1}{\PYZsh{} run model through the time range defined in the object}
+            \PY{n}{c\PYZus{}mdl}\PY{o}{=}\PY{n+nb}{dict}\PY{o}{.}\PY{n}{fromkeys}\PY{p}{(}\PY{n}{ctimes}\PY{p}{)}
+            \PY{n}{flowstates}\PY{o}{=}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+            \PY{k}{for} \PY{n}{t\PYZus{}ind}\PY{p}{,} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{timerange}\PY{p}{)}\PY{p}{:}
+               \PY{c+c1}{\PYZsh{} inject fault when it occurs, track defined flow states and graph }
+                \PY{k}{if} \PY{n}{t}\PY{o}{==}\PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{properties}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:} \PY{n}{flowstates} \PY{o}{=} \PY{n}{propagate}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{scen}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faults}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{flowstates}\PY{p}{)}
+                \PY{k}{else}\PY{p}{:} \PY{n}{flowstates} \PY{o}{=} \PY{n}{propagate}\PY{p}{(}\PY{n}{mdl}\PY{p}{,}\PY{p}{[}\PY{p}{]}\PY{p}{,}\PY{n}{t}\PY{p}{,} \PY{n}{flowstates}\PY{p}{)}
+                \PY{k}{if} \PY{n}{track}\PY{p}{:} \PY{n}{update\PYZus{}mdlhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{mdlhist}\PY{p}{,} \PY{n}{t\PYZus{}ind}\PY{o}{+}\PY{n}{shift}\PY{p}{)}
+                \PY{k}{if} \PY{n}{t} \PY{o+ow}{in} \PY{n}{ctimes}\PY{p}{:} \PY{n}{c\PYZus{}mdl}\PY{p}{[}\PY{n}{t}\PY{p}{]}\PY{o}{=}\PY{n}{mdl}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+            \PY{k}{return} \PY{n}{mdlhist}\PY{p}{,} \PY{n}{c\PYZus{}mdl}
+        
+        \PY{k}{def} \PY{n+nf}{propagate}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{initfaults}\PY{p}{,} \PY{n}{time}\PY{p}{,} \PY{n}{flowstates}\PY{o}{=}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Injects and propagates faults through the graph at one time\PYZhy{}step}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : model}
+        \PY{l+s+sd}{        The model to propagate the fault in}
+        \PY{l+s+sd}{    initfaults : dict}
+        \PY{l+s+sd}{        The faults to inject in the model with structure \PYZob{}fxn:fault\PYZcb{}}
+        \PY{l+s+sd}{    time : float}
+        \PY{l+s+sd}{        The current timestep.}
+        \PY{l+s+sd}{    flowstates : dict, optional}
+        \PY{l+s+sd}{        States of the model at the previous time\PYZhy{}step (if used). The default is \PYZob{}\PYZcb{}.}
+        \PY{l+s+sd}{    Returns}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    flowstates : dict}
+        \PY{l+s+sd}{        States of the model at the current time\PYZhy{}step.}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{c+c1}{\PYZsh{}set up history of flows to see if any has changed}
+            \PY{n}{activefxns}\PY{o}{=}\PY{n}{mdl}\PY{o}{.}\PY{n}{timelyfxns}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+            \PY{n}{nextfxns}\PY{o}{=}\PY{n+nb}{set}\PY{p}{(}\PY{p}{)}
+            \PY{c+c1}{\PYZsh{}Step 1: Find out what the current value of the flows are (if not generated in the last iteration)}
+            \PY{k}{if} \PY{o+ow}{not} \PY{n}{flowstates}\PY{p}{:}
+                \PY{k}{for} \PY{n}{flowname}\PY{p}{,} \PY{n}{flow} \PY{o+ow}{in} \PY{n}{mdl}\PY{o}{.}\PY{n}{flows}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                    \PY{n}{flowstates}\PY{p}{[}\PY{n}{flowname}\PY{p}{]}\PY{o}{=}\PY{n}{flow}\PY{o}{.}\PY{n}{status}\PY{p}{(}\PY{p}{)}
+            \PY{c+c1}{\PYZsh{}Step 2: Inject faults if present}
+            \PY{k}{if} \PY{n}{initfaults}\PY{p}{:}
+                \PY{n}{flowstates} \PY{o}{=} \PY{n}{prop\PYZus{}time}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{activefxns}\PY{p}{,} \PY{n}{nextfxns}\PY{p}{,} \PY{n}{flowstates}\PY{p}{,} \PY{n}{time}\PY{p}{,} \PY{n}{initfaults}\PY{p}{)}
+            \PY{k}{for} \PY{n}{fxnname} \PY{o+ow}{in} \PY{n}{initfaults}\PY{p}{:}
+                \PY{n}{fxn}\PY{o}{=}\PY{n}{mdl}\PY{o}{.}\PY{n}{fxns}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}
+                \PY{k}{if} \PY{n+nb}{type}\PY{p}{(}\PY{n}{initfaults}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{p}{)}\PY{o}{==}\PY{n+nb}{list}\PY{p}{:} \PY{n}{fxn}\PY{o}{.}\PY{n}{updatefxn}\PY{p}{(}\PY{n}{faults}\PY{o}{=}\PY{n}{initfaults}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{p}{,} \PY{n}{time}\PY{o}{=}\PY{n}{time}\PY{p}{)}
+                \PY{k}{else}\PY{p}{:}                               \PY{n}{fxn}\PY{o}{.}\PY{n}{updatefxn}\PY{p}{(}\PY{n}{faults}\PY{o}{=}\PY{p}{[}\PY{n}{initfaults}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{time}\PY{o}{=}\PY{n}{time}\PY{p}{)}
+                \PY{n}{activefxns}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{p}{)}
+            \PY{c+c1}{\PYZsh{}Step 3: Propagate faults through graph}
+            \PY{n}{flowstates} \PY{o}{=} \PY{n}{prop\PYZus{}time}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{activefxns}\PY{p}{,} \PY{n}{nextfxns}\PY{p}{,} \PY{n}{flowstates}\PY{p}{,} \PY{n}{time}\PY{p}{,} \PY{n}{initfaults}\PY{p}{)}
+            \PY{k}{return} \PY{n}{flowstates}
+        \PY{k}{def} \PY{n+nf}{prop\PYZus{}time}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{activefxns}\PY{p}{,} \PY{n}{nextfxns}\PY{p}{,} \PY{n}{flowstates}\PY{p}{,} \PY{n}{time}\PY{p}{,} \PY{n}{initfaults}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Propagates faults through model graph.}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : model}
+        \PY{l+s+sd}{        Model to propagate faults in}
+        \PY{l+s+sd}{    activefxns : set}
+        \PY{l+s+sd}{        Set of functions that are active (must be checked, e.g. because a fault was injected)}
+        \PY{l+s+sd}{    nextfxns : set}
+        \PY{l+s+sd}{        Set of active functions for the next iteration.}
+        \PY{l+s+sd}{    flowstates : dict}
+        \PY{l+s+sd}{        States of each flow in the model.}
+        \PY{l+s+sd}{    time : float}
+        \PY{l+s+sd}{        Current time\PYZhy{}step.}
+        \PY{l+s+sd}{    initfaults : dict}
+        \PY{l+s+sd}{        Faults to inject during this propagation step.}
+        \PY{l+s+sd}{    Returns}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    flowstates : dict}
+        \PY{l+s+sd}{        States of each flow in the model after propagation}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{n}{n}\PY{o}{=}\PY{l+m+mi}{0}
+            \PY{k}{while} \PY{n}{activefxns}\PY{p}{:}
+                \PY{k}{for} \PY{n}{fxnname} \PY{o+ow}{in} \PY{n+nb}{list}\PY{p}{(}\PY{n}{activefxns}\PY{p}{)}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                    \PY{c+c1}{\PYZsh{}Update functions with new values, check to see if new faults or states}
+                    \PY{n}{oldstates}\PY{p}{,} \PY{n}{oldfaults} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{fxns}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{o}{.}\PY{n}{return\PYZus{}states}\PY{p}{(}\PY{p}{)}
+                    \PY{n}{mdl}\PY{o}{.}\PY{n}{fxns}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{o}{.}\PY{n}{updatefxn}\PY{p}{(}\PY{n}{time}\PY{o}{=}\PY{n}{time}\PY{p}{)}
+                    \PY{n}{newstates}\PY{p}{,} \PY{n}{newfaults} \PY{o}{=} \PY{n}{mdl}\PY{o}{.}\PY{n}{fxns}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{o}{.}\PY{n}{return\PYZus{}states}\PY{p}{(}\PY{p}{)} 
+                    \PY{k}{if} \PY{n}{oldstates} \PY{o}{!=} \PY{n}{newstates} \PY{o+ow}{or} \PY{n}{oldfaults} \PY{o}{!=} \PY{n}{newfaults}\PY{p}{:} \PY{n}{nextfxns}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{p}{)}
+                \PY{c+c1}{\PYZsh{}Check to see what flows have new values and add connected functions}
+                \PY{k}{for} \PY{n}{flowname}\PY{p}{,} \PY{n}{flow} \PY{o+ow}{in} \PY{n}{mdl}\PY{o}{.}\PY{n}{flows}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                    \PY{k}{if} \PY{n}{flowstates}\PY{p}{[}\PY{n}{flowname}\PY{p}{]}\PY{o}{!=}\PY{n}{flow}\PY{o}{.}\PY{n}{status}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                        \PY{n}{nextfxns}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n}{n} \PY{k}{for} \PY{n}{n} \PY{o+ow}{in} \PY{n}{mdl}\PY{o}{.}\PY{n}{bipartite}\PY{o}{.}\PY{n}{neighbors}\PY{p}{(}\PY{n}{flowname}\PY{p}{)}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+                    \PY{n}{flowstates}\PY{p}{[}\PY{n}{flowname}\PY{p}{]}\PY{o}{=}\PY{n}{flow}\PY{o}{.}\PY{n}{status}\PY{p}{(}\PY{p}{)}
+                \PY{n}{activefxns}\PY{o}{=}\PY{n}{nextfxns}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+                \PY{n}{nextfxns}\PY{o}{.}\PY{n}{clear}\PY{p}{(}\PY{p}{)}
+                \PY{n}{n}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
+                \PY{k}{if} \PY{n}{n}\PY{o}{\PYZgt{}}\PY{l+m+mi}{1000}\PY{p}{:} \PY{c+c1}{\PYZsh{}break if this is going for too long}
+                    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Undesired looping in function}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                    \PY{n+nb}{print}\PY{p}{(}\PY{n}{initfaults}\PY{p}{)}
+                    \PY{n+nb}{print}\PY{p}{(}\PY{n}{fxnname}\PY{p}{)}
+                    \PY{k}{break}
+            \PY{k}{return} \PY{n}{flowstates}
+        
+        \PY{c+c1}{\PYZsh{}update\PYZus{}mdlhist}
+        \PY{c+c1}{\PYZsh{} find a way to make faster (e.g. by automatically getting values by reference)}
+        \PY{k}{def} \PY{n+nf}{update\PYZus{}mdlhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{mdlhist}\PY{p}{,} \PY{n}{t\PYZus{}ind}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Updates the model history at a given time.}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : model}
+        \PY{l+s+sd}{        Model at the timestep}
+        \PY{l+s+sd}{    mdlhist : dict}
+        \PY{l+s+sd}{        History of model states (a dict with a vector of each state)}
+        \PY{l+s+sd}{    t\PYZus{}ind : float}
+        \PY{l+s+sd}{        The time to update the model history at.}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{n}{update\PYZus{}flowhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{mdlhist}\PY{p}{,} \PY{n}{t\PYZus{}ind}\PY{p}{)}
+            \PY{n}{update\PYZus{}fxnhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{mdlhist}\PY{p}{,} \PY{n}{t\PYZus{}ind}\PY{p}{)}
+        \PY{k}{def} \PY{n+nf}{update\PYZus{}flowhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{mdlhist}\PY{p}{,} \PY{n}{t\PYZus{}ind}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{} Updates the flows in the model history at t\PYZus{}ind \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{k}{for} \PY{n}{flowname}\PY{p}{,} \PY{n}{flow} \PY{o+ow}{in} \PY{n}{mdl}\PY{o}{.}\PY{n}{flows}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                \PY{n}{atts}\PY{o}{=}\PY{n}{flow}\PY{o}{.}\PY{n}{status}\PY{p}{(}\PY{p}{)}
+                \PY{k}{for} \PY{n}{att}\PY{p}{,} \PY{n}{val} \PY{o+ow}{in} \PY{n}{atts}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                    \PY{n}{mdlhist}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{flows}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{flowname}\PY{p}{]}\PY{p}{[}\PY{n}{att}\PY{p}{]}\PY{p}{[}\PY{n}{t\PYZus{}ind}\PY{p}{]} \PY{o}{=} \PY{n}{val}
+        \PY{k}{def} \PY{n+nf}{update\PYZus{}fxnhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{mdlhist}\PY{p}{,} \PY{n}{t\PYZus{}ind}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{} Updates the functions (faults and states) in the model history at t\PYZus{}ind \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{k}{for} \PY{n}{fxnname}\PY{p}{,} \PY{n}{fxn} \PY{o+ow}{in} \PY{n}{mdl}\PY{o}{.}\PY{n}{fxns}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                \PY{n}{states}\PY{p}{,} \PY{n}{faults} \PY{o}{=} \PY{n}{fxn}\PY{o}{.}\PY{n}{return\PYZus{}states}\PY{p}{(}\PY{p}{)}
+                \PY{n}{mdlhist}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{functions}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{faults}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{t\PYZus{}ind}\PY{p}{]}\PY{o}{=}\PY{n}{faults}
+                \PY{k}{for} \PY{n}{state}\PY{p}{,} \PY{n}{value} \PY{o+ow}{in} \PY{n}{states}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                    \PY{n}{mdlhist}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{functions}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{p}{[}\PY{n}{state}\PY{p}{]}\PY{p}{[}\PY{n}{t\PYZus{}ind}\PY{p}{]} \PY{o}{=} \PY{n}{value} 
+        
+        \PY{k}{def} \PY{n+nf}{init\PYZus{}mdlhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{timerange}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{l+s+sd}{    Initializes the model history over a given timerange}
+        \PY{l+s+sd}{    Parameters}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdl : model}
+        \PY{l+s+sd}{        the Model object}
+        \PY{l+s+sd}{    timerange : array}
+        \PY{l+s+sd}{        Numpy array of times to initialize in the dictionary.}
+        \PY{l+s+sd}{    Returns}
+        \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+        \PY{l+s+sd}{    mdlhist : dict}
+        \PY{l+s+sd}{        A dictionary history of each model state over the given timerange.}
+        \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{n}{mdlhist}\PY{o}{=}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+            \PY{n}{mdlhist}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{flows}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=}\PY{n}{init\PYZus{}flowhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{timerange}\PY{p}{)}
+            \PY{n}{mdlhist}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{functions}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=}\PY{n}{init\PYZus{}fxnhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{timerange}\PY{p}{)}
+            \PY{n}{mdlhist}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{time}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{i} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{timerange}\PY{p}{]}\PY{p}{)}
+            \PY{k}{return} \PY{n}{mdlhist}
+        \PY{k}{def} \PY{n+nf}{init\PYZus{}flowhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{timerange}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{} Initializes the flow history flowhist of the model mdl over the time range timerange\PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{n}{flowhist}\PY{o}{=}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+            \PY{k}{for} \PY{n}{flowname}\PY{p}{,} \PY{n}{flow} \PY{o+ow}{in} \PY{n}{mdl}\PY{o}{.}\PY{n}{flows}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                \PY{n}{atts}\PY{o}{=}\PY{n}{flow}\PY{o}{.}\PY{n}{status}\PY{p}{(}\PY{p}{)}
+                \PY{n}{flowhist}\PY{p}{[}\PY{n}{flowname}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+                \PY{k}{for} \PY{n}{att}\PY{p}{,} \PY{n}{val} \PY{o+ow}{in} \PY{n}{atts}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                    \PY{n}{flowhist}\PY{p}{[}\PY{n}{flowname}\PY{p}{]}\PY{p}{[}\PY{n}{att}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{full}\PY{p}{(}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{timerange}\PY{p}{)}\PY{p}{]}\PY{p}{,} \PY{n}{val}\PY{p}{)}
+            \PY{k}{return} \PY{n}{flowhist}
+        \PY{k}{def} \PY{n+nf}{init\PYZus{}fxnhist}\PY{p}{(}\PY{n}{mdl}\PY{p}{,} \PY{n}{timerange}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Initializes the function state history fxnhist of the model mdl over the time range timerange\PYZdq{}\PYZdq{}\PYZdq{}}
+            \PY{n}{fxnhist} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+            \PY{k}{for} \PY{n}{fxnname}\PY{p}{,} \PY{n}{fxn} \PY{o+ow}{in} \PY{n}{mdl}\PY{o}{.}\PY{n}{fxns}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                \PY{n}{states}\PY{p}{,} \PY{n}{faults} \PY{o}{=} \PY{n}{fxn}\PY{o}{.}\PY{n}{return\PYZus{}states}\PY{p}{(}\PY{p}{)}
+                \PY{n}{fxnhist}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{o}{=}\PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+                \PY{n}{fxnhist}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{faults}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=}\PY{p}{[}\PY{n}{faults} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{timerange}\PY{p}{]}
+                \PY{k}{for} \PY{n}{state}\PY{p}{,} \PY{n}{value} \PY{o+ow}{in} \PY{n}{states}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                    \PY{n}{fxnhist}\PY{p}{[}\PY{n}{fxnname}\PY{p}{]}\PY{p}{[}\PY{n}{state}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{full}\PY{p}{(}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{timerange}\PY{p}{)}\PY{p}{]}\PY{p}{,} \PY{n}{value}\PY{p}{)}
+            \PY{k}{return} \PY{n}{fxnhist}
+\end{Verbatim}
+
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
