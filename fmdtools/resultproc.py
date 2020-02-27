@@ -223,7 +223,7 @@ def make_bipresultsgraph(g, nomg):
     rg=g.copy() 
     for node in g.nodes:        
         if g.nodes[node]['bipartite']==0 or g.nodes[node].get('iscomponent', False): #condition only checked for functions
-            if g.nodes[node].get('modes').difference(['nom']): status='Faulty'
+            if g.nodes[node].get('modes', {'nom'}).difference(['nom']): status='Faulty'
             else: status='Nominal'
         elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
         else: status='Nominal'
@@ -619,7 +619,7 @@ def plot_samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     if title: axes[0].set_title(title)
     elif type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+str(fxnmode)+" over time")
     else:                       axes[0].set_title("Cost function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
-def plot_costovertime(endclasses, app, costtype='expected cost'):
+def plot_costovertime(endclasses, app, costtype='expected cost', timelabel='time'):
     """
     Plots the total cost or total expected cost of faults over time.
 
@@ -636,10 +636,10 @@ def plot_costovertime(endclasses, app, costtype='expected cost'):
     plt.plot(list(costovertime.index), costovertime[costtype])
     plt.title('Total '+costtype+' of all faults over time.')
     plt.ylabel(costtype)
-    plt.xlabel('time')
+    plt.xlabel(timelabel)
     plt.grid()
 
-def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
+def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel="time"):
     """
     Plots the states of a model over time given a history.
 
@@ -653,13 +653,16 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
         Time of fault injection. The default is 0.
     fxnflows : list, optional
         List of functions and flows to plot. The default is [], which returns all.
-        
+    returnfigs: bool, optional
+        Whether to return the figure objects in a list. The default is False.
+    legend: bool, optional
+        Whether the plot should have a legend for faulty and nominal states. The default is true
     """
     mdlhists={}
     if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
     else: mdlhists=mdlhist
     times = mdlhists["nominal"]["time"]
-    
+    figs =[]
     for objtype in ["flows", "functions"]:
         for fxnflow in mdlhists['nominal'][objtype]:
             if fxnflows: #if in the list 
@@ -669,15 +672,18 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
                 nomhist=mdlhists['nominal']["flows"][fxnflow]
                 if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
             elif objtype=="functions":
-                nomhist=mdlhists['nominal']["functions"][fxnflow]
+                nomhist=copy.deepcopy(mdlhists['nominal']["functions"][fxnflow])
                 del nomhist['faults']
                 if 'faulty' in mdlhists: 
-                    hist = mdlhists['faulty']["functions"][fxnflow]
+                    hist = copy.deepcopy(mdlhists['faulty']["functions"][fxnflow])
                     del hist['faults']
             plots=len(nomhist)
             if plots:
                 fig = plt.figure()
-                fig.add_subplot(np.ceil((plots+1)/2),2,plots)
+                figs = figs +[fig]
+                if legend: fig.add_subplot(np.ceil((plots+1)/2),2,plots)
+                else: fig.add_subplot(np.ceil((plots)/2),2,plots)
+                
                 plt.tight_layout(pad=2.5, w_pad=2.5, h_pad=2.5, rect=[0, 0.03, 1, 0.95])
                 n=1
                 for var in nomhist:
@@ -686,13 +692,93 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[]):
                     if 'faulty' in mdlhists:
                         a, = plt.plot(times, hist[var], color='r')
                         c = plt.axvline(x=time, color='k')
-                    b, =plt.plot(times, nomhist[var], color='b')
+                    b, =plt.plot(times, nomhist[var], ls='--', color='b')
                     plt.title(var)
+                    plt.xlabel(timelabel)
                 if 'faulty' in mdlhists:
-                    plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+'legend')
-                    plt.legend([a,b],['faulty', 'nominal'])
-                fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
+                    fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
+                    if legend:
+                        ax_l = plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+'legend')
+                        plt.legend([a,b],['faulty', 'nominal'], loc='center')
+                        plt.box(on=None)
+                        ax_l.get_xaxis().set_visible(False)
+                        ax_l.get_yaxis().set_visible(False)
                 plt.show()
+    if returnfigs: return figs
+
+def plot_mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=False, legend=True, timelabel="time"):
+    """
+    Plots the states of a model over time given a history.
+
+    Parameters
+    ----------
+    mdlhist : dict
+        History of states over time. Can be just the scenario states or a dict of scenario states and nominal states per {'nominal':nomhist,'faulty':mdlhist}
+    fault : str, optional
+        Name of the fault (for the title). The default is ''.
+    time : float, optional
+        Time of fault injection. The default is 0.
+    fxnflowsvals : dict, optional
+        dict of flow values to plot with structure {fxnflow:[vals]}. The default is {}, which returns all.
+    cols: int, optional
+        columns to use in the figure. The default is 2.
+    returnfig: bool, optional
+        Whether to return the figure. The default is False.
+    legend: bool, optional
+        Whether the plot should have a legend for faulty and nominal states. The default is true
+        
+    """
+    mdlhists={}
+    if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
+    else: mdlhists=mdlhist
+    times = mdlhists["nominal"]["time"]
+    
+    if fxnflowvals: num_plots = sum([len(val) for k,val in fxnflowvals.items()])
+    else: num_plots = sum([len(flow) for flow in mdlhists['nominal']['flows'].values()])+sum([len(f.keys())-1 for f in mdlhists['nominal']['functions'].values()])
+    fig = plt.figure(figsize=(cols*3, 2*num_plots/cols))
+    n=1
+    
+    for objtype in ["flows", "functions"]:
+        for fxnflow in mdlhists['nominal'][objtype]:
+            if fxnflowvals: #if in the list 
+                if fxnflow not in fxnflowvals: continue
+            
+            if objtype =="flows":
+                nomhist=mdlhists['nominal']["flows"][fxnflow]
+                if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
+            elif objtype=="functions":
+                nomhist=copy.deepcopy(mdlhists['nominal']["functions"][fxnflow])
+                del nomhist['faults']
+                if 'faulty' in mdlhists: 
+                    hist = copy.deepcopy(mdlhists['faulty']["functions"][fxnflow])
+                    del hist['faults']
+
+            for var in nomhist:
+                if fxnflowvals: #if in the list of values
+                    if var not in fxnflowvals[fxnflow]: continue
+                if legend: plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label=fxnflow+var)
+                else: plt.subplot(np.ceil((num_plots)/cols),cols,n, label=fxnflow+var)
+                n+=1
+                if 'faulty' in mdlhists:
+                    a, = plt.plot(times, hist[var], color='r')
+                    c = plt.axvline(x=time, color='k')
+                b, =plt.plot(times, nomhist[var], ls='--', color='b')
+                plt.title(fxnflow+": "+var)
+                plt.xlabel(timelabel)
+    if 'faulty' in mdlhists:
+        if fxnflowvals: fig.suptitle('Dynamic Response of '+str(list(fxnflowvals.keys()))+' to fault'+' '+fault)
+        else:           fig.suptitle('Dynamic Response of Model States to fault'+' '+fault)
+        if legend:
+            ax_l = plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label=fxnflow+'legend')
+            plt.legend([a,b],['faulty', 'nominal'], loc='center')
+            plt.box(on=None)
+            ax_l.get_xaxis().set_visible(False)
+            ax_l.get_yaxis().set_visible(False)
+    plt.tight_layout(pad=1)
+    plt.subplots_adjust(top=0.85)
+    if returnfig: return fig
+    else: plt.show()
+
     
 def plot_ghist(ghist,faultscen=[]):
     """
@@ -810,7 +896,7 @@ def show_bipartite(g, scale=1, faultscen=[], time=[], showfaultlabels=True, heat
         faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
         plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale)
 
-def plot_resultsgraph_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[]):
+def plot_resultsgraph_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[], retfig=False):
     """
     Plots a representation of the model graph at a specific time in the results history.
 
@@ -832,18 +918,21 @@ def plot_resultsgraph_from(mdl, reshist, time, faultscen=[], gtype='bipartite', 
         Scale factor for the node/label sizes. The default is 1.
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
+    retfig:, bool, optional
+        whether to return the figure and axis objects of the plot. The default is False.
     """
     [[t_ind,],] = np.where(reshist['time']==time)
     if gtype=='bipartite':
         g = mdl.bipartite.copy()
         labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
         degnodes = degfxns + degflows
-        plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos=pos)
+        
+        fig_axis = plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos=pos, retfig=retfig)
     elif gtype=='normal':
         g = mdl.graph.copy()
         labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-        plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale)
-    return 0
+        fig_axis= plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, retfig=retfig)
+    if retfig: return fig_axis
 
 def plot_resultsgraphs_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[]):
     """
@@ -882,7 +971,6 @@ def plot_resultsgraphs_from(mdl, reshist, times, faultscen=[], gtype='bipartite'
         pos=nx.shell_layout(g)
         for t_ind in t_inds:
             update_graphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale)
-    return 0
 
 def animate_resultsgraphs_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, show=False, pos=[]):
     """
@@ -940,7 +1028,7 @@ def update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True,
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show)
 
-def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True):
+def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, retfig=False):
     """ Plots a standard graph. Used in other functions"""
     if not pos: pos=nx.shell_layout(g)
     nx.draw_networkx(g,pos,node_size=2000,node_shape='s', node_color='g', \
@@ -958,10 +1046,11 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
         nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows, font_color='r')
     if faultscen:
         plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    if show: plt.show()
-    return 0
+    if retfig:
+        return plt.gcf(), plt.gca()
+    elif show: plt.show()
 
-def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True):
+def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, retfig=False):
     """ Plots a bipartite graph. Used in other functions"""
     nodesize=scale*700
     fontsize=scale*6
@@ -975,8 +1064,9 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=fontsize, font_color='k')
     if faultscen:
             plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    if show: plt.show()
-    return 0
+    if retfig:
+        return plt.gcf(), plt.gca()
+    elif show: plt.show()
 def get_plotlabels(g, reshist, t_ind):
     """
     Assigns labels to a graph g from reshist at time t so that it can be plotted

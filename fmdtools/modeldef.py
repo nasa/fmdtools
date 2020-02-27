@@ -548,6 +548,9 @@ class Model(object):
             flow.reset()
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
+    def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
+        """Placeholder for model find_classification methods (for running nominal models)"""
+        return {'rate':1, 'cost': 1, 'expected cost': 1}
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) """
@@ -763,6 +766,8 @@ class SampleApproach():
                 pts.sort()
         else: print("invalid option: ", param)
         if not any(weights): weights = [1/len(pts) for t in pts]
+        if len(pts)!=len(set(pts)):
+            raise Exception("Too many pts for quadrature at this discretization")
         return pts, weights
     def add_phasetimes(self, fxnmode, phase, phasetimes, weights=[]):
         """ Adds a set of times for a given mode to sampletimes"""
