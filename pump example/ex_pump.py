@@ -25,7 +25,7 @@ from fmdtools.modeldef import *
 
 
 ##DEFINE MODEL FUNCTIONS
-# Functions are, again, defined using Python classes that are instantiated as objects
+# Functions are defined using Python classes that are instantiated as objects
 
 # Import EE is the line of electricity going into the pump
 # We define it here as a subclass of the FxnBlock superclass (imported from modeldef.py)
@@ -60,14 +60,14 @@ class ImportEE(FxnBlock):
     def condfaults(self,time):
         #in this case, if the current is too high, the line becomes an open circuit
         # (e.g. due to a fuse or line burnout)
-        if self.EEout.rate>5.0: self.add_fault('no_v')
+        if self.EEout.current>15.0: self.add_fault('no_v')
     #behavior defines the behavior of the function
     def behavior(self,time):
         #here we can define how the function will behave with different faults
         if self.has_fault('no_v'): self.effstate=0.0 #an open circuit means no voltage is exported
         elif self.has_fault('inf_v'): self.effstate=100.0 #a voltage spike means voltage is much higher
-        else: self.effstate=1.0 #normally, voltage is 1.0
-        self.EEout.effort=self.effstate
+        else: self.effstate=1.0 #normally, voltage is 500 V
+        self.EEout.voltage=self.effstate * 500
 
 # Import Water is the pipe with water going into the pump
 
@@ -84,7 +84,7 @@ class ImportWater(FxnBlock):
     def behavior(self,time):
         #here we can define how the function will behave with different faults
         if self.has_fault('no_wat'):
-            self.Watout.level=0.0 #an open circuit means no voltage is exported
+            self.Watout.level=0.0 
         else:
             self.Watout.level=1.0
 
@@ -98,7 +98,7 @@ class ExportWater(FxnBlock):
         self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 5000]})
     def behavior(self,time):
         if self.has_fault('block'): #here the fault is some sort of blockage
-            self.Watin.area=0.1
+            self.Watin.area=0.01
 
 # Import Signal is the on/off switch
 class ImportSig(FxnBlock):
@@ -134,13 +134,13 @@ class MoveWat(FxnBlock):
         self.delay=delay[0]
         super().__init__(flownames,flows,states, timers={'timer'})
         self.failrate=1e-5
-        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 10000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
+        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
         #timers can be set by adding variables to functions also
     def condfaults(self, time):
         # here we define a conditional fault that only occurs after a state 
         # is present after 10 seconds
         if self.delay:
-            if self.Watout.effort>5.0:
+            if self.Watout.pressure>15.0:
                 if time>self.time:
                     #increment timer: default is 1 second, if we use self.tstep, the time
                     # will increment as desired even if we change model timestep
@@ -148,26 +148,26 @@ class MoveWat(FxnBlock):
                 if self.timer.time>self.delay:
                     self.add_fault('mech_break')
         else: 
-            if self.Watout.effort>5.0: self.add_fault('mech_break')
+            if self.Watout.pressure>15.0: self.add_fault('mech_break')
             
     #behavior defines the behavior of the function
     def behavior(self, time):
         #here we can define how the function will behave with different faults
         if self.has_fault('short'):
-            self.EEin.rate=500*self.Sigin.power*self.EEin.effort
+            self.EEin.current=500*10/5000*self.Sigin.power*self.EEin.voltage
             self.eff=0.0
         elif self.has_fault('mech_break'):
-            self.EEin.rate=0.2*self.Sigin.power*self.EEin.effort
+            self.EEin.current=0.2*10/5000*self.Sigin.power*self.EEin.voltage
             self.eff=0.0
         else:
-            self.EEin.rate=1.0*self.Sigin.power*self.EEin.effort*min(3.0, self.Watout.effort)
+            self.EEin.current=10/5000*self.Sigin.power*self.EEin.voltage*min(13.0, self.Watout.pressure)
             self.eff=1.0 
             
-        self.Watout.effort=self.Sigin.power*self.eff*min(1.5, self.EEin.effort)*self.Watin.level/self.Watout.area
-        self.Watout.rate=self.Sigin.power*self.eff*min(1.5, self.EEin.effort)*self.Watin.level*self.Watout.area
+        self.Watout.pressure = 10/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level/self.Watout.area
+        self.Watout.flowrate = 0.3/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level*self.Watout.area
         
-        self.Watin.effort=self.Watout.effort
-        self.Watin.rate=self.Watout.rate
+        self.Watin.pressure=self.Watout.pressure
+        self.Watin.flowrate=self.Watout.flowrate
 
 ##DEFINE CUSTOM MODEL FLOWS
 # Flows can be defined using Python classes that are instantiated as objects
@@ -179,8 +179,8 @@ class MoveWat(FxnBlock):
 # and methods could be given here if desired.
 class Water(Flow):
     def __init__(self):
-        attributes={'rate':1.0, \
-                    'effort':1.0, \
+        attributes={'flowrate':1.0, \
+                    'pressure':1.0, \
                     'area':1.0, \
                     'level':1.0}
         super().__init__(attributes, 'Water')
@@ -210,7 +210,7 @@ class Pump(Model):
         #Here addflow takes as input a unique name for the flow "flowname", a type for the flow, "flowtype"
         # and either:   a dict with the initial flow attributes, OR
         #               a flow object defined in the model file
-        self.add_flow('EE_1', 'EE', {'rate':1.0, 'effort':1.0})
+        self.add_flow('EE_1', 'EE', {'current':1.0, 'voltage':1.0})
         self.add_flow('Sig_1', 'Signal', {'power':1.0})
         # custom flows which we defined earlier can be added also:
         self.add_flow('Wat_1', 'Water', Water())
@@ -255,16 +255,16 @@ class Pump(Model):
         else: repcost = 0.0
         
         if 'water' in self.params['cost']: 
-            lostwat = sum(mdlhists['nominal']['flows']['Wat_2']['rate'] - mdlhists['faulty']['flows']['Wat_2']['rate'])
-            watcost = lostwat * 100 * self.tstep
+            lostwat = sum(mdlhists['nominal']['flows']['Wat_2']['flowrate'] - mdlhists['faulty']['flows']['Wat_2']['flowrate'])
+            watcost = 750 * lostwat  * self.tstep
         elif 'water_exp' in self.params['cost']:
-            wat = mdlhists['nominal']['flows']['Wat_2']['rate'] - mdlhists['faulty']['flows']['Wat_2']['rate']
-            watcost = sum(np.array(accumulate(wat))**2) * self.tstep
+            wat = mdlhists['nominal']['flows']['Wat_2']['flowrate'] - mdlhists['faulty']['flows']['Wat_2']['flowrate']
+            watcost =100 *  sum(np.array(accumulate(wat))**2) * self.tstep
         else: watcost = 0.0
         
         if 'ee' in self.params['cost']:
-            eespike = [spike for spike in mdlhists['faulty']['flows']['EE_1']['rate'] - mdlhists['nominal']['flows']['EE_1']['rate'] if spike >1.0]
-            if len(eespike)>0: eecost = 10 * sum(np.array(reseting_accumulate(eespike))) * self.tstep
+            eespike = [spike for spike in mdlhists['faulty']['flows']['EE_1']['current'] - mdlhists['nominal']['flows']['EE_1']['current'] if spike >1.0]
+            if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.tstep
             else: eecost =0.0
         else: eecost = 0.0
         

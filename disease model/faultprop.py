@@ -358,10 +358,14 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     flowstates={}
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph 
-        if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
-        else: flowstates = propagate(mdl,[],t, flowstates)
-        if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
-        if t in ctimes: c_mdl[t]=mdl.copy()
+        try:
+            if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
+            else: flowstates = propagate(mdl,[],t, flowstates)
+            if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
+            if t in ctimes: c_mdl[t]=mdl.copy()
+        except:
+            print("Error at t="+str(t))
+            break
     return mdlhist, c_mdl
 
 def propagate(mdl, initfaults, time, flowstates={}):
@@ -471,7 +475,11 @@ def update_flowhist(mdl, mdlhist, t_ind):
     for flowname, flow in mdl.flows.items():
         atts=flow.status()
         for att, val in atts.items():
-            mdlhist["flows"][flowname][att][t_ind] = val
+            try:
+                mdlhist["flows"][flowname][att][t_ind] = val
+            except:
+                print("Value too large to represent: "+att+"="+str(val))
+                raise
 def update_fxnhist(mdl, mdlhist, t_ind):
     """ Updates the functions (faults and states) in the model history at t_ind """
     for fxnname, fxn in mdl.fxns.items():

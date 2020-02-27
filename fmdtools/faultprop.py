@@ -26,6 +26,7 @@ def construct_nomscen(mdl):
     """
     nomscen={'faults':{},'properties':{}}
     nomscen['properties']['time']=0.0
+    nomscen['properties']['rate']=1.0
     nomscen['properties']['type']='nominal'
     return nomscen
 
@@ -57,7 +58,7 @@ def run_nominal(mdl, track=True, gtype='normal'):
     
     resgraph = mdl.return_stategraph(gtype)   
     endfaults, endfaultprops = mdl.return_faultmodes()
-    endclass=mdl.find_classification(resgraph, endfaultprops, {}, scen, {'nominal': mdlhist, 'faulty':mdlhist})
+    endclass=mdl.find_classification(resgraph, endfaultprops, construct_nomscen(mdl), scen, {'nominal': mdlhist, 'faulty':mdlhist})
     
     endresults={'faults': endfaults, 'classification':endclass}
     
