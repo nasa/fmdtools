@@ -48,7 +48,7 @@ class Block(object):
         self.timely=timely
         self._states=states.keys()
         self._initstates=states.copy()
-        self.failrate = getattr(self, 'failrate', 0.0)
+        self.failrate = getattr(self, 'failrate', 1.0)
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
@@ -69,9 +69,28 @@ class Block(object):
             else:    self.faultmodes=dict.fromkeys(modes)
         for mode in modes:
             self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost'))
-            self.faultmodes[name+mode]['dist'] =     modes[mode][0]
-            self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
-            self.faultmodes[name+mode]['rcost'] =    modes[mode][2]
+            if type(modes) == set: # minimum information - here the modes are only a set of labels
+                self.faultmodes[name+mode]['dist'] =     1.0/len(modes)
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    0.0
+            elif type(modes[mode]) == float: # dict of modes: dist, where dist is the distribution
+                self.faultmodes[name+mode]['dist'] =     modes[mode]
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    0.0
+            elif len(modes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
+                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
+                self.faultmodes[name+mode]['rcost'] =    modes[mode][2]
+            elif len(modes[mode]) == 2:  # dist, repair costs
+                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    modes[mode][1]
+            elif len(modes[mode]) == 1:  # dist only
+                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    0.0
+            else:
+                raise Exception("Invalid mode definition")
     def has_fault(self,fault): 
         """Check if the block has fault (a str)"""
         return self.faults.intersection(set([fault]))
@@ -335,14 +354,22 @@ class Model(object):
     graph : networkx graph
         multigraph view of functions and flows
     """
-    def __init__(self):
+    def __init__(self, params={},modelparams={}):
         """
-        Instantiates internal model attributes (as empty)
+        Instantiates internal model attributes with predetermined:
+            - params (design variables of he model), and
+            - modelparams (dictionary of phases, times, and timestep to run the model with)
         """
         self.type='model'
         self.flows={}
         self.fxns={}
-        self.params=getattr(self,'params',{})
+        self.params=params
+        
+        # model defaults to static representation if no timerange
+        self.phases=modelparams.get('phases',{'na':[1]})
+        self.times=modelparams.get('times',[1])
+        self.tstep = modelparams.get('tstep', 1.0)
+        
         self.timelyfxns=set()
         self._fxnflows=[]
         self._fxninput={}
@@ -550,7 +577,7 @@ class Model(object):
             fxn.reset()
     def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
-        return {'rate':1, 'cost': 1, 'expected cost': 1}
+        return {'rate':scen['properties']['rate'], 'cost': 1, 'expected cost': 1}
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) """

@@ -65,7 +65,7 @@ def run_nominal(mdl, track=True, gtype='normal'):
     mdl.reset()
     return endresults, resgraph, mdlhist
 
-def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gtype = 'normal'):
+def run_one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype = 'normal'):
     """
     Runs one fault in the model at a specified time.
 
@@ -113,7 +113,7 @@ def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gty
     scen['properties']['type']='single fault'
     scen['properties']['function']=fxnname
     scen['properties']['fault']=faultmode
-    scen['properties']['rate']=mdl.fxns[fxnname].failrate 
+    scen['properties']['rate']=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist']
     scen['properties']['time']=time
     
     faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=staged, prevhist=nommdlhist)
@@ -157,7 +157,7 @@ def list_init_faults(mdl):
                 nomscen=construct_nomscen(mdl)
                 newscen=nomscen.copy()
                 newscen['faults'][fxnname]=mode
-                rate=mdl.fxns[fxnname].failrate
+                rate=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']
                 newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
                 faultlist.append(newscen)
     return faultlist
