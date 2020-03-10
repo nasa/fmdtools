@@ -259,6 +259,29 @@ class FxnBlock(Block):
         self.behavior(time)
         self.time=time
         return
+
+#Future ActGraph class
+#Development in progress
+class ActGraph(Block):
+    def __init__(self):
+        super().__init__()
+        self.graph = nx.DiGraph()
+    def add_actions(self,actions):
+        self.actionmethods = {act:val[0] for act,val in actions.items()}
+        self.actionmodes =   {act:val[1] for act,val in actions.items()}
+        self.actiontimes =  {act:val[2] for act,val in actions.items()}
+        self.actions = list(actions.keys())
+        self.graph.add_nodes_from(self.actions)
+    def connect_actions(self,actionpairs, root='na'):
+        self.actionpairs = actionpairs
+        self.graph.add_edges_from(self.actionpairs)
+        if root == 'na': root = self.actions[0]
+
+    def add_actionmodes(self,modes):
+        return 0 
+    def updatefxn(self,faults=['nom'], time=0):
+         self.time=time
+ ###     
         
 class Component(Block):
     """
