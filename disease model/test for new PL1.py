@@ -41,6 +41,7 @@ def DiseaseModel(x0):
     
     a2=x0[0]
     n=x0[1]
+    nms = n
     v=x0[2]
     m=x0[3]
     alpha=x0[4]
@@ -64,8 +65,8 @@ def DiseaseModel(x0):
 #        print('\n')
          
         if I[i-1]/N > alpha and infect_rate[i-1] > IR:
-            c =( m+n )/ m
-            m = m+n
+            c =( m+nms )/ m
+            nms = m+n
             
             infect_rate[i]= a2 * (S[i-1]) * I[i-1] / N
             recover_rate[i]= c * I[i-1]/b2
@@ -101,8 +102,8 @@ def DiseaseModel(x0):
 #            print(R[i])
     # PL2 triggered     
         elif  infect_rate[i-1] > IR : 
-            c =( m+n )/ m
-            m = m+n
+            c =( m+nms )/ m
+            nms = m+n
             
             infect_rate[i]= a * (S[i-1]) * I[i-1] / N
             recover_rate[i]= c * I[i-1]/b2

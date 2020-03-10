@@ -24,7 +24,7 @@ class Place(FxnBlock):
 # IR is the threshold  to triger policy 1 
 # NMS is the  total number of the medical staff 
 # a0 is the contact rate in normal state
-        self.a = params[0]['a']
+        self.a_PL1 = params[0]['a']
         self.n = params[0]['n']
         self.v = params[0]['v']
         self.m = params[0]['m']
@@ -34,9 +34,10 @@ class Place(FxnBlock):
         self.NMS=self.m
         
         self.a0=0.2
+        self.a = self.a0
         self.b=10
         
-        super().__init__(['Transport'],flows, {'Infected':population*1/10,'Susceptible':population*9/10,'Recovered':0.0})
+        super().__init__(['Transport'],flows, {'Infected':population*1/10,'Susceptible':population*9/10,'Recovered':0.0, 'In_R':0.0, 'Re_R':0.0})
         self.failrate=1e-5
         self.assoc_modes({'PL1':[1.0, [1,1,1], 1],'PL2':[1.0, [1,1,1], 1]})
                     
@@ -47,92 +48,54 @@ class Place(FxnBlock):
     def condfaults(self,time):
         # policy 2: if infect rate bigger than IR, add m medical staff per day,  infectious time will drop from 1.25 to 1.25/2
         # policy 1: if infected people bigger than alpha, contact rate will drop from 10 to a , susceptible people will get vaccine,v people/day
-        if self.Infected/(self.N) > self.alpha: 
-            self.add_fault('PL1');self.PL1=self.PL1+1
-        else:
-            if self.has_fault('PL1'): self.replace_fault('PL1','nom')
-        if ( self.a0 * self.Susceptible * self.Infected / (self.N)) > self.IR:
-            self.add_fault('PL2');self.PL2=self.PL2+1
-        else:
-            if self.has_fault('PL2'): self.replace_fault('PL2','nom')
-        
+        if time > self.time:
+            if self.Infected/(self.N) > self.alpha: 
+                self.add_fault('PL1');self.PL1=self.PL1+1
+            else:
+                if self.has_fault('PL1'): self.replace_fault('PL1','nom')
+            if ( self.a * self.Susceptible * self.Infected / (self.N)) > self.IR:
+                self.add_fault('PL2')
+                self.PL2=self.PL2+1
+            else:
+                if self.has_fault('PL2'): self.replace_fault('PL2','nom')
             
     def behavior(self,time):
-        if self.has_fault('PL1') and self.has_fault('PL2'):
+        if time>self.time:
+            if self.has_fault('PL1') and self.has_fault('PL2'):
+                self.a=self.a_PL1
+                self.c=(self.NMS+self.m)/(self.m)
+                self.v = 5
+                NMS_increase = self.n
+            elif self.has_fault('PL1'):
+                self.a=self.a_PL1
+                self.c = 1.0
+                self.v = 5
+                NMS_increase = 0.0
+            elif self.has_fault('PL2'):
+                self.a = self.a0
+                self.c=(self.NMS+self.m)/(self.m)
+                self.v = 0
+                NMS_increase = self.n
+            else:
+                self.a = self.a0
+                self.c = 1.0
+                self.v = 0
+                NMS_increase = 0.0
+            self.In_R= self.a * self.Susceptible * self.Infected / self.N
+            self.Re_R = self.c * self.Infected / self.b 
             
-            self.c=(self.NMS+self.m)/(self.m)
-            self.NMS+=self.n 
             
-            Infect_rate = self.a * self.Susceptible * self.Infected / self.N
-            Recover_Rate = self.c * self.Infected / self.b
+            self.NMS+=NMS_increase  
+            self.Infected = self.Infected +  (self.In_R - self.Re_R)
+            self.Susceptible = self.Susceptible - self.In_R - self.v
+            self.Recovered = self.Recovered +  self.Re_R + self.v
             
-            if time>self.time:
-                self.Infected = self.Infected +   Infect_rate - Recover_Rate
-                self.Susceptible = self.Susceptible- Infect_rate - self.v
-                self.Recovered = self.Recovered +  Recover_Rate + self.v
-                
-                self.vc=self.vc + self.v
-                
-                self.Infected += self.Transport.In_I  - self.Transport.Out_I 
-                self.Susceptible += self.Transport.In_S  - self.Transport.Out_S 
-                self.Recovered += self.Transport.In_R - self.Transport.Out_R
-                self.Transport.Stay_I  = self.Infected
-                self.Transport.Stay_S  = self.Susceptible
-                self.Transport.Stay_R  = self.Recovered
-                
-        elif self.has_fault('PL1'):
-            Infect_rate = self.a * self.Susceptible * self.Infected / self.N
-            Recover_Rate = self.Infected / self.b
-            
-            if time>self.time:
-                self.Infected = self.Infected +  Infect_rate - Recover_Rate
-                self.Susceptible = self.Susceptible - Infect_rate - self.v
-                self.Recovered = self.Recovered + Recover_Rate + self.v
-                
-                self.vc=self.vc + self.v
-                
-                self.Infected += self.Transport.In_I  - self.Transport.Out_I 
-                self.Susceptible += self.Transport.In_S  - self.Transport.Out_S 
-                self.Recovered += self.Transport.In_R - self.Transport.Out_R
-                self.Transport.Stay_I  = self.Infected
-                self.Transport.Stay_S  = self.Susceptible
-                self.Transport.Stay_R  = self.Recovered
-        
-        elif self.has_fault('PL2'):
-            
-            self.c=(self.NMS+self.m)/(self.m)
-            self.NMS+=self.n 
-            
-            Infect_rate = self.a0 * self.Susceptible * self.Infected / self.N
-            Recover_Rate = self.c * self.Infected / self.b 
-            
-            if time>self.time:
-                self.Infected =self.Infected + Infect_rate - Recover_Rate
-                self.Susceptible = self.Susceptible - (Infect_rate)
-                self.Recovered = self.Recovered + ( Recover_Rate)
-                
-                self.Infected += self.Transport.In_I  - self.Transport.Out_I 
-                self.Susceptible += self.Transport.In_S  - self.Transport.Out_S 
-                self.Recovered += self.Transport.In_R - self.Transport.Out_R
-                self.Transport.Stay_I  = self.Infected
-                self.Transport.Stay_S  = self.Susceptible
-                self.Transport.Stay_R  = self.Recovered
-            
-        else:
-            Infect_rate= self.a0 * self.alpha * self.Susceptible * self.Infected / self.N
-            Recover_Rate =  self.Infected / self.b 
-            
-            if time>self.time:
-                self.Infected = self.Infected +  (Infect_rate - Recover_Rate)
-                self.Susceptible = self.Susceptible - Infect_rate
-                self.Recovered = self.Recovered +  Recover_Rate
-                
-                self.Infected += self.Transport.In_I  - self.Transport.Out_I 
-                self.Susceptible += self.Transport.In_S  - self.Transport.Out_S 
-                self.Recovered += self.Transport.In_R - self.Transport.Out_R
-                self.Transport.Stay_I  = self.Infected
-                self.Transport.Stay_S  = self.Susceptible
-                self.Transport.Stay_R  = self.Recovered
+            self.Infected += self.Transport.In_I  - self.Transport.Out_I 
+            self.Susceptible += self.Transport.In_S  - self.Transport.Out_S 
+            self.Recovered += self.Transport.In_R - self.Transport.Out_R
+            self.Transport.Stay_I  = self.Infected
+            self.Transport.Stay_S  = self.Susceptible
+            self.Transport.Stay_R  = self.Recovered
                 
 class Transit(FxnBlock):
     def __init__(self,flows):
@@ -177,7 +140,7 @@ class DiseaseModel(Model):
     def __init__(self, x0):
         super().__init__()
         
-        self.times = [1,20]
+        self.times = [1,160]
         self.tstep = 1
         
         travel = {'In_I':0,'In_S':0,'In_R':0,'Out_I':0,'Out_S':0,'Out_R':0,'Stay_I':0,'Stay_S':0,'Stay_R':0}
