@@ -41,12 +41,7 @@ class StoreEE(FxnBlock):
         EE={}
         soc={}
         for batname, bat in self.components.items():
-            for fault in self.faults:
-                if fault in bat.faultmodes:
-                    bat.faults.update([fault])
-            
             bat.behavior(self.FS.support, self.EEout.rate, time)
-            self.faults.update(bat.faults)
             EE[bat.name]=bat.Et
             soc[bat.name]=bat.soc
             
@@ -155,11 +150,8 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         Air,EEin={},{}
         #injects faults into lines
         for linname,lin in self.components.items():
-            for fault in self.faults:
-                if fault in lin.faultmodes: lin.add_fault(fault)
             cmds={'up':self.upward[linname], 'for':self.forward[linname]}
-            lin.behavior(self.EEin.effort, self.Ctlin, cmds, self.Force.support)
-            self.faults.update(lin.faults)  
+            lin.behavior(self.EEin.effort, self.Ctlin, cmds, self.Force.support) 
             Air[lin.name]=lin.Airout
             EEin[lin.name]=lin.EE_in
         
