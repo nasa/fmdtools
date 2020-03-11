@@ -256,7 +256,14 @@ class FxnBlock(Block):
         """
         self.faults.update(faults)  #if there is a fault, it is instantiated in the function
         self.condfaults(time)           #conditional faults and behavior are then run
+        if self.components:
+            for compname,comp in self.components.items():
+                for fault in self.faults:
+                    if fault in comp.faultmodes: comp.add_fault(fault)
         self.behavior(time)
+        if self.components:
+            for compname, comp in self.components.items():
+                self.faults.update(comp.faults) 
         self.time=time
         return
 
