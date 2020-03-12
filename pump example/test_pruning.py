@@ -2,6 +2,8 @@
 """
 Created on Wed Dec 18 16:26:37 2019
 
+This script shows some approaches to creating the ideal quadrature based on the full silulation of sample points
+
 @author: hulsed
 """
 import sys

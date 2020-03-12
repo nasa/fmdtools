@@ -619,6 +619,8 @@ def plot_samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     if title: axes[0].set_title(title)
     elif type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+str(fxnmode)+" over time")
     else:                       axes[0].set_title("Cost function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
+    #plt.subplot_adjust()
+    plt.tight_layout()
 def plot_costovertime(endclasses, app, costtype='expected cost', timelabel='time'):
     """
     Plots the total cost or total expected cost of faults over time.
