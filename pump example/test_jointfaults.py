@@ -2,6 +2,8 @@
 """
 Created on Thu Dec 19 12:45:41 2019
 
+This code tests some approaches to sampling joing fault scenarios
+
 @author: Daniel Hulse
 """
 
