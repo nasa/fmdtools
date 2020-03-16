@@ -8,12 +8,12 @@ from scipy.optimize import differential_evolution
 import sys
 sys.path.append('../')
 import pandas as pd
-import faultprop as fp
-import resultproc as rp
+import fmdtools.faultprop as fp
+import fmdtools.resultproc as rp
 import csv
 import time
 import numpy as np
-from test_fault_disease_model import *
+from fmd_final_version import *
 #from disease_model import *
 
 #x0 = np.array([0.11 , 1 , 5 , 9.27 , 0.05 , 10 ])
