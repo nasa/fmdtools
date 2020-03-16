@@ -133,13 +133,13 @@ def DiseaseModel(x0):
 #            print(I[i])
 #            print(R[i])
     # treatment fee for each people            
-    H=10000
+    H=1
     # average expense for each people
-    E=100
+    E=10000
     # PL1 lasting time
     T=PL1 
     # salary for each medical people per day
-    Em=200
+    Em=1
     # extra medical people total working time
     Tm=n * (t-1+t-PL2)*PL2/2        
     
@@ -152,10 +152,17 @@ def objective(x0):
     
 # # 'a': x0[0] ,'n':x0[1] ,'v' : x0[2] ,'m': x0[3], 'alpha': x0[4] , 'IR':x0[5]
 #x0 = np.array([0.1 , 10 , 5 , 10 , 0.15 , 1 ])
-   
-    
 
-x0 = [0.11 , 1 , 5 , 9.27 , 0.05 , 10 ]
+
+## nominal state
+x0 = [0.2 , 0 , 0 , 10 , 0 , 0 ]   
+## under PL1 only
+#x0 = [0.1 , 2 , 5 , 10 , 0.05 , 100 ]    
+## under PL2 only
+#x0 = [0.1 , 2 , 5 , 10 , 100 , 2 ]
+# under PL1&PL2 
+#x0 = [0.1 , 2 , 5 , 10 , 0.05 , 5 ]
+#x0= [0.07 , 1 , 9.6 , 9 , 0.329 , 4.9]
 result0=list(DiseaseModel(x0))
 #print(result0[3])
 x=list(range(0,t))
@@ -172,6 +179,7 @@ stop=0
 for i in range(0,t):
     if result0[2][i] < 5:
         stop=i; break
+    
 print('stop day:',stop)
 print('total infected people:',result0[3][-1]-result0[10])
 #plt.plot(x,result0[2])
@@ -184,16 +192,16 @@ print('total infected people:',result0[3][-1]-result0[10])
 #plt.ylabel('Number of R')
 #plt.show()
 
-plt.plot(x,result0[7])
-plt.xlabel('Time /days')
-plt.ylabel('Infect rate')
-plt.show()
-#print(result0[7])
-
-plt.plot(x,result0[8])
-plt.xlabel('Time /days')
-plt.ylabel('Recover rate')
-plt.show()
+#plt.plot(x,result0[7])
+#plt.xlabel('Time /days')
+#plt.ylabel('Infect rate')
+#plt.show()
+##print(result0[7])
+#
+#plt.plot(x,result0[8])
+#plt.xlabel('Time /days')
+#plt.ylabel('Recover rate')
+#plt.show()
 
 print(result0[1][-1]+result0[2][-1]+result0[3][-1])
 print('PL1:',result0[4],'PL2:',result0[5],'nom:',result0[6])
@@ -217,20 +225,23 @@ dataframe.to_csv("test_new_PL1.csv",index=False,sep=',')
 #    totalXXX=x0[0]+x0[1]+x0[2]+x0[3]+x0[4]+x0[5]
 #    return totalXXX
 
-bounds = [(0, 0.2), (9, 10),(9, 10),(9, 11),(0, 0.2),(0, 5)]
 #x0 = [0.1 , 10 , 5 , 10 , 0.15 , 2 ]
 ##
+
+bounds = [(0, 0.2), (1, 5),(9, 10),(9, 10),(0, 1),(0, 5)]
 result = differential_evolution(objective, bounds, maxiter=10000)
 ##
 ##print(result.x, result.fun)
 # # 'a': x0[0] ,'n':x0[1] ,'v' : x0[2] ,'m': x0[3], 'alpha': x0[4] , 'IR':x0[5]
 # 
-print('a=',result.x[0])
+print('a2=',result.x[0])
 print('n=',result.x[1])
 print('v=',result.x[2])
 print('m=',result.x[3])
 print('alpha=',result.x[4])
 print('IR=',result.x[5])
 print('cost=',result.fun)
-#print(result0[9])
 print(result.nit)
+
+
+#print(result0[9])

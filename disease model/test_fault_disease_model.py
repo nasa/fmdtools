@@ -119,7 +119,7 @@ class Place(FxnBlock):
                 self.Transport.Stay_R  = self.Recovered
             
         else:
-            Infect_rate= self.a0 * self.alpha * self.Susceptible * self.Infected / self.N
+            Infect_rate= self.a0 * self.Susceptible * self.Infected / self.N
             Recover_Rate =  self.Infected / self.b 
             
             if time>self.time:
@@ -177,7 +177,7 @@ class DiseaseModel(Model):
     def __init__(self, x0):
         super().__init__()
         
-        self.times = [1,20]
+        self.times = [1,160]
         self.tstep = 1
         
         travel = {'In_I':0,'In_S':0,'In_R':0,'Out_I':0,'Out_S':0,'Out_R':0,'Stay_I':0,'Stay_S':0,'Stay_R':0}
