@@ -16,8 +16,8 @@ import numpy as np
 from test_fault_disease_model import *
 #from disease_model import *
 
-x0 = np.array([0.11 , 1 , 5 , 9.27 , 0.05 , 10 ])
-
+#x0 = np.array([0.11 , 1 , 5 , 9.27 , 0.05 , 10 ])
+x0 = [0.1 , 2 , 5 , 10 , 0.05 , 10 ]
 dm1 = DiseaseModel(x0)
     
 rp.show_graph(dm1.graph)
