@@ -13,7 +13,7 @@ import fmdtools.resultproc as rp
 import csv
 import time
 import numpy as np
-from fmd_final_version import *
+from fmd_model import *
 #from disease_model import *
 
 #x0 = np.array([0.11 , 1 , 5 , 9.27 , 0.05 , 10 ])
