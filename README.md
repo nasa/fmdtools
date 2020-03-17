@@ -46,6 +46,21 @@ One of the example scripts is provided in Jupyter Notebook, so install it if you
 
 A simple example model is provided in the `pump example` directory. `ex_pump.py` shows the underlying model classes that must be construted for a given system while `Pump Tutorial` shows how one would use the toolkit for a variety of fault propogation and resilience quantification use-cases.
 
+A static model is provided in the `eps example` directory. `eps.py` shows the model (previously implemented in [IBFM](https://github.com/DesignEngrLab/IBFM) and other works) while `EPS Example Notebook.ipynb` shows some basic fault propogation and visualization. 
+
+An example of modelling a dynamical system (without faults) is shown in the `\pandemic example` directory. A reference stand-alone model is provided in `simple_model.py` and `fmd_model.py` and `fmd_model_script.py` show how one might implement a distributed version of this model in `fmdtools`.
+
+`hold-up tank example` provides an example of modelling human-interactions with the modelled system using the `component` class.
+
+`multirotor example` provides an example of representing functions with underlying componenent architectures.
+
+----
+## Contributors
+
+[Daniel Hulse](https://github.com/hulsed)
+
+[Hongyang Zhang](https://github.com/zhangho2)
+
 ----
 ## License
 
