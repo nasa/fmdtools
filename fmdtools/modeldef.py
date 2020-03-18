@@ -190,8 +190,10 @@ class FxnBlock(Block):
             setattr(self, flow,self.flows[flow])
         self.components=components
         if not getattr(self, 'faultmodes', []): self.faultmodes={}
+        if self.components: self.compfaultmodes= dict()
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
+            self.compfaultmodes.update({modename:cname for modename in components[cname].faultmodes})
         self.timers = timers
         for timername in timers:
             setattr(self, timername, Timer(timername))
@@ -253,7 +255,7 @@ class FxnBlock(Block):
         copy : FxnBlock
             Copy of the given function with new flows
         """
-        copy = self.__class__(newflows, *attr)
+        copy = self.__class__(newflows, *attr)  # Is this adequate? Wouldn't this give it new components?
         copy.faults = self.faults.copy()
         for state in self._initstates.keys():
             setattr(copy, state, self._initstates[state])
@@ -273,12 +275,12 @@ class FxnBlock(Block):
         """
         self.faults.update(faults)  #if there is a fault, it is instantiated in the function
         self.condfaults(time)           #conditional faults and behavior are then run
-        if self.components:
-            for compname,comp in self.components.items():
-                for fault in self.faults:
-                    if fault in comp.faultmodes: comp.add_fault(fault)
+        if self.components:     # propogate faults from function level to component level
+            for fault in self.faults:
+                if fault in self.compfaultmodes:
+                    self.components[self.compfaultmodes[fault]].add_fault(fault)
         self.behavior(time)
-        if self.components:
+        if self.components:     # propogate faults from component level to function level
             for compname, comp in self.components.items():
                 self.faults.update(comp.faults) 
         self.time=time
