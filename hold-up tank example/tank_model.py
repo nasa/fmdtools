@@ -121,7 +121,7 @@ class Detect(Component):
     def __init__(self,name):
         super().__init__(name)
         self.add_he_rate(0.03, EPCs={2:[11,0.1],10:[10,0.2],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0.6]})
-        self.assoc_modes({'NotDetected':[1,[1,0],0]}, probtype='prob')
+        self.assoc_modes({'NotDetected':[1,[1,0],0]}, probtype='prob') # add failed detection, etc modes
     def behavior(self, look, signal):
         if self.has_fault('NotDetected'):   detect = 0
         else:                               detect = look * signal
