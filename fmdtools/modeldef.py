@@ -53,6 +53,21 @@ class Block(object):
             setattr(self, state,states[state])
         self.faults=set(['nom'])
         if timely: self.time=0.0
+    def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
+        """
+        Calculates self.failrate based on a human error probability model.
+
+        Parameters
+        ----------
+        gtp : float
+            Generic Task Probability. (from HEART)
+        EPCs : Dict or list
+            Error producing conditions (and respective factors) for a given task (from HEART). Used in format:
+            Dict {'name':[EPC factor, Effect proportion]} or list [[EPC factor, Effect proportion],[[EPC factor, Effect proportion]]]
+        """
+        if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
+        elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
+        self.failrate = gtp*EPC_f
     def assoc_modes(self, modes, name='', probtype='rate', units='hr'):
         """
         Associates modes with the block when called in the function or component.
@@ -67,43 +82,32 @@ class Block(object):
         if not getattr(self, 'faultmodes', []): 
             if name: self.faultmodes=dict()
             else:    self.faultmodes=dict.fromkeys(modes)
-        if probtype=='rate' or probtype=='prob':
-            for mode in modes:
-                self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
-                self.faultmodes[name+mode]['probtype'] = probtype
-                self.faultmodes[name+mode]['units'] = units
-                if type(modes) == set: # minimum information - here the modes are only a set of labels
-                    self.faultmodes[name+mode]['dist'] =     1.0/len(modes)
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    0.0
-                elif type(modes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
-                    self.faultmodes[name+mode]['dist'] =     modes[mode]
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    0.0
-                elif len(modes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
-                    self.faultmodes[name+mode]['dist'] =     modes[mode][0]
-                    self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
-                    self.faultmodes[name+mode]['rcost'] =    modes[mode][2]
-                elif len(modes[mode]) == 2:  # dist, repair costs
-                    self.faultmodes[name+mode]['dist'] =     modes[mode][0]
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    modes[mode][1]
-                elif len(modes[mode]) == 1:  # dist only
-                    self.faultmodes[name+mode]['dist'] =     modes[mode][0]
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    0.0
-                else:
-                    raise Exception("Invalid mode definition")                
-        elif probtype=='human':
-            for mode in modes:
-                self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype'))
-                self.faultmodes[name+mode]['probtype'] = probtype
-                self.faultmodes[name+mode]['units'] = units
-                if type(modes) == set: # minimum information - here the modes are only a set of labels
-                    self.faultmodes[name+mode]['dist'] =     1.0/len(modes)
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    0.0
-            
+        for mode in modes:
+            self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
+            self.faultmodes[name+mode]['probtype'] = probtype
+            self.faultmodes[name+mode]['units'] = units
+            if type(modes) == set: # minimum information - here the modes are only a set of labels
+                self.faultmodes[name+mode]['dist'] =     1.0/len(modes)
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    0.0
+            elif type(modes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
+                self.faultmodes[name+mode]['dist'] =     modes[mode]
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    0.0
+            elif len(modes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
+                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
+                self.faultmodes[name+mode]['rcost'] =    modes[mode][2]
+            elif len(modes[mode]) == 2:  # dist, repair costs
+                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    modes[mode][1]
+            elif len(modes[mode]) == 1:  # dist only
+                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    0.0
+            else:
+                raise Exception("Invalid mode definition")                            
     def has_fault(self,fault): 
         """Check if the block has fault (a str)"""
         return self.faults.intersection(set([fault]))

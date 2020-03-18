@@ -28,7 +28,7 @@ from fmdtools.modeldef import Model, FxnBlock, Component
 class ImportLiquid(FxnBlock):
     def __init__(self,flows):
         super().__init__(['Watout', 'Sig'],flows,{'open':0})
-        self.assoc_modes({'Stuck':1e-5}, units='hr') # need to add human-induced?
+        self.assoc_modes({'Stuck':[1e-5,[1,1],0]}, units='hr') # need to add human-induced?
     def behavior(self,time):
         if self.Sig.action==1:      self.open = 1
         elif self.Sig.action==-1:   self.open = 0
@@ -38,7 +38,7 @@ class ImportLiquid(FxnBlock):
 class ExportLiquid(FxnBlock):
     def __init__(self,flows):
         super().__init__(['Watin', 'Sig'],flows,{'open':1})
-        self.assoc_modes({'Stuck'}) # need to add human-induced?
+        self.assoc_modes({'Stuck':[1e-5,[1,1],0]}) # need to add human-induced?
     def behavior(self,time):
         if self.Sig.action==1:      self.open = 1
         elif self.Sig.action==-1:   self.open = 0
@@ -48,7 +48,7 @@ class ExportLiquid(FxnBlock):
 class GuideLiquid(FxnBlock):
     def __init__(self,flows):
         super().__init__(['Watin','Watout'],flows)
-        self.assoc_modes({'Leak', 'Clogged'})
+        self.assoc_modes({'Leak':[1e-5,[1,1],0], 'Clogged':[1e-5,[1,1],0]})
     def behavior(self,time):
         if self.has_fault('Clogged'):
             self.Watin.rate=0.0
@@ -63,7 +63,7 @@ class GuideLiquid(FxnBlock):
 class StoreLiquid(FxnBlock):
     def __init__(self,flows):
         super().__init__(['Watin','Watout', 'Sig'],flows, {'level':5.0, 'net_flow': 0.0})
-        self.assoc_modes({'Leak'})
+        self.assoc_modes({'Leak':[1e-5,[1,1],0]})
     def behavior(self, time):
         if self.level >= 10.0:
             self.Watin.rate = 0.0 * self.Watin.effort
@@ -111,7 +111,8 @@ class HumanActions(FxnBlock):
 class Look(Component):
     def __init__(self, name):
         super().__init__(name)
-        self.assoc_modes({'NotVisible'})
+        self.add_he_rate(0.02, EPCs=[[4,0.1],[4,0.6],[1.1,0.9]]) #using lists as inputs leaves the EPCs unlabeled
+        self.assoc_modes({'NotVisible':[1,[1,0],0]}, probtype='prob')
     def behavior(self):
         if self.has_fault('NotVisible'):    return 0
         else:                               return 1
@@ -119,7 +120,8 @@ class Look(Component):
 class Detect(Component):
     def __init__(self,name):
         super().__init__(name)
-        self.assoc_modes({'NotDetected'})
+        self.add_he_rate(0.03, EPCs={2:[11,0.1],10:[10,0.2],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0.6]})
+        self.assoc_modes({'NotDetected':[1,[1,0],0]}, probtype='prob')
     def behavior(self, look, signal):
         if self.has_fault('NotDetected'):   detect = 0
         else:                               detect = look * signal
@@ -127,7 +129,8 @@ class Detect(Component):
 class Reach(Component):
     def __init__(self,name):
         super().__init__(name)
-        self.assoc_modes({'FalseReach', 'CannotReach'})
+        self.add_he_rate(0.09, EPCs={2:[11,0.1],10:[10,0.0],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0]})
+        self.assoc_modes({'FalseReach':[0.5,[1,0],0], 'CannotReach':[0.5,[1,0],0]}, probtype='prob')
     def behavior(self):
         if self.has_fault('CannotReach'):   return 0,0
         elif self.has_fault('FalseReach'):  return 0,1
@@ -135,14 +138,16 @@ class Reach(Component):
 class Grasp(Component):
     def __init__(self,name):
         super().__init__(name)
-        self.assoc_modes({'CannotGrasp'})
+        self.add_he_rate(0.02) #in the case with no EPCs, we can just leave it out
+        self.assoc_modes({'CannotGrasp':[1,[1,0],0]}, probtype='prob')
     def behavior(self):
         if self.has_fault('CannotGrasp'):   return 0
         else:                               return 1
 class Turn(Component):
     def __init__(self,name):
         super().__init__(name)
-        self.assoc_modes({'CannotTurn'})
+        self.add_he_rate(0.009, EPCs={2:[11,0.4],10:[10,0.2],13:[4,0],14:[4,0],17:[3,0.6],34:[1.1,0]})
+        self.assoc_modes({'CannotTurn':[1,[1,0],0]}, probtype='prob')
     def behavior(self,grasp, intended_turn):
         if self.has_fault('CannotTurn') or grasp == 0:  return 0
         else:                                           return intended_turn
@@ -151,7 +156,7 @@ class Turn(Component):
             
 class Tank(Model):
     def __init__(self, params={}):
-        super().__init__(modelparams = {'phases':{'na':[0,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'})
+        super().__init__(modelparams = {'phases':{'na':[0,1],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'})
         
         self.add_flow('Wat_in_1', 'Water', {'effort':1.0, 'rate':1.0})
         self.add_flow('Wat_in_2', 'Water', {'effort':1.0, 'rate':1.0})
