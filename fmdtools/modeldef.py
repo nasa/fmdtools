@@ -53,7 +53,7 @@ class Block(object):
             setattr(self, state,states[state])
         self.faults=set(['nom'])
         if timely: self.time=0.0
-    def assoc_modes(self, modes, name=''):
+    def assoc_modes(self, modes, name='', probtype='rate', units='hr'):
         """
         Associates modes with the block when called in the function or component.
 
@@ -67,30 +67,43 @@ class Block(object):
         if not getattr(self, 'faultmodes', []): 
             if name: self.faultmodes=dict()
             else:    self.faultmodes=dict.fromkeys(modes)
-        for mode in modes:
-            self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost'))
-            if type(modes) == set: # minimum information - here the modes are only a set of labels
-                self.faultmodes[name+mode]['dist'] =     1.0/len(modes)
-                self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                self.faultmodes[name+mode]['rcost'] =    0.0
-            elif type(modes[mode]) == float: # dict of modes: dist, where dist is the distribution
-                self.faultmodes[name+mode]['dist'] =     modes[mode]
-                self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                self.faultmodes[name+mode]['rcost'] =    0.0
-            elif len(modes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
-                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
-                self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
-                self.faultmodes[name+mode]['rcost'] =    modes[mode][2]
-            elif len(modes[mode]) == 2:  # dist, repair costs
-                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
-                self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                self.faultmodes[name+mode]['rcost'] =    modes[mode][1]
-            elif len(modes[mode]) == 1:  # dist only
-                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
-                self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                self.faultmodes[name+mode]['rcost'] =    0.0
-            else:
-                raise Exception("Invalid mode definition")
+        if probtype=='rate' or probtype=='prob':
+            for mode in modes:
+                self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
+                self.faultmodes[name+mode]['probtype'] = probtype
+                self.faultmodes[name+mode]['units'] = units
+                if type(modes) == set: # minimum information - here the modes are only a set of labels
+                    self.faultmodes[name+mode]['dist'] =     1.0/len(modes)
+                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                    self.faultmodes[name+mode]['rcost'] =    0.0
+                elif type(modes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
+                    self.faultmodes[name+mode]['dist'] =     modes[mode]
+                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                    self.faultmodes[name+mode]['rcost'] =    0.0
+                elif len(modes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
+                    self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                    self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
+                    self.faultmodes[name+mode]['rcost'] =    modes[mode][2]
+                elif len(modes[mode]) == 2:  # dist, repair costs
+                    self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                    self.faultmodes[name+mode]['rcost'] =    modes[mode][1]
+                elif len(modes[mode]) == 1:  # dist only
+                    self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                    self.faultmodes[name+mode]['rcost'] =    0.0
+                else:
+                    raise Exception("Invalid mode definition")                
+        elif probtype=='human':
+            for mode in modes:
+                self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype'))
+                self.faultmodes[name+mode]['probtype'] = probtype
+                self.faultmodes[name+mode]['units'] = units
+                if type(modes) == set: # minimum information - here the modes are only a set of labels
+                    self.faultmodes[name+mode]['dist'] =     1.0/len(modes)
+                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                    self.faultmodes[name+mode]['rcost'] =    0.0
+            
     def has_fault(self,fault): 
         """Check if the block has fault (a str)"""
         return self.faults.intersection(set([fault]))
@@ -399,6 +412,7 @@ class Model(object):
         self.phases=modelparams.get('phases',{'na':[1]})
         self.times=modelparams.get('times',[1])
         self.tstep = modelparams.get('tstep', 1.0)
+        self.units = modelparams.get('units', 'hr')
         
         self.timelyfxns=set()
         self._fxnflows=[]
@@ -689,8 +703,10 @@ class SampleApproach():
                 - 'quad' : quadpy quadrature
                     quadrature object if the quadrature option is selected.
         """
+        self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
         self.phases = mdl.phases
         self.tstep = mdl.tstep
+        self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)
         self.init_rates(mdl, jointfaults=jointfaults)
         self.create_sampletimes(sampparams, defaultsamp)
@@ -736,9 +752,15 @@ class SampleApproach():
             for ind, (phase, times) in enumerate(self.phases.items()):
                 opp = self._fxnmodes[fxnname, mode]['oppvect'][ind]/sum(self._fxnmodes[fxnname, mode]['oppvect']) #forces to be a conditional probability
                 dist = self._fxnmodes[fxnname, mode]['dist']
-                dt = float(times[1]-times[0])              
-                self.rates[fxnname, mode][phase] = overallrate*opp*dist*dt
+                if self._fxnmodes[fxnname, mode]['probtype']=='rate':      
+                    dt = float(times[1]-times[0]) 
+                    unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
+                elif self._fxnmodes[fxnname, mode]['probtype']=='prob':    
+                    dt = 1
+                    unitfactor = 1
+                self.rates[fxnname, mode][phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
                 self.rates_timeless[fxnname, mode][phase] = overallrate*opp*dist
+                
         if getattr(self, 'jointmodes',False):
             for (j_ind, jointmode) in enumerate(self.jointmodes):
                 self.rates.update({jointmode:dict.fromkeys(self.phases)})
@@ -949,6 +971,7 @@ class SampleApproach():
     def list_moderates(self):
         """ Returns the rates for each mode """
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
+        
     
 def phases(times, names=[]):
     """ Creates named phases from a set of times defining the edges of hte intervals """

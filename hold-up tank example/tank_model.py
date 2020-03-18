@@ -28,7 +28,7 @@ from fmdtools.modeldef import Model, FxnBlock, Component
 class ImportLiquid(FxnBlock):
     def __init__(self,flows):
         super().__init__(['Watout', 'Sig'],flows,{'open':0})
-        self.assoc_modes({'Stuck'}) # need to add human-induced?
+        self.assoc_modes({'Stuck':1e-5}, units='hr') # need to add human-induced?
     def behavior(self,time):
         if self.Sig.action==1:      self.open = 1
         elif self.Sig.action==-1:   self.open = 0
@@ -151,7 +151,7 @@ class Turn(Component):
             
 class Tank(Model):
     def __init__(self, params={}):
-        super().__init__(modelparams = {'phases':{'na':[0,20]}, 'times':[0,5,10,15,20], 'tstep':1})
+        super().__init__(modelparams = {'phases':{'na':[0,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'})
         
         self.add_flow('Wat_in_1', 'Water', {'effort':1.0, 'rate':1.0})
         self.add_flow('Wat_in_2', 'Water', {'effort':1.0, 'rate':1.0})

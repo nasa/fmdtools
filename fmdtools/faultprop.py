@@ -113,7 +113,10 @@ def run_one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gty
     scen['properties']['type']='single fault'
     scen['properties']['function']=fxnname
     scen['properties']['fault']=faultmode
-    scen['properties']['rate']=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist']
+    if mdl.fxns[fxnname].faultmodes[faultmode]['probtype']=='rate':
+        scen['properties']['rate']=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[faultmode]['units'], mdl.units)*(mdl.times[-1]-mdl.times[0]) # this rate is on a per-simulation basis
+    elif mdl.fxns[fxnname].faultmodes[faultmode]['probtype']=='prob':
+        scen['properties']['rate'] = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist']
     scen['properties']['time']=time
     
     faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=staged, prevhist=nommdlhist)
@@ -135,6 +138,10 @@ def run_one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gty
     mdl.reset()
     return endresults,resgraph, mdlhists
 
+def eq_units(rateunit, timeunit):
+    factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
+    return factors[timeunit]/factors[rateunit]
+
 def list_init_faults(mdl):
     """
     Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
@@ -150,6 +157,7 @@ def list_init_faults(mdl):
         A list of fault scenarios, where a scenario is defined as: {faults:{functions:faultmodes}, properties:{(changes depending scenario type)} }
     """
     faultlist=[]
+    trange = mdl.times[-1]-mdl.times[0]
     for time in mdl.times:
         for fxnname, fxn in mdl.fxns.items():
             modes=fxn.faultmodes
@@ -157,7 +165,10 @@ def list_init_faults(mdl):
                 nomscen=construct_nomscen(mdl)
                 newscen=nomscen.copy()
                 newscen['faults'][fxnname]=mode
-                rate=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']
+                if mdl.fxns[fxnname].faultmodes[mode]['probtype']=='rate':
+                    rate=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[mode]['units'], mdl.units)*trange # this rate is on a per-simulation basis
+                elif mdl.fxns[fxnname].faultmodes[mode]['probtype']=='prob':
+                    rate = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']
                 newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
                 faultlist.append(newscen)
     return faultlist
