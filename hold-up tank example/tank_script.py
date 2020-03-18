@@ -44,4 +44,7 @@ app_stuck = SampleApproach(mdl, faults=[('Import_Water', 'Stuck')])
 
 endresults, resgraph, mdlhist = fp.run_one_fault(mdl,'Import_Water','Stuck', time=2)
 
+app_full = SampleApproach(mdl)
+endclasses, mdlhists = fp.run_approach(mdl, app_full)
+
 
