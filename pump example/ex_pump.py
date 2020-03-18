@@ -64,6 +64,8 @@ class ImportEE(FxnBlock):
             - self.assoc_modes(modes) creates a probability model for each mode, where modes is:
                 - {modename: [%of failures, [% at each phase in mdl.phases], repaircosts]
         These failure rates will then be used to generate a list of scenarios for fp.run_list() and SampleApproach()
+        
+        Note that these rates are given in occurences/hr by default. To change the units, use the option units='sec'/'min'/'hr'/'day' etc
         """
         self.failrate=1e-5
         self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[0.20, [0,1,0], 5000]})
@@ -203,7 +205,7 @@ class Pump(Model):
 
         Models take a dictionary of parameters as input defining any veriables and values to use in the model.
     """
-    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10}):
+    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}):
         """
         To sample the model, the timerange and operational phases need to be defined.
 

@@ -11,6 +11,7 @@ sys.path.append('../')
 import fmdtools.faultprop as fp
 import fmdtools.resultproc as rp
 from tank_model import Tank
+from fmdtools.modeldef import SampleApproach
 
 
 
@@ -37,4 +38,10 @@ rp.show_bipartite(resgraph,faultscen='FalseReach', time=2)
 #rp.plot_resultsgraph_from(mdl,reshist,time=20)
 
 endclasses, mdlhists = fp.run_list(mdl)
+
+
+app_stuck = SampleApproach(mdl, faults=[('Import_Water', 'Stuck')])
+
+endresults, resgraph, mdlhist = fp.run_one_fault(mdl,'Import_Water','Stuck', time=2)
+
 

@@ -601,7 +601,7 @@ def plot_samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     axes[1].set_xlim(phasetimes_start[0], phasetimes_end[-1])
     axes[1].set_ylim(0, np.max(ratesvect)*1.2 )
     axes[1].set_ylabel("Rate")
-    axes[1].set_xlabel("Time")
+    axes[1].set_xlabel("Time ("+str(app.units)+")")
     axes[1].grid()
     #cost plots
     axes[0].set_xlim(phasetimes_start[0], phasetimes_end[-1])
@@ -621,7 +621,7 @@ def plot_samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     else:                       axes[0].set_title("Cost function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
     #plt.subplot_adjust()
     plt.tight_layout()
-def plot_costovertime(endclasses, app, costtype='expected cost', timelabel='time'):
+def plot_costovertime(endclasses, app, costtype='expected cost'):
     """
     Plots the total cost or total expected cost of faults over time.
 
@@ -638,10 +638,10 @@ def plot_costovertime(endclasses, app, costtype='expected cost', timelabel='time
     plt.plot(list(costovertime.index), costovertime[costtype])
     plt.title('Total '+costtype+' of all faults over time.')
     plt.ylabel(costtype)
-    plt.xlabel(timelabel)
+    plt.xlabel("Time ("+str(app.units)+")")
     plt.grid()
 
-def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel="time"):
+def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel='Time'):
     """
     Plots the states of a model over time given a history.
 
