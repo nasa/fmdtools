@@ -27,12 +27,15 @@ from fmdtools.modeldef import Model, FxnBlock, Component
 
 class ImportLiquid(FxnBlock):
     def __init__(self,flows):
-        super().__init__(['Watout', 'Sig'],flows,{'open':0})
+        super().__init__(['Watout', 'Sig'],flows,{'open':1})
         self.assoc_modes({'Stuck':[1e-5,[1,1],0]}, units='hr') # need to add human-induced?
     def behavior(self,time):
-        if self.Sig.action==1:      self.open = 1
-        elif self.Sig.action==-1:   self.open = 0
+        if not self.has_fault('Stuck'):
+            if   self.Sig.action>=2:    self.open=2
+            elif self.Sig.action==1:      self.open = 1
+            elif self.Sig.action==-1:   self.open = 0
         self.Watout.effort=self.open
+        self.Sig.indicator = self.open
         
 
 class ExportLiquid(FxnBlock):
@@ -40,9 +43,11 @@ class ExportLiquid(FxnBlock):
         super().__init__(['Watin', 'Sig'],flows,{'open':1})
         self.assoc_modes({'Stuck':[1e-5,[1,1],0]}) # need to add human-induced?
     def behavior(self,time):
-        if self.Sig.action==1:      self.open = 1
-        elif self.Sig.action==-1:   self.open = 0
+        if not self.has_fault('Stuck'):
+            if self.Sig.action==1:      self.open = 1
+            elif self.Sig.action==-1:   self.open = 0
         self.Watin.rate=self.open*self.Watin.effort
+        self.Sig.indicator = self.open
     
     
 class GuideLiquid(FxnBlock):
@@ -62,21 +67,21 @@ class GuideLiquid(FxnBlock):
     
 class StoreLiquid(FxnBlock):
     def __init__(self,flows):
-        super().__init__(['Watin','Watout', 'Sig'],flows, {'level':5.0, 'net_flow': 0.0})
+        super().__init__(['Watin','Watout', 'Sig'],flows, {'level':10.0, 'net_flow': 0.0})
         self.assoc_modes({'Leak':[1e-5,[1,1],0]})
     def behavior(self, time):
-        if self.level >= 10.0:
+        if self.level >= 20.0:
             self.Watin.rate = 0.0 * self.Watin.effort
             self.Watout.effort = 2.0 * self.Watin.effort
-            self.level = 10.0
+            self.level = 20.0
         elif self.level <=0.0:
             self.Watout.effort = 0.0
             self.Watin.rate = self.Watin.effort
         else:
             self.Watin.rate = self.Watin.effort
             self.Watout.effort = 1.0
-        if self.level > 6:      self.Sig.indicator = -1
-        elif self.level < 4:    self.Sig.indicator = 1
+        if self.level > 12:      self.Sig.indicator = -1
+        elif self.level < 8:    self.Sig.indicator = 1
         else:                   self.Sig.indicator = 0
         
         if self.has_fault('Leak'):  self.net_flow = self.Watin.rate - self.Watout.rate - 1.0
@@ -90,23 +95,37 @@ class HumanActions(FxnBlock):
                    'reach':Reach('reach'), 'grasp':Grasp('grasp'),\
                    'turn':Turn('turn')}
         super().__init__(['Valve_Sig','Tank_Sig', 'OtherValve_Sig'], flows, components=actions,timers={'t1'})
+        self.assoc_modes({'FalseDetection_low':[1e-4,[1,1],0],'FalseDetection_high':[1e-4,[1,1],0]}, probtype='rate')
     def behavior(self,time):        
         if time > self.time:
             if self.t1.time == 0:
                 self.look = self.components['look'].behavior()
                 self.detect = self.components['detect'].behavior(self.look,self.Tank_Sig.indicator)
-                if self.detect: 
+                if self.detect or self.has_fault('FalseDetection_low') or self.has_fault('FalseDetection_high'): 
                     self.t1.inc(1)
             elif self.t1.time < 2: self.t1.inc(1)
             elif self.t1.time >=2:
+                
+                if self.Tank_Sig.indicator == 1 or self.has_fault('FalseDetection_low'):
+                    if self.Valve_Sig.indicator >= 1:   intended_turn = 2
+                    elif self.Valve_Sig.indicator == 0: intended_turn = 1
+                elif self.Tank_Sig.indicator == -1 or self.has_fault('FalseDetection_high'):
+                    if self.Valve_Sig.indicator >= 2:   intended_turn = 1
+                    else:                               intended_turn = -1
+                else: intended_turn = 0
+                
                 self.reach = self.components['reach'].behavior()
                 self.grasp = self.components['grasp'].behavior()
-                self.turn  = self.components['turn'].behavior(self.grasp, self.Tank_Sig.indicator)
+                
+                
+                self.turn  = self.components['turn'].behavior(self.grasp, intended_turn)
                 if self.reach[0]:
                     self.Valve_Sig.action = self.turn
                 if self.reach[1]:
                     self.OtherValve_Sig.action = self.turn
                 self.t1.reset()
+                self.remove_fault('FalseDetection_low')
+                self.remove_fault('FalseDetection_high')
             
 class Look(Component):
     def __init__(self, name):

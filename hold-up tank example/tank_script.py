@@ -14,7 +14,7 @@ from tank_model import Tank
 from fmdtools.modeldef import SampleApproach
 
 
-
+# Nominal Run - nothing happens
 mdl = Tank()
 
 endresults, resgraph, mdlhist = fp.run_nominal(mdl)
@@ -22,6 +22,7 @@ endresults, resgraph, mdlhist = fp.run_nominal(mdl)
 rp.plot_mdlhistvals(mdlhist)
 rp.show_graph(resgraph)
 
+# Faulty Run - nothing happens b/c no fault
 endresults, resgraph, mdlhist = fp.run_one_fault(mdl,'Human','NotVisible', time=2)
 
 rp.plot_mdlhistvals(mdlhist, fault='NotVisible', time=2)
@@ -31,6 +32,10 @@ endresults, resgraph, mdlhist = fp.run_one_fault(mdl,'Human','FalseReach', time=
 
 rp.plot_mdlhistvals(mdlhist,fault='FalseReach',time=2)
 rp.show_bipartite(resgraph,faultscen='FalseReach', time=2)
+
+
+
+
 
 #import matplotlib.pyplot as plt
 #plt.figure()

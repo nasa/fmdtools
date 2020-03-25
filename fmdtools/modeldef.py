@@ -124,6 +124,9 @@ class Block(object):
         """Replaces fault_to_replace with fault_to_add in the set of faults"""
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
+    def remove_fault(self, fault_to_remove):
+        """Removes fault in the set of faults"""
+        self.faults.discard(fault_to_remove)
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used (only for components) when resetting the model"""
         self.faults.clear()
