@@ -694,7 +694,9 @@ def plot_mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legen
                     if 'faulty' in mdlhists:
                         a, = plt.plot(times, hist[var], color='r')
                         c = plt.axvline(x=time, color='k')
-                    b, =plt.plot(times, nomhist[var], ls='--', color='b')
+                        b, =plt.plot(times, nomhist[var], ls='--', color='b')
+                    else:
+                        b, =plt.plot(times, nomhist[var], color='b')
                     plt.title(var)
                     plt.xlabel(timelabel)
                 if 'faulty' in mdlhists:
@@ -764,7 +766,9 @@ def plot_mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfi
                 if 'faulty' in mdlhists:
                     a, = plt.plot(times, hist[var], color='r')
                     c = plt.axvline(x=time, color='k')
-                b, =plt.plot(times, nomhist[var], ls='--', color='b')
+                    b, =plt.plot(times, nomhist[var], ls='--', color='b')
+                else:
+                    b, =plt.plot(times, nomhist[var], color='b')
                 plt.title(fxnflow+": "+var)
                 plt.xlabel(timelabel)
     if 'faulty' in mdlhists:

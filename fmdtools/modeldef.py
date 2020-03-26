@@ -736,7 +736,7 @@ class SampleApproach():
             for fxnname, mode in faults: 
                 self._fxnmodes[fxnname, mode]=mdl.fxns[fxnname].faultmodes[mode]
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
-                self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components}
+                self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components.items()}
         if type(jointfaults['faults'])==int:
             self.jointmodes=[]
             for numjoint in range(2, jointfaults['faults']+1):
