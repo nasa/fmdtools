@@ -9,7 +9,12 @@ Description: functions to propagate faults through a user-defined fault model
 
 import numpy as np
 import copy
+import networkx as nx
 import fmdtools.resultproc as rp
+import random
+from networkx.algorithms.community.quality import modularity
+from networkx.algorithms.community import greedy_modularity_communities
+from networkx.algorithms.community import greedy_modularity_communities
 ## FAULT PROPAGATION
 
 def construct_nomscen(mdl):
@@ -532,5 +537,131 @@ def init_fxnhist(mdl, timerange):
         for state, value in states.items():
             fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist
-
-    
+def calcASPL(mdl):
+    """
+        Computes average shortest path length given a graph object g.
+        
+        Parameters
+        ----------
+        mdl : model
+        
+        Returns
+        -------
+        ASPL : average shortest path length
+        """
+    g = mdl.graph
+    ASPL = nx.average_shortest_path_length(g)
+    return ASPL
+def calcModularity(mdl):
+    """
+        Computes graph modularity given a graph object g.
+        
+        Parameters
+        ----------
+        mdl : model
+        
+        Returns
+        -------
+        modularity : Modularity
+        """
+    g = mdl.graph
+    communities = list(greedy_modularity_communities(g))
+    m = modularity(g,communities)
+    return m
+def findBridgingNodes(mdl):
+    """
+        Determines bridging nodes in a graph given a graph object g.
+        
+        Parameters
+        ----------
+        mdl : model
+        
+        Returns
+        -------
+        bridgingNodes : list of bridging nodes
+        """
+    g = mdl.graph
+    communitiesRaw = list(greedy_modularity_communities(g))
+    communities = [list(x) for x in communitiesRaw]
+    numCommunities = len(communities)
+    nodes = list(g.nodes)
+    numNodes = len(nodes)
+    bridgingNodes = list()
+    nodeEdges = [list(g.edges(nodes[0]))]
+    for i in range(1,numNodes):
+        nodeEdges.append(list(g.edges(nodes[i])))
+        lenNodeEdges = len(nodeEdges[i])
+        for j in range(numCommunities):
+            if nodes[i] in communities[j]:
+                communityIdx = j
+        for j in range(lenNodeEdges):
+            nodeEdgePair = list(nodeEdges[i][j])
+            if nodeEdgePair[1] in communities[communityIdx]:
+                pass
+            else:
+                bridgingNodes.append(nodes[i])
+    bridgingNodes = sorted(list(set(bridgingNodes)))
+# add option to visualize bridging nodes
+    return bridgingNodes
+def findHighDegreeNodes(mdl,p=.1):
+    """
+        Determines highest degree nodes, up to percentile p, in a graph given a graph object g.
+        
+        Parameters
+        ----------
+        mdl : model
+        p : percentile of degrees to return, between 0 and 1
+        
+        Returns
+        -------
+        highDegreeNodes : list of high degree nodes in format (node,degree)
+        """
+    g = mdl.graph
+    d = list(g.degree())
+    def take_second(elem):
+        return elem[1]
+    sortedNodes = sorted(d, key=take_second, reverse=True)
+    sortedDegrees = [x[1] for x in sortedNodes]
+    sortedDegreesSet = set(sortedDegrees)
+    sortedDegreesUnique = list(sortedDegreesSet)
+    numDegrees = len(sortedDegreesUnique)
+    topPercentileDegree = sortedDegreesUnique[int(round(numDegrees*p))-1]
+    numNodes = len(sortedNodes)
+    highestDegree = sortedNodes[0][1]
+    highDegreeNodes = [sortedNodes[0]]
+    for i in range(1,numNodes):
+        if sortedNodes[i][1] < topPercentileDegree:
+            pass
+        else:
+            highDegreeNodes.append(sortedNodes[i])
+    # add option to visualize high degree nodes
+    return highDegreeNodes
+def calcRobustnessCoefficient(mdl,trials=100):
+    """
+        Computes robustness coefficient given a graph object g.
+        
+        Parameters
+        ----------
+        mdl : model
+        trials : number of times to run robustness coefficient algorithm (result is averaged over all trials)
+        
+        Returns
+        -------
+        RC : robustness coefficient
+        """
+    g = mdl.graph
+    trialsRC = list()
+    for itr in range(trials):
+        tmp = g.copy()
+        N = float(len(tmp))
+        largestCC = max(nx.connected_components(tmp), key=len)
+        s = [float(len(largestCC))]
+        rs = random.sample(range(int(s[0])),int(s[0]))
+        nodes = list(g)
+        for i in range(int(s[0])-1):
+            tmp.remove_node(nodes[rs[i]])
+            largestCC = max(nx.connected_components(tmp), key=len)
+            s.append(float(len(largestCC)))
+        trialsRC.append((200*sum(s)-100*s[0])/N/N)
+    RC = sum(trialsRC)/len(trialsRC)
+    return RC
