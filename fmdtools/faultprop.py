@@ -2,7 +2,8 @@
 """
 File name: faultprop.py
 Author: Daniel Hulse
-Created: December 2018
+    - Network analysis codes by Hannah Walsh
+Created: December 2019
 
 Description: functions to propagate faults through a user-defined fault model
 """
