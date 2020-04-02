@@ -2,7 +2,7 @@
 """
 File Name: resultproc.py
 Author: Daniel Hulse
-Created: November 2018
+Created: November 2019
 
 Description: Results processing and plotting for single (or multiple) fault model runs.
 

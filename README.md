@@ -59,7 +59,9 @@ An example of modelling a dynamical system (without faults) is shown in the `\pa
 
 [Daniel Hulse](https://github.com/hulsed)
 
-[Hongyang Zhang](https://github.com/zhangho2)
+[Hannah Walsh](https://github.com/walshh) : Network analysis codes
+
+[Hongyang Zhang](https://github.com/zhangho2) : Pandemic model
 
 ----
 ## License
