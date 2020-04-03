@@ -145,7 +145,7 @@ class MoveWat(FxnBlock):
         """
         flownames=['EEin', 'Sigin', 'Watin', 'Watout']
         states={'eff':1.0} #effectiveness state
-        self.delay=delay[0] #delay parameter
+        self.delay=delay #delay parameter
         super().__init__(flownames,flows,states, timers={'timer'})
         self.failrate=1e-5
         self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
@@ -241,11 +241,11 @@ class Pump(Model):
                -the *order* of which corresponds to those in the function definition
                -the *name* of which corresponds to the name defined above for the flow
         """
-        self.add_fxn('ImportEE',ImportEE,['EE_1'])
-        self.add_fxn('ImportWater',ImportWater,['Wat_1'])
-        self.add_fxn('ImportSignal',ImportSig,['Sig_1'])
-        self.add_fxn('MoveWater', MoveWat, ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'], params['delay'])
-        self.add_fxn('ExportWater', ExportWater, ['Wat_2'])
+        self.add_fxn('ImportEE',['EE_1'],fclass=ImportEE)
+        self.add_fxn('ImportWater',['Wat_1'],fclass=ImportWater)
+        self.add_fxn('ImportSignal',['Sig_1'],fclass=ImportSig)
+        self.add_fxn('MoveWater', ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'],fclass=MoveWat, fparams = params['delay'])
+        self.add_fxn('ExportWater', ['Wat_2'], fclass=ExportWater)
 
         self.construct_graph()
     def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):

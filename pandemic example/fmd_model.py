@@ -13,7 +13,7 @@ import csv
 class Place(FxnBlock):
     def __init__(self,flows, params):
 # total polulation
-        population = params[0]['pop']
+        population = params['pop']
 #         self.extra = params[0]['extra']
 
 # a is the contact rate after policy 2
@@ -24,12 +24,12 @@ class Place(FxnBlock):
 # IR is the threshold  to triger policy 1 
 # NMS is the  total number of the medical staff 
 # a0 is the contact rate in normal state
-        self.a_PL1 = params[0]['a']
-        self.n = params[0]['n']
-        self.v = params[0]['v']
-        self.m = params[0]['m']
-        self.alpha = params[0]['alpha']
-        self.IR = params[0]['IR']
+        self.a_PL1 = params['a']
+        self.n = params['n']
+        self.v = params['v']
+        self.m = params['m']
+        self.alpha = params['alpha']
+        self.IR = params['IR']
         
         self.NMS=self.m
         
@@ -150,10 +150,10 @@ class DiseaseModel(Model):
         
 #         x0 = np.array([2,3,5,10,0.15,2])
         params= {'pop':1000.0, 'a': x0[0] ,'n': x0[1] ,'v' : x0[2] ,'m': x0[3], 'alpha': x0[4] , 'IR':x0[5] }
-        self.add_fxn('Campus',Place,['Travel_Campus'],params)
-        self.add_fxn('Downtown',Place,['Travel_Downtown'], params)
-        self.add_fxn('Living',Place,['Travel_Living'], params)
-        self.add_fxn('Movement', Transit, ['Travel_Campus','Travel_Downtown','Travel_Living'])
+        self.add_fxn('Campus',['Travel_Campus'],fclass= Place, fparams=params)
+        self.add_fxn('Downtown',['Travel_Downtown'],fclass= Place, fparams=params)
+        self.add_fxn('Living',['Travel_Living'],fclass= Place, fparams=params)
+        self.add_fxn('Movement',['Travel_Campus','Travel_Downtown','Travel_Living'], fclass=Transit)
         
         
         self.construct_graph()
