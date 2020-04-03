@@ -16,6 +16,8 @@ import random
 from networkx.algorithms.community.quality import modularity
 from networkx.algorithms.community import greedy_modularity_communities
 from networkx.algorithms.community import greedy_modularity_communities
+import matplotlib.pyplot as plt
+import math
 ## FAULT PROPAGATION
 
 def construct_nomscen(mdl):
@@ -538,9 +540,9 @@ def init_fxnhist(mdl, timerange):
         for state, value in states.items():
             fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist
-def calcASPL(mdl):
+def calc_aspl(mdl):
     """
-        Computes average shortest path length given a graph object g.
+        Computes average shortest path length of graph representation of model mdl.
         
         Parameters
         ----------
@@ -553,9 +555,9 @@ def calcASPL(mdl):
     g = mdl.graph
     ASPL = nx.average_shortest_path_length(g)
     return ASPL
-def calcModularity(mdl):
+def calc_modularity(mdl):
     """
-        Computes graph modularity given a graph object g.
+        Computes graph modularity given a graph representation of model mdl.
         
         Parameters
         ----------
@@ -569,9 +571,9 @@ def calcModularity(mdl):
     communities = list(greedy_modularity_communities(g))
     m = modularity(g,communities)
     return m
-def findBridgingNodes(mdl):
+def find_bridging_nodes(mdl,plot='off'):
     """
-        Determines bridging nodes in a graph given a graph object g.
+        Determines bridging nodes in a graph representation of model mdl.
         
         Parameters
         ----------
@@ -602,16 +604,27 @@ def findBridgingNodes(mdl):
             else:
                 bridgingNodes.append(nodes[i])
     bridgingNodes = sorted(list(set(bridgingNodes)))
-# add option to visualize bridging nodes
+    if plot == 'on':
+        plt.figure()
+        color_map = []
+        for node in g:
+            if node in bridgingNodes:
+                color_map.append('yellow')
+            else:
+                color_map.append('gray')
+        nx.draw_networkx(g,node_color=color_map,with_labels=True)
+        plt.title('Bridging Nodes')
+        plt.show()
     return bridgingNodes
-def findHighDegreeNodes(mdl,p=.1):
+def find_high_degree_nodes(mdl,p=.1,plot='off'):
     """
-        Determines highest degree nodes, up to percentile p, in a graph given a graph object g.
+        Determines highest degree nodes, up to percentile p, in graph representation of model mdl.
         
         Parameters
         ----------
         mdl : model
         p : percentile of degrees to return, between 0 and 1
+        plot : plots graph with high degree nodes visualized if set to 'on'
         
         Returns
         -------
@@ -635,11 +648,21 @@ def findHighDegreeNodes(mdl,p=.1):
             pass
         else:
             highDegreeNodes.append(sortedNodes[i])
-    # add option to visualize high degree nodes
+    if plot == 'on':
+        plt.figure()
+        color_map = []
+        for node in g:
+            if node in [x[0] for x in highDegreeNodes]:
+                color_map.append('red')
+            else:
+                color_map.append('gray')
+        nx.draw_networkx(g,node_color=color_map,with_labels=True)
+        plt.title('High Degree Nodes')
+        plt.show()
     return highDegreeNodes
-def calcRobustnessCoefficient(mdl,trials=100):
+def calc_robustness_coefficient(mdl,trials=100):
     """
-        Computes robustness coefficient given a graph object g.
+        Computes robustness coefficient of graph representation of model mdl.
         
         Parameters
         ----------
@@ -666,3 +689,34 @@ def calcRobustnessCoefficient(mdl,trials=100):
         trialsRC.append((200*sum(s)-100*s[0])/N/N)
     RC = sum(trialsRC)/len(trialsRC)
     return RC
+def degree_dist(mdl):
+    """
+        Plots degree distribution of graph representation of model mdl.
+        
+        Parameters
+        ----------
+        mdl : model
+        
+        Returns
+        -------
+        
+        """
+    g = mdl.graph
+    degrees = [g.degree(n) for n in g.nodes()]
+    degreesSet = set(degrees)
+    degreesUnique = list(degreesSet)
+    freq = [degrees.count(n) for n in degreesUnique]
+    maxFreq = max(freq)
+    freqint = list(range(0,maxFreq+1))
+    degreeint = list(range(min(degrees),math.ceil(max(degrees))+1))
+    degreesSet = set(degrees)
+    degreesUnique = list(degrees)
+    numDegreesUnique = len(degreesUnique)
+    plt.figure()
+    plt.hist(degrees,bins=np.arange(numDegreesUnique)-0.5)
+    plt.xticks(degreeint)
+    plt.yticks(freqint)
+    plt.title('Degree distribution')
+    plt.xlabel('Degree')
+    plt.ylabel('Frequency')
+    plt.show()
