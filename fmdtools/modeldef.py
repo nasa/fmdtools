@@ -292,8 +292,9 @@ class FxnBlock(Block):
         self.time=time
         return
 class GenericFxn(FxnBlock):
+    """Generic function block. For use when there is no Function Block defined"""
     def __init__(self, flows):
-        super().__init__([str(f) for f in range(len(flows))], flows)
+        super().__init__([f.name for f in flows], flows)
 
 #Future ActGraph class
 #Development in progress
@@ -442,13 +443,15 @@ class Model(object):
         ----------
         flowname : str
             Unique flow name to give the flow in the model
-        flowdict : dict or Flow
-            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object
+        flowattributes : dict, Flow, set or empty set
+            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object.
+            If a set of attribute names is provided, each will be given a value of 1
+            If an empty set is given, it will be represented w- {flowname: 1}
         """
-        if type(flowdict) == dict:
-            self.flows[flowname]=Flow(flowdict, flowname)
-        elif isinstance(flowdict, Flow):
-            self.flows[flowname] = flowdict
+        if not flowdict:                self.flows[flowname]=Flow({flowname:1}, flowname)
+        elif type(flowdict) == set:       self.flows[flowname]=Flow({f:1 for f in flowdict}, flowname)
+        elif type(flowdict) == dict:    self.flows[flowname]=Flow(flowdict, flowname)
+        elif isinstance(flowdict, Flow):self.flows[flowname] = flowdict
         else: raise Exception('Invalid flow. Must be dict or flow')
     def add_fxn(self,name, flownames, fclass=GenericFxn, fparams={}):
         """
