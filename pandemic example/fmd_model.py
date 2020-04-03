@@ -144,9 +144,9 @@ class DiseaseModel(Model):
         self.tstep = 1
         
         travel = {'In_I':0,'In_S':0,'In_R':0,'Out_I':0,'Out_S':0,'Out_R':0,'Stay_I':0,'Stay_S':0,'Stay_R':0}
-        self.add_flow('Travel_Campus', 'People', travel)
-        self.add_flow('Travel_Downtown', 'People', travel)
-        self.add_flow('Travel_Living', 'People', travel)
+        self.add_flow('Travel_Campus', travel)
+        self.add_flow('Travel_Downtown', travel)
+        self.add_flow('Travel_Living', travel)
         
 #         x0 = np.array([2,3,5,10,0.15,2])
         params= {'pop':1000.0, 'a': x0[0] ,'n': x0[1] ,'v' : x0[2] ,'m': x0[3], 'alpha': x0[4] , 'IR':x0[5] }

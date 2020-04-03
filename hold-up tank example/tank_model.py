@@ -172,13 +172,13 @@ class Tank(Model):
     def __init__(self, params={'reacttime':2}):
         super().__init__(params = params, modelparams = {'phases':{'na':[0,1],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'})
         
-        self.add_flow('Wat_in_1', 'Water', {'effort':1.0, 'rate':1.0})
-        self.add_flow('Wat_in_2', 'Water', {'effort':1.0, 'rate':1.0})
-        self.add_flow('Wat_out_1', 'Water', {'effort':1.0, 'rate':1.0})
-        self.add_flow('Wat_out_2', 'Water', {'effort':1.0, 'rate':1.0})
-        self.add_flow('Valve1_Sig', 'Signal', {'indicator':1, 'action':0})
-        self.add_flow('Tank_Sig', 'Signal', {'indicator':0, 'action':0})
-        self.add_flow('Valve2_Sig', 'Signal', {'indicator':1, 'action':0})
+        self.add_flow('Wat_in_1', {'effort':1.0, 'rate':1.0})
+        self.add_flow('Wat_in_2', {'effort':1.0, 'rate':1.0})
+        self.add_flow('Wat_out_1', {'effort':1.0, 'rate':1.0})
+        self.add_flow('Wat_out_2',{'effort':1.0, 'rate':1.0})
+        self.add_flow('Valve1_Sig', {'indicator':1, 'action':0})
+        self.add_flow('Tank_Sig', {'indicator':0, 'action':0})
+        self.add_flow('Valve2_Sig', {'indicator':1, 'action':0})
         
         self.add_fxn('Import_Water', ['Wat_in_1', 'Valve1_Sig'], fclass = ImportLiquid)
         self.add_fxn('Guide_Water_In', ['Wat_in_1', 'Wat_in_2'], fclass = GuideLiquid)

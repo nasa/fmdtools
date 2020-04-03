@@ -53,6 +53,8 @@ class Block(object):
             setattr(self, state,states[state])
         self.faults=set(['nom'])
         if timely: self.time=0.0
+    def __repr__(self):
+        return self.name+' '+self.__class__.__name__+' '+self.type+': '+str(self.return_states())
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
@@ -188,6 +190,7 @@ class FxnBlock(Block):
             Whether or not the function depends on time (or just input/output). The default is True.
         """
         self.type = 'function'
+        self.name = 'fxnname'
         self.flows=self.make_flowdict(flownames,flows)
         for flow in self.flows.keys():
             setattr(self, flow,self.flows[flow])
@@ -355,11 +358,13 @@ class Flow(object):
             name of the flow
         """
         self.type='flow'
-        self.flow=name
+        self.name=name
         self._initattributes=attributes.copy()
         self._attributes=attributes.keys()
         for attribute in self._attributes:
             setattr(self, attribute, attributes[attribute])
+    def __repr__(self):
+        return self.name+' '+self.type+': '+str(self.status())
     def reset(self):
         """ Resets the flow to the initial state"""
         for attribute in self._initattributes:
@@ -380,7 +385,7 @@ class Flow(object):
         for attribute in self._attributes:
             attributes[attribute]=getattr(self,attribute)
         if self.__class__==Flow:
-            copy = self.__class__(attributes, self.flow)
+            copy = self.__class__(attributes, self.name)
         else:
             copy = self.__class__()
             for attribute in self._attributes:
@@ -429,7 +434,7 @@ class Model(object):
         self.timelyfxns=set()
         self._fxnflows=[]
         self._fxninput={}
-    def add_flow(self,flowname, flowtype, flowdict):
+    def add_flow(self,flowname, flowdict):
         """
         Adds a flow with given attributes to the model.
 
@@ -437,13 +442,11 @@ class Model(object):
         ----------
         flowname : str
             Unique flow name to give the flow in the model
-        flowtype : str
-            Type of flow (e.g. EE, ME, etc)
         flowdict : dict or Flow
             Dictionary of flow attributes e.g. {'value':XX}, or the Flow object
         """
         if type(flowdict) == dict:
-            self.flows[flowname]=Flow(flowdict, flowtype)
+            self.flows[flowname]=Flow(flowdict, flowname)
         elif isinstance(flowdict, Flow):
             self.flows[flowname] = flowdict
         else: raise Exception('Invalid flow. Must be dict or flow')
