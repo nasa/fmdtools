@@ -227,11 +227,11 @@ class Pump(Model):
         and either:   a dict with the initial flow attributes, OR
                       a flow object defined in the model file
         """
-        self.add_flow('EE_1', 'EE', {'current':1.0, 'voltage':1.0})
-        self.add_flow('Sig_1', 'Signal', {'power':1.0})
+        self.add_flow('EE_1', {'current':1.0, 'voltage':1.0})
+        self.add_flow('Sig_1',  {'power':1.0})
         # custom flows which we defined earlier can be added also:
-        self.add_flow('Wat_1', 'Water', Water())
-        self.add_flow('Wat_2', 'Water', Water())
+        self.add_flow('Wat_1', Water())
+        self.add_flow('Wat_2', Water())
 
         """
         Functions are added to the model using the addfxn() method, which needs:
