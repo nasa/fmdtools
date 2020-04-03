@@ -288,6 +288,9 @@ class FxnBlock(Block):
                 self.faults.update(comp.faults) 
         self.time=time
         return
+class GenericFxn(FxnBlock):
+    def __init__(self, flows):
+        super().__init__([str(f) for f in range(len(flows))], flows)
 
 #Future ActGraph class
 #Development in progress
@@ -444,7 +447,7 @@ class Model(object):
         elif isinstance(flowdict, Flow):
             self.flows[flowname] = flowdict
         else: raise Exception('Invalid flow. Must be dict or flow')
-    def add_fxn(self,name,classobj, flownames, *args):
+    def add_fxn(self,name, flownames, fclass=GenericFxn, fparams={}):
         """
         Instantiates a given function in the model.
 
@@ -452,24 +455,25 @@ class Model(object):
         ----------
         name : str
             Name to give the function.
-        classobj : Class
-            Class to instantiate the function as.
         flownames : list
             List of flows to associate with the function.
-        *args : arbitrary
+        fclass : Class
+            Class to instantiate the function as.
+        fparams : arbitrary float, dict, list, etc.
             Other parameters to send to the __init__ method of the function class
         """
         flows=self.get_flows(flownames)
-        if args: 
-            self.fxns[name]=classobj(flows,args)
-            self._fxninput[name]={'flows': flownames, 'args': args}
+        if fparams: 
+            self.fxns[name]=fclass(flows,fparams)
+            self._fxninput[name]={'flows': flownames, 'fparams': fparams}
         else: 
-            self.fxns[name]=classobj(flows)
-            self._fxninput[name]={'flows': flownames, 'args': []}
+            self.fxns[name]=fclass(flows)
+            self._fxninput[name]={'flows': flownames, 'fparams': []}
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
         if self.fxns[name].timely: self.timelyfxns.update([name])
         self.fxns[name].tstep=self.tstep
+        self.fxns[name].name=name
     def get_flows(self,flownames):
         """ Returns a list of the model flow objects """
         return [self.flows[flowname] for flowname in flownames]
@@ -616,9 +620,9 @@ class Model(object):
             copy.flows[flowname]=flow.copy()
         for fxnname, fxn in self.fxns.items():
             flownames=self._fxninput[fxnname]['flows']
-            args=self._fxninput[fxnname]['args']
+            fparams=self._fxninput[fxnname]['fparams']
             flows = copy.get_flows(flownames)
-            if args:    copy.fxns[fxnname]=fxn.copy(flows, args)
+            if fparams:    copy.fxns[fxnname]=fxn.copy(flows, fparams)
             else:       copy.fxns[fxnname]=fxn.copy(flows)
         _ = copy.construct_graph()
         return copy

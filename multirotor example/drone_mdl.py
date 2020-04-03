@@ -25,7 +25,7 @@ class Direc(Flow):
 #Define functions
 class StoreEE(FxnBlock):
     def __init__(self, flows, archtype):
-        if archtype[0]=='normal':
+        if archtype=='normal':
             #architecture: 1 for controllers? + cells in Series & Parallel
             #Batctl=battery('ctl')
             components={'00':Battery('00'), '01':Battery('01'), '10':Battery('10'), '11':Battery('11')}
@@ -141,7 +141,7 @@ class ManageHealth(FxnBlock):
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
     def __init__(self, flows, archtype):     
         self.archtype=archtype
-        if archtype[0]=='quad':
+        if archtype=='quad':
             components={'RF':Line('RF'), 'LF':Line('LF'), 'LR':Line('LR'), 'RR':Line('RR')}
             self.upward={'RF':1,'LF':1,'LR':1,'RR':1}
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5}
@@ -238,7 +238,7 @@ class PlanPath(FxnBlock):
     def __init__(self, flows, params):
         super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'},timers={'pause'})
         
-        self.goals = params[0]['flightplan'] 
+        self.goals = params['flightplan'] 
         self.queue = list(self.goals.keys())
         self.queue.reverse()
         self.goal = self.goals[1]
@@ -306,7 +306,7 @@ class Trajectory(FxnBlock):
 class ViewEnvironment(FxnBlock):
     def __init__(self, flows, params):
         super().__init__(['Env'], flows)
-        square=params[0]
+        square=params
         self.viewingarea = {(x,y):'unviewed' for x in range(int(square[0][0]),int(square[1][0])+10,10) for y in range(int(square[0][1]),int(square[2][1])+10,10)}
     def behavior(self, time):
         area = square((self.Env.x, self.Env.y), 10, 10)
@@ -346,16 +346,16 @@ class Drone(Model):
         self.add_flow('Dir1', 'Direction', Direc())
         #add functions to the model
         flows=['EEctl', 'Force_ST', 'HSig_DOFs', 'HSig_Bat', 'RSig_Ctl', 'RSig_Traj']
-        self.add_fxn('ManageHealth',ManageHealth,flows)
-        self.add_fxn('StoreEE',StoreEE,['EE_1', 'Force_ST', 'HSig_Bat'], 'normal')
-        self.add_fxn('DistEE',DistEE, ['EE_1','EEmot','EEctl', 'Force_ST'])
-        self.add_fxn('AffectDOF',AffectDOF,['EEmot','Ctl1','DOFs','Force_Lin', 'HSig_DOFs'], 'quad')
-        self.add_fxn('CtlDOF', CtlDOF,['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST', 'RSig_Ctl'])
-        self.add_fxn('Planpath', PlanPath, ['EEctl', 'Env1','Dir1', 'Force_ST', 'RSig_Traj'], params)
-        self.add_fxn('Trajectory', Trajectory,['Env1','DOFs','Dir1', 'Force_GR'] )
-        self.add_fxn('EngageLand', EngageLand,['Force_GR', 'Force_LG'])
-        self.add_fxn('HoldPayload', HoldPayload,['Force_LG', 'Force_Lin', 'Force_ST'])
-        self.add_fxn('ViewEnv', ViewEnvironment, ['Env1'], self.dang_area)
+        self.add_fxn('ManageHealth',flows,fclass = ManageHealth)
+        self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= 'normal')
+        self.add_fxn('DistEE', ['EE_1','EEmot','EEctl', 'Force_ST'], fclass = DistEE)
+        self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Force_Lin', 'HSig_DOFs'], fclass=AffectDOF, fparams = 'quad')
+        self.add_fxn('CtlDOF',['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST', 'RSig_Ctl'], fclass = CtlDOF)
+        self.add_fxn('Planpath', ['EEctl', 'Env1','Dir1', 'Force_ST', 'RSig_Traj'], fclass=PlanPath, fparams=params)
+        self.add_fxn('Trajectory',['Env1','DOFs','Dir1', 'Force_GR'], fclass = Trajectory )
+        self.add_fxn('EngageLand', ['Force_GR', 'Force_LG'], fclass = EngageLand)
+        self.add_fxn('HoldPayload',['Force_LG', 'Force_Lin', 'Force_ST'], fclass = HoldPayload)
+        self.add_fxn('ViewEnv', ['Env1'], fclass = ViewEnvironment, fparams = self.dang_area)
         
         self.construct_graph()
         

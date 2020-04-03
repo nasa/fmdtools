@@ -89,13 +89,13 @@ class StoreLiquid(FxnBlock):
         if time>self.time:          self.level = self.level + self.net_flow
         
 class HumanActions(FxnBlock):
-    def __init__(self,flows, var):
+    def __init__(self,flows, reacttime):
         actions = {'look':Look('look'),'detect':Detect('detect'),\
                    'reach':Reach('reach'), 'grasp':Grasp('grasp'),\
                    'turn':Turn('turn')}
         super().__init__(['Valve_Sig','Tank_Sig', 'OtherValve_Sig'], flows, components=actions,timers={'t1'})
         self.assoc_modes({'FalseDetection_low':[1e-4,[1,1],0],'FalseDetection_high':[1e-4,[1,1],0]}, probtype='rate')
-        self.reacttime=var[0]
+        self.reacttime=reacttime
     def behavior(self,time):        
         if time > self.time:
             if self.t1.time == 0:
@@ -180,12 +180,12 @@ class Tank(Model):
         self.add_flow('Tank_Sig', 'Signal', {'indicator':0, 'action':0})
         self.add_flow('Valve2_Sig', 'Signal', {'indicator':1, 'action':0})
         
-        self.add_fxn('Import_Water', ImportLiquid, ['Wat_in_1', 'Valve1_Sig'])
-        self.add_fxn('Guide_Water_In', GuideLiquid, ['Wat_in_1', 'Wat_in_2'])
-        self.add_fxn('Store_Water', StoreLiquid, ['Wat_in_2', 'Wat_out_1', 'Tank_Sig'])
-        self.add_fxn('Guide_Water_Out', GuideLiquid, ['Wat_out_1', 'Wat_out_2'])
-        self.add_fxn('Export_Water', ExportLiquid, ['Wat_out_2', 'Valve2_Sig'])
-        self.add_fxn('Human', HumanActions, ['Valve1_Sig', 'Tank_Sig', 'Valve2_Sig'], params['reacttime'])
+        self.add_fxn('Import_Water', ['Wat_in_1', 'Valve1_Sig'], fclass = ImportLiquid)
+        self.add_fxn('Guide_Water_In', ['Wat_in_1', 'Wat_in_2'], fclass = GuideLiquid)
+        self.add_fxn('Store_Water', ['Wat_in_2', 'Wat_out_1', 'Tank_Sig'], fclass = StoreLiquid)
+        self.add_fxn('Guide_Water_Out', ['Wat_out_1', 'Wat_out_2'], fclass =GuideLiquid)
+        self.add_fxn('Export_Water', ['Wat_out_2', 'Valve2_Sig'], fclass =ExportLiquid)
+        self.add_fxn('Human', ['Valve1_Sig', 'Tank_Sig', 'Valve2_Sig'], fclass =HumanActions, fparams = params['reacttime'])
         
         self.construct_graph()
     def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
