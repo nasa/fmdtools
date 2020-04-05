@@ -11,15 +11,15 @@ Description: functions to propagate faults through a user-defined fault model
 import numpy as np
 import copy
 import networkx as nx
-import fmdtools.resultproc as rp
+import fmdtools.resultdisp.process as proc
 import random
 from networkx.algorithms.community.quality import modularity
 from networkx.algorithms.community import greedy_modularity_communities
 from networkx.algorithms.community import greedy_modularity_communities
 import matplotlib.pyplot as plt
 import math
-## FAULT PROPAGATION
 
+## FAULT PROPAGATION
 def construct_nomscen(mdl):
     """
     Creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal.
@@ -132,14 +132,10 @@ def run_one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gty
     
     #process model run
     endfaults, endfaultprops = mdl.return_faultmodes()
-    endflows = rp.compare_graphflows(faultresgraph, nomresgraph, gtype)
-    
+    endflows = proc.graphflows(faultresgraph, nomresgraph, gtype)
     mdlhists={'nominal':nommdlhist, 'faulty':faultmdlhist}
-    
     endclass = mdl.find_classification(faultresgraph, endfaultprops, endflows, scen, mdlhists)
-    # note: in the future, put this in rp package so it doesn't need to be imported
-    if gtype=='normal': resgraph = rp.make_resultsgraph(faultresgraph, nomresgraph) 
-    elif gtype=='bipartite' or gtype=='component': resgraph = rp.make_bipresultsgraph(faultresgraph, nomresgraph)
+    resgraph = proc.resultsgraph(faultresgraph, nomresgraph, gtype=gtype) 
     
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
     
@@ -230,7 +226,7 @@ def run_list(mdl, reuse=False, staged=False, track=True):
             mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track)
         endfaults, endfaultprops = mdl.return_faultmodes()
         resgraph = mdl.return_stategraph()
-        endflows = rp.compare_graphflows(resgraph, nomresgraph)
+        endflows = proc.graphflows(resgraph, nomresgraph)
         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
         if reuse: mdl.reset()
@@ -286,53 +282,13 @@ def run_approach(mdl, app, reuse=False, staged=False, track=True):
         endfaults, endfaultprops = mdl.return_faultmodes()
         resgraph = mdl.return_stategraph()
         
-        endflows = rp.compare_graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
+        endflows = proc.graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
         if reuse: mdl.reset()
         elif staged: _
         else: mdl = mdl.__class__(params=mdl.params)
     return endclasses, mdlhists
-
-
-
-
-# =============================================================================
-# from pathos.pp import ParallelPool
-# def run_approach_parallel(mdl, app, reuse=False, staged=False, track=True):
-#     if reuse and staged:
-#         print("invalid to use reuse and staged options at the same time. Using staged")
-#         reuse=False
-#     mdl.reset()
-#     if staged:
-#         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times)
-#     else:
-#         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track)
-#     nomresgraph = mdl.return_stategraph()
-#     mdl.reset()
-#     
-#     endclasses = {}
-#     mdlhists = {}
-#     mdlhists['nominal'] = nomhist
-#     mdls = [mdl.copy() for i, s in enumerate(app.scenlist)]
-#     
-#     pool = ParallelPool(nodes=4)
-#     
-#     outputs = pool.map(prop_one_scen, mdls, app.scenlist)
-#         
-#     for i, scen in enumerate(app.scenlist):
-#         mdlhists[scen['properties']['name']], _ = outputs[i]
-#         endfaults, endfaultprops = mdl.return_faultmodes()
-#         resgraph = mdl.return_stategraph()
-#         
-#         endflows = rp.compare_graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
-#         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
-#         
-#         if reuse: mdl.reset()
-#         elif staged: _
-#         else: mdl = mdl.__class__(params=mdl.params)
-#     return endclasses, mdlhists
-# =============================================================================
        
 def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     """
@@ -540,6 +496,8 @@ def init_fxnhist(mdl, timerange):
         for state, value in states.items():
             fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist
+
+# Network Metric Quantification
 def calc_aspl(mdl):
     """
         Computes average shortest path length of graph representation of model mdl.

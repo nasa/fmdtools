@@ -9,7 +9,8 @@ import sys
 sys.path.append('../')
 
 import fmdtools.faultprop as fp
-import fmdtools.resultproc as rp
+import fmdtools.resultdisp.graph_view as graphs
+import fmdtools.resultdisp.plots as plots
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -26,7 +27,7 @@ mdl = Drone()
 
 # =============================================================================
 endresults_nom, resgraph, mdlhist =fp.run_nominal(mdl)
-rp.show_graph(resgraph) #, showfaultlabels=False)
+graphs.show_graph(resgraph) #, showfaultlabels=False)
 #fp.plotflowhist(flowhist3, 'N/A', time=0)
 ## 
 
@@ -38,12 +39,12 @@ mdl = Drone(params)
 ## 
 endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=50, staged=True, gtype='component')
 
-rp.show_bipartite(resgraph, faultscen='DistEE short', time=5, showfaultlabels=False)
+graphs.show_graph(resgraph,gtype='bipartite', faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
 #rp.plot_mdlhistvals(mdlhist, 'DistEE short', time=20) #, fxnflows=['StoreEE'])
-rp.plot_mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Planpath':['dx','dy','dz']}, time=20)
+plots.plot_mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Planpath':['dx','dy','dz']}, time=20)
 
-rp.plot_mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Force_GR':['value'],'Force_LG':['value'],'Force_ST':['support'],'Force_Lin':['support']}, time=20)
+plots.plot_mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Force_GR':['value'],'Force_LG':['value'],'Force_ST':['support'],'Force_Lin':['support']}, time=20)
 
 # mdlhist['nominal']['functions']['Planpath']
 ### 
