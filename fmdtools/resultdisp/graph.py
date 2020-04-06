@@ -6,6 +6,7 @@ Created: November 2019 (Refactored April 2020)
 Description: Gives graph-level visualizations of the model.
 
 Public user-facing methods:
+    - set_pos:                      Set graph node positions manually
     - show:                         Plots a single graph object g.
     - history:                      Displays plots of the graph over time given a dict history of graph objects
     - result_from:                  Plots a representation of the model graph at a specific time in the results history.
@@ -24,6 +25,49 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation
+import netgraph
+
+def set_pos(g, gtype='normal',scale=1,node_color='gray', label_size=8, initpos={}):
+    """
+    Provides graphical interface to set graph node positions.
+
+    Parameters
+    ----------
+    g : networkx graph
+        normal or bipartite graph of the model of interest
+    gtype : 'normal' or 'bipartite', optional
+        Type of graph to plot. The default is 'normal'.
+    scale : float, optional
+        scale for the node sizes. The default is 1.
+    node_color : str, optional
+        color to use for the nodes. The default is 'gray'.
+    label_size : float, optional
+        size to use for the labels. The default is 8.
+    initpos : dict, optional
+        dict of initial positions for the labels (e.g. from nx.spring_layout). The default is {}.
+
+    Returns
+    -------
+    pos: dict
+        dict of node positions for use in graph plotting functions
+    """
+    plt.ion()
+    fig = plt.figure()
+    if gtype=='normal':
+        if not initpos: initpos = nx.shell_layout(g)
+        edgeflows={}
+        for edge in g.edges:
+            flows=list(g.get_edge_data(edge[0],edge[1]).keys())
+            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
+        plot_instance = netgraph.InteractiveGraph(g,node_size=20*scale,node_shape='s',node_color=node_color, node_edge_width=0, node_positions=initpos, edge_labels=edgeflows, edge_label_font_size=label_size, node_labels={n:n for n in g.nodes},node_label_font_size=label_size)
+    elif gtype=='bipartite':
+        if not initpos: initpos = nx.spring_layout(g)
+        plot_instance = netgraph.InteractiveGraph(g,node_size=7*scale,node_color=node_color, node_edge_width=0, node_positions=initpos, node_labels={n:n for n in g.nodes},node_label_font_size=label_size)
+    plt.show(block=False)
+    
+    while plt.fignum_exists(fig.number):
+        plt.pause(0.1)
+    return plot_instance.node_positions
 
 def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
     """

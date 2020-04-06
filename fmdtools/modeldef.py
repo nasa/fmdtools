@@ -7,10 +7,8 @@ Created: October 2019
 Description: A module to simplify model definition
 """
 import numpy as np
-import operator
 import itertools
 import networkx as nx
-from scipy.stats import binom
 
 # MAJOR CLASSES
 class Block(object):
