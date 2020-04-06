@@ -8,7 +8,7 @@ from scipy.optimize import differential_evolution
 import sys
 sys.path.append('../')
 import pandas as pd
-import fmdtools.faultprop as fp
+import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
 import csv
 import time
@@ -23,7 +23,7 @@ dm1 = PandemicModel(x0)
     
 rd.graph.show(dm1.graph)
 
-endresults, resgraph, mdlhist_nom = fp.run_nominal(dm1)
+endresults, resgraph, mdlhist_nom = propagate.nominal(dm1)
 
 rd.plot.mdlhist(mdlhist_nom, fxnflows=['Campus'])
 
@@ -33,7 +33,7 @@ normal_state_table.to_csv('normal_state_table.csv')
 
 def objective(x):
     dm1 = PandemicModel(x)
-    endresults, resgraph, mdlhist_nom = fp.run_nominal(dm1)
+    endresults, resgraph, mdlhist_nom = propagate.nominal(dm1)
     print('hi')
     return endresults['classification']['total cost']
 

@@ -9,11 +9,9 @@ import sys
 sys.path.append('../')
 sys.path.append('Users\hulsed\Downloads\netgraph-master')
 from eps import EPS
-import fmdtools.faultprop as fp
 import fmdtools.resultdisp as rd
 import netgraph
 import matplotlib.pyplot as plt
-import networkx as nx
 
 mdl= EPS()
 

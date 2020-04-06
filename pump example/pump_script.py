@@ -13,7 +13,7 @@ Description: A simple example of I/O using faultprop.py and the pump model in ex
 import sys
 sys.path.append('../')
 
-import fmdtools.faultprop as fp
+import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
 from ex_pump import * #required to import entire module
 import time
@@ -28,7 +28,7 @@ mdl = Pump()
 #   -are the functions connected with the correct flows?
 #   -do any faults occur in the nominal state?
 #   -do all the flow states proceed as desired over time?
-endresults, resgraph, mdlhist=fp.run_nominal(mdl, track=True)
+endresults, resgraph, mdlhist=propagate.nominal(mdl, track=True)
 #plot graph
 rd.graph.show(resgraph)
 #plot the flows over time
@@ -40,13 +40,13 @@ print(nominal_state_table)
 # nominal_state_table.to_csv("filename.csv")
 
 #plots can be made on the bipartite version of the graph
-endresults_bip, resgraph_bip, mdlhist2=fp.run_nominal(mdl, gtype='bipartite')
+endresults_bip, resgraph_bip, mdlhist2=propagate.nominal(mdl, gtype='bipartite')
 rd.graph.show(resgraph_bip,gtype='bipartite', scale=2)
 
 ##SINGLE-FAULT PLOTS
 ## SCENARIO 1
 ##We might further query the faults to see what happens to the various states
-endresults, resgraph, mdlhist=fp.run_one_fault(mdl, 'MoveWater', 'short', time=10, staged=True)
+endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'MoveWater', 'short', time=10, staged=True)
 #Here we again make a plot of states--however, looking at this might not tell us what degraded/failed
 short_state_table = rd.tabulate.hist(mdlhist)
 print(short_state_table)
@@ -92,11 +92,11 @@ rd.plot.mdlhist(mdlhist, 'short', time=10, fxnflows=['Wat_1','Wat_2', 'EE_1', 'S
 print(endresults)
 #
 ##we can also look at other faults
-endresults, resgraph, mdlhist=fp.run_one_fault(mdl, 'ExportWater', 'block', time=10, staged=True)
+endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater', 'block', time=10, staged=True)
 rd.graph.show(resgraph)
 rd.plot.mdlhist(mdlhist, 'blockage', time=10, fxnflows=['Wat_1','Wat_2', 'EE_1'])
 # we can also view the results as a bipartite graph
-endresults, resgraph_bip2, mdlhist=fp.run_one_fault(mdl, 'ExportWater', 'block', time=10, gtype='bipartite')
+endresults, resgraph_bip2, mdlhist=propagate.one_fault(mdl, 'ExportWater', 'block', time=10, gtype='bipartite')
 rd.graph.show(resgraph_bip2, faultscen='ExportWater block', time=10, scale=2)
 
 
@@ -107,7 +107,7 @@ rd.graph.show(resgraph_bip2, faultscen='ExportWater block', time=10, scale=2)
 #note that this will propogate faults based on the times vector put in the model,
 # e.g. times=[0,3,15,55] will propogate the faults at the begining, end, and at
 # t=15 and t=15
-endclasses, mdlhists=fp.run_list(mdl, staged=True)
+endclasses, mdlhists=propagate.single_faults(mdl, staged=True)
 simplefmea = rd.tabulate.simplefmea(endclasses)
 print(simplefmea)
 reshists, diffs, summaries = rd.process.hists(mdlhists)
@@ -120,7 +120,7 @@ heatmap2 = rd.process.expdegtimeheatmap(reshists, endclasses)
 rd.graph.show(mdl.bipartite, gtype='bipartite', heatmap=heatmap2, scale=2)
 #time test
 a = time.time()
-endresults, resgraph, mdlhist=fp.run_one_fault(mdl, 'MoveWater', 'short', time=10, staged=False)
+endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'MoveWater', 'short', time=10, staged=False)
 b = time.time()
 print(b-a)
 #resultstab.write('tab.ecsv', overwrite=True)

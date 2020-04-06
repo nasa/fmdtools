@@ -1,44 +1,37 @@
 # -*- coding: utf-8 -*-
 """
-File name: faultprop.py
+File name: propagate.py
 Author: Daniel Hulse
-    - Network analysis codes by Hannah Walsh
 Created: December 2019
 
 Description: functions to propagate faults through a user-defined fault model
+
+Main Methods:
+    - nominal():            Runs the model over time in the nominal scenario.
+    - one_fault():          Runs one fault in the model at a specified time.
+    - singlefaults():       Creates and propagates a list of failure scenarios in a model over given model times
+    - approach:             Injects and propagates faults in the model defined by a given sample approach.   
+Private Methods:
+    - list_init_faults():   Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
+    - prop_one_scen():      Runs a fault scenario in the model over time
+    - propagate():          Injects and propagates faults through the graph at one time-step
+    - prop_time():          Propagates faults through model graph.
+    - update_mdlhist():     Updates the model history at a given time.
+        - update_flowhist():Updates the flows in the model history at t_ind
+        - update_fxnhist(): Updates the functions (faults and states) in the model history at t_ind
+    - init_mdlhist():       Initializes the model history over a given timerange
+        - init_flowhist():  Initializes the flow history flowhist of the model mdl over the time range timerange
+        - init_fxnhist():   Initializes the function state history fxnhist of the model mdl over the time range timerange
 """
 
 import numpy as np
 import copy
 import networkx as nx
 import fmdtools.resultdisp.process as proc
-import random
-from networkx.algorithms.community.quality import modularity
-from networkx.algorithms.community import greedy_modularity_communities
-from networkx.algorithms.community import greedy_modularity_communities
-import matplotlib.pyplot as plt
-import math
 
 ## FAULT PROPAGATION
-def construct_nomscen(mdl):
-    """
-    Creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal.
 
-    Parameters
-    ----------
-    mdl : Model
-
-    Returns
-    -------
-    nomscen : scen
-    """
-    nomscen={'faults':{},'properties':{}}
-    nomscen['properties']['time']=0.0
-    nomscen['properties']['rate']=1.0
-    nomscen['properties']['type']='nominal'
-    return nomscen
-
-def run_nominal(mdl, track=True, gtype='normal'):
+def nominal(mdl, track=True, gtype='normal'):
     """
     Runs the model over time in the nominal scenario.
 
@@ -73,7 +66,7 @@ def run_nominal(mdl, track=True, gtype='normal'):
     mdl.reset()
     return endresults, resgraph, mdlhist
 
-def run_one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype = 'normal'):
+def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype = 'normal'):
     """
     Runs one fault in the model at a specified time.
 
@@ -142,42 +135,7 @@ def run_one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gty
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-def eq_units(rateunit, timeunit):
-    factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
-    return factors[timeunit]/factors[rateunit]
-
-def list_init_faults(mdl):
-    """
-    Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
-
-    Parameters
-    ----------
-    mdl : Model
-        Model with list of times in mdl.times
-
-    Returns
-    -------
-    faultlist : list
-        A list of fault scenarios, where a scenario is defined as: {faults:{functions:faultmodes}, properties:{(changes depending scenario type)} }
-    """
-    faultlist=[]
-    trange = mdl.times[-1]-mdl.times[0] + 1.0
-    for time in mdl.times:
-        for fxnname, fxn in mdl.fxns.items():
-            modes=fxn.faultmodes
-            for mode in modes:
-                nomscen=construct_nomscen(mdl)
-                newscen=nomscen.copy()
-                newscen['faults'][fxnname]=mode
-                if mdl.fxns[fxnname].faultmodes[mode]['probtype']=='rate':
-                    rate=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[mode]['units'], mdl.units)*trange # this rate is on a per-simulation basis
-                elif mdl.fxns[fxnname].faultmodes[mode]['probtype']=='prob':
-                    rate = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']
-                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
-                faultlist.append(newscen)
-    return faultlist
-
-def run_list(mdl, reuse=False, staged=False, track=True):
+def single_faults(mdl, reuse=False, staged=False, track=True):
     """
     Creates and propagates a list of failure scenarios in a model
 
@@ -234,7 +192,7 @@ def run_list(mdl, reuse=False, staged=False, track=True):
         else: mdl = mdl.__class__(params=mdl.params)
     return endclasses, mdlhists
 
-def run_approach(mdl, app, reuse=False, staged=False, track=True):
+def approach(mdl, app, reuse=False, staged=False, track=True):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -289,6 +247,60 @@ def run_approach(mdl, app, reuse=False, staged=False, track=True):
         elif staged: _
         else: mdl = mdl.__class__(params=mdl.params)
     return endclasses, mdlhists
+
+def construct_nomscen(mdl):
+    """
+    Creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal.
+
+    Parameters
+    ----------
+    mdl : Model
+
+    Returns
+    -------
+    nomscen : scen
+    """
+    nomscen={'faults':{},'properties':{}}
+    nomscen['properties']['time']=0.0
+    nomscen['properties']['rate']=1.0
+    nomscen['properties']['type']='nominal'
+    return nomscen
+
+
+def eq_units(rateunit, timeunit):
+    factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
+    return factors[timeunit]/factors[rateunit]
+
+def list_init_faults(mdl):
+    """
+    Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
+
+    Parameters
+    ----------
+    mdl : Model
+        Model with list of times in mdl.times
+
+    Returns
+    -------
+    faultlist : list
+        A list of fault scenarios, where a scenario is defined as: {faults:{functions:faultmodes}, properties:{(changes depending scenario type)} }
+    """
+    faultlist=[]
+    trange = mdl.times[-1]-mdl.times[0] + 1.0
+    for time in mdl.times:
+        for fxnname, fxn in mdl.fxns.items():
+            modes=fxn.faultmodes
+            for mode in modes:
+                nomscen=construct_nomscen(mdl)
+                newscen=nomscen.copy()
+                newscen['faults'][fxnname]=mode
+                if mdl.fxns[fxnname].faultmodes[mode]['probtype']=='rate':
+                    rate=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[mode]['units'], mdl.units)*trange # this rate is on a per-simulation basis
+                elif mdl.fxns[fxnname].faultmodes[mode]['probtype']=='prob':
+                    rate = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']
+                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
+                faultlist.append(newscen)
+    return faultlist
        
 def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     """
@@ -496,185 +508,3 @@ def init_fxnhist(mdl, timerange):
         for state, value in states.items():
             fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist
-
-# Network Metric Quantification
-def calc_aspl(mdl):
-    """
-        Computes average shortest path length of graph representation of model mdl.
-        
-        Parameters
-        ----------
-        mdl : model
-        
-        Returns
-        -------
-        ASPL : average shortest path length
-        """
-    g = mdl.graph
-    ASPL = nx.average_shortest_path_length(g)
-    return ASPL
-def calc_modularity(mdl):
-    """
-        Computes graph modularity given a graph representation of model mdl.
-        
-        Parameters
-        ----------
-        mdl : model
-        
-        Returns
-        -------
-        modularity : Modularity
-        """
-    g = mdl.graph
-    communities = list(greedy_modularity_communities(g))
-    m = modularity(g,communities)
-    return m
-def find_bridging_nodes(mdl,plot='off'):
-    """
-        Determines bridging nodes in a graph representation of model mdl.
-        
-        Parameters
-        ----------
-        mdl : model
-        
-        Returns
-        -------
-        bridgingNodes : list of bridging nodes
-        """
-    g = mdl.graph
-    communitiesRaw = list(greedy_modularity_communities(g))
-    communities = [list(x) for x in communitiesRaw]
-    numCommunities = len(communities)
-    nodes = list(g.nodes)
-    numNodes = len(nodes)
-    bridgingNodes = list()
-    nodeEdges = [list(g.edges(nodes[0]))]
-    for i in range(1,numNodes):
-        nodeEdges.append(list(g.edges(nodes[i])))
-        lenNodeEdges = len(nodeEdges[i])
-        for j in range(numCommunities):
-            if nodes[i] in communities[j]:
-                communityIdx = j
-        for j in range(lenNodeEdges):
-            nodeEdgePair = list(nodeEdges[i][j])
-            if nodeEdgePair[1] in communities[communityIdx]:
-                pass
-            else:
-                bridgingNodes.append(nodes[i])
-    bridgingNodes = sorted(list(set(bridgingNodes)))
-    if plot == 'on':
-        plt.figure()
-        color_map = []
-        for node in g:
-            if node in bridgingNodes:
-                color_map.append('yellow')
-            else:
-                color_map.append('gray')
-        nx.draw_networkx(g,node_color=color_map,with_labels=True)
-        plt.title('Bridging Nodes')
-        plt.show()
-    return bridgingNodes
-def find_high_degree_nodes(mdl,p=.1,plot='off'):
-    """
-        Determines highest degree nodes, up to percentile p, in graph representation of model mdl.
-        
-        Parameters
-        ----------
-        mdl : model
-        p : percentile of degrees to return, between 0 and 1
-        plot : plots graph with high degree nodes visualized if set to 'on'
-        
-        Returns
-        -------
-        highDegreeNodes : list of high degree nodes in format (node,degree)
-        """
-    g = mdl.graph
-    d = list(g.degree())
-    def take_second(elem):
-        return elem[1]
-    sortedNodes = sorted(d, key=take_second, reverse=True)
-    sortedDegrees = [x[1] for x in sortedNodes]
-    sortedDegreesSet = set(sortedDegrees)
-    sortedDegreesUnique = list(sortedDegreesSet)
-    numDegrees = len(sortedDegreesUnique)
-    topPercentileDegree = sortedDegreesUnique[int(round(numDegrees*p))-1]
-    numNodes = len(sortedNodes)
-    highestDegree = sortedNodes[0][1]
-    highDegreeNodes = [sortedNodes[0]]
-    for i in range(1,numNodes):
-        if sortedNodes[i][1] < topPercentileDegree:
-            pass
-        else:
-            highDegreeNodes.append(sortedNodes[i])
-    if plot == 'on':
-        plt.figure()
-        color_map = []
-        for node in g:
-            if node in [x[0] for x in highDegreeNodes]:
-                color_map.append('red')
-            else:
-                color_map.append('gray')
-        nx.draw_networkx(g,node_color=color_map,with_labels=True)
-        plt.title('High Degree Nodes')
-        plt.show()
-    return highDegreeNodes
-def calc_robustness_coefficient(mdl,trials=100):
-    """
-        Computes robustness coefficient of graph representation of model mdl.
-        
-        Parameters
-        ----------
-        mdl : model
-        trials : number of times to run robustness coefficient algorithm (result is averaged over all trials)
-        
-        Returns
-        -------
-        RC : robustness coefficient
-        """
-    g = mdl.graph
-    trialsRC = list()
-    for itr in range(trials):
-        tmp = g.copy()
-        N = float(len(tmp))
-        largestCC = max(nx.connected_components(tmp), key=len)
-        s = [float(len(largestCC))]
-        rs = random.sample(range(int(s[0])),int(s[0]))
-        nodes = list(g)
-        for i in range(int(s[0])-1):
-            tmp.remove_node(nodes[rs[i]])
-            largestCC = max(nx.connected_components(tmp), key=len)
-            s.append(float(len(largestCC)))
-        trialsRC.append((200*sum(s)-100*s[0])/N/N)
-    RC = sum(trialsRC)/len(trialsRC)
-    return RC
-def degree_dist(mdl):
-    """
-        Plots degree distribution of graph representation of model mdl.
-        
-        Parameters
-        ----------
-        mdl : model
-        
-        Returns
-        -------
-        
-        """
-    g = mdl.graph
-    degrees = [g.degree(n) for n in g.nodes()]
-    degreesSet = set(degrees)
-    degreesUnique = list(degreesSet)
-    freq = [degrees.count(n) for n in degreesUnique]
-    maxFreq = max(freq)
-    freqint = list(range(0,maxFreq+1))
-    degreeint = list(range(min(degrees),math.ceil(max(degrees))+1))
-    degreesSet = set(degrees)
-    degreesUnique = list(degrees)
-    numDegreesUnique = len(degreesUnique)
-    plt.figure()
-    plt.hist(degrees,bins=np.arange(numDegreesUnique)-0.5)
-    plt.xticks(degreeint)
-    plt.yticks(freqint)
-    plt.title('Degree distribution')
-    plt.xlabel('Degree')
-    plt.ylabel('Frequency')
-    plt.show()

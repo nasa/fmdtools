@@ -8,7 +8,7 @@ Description: I/O with the quadrotor model defined in quad_mdl.py
 import sys
 sys.path.append('../')
 
-import fmdtools.faultprop as fp
+import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -25,7 +25,7 @@ mdl = Drone()
 #summfmea = rp.make_summfmea(endclasses, app)
 
 # =============================================================================
-endresults_nom, resgraph, mdlhist =fp.run_nominal(mdl)
+endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
 rd.graph.show(resgraph) #, showfaultlabels=False)
 #fp.plotflowhist(flowhist3, 'N/A', time=0)
 ## 
@@ -36,7 +36,7 @@ params={'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 1
 mdl = Drone(params)
 ## #Check various scenarios individually
 ## 
-endresults, resgraph, mdlhist = fp.run_one_fault(mdl, 'DistEE', 'short', time=50, staged=True, gtype='component')
+endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'DistEE', 'short', time=50, staged=True, gtype='component')
 
 rd.graph.show(resgraph,gtype='bipartite', faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
