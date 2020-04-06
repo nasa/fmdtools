@@ -8,23 +8,25 @@ import sys
 sys.path.append('../')
 from eps import EPS
 import fmdtools.faultprop as fp
-import fmdtools.resultproc as rp
+import fmdtools.resultdisp as rd
 
 mdl= EPS()
-rp.show_bipartite(mdl.bipartite)
+rd.graph.show(mdl.bipartite, gtype='bipartite')
 
 endresults,resgraph, mdlhists = fp.run_one_fault(mdl, 'EE_to_ME', 'toohigh_torque')
-rp.show_graph(resgraph)
+rd.graph.show(resgraph)
 
 
 endclasses, mdlhists = fp.run_list(mdl)
 
-reshists, diffs, summary = rp.compare_hists(mdlhists)
+reshists, diffs, summary = rd.process.hists(mdlhists)
 
-sumtable = rp.make_summarytable(summary)
+sumtable = rd.tabulate.summary(summary)
 
 
-degtimemap = rp.make_avgdegtimeheatmap(reshists)
+degtimemap = rd.process.avgdegtimeheatmap(reshists)
 
-rp.show_bipartite(mdl.bipartite,heatmap=degtimemap)
-rp.show_graph(resgraph,heatmap=degtimemap)
+rd.graph.show(mdl.bipartite,gtype='bipartite', heatmap=degtimemap)
+rd.graph.show(resgraph,heatmap=degtimemap)
+
+endclasses, mdlhists = fp.run_list(mdl)

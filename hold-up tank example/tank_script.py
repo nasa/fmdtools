@@ -9,7 +9,7 @@ import sys
 sys.path.append('../')
 
 import fmdtools.faultprop as fp
-import fmdtools.resultproc as rp
+import fmdtools.resultdisp as rd
 from tank_model import Tank
 from fmdtools.modeldef import SampleApproach
 
@@ -19,19 +19,19 @@ mdl = Tank()
 
 endresults, resgraph, mdlhist = fp.run_nominal(mdl)
 
-rp.plot_mdlhistvals(mdlhist)
-rp.show_graph(resgraph)
+rd.plot.mdlhistvals(mdlhist)
+rd.graph.show(resgraph)
 
 # Faulty Run - nothing happens b/c no fault
 endresults, resgraph, mdlhist = fp.run_one_fault(mdl,'Human','NotVisible', time=2)
 
-rp.plot_mdlhistvals(mdlhist, fault='NotVisible', time=2)
-rp.show_graph(resgraph,faultscen='NotVisible', time=2)
+rd.plot.mdlhistvals(mdlhist, fault='NotVisible', time=2)
+rd.graph.show(resgraph,faultscen='NotVisible', time=2)
 
 endresults, resgraph, mdlhist = fp.run_one_fault(mdl,'Human','FalseReach', time=2, gtype='component')
 
-rp.plot_mdlhistvals(mdlhist,fault='FalseReach',time=2)
-rp.show_bipartite(resgraph,faultscen='FalseReach', time=2)
+rd.plot.mdlhistvals(mdlhist,fault='FalseReach',time=2)
+rd.graph.show(resgraph,gtype='bipartite',faultscen='FalseReach', time=2)
 
 
 

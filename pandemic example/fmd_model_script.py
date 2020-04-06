@@ -9,7 +9,7 @@ import sys
 sys.path.append('../')
 import pandas as pd
 import fmdtools.faultprop as fp
-import fmdtools.resultproc as rp
+import fmdtools.resultdisp as rd
 import csv
 import time
 import numpy as np
@@ -20,13 +20,13 @@ from fmd_model import *
 x0 = [0.1 , 2 , 5 , 10 , 0.05 , 10 ]
 dm1 = DiseaseModel(x0)
     
-rp.show_graph(dm1.graph)
+rd.graph.show(dm1.graph)
 
 endresults, resgraph, mdlhist_nom = fp.run_nominal(dm1)
 
-rp.plot_mdlhist(mdlhist_nom, fxnflows=['Campus'])
+rd.plot.mdlhist(mdlhist_nom, fxnflows=['Campus'])
 
-normal_state_table = rp.make_histtable(mdlhist_nom)
+normal_state_table = rd.tabulate.hist(mdlhist_nom)
 normal_state_table.to_csv('normal_state_table.csv')
 
 
