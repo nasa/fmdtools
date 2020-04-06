@@ -29,14 +29,14 @@ WARNING: This is a research code and is currently under development. Some featur
 fmdtools requires Python 3 and depends on these packages:
 
 - `networkx`
-- `matplotlib`
-- `mpl_toolkits`
 - `numpy`
-- `scipy`
-- `pandas`
-- `jupyter notebook`
-- `ffmpeg` (for animations)
-- `quadpy` (for quadrature sampling)
+- `matplotlib`			(for plots)
+- `pandas`				(for tables)
+- `jupyter notebook`	(for notebooks)
+- `netgraph`	 		(for setting graph node positions)
+- `ffmpeg` 				(for animations)
+- `quadpy` 				(for quadrature sampling)
+- `mpl_toolkits`		(for drone model)
 
 so make sure to install (e.g. using `pip install packagename` or `conda install packagename`) them before running any of the codes.
 
