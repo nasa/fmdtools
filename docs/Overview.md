@@ -36,20 +36,20 @@ What are we trying to do with a fault model?
 
 ![fmdtools modules](figures/modules.png)
 
-- fmdtools.modeldef: classes for defining a model 
+- fmdtools.modeldef: classes for defining a model
 	- e.g. functions, flows, etc.
-- fmdtools.faultprop: functions to propogate faults in a model 
+- fmdtools.faultprop: functions to propogate faults in a model
 	- e.g. inject a fault or set of faults
-- fmdtools.resultproc: functions to process results 
+- fmdtools.resultproc: functions to process results
 	- e.g. tables, visualizations, etc.
-	
+
 ---
 
 # What is a model? What is propagation?
 
 ![fmdtools modules](figures/example_model.png)
 
-At its most basic, a model is an object with function objects connected by flow objects. 
+At its most basic, a model is an object with function objects connected by flow objects.
 
 - Function objects have:
 	- States
@@ -96,7 +96,7 @@ Iteratively re-run static propagation over a set of discrete time-steps until th
 
 # Putting it all together
 
-Putting it all together means dynamically propogating a *set* of faults for the whole system over a *set* of times 
+Putting it all together means dynamically propogating a *set* of faults for the whole system over a *set* of times
 
 ![full propagation of all faults](figures/run_approach.png)
 
@@ -107,26 +107,26 @@ Putting it all together means dynamically propogating a *set* of faults for the 
 ### 1.) Define a model
 
 - python file referencing the modeldef modules
-	
+
 - create needed function, flow, model, and component classes for model
-	
+
 ### 2.) Propagate Faults
 
 - python script/jupyter notebook using the model file and faultprop module
-	
+
 - instantiate model
-	
+
 - instantiate sample approach for model (if used)
-	
+
 - run appropriate faultprop function
-	
+
 ### 3.) Process/Visualize/Quantify Results
 - (same python script)
-	
+
 - use the function(s) corresponding to the analysis/visualization desired
-	
+
 	- use compare_hists() if needed for the above functions
-		
+
 In this, we'll reference the tutorial in /pump example/
 
 ![functionality](figures/module_flow.png)
@@ -156,7 +156,7 @@ Three methods to define: init(), condfaults(), behavior()
 	- timers: (optional) Set of names for timers to use in the function
 - define a failure rate for the function (self.failrate = )
 - add failure modes using self.assoc_modes():
-	- input is dict with structure: 
+	- input is dict with structure:
 	- {`name`:[distribution (fail rate fraction), [weightings for each phase], repaircost]}
 
 ## condfaults: defines how faults occur in the function as a result of input states
@@ -170,7 +170,7 @@ Three methods to define: init(), condfaults(), behavior()
 ## behavior: defines how the function behaves
 
 ![behavior](figures/fxnbehavior.png)
-- Arbitrarily definable, but best organized into two parts: 
+- Arbitrarily definable, but best organized into two parts:
 	- if/else statements for what happens if there is a fault
 		- here we use self.has_fault('faultname') to check
 	- equations relating inputs to outputs and vice-versa
@@ -181,7 +181,7 @@ Three methods to define: init(), condfaults(), behavior()
 # Defining Model Class
 Two methods to define: init and find_classification()
 
-## init 
+## init
 
 ![model](figures/mdlinit1.png)
 

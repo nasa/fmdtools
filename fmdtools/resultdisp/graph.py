@@ -11,7 +11,7 @@ Public user-facing methods:
     - history:                      Displays plots of the graph over time given a dict history of graph objects
     - result_from:                  Plots a representation of the model graph at a specific time in the results history.
     - results_from:                 Plots a set of representations of the model graph at given times in the results history.
-    - animation_from:   Creates an animation of the model graph using results at given times in the results history.
+    - animation_from:               Creates an animation of the model graph using results at given times in the results history.
 Private/helper methods: 
     - update_bipplot:               updates a bipartite graph plot at a given timestep t_ind given the result history reshist
     - update_graphplot:             updates a graph plot at a given timestep t_ind given the result history reshist
