@@ -10,7 +10,7 @@ import numpy as np
 from scipy.optimize import minimize
 import csv
 
-class Place(FxnBlock):
+class Area(FxnBlock):
     def __init__(self,flows, params):
 # total polulation
         population = params['pop']
@@ -97,9 +97,9 @@ class Place(FxnBlock):
             self.Transport.Stay_S  = self.Susceptible
             self.Transport.Stay_R  = self.Recovered
                 
-class Transit(FxnBlock):
+class Transportation(FxnBlock):
     def __init__(self,flows):
-        super().__init__(['T_Campus', 'T_Downtown', 'T_Living'],flows)
+        super().__init__(['T_Schools', 'T_City', 'T_Suburbs'],flows)
         self.failrate=1e-5
         self.assoc_modes({'na':[1.0, [1,1,1], 1]})
     def behavior(self,time):
@@ -108,34 +108,34 @@ class Transit(FxnBlock):
         L_to_D = 0
         
         if time > self.time:
-            self.T_Campus.Out_I = C_to_L * self.T_Campus.Stay_I
-            self.T_Campus.Out_S = C_to_L * self.T_Campus.Stay_S
-            self.T_Campus.Out_R = C_to_L * self.T_Campus.Stay_R 
+            self.T_Schools.Out_I = C_to_L * self.T_Schools.Stay_I
+            self.T_Schools.Out_S = C_to_L * self.T_Schools.Stay_S
+            self.T_Schools.Out_R = C_to_L * self.T_Schools.Stay_R 
             
-            self.T_Downtown.Out_I = D_to_C * self.T_Downtown.Stay_I
-            self.T_Downtown.Out_S = D_to_C * self.T_Downtown.Stay_S
-            self.T_Downtown.Out_R  = D_to_C * self.T_Downtown.Stay_R 
+            self.T_City.Out_I = D_to_C * self.T_City.Stay_I
+            self.T_City.Out_S = D_to_C * self.T_City.Stay_S
+            self.T_City.Out_R  = D_to_C * self.T_City.Stay_R 
             
-            self.T_Living.Out_I = L_to_D * self.T_Living.Stay_I
-            self.T_Living.Out_S = L_to_D * self.T_Living.Stay_S
-            self.T_Living.Out_R  = L_to_D * self.T_Living.Stay_R          
+            self.T_Suburbs.Out_I = L_to_D * self.T_Suburbs.Stay_I
+            self.T_Suburbs.Out_S = L_to_D * self.T_Suburbs.Stay_S
+            self.T_Suburbs.Out_R  = L_to_D * self.T_Suburbs.Stay_R          
             
             
-            self.T_Downtown.In_I = self.T_Campus.Out_I
-            self.T_Downtown.In_S = self.T_Campus.Out_S
-            self.T_Downtown.In_R  = self.T_Campus.Out_R 
+            self.T_City.In_I = self.T_Schools.Out_I
+            self.T_City.In_S = self.T_Schools.Out_S
+            self.T_City.In_R  = self.T_Schools.Out_R 
             
-            self.T_Campus.In_I = self.T_Living.Out_I
-            self.T_Campus.In_S = self.T_Living.Out_S
-            self.T_Campus.In_R  = self.T_Living.Out_R  
+            self.T_Schools.In_I = self.T_Suburbs.Out_I
+            self.T_Schools.In_S = self.T_Suburbs.Out_S
+            self.T_Schools.In_R  = self.T_Suburbs.Out_R  
             
-            self.T_Living.In_I = self.T_Downtown.Out_I
-            self.T_Living.In_S = self.T_Downtown.Out_S
-            self.T_Living.In_R  =  self.T_Downtown.Out_R 
+            self.T_Suburbs.In_I = self.T_City.Out_I
+            self.T_Suburbs.In_S = self.T_City.Out_S
+            self.T_Suburbs.In_R  =  self.T_City.Out_R 
             
             
         
-class DiseaseModel(Model):
+class PandemicModel(Model):
 #     def __init__(self, x0, params={}):
     def __init__(self, x0):
         super().__init__()
@@ -144,65 +144,65 @@ class DiseaseModel(Model):
         self.tstep = 1
         
         travel = {'In_I':0,'In_S':0,'In_R':0,'Out_I':0,'Out_S':0,'Out_R':0,'Stay_I':0,'Stay_S':0,'Stay_R':0}
-        self.add_flow('Travel_Campus', travel)
-        self.add_flow('Travel_Downtown', travel)
-        self.add_flow('Travel_Living', travel)
+        self.add_flow('Travel_Schools', travel)
+        self.add_flow('Travel_City', travel)
+        self.add_flow('Travel_Suburbs', travel)
         
 #         x0 = np.array([2,3,5,10,0.15,2])
         params= {'pop':1000.0, 'a': x0[0] ,'n': x0[1] ,'v' : x0[2] ,'m': x0[3], 'alpha': x0[4] , 'IR':x0[5] }
-        self.add_fxn('Campus',['Travel_Campus'],fclass= Place, fparams=params)
-        self.add_fxn('Downtown',['Travel_Downtown'],fclass= Place, fparams=params)
-        self.add_fxn('Living',['Travel_Living'],fclass= Place, fparams=params)
-        self.add_fxn('Movement',['Travel_Campus','Travel_Downtown','Travel_Living'], fclass=Transit)
+        self.add_fxn('Schools',['Travel_Schools'],fclass= Area, fparams=params)
+        self.add_fxn('City',['Travel_City'],fclass= Area, fparams=params)
+        self.add_fxn('Suburbs',['Travel_Suburbs'],fclass= Area, fparams=params)
+        self.add_fxn('Trasportation',['Travel_Schools','Travel_City','Travel_Suburbs'], fclass=Transportation)
         
         
         self.construct_graph()
     def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
         # total number of medical staff
-        n1 = self.fxns['Campus'].n
-        n2 = self.fxns['Downtown'].n
-        n3 = self.fxns['Living'].n
+        n1 = self.fxns['Schools'].n
+        n2 = self.fxns['City'].n
+        n3 = self.fxns['Suburbs'].n
         totalN=n1+n2+n3
         # total number of recovered people
-        r1= self.fxns['Campus'].Recovered
-        r2= self.fxns['Downtown'].Recovered
-        r3= self.fxns['Living'].Recovered
+        r1= self.fxns['Schools'].Recovered
+        r2= self.fxns['City'].Recovered
+        r3= self.fxns['Suburbs'].Recovered
         totalR=r1+r2+r3
         # total number of Susceptible people
-        s1= self.fxns['Campus'].Susceptible
-        s2= self.fxns['Downtown'].Susceptible
-        s3= self.fxns['Living'].Susceptible
+        s1= self.fxns['Schools'].Susceptible
+        s2= self.fxns['City'].Susceptible
+        s3= self.fxns['Suburbs'].Susceptible
         totalS=s1+r2+r3
         # total number of Infected people
-        i1= self.fxns['Campus'].Infected
-        i2= self.fxns['Downtown'].Infected
-        i3= self.fxns['Living'].Infected
+        i1= self.fxns['Schools'].Infected
+        i2= self.fxns['City'].Infected
+        i3= self.fxns['Suburbs'].Infected
         totalI=i1+i2+i3
         
         # total number of vaccine people
-        vc1= self.fxns['Campus'].vc
-        vc2= self.fxns['Downtown'].vc
-        vc3= self.fxns['Living'].vc
+        vc1= self.fxns['Schools'].vc
+        vc2= self.fxns['City'].vc
+        vc3= self.fxns['Suburbs'].vc
         totalVC= vc1+vc2+vc3
         
-        PL11= self.fxns['Campus'].PL1
-        PL12= self.fxns['Downtown'].PL1
-        PL13= self.fxns['Living'].PL1
+        PL11= self.fxns['Schools'].PL1
+        PL12= self.fxns['City'].PL1
+        PL13= self.fxns['Suburbs'].PL1
         
-        PL21= self.fxns['Campus'].PL2
-        PL22= self.fxns['Downtown'].PL2
-        PL23= self.fxns['Living'].PL2
+        PL21= self.fxns['Schools'].PL2
+        PL22= self.fxns['City'].PL2
+        PL23= self.fxns['Suburbs'].PL2
         
-        a0 = self.fxns['Campus'].a0
-        a1 = self.fxns['Campus'].a
-        a2 = self.fxns['Downtown'].a
-        a3 = self.fxns['Living'].a 
-       #t_campus = len([i for i in mdlhists['Campus']['faults'] if 'PL1' in i])
+        a0 = self.fxns['Schools'].a0
+        a1 = self.fxns['Schools'].a
+        a2 = self.fxns['City'].a
+        a3 = self.fxns['Suburbs'].a 
+       #t_Schools = len([i for i in mdlhists['Schools']['faults'] if 'PL1' in i])
                  
         rate=1
         totcost=1
         expcost=1     
-        N1= self.fxns['Campus'].N
+        N1= self.fxns['Schools'].N
         
         t=self.times[-1]
          # treatment fee for each people            
