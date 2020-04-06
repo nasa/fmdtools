@@ -55,8 +55,8 @@ def hists(mdlhists, returndiff=True):
     diffs={}
     summaries={}
     nomhist = mdlhists.pop('nominal')
-    for scenname, hist in mdlhists.items():
-        reshists[scenname], diffs[scenname], summaries[scenname] = hist(hist, nomhist=nomhist, returndiff=returndiff)
+    for scenname, history in mdlhists.items():
+        reshists[scenname], diffs[scenname], summaries[scenname] = hist(history, nomhist=nomhist, returndiff=returndiff)
     mdlhists['nominal']=nomhist
     return reshists, diffs, summaries
 def hist(mdlhist, nomhist={}, returndiff=True):

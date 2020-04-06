@@ -161,7 +161,7 @@ def list_init_faults(mdl):
         A list of fault scenarios, where a scenario is defined as: {faults:{functions:faultmodes}, properties:{(changes depending scenario type)} }
     """
     faultlist=[]
-    trange = mdl.times[-1]-mdl.times[0]
+    trange = mdl.times[-1]-mdl.times[0] + 1.0
     for time in mdl.times:
         for fxnname, fxn in mdl.fxns.items():
             modes=fxn.faultmodes

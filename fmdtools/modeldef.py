@@ -453,7 +453,7 @@ class Model(object):
         elif type(flowdict) == dict:    self.flows[flowname]=Flow(flowdict, flowname)
         elif isinstance(flowdict, Flow):self.flows[flowname] = flowdict
         else: raise Exception('Invalid flow. Must be dict or flow')
-    def add_fxn(self,name, flownames, fclass=GenericFxn, fparams={}):
+    def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None'):
         """
         Instantiates a given function in the model.
 
@@ -469,12 +469,12 @@ class Model(object):
             Other parameters to send to the __init__ method of the function class
         """
         flows=self.get_flows(flownames)
-        if fparams: 
+        if fparams=='None':
+            self.fxns[name]=fclass(flows)
+            self._fxninput[name]={'flows': flownames, 'fparams': 'None'}
+        else: 
             self.fxns[name]=fclass(flows,fparams)
             self._fxninput[name]={'flows': flownames, 'fparams': fparams}
-        else: 
-            self.fxns[name]=fclass(flows)
-            self._fxninput[name]={'flows': flownames, 'fparams': []}
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
         if self.fxns[name].timely: self.timelyfxns.update([name])
@@ -628,8 +628,8 @@ class Model(object):
             flownames=self._fxninput[fxnname]['flows']
             fparams=self._fxninput[fxnname]['fparams']
             flows = copy.get_flows(flownames)
-            if fparams:    copy.fxns[fxnname]=fxn.copy(flows, fparams)
-            else:       copy.fxns[fxnname]=fxn.copy(flows)
+            if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows)
+            else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams)
         _ = copy.construct_graph()
         return copy
     def reset(self):
