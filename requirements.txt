@@ -1,0 +1,8 @@
+networkx
+matplotlib
+mpl_toolkits
+numpy
+scipy
+pandas
+jupyter notebook
+quadpy
