@@ -481,7 +481,7 @@ class Model(object):
     def get_flows(self,flownames):
         """ Returns a list of the model flow objects """
         return [self.flows[flowname] for flowname in flownames]
-    def construct_graph(self):
+    def construct_graph(self, graph_pos={}, bipartite_pos={}):
         """
         Creates and returns a graph representation of the model
 
@@ -508,9 +508,8 @@ class Model(object):
         nx.set_edge_attributes(self.graph, attrs)
         
         nx.set_node_attributes(self.graph, self.fxns, 'obj')
-        #self.graph=nx.DiGraph()
-        #self.graph.add_nodes_from(self.fxn)
-        #self.graph=
+        self.graph_pos=graph_pos
+        self.bipartite_pos=bipartite_pos
         return self.graph
     def return_componentgraph(self, fxnname):
         """
@@ -628,7 +627,7 @@ class Model(object):
             flows = copy.get_flows(flownames)
             if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows)
             else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams)
-        _ = copy.construct_graph()
+        _ = copy.construct_graph(graph_pos=self.graph_pos, bipartite_pos=self.bipartite_pos)
         return copy
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
