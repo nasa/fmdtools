@@ -29,11 +29,11 @@ import netgraph
 
 def set_pos(g, gtype='normal',scale=1,node_color='gray', label_size=8, initpos={}):
     """
-    Provides graphical interface to set graph node positions.
+    Provides graphical interface to set graph node positions. If model is provided, it will also set the positions in the model object.
 
     Parameters
     ----------
-    g : networkx graph
+    g : networkx graph or model
         normal or bipartite graph of the model of interest
     gtype : 'normal' or 'bipartite', optional
         Type of graph to plot. The default is 'normal'.
@@ -51,6 +51,12 @@ def set_pos(g, gtype='normal',scale=1,node_color='gray', label_size=8, initpos={
     pos: dict
         dict of node positions for use in graph plotting functions
     """
+    set_mdl=False
+    if not type(g)==nx.classes.graph.Graph:
+        mdl=g
+        set_mdl=True
+        if gtype=='normal':         g=mdl.graph
+        elif gtype=='bipartite':    g=mdl.bipartite    
     plt.ion()
     fig = plt.figure()
     if gtype=='normal':
@@ -63,11 +69,20 @@ def set_pos(g, gtype='normal',scale=1,node_color='gray', label_size=8, initpos={
     elif gtype=='bipartite':
         if not initpos: initpos = nx.spring_layout(g)
         plot_instance = netgraph.InteractiveGraph(g,node_size=7*scale,node_color=node_color, node_edge_width=0, node_positions=initpos, node_labels={n:n for n in g.nodes},node_label_font_size=label_size)
+    plt.title("Click and drag to place nodes.")
+    plt.xlabel("Close window to continue...")
     plt.show(block=False)
-    
+    t=0
     while plt.fignum_exists(fig.number):
         plt.pause(0.1)
-    return plot_instance.node_positions
+        t+=0.1
+    if t< 0.2:
+        print("Cannot place nodes in inline version of plot. Use '%matplotlib qt' to open in external window")
+    pos = {node:list(loc) for node,loc in plot_instance.node_positions.items()}
+    if set_mdl:
+        if gtype=='normal':         mdl.graph_pos = pos
+        elif gtype=='bipartite':    mdl.bipartite_pos = pos  
+    return pos
 
 def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
     """
@@ -75,7 +90,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
 
     Parameters
     ----------
-    g : networkx graph
+    g : networkx graph or model
         The multigraph to plot
     gtype : 'normal' or 'bipartite'
         Type of graph input to show--normal (multgraph) or bipartite
@@ -92,6 +107,14 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
     heatmap : dict, optional
         A heatmap dictionary to overlay on the plot. The default is {}.
     """
+    if not type(g)==nx.classes.graph.Graph:
+        mdl=g
+        if gtype=='normal':         
+            g=mdl.graph
+            if not pos: pos=mdl.graph_pos
+        elif gtype=='bipartite':    
+            g=mdl.bipartite 
+            if not pos: pos=mdl.bipartite_pos
     plt.figure()
     if gtype=='normal':
         edgeflows=dict()
@@ -201,6 +224,8 @@ def result_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultla
     retfig:, bool, optional
         whether to return the figure and axis objects of the plot. The default is False.
     """
+    if gtype=='normal' and not pos:         pos=mdl.graph_pos
+    elif gtype=='bipartite' and not pos:    pos=mdl.bipartite_pos
     [[t_ind,],] = np.where(reshist['time']==time)
     if gtype=='bipartite':
         g = mdl.bipartite.copy()
@@ -237,6 +262,8 @@ def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfault
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
     """
+    if gtype=='normal' and not pos:         pos=mdl.graph_pos
+    elif gtype=='bipartite' and not pos:    pos=mdl.bipartite_pos
     if times=='all':
         t_inds= [i for i in range(0,len(reshist['time']))]
     else:
@@ -279,6 +306,8 @@ def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfau
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
     """
+    if gtype=='normal' and not pos:         pos=mdl.graph_pos
+    elif gtype=='bipartite' and not pos:    pos=mdl.bipartite_pos
     if times=='all':
         t_inds= [i for i in range(0,len(reshist['time']))]
     else:
