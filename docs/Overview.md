@@ -98,7 +98,7 @@ Iteratively re-run static propagation over a set of discrete time-steps until th
 
 Putting it all together means dynamically propogating a *set* of faults for the whole system over a *set* of times
 
-![full propagation of all faults](figures/run_approach.png)
+![full propagation of all faults](figures/propagate_approach.png)
 
 ---
 
