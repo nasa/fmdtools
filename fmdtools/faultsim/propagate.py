@@ -26,7 +26,6 @@ Private Methods:
 
 import numpy as np
 import copy
-import networkx as nx
 import fmdtools.resultdisp.process as proc
 
 ## FAULT PROPAGATION
@@ -57,7 +56,7 @@ def nominal(mdl, track=True, gtype='normal'):
     scen=nomscen.copy()
     mdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False)
     
-    resgraph = mdl.return_stategraph(gtype)   
+    resgraph = mdl.return_stategraph(gtype=gtype)   
     endfaults, endfaultprops = mdl.return_faultmodes()
     endclass=mdl.find_classification(resgraph, endfaultprops, construct_nomscen(mdl), scen, {'nominal': mdlhist, 'faulty':mdlhist})
     
@@ -434,6 +433,7 @@ def prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults):
             print("Undesired looping in function")
             print(initfaults)
             print(fxnname)
+            print(activefxns)
             break
     return flowstates
 
