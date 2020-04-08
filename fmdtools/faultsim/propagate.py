@@ -107,6 +107,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype =
         nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=staged)
         nomresgraph = mdl.return_stategraph(gtype)
         mdl.reset()
+        mdl = mdl.__class__(params=mdl.params)
     #run with fault present, get relevant results
     scen=nomscen.copy() #note: this is a shallow copy, so don't define it earlier
     scen['faults'][fxnname]=faultmode
@@ -174,13 +175,13 @@ def single_faults(mdl, staged=False, track=True):
             mdl=c_mdl[scen['properties']['time']].copy()
             mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
         else:
+            mdl = mdl.__class__(params=mdl.params)
             mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track)
         endfaults, endfaultprops = mdl.return_faultmodes()
         resgraph = mdl.return_stategraph()
         endflows = proc.graphflows(resgraph, nomresgraph)
         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
-        if not staged: mdl.reset()
     return endclasses, mdlhists
 
 def approach(mdl, app, staged=False, track=True):
@@ -221,6 +222,7 @@ def approach(mdl, app, staged=False, track=True):
             mdl=c_mdl[scen['properties']['time']].copy()
             mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
         else:
+            mdl = mdl.__class__(params=mdl.params)
             mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track)
         endfaults, endfaultprops = mdl.return_faultmodes()
         resgraph = mdl.return_stategraph()
@@ -228,7 +230,6 @@ def approach(mdl, app, staged=False, track=True):
         endflows = proc.graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
-        if not staged: mdl.reset()
     return endclasses, mdlhists
 
 def construct_nomscen(mdl):
