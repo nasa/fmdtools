@@ -92,25 +92,25 @@ def hist(mdlhist, nomhist={}, returndiff=True):
     return reshist, diff, summary
 def flowhist(mdlhist, returndiff=True):
     """ Compares the history of flow states in mdlhist over time."""
-    flowhist = {}
+    flowshist = {}
     summhist = {}
     degflows = []
     diff = {}
     for flowname in mdlhist['nominal']['flows']:
-        flowhist[flowname]={}
+        flowshist[flowname]={}
         diff[flowname]={}
         for att in mdlhist['nominal']['flows'][flowname]:
             faulty  = mdlhist['faulty']['flows'][flowname][att]
             nominal = mdlhist['nominal']['flows'][flowname][att]
-            flowhist[flowname][att] = 1* (faulty == nominal)
+            flowshist[flowname][att] = 1* (faulty == nominal)
             if returndiff: diff[flowname][att] = nominal - faulty
-        summhist[flowname] = np.prod(np.array(list(flowhist[flowname].values())), axis = 0)
+        summhist[flowname] = np.prod(np.array(list(flowshist[flowname].values())), axis = 0)
         if 0 in summhist[flowname]: degflows+=[flowname]
     numdegflows = len(summhist) - np.sum(np.array(list(summhist.values())), axis=0)
-    return flowhist, summhist, degflows, numdegflows, diff
+    return flowshist, summhist, degflows, numdegflows, diff
 def fxnhist(mdlhist, returndiff=True):
     """ Compares the history of function states in mdlhist over time."""
-    fxnhist = {}
+    fxnshist = {}
     faulthist = {}
     deghist = {}
     degfxns = []
@@ -118,26 +118,26 @@ def fxnhist(mdlhist, returndiff=True):
     for fxnname in mdlhist['nominal']['functions']:
         fhist = copy.copy(mdlhist['faulty']['functions'][fxnname])
         del fhist['faults']
-        fxnhist[fxnname] = {}
+        fxnshist[fxnname] = {}
         diff[fxnname]={}
         for state in fhist:
             faulty  = mdlhist['faulty']['functions'][fxnname][state]
             nominal = mdlhist['nominal']['functions'][fxnname][state] 
-            fxnhist[fxnname][state] = 1* (faulty == nominal)
+            fxnshist[fxnname][state] = 1* (faulty == nominal)
             diff[fxnname][state] = nominal - faulty
-        if fxnhist[fxnname]: status = np.prod(np.array(list(fxnhist[fxnname].values())), axis = 0) 
+        if fxnshist[fxnname]: status = np.prod(np.array(list(fxnshist[fxnname].values())), axis = 0) 
         else: status = np.ones(len(mdlhist['faulty']['functions'][fxnname]['faults']), dtype=int) #should empty be given 1 or nothing?
-        fxnhist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname]['faults']
+        fxnshist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname]['faults']
         faults = mdlhist['faulty']['functions'][fxnname]['faults']
-        fxnhist[fxnname]['numfaults']=np.array(list(map(lambda f: len(f.difference(['nom'])), faults)))
-        faulty = 1 - 1*(fxnhist[fxnname]['numfaults']>0)
-        fxnhist[fxnname]['status'] = status*faulty
-        faulthist[fxnname]=fxnhist[fxnname]['numfaults']
-        deghist[fxnname] = fxnhist[fxnname]['status']
+        fxnshist[fxnname]['numfaults']=np.array(list(map(lambda f: len(f.difference(['nom'])), faults)))
+        faulty = 1 - 1*(fxnshist[fxnname]['numfaults']>0)
+        fxnshist[fxnname]['status'] = status*faulty
+        faulthist[fxnname]=fxnshist[fxnname]['numfaults']
+        deghist[fxnname] = fxnshist[fxnname]['status']
         if 0 in deghist[fxnname] or any(0 < faulthist[fxnname]): degfxns+=[fxnname]
     numfaults = np.sum(np.array(list(faulthist.values())), axis=0)
     numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
-    return fxnhist, numfaults, degfxns, numdegfxns, diff
+    return fxnshist, numfaults, degfxns, numdegfxns, diff
 def graphflows(g, nomg, gtype='normal'):
     """
     Extracts non-nominal flows by comparing the a results graph with a nominal results graph.
