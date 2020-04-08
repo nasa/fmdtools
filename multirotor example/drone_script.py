@@ -45,6 +45,8 @@ rd.plot.mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Planpath':['dx','dy','
 
 rd.plot.mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Force_GR':['value'],'Force_LG':['value'],'Force_ST':['support'],'Force_Lin':['support']}, time=20)
 
+rd.plot.mdlhistvals(mdlhist,'DistEE short', time=20)
+
 # mdlhist['nominal']['functions']['Planpath']
 ### 
 #endresults, resgraph, mdlhist2=fp.run_one_fault(mdl, 'AffectDOF', 'RFshort', time=13, staged=True)
