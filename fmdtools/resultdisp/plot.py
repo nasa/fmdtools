@@ -157,7 +157,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
             ax_l.get_xaxis().set_visible(False)
             ax_l.get_yaxis().set_visible(False)
     plt.tight_layout(pad=1)
-    plt.subplots_adjust(top=0.85)
+    plt.subplots_adjust(top=1-0.05-0.15/(num_plots/cols))
     if returnfig: return fig
     else: plt.show()
 
