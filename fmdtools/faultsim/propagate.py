@@ -134,7 +134,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype =
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-def single_faults(mdl, reuse=False, staged=False, track=True):
+def single_faults(mdl, staged=False, track=True):
     """
     Creates and propagates a list of failure scenarios in a model
 
@@ -142,8 +142,6 @@ def single_faults(mdl, reuse=False, staged=False, track=True):
     ----------
     mdl : model
         The model to inject faults in
-    reuse : bool, optional
-        Whether to clear and re-use the same model over each run rather than copying (for less memory use). The default is False.
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
     track : bool, optional
@@ -156,12 +154,8 @@ def single_faults(mdl, reuse=False, staged=False, track=True):
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    if reuse and staged:
-        print("invalid to use reuse and staged options at the same time. Using staged")
-        reuse=False
 
     scenlist=list_init_faults(mdl)
-    mdl.reset() #make sure the model is actually starting from the beginning
     #run model nominally, get relevant results
     nomscen=construct_nomscen(mdl)
     if staged:
@@ -186,12 +180,10 @@ def single_faults(mdl, reuse=False, staged=False, track=True):
         endflows = proc.graphflows(resgraph, nomresgraph)
         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
-        if reuse: mdl.reset()
-        elif staged: _
-        else: mdl = mdl.__class__(params=mdl.params)
+        if not staged: mdl.reset()
     return endclasses, mdlhists
 
-def approach(mdl, app, reuse=False, staged=False, track=True):
+def approach(mdl, app, staged=False, track=True):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -201,8 +193,6 @@ def approach(mdl, app, reuse=False, staged=False, track=True):
         The model to inject faults in.
     app : sampleapproach
         SampleApproach used to define the list of faults and sample time for the model.
-    reuse : bool, optional
-        Whether to clear and re-use the same model over each run rather than copying (for less memory use). The default is False.
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
     track : bool, optional
@@ -215,10 +205,6 @@ def approach(mdl, app, reuse=False, staged=False, track=True):
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    if reuse and staged:
-        print("invalid to use reuse and staged options at the same time. Using staged")
-        reuse=False
-    mdl.reset()
     if staged:
         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times)
     else:
@@ -242,9 +228,7 @@ def approach(mdl, app, reuse=False, staged=False, track=True):
         endflows = proc.graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
-        if reuse: mdl.reset()
-        elif staged: _
-        else: mdl = mdl.__class__(params=mdl.params)
+        if not staged: mdl.reset()
     return endclasses, mdlhists
 
 def construct_nomscen(mdl):
