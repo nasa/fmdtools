@@ -84,7 +84,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='gray', label_size=8, initpos={
         elif gtype=='bipartite':    mdl.bipartite_pos = pos  
     return pos
 
-def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, heatmap={}):
+def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, heatmap={}, retfig=False):
     """
     Plots a single graph object g.
 
@@ -116,6 +116,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             g=mdl.bipartite 
             if not pos: pos=mdl.bipartite_pos
     plt.figure()
+    fig_axis = 0
     if gtype=='normal':
         edgeflows=dict()
         if not pos: pos=nx.shell_layout(g)
@@ -144,7 +145,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
-            plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=pos)
+            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=pos, retfig=retfig)
     elif gtype == 'bipartite' or 'component':
         labels={node:node for node in g.nodes}
         if not pos: pos=nx.spring_layout(g)
@@ -173,7 +174,10 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             degradednodes=[node for node,status in statuses.items() if status=='Degraded']
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
-            plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale, pos=pos)
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale, pos=pos, retfig=retfig)
+    if retfig: 
+        if fig_axis: return fig_axis
+        else: return plt.gcf(), plt.gca()
 def history(ghist, gtype='normal', pos=[], scale=1, faultscen=[],showfaultlabels=True):
     """
     Displays plots of the graph over time given a dict history of graph objects
