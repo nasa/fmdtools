@@ -293,29 +293,7 @@ class GenericFxn(FxnBlock):
     """Generic function block. For use when there is no Function Block defined"""
     def __init__(self, flows):
         super().__init__([f.name for f in flows], flows)
-
-#Future ActGraph class
-#Development in progress
-#class ActGraph(Block):
-#    def __init__(self):
-#        super().__init__()
-#        self.graph = nx.DiGraph()
-#    def add_actions(self,actions):
-#        self.actionmethods = {act:val[0] for act,val in actions.items()}
-#        self.actionmodes =   {act:val[1] for act,val in actions.items()}
-#        self.actiontimes =  {act:val[2] for act,val in actions.items()}
-#        self.actions = list(actions.keys())
-#        self.graph.add_nodes_from(self.actions)
-#    def connect_actions(self,actionpairs, root='na'):
-#        self.actionpairs = actionpairs
-#        self.graph.add_edges_from(self.actionpairs)
-#        if root == 'na': root = self.actions[0]
-#
-#    def add_actionmodes(self,modes):
-#        return 0 
-#    def updatefxn(self,faults=['nom'], time=0):
-#         self.time=time
- ###     
+  
         
 class Component(Block):
     """
@@ -511,6 +489,10 @@ class Model(object):
         self.graph_pos=graph_pos
         self.bipartite_pos=bipartite_pos
         return self.graph
+    def return_paramgraph(self):
+        """ Returns a graph representation of the flows in the model, where flows are nodes and edges are 
+        associations in functions """
+        return nx.projected_graph(self.bipartite, self.flows)
     def return_componentgraph(self, fxnname):
         """
         Returns a graph representation of the components associated with a given funciton
