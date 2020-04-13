@@ -71,8 +71,8 @@ def find_bridging_nodes(mdl,plot='off', gtype = 'parameter'):
     nodes = list(g.nodes)
     numNodes = len(nodes)
     bridgingNodes = list()
-    nodeEdges = [list(g.edges(nodes[0]))]
-    for i in range(1,numNodes):
+    nodeEdges = list()
+    for i in range(0,numNodes):
         nodeEdges.append(list(g.edges(nodes[i])))
         lenNodeEdges = len(nodeEdges[i])
         for j in range(numCommunities):
