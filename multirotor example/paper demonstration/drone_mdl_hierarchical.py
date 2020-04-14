@@ -27,7 +27,7 @@ from fmdtools.modeldef import SampleApproach
 class StoreEE(FxnBlock):
     def __init__(self, flows):
         self.failrate=1e-5
-        self.assoc_modes({'nocharge':[1,[0.6,0.1,0.1,0.1,0.1],300]})
+        self.assoc_modes({'nocharge':[1,[0.6,0.1,0.1],300]})
         super().__init__(['EEout', 'FS'], flows, {'soc': 250})
     def condfaults(self,time):
         if self.soc<1:
@@ -42,8 +42,8 @@ class DistEE(FxnBlock):
     def __init__(self,flows):
         super().__init__(['EEin','EEmot','EEctl','ST'],flows, {'EEtr':1.0, 'EEte':1.0}, timely=False)
         self.failrate=1e-5
-        self.assoc_modes({'short':[0.3,[0.2, 0.2,0.2,0.2,0.2],3000], 'degr':[0.5,[0.2, 0.2,0.2,0.2,0.2],1000],\
-                          'break':[0.2,[0.2, 0.2,0.2,0.2,0.2],2000]})
+        self.assoc_modes({'short':[0.3,[0.33, 0.33, 0.33],3000], 'degr':[0.5,[0.33, 0.33, 0.33],1000],\
+                          'break':[0.2,[0.33, 0.33, 0.33],2000]})
     def condfaults(self, time):
         if self.ST.support<0.5 or max(self.EEmot.rate,self.EEctl.rate)>2: 
             self.add_fault('break')
@@ -64,7 +64,7 @@ class EngageLand(FxnBlock):
     def __init__(self,flows):
         super().__init__(['forcein', 'forceout'],flows, timely=False)
         self.failrate=1e-5
-        self.assoc_modes({'break':[0.2,[0.5,0.0,0.0,0.0,0.5], 1000], 'deform':[0.8,[0.5,0.0,0.0,0.0,0.5], 1000]})
+        self.assoc_modes({'break':[0.2,[0.5,0.0,0.5], 1000], 'deform':[0.8,[0.5,0.0,0.5], 1000]})
     def condfaults(self, time):
         if abs(self.forcein.value)>=2.0:      self.add_fault('break')
         elif abs(self.forcein.value)>1.5:    self.add_fault('deform')
@@ -75,7 +75,7 @@ class HoldPayload(FxnBlock):
     def __init__(self,flows):
         super().__init__(['FG', 'Lin', 'ST'],flows, timely=False)
         self.failrate=1e-6
-        self.assoc_modes({'break':[0.2, [0.2, 0.2, 0.2, 0.2,0.2], 10000], 'deform':[0.8, [0.2, 0.2, 0.2, 0.2,0.2], 10000]})
+        self.assoc_modes({'break':[0.2, [0.33, 0.33, 0.33], 10000], 'deform':[0.8, [0.33, 0.33, 0.33], 10000]})
     def condfaults(self, time):
         if abs(self.FG.value)>0.8:      self.add_fault('break')
         elif abs(self.FG.value)>1.0:    self.add_fault('deform')
@@ -128,11 +128,11 @@ class Line(Component):
     def __init__(self, name):
         super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, timely=False)
         self.failrate=1e-5
-        self.assoc_modes({'short':[0.1, [0.2, 0.2, 0.2, 0.2,0.2], 200],'openc':[0.1, [0.2, 0.2, 0.2, 0.2,0.2], 200],\
-                          'ctlup':[0.2, [0.2, 0.2, 0.2, 0.2,0.2], 500],'ctldn':[0.2, [0.2, 0.2, 0.2, 0.2,0.2], 500],\
-                          'ctlbreak':[0.2, [0.2, 0.2, 0.2, 0.2,0.2], 1000], 'mechbreak':[0.1, [0.2, 0.2, 0.2, 0.2,0.2], 500],\
-                          'mechfriction':[0.05, [0.0, 0.2, 0.2, 0.2,0.2], 500],'propwarp':[0.01, [0.0, 0.2, 0.2, 0.2,0.2], 200],\
-                          'propstuck':[0.02, [0.0, 0.2, 0.2, 0.2,0.2], 200], 'propbreak':[0.03, [0.0, 0.2, 0.2, 0.2,0.2], 200]},name=name)
+        self.assoc_modes({'short':[0.1, [0.33, 0.33, 0.33], 200],'openc':[0.1, [0.33, 0.33, 0.33], 200],\
+                          'ctlup':[0.2, [0.33, 0.33, 0.33], 500],'ctldn':[0.2, [0.33, 0.33, 0.33], 500],\
+                          'ctlbreak':[0.2, [0.33, 0.33, 0.33], 1000], 'mechbreak':[0.1, [0.33, 0.33, 0.33], 500],\
+                          'mechfriction':[0.05, [0.0, 0.5,0.5], 500],'propwarp':[0.01, [0.0, 0.5,0.5], 200],\
+                          'propstuck':[0.02, [0.0, 0.5,0.5], 200], 'propbreak':[0.03, [0.0, 0.5,0.5], 200]},name=name)
 
     def behavior(self, EEin, Ctlin, cmds, Force):
         if Force<=0.0:   self.add_faults([self.name+'mechbreak', self.name+'propbreak'])
@@ -167,7 +167,7 @@ class CtlDOF(FxnBlock):
     def __init__(self, flows):
         super().__init__(['EEin','Dir','Ctl','DOFs','FS'],flows, {'vel':0.0, 'Cs':1.0})
         self.failrate=1e-5
-        self.assoc_modes({'noctl':[0.2, [0.4, 0.2, 0.3, 0.1,0.0], 10000], 'degctl':[0.8, [0.4, 0.2, 0.3, 0.1,0.0], 10000]})
+        self.assoc_modes({'noctl':[0.2, [0.6, 0.3, 0.1], 10000], 'degctl':[0.8, [0.6, 0.3, 0.1], 10000]})
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noctl')
     def behavior(self, time):
@@ -203,7 +203,7 @@ class PlanPath(FxnBlock):
         self.queue.reverse()
         self.goal = self.goals[1]
         self.failrate=1e-5
-        self.assoc_modes({'noloc':[0.2, [0.4, 0.2, 0.3, 0.1,0.0], 10000], 'degloc':[0.8, [0.4, 0.2, 0.3, 0.1,0.0], 10000]})
+        self.assoc_modes({'noloc':[0.2, [0.6, 0.3, 0.1], 10000], 'degloc':[0.8, [0.6, 0.3, 0.1], 10000]})
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noloc')
     def behavior(self, t):
@@ -216,7 +216,7 @@ class PlanPath(FxnBlock):
             self.mode='hover'
             if t>self.time:
                 self.pause.inc(1)
-                if self.pause.t() > 5:
+                if self.pause.t() > 2:
                     self.pt=self.queue.pop()
                     self.goal = self.goals[self.pt]
                     self.pause.reset()
@@ -254,7 +254,7 @@ class Trajectory(FxnBlock):
             sign=np.sign(self.DOF.vertvel)
             damp=(-0.02*sign*np.power(self.DOF.vertvel, 2)-0.1*self.DOF.vertvel)
             self.DOF.vertvel=self.DOF.vertvel+(acc+damp)
-            self.DOF.planvel=5.0*self.DOF.planpwr            
+            self.DOF.planvel=10*self.DOF.planpwr            
             if self.Env.elev<=0.0:  
                 self.DOF.vertvel=max(0,self.DOF.vertvel)
                 self.DOF.planvel=0.0
@@ -288,8 +288,8 @@ class Direc(Flow):
         
 class Drone(Model):
     def __init__(self, params={'graph_pos':{}, 'bipartite_pos':{},'arch':'quad'}):
-        super().__init__(modelparams={'phases': {'taxi':[0,1], 'climb':[1,5],'forward':[5,164], 'descend':[164,170], 'land':[170,175]},
-                                     'times':[0,200], 'units':'sec'})
+        super().__init__(modelparams={'phases': {'ascend':[0,5],'forward':[5,95],'descend':[95, 100]},
+                                     'times':[0,135],'units':'sec'})
         self.params=params
         #add flows to the model
         self.add_flow('Force_ST', {'support':1.0})
