@@ -341,8 +341,10 @@ def update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True,
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors)
 
-def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, retfig=False, colors=['gray','orange', 'red']):
+def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, retfig=False, colors=['gray','orange', 'red'], title=[]):
     """ Plots a standard graph. Used in other functions"""
+    if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+    elif title:     plt.title(title)
     nodesize=scale*2000
     fontsize=scale*12
     if not pos: pos=nx.shell_layout(g)
@@ -356,14 +358,14 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=fontsize, font_color='k')
         nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows,fontsize=fontsize, font_color=colors[1])
-    if faultscen:
-        plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     if retfig:
         return plt.gcf(), plt.gca()
     elif show: plt.show()
 
-def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, retfig=False, colors=['gray','orange', 'red']):
+def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, retfig=False, colors=['gray','orange', 'red'], title=[]):
     """ Plots a bipartite graph. Used in other functions"""
+    if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+    elif title:     plt.title(title)
     nodesize=scale*700
     fontsize=scale*6
     if not pos: pos=nx.spring_layout(g)
@@ -374,8 +376,6 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=fontsize, font_color='k')
-    if faultscen:
-            plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     if retfig:
         return plt.gcf(), plt.gca()
     elif show: plt.show()
