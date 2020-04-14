@@ -106,6 +106,10 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
         Whether or not to label the faults on the functions. The default is True.
     heatmap : dict, optional
         A heatmap dictionary to overlay on the plot. The default is {}.
+    colors : list, optional
+        List of colors to use for nominal, degraded, and faulty functions/flows
+    cmap : mpl colormap
+        Colormap to use for heatmap visualizations
     """
     if not type(g)==nx.classes.graph.Graph:
         mdl=g
@@ -431,3 +435,31 @@ def get_plotlabels(g, reshist, t_ind):
     faultedges = [edge for edge in g.edges if any([reshist['flows'][flow][t_ind]==0 for flow in g.edges[edge].keys()])]
     faultedgeflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if reshist['flows'][flow][t_ind]==0)]) for edge in faultedges}
     return labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgelabels
+
+def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, retfig=False, colors=['gray','orange', 'red']):
+    """ Experimental method for plotting with netgraph instead of networkx"""
+    nodesize=scale*20
+    fontsize=scale*12
+    if not pos: pos=nx.shell_layout(g)
+    netgraph.draw(g,pos,node_size=nodesize,fontsize=fontsize, node_shape='s', node_color=colors[0], width=3, font_weight='bold')
+    netgraph.draw_edge_labels(list(edgeflows.keys()), edgeflows, pos,edge_label_font_size=fontsize)
+    netgraph.draw_nodes({n:pos[n] for n in degfxns}, node_labels=degfxns, node_shape='s', node_color = colors[1],width=3,fontsize=fontsize, font_weight='bold', node_size = nodesize)
+    netgraph.draw_nodes({n:pos[n] for n in faultfxns}, node_labels=faultfxns, node_shape='s', node_color = colors[2],width=3,fontsize=fontsize, font_weight='bold', node_size = nodesize)
+    netgraph.draw_edges(faultedges,pos, edge_color=colors[1],fontsize=fontsize, width=2)
+    netgraph.draw_node_labels({p:p for p in pos}, pos)
+    if showfaultlabels:
+        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        netgraph.draw_node_labels(faultlabels_form, pos, font_size=fontsize, font_color='k')
+        netgraph.draw_edge_labels(list(faultedgeflows.keys()), faultedgeflows, pos, fontsize=fontsize, font_color=colors[1])
+    if faultscen:
+        plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+    if retfig:
+        return plt.gcf(), plt.gca()
+    elif show: plt.show()
+
+
+
+
+
+
+
