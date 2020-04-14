@@ -1,23 +1,12 @@
-import sys
-sys.path.append('../../')
-
 from fmdtools.modeldef import FxnBlock
 from fmdtools.modeldef import Flow
 from fmdtools.modeldef import Model
 from fmdtools.modeldef import m2to1
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import fmdtools.faultsim as fs
-import fmdtools.resultdisp as rd
-import quadpy
-from IPython.display import HTML
-
 class StoreEE(FxnBlock):
     def __init__(self, flows):
-        self.failrate=1e-3
-        self.assoc_modes({'nocharge':[0.2,300]})
+        self.failrate=1e-5
+        self.assoc_modes({'nocharge':[1,300]})
         super().__init__(['EEout', 'FS'], flows, {'soc': 2000})
     def behavior(self, time):
         if      self.has_fault('nocharge'):   self.EEout.effort=0.0
@@ -70,6 +59,7 @@ class HoldPayload(FxnBlock):
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
     def __init__(self, flows):     
         super().__init__(['EEin', 'Ctlin','DOF','Force'], flows,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, timely=False)
+        self.failrate=1e-5
         self.assoc_modes({'short':[0.1, 200],'openc':[0.1, 200],'ctlup':[0.2, 500],'ctldn':[0.2, 500],
                           'ctlbreak':[0.2, 1000], 'mechbreak':[0.1, 500], 'mechfriction':[0.05, 500],
                           'propwarp':[0.01, 200],'propstuck':[0.02, 200], 'propbreak':[0.03, 200]})
@@ -205,9 +195,11 @@ class Drone(Model):
         self.add_fxn('ViewEnv', ['Env1'], fclass=ViewEnvironment)
         
         self.construct_graph(graph_pos=params['graph_pos'], bipartite_pos=params['bipartite_pos'])
-
-static_mdl=Drone()
-
-endresults, resgraph, mdlhist = fs.propagate.one_fault(static_mdl,'AffectDOF', 'short')
-
-endclasses, mdlhists = fs.propagate.single_faults(static_mdl)
+    def find_classification(self, g, endfaults, endflows, scen, mdlhist):
+    
+        repcost=sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()])
+        
+        totcost=repcost
+        rate=scen['properties']['rate']
+        expcost=totcost*rate*1e5
+        return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
