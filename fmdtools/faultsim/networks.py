@@ -15,6 +15,7 @@ from networkx.algorithms.community import greedy_modularity_communities
 from networkx.algorithms.community import greedy_modularity_communities
 import matplotlib.pyplot as plt
 import math
+import fmdtools.resultdisp as rd
 
 
 # Network Metric Quantification
@@ -51,7 +52,7 @@ def calc_modularity(mdl, gtype='parameter'):
     communities = list(greedy_modularity_communities(g))
     m = modularity(g,communities)
     return m
-def find_bridging_nodes(mdl,plot='off', gtype = 'parameter'):
+def find_bridging_nodes(mdl,plot='off', gtype = 'parameter', pos={}, scale=1):
     """
         Determines bridging nodes in a graph representation of model mdl.
         
@@ -86,18 +87,15 @@ def find_bridging_nodes(mdl,plot='off', gtype = 'parameter'):
                 bridgingNodes.append(nodes[i])
     bridgingNodes = sorted(list(set(bridgingNodes)))
     if plot == 'on':
-        plt.figure()
-        color_map = []
-        for node in g:
-            if node in bridgingNodes:
-                color_map.append('yellow')
-            else:
-                color_map.append('gray')
-        nx.draw_networkx(g,node_color=color_map,with_labels=True)
-        plt.title('Bridging Nodes')
+        if gtype=='normal':
+            fig, ax= rd.graph.plot_normgraph(g,{},bridgingNodes,{},{},{},{},{},{},{},False,{}, pos=pos, scale=scale, colors=['gray','yellow', 'yellow'],show=False, retfig=True, title='Bridging Nodes')
+        else:
+            fig, ax = rd.graph.plot_bipgraph(g,{n:n for n in g.nodes()},{},bridgingNodes,{},{},showfaultlabels=False, pos=pos, scale=scale, colors=['gray','yellow', 'yellow'],show=False, retfig=True, title='Bridging Nodes')
         plt.show()
-    return bridgingNodes
-def find_high_degree_nodes(mdl,p=.1,plot='off', gtype='bipartite'):
+        return bridgingNodes, fig, ax
+    else:
+        return bridgingNodes
+def find_high_degree_nodes(mdl,p=.9,plot='off', gtype='bipartite', pos={}, scale=1):
     """
         Determines highest degree nodes, up to percentile p, in graph representation of model mdl.
         
@@ -131,17 +129,14 @@ def find_high_degree_nodes(mdl,p=.1,plot='off', gtype='bipartite'):
         else:
             highDegreeNodes.append(sortedNodes[i])
     if plot == 'on':
-        plt.figure()
-        color_map = []
-        for node in g:
-            if node in [x[0] for x in highDegreeNodes]:
-                color_map.append('red')
-            else:
-                color_map.append('gray')
-        nx.draw_networkx(g,node_color=color_map,with_labels=True)
-        plt.title('High Degree Nodes')
+        if gtype=='normal':
+            fig, ax= rd.graph.plot_normgraph(g,{},[h for h,i in highDegreeNodes],{},{},{},{},{},{},{},False,{}, pos=pos, scale=scale, colors=['gray','red', 'red'],show=False, retfig=True, title='High Degree Nodes')
+        else:
+            fig, ax = rd.graph.plot_bipgraph(g,{n:n for n in g.nodes()}, {},[h for h,i in highDegreeNodes],{},{},showfaultlabels=False, pos=pos, scale=scale, colors=['gray','red', 'red'], show=False, retfig=True, title='High Degree Nodes')
         plt.show()
-    return highDegreeNodes
+        return highDegreeNodes, fig, ax
+    else:
+        return highDegreeNodes
 def calc_robustness_coefficient(mdl,trials=100, gtype='bipartite'):
     """
         Computes robustness coefficient of graph representation of model mdl.
