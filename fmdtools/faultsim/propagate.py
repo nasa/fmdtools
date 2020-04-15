@@ -52,6 +52,7 @@ def nominal(mdl, track=True, gtype='normal'):
     mdlhist : Dict
         A dictionary with a history of modelstates
     """
+    mdl = mdl.__class__(params=mdl.params)
     nomscen=construct_nomscen(mdl)
     scen=nomscen.copy()
     mdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False)
@@ -97,6 +98,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype =
 
     """
     #run model nominally, get relevant results
+    mdl = mdl.__class__(params=mdl.params)
     nomscen=construct_nomscen(mdl)
     if staged:
         nommdlhist, mdls = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes=[time])
@@ -159,6 +161,7 @@ def single_faults(mdl, staged=False, track=True):
     scenlist=list_init_faults(mdl)
     #run model nominally, get relevant results
     nomscen=construct_nomscen(mdl)
+    mdl = mdl.__class__(params=mdl.params)
     if staged:
         nomhist, c_mdl = prop_one_scen(mdl, nomscen, track=track, ctimes=mdl.times)
     else:
@@ -206,6 +209,7 @@ def approach(mdl, app, staged=False, track=True):
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
+    mdl = mdl.__class__(params=mdl.params)
     if staged:
         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times)
     else:

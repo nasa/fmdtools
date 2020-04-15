@@ -116,7 +116,7 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         self.LRstab = (sum([Air[comp] for comp in self.LR['L']])-sum([Air[comp] for comp in self.LR['R']]))/len(Air)
         self.FRstab = (sum([Air[comp] for comp in self.FR['R']])-sum([Air[comp] for comp in self.FR['F']]))/len(Air)
         
-        if abs(self.LRstab) >=0.4 or abs(self.FRstab)>=0.65:
+        if abs(self.LRstab) >=0.4 or abs(self.FRstab)>=0.75:
             self.DOF.uppwr=0
             self.DOF.planpwr=0
         else:
@@ -199,14 +199,13 @@ class PlanPath(FxnBlock):
         super().__init__(['EEin','Env','Dir','FS'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'},timers={'pause'})
         
         self.goals = {1:[0,0,50], 2:[100, 0, 50], 3:[100, 100, 50], 4:[150, 150, 50], 5:[0,0,50], 6:[0,0,0]}
-        self.queue = list(self.goals.keys())
-        self.queue.reverse()
         self.goal = self.goals[1]
         self.failrate=1e-5
         self.assoc_modes({'noloc':[0.2, [0.6, 0.3, 0.1], 10000], 'degloc':[0.8, [0.6, 0.3, 0.1], 10000]})
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noloc')
     def behavior(self, t):
+        self.goal = self.goals[self.pt]
         loc = [self.Env.x, self.Env.y, self.Env.elev]
         dist = finddist(loc, self.goal)        
         [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
@@ -217,12 +216,12 @@ class PlanPath(FxnBlock):
             if t>self.time:
                 self.pause.inc(1)
                 if self.pause.t() > 2:
-                    self.pt=self.queue.pop()
+                    self.pt=self.pt+1
                     self.goal = self.goals[self.pt]
                     self.pause.reset()
-        elif self.Env.elev<1 and len(self.queue)==0: self.mode = 'taxi'
-        elif dist<5 and len(self.queue)==0:         self.mode = 'land'
-        elif len(self.queue)==0 and {'move', 'hover'}.issuperset({self.mode}): self.mode = 'descend'
+        elif self.Env.elev<1 and self.pt==6: self.mode = 'taxi'
+        elif dist<5 and self.pt==6:         self.mode = 'land'
+        elif self.pt==6 and {'move', 'hover'}.issuperset({self.mode}): self.mode = 'descend'
         elif dist>5 and not(self.mode=='descend'):                       self.mode='move'
         # nominal behaviors
         self.Dir.power=1.0
@@ -327,7 +326,7 @@ class Drone(Model):
         else:
             lostcost=0
         
-        if any(abs(mdlhist['faulty']['flows']['Force_GR']['value'])>1):
+        if any(abs(mdlhist['faulty']['flows']['Force_GR']['value'])>2.0):
             crashcost = 100000
         else:
             crashcost = 0
@@ -397,8 +396,12 @@ graph_pos = {'StoreEE': [-1.0787279392101061, -0.06903523859088145],
 
 
 
-mdl = Drone(params={'graph_pos':graph_pos, 'bipartite_pos':bipartite_pos,'arch':'quad'})
-app = SampleApproach(mdl)
+mdl = Drone(params={'graph_pos':graph_pos, 'bipartite_pos':bipartite_pos,'arch':'oct'})
+app = SampleApproach(mdl, faults=[('AffectDOF', 'RR2propstuck')])
+endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=False)
+rd.plot.mdlhistvals({'nominal': mdlhists['nominal'],'faulty': mdlhists['AffectDOF RR2propstuck, t=49.0']})
+
+
 
 
 

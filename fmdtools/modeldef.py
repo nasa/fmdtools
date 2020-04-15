@@ -262,7 +262,7 @@ class FxnBlock(Block):
         copy = self.__class__(newflows, *attr)  # Is this adequate? Wouldn't this give it new components?
         copy.faults = self.faults.copy()
         for state in self._initstates.keys():
-            setattr(copy, state, self._initstates[state])
+            setattr(copy, state, getattr(self, state))
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy

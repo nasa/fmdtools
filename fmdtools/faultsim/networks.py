@@ -95,7 +95,7 @@ def find_bridging_nodes(mdl,plot='off', gtype = 'parameter', pos={}, scale=1):
         return bridgingNodes, fig, ax
     else:
         return bridgingNodes
-def find_high_degree_nodes(mdl,p=.9,plot='off', gtype='bipartite', pos={}, scale=1):
+def find_high_degree_nodes(mdl,p=90,plot='off', gtype='bipartite', pos={}, scale=1):
     """
         Determines highest degree nodes, up to percentile p, in graph representation of model mdl.
         
@@ -119,7 +119,7 @@ def find_high_degree_nodes(mdl,p=.9,plot='off', gtype='bipartite', pos={}, scale
     sortedDegreesSet = set(sortedDegrees)
     sortedDegreesUnique = list(sortedDegreesSet)
     numDegrees = len(sortedDegreesUnique)
-    topPercentileDegree = sortedDegreesUnique[int(round(numDegrees*p))-1]
+    topPercentileDegree = sortedDegreesUnique[int(round(numDegrees*p/100))-1]
     numNodes = len(sortedNodes)
     highestDegree = sortedNodes[0][1]
     highDegreeNodes = [sortedNodes[0]]
@@ -130,9 +130,9 @@ def find_high_degree_nodes(mdl,p=.9,plot='off', gtype='bipartite', pos={}, scale
             highDegreeNodes.append(sortedNodes[i])
     if plot == 'on':
         if gtype=='normal':
-            fig, ax= rd.graph.plot_normgraph(g,{},[h for h,i in highDegreeNodes],{},{},{},{},{},{},{},False,{}, pos=pos, scale=scale, colors=['gray','red', 'red'],show=False, retfig=True, title='High Degree Nodes')
+            fig, ax= rd.graph.plot_normgraph(g,{},[h for h,i in highDegreeNodes],{},{},{},{},{},{},{},False,{}, pos=pos, scale=scale, colors=['gray','red', 'red'],show=False, retfig=True, title='High Degree Nodes ('+str(p)+'th Percentile)')
         else:
-            fig, ax = rd.graph.plot_bipgraph(g,{n:n for n in g.nodes()}, {},[h for h,i in highDegreeNodes],{},{},showfaultlabels=False, pos=pos, scale=scale, colors=['gray','red', 'red'], show=False, retfig=True, title='High Degree Nodes')
+            fig, ax = rd.graph.plot_bipgraph(g,{n:n for n in g.nodes()}, {},[h for h,i in highDegreeNodes],{},{},showfaultlabels=False, pos=pos, scale=scale, colors=['gray','red', 'red'], show=False, retfig=True, title='High Degree Nodes ('+str(p)+'th Percentile)')
         plt.show()
         return highDegreeNodes, fig, ax
     else:
@@ -191,7 +191,7 @@ def degree_dist(mdl, gtype='bipartite'):
     degreesSet = set(degrees)
     degreesUnique = list(degrees)
     numDegreesUnique = len(degreesUnique)
-    plt.figure()
+    fig = plt.figure()
     plt.hist(degrees,bins=np.arange(numDegreesUnique)-0.5)
     plt.xticks(degreeint)
     plt.yticks(freqint)
@@ -199,6 +199,7 @@ def degree_dist(mdl, gtype='bipartite'):
     plt.xlabel('Degree')
     plt.ylabel('Frequency')
     plt.show()
+    return fig
 
 def get_graph(mdl, gtype):
     "gets the appropriate graph of type gtype from mdl"
