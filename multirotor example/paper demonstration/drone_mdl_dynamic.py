@@ -270,7 +270,7 @@ class Drone(Model):
         else:
             lostcost=0
         
-        if any(mdlhist['faulty']['flows']['Force_GR']['value']>1):
+        if any(abs(mdlhist['faulty']['flows']['Force_GR']['value'])>1):
             crashcost = 100000
         else:
             crashcost = 0
