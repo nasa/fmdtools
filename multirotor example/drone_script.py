@@ -33,19 +33,19 @@ rd.graph.show(resgraph) #, showfaultlabels=False)
 params={'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20], 5:[0,0,50], 6:[0,0,0] }}
 
 #params={'flightplan':{ 1:[0,0,50], 2:[100, 0, 50], 3:[100, 100, 50], 4:[150, 150, 50], 5:[0,0,50], 6:[0,0,0] }}
-mdl = Drone(params)
+mdl = Drone(params=params)
 ## #Check various scenarios individually
 ## 
-endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'DistEE', 'short', time=50, staged=True, gtype='component')
+endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'DistEE', 'short', time=5, staged=True, gtype='component')
 
 rd.graph.show(resgraph,gtype='bipartite', faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
 #rp.plot_mdlhistvals(mdlhist, 'DistEE short', time=20) #, fxnflows=['StoreEE'])
-rd.plot.mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Planpath':['dx','dy','dz']}, time=20)
+rd.plot.mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Planpath':['dx','dy','dz']}, time=5)
 
-rd.plot.mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Force_GR':['value'],'Force_LG':['value'],'Force_ST':['support'],'Force_Lin':['support']}, time=20)
+rd.plot.mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Force_GR':['value'],'Force_LG':['value'],'Force_ST':['support'],'Force_Lin':['support']}, time=5)
 
-rd.plot.mdlhistvals(mdlhist,'DistEE short', time=20)
+rd.plot.mdlhistvals(mdlhist,'DistEE short', time=5)
 
 # mdlhist['nominal']['functions']['Planpath']
 ### 

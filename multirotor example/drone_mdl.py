@@ -179,7 +179,7 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         else:
             Airs=list(Air.values())
             self.DOF.uppwr=np.mean(Airs)
-            self.DOF.planpwr=-2*self.FRstab
+            self.DOF.planpwr=self.Ctlin.forward
 
 class Line(Component):
     def __init__(self, name):
@@ -233,11 +233,11 @@ class CtlDOF(FxnBlock):
         if time>self.time: self.vel=self.DOFs.vertvel
         # throttle settings: 0 is off (-50 m/s), 1 is hover, 2 is max climb (5 m/s)
         if self.Dir.traj[2]>0:      upthrottle = 1+np.min([self.Dir.traj[2]/(50*5), 1])
-        elif self.Dir.traj[2] <0:   upthrottle = 1+np.max([self.Dir.traj[2]/(50*50), -1])/10
+        elif self.Dir.traj[2] <0:   upthrottle = 1+np.max([self.Dir.traj[2]/(50*50), -1])
         else:                        upthrottle = 1.0
-            
-        if self.Dir.traj[0]==0 and self.Dir.traj[1]==0: forwardthrottle=0.0
-        else: forwardthrottle=1.0
+        
+        vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
+        forwardthrottle = np.min([vect/(60*9), 1])
         
         self.Ctl.forward=self.EEin.effort*self.Cs*forwardthrottle*self.Dir.power
         self.Ctl.upward=self.EEin.effort*self.Cs*upthrottle*self.Dir.power
@@ -246,20 +246,22 @@ class PlanPath(FxnBlock):
     def __init__(self, flows, params):
         super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'})
         self.goals = params['flightplan']
+        self.goal=self.goals[1]
         self.failrate=1e-5
         self.assoc_modes({'noloc':[0.2, [0.6, 0.3, 0.1], 10000], 'degloc':[0.8, [0.6, 0.3, 0.1], 10000]})
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noloc')
     def behavior(self, t):
         loc = [self.Env.x, self.Env.y, self.Env.elev]
-        self.goal = self.goals[self.pt]
+        if self.pt <= max(self.goals):   self.goal = self.goals[self.pt]
         dist = finddist(loc, self.goal)        
         [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
         
         if self.mode=='taxi' and t>5: self.mode=='taxi'
         elif dist<5 and {'move'}.issuperset({self.mode}):
-            self.pt+=1
-            self.goal = self.goals[self.pt]
+            if self.pt < max(self.goals):   
+                self.pt+=1
+                self.goal = self.goals[self.pt]
         elif self.Env.elev<1 and self.pt>=max(self.goals):  self.mode = 'taxi'
         elif dist<5 and self.pt>=max(self.goals):           self.mode = 'land'
         elif dist>5 and not(self.mode=='descend'):          self.mode='move'
@@ -288,14 +290,15 @@ class Trajectory(FxnBlock):
             elif self.DOF.uppwr < 1:    self.DOF.vertvel = 60*max([(self.DOF.uppwr-1)*50, -50])
             else:                       self.DOF.vertvel = 0.0
                 
-            self.DOF.planvel=60*10*self.DOF.planpwr            
+            self.DOF.planvel=60*min([10*self.DOF.planpwr, 10])            
             if self.Env.elev<=0.0:  
                 self.DOF.vertvel=max(0,self.DOF.vertvel)
                 self.DOF.planvel=0.0
             
             self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
-            self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]
-            self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
+            vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
+            self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]/vect
+            self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]/vect
 
 class ViewEnvironment(FxnBlock):
     def __init__(self, flows, params):
@@ -399,7 +402,7 @@ def vectdist(p1, p2):
     return [p1[0]-p2[0],p1[1]-p2[1],p1[2]-p2[2]]
 
 def vectdir(p1, p2):
-    return vectdist(p1,p2)/finddist(p1,p2)
+    return vectdist(p1,p2)/(finddist(p1,p2)+0.0001)
 
 #takes the maximum of a variety of classifications given a list of strings
 def textmax(texts):
