@@ -341,6 +341,7 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
            if t in ctimes: c_mdl[t]=mdl.copy()
        except:
             print("Error at t="+str(t))
+            raise
             break
     return mdlhist, c_mdl
 
