@@ -230,24 +230,11 @@ class CtlDOF(FxnBlock):
     def behavior(self, time):
         if self.has_fault('noctl'):    self.Cs=0.0
         elif self.has_fault('degctl'): self.Cs=0.5
-        
         if time>self.time: self.vel=self.DOFs.vertvel
-        
-        upthrottle=1.0
-        if self.Dir.traj[2]>=1:     
-            damp2=min(1.0, np.power(self.vel/60, 2))
-            upthrottle=1.1-0.1*damp2
-        elif 0<self.Dir.traj[2]<1:  upthrottle= 0.1 * self.Dir.traj[2] + 1.0
-        elif self.Dir.traj[2]==0:
-            damp=np.sign(self.vel)
-            damp2=damp*min(1.0, np.power(self.vel/60, 2))
-            upthrottle=1.0-0.05*damp2
-        elif -1<self.Dir.traj[2]<=0.0:
-            damp=min(1.0, np.power(self.vel/60+0.5, 2))
-            upthrottle=0.9+0.1*damp
-        elif self.Dir.traj[2]<=-1.0:
-            damp=min(0.75, np.power(self.vel/60+5.0, 2))
-            upthrottle=0.85+0.15*damp
+        # throttle settings: 0 is off (-50 m/s), 1 is hover, 2 is max climb (5 m/s)
+        if self.Dir.traj[2]>0:      upthrottle = 1+np.min([self.Dir.traj[2]/(50*5), 1])
+        elif self.Dir.traj[2] <0:   upthrottle = 1+np.max([self.Dir.traj[2]/(50*50), -1])/10
+        else:                        upthrottle = 1.0
             
         if self.Dir.traj[0]==0 and self.Dir.traj[1]==0: forwardthrottle=0.0
         else: forwardthrottle=1.0
@@ -257,39 +244,29 @@ class CtlDOF(FxnBlock):
 
 class PlanPath(FxnBlock):
     def __init__(self, flows, params):
-        super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'},timers={'pause'})
-        
+        super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'})
         self.goals = params['flightplan']
-        self.goal = self.goals[1]
         self.failrate=1e-5
         self.assoc_modes({'noloc':[0.2, [0.6, 0.3, 0.1], 10000], 'degloc':[0.8, [0.6, 0.3, 0.1], 10000]})
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noloc')
     def behavior(self, t):
-        self.goal = self.goals[self.pt]
         loc = [self.Env.x, self.Env.y, self.Env.elev]
+        self.goal = self.goals[self.pt]
         dist = finddist(loc, self.goal)        
         [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
         
         if self.mode=='taxi' and t>5: self.mode=='taxi'
-        elif dist<5 and {'move', 'hover'}.issuperset({self.mode}):
-            self.mode='hover'
-            if t>self.time:
-                self.pause.inc(1)
-                if self.pause.t() > 2:
-                    self.pt=self.pt+1
-                    self.goal = self.goals[self.pt]
-                    self.pause.reset()
-        elif self.Env.elev<1 and self.pt==6: self.mode = 'taxi'
-        elif dist<5 and self.pt==6:         self.mode = 'land'
-        elif self.pt==6 and {'move', 'hover'}.issuperset({self.mode}): self.mode = 'descend'
-        elif dist>5 and not(self.mode=='descend'):                       self.mode='move'
+        elif dist<5 and {'move'}.issuperset({self.mode}):
+            self.pt+=1
+            self.goal = self.goals[self.pt]
+        elif self.Env.elev<1 and self.pt>=max(self.goals):  self.mode = 'taxi'
+        elif dist<5 and self.pt>=max(self.goals):           self.mode = 'land'
+        elif dist>5 and not(self.mode=='descend'):          self.mode='move'
         # nominal behaviors
         self.Dir.power=1.0
-        if self.mode=='taxi':       self.Dir.power=0.0
-        elif self.mode=='hover':    self.Dir.assign([0,0,0])           
-        elif self.mode=='move':     self.Dir.assign(vectdir(self.goal, loc))     
-        elif self.mode=='descend':  self.Dir.assign([0,0,-0.5])
+        if self.mode=='taxi':       self.Dir.power=0.0          
+        elif self.mode=='move':     self.Dir.assign([self.dx,self.dy, self.dz])     
         elif self.mode=='land':     self.Dir.assign([0,0,-0.1])
         # faulty behaviors    
         if self.has_fault('noloc'):     self.Dir.assign([0,0,0])
@@ -303,17 +280,14 @@ class Trajectory(FxnBlock):
         super().__init__(['Env','DOF', 'Dir', 'Force_GR'], flows)
         #self.assoc_modes({'crash':[0, 100000], 'lost':[0.0, 50000]})
     def behavior(self, time):
-        if time>self.time:            
-            if self.Env.elev<=0.0:  
-                self.Force_GR.value=min(-0.5, (self.DOF.vertvel/60-self.DOF.planvel/60)/7.5)
-                acc=10*(self.DOF.uppwr-1.0) 
-            else:                   
-                self.Force_GR.value=0.0
-                acc=10*(self.DOF.uppwr-1.0) 
-            
-            sign=np.sign(self.DOF.vertvel)
-            damp=(-0.02*sign*np.power(self.DOF.vertvel/60, 2)-0.1*self.DOF.vertvel/60)
-            self.DOF.vertvel=self.DOF.vertvel+60*(acc+damp)
+        if time>self.time:         
+            if self.Env.elev<=0.0:  self.Force_GR.value=min(-0.5, (self.DOF.vertvel/60-self.DOF.planvel/60)/7.5)
+            else:                   self.Force_GR.value=0.0
+                 
+            if self.DOF.uppwr > 1:      self.DOF.vertvel = 60*min([(self.DOF.uppwr-1)*5, 5])
+            elif self.DOF.uppwr < 1:    self.DOF.vertvel = 60*max([(self.DOF.uppwr-1)*50, -50])
+            else:                       self.DOF.vertvel = 0.0
+                
             self.DOF.planvel=60*10*self.DOF.planpwr            
             if self.Env.elev<=0.0:  
                 self.DOF.vertvel=max(0,self.DOF.vertvel)

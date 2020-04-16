@@ -26,3 +26,4 @@ rd.graph.show(mdl)
 rd.plot.mdlhistvals(mdlhist, fxnflowvals={'DOFs':['vertvel', 'uppwr'], 'Env1':['elev'], 'CtlDOF':['vel']})
 
 
+rd.plot.mdlhistvals(mdlhist)
