@@ -94,26 +94,17 @@ class DistEE(FxnBlock):
         self.EEmot.effort=self.EEte*self.EEin.effort
         self.EEctl.effort=self.EEte*self.EEin.effort
         self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, 0.9*self.EEmot.rate+0.1*self.EEctl.rate])
-
-class EngageLand(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['forcein', 'forceout'],flows, timely=False)
-        self.failrate=1e-5
-        self.assoc_modes({'break':[0.2,[0.5,0.0,0.5], 1000], 'deform':[0.8,[0.5,0.0,0.5], 1000]})
-    def condfaults(self, time):
-        if abs(self.forcein.value)>=2.0:      self.add_fault('break')
-        elif abs(self.forcein.value)>1.5:    self.add_fault('deform')
-    def behavior(self, time):
-        self.forceout.value=self.forcein.value/2
             
 class HoldPayload(FxnBlock):
     def __init__(self,flows):
-        super().__init__(['FG', 'Lin', 'ST'],flows, timely=False)
+        super().__init__(['DOF', 'Lin', 'ST'],flows, timely=False, states={'Force_GR':1.0})
         self.failrate=1e-6
         self.assoc_modes({'break':[0.2, [0.33, 0.33, 0.33], 10000], 'deform':[0.8, [0.33, 0.33, 0.33], 10000]})
     def condfaults(self, time):
-        if abs(self.FG.value)>0.8:      self.add_fault('break')
-        elif abs(self.FG.value)>1.0:    self.add_fault('deform')
+        if self.DOF.elev<=0.0:  self.Force_GR=min(-0.5, (self.DOF.vertvel/60-self.DOF.planvel/60)/7.5)
+        else:                   self.Force_GR=0.0
+        if abs(self.Force_GR/2)>0.8:      self.add_fault('break')
+        elif abs(self.Force_GR/2)>1.0:    self.add_fault('deform')
     def behavior(self, time):
         #need to transfer FG to FA & FS???
         if self.has_fault('break'):     self.Lin.support, self.ST.support = 0,0
@@ -156,7 +147,7 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5,'RF2':0.5,'LF2':0.5,'LR2':-0.5,'RR2':-0.5}
             self.LR = {'L':{'LF', 'LR','LF2', 'LR2'}, 'R':{'RF','RR','RF2','RR2'}}
             self.FR = {'F':{'LF', 'RF','LF2', 'RF2'}, 'R':{'LR', 'RR','LR2', 'RR2'}}
-        super().__init__(['EEin', 'Ctlin','DOF','Force','Hsig'], flows,{'LRstab':0.0, 'FRstab':0.0}, components, timely=False) 
+        super().__init__(['EEin', 'Ctlin','DOF','Dir','Force','Hsig'], flows,{'LRstab':0.0, 'FRstab':0.0}, components) 
     def behavior(self, time):
         Air,EEin={},{}
         #injects faults into lines
@@ -180,6 +171,21 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
             Airs=list(Air.values())
             self.DOF.uppwr=np.mean(Airs)
             self.DOF.planpwr=self.Ctlin.forward
+            
+        if time> self.time:
+            if self.DOF.uppwr > 1:      self.DOF.vertvel = 60*min([(self.DOF.uppwr-1)*5, 5])
+            elif self.DOF.uppwr < 1:    self.DOF.vertvel = 60*max([(self.DOF.uppwr-1)*50, -50])
+            else:                       self.DOF.vertvel = 0.0
+                
+            self.DOF.planvel=60*min([10*self.DOF.planpwr, 10])            
+            if self.DOF.elev<=0.0:  
+                self.DOF.vertvel=max(0,self.DOF.vertvel)
+                self.DOF.planvel=0.0
+            
+            self.DOF.elev=max(0.0, self.DOF.elev+self.DOF.vertvel)
+            vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
+            self.DOF.x=self.DOF.x+self.DOF.planvel*self.Dir.traj[0]/vect
+            self.DOF.y=self.DOF.y+self.DOF.planvel*self.Dir.traj[1]/vect
 
 class Line(Component):
     def __init__(self, name):
@@ -275,31 +281,7 @@ class PlanPath(FxnBlock):
         elif self.has_fault('degloc'):  self.Dir.assign([0,0,-1])
         if self.EEin.effort<0.5:
             self.Dir.power=0.0
-            self.Dir.assign([0,0,0])
-
-class Trajectory(FxnBlock):
-    def __init__(self, flows):
-        super().__init__(['Env','DOF', 'Dir', 'Force_GR'], flows)
-        #self.assoc_modes({'crash':[0, 100000], 'lost':[0.0, 50000]})
-    def behavior(self, time):
-        if time>self.time:         
-            if self.Env.elev<=0.0:  self.Force_GR.value=min(-0.5, (self.DOF.vertvel/60-self.DOF.planvel/60)/7.5)
-            else:                   self.Force_GR.value=0.0
-                 
-            if self.DOF.uppwr > 1:      self.DOF.vertvel = 60*min([(self.DOF.uppwr-1)*5, 5])
-            elif self.DOF.uppwr < 1:    self.DOF.vertvel = 60*max([(self.DOF.uppwr-1)*50, -50])
-            else:                       self.DOF.vertvel = 0.0
-                
-            self.DOF.planvel=60*min([10*self.DOF.planpwr, 10])            
-            if self.Env.elev<=0.0:  
-                self.DOF.vertvel=max(0,self.DOF.vertvel)
-                self.DOF.planvel=0.0
-            
-            self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
-            vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
-            self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]/vect
-            self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]/vect
-
+            self.Dir.assign([0,0,0])            
             
 class Drone(Model):
     def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]} }):
@@ -315,8 +297,6 @@ class Drone(Model):
         #add flows to the model
         self.add_flow('Force_ST', {'support':1.0})
         self.add_flow('Force_Lin', {'support':1.0} )
-        self.add_flow('Force_GR', {'value':1.0} )
-        self.add_flow('Force_LG', {'value':1.0})
         self.add_flow('HSig_DOFs', {'hstate':'nominal', 'config':1.0})
         self.add_flow('HSig_Bat', {'hstate':'nominal', 'config':1.0} )
         self.add_flow('RSig_Ctl', {'mode':1})
@@ -325,8 +305,7 @@ class Drone(Model):
         self.add_flow('EEmot', {'rate':1.0, 'effort':1.0})
         self.add_flow('EEctl', {'rate':1.0, 'effort':1.0})
         self.add_flow('Ctl1', {'forward':0.0, 'upward':1.0})
-        self.add_flow('DOFs', {'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0})
-        self.add_flow('Env1', {'x':0.0,'y':0.0,'elev':0.0} )
+        self.add_flow('DOFs', {'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0, 'x':0.0,'y':0.0,'elev':0.0})
         # custom flows
         self.add_flow('Dir1', Direc())
         #add functions to the model
@@ -334,22 +313,20 @@ class Drone(Model):
         self.add_fxn('ManageHealth',flows,fclass = ManageHealth)
         self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= 'normal')
         self.add_fxn('DistEE', ['EE_1','EEmot','EEctl', 'Force_ST'], fclass = DistEE)
-        self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Force_Lin', 'HSig_DOFs'], fclass=AffectDOF, fparams = 'quad')
+        self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Dir1','Force_Lin', 'HSig_DOFs'], fclass=AffectDOF, fparams = 'quad')
         self.add_fxn('CtlDOF',['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST', 'RSig_Ctl'], fclass = CtlDOF)
-        self.add_fxn('Planpath', ['EEctl', 'Env1','Dir1', 'Force_ST', 'RSig_Traj'], fclass=PlanPath, fparams=params)
-        self.add_fxn('Trajectory',['Env1','DOFs','Dir1', 'Force_GR'], fclass = Trajectory )
-        self.add_fxn('EngageLand', ['Force_GR', 'Force_LG'], fclass = EngageLand)
-        self.add_fxn('HoldPayload',['Force_LG', 'Force_Lin', 'Force_ST'], fclass = HoldPayload)
+        self.add_fxn('Planpath', ['EEctl', 'DOFs','Dir1', 'Force_ST', 'RSig_Traj'], fclass=PlanPath, fparams=params)
+        self.add_fxn('HoldPayload',['DOFs', 'Force_Lin', 'Force_ST'], fclass = HoldPayload)
         
         self.construct_graph()
         
     def find_classification(self, g, endfaults, endflows, scen, mdlhist):
         #landing costs
-        viewed = env_viewed(mdlhist['faulty']['flows']['Env1']['x'], mdlhist['faulty']['flows']['Env1']['y'], self.dang_area)
+        viewed = env_viewed(mdlhist['faulty']['flows']['DOFs']['x'], mdlhist['faulty']['flows']['DOFs']['y'], self.dang_area)
         num_viewed = sum([1 for k,view in viewed.items() if view=='viewed'])
         viewed_value = num_viewed*100
         
-        Env=self.flows['Env1']
+        Env=self.flows['DOFs']
         if  inrange(self.start_area, Env.x, Env.y): landcost = 1 # nominal landing
         elif inrange(self.safe1_area, Env.x, Env.y) or inrange(self.safe2_area, Env.x, Env.y): landcost=1000 # emergency safe
         elif inrange(self.dang_area, Env.x, Env.y):  landcost=100000 # emergency dangerous
@@ -382,13 +359,10 @@ def rect(x1, y1, x2, y2, width, height):
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 
-#checks to see if a point with x-y coordinates is in the area a
 def inrange(area, x, y):
     point=Point(x,y)
-    
-    
-    return 
-
+    polygon=Polygon(area)
+    return polygon.contains(point)
 def finddist(p1, p2):
     return np.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2+(p1[2]-p2[2])**2)
 
