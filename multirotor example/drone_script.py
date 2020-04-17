@@ -17,25 +17,26 @@ from drone_mdl import *
 import time
 
 #scenlist=fp.listinitfaults(graph, mdl.times)
-mdl = Drone()
+
 
 #app = SampleApproach(mdl)
 #endclasses, mdlhists = fp.run_approach(mdl, app)
 #simplefmea = rp.make_simplefmea(endclasses)
 #summfmea = rp.make_summfmea(endclasses, app)
-
+fig= plt.figure()
 # =============================================================================
+params={'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20], 5:[0,0,50], 6:[0,0,0] }}
+mdl = Drone(params=params)
 endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
 rd.graph.show(resgraph) #, showfaultlabels=False)
 #fp.plotflowhist(flowhist3, 'N/A', time=0)
 ## 
 
-params={'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20], 5:[0,0,50], 6:[0,0,0] }}
-
 #params={'flightplan':{ 1:[0,0,50], 2:[100, 0, 50], 3:[100, 100, 50], 4:[150, 150, 50], 5:[0,0,50], 6:[0,0,0] }}
 mdl = Drone(params=params)
 ## #Check various scenarios individually
 ## 
+fig= plt.figure()
 endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'DistEE', 'short', time=5, staged=True, gtype='component')
 
 rd.graph.show(resgraph,gtype='bipartite', faultscen='DistEE short', time=5, showfaultlabels=False)
@@ -95,10 +96,10 @@ plt.plot(x,y)
 plt.plot(xnom,ynom)
 
 
-xviewed = [x for (x,y),view in mdl.fxns['ViewEnv'].viewingarea.items() if view=='viewed']
-yviewed = [y for (x,y),view in mdl.fxns['ViewEnv'].viewingarea.items() if view=='viewed']
-xunviewed = [x for (x,y),view in mdl.fxns['ViewEnv'].viewingarea.items() if view=='unviewed']
-yunviewed = [y for (x,y),view in mdl.fxns['ViewEnv'].viewingarea.items() if view=='unviewed']
+xviewed = [x for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='viewed']
+yviewed = [y for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='viewed']
+xunviewed = [x for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='unviewed']
+yunviewed = [y for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='unviewed']
 
 plt.scatter(xviewed,yviewed, color='red')
 plt.scatter(xunviewed,yunviewed, color='grey')
