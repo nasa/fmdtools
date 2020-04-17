@@ -673,8 +673,8 @@ class SampleApproach():
         ----------
         mdl : Model
             Model to sample.
-        faults : str or list, optional
-            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'.
+        faults : str (all/single-component) or list, optional
+            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'. 'single-components' uses faults from a single component to represent faults form all components
         jointfaults : dict, optional
             Defines how the approach considers joint faults. The default is {'faults':'None'}. Has structure:
                 - faults : float    
@@ -720,6 +720,22 @@ class SampleApproach():
                     self._fxnmodes[fxnname, mode]=params
                 self.fxnrates[fxnname]=fxn.failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
+        elif faults=='single-component':
+            self.fxnrates=dict.fromkeys(mdl.fxns)
+            for fxnname, fxn in  mdl.fxns.items():
+                if getattr(fxn, 'components', {}):
+                    firstcomp = list(fxn.components)[0]
+                    for mode, params in fxn.faultmodes.items():
+                        comp = fxn.compfaultmodes.get(mode, 'fxn')
+                        if comp==firstcomp or comp=='fxn':
+                            self._fxnmodes[fxnname, mode]=params
+                    self.fxnrates[fxnname]=fxn.failrate
+                    self.comprates[fxnname] = {firstcomp: sum([comp.failrate for compname, comp in fxn.components.items()])}
+                else:
+                    for mode, params in fxn.faultmodes.items():
+                        self._fxnmodes[fxnname, mode]=params
+                    self.fxnrates[fxnname]=fxn.failrate
+                    self.comprates[fxnname] = {}
         else:
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
             for fxnname, mode in faults: 
