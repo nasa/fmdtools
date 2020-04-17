@@ -31,7 +31,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='gray', label_size=8, initpos={
     """
     Provides graphical interface to set graph node positions. If model is provided, it will also set the positions in the model object. 
     
-    To work, this method must be opened in an external window, so change the IPython before use using %matplotlib qt' (or '%matplotlib osx')
+    To work, this method must be opened in an external window, so change the IPython before use usings %matplotlib qt' (or '%matplotlib osx')
 
     Parameters
     ----------
