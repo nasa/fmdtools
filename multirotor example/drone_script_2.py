@@ -24,3 +24,5 @@ bridgingNodes, fig, ax = networks.find_bridging_nodes(mdl, plot='on', gtype='nor
 
 plt.figure()
 highdegreeNodes, fig, ax = networks.find_high_degree_nodes(mdl, plot='on', gtype='normal')
+
+app = SampleApproach(mdl, faults='single-component')
