@@ -300,15 +300,6 @@ class Trajectory(FxnBlock):
             self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]/vect
             self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]/vect
 
-class ViewEnvironment(FxnBlock):
-    def __init__(self, flows, params):
-        super().__init__(['Env'], flows)
-        square=params
-        self.viewingarea = {(x,y):'unviewed' for x in range(int(square[0][0]),int(square[1][0])+10,10) for y in range(int(square[0][1]),int(square[2][1])+10,10)}
-    def behavior(self, time):
-        area = square((self.Env.x, self.Env.y), 10, 10)
-        for spot in self.viewingarea:
-            if inrange(area, spot[0],spot[1]): self.viewingarea[spot]='viewed'
             
 class Drone(Model):
     def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]} }):
@@ -349,15 +340,14 @@ class Drone(Model):
         self.add_fxn('Trajectory',['Env1','DOFs','Dir1', 'Force_GR'], fclass = Trajectory )
         self.add_fxn('EngageLand', ['Force_GR', 'Force_LG'], fclass = EngageLand)
         self.add_fxn('HoldPayload',['Force_LG', 'Force_Lin', 'Force_ST'], fclass = HoldPayload)
-        self.add_fxn('ViewEnv', ['Env1'], fclass = ViewEnvironment, fparams = self.dang_area)
         
         self.construct_graph()
         
     def find_classification(self, g, endfaults, endflows, scen, mdlhist):
         #landing costs
-        
-        viewed = sum([1 for k,view in self.fxns['ViewEnv'].viewingarea.items() if view=='viewed'])
-        viewed_value = viewed*100
+        viewed = env_viewed(mdlhist['faulty']['flows']['Env1']['x'], mdlhist['faulty']['flows']['Env1']['y'], self.dang_area)
+        num_viewed = sum([1 for k,view in viewed.items() if view=='viewed'])
+        viewed_value = num_viewed*100
         
         Env=self.flows['Env1']
         if  inrange(self.start_area, Env.x, Env.y): landcost = 1 # nominal landing
@@ -371,7 +361,7 @@ class Drone(Model):
         rate=scen['properties']['rate']
         expcost=totcost*rate*1e5
         
-        return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
+        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'viewed':viewed}
 
 ## BASE FUNCTIONS
 
@@ -383,14 +373,21 @@ def square(center,xw,yw):
             [center[0]-xw/2,center[1]+yw/2]]
     return square
 
+def rect(x1, y1, x2, y2, width, height):
+    vec = vectdir([x1, y1,0], [x2,y2+0.00001,0])[0:2]
+    normvec = np.array([vec[1], -vec[0]])
+    rec = [[x1, y1]+normvec*width/2+vec*height/2,[x1, y1]-normvec*width/2+vec*height/2,[x2, y2]-normvec*width/2-vec*height/2,[x2, y2]+normvec*width/2-vec*height/2]
+    return rec
+
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 
 #checks to see if a point with x-y coordinates is in the area a
 def inrange(area, x, y):
     point=Point(x,y)
-    polygon=Polygon(area)
-    return polygon.contains(point)
+    
+    
+    return 
 
 def finddist(p1, p2):
     return np.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2+(p1[2]-p2[2])**2)
@@ -404,16 +401,18 @@ def vectdist(p1, p2):
 def vectdir(p1, p2):
     return vectdist(p1,p2)/(finddist(p1,p2)+0.0001)
 
-#takes the maximum of a variety of classifications given a list of strings
-def textmax(texts):
-    if 'major' in texts:
-        maxt='major'
-    elif 'moderate' in texts:
-        maxt='moderate'
-    elif 'minor' in texts:
-        maxt='minor'
-    elif 'replacement' in texts:
-        maxt='replacement'
-    else:
-        maxt='none'
-    return maxt
+import matplotlib.pyplot as plt
+def env_viewed(xhist, yhist, square):
+    viewed = {(x,y):'unviewed' for x in range(int(square[0][0]),int(square[1][0])+10,10) for y in range(int(square[0][1]),int(square[2][1])+10,10)}
+    for i,x in enumerate(xhist[1:len(xhist)]):
+        viewed_area = rect(xhist[i],yhist[i],xhist[i+1],yhist[i+1], 10,10)
+        polygon=Polygon(viewed_area)
+        #plt.plot(*polygon.exterior.xy) (displays area to debug code)
+        #plt.plot([xhist[i],xhist[i+1]],[yhist[i],yhist[i+1]])
+        if not polygon.is_valid:    print('invalid points')
+        for spot in viewed:
+            if polygon.contains(Point(spot)): 
+                viewed[spot]='viewed'
+    return viewed
+
+
