@@ -29,7 +29,9 @@ import netgraph
 
 def set_pos(g, gtype='normal',scale=1,node_color='gray', label_size=8, initpos={}):
     """
-    Provides graphical interface to set graph node positions. If model is provided, it will also set the positions in the model object.
+    Provides graphical interface to set graph node positions. If model is provided, it will also set the positions in the model object. 
+    
+    To work, this method must be opened in an external window, so change the IPython before use using %matplotlib qt' (or '%matplotlib osx')
 
     Parameters
     ----------
@@ -77,7 +79,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='gray', label_size=8, initpos={
         plt.pause(0.1)
         t+=0.1
     if t< 0.2:
-        print("Cannot place nodes in inline version of plot. Use '%matplotlib qt' to open in external window")
+        print("Cannot place nodes in inline version of plot. Use '%matplotlib qt' (or '%matplotlib osx') to open in external window")
     pos = {node:list(loc) for node,loc in plot_instance.node_positions.items()}
     if set_mdl:
         if gtype=='normal':         mdl.graph_pos = pos
