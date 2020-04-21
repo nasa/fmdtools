@@ -1,35 +1,36 @@
 # -*- coding: utf-8 -*-
 """
-File name: faultprop.py
+File name: propagate.py
 Author: Daniel Hulse
-Created: December 2018
+Created: December 2019
 
 Description: functions to propagate faults through a user-defined fault model
+
+Main Methods:
+    - nominal():            Runs the model over time in the nominal scenario.
+    - one_fault():          Runs one fault in the model at a specified time.
+    - singlefaults():       Creates and propagates a list of failure scenarios in a model over given model times
+    - approach:             Injects and propagates faults in the model defined by a given sample approach.   
+Private Methods:
+    - list_init_faults():   Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
+    - prop_one_scen():      Runs a fault scenario in the model over time
+    - propagate():          Injects and propagates faults through the graph at one time-step
+    - prop_time():          Propagates faults through model graph.
+    - update_mdlhist():     Updates the model history at a given time.
+        - update_flowhist():Updates the flows in the model history at t_ind
+        - update_fxnhist(): Updates the functions (faults and states) in the model history at t_ind
+    - init_mdlhist():       Initializes the model history over a given timerange
+        - init_flowhist():  Initializes the flow history flowhist of the model mdl over the time range timerange
+        - init_fxnhist():   Initializes the function state history fxnhist of the model mdl over the time range timerange
 """
 
 import numpy as np
 import copy
-import fmdtools.resultproc as rp
+import fmdtools.resultdisp.process as proc
+
 ## FAULT PROPAGATION
 
-def construct_nomscen(mdl):
-    """
-    Creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal.
-
-    Parameters
-    ----------
-    mdl : Model
-
-    Returns
-    -------
-    nomscen : scen
-    """
-    nomscen={'faults':{},'properties':{}}
-    nomscen['properties']['time']=0.0
-    nomscen['properties']['type']='nominal'
-    return nomscen
-
-def run_nominal(mdl, track=True, gtype='normal'):
+def nominal(mdl, track=True, gtype='normal'):
     """
     Runs the model over time in the nominal scenario.
 
@@ -51,20 +52,21 @@ def run_nominal(mdl, track=True, gtype='normal'):
     mdlhist : Dict
         A dictionary with a history of modelstates
     """
+    mdl = mdl.__class__(params=mdl.params)
     nomscen=construct_nomscen(mdl)
     scen=nomscen.copy()
     mdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False)
     
-    resgraph = mdl.return_stategraph(gtype)   
+    resgraph = mdl.return_stategraph(gtype=gtype)   
     endfaults, endfaultprops = mdl.return_faultmodes()
-    endclass=mdl.find_classification(resgraph, endfaultprops, {}, scen, {'nominal': mdlhist, 'faulty':mdlhist})
+    endclass=mdl.find_classification(resgraph, endfaultprops, construct_nomscen(mdl), scen, {'nominal': mdlhist, 'faulty':mdlhist})
     
     endresults={'faults': endfaults, 'classification':endclass}
     
     mdl.reset()
     return endresults, resgraph, mdlhist
 
-def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gtype = 'normal'):
+def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype = 'normal'):
     """
     Runs one fault in the model at a specified time.
 
@@ -96,6 +98,7 @@ def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gty
 
     """
     #run model nominally, get relevant results
+    mdl = mdl.__class__(params=mdl.params)
     nomscen=construct_nomscen(mdl)
     if staged:
         nommdlhist, mdls = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes=[time])
@@ -106,13 +109,17 @@ def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gty
         nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=staged)
         nomresgraph = mdl.return_stategraph(gtype)
         mdl.reset()
+        mdl = mdl.__class__(params=mdl.params)
     #run with fault present, get relevant results
     scen=nomscen.copy() #note: this is a shallow copy, so don't define it earlier
     scen['faults'][fxnname]=faultmode
     scen['properties']['type']='single fault'
     scen['properties']['function']=fxnname
     scen['properties']['fault']=faultmode
-    scen['properties']['rate']=mdl.fxns[fxnname].failrate 
+    if mdl.fxns[fxnname].faultmodes[faultmode]['probtype']=='rate':
+        scen['properties']['rate']=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[faultmode]['units'], mdl.units)*(mdl.times[-1]-mdl.times[0]) # this rate is on a per-simulation basis
+    elif mdl.fxns[fxnname].faultmodes[faultmode]['probtype']=='prob':
+        scen['properties']['rate'] = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist']
     scen['properties']['time']=time
     
     faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=staged, prevhist=nommdlhist)
@@ -120,48 +127,17 @@ def run_one_fault(mdl, fxnname, faultmode, time=0, track=True, staged=False, gty
     
     #process model run
     endfaults, endfaultprops = mdl.return_faultmodes()
-    endflows = rp.compare_graphflows(faultresgraph, nomresgraph, gtype)
-    
+    endflows = proc.graphflows(faultresgraph, nomresgraph, gtype)
     mdlhists={'nominal':nommdlhist, 'faulty':faultmdlhist}
-    
     endclass = mdl.find_classification(faultresgraph, endfaultprops, endflows, scen, mdlhists)
-    # note: in the future, put this in rp package so it doesn't need to be imported
-    if gtype=='normal': resgraph = rp.make_resultsgraph(faultresgraph, nomresgraph) 
-    elif gtype=='bipartite' or gtype=='component': resgraph = rp.make_bipresultsgraph(faultresgraph, nomresgraph)
+    resgraph = proc.resultsgraph(faultresgraph, nomresgraph, gtype=gtype) 
     
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
     
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-def list_init_faults(mdl):
-    """
-    Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
-
-    Parameters
-    ----------
-    mdl : Model
-        Model with list of times in mdl.times
-
-    Returns
-    -------
-    faultlist : list
-        A list of fault scenarios, where a scenario is defined as: {faults:{functions:faultmodes}, properties:{(changes depending scenario type)} }
-    """
-    faultlist=[]
-    for time in mdl.times:
-        for fxnname, fxn in mdl.fxns.items():
-            modes=fxn.faultmodes
-            for mode in modes:
-                nomscen=construct_nomscen(mdl)
-                newscen=nomscen.copy()
-                newscen['faults'][fxnname]=mode
-                rate=mdl.fxns[fxnname].failrate
-                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
-                faultlist.append(newscen)
-    return faultlist
-
-def run_list(mdl, reuse=False, staged=False, track=True):
+def single_faults(mdl, staged=False, track=True):
     """
     Creates and propagates a list of failure scenarios in a model
 
@@ -169,8 +145,6 @@ def run_list(mdl, reuse=False, staged=False, track=True):
     ----------
     mdl : model
         The model to inject faults in
-    reuse : bool, optional
-        Whether to clear and re-use the same model over each run rather than copying (for less memory use). The default is False.
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
     track : bool, optional
@@ -183,14 +157,11 @@ def run_list(mdl, reuse=False, staged=False, track=True):
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    if reuse and staged:
-        print("invalid to use reuse and staged options at the same time. Using staged")
-        reuse=False
 
     scenlist=list_init_faults(mdl)
-    mdl.reset() #make sure the model is actually starting from the beginning
     #run model nominally, get relevant results
     nomscen=construct_nomscen(mdl)
+    mdl = mdl.__class__(params=mdl.params)
     if staged:
         nomhist, c_mdl = prop_one_scen(mdl, nomscen, track=track, ctimes=mdl.times)
     else:
@@ -207,18 +178,16 @@ def run_list(mdl, reuse=False, staged=False, track=True):
             mdl=c_mdl[scen['properties']['time']].copy()
             mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
         else:
+            mdl = mdl.__class__(params=mdl.params)
             mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track)
         endfaults, endfaultprops = mdl.return_faultmodes()
         resgraph = mdl.return_stategraph()
-        endflows = rp.compare_graphflows(resgraph, nomresgraph)
+        endflows = proc.graphflows(resgraph, nomresgraph)
         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
-        if reuse: mdl.reset()
-        elif staged: _
-        else: mdl = mdl.__class__(params=mdl.params)
     return endclasses, mdlhists
 
-def run_approach(mdl, app, reuse=False, staged=False, track=True):
+def approach(mdl, app, staged=False, track=True):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -228,8 +197,6 @@ def run_approach(mdl, app, reuse=False, staged=False, track=True):
         The model to inject faults in.
     app : sampleapproach
         SampleApproach used to define the list of faults and sample time for the model.
-    reuse : bool, optional
-        Whether to clear and re-use the same model over each run rather than copying (for less memory use). The default is False.
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
     track : bool, optional
@@ -242,10 +209,7 @@ def run_approach(mdl, app, reuse=False, staged=False, track=True):
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    if reuse and staged:
-        print("invalid to use reuse and staged options at the same time. Using staged")
-        reuse=False
-    mdl.reset()
+    mdl = mdl.__class__(params=mdl.params)
     if staged:
         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times)
     else:
@@ -262,57 +226,69 @@ def run_approach(mdl, app, reuse=False, staged=False, track=True):
             mdl=c_mdl[scen['properties']['time']].copy()
             mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
         else:
+            mdl = mdl.__class__(params=mdl.params)
             mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track)
         endfaults, endfaultprops = mdl.return_faultmodes()
         resgraph = mdl.return_stategraph()
         
-        endflows = rp.compare_graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
+        endflows = proc.graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
         
-        if reuse: mdl.reset()
-        elif staged: _
-        else: mdl = mdl.__class__(params=mdl.params)
     return endclasses, mdlhists
 
+def construct_nomscen(mdl):
+    """
+    Creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal.
+
+    Parameters
+    ----------
+    mdl : Model
+
+    Returns
+    -------
+    nomscen : scen
+    """
+    nomscen={'faults':{},'properties':{}}
+    nomscen['properties']['time']=0.0
+    nomscen['properties']['rate']=1.0
+    nomscen['properties']['type']='nominal'
+    return nomscen
 
 
+def eq_units(rateunit, timeunit):
+    factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
+    return factors[timeunit]/factors[rateunit]
 
-# =============================================================================
-# from pathos.pp import ParallelPool
-# def run_approach_parallel(mdl, app, reuse=False, staged=False, track=True):
-#     if reuse and staged:
-#         print("invalid to use reuse and staged options at the same time. Using staged")
-#         reuse=False
-#     mdl.reset()
-#     if staged:
-#         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times)
-#     else:
-#         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track)
-#     nomresgraph = mdl.return_stategraph()
-#     mdl.reset()
-#     
-#     endclasses = {}
-#     mdlhists = {}
-#     mdlhists['nominal'] = nomhist
-#     mdls = [mdl.copy() for i, s in enumerate(app.scenlist)]
-#     
-#     pool = ParallelPool(nodes=4)
-#     
-#     outputs = pool.map(prop_one_scen, mdls, app.scenlist)
-#         
-#     for i, scen in enumerate(app.scenlist):
-#         mdlhists[scen['properties']['name']], _ = outputs[i]
-#         endfaults, endfaultprops = mdl.return_faultmodes()
-#         resgraph = mdl.return_stategraph()
-#         
-#         endflows = rp.compare_graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
-#         endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
-#         
-#         if reuse: mdl.reset()
-#         elif staged: _
-#         else: mdl = mdl.__class__(params=mdl.params)
-#     return endclasses, mdlhists
-# =============================================================================
+def list_init_faults(mdl):
+    """
+    Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
+
+    Parameters
+    ----------
+    mdl : Model
+        Model with list of times in mdl.times
+
+    Returns
+    -------
+    faultlist : list
+        A list of fault scenarios, where a scenario is defined as: {faults:{functions:faultmodes}, properties:{(changes depending scenario type)} }
+    """
+    faultlist=[]
+    trange = mdl.times[-1]-mdl.times[0] + 1.0
+    for time in mdl.times:
+        for fxnname, fxn in mdl.fxns.items():
+            modes=fxn.faultmodes
+            for mode in modes:
+                nomscen=construct_nomscen(mdl)
+                newscen=nomscen.copy()
+                newscen['faults'][fxnname]=mode
+                if mdl.fxns[fxnname].faultmodes[mode]['probtype']=='rate':
+                    rate=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[mode]['units'], mdl.units)*trange # this rate is on a per-simulation basis
+                elif mdl.fxns[fxnname].faultmodes[mode]['probtype']=='prob':
+                    rate = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']
+                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
+                faultlist.append(newscen)
+    return faultlist
        
 def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     """
@@ -357,11 +333,16 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     c_mdl=dict.fromkeys(ctimes)
     flowstates={}
     for t_ind, t in enumerate(timerange):
-       # inject fault when it occurs, track defined flow states and graph 
-        if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
-        else: flowstates = propagate(mdl,[],t, flowstates)
-        if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
-        if t in ctimes: c_mdl[t]=mdl.copy()
+       # inject fault when it occurs, track defined flow states and graph
+       try:
+           if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
+           else: flowstates = propagate(mdl,[],t, flowstates)
+           if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
+           if t in ctimes: c_mdl[t]=mdl.copy()
+       except:
+            print("Error at t="+str(t))
+            raise
+            break
     return mdlhist, c_mdl
 
 def propagate(mdl, initfaults, time, flowstates={}):
@@ -446,6 +427,7 @@ def prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults):
             print("Undesired looping in function")
             print(initfaults)
             print(fxnname)
+            print(activefxns)
             break
     return flowstates
 
@@ -471,7 +453,11 @@ def update_flowhist(mdl, mdlhist, t_ind):
     for flowname, flow in mdl.flows.items():
         atts=flow.status()
         for att, val in atts.items():
-            mdlhist["flows"][flowname][att][t_ind] = val
+            try:
+                mdlhist["flows"][flowname][att][t_ind] = val
+            except:
+                print("Value too large to represent: "+att+"="+str(val))
+                raise
 def update_fxnhist(mdl, mdlhist, t_ind):
     """ Updates the functions (faults and states) in the model history at t_ind """
     for fxnname, fxn in mdl.fxns.items():
@@ -520,5 +506,3 @@ def init_fxnhist(mdl, timerange):
         for state, value in states.items():
             fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist
-
-    

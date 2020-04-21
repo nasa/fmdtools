@@ -7,10 +7,8 @@ Created: October 2019
 Description: A module to simplify model definition
 """
 import numpy as np
-import operator
 import itertools
 import networkx as nx
-from scipy.stats import binom
 
 # MAJOR CLASSES
 class Block(object):
@@ -48,12 +46,29 @@ class Block(object):
         self.timely=timely
         self._states=states.keys()
         self._initstates=states.copy()
-        self.failrate = getattr(self, 'failrate', 0.0)
+        self.failrate = getattr(self, 'failrate', 1.0)
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
         if timely: self.time=0.0
-    def assoc_modes(self, modes, name=''):
+    def __repr__(self):
+        return self.name+' '+self.__class__.__name__+' '+self.type+': '+str(self.return_states())
+    def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
+        """
+        Calculates self.failrate based on a human error probability model.
+
+        Parameters
+        ----------
+        gtp : float
+            Generic Task Probability. (from HEART)
+        EPCs : Dict or list
+            Error producing conditions (and respective factors) for a given task (from HEART). Used in format:
+            Dict {'name':[EPC factor, Effect proportion]} or list [[EPC factor, Effect proportion],[[EPC factor, Effect proportion]]]
+        """
+        if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
+        elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
+        self.failrate = gtp*EPC_f
+    def assoc_modes(self, modes, name='', probtype='rate', units='hr'):
         """
         Associates modes with the block when called in the function or component.
 
@@ -68,10 +83,31 @@ class Block(object):
             if name: self.faultmodes=dict()
             else:    self.faultmodes=dict.fromkeys(modes)
         for mode in modes:
-            self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost'))
-            self.faultmodes[name+mode]['dist'] =     modes[mode][0]
-            self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
-            self.faultmodes[name+mode]['rcost'] =    modes[mode][2]
+            self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
+            self.faultmodes[name+mode]['probtype'] = probtype
+            self.faultmodes[name+mode]['units'] = units
+            if type(modes) == set: # minimum information - here the modes are only a set of labels
+                self.faultmodes[name+mode]['dist'] =     1.0/len(modes)
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    0.0
+            elif type(modes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
+                self.faultmodes[name+mode]['dist'] =     modes[mode]
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    0.0
+            elif len(modes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
+                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
+                self.faultmodes[name+mode]['rcost'] =    modes[mode][2]
+            elif len(modes[mode]) == 2:  # dist, repair costs
+                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    modes[mode][1]
+            elif len(modes[mode]) == 1:  # dist only
+                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                self.faultmodes[name+mode]['rcost'] =    0.0
+            else:
+                raise Exception("Invalid mode definition")                            
     def has_fault(self,fault): 
         """Check if the block has fault (a str)"""
         return self.faults.intersection(set([fault]))
@@ -88,6 +124,9 @@ class Block(object):
         """Replaces fault_to_replace with fault_to_add in the set of faults"""
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
+    def remove_fault(self, fault_to_remove):
+        """Removes fault in the set of faults"""
+        self.faults.discard(fault_to_remove)
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used (only for components) when resetting the model"""
         self.faults.clear()
@@ -149,13 +188,16 @@ class FxnBlock(Block):
             Whether or not the function depends on time (or just input/output). The default is True.
         """
         self.type = 'function'
+        self.name = 'fxnname'
         self.flows=self.make_flowdict(flownames,flows)
         for flow in self.flows.keys():
             setattr(self, flow,self.flows[flow])
         self.components=components
         if not getattr(self, 'faultmodes', []): self.faultmodes={}
+        if self.components: self.compfaultmodes= dict()
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
+            self.compfaultmodes.update({modename:cname for modename in components[cname].faultmodes})
         self.timers = timers
         for timername in timers:
             setattr(self, timername, Timer(timername))
@@ -217,10 +259,10 @@ class FxnBlock(Block):
         copy : FxnBlock
             Copy of the given function with new flows
         """
-        copy = self.__class__(newflows, *attr)
+        copy = self.__class__(newflows, *attr)  # Is this adequate? Wouldn't this give it new components?
         copy.faults = self.faults.copy()
         for state in self._initstates.keys():
-            setattr(copy, state, self._initstates[state])
+            setattr(copy, state, getattr(self, state))
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
@@ -237,9 +279,21 @@ class FxnBlock(Block):
         """
         self.faults.update(faults)  #if there is a fault, it is instantiated in the function
         self.condfaults(time)           #conditional faults and behavior are then run
+        if self.components:     # propogate faults from function level to component level
+            for fault in self.faults:
+                if fault in self.compfaultmodes:
+                    self.components[self.compfaultmodes[fault]].add_fault(fault)
         self.behavior(time)
+        if self.components:     # propogate faults from component level to function level
+            for compname, comp in self.components.items():
+                self.faults.update(comp.faults) 
         self.time=time
         return
+class GenericFxn(FxnBlock):
+    """Generic function block. For use when there is no Function Block defined"""
+    def __init__(self, flows):
+        super().__init__([f.name for f in flows], flows)
+  
         
 class Component(Block):
     """
@@ -281,11 +335,13 @@ class Flow(object):
             name of the flow
         """
         self.type='flow'
-        self.flow=name
+        self.name=name
         self._initattributes=attributes.copy()
         self._attributes=attributes.keys()
         for attribute in self._attributes:
             setattr(self, attribute, attributes[attribute])
+    def __repr__(self):
+        return self.name+' '+self.type+': '+str(self.status())
     def reset(self):
         """ Resets the flow to the initial state"""
         for attribute in self._initattributes:
@@ -306,7 +362,7 @@ class Flow(object):
         for attribute in self._attributes:
             attributes[attribute]=getattr(self,attribute)
         if self.__class__==Flow:
-            copy = self.__class__(attributes, self.flow)
+            copy = self.__class__(attributes, self.name)
         else:
             copy = self.__class__()
             for attribute in self._attributes:
@@ -335,18 +391,27 @@ class Model(object):
     graph : networkx graph
         multigraph view of functions and flows
     """
-    def __init__(self):
+    def __init__(self, params={},modelparams={}):
         """
-        Instantiates internal model attributes (as empty)
+        Instantiates internal model attributes with predetermined:
+            - params (design variables of he model), and
+            - modelparams (dictionary of phases, times, and timestep to run the model with)
         """
         self.type='model'
         self.flows={}
         self.fxns={}
-        self.params=getattr(self,'params',{})
+        self.params=params
+        
+        # model defaults to static representation if no timerange
+        self.phases=modelparams.get('phases',{'na':[1]})
+        self.times=modelparams.get('times',[1])
+        self.tstep = modelparams.get('tstep', 1.0)
+        self.units = modelparams.get('units', 'hr')
+        
         self.timelyfxns=set()
         self._fxnflows=[]
         self._fxninput={}
-    def add_flow(self,flowname, flowtype, flowdict):
+    def add_flow(self,flowname, flowdict):
         """
         Adds a flow with given attributes to the model.
 
@@ -354,17 +419,17 @@ class Model(object):
         ----------
         flowname : str
             Unique flow name to give the flow in the model
-        flowtype : str
-            Type of flow (e.g. EE, ME, etc)
-        flowdict : dict or Flow
-            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object
+        flowattributes : dict, Flow, set or empty set
+            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object.
+            If a set of attribute names is provided, each will be given a value of 1
+            If an empty set is given, it will be represented w- {flowname: 1}
         """
-        if type(flowdict) == dict:
-            self.flows[flowname]=Flow(flowdict, flowtype)
-        elif isinstance(flowdict, Flow):
-            self.flows[flowname] = flowdict
+        if not flowdict:                self.flows[flowname]=Flow({flowname:1}, flowname)
+        elif type(flowdict) == set:       self.flows[flowname]=Flow({f:1 for f in flowdict}, flowname)
+        elif type(flowdict) == dict:    self.flows[flowname]=Flow(flowdict, flowname)
+        elif isinstance(flowdict, Flow):self.flows[flowname] = flowdict
         else: raise Exception('Invalid flow. Must be dict or flow')
-    def add_fxn(self,name,classobj, flownames, *args):
+    def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None'):
         """
         Instantiates a given function in the model.
 
@@ -372,28 +437,29 @@ class Model(object):
         ----------
         name : str
             Name to give the function.
-        classobj : Class
-            Class to instantiate the function as.
         flownames : list
             List of flows to associate with the function.
-        *args : arbitrary
+        fclass : Class
+            Class to instantiate the function as.
+        fparams : arbitrary float, dict, list, etc.
             Other parameters to send to the __init__ method of the function class
         """
         flows=self.get_flows(flownames)
-        if args: 
-            self.fxns[name]=classobj(flows,args)
-            self._fxninput[name]={'flows': flownames, 'args': args}
+        if fparams=='None':
+            self.fxns[name]=fclass(flows)
+            self._fxninput[name]={'flows': flownames, 'fparams': 'None'}
         else: 
-            self.fxns[name]=classobj(flows)
-            self._fxninput[name]={'flows': flownames, 'args': []}
+            self.fxns[name]=fclass(flows,fparams)
+            self._fxninput[name]={'flows': flownames, 'fparams': fparams}
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
         if self.fxns[name].timely: self.timelyfxns.update([name])
         self.fxns[name].tstep=self.tstep
+        self.fxns[name].name=name
     def get_flows(self,flownames):
         """ Returns a list of the model flow objects """
         return [self.flows[flowname] for flowname in flownames]
-    def construct_graph(self):
+    def construct_graph(self, graph_pos={}, bipartite_pos={}):
         """
         Creates and returns a graph representation of the model
 
@@ -420,10 +486,13 @@ class Model(object):
         nx.set_edge_attributes(self.graph, attrs)
         
         nx.set_node_attributes(self.graph, self.fxns, 'obj')
-        #self.graph=nx.DiGraph()
-        #self.graph.add_nodes_from(self.fxn)
-        #self.graph=
+        self.graph_pos=graph_pos
+        self.bipartite_pos=bipartite_pos
         return self.graph
+    def return_paramgraph(self):
+        """ Returns a graph representation of the flows in the model, where flows are nodes and edges are 
+        associations in functions """
+        return nx.projected_graph(self.bipartite, self.flows)
     def return_componentgraph(self, fxnname):
         """
         Returns a graph representation of the components associated with a given funciton
@@ -536,11 +605,11 @@ class Model(object):
             copy.flows[flowname]=flow.copy()
         for fxnname, fxn in self.fxns.items():
             flownames=self._fxninput[fxnname]['flows']
-            args=self._fxninput[fxnname]['args']
+            fparams=self._fxninput[fxnname]['fparams']
             flows = copy.get_flows(flownames)
-            if args:    copy.fxns[fxnname]=fxn.copy(flows, args)
-            else:       copy.fxns[fxnname]=fxn.copy(flows)
-        _ = copy.construct_graph()
+            if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows)
+            else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams)
+        _ = copy.construct_graph(graph_pos=self.graph_pos, bipartite_pos=self.bipartite_pos)
         return copy
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
@@ -550,7 +619,7 @@ class Model(object):
             fxn.reset()
     def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
-        return {'rate':1, 'cost': 1, 'expected cost': 1}
+        return {'rate':scen['properties']['rate'], 'cost': 1, 'expected cost': 1}
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) """
@@ -604,8 +673,8 @@ class SampleApproach():
         ----------
         mdl : Model
             Model to sample.
-        faults : str or list, optional
-            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'.
+        faults : str (all/single-component) or list, optional
+            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'. 'single-components' uses faults from a single component to represent faults form all components
         jointfaults : dict, optional
             Defines how the approach considers joint faults. The default is {'faults':'None'}. Has structure:
                 - faults : float    
@@ -632,8 +701,10 @@ class SampleApproach():
                 - 'quad' : quadpy quadrature
                     quadrature object if the quadrature option is selected.
         """
+        self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
         self.phases = mdl.phases
         self.tstep = mdl.tstep
+        self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)
         self.init_rates(mdl, jointfaults=jointfaults)
         self.create_sampletimes(sampparams, defaultsamp)
@@ -649,12 +720,28 @@ class SampleApproach():
                     self._fxnmodes[fxnname, mode]=params
                 self.fxnrates[fxnname]=fxn.failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
+        elif faults=='single-component':
+            self.fxnrates=dict.fromkeys(mdl.fxns)
+            for fxnname, fxn in  mdl.fxns.items():
+                if getattr(fxn, 'components', {}):
+                    firstcomp = list(fxn.components)[0]
+                    for mode, params in fxn.faultmodes.items():
+                        comp = fxn.compfaultmodes.get(mode, 'fxn')
+                        if comp==firstcomp or comp=='fxn':
+                            self._fxnmodes[fxnname, mode]=params
+                    self.fxnrates[fxnname]=fxn.failrate
+                    self.comprates[fxnname] = {firstcomp: sum([comp.failrate for compname, comp in fxn.components.items()])}
+                else:
+                    for mode, params in fxn.faultmodes.items():
+                        self._fxnmodes[fxnname, mode]=params
+                    self.fxnrates[fxnname]=fxn.failrate
+                    self.comprates[fxnname] = {}
         else:
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
             for fxnname, mode in faults: 
                 self._fxnmodes[fxnname, mode]=mdl.fxns[fxnname].faultmodes[mode]
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
-                self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components}
+                self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components.items()}
         if type(jointfaults['faults'])==int:
             self.jointmodes=[]
             for numjoint in range(2, jointfaults['faults']+1):
@@ -679,9 +766,15 @@ class SampleApproach():
             for ind, (phase, times) in enumerate(self.phases.items()):
                 opp = self._fxnmodes[fxnname, mode]['oppvect'][ind]/sum(self._fxnmodes[fxnname, mode]['oppvect']) #forces to be a conditional probability
                 dist = self._fxnmodes[fxnname, mode]['dist']
-                dt = float(times[1]-times[0])              
-                self.rates[fxnname, mode][phase] = overallrate*opp*dist*dt
+                if self._fxnmodes[fxnname, mode]['probtype']=='rate':      
+                    dt = float(times[1]-times[0]) 
+                    unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
+                elif self._fxnmodes[fxnname, mode]['probtype']=='prob':    
+                    dt = 1
+                    unitfactor = 1
+                self.rates[fxnname, mode][phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
                 self.rates_timeless[fxnname, mode][phase] = overallrate*opp*dist
+                
         if getattr(self, 'jointmodes',False):
             for (j_ind, jointmode) in enumerate(self.jointmodes):
                 self.rates.update({jointmode:dict.fromkeys(self.phases)})
@@ -892,6 +985,7 @@ class SampleApproach():
     def list_moderates(self):
         """ Returns the rates for each mode """
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
+        
     
 def phases(times, names=[]):
     """ Creates named phases from a set of times defining the edges of hte intervals """

@@ -1,8 +1,8 @@
 networkx
-matplotlib
-mpl_toolkits
 numpy
-scipy
+matplotlib
 pandas
 jupyter notebook
+netgraph
 quadpy
+mpl_toolkits

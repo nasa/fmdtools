@@ -11,8 +11,8 @@ sys.path.append('../')
 
 import numpy as np
 import quadpy
-import fmdtools.faultprop as fp
-import fmdtools.resultproc as rp
+import fmdtools.faultsim.propagate as propagate
+import fmdtools.resultdisp as rd
 from ex_pump import * #required to import entire module
 import time
 
@@ -30,7 +30,7 @@ app_symrand = SampleApproach(mdl, defaultsamp={'samp':'symrandtimes', 'numpts':3
 
 app_cust = SampleApproach(mdl, sampparams={(('ExportWater', 'block'), 'on'):{'samp':'fullint'}})
 
-tab=rp.make_samptimetable(app_multipt.sampletimes)
+tab=rd.tabulate.samptime(app_multipt.sampletimes)
 
 app_short = SampleApproach(mdl, faults=[('ImportEE', 'inf_v')], defaultsamp={'samp':'evenspacing', 'numpts':3})
 
@@ -42,20 +42,20 @@ app_short = SampleApproach(mdl, faults=[('ImportEE', 'inf_v')], defaultsamp={'sa
 #rp.plot_samplecosts(app_full, endclasses)
 
 
-endclasses, mdlhists = fp.run_approach(mdl, app_quad)
-rp.plot_samplecosts(app_quad, endclasses)
+endclasses, mdlhists = propagate.approach(mdl, app_quad)
+rd.plot.samplecosts(app_quad, endclasses)
 
-endclasses_full, mdlhists = fp.run_approach(mdl, app_full)
-rp.plot_samplecosts(app_full, endclasses_full)
+endclasses_full, mdlhists = propagate.approach(mdl, app_full)
+rd.plot.samplecosts(app_full, endclasses_full)
 
 #endclasses, mdlhists = fp.run_approach(mdl, app_fullp)
 #rp.plot_samplecosts(app_fullp, endclasses)
-costovertime = rp.find_costovertime(endclasses_full, app_full)
-rp.plot_costovertime(endclasses_full, app_full)
+costovertime = rd.tabulate.costovertime(endclasses_full, app_full)
+rd.plot.costovertime(endclasses_full, app_full)
 #rp.plot_costovertime(endclasses_full, app_full, costtype='cost')
 
-endclasses_ml, mdlhists = fp.run_approach(mdl, app_maxlike)
-rp.plot_samplecosts(app_maxlike, endclasses_ml)
+endclasses_ml, mdlhists = propagate.approach(mdl, app_maxlike)
+rd.plot.samplecosts(app_maxlike, endclasses_ml)
 
 
 
@@ -69,13 +69,13 @@ class CustApproach(SampleApproach):
         #self.addjointfaults(jointfaultscens) ???
 
 def resilquant(approach, mdl):
-    endclasses, mdlhists = fp.run_approach(mdl, approach)
-    reshists, diffs, summaries = rp.compare_hists(mdlhists)
+    endclasses, mdlhists = propagate.approach(mdl, approach)
+    reshists, diffs, summaries = rd.process.hists(mdlhists)
     
-    fmea = rp.make_summfmea(endclasses, approach)
-    fmea2 = rp.make_phasefmea(endclasses, approach)
+    fmea = rd.tabulate.summfmea(endclasses, approach)
+    fmea2 = rd.tabulate.phasefmea(endclasses, approach)
     util=sum(fmea['expected cost'])
-    expdegtimes = rp.make_expdegtimeheatmap(reshists, endclasses)
+    expdegtimes = rd.process.expdegtimeheatmap(reshists, endclasses)
     return util, expdegtimes, fmea, fmea2
 
 util_full, expdegtimes_full, fmea_full, f_f= resilquant(app_full, mdl)
@@ -93,18 +93,18 @@ util_enter, expdegtimes_center, fmea_center, f_ce= resilquant(app_center, mdl)
 
 center_error = {i:(expdegtimes_full[i] - expdegtimes_center[i])/expdegtimes_full[i] for i in expdegtimes_full}
 
-rp.show_bipartite(mdl.bipartite, heatmap=center_error)
+rd.graph.show(mdl.bipartite,gtype='bipartite', heatmap=center_error)
 
 util_maxlike, expdegtimes_maxlike, fmea_maxlike, f_m = resilquant(app_maxlike, mdl)
 
 maxlike_error = {i:(expdegtimes_full[i] - expdegtimes_maxlike[i])/expdegtimes_full[i] for i in expdegtimes_full}
 
-rp.show_bipartite(mdl.bipartite, heatmap=maxlike_error)
+rd.graph.show(mdl.bipartite,gtype='bipartite', heatmap=maxlike_error)
 
 util_multipt, expdegtimes_multipt, fmea_multipt, f_mi = resilquant(app_multipt, mdl)
 
 def prune_app(app, mdl):
-    endclasses, mdlhists = fp.run_approach(mdl, app)
+    endclasses, mdlhists = propagate.approach(mdl, app)
     newscenids = dict.fromkeys(app.scenids.keys())
     
     for modeinphase in app.scenids:
