@@ -44,7 +44,6 @@ fmdtools requires Python 3 and depends on these packages:
 - `netgraph`	 		(for setting graph node positions)
 - `ffmpeg` 				(for animations)
 - `quadpy` 				(for quadrature sampling)
-- `mpl_toolkits`		(for drone model)
 
 These must be installed (e.g. using `pip install packagename` or `conda install packagename`) them before running any of the codes.
 

@@ -5,4 +5,3 @@ pandas
 jupyter notebook
 netgraph
 quadpy
-mpl_toolkits
