@@ -114,6 +114,9 @@ class Block(object):
     def has_faults(self,faults): 
         """Check if the block has any in the list of faults"""
         return self.faults.intersection(set(faults))
+    def any_faults(self):
+        """check if the block has any fault modes"""
+        return any(self.faults.difference({'nom'}))
     def add_fault(self,fault): 
         """Adds fault (a str) to the block"""
         self.faults.update([fault])

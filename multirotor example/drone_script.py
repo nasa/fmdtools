@@ -24,10 +24,10 @@ import time
 #simplefmea = rp.make_simplefmea(endclasses)
 #summfmea = rp.make_summfmea(endclasses, app)
 # =============================================================================
-params={'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20], 5:[0,0,50], 6:[0,0,0] },'bat':'monolithic'}
+params={'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20],5:[75, 300, 20],6:[0, 300, 20], 7:[0,0,50], 8:[0,0,0] },'bat':'series-split'}
 mdl = Drone(params=params)
 endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
-rd.graph.show(resgraph) #, showfaultlabels=False)
+rd.graph.show(resgraph, pos=mdl.graph_pos) #, showfaultlabels=False)
 #fp.plotflowhist(flowhist3, 'N/A', time=0)
 ## 
 
@@ -35,16 +35,16 @@ rd.graph.show(resgraph) #, showfaultlabels=False)
 mdl = Drone(params=params)
 ## #Check various scenarios individually
 ## 
-endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'StoreEE', 'S1P1nocharge', time=5, staged=True, gtype='component')
+endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'StoreEE', 'S1P1nocharge', time=5, staged=True, gtype='bipartite')
 
-rd.graph.show(resgraph,gtype='bipartite', faultscen='DistEE short', time=5, showfaultlabels=False)
+rd.graph.show(resgraph,gtype='bipartite', pos=mdl.bipartite_pos, faultscen='StoreEE S1P1nocharge', time=5, showfaultlabels=False)
 ### 
 #rp.plot_mdlhistvals(mdlhist, 'DistEE short', time=20) #, fxnflows=['StoreEE'])
-rd.plot.mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Planpath':['dx','dy','dz']}, time=5)
+rd.plot.mdlhistvals(mdlhist,'StoreEE S1P1nocharge', fxnflowvals={'Planpath':['dx','dy','dz']}, time=5)
 
-rd.plot.mdlhistvals(mdlhist,'DistEE short', fxnflowvals={'Force_GR':['value'],'Force_LG':['value'],'Force_ST':['support'],'Force_Lin':['support']}, time=5)
+rd.plot.mdlhistvals(mdlhist,'StoreEE S1P1nocharge', fxnflowvals={'Force_GR':['value'],'Force_LG':['value'],'Force_ST':['support'],'Force_Lin':['support']}, time=5)
 
-rd.plot.mdlhistvals(mdlhist,'DistEE short', time=5)
+rd.plot.mdlhistvals(mdlhist,'StoreEE S1P1nocharge', time=5)
 
 # mdlhist['nominal']['functions']['Planpath']
 ### 
