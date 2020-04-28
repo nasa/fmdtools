@@ -20,9 +20,12 @@ import time
 #scenlist=fp.listinitfaults(graph, mdl.times)
 mdl = Drone()
 
+pos = rd.graph.set_pos(mdl, gtype='bipartite')
+
 bridgingNodes, fig, ax = networks.find_bridging_nodes(mdl, plot='on', gtype='normal')
 
 plt.figure()
 highdegreeNodes, fig, ax = networks.find_high_degree_nodes(mdl, plot='on', gtype='normal')
 
 app = SampleApproach(mdl, faults='single-component')
+
