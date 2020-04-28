@@ -26,71 +26,74 @@ class Direc(Flow):
 class StoreEE(FxnBlock):
     def __init__(self, flows, archtype):
         self.archtype=archtype
-        if archtype=='normal':
-            #architecture: 1 for controllers? + cells in Series & Parallel
-            #Batctl=battery('ctl')
-            components={'00':Battery('00'), '01':Battery('01'), '10':Battery('10'), '11':Battery('11')}    
-        elif archtype == 'monolithic':
-            components = {'S1P1': Battery('S1P1')}
+        if archtype == 'monolithic':
+            self.s, self.p = 1, 1
+            components = {'S1P1': Battery('S1P1', self.s, self.p)}
         elif archtype =='series-split':
-            components = {'S1P1': Battery('S1P1'), 'S2P1': Battery('S2P1')}
+            self.s, self.p = 2, 1
+            components = {'S1P1': Battery('S1P1', self.s, self.p), 'S2P1': Battery('S2P1', self.s, self.p)}
+            self.partitions = {'S1':['S1P1','S1P1'], 'S2':[]}
         elif archtype == 'parallel-split':
-            components = {'S1P1': Battery('S1P1'),'S1P2': Battery('S1P2')}
+            self.s, self.p = 1, 2
+            components = {'S1P1': Battery('S1P1', self.s, self.p),'S1P2': Battery('S1P2', self.s, self.p)}
         elif archtype == 'split-both':
-            components = {'S1P1': Battery('S1'), 'S2P1': Battery('S2'),'S1P2': Battery('S1P2'), 'S2P2': Battery('S2P2')}
+            self.s, self.p = 2, 2
+            components = {'S1P1': Battery('S1', self.s, self.p), 'S2P1': Battery('S2', self.s, self.p),'S1P2': Battery('S1P2', self.s, self.p), 'S2P2': Battery('S2P2', self.s, self.p)}
         #failrate for function w- component only applies to function modes
         self.failrate=1e-3
         self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],300],'lowcharge':[0.7,[0.6,0.2,0.2],200]})
         super().__init__(['EEout', 'FS', 'Hsig'], flows, {'soc': 2000}, components)
     def condfaults(self, time):
         if self.soc<20: self.add_fault('lowcharge')
-        if self.soc<1: self.replacefault('lowcharge','nocharge')
+        if self.soc<1: self.replace_fault('lowcharge','nocharge')
         return 0
     def behavior(self, time):
         EE={}
         soc={}
+        rate_res=0
         for batname, bat in self.components.items():
-            bat.behavior(self.FS.support, self.EEout.rate, time)
-            EE[bat.name]=bat.Et
-            soc[bat.name]=bat.soc
+            EE[bat.name], soc[bat.name], rate_res = bat.behavior(self.FS.support, self.EEout.rate/(self.s*self.p)+rate_res, time)
         #need to incorporate max current draw somehow + draw when reconfigured
-        if self.archtype == 'monolithic':        
-            self.EEout.effort = EE['S1P1']
-        elif self.archtype == 'series-split':     
-            self.EEout.effort = np.max(list(EE.values()))
-        elif self.archtype == 'parallel-split':  
-            self.EEout.effort = np.mean(list(EE.values()))
-        elif selfarchtype == 'split-both':
-            self.EEout.effort = np.max(list(EE.values()))
+        if self.archtype == 'monolithic':           self.EEout.effort = EE['S1P1']
+        elif self.archtype == 'series-split':       self.EEout.effort = np.max(list(EE.values()))
+        elif self.archtype == 'parallel-split':     self.EEout.effort = np.sum(list(EE.values()))
+        elif selfarchtype == 'split-both':          
+            e=list(EE.values())
+            e.sort()
+            self.EEout.effort = e[-1]+e[-2]
             
         self.soc=np.mean(list(soc.values()))
 
 class Battery(Component):
-    def __init__(self, name):
+    def __init__(self, name, s, p):
         super().__init__(name, {'soc':100, 'EEe':1.0, 'Et':1.0})
         self.failrate=1e-3
-        self.voltage = 3.7 #volts
-        self.capacity = 1600 #mah
-        self.crat = 60 # c-rating ()
-        self.maxa = self.crat * self.capacity/1000
+        self.avail_eff = 1/p
+        self.maxa = 2/s
+        self.amt = s*p
+        #self.voltage = 4/p #3.7 #volts
+        #self.capacity = 1500 #1600 #mah
+        #self.crat = 50 # c-rating ()
+        #self.maxa = self.crat * self.capacity/(s*1000)
         self.assoc_modes({'short':[0.02,[0.3,0.3,0.3],2000], 'degr':[0.06,[0.3,0.3,0.3],2000],
                           'break':[0.02,[0.2,0.2,0.2],2000], 'nocharge':[0.2,[0.6,0.2,0.2],300],
                           'lowcharge':[0.7,[0.6,0.2,0.2],200]}, name=name)
     def behavior(self, FS, EEoutr, time):
         if FS <1.0:     self.add_fault(self.name+'break')
-        if EEoutr>2:    self.add_fault(self.name+'break')
+        if EEoutr>self.maxa:    self.add_fault(self.name+'break')
         if self.soc<10: self.add_fault(self.name+'lowcharge')
         if self.soc<1:  self.replace_fault(self.name+'lowcharge',self.name+'nocharge')
-        self.Et=1.0 #default
-        if self.has_fault(self.name+'short'):       self.Et=0.0
-        elif self.has_fault(self.name+'break'):     self.Et=0.0
-        elif self.has_fault(self.name+'degr'):      self.Et=0.5
-            
+        Et=1.0 #default
+        if self.has_fault(self.name+'short'):       Et=0.0
+        elif self.has_fault(self.name+'break'):     Et=0.0
+        elif self.has_fault(self.name+'degr'):      Et=0.5
+        self.Et = Et*self.avail_eff
+        Er_res=0.0
         if time > self.time:
-            if self.has_fault(self.name+'nocharge'):    self.soc, self.Et = 0.0,0.0
-            self.soc=self.soc-EEoutr*(time-self.time)
+            self.soc=self.soc-5*EEoutr*(time-self.time)/self.amt
             self.time=time
-        return self.Et
+        if self.has_fault(self.name+'nocharge'):    self.soc, self.Et, Er_res = 0.0,0.0, EEoutr
+        return self.Et, self.soc, Er_res
 
 class DistEE(FxnBlock):
     def __init__(self,flows):
@@ -303,7 +306,7 @@ class PlanPath(FxnBlock):
             self.Dir.assign([0,0,0])            
             
 class Drone(Model):
-    def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]} }):
+    def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic'}):
         super().__init__()
         super().__init__(modelparams={'phases': {'ascend':[0,1],'forward':[1,29],'descend':[29, 30]},
                                      'times':[0,30],'units':'min'}, params=params)
@@ -330,7 +333,7 @@ class Drone(Model):
         #add functions to the model
         flows=['EEctl', 'Force_ST', 'HSig_DOFs', 'HSig_Bat', 'RSig_Ctl', 'RSig_Traj']
         self.add_fxn('ManageHealth',flows,fclass = ManageHealth)
-        self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= 'monolithic')
+        self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= params['bat'])
         self.add_fxn('DistEE', ['EE_1','EEmot','EEctl', 'Force_ST'], fclass = DistEE)
         self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Dir1','Force_Lin', 'HSig_DOFs'], fclass=AffectDOF, fparams = 'quad')
         self.add_fxn('CtlDOF',['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST', 'RSig_Ctl'], fclass = CtlDOF)
