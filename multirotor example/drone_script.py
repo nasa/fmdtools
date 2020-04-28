@@ -24,7 +24,7 @@ import time
 #simplefmea = rp.make_simplefmea(endclasses)
 #summfmea = rp.make_summfmea(endclasses, app)
 # =============================================================================
-params={'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20], 5:[0,0,50], 6:[0,0,0] }}
+params={'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20], 5:[0,0,50], 6:[0,0,0] },'bat':'monolithic'}
 mdl = Drone(params=params)
 endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
 rd.graph.show(resgraph) #, showfaultlabels=False)
@@ -35,7 +35,7 @@ rd.graph.show(resgraph) #, showfaultlabels=False)
 mdl = Drone(params=params)
 ## #Check various scenarios individually
 ## 
-endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'DistEE', 'short', time=5, staged=True, gtype='component')
+endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'StoreEE', 'S1P1nocharge', time=5, staged=True, gtype='component')
 
 rd.graph.show(resgraph,gtype='bipartite', faultscen='DistEE short', time=5, showfaultlabels=False)
 ### 
