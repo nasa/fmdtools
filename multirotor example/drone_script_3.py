@@ -23,7 +23,9 @@ endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
 
 rd.graph.show(mdl)
 
-rd.plot.mdlhistvals(mdlhist, fxnflowvals={'DOFs':['vertvel', 'uppwr'], 'Env1':['elev'], 'CtlDOF':['vel']})
+rd.plot.mdlhistvals(mdlhist, fxnflowvals={'DOFs':['vertvel', 'uppwr', 'elev'], 'CtlDOF':['vel']}, units=['m/s','N','m','m/s'])
+
+rd.plot.mdlhist(mdlhist, fxnflows=['DOFs', 'CtlDOF'], units=['m/s','m/s','N','N','m','m','m','m/s', 'unitless'])
 
 
 rd.plot.mdlhistvals(mdlhist)

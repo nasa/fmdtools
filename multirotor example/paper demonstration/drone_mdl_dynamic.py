@@ -12,16 +12,16 @@ class StoreEE(FxnBlock):
     def __init__(self, flows):
         self.failrate=1e-5
         self.assoc_modes({'nocharge':[1,300]})
-        super().__init__(['EEout', 'FS'], flows, {'soc': 250})
+        super().__init__(['EEout', 'FS'], flows, {'soc': 100})
     def condfaults(self,time):
         if self.soc<1:
             self.soc=0
-            self.has_fault('nocharge')
+            self.add_fault('nocharge')
     def behavior(self, time):
         if      self.has_fault('nocharge'):   self.EEout.effort=0.0
         else: self.EEout.effort=1.0
         if time > self.time:
-            self.soc=self.soc-self.EEout.effort*self.EEout.rate*(time-self.time)
+            self.soc=self.soc-self.EEout.effort*self.EEout.rate*(time-self.time)/2
 class DistEE(FxnBlock):
     def __init__(self,flows):
         super().__init__(['EEin','EEmot','EEctl','ST'],flows, {'EEtr':1.0, 'EEte':1.0}, timely=False)
