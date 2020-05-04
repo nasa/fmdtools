@@ -17,7 +17,7 @@ import copy
 import numpy as np
 from fmdtools.resultdisp.tabulate import costovertime as cost_table
 
-def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel='Time'):
+def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel='Time', units=[]):
     """
     Plots the states of a model over time given a history.
 
@@ -40,6 +40,8 @@ def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=Tru
     if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
     else: mdlhists=mdlhist
     times = mdlhists["nominal"]["time"]
+    unitdict = dict(enumerate(units))
+    z=0
     figs =[]
     for objtype in ["flows", "functions"]:
         for fxnflow in mdlhists['nominal'][objtype]:
@@ -75,6 +77,8 @@ def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=Tru
                         b, =plt.plot(times, nomhist[var], color='b')
                     plt.title(var)
                     plt.xlabel(timelabel)
+                    plt.ylabel(unitdict.get(z, ''))
+                    z+=1
                 if 'faulty' in mdlhists:
                     fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
                     if legend:
@@ -86,7 +90,7 @@ def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=Tru
                 plt.show()
     if returnfigs: return figs
 
-def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=False, legend=True, timelabel="time"):
+def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=False, legend=True, timelabel="time", units=[]):
     """
     Plots the states of a model over time given a history.
 
@@ -112,6 +116,8 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
     else: mdlhists=mdlhist
     times = mdlhists["nominal"]["time"]
+    
+    unitdict = dict(enumerate(units))
     
     if fxnflowvals: num_plots = sum([len(val) for k,val in fxnflowvals.items()])
     else: num_plots = sum([len(flow) for flow in mdlhists['nominal']['flows'].values()])+sum([len(f.keys())-1 for f in mdlhists['nominal']['functions'].values()])
@@ -147,6 +153,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
                     b, =plt.plot(times, nomhist[var], color='b')
                 plt.title(fxnflow+": "+var)
                 plt.xlabel(timelabel)
+                plt.ylabel(unitdict.get(n-2, ''))
     if 'faulty' in mdlhists:
         if fxnflowvals: fig.suptitle('Dynamic Response of '+str(list(fxnflowvals.keys()))+' to fault'+' '+fault)
         else:           fig.suptitle('Dynamic Response of Model States to fault'+' '+fault)
