@@ -203,130 +203,130 @@ def degree_dist(mdl, gtype='bipartite'):
     return fig
 
 def sff_model(mdl,gtype='parameter',endtime=5,pi=.1,pr=.1,num_trials=100,start_node='random',error_bar_option='off'):
-	"""
-        susc-fix-fail model.
-        
-        Parameters
-        ----------
-        mdl : model or graph
-        endtime: simulation end time
-        pi = infection (failure spread) rate
-        pf = recovery (fix) rate
-        start_node = option for selecting start node or letting a random node be chosen
-        error_bar_option = option for plotting error bars (first to third quartile), default is off
-        num_trials = number of times to run the epidemic model, default is 100
-        
-        Returns
-        -------
-        fig: plot of susc, fail, and fix nodes over time
-        
-        """
-	if type(mdl)==nx.classes.graph.Graph:	g = mdl
-	else:									g = get_graph(mdl, gtype)
-	if start_node == 'random':
-		start_node_selected= nodes[random.randint(0,len(nodes))]
-	else:
-		start_node_selected=start_node
-
-	def sff_one_trial(start_node_selected,g):
-		nodes = list(g.nodes)
-		num_nodes = len(nodes)
-		time = 0
-		susc_nodes = nodes
-		susc_nodes.remove(start_node_selected)
-		fail_nodes = [start_node_selected]
-		fix_nodes = []
-		num_susc = [num_nodes-1]
-		num_fail = [1]
-		num_fix = [0]
-		while time < endtime:
-			time = time + 1
-			new_exposed_nodes = []
-			for i in range(0,len(fail_nodes)):
-				n = list(g.neighbors(fail_nodes[i]))
-				new_exposed_nodes.extend(n)
-			ri_list = [random.random() for iter in range(len(new_exposed_nodes))]
-			new_fail_nodes = []
-			for i in range(0,len(new_exposed_nodes)):
-				if new_exposed_nodes[i] in fix_nodes:
-					pass
-				else:
-					if ri_list[i] <= pi:
-						new_fail_nodes.append(new_exposed_nodes[i])
-			new_fail_nodes_set = set(new_fail_nodes)
-			new_fail_nodes = list(new_fail_nodes_set)
-			for i in range(0,len(new_fail_nodes)):
-				if new_fail_nodes[i] in fail_nodes:
-					pass
-				else:
-					susc_nodes.remove(new_fail_nodes[i])
-			fail_nodes.extend(new_fail_nodes)
-			fail_nodes_set = set(fail_nodes)
-			fail_nodes = list(fail_nodes_set)
-			rf_list = [random.random() for iter in range(len(fail_nodes))]
-			new_fix_nodes = []
-			for i in range(0,len(fail_nodes)):
-				if rf_list[i] <= pr:
-					new_fix_nodes.append(fail_nodes[i])
-			fix_nodes.extend(new_fix_nodes)
-			fail_nodes = list(set(fail_nodes)-set(new_fix_nodes))
-			num_susc.append(len(susc_nodes))
-			num_fail.append(len(fail_nodes))
-			num_fix.append(len(fix_nodes))
-		return num_susc, num_fail, num_fix
-
-	num_susc_all_trials = []
-	num_fail_all_trials = []
-	num_fix_all_trials = []
-	for trials in range(0,num_trials):
-		num_susc_trial, num_fail_trial, num_fix_trial = sff_one_trial(start_node_selected,g)
-		num_susc_all_trials.append(num_susc_trial)
-		num_fail_all_trials.append(num_fail_trial)
-		num_fix_all_trials.append(num_fix_trial)
-	
-	def data_average(data):
-		list_average = []
-		for i in range(0,len(data[0])):
-			list_average.append(sum(x[i] for x in data)/len(data))
-		return list_average
-
-	def data_error(data,average):
-		q1 = []
-		q3 = []
-		for i in range(0,len(data[0])):
-			current_array = np.array([float(x[i]) for x in data])
-			q1.append(np.percentile(current_array,25))
-			q3.append(np.percentile(current_array,75))
-		lower_error = [x - y for x, y in zip(average,q1)]
-		upper_error = [x - y for x, y in zip(q3,average)]
-		return lower_error, upper_error
-
-	num_susc_average = data_average(num_susc_all_trials)
-	num_fail_average = data_average(num_fail_all_trials)
-	num_fix_average = data_average(num_fix_all_trials)
-
-	fig = plt.figure()
-	time_list = range(0,endtime+1)
-	if error_bar_option == 'on':
-		num_susc_lower_error, num_susc_upper_error = data_error(num_susc_all_trials,num_susc_average)
-		num_fail_lower_error, num_fail_upper_error = data_error(num_fail_all_trials,num_fail_average)
-		num_fix_lower_error, num_fix_upper_error = data_error(num_fix_all_trials,num_fix_average)
-		num_susc_asymmetric_error = [num_susc_lower_error, num_susc_upper_error]
-		num_fail_asymmetric_error = [num_fail_lower_error, num_fail_upper_error]
-		num_fix_asymmetric_error = [num_fix_lower_error, num_fix_upper_error]
-		plt.errorbar(time_list,num_susc_average,yerr=num_susc_asymmetric_error,fmt='-o',label='Susceptible')
-		plt.errorbar(time_list,num_fail_average,yerr=num_fail_asymmetric_error,fmt='-o',label='Failed')
-		plt.errorbar(time_list,num_fix_average,yerr=num_fix_asymmetric_error,fmt='-o',label='Fixed')
-	else:
-		plt.plot(time_list,num_susc_average,label='Susceptible')
-		plt.plot(time_list,num_fail_average,label='Failed')
-		plt.plot(time_list,num_fix_average,label='Fixed')
-	plt.legend()
-	plt.title('SFF model')
-	plt.xlabel('Time steps')
-	plt.ylabel('Number of nodes')
-	plt.show()
-	return fig
+    """
+    susc-fix-fail model.
+    
+    Parameters
+    ----------
+    mdl : model or graph
+    endtime: simulation end time
+    pi = infection (failure spread) rate
+    pf = recovery (fix) rate
+    start_node = option for selecting start node or letting a random node be chosen
+    error_bar_option = option for plotting error bars (first to third quartile), default is off
+    num_trials = number of times to run the epidemic model, default is 100
+    
+    Returns
+    -------
+    fig: plot of susc, fail, and fix nodes over time
+    
+    """
+    if type(mdl)==nx.classes.graph.Graph:   g = mdl
+    else:									g = get_graph(mdl, gtype)
+    if start_node == 'random':
+        nodes = list(g.nodes)
+        start_node_selected= nodes[random.randint(0,len(nodes))]
+    else: start_node_selected=start_node
+    
+    def sff_one_trial(start_node_selected,g):
+   		nodes = list(g.nodes)
+   		num_nodes = len(nodes)
+   		time = 0
+   		susc_nodes = nodes
+   		susc_nodes.remove(start_node_selected)
+   		fail_nodes = [start_node_selected]
+   		fix_nodes = []
+   		num_susc = [num_nodes-1]
+   		num_fail = [1]
+   		num_fix = [0]
+   		while time < endtime:
+   			time = time + 1
+   			new_exposed_nodes = []
+   			for i in range(0,len(fail_nodes)):
+   				n = list(g.neighbors(fail_nodes[i]))
+   				new_exposed_nodes.extend(n)
+   			ri_list = [random.random() for iter in range(len(new_exposed_nodes))]
+   			new_fail_nodes = []
+   			for i in range(0,len(new_exposed_nodes)):
+   				if new_exposed_nodes[i] in fix_nodes:
+   					pass
+   				else:
+   					if ri_list[i] <= pi:
+   						new_fail_nodes.append(new_exposed_nodes[i])
+   			new_fail_nodes_set = set(new_fail_nodes)
+   			new_fail_nodes = list(new_fail_nodes_set)
+   			for i in range(0,len(new_fail_nodes)):
+   				if new_fail_nodes[i] in fail_nodes:
+   					pass
+   				else:
+   					susc_nodes.remove(new_fail_nodes[i])
+   			fail_nodes.extend(new_fail_nodes)
+   			fail_nodes_set = set(fail_nodes)
+   			fail_nodes = list(fail_nodes_set)
+   			rf_list = [random.random() for iter in range(len(fail_nodes))]
+   			new_fix_nodes = []
+   			for i in range(0,len(fail_nodes)):
+   				if rf_list[i] <= pr:
+   					new_fix_nodes.append(fail_nodes[i])
+   			fix_nodes.extend(new_fix_nodes)
+   			fail_nodes = list(set(fail_nodes)-set(new_fix_nodes))
+   			num_susc.append(len(susc_nodes))
+   			num_fail.append(len(fail_nodes))
+   			num_fix.append(len(fix_nodes))
+   		return num_susc, num_fail, num_fix
+   
+    num_susc_all_trials = []
+    num_fail_all_trials = []
+    num_fix_all_trials = []
+    for trials in range(0,num_trials):
+   		num_susc_trial, num_fail_trial, num_fix_trial = sff_one_trial(start_node_selected,g)
+   		num_susc_all_trials.append(num_susc_trial)
+   		num_fail_all_trials.append(num_fail_trial)
+   		num_fix_all_trials.append(num_fix_trial)
+   	
+    def data_average(data):
+   		list_average = []
+   		for i in range(0,len(data[0])):
+   			list_average.append(sum(x[i] for x in data)/len(data))
+   		return list_average
+   
+    def data_error(data,average):
+   		q1 = []
+   		q3 = []
+   		for i in range(0,len(data[0])):
+   			current_array = np.array([float(x[i]) for x in data])
+   			q1.append(np.percentile(current_array,25))
+   			q3.append(np.percentile(current_array,75))
+   		lower_error = [x - y for x, y in zip(average,q1)]
+   		upper_error = [x - y for x, y in zip(q3,average)]
+   		return lower_error, upper_error
+   
+    num_susc_average = data_average(num_susc_all_trials)
+    num_fail_average = data_average(num_fail_all_trials)
+    num_fix_average = data_average(num_fix_all_trials)
+   
+    fig = plt.figure()
+    time_list = range(0,endtime+1)
+    if error_bar_option == 'on':
+   		num_susc_lower_error, num_susc_upper_error = data_error(num_susc_all_trials,num_susc_average)
+   		num_fail_lower_error, num_fail_upper_error = data_error(num_fail_all_trials,num_fail_average)
+   		num_fix_lower_error, num_fix_upper_error = data_error(num_fix_all_trials,num_fix_average)
+   		num_susc_asymmetric_error = [num_susc_lower_error, num_susc_upper_error]
+   		num_fail_asymmetric_error = [num_fail_lower_error, num_fail_upper_error]
+   		num_fix_asymmetric_error = [num_fix_lower_error, num_fix_upper_error]
+   		plt.errorbar(time_list,num_susc_average,yerr=num_susc_asymmetric_error,fmt='-o',label='Susceptible')
+   		plt.errorbar(time_list,num_fail_average,yerr=num_fail_asymmetric_error,fmt='-o',label='Failed')
+   		plt.errorbar(time_list,num_fix_average,yerr=num_fix_asymmetric_error,fmt='-o',label='Fixed')
+    else:
+   		plt.plot(time_list,num_susc_average,label='Susceptible')
+   		plt.plot(time_list,num_fail_average,label='Failed')
+   		plt.plot(time_list,num_fix_average,label='Fixed')
+    plt.legend()
+    plt.title('SFF model')
+    plt.xlabel('Time steps')
+    plt.ylabel('Number of nodes')
+    plt.show()
+    return fig
 
 def get_graph(mdl, gtype):
     "gets the appropriate graph of type gtype from mdl"
