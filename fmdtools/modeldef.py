@@ -668,7 +668,7 @@ class SampleApproach():
     scenids : dict
         a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,phase):listofnames}
     """
-    def __init__(self, mdl, faults='all', jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
+    def __init__(self, mdl, faults='all', phases='all', jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
         """
         Initializes the sample approach for a given model
 
@@ -705,7 +705,8 @@ class SampleApproach():
                     quadrature object if the quadrature option is selected.
         """
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
-        self.phases = mdl.phases
+        if phases=='all':   self.phases = mdl.phases
+        else:               self.phases = {ph:mdl.phases[ph] for ph in phases}
         self.tstep = mdl.tstep
         self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)

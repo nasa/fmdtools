@@ -331,4 +331,6 @@ def expfaultsheatmap(reshists, endclasses):
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expfaulttable = faulttable.multiply(rates).transpose()
     return expfaulttable.mean().to_dict()
+def totalcost(endclasses):
+    return sum([e['expected cost'] for k,e in endclasses.items()])
     

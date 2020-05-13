@@ -208,3 +208,4 @@ def fullfmea(endclasses, summaries):
     simplefmea=pd.DataFrame(endclasses)
     fulltable = pd.concat([degradedtable, simplefmea])
     return fulltable.transpose()
+

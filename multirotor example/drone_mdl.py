@@ -121,7 +121,8 @@ class HoldPayload(FxnBlock):
         else:                           self.Lin.support, self.ST.support = 1.0,1.0
     
 class ManageHealth(FxnBlock):
-    def __init__(self,flows):
+    def __init__(self,flows,respolicy):
+        self.respolicy = respolicy
         flownames=['EECtl','FS','DOFshealth', 'Bathealth', 'Trajconfig' ]
         super().__init__(flownames, flows)
         
@@ -134,7 +135,9 @@ class ManageHealth(FxnBlock):
         if self.FS.support<0.5 or self.EECtl.effort>2.0: self.add_fault('lostfunction')
     def behavior(self, time):
         if self.has_fault('lostfunction'):      self.Trajconfig.mode = 'continue'
-        elif  self.Bathealth.hstate=='faulty':   self.Trajconfig.mode = 'to_home'
+        elif  self.DOFshealth.hstate=='faulty': self.Trajconfig.mode = self.respolicy['line']
+        elif  self.Bathealth.hstate=='faulty':   self.Trajconfig.mode = self.respolicy['bat']
+        else:                                   self.Trajconfig.mode = 'continue'
             # trajconfig: continue, to_home, to_nearest, emland
     
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
@@ -269,7 +272,7 @@ class PlanPath(FxnBlock):
         self.Dir.power=1.0
         if self.mode=='taxi':       self.Dir.power=0.0          
         elif self.mode=='move':     self.Dir.assign([self.dx,self.dy, self.dz])     
-        elif self.mode=='land':     self.Dir.assign([0,0,-0.1])
+        elif self.mode=='land':     self.Dir.assign([0,0,-self.Env.elev/2])
         # faulty behaviors    
         if self.has_fault('noloc'):     self.Dir.assign([0,0,0])
         elif self.has_fault('degloc'):  self.Dir.assign([0,0,-1])
@@ -278,9 +281,9 @@ class PlanPath(FxnBlock):
             self.Dir.assign([0,0,0])            
             
 class Drone(Model):
-    def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic'}):
+    def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic', 'linearch':'quad','respolicy':{'bat':'to_home','line':'emland'}}):
         super().__init__()
-        super().__init__(modelparams={'phases': {'ascend':[0,1],'forward':[1,29],'descend':[29, 30]},
+        super().__init__(modelparams={'phases': {'ascend':[0,1],'forward':[1,19],'descend':[19, 20]},
                                      'times':[0,30],'units':'min'}, params=params)
         
         self.start_area=square([0.0,0.0],10, 10) # coordinates, xwidth, ywidth
@@ -303,10 +306,11 @@ class Drone(Model):
         self.add_flow('Dir1', Direc())
         #add functions to the model
         flows=['EEctl', 'Force_ST', 'HSig_DOFs', 'HSig_Bat', 'RSig_Traj']
-        self.add_fxn('ManageHealth',flows,fclass = ManageHealth)
+        # trajconfig: continue, to_home, to_nearest, emland
+        self.add_fxn('ManageHealth',flows,fclass = ManageHealth, fparams=params['respolicy'])
         self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= params['bat'])
         self.add_fxn('DistEE', ['EE_1','EEmot','EEctl', 'Force_ST'], fclass = DistEE)
-        self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Dir1','Force_Lin', 'HSig_DOFs'], fclass=AffectDOF, fparams = 'quad')
+        self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Dir1','Force_Lin', 'HSig_DOFs'], fclass=AffectDOF, fparams = params['linearch'])
         self.add_fxn('CtlDOF',['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST'], fclass = CtlDOF)
         self.add_fxn('Planpath', ['EEctl', 'DOFs','Dir1', 'Force_ST', 'RSig_Traj'], fclass=PlanPath, fparams=params)
         self.add_fxn('HoldPayload',['DOFs', 'Force_Lin', 'Force_ST'], fclass = HoldPayload)
