@@ -281,15 +281,14 @@ class PlanPath(FxnBlock):
             self.Dir.assign([0,0,0])            
             
 class Drone(Model):
-    def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic', 'linearch':'quad','respolicy':{'bat':'to_home','line':'emland'}}):
+    def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic', 'linearch':'quad','respolicy':{'bat':'to_home','line':'emland'}, 'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10]}):
         super().__init__()
         super().__init__(modelparams={'phases': {'ascend':[0,1],'forward':[1,19],'descend':[19, 20]},
                                      'times':[0,30],'units':'min'}, params=params)
         
-        self.start_area=square([0.0,0.0],10, 10) # coordinates, xwidth, ywidth
-        self.dang_area=square([0,150], 160, 160)
-        self.safe1_area=square([-25,100], 10, 10)
-        self.safe2_area=square([25,50], 10, 10)
+        self.start_area = square(self.params['start'][0:2],self.params['start'][2],self.params['start'][3] )
+        self.safe_area = square(self.params['safe'][0:2],self.params['safe'][2],self.params['safe'][3] )
+        self.target_area = square(self.params['target'][0:2],self.params['target'][2],self.params['target'][3] )
         
         #add flows to the model
         self.add_flow('Force_ST', {'support':1.0})
@@ -346,14 +345,13 @@ class Drone(Model):
         
     def find_classification(self, g, endfaults, endflows, scen, mdlhist):
         #landing costs
-        viewed = env_viewed(mdlhist['faulty']['flows']['DOFs']['x'], mdlhist['faulty']['flows']['DOFs']['y'], self.dang_area)
-        num_viewed = sum([1 for k,view in viewed.items() if view=='viewed'])
-        viewed_value = num_viewed*100
+        viewed = env_viewed(mdlhist['faulty']['flows']['DOFs']['x'], mdlhist['faulty']['flows']['DOFs']['y'],mdlhist['faulty']['flows']['DOFs']['elev'], self.target_area)
+        viewed_value = 10*sum([view for k,view in viewed.items() if view!='unviewed'])
         
         Env=self.flows['DOFs']
-        if  inrange(self.start_area, Env.x, Env.y): landcost = 1 # nominal landing
-        elif inrange(self.safe1_area, Env.x, Env.y) or inrange(self.safe2_area, Env.x, Env.y): landcost=1000 # emergency safe
-        elif inrange(self.dang_area, Env.x, Env.y):  landcost=100000 # emergency dangerous
+        if  inrange(self.start_area, Env.x, Env.y): landcost = 0 # nominal landing
+        elif inrange(self.safe_area, Env.x, Env.y): landcost=1000 # emergency safe
+        elif inrange(self.target_area, Env.x, Env.y):  landcost=100000 # emergency dangerous
         else:                                    landcost=10000 # emergency unsanctioned
         #repair costs
         repcost=sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()])
@@ -400,23 +398,24 @@ def vectdir(p1, p2):
     return vectdist(p1,p2)/(finddist(p1,p2)+0.0001)
 
 import matplotlib.pyplot as plt
-def env_viewed(xhist, yhist, square):
+def env_viewed(xhist, yhist,zhist, square):
     viewed = {(x,y):'unviewed' for x in range(int(square[0][0]),int(square[1][0])+10,10) for y in range(int(square[0][1]),int(square[2][1])+10,10)}
     for i,x in enumerate(xhist[1:len(xhist)]):
-        viewed_area = rect(xhist[i],yhist[i],xhist[i+1],yhist[i+1], 10,10)
+        w,h,d = viewable_area(zhist[i+1])
+        viewed_area = rect(xhist[i],yhist[i],xhist[i+1],yhist[i+1], w,h)
         polygon=Polygon(viewed_area)
         #plt.plot(*polygon.exterior.xy) (displays area to debug code)
         #plt.plot([xhist[i],xhist[i+1]],[yhist[i],yhist[i+1]])
         if not polygon.is_valid:    print('invalid points')
         for spot in viewed:
             if polygon.contains(Point(spot)): 
-                viewed[spot]='viewed'
+                viewed[spot]=d
     return viewed
 
 def viewable_area(elev):
     width = elev
     height = elev * 0.75 # 4/3 camera with ~45 mm lens st dist = width
-    detail = 1/(width*height)
+    detail = 1/(width*height+0.00001)
     return width, height, detail
 
 def plan_flight(elev, square, landing):
@@ -428,10 +427,10 @@ def plan_flight(elev, square, landing):
     startpt = [square[0][0]+width/2, square[0][1]+height/2, elev]
     endpt = [square[1][0]-width/2, square[1][1]+height/2, elev]
     
-    num_rows = int(np.ceil((square[0][1]-square[0][0])/width))
+    num_rows = int(np.ceil((square[2][1]-square[0][1])/width))
     
-    leftpts = [[startpt[0] , startpt[1]+ r*height] for r in range(num_rows)]
-    rightpts = [[endpt[0], endpt[1]+ r*height] for r in range(num_rows)]
+    leftpts = [[startpt[0] , startpt[1]+ r*width] for r in range(num_rows)]
+    rightpts = [[endpt[0], endpt[1]+ r*width] for r in range(num_rows)]
     leftpts.sort(reverse=True)
     rightpts.sort(reverse=True)
     
@@ -440,17 +439,19 @@ def plan_flight(elev, square, landing):
     
     vec1 = leftpts
     vec2 = rightpts
-    
+    vec=[]
+    n=2
     newplan = {}
-    for n in range(numpts):
-        newplan[n+2]=vec1.pop()+[elev]
+    while len(vec1+vec2+vec)>0:
+        newplan[n]=vec1.pop()+[elev]
+        n+=1
         if len(vec1)< len(vec2) or n==0:
             vec = vec2
             vec2 = vec1
             vec1 = vec
     
     flightplan.update(newplan)
-    flightplan.update({max(flightplan):flightplan[1], max(flightplan)+1:flightplan[0]})
+    flightplan.update({max(flightplan)+1:flightplan[1], max(flightplan)+2:flightplan[0]})
     return flightplan
 
 
