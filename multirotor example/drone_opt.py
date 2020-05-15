@@ -32,7 +32,29 @@ endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
 opercost = endresults_nom['classification']['expected cost']
 
 # Resilience Model
+def calc_res(mdl):
+    app = SampleApproach(mdl, faults='single-component', phases={'forward'})
+    endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
+    rescost = rd.process.totalcost(endclasses)
+    return rescost
 
-app = SampleApproach(mdl, faults='single-component', phases={'forward'})
-endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
-rescost = rd.process.totalcost(endclasses)
+def x_to_mdl(x):
+    bats = ['monolithic', 'series-split', 'paralel-split', 'split-both']
+    linarchs = ['quad', 'hex', 'oct']
+    respols = ['continue', 'to_home', 'to_nearest', 'emland']
+    
+    params = {'bat':bats[x[0]], 'linearch':linarchs[x[1]]}
+    mdl = Drone(params=params)
+    return mdl
+
+sq = square([140,200],750,500)
+fp = plan_flight(50, sq, [0,0,0])
+
+fig2 = plt.figure()
+
+ax2 = fig2.add_subplot(111, projection='3d')
+
+for goal,loc in fp.items():
+    ax2.text(loc[0],loc[1],loc[2], str(goal), fontweight='bold', fontsize=12)
+    ax2.plot([loc[0]],[loc[1]],[loc[2]], marker='o', markersize=10, color='red', alpha=0.5)
+

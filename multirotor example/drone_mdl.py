@@ -413,4 +413,44 @@ def env_viewed(xhist, yhist, square):
                 viewed[spot]='viewed'
     return viewed
 
+def viewable_area(elev):
+    width = elev
+    height = elev * 0.75 # 4/3 camera with ~45 mm lens st dist = width
+    detail = 1/(width*height)
+    return width, height, detail
+
+def plan_flight(elev, square, landing):
+    
+    flightplan = {0:landing, 1: landing[0:2]+[elev]}
+    
+    width, height, detail = viewable_area(elev)
+    # x,y, elev
+    startpt = [square[0][0]+width/2, square[0][1]+height/2, elev]
+    endpt = [square[1][0]-width/2, square[1][1]+height/2, elev]
+    
+    num_rows = int(np.ceil((square[0][1]-square[0][0])/width))
+    
+    leftpts = [[startpt[0] , startpt[1]+ r*height] for r in range(num_rows)]
+    rightpts = [[endpt[0], endpt[1]+ r*height] for r in range(num_rows)]
+    leftpts.sort(reverse=True)
+    rightpts.sort(reverse=True)
+    
+    addpt = max(flightplan) + 1
+    numpts = 2*len(leftpts)
+    
+    vec1 = leftpts
+    vec2 = rightpts
+    
+    newplan = {}
+    for n in range(numpts):
+        newplan[n+2]=vec1.pop()+[elev]
+        if len(vec1)< len(vec2) or n==0:
+            vec = vec2
+            vec2 = vec1
+            vec1 = vec
+    
+    flightplan.update(newplan)
+    flightplan.update({max(flightplan):flightplan[1], max(flightplan)+1:flightplan[0]})
+    return flightplan
+
 
