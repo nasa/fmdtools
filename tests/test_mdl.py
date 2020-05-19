@@ -1,14 +1,121 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Mar  5 03:25:00 2020
+Created on Tue May 19 12:27:39 2020
 
-@author: zhang
+@author: Daniel Hulse
+
+- tests if dynamic model constructed in fmdtools will match model output from a dynamic model outside of fmdtools
 """
-
+import sys
+sys.path.append('../')
 from fmdtools.modeldef import *
-import numpy as np
-from scipy.optimize import minimize
-import csv
+from fmdtools.faultsim import propagate
+import fmdtools.resultdisp as rd
+a=0.2
+b=10
+
+t=160
+def SimplePandemicModel(x0):
+    
+    
+    S=list(range(0,t)); S[0]=900
+    I=list(range(0,t)); I[0]=100
+    R=list(range(0,t)); R[0]=0
+    N=S[0]+I[0]+R[0]
+        
+    PL1=0
+    PL2=0
+    nom=0
+    
+    
+    a2=x0[0]
+    n=x0[1]
+    nms = n
+    v=x0[2]
+    m=x0[3]
+    alpha=x0[4]
+    IR=x0[5]
+    
+    c=m/m
+#    print(a2,n,v,m,alpha,IR)
+    b2=b
+    vc=0
+       
+    infect_rate=list(range(0,t))
+    recover_rate=list(range(0,t))
+    
+    infect_rate[0]= a * S[0] * I[0] / N
+    recover_rate[0]= I[0]/b
+    
+    state=list(range(0,t))
+    state[0]='nom'
+    for i in range(1,t):
+        if I[i-1]/N > alpha and infect_rate[i-1] > IR:
+            c =( m+nms )/ m
+            nms = m+n
+            
+            infect_rate[i]= a2 * (S[i-1]) * I[i-1] / N
+            recover_rate[i]= c * I[i-1]/b2
+            
+            S[i]= S[i-1] -  (infect_rate[i] ) - v
+            I[i]= I[i-1] +  (infect_rate[i] - recover_rate[i])
+            R[i]= R[i-1] +  (recover_rate[i]) + v
+                   
+            PL1=PL1+1
+            PL2=PL2+1
+            state[i]='PL1&PL2'
+            vc=vc+v
+            
+    # PL1 triggered - vaccine + low contact rate
+        elif I[i-1]/N > alpha :
+            infect_rate[i] = a2 * (S[i-1]) * I[i-1] / N
+            recover_rate[i] = I[i-1]/b2
+            
+            S[i]= S[i-1] -  (infect_rate[i] ) - v
+            I[i]= I[i-1] +  (infect_rate[i] - recover_rate[i] )
+            R[i]= R[i-1] +  (recover_rate[i]) + v
+                        
+            PL1=PL1+1
+            state[i]='PL1'
+            vc=vc+v
+    # PL2 triggered - increase staff + increase medical staff    
+        elif  infect_rate[i-1] > IR : 
+            c =( m+nms )/ m
+            nms = m+n
+            
+            infect_rate[i]= a * (S[i-1]) * I[i-1] / N
+            recover_rate[i]= c * I[i-1]/b2
+        
+            S[i]= S[i-1] -  (infect_rate[i])
+            I[i]= I[i-1] +  (infect_rate[i] - recover_rate[i])
+            R[i]= R[i-1] +  (recover_rate[i])
+            
+            PL2=PL2+1
+            state[i]='PL2'
+    #     nominal state
+        else:
+            infect_rate[i]= a * S[i-1] * I[i-1] / N
+            recover_rate[i]= c * I[i-1]/b
+            
+            S[i]= S[i-1] -  (infect_rate[i])
+            I[i]= I[i-1] +  (infect_rate[i] - c * I[i-1]/b)
+            R[i]= R[i-1] +  (c * I[i-1]/b)
+            
+            nom=nom+1  
+            state[i]='nom'
+    # treatment fee for each people            
+    H=1
+    # average expense for each people
+    E=10000
+    # PL1 lasting time
+    T=PL1 
+    # salary for each medical people per day
+    Em=1
+    # extra medical people total working time
+    Tm=n * (t-1+t-PL2)*PL2/2        
+    
+    totalcost=(R[-1]-vc)*H + (a-x0[0])* N * E * T +  Em * Tm
+    return totalcost, S , I , R, PL1, PL2, nom,infect_rate,recover_rate, state,vc
 
 class Area(FxnBlock):
     def __init__(self,flows, params):
@@ -26,7 +133,7 @@ class Area(FxnBlock):
 # a0 is the contact rate in normal state
         self.a_PL1 = params['a']
         self.n = params['n']
-        self.v = params['v']
+        self.v_in = params['v']
         self.m = params['m']
         self.alpha = params['alpha']
         self.IR = params['IR']
@@ -50,7 +157,8 @@ class Area(FxnBlock):
         # policy 1: if infected people bigger than alpha, contact rate will drop from 10 to a , susceptible people will get vaccine,v people/day
         if time > self.time:
             if self.Infected/(self.N) > self.alpha: 
-                self.add_fault('PL1');self.PL1=self.PL1+1
+                self.add_fault('PL1')
+                self.PL1=self.PL1+1
             else:
                 if self.has_fault('PL1'): self.replace_fault('PL1','nom')
             if ( self.a * self.Susceptible * self.Infected / (self.N)) > self.IR:
@@ -64,12 +172,12 @@ class Area(FxnBlock):
             if self.has_fault('PL1') and self.has_fault('PL2'):
                 self.a=self.a_PL1
                 self.c=(self.NMS+self.m)/(self.m)
-                self.v = 5
+                self.v = self.v_in
                 NMS_increase = self.n
             elif self.has_fault('PL1'):
                 self.a=self.a_PL1
                 self.c = 1.0
-                self.v = 5
+                self.v = self.v_in
                 NMS_increase = 0.0
             elif self.has_fault('PL2'):
                 self.a = self.a0
@@ -140,7 +248,6 @@ class PandemicModel(Model):
     def __init__(self, params={'x0':[0.2 , 0 , 0 , 10 , 0 , 0 ]}):
         super().__init__(params=params)
         x0=self.params['x0']
-        
         self.times = [1,160]
         self.tstep = 1
         
@@ -229,3 +336,57 @@ class PandemicModel(Model):
         
 #         return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'total number of medical staff': totalN , 'total recovery people': totalR}
         return {'total cost':total}
+
+def test_model_1():
+    x0 = [0.2 , 0 , 0 , 10 , 0 , 0 ]   
+    result0=list(SimplePandemicModel(x0))
+    sus_simp = result0[1]
+    inf_simp = result0[2]
+    rec_simp = result0[3]
+    
+    fmdmdl = PandemicModel(params={'x0':x0})
+    endresults, resgraph, mdlhist_nom = propagate.nominal(fmdmdl)
+    sus_mdl = mdlhist_nom['functions']['City']['Susceptible']
+    inf_mdl = mdlhist_nom['functions']['City']['Infected']
+    rec_mdl = mdlhist_nom['functions']['City']['Recovered']
+    
+    
+    sus_err = np.average(abs((sus_simp-sus_mdl)/(sus_mdl+0.1)))
+    inf_err = np.average(abs((inf_simp-inf_mdl)/(inf_mdl+0.1)))
+    rec_err = np.average(abs((rec_simp-rec_mdl)/(rec_mdl+0.1)))
+    assert sus_err < 0.06
+    assert inf_err < 0.06
+    assert rec_err < 0.06
+    
+def test_model_2():
+    x0 = [0.1 , 2 , 5 , 10 , 0.05 , 10 ]   
+    result0=list(SimplePandemicModel(x0))
+    sus_simp = result0[1]
+    inf_simp = result0[2]
+    rec_simp = result0[3]
+    
+    fmdmdl = PandemicModel(params={'x0':x0})
+    endresults, resgraph, mdlhist_nom = propagate.nominal(fmdmdl)
+    sus_mdl = mdlhist_nom['functions']['City']['Susceptible']
+    inf_mdl = mdlhist_nom['functions']['City']['Infected']
+    rec_mdl = mdlhist_nom['functions']['City']['Recovered']
+    
+    
+    sus_err = np.average(abs((sus_simp-sus_mdl)/(sus_mdl+0.1)))
+    inf_err = np.average(abs((inf_simp-inf_mdl)/(inf_mdl+0.1)))
+    rec_err = np.average(abs((rec_simp-rec_mdl)/(rec_mdl+0.1)))
+    assert sus_err < 0.06
+    assert inf_err < 0.06
+    assert rec_err < 0.06
+
+#fmdmdl = PandemicModel(params={'x0':x0})
+#endresults, resgraph, mdlhist_nom = propagate.nominal(fmdmdl)
+#sus_mdl = mdlhist_nom['functions']['City']['Susceptible']
+#inf_mdl = mdlhist_nom['functions']['City']['Infected']
+#rec_mdl = mdlhist_nom['functions']['City']['Recovered']
+#rd.plot.mdlhistvals(mdlhist_nom, fxnflowvals={'City':['Susceptible', 'Infected', 'Recovered']})
+
+#normal_state_table = rd.tabulate.hist(mdlhist_nom)
+#normal_state_table.to_csv('normal_state_table.csv')
+
+#x=list(range(0,t))

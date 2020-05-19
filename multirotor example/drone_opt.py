@@ -60,7 +60,7 @@ def x_to_mdl(x):
     mdl = Drone(params=params)
     return mdl
 
-x=[1,1,40,1,1]
+x=[1,1,100,1,1]
 mdl = x_to_mdl(x)
 
 endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
