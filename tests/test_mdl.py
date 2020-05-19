@@ -8,9 +8,9 @@ Created on Tue May 19 12:27:39 2020
 """
 import sys
 sys.path.append('../')
-from fmdtools.modeldef import *
-from fmdtools.faultsim import propagate
-import fmdtools.resultdisp as rd
+from fmdtools.modeldef import FxnBlock, Model
+import fmdtools.faultsim.propagate as propagate
+#import fmdtools.resultdisp as rd
 a=0.2
 b=10
 
