@@ -7,16 +7,17 @@ Created on Tue May 19 12:27:39 2020
 - tests if dynamic model constructed in fmdtools will match model output from a dynamic model outside of fmdtools
 """
 import sys
+import numpy as np
 sys.path.append('../')
 from fmdtools.modeldef import FxnBlock, Model
-import fmdtools.faultsim.propagate as propagate
+from fmdtools.faultsim.propagate import nominal
 #import fmdtools.resultdisp as rd
-a=0.2
-b=10
 
-t=160
 def SimplePandemicModel(x0):
-    
+    a=0.2
+    b=10
+
+    t=160
     
     S=list(range(0,t)); S[0]=900
     I=list(range(0,t)); I[0]=100
@@ -95,11 +96,11 @@ def SimplePandemicModel(x0):
     #     nominal state
         else:
             infect_rate[i]= a * S[i-1] * I[i-1] / N
-            recover_rate[i]= c * I[i-1]/b
+            recover_rate[i]=  I[i-1]/b
             
             S[i]= S[i-1] -  (infect_rate[i])
-            I[i]= I[i-1] +  (infect_rate[i] - c * I[i-1]/b)
-            R[i]= R[i-1] +  (c * I[i-1]/b)
+            I[i]= I[i-1] +  (infect_rate[i] -  recover_rate[i])
+            R[i]= R[i-1] +  recover_rate[i]
             
             nom=nom+1  
             state[i]='nom'
@@ -152,6 +153,7 @@ class Area(FxnBlock):
         self.PL1=0
         self.PL2=0
         self.vc=0
+        self.In_R= self.a * self.Susceptible * self.Infected / self.N
     def condfaults(self,time):
         # policy 2: if infect rate bigger than IR, add m medical staff per day,  infectious time will drop from 1.25 to 1.25/2
         # policy 1: if infected people bigger than alpha, contact rate will drop from 10 to a , susceptible people will get vaccine,v people/day
@@ -161,7 +163,7 @@ class Area(FxnBlock):
                 self.PL1=self.PL1+1
             else:
                 if self.has_fault('PL1'): self.replace_fault('PL1','nom')
-            if ( self.a * self.Susceptible * self.Infected / (self.N)) > self.IR:
+            if self.In_R > self.IR:
                 self.add_fault('PL2')
                 self.PL2=self.PL2+1
             else:
@@ -345,7 +347,7 @@ def test_model_1():
     rec_simp = result0[3]
     
     fmdmdl = PandemicModel(params={'x0':x0})
-    endresults, resgraph, mdlhist_nom = propagate.nominal(fmdmdl)
+    endresults, resgraph, mdlhist_nom = nominal(fmdmdl)
     sus_mdl = mdlhist_nom['functions']['City']['Susceptible']
     inf_mdl = mdlhist_nom['functions']['City']['Infected']
     rec_mdl = mdlhist_nom['functions']['City']['Recovered']
@@ -366,7 +368,7 @@ def test_model_2():
     rec_simp = result0[3]
     
     fmdmdl = PandemicModel(params={'x0':x0})
-    endresults, resgraph, mdlhist_nom = propagate.nominal(fmdmdl)
+    endresults, resgraph, mdlhist_nom = nominal(fmdmdl)
     sus_mdl = mdlhist_nom['functions']['City']['Susceptible']
     inf_mdl = mdlhist_nom['functions']['City']['Infected']
     rec_mdl = mdlhist_nom['functions']['City']['Recovered']
@@ -378,6 +380,9 @@ def test_model_2():
     assert sus_err < 0.06
     assert inf_err < 0.06
     assert rec_err < 0.06
+
+x0 = [0.1 , 2 , 5 , 10 , 0.05 , 10 ]   
+result0=list(SimplePandemicModel(x0))
 
 #fmdmdl = PandemicModel(params={'x0':x0})
 #endresults, resgraph, mdlhist_nom = propagate.nominal(fmdmdl)
