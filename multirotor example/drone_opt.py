@@ -65,6 +65,8 @@ mdl = x_to_mdl(x)
 
 endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
 
+
+rd.plot.mdlhistvals(mdlhist,fxnflowvals={'StoreEE':'soc'})
 #descost = calc_des(mdl)
 #opercost = calc_oper(mdl)
 #rescost = calc_res(mdl)

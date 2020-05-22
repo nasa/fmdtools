@@ -22,24 +22,27 @@ class Direc(Flow):
 
 #Define functions
 class StoreEE(FxnBlock):
-    def __init__(self, flows, archtype):
-        self.archtype=archtype
-        if archtype == 'monolithic':
-            self.s, self.p = 1, 1
-            components = {'S1P1': Battery('S1P1', self.s, self.p)}
-        elif archtype =='series-split':
-            self.s, self.p = 2, 1
-            components = {'S1P1': Battery('S1P1', self.s, self.p), 'S2P1': Battery('S2P1', self.s, self.p)}
-        elif archtype == 'parallel-split':
-            self.s, self.p = 1, 2
-            components = {'S1P1': Battery('S1P1', self.s, self.p),'S1P2': Battery('S1P2', self.s, self.p)}
-        elif archtype == 'split-both':
-            self.s, self.p = 2, 2
-            components = {'S1P1': Battery('S1', self.s, self.p), 'S2P1': Battery('S2', self.s, self.p),'S1P2': Battery('S1P2', self.s, self.p), 'S2P2': Battery('S2P2', self.s, self.p)}
+    def __init__(self, flows, params):
+        self.archtype=params['bat']
+        
+        #weight, cap, voltage, drag_factor
+        
+        if self.archtype == 'monolithic':
+            self.batparams ={'s':1,'p':1,'w':params['weight'],'v':12,'d':params['drag']}
+            components = {'S1P1': Battery('S1P1', self.batparams)}
+        elif self.archtype =='series-split':
+            self.batparams ={'s':2,'p':1,'w':params['weight'],'v':12,'d':params['drag']}
+            components = {'S1P1': Battery('S1P1', self.batparams), 'S2P1': Battery('S2P1', self.batparams)}
+        elif self.archtype == 'parallel-split':
+            self.batparams ={'s':1,'p':2,'w':params['weight'],'v':12,'d':params['drag']}
+            components = {'S1P1': Battery('S1P1', self.batparams),'S1P2': Battery('S1P2', self.batparams)}
+        elif self.archtype == 'split-both':
+            self.batparams ={'s':2,'p':2,'w':params['weight'],'v':12,'d':params['drag']}
+            components = {'S1P1': Battery('S1', self.batparams), 'S2P1': Battery('S2', self.batparams),'S1P2': Battery('S1P2', self.batparams), 'S2P2': Battery('S2P2', self.batparams)}
         #failrate for function w- component only applies to function modes
         self.failrate=1e-3
         self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],300],'lowcharge':[0.7,[0.6,0.2,0.2],200]})
-        super().__init__(['EEout', 'FS', 'HSig'], flows, {'soc': 2000}, components)
+        super().__init__(['EEout', 'FS', 'HSig'], flows, {'soc': 100}, components)
     def condfaults(self, time):
         if self.soc<20:                     self.add_fault('lowcharge')
         if self.soc<1:                      self.replace_fault('lowcharge','nocharge')
@@ -47,7 +50,7 @@ class StoreEE(FxnBlock):
         EE, soc = {}, {}
         rate_res=0
         for batname, bat in self.components.items():
-            EE[bat.name], soc[bat.name], rate_res = bat.behavior(self.FS.support, self.EEout.rate/(self.s*self.p)+rate_res, time)
+            EE[bat.name], soc[bat.name], rate_res = bat.behavior(self.FS.support, self.EEout.rate/(self.batparams['s']*self.batparams['p'])+rate_res, time)
         #need to incorporate max current draw somehow + draw when reconfigured
         if self.archtype == 'monolithic':           self.EEout.effort = EE['S1P1']
         elif self.archtype == 'series-split':       self.EEout.effort = np.max(list(EE.values()))
@@ -61,19 +64,19 @@ class StoreEE(FxnBlock):
         else:                   self.HSig.hstate = 'nominal'
 
 class Battery(Component):
-    def __init__(self, name, s, p):
+    def __init__(self, name, batparams):
         super().__init__(name, {'soc':100, 'EEe':1.0, 'Et':1.0})
         self.failrate=1e-3
-        self.avail_eff = 1/p
-        self.maxa = 2/s
-        self.amt = s*p
+        self.avail_eff = 1/batparams['p']
+        self.maxa = 2/batparams['s']
+        self.amt = batparams['s']*batparams['p'] * 60*3.600/(batparams['d']*batparams['w']*170/batparams['v'])
         self.assoc_modes({'short':[0.02,[0.3,0.3,0.3],2000], 'degr':[0.06,[0.3,0.3,0.3],2000],
                           'break':[0.02,[0.2,0.2,0.2],2000], 'nocharge':[0.2,[0.6,0.2,0.2],300],
                           'lowcharge':[0.7,[0.6,0.2,0.2],200]}, name=name)
     def behavior(self, FS, EEoutr, time):
         if FS <1.0:     self.add_fault(self.name+'break')
         if EEoutr>self.maxa:    self.add_fault(self.name+'break')
-        if self.soc<10: self.add_fault(self.name+'lowcharge')
+        if self.soc<20: self.add_fault(self.name+'lowcharge')
         if self.soc<1:  self.replace_fault(self.name+'lowcharge',self.name+'nocharge')
         Et=1.0 #default
         if self.has_fault(self.name+'short'):       Et=0.0
@@ -82,7 +85,7 @@ class Battery(Component):
         self.Et = Et*self.avail_eff
         Er_res=0.0
         if time > self.time:
-            self.soc=self.soc-5*EEoutr*(time-self.time)/self.amt
+            self.soc=self.soc-EEoutr*(time-self.time)/self.amt
             self.time=time
         if self.has_fault(self.name+'nocharge'):    self.soc, self.Et, Er_res = 0.0,0.0, EEoutr
         return self.Et, self.soc, Er_res
@@ -307,7 +310,10 @@ class Drone(Model):
         flows=['EEctl', 'Force_ST', 'HSig_DOFs', 'HSig_Bat', 'RSig_Traj']
         # trajconfig: continue, to_home, to_nearest, emland
         self.add_fxn('ManageHealth',flows,fclass = ManageHealth, fparams=params['respolicy'])
-        self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= params['bat'])
+        batweight = {'monolithic':0.5, 'series-split':0.6, 'paralel-split':0.6, 'split-both':0.7}[params['bat']]
+        archweight = {'quad':1.2, 'hex':1.6, 'oct':2.0}[params['linearch']]
+        archdrag = {'quad':0.75, 'hex':0.65, 'oct':0.55}[params['linearch']]
+        self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= {'bat': params['bat'], 'weight':(batweight+archweight)*2.2 , 'drag': archdrag })
         self.add_fxn('DistEE', ['EE_1','EEmot','EEctl', 'Force_ST'], fclass = DistEE)
         self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Dir1','Force_Lin', 'HSig_DOFs'], fclass=AffectDOF, fparams = params['linearch'])
         self.add_fxn('CtlDOF',['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST'], fclass = CtlDOF)
