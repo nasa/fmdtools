@@ -39,6 +39,7 @@ class StoreEE(FxnBlock):
         elif self.archtype == 'split-both':
             self.batparams ={'s':2,'p':2,'w':params['weight'],'v':12,'d':params['drag']}
             components = {'S1P1': Battery('S1', self.batparams), 'S2P1': Battery('S2', self.batparams),'S1P2': Battery('S1P2', self.batparams), 'S2P2': Battery('S2P2', self.batparams)}
+        else: raise Exception("Invalid battery architecture")
         #failrate for function w- component only applies to function modes
         self.failrate=1e-3
         self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],300],'lowcharge':[0.7,[0.6,0.2,0.2],200]})
@@ -69,7 +70,9 @@ class Battery(Component):
         self.failrate=1e-3
         self.avail_eff = 1/batparams['p']
         self.maxa = 2/batparams['s']
-        self.amt = batparams['s']*batparams['p'] * 60*3.600/(batparams['d']*batparams['w']*170/batparams['v'])
+        self.p=batparams['p']
+        self.s=batparams['s']
+        self.amt = 60*4.200/(batparams['w']*170/(batparams['d']*batparams['v']))
         self.assoc_modes({'short':[0.02,[0.3,0.3,0.3],2000], 'degr':[0.06,[0.3,0.3,0.3],2000],
                           'break':[0.02,[0.2,0.2,0.2],2000], 'nocharge':[0.2,[0.6,0.2,0.2],300],
                           'lowcharge':[0.7,[0.6,0.2,0.2],200]}, name=name)
@@ -85,7 +88,7 @@ class Battery(Component):
         self.Et = Et*self.avail_eff
         Er_res=0.0
         if time > self.time:
-            self.soc=self.soc-EEoutr*(time-self.time)/self.amt
+            self.soc=self.soc-100*EEoutr*self.p*self.s*(time-self.time)/self.amt
             self.time=time
         if self.has_fault(self.name+'nocharge'):    self.soc, self.Et, Er_res = 0.0,0.0, EEoutr
         return self.Et, self.soc, Er_res
@@ -191,7 +194,7 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
             elif self.DOF.uppwr < 1:    self.DOF.vertvel = 60*max([(self.DOF.uppwr-1)*50, -50])
             else:                       self.DOF.vertvel = 0.0
                 
-            self.DOF.planvel=60*min([10*self.DOF.planpwr, 10])            
+            self.DOF.planvel=60*min([10*self.DOF.planpwr, 10]) # 600 m/m = 23 mph 
             if self.DOF.elev<=0.0:  
                 self.DOF.vertvel=max(0,self.DOF.vertvel)
                 self.DOF.planvel=0.0
@@ -261,15 +264,15 @@ class PlanPath(FxnBlock):
         
         if self.mode=='taxi' and t>5:   self.mode=='taxi'
         elif self.Rsig.mode == 'to_home': # add a to_nearest option
-            self.pt = 1
+            self.pt = 0
             self.goal =self.goals[self.pt]
         elif self.Rsig.mode== 'emland': self.mode = 'land'
+        elif self.Env.elev<1 and (self.pt>=max(self.goals) or self.mode=='land'):  self.mode = 'taxi'
+        elif dist<5 and self.pt>=max(self.goals):           self.mode = 'land'
         elif dist<5 and {'move'}.issuperset({self.mode}):
             if self.pt < max(self.goals):   
                 self.pt+=1
                 self.goal = self.goals[self.pt]
-        elif self.Env.elev<1 and self.pt>=max(self.goals):  self.mode = 'taxi'
-        elif dist<5 and self.pt>=max(self.goals):           self.mode = 'land'
         elif dist>5 and not(self.mode=='descend'):          self.mode='move'
         # nominal behaviors
         self.Dir.power=1.0
@@ -310,10 +313,10 @@ class Drone(Model):
         flows=['EEctl', 'Force_ST', 'HSig_DOFs', 'HSig_Bat', 'RSig_Traj']
         # trajconfig: continue, to_home, to_nearest, emland
         self.add_fxn('ManageHealth',flows,fclass = ManageHealth, fparams=params['respolicy'])
-        batweight = {'monolithic':0.5, 'series-split':0.6, 'paralel-split':0.6, 'split-both':0.7}[params['bat']]
+        batweight = {'monolithic':0.4, 'series-split':0.5, 'parallel-split':0.5, 'split-both':0.6}[params['bat']]
         archweight = {'quad':1.2, 'hex':1.6, 'oct':2.0}[params['linearch']]
-        archdrag = {'quad':0.75, 'hex':0.65, 'oct':0.55}[params['linearch']]
-        self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= {'bat': params['bat'], 'weight':(batweight+archweight)*2.2 , 'drag': archdrag })
+        archdrag = {'quad':0.95, 'hex':0.85, 'oct':0.75}[params['linearch']]
+        self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= {'bat': params['bat'], 'weight':(batweight+archweight)/2.2 , 'drag': archdrag })
         self.add_fxn('DistEE', ['EE_1','EEmot','EEctl', 'Force_ST'], fclass = DistEE)
         self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Dir1','Force_Lin', 'HSig_DOFs'], fclass=AffectDOF, fparams = params['linearch'])
         self.add_fxn('CtlDOF',['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST'], fclass = CtlDOF)

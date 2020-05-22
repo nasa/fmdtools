@@ -45,7 +45,7 @@ def calc_res(mdl):
 
 #creates model from design variables
 def x_to_mdl(x):
-    bats = ['monolithic', 'series-split', 'paralel-split', 'split-both']
+    bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
     linarchs = ['quad', 'hex', 'oct']
     respols = ['continue', 'to_home', 'to_nearest', 'emland']
     #start locs
@@ -60,13 +60,13 @@ def x_to_mdl(x):
     mdl = Drone(params=params)
     return mdl
 
-x=[1,1,100,1,1]
+x=[0,0,55,1,1]
 mdl = x_to_mdl(x)
 
 endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
 
 
-rd.plot.mdlhistvals(mdlhist,fxnflowvals={'StoreEE':'soc'})
+rd.plot.mdlhistvals(mdlhist,fxnflowvals={'StoreEE':'soc', 'EE_1':'rate', 'DOFs': 'elev', 'Planpath':'mode', 'Dir1':'power'})
 #descost = calc_des(mdl)
 #opercost = calc_oper(mdl)
 #rescost = calc_res(mdl)
