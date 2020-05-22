@@ -32,6 +32,8 @@ Finally, fmdtools is a research code and is under active development. As a resul
 ----
 ## Getting Started
 
+A version of the fmdtools toolkit can also be installed directly from the [PyPI package repository](https://pypi.org/project/fmdtools/) using `pip install fmdtools`. However, because fmdtools is a research tool (and may need modifications to adapt to a given use-case), we recommend downloading the repository.
+
 ### Prerequisites
 
 fmdtools requires Python 3 and depends on these packages:
@@ -46,7 +48,7 @@ fmdtools requires Python 3 and depends on these packages:
 - `quadpy` 				(for quadrature sampling)
 - `shapely`				(for multirotor model)
 
-These must be installed (e.g. using `pip install packagename` or `conda install packagename`) them before running any of the codes.
+These must be installed (e.g. using `pip install packagename` or `conda install packagename`) them before running any of the codes in the repository. 
 
 While it is not required to use any of the methods, Jupyter notebook is helpful for and for documenting simulation and analysis of a pre-existing model and required to follow through the provided examples.
 
