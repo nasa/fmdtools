@@ -31,10 +31,17 @@ def calc_des(mdl):
     return descost
 
 # Operations Model
+# Obj - flight time
+# Constraints   - batteries stay above 20% (to avoid damage)
+#               - no faults at end of simulation
+#               - cannot fly above 122 m (400 ft)
 def calc_oper(mdl):
     endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
-    opercost = endresults_nom['classification']['expected cost']
-    return opercost
+    f_opercost = endresults_nom['classification']['expected cost']
+    g_soc = 20 - mdlhist['functions']['StoreEE']['soc'][-1] 
+    g_faults = any(endresults_nom['faults'])
+    g_max_height = sum([i for i in mdlhist['flows']['DOFs']['elev']-122 if i>0])
+    return opercost, g_soc, g_faults, g_max_height
 
 # Resilience Model
 def calc_res(mdl):
