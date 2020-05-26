@@ -25,7 +25,14 @@ mdl = Drone(params=params)
 
 # Design Model
 def calc_des(mdl):
-    batcostdict = {'monolithic':0, 'series-split':50000, 'paralel-split':50000, 'split-both':100000}
+    batcostdict = {'monolithic':0, 'series-split':50000, 'parallel-split':50000, 'split-both':100000}
+    linecostdict = {'quad':0, 'hex':100000, 'oct':200000}
+    descost = batcostdict[mdl.params['bat']] + linecostdict[mdl.params['linearch']]
+    return descost
+def x_to_dcost(xdes):
+    bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
+    linarchs = ['quad', 'hex', 'oct']
+    batcostdict = {'monolithic':0, 'series-split':50000, 'parallel-split':50000, 'split-both':100000}
     linecostdict = {'quad':0, 'hex':100000, 'oct':200000}
     descost = batcostdict[mdl.params['bat']] + linecostdict[mdl.params['linearch']]
     return descost
@@ -37,11 +44,25 @@ def calc_des(mdl):
 #               - cannot fly above 122 m (400 ft)
 def calc_oper(mdl):
     endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
-    f_opercost = endresults_nom['classification']['expected cost']
+    opercost = endresults_nom['classification']['expected cost']
     g_soc = 20 - mdlhist['functions']['StoreEE']['soc'][-1] 
     g_faults = any(endresults_nom['faults'])
     g_max_height = sum([i for i in mdlhist['flows']['DOFs']['elev']-122 if i>0])
     return opercost, g_soc, g_faults, g_max_height
+def x_to_ocost(xdes, xoper):
+    bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
+    linarchs = ['quad', 'hex', 'oct']
+    respols = ['continue', 'to_home', 'to_nearest', 'emland']
+    #start locs
+    target = [0, 150, 160, 160]
+    safe = [0, 50, 10, 10]
+    start = [0.0,0.0, 10, 10]
+    
+    sq = square(target[0:2],target[2],target[3])
+    fp = plan_flight(x[2], sq, start[0:2]+[0])
+    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'continue','line':'continue'}, 'target':target,'safe':safe,'start':start }
+    mdl = Drone(params=params)
+    return calc_oper(mdl)
 
 # Resilience Model
 def calc_res(mdl):
@@ -49,6 +70,21 @@ def calc_res(mdl):
     endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
     rescost = rd.process.totalcost(endclasses)
     return rescost
+def x_to_rcost(xdes, xoper, xres):
+    bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
+    linarchs = ['quad', 'hex', 'oct']
+    respols = ['continue', 'to_home', 'to_nearest', 'emland']
+    #start locs
+    target = [0, 150, 160, 160]
+    safe = [0, 50, 10, 10]
+    start = [0.0,0.0, 10, 10]
+    
+    sq = square(target[0:2],target[2],target[3])
+    fp = plan_flight(x[2], sq, start[0:2]+[0])
+    
+    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start }
+    mdl = Drone(params=params)
+    return calc_res(mdl)
 
 #creates model from design variables
 def x_to_mdl(x):
@@ -66,54 +102,13 @@ def x_to_mdl(x):
     params = {'bat':bats[x[0]], 'linearch':linarchs[x[1]], 'flightplan':fp, 'respolicy':{'bat':respols[x[3]],'line':respols[x[4]]}, 'target':target,'safe':safe,'start':start }
     mdl = Drone(params=params)
     return mdl
-
-x=[0,0,55,1,1]
-mdl = x_to_mdl(x)
-
-endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
-
-
-rd.plot.mdlhistvals(mdlhist,fxnflowvals={'StoreEE':'soc', 'EE_1':'rate', 'DOFs': 'elev', 'Planpath':'mode', 'Dir1':'power'})
-#descost = calc_des(mdl)
-#opercost = calc_oper(mdl)
-#rescost = calc_res(mdl)
+# all-in-one-model
+def x_to_cost(x):
+    mdl = x_to_mdl(x)
+    dcost = calc_des(mdl)
+    ocost = calc_oper(mdl)
+    rcost = calc_rcost(mdl)
+    return dcost + ocost + rcost
 
 
-fp = mdl.params['flightplan']
-
-fig1 = plt.figure()
-
-ax2 = fig1.add_subplot(111, projection='3d')
-
-xnom=mdlhist['flows']['DOFs']['x']
-ynom=mdlhist['flows']['DOFs']['y']
-znom=mdlhist['flows']['DOFs']['elev']
-time = mdlhist['time']
-
-
-for goal,loc in fp.items():
-    ax2.text(loc[0],loc[1],loc[2], str(goal), fontweight='bold', fontsize=12)
-    ax2.plot([loc[0]],[loc[1]],[loc[2]], marker='o', markersize=10, color='red', alpha=0.5)
-for xx,yy,zz,tt in zip(xnom,ynom,znom,time):
-    ax2.text(xx,yy,zz, 't='+str(tt), fontsize=8)
-ax2.plot(xnom,ynom,znom)
-fig2 = plt.figure()
-
-x_traj = [a[0] for k,a in fp.items()]
-y_traj = [a[1] for k,a in fp.items()]
-
-plt.plot(x_traj, y_traj)
-plt.plot(mdlhist['flows']['DOFs']['x'], mdlhist['flows']['DOFs']['y'])
-
-xviewed = [x for (x,y),view in endresults_nom['classification']['viewed'].items() if view!='unviewed']
-yviewed = [y for (x,y),view in endresults_nom['classification']['viewed'].items() if view!='unviewed']
-xunviewed = [x for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='unviewed']
-yunviewed = [y for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='unviewed']
-
-plt.scatter(xviewed,yviewed, color='red')
-plt.scatter(xunviewed,yunviewed, color='grey')
-
-plt.fill([x[0] for x in mdl.start_area],[x[1] for x in mdl.start_area], color='blue')
-plt.fill([x[0] for x in mdl.target_area],[x[1] for x in mdl.target_area], alpha=0.2, color='red')
-plt.fill([x[0] for x in mdl.safe_area],[x[1] for x in mdl.safe_area], color='yellow')
 
