@@ -34,7 +34,7 @@ def x_to_dcost(xdes):
     linarchs = ['quad', 'hex', 'oct']
     batcostdict = {'monolithic':0, 'series-split':50000, 'parallel-split':50000, 'split-both':100000}
     linecostdict = {'quad':0, 'hex':100000, 'oct':200000}
-    descost = batcostdict[mdl.params['bat']] + linecostdict[mdl.params['linearch']]
+    descost = batcostdict[bats[xdes[0]]] + linecostdict[linarchs[xdes[1]]]
     return descost
 
 # Operations Model
@@ -59,7 +59,7 @@ def x_to_ocost(xdes, xoper):
     start = [0.0,0.0, 10, 10]
     
     sq = square(target[0:2],target[2],target[3])
-    fp = plan_flight(x[2], sq, start[0:2]+[0])
+    fp = plan_flight(xoper[0], sq, start[0:2]+[0])
     params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'continue','line':'continue'}, 'target':target,'safe':safe,'start':start }
     mdl = Drone(params=params)
     return calc_oper(mdl)
@@ -80,7 +80,7 @@ def x_to_rcost(xdes, xoper, xres):
     start = [0.0,0.0, 10, 10]
     
     sq = square(target[0:2],target[2],target[3])
-    fp = plan_flight(x[2], sq, start[0:2]+[0])
+    fp = plan_flight(xoper[0], sq, start[0:2]+[0])
     
     params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start }
     mdl = Drone(params=params)
@@ -106,9 +106,9 @@ def x_to_mdl(x):
 def x_to_cost(x):
     mdl = x_to_mdl(x)
     dcost = calc_des(mdl)
-    ocost = calc_oper(mdl)
-    rcost = calc_rcost(mdl)
-    return dcost + ocost + rcost
+    oper = calc_oper(mdl)
+    rcost = calc_res(mdl)
+    return dcost + oper[0] + rcost, oper[1:]
 
 
 
