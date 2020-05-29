@@ -24,8 +24,9 @@ import time
 #simplefmea = rp.make_simplefmea(endclasses)
 #summfmea = rp.make_summfmea(endclasses, app)
 # =============================================================================
-params={'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20],5:[75, 300, 20],6:[0, 300, 20], 7:[0,0,50], 8:[0,0,0] },
-        'bat':'series-split',                           #
+params={'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10], # areas
+        'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20],5:[75, 300, 20],6:[0, 300, 20], 7:[0,0,50], 8:[0,0,0] },
+        'bat':'series-split',                           #'monolithic', 'series-split', 'paralel-split', 'split-both'
         'linearch':'quad',                              #quad, hex, oct
         'respolicy':{'bat':'emland','line':'emland'}}   #continue, to_home, to_nearest, emland
 mdl = Drone(params=params)
@@ -97,8 +98,8 @@ plt.plot(x,y)
 plt.plot(xnom,ynom)
 
 
-xviewed = [x for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='viewed']
-yviewed = [y for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='viewed']
+xviewed = [x for (x,y),view in endresults_nom['classification']['viewed'].items() if view!='unviewed']
+yviewed = [y for (x,y),view in endresults_nom['classification']['viewed'].items() if view!='unviewed']
 xunviewed = [x for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='unviewed']
 yunviewed = [y for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='unviewed']
 
@@ -106,9 +107,8 @@ plt.scatter(xviewed,yviewed, color='red')
 plt.scatter(xunviewed,yunviewed, color='grey')
 
 plt.fill([x[0] for x in mdl.start_area],[x[1] for x in mdl.start_area], color='blue')
-plt.fill([x[0] for x in mdl.dang_area],[x[1] for x in mdl.dang_area], alpha=0.2, color='red')
-plt.fill([x[0] for x in mdl.safe1_area],[x[1] for x in mdl.safe1_area], color='yellow')
-plt.fill([x[0] for x in mdl.safe2_area],[x[1] for x in mdl.safe2_area], color='yellow')
+plt.fill([x[0] for x in mdl.target_area],[x[1] for x in mdl.target_area], alpha=0.2, color='red')
+plt.fill([x[0] for x in mdl.safe_area],[x[1] for x in mdl.safe_area], color='yellow')
 
 
 plt.show()

@@ -412,13 +412,16 @@ def env_viewed(xhist, yhist,zhist, square):
     for i,x in enumerate(xhist[1:len(xhist)]):
         w,h,d = viewable_area(zhist[i+1])
         viewed_area = rect(xhist[i],yhist[i],xhist[i+1],yhist[i+1], w,h)
-        polygon=Polygon(viewed_area)
-        #plt.plot(*polygon.exterior.xy) (displays area to debug code)
-        #plt.plot([xhist[i],xhist[i+1]],[yhist[i],yhist[i+1]])
-        if not polygon.is_valid:    print('invalid points')
-        for spot in viewed:
-            if polygon.contains(Point(spot)): 
-                viewed[spot]=d
+        
+        if abs(xhist[i]-xhist[i+1]) + abs(yhist[i]-yhist[i+1]) > 0.1 and w >0.01:
+            polygon=Polygon(viewed_area)
+            #plt.plot(*polygon.exterior.xy) (displays area to debug code)
+            #plt.plot([xhist[i],xhist[i+1]],[yhist[i],yhist[i+1]])
+            if not polygon.is_valid:    
+                print('invalid points')
+            for spot in viewed:
+                if polygon.contains(Point(spot)): 
+                    viewed[spot]=d
     return viewed
 
 def viewable_area(elev):
