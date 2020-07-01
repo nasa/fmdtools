@@ -466,4 +466,25 @@ def plan_flight(elev, square, landing):
     flightplan.update({max(flightplan)+1:flightplan[1], max(flightplan)+2:flightplan[0]})
     return flightplan
 
+# likelihood class schedule
+p_allowable = {"small airplane"}
+
+# population schedule
+density_categories = {'congested':{'density':0.006194, 'body strike':{'vert':0.1, 'horiz':0.73},'head strike':{'vert':0.0375,'horiz':0.0375}},
+                      'urban':{'density':0.002973, 'body strike':{'vert':0.0004, 'horiz':0.0003},'head strike':{'vert':0.0002,'horiz':0.0002}},
+                      'suburban':{'density':0.001042, 'body strike':{'vert':0.0001, 'horiz':0.0011},'head strike':{'vert':0.0001,'horiz':0.0001}},
+                      'rural':{'density':0.0001042, 'body strike':{'vert':0.0000, 'horiz':0.0001},'head strike':{'vert':0.000,'horiz':0.000}},
+                      'remote':{'density':1.931e-6, 'body strike':{'vert':0.0000, 'horiz':0.0000},'head strike':{'vert':0.000,'horiz':0.000}},}
+
+# safety class schedule
+safety_categories = {'catastrophic':{'injuries':'multiple fatalities', 'safety margins':'na', 'crew workload': 'na', 'cost':2000000},
+                     'hazardous':{'injuries':'single fatality and/or multiple serious injurries', 'safety margins':'large decrease', 'crew workload': 'compromises safety', 'cost':9600000},
+                     'major': {'injuries':'non-serious injuries', 'safety margins':'significant decrease', 'crew workload': 'significant increase', 'cost':2428800},
+                     'minor': {'injuries':'na', 'safety margins':'slight decrease', 'crew workload': 'slight increase', 'cost':28800},
+                     'no effect': {'injuries':'na', 'safety margins':'na', 'crew workload': 'na','cost': 0}}
+
+hazards = {'VH-1':'loss of control', 'VH-2':'fly-away / non-conformance', 'VH-3':'loss of communication', 'VH-4':'loss of navigation', 'VH-5':'unsuccessful landing',
+           'VH-6':'unintentional flight termination', 'VH-7':'collision'}
+
+
 
