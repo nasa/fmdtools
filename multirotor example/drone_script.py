@@ -25,6 +25,7 @@ import time
 #summfmea = rp.make_summfmea(endclasses, app)
 # =============================================================================
 params={'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10], # areas
+        'loc':'rural', # location of use
         'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20],5:[75, 300, 20],6:[0, 300, 20], 7:[0,0,50], 8:[0,0,0] },
         'bat':'series-split',                           #'monolithic', 'series-split', 'paralel-split', 'split-both'
         'linearch':'quad',                              #quad, hex, oct
@@ -112,6 +113,14 @@ plt.fill([x[0] for x in mdl.safe_area],[x[1] for x in mdl.safe_area], color='yel
 
 
 plt.show()
+
+
+app = SampleApproach(mdl, faults='single-component')
+a, b = propagate.approach(mdl, app)
+
+p_hazardous = np.sum([v['severities']['hazardous'] for k,v in a.items()])
+p_minor = np.sum([v['severities']['minor'] for k,v in a.items()])
+
 
 #resultstab=fp.runlist(mdl,staged=True)
 

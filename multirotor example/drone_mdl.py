@@ -287,7 +287,8 @@ class PlanPath(FxnBlock):
             self.Dir.assign([0,0,0])            
             
 class Drone(Model):
-    def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic', 'linearch':'quad','respolicy':{'bat':'to_home','line':'emland'}, 'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10]}):
+    def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic', 'linearch':'quad','respolicy':{'bat':'to_home','line':'emland'}, 
+                               'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10], 'loc':'rural'}):
         super().__init__()
         super().__init__(modelparams={'phases': {'ascend':[0,1],'forward':[1,19],'descend':[19, 20]},
                                      'times':[0,30],'units':'min'}, params=params)
@@ -358,18 +359,63 @@ class Drone(Model):
         viewed_value = 10*sum([view for k,view in viewed.items() if view!='unviewed'])
         
         Env=self.flows['DOFs']
-        if  inrange(self.start_area, Env.x, Env.y): landcost = 0 # nominal landing
-        elif inrange(self.safe_area, Env.x, Env.y): landcost=1000 # emergency safe
-        elif inrange(self.target_area, Env.x, Env.y):  landcost=100000 # emergency dangerous
-        else:                                    landcost=10000 # emergency unsanctioned
+        if  inrange(self.start_area, Env.x, Env.y):     landloc = 'nominal' # nominal landing
+        elif inrange(self.safe_area, Env.x, Env.y):     landloc = 'designated' # emergency safe
+        elif inrange(self.target_area, Env.x, Env.y):   landloc = 'over target' # emergency dangerous
+        else:                                           landloc = 'outside target' # emergency unsanctioned
+        # need a way to differentiate horizontal and vertical crashes/landings
+        if self.params['loc'] == 'rural': #assumed photographing a field
+            if landloc == 'over target':    
+                body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
+                head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
+                property_restrictions = 0
+            elif landloc == 'outside target':
+                body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
+                head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
+                property_restrictions = 1
+            else:
+                body_strikes = 0
+                head_strikes = 0
+                property_restrictions = 0
+        elif self.params['loc'] == 'congested': #assumed surveiling a crowd
+            if landloc == 'over target':    
+                body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
+                head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
+                property_restrictions = 0
+            elif landloc == 'outside target':
+                body_strikes = density_categories['urban']['body strike']['horiz']
+                head_strikes = density_categories['urban']['head strike']['horiz']
+                property_restrictions = 1
+            else:
+                body_strikes = 0
+                head_strikes = 0
+                property_restrictions = 0
+        else: #assumes mixed public/private areas in urban, suburban, etc environment
+            if landloc == 'over target':    
+                body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
+                head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
+                property_restrictions = 1
+            elif landloc == 'outside target':
+                body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
+                head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
+                property_restrictions = 1
+            else:
+                body_strikes = 0
+                head_strikes = 0
+                property_restrictions = 0
+        safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes)
+        landcost = property_restrictions*10000
         #repair costs
         repcost=sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()])
-
-        totcost=repcost+landcost-viewed_value
         rate=scen['properties']['rate']
+        p_safety = 1-np.exp(-(body_strikes+head_strikes) * 60/self.times[1]) #convert to pfh
+        classifications = {'hazardous':rate*p_safety, 'minor':rate*(1-p_safety)}
+
+        totcost=repcost+landcost+safecost-viewed_value
+        
         expcost=totcost*rate*1e5
         
-        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'viewed':viewed}
+        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'viewed':viewed, 'landloc':landloc,'body strikes':body_strikes, 'head strikes':head_strikes, 'property restrictions': property_restrictions, 'severities':classifications}
 
 ## BASE FUNCTIONS
 
@@ -466,19 +512,20 @@ def plan_flight(elev, square, landing):
     flightplan.update({max(flightplan)+1:flightplan[1], max(flightplan)+2:flightplan[0]})
     return flightplan
 
-# likelihood class schedule
-p_allowable = {"small airplane"}
+# likelihood class schedule (pfh)
+p_allowable = {'small airplane':{'no requirement':'na', 'probable':1e-3, 'remote':1e-4, 'extremely remote':1e-5, 'extremely improbable':1e-6},
+               'small helicopter':{'no requirement':'na', 'probable':1e-3, 'remote':1e-5, 'extremely remote':1e-7, 'extremely improbable':1e-9}}
 
 # population schedule
 density_categories = {'congested':{'density':0.006194, 'body strike':{'vert':0.1, 'horiz':0.73},'head strike':{'vert':0.0375,'horiz':0.0375}},
                       'urban':{'density':0.002973, 'body strike':{'vert':0.0004, 'horiz':0.0003},'head strike':{'vert':0.0002,'horiz':0.0002}},
                       'suburban':{'density':0.001042, 'body strike':{'vert':0.0001, 'horiz':0.0011},'head strike':{'vert':0.0001,'horiz':0.0001}},
                       'rural':{'density':0.0001042, 'body strike':{'vert':0.0000, 'horiz':0.0001},'head strike':{'vert':0.000,'horiz':0.000}},
-                      'remote':{'density':1.931e-6, 'body strike':{'vert':0.0000, 'horiz':0.0000},'head strike':{'vert':0.000,'horiz':0.000}},}
+                      'remote':{'density':1.931e-6, 'body strike':{'vert':0.0000, 'horiz':0.0000},'head strike':{'vert':0.000,'horiz':0.000}}}
 
 # safety class schedule
 safety_categories = {'catastrophic':{'injuries':'multiple fatalities', 'safety margins':'na', 'crew workload': 'na', 'cost':2000000},
-                     'hazardous':{'injuries':'single fatality and/or multiple serious injurries', 'safety margins':'large decrease', 'crew workload': 'compromises safety', 'cost':9600000},
+                     'hazardous':{'injuries':'single fatality and/or multiple serious injuries', 'safety margins':'large decrease', 'crew workload': 'compromises safety', 'cost':9600000},
                      'major': {'injuries':'non-serious injuries', 'safety margins':'significant decrease', 'crew workload': 'significant increase', 'cost':2428800},
                      'minor': {'injuries':'na', 'safety margins':'slight decrease', 'crew workload': 'slight increase', 'cost':28800},
                      'no effect': {'injuries':'na', 'safety margins':'na', 'crew workload': 'na','cost': 0}}

@@ -29,3 +29,4 @@ rd.plot.mdlhist(mdlhist, fxnflows=['DOFs', 'CtlDOF'], units=['m/s','m/s','N','N'
 
 
 rd.plot.mdlhistvals(mdlhist)
+
