@@ -112,4 +112,23 @@ def x_to_cost(x):
     return dcost + oper[0] + rcost, oper[1:]
 
 
+xdes1 = [3,2]
+xoper1 = [65]
+xres1 = [0,0]
+
+a,b,c,d = x_to_ocost(xdes1, xoper1)
+
+mdl = x_to_mdl([0,2,100,0,0])
+
+
+endresults, resgraph, mdlhist = propagate.nominal(mdl)
+
+rd.plot.mdlhistvals(mdlhist, fxnflowvals={'StoreEE':'soc'})
+
+
+
+
+
+
+
 
