@@ -149,6 +149,7 @@ p_minor = np.sum([v['severities']['minor'] for k,v in a.items()])
 
 
 
+
 #print(t_reused)
 #print(t_copied)
 # based on this test, it appears reusing the model is actually slightly slower
