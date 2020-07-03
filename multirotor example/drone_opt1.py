@@ -17,6 +17,7 @@ from drone_mdl import *
 import time
 
 params={'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10], # areas
+        'loc':'rural',
         'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20],5:[75, 300, 20],6:[0, 300, 20], 7:[0,0,50], 8:[0,0,0] },
         'bat':'series-split',                           #'monolithic', 'series-split', 'paralel-split', 'split-both'
         'linearch':'quad',                              #quad, hex, oct
@@ -64,7 +65,7 @@ def x_to_ocost(xdes, xoper):
     
     sq = square(target[0:2],target[2],target[3])
     fp = plan_flight(xoper[0], sq, start[0:2]+[0])
-    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'to_home','line':'to_home'}, 'target':target,'safe':safe,'start':start }
+    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'to_home','line':'to_home'}, 'target':target,'safe':safe,'start':start, 'loc':'rural' }
     #params = {'bat': bats[xdes[0]], 'linearch': linarchs[xdes[1]], 'flightplan': fp,
     #           'target': target, 'safe': safe, 'start': start}
     mdl = Drone(params=params)
@@ -91,7 +92,7 @@ def x_to_rcost(xdes, xoper, xres):
     sq = square(target[0:2],target[2],target[3])
     fp = plan_flight(xoper[0], sq, start[0:2]+[0])
     
-    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start }
+    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start, 'loc':'rural' }
     mdl = Drone(params=params)
     return calc_res(mdl)
 
@@ -111,7 +112,7 @@ def x_to_mdl(x):
     sq = square(target[0:2],target[2],target[3])
     fp = plan_flight(x[2], sq, start[0:2]+[0])
     
-    params = {'bat':bats[x[0]], 'linearch':linarchs[x[1]], 'flightplan':fp, 'respolicy':{'bat':respols[x[3]],'line':respols[x[4]]}, 'target':target,'safe':safe,'start':start }
+    params = {'bat':bats[x[0]], 'linearch':linarchs[x[1]], 'flightplan':fp, 'respolicy':{'bat':respols[x[3]],'line':respols[x[4]]}, 'target':target,'safe':safe,'start':start, 'loc':'rural' }
     mdl = Drone(params=params)
     return mdl
 # all-in-one-model

@@ -64,7 +64,7 @@ def x_to_ocost(xdes, xoper):
     
     sq = square(target[0:2],target[2],target[3])
     fp = plan_flight(xoper[0], sq, start[0:2]+[0])
-    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'continue','line':'continue'}, 'target':target,'safe':safe,'start':start, 'loc':'rural', }
+    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'continue','line':'continue'}, 'target':target,'safe':safe,'start':start, 'loc':'rural'}
     mdl = Drone(params=params)
     return calc_oper(mdl)
 
