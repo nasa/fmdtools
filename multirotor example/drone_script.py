@@ -60,59 +60,10 @@ rd.plot.mdlhistvals(mdlhist,'StoreEE S1P1nocharge', time=5)
 #fp.plotflowhist(flowhist2, 'RFshort', time=13)
 #fp.plotghist(ghist2, 't=13 RFshort')
 #
-xnom=mdlhist['nominal']['flows']['DOFs']['x']
-ynom=mdlhist['nominal']['flows']['DOFs']['y']
-znom=mdlhist['nominal']['flows']['DOFs']['elev']
-#
-x=mdlhist['faulty']['flows']['DOFs']['x']
-y=mdlhist['faulty']['flows']['DOFs']['y']
-z=mdlhist['faulty']['flows']['DOFs']['elev']
-
-time = mdlhist['nominal']['time']
 
 
-fig2 = plt.figure()
-
-ax2 = fig2.add_subplot(111, projection='3d')
-ax2.set_xlim3d(-50, 200)
-ax2.set_ylim3d(-50,200)
-ax2.set_zlim3d(0,100)
-ax2.plot(xnom,ynom,znom)
-ax2.plot(x,y,z)
-
-for xx,yy,zz,tt in zip(xnom,ynom,znom,time):
-    if tt%20==0:
-        ax2.text(xx,yy,zz, 't='+str(tt), fontsize=8)
-
-for goal,loc in params['flightplan'].items():
-    ax2.text(loc[0],loc[1],loc[2], str(goal), fontweight='bold', fontsize=12)
-    ax2.plot([loc[0]],[loc[1]],[loc[2]], marker='o', markersize=10, color='red', alpha=0.5)
-
-ax2.set_title('Fault response to RFpropbreak fault at t=20')
-ax2.legend(['Nominal Flightpath','Faulty Flighpath'], loc=4)
-#
-plt.show()
 
 
-plt.figure()
-plt.plot(x,y)
-plt.plot(xnom,ynom)
-
-
-xviewed = [x for (x,y),view in endresults_nom['classification']['viewed'].items() if view!='unviewed']
-yviewed = [y for (x,y),view in endresults_nom['classification']['viewed'].items() if view!='unviewed']
-xunviewed = [x for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='unviewed']
-yunviewed = [y for (x,y),view in endresults_nom['classification']['viewed'].items() if view=='unviewed']
-
-plt.scatter(xviewed,yviewed, color='red')
-plt.scatter(xunviewed,yunviewed, color='grey')
-
-plt.fill([x[0] for x in mdl.start_area],[x[1] for x in mdl.start_area], color='blue')
-plt.fill([x[0] for x in mdl.target_area],[x[1] for x in mdl.target_area], alpha=0.2, color='red')
-plt.fill([x[0] for x in mdl.safe_area],[x[1] for x in mdl.safe_area], color='yellow')
-
-
-plt.show()
 
 
 app = SampleApproach(mdl, faults='single-component')
