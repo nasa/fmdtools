@@ -38,9 +38,6 @@ def x_to_dcost(xdes):
     descost = batcostdict[bats[xdes[0]]] + linecostdict[linarchs[xdes[1]]]
     return descost
 
-xdes1 = [0, 1]
-desC1 = x_to_dcost(xdes1)
-print(desC1)
 # Operations Model
 # Obj - flight time
 # Constraints   - batteries stay above 20% (to avoid damage)
@@ -68,10 +65,6 @@ def x_to_ocost(xdes, xoper):
     mdl = Drone(params=params)
     return calc_oper(mdl)
 
-xoper1 = [122] #in m or ft?
-desO1 = x_to_ocost(xdes1, xoper1)
-print(desO1)
-
 # Resilience Model
 def calc_res(mdl):
     app = SampleApproach(mdl, faults='single-component', phases={'forward'})
@@ -93,10 +86,6 @@ def x_to_rcost(xdes, xoper, xres):
     params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start,'loc':'rural', }
     mdl = Drone(params=params)
     return calc_res(mdl)
-
-xres1 = [0, 0]
-desR1 = x_to_rcost(xdes1, xoper1, xres1)
-print(desR1)
 
 #creates model from design variables
 def x_to_mdl(x):
@@ -207,19 +196,6 @@ def plot_xy(mdlhist, endresults):
     
     plt.show()
 
-
-xdes1 = [3,2]
-xoper1 = [65]
-xres1 = [0,0]
-
-a,b,c,d = x_to_ocost(xdes1, xoper1)
-
-mdl = x_to_mdl([0,2,100,0,0])
-
-
-endresults, resgraph, mdlhist = propagate.nominal(mdl)
-
-rd.plot.mdlhistvals(mdlhist, fxnflowvals={'StoreEE':'soc'})
 
 
 

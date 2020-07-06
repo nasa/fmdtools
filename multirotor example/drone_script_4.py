@@ -26,6 +26,6 @@ endresults, resgraph, mdlhist = propagate.nominal(mdl)
 
 rd.plot.mdlhistvals(mdlhist, fxnflowvals={'StoreEE':'soc'})
 
-plot_nomtraj(mdlhist, params)
+#plot_nomtraj(mdlhist, params)
 
-plot_xy(mdlhist, endresults)
+#plot_xy(mdlhist, endresults)

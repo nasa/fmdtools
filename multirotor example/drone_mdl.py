@@ -108,7 +108,7 @@ class DistEE(FxnBlock):
         elif self.has_fault('degr'):                                        self.EEte=0.5
         self.EEmot.effort=self.EEte*self.EEin.effort
         self.EEctl.effort=self.EEte*self.EEin.effort
-        self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, 0.9*self.EEmot.rate+0.1*self.EEctl.rate])
+        self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, 0.99*self.EEmot.rate+0.01*self.EEctl.rate])
             
 class HoldPayload(FxnBlock):
     def __init__(self,flows):
@@ -243,7 +243,7 @@ class CtlDOF(FxnBlock):
         else:                           upthrottle = 1.0
         
         vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
-        forwardthrottle = np.min([vect/(60*9), 1])
+        forwardthrottle = np.min([vect/(60*10), 1])
         self.Ctl.forward=self.EEin.effort*self.Cs*forwardthrottle*self.Dir.power
         self.Ctl.upward=self.EEin.effort*self.Cs*upthrottle*self.Dir.power
 
