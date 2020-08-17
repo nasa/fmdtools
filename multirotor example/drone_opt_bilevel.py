@@ -28,9 +28,9 @@ ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10))
 #ULXbound=np.array([[0,3],[0,2],[10,122]])
 #ULXtype=np.array([['int'],['int'],['real']])
 #ULXRes = [0,0] # Default Res. Pol. in Upper level (nominal env) is o continue
-# Min and max feasible values for each cost models (Obtained from data analysis)
+# Approx Min and max feasible values for each cost models (Obtained from data analysis)
 desC0 = [0, 300000]
-operC0 = [-398609, -37171.5989]
+operC0 = [-630000, -37171.5989]
 resC0 = [171426.3, 55932536.24]
 ulparams = (desC0, operC0, resC0)
 # Defining lower level objetive function
@@ -109,7 +109,7 @@ def ULf(X, *ulparams):
         LL_opt = LLmodel(xdes, xoper, resC0)
         LL_res_opt = LL_opt[0]
         LL_obj_opt = LL_opt[1]
-        LLpen = 100*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
+        LLpen = 1000*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
         #LLpen = LL_obj_opt**2
 
     #Penalized obj func.(both upper and lower level): Double Penalty method
