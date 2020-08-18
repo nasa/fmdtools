@@ -22,7 +22,9 @@ import numpy as np
 from drone_mdl import *
 from drone_opt import *
 import time
+import timeit
 
+start = timeit.default_timer()
 # Initializing design variables and parameters
 ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10))
 #ULXbound=np.array([[0,3],[0,2],[10,122]])
@@ -109,7 +111,7 @@ def ULf(X, *ulparams):
         LL_opt = LLmodel(xdes, xoper, resC0)
         LL_res_opt = LL_opt[0]
         LL_obj_opt = LL_opt[1]
-        LLpen = 1000*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
+        LLpen = 1*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
         #LLpen = LL_obj_opt**2
 
     #Penalized obj func.(both upper and lower level): Double Penalty method
@@ -157,6 +159,14 @@ print(resC_opt)
 #
 # model.run()
 
+###################################################################################
+stop = timeit.default_timer()
+total_time = stop - start
 
+# output running time in a nice format.
+mins, secs = divmod(total_time, 60)
+hours, mins = divmod(mins, 60)
+
+sys.stdout.write("Total running time: %d hrs:%d mins:%d secs.\n" % (hours, mins, secs))
 
 

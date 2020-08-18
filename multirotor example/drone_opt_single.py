@@ -19,7 +19,9 @@ import numpy as np
 from drone_mdl import *
 from drone_opt import *
 import time
+import timeit
 
+start = timeit.default_timer()
 # Initializing design variables and parameters
 ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10), slice(0, 3, 1), slice(0, 3, 1))
 #ULXRes = [0,0] # Default Res. Pol. in Upper level (nominal env) is o continue
@@ -79,7 +81,7 @@ operC_opt = x_to_ocost(xdes_opt, xoper_opt)
 resC_opt = x_to_rcost(xdes_opt, xoper_opt, xres_opt)
 
 print("#####################Single-Stage MOO approach###############################")
-print("Optimal solution at weights w1 = %d and w2 =%d" %(w1, w2))
+sys.stdout.write("Optimal solution at weights w1 = %d and w2 =%d\n" % (w1, w2))
 print(UL_xopt)
 print(UL_fopt)
 print(desC_opt)
@@ -87,3 +89,12 @@ print(operC_opt)
 print(resC_opt)
 
 
+###################################################################################
+stop = timeit.default_timer()
+total_time = stop - start
+
+# output running time in a nice format.
+mins, secs = divmod(total_time, 60)
+hours, mins = divmod(mins, 60)
+
+sys.stdout.write("Total running time: %d hrs:%d mins:%d secs.\n" % (hours, mins, secs))
