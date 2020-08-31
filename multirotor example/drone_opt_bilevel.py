@@ -111,7 +111,7 @@ def ULf(X, *ulparams):
         LL_opt = LLmodel(xdes, xoper, resC0)
         LL_res_opt = LL_opt[0]
         LL_obj_opt = LL_opt[1]
-        LLpen = 1*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
+        LLpen = 1000*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
         #LLpen = LL_obj_opt**2
 
     #Penalized obj func.(both upper and lower level): Double Penalty method
@@ -121,7 +121,7 @@ def ULf(X, *ulparams):
 
 # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
 ULoptmodel = optimize.brute(ULf, ULXbound, args=ulparams, full_output=True, finish=optimize.fmin)
-UL_xopt = np.around(ULoptmodel[0])
+UL_xopt = abs(np.around(ULoptmodel[0]))
 UL_fopt = np.around(ULoptmodel[1], decimals= 4)
 xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]
 xoper_opt = [UL_xopt[2]]
@@ -129,7 +129,7 @@ desC_opt = x_to_dcost(xdes_opt)
 operC_opt = x_to_ocost(xdes_opt, xoper_opt)
 #Running final lower level solution for the upper level optimal solution
 LL_opt = LLmodel(xdes_opt, xoper_opt, resC0)
-LL_xopt = LL_opt[0]
+LL_xopt = abs(LL_opt[0])
 LL_fopt = np.around(LL_opt[1], decimals= 4)
 xres_opt = [int(LL_xopt[0]), int(LL_xopt[1])]
 resC_opt = x_to_rcost(xdes_opt, xoper_opt, xres_opt)
