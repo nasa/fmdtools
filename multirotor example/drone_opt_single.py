@@ -29,9 +29,6 @@ ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10), slice(0, 3, 1), sl
 desC0 = [0, 300000]
 operC0 = [-630000, -37171.5989]
 resC0 = [171426.3, 55932536.24]
-w1 = 0.5 # Weights on obj 1: Design + Oper Cost
-w2 = 1-w1 # Weights on obj 2: Failure Cost
-ulparams = (desC0, operC0, resC0, w1, w2)
 
 # Defining Stage1 objective function
 def ULf(X, *ulparams):
@@ -69,25 +66,43 @@ def ULf(X, *ulparams):
     return ULobj
 
 # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
-ULoptmodel = optimize.brute(ULf, ULXbound, args=ulparams, full_output=True, finish=optimize.fmin)
-UL_xopt = np.around(ULoptmodel[0])
-UL_fopt = np.around(ULoptmodel[1], decimals= 4)
-xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]
-xoper_opt = [UL_xopt[2]]
-xres_opt = [int(UL_xopt[3]), int(UL_xopt[4])]
+weights = pd.Series(np.arange(0, 1.1, 0.1)) # Weights on obj 1: Design + Oper Cost
+obj1_w = []
+obj2_w = []
+for ix in range(len(weights)):
+    w1 = weights.iloc[ix]  # Weights on obj 1: Design + Oper Cost
+    w2 = 1 - w1 # Weights on obj 2: Failure Cost
+    ulparams = (desC0, operC0, resC0, w1, w2)
+    ULoptmodel = optimize.brute(ULf, ULXbound, args=ulparams, full_output=True, finish=optimize.fmin)
+    UL_xopt = abs(np.around(ULoptmodel[0]))
+    UL_fopt = np.around(ULoptmodel[1], decimals=4)
+    xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]
+    xoper_opt = [UL_xopt[2]]
+    xres_opt = [int(UL_xopt[3]), int(UL_xopt[4])]
 
-desC_opt = x_to_dcost(xdes_opt)
-operC_opt = x_to_ocost(xdes_opt, xoper_opt)
-resC_opt = x_to_rcost(xdes_opt, xoper_opt, xres_opt)
+    desC_opt = x_to_dcost(xdes_opt)
+    operC_opt = x_to_ocost(xdes_opt, xoper_opt)
+    resC_opt = x_to_rcost(xdes_opt, xoper_opt, xres_opt)
+    # desC_opt = ([0])
+    # operC_opt = ([11])
+    # resC_opt = ([12])
+    obj1_w.append(desC_opt+operC_opt[0])
+    obj2_w.append(resC_opt)
 
-print("#####################Single-Stage MOO approach###############################")
-sys.stdout.write("Optimal solution at weights w1 = %d and w2 =%d\n" % (w1, w2))
-print(UL_xopt)
-print(UL_fopt)
-print(desC_opt)
-print(operC_opt)
-print(resC_opt)
+    print("#####################Single-Stage MOO approach###############################")
+    sys.stdout.write("Optimal solution at weights w1 = %.1f and w2 =%.1f\n" % (w1, w2))
+    print(UL_xopt)
+    print(UL_fopt)
+    print(desC_opt)
+    print(operC_opt)
+    print(resC_opt)
 
+#Ploting Pareto frontier
+plt.plot(obj1_w,obj2_w,'*b')
+plt.xlabel("f1: Design + Operation Cost")
+plt.ylabel("f2: Failure Cost")
+#plt.legend(('Des','Oper','Res'))
+plt.title("Pareto Frontier")
 
 ###################################################################################
 stop = timeit.default_timer()
