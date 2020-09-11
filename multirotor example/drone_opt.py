@@ -44,12 +44,20 @@ def x_to_dcost(xdes):
 # Constraints   - batteries stay above 20% (to avoid damage)
 #               - no faults at end of simulation
 #               - cannot fly above 122 m (400 ft)
+def find_landtime(mdlhist):
+    return min([i for i,a in enumerate(mdlhist['functions']['Planpath']['mode']) if a=='taxi'])
 def calc_oper(mdl):
+    
     endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
     opercost = endresults_nom['classification']['expected cost']
     g_soc = 20 - mdlhist['functions']['StoreEE']['soc'][-1] 
     g_faults = any(endresults_nom['faults'])
     g_max_height = sum([i for i in mdlhist['flows']['DOFs']['elev']-122 if i>0])
+    
+    landtime = find_landtime(mdlhist)
+    mdl.params['landtime']=landtime
+    mdl.phases['forward'][1] = landtime
+    mdl.phases['taxis'][0] = landtime
     return opercost, g_soc, g_faults, g_max_height
 def x_to_ocost(xdes, xoper):
     bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
@@ -86,9 +94,10 @@ def x_to_rcost(xdes, xoper, xres):
     
     params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start,'loc':'rural', 'landtime':12 }
     mdl = Drone(params=params)
+    a,b,c,d = calc_oper(mdl)
     return calc_res(mdl)
 
-#creates model from design variables
+#creates model from design variables (note: does not get flight time)
 def x_to_mdl(x):
     bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
     linarchs = ['quad', 'hex', 'oct']
