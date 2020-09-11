@@ -1,3 +1,3 @@
 
-import fmdtools.faultsim.networks as networks
-import fmdtools.faultsim.propagate as propagate
+from fmdtools.faultsim import networks
+from fmdtools.faultsim import propagate

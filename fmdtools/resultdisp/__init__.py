@@ -1,5 +1,5 @@
 
-import fmdtools.resultdisp.tabulate as tabulate
-import fmdtools.resultdisp.process as process
-import fmdtools.resultdisp.graph as graph
-import fmdtools.resultdisp.plot as plot
+from fmdtools.resultdisp import tabulate
+from fmdtools.resultdisp import process
+from fmdtools.resultdisp import graph
+from fmdtools.resultdisp import plot
