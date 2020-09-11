@@ -354,6 +354,8 @@ class Drone(Model):
         self.construct_graph(graph_pos=pos, bipartite_pos=bippos)
         
     def find_classification(self, g, endfaults, endflows, scen, mdlhist):
+        
+        
         #landing costs
         viewed = env_viewed(mdlhist['faulty']['flows']['DOFs']['x'], mdlhist['faulty']['flows']['DOFs']['y'],mdlhist['faulty']['flows']['DOFs']['elev'], self.target_area)
         viewed_value = 10*sum([view for k,view in viewed.items() if view!='unviewed'])
