@@ -45,7 +45,7 @@ def x_to_dcost(xdes):
 #               - no faults at end of simulation
 #               - cannot fly above 122 m (400 ft)
 def find_landtime(mdlhist):
-    return min([i for i,a in enumerate(mdlhist['functions']['Planpath']['mode']) if a=='taxi'])
+    return min([i for i,a in enumerate(mdlhist['functions']['Planpath']['mode']) if a=='taxi']+[15])
 def calc_oper(mdl):
     
     endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
