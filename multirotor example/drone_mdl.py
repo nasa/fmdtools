@@ -288,9 +288,9 @@ class PlanPath(FxnBlock):
             
 class Drone(Model):
     def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic', 'linearch':'quad','respolicy':{'bat':'to_home','line':'emland'}, 
-                               'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10], 'loc':'rural'}):
+                               'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10], 'loc':'rural', 'landtime':12}):
         super().__init__()
-        super().__init__(modelparams={'phases': {'ascend':[0,1],'forward':[1,19],'descend':[19, 20]},
+        super().__init__(modelparams={'phases': {'ascend':[0,1],'forward':[1,params['landtime']],'taxis':[params['landtime'], 20]},
                                      'times':[0,30],'units':'min'}, params=params)
         
         self.start_area = square(self.params['start'][0:2],self.params['start'][2],self.params['start'][3] )

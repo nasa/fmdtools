@@ -21,7 +21,8 @@ params={'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50
         'flightplan':{ 1:[0,0,50], 2:[100, 200, 50], 3:[100, 100, 85], 4:[-25, 150, 20],5:[75, 300, 20],6:[0, 300, 20], 7:[0,0,50], 8:[0,0,0] },
         'bat':'series-split',                           #'monolithic', 'series-split', 'paralel-split', 'split-both'
         'linearch':'quad',                              #quad, hex, oct
-        'respolicy':{'bat':'emland','line':'emland'}}   #continue, to_home, to_nearest, emland
+        'respolicy':{'bat':'emland','line':'emland'},   #continue, to_home, to_nearest, emland
+        'landtime':12}                                  #time when the drone lands (get from nominal simulation)
 mdl = Drone(params=params)
 
 # Design Model
@@ -61,7 +62,7 @@ def x_to_ocost(xdes, xoper):
     
     sq = square(target[0:2],target[2],target[3])
     fp = plan_flight(xoper[0], sq, start[0:2]+[0])
-    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'continue','line':'continue'}, 'target':target,'safe':safe,'start':start, 'loc':'rural'}
+    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'continue','line':'continue'}, 'target':target,'safe':safe,'start':start, 'loc':'rural', 'landtime':12}
     mdl = Drone(params=params)
     return calc_oper(mdl)
 
@@ -83,7 +84,7 @@ def x_to_rcost(xdes, xoper, xres):
     sq = square(target[0:2],target[2],target[3])
     fp = plan_flight(xoper[0], sq, start[0:2]+[0])
     
-    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start,'loc':'rural', }
+    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start,'loc':'rural', 'landtime':12 }
     mdl = Drone(params=params)
     return calc_res(mdl)
 
@@ -100,7 +101,7 @@ def x_to_mdl(x):
     sq = square(target[0:2],target[2],target[3])
     fp = plan_flight(x[2], sq, start[0:2]+[0])
     
-    params = {'bat':bats[x[0]], 'linearch':linarchs[x[1]], 'flightplan':fp, 'respolicy':{'bat':respols[x[3]],'line':respols[x[4]]}, 'target':target,'safe':safe,'start':start,'loc':'rural', }
+    params = {'bat':bats[x[0]], 'linearch':linarchs[x[1]], 'flightplan':fp, 'respolicy':{'bat':respols[x[3]],'line':respols[x[4]]}, 'target':target,'safe':safe,'start':start,'loc':'rural', 'landtime':12}
     mdl = Drone(params=params)
     return mdl
 # all-in-one-model
@@ -173,7 +174,7 @@ def plot_faulttraj(mdlhist, params):
     #
     plt.show()
     
-def plot_xy(mdlhist, endresults):
+def plot_xy(mdlhist, endresults, title=''):
     xnom=mdlhist['flows']['DOFs']['x']
     ynom=mdlhist['flows']['DOFs']['y']
     znom=mdlhist['flows']['DOFs']['elev']
@@ -193,6 +194,7 @@ def plot_xy(mdlhist, endresults):
     plt.fill([x[0] for x in mdl.target_area],[x[1] for x in mdl.target_area], alpha=0.2, color='red')
     plt.fill([x[0] for x in mdl.safe_area],[x[1] for x in mdl.safe_area], color='yellow')
     
+    plt.title(title)
     
     plt.show()
 
