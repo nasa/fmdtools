@@ -26,79 +26,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 from drone_mdl import *
+from drone_opt import *
 import time
 import pandas as pd
 import numpy as np
-
-# Design Model
-def x_to_dcost(xdes):
-    bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
-    linarchs = ['quad', 'hex', 'oct']
-    batcostdict = {'monolithic': 0, 'series-split': 50000, 'parallel-split': 50000, 'split-both': 100000}
-    linecostdict = {'quad': 0, 'hex': 100000, 'oct': 200000}
-    # print(xdes[0])
-    descost = batcostdict[bats[xdes[0]]] + linecostdict[linarchs[xdes[1]]]
-    return descost
-
-
-# Operation Model
-# Constraints   - batteries stay above 20% (to avoid damage) #postitive means violation
-#               - no faults at end of simulation # True means faults exists (violation)
-#               - cannot fly above 122 m (400 ft) #Positive means violation ??
-def calc_oper(mdl):
-    endresults_nom, resgraph, mdlhist = propagate.nominal(mdl)
-    opercost = endresults_nom['classification']['expected cost']
-    g_soc = 20 - mdlhist['functions']['StoreEE']['soc'][-1]
-    g_faults = any(endresults_nom['faults'])
-    g_max_height = sum([i for i in mdlhist['flows']['DOFs']['elev'] - 122 if i > 0])
-    return opercost, g_soc, g_faults, g_max_height
-
-
-def x_to_ocost(xdes, xoper, xres):
-    bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
-    linarchs = ['quad', 'hex', 'oct']
-    respols = ['continue', 'to_home', 'to_nearest', 'emland']
-    # start locs
-    target = [0, 150, 160, 160]
-    safe = [0, 50, 10, 10]
-    start = [0.0, 0.0, 10, 10]
-
-    sq = square(target[0:2], target[2], target[3])
-    fp = plan_flight(xoper[0], sq, start[0:2] + [0])
-    params = {'bat': bats[xdes[0]], 'linearch': linarchs[xdes[1]], 'flightplan': fp,
-              'respolicy': {'bat': respols[xres[0]], 'line': respols[xres[1]]}, 'target': target, 'safe': safe,
-              'start': start, 'loc': 'rural'}
-    # params = {'bat': bats[xdes[0]], 'linearch': linarchs[xdes[1]], 'flightplan': fp,
-    #           'target': target, 'safe': safe, 'start': start}
-    mdl = Drone(params=params)
-    return calc_oper(mdl)
-
-
-# Resilience Model
-def calc_res(mdl):
-    app = SampleApproach(mdl, faults='single-component', phases={'forward'})
-    endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
-    rescost = rd.process.totalcost(endclasses)
-    return rescost
-
-
-def x_to_rcost(xdes, xoper, xres):
-    bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
-    linarchs = ['quad', 'hex', 'oct']
-    respols = ['continue', 'to_home', 'to_nearest', 'emland']
-    # start locs
-    target = [0, 150, 160, 160]
-    safe = [0, 50, 10, 10]
-    start = [0.0, 0.0, 10, 10]
-
-    sq = square(target[0:2], target[2], target[3])
-    fp = plan_flight(xoper[0], sq, start[0:2] + [0])
-
-    params = {'bat': bats[xdes[0]], 'linearch': linarchs[xdes[1]], 'flightplan': fp,
-              'respolicy': {'bat': respols[xres[0]], 'line': respols[xres[1]]}, 'target': target, 'safe': safe,
-              'start': start, 'loc': 'rural'}
-    mdl = Drone(params=params)
-    return calc_res(mdl)
 
 
 
@@ -131,7 +62,7 @@ for ix in range(len(x_mat)):
     xoper = [x_mat.iloc[ix, 2]]
     xres = [x_mat.iloc[ix, 3], x_mat.iloc[ix, 4]]
     desC = x_to_dcost(xdes)  # Calling design model
-    operC = x_to_ocost(xdes, xoper, xres)  # Calling operational model
+    operC = x_to_ocost(xdes, xoper)  # Calling operational model
     resC = x_to_rcost(xdes, xoper, xres)  # Calling failure model
     Cost_eval.loc[ix, ['desC']] = desC
     Cost_eval.loc[ix, ['operC']] = operC[0]
