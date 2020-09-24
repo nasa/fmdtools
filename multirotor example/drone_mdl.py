@@ -167,7 +167,7 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5,'RF2':0.5,'LF2':0.5,'LR2':-0.5,'RR2':-0.5}
             self.LR = {'L':{'LF', 'LR','LF2', 'LR2'}, 'R':{'RF','RR','RF2','RR2'}}
             self.FR = {'F':{'LF', 'RF','LF2', 'RF2'}, 'R':{'LR', 'RR','LR2', 'RR2'}}
-        super().__init__(['EEin', 'Ctlin','DOF','Dir','Force','Hsig'], flows,{'LRstab':0.0, 'FRstab':0.0}, components) 
+        super().__init__(['EEin', 'Ctlin','DOF','Dir','Force','HSig'], flows,{'LRstab':0.0, 'FRstab':0.0}, components) 
     def behavior(self, time):
         Air,EEin={},{}
         #injects faults into lines
@@ -184,11 +184,14 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         self.LRstab = (sum([Air[comp] for comp in self.LR['L']])-sum([Air[comp] for comp in self.LR['R']]))/len(Air)
         self.FRstab = (sum([Air[comp] for comp in self.FR['R']])-sum([Air[comp] for comp in self.FR['F']]))/len(Air)
         
-        if abs(self.LRstab) >=0.4 or abs(self.FRstab)>=0.75:    self.DOF.uppwr, self.DOF.planpwr = 0.0, 0.0
+        if abs(self.LRstab) >=0.25 or abs(self.FRstab)>=0.75:    self.DOF.uppwr, self.DOF.planpwr = 0.0, 0.0
         else:
             Airs=list(Air.values())
             self.DOF.uppwr=np.mean(Airs)
             self.DOF.planpwr=self.Ctlin.forward
+        
+        if self.any_faults():   self.HSig.hstate='faulty'
+        
         if time> self.time:
             if self.DOF.uppwr > 1:      self.DOF.vertvel = 60*min([(self.DOF.uppwr-1)*5, 5])
             elif self.DOF.uppwr < 1:    self.DOF.vertvel = 60*max([(self.DOF.uppwr-1)*50, -50])
@@ -203,6 +206,7 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
             vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
             self.DOF.x=self.DOF.x+self.DOF.planvel*self.Dir.traj[0]/vect
             self.DOF.y=self.DOF.y+self.DOF.planvel*self.Dir.traj[1]/vect
+            
 
 class Line(Component):
     def __init__(self, name):
@@ -250,6 +254,7 @@ class CtlDOF(FxnBlock):
 class PlanPath(FxnBlock):
     def __init__(self, flows, params):
         super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'})
+        self.nearest = params['safe'][0:2]+[0]
         self.goals = params['flightplan']
         self.goal=self.goals[1]
         self.failrate=1e-5
@@ -262,11 +267,13 @@ class PlanPath(FxnBlock):
         dist = finddist(loc, self.goal)        
         [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
         
-        if self.mode=='taxi' and t>5:   self.mode=='taxi'
+        if self.mode=='taxi' and t>5:           self.mode=='taxi'
         elif self.Rsig.mode == 'to_home': # add a to_nearest option
             self.pt = 0
             self.goal =self.goals[self.pt]
-        elif self.Rsig.mode== 'emland': self.mode = 'land'
+            [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
+        elif self.Rsig.mode == 'to_nearest':    self.mode = 'to_nearest'
+        elif self.Rsig.mode== 'emland':         self.mode = 'land'
         elif self.Env.elev<1 and (self.pt>=max(self.goals) or self.mode=='land'):  self.mode = 'taxi'
         elif dist<5 and self.pt>=max(self.goals):           self.mode = 'land'
         elif dist<5 and {'move'}.issuperset({self.mode}):
@@ -276,9 +283,10 @@ class PlanPath(FxnBlock):
         elif dist>5 and not(self.mode=='descend'):          self.mode='move'
         # nominal behaviors
         self.Dir.power=1.0
-        if self.mode=='taxi':       self.Dir.power=0.0          
-        elif self.mode=='move':     self.Dir.assign([self.dx,self.dy, self.dz])     
-        elif self.mode=='land':     self.Dir.assign([0,0,-self.Env.elev/2])
+        if self.mode=='taxi':           self.Dir.power=0.0          
+        elif self.mode=='move':         self.Dir.assign([self.dx,self.dy, self.dz])     
+        elif self.mode=='land':         self.Dir.assign([0,0,-self.Env.elev/2])
+        elif self.mode =='to_nearest':  self.Dir.assign(vectdist(self.nearest,loc))
         # faulty behaviors    
         if self.has_fault('noloc'):     self.Dir.assign([0,0,0])
         elif self.has_fault('degloc'):  self.Dir.assign([0,0,-1])
@@ -360,6 +368,9 @@ class Drone(Model):
         viewed = env_viewed(mdlhist['faulty']['flows']['DOFs']['x'], mdlhist['faulty']['flows']['DOFs']['y'],mdlhist['faulty']['flows']['DOFs']['elev'], self.target_area)
         viewed_value = 10*sum([view for k,view in viewed.items() if view!='unviewed'])
         
+        fhist=mdlhist['faulty']
+        faulttime = sum([any([fhist['functions'][f]['faults'][t]!={'nom'} for f in fhist['functions']]) for t in range(len(fhist['time'])) if fhist['flows']['DOFs']['elev'][t]])
+        
         Env=self.flows['DOFs']
         if  inrange(self.start_area, Env.x, Env.y):     landloc = 'nominal' # nominal landing
         elif inrange(self.safe_area, Env.x, Env.y):     landloc = 'designated' # emergency safe
@@ -405,7 +416,7 @@ class Drone(Model):
                 body_strikes = 0
                 head_strikes = 0
                 property_restrictions = 0
-        safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes)
+        safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes) + safety_categories['minor']['cost'] * faulttime
         landcost = property_restrictions*10000
         #repair costs
         repcost=sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()])
