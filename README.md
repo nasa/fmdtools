@@ -32,7 +32,7 @@ Finally, fmdtools is a research code and is under active development. As a resul
 ----
 ## Getting Started
 
-A version of the fmdtools toolkit can also be installed directly from the [PyPI package repository](https://pypi.org/project/fmdtools/) using `pip install fmdtools`. However, because fmdtools is a research tool (and may need modifications to adapt to a given use-case), we recommend downloading the repository.
+A version of the fmdtools toolkit can also be installed directly from the [PyPI package repository](https://pypi.org/project/fmdtools/) using `pip install fmdtools`. 
 
 ### Prerequisites
 
@@ -54,18 +54,22 @@ While it is not required to use any of the methods, Jupyter notebook is helpful 
 
 ### Documentation and Examples
 
-This repo provides a few resources to get familiar with fmdtools:
+An overview of fmdtools is provided in the accomanying paper:
 
-- A high-level overview of the toolkit methods and structure is provided in `docs/overview`.
+[Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., & Goebel, K. (2020, September 14). fmdtools: A Fault Propagation Toolkit for Resilience Assessment in Early Design. https://doi.org/10.31224/osf.io/d48k6](https://doi.org/10.31224/osf.io/d48k6)
 
+Additionally, this repo provides a few resources to get familiar with fmdtools:
+
+- Workshop slides and tutorial in `docs.Intro to fmdtools.pptx`, `pump example/ex_pump.py`, and `pump example/tutorial_complete.py`
+- A shorter overview the toolkit methods and structure is provided in `docs/overview`.
 - Some documented examples are provided, including:
-  - A baseline example of most provided methods in conceptual design-stage pump system in `pump example/ex_pump.py` and `pump example/Pump Tutorial.ipynb`
+  - A baseline example of most provided methods in conceptual design-stage pump system in `pump example/ex_pump.py` and `pump example/Pump Example Notebook.ipynb`
   - An case study following the modelling process of going from a less detailed to more detailed model is provided in `multirotor example\paper demonstration\Demonstration.ipynb` for the design of a multirotor drone.
   - An example replicating previous the simple electric power system implemented in [IBFM](https://github.com/DesignEngrLab/IBFM) in the `eps example` directory, with some basic fault propagation and visualization.
   - An example of modelling a dynamical system (without faults) is shown in the `\pandemic example` directory, with a reference stand-alone model is provided in `simple_model.py` and `fmd_model.py` and `fmd_model_script.py` showing how one might implement a distributed version of this model in `fmdtools`.
   - Using the `component` class to model human interactions with the modelled system in `hold-up tank example`.
 
-- Documentation for each of the classes/methods/modules is provided and can be viewed by going through the fmdtools source code (or by using `help(methodname)`)
+- More detailed documentation for each of the classes/methods/modules is provided and can be viewed by going through the fmdtools source code (or by using `help(methodname)`)
 
 ----
 ## Contributors
