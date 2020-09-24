@@ -94,7 +94,7 @@ def x_to_rcost(xdes, xoper, xres):
     
     params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start,'loc':'rural', 'landtime':12 }
     mdl = Drone(params=params)
-    a,b,c,d = calc_oper(mdl)
+    a,b,c,d = calc_oper(mdl) #used to form flight phases
     return calc_res(mdl)
 
 #creates model from design variables (note: does not get flight time)
