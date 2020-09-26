@@ -12,7 +12,7 @@ sys.path.append('../')
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
-import GA.geneticalgorithm.geneticalgorithm as ga
+#import GA.geneticalgorithm.geneticalgorithm as ga
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from scipy import optimize
@@ -33,7 +33,8 @@ ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10))
 # Approx Min and max feasible values for each cost models (Obtained from data analysis)
 desC0 = [0, 300000]
 operC0 = [-630000, -37171.5989]
-resC0 = [171426.3, 55932536.24]
+resC0 = [5245622.35, 310771934]
+#resC0 = [171426.3, 55932536.24]
 ulparams = (desC0, operC0, resC0)
 # Defining lower level objetive function
 def LLf(ll_x, *llparams):
@@ -111,7 +112,7 @@ def ULf(X, *ulparams):
         LL_opt = LLmodel(xdes, xoper, resC0)
         LL_res_opt = LL_opt[0]
         LL_obj_opt = LL_opt[1]
-        LLpen = 1000*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
+        LLpen = 1*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
         #LLpen = LL_obj_opt**2
 
     #Penalized obj func.(both upper and lower level): Double Penalty method

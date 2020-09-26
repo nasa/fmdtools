@@ -57,7 +57,7 @@ import seaborn as sns; sns.set(style="ticks", color_codes=True)
 # rd.plot.mdlhistvals(mdlhist, fxnflowvals={'StoreEE':'soc'})
 
 # Read the dataset of cost model values and constraint validation for a large grid of design variables
-grid_results= pd.read_csv('grid_results.csv')
+grid_results= pd.read_csv('grid_results_new.csv')
 #print(grid_results.head())
 #print(grid_results.shape)
 
@@ -79,15 +79,15 @@ opt_results= pd.read_csv('opt_results.csv')
 #print(opt_results.shape)
 obj1 = pd.Series.tolist(opt_results['Obj1'])
 obj2 = pd.Series.tolist(opt_results['Obj2'])
-index= ['Bi-LevelP1000', 'Bi-LevelP100', 'Bi-LevelP10', 'Bi-LevelP1', 'Two-Stage', 'MOO:w1=0','MOO:w1=[0.1,1]']
+index= ['Bi-LevelP1000', 'Bi-LevelP100', 'Bi-LevelP10/1', 'Two-Stage', 'MOO:w1=0','MOO:w1=[0.1,0.2,0.3]','MOO:w1=0.4','MOO:w1=[0.5,0.6,..,1]']
 df_y = pd.DataFrame({'Obj1:DesC+OperC':obj1, 'Obj2:FailureC': obj2}, index=index)
-df_y.plot.bar(rot=30)
+df_y.plot.bar(rot=45)
 plt.title("Costs at optimal decision under different frameworks")
 plt.show()
 
 obj_combined = pd.Series.tolist(opt_results['Obj1']+opt_results['Obj2'])
-df_y1 = pd.DataFrame({'Obj1 + Obj2:DesC+OperC':obj_combined}, index=index)
-df_y1.plot.bar(rot=30)
+df_y1 = pd.DataFrame({'Obj1 + Obj2:DesC+OperC+FailureC':obj_combined}, index=index)
+df_y1.plot.bar(rot=45)
 plt.title("Combined Costs at optimal decision under different frameworks")
 plt.show()
 # #Subsetting all data into 4 parts- each resilience policy (includes also infeasible data)

@@ -9,7 +9,7 @@ sys.path.append('../')
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
-import GA.geneticalgorithm.geneticalgorithm as ga
+#import GA.geneticalgorithm.geneticalgorithm as ga
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from scipy import optimize
@@ -28,7 +28,8 @@ ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10), slice(0, 3, 1), sl
 # Approx Min and max feasible values for each cost models (Obtained from data analysis)
 desC0 = [0, 300000]
 operC0 = [-630000, -37171.5989]
-resC0 = [171426.3, 55932536.24]
+resC0 = [5245622.35, 310771934]
+#resC0 = [171426.3, 55932536.24]
 
 # Defining Stage1 objective function
 def ULf(X, *ulparams):
