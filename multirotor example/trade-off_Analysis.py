@@ -97,5 +97,5 @@ grid_results.columns = ['Bat', 'Rotor', 'Height', 'ResPolBat', 'ResPolRot','desC
 # Saving the results in .csv file
 # We will work on this dataset for plotting (examples provided in the trade-off_Analysis_plot.py)
 # No need to rerun the file unless we change the cost models
-grid_results.to_csv('grid_results.csv', index=False)
+grid_results.to_csv('grid_results_new.csv', index=False)
 print(grid_results)
