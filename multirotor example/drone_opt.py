@@ -8,10 +8,14 @@ Created on Wed May 13 13:17:31 2020
 import sys
 sys.path.append('../')
 
+import numpy as np
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
+
 
 from drone_mdl import *
 import time
@@ -183,11 +187,24 @@ def plot_faulttraj(mdlhist, params):
     #
     plt.show()
     
-def plot_xy(mdlhist, endresults, title=''):
+def plot_xy(mdlhist, endresults, title='', retfig=False, legend=False):
+    plt.figure()
+    plot_one_xy(mdlhist, endresults)
+    
+    plt.fill([x[0] for x in mdl.start_area],[x[1] for x in mdl.start_area], color='blue', label='Starting Area')
+    plt.fill([x[0] for x in mdl.target_area],[x[1] for x in mdl.target_area], alpha=0.2, color='red', label='Target Area')
+    plt.fill([x[0] for x in mdl.safe_area],[x[1] for x in mdl.safe_area], color='yellow', label='Emergency Landing Area')
+    
+    plt.title(title)
+    if legend: plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    
+    if retfig:  return plt.gcf(), plt.gca()
+    else:       plt.show()
+def plot_one_xy(mdlhist,endresults, retfig=False):
     xnom=mdlhist['flows']['DOFs']['x']
     ynom=mdlhist['flows']['DOFs']['y']
     znom=mdlhist['flows']['DOFs']['elev']
-    plt.figure()
+    
     plt.plot(xnom,ynom)
     
     
@@ -196,18 +213,41 @@ def plot_xy(mdlhist, endresults, title=''):
     xunviewed = [x for (x,y),view in endresults['classification']['viewed'].items() if view=='unviewed']
     yunviewed = [y for (x,y),view in endresults['classification']['viewed'].items() if view=='unviewed']
     
-    plt.scatter(xviewed,yviewed, color='red')
-    plt.scatter(xunviewed,yunviewed, color='grey')
+    plt.scatter(xviewed,yviewed, color='red', label='Viewed')
+    plt.scatter(xunviewed,yunviewed, color='grey', label='Unviewed')
+    if retfig: return plt.gca(), plt.gcf()
     
-    plt.fill([x[0] for x in mdl.start_area],[x[1] for x in mdl.start_area], color='blue')
-    plt.fill([x[0] for x in mdl.target_area],[x[1] for x in mdl.target_area], alpha=0.2, color='red')
-    plt.fill([x[0] for x in mdl.safe_area],[x[1] for x in mdl.safe_area], color='yellow')
+def plot_xys(mdlhists, endresultss, cols=2, title='', retfig=False, legend=False):
     
-    plt.title(title)
+    num_plots = len(mdlhists)
+    fig, axs = plt.subplots(nrows=int(np.ceil((num_plots)/cols)), ncols=cols, figsize=(cols*6, 5*num_plots/cols))
+    n=1
     
-    plt.show()
-
-
+    for paramlab, mdlhist in mdlhists.items():
+        plt.subplot(int(np.ceil((num_plots)/cols)),cols,n, label=paramlab)
+        a, _= plot_one_xy(mdlhist, endresultss[paramlab],retfig=True)
+        b= plt.fill([x[0] for x in mdl.start_area],[x[1] for x in mdl.start_area], color='blue', label='Starting Area')
+        c=plt.fill([x[0] for x in mdl.target_area],[x[1] for x in mdl.target_area], alpha=0.2, color='red', label='Target Area')
+        d=plt.fill([x[0] for x in mdl.safe_area],[x[1] for x in mdl.safe_area], color='yellow', label='Emergency Landing Area')
+        plt.title(paramlab)
+        n+=1
+    plt.suptitle(title)
+    if legend: 
+        plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label='legend')
+        legend_elements = [Line2D([0], [0], color='b', lw=1, label='Flightpath'),
+                   Line2D([0], [0], marker='o', color='r', label='Viewed',
+                          markerfacecolor='r', markersize=8),
+                   Line2D([0], [0], marker='o', color='grey', label='Unviewed',
+                          markerfacecolor='grey', markersize=8),
+                   Patch(facecolor='red', edgecolor='red', alpha=0.2,
+                         label='Target Area'),
+                   Patch(facecolor='blue', edgecolor='blue',label='Landing Area'),
+                   Patch(facecolor='yellow', edgecolor='yellow',label='Emergency Landing Area')]
+        plt.legend( handles=legend_elements, loc='center')
+    plt.subplots_adjust(top=1-0.05-0.05/(num_plots/cols))
+    
+    if retfig:  return fig
+    else:       plt.show()
 
 
 
