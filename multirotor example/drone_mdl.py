@@ -41,12 +41,16 @@ class StoreEE(FxnBlock):
             components = {'S1P1': Battery('S1', self.batparams), 'S2P1': Battery('S2', self.batparams),'S1P2': Battery('S1P2', self.batparams), 'S2P2': Battery('S2P2', self.batparams)}
         else: raise Exception("Invalid battery architecture")
         #failrate for function w- component only applies to function modes
-        self.failrate=1e-3
-        self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],300],'lowcharge':[0.7,[0.6,0.2,0.2],200]})
+        self.failrate=1e-4
+        self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],50],'lowcharge':[0.7,[0.6,0.2,0.2],20]})
         super().__init__(['EEout', 'FS', 'HSig'], flows, {'soc': 100}, components)
     def condfaults(self, time):
         if self.soc<20:                     self.add_fault('lowcharge')
+        elif self.has_fault('lowcharge'):   
+            for batname, bat in self.components.items(): bat.soc=19
         if self.soc<1:                      self.replace_fault('lowcharge','nocharge')
+        elif self.has_fault('nocharge'):
+            for batname, bat in self.components.items(): bat.soc=0
     def behavior(self, time):
         EE, soc = {}, {}
         rate_res=0
@@ -67,15 +71,15 @@ class StoreEE(FxnBlock):
 class Battery(Component):
     def __init__(self, name, batparams):
         super().__init__(name, {'soc':100, 'EEe':1.0, 'Et':1.0})
-        self.failrate=1e-3
+        self.failrate=1e-4
         self.avail_eff = 1/batparams['p']
         self.maxa = 2/batparams['s']
         self.p=batparams['p']
         self.s=batparams['s']
         self.amt = 60*4.200/(batparams['w']*170/(batparams['d']*batparams['v']))
-        self.assoc_modes({'short':[0.02,[0.3,0.3,0.3],2000], 'degr':[0.06,[0.3,0.3,0.3],2000],
-                          'break':[0.02,[0.2,0.2,0.2],2000], 'nocharge':[0.2,[0.6,0.2,0.2],300],
-                          'lowcharge':[0.7,[0.6,0.2,0.2],200]}, name=name)
+        self.assoc_modes({'short':[0.2,[0.3,0.3,0.3],200], 'degr':[0.2,[0.3,0.3,0.3],200],
+                          'break':[0.2,[0.2,0.2,0.2],200], 'nocharge':[0.6,[0.6,0.2,0.2],300],
+                          'lowcharge':[0,[0.6,0.2,0.2],200]}, name=name)
     def behavior(self, FS, EEoutr, time):
         if FS <1.0:     self.add_fault(self.name+'break')
         if EEoutr>self.maxa:    self.add_fault(self.name+'break')
@@ -97,8 +101,8 @@ class DistEE(FxnBlock):
     def __init__(self,flows):
         super().__init__(['EEin','EEmot','EEctl','ST'],flows, {'EEtr':1.0, 'EEte':1.0}, timely=False)
         self.failrate=1e-5
-        self.assoc_modes({'short':[0.3,[0.33, 0.33, 0.33],3000], 'degr':[0.5,[0.33, 0.33, 0.33],1000],\
-                          'break':[0.2,[0.33, 0.33, 0.33],2000]})
+        self.assoc_modes({'short':[0.3,[0.33, 0.33, 0.33],300], 'degr':[0.5,[0.33, 0.33, 0.33],100],\
+                          'break':[0.2,[0.33, 0.33, 0.33],200]})
     def condfaults(self, time):
         if self.ST.support<0.5 or max(self.EEmot.rate,self.EEctl.rate)>2:   self.add_fault('break')
         if self.EEin.rate>2:                                                self.add_fault('short')
@@ -114,7 +118,7 @@ class HoldPayload(FxnBlock):
     def __init__(self,flows):
         super().__init__(['DOF', 'Lin', 'ST'],flows, timely=False, states={'Force_GR':1.0})
         self.failrate=1e-6
-        self.assoc_modes({'break':[0.2, [0.33, 0.33, 0.33], 10000], 'deform':[0.8, [0.33, 0.33, 0.33], 10000]})
+        self.assoc_modes({'break':[0.2, [0.33, 0.33, 0.33], 1000], 'deform':[0.8, [0.33, 0.33, 0.33], 1000]})
     def condfaults(self, time):
         if self.DOF.elev<=0.0:  self.Force_GR=min(-0.5, (self.DOF.vertvel/60-self.DOF.planvel/60)/7.5)
         else:                   self.Force_GR=0.0
@@ -132,11 +136,10 @@ class ManageHealth(FxnBlock):
         flownames=['EECtl','FS','DOFshealth', 'Bathealth', 'Trajconfig' ]
         super().__init__(flownames, flows)
         
-        self.failrate=1e-5
-        self.assoc_modes({'falsemaintenance':[0.8,[1.0, 0.0,0.0,0.0,0.0],10000],\
-                         'falsemasking':[0.1,[1.0, 0.2,0.4,0.4,0.0],10000],\
-                         'falseemland':[0.05,[0.0, 0.2,0.4,0.4,0.0],10000],\
-                         'lostfunction':[0.05,[0.2, 0.2,0.2,0.2,0.2],10000]})
+        self.failrate=1e-6 #{'falsemaintenance':[0.8,[1.0, 0.0,0.0,0.0,0.0],1000],\
+        self.assoc_modes({'falsemasking':[0.1,[1.0, 0.2,0.4,0.4,0.0],1000],\
+                         'falseemland':[0.05,[0.0, 0.2,0.4,0.4,0.0],1000],\
+                         'lostfunction':[0.05,[0.2, 0.2,0.2,0.2,0.2],1000]})
     def condfaults(self, time):
         if self.FS.support<0.5 or self.EECtl.effort>2.0: self.add_fault('lostfunction')
     def behavior(self, time):
@@ -213,7 +216,7 @@ class Line(Component):
         super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, timely=False)
         self.failrate=1e-5
         self.assoc_modes({'short':[0.1, [0.33, 0.33, 0.33], 200],'openc':[0.1, [0.33, 0.33, 0.33], 200],\
-                          'ctlbreak':[0.2, [0.33, 0.33, 0.33], 1000], 'mechbreak':[0.1, [0.33, 0.33, 0.33], 500],\
+                          'ctlbreak':[0.2, [0.33, 0.33, 0.33], 100], 'mechbreak':[0.1, [0.33, 0.33, 0.33], 500],\
                           'mechfriction':[0.05, [0.0, 0.5,0.5], 500], 'stuck':[0.02, [0.0, 0.5,0.5], 200]},name=name)
     def behavior(self, EEin, Ctlin, cmds, Force):
         if Force<=0.0:   self.add_fault(self.name+'mechbreak')
@@ -234,7 +237,7 @@ class CtlDOF(FxnBlock):
     def __init__(self, flows):
         super().__init__(['EEin','Dir','Ctl','DOFs','FS'],flows, {'vel':0.0, 'Cs':1.0})
         self.failrate=1e-5
-        self.assoc_modes({'noctl':[0.2, [0.6, 0.3, 0.1], 10000], 'degctl':[0.8, [0.6, 0.3, 0.1], 10000]})
+        self.assoc_modes({'noctl':[0.2, [0.6, 0.3, 0.1], 1000], 'degctl':[0.8, [0.6, 0.3, 0.1], 1000]})
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noctl')
     def behavior(self, time):
@@ -258,7 +261,7 @@ class PlanPath(FxnBlock):
         self.goals = params['flightplan']
         self.goal=self.goals[1]
         self.failrate=1e-5
-        self.assoc_modes({'noloc':[0.2, [0.6, 0.3, 0.1], 10000], 'degloc':[0.8, [0.6, 0.3, 0.1], 10000]})
+        self.assoc_modes({'noloc':[0.2, [0.6, 0.3, 0.1], 1000], 'degloc':[0.8, [0.6, 0.3, 0.1], 1000]})
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noloc')
     def behavior(self, t):
@@ -378,7 +381,7 @@ class Drone(Model):
         else:                                           landloc = 'outside target' # emergency unsanctioned
         # need a way to differentiate horizontal and vertical crashes/landings
         if self.params['loc'] == 'rural': #assumed photographing a field
-            if landloc == 'over target':    
+            if landloc == 'over target':  
                 body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
                 head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
                 property_restrictions = 0
@@ -416,10 +419,10 @@ class Drone(Model):
                 body_strikes = 0
                 head_strikes = 0
                 property_restrictions = 0
-        safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes) + safety_categories['minor']['cost'] * faulttime
-        landcost = property_restrictions*10000
+        safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes) + unsafecost[self.params['loc']] * faulttime
+        landcost = property_restrictions*propertycost[self.params['loc']]
         #repair costs
-        repcost=sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()])
+        repcost=min(sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()]), 3000)
         rate=scen['properties']['rate']
         p_safety = 1-np.exp(-(body_strikes+head_strikes) * 60/self.times[1]) #convert to pfh
         classifications = {'hazardous':rate*p_safety, 'minor':rate*(1-p_safety)}
@@ -428,7 +431,7 @@ class Drone(Model):
         
         expcost=totcost*rate*1e5
         
-        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'viewed':viewed, 'landloc':landloc,'body strikes':body_strikes, 'head strikes':head_strikes, 'property restrictions': property_restrictions, 'severities':classifications}
+        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'repcost':repcost, 'landcost':landcost,'safecost':safecost,'viewed value': viewed_value, 'viewed':viewed, 'landloc':landloc,'body strikes':body_strikes, 'head strikes':head_strikes, 'property restrictions': property_restrictions, 'severities':classifications}
 
 ## BASE FUNCTIONS
 
@@ -536,6 +539,8 @@ density_categories = {'congested':{'density':0.006194, 'body strike':{'vert':0.1
                       'rural':{'density':0.0001042, 'body strike':{'vert':0.0000, 'horiz':0.0001},'head strike':{'vert':0.000,'horiz':0.000}},
                       'remote':{'density':1.931e-6, 'body strike':{'vert':0.0000, 'horiz':0.0000},'head strike':{'vert':0.000,'horiz':0.000}}}
 
+unsafecost = {'congested': 10000,'urban': 1000, 'suburban':100, 'rural':50, 'remote':50}
+propertycost = {'congested': 100000,'urban': 10000, 'suburban':1000, 'rural':100, 'remote':10}
 # safety class schedule
 safety_categories = {'catastrophic':{'injuries':'multiple fatalities', 'safety margins':'na', 'crew workload': 'na', 'cost':2000000},
                      'hazardous':{'injuries':'single fatality and/or multiple serious injuries', 'safety margins':'large decrease', 'crew workload': 'compromises safety', 'cost':9600000},

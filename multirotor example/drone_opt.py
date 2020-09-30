@@ -31,15 +31,15 @@ mdl = Drone(params=params)
 
 # Design Model
 def calc_des(mdl):
-    batcostdict = {'monolithic':0, 'series-split':50000, 'parallel-split':50000, 'split-both':100000}
-    linecostdict = {'quad':0, 'hex':100000, 'oct':200000}
+    batcostdict = {'monolithic':0, 'series-split':300, 'parallel-split':300, 'split-both':600}
+    linecostdict = {'quad':0, 'hex':1000, 'oct':2000}
     descost = batcostdict[mdl.params['bat']] + linecostdict[mdl.params['linearch']]
     return descost
 def x_to_dcost(xdes):
     bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
     linarchs = ['quad', 'hex', 'oct']
-    batcostdict = {'monolithic':0, 'series-split':50000, 'parallel-split':50000, 'split-both':100000}
-    linecostdict = {'quad':0, 'hex':100000, 'oct':200000}
+    batcostdict = {'monolithic':0, 'series-split':300, 'parallel-split':300, 'split-both':600}
+    linecostdict = {'quad':0, 'hex':1000, 'oct':2000}
     descost = batcostdict[bats[xdes[0]]] + linecostdict[linarchs[xdes[1]]]
     return descost
 
@@ -63,7 +63,7 @@ def calc_oper(mdl):
     mdl.phases['forward'][1] = landtime
     mdl.phases['taxis'][0] = landtime
     return opercost, g_soc, g_faults, g_max_height
-def x_to_ocost(xdes, xoper):
+def x_to_ocost(xdes, xoper, loc='rural'):
     bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
     linarchs = ['quad', 'hex', 'oct']
     respols = ['continue', 'to_home', 'to_nearest', 'emland']
@@ -74,7 +74,7 @@ def x_to_ocost(xdes, xoper):
     
     sq = square(target[0:2],target[2],target[3])
     fp = plan_flight(xoper[0], sq, start[0:2]+[0])
-    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'continue','line':'continue'}, 'target':target,'safe':safe,'start':start, 'loc':'rural', 'landtime':12}
+    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'continue','line':'continue'}, 'target':target,'safe':safe,'start':start, 'loc':loc, 'landtime':12}
     mdl = Drone(params=params)
     return calc_oper(mdl)
 
@@ -84,7 +84,7 @@ def calc_res(mdl):
     endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
     rescost = rd.process.totalcost(endclasses)
     return rescost
-def x_to_rcost(xdes, xoper, xres):
+def x_to_rcost(xdes, xoper, xres, loc='rural'):
     bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
     linarchs = ['quad', 'hex', 'oct']
     respols = ['continue', 'to_home', 'to_nearest', 'emland']
@@ -96,13 +96,13 @@ def x_to_rcost(xdes, xoper, xres):
     sq = square(target[0:2],target[2],target[3])
     fp = plan_flight(xoper[0], sq, start[0:2]+[0])
     
-    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start,'loc':'rural', 'landtime':12 }
+    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start,'loc':loc, 'landtime':12 }
     mdl = Drone(params=params)
     a,b,c,d = calc_oper(mdl) #used to form flight phases
     return calc_res(mdl)
 
 #creates model from design variables (note: does not get flight time)
-def x_to_mdl(x):
+def x_to_mdl(x, loc='rural'):
     bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
     linarchs = ['quad', 'hex', 'oct']
     respols = ['continue', 'to_home', 'to_nearest', 'emland']
@@ -114,12 +114,12 @@ def x_to_mdl(x):
     sq = square(target[0:2],target[2],target[3])
     fp = plan_flight(x[2], sq, start[0:2]+[0])
     
-    params = {'bat':bats[x[0]], 'linearch':linarchs[x[1]], 'flightplan':fp, 'respolicy':{'bat':respols[x[3]],'line':respols[x[4]]}, 'target':target,'safe':safe,'start':start,'loc':'rural', 'landtime':12}
+    params = {'bat':bats[x[0]], 'linearch':linarchs[x[1]], 'flightplan':fp, 'respolicy':{'bat':respols[x[3]],'line':respols[x[4]]}, 'target':target,'safe':safe,'start':start,'loc':loc, 'landtime':12}
     mdl = Drone(params=params)
     return mdl
 # all-in-one-model
-def x_to_cost(x):
-    mdl = x_to_mdl(x)
+def x_to_cost(x, loc='rural'):
+    mdl = x_to_mdl(x, loc=loc)
     dcost = calc_des(mdl)
     oper = calc_oper(mdl)
     rcost = calc_res(mdl)

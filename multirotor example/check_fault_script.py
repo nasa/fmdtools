@@ -8,7 +8,8 @@ Created on Thu Sep 24 12:14:23 2020
 from drone_opt import *
 import fmdtools.faultsim.propagate as propagate
 
-mdl_med = x_to_mdl([1,1,80,1,2])
+mdl_split = x_to_mdl([1,1,35,1,2], loc='rural')
+mdl_med = x_to_mdl([0,1,35,1,2], loc='rural')
 mdl_med.params['respolicy']
 
 #testing mechanical fault response
@@ -18,10 +19,18 @@ plot_faulttraj(mdlhist_med, mdl_med.params)
 plot_xy(mdlhist_med['faulty'], endresults_med)
 
 #testing battery fault response
-endresults_med, resgraph, mdlhist_med = propagate.one_fault(mdl_med,'StoreEE', 'lowcharge', time=4)
-rd.plot.mdlhistvals(mdlhist_med, fxnflowvals = {'RSig_Traj':'mode', 'Planpath':'mode', 'DOFs': 'planvel'}, time=4)
+#endresults_med, resgraph, mdlhist_med = propagate.one_fault(mdl_med,'StoreEE', 'S1P1nocharge', time=4)
+endresults_med, resgraph, mdlhist_med = propagate.one_fault(mdl_med,'StoreEE', 'S1P1nocharge', time=6)
+rd.plot.mdlhistvals(mdlhist_med, fxnflowvals = {'RSig_Traj':'mode', 'Planpath':'mode', 'DOFs': 'planvel', 'StoreEE':'soc'}, time=4, legend=False)
 plot_faulttraj(mdlhist_med, mdl_med.params)
 plot_xy(mdlhist_med['faulty'], endresults_med)
+
+#testing battery fault response
+#endresults_med, resgraph, mdlhist_med = propagate.one_fault(mdl_med,'StoreEE', 'S1P1nocharge', time=4)
+endresults_split, resgraph, mdlhist_split = propagate.one_fault(mdl_split,'StoreEE', 'S1P1nocharge', time=6)
+rd.plot.mdlhistvals(mdlhist_split, fxnflowvals = {'RSig_Traj':'mode', 'Planpath':'mode', 'DOFs': 'planvel', 'StoreEE':'soc'}, time=4, legend=False)
+plot_faulttraj(mdlhist_split, mdl_split.params)
+plot_xy(mdlhist_split['faulty'], endresults_split)
 
 
 fhist=mdlhist_med['faulty']
