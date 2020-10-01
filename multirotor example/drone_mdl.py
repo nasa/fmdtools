@@ -42,7 +42,7 @@ class StoreEE(FxnBlock):
         else: raise Exception("Invalid battery architecture")
         #failrate for function w- component only applies to function modes
         self.failrate=1e-4
-        self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],50],'lowcharge':[0.7,[0.6,0.2,0.2],20]})
+        self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],0],'lowcharge':[0.7,[0.6,0.2,0.2],0]})
         super().__init__(['EEout', 'FS', 'HSig'], flows, {'soc': 100}, components)
     def condfaults(self, time):
         if self.soc<20:                     self.add_fault('lowcharge')
@@ -77,9 +77,9 @@ class Battery(Component):
         self.p=batparams['p']
         self.s=batparams['s']
         self.amt = 60*4.200/(batparams['w']*170/(batparams['d']*batparams['v']))
-        self.assoc_modes({'short':[0.2,[0.3,0.3,0.3],200], 'degr':[0.2,[0.3,0.3,0.3],200],
-                          'break':[0.2,[0.2,0.2,0.2],200], 'nocharge':[0.6,[0.6,0.2,0.2],300],
-                          'lowcharge':[0,[0.6,0.2,0.2],200]}, name=name)
+        self.assoc_modes({'short':[0.2,[0.3,0.3,0.3],100], 'degr':[0.2,[0.3,0.3,0.3],100],
+                          'break':[0.2,[0.2,0.2,0.2],100], 'nocharge':[0.6,[0.6,0.2,0.2],100],
+                          'lowcharge':[0,[0.6,0.2,0.2],100]}, name=name)
     def behavior(self, FS, EEoutr, time):
         if FS <1.0:     self.add_fault(self.name+'break')
         if EEoutr>self.maxa:    self.add_fault(self.name+'break')
@@ -196,19 +196,32 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         if self.any_faults():   self.HSig.hstate='faulty'
         
         if time> self.time:
-            if self.DOF.uppwr > 1:      self.DOF.vertvel = 60*min([(self.DOF.uppwr-1)*5, 5])
-            elif self.DOF.uppwr < 1:    self.DOF.vertvel = 60*max([(self.DOF.uppwr-1)*50, -50])
-            else:                       self.DOF.vertvel = 0.0
+            if self.DOF.uppwr > 1.0:        self.DOF.vertvel = 60*min([(self.DOF.uppwr-1)*5, 5])
+            elif self.DOF.uppwr < 1.0:      self.DOF.vertvel = 60*max([(self.DOF.uppwr-1)*5, -5])
+            else:                           self.DOF.vertvel = 0.0
                 
-            self.DOF.planvel=60*min([10*self.DOF.planpwr, 10]) # 600 m/m = 23 mph 
+             
             if self.DOF.elev<=0.0:  
                 self.DOF.vertvel=max(0,self.DOF.vertvel)
                 self.DOF.planvel=0.0
             
-            self.DOF.elev=max(0.0, self.DOF.elev+self.DOF.vertvel)
-            vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
-            self.DOF.x=self.DOF.x+self.DOF.planvel*self.Dir.traj[0]/vect
-            self.DOF.y=self.DOF.y+self.DOF.planvel*self.Dir.traj[1]/vect
+            if self.DOF.vertvel<-self.DOF.elev:
+                reqdist = np.sqrt(self.Dir.x**2 + self.Dir.y**2+0.0001)
+                if self.DOF.planpwr>0.0:
+                    maxdist = 600 * self.DOF.elev/(-self.DOF.vertvel+0.001)
+                    if reqdist > maxdist:   self.planvel = maxdist
+                    else:                   self.planvel = reqdist
+                else:                       self.planvel = 0.1
+
+                self.DOF.x=self.DOF.x+self.planvel*self.Dir.traj[0]/reqdist
+                self.DOF.y=self.DOF.y+self.planvel*self.Dir.traj[1]/reqdist
+                self.DOF.elev=0.0
+            else:
+                self.DOF.planvel=60*min([10*self.DOF.planpwr, 10]) # 600 m/m = 23 mph
+                vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
+                self.DOF.x=self.DOF.x+self.DOF.planvel*self.Dir.traj[0]/vect
+                self.DOF.y=self.DOF.y+self.DOF.planvel*self.Dir.traj[1]/vect
+                self.DOF.elev=self.DOF.elev + self.DOF.vertvel
             
 
 class Line(Component):
@@ -246,7 +259,7 @@ class CtlDOF(FxnBlock):
         if time>self.time: self.vel=self.DOFs.vertvel
         # throttle settings: 0 is off (-50 m/s), 1 is hover, 2 is max climb (5 m/s)
         if self.Dir.traj[2]>0:          upthrottle = 1+np.min([self.Dir.traj[2]/(50*5), 1])
-        elif self.Dir.traj[2] <0:       upthrottle = 1+np.max([self.Dir.traj[2]/(50*50), -1])
+        elif self.Dir.traj[2] <0:       upthrottle = 1+np.max([self.Dir.traj[2]/(50*5), -1])
         else:                           upthrottle = 1.0
         
         vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
@@ -278,8 +291,8 @@ class PlanPath(FxnBlock):
         elif self.Rsig.mode == 'to_nearest':    self.mode = 'to_nearest'
         elif self.Rsig.mode== 'emland':         self.mode = 'land'
         elif self.Env.elev<1 and (self.pt>=max(self.goals) or self.mode=='land'):  self.mode = 'taxi'
-        elif dist<5 and self.pt>=max(self.goals):           self.mode = 'land'
-        elif dist<5 and {'move'}.issuperset({self.mode}):
+        elif dist<10 and self.pt>=max(self.goals):           self.mode = 'land'
+        elif dist<10 and {'move'}.issuperset({self.mode}):
             if self.pt < max(self.goals):   
                 self.pt+=1
                 self.goal = self.goals[self.pt]
@@ -369,7 +382,7 @@ class Drone(Model):
         
         #landing costs
         viewed = env_viewed(mdlhist['faulty']['flows']['DOFs']['x'], mdlhist['faulty']['flows']['DOFs']['y'],mdlhist['faulty']['flows']['DOFs']['elev'], self.target_area)
-        viewed_value = 10*sum([view for k,view in viewed.items() if view!='unviewed'])
+        viewed_value = sum([0.5+5*view for k,view in viewed.items() if view!='unviewed'])
         
         fhist=mdlhist['faulty']
         faulttime = sum([any([fhist['functions'][f]['faults'][t]!={'nom'} for f in fhist['functions']]) for t in range(len(fhist['time'])) if fhist['flows']['DOFs']['elev'][t]])
@@ -384,7 +397,7 @@ class Drone(Model):
             if landloc == 'over target':  
                 body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
                 head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
-                property_restrictions = 0
+                property_restrictions = 1
             elif landloc == 'outside target':
                 body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
                 head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
@@ -397,7 +410,7 @@ class Drone(Model):
             if landloc == 'over target':    
                 body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
                 head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
-                property_restrictions = 0
+                property_restrictions = 1
             elif landloc == 'outside target':
                 body_strikes = density_categories['urban']['body strike']['horiz']
                 head_strikes = density_categories['urban']['head strike']['horiz']
@@ -422,7 +435,7 @@ class Drone(Model):
         safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes) + unsafecost[self.params['loc']] * faulttime
         landcost = property_restrictions*propertycost[self.params['loc']]
         #repair costs
-        repcost=min(sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()]), 3000)
+        repcost=min(sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()]), 1500)
         rate=scen['properties']['rate']
         p_safety = 1-np.exp(-(body_strikes+head_strikes) * 60/self.times[1]) #convert to pfh
         classifications = {'hazardous':rate*p_safety, 'minor':rate*(1-p_safety)}
@@ -473,7 +486,7 @@ def env_viewed(xhist, yhist,zhist, square):
     viewed = {(x,y):'unviewed' for x in range(int(square[0][0]),int(square[1][0])+10,10) for y in range(int(square[0][1]),int(square[2][1])+10,10)}
     for i,x in enumerate(xhist[1:len(xhist)]):
         w,h,d = viewable_area(zhist[i+1])
-        viewed_area = rect(xhist[i],yhist[i],xhist[i+1],yhist[i+1], w,h)
+        viewed_area = rect(xhist[i],yhist[i],xhist[i+1],yhist[i+1], w+5,h+5)
         
         if abs(xhist[i]-xhist[i+1]) + abs(yhist[i]-yhist[i+1]) > 0.1 and w >0.01:
             polygon=Polygon(viewed_area)
@@ -488,7 +501,7 @@ def env_viewed(xhist, yhist,zhist, square):
 
 def viewable_area(elev):
     width = elev
-    height = elev * 0.75 # 4/3 camera with ~45 mm lens st dist = width
+    height = elev #* 0.75 # 4/3 camera with ~45 mm lens st dist = width
     detail = 1/(width*height+0.00001)
     return width, height, detail
 
@@ -539,8 +552,8 @@ density_categories = {'congested':{'density':0.006194, 'body strike':{'vert':0.1
                       'rural':{'density':0.0001042, 'body strike':{'vert':0.0000, 'horiz':0.0001},'head strike':{'vert':0.000,'horiz':0.000}},
                       'remote':{'density':1.931e-6, 'body strike':{'vert':0.0000, 'horiz':0.0000},'head strike':{'vert':0.000,'horiz':0.000}}}
 
-unsafecost = {'congested': 10000,'urban': 1000, 'suburban':100, 'rural':50, 'remote':50}
-propertycost = {'congested': 100000,'urban': 10000, 'suburban':1000, 'rural':100, 'remote':10}
+unsafecost = {'congested': 1000,'urban': 100, 'suburban':25, 'rural':5, 'remote':1}
+propertycost = {'congested': 100000,'urban': 10000, 'suburban':1000, 'rural':1000, 'remote':1000}
 # safety class schedule
 safety_categories = {'catastrophic':{'injuries':'multiple fatalities', 'safety margins':'na', 'crew workload': 'na', 'cost':2000000},
                      'hazardous':{'injuries':'single fatality and/or multiple serious injuries', 'safety margins':'large decrease', 'crew workload': 'compromises safety', 'cost':9600000},
