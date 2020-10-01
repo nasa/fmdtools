@@ -382,7 +382,7 @@ class Drone(Model):
         
         #landing costs
         viewed = env_viewed(mdlhist['faulty']['flows']['DOFs']['x'], mdlhist['faulty']['flows']['DOFs']['y'],mdlhist['faulty']['flows']['DOFs']['elev'], self.target_area)
-        viewed_value = sum([0.5+5*view for k,view in viewed.items() if view!='unviewed'])
+        viewed_value = sum([0.5+2*view for k,view in viewed.items() if view!='unviewed'])
         
         fhist=mdlhist['faulty']
         faulttime = sum([any([fhist['functions'][f]['faults'][t]!={'nom'} for f in fhist['functions']]) for t in range(len(fhist['time'])) if fhist['flows']['DOFs']['elev'][t]])
