@@ -31,41 +31,6 @@ operC0 = [-630000, -37171.5989]
 resC0 = [5245622.35, 310771934]
 #resC0 = [171426.3, 55932536.24]
 
-# Defining Stage1 objective function
-def ULf(X, *ulparams):
-    xdes = [int(X[0]),int(X[1])]
-    xoper = [X[2]]
-    xres = [int(X[3]), int(X[4])]
-    desC0, operC0, resC0, w1, w2 = ulparams
-    desC = x_to_dcost(xdes)
-    operC = x_to_ocost(xdes, xoper)
-    resC = x_to_rcost(xdes, xoper, xres)
-
-    #Normalizing obj function to avoid issue on magnitudes
-    ndesC = (desC-desC0[0])/(desC0[1]-desC0[0])
-    noperC =(operC[0]-operC0[0])/(operC0[1]-operC0[0])
-    nresC = (resC - resC0[0]) / (resC0[1] - resC0[0])
-    #Constraints validation: >0 or 1(Boolean) means violation and is penalized in Obj Func
-    c_batlife = operC[1]
-    if operC[2] == True:
-        c_faults = 1
-    else:
-        c_faults = 0
-    c_maxh = operC[3]
-    #Penalizing obj function with upper level contraints
-    if ((operC[1] > 0 or operC[2] == True) or (operC[3] > 0)):  # Infeasible design if any above constraints violated
-        ULpen = c_batlife**2 + 1000*c_faults + c_maxh**2 # Exterior Penalty method
-        #LLpen = 10000 # Giving a big penalty of lower level if upper level decision is infeasible
-    else: # Calling lower level only if all the upper level contraints are feasible: Reducing redundant lower level iterations
-        ULpen = 0
-
-    #Penalized weighted Tchebycheff obj func.
-    #The normalized utopia values (global optimal)
-    u1 = 0.0018
-    u2 = 0
-    ULobj = max((w1*(ndesC + noperC) -u1), (w2*nresC- u2)) + ULpen #normalized cost with penalty value
-    return ULobj
-
 # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
 weights = pd.Series(np.arange(0, 1.1, 0.1)) # Weights on obj 1: Design + Oper Cost
 obj1_w = []
@@ -74,7 +39,7 @@ for ix in range(len(weights)):
     w1 = weights.iloc[ix]  # Weights on obj 1: Design + Oper Cost
     w2 = 1 - w1 # Weights on obj 2: Failure Cost
     ulparams = (desC0, operC0, resC0, w1, w2)
-    ULoptmodel = optimize.brute(ULf, ULXbound, args=ulparams, full_output=True, finish=optimize.fmin)
+    ULoptmodel = optimize.brute(AAO_f, ULXbound, args=ulparams, full_output=True, finish=optimize.fmin)
     UL_xopt = abs(np.around(ULoptmodel[0]))
     UL_fopt = np.around(ULoptmodel[1], decimals=4)
     xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]
