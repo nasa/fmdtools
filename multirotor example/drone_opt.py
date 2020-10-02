@@ -355,41 +355,29 @@ def plot_tradeoffs(filename, retfig=True):
 
 def AAO_f(X, *ulparams):
     """AAO objective function for use in multiobjective optimization """
-    xdes = [int(X[0]),int(X[1])]
-    xoper = [X[2]]
-    xres = [int(X[3]), int(X[4])]
-    desC0, operC0, resC0, w1, w2 = ulparams
+    xdes = [int(X[0]),int(X[1])];  xoper = [X[2]]; xres = [int(X[3]), int(X[4])]
+    desC0, operC0, resC0,normalize, w1, w2,u1,u2,loc  = ulparams
+    #find costs
     desC = x_to_dcost(xdes)
-    operC = x_to_ocost(xdes, xoper)
-    resC = x_to_rcost(xdes, xoper, xres)
-
-    #Normalizing obj function to avoid issue on magnitudes
-    ndesC = (desC-desC0[0])/(desC0[1]-desC0[0])
-    noperC =(operC[0]-operC0[0])/(operC0[1]-operC0[0])
-    nresC = (resC - resC0[0]) / (resC0[1] - resC0[0])
+    operC = x_to_ocost(xdes, xoper, loc=loc)
+    resC = x_to_rcost(xdes, xoper, xres, loc=loc)
+    
     #Constraints validation: >0 or 1(Boolean) means violation and is penalized in Obj Func
-    c_batlife = operC[1]
-    if operC[2] == True:
-        c_faults = 1
-    else:
-        c_faults = 0
-    c_maxh = operC[3]
+    c_batlife = operC[1]; c_faults = int(operC[2]); c_maxh = operC[3]
     #Penalizing obj function with upper level contraints
-    if ((operC[1] > 0 or operC[2] == True) or (operC[3] > 0)):  # Infeasible design if any above constraints violated
-        ULpen = c_batlife**2 + 1000*c_faults + c_maxh**2 # Exterior Penalty method
-        #LLpen = 10000 # Giving a big penalty of lower level if upper level decision is infeasible
-    else: # Calling lower level only if all the upper level contraints are feasible: Reducing redundant lower level iterations
-        ULpen = 0
-
-    #Penalized weighted Tchebycheff obj func.
-    #The normalized utopia values (global optimal)
-    u1 = 0.0018
-    u2 = 0
-    ULobj = max((w1*(ndesC + noperC) -u1), (w2*nresC- u2)) + ULpen #normalized cost with penalty value
-    return ULobj
+    pen = max(c_batlife, 0)**2+100000*c_faults+max(c_maxh,0)**2
+    
+    if normalize: #Normalizing obj function to avoid issue on magnitudes
+        ndesC = (desC-desC0[0])/(desC0[1]-desC0[0])
+        noperC =(operC[0]-operC0[0])/(operC0[1]-operC0[0])
+        nresC = (resC - resC0[0]) / (resC0[1] - resC0[0])
+        #Penalized weighted Tchebycheff obj func.
+        obj = max((w1*(ndesC + noperC) -u1), (w2*nresC- u2)) + ULpen #normalized cost with penalty value
+    else: obj = desC + operC + resC + pen
+    return obj
 
 
-def bistage_optimization():
+def bistage_optimization(loc='rural', printresults=True, normalize = True, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
     """
     The two-stage optimization framework for the drone model.
     Stage 1 considers the nominal scenario, optimizing battery, rotor config and oper height,
@@ -400,89 +388,72 @@ def bistage_optimization():
     Grid search brute force is used as optimization algo and handling constraints with Penalty method
     Because of using grid search, the Stage 1 height variable has been discritized to gain computational efficiency at
     the expense of accuracy.
-
+    
+    (optional) arguments are:
+        loc:                    urban/rural/conjested (scenario for the optimization to run over)
+        printresults:           bool (whether to print results)
+        normalize:              T/F (whether to normalize over utopia values)
+        desC0, operC0, resC0    [max, min] (max/min feasible values for design/oper/resilience normalization)
+        
     """
     ######################### Stage 1 optimization ####################################
     # Initializing design variables and parameters
-    ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10))
-    #ULXRes = [0,0] # Default Res. Pol. in Upper level (nominal env) is o continue
-    # Approx Min and max feasible values for each cost models (Obtained from data analysis)
-    desC0 = [0, 300000]
-    operC0 = [-630000, -37171.5989]
-    resC0 = [5245622.35, 310771934]
-    ulparams = (desC0, operC0, resC0)
+    ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10))    
+    ulparams = (desC0, operC0, resC0, normalize, loc)
     
     # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
     ULoptmodel = optimize.brute(bistage_firststageobj, ULXbound, args=ulparams, full_output=True, finish=optimize.fmin)
-    UL_xopt = abs(np.around(ULoptmodel[0]))
-    UL_fopt = np.around(ULoptmodel[1], decimals= 4)
-    xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]
-    xoper_opt = [UL_xopt[2]]
-    desC_opt = x_to_dcost(xdes_opt)
-    operC_opt = x_to_ocost(xdes_opt, xoper_opt)
+    UL_xopt = abs(np.around(ULoptmodel[0])); UL_fopt = np.around(ULoptmodel[1], decimals= 4)
+    xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]; xoper_opt = [UL_xopt[2]]                 #get optimal design values   
+    desC_opt = x_to_dcost(xdes_opt); operC_opt = x_to_ocost(xdes_opt, xoper_opt, loc=loc)   #get objective values
     
     #################### Stage 2 optimization##############################################
     #Running Stage 2 model for the upper level optimal solution
-    LL_opt = bistage_secondstagemodel(xdes_opt, xoper_opt, resC0)
-    LL_xopt = abs(LL_opt[0])
-    LL_fopt = np.around(LL_opt[1], decimals= 4)
-    xres_opt = [int(LL_xopt[0]), int(LL_xopt[1])]
-    resC_opt = x_to_rcost(xdes_opt, xoper_opt, xres_opt)
-    print("#####################Two-Stage approach###############################")
-    print("Stage 1 optimal solution:")
-    print(UL_xopt)
-    print(UL_fopt)
-    print(desC_opt)
-    print(operC_opt)
-    print("#####################################################################")
-    print("Stage 2 optimal solution:")
-    print(LL_xopt)
-    print(LL_fopt)
-    print(resC_opt)
+    LL_opt = bistage_secondstagemodel(xdes_opt, xoper_opt, resC0, normalize, loc)
+    LL_xopt = abs(LL_opt[0]);  LL_fopt = np.around(LL_opt[1], decimals= 4)
+    xres_opt = [int(LL_xopt[0]), int(LL_xopt[1])]                   #get optimal design values
+    resC_opt = x_to_rcost(xdes_opt, xoper_opt, xres_opt, loc=loc)   #get optimal resilience
+    if printresults:
+        print("#####################Two-Stage approach###############################")
+        print("Stage 1 optimal solution:")
+        print(UL_xopt); print(UL_fopt); print(desC_opt); print(operC_opt)
+        print("#####################################################################")
+        print("Stage 2 optimal solution:")
+        print(LL_xopt); print(LL_fopt); print(resC_opt)
+    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt
 def bistage_firststageobj(X, *ulparams):
     """Objective function for first stage of the two-stage optimization"""
-    xdes = [int(X[0]),int(X[1])]
-    xoper = [X[2]]
-    desC0, operC0, resC0 = ulparams
+    xdes = [int(X[0]),int(X[1])]; xoper = [X[2]]    #get variables values
+    desC0, operC0, resC0, normalize, loc = ulparams                 #get params
+    # execute design + operational models
     desC = x_to_dcost(xdes)
-    operC = x_to_ocost(xdes, xoper)
+    operC = x_to_ocost(xdes, xoper, loc=loc)
+    #Constraints validation: >0 or 1(Boolean) means violation and is penalized in Obj Func
+    c_batlife = operC[1]; c_faults = int(operC[2]); c_maxh = operC[3]
+    #Penalizing obj function with upper level contraints
+    ULpen = max(c_batlife, 0)**2+10000*c_faults+max(c_maxh,0)**2
     #Normalizing obj function to avoid issue on magnitudes
     ndesC = (desC-desC0[0])/(desC0[1]-desC0[0])
     noperC =(operC[0]-operC0[0])/(operC0[1]-operC0[0])
-    #Constraints validation: >0 or 1(Boolean) means violation and is penalized in Obj Func
-    c_batlife = operC[1]
-    if operC[2] == True:
-        c_faults = 1
-    else:
-        c_faults = 0
-    c_maxh = operC[3]
-    #Penalizing obj function with upper level contraints
-    if ((operC[1] > 0 or operC[2] == True) or (operC[3] > 0)):  # Infeasible design if any above constraints violated
-        ULpen = c_batlife**2 + 1000*c_faults + c_maxh**2 # Exterior Penalty method
-        #LLpen = 10000 # Giving a big penalty of lower level if upper level decision is infeasible
-    else: # Calling lower level only if all the upper level contraints are feasible: Reducing redundant lower level iterations
-        ULpen = 0
-    #Penalized obj func.
-    #LLpen =0
     ULobj = ndesC + noperC + ULpen #normalized design and oper cost with penalty value
     return ULobj
 def bistage_secondstageobj(ll_x, *llparams):
     """Objective function for second stage of the two-stage optimization"""
-    xdes, xoper, resC0 = llparams
+    xdes, xoper, resC0, normalize, loc = llparams
     xres = ll_x
-    resC = x_to_rcost(xdes, xoper, xres)
-    nresC = (resC-resC0[0])/(resC0[1]-resC0[0])
-    LLobj =nresC
+    resC = x_to_rcost(xdes, xoper, xres, loc=loc)
+    if normalize:   LLobj = (resC-resC0[0])/(resC0[1]-resC0[0])
+    else:           LLobj = resC
     return LLobj
-def bistage_secondstagemodel(xdes, xoper, resC0):
+def bistage_secondstagemodel(xdes, xoper, resC0, normalize,loc):
     """ Defining the Stage2 optimization model (Using brute force exhaustive grid search algortihm)"""
     LLXbound = (slice(0, 3, 1), slice(0, 3, 1))
-    llparams = (xdes, xoper, resC0)
+    llparams = (xdes, xoper, resC0, normalize, loc)
     LLoptmodel = optimize.brute(bistage_secondstageobj, LLXbound, args=llparams, full_output=True, finish=None)
     return LLoptmodel
 
 
-def bilevel_optimization():
+def bilevel_optimization(loc='rural', printresults=True, normalize = True, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
     """
     Bi-level optimization framework for the drone model.
     
@@ -493,92 +464,73 @@ def bilevel_optimization():
     continuous height variable) and lower level is IP (Discrete resilience policy)
     Grid search brute force is used as optimization algo and handling constraints with Penalty method
     Because of using grid search, the upper level height variable has been discritized to gain computational efficiency at
-    the expense of accurac
+    the expense of accuracy
+
+    (optional) arguments are:
+        loc:                    urban/rural/conjested (scenario for the optimization to run over)
+        printresults:           bool (whether to print results)
+        normalize:              T/F (whether to normalize over utopia values)
+        desC0, operC0, resC0    [max, min] (max/min feasible values for design/oper/resilience normalization)
     """
     # Initializing design variables and parameters
     ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10))
-    #ULXbound=np.array([[0,3],[0,2],[10,122]])
-    #ULXtype=np.array([['int'],['int'],['real']])
-    #ULXRes = [0,0] # Default Res. Pol. in Upper level (nominal env) is o continue
-    # Approx Min and max feasible values for each cost models (Obtained from data analysis)
-    desC0 = [0, 300000]
-    operC0 = [-630000, -37171.5989]
-    resC0 = [5245622.35, 310771934]
-    #resC0 = [171426.3, 55932536.24]
-    ulparams = (desC0, operC0, resC0)
+    ulparams = (desC0, operC0, resC0, normalize, loc)
     # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
     ULoptmodel = optimize.brute(bilevel_upperlevelobj, ULXbound, args=ulparams, full_output=True, finish=optimize.fmin)
-    UL_xopt = abs(np.around(ULoptmodel[0]))
-    UL_fopt = np.around(ULoptmodel[1], decimals= 4)
-    xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]
-    xoper_opt = [UL_xopt[2]]
-    desC_opt = x_to_dcost(xdes_opt)
-    operC_opt = x_to_ocost(xdes_opt, xoper_opt)
+    UL_xopt = abs(np.around(ULoptmodel[0])); UL_fopt = np.around(ULoptmodel[1], decimals= 4)
+    xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]; xoper_opt = [UL_xopt[2]]
+    desC_opt = x_to_dcost(xdes_opt); operC_opt = x_to_ocost(xdes_opt, xoper_opt, loc=loc)
     #Running final lower level solution for the upper level optimal solution
     LL_opt = bilevel_lowerlevelmodel(xdes_opt, xoper_opt, resC0)
-    LL_xopt = abs(LL_opt[0])
-    LL_fopt = np.around(LL_opt[1], decimals= 4)
+    LL_xopt = abs(LL_opt[0]); LL_fopt = np.around(LL_opt[1], decimals= 4)
     xres_opt = [int(LL_xopt[0]), int(LL_xopt[1])]
-    resC_opt = x_to_rcost(xdes_opt, xoper_opt, xres_opt)
-    print("#####################Bi-level approach###############################")
-    print("Upper level optimal solution:")
-    print(UL_xopt)
-    print(UL_fopt)
-    print(desC_opt)
-    print(operC_opt)
-    print("#####################################################################")
-    print("Lower level optimal solution:")
-    print(LL_xopt)
-    print(LL_fopt)
-    print(resC_opt)
+    resC_opt = x_to_rcost(xdes_opt, xoper_opt, xres_opt, loc=loc)
+    if printresults:
+        print("#####################Bi-level approach###############################")
+        print("Upper level optimal solution:")
+        print(UL_xopt); print(UL_fopt); print(desC_opt); print(operC_opt)
+        print("#####################################################################")
+        print("Lower level optimal solution:")
+        print(LL_xopt); print(LL_fopt); print(resC_opt)
+    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt
 def bilevel_lowerlevelobj(ll_x, *llparams):
     """Lower-level objective function in bilevel framework."""
-    xdes, xoper, resC0 = llparams
+    xdes, xoper, resC0, normalize,loc = llparams
     xres = ll_x
-    # xdes = [int(xdes[0]), int(xdes[1])]
-    # xres = [int(ll_x[0]), int(ll_x[1])]
-    resC = x_to_rcost(xdes, xoper, xres)
-    nresC = (resC-resC0[0])/(resC0[1]-resC0[0])
-    LLobj =nresC
+    resC = x_to_rcost(xdes, xoper, xres, loc=loc)
+    if normalize:   LLobj = (resC-resC0[0])/(resC0[1]-resC0[0])
+    else:           LLobj = resC
     return LLobj
-def bilevel_lowerlevelmodel(xdes, xoper, resC0):
+def bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc):
     """Defining the lower level optimization model (Using brute force exhaustive grid search algortihm)"""
     LLXbound = (slice(0, 3, 1), slice(0, 3, 1))
-    llparams = (xdes, xoper, resC0)
+    llparams = (xdes, xoper, resC0, normalize,loc)
     LLoptmodel = optimize.brute(bilevel_lowerlevelobj, LLXbound, args=llparams, full_output=True, finish=None)
     return LLoptmodel
 def bilevel_upperlevelobj(X, *ulparams):
     """ upper level objective function in the bilevel framework """
-    xdes = [int(X[0]),int(X[1])]
-    xoper = [X[2]]
-    desC0, operC0, resC0 = ulparams
+    xdes = [int(X[0]),int(X[1])]; xoper = [X[2]]
+    desC0, operC0, resC0, normalize, loc = ulparams
     desC = x_to_dcost(xdes)
-    operC = x_to_ocost(xdes, xoper)
-    #Normalizing obj function to avoid issue on magnitudes
-    ndesC = (desC-desC0[0])/(desC0[1]-desC0[0])
-    noperC =(operC[0]-operC0[0])/(operC0[1]-operC0[0])
+    operC = x_to_ocost(xdes, xoper, loc=loc)
     #Constraints validation: >0 or 1(Boolean) means violation and is penalized in Obj Func
-    c_batlife = operC[1]
-    if operC[2] == True:
-        c_faults = 1
-    else:
-        c_faults = 0
-    c_maxh = operC[3]
+    #Constraints validation: >0 or 1(Boolean) means violation and is penalized in Obj Func
+    c_batlife = operC[1]; c_faults = int(operC[2]); c_maxh = operC[3]
     #Penalizing obj function with upper level contraints
     if ((operC[1] > 0 or operC[2] == True) or (operC[3] > 0)):  # Infeasible design if any above constraints violated
-        ULpen = c_batlife**2 + 1000*c_faults + c_maxh**2 # Exterior Penalty method
-        LLpen = 10000 # Giving a big penalty of lower level if upper level decision is infeasible
+        ULpen = max(c_batlife, 0)**2+10000*c_faults+max(c_maxh,0)**2 # Exterior Penalty method
+        LLpen = 100000 # Giving a big penalty of lower level if upper level decision is infeasible
     else: # Calling lower level only if all the upper level contraints are feasible: Reducing redundant lower level iterations
         ULpen = 0
-        LL_opt = bilevel_lowerlevelmodel(xdes, xoper, resC0)
-        LL_res_opt = LL_opt[0]
-        LL_obj_opt = LL_opt[1]
+        LL_opt = bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc)
+        LL_res_opt = LL_opt[0]; LL_obj_opt = LL_opt[1]
         LLpen = 1*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
-        #LLpen = LL_obj_opt**2
-
     #Penalized obj func.(both upper and lower level): Double Penalty method
-    #LLpen =0
-    ULobj = ndesC + noperC + ULpen + LLpen #normalized design and oper cost with penalty value
+    if normalize: #Normalizing obj function to avoid issue on magnitudes
+        ndesC = (desC-desC0[0])/(desC0[1]-desC0[0])
+        noperC =(operC[0]-operC0[0])/(operC0[1]-operC0[0])
+        ULobj = ndesC + noperC + ULpen + LLpen #normalized design and oper cost with penalty value
+    else: ULobj = desC + operC + ULpen + LLpen
     return ULobj
 
 
