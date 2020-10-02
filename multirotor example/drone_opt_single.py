@@ -23,13 +23,17 @@ import timeit
 
 start = timeit.default_timer()
 # Initializing design variables and parameters
-ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10), slice(0, 3, 1), slice(0, 3, 1))
+ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10), slice(0, 3, 1), slice(0, 3, 1)) #specifies ranges + iter num for each var
 #ULXRes = [0,0] # Default Res. Pol. in Upper level (nominal env) is o continue
 # Approx Min and max feasible values for each cost models (Obtained from data analysis)
 desC0 = [0, 300000]
 operC0 = [-630000, -37171.5989]
 resC0 = [5245622.35, 310771934]
-#resC0 = [171426.3, 55932536.24]
+#The normalized utopia values (global optimal)
+u1 = 0.0018
+u2 = 0
+normalize=True
+loc='rural'
 
 # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
 weights = pd.Series(np.arange(0, 1.1, 0.1)) # Weights on obj 1: Design + Oper Cost
@@ -38,7 +42,7 @@ obj2_w = []
 for ix in range(len(weights)):
     w1 = weights.iloc[ix]  # Weights on obj 1: Design + Oper Cost
     w2 = 1 - w1 # Weights on obj 2: Failure Cost
-    ulparams = (desC0, operC0, resC0, w1, w2)
+    ulparams = (desC0, operC0, resC0,normalize, w1, w2,u1,u2,loc)
     ULoptmodel = optimize.brute(AAO_f, ULXbound, args=ulparams, full_output=True, finish=optimize.fmin)
     UL_xopt = abs(np.around(ULoptmodel[0]))
     UL_fopt = np.around(ULoptmodel[1], decimals=4)
