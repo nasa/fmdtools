@@ -83,12 +83,22 @@ def x_to_ocost(xdes, xoper, loc='rural'):
     return calc_oper(mdl)
 
 # Resilience Model
-def calc_res(mdl):
+def calc_res(mdl, fullcosts=False):
     app = SampleApproach(mdl, faults='single-component', phases={'forward'})
     endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
     rescost = rd.process.totalcost(endclasses)
-    return rescost
-def x_to_rcost(xdes, xoper, xres, loc='rural'):
+    if fullcosts: 
+        rescosts = {'cost':0,'repcost':0, 'landcost':0, 'safecost':0, 'viewed value':0}
+        for scen in endclasses:
+            number = endclasses[scen]['expected cost']/endclasses[scen]['cost']
+            rescosts['cost'] += endclasses[scen]['expected cost']
+            rescosts['repcost'] += number *  endclasses[scen]['repcost']
+            rescosts['landcost'] += number *  endclasses[scen]['landcost']
+            rescosts['safecost'] += number *  endclasses[scen]['safecost']
+            rescosts['viewed value'] += number *  endclasses[scen]['viewed value']
+        return rescosts
+    else: return rescost
+def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False):
     bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
     linarchs = ['quad', 'hex', 'oct']
     respols = ['continue', 'to_home', 'to_nearest', 'emland']
@@ -103,7 +113,7 @@ def x_to_rcost(xdes, xoper, xres, loc='rural'):
     params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start,'loc':loc, 'landtime':12 }
     mdl = Drone(params=params)
     a,b,c,d = calc_oper(mdl) #used to form flight phases
-    return calc_res(mdl)
+    return calc_res(mdl, fullcosts=fullcosts)
 
 #creates model from design variables (note: does not get flight time)
 def x_to_mdl(x, loc='rural'):
@@ -122,12 +132,13 @@ def x_to_mdl(x, loc='rural'):
     mdl = Drone(params=params)
     return mdl
 # all-in-one-model
-def x_to_cost(x, loc='rural'):
+def x_to_cost(x, loc='rural', fullcosts=False):
     mdl = x_to_mdl(x, loc=loc)
     dcost = calc_des(mdl)
     oper = calc_oper(mdl)
-    rcost = calc_res(mdl)
-    return dcost + oper[0] + rcost, oper[1:]
+    rcost = calc_res(mdl, fullcosts=fullcosts)
+    if fullcosts:   return dcost, oper, rcost
+    else:           return dcost + oper[0] + rcost, oper[1:]
 
 
 
@@ -533,7 +544,16 @@ def bilevel_upperlevelobj(X, *ulparams):
     else: ULobj = desC + operC + ULpen + LLpen
     return ULobj
 
-
+def brute_search(loc = 'rural', Xranges = [[0,3,1],[0,2,1],[10, 130, 10],[0,3,1],[0,3,1]]):
+    Xvals = [ e for e in itertools.product(*(range(x[0],x[1],x[2]) for x in Xranges))]
+    
+    results = dict()
+    
+    for X in Xvals:
+        dcost, ocost, rcosts = x_to_cost(X, loc='rural', fullcosts=True)
+        if (ocost[1]<=0) & (not ocost[2]) & (ocost[3] <= 0):
+            results[X] = [dcost, ocost[0]]+list(rcosts.values())        
+    return results
 
 
 
