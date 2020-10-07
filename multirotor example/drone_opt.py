@@ -95,7 +95,7 @@ def calc_res(mdl, fullcosts=False):
             rescosts['repcost'] += number *  endclasses[scen]['repcost']
             rescosts['landcost'] += number *  endclasses[scen]['landcost']
             rescosts['safecost'] += number *  endclasses[scen]['safecost']
-            rescosts['viewed value'] += number *  endclasses[scen]['viewed value']
+            rescosts['lost value'] += number * -endclasses[scen]['viewed value']
         return rescosts
     else: return rescost
 def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False):
@@ -554,6 +554,24 @@ def brute_search(loc = 'rural', Xranges = [[0,3,1],[0,2,1],[10, 130, 10],[0,3,1]
         if (ocost[1]<=0) & (not ocost[2]) & (ocost[3] <= 0):
             results[X] = [dcost, ocost[0]]+list(rcosts.values())        
     return results
+
+def get_2dpareto(resultstab, ind1, ind2):
+    pareto = dict()
+    for x in resultstab:
+        if not any([(resultstab[x][ind1] >= resultstab[i][ind1] and resultstab[x][ind2] > resultstab[i][ind2]) or (resultstab[x][ind1] > resultstab[i][ind1] and resultstab[x][ind2] >= resultstab[i][ind2]) for i in resultstab]):
+            pareto[x] = resultstab[x][ind1], resultstab[x][ind2]
+    return dict(sorted(pareto.items(), key=lambda x: x[1]))
+
+def get_3dpareto(resultstab, ind1, ind2, ind3):
+    pareto = dict()
+    for x in resultstab:
+        if not any([(resultstab[x][ind1] >= resultstab[i][ind1] and resultstab[x][ind2] >= resultstab[i][ind2] and resultstab[x][ind3] > resultstab[i][ind3]) \
+                    or (resultstab[x][ind1] > resultstab[i][ind1] and resultstab[x][ind2] >= resultstab[i][ind2] and resultstab[x][ind3] >= resultstab[i][ind3]) \
+                        or (resultstab[x][ind1] >= resultstab[i][ind1] and resultstab[x][ind2] > resultstab[i][ind2] and resultstab[x][ind3] >= resultstab[i][ind3]) \
+                            for i in resultstab]):
+            pareto[x] = resultstab[x][ind1], resultstab[x][ind2], resultstab[x][ind3]
+    return dict(sorted(pareto.items(), key=lambda x: x[1]))
+
 
 
 
