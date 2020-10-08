@@ -444,7 +444,7 @@ class Drone(Model):
         
         expcost=totcost*rate*1e5
         
-        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'repcost':repcost, 'landcost':landcost,'safecost':safecost,'viewed value': viewed_value, 'viewed':viewed, 'landloc':landloc,'body strikes':body_strikes, 'head strikes':head_strikes, 'property restrictions': property_restrictions, 'severities':classifications}
+        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'repcost':repcost, 'landcost':landcost,'safecost':safecost,'viewed value': viewed_value, 'viewed':viewed, 'landloc':landloc,'body strikes':body_strikes, 'head strikes':head_strikes, 'property restrictions': property_restrictions, 'severities':classifications, 'unsafe flight time':faulttime}
 
 ## BASE FUNCTIONS
 
