@@ -12,7 +12,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 #results = brute_search()
 
-#resultstab = pd.DataFrame(results)
+#resultstab, opthist = pd.DataFrame(results)
 #resultstab.columns = resultstab.columns.to_flat_index()
 #resultstab.to_csv('fullspace.csv')
 

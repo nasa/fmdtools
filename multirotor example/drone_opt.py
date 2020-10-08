@@ -88,7 +88,7 @@ def calc_res(mdl, fullcosts=False):
     endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
     rescost = rd.process.totalcost(endclasses)
     if fullcosts: 
-        rescosts = {'cost':0,'repcost':0, 'landcost':0, 'safecost':0, 'viewed value':0}
+        rescosts = {'cost':0,'repcost':0, 'landcost':0, 'safecost':0, 'lost value':0}
         for scen in endclasses:
             number = endclasses[scen]['expected cost']/endclasses[scen]['cost']
             rescosts['cost'] += endclasses[scen]['expected cost']
@@ -547,13 +547,17 @@ def bilevel_upperlevelobj(X, *ulparams):
 def brute_search(loc = 'rural', Xranges = [[0,3,1],[0,2,1],[10, 130, 10],[0,3,1],[0,3,1]]):
     Xvals = [ e for e in itertools.product(*(range(x[0],x[1],x[2]) for x in Xranges))]
     
-    results = dict()
+    results = dict(); opt_hist = []
     
     for X in Xvals:
-        dcost, ocost, rcosts = x_to_cost(X, loc='rural', fullcosts=True)
+        dcost, ocost, rcosts = x_to_cost(X, loc=loc, fullcosts=True)
         if (ocost[1]<=0) & (not ocost[2]) & (ocost[3] <= 0):
-            results[X] = [dcost, ocost[0]]+list(rcosts.values())        
-    return results
+            results[X] = [dcost, ocost[0]]+list(rcosts.values())
+        totalcost = dcost + ocost[0] + rcosts['cost']
+        if not opt_hist:                     opt_hist= [[totalcost, X]]
+        elif totalcost < opt_hist[-1][0]:     opt_hist.append([totalcost, X])
+            
+    return results, opt_hist
 
 def get_2dpareto(resultstab, ind1, ind2):
     pareto = dict()
@@ -572,6 +576,19 @@ def get_3dpareto(resultstab, ind1, ind2, ind3):
             pareto[x] = resultstab[x][ind1], resultstab[x][ind2], resultstab[x][ind3]
     return dict(sorted(pareto.items(), key=lambda x: x[1]))
 
+def plot_pareto3(pareto3):
+    x = np.array([x for x,y,z in pareto3.values()])
+    y = np.array([y for x,y,z in pareto3.values()])
+    z = np.array([z for x,y,z in pareto3.values()])
+    mindes = np.argmin(x+y+z)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.view_init(elev=25., azim=45)
+    ax.scatter(x,y,z)
+    ax.scatter(x[mindes],y[mindes],z[mindes], color='red',s=50, label='best design')
+    #ax.plot_trisurf(x,y,z)
+    plt.legend()
+    return fig, ax
 
 
 
