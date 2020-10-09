@@ -417,13 +417,14 @@ def bistage_optimization(loc='rural', printresults=True, normalize = True, finis
     UL_xopt = abs(np.around(ULoptmodel[0])); UL_fopt = np.around(ULoptmodel[1], decimals= 4)
     xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]; xoper_opt = [UL_xopt[2]]                 #get optimal design values   
     desC_opt = x_to_dcost(xdes_opt); operC_opt = x_to_ocost(xdes_opt, xoper_opt, loc=loc)   #get objective values
-    num_upper = ULoptmodel[2].size
+    num_upper = ULoptmodel[2][0].size
     #################### Stage 2 optimization##############################################
     #Running Stage 2 model for the upper level optimal solution
     LL_opt = bistage_secondstagemodel(xdes_opt, xoper_opt, resC0, normalize, loc)
     LL_xopt = abs(LL_opt[0]);  LL_fopt = np.around(LL_opt[1], decimals= 4)
     xres_opt = [int(LL_xopt[0]), int(LL_xopt[1])]                   #get optimal design values
     resC_opt = x_to_rcost(xdes_opt, xoper_opt, xres_opt, loc=loc)   #get optimal resilience
+    num_lower = LL_opt[2][0].size
     if printresults:
         print("#####################Two-Stage approach###############################")
         print("Stage 1 optimal solution:")
@@ -484,18 +485,17 @@ def bilevel_optimization(loc='rural', printresults=True, normalize = True, finis
         desC0, operC0, resC0    [max, min] (max/min feasible values for design/oper/resilience normalization)
     """
     # Initializing design variables and parameters
-    ULXbound=(slice(0, 4, 1), slice(0, 3, 1), slice(10, 122, 10))   
-    ulparams = (desC0, operC0, resC0, normalize, loc)
+    ULXbound=(slice(0, 4, 1), slice(0, 3, 1), slice(10, 122, 10))  
+    LL_progress = {'num_iters':0, 'x_opt':[], 'c_r_opt':0}
+    ulparams = (desC0, operC0, resC0, normalize, loc,LL_progress)
     # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
     ULoptmodel = optimize.brute(bilevel_upperlevelobj, ULXbound, args=ulparams, full_output=True, finish=finish)
     UL_xopt = abs(np.around(ULoptmodel[0])); UL_fopt = np.around(ULoptmodel[1], decimals= 4)
     xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]; xoper_opt = [UL_xopt[2]]
     desC_opt = x_to_dcost(xdes_opt); operC_opt = x_to_ocost(xdes_opt, xoper_opt, loc=loc)
-    num_upper = ULoptmodel[2].size
-    #Running final lower level solution for the upper level optimal solution
-    LL_opt = bilevel_lowerlevelmodel(xdes_opt, xoper_opt, resC0)
-    LL_xopt = abs(LL_opt[0]); LL_fopt = np.around(LL_opt[1], decimals= 4)
-    xres_opt = [int(LL_xopt[0]), int(LL_xopt[1])]
+    num_upper = ULoptmodel[2][0].size
+    #Getting best design, cost, iterations from lower level
+    resC_opt = LL_progress['c_r_opt']; xres_opt = LL_progress['x_opt']; num_lower = LL_progress['num_iters']
     resC_opt = x_to_rcost(xdes_opt, xoper_opt, xres_opt, loc=loc)
     if printresults:
         print("#####################Bi-level approach###############################")
@@ -503,8 +503,8 @@ def bilevel_optimization(loc='rural', printresults=True, normalize = True, finis
         print(UL_xopt); print(UL_fopt); print(desC_opt); print(operC_opt)
         print("#####################################################################")
         print("Lower level optimal solution:")
-        print(LL_xopt); print(LL_fopt); print(resC_opt)
-    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt, num_upper
+        print(xres_opt); print(resC_opt)
+    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt, num_upper, num_lower
 def bilevel_lowerlevelobj(ll_x, *llparams):
     """Lower-level objective function in bilevel framework."""
     xdes, xoper, resC0, normalize,loc = llparams
@@ -522,7 +522,7 @@ def bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc):
 def bilevel_upperlevelobj(X, *ulparams):
     """ upper level objective function in the bilevel framework """
     xdes = [int(X[0]),int(X[1])]; xoper = [X[2]]
-    desC0, operC0, resC0, normalize, loc = ulparams
+    desC0, operC0, resC0, normalize, loc, LL_progress = ulparams
     desC = x_to_dcost(xdes)
     operC = x_to_ocost(xdes, xoper, loc=loc)
     #Constraints validation: >0 or 1(Boolean) means violation and is penalized in Obj Func
@@ -537,6 +537,7 @@ def bilevel_upperlevelobj(X, *ulparams):
         LL_opt = bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc)
         LL_res_opt = LL_opt[0]; LL_obj_opt = LL_opt[1]
         LLpen = 1*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
+        LL_progress['num_iters'] += LL_opt[2][0].size
     #Penalized obj func.(both upper and lower level): Double Penalty method
     if normalize: #Normalizing obj function to avoid issue on magnitudes
         ndesC = (desC-desC0[0])/(desC0[1]-desC0[0])
