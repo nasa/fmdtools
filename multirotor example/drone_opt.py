@@ -83,8 +83,13 @@ def x_to_ocost(xdes, xoper, loc='rural'):
     return calc_oper(mdl)
 
 # Resilience Model
-def calc_res(mdl, fullcosts=False):
-    app = SampleApproach(mdl, faults='single-component', phases={'forward'})
+def calc_res(mdl, fullcosts=False, faultsmodes = 'all'):
+    if faultmodes == 'all':        faults='single-component'     
+    elif faultmodes == 'battery':   faults = [ ('StoreEE', 'nocharge'), ('StoreEE', 'lowcharge'), ('StoreEE', 'S1P1short'), ('StoreEE', 'S1P1degr'), ('StoreEE', 'S1P1break'), ('StoreEE', 'S1P1nocharge'), ('StoreEE', 'S1P1lowcharge') ]
+    elif faultmodes == 'line':      faults = [ ('AffectDOF', 'RFshort'), ('AffectDOF', 'RFopenc'), ('AffectDOF', 'RFctlbreak'), ('AffectDOF', 'RFmechbreak'), ('AffectDOF', 'RFmechfriction'), ('AffectDOF', 'RFstuck')]    
+    elif faultmodes == 'notvars':   faults = [ ('ManageHealth', 'falsemasking'), ('ManageHealth', 'falseemland'), ('ManageHealth', 'lostfunction'), ('CtlDOF', 'noctl'), ('CtlDOF', 'degctl'), ('Planpath', 'noloc'), ('Planpath', 'degloc'),('DistEE', 'short'), ('DistEE', 'degr'), ('DistEE', 'break'), ('HoldPayload', 'break'), ('HoldPayload', 'deform')]
+    
+    app = SampleApproach(mdl, faults=faults, phases={'forward'})
     endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
     rescost = rd.process.totalcost(endclasses)
     if fullcosts: 
@@ -98,7 +103,7 @@ def calc_res(mdl, fullcosts=False):
             rescosts['lost value'] += number * -endclasses[scen]['viewed value']
         return rescosts
     else: return rescost
-def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False):
+def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultsmodes = 'all'):
     bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
     linarchs = ['quad', 'hex', 'oct']
     respols = ['continue', 'to_home', 'to_nearest', 'emland']
@@ -113,7 +118,7 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False):
     params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start,'loc':loc, 'landtime':12 }
     mdl = Drone(params=params)
     a,b,c,d = calc_oper(mdl) #used to form flight phases
-    return calc_res(mdl, fullcosts=fullcosts)
+    return calc_res(mdl, fullcosts=fullcosts, faultsmodes = faultmodes)
 
 #creates model from design variables (note: does not get flight time)
 def x_to_mdl(x, loc='rural'):
@@ -407,6 +412,7 @@ def bistage_optimization(loc='rural', printresults=True, normalize = True, finis
         desC0, operC0, resC0    [max, min] (max/min feasible values for design/oper/resilience normalization)
         
     """
+    starttime = time.time()
     ######################### Stage 1 optimization ####################################
     # Initializing design variables and parameters
     ULXbound=(slice(0, 4, 1), slice(0, 3, 1), slice(10, 122, 10))    
@@ -432,7 +438,7 @@ def bistage_optimization(loc='rural', printresults=True, normalize = True, finis
         print("#####################################################################")
         print("Stage 2 optimal solution:")
         print(LL_xopt); print(LL_fopt); print(resC_opt)
-    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt, num_upper, num_lower
+    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt, num_upper, num_lower, starttime - time.time()
 def bistage_firststageobj(X, *ulparams):
     """Objective function for first stage of the two-stage optimization"""
     xdes = [int(X[0]),int(X[1])]; xoper = [X[2]]    #get variables values
@@ -465,7 +471,7 @@ def bistage_secondstagemodel(xdes, xoper, resC0, normalize,loc):
     return LLoptmodel
 
 
-def bilevel_optimization(loc='rural', printresults=True, normalize = True, finish=None, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
+def bilevel_optimization(loc='rural', printresults=True, normalize = True, finish=None, decomp = False, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
     """
     Bi-level optimization framework for the drone model.
     
@@ -484,10 +490,11 @@ def bilevel_optimization(loc='rural', printresults=True, normalize = True, finis
         normalize:              T/F (whether to normalize over utopia values)
         desC0, operC0, resC0    [max, min] (max/min feasible values for design/oper/resilience normalization)
     """
+    starttime = time.time()
     # Initializing design variables and parameters
     ULXbound=(slice(0, 4, 1), slice(0, 3, 1), slice(10, 122, 10))  
     LL_progress = {'num_iters':0, 'x_opt':[], 'c_r_opt':0}
-    ulparams = (desC0, operC0, resC0, normalize, loc,LL_progress)
+    ulparams = (desC0, operC0, resC0, normalize, loc,LL_progress, decomp)
     # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
     ULoptmodel = optimize.brute(bilevel_upperlevelobj, ULXbound, args=ulparams, full_output=True, finish=finish)
     UL_xopt = abs(np.around(ULoptmodel[0])); UL_fopt = np.around(ULoptmodel[1], decimals= 4)
@@ -504,25 +511,49 @@ def bilevel_optimization(loc='rural', printresults=True, normalize = True, finis
         print("#####################################################################")
         print("Lower level optimal solution:")
         print(xres_opt); print(resC_opt)
-    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt, num_upper, num_lower
+    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt, num_upper, num_lower, starttime - time.time()
 def bilevel_lowerlevelobj(ll_x, *llparams):
     """Lower-level objective function in bilevel framework."""
-    xdes, xoper, resC0, normalize,loc = llparams
+    xdes, xoper, resC0, normalize,loc, faultmodes = llparams
     xres = ll_x
-    resC = x_to_rcost(xdes, xoper, xres, loc=loc)
+    resC = x_to_rcost(xdes, xoper, xres, loc=loc, faultsmodes = faultmodes)
     if normalize:   LLobj = (resC-resC0[0])/(resC0[1]-resC0[0])
     else:           LLobj = resC
     return LLobj
-def bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc):
+def bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc, decomp):
     """Defining the lower level optimization model (Using brute force exhaustive grid search algortihm)"""
-    LLXbound = (slice(0, 4, 1), slice(0, 4, 1))
-    llparams = (xdes, xoper, resC0, normalize,loc)
-    LLoptmodel = optimize.brute(bilevel_lowerlevelobj, LLXbound, args=llparams, full_output=True, finish=None)
-    return LLoptmodel
+    if decomp == False:
+        faultmodes = 'all'
+        LLXbound = (slice(0, 4, 1), slice(0, 4, 1))
+        llparams = (xdes, xoper, resC0, normalize,loc, faultmodes) 
+        LL_opt = optimize.brute(bilevel_lowerlevelobj, LLXbound, args=llparams, full_output=True, finish=None)
+        LL_x_opt = LL_opt[0]; LL_obj_opt = LL_opt[1]
+        num_iters = LL_opt[2][0].size
+    else:
+        # battery optimization
+        faultmodes = 'battery'
+        LLXbound = (slice(0, 4, 1), slice(0, 1, 1))
+        llparams = (xdes, xoper, resC0, normalize,loc, faultmodes) 
+        LL_opt = optimize.brute(bilevel_lowerlevelobj, LLXbound, args=llparams, full_output=True, finish=None)
+        opt_bat = LL_opt[0][0]; bat_cost = LL_opt[1]
+        num_iters = LL_opt[2][0].size
+        # line optimization
+        faultmodes = 'line'
+        LLXbound = (slice(0, 1, 1), slice(0, 4, 1))
+        llparams = (xdes, xoper, resC0, normalize,loc, faultmodes) 
+        LL_opt = optimize.brute(bilevel_lowerlevelobj, LLXbound, args=llparams, full_output=True, finish=None)
+        opt_line= LL_opt[0][1]; line_cost = LL_opt[1]
+        num_iters += LL_opt[2][0].size
+        # getting residual costs
+        faultmodes = 'notvars'
+        llparams = (xdes, xoper, resC0, normalize,loc, faultmodes)
+        rest_cost = bilevel_lowerlevelobj([opt_bat, opt_line], *llparams) 
+        LL_x_opt = [opt_bat, opt_line]; LL_obj_opt = bat_cost + line_cost + rest_cost
+    return LL_x_opt, LL_obj_opt, num_iters
 def bilevel_upperlevelobj(X, *ulparams):
     """ upper level objective function in the bilevel framework """
     xdes = [int(X[0]),int(X[1])]; xoper = [X[2]]
-    desC0, operC0, resC0, normalize, loc, LL_progress = ulparams
+    desC0, operC0, resC0, normalize, loc, LL_progress, decomp = ulparams
     desC = x_to_dcost(xdes)
     operC = x_to_ocost(xdes, xoper, loc=loc)
     #Constraints validation: >0 or 1(Boolean) means violation and is penalized in Obj Func
@@ -534,10 +565,11 @@ def bilevel_upperlevelobj(X, *ulparams):
         LLpen = 100000 # Giving a big penalty of lower level if upper level decision is infeasible
     else: # Calling lower level only if all the upper level contraints are feasible: Reducing redundant lower level iterations
         ULpen = 0
-        LL_opt = bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc)
-        LL_res_opt = LL_opt[0]; LL_obj_opt = LL_opt[1]
+        LL_x_opt, LL_obj_opt, num_iters  = bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc, decomp)
+        
         LLpen = 1*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
-        LL_progress['num_iters'] += LL_opt[2][0].size
+        LL_progress['num_iters'] += num_iters
+        LL_progress['x_opt']=LL_x_opt; LL_progress['c_r_opt']=LL_obj_opt
     #Penalized obj func.(both upper and lower level): Double Penalty method
     if normalize: #Normalizing obj function to avoid issue on magnitudes
         ndesC = (desC-desC0[0])/(desC0[1]-desC0[0])
@@ -547,6 +579,7 @@ def bilevel_upperlevelobj(X, *ulparams):
     return ULobj
 
 def brute_search(loc = 'rural', Xranges = [[0,4,1],[0,3,1],[10, 130, 10],[0,4,1],[0,4,1]]):
+    starttime = time.time()
     Xvals = [ e for e in itertools.product(*(range(x[0],x[1],x[2]) for x in Xranges))]
     results = dict(); opt_hist = []
     
@@ -558,7 +591,7 @@ def brute_search(loc = 'rural', Xranges = [[0,4,1],[0,3,1],[10, 130, 10],[0,4,1]
         if not opt_hist:                     opt_hist= [[totalcost, X]]
         elif totalcost < opt_hist[-1][0]:     opt_hist.append([totalcost, X])
             
-    return results, opt_hist, len(Xvals)
+    return results, opt_hist, len(Xvals), starttime - time.time()
 
 def get_2dpareto(resultstab, ind1, ind2):
     pareto = dict()
