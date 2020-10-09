@@ -388,7 +388,7 @@ def AAO_f(X, *ulparams):
     return obj
 
 
-def bistage_optimization(loc='rural', printresults=True, normalize = True, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
+def bistage_optimization(loc='rural', printresults=True, normalize = True, finish=None, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
     """
     The two-stage optimization framework for the drone model.
     Stage 1 considers the nominal scenario, optimizing battery, rotor config and oper height,
@@ -409,15 +409,15 @@ def bistage_optimization(loc='rural', printresults=True, normalize = True, desC0
     """
     ######################### Stage 1 optimization ####################################
     # Initializing design variables and parameters
-    ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10))    
+    ULXbound=(slice(0, 4, 1), slice(0, 3, 1), slice(10, 122, 10))    
     ulparams = (desC0, operC0, resC0, normalize, loc)
     
     # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
-    ULoptmodel = optimize.brute(bistage_firststageobj, ULXbound, args=ulparams, full_output=True, finish=optimize.fmin)
+    ULoptmodel = optimize.brute(bistage_firststageobj, ULXbound, args=ulparams, full_output=True, finish=finish)
     UL_xopt = abs(np.around(ULoptmodel[0])); UL_fopt = np.around(ULoptmodel[1], decimals= 4)
     xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]; xoper_opt = [UL_xopt[2]]                 #get optimal design values   
     desC_opt = x_to_dcost(xdes_opt); operC_opt = x_to_ocost(xdes_opt, xoper_opt, loc=loc)   #get objective values
-    
+    num_upper = ULoptmodel[2].size
     #################### Stage 2 optimization##############################################
     #Running Stage 2 model for the upper level optimal solution
     LL_opt = bistage_secondstagemodel(xdes_opt, xoper_opt, resC0, normalize, loc)
@@ -431,7 +431,7 @@ def bistage_optimization(loc='rural', printresults=True, normalize = True, desC0
         print("#####################################################################")
         print("Stage 2 optimal solution:")
         print(LL_xopt); print(LL_fopt); print(resC_opt)
-    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt
+    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt, num_upper, num_lower
 def bistage_firststageobj(X, *ulparams):
     """Objective function for first stage of the two-stage optimization"""
     xdes = [int(X[0]),int(X[1])]; xoper = [X[2]]    #get variables values
@@ -458,13 +458,13 @@ def bistage_secondstageobj(ll_x, *llparams):
     return LLobj
 def bistage_secondstagemodel(xdes, xoper, resC0, normalize,loc):
     """ Defining the Stage2 optimization model (Using brute force exhaustive grid search algortihm)"""
-    LLXbound = (slice(0, 3, 1), slice(0, 3, 1))
+    LLXbound = (slice(0, 4, 1), slice(0, 4, 1))
     llparams = (xdes, xoper, resC0, normalize, loc)
     LLoptmodel = optimize.brute(bistage_secondstageobj, LLXbound, args=llparams, full_output=True, finish=None)
     return LLoptmodel
 
 
-def bilevel_optimization(loc='rural', printresults=True, normalize = True, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
+def bilevel_optimization(loc='rural', printresults=True, normalize = True, finish=None, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
     """
     Bi-level optimization framework for the drone model.
     
@@ -484,13 +484,14 @@ def bilevel_optimization(loc='rural', printresults=True, normalize = True, desC0
         desC0, operC0, resC0    [max, min] (max/min feasible values for design/oper/resilience normalization)
     """
     # Initializing design variables and parameters
-    ULXbound=(slice(0, 3, 1), slice(0, 2, 1), slice(10, 122, 10))
+    ULXbound=(slice(0, 4, 1), slice(0, 3, 1), slice(10, 122, 10))   
     ulparams = (desC0, operC0, resC0, normalize, loc)
     # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
-    ULoptmodel = optimize.brute(bilevel_upperlevelobj, ULXbound, args=ulparams, full_output=True, finish=optimize.fmin)
+    ULoptmodel = optimize.brute(bilevel_upperlevelobj, ULXbound, args=ulparams, full_output=True, finish=finish)
     UL_xopt = abs(np.around(ULoptmodel[0])); UL_fopt = np.around(ULoptmodel[1], decimals= 4)
     xdes_opt = [int(UL_xopt[0]), int(UL_xopt[1])]; xoper_opt = [UL_xopt[2]]
     desC_opt = x_to_dcost(xdes_opt); operC_opt = x_to_ocost(xdes_opt, xoper_opt, loc=loc)
+    num_upper = ULoptmodel[2].size
     #Running final lower level solution for the upper level optimal solution
     LL_opt = bilevel_lowerlevelmodel(xdes_opt, xoper_opt, resC0)
     LL_xopt = abs(LL_opt[0]); LL_fopt = np.around(LL_opt[1], decimals= 4)
@@ -503,7 +504,7 @@ def bilevel_optimization(loc='rural', printresults=True, normalize = True, desC0
         print("#####################################################################")
         print("Lower level optimal solution:")
         print(LL_xopt); print(LL_fopt); print(resC_opt)
-    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt
+    return xdes_opt, xoper_opt, xres_opt, desC_opt, operC_opt, resC_opt, num_upper
 def bilevel_lowerlevelobj(ll_x, *llparams):
     """Lower-level objective function in bilevel framework."""
     xdes, xoper, resC0, normalize,loc = llparams
@@ -514,7 +515,7 @@ def bilevel_lowerlevelobj(ll_x, *llparams):
     return LLobj
 def bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc):
     """Defining the lower level optimization model (Using brute force exhaustive grid search algortihm)"""
-    LLXbound = (slice(0, 3, 1), slice(0, 3, 1))
+    LLXbound = (slice(0, 4, 1), slice(0, 4, 1))
     llparams = (xdes, xoper, resC0, normalize,loc)
     LLoptmodel = optimize.brute(bilevel_lowerlevelobj, LLXbound, args=llparams, full_output=True, finish=None)
     return LLoptmodel
@@ -544,9 +545,8 @@ def bilevel_upperlevelobj(X, *ulparams):
     else: ULobj = desC + operC + ULpen + LLpen
     return ULobj
 
-def brute_search(loc = 'rural', Xranges = [[0,3,1],[0,2,1],[10, 130, 10],[0,3,1],[0,3,1]]):
+def brute_search(loc = 'rural', Xranges = [[0,4,1],[0,3,1],[10, 130, 10],[0,4,1],[0,4,1]]):
     Xvals = [ e for e in itertools.product(*(range(x[0],x[1],x[2]) for x in Xranges))]
-    
     results = dict(); opt_hist = []
     
     for X in Xvals:
@@ -557,7 +557,7 @@ def brute_search(loc = 'rural', Xranges = [[0,3,1],[0,2,1],[10, 130, 10],[0,3,1]
         if not opt_hist:                     opt_hist= [[totalcost, X]]
         elif totalcost < opt_hist[-1][0]:     opt_hist.append([totalcost, X])
             
-    return results, opt_hist
+    return results, opt_hist, len(Xvals)
 
 def get_2dpareto(resultstab, ind1, ind2):
     pareto = dict()
