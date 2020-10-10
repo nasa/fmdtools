@@ -393,7 +393,7 @@ def AAO_f(X, *ulparams):
     return obj
 
 
-def bistage_optimization(loc='rural', printresults=True, normalize = True, finish=None, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
+def bistage_optimization(loc='rural', printresults=True, normalize = False, finish=None, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
     """
     The two-stage optimization framework for the drone model.
     Stage 1 considers the nominal scenario, optimizing battery, rotor config and oper height,
@@ -471,7 +471,7 @@ def bistage_secondstagemodel(xdes, xoper, resC0, normalize,loc):
     return LLoptmodel
 
 
-def bilevel_optimization(loc='rural', printresults=True, normalize = True, finish=None, decomp = False, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
+def bilevel_optimization(loc='rural', printresults=True, normalize = False, finish=None, decomp = False, desC0 = [0, 300000],operC0 = [-630000, -37171.5989], resC0 = [5245622.35, 310771934] ):
     """
     Bi-level optimization framework for the drone model.
     
