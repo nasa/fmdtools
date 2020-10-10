@@ -562,8 +562,8 @@ def bilevel_upperlevelobj(X, *ulparams):
     c_batlife = operC[1]; c_faults = int(operC[2]); c_maxh = operC[3]
     #Penalizing obj function with upper level contraints
     if ((operC[1] > 0 or operC[2] == True) or (operC[3] > 0)):  # Infeasible design if any above constraints violated
-        ULpen = max(c_batlife, 0)**2+10000*c_faults+max(c_maxh,0)**2 # Exterior Penalty method
-        LLpen = 100000 # Giving a big penalty of lower level if upper level decision is infeasible
+        ULpen = 100000 * max(c_batlife, 0)**2+100000*c_faults+100000 *max(c_maxh,0)**2 # Exterior Penalty method
+        LLpen = 1000000 # Giving a big penalty of lower level if upper level decision is infeasible
     else: # Calling lower level only if all the upper level contraints are feasible: Reducing redundant lower level iterations
         ULpen = 0
         LL_x_opt, LL_obj_opt, num_iters  = bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc, decomp)
