@@ -5,7 +5,7 @@ import timeit
 
 start = timeit.default_timer()
 
-bilevel_optimization()
+bilevel_optimization(loc='urban', decomp = True)
 
 
 ###################################################################################

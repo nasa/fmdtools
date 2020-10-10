@@ -38,7 +38,7 @@ class StoreEE(FxnBlock):
             components = {'S1P1': Battery('S1P1', self.batparams),'S1P2': Battery('S1P2', self.batparams)}
         elif self.archtype == 'split-both':
             self.batparams ={'s':2,'p':2,'w':params['weight'],'v':12,'d':params['drag']}
-            components = {'S1P1': Battery('S1', self.batparams), 'S2P1': Battery('S2', self.batparams),'S1P2': Battery('S1P2', self.batparams), 'S2P2': Battery('S2P2', self.batparams)}
+            components = {'S1P1': Battery('S1P1', self.batparams), 'S2P1': Battery('S2P1', self.batparams),'S1P2': Battery('S1P2', self.batparams), 'S2P2': Battery('S2P2', self.batparams)}
         else: raise Exception("Invalid battery architecture")
         #failrate for function w- component only applies to function modes
         self.failrate=1e-4
