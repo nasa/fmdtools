@@ -84,12 +84,12 @@ def x_to_ocost(xdes, xoper, loc='rural'):
 
 # Resilience Model
 def calc_res(mdl, fullcosts=False, faultmodes = 'all'):
-    if faultmodes == 'all':        faults='single-component'     
-    elif faultmodes == 'battery':   faults = [ ('StoreEE', 'nocharge'), ('StoreEE', 'lowcharge'), ('StoreEE', 'S1P1short'), ('StoreEE', 'S1P1degr'), ('StoreEE', 'S1P1break'), ('StoreEE', 'S1P1nocharge'), ('StoreEE', 'S1P1lowcharge') ]
-    elif faultmodes == 'line':      faults = [ ('AffectDOF', 'RFshort'), ('AffectDOF', 'RFopenc'), ('AffectDOF', 'RFctlbreak'), ('AffectDOF', 'RFmechbreak'), ('AffectDOF', 'RFmechfriction'), ('AffectDOF', 'RFstuck')]    
-    elif faultmodes == 'notvars':   faults = [ ('ManageHealth', 'falsemasking'), ('ManageHealth', 'falseemland'), ('ManageHealth', 'lostfunction'), ('CtlDOF', 'noctl'), ('CtlDOF', 'degctl'), ('Planpath', 'noloc'), ('Planpath', 'degloc'),('DistEE', 'short'), ('DistEE', 'degr'), ('DistEE', 'break'), ('HoldPayload', 'break'), ('HoldPayload', 'deform')]
+    app = SampleApproach(mdl, faults='single-component', phases={'forward'})   
+    if faultmodes == 'battery':     app.scenlist = [scen for scen in app.scenlist if list(scen['faults'].keys())[0]=='StoreEE']
+    elif faultmodes == 'line':      app.scenlist = [scen for scen in app.scenlist if list(scen['faults'].keys())[0]=='AffectDOF']
+    elif faultmodes == 'notvars':   app.scenlist = [scen for scen in app.scenlist if list(scen['faults'].keys())[0] not in {'StoreEE', 'AffectDOF'}]
     
-    app = SampleApproach(mdl, faults=faults, phases={'forward'})
+    
     endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
     rescost = rd.process.totalcost(endclasses)
     if fullcosts: 
@@ -493,7 +493,7 @@ def bilevel_optimization(loc='rural', printresults=True, normalize = False, fini
     starttime = time.time()
     # Initializing design variables and parameters
     ULXbound=(slice(0, 4, 1), slice(0, 3, 1), slice(10, 122, 10))  
-    LL_progress = {'num_iters':0, 'x_opt':[], 'c_r_opt':0}
+    LL_progress = {'num_iters':0, 'x_opt':[], 'c_r_opt':np.inf, 'c_tot_opt':np.inf}
     ulparams = (desC0, operC0, resC0, normalize, loc,LL_progress, decomp)
     # Brute force algo with polishing optimal results of brute force using downhill simplex algorithm
     ULoptmodel = optimize.brute(bilevel_upperlevelobj, ULXbound, args=ulparams, full_output=True, finish=finish)
@@ -564,19 +564,21 @@ def bilevel_upperlevelobj(X, *ulparams):
     if ((operC[1] > 0 or operC[2] == True) or (operC[3] > 0)):  # Infeasible design if any above constraints violated
         ULpen = 100000 * max(c_batlife, 0)**2+100000*c_faults+100000 *max(c_maxh,0)**2 # Exterior Penalty method
         LLpen = 1000000 # Giving a big penalty of lower level if upper level decision is infeasible
+        LL_x_opt=[0,0];
     else: # Calling lower level only if all the upper level contraints are feasible: Reducing redundant lower level iterations
         ULpen = 0
         LL_x_opt, LL_obj_opt, num_iters  = bilevel_lowerlevelmodel(xdes, xoper, resC0, normalize,loc, decomp)
         
         LLpen = 1*LL_obj_opt # with increasing penalty term, optimal design decision is provided with lower risk to failure
         LL_progress['num_iters'] += num_iters
-        LL_progress['x_opt']=LL_x_opt; LL_progress['c_r_opt']=LL_obj_opt
     #Penalized obj func.(both upper and lower level): Double Penalty method
     if normalize: #Normalizing obj function to avoid issue on magnitudes
         ndesC = (desC-desC0[0])/(desC0[1]-desC0[0])
         noperC =(operC[0]-operC0[0])/(operC0[1]-operC0[0])
         ULobj = ndesC + noperC + ULpen + LLpen #normalized design and oper cost with penalty value
     else: ULobj = desC + operC[0] + ULpen + LLpen
+    if ULobj < LL_progress['c_tot_opt']: 
+        LL_progress['x_opt']=LL_x_opt; LL_progress['c_r_opt']=LLpen; LL_progress['c_tot_opt'] = ULobj
     return ULobj
 
 def brute_search(loc = 'rural', Xranges = [[0,4,1],[0,3,1],[10, 130, 10],[0,4,1],[0,4,1]]):
