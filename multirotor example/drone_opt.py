@@ -613,7 +613,7 @@ def get_3dpareto(resultstab, ind1, ind2, ind3):
             pareto[x] = resultstab[x][ind1], resultstab[x][ind2], resultstab[x][ind3]
     return dict(sorted(pareto.items(), key=lambda x: x[1]))
 
-def plot_pareto3(pareto3):
+def plot_pareto3(pareto3, legend='equal-weight design'):
     x = np.array([x for x,y,z in pareto3.values()])
     y = np.array([y for x,y,z in pareto3.values()])
     z = np.array([z for x,y,z in pareto3.values()])
@@ -622,7 +622,7 @@ def plot_pareto3(pareto3):
     ax = fig.add_subplot(111, projection='3d')
     ax.view_init(elev=25., azim=45)
     ax.scatter(x,y,z)
-    ax.scatter(x[mindes],y[mindes],z[mindes], color='red',s=50, label='best design')
+    if legend: ax.scatter(x[mindes],y[mindes],z[mindes], color='red',s=50, label=legend)
     #ax.plot_trisurf(x,y,z)
     plt.legend()
     return fig, ax
