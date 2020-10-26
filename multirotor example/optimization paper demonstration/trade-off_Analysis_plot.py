@@ -12,7 +12,7 @@ Created on Mon Jul  6 09:54:15 2020
 # Few examples have been provided for interpretation. However, different plotting other than shown here can be done depending
 # on the analysis question or for better visualization.
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd

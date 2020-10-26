@@ -6,7 +6,7 @@ Created: June 2019
 Description: I/O with the quadrotor model defined in quad_mdl.py
 """
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd

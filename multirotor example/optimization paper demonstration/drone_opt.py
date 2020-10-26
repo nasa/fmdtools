@@ -6,7 +6,7 @@ Created on Wed May 13 13:17:31 2020
 """
 
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 
 import numpy as np
 import pandas as pd
