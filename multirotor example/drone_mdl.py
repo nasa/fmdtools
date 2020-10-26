@@ -38,15 +38,19 @@ class StoreEE(FxnBlock):
             components = {'S1P1': Battery('S1P1', self.batparams),'S1P2': Battery('S1P2', self.batparams)}
         elif self.archtype == 'split-both':
             self.batparams ={'s':2,'p':2,'w':params['weight'],'v':12,'d':params['drag']}
-            components = {'S1P1': Battery('S1', self.batparams), 'S2P1': Battery('S2', self.batparams),'S1P2': Battery('S1P2', self.batparams), 'S2P2': Battery('S2P2', self.batparams)}
+            components = {'S1P1': Battery('S1P1', self.batparams), 'S2P1': Battery('S2P1', self.batparams),'S1P2': Battery('S1P2', self.batparams), 'S2P2': Battery('S2P2', self.batparams)}
         else: raise Exception("Invalid battery architecture")
         #failrate for function w- component only applies to function modes
-        self.failrate=1e-3
-        self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],300],'lowcharge':[0.7,[0.6,0.2,0.2],200]})
+        self.failrate=1e-4
+        self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],0],'lowcharge':[0.7,[0.6,0.2,0.2],0]})
         super().__init__(['EEout', 'FS', 'HSig'], flows, {'soc': 100}, components)
     def condfaults(self, time):
         if self.soc<20:                     self.add_fault('lowcharge')
+        elif self.has_fault('lowcharge'):   
+            for batname, bat in self.components.items(): bat.soc=19
         if self.soc<1:                      self.replace_fault('lowcharge','nocharge')
+        elif self.has_fault('nocharge'):
+            for batname, bat in self.components.items(): bat.soc=0
     def behavior(self, time):
         EE, soc = {}, {}
         rate_res=0
@@ -67,15 +71,15 @@ class StoreEE(FxnBlock):
 class Battery(Component):
     def __init__(self, name, batparams):
         super().__init__(name, {'soc':100, 'EEe':1.0, 'Et':1.0})
-        self.failrate=1e-3
+        self.failrate=1e-4
         self.avail_eff = 1/batparams['p']
         self.maxa = 2/batparams['s']
         self.p=batparams['p']
         self.s=batparams['s']
         self.amt = 60*4.200/(batparams['w']*170/(batparams['d']*batparams['v']))
-        self.assoc_modes({'short':[0.02,[0.3,0.3,0.3],2000], 'degr':[0.06,[0.3,0.3,0.3],2000],
-                          'break':[0.02,[0.2,0.2,0.2],2000], 'nocharge':[0.2,[0.6,0.2,0.2],300],
-                          'lowcharge':[0.7,[0.6,0.2,0.2],200]}, name=name)
+        self.assoc_modes({'short':[0.2,[0.3,0.3,0.3],100], 'degr':[0.2,[0.3,0.3,0.3],100],
+                          'break':[0.2,[0.2,0.2,0.2],100], 'nocharge':[0.6,[0.6,0.2,0.2],100],
+                          'lowcharge':[0,[0.6,0.2,0.2],100]}, name=name)
     def behavior(self, FS, EEoutr, time):
         if FS <1.0:     self.add_fault(self.name+'break')
         if EEoutr>self.maxa:    self.add_fault(self.name+'break')
@@ -97,8 +101,8 @@ class DistEE(FxnBlock):
     def __init__(self,flows):
         super().__init__(['EEin','EEmot','EEctl','ST'],flows, {'EEtr':1.0, 'EEte':1.0}, timely=False)
         self.failrate=1e-5
-        self.assoc_modes({'short':[0.3,[0.33, 0.33, 0.33],3000], 'degr':[0.5,[0.33, 0.33, 0.33],1000],\
-                          'break':[0.2,[0.33, 0.33, 0.33],2000]})
+        self.assoc_modes({'short':[0.3,[0.33, 0.33, 0.33],300], 'degr':[0.5,[0.33, 0.33, 0.33],100],\
+                          'break':[0.2,[0.33, 0.33, 0.33],200]})
     def condfaults(self, time):
         if self.ST.support<0.5 or max(self.EEmot.rate,self.EEctl.rate)>2:   self.add_fault('break')
         if self.EEin.rate>2:                                                self.add_fault('short')
@@ -114,7 +118,7 @@ class HoldPayload(FxnBlock):
     def __init__(self,flows):
         super().__init__(['DOF', 'Lin', 'ST'],flows, timely=False, states={'Force_GR':1.0})
         self.failrate=1e-6
-        self.assoc_modes({'break':[0.2, [0.33, 0.33, 0.33], 10000], 'deform':[0.8, [0.33, 0.33, 0.33], 10000]})
+        self.assoc_modes({'break':[0.2, [0.33, 0.33, 0.33], 1000], 'deform':[0.8, [0.33, 0.33, 0.33], 1000]})
     def condfaults(self, time):
         if self.DOF.elev<=0.0:  self.Force_GR=min(-0.5, (self.DOF.vertvel/60-self.DOF.planvel/60)/7.5)
         else:                   self.Force_GR=0.0
@@ -132,11 +136,10 @@ class ManageHealth(FxnBlock):
         flownames=['EECtl','FS','DOFshealth', 'Bathealth', 'Trajconfig' ]
         super().__init__(flownames, flows)
         
-        self.failrate=1e-5
-        self.assoc_modes({'falsemaintenance':[0.8,[1.0, 0.0,0.0,0.0,0.0],10000],\
-                         'falsemasking':[0.1,[1.0, 0.2,0.4,0.4,0.0],10000],\
-                         'falseemland':[0.05,[0.0, 0.2,0.4,0.4,0.0],10000],\
-                         'lostfunction':[0.05,[0.2, 0.2,0.2,0.2,0.2],10000]})
+        self.failrate=1e-6 #{'falsemaintenance':[0.8,[1.0, 0.0,0.0,0.0,0.0],1000],\
+        self.assoc_modes({'falsemasking':[0.1,[1.0, 0.2,0.4,0.4,0.0],1000],\
+                         'falseemland':[0.05,[0.0, 0.2,0.4,0.4,0.0],1000],\
+                         'lostfunction':[0.05,[0.2, 0.2,0.2,0.2,0.2],1000]})
     def condfaults(self, time):
         if self.FS.support<0.5 or self.EECtl.effort>2.0: self.add_fault('lostfunction')
     def behavior(self, time):
@@ -167,7 +170,7 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5,'RF2':0.5,'LF2':0.5,'LR2':-0.5,'RR2':-0.5}
             self.LR = {'L':{'LF', 'LR','LF2', 'LR2'}, 'R':{'RF','RR','RF2','RR2'}}
             self.FR = {'F':{'LF', 'RF','LF2', 'RF2'}, 'R':{'LR', 'RR','LR2', 'RR2'}}
-        super().__init__(['EEin', 'Ctlin','DOF','Dir','Force','Hsig'], flows,{'LRstab':0.0, 'FRstab':0.0}, components) 
+        super().__init__(['EEin', 'Ctlin','DOF','Dir','Force','HSig'], flows,{'LRstab':0.0, 'FRstab':0.0}, components) 
     def behavior(self, time):
         Air,EEin={},{}
         #injects faults into lines
@@ -184,32 +187,49 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         self.LRstab = (sum([Air[comp] for comp in self.LR['L']])-sum([Air[comp] for comp in self.LR['R']]))/len(Air)
         self.FRstab = (sum([Air[comp] for comp in self.FR['R']])-sum([Air[comp] for comp in self.FR['F']]))/len(Air)
         
-        if abs(self.LRstab) >=0.4 or abs(self.FRstab)>=0.75:    self.DOF.uppwr, self.DOF.planpwr = 0.0, 0.0
+        if abs(self.LRstab) >=0.25 or abs(self.FRstab)>=0.75:    self.DOF.uppwr, self.DOF.planpwr = 0.0, 0.0
         else:
             Airs=list(Air.values())
             self.DOF.uppwr=np.mean(Airs)
             self.DOF.planpwr=self.Ctlin.forward
+        
+        if self.any_faults():   self.HSig.hstate='faulty'
+        
         if time> self.time:
-            if self.DOF.uppwr > 1:      self.DOF.vertvel = 60*min([(self.DOF.uppwr-1)*5, 5])
-            elif self.DOF.uppwr < 1:    self.DOF.vertvel = 60*max([(self.DOF.uppwr-1)*50, -50])
-            else:                       self.DOF.vertvel = 0.0
+            if self.DOF.uppwr > 1.0:        self.DOF.vertvel = 60*min([(self.DOF.uppwr-1)*5, 5])
+            elif self.DOF.uppwr < 1.0:      self.DOF.vertvel = 60*max([(self.DOF.uppwr-1)*5, -5])
+            else:                           self.DOF.vertvel = 0.0
                 
-            self.DOF.planvel=60*min([10*self.DOF.planpwr, 10]) # 600 m/m = 23 mph 
+             
             if self.DOF.elev<=0.0:  
                 self.DOF.vertvel=max(0,self.DOF.vertvel)
                 self.DOF.planvel=0.0
             
-            self.DOF.elev=max(0.0, self.DOF.elev+self.DOF.vertvel)
-            vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
-            self.DOF.x=self.DOF.x+self.DOF.planvel*self.Dir.traj[0]/vect
-            self.DOF.y=self.DOF.y+self.DOF.planvel*self.Dir.traj[1]/vect
+            if self.DOF.vertvel<-self.DOF.elev:
+                reqdist = np.sqrt(self.Dir.x**2 + self.Dir.y**2+0.0001)
+                if self.DOF.planpwr>0.0:
+                    maxdist = 600 * self.DOF.elev/(-self.DOF.vertvel+0.001)
+                    if reqdist > maxdist:   self.planvel = maxdist
+                    else:                   self.planvel = reqdist
+                else:                       self.planvel = 0.1
+
+                self.DOF.x=self.DOF.x+self.planvel*self.Dir.traj[0]/reqdist
+                self.DOF.y=self.DOF.y+self.planvel*self.Dir.traj[1]/reqdist
+                self.DOF.elev=0.0
+            else:
+                self.DOF.planvel=60*min([10*self.DOF.planpwr, 10]) # 600 m/m = 23 mph
+                vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
+                self.DOF.x=self.DOF.x+self.DOF.planvel*self.Dir.traj[0]/vect
+                self.DOF.y=self.DOF.y+self.DOF.planvel*self.Dir.traj[1]/vect
+                self.DOF.elev=self.DOF.elev + self.DOF.vertvel
+            
 
 class Line(Component):
     def __init__(self, name):
         super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, timely=False)
         self.failrate=1e-5
         self.assoc_modes({'short':[0.1, [0.33, 0.33, 0.33], 200],'openc':[0.1, [0.33, 0.33, 0.33], 200],\
-                          'ctlbreak':[0.2, [0.33, 0.33, 0.33], 1000], 'mechbreak':[0.1, [0.33, 0.33, 0.33], 500],\
+                          'ctlbreak':[0.2, [0.33, 0.33, 0.33], 100], 'mechbreak':[0.1, [0.33, 0.33, 0.33], 500],\
                           'mechfriction':[0.05, [0.0, 0.5,0.5], 500], 'stuck':[0.02, [0.0, 0.5,0.5], 200]},name=name)
     def behavior(self, EEin, Ctlin, cmds, Force):
         if Force<=0.0:   self.add_fault(self.name+'mechbreak')
@@ -230,7 +250,7 @@ class CtlDOF(FxnBlock):
     def __init__(self, flows):
         super().__init__(['EEin','Dir','Ctl','DOFs','FS'],flows, {'vel':0.0, 'Cs':1.0})
         self.failrate=1e-5
-        self.assoc_modes({'noctl':[0.2, [0.6, 0.3, 0.1], 10000], 'degctl':[0.8, [0.6, 0.3, 0.1], 10000]})
+        self.assoc_modes({'noctl':[0.2, [0.6, 0.3, 0.1], 1000], 'degctl':[0.8, [0.6, 0.3, 0.1], 1000]})
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noctl')
     def behavior(self, time):
@@ -239,7 +259,7 @@ class CtlDOF(FxnBlock):
         if time>self.time: self.vel=self.DOFs.vertvel
         # throttle settings: 0 is off (-50 m/s), 1 is hover, 2 is max climb (5 m/s)
         if self.Dir.traj[2]>0:          upthrottle = 1+np.min([self.Dir.traj[2]/(50*5), 1])
-        elif self.Dir.traj[2] <0:       upthrottle = 1+np.max([self.Dir.traj[2]/(50*50), -1])
+        elif self.Dir.traj[2] <0:       upthrottle = 1+np.max([self.Dir.traj[2]/(50*5), -1])
         else:                           upthrottle = 1.0
         
         vect = np.sqrt(np.power(self.Dir.traj[0], 2)+ np.power(self.Dir.traj[1], 2))+0.001
@@ -250,10 +270,11 @@ class CtlDOF(FxnBlock):
 class PlanPath(FxnBlock):
     def __init__(self, flows, params):
         super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'})
+        self.nearest = params['safe'][0:2]+[0]
         self.goals = params['flightplan']
         self.goal=self.goals[1]
         self.failrate=1e-5
-        self.assoc_modes({'noloc':[0.2, [0.6, 0.3, 0.1], 10000], 'degloc':[0.8, [0.6, 0.3, 0.1], 10000]})
+        self.assoc_modes({'noloc':[0.2, [0.6, 0.3, 0.1], 1000], 'degloc':[0.8, [0.6, 0.3, 0.1], 1000]})
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noloc')
     def behavior(self, t):
@@ -262,23 +283,26 @@ class PlanPath(FxnBlock):
         dist = finddist(loc, self.goal)        
         [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
         
-        if self.mode=='taxi' and t>5:   self.mode=='taxi'
+        if self.mode=='taxi' and t>5:           self.mode=='taxi'
         elif self.Rsig.mode == 'to_home': # add a to_nearest option
             self.pt = 0
             self.goal =self.goals[self.pt]
-        elif self.Rsig.mode== 'emland': self.mode = 'land'
+            [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
+        elif self.Rsig.mode == 'to_nearest':    self.mode = 'to_nearest'
+        elif self.Rsig.mode== 'emland':         self.mode = 'land'
         elif self.Env.elev<1 and (self.pt>=max(self.goals) or self.mode=='land'):  self.mode = 'taxi'
-        elif dist<5 and self.pt>=max(self.goals):           self.mode = 'land'
-        elif dist<5 and {'move'}.issuperset({self.mode}):
+        elif dist<10 and self.pt>=max(self.goals):           self.mode = 'land'
+        elif dist<10 and {'move'}.issuperset({self.mode}):
             if self.pt < max(self.goals):   
                 self.pt+=1
                 self.goal = self.goals[self.pt]
         elif dist>5 and not(self.mode=='descend'):          self.mode='move'
         # nominal behaviors
         self.Dir.power=1.0
-        if self.mode=='taxi':       self.Dir.power=0.0          
-        elif self.mode=='move':     self.Dir.assign([self.dx,self.dy, self.dz])     
-        elif self.mode=='land':     self.Dir.assign([0,0,-self.Env.elev/2])
+        if self.mode=='taxi':           self.Dir.power=0.0          
+        elif self.mode=='move':         self.Dir.assign([self.dx,self.dy, self.dz])     
+        elif self.mode=='land':         self.Dir.assign([0,0,-self.Env.elev/2])
+        elif self.mode =='to_nearest':  self.Dir.assign(vectdist(self.nearest,loc))
         # faulty behaviors    
         if self.has_fault('noloc'):     self.Dir.assign([0,0,0])
         elif self.has_fault('degloc'):  self.Dir.assign([0,0,-1])
@@ -288,9 +312,9 @@ class PlanPath(FxnBlock):
             
 class Drone(Model):
     def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic', 'linearch':'quad','respolicy':{'bat':'to_home','line':'emland'}, 
-                               'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10], 'loc':'rural'}):
+                               'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10], 'loc':'rural', 'landtime':12}):
         super().__init__()
-        super().__init__(modelparams={'phases': {'ascend':[0,1],'forward':[1,19],'descend':[19, 20]},
+        super().__init__(modelparams={'phases': {'ascend':[0,1],'forward':[1,params['landtime']],'taxis':[params['landtime'], 20]},
                                      'times':[0,30],'units':'min'}, params=params)
         
         self.start_area = square(self.params['start'][0:2],self.params['start'][2],self.params['start'][3] )
@@ -335,7 +359,7 @@ class Drone(Model):
         bippos = {'ManageHealth': [-0.23403572483176666, 0.8119063670455383],
                   'StoreEE': [-0.7099736148158298, 0.2981652748232978],
                   'DistEE': [-0.28748133634190726, 0.32563569654296287],
-                  'AffectDOF': [0.9473412427515959, 0.0466423266443633],
+                  'AffectDOF': [0.9073412427515959, 0.0466423266443633],
                   'CtlDOF': [0.498663257339388, 0.44284186573420836],
                   'Planpath': [0.5353654708147643, 0.7413936186204868],
                   'HoldPayload': [0.329334798653681, -0.17443414674339652],
@@ -354,9 +378,14 @@ class Drone(Model):
         self.construct_graph(graph_pos=pos, bipartite_pos=bippos)
         
     def find_classification(self, g, endfaults, endflows, scen, mdlhist):
+        
+        
         #landing costs
         viewed = env_viewed(mdlhist['faulty']['flows']['DOFs']['x'], mdlhist['faulty']['flows']['DOFs']['y'],mdlhist['faulty']['flows']['DOFs']['elev'], self.target_area)
-        viewed_value = 10*sum([view for k,view in viewed.items() if view!='unviewed'])
+        viewed_value = sum([0.5+2*view for k,view in viewed.items() if view!='unviewed'])
+        
+        fhist=mdlhist['faulty']
+        faulttime = sum([any([fhist['functions'][f]['faults'][t]!={'nom'} for f in fhist['functions']]) for t in range(len(fhist['time'])) if fhist['flows']['DOFs']['elev'][t]])
         
         Env=self.flows['DOFs']
         if  inrange(self.start_area, Env.x, Env.y):     landloc = 'nominal' # nominal landing
@@ -365,10 +394,10 @@ class Drone(Model):
         else:                                           landloc = 'outside target' # emergency unsanctioned
         # need a way to differentiate horizontal and vertical crashes/landings
         if self.params['loc'] == 'rural': #assumed photographing a field
-            if landloc == 'over target':    
+            if landloc == 'over target':  
                 body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
                 head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
-                property_restrictions = 0
+                property_restrictions = 1
             elif landloc == 'outside target':
                 body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
                 head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
@@ -381,7 +410,7 @@ class Drone(Model):
             if landloc == 'over target':    
                 body_strikes = density_categories[self.params['loc']]['body strike']['horiz']
                 head_strikes = density_categories[self.params['loc']]['head strike']['horiz']
-                property_restrictions = 0
+                property_restrictions = 1
             elif landloc == 'outside target':
                 body_strikes = density_categories['urban']['body strike']['horiz']
                 head_strikes = density_categories['urban']['head strike']['horiz']
@@ -403,10 +432,10 @@ class Drone(Model):
                 body_strikes = 0
                 head_strikes = 0
                 property_restrictions = 0
-        safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes)
-        landcost = property_restrictions*10000
+        safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes) + unsafecost[self.params['loc']] * faulttime
+        landcost = property_restrictions*propertycost[self.params['loc']]
         #repair costs
-        repcost=sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()])
+        repcost=min(sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()]), 1500)
         rate=scen['properties']['rate']
         p_safety = 1-np.exp(-(body_strikes+head_strikes) * 60/self.times[1]) #convert to pfh
         classifications = {'hazardous':rate*p_safety, 'minor':rate*(1-p_safety)}
@@ -415,7 +444,7 @@ class Drone(Model):
         
         expcost=totcost*rate*1e5
         
-        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'viewed':viewed, 'landloc':landloc,'body strikes':body_strikes, 'head strikes':head_strikes, 'property restrictions': property_restrictions, 'severities':classifications}
+        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'repcost':repcost, 'landcost':landcost,'safecost':safecost,'viewed value': viewed_value, 'viewed':viewed, 'landloc':landloc,'body strikes':body_strikes, 'head strikes':head_strikes, 'property restrictions': property_restrictions, 'severities':classifications, 'unsafe flight time':faulttime}
 
 ## BASE FUNCTIONS
 
@@ -457,7 +486,7 @@ def env_viewed(xhist, yhist,zhist, square):
     viewed = {(x,y):'unviewed' for x in range(int(square[0][0]),int(square[1][0])+10,10) for y in range(int(square[0][1]),int(square[2][1])+10,10)}
     for i,x in enumerate(xhist[1:len(xhist)]):
         w,h,d = viewable_area(zhist[i+1])
-        viewed_area = rect(xhist[i],yhist[i],xhist[i+1],yhist[i+1], w,h)
+        viewed_area = rect(xhist[i],yhist[i],xhist[i+1],yhist[i+1], w+5,h+5)
         
         if abs(xhist[i]-xhist[i+1]) + abs(yhist[i]-yhist[i+1]) > 0.1 and w >0.01:
             polygon=Polygon(viewed_area)
@@ -472,7 +501,7 @@ def env_viewed(xhist, yhist,zhist, square):
 
 def viewable_area(elev):
     width = elev
-    height = elev * 0.75 # 4/3 camera with ~45 mm lens st dist = width
+    height = elev #* 0.75 # 4/3 camera with ~45 mm lens st dist = width
     detail = 1/(width*height+0.00001)
     return width, height, detail
 
@@ -523,6 +552,8 @@ density_categories = {'congested':{'density':0.006194, 'body strike':{'vert':0.1
                       'rural':{'density':0.0001042, 'body strike':{'vert':0.0000, 'horiz':0.0001},'head strike':{'vert':0.000,'horiz':0.000}},
                       'remote':{'density':1.931e-6, 'body strike':{'vert':0.0000, 'horiz':0.0000},'head strike':{'vert':0.000,'horiz':0.000}}}
 
+unsafecost = {'congested': 1000,'urban': 100, 'suburban':25, 'rural':5, 'remote':1}
+propertycost = {'congested': 100000,'urban': 10000, 'suburban':1000, 'rural':1000, 'remote':1000}
 # safety class schedule
 safety_categories = {'catastrophic':{'injuries':'multiple fatalities', 'safety margins':'na', 'crew workload': 'na', 'cost':2000000},
                      'hazardous':{'injuries':'single fatality and/or multiple serious injuries', 'safety margins':'large decrease', 'crew workload': 'compromises safety', 'cost':9600000},
