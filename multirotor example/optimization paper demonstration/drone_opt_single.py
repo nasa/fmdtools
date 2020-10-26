@@ -5,7 +5,7 @@
 # the expense of accuracy.
 # We use the Weighted Tchebycheff method to get the Pareto frontier between (Design + Oper) Cost vs Failure Cost
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd

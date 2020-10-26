@@ -6,7 +6,7 @@ Created on Mon Apr 13 21:31:47 2020
 """
 
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.faultsim.networks as networks
