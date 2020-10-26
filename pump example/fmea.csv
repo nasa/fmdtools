@@ -1,0 +1,18 @@
+,degraded functions,degraded flows,rate,cost,expected cost
+"ImportWater no_wat, t=2",['ImportWater'],"['EE_1', 'Wat_1', 'Wat_2']",1.6666666666666667e-05,11125.000000000007,18541.66666666668
+"ImportSignal no_sig, t=2",['ImportSignal'],"['EE_1', 'Sig_1', 'Wat_1', 'Wat_2']",2.1428571428571427e-06,20125.000000000007,4312.500000000001
+"MoveWater mech_break, t=2",['MoveWater'],"['EE_1', 'Wat_1', 'Wat_2']",2.1428571428571427e-06,15125.000000000007,3241.07142857143
+"MoveWater short, t=2","['ImportEE', 'MoveWater']","['EE_1', 'Wat_1', 'Wat_2']",2.1428571428571428e-05,30125.000000000007,64553.57142857144
+"ExportWater block, t=2","['MoveWater', 'ExportWater']","['EE_1', 'Wat_1', 'Wat_2']",2.1428571428571428e-05,20100.250000000007,43071.9642857143
+"ImportEE no_v, t=27",['ImportEE'],"['EE_1', 'Wat_1', 'Wat_2']",0.0003600000000000001,15174.999999999998,546300.0
+"ImportEE inf_v, t=27",['ImportEE'],"['EE_1', 'Wat_1', 'Wat_2']",9.000000000000002e-05,20175.0,181575.00000000003
+"ImportWater no_wat, t=27",['ImportWater'],"['EE_1', 'Wat_1', 'Wat_2']",0.00015,6174.999999999998,92624.99999999996
+"ImportSignal no_sig, t=27",['ImportSignal'],"['EE_1', 'Sig_1', 'Wat_1', 'Wat_2']",1.2857142857142856e-05,15174.999999999998,19510.714285714283
+"MoveWater mech_break, t=27",['MoveWater'],"['EE_1', 'Wat_1', 'Wat_2']",0.00023142857142857142,10174.999999999998,235478.5714285714
+"MoveWater short, t=27","['ImportEE', 'MoveWater']","['EE_1', 'Wat_1', 'Wat_2']",0.00012857142857142858,25175.0,323678.5714285714
+"ExportWater block, t=27","['MoveWater', 'ExportWater']","['EE_1', 'Wat_1', 'Wat_2']",0.00012857142857142858,15150.25,194788.92857142858
+"ImportWater no_wat, t=52",['ImportWater'],['Wat_1'],1.6666666666666667e-05,1000.0,1666.6666666666667
+"ImportSignal no_sig, t=52",['ImportSignal'],[],1.4285714285714284e-06,10000.0,1428.5714285714284
+"MoveWater mech_break, t=52",['MoveWater'],[],2.1428571428571427e-06,5000.0,1071.4285714285713
+"MoveWater short, t=52",['MoveWater'],[],1.4285714285714285e-05,10000.0,14285.714285714286
+"ExportWater block, t=52",['ExportWater'],['Wat_2'],1.4285714285714285e-05,5000.0,7142.857142857143

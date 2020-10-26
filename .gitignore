@@ -10,8 +10,8 @@ __pycache__/quad_mdl.cpython-36.pyc
 .ipynb_checkpoints
 
 #ignore output tables
-*.ecsv
-*csv
+#*.ecsv
+#*csv
 
 #profiling
 profiling.py
