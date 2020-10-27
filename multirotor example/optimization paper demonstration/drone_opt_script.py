@@ -5,7 +5,7 @@ Created on Mon Jul  6 09:54:15 2020
 @author: dhulse
 """
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd

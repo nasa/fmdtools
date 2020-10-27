@@ -7,7 +7,7 @@ with open('requirements.txt') as f:
 
 setuptools.setup(
     name="fmdtools",
-    version="0.5.4",
+    version="0.6.0",
     author="Daniel Hulse",
     author_email="hulsed@oregonstate.edu",
     description="System modelling and fault-injection-based resilience assessment in Python ",
