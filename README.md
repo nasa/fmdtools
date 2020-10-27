@@ -78,6 +78,8 @@ Additionally, this repo provides a few resources to get familiar with fmdtools:
 
 [Hannah Walsh](https://github.com/walshh) : Network analysis codes
 
+[Arpan Biswas](https://github.com/arpanbiswas52) : Multirotor optimization codes
+
 [Hongyang Zhang](https://github.com/zhangho2) : Pandemic model
 
 ----
