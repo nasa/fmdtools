@@ -9,6 +9,7 @@ Description: functions to propagate faults through a user-defined fault model
 Main Methods:
     - nominal():            Runs the model over time in the nominal scenario.
     - one_fault():          Runs one fault in the model at a specified time.
+    - mult_fault():         Runs arbitrary scenario of fault modes at specified times
     - singlefaults():       Creates and propagates a list of failure scenarios in a model over given model times
     - approach:             Injects and propagates faults in the model defined by a given sample approach.   
 Private Methods:
@@ -123,6 +124,65 @@ def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype =
     scen['properties']['time']=time
     
     faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=staged, prevhist=nommdlhist)
+    faultresgraph = mdl.return_stategraph(gtype)
+    
+    #process model run
+    endfaults, endfaultprops = mdl.return_faultmodes()
+    endflows = proc.graphflows(faultresgraph, nomresgraph, gtype)
+    mdlhists={'nominal':nommdlhist, 'faulty':faultmdlhist}
+    endclass = mdl.find_classification(faultresgraph, endfaultprops, endflows, scen, mdlhists)
+    resgraph = proc.resultsgraph(faultresgraph, nomresgraph, gtype=gtype) 
+    
+    endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
+    
+    mdl.reset()
+    return endresults,resgraph, mdlhists
+
+def mult_fault(mdl, faultseq, track=True, rate=np.NaN, gtype='normal'):
+    """
+    Runs one fault in the model at a specified time.
+
+    Parameters
+    ----------
+    mdl : Model
+        The model to inject the fault in.
+    faultseq : dict
+        Dict of times and modes defining the fault scenario {time:{fxns: [modes]},}
+    track : bool, optional
+        Whether to track model states over time. The default is True.
+    rate : float, optional
+        Input rate for the sequence (must be calculated elsewhere)
+    gtype : str, optional
+        The graph type to return ('bipartite' or 'normal'). The default is 'normal'.
+
+    Returns
+    -------
+    endresults : dict
+        A dictionary summary of results at the end of the simulation with structure {flows:{flow:attribute:value},faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val}
+    resgraph : networkx.classes.graph.Graph
+        A graph object with function faults and degraded flows noted as attributes
+    mdlhists : dict
+        A dictionary of the states of the model of each fault scenario over time.
+
+    """
+    #run model nominally, get relevant results
+    mdl = mdl.__class__(params=mdl.params)
+    nomscen=construct_nomscen(mdl)
+    
+    nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False)
+    nomresgraph = mdl.return_stategraph(gtype)
+    mdl.reset()
+    
+    mdl = mdl.__class__(params=mdl.params)
+    #run with fault present, get relevant results
+    scen=nomscen.copy() #note: this is a shallow copy, so don't define it earlier
+    scen['faults']=list(faultseq.values())
+    scen['properties']['type']='sequence'
+    scen['properties']['sequence']=faultseq
+    scen['properties']['rate']=rate # this rate is on a per-simulation basis
+    scen['properties']['time']=list(faultseq.keys())
+    
+    faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=False, prevhist=nommdlhist)
     faultresgraph = mdl.return_stategraph(gtype)
     
     #process model run
@@ -332,11 +392,19 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes)
     flowstates={}
+    if type(scen['properties']['time'])==list:    singletime=False
+    else:                                         singletime=True
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
-           if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
-           else: flowstates = propagate(mdl,[],t, flowstates)
+           if singletime:
+               if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
+               else: flowstates = propagate(mdl,[],t, flowstates)
+           else:
+               if t in scen['properties']['time']:
+                   ind = scen['properties']['time'].index(t)
+                   flowstates = propagate(mdl, scen['faults'][ind], t, flowstates)
+               else: flowstates = propagate(mdl,[],t, flowstates)
            if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
            if t in ctimes: c_mdl[t]=mdl.copy()
        except:

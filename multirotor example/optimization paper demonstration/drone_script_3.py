@@ -19,14 +19,17 @@ import time
 #scenlist=fp.listinitfaults(graph, mdl.times)
 mdl = Drone()
 
-endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
+#endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
 
-rd.graph.show(mdl)
+#rd.graph.show(mdl)
 
-rd.plot.mdlhistvals(mdlhist, fxnflowvals={'DOFs':['vertvel', 'uppwr', 'elev'], 'CtlDOF':['vel']}, units=['m/s','N','m','m/s'])
+#rd.plot.mdlhistvals(mdlhist, fxnflowvals={'DOFs':['vertvel', 'uppwr', 'elev'], 'CtlDOF':['vel']}, units=['m/s','N','m','m/s'])
 
-rd.plot.mdlhist(mdlhist, fxnflows=['DOFs', 'CtlDOF'], units=['m/s','m/s','N','N','m','m','m','m/s', 'unitless'])
+#rd.plot.mdlhist(mdlhist, fxnflows=['DOFs', 'CtlDOF'], units=['m/s','m/s','N','N','m','m','m','m/s', 'unitless'])
 
+scenseq = {2: {'AffectDOF': ['LRctlbreak'],'StoreEE': ['nocharge']}, 5:{'ManageHealth': ['falseemland'], 'HoldPayload': ['break']}}
 
-rd.plot.mdlhistvals(mdlhist)
+endresults_nom, resgraph, mdlhist =propagate.mult_fault(mdl, scenseq)
+
+#rd.plot.mdlhistvals(mdlhist)
 
