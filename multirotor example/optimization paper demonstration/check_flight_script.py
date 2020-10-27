@@ -7,6 +7,7 @@ Created on Fri Sep 11 10:23:55 2020
 
 from drone_opt import *
 import fmdtools.faultsim.propagate as propagate
+import fmdtools.resultdisp.graph as graph
 
 mdl_med = x_to_mdl([1,1,80,1,1])
 calc_oper(mdl_med)

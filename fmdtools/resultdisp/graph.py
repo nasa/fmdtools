@@ -169,7 +169,6 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             plt.show()
         elif not list(g.nodes(data='status'))[0][1]: #just plots graph if no status information 
             nx.draw(g, pos, labels=labels,font_size=fontsize, node_size=nodesize,node_color = colors[0], font_weight='bold')
-            plt.show()
         else:                                      #plots graph with status information 
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
