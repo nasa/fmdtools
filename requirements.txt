@@ -4,3 +4,4 @@ matplotlib
 pandas
 netgraph
 quadpy
+ordered-set

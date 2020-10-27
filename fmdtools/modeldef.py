@@ -9,6 +9,7 @@ Description: A module to simplify model definition
 import numpy as np
 import itertools
 import networkx as nx
+from ordered_set import OrderedSet
 
 # MAJOR CLASSES
 class Block(object):
@@ -411,7 +412,7 @@ class Model(object):
         self.tstep = modelparams.get('tstep', 1.0)
         self.units = modelparams.get('units', 'hr')
         
-        self.timelyfxns=set()
+        self.timelyfxns=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
     def add_flow(self,flowname, flowdict):
@@ -459,6 +460,10 @@ class Model(object):
         if self.fxns[name].timely: self.timelyfxns.update([name])
         self.fxns[name].tstep=self.tstep
         self.fxns[name].name=name
+    def set_fxnorder(self,fxnlist):
+        """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
+        if not self.timelyfxns.difference(fxnlist): self.timelyfxns=OrderedSet(fxnlist)
+        else:                                       raise Exception("Invalid fxnlist: "+str(fxnlist)+" should have elements: "+str(self.timelyfxns))
     def get_flows(self,flownames):
         """ Returns a list of the model flow objects """
         return [self.flows[flowname] for flowname in flownames]
