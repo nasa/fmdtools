@@ -40,6 +40,7 @@ fmdtools requires Python 3 and depends on these packages:
 
 - `networkx`
 - `numpy`
+- `ordered-dict`
 - `matplotlib`			(for plots)
 - `pandas`				(for tables)
 - `jupyter notebook`	(for notebooks)
