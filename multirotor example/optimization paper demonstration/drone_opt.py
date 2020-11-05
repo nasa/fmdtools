@@ -622,7 +622,7 @@ def plot_pareto3(pareto3, legend='equal-weight design'):
     ax = fig.add_subplot(111, projection='3d')
     ax.view_init(elev=25., azim=45)
     ax.scatter(x,y,z)
-    if legend: ax.scatter(x[mindes],y[mindes],z[mindes], color='red',s=50, label=legend)
+    if legend: ax.scatter(x[mindes],y[mindes],z[mindes], color='red',s=55,marker='X', label=legend)
     #ax.plot_trisurf(x,y,z)
     plt.legend()
     return fig, ax
