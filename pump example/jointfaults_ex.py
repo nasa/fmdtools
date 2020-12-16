@@ -13,7 +13,7 @@ sys.path.append('../')
 import fmdtools.faultprop as fp
 import fmdtools.resultproc as rp
 from ex_pump import * #required to import entire module
-
+#comment
 #mdl = Pump(params={'repair', 'ee', 'water', 'delay'})
 mdl = Pump(params={'water'}) # should give identical utilities
 mdl = Pump()
