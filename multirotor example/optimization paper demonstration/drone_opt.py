@@ -254,6 +254,7 @@ def plot_xys(mdlhists, endresultss, cols=2, title='', retfig=False, legend=False
     plt.suptitle(title)
     if legend: 
         plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label='legend')
+        plt.axis('off')
         legend_elements = [Line2D([0], [0], color='b', lw=1, label='Flightpath'),
                    Line2D([0], [0], marker='o', color='r', label='Viewed',
                           markerfacecolor='r', markersize=8),
