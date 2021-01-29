@@ -87,9 +87,9 @@ def find_bridging_nodes(mdl,plot='off', gtype = 'parameter', pos={}, scale=1):
     bridgingNodes = sorted(list(set(bridgingNodes)))
     if plot == 'on':
         if gtype=='normal':
-            fig, ax= plot_normgraph(g,{},bridgingNodes,{},{},{},{},{},{},{},False,{}, pos=pos, scale=scale, colors=['gray','yellow', 'yellow'],show=False, retfig=True, title='Bridging Nodes')
+            fig, ax= plot_normgraph(g,{},bridgingNodes,{},{},{},{},{},{},{},False,{}, pos=pos, scale=scale, colors=['lightgray','yellow', 'yellow'],show=False, retfig=True, title='Bridging Nodes')
         else:
-            fig, ax = plot_bipgraph(g,{n:n for n in g.nodes()},{},bridgingNodes,{},{},showfaultlabels=False, pos=pos, scale=scale, colors=['gray','yellow', 'yellow'],show=False, retfig=True, title='Bridging Nodes')
+            fig, ax = plot_bipgraph(g,{n:n for n in g.nodes()},{},bridgingNodes,{},{},showfaultlabels=False, pos=pos, scale=scale, colors=['lightgray','yellow', 'yellow'],show=False, retfig=True, title='Bridging Nodes')
         plt.show()
         return bridgingNodes, fig, ax
     else:
@@ -130,9 +130,9 @@ def find_high_degree_nodes(mdl,p=90,plot='off', gtype='bipartite', pos={}, scale
             highDegreeNodes.append(sortedNodes[i])
     if plot == 'on':
         if gtype=='normal':
-            fig, ax= plot_normgraph(g,{},[h for h,i in highDegreeNodes],{},{},{},{},{},{},{},False,{}, pos=pos, scale=scale, colors=['gray','red', 'red'],show=False, retfig=True, title='High Degree Nodes ('+str(p)+'th Percentile)')
+            fig, ax= plot_normgraph(g,{},[h for h,i in highDegreeNodes],{},{},{},{},{},{},{},False,{}, pos=pos, scale=scale, colors=['lightgray','red', 'red'],show=False, retfig=True, title='High Degree Nodes ('+str(p)+'th Percentile)')
         else:
-            fig, ax = plot_bipgraph(g,{n:n for n in g.nodes()}, {},[h for h,i in highDegreeNodes],{},{},showfaultlabels=False, pos=pos, scale=scale, colors=['gray','red', 'red'], show=False, retfig=True, title='High Degree Nodes ('+str(p)+'th Percentile)')
+            fig, ax = plot_bipgraph(g,{n:n for n in g.nodes()}, {},[h for h,i in highDegreeNodes],{},{},showfaultlabels=False, pos=pos, scale=scale, colors=['lightgray','red', 'red'], show=False, retfig=True, title='High Degree Nodes ('+str(p)+'th Percentile)')
         plt.show()
         return highDegreeNodes, fig, ax
     else:
