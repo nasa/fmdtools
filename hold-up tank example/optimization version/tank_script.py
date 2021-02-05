@@ -9,6 +9,7 @@ import sys
 sys.path.append('../')
 import numpy as np
 from scipy.optimize import minimize
+from scipy.optimize import differential_evolution
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
@@ -41,3 +42,6 @@ result = minimize(x_to_descost, [1000, 0.5], method='trust-constr', bounds =((10
 
 xres=[0 for i in range(0,54)]
 cost = x_to_rcost2(xres)
+
+result = differential_evolution(x_to_rcost2, [(0,1) for i in range(0,27)]+[(10,100) for i in range(0,27)], maxiter=20, popsize=10)
+
