@@ -20,7 +20,6 @@ from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 import seaborn as sns; sns.set(style="ticks", color_codes=True)
 
-
 from drone_mdl import *
 import time
 
