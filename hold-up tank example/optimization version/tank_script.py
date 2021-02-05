@@ -8,11 +8,13 @@ Created on Tue Mar 10 12:08:05 2020
 import sys
 sys.path.append('../')
 import numpy as np
+from scipy.optimize import minimize
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
 from tank_model import Tank
 from fmdtools.modeldef import SampleApproach
+from tank_opt import *
 
 
 # Nominal Run - nothing happens
@@ -34,3 +36,8 @@ endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Import_Water','Leak', t
 rd.plot.mdlhistvals(mdlhist, fault='Leak', time=3, fxnflowvals={'Store_Water':['level', 'net_flow', 'coolingbuffer'], 'Tank_Sig':['indicator'], 'Valve1_Sig':['action']}, legend=False)
 rd.graph.show(resgraph,faultscen='Leak', time=3)
 #rd.plot.mdlhistvals(mdlhist, time=3)
+
+result = minimize(x_to_descost, [1000, 0.5], method='trust-constr', bounds =((10, 100),(0,1)))
+
+xres=[0 for i in range(0,54)]
+cost = x_to_rcost2(xres)
