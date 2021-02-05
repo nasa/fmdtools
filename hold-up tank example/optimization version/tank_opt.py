@@ -47,7 +47,9 @@ def x_to_rcost2(xres):
     rescost = rd.process.totalcost(endclasses)
     return rescost
 
-def brute_search():
+def brute_search(): 
+    #uh oh--the space of the lower level problem is way too big for an exhaustive search!
+    # 3 actions, 54 states = 3^54 possible combinations--far too many to even enumerate in a list!!!
     starttime = time.time()
     Xvals = [ e for e in itertools.product(*(range(-1,2,1) for x in range(0,54)))]
     results = dict(); opt_hist = []
