@@ -48,23 +48,24 @@ def x_to_rcost2(xres):
     rescost = rd.process.totalcost(endclasses)
     return rescost
 def x_to_rcost3(xres1,xres2):
-    fp = {(a-1,b-1,c-1):(xres1,xres2) for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))}
+    fp = {(a-1,b-1,c-1):(xres1[i],xres2[i]) for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))}
     mdl=Tank(params={'capacity':20,'turnup':1,'faultpolicy':fp})
     app = SampleApproach(mdl)
     endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
     rescost = rd.process.totalcost(endclasses)
     return rescost
 
-def EA(popsize=10, iters=10):
+def EA(popsize=10, iters=10, mutations=3, numselect=5):
     starttime = time.time()
-    pop = seedpop() + randpop(popsize-3)
-    
+    pop =np.concatenate((seedpop(), randpop(popsize-3)))
+    values = np.array([x_to_rcost3(x[0],x[1]) for x in pop])
     for i in range(iters):
-        values = [x_to_rcost(x[0],x[1]) for x in pop]
-        goodpop, goodvals = select(pop, values)
-        
-    
-    return results, opt_hist, len(Xvals), time.time() - starttime
+        goodpop, goodvals = select(pop, values, numselect)
+        newpop =  np.concatenate((randpop(popsize-len(goodvals)-mutations), mutepop(goodpop, mutations)))
+        newvals = np.array([x_to_rcost3(x[0],x[1]) for x in newpop])
+        pop, values = np.concatenate((goodpop, newpop)), np.concatenate((goodvals, newvals))        
+    minind = np.argmin(values)
+    return pop[minind], values[minind], time.time() - starttime
 def randpop(popsize):
     return np.array([[[random.randint(-1,1) for a in range(0,27)],[random.randint(-1,1) for a in range(0,27)]] for i in range(0,popsize)])
 def seedpop():
@@ -72,11 +73,14 @@ def seedpop():
     adjustup = np.ones((2,27))
     adjustdown = -np.ones((2,27))
     return np.array([donothing, adjustup, adjustdown])
+def mutepop(goodpop, mutations):
+    to_mutate = np.random.choice([i for i in range(len(goodpop))], size=mutations, replace=False)
+    return np.array([permute(solution) for solution in goodpop[to_mutate]])
 def permute(solution):
-    solution[[random.randint(0,27)][random.randint(0,1)]]=random.randint(-1,1)
+    solution[random.randint(0,1)][random.randint(0,26)]=random.randint(-1,1)
     return solution
-def select(solutions, values, quantile=0.5):
-    selection = [np.quantile(solutions,quantile)>solutions]
+def select(solutions, values, numselect):
+    selection = np.argsort(values)[0:numselect]
     return solutions[selection], values[selection]
 
 def brute_search(): 
