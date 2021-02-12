@@ -62,11 +62,11 @@ def lower_level(xdes, args):
 def bilevel_opt():
     xdes = [20, 1]
     args = {'seed':seedpop(), 'll_opt':1e6, 'll_optx':[]}
-    result = minimize(lower_level, xdes, method='trust-constr', bounds =((10, 100),(0,1)), callback=callbackF, args = args)
+    result = minimize(lower_level, xdes, method='Powell', bounds =((10, 100),(0,1)), callback=callbackF1, args = args, options={'direc':[[0,1],[1,0]], 'disp':True})
     return result, args
 
 def alternating_opt():
-    xdes = np.array([15, 1])
+    xdes = np.array([20, 1])
     args = {'seed':seedpop(), 'll_opt':1e6, 'll_optx':[]}
     newmin = 100000000
     lastmin = 1000000001
@@ -78,7 +78,7 @@ def alternating_opt():
         # doesn't really work: trust-constr, SLSQP, Nelder-Mead (doesn't respect bounds), COBYLA (a bit better, but converges poorly), 
         # powell does okay but I'm not sure if it's actually searching the x-direction
         xdes = result['x']
-        bestsol, rcost, time = EA(args=args, popsize=15, iters=100, xdes = xdes)
+        bestsol, rcost, time = EA(args=args, popsize=100, mutations=20,numselect=30, iters=50, xdes = xdes)
         lastmin = newmin; newmin = x_to_descost(xdes) + rcost
         print(n, newmin, lastmin-newmin)
         if lastmin - newmin <0.1: 
@@ -95,7 +95,7 @@ def callbackF1(Xdes):
 
 def EA(popsize=10, iters=10, mutations=3, numselect=5, args={}, xdes=[20,1]):
     starttime = time.time()
-    if args: pop=np.concatenate((args['seed'], randpop(popsize-3)))
+    if args: pop=np.concatenate((args['seed'],seedpop(), randpop(popsize-3)))
     else:    pop=np.concatenate((seedpop(), randpop(popsize-3)))
     values = np.array([x_to_rcost(x[0],x[1], xdes=xdes) for x in pop])
     for i in range(iters):
