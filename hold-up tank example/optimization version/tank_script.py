@@ -46,9 +46,11 @@ from tank_opt import *
 #result = differential_evolution(x_to_rcost2, [(0,1) for i in range(0,27)]+[(10,100) for i in range(0,27)], maxiter=20, popsize=10)
 
 #pop, values, time = EA(iters=100)
-result, llargs = bilevel_opt()
+#result, llargs = bilevel_opt()
 
-x_to_rcost(llargs['ll_optx'][0],llargs['ll_optx'][1])
-result['x']
+result, llargs = alternating_opt()
+
+#x_to_rcost(llargs['ll_optx'][0],llargs['ll_optx'][1])
+#result['x']
 
 #x_to_rcost(result[1]['ll_optx'][0],result[1]['ll_optx'][1], xdes=[420,1])
