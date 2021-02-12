@@ -25,7 +25,7 @@ params={'capacity':20, # size of the tank (10 - 100)
 
 
 def x_to_descost(xdes):
-    return (xdes[0]-10)*1000 + (xdes[0]-10)**2*100   + xdes[1]**2*10000
+    return (xdes[0]-10)*1000 + (xdes[0]-10)**2*1000   + xdes[1]**2*10000
 
 def x_to_rcost(xres1,xres2, xdes=[20,1]):
     fp = {(a-1,b-1,c-1):(xres1[i],xres2[i]) for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))}
@@ -35,10 +35,24 @@ def x_to_rcost(xres1,xres2, xdes=[20,1]):
     rescost = rd.process.totalcost(endclasses)
     return rescost
 
+
 def x_to_totcost(xdes, xres1, xres2):
     do_cost = x_to_descost(xdes)
     rescost = x_to_rcost(xres1, xres2, xdes=xdes)
     return do_cost, rescost
+def x_to_totcost2(xdes, xres1, xres2):
+    do_cost = x_to_descost(xdes)
+    rescost = x_to_rcost(xres1, xres2, xdes=xdes)
+    return do_cost + rescost
+def x_to_totcost3(xdes, xres1, xres2): # total cost with crude penalty function
+    do_cost = x_to_descost(xdes)
+    rescost = x_to_rcost(xres1, xres2, xdes=xdes)
+    pen = 0
+    if xdes[0]<10: pen+=1e5*(10-xdes)**2
+    if xdes[0]>100: pen+=1e5*(100-xdes)**2
+    if xdes[1]<0: pen+=1e5*(xdes[1])**2
+    if xdes[1]>1: pen+=1e5*(1-xdes[1])**2
+    return do_cost + rescost + pen
 
 def lower_level(xdes, args):
     do_cost = x_to_descost(xdes) 
@@ -52,19 +66,32 @@ def bilevel_opt():
     return result, args
 
 def alternating_opt():
-    xdes = [20, 1]
+    xdes = np.array([15, 1])
     args = {'seed':seedpop(), 'll_opt':1e6, 'll_optx':[]}
     newmin = 100000000
     lastmin = 1000000001
-    while newmin < lastmin:
-        result = minimize(x_to_descost, xdes, method='trust-constr', bounds =((10, 100),(0,1)), callback=callbackF, args = args)
-        bestsol, rcost, time = EA(args=args, xdes=result['x'])
-        lastmin = newmin; newmin = result['fun'] + rcost
+    bestsol = np.zeros((2,27))
+    last_run = False
+    for n in range(10):
+        result = minimize(x_to_totcost2, [np.round(xdes[0],1), np.round(xdes[1],1)], method='Powell', callback=callbackF1, args = (bestsol[0],bestsol[1]), options={'direc':[[0,1],[1,0]], 'disp':True})
+        #result = minimize(x_to_totcost2, xdes, method='Powell', callback=callbackF1,  args = (bestsol[0],bestsol[1]), options={'disp':True,'ftol': 0.000001})
+        # doesn't really work: trust-constr, SLSQP, Nelder-Mead (doesn't respect bounds), COBYLA (a bit better, but converges poorly), 
+        # powell does okay but I'm not sure if it's actually searching the x-direction
+        xdes = result['x']
+        bestsol, rcost, time = EA(args=args, popsize=15, iters=100, xdes = xdes)
+        lastmin = newmin; newmin = x_to_descost(xdes) + rcost
+        print(n, newmin, lastmin-newmin)
+        if lastmin - newmin <0.1: 
+            if last_run:    break
+            else:           last_run = True
+        else:               last_run = False
     return result, args
 
 
 def callbackF(Xdes, result):
     print('{0:4d}   {1: 3.6f}   {2: 3.6f}   {3: 3.6f}'.format(result['nit'], Xdes[0], Xdes[1], result['fun']))
+def callbackF1(Xdes):
+    print(Xdes)
 
 def EA(popsize=10, iters=10, mutations=3, numselect=5, args={}, xdes=[20,1]):
     starttime = time.time()
