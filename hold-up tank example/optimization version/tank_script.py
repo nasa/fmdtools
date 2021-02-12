@@ -48,7 +48,9 @@ from tank_opt import *
 #pop, values, time = EA(iters=100)
 #result, llargs = bilevel_opt()
 
-result, llargs = alternating_opt()
+#result, llargs = alternating_opt()
+
+result, llargs = bilevel_opt()
 
 #x_to_rcost(llargs['ll_optx'][0],llargs['ll_optx'][1])
 #result['x']
