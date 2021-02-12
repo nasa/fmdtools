@@ -25,13 +25,7 @@ params={'capacity':20, # size of the tank (10 - 100)
 
 
 def x_to_descost(xdes):
-    return (xdes[0]-10)*1000 + xdes[1]**2*10000
-
-def x_to_ocost(xdes):
-    # is this even necessary?
-    #mdl=Tank(params={'capacity':20,'turnup':1.0,'faultpolicy':{(a-1,b-1,c-1):(0,0) for a,b,c in np.ndindex((3,3,3))}})
-    #endresults, resgraph, mdlhist = propagate.nominal(mdl)
-    return (xdes[0]-10)**2*100  + xdes[1]**2*10000
+    return (xdes[0]-10)*1000 + (xdes[0]-10)**2*100   + xdes[1]**2*10000
 
 def x_to_rcost(xres1,xres2, xdes=[20,1]):
     fp = {(a-1,b-1,c-1):(xres1[i],xres2[i]) for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))}
@@ -42,12 +36,12 @@ def x_to_rcost(xres1,xres2, xdes=[20,1]):
     return rescost
 
 def x_to_totcost(xdes, xres1, xres2):
-    do_cost = x_to_descost(xdes) + x_to_ocost(xdes)
+    do_cost = x_to_descost(xdes)
     rescost = x_to_rcost(xres1, xres2, xdes=xdes)
     return do_cost, rescost
 
 def lower_level(xdes, args):
-    do_cost = x_to_descost(xdes) + x_to_ocost(xdes)
+    do_cost = x_to_descost(xdes) 
     bestsol, rcost, time = EA(args=args, xdes=xdes)
     return do_cost + rcost
 
@@ -89,6 +83,14 @@ def permute(solution):
 def select(solutions, values, numselect):
     selection = np.argsort(values)[0:numselect]
     return solutions[selection], values[selection]
+
+def time_rcost():
+    starttime = time.time()
+    mdl=Tank()
+    app = SampleApproach(mdl)
+    endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
+    rescost = rd.process.totalcost(endclasses)
+    return time.time() - starttime
 
 
 
