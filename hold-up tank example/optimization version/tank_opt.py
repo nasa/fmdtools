@@ -57,6 +57,18 @@ def bilevel_opt():
     result = minimize(lower_level, xdes, method='trust-constr', bounds =((10, 100),(0,1)), callback=callbackF, args = args)
     return result, args
 
+def alternating_opt():
+    xdes = [20, 1]
+    args = {'seed':seedpop(), 'll_opt':1e6, 'll_optx':[]}
+    newmin = 100000000
+    lastmin = 1000000001
+    while newmin < lastmin:
+        result = minimize(x_to_descost, xdes, method='trust-constr', bounds =((10, 100),(0,1)), callback=callbackF, args = args)
+        bestsol, rcost, time = EA(args=args, xdes=result['x'])
+        lastmin = newmin; newmin = result['fun'] + rcost
+    return result, args
+
+
 def callbackF(Xdes, result):
     print('{0:4d}   {1: 3.6f}   {2: 3.6f}   {3: 3.6f}'.format(result['nit'], Xdes[0], Xdes[1], result['fun']))
 
