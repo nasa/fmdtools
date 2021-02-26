@@ -127,7 +127,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
         edgeflows=dict()
         if not pos: pos=nx.shell_layout(g)
         nodesize=scale*2000
-        fontsize=scale*12
+        font_size=scale*12
         for edge in g.edges:
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
             edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
@@ -137,12 +137,12 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
                 colors = colors +[heatmap.get(node,0.0)]
                 nx.draw_networkx_edges(g,pos, width=2)
             nx.draw_networkx_nodes(g,pos,node_size=nodesize, node_shape='s', node_color=colors, cmap=cmap, alpha=0.7)
-            nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows, font_size=fontsize, font_weight='bold')
+            nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows, font_size=font_size, font_weight='bold')
             labels={node:node for node in g.nodes} 
-            nx.draw_networkx_labels(g, pos, labels=labels,font_size=fontsize, font_weight='bold')
+            nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, font_weight='bold')
         elif not list(g.nodes(data='status'))[0][1]:    
-            nx.draw_networkx(g,pos,node_size=nodesize,node_shape='s', node_color=colors[0], width=3,font_size=fontsize, font_weight='bold')
-            nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows,font_size=fontsize)
+            nx.draw_networkx(g,pos,node_size=nodesize,node_shape='s', node_color=colors[0], width=3,font_size=font_size, font_weight='bold')
+            nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows,font_size=font_size)
         else:
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
@@ -156,19 +156,19 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
         labels={node:node for node in g.nodes}
         if not pos: pos=nx.spring_layout(g)
         nodesize=scale*700
-        fontsize=scale*6
+        font_size=scale*6
         if heatmap:
             #nx.draw(g, pos, node_size=nodesize,node_color = 'k', alpha=0.3)
             colors = []
             for node in labels.keys():
                 colors = colors + [heatmap.get(node, 0.0)]
             nx.draw(g, pos, node_color=colors, cmap=cmap, alpha=0.6, node_size=nodesize)
-            nx.draw_networkx_labels(g, pos, labels=labels,font_size=fontsize, node_size=nodesize, font_weight='bold')
+            nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, node_size=nodesize, font_weight='bold')
             if faultscen:
                 plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
             plt.show()
         elif not list(g.nodes(data='status'))[0][1]: #just plots graph if no status information 
-            nx.draw(g, pos, labels=labels,font_size=fontsize, node_size=nodesize,node_color = colors[0], font_weight='bold')
+            nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize,node_color = colors[0], font_weight='bold')
         else:                                      #plots graph with status information 
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
@@ -347,18 +347,18 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
     nodesize=scale*2000
-    fontsize=scale*12
+    font_size=scale*12
     if not pos: pos=nx.shell_layout(g)
-    nx.draw_networkx(g,pos,node_size=nodesize,fontsize=fontsize, node_shape='s',edge_color='gray', node_color=colors[0], width=3, font_weight='bold')
-    nx.draw_networkx_edge_labels(g,pos,fontsize=fontsize, edge_labels=edgeflows)
-    nx.draw_networkx_nodes(g, pos, nodelist=degfxns,node_shape='s', node_color = colors[1],width=3,fontsize=fontsize, font_weight='bold', node_size = nodesize)
-    nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2],width=3,fontsize=fontsize, font_weight='bold', node_size = nodesize)
-    nx.draw_networkx_edges(g,pos,edgelist=faultedges, edge_color=colors[1],fontsize=fontsize, width=2)
+    nx.draw_networkx(g,pos,node_size=nodesize,font_size=font_size, node_shape='s',edge_color='gray', node_color=colors[0], width=3, font_weight='bold')
+    nx.draw_networkx_edge_labels(g,pos,font_size=font_size, edge_labels=edgeflows)
+    nx.draw_networkx_nodes(g, pos, nodelist=degfxns,node_shape='s', node_color = colors[1],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
+    nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
+    nx.draw_networkx_edges(g,pos,edgelist=faultedges, edge_color=colors[1],font_size=font_size, width=2)
         
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=fontsize, font_color='k')
-        nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows,fontsize=fontsize, font_color=colors[1])
+        nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
+        nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows,font_size=font_size, font_color=colors[1])
     if retfig:
         return plt.gcf(), plt.gca()
     elif show: plt.show()
@@ -368,15 +368,15 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
     nodesize=scale*700
-    fontsize=scale*6
+    font_size=scale*6
     if not pos: pos=nx.spring_layout(g)
     
-    nx.draw(g, pos, labels=labels,font_size=fontsize, node_size=nodesize, node_color = colors[0], font_weight='bold')
+    nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
     nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize, font_weight='bold')
     nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize, font_weight='bold')
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=fontsize, font_color='k')
+        nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
     if retfig:
         return plt.gcf(), plt.gca()
     elif show: plt.show()
@@ -440,18 +440,18 @@ def get_plotlabels(g, reshist, t_ind):
 def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, retfig=False, colors=['lightgray','orange', 'red']):
     """ Experimental method for plotting with netgraph instead of networkx"""
     nodesize=scale*20
-    fontsize=scale*12
+    font_size=scale*12
     if not pos: pos=nx.shell_layout(g)
-    netgraph.draw(g,pos,node_size=nodesize,fontsize=fontsize, node_shape='s', node_color=colors[0], width=3, font_weight='bold')
-    netgraph.draw_edge_labels(list(edgeflows.keys()), edgeflows, pos,edge_label_font_size=fontsize)
-    netgraph.draw_nodes({n:pos[n] for n in degfxns}, node_labels=degfxns, node_shape='s', node_color = colors[1],width=3,fontsize=fontsize, font_weight='bold', node_size = nodesize)
-    netgraph.draw_nodes({n:pos[n] for n in faultfxns}, node_labels=faultfxns, node_shape='s', node_color = colors[2],width=3,fontsize=fontsize, font_weight='bold', node_size = nodesize)
-    netgraph.draw_edges(faultedges,pos, edge_color=colors[1],fontsize=fontsize, width=2)
+    netgraph.draw(g,pos,node_size=nodesize,font_size=font_size, node_shape='s', node_color=colors[0], width=3, font_weight='bold')
+    netgraph.draw_edge_labels(list(edgeflows.keys()), edgeflows, pos,edge_label_font_size=font_size)
+    netgraph.draw_nodes({n:pos[n] for n in degfxns}, node_labels=degfxns, node_shape='s', node_color = colors[1],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
+    netgraph.draw_nodes({n:pos[n] for n in faultfxns}, node_labels=faultfxns, node_shape='s', node_color = colors[2],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
+    netgraph.draw_edges(faultedges,pos, edge_color=colors[1],font_size=font_size, width=2)
     netgraph.draw_node_labels({p:p for p in pos}, pos)
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        netgraph.draw_node_labels(faultlabels_form, pos, font_size=fontsize, font_color='k')
-        netgraph.draw_edge_labels(list(faultedgeflows.keys()), faultedgeflows, pos, fontsize=fontsize, font_color=colors[1])
+        netgraph.draw_node_labels(faultlabels_form, pos, font_size=font_size, font_color='k')
+        netgraph.draw_edge_labels(list(faultedgeflows.keys()), faultedgeflows, pos, font_size=font_size, font_color=colors[1])
     if faultscen:
         plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     if retfig:
