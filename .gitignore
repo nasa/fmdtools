@@ -20,5 +20,3 @@ speedtest*
 #build things
 lib/
 dist/
-fmdtools.egg-info/
-fmdtools_hulsed.egg-info
