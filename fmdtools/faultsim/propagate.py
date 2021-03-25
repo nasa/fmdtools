@@ -26,8 +26,10 @@ Private Methods:
 """
 
 import numpy as np
+import time
 import copy
 import fmdtools.resultdisp.process as proc
+import multiprocessing as mp
 
 ## FAULT PROPAGATION
 
@@ -197,9 +199,14 @@ def mult_fault(mdl, faultseq, track=True, rate=np.NaN, gtype='normal'):
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-def single_faults(mdl, staged=False, track=True):
+def single_faults(mdl, staged=False, track=True, parallel=False, poolsize=4):
     """
-    Creates and propagates a list of failure scenarios in a model
+    Creates and propagates a list of failure scenarios in a model.
+    
+    NOTE: When calling in a script using parallel=True, keep the script in the if statement:
+        "if __name__=='main':
+            endclasses, mdlhists = single_faults(mdl)"
+        Otherwise, the method will keep spawning parallel processes. See multiprocessing documentation.
 
     Parameters
     ----------
@@ -209,6 +216,10 @@ def single_faults(mdl, staged=False, track=True):
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
     track : bool, optional
         Whether to track states over time. The default is True.
+    parallel : bool, optional
+        Whether the set of scenarios should be run in parallel. The default is True
+    poolsize : int, optional
+        Size of the pool to use when the scenarios are run in parallel. The default is 4.
 
     Returns
     -------
@@ -232,22 +243,53 @@ def single_faults(mdl, staged=False, track=True):
     endclasses = {}
     mdlhists = {}
     mdlhists['nominal'] = nomhist
-    for i, scen in enumerate(scenlist):
-        #run model with fault scenario
-        if staged:
-            mdl=c_mdl[scen['properties']['time']].copy()
-            mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
-        else:
-            mdl = mdl.__class__(params=mdl.params)
-            mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track)
-        endfaults, endfaultprops = mdl.return_faultmodes()
-        resgraph = mdl.return_stategraph()
-        endflows = proc.graphflows(resgraph, nomresgraph)
-        endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
-        
+    if parallel:
+        pool = mp.Pool(poolsize)
+        inputs = [(mdl, scen, nomresgraph, nomhist, c_mdl, track, staged) for scen in scenlist]
+        result_list = pool.map(exec_scen_par, inputs)
+        endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
+        mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(scenlist)}
+    else:
+        for i, scen in enumerate(scenlist):
+            endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(mdl, scen, nomresgraph,nomhist,c_mdl, track=track, staged=staged)
     return endclasses, mdlhists
 
-def approach(mdl, app, staged=False, track=True):
+def exec_scen_par(args):
+    return exec_scen(args[0], args[1], args[2], args[3], args[4], track=args[5], staged=args[6])
+def exec_scen(mdl, scen, nomresgraph,nomhist,c_mdl, track=True, staged = True):
+    """ 
+    Executes a scenario and generates results and classifications given a model and nominal model history
+    
+     Parameters
+    ----------
+    mdl : model
+        The model to inject faults in.
+    scen : scenario
+        scenario used to define time and faults where the fault is to be injected
+    nomresgraph: 
+        results graph of the nominal model run
+    nomhist:
+        history of results in the nominal model run
+    c_mdl:
+        copies of the nominal model at the time to be executed in the scenarios (a dict keyed by times)
+    staged : bool, optional
+        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
+    track : bool, optional
+        Whether to track states over time. The default is True.
+    """
+    if staged:
+        mdl=c_mdl[scen['properties']['time']].copy()
+        mdlhist, _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
+    else:
+        mdl = mdl.__class__(params=mdl.params)
+        mdlhist, _ =prop_one_scen(mdl, scen, track=track)
+    endfaults, endfaultprops = mdl.return_faultmodes()
+    resgraph = mdl.return_stategraph()
+    endflows = proc.graphflows(resgraph, nomresgraph)
+    endclass = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhist})
+    return endclass, mdlhist 
+
+def approach(mdl, app, staged=False, track=True, parallel=False, poolsize=4):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -280,20 +322,16 @@ def approach(mdl, app, staged=False, track=True):
     endclasses = {}
     mdlhists = {}
     mdlhists['nominal'] = nomhist
-    for i, scen in enumerate(app.scenlist):
-        #run model with fault scenario
-        if staged:
-            mdl=c_mdl[scen['properties']['time']].copy()
-            mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
-        else:
-            mdl = mdl.__class__(params=mdl.params)
-            mdlhists[scen['properties']['name']], _ =prop_one_scen(mdl, scen, track=track)
-        endfaults, endfaultprops = mdl.return_faultmodes()
-        resgraph = mdl.return_stategraph()
-        
-        endflows = proc.graphflows(resgraph, nomresgraph) #TODO: supercede this with something in faultprop?
-        endclasses[scen['properties']['name']] = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhists[scen['properties']['name']]})
-        
+    scenlist = app.scenlist
+    if parallel:
+        pool = mp.Pool(poolsize)
+        inputs = [(mdl, scen, nomresgraph, nomhist, c_mdl, track, staged) for scen in scenlist]
+        result_list = pool.map(exec_scen_par, inputs)
+        endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
+        mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(scenlist)}
+    else:
+        for i, scen in enumerate(scenlist):
+            endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(mdl, scen, nomresgraph,nomhist,c_mdl, track=track, staged=staged)
     return endclasses, mdlhists
 
 def construct_nomscen(mdl):
