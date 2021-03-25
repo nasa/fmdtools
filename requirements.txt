@@ -5,3 +5,5 @@ pandas
 netgraph
 quadpy
 ordered-set
+dill 
+pickle

@@ -7,41 +7,34 @@ Created on Wed Mar 24 16:19:59 2021
 """
 
 from ex_pump import * 
-import pickle
-import dill
+import fmdtools.faultsim.propagate as propagate
+import fmdtools.resultdisp as rd
 
 IE = ImportEE([{'current':1.0, 'voltage':1.0}])
 mdl = Pump()
 
-#check if object will pickle
-def check_pickleability(obj):
-    unpickleable = []
-    for name, attribute in vars(obj).items():
-        if not dill.pickles(attribute):
-            unpickleable = unpickleable + [name]
-    if unpickleable: print("The following attributes will not pickle: "+str(unpickleable))
-    else:           print("The object is pickleable")
-    return unpickleable
 
-def check_model_pickleability(model):
-    unpickleable = check_pickleability(model)
-    if 'flows' in unpickleable:
-        print('FLOWS ')
-        for flowname, flow in model.flows.items():
-            print(flowname)
-            check_pickleability(flow)
-    if 'fxns' in unpickleable:
-        print('FUNCTIONS ')
-        for fxnname, fxn in model.fxns.items():
-            print(fxnname)
-            check_pickleability(fxn)
-
+#mdl.flows["EE_1"]._attributes
 
 check_pickleability(IE)
 
 check_pickleability(mdl)
 check_model_pickleability(mdl)
 
-#pickle.dump( IE, open( "save.p", "wb" ) )
+pickle.dump( IE, open( "fxn_save.p", "wb" ) )
+IE_loaded = pickle.load( open( "fxn_save.p", "rb" ) )
 
-#IE_loaded = pickle.load( open( "save.p", "rb" ) )
+pickle.dump( mdl, open( "mdl_save.p", "wb" ) )
+mdl_loaded = pickle.load( open( "mdl_save.p", "rb" ) )
+
+
+## Compare simulation results
+endresults, resgraph, mdlhist=propagate.nominal(mdl, track=True)
+endresults_loaded, resgraph_loaded, mdlhist_loaded=propagate.nominal(mdl_loaded, track=True)
+#plot graph
+rd.graph.show(resgraph)
+rd.graph.show(resgraph_loaded)
+#plot the flows over time
+rd.plot.mdlhistvals(mdlhist, 'Nominal')
+rd.plot.mdlhistvals(mdlhist_loaded, 'Nominal')
+# both plots give equivalent outputs!!
