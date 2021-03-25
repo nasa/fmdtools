@@ -26,12 +26,12 @@ def check_pickleability(obj):
 def check_model_pickleability(model):
     unpickleable = check_pickleability(model)
     if 'flows' in unpickleable:
-        print('Flows: ')
+        print('FLOWS ')
         for flowname, flow in model.flows.items():
             print(flowname)
             check_pickleability(flow)
     if 'fxns' in unpickleable:
-        print('Functions: ')
+        print('FUNCTIONS ')
         for fxnname, fxn in model.fxns.items():
             print(fxnname)
             check_pickleability(fxn)
