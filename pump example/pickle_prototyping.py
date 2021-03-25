@@ -10,6 +10,8 @@ from ex_pump import *
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
 
+import multiprocessing as mp
+
 IE = ImportEE([{'current':1.0, 'voltage':1.0}])
 mdl = Pump()
 
@@ -38,3 +40,32 @@ rd.graph.show(resgraph_loaded)
 rd.plot.mdlhistvals(mdlhist, 'Nominal')
 rd.plot.mdlhistvals(mdlhist_loaded, 'Nominal')
 # both plots give equivalent outputs!!
+
+
+## attempting parallelism?
+
+def run_model():
+    mdl = Pump()
+    endresults, resgraph, mdlhist=propagate.nominal(mdl)
+    return endresults
+
+def parallel_mc(iters=10):
+    pool = mp.Pool(4)
+
+    future_res = [pool.apply_async(run_model) for _ in range(iters)]
+    res = [f.get() for f in future_res]
+
+    return res
+
+def parallel_mc2(iters=10):
+    pool = mp.Pool(4)
+    models = [Pump() for i in range(iters)]
+    result_list = pool.map(propagate.nominal, models)
+    return result_list
+
+#res_list = parallel_mc2(iters=1)
+
+#res = parallel_mc(iters=1)
+
+
+
