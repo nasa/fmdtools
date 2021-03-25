@@ -8,6 +8,8 @@ Description: A module to simplify model definition
 """
 import numpy as np
 import itertools
+import dill
+import pickle
 import networkx as nx
 from ordered_set import OrderedSet
 
@@ -45,7 +47,7 @@ class Block(object):
             Whether or not the function is dependent on time (or just inputs/outputs). The default is True.
         """
         self.timely=timely
-        self._states=states.keys()
+        self._states=list(states.keys())
         self._initstates=states.copy()
         self.failrate = getattr(self, 'failrate', 1.0)
         for state in states.keys():
@@ -341,7 +343,7 @@ class Flow(object):
         self.type='flow'
         self.name=name
         self._initattributes=attributes.copy()
-        self._attributes=attributes.keys()
+        self._attributes=list(attributes.keys())
         for attribute in self._attributes:
             setattr(self, attribute, attributes[attribute])
     def __repr__(self):
@@ -1058,4 +1060,27 @@ def accumulate(vec):
     """ Accummulates vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])"""
     return [sum(vec[:i+1]) for i in range(len(vec)) ]
 
-    
+"""Model checking"""
+def check_pickleability(obj):
+    """ Checks to see which attributes of an object will pickle (and thus parallelize)"""
+    unpickleable = []
+    for name, attribute in vars(obj).items():
+        if not dill.pickles(attribute):
+            unpickleable = unpickleable + [name]
+    if unpickleable: print("The following attributes will not pickle: "+str(unpickleable))
+    else:           print("The object is pickleable")
+    return unpickleable
+
+def check_model_pickleability(model):
+    """ Checks to see which attributes of a model object will pickle, providing more detail about functions/flows"""
+    unpickleable = check_pickleability(model)
+    if 'flows' in unpickleable:
+        print('FLOWS ')
+        for flowname, flow in model.flows.items():
+            print(flowname)
+            check_pickleability(flow)
+    if 'fxns' in unpickleable:
+        print('FUNCTIONS ')
+        for fxnname, fxn in model.fxns.items():
+            print(fxnname)
+            check_pickleability(fxn)
