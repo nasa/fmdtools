@@ -213,7 +213,7 @@ class Pump(Model):
 
         Models take a dictionary of parameters as input defining any veriables and values to use in the model.
     """
-    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}):
+    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}):
         """
         To sample the model, the timerange and operational phases need to be defined.
 
@@ -229,7 +229,7 @@ class Pump(Model):
 
         t=1 is a good default.
         """
-        super().__init__(params=params, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1})
+        super().__init__(params=params, modelparams=modelparams)
         """
         Here addflow() takes as input a unique name for the flow "flowname", a type for the flow, "flowtype"
         and either:   a dict with the initial flow attributes, OR

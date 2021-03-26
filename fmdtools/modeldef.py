@@ -407,6 +407,7 @@ class Model(object):
         self.flows={}
         self.fxns={}
         self.params=params
+        self.modelparams=modelparams
         
         # model defaults to static representation if no timerange
         self.phases=modelparams.get('phases',{'na':[1]})
