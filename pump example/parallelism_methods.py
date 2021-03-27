@@ -33,6 +33,23 @@ def one_delay_helper(delay):
     endresults,resgraph, mdlhists = propagate.one_fault(mdl, 'ExportWater', 'block')
     return endresults
 
+def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True):
+    exectimes = {}
+    starttime = time.time()
+    endclasses, mdlhists = propagate.approach(mdl,app, pool=False, staged = staged, track=track)
+    exectime_single = time.time() - starttime
+    if verbose: print("single-thread exec time: "+str(exectime_single))
+    exectimes['single'] = exectime_single
+    
+    for pool in pools:
+        starttime = time.time()
+        endclasses, mdlhists = propagate.approach(mdl,app, pool=pools[pool], staged = staged, track=track)
+        exectime_par = time.time() - starttime
+        if verbose: print(pool+" exec time: "+str(exectime_par))
+        exectimes[pool] = exectime_par
+    return exectimes
+
+
 def run_model():
     mdl = Pump()
     endresults, resgraph, mdlhist=propagate.nominal(mdl)
@@ -65,18 +82,6 @@ def parallel_mc3():
     inputlist = [(fxn,fm) for fxn in mdl.fxns for fm in mdl.fxns[fxn].faultmodes.keys()]
     resultslist = pool.map(one_fault_helper, inputlist)
     return resultslist
-
-def compare_pools(mdl, app, pools, staged=False, track=False):
-    starttime = time.time()
-    endclasses, mdlhists = propagate.approach(mdl,app, pool=False, staged = staged, track=track)
-    exectime_single = time.time() - starttime
-    print("single-thread exec time: "+str(exectime_single))
-    
-    for pool in pools:
-        starttime = time.time()
-        endclasses, mdlhists = propagate.approach(mdl,app, pool=pools[pool], staged = staged, track=track)
-        exectime_par = time.time() - starttime
-        print(pool+" exec time: "+str(exectime_par))
 
 if __name__=='__main__':
     a=1
