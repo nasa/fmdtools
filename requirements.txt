@@ -1,3 +1,4 @@
+multiprocessing
 networkx
 numpy
 matplotlib
