@@ -154,7 +154,9 @@ class Block(object):
         states={}
         for state in self._states:
             states[state]=getattr(self,state)
-        return states, self.faults.copy()
+        faults = self.faults.copy()
+        faults.discard('nom')
+        return states, faults
 
 #Function superclass 
 class FxnBlock(Block):
