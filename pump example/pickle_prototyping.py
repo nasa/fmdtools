@@ -67,46 +67,46 @@ if __name__=='__main__':
     cores = 4
     pools = {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores) }
     
-    print("STAGED + MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track=True)
-    print("STAGED + NO MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track=False)
-    print("NOT STAGED + MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=False, track=True)
-    print("NOT STAGED + NO MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=False, track=False)
+    print("STAGED + FULL MODEL TRACKING")
+    compare_pools(mdl,app,pools, staged=True, track='all')
+    print("STAGED + FLOW TRACKING")
+    compare_pools(mdl,app,pools, staged=True, track='flows')
+    print("STAGED + FUNCTION TRACKING")
+    compare_pools(mdl,app,pools, staged=True, track='functions')
+    print("STAGED + NO TRACKING")
+    compare_pools(mdl,app,pools, staged=True, track='none')
     
-    print("--FEW SIMULATIONS--")
-    mdl=Pump(params={'cost':{'repair'}, 'delay':10}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,500]}, 'times':[0,20, 500], 'tstep':1})
-    app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':1})
+    # print("--FEW SIMULATIONS--")
+    # mdl=Pump(params={'cost':{'repair'}, 'delay':10}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,500]}, 'times':[0,20, 500], 'tstep':1})
+    # app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':1})
     
-    cores = 4
-    pools = {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores) }
+    # cores = 4
+    # pools = {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores) }
     
-    print("STAGED + MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track=True)
-    print("STAGED + NO MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track=False)
-    print("NOT STAGED + MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=False, track=True)
-    print("NOT STAGED + NO MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=False, track=False)
+    # print("STAGED + MODEL TRACKING")
+    # compare_pools(mdl,app,pools, staged=True, track=True)
+    # print("STAGED + NO MODEL TRACKING")
+    # compare_pools(mdl,app,pools, staged=True, track=False)
+    # print("NOT STAGED + MODEL TRACKING")
+    # compare_pools(mdl,app,pools, staged=False, track=True)
+    # print("NOT STAGED + NO MODEL TRACKING")
+    # compare_pools(mdl,app,pools, staged=False, track=False)
     
-    print("--FEW SHORT SIMULATIONS--")
-    mdl=Pump(params={'cost':{'repair'}, 'delay':10}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1})
-    app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':1})
+    # print("--FEW SHORT SIMULATIONS--")
+    # mdl=Pump(params={'cost':{'repair'}, 'delay':10}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1})
+    # app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':1})
     
-    cores = 4
-    pools = {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores) }
+    # cores = 4
+    # pools = {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores) }
     
-    print("STAGED + MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track=True)
-    print("STAGED + NO MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track=False)
-    print("NOT STAGED + MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=False, track=True)
-    print("NOT STAGED + NO MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=False, track=False)
+    # print("STAGED + MODEL TRACKING")
+    # compare_pools(mdl,app,pools, staged=True, track=True)
+    # print("STAGED + NO MODEL TRACKING")
+    # compare_pools(mdl,app,pools, staged=True, track=False)
+    # print("NOT STAGED + MODEL TRACKING")
+    # compare_pools(mdl,app,pools, staged=False, track=True)
+    # print("NOT STAGED + NO MODEL TRACKING")
+    # compare_pools(mdl,app,pools, staged=False, track=False)
         
     
     # Note: ParallelPool seems slower, unclear whether processpool or threadpool is faster

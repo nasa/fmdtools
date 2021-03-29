@@ -33,7 +33,7 @@ mdl = Pump()
 #   -are the functions connected with the correct flows?
 #   -do any faults occur in the nominal state?
 #   -do all the flow states proceed as desired over time?
-endresults, resgraph, mdlhist=propagate.nominal(mdl, track=True)
+endresults, resgraph, mdlhist=propagate.nominal(mdl, track='all')
 #plot graph
 rd.graph.show(resgraph)
 #plot the flows over time

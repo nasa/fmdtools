@@ -32,7 +32,7 @@ import fmdtools.resultdisp.process as proc
 
 ## FAULT PROPAGATION
 
-def nominal(mdl, track=True, gtype='normal'):
+def nominal(mdl, track='all', gtype='normal'):
     """
     Runs the model over time in the nominal scenario.
 
@@ -40,8 +40,8 @@ def nominal(mdl, track=True, gtype='normal'):
     ----------
     mdl : Model
         Model of the system
-    track : BOOL, optional
-        Whether or not to track flows. The default is True.
+    track : str ('all', 'functions', 'flows', `none`), optional
+        Which model states to track over time. The default is 'all'.
     gtype : TYPE, optional
         The type of graph to return (normal or bipartite). The default is 'normal'.
 
@@ -68,7 +68,7 @@ def nominal(mdl, track=True, gtype='normal'):
     mdl.reset()
     return endresults, resgraph, mdlhist
 
-def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype = 'normal'):
+def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'normal'):
     """
     Runs one fault in the model at a specified time.
 
@@ -82,8 +82,8 @@ def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype =
         Name of the faultmode
     time : float, optional
         Time to inject fault. Must be in the range of model times (i.e. in range(0, end, mdl.tstep)). The default is 0.
-    track : bool, optional
-        Whether to track model states over time. The default is True.
+    track : str ('all', 'functions', 'flows', `none`), optional
+        Which model states to track over time. The default is 'all'.
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). The default is False.
     gtype : str, optional
@@ -139,7 +139,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype =
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-def mult_fault(mdl, faultseq, track=True, rate=np.NaN, gtype='normal'):
+def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal'):
     """
     Runs one fault in the model at a specified time.
 
@@ -149,8 +149,8 @@ def mult_fault(mdl, faultseq, track=True, rate=np.NaN, gtype='normal'):
         The model to inject the fault in.
     faultseq : dict
         Dict of times and modes defining the fault scenario {time:{fxns: [modes]},}
-    track : bool, optional
-        Whether to track model states over time. The default is True.
+    track : str ('all', 'functions', 'flows', `none`), optional
+        Which model states to track over time. The default is 'all'.
     rate : float, optional
         Input rate for the sequence (must be calculated elsewhere)
     gtype : str, optional
@@ -198,7 +198,7 @@ def mult_fault(mdl, faultseq, track=True, rate=np.NaN, gtype='normal'):
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-def single_faults(mdl, staged=False, track=True, pool=False):
+def single_faults(mdl, staged=False, track='all', pool=False):
     """
     Creates and propagates a list of failure scenarios in a model.
     
@@ -213,8 +213,8 @@ def single_faults(mdl, staged=False, track=True, pool=False):
         The model to inject faults in
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
-    track : bool, optional
-        Whether to track states over time. The default is True.
+    track : str ('all', 'functions', 'flows', `none`), optional
+        Which model states to track over time. The default is 'all'.
     pool : process pool, optional
         Process Pool Object from multiprocessing or pathos packages. Pathos is recommended.
         e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
@@ -258,7 +258,7 @@ def single_faults(mdl, staged=False, track=True, pool=False):
             
     return endclasses, mdlhists
 
-def approach(mdl, app, staged=False, track=True, pool=False):
+def approach(mdl, app, staged=False, track='all', pool=False):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -270,8 +270,8 @@ def approach(mdl, app, staged=False, track=True, pool=False):
         SampleApproach used to define the list of faults and sample time for the model.
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
-    track : bool, optional
-        Whether to track states over time. The default is True.
+    track : str ('all', 'functions', 'flows', `none`), optional
+        Which model states to track over time. The default is 'all'.
     pool : process pool, optional
         Process Pool Object from multiprocessing or pathos packages. Pathos is recommended.
         e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
@@ -311,7 +311,7 @@ def approach(mdl, app, staged=False, track=True, pool=False):
 
 def exec_scen_par(args):
     return exec_scen(args[0], args[1], args[2], args[3], track=args[4], staged=args[5])
-def exec_scen(mdl, scen, nomresgraph,nomhist, track=True, staged = True):
+def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True):
     """ 
     Executes a scenario and generates results and classifications given a model and nominal model history
     
@@ -329,8 +329,8 @@ def exec_scen(mdl, scen, nomresgraph,nomhist, track=True, staged = True):
         the nominal model at the time to be executed in the scenarios (a dict keyed by times)
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
-    track : bool, optional
-        Whether to track states over time. The default is True.
+    track : str ('all', 'functions', 'flows', `none`), optional
+        Which model states to track over time. The default is 'all'.
     """
     if staged:
         mdlhist, _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
@@ -397,7 +397,7 @@ def list_init_faults(mdl):
                 faultlist.append(newscen)
     return faultlist
        
-def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
+def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}):
     """
     Runs a fault scenario in the model over time
 
@@ -407,8 +407,8 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
         The model to inject faults in.
     scen : Dict
         The fault scenario to run. Has structure: {'faults':{fxn:fault}, 'properties':{rate, time, name, etc}}
-    track : bool, optional
-        Whether to track states over time. The default is True.
+    track : str ('all', 'functions', 'flows', `none`), optional
+        Which model states to track over time. The default is 'all'.
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
     ctimes : list, optional
@@ -428,14 +428,12 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
     if staged:
         timerange=np.arange(scen['properties']['time'], mdl.times[-1]+1, mdl.tstep)
         shift = len(np.arange(mdl.times[0], scen['properties']['time'], mdl.tstep))
-        if track: 
-            if prevhist:    mdlhist = copy.deepcopy(prevhist)
-            else:           mdlhist = init_mdlhist(mdl, timerange)
+        if prevhist:    mdlhist = copy.deepcopy(prevhist)
+        else:           mdlhist = init_mdlhist(mdl, timerange, track=track)
     else: 
         timerange = np.arange(mdl.times[0], mdl.times[-1]+1, mdl.tstep)
         shift = 0
-        if track:  mdlhist = init_mdlhist(mdl, timerange)
-    if not track: mdlhist={}
+        mdlhist = init_mdlhist(mdl, timerange, track=track)
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes)
     flowstates={}
@@ -452,7 +450,7 @@ def prop_one_scen(mdl, scen, track=True, staged=False, ctimes=[], prevhist={}):
                    ind = scen['properties']['time'].index(t)
                    flowstates = propagate(mdl, scen['faults'][ind], t, flowstates)
                else: flowstates = propagate(mdl,[],t, flowstates)
-           if track: update_mdlhist(mdl, mdlhist, t_ind+shift)
+           update_mdlhist(mdl, mdlhist, t_ind+shift, track=track)
            if t in ctimes: c_mdl[t]=mdl.copy()
        except:
             print("Error at t="+str(t))
@@ -548,7 +546,7 @@ def prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults):
 
 #update_mdlhist
 # find a way to make faster (e.g. by automatically getting values by reference)
-def update_mdlhist(mdl, mdlhist, t_ind):
+def update_mdlhist(mdl, mdlhist, t_ind, track = 'all'):
     """
     Updates the model history at a given time.
 
@@ -560,9 +558,17 @@ def update_mdlhist(mdl, mdlhist, t_ind):
         History of model states (a dict with a vector of each state)
     t_ind : float
         The time to update the model history at.
+    track : str ('all', 'functions', 'flows', `none`), optional
+        Which model states to track over time. The default is 'all'.
     """
-    update_flowhist(mdl, mdlhist, t_ind)
-    update_fxnhist(mdl, mdlhist, t_ind)
+    if track == 'flows':        update_flowhist(mdl, mdlhist, t_ind)
+    elif track == 'functions':  update_fxnhist(mdl, mdlhist, t_ind)
+    elif track == 'none':       a=0
+    elif track == 'all':      
+        update_flowhist(mdl, mdlhist, t_ind)
+        update_fxnhist(mdl, mdlhist, t_ind)
+    else:
+        raise Exception("Invalid track option: "+str(track))
 def update_flowhist(mdl, mdlhist, t_ind):
     """ Updates the flows in the model history at t_ind """
     for flowname, flow in mdl.flows.items():
@@ -581,7 +587,7 @@ def update_fxnhist(mdl, mdlhist, t_ind):
         for state, value in states.items():
             mdlhist["functions"][fxnname][state][t_ind] = value 
 
-def init_mdlhist(mdl, timerange):
+def init_mdlhist(mdl, timerange, track = 'all'):
     """
     Initializes the model history over a given timerange
 
@@ -598,8 +604,14 @@ def init_mdlhist(mdl, timerange):
         A dictionary history of each model state over the given timerange.
     """
     mdlhist={}
-    mdlhist["flows"]=init_flowhist(mdl, timerange)
-    mdlhist["functions"]=init_fxnhist(mdl, timerange)
+    if track == 'functions':    mdlhist["functions"]=init_fxnhist(mdl, timerange)
+    elif track == 'flows':      mdlhist["flows"]=init_flowhist(mdl, timerange)
+    elif track == 'none':       a=0
+    elif track == 'all':                       
+        mdlhist["flows"]=init_flowhist(mdl, timerange)
+        mdlhist["functions"]=init_fxnhist(mdl, timerange)
+    else:
+        raise Exception("Invalid track option: "+str(track))
     mdlhist["time"]=np.array([i for i in timerange])
     return mdlhist
 def init_flowhist(mdl, timerange):
