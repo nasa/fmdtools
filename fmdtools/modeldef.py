@@ -397,16 +397,18 @@ class Model(object):
     graph : networkx graph
         multigraph view of functions and flows
     """
-    def __init__(self, params={},modelparams={}):
+    def __init__(self, params={},modelparams={}, valparams='all'):
         """
         Instantiates internal model attributes with predetermined:
             - params (design variables of he model), and
             - modelparams (dictionary of phases, times, and timestep to run the model with)
+            - valparams (`all`/`flows`/`fxns`/or dict of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
         """
         self.type='model'
         self.flows={}
         self.fxns={}
         self.params=params
+        self.valparams = valparams
         self.modelparams=modelparams
         
         # model defaults to static representation if no timerange
@@ -611,7 +613,7 @@ class Model(object):
         copy : Model
             Copy of the curent model.
         """
-        copy = self.__class__(params=getattr(self, 'params', {}))
+        copy = self.__class__(params=getattr(self, 'params', {}),modelparams=getattr(self, 'modelparams', {}),valparams=getattr(self, 'valparams', {}))
         for flowname, flow in self.flows.items():
             copy.flows[flowname]=flow.copy()
         for fxnname, fxn in self.fxns.items():
