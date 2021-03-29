@@ -129,7 +129,7 @@ def fxnhist(mdlhist, returndiff=True):
         else: status = np.ones(len(mdlhist['faulty']['functions'][fxnname]['faults']), dtype=int) #should empty be given 1 or nothing?
         fxnshist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname]['faults']
         faults = mdlhist['faulty']['functions'][fxnname]['faults']
-        fxnshist[fxnname]['numfaults']=np.array(list(map(lambda f: len(f.difference(['nom'])), faults)))
+        fxnshist[fxnname]['numfaults']=np.array(list(map(lambda f: int(0 if f is None else len(f)), faults)))
         faulty = 1 - 1*(fxnshist[fxnname]['numfaults']>0)
         fxnshist[fxnname]['status'] = status*faulty
         faulthist[fxnname]=fxnshist[fxnname]['numfaults']
@@ -202,7 +202,7 @@ def resultsgraph(g, nomg, gtype='normal'):
                 else:                               status='Nominal' 
                 rg.edges[edge][flow]={'values':g.edges[edge][flow],'status':status}
         for node in g.nodes:        
-            if g.nodes[node]['modes'].difference(['nom']): status='Faulty' 
+            if g.nodes[node]['modes'] and g.nodes[node]['modes'].difference(['nom']): status='Faulty' 
             elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
             else: status='Nominal'
             rg.nodes[node]['status']=status
