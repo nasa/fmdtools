@@ -213,7 +213,7 @@ class Pump(Model):
 
         Models take a dictionary of parameters as input defining any veriables and values to use in the model.
     """
-    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}):
+    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}, valparams='all'):
         """
         To sample the model, the timerange and operational phases need to be defined.
 
@@ -256,7 +256,7 @@ class Pump(Model):
         self.add_fxn('ExportWater', ['Wat_2'], fclass=ExportWater)
 
         self.construct_graph()
-    def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
+    def find_classification(self,scen, mdlhists):
         """
             Model classes use find_classification() to classify the results based on a fault scenario, returning
             a dictionary with rate, cost, and expected cost for the given variables in the model history.

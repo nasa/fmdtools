@@ -5,6 +5,11 @@ Author: Daniel Hulse
 Created: October 2019
 Description: A simple example of I/O using faultprop.py and the pump model in ex_pump.py
 """
+import sys
+paths = sys.path
+if paths[1]!='../':
+    sys.path=[sys.path[0]] + ['../'] + paths
+
 
 #Using the model that was set up, we can now perform a few different operations
 

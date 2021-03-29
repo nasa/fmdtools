@@ -54,14 +54,14 @@ def nominal(mdl, track=True, gtype='normal'):
     mdlhist : Dict
         A dictionary with a history of modelstates
     """
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams)
+    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     nomscen=construct_nomscen(mdl)
     scen=nomscen.copy()
     mdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False)
     
     resgraph = mdl.return_stategraph(gtype=gtype)   
     endfaults, endfaultprops = mdl.return_faultmodes()
-    endclass=mdl.find_classification(resgraph, endfaultprops, construct_nomscen(mdl), scen, {'nominal': mdlhist, 'faulty':mdlhist})
+    endclass=mdl.find_classification(scen, {'nominal': mdlhist, 'faulty':mdlhist})
     
     endresults={'faults': endfaults, 'classification':endclass}
     
@@ -100,7 +100,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype =
 
     """
     #run model nominally, get relevant results
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams)
+    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     nomscen=construct_nomscen(mdl)
     if staged:
         nommdlhist, mdls = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes=[time])
@@ -111,7 +111,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype =
         nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=staged)
         nomresgraph = mdl.return_stategraph(gtype)
         mdl.reset()
-        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams)
+        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     #run with fault present, get relevant results
     scen=nomscen.copy() #note: this is a shallow copy, so don't define it earlier
     scen['faults'][fxnname]=faultmode
@@ -131,7 +131,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track=True, staged=False, gtype =
     endfaults, endfaultprops = mdl.return_faultmodes()
     endflows = proc.graphflows(faultresgraph, nomresgraph, gtype)
     mdlhists={'nominal':nommdlhist, 'faulty':faultmdlhist}
-    endclass = mdl.find_classification(faultresgraph, endfaultprops, endflows, scen, mdlhists)
+    endclass=mdl.find_classification(scen, mdlhists)
     resgraph = proc.resultsgraph(faultresgraph, nomresgraph, gtype=gtype) 
     
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
@@ -167,14 +167,14 @@ def mult_fault(mdl, faultseq, track=True, rate=np.NaN, gtype='normal'):
 
     """
     #run model nominally, get relevant results
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams)
+    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     nomscen=construct_nomscen(mdl)
     
     nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False)
     nomresgraph = mdl.return_stategraph(gtype)
     mdl.reset()
     
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams)
+    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     #run with fault present, get relevant results
     scen=nomscen.copy() #note: this is a shallow copy, so don't define it earlier
     scen['faults']=list(faultseq.values())
@@ -190,7 +190,7 @@ def mult_fault(mdl, faultseq, track=True, rate=np.NaN, gtype='normal'):
     endfaults, endfaultprops = mdl.return_faultmodes()
     endflows = proc.graphflows(faultresgraph, nomresgraph, gtype)
     mdlhists={'nominal':nommdlhist, 'faulty':faultmdlhist}
-    endclass = mdl.find_classification(faultresgraph, endfaultprops, endflows, scen, mdlhists)
+    endclass=mdl.find_classification(scen, mdlhists)
     resgraph = proc.resultsgraph(faultresgraph, nomresgraph, gtype=gtype) 
     
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
@@ -234,7 +234,7 @@ def single_faults(mdl, staged=False, track=True, pool=False):
     scenlist=list_init_faults(mdl)
     #run model nominally, get relevant results
     nomscen=construct_nomscen(mdl)
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams)
+    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     if staged:
         nomhist, c_mdl = prop_one_scen(mdl, nomscen, track=track, ctimes=mdl.times)
     else:
@@ -285,7 +285,7 @@ def approach(mdl, app, staged=False, track=True, pool=False):
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams)
+    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     if staged:
         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times)
     else:
@@ -335,12 +335,12 @@ def exec_scen(mdl, scen, nomresgraph,nomhist, track=True, staged = True):
     if staged:
         mdlhist, _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
     else:
-        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams)
+        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
         mdlhist, _ =prop_one_scen(mdl, scen, track=track)
     endfaults, endfaultprops = mdl.return_faultmodes()
     resgraph = mdl.return_stategraph()
     endflows = proc.graphflows(resgraph, nomresgraph)
-    endclass = mdl.find_classification(resgraph, endfaultprops, endflows, scen, {'nominal':nomhist, 'faulty':mdlhist})
+    endclass = mdl.find_classification(scen, {'nominal':nomhist, 'faulty':mdlhist})
     return endclass, mdlhist 
 
 def construct_nomscen(mdl):
