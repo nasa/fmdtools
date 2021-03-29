@@ -561,8 +561,8 @@ def update_mdlhist(mdl, mdlhist, t_ind, track = 'all'):
     track : str ('all', 'functions', 'flows', `none`), optional
         Which model states to track over time. The default is 'all'.
     """
-    if track == 'flows':        update_flowhist(mdl, mdlhist, t_ind)
-    elif track == 'functions':  update_fxnhist(mdl, mdlhist, t_ind)
+    if  'flows' in track:        update_flowhist(mdl, mdlhist, t_ind)
+    elif 'functions' in track:  update_fxnhist(mdl, mdlhist, t_ind)
     elif track == 'none':       a=0
     elif track == 'all':      
         update_flowhist(mdl, mdlhist, t_ind)
@@ -604,8 +604,8 @@ def init_mdlhist(mdl, timerange, track = 'all'):
         A dictionary history of each model state over the given timerange.
     """
     mdlhist={}
-    if track == 'functions':    mdlhist["functions"]=init_fxnhist(mdl, timerange)
-    elif track == 'flows':      mdlhist["flows"]=init_flowhist(mdl, timerange)
+    if 'functions' in track:    mdlhist["functions"]=init_fxnhist(mdl, timerange)
+    elif 'flows' in track:      mdlhist["flows"]=init_flowhist(mdl, timerange)
     elif track == 'none':       a=0
     elif track == 'all':                       
         mdlhist["flows"]=init_flowhist(mdl, timerange)
