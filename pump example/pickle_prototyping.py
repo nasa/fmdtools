@@ -67,6 +67,11 @@ if __name__=='__main__':
     cores = 4
     pools = {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores) }
     
+    
+    print("STAGED + SOME TRACKING")
+    compare_pools(mdl,app,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_1':['pressure', 'flowrate']}})
+    
+    
     print("STAGED + FULL MODEL TRACKING")
     compare_pools(mdl,app,pools, staged=True, track='all')
     print("STAGED + FLOW TRACKING")
