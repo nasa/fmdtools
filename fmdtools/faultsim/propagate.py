@@ -40,8 +40,11 @@ def nominal(mdl, track='all', gtype='normal'):
     ----------
     mdl : Model
         Model of the system
-    track : str ('all', 'functions', 'flows', `none`), optional
-        Which model states to track over time. The default is 'all'.
+    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
+        Which model states to track over time, which can be given as 'functions', 'flows', 
+        'all', 'none', 'valparams' (model states specified in mdl.valparams),
+        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
     gtype : TYPE, optional
         The type of graph to return (normal or bipartite). The default is 'normal'.
 
@@ -82,8 +85,11 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
         Name of the faultmode
     time : float, optional
         Time to inject fault. Must be in the range of model times (i.e. in range(0, end, mdl.tstep)). The default is 0.
-    track : str ('all', 'functions', 'flows', `none`), optional
-        Which model states to track over time. The default is 'all'.
+    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
+        Which model states to track over time, which can be given as 'functions', 'flows', 
+        'all', 'none', 'valparams' (model states specified in mdl.valparams),
+        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). The default is False.
     gtype : str, optional
@@ -149,8 +155,11 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal'):
         The model to inject the fault in.
     faultseq : dict
         Dict of times and modes defining the fault scenario {time:{fxns: [modes]},}
-    track : str ('all', 'functions', 'flows', `none`), optional
-        Which model states to track over time. The default is 'all'.
+    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
+        Which model states to track over time, which can be given as 'functions', 'flows', 
+        'all', 'none', 'valparams' (model states specified in mdl.valparams),
+        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
     rate : float, optional
         Input rate for the sequence (must be calculated elsewhere)
     gtype : str, optional
@@ -213,8 +222,11 @@ def single_faults(mdl, staged=False, track='all', pool=False):
         The model to inject faults in
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
-    track : str ('all', 'functions', 'flows', `none`), optional
-        Which model states to track over time. The default is 'all'.
+    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
+        Which model states to track over time, which can be given as 'functions', 'flows', 
+        'all', 'none', 'valparams' (model states specified in mdl.valparams),
+        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
     pool : process pool, optional
         Process Pool Object from multiprocessing or pathos packages. Pathos is recommended.
         e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
@@ -270,8 +282,11 @@ def approach(mdl, app, staged=False, track='all', pool=False):
         SampleApproach used to define the list of faults and sample time for the model.
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
-    track : str ('all', 'functions', 'flows', `none`), optional
-        Which model states to track over time. The default is 'all'.
+    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
+        Which model states to track over time, which can be given as 'functions', 'flows', 
+        'all', 'none', 'valparams' (model states specified in mdl.valparams),
+        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
     pool : process pool, optional
         Process Pool Object from multiprocessing or pathos packages. Pathos is recommended.
         e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
@@ -329,8 +344,11 @@ def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True):
         the nominal model at the time to be executed in the scenarios (a dict keyed by times)
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
-    track : str ('all', 'functions', 'flows', `none`), optional
-        Which model states to track over time. The default is 'all'.
+    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
+        Which model states to track over time, which can be given as 'functions', 'flows', 
+        'all', 'none', 'valparams' (model states specified in mdl.valparams),
+        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
     """
     if staged:
         mdlhist, _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
@@ -407,8 +425,11 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}):
         The model to inject faults in.
     scen : Dict
         The fault scenario to run. Has structure: {'faults':{fxn:fault}, 'properties':{rate, time, name, etc}}
-    track : str ('all', 'functions', 'flows', `none`), optional
-        Which model states to track over time. The default is 'all'.
+    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
+        Which model states to track over time, which can be given as 'functions', 'flows', 
+        'all', 'none', 'valparams' (model states specified in mdl.valparams),
+        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
     ctimes : list, optional
@@ -558,34 +579,36 @@ def update_mdlhist(mdl, mdlhist, t_ind, track = 'all'):
         History of model states (a dict with a vector of each state)
     t_ind : float
         The time to update the model history at.
-    track : str ('all', 'functions', 'flows', `none`), optional
-        Which model states to track over time. The default is 'all'.
+    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
+        Which model states to track over time, which can be given as 'functions', 'flows', 
+        'all', 'none', 'valparams' (model states specified in mdl.valparams),
+        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
     """
-    if  'flows' in track:        update_flowhist(mdl, mdlhist, t_ind)
-    elif 'functions' in track:  update_fxnhist(mdl, mdlhist, t_ind)
-    elif track == 'none':       a=0
-    elif track == 'all':      
+    if track == 'valparams':        track = mdl.valparams
+    if  'flows' in track:     update_flowhist(mdl, mdlhist, t_ind)
+    if 'functions' in track:  update_fxnhist(mdl, mdlhist, t_ind)
+    if track == 'all':      
         update_flowhist(mdl, mdlhist, t_ind)
         update_fxnhist(mdl, mdlhist, t_ind)
-    else:
-        raise Exception("Invalid track option: "+str(track))
 def update_flowhist(mdl, mdlhist, t_ind):
     """ Updates the flows in the model history at t_ind """
-    for flowname, flow in mdl.flows.items():
-        atts=flow.status()
+    for flowname in mdlhist["flows"]:
+        atts=mdl.flows[flowname].status()
         for att, val in atts.items():
-            try:
-                mdlhist["flows"][flowname][att][t_ind] = val
-            except:
-                print("Value too large to represent: "+att+"="+str(val))
-                raise
+            if att in mdlhist['flows'][flowname]:
+                try:
+                    mdlhist["flows"][flowname][att][t_ind] = val
+                except:
+                    print("Value too large to represent: "+att+"="+str(val))
+                    raise
 def update_fxnhist(mdl, mdlhist, t_ind):
     """ Updates the functions (faults and states) in the model history at t_ind """
-    for fxnname, fxn in mdl.fxns.items():
-        states, faults = fxn.return_states()
-        mdlhist["functions"][fxnname]["faults"][t_ind]=faults
+    for fxnname in mdlhist["functions"]:
+        states, faults = mdl.fxns[fxnname].return_states()
+        if 'faults' in mdlhist["functions"][fxnname]:   mdlhist["functions"][fxnname]["faults"][t_ind]=faults
         for state, value in states.items():
-            mdlhist["functions"][fxnname][state][t_ind] = value 
+            if state in mdlhist["functions"][fxnname]:  mdlhist["functions"][fxnname][state][t_ind] = value 
 
 def init_mdlhist(mdl, timerange, track = 'all'):
     """
@@ -597,39 +620,51 @@ def init_mdlhist(mdl, timerange, track = 'all'):
         the Model object
     timerange : array
         Numpy array of times to initialize in the dictionary.
-
+    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
+        Which model states to track over time, which can be given as 'functions', 'flows', 
+        'all', 'none', 'valparams' (model states specified in mdl.valparams),
+        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
     Returns
     -------
     mdlhist : dict
         A dictionary history of each model state over the given timerange.
     """
     mdlhist={}
-    if 'functions' in track:    mdlhist["functions"]=init_fxnhist(mdl, timerange)
-    elif 'flows' in track:      mdlhist["flows"]=init_flowhist(mdl, timerange)
-    elif track == 'none':       a=0
+    if track == 'valparams':        track = mdl.valparams
+    if track=='functions':          mdlhist["functions"]=init_fxnhist(mdl, timerange, track='all') 
+    elif track=='flows':            mdlhist["flows"]=init_flowhist(mdl, timerange, track='all')
     elif track == 'all':                       
         mdlhist["flows"]=init_flowhist(mdl, timerange)
         mdlhist["functions"]=init_fxnhist(mdl, timerange)
+    elif type(track)==dict:
+        if 'functions' in track:    mdlhist["functions"]=init_fxnhist(mdl, timerange, track=track)
+        if 'flows' in track:         mdlhist["flows"]=init_flowhist(mdl, timerange, track=track)
     else:
         raise Exception("Invalid track option: "+str(track))
     mdlhist["time"]=np.array([i for i in timerange])
     return mdlhist
-def init_flowhist(mdl, timerange):
+def init_flowhist(mdl, timerange, track='all'):
     """ Initializes the flow history flowhist of the model mdl over the time range timerange"""
     flowhist={}
     for flowname, flow in mdl.flows.items():
-        atts=flow.status()
-        flowhist[flowname] = {}
-        for att, val in atts.items():
-            flowhist[flowname][att] = np.full([len(timerange)], val)
+        if track=='all' or flowname in track['flows']:
+            atts=flow.status()
+            flowhist[flowname] = {}
+            for att, val in atts.items():
+                if track=='all' or track['flows'][flowname]=='all' or att in track['flows'][flowname]:
+                    flowhist[flowname][att] = np.full([len(timerange)], val)
     return flowhist
-def init_fxnhist(mdl, timerange):
+def init_fxnhist(mdl, timerange, track='all'):
     """Initializes the function state history fxnhist of the model mdl over the time range timerange"""
     fxnhist = {}
     for fxnname, fxn in mdl.fxns.items():
-        states, faults = fxn.return_states()
-        fxnhist[fxnname]={}
-        fxnhist[fxnname]["faults"]=[faults for i in timerange]
-        for state, value in states.items():
-            fxnhist[fxnname][state] = np.full([len(timerange)], value)
+        if track=='all' or fxnname in track['functions']:
+            states, faults = fxn.return_states()
+            fxnhist[fxnname]={}
+            if track == 'all' or track['functions'][fxnname]=='all' or 'faults' in track['functions'][fxnname]:
+                fxnhist[fxnname]["faults"]=[faults for i in timerange]
+            for state, value in states.items():
+                if track == 'all' or track['functions'][fxnname]=='all' or state in track['functions'][fxnname]:
+                    fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist

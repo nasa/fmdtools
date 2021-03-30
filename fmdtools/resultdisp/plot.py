@@ -43,7 +43,8 @@ def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=Tru
     unitdict = dict(enumerate(units))
     z=0
     figs =[]
-    for objtype in ["flows", "functions"]:
+    objtypes = list(set(mdlhists['nominal'].keys()).difference({'time'}))
+    for objtype in objtypes:
         for fxnflow in mdlhists['nominal'][objtype]:
             if fxnflows: #if in the list 
                 if fxnflow not in fxnflows: continue
@@ -120,11 +121,14 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     unitdict = dict(enumerate(units))
     
     if fxnflowvals: num_plots = sum([len(val) for k,val in fxnflowvals.items()])
-    else: num_plots = sum([len(flow) for flow in mdlhists['nominal']['flows'].values()])+sum([len(f.keys())-1 for f in mdlhists['nominal']['functions'].values()])
+    else: 
+        num_flow_plots = sum([len(flow) for flow in mdlhists['nominal']['flows'].values()])
+        num_fxn_plots = sum([len([a for a in atts if a!='faults']) for fname, atts in mdlhists['nominal'].get('functions',{}).items()])
+        num_plots = num_fxn_plots + num_flow_plots + int(legend)
     fig = plt.figure(figsize=(cols*3, 2*num_plots/cols))
     n=1
-    
-    for objtype in ["flows", "functions"]:
+    objtypes = set(mdlhists['nominal'].keys()).difference({'time'})
+    for objtype in objtypes:
         for fxnflow in mdlhists['nominal'][objtype]:
             if fxnflowvals: #if in the list 
                 if fxnflow not in fxnflowvals: continue
@@ -142,8 +146,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
             for var in nomhist:
                 if fxnflowvals: #if in the list of values
                     if var not in fxnflowvals[fxnflow]: continue
-                if legend: plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label=fxnflow+var)
-                else: plt.subplot(np.ceil((num_plots)/cols),cols,n, label=fxnflow+var)
+                plt.subplot(np.ceil((num_plots)/cols),cols,n, label=fxnflow+var)
                 n+=1
                 if 'faulty' in mdlhists:
                     a, = plt.plot(times, hist[var], color='r')
@@ -158,7 +161,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
         if fxnflowvals: fig.suptitle('Dynamic Response of '+str(list(fxnflowvals.keys()))+' to fault'+' '+fault)
         else:           fig.suptitle('Dynamic Response of Model States to fault'+' '+fault)
         if legend:
-            ax_l = plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label=fxnflow+'legend')
+            ax_l = plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label='legend')
             plt.legend([a,b],['faulty', 'nominal'], loc='center')
             plt.box(on=None)
             ax_l.get_xaxis().set_visible(False)
