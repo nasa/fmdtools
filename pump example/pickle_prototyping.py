@@ -22,6 +22,7 @@ import multiprocessing as mp
 import multiprocess as ms
 
 from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
+# from ray.util.multiprocessing import Pool as RayPool (need to figure out how to use Ray)
 #IE = ImportEE([{'current':1.0, 'voltage':1.0}])
 #mdl = Pump()
 
@@ -55,7 +56,7 @@ from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
 ## attempting parallelism?
 # Note: Presently these work when used in the console but not in a script?!?!?
  
-from parallelism_methods import * 
+from parallelism_methods import compare_pools
 
 if __name__=='__main__':
     #resultslist = parallel_mc3()
@@ -65,7 +66,7 @@ if __name__=='__main__':
     app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':10})
     
     cores = 4
-    pools = {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores) }
+    pools = {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores)} #, 'Ray': RayPool(cores) }
     
     
     print("STAGED + SOME TRACKING")
