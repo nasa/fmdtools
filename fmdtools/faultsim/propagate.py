@@ -26,7 +26,6 @@ Private Methods:
 """
 
 import numpy as np
-import time
 import copy
 import fmdtools.resultdisp.process as proc
 
@@ -355,9 +354,6 @@ def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True):
     else:
         mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
         mdlhist, _ =prop_one_scen(mdl, scen, track=track)
-    endfaults, endfaultprops = mdl.return_faultmodes()
-    resgraph = mdl.return_stategraph()
-    endflows = proc.graphflows(resgraph, nomresgraph)
     endclass = mdl.find_classification(scen, {'nominal':nomhist, 'faulty':mdlhist})
     return endclass, mdlhist 
 
@@ -641,7 +637,7 @@ def init_mdlhist(mdl, timerange, track = 'all'):
         if 'functions' in track:    mdlhist["functions"]=init_fxnhist(mdl, timerange, track=track)
         if 'flows' in track:         mdlhist["flows"]=init_flowhist(mdl, timerange, track=track)
     else:
-        raise Exception("Invalid track option: "+str(track))
+        if not track in ['none','None']: raise Exception("Invalid track option: "+str(track))
     mdlhist["time"]=np.array([i for i in timerange])
     return mdlhist
 def init_flowhist(mdl, timerange, track='all'):
