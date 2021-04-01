@@ -189,14 +189,13 @@ class Water(Flow):
 ##DEFINE MODEL OBJECT
 # The model is also made an object to aid graph construction
 class Pump(Model):
-    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10}):
+    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, \
+                 modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}, \
+                     valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
         super().__init__()
         
-        self.params=params
-        #Declare time range to run model over
-        self.phases={'start':[0,5], 'on':[5, 50], 'end':[50,55]}
-        self.times=[0,20, 55]
-        self.tstep = 1 #Stepsize: (change at your own risk, because this changes how the model will execute)
+        super().__init__(params=params, modelparams=modelparams, valparams=valparams)
+        #Stepsize: (change at your own risk, because this changes how the model will execute)
         # Timestep at the moment must be an integer.
         # In this model, because every time we've entered occurs at a factor of 5,
         # and there aren't any complicated controls/dynamics interactions that would need to be 
@@ -233,7 +232,7 @@ class Pump(Model):
     #PROVIDE MEANS OF CLASSIFYING RESULTS
     # this function classifies the faults into severities based on the state of faults
     # in this case, we will just use the repair costs and the probability
-    def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
+    def find_classification(self, scen, mdlhists):
         
         #accumulated loss function:
         # sum([sum(vec[i:]) for i in range(len(vec))])
