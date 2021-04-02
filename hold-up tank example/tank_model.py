@@ -169,8 +169,10 @@ class Turn(Component):
         else:                                           return intended_turn
         
 class Tank(Model):
-    def __init__(self, params={'reacttime':2}):
-        super().__init__(params = params, modelparams = {'phases':{'na':[0,1],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'})
+    def __init__(self, params={'reacttime':2},\
+                 modelparams = {'phases':{'na':[0,1],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'},\
+                 valparams = {'functions':{'Store_Water':'level'}}):
+        super().__init__(params = params,modelparams=modelparams, valparams=valparams )
         
         self.add_flow('Wat_in_1', {'effort':1.0, 'rate':1.0})
         self.add_flow('Wat_in_2', {'effort':1.0, 'rate':1.0})
@@ -188,7 +190,7 @@ class Tank(Model):
         self.add_fxn('Human', ['Valve1_Sig', 'Tank_Sig', 'Valve2_Sig'], fclass =HumanActions, fparams = params['reacttime'])
         
         self.construct_graph()
-    def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
+    def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high
         if any(mdlhists['faulty']['functions']['Store_Water']['level']>=20):    totcost = 1000000
         elif any(mdlhists['faulty']['functions']['Store_Water']['level']<=0):   totcost = 1000000

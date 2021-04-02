@@ -218,7 +218,7 @@ class EEtoOE(FxnBlock):
             self.OE_out.effort =  self.EE_in.effort 
 
 class EPS(Model):
-    def __init__(self, params={}):
+    def __init__(self, params={}, modelparams={},valparams={}):
         """
         The Model superclass uses a static model representation by default if
         there are no parameters for times, phases, etc.
@@ -255,7 +255,7 @@ class EPS(Model):
         self.add_fxn('Export_waste_HM', ['waste_HE_M'], fclass = ExportHE)
         
         self.construct_graph()
-    def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
+    def find_classification(self, scen, mdlhists):
         
         outflows = ['HE','ME', 'OE']
         
