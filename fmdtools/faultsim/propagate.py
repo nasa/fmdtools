@@ -28,6 +28,7 @@ Private Methods:
 import numpy as np
 import copy
 import fmdtools.resultdisp.process as proc
+import tqdm
 
 ## FAULT PROPAGATION
 
@@ -206,7 +207,7 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal'):
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-def single_faults(mdl, staged=False, track='all', pool=False):
+def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True):
     """
     Creates and propagates a list of failure scenarios in a model.
     
@@ -231,8 +232,8 @@ def single_faults(mdl, staged=False, track='all', pool=False):
         e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
         or parallelpool = ProcessPool(nodes=n) for n cores (pathos)
         If False, the set of scenarios is run serially. The default is False
-    poolsize : int, optional
-        Size of the pool to use when the scenarios are run in parallel. The default is 4.
+    showprogress: bool, optional
+        whether to show a progress bar during execution. default is true
 
     Returns
     -------
@@ -259,17 +260,17 @@ def single_faults(mdl, staged=False, track='all', pool=False):
     if pool:
         if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged) for scen in scenlist]
         else: inputs = [(mdl, scen, nomresgraph, nomhist, track, staged) for scen in scenlist]
-        result_list = pool.map(exec_scen_par, inputs)
+        result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
         mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(scenlist)}
     else:
-        for i, scen in enumerate(scenlist):
+        for i, scen in enumerate(tqdm.tqdm(scenlist), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
             if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(c_mdl[scen['properties']['time']], scen, nomresgraph,nomhist, track=track, staged=staged)
             else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged)
             
     return endclasses, mdlhists
 
-def approach(mdl, app, staged=False, track='all', pool=False):
+def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -291,6 +292,8 @@ def approach(mdl, app, staged=False, track='all', pool=False):
         e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
         or parallelpool = ProcessPool(nodes=n) for n cores (pathos)
         If False, the set of scenarios is run serially. The default is False
+    showprogress: bool, optional
+        whether to show a progress bar during execution. default is true
 
     Returns
     -------
@@ -314,11 +317,11 @@ def approach(mdl, app, staged=False, track='all', pool=False):
     if pool:
         if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged) for scen in scenlist]
         else: inputs = [(mdl, scen, nomresgraph, nomhist, track, staged) for scen in scenlist]
-        result_list = pool.map(exec_scen_par, inputs)
+        result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
         mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(scenlist)}
     else:
-        for i, scen in enumerate(scenlist):
+        for i, scen in enumerate(tqdm.tqdm(scenlist), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
             if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(c_mdl[scen['properties']['time']], scen, nomresgraph,nomhist, track=track, staged=staged)
             else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged)
     return endclasses, mdlhists

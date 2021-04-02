@@ -43,6 +43,7 @@ fmdtools requires Python 3 and depends on these packages:
 - `ordered-dict`
 - `dill`
 - `pickle`
+- `tqdm`
 - `multiprocessing`     (for parallel execution--Pathos and multiprocess can also be used)
 - `matplotlib`			(for plots)
 - `pandas`				(for tables)
