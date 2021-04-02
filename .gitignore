@@ -11,6 +11,7 @@ __pycache__/quad_mdl.cpython-36.pyc
 
 #ignore model repos
 smart_stereo/
+rad_models/
 
 #ignore output tables
 #*.ecsv
