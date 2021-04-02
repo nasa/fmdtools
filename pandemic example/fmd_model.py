@@ -137,12 +137,11 @@ class Transportation(FxnBlock):
         
 class PandemicModel(Model):
 #     def __init__(self, x0, params={}):
-    def __init__(self, params={'x0':[0.2 , 0 , 0 , 10 , 0 , 0 ]}):
-        super().__init__(params=params)
-        x0=self.params['x0']
+    def __init__(self, params={'x0':[0.2 , 0 , 0 , 10 , 0 , 0 ]},\
+                 modelparams={'times':[0,160], 'tstep':1}, valparams='all'):
         
-        self.times = [1,160]
-        self.tstep = 1
+        super().__init__(params=params, modelparams=modelparams, valparams=valparams)
+        x0=self.params['x0']
         
         travel = {'In_I':0,'In_S':0,'In_R':0,'Out_I':0,'Out_S':0,'Out_R':0,'Stay_I':0,'Stay_S':0,'Stay_R':0}
         self.add_flow('Travel_Schools', travel)
@@ -158,7 +157,7 @@ class PandemicModel(Model):
         
         
         self.construct_graph()
-    def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
+    def find_classification(self, scen, mdlhists):
         # total number of medical staff
         n1 = self.fxns['Schools'].n
         n2 = self.fxns['City'].n

@@ -6,7 +6,10 @@ Created on Thu Mar  5 03:26:48 2020
 """
 from scipy.optimize import differential_evolution
 import sys
-sys.path.append('../')
+# for use in development - makes sure git version is used instead of pip-installed version
+paths = sys.path
+if paths[1]!='../':
+    sys.path=[sys.path[0]] + ['../'] + paths
 import pandas as pd
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
