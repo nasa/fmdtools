@@ -9,6 +9,9 @@ __pycache__/quad_mdl.cpython-36.pyc
 #ignore Jupyter checkpoints
 .ipynb_checkpoints
 
+#ignore model repos
+smart_stereo/
+
 #ignore output tables
 #*.ecsv
 #*csv
