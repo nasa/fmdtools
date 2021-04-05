@@ -71,7 +71,7 @@ class Block(object):
         if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
         elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
         self.failrate = gtp*EPC_f
-    def assoc_modes(self, modes, name='', probtype='rate', units='hr'):
+    def assoc_modes(self, modes, name='', probtype='rate', units='hr', exclusive=False):
         """
         Associates modes with the block when called in the function or component.
 
@@ -81,7 +81,13 @@ class Block(object):
             Dictionary of modes with structure {faultname:[dist,oppvect, rcost]}
         name : str, optional
             (for components only) Name of the component. The default is ''.
+        probtype : str, optional
+            Type of probability in the probability model, a per-time 'rate' or per-run 'prob'. 
+            The default is 'rate'
+        exclusive : True/False
+            Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present). 
         """
+        self.exclusive_faultmodes = exclusive
         if not getattr(self, 'faultmodes', []): 
             if name: self.faultmodes=dict()
             else:    self.faultmodes=dict.fromkeys(modes)
@@ -203,6 +209,7 @@ class FxnBlock(Block):
         self.components=components
         if not getattr(self, 'faultmodes', []): self.faultmodes={}
         if self.components: self.compfaultmodes= dict()
+        self.exclusive_faultmodes = False
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
             self.compfaultmodes.update({modename:cname for modename in components[cname].faultmodes})
