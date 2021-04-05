@@ -174,16 +174,18 @@ class FxnBlock(Block):
     tstep : float
         timestep of the model in the function (added in model definition)
     """
-    def __init__(self,flownames,flows, states={}, components={},timers={}, timely=True):
+    def __init__(self,name, flows, flownames=[], states={}, components={},timers={}, timely=True):
         """
         Intances the function superclass with the relevant parameters.
 
         Parameters
         ----------
-        flownames : list
-            Names of flows (in order) to use in the function 
         flows :list
             Flow objects to (in order correspoinding to flownames) associate with the function
+        flownames : list/dict, optional
+            Names of flows  to use in the function, if private flow names are needed (e.g. functions with in/out relationships).
+            Either provided as a list (in the same order as the flows) of all flow names corresponding to those flows
+            Or as a dict of form {External Flowname: Internal Flowname}
         states : dict, optional
             Internal states to associate with the function. The default is {}.
         components : dict, optional
@@ -194,7 +196,7 @@ class FxnBlock(Block):
             Whether or not the function depends on time (or just input/output). The default is True.
         """
         self.type = 'function'
-        self.name = 'fxnname'
+        self.name = name
         self.flows=self.make_flowdict(flownames,flows)
         for flow in self.flows.keys():
             setattr(self, flow,self.flows[flow])
@@ -214,7 +216,7 @@ class FxnBlock(Block):
 
         Parameters
         ----------
-        flownames : list
+        flownames : list or dict or empty
             names of flows corresponding to flows
         flows : list
             flows
@@ -224,9 +226,17 @@ class FxnBlock(Block):
         flowdict : dict
             dict of flows indexed by flownames
         """
-        flowdict={}
-        for ind, flowname in enumerate(flownames):
-            flowdict[flowname]=flows[ind]
+        flowdict = {}
+        if not(flownames) or type(flownames)==dict:
+            flowdict = {f.name:f for f in flows}
+            for externalname, internalname in flownames:
+                flowdict[internalname] = flowdict.pop(internalname)
+        elif type(flownames)==list:
+            if len(flownames)==len(flows):
+                for ind, flowname in enumerate(flownames):
+                    flowdict[flowname]=flows[ind]
+            else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
+        else:       raise Exception("Invalid flownames option in "+self.name)
         return flowdict
     def condfaults(self,time):
         """ Placeholder for function condfaults methods """
@@ -265,7 +275,7 @@ class FxnBlock(Block):
         copy : FxnBlock
             Copy of the given function with new flows
         """
-        copy = self.__class__(newflows, *attr)  # Is this adequate? Wouldn't this give it new components?
+        copy = self.__class__(self.name, newflows, *attr)  # Is this adequate? Wouldn't this give it new components?
         copy.faults = self.faults.copy()
         for state in self._initstates.keys():
             setattr(copy, state, getattr(self, state))
@@ -298,7 +308,7 @@ class FxnBlock(Block):
 class GenericFxn(FxnBlock):
     """Generic function block. For use when there is no Function Block defined"""
     def __init__(self, flows):
-        super().__init__([f.name for f in flows], flows)
+        super().__init__(flows)
   
         
 class Component(Block):
@@ -455,16 +465,15 @@ class Model(object):
         """
         flows=self.get_flows(flownames)
         if fparams=='None':
-            self.fxns[name]=fclass(flows)
-            self._fxninput[name]={'flows': flownames, 'fparams': 'None'}
+            self.fxns[name]=fclass(name, flows)
+            self._fxninput[name]={'name':name,'flows': flownames, 'fparams': 'None'}
         else: 
-            self.fxns[name]=fclass(flows,fparams)
-            self._fxninput[name]={'flows': flownames, 'fparams': fparams}
+            self.fxns[name]=fclass(name, flows,fparams)
+            self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams}
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
         if self.fxns[name].timely: self.timelyfxns.update([name])
         self.fxns[name].tstep=self.tstep
-        self.fxns[name].name=name
     def set_fxnorder(self,fxnlist):
         """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
         if not self.timelyfxns.difference(fxnlist): self.timelyfxns=OrderedSet(fxnlist)
@@ -630,7 +639,7 @@ class Model(object):
             flow.reset()
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
-    def find_classification(self,resgraph, endfaults, endflows, scen, mdlhists):
+    def find_classification(self, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
         return {'rate':scen['properties']['rate'], 'cost': 1, 'expected cost': 1}
 
