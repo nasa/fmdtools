@@ -52,14 +52,22 @@ def objtab(hist, objtype):
     labels = []
     for fxn, atts in hist[objtype].items():
         for att, val in atts.items():
-            label=(fxn, att)
-            labels=labels+[label]
-            df[label]=val
+            if att != 'faults':
+                label=(fxn, att)
+                labels=labels+[label]
+                df[label]=val
         if objtype =='functions':
-            if hist[objtype][fxn].get('faults'):
+            faulthist = hist[objtype][fxn].get('faults', {})
+            if type(faulthist)==dict:
+                for fault in faulthist:
+                    label=(fxn, fault+' fault')
+                    labels+=[label]
+                    df[label]=hist[objtype][fxn]['faults'][fault]
+            elif len(faulthist)==1:
                 label=(fxn, 'faults')
                 labels+=[label]
                 df[label]=hist[objtype][fxn]['faults']
+                
     index = pd.MultiIndex.from_tuples(labels)
     df = df.reindex(index, axis="columns")
     return df

@@ -126,10 +126,11 @@ def fxnhist(mdlhist, returndiff=True):
             fxnshist[fxnname][state] = 1* (faulty == nominal)
             diff[fxnname][state] = nominal - faulty
         if fxnshist[fxnname]: status = np.prod(np.array(list(fxnshist[fxnname].values())), axis = 0) 
-        else: status = np.ones(len(mdlhist['faulty']['functions'][fxnname]['faults']), dtype=int) #should empty be given 1 or nothing?
+        else: status = np.ones(len(mdlhist['faulty']['time']), dtype=int) #should empty be given 1 or nothing?
         fxnshist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname]['faults']
         faults = mdlhist['faulty']['functions'][fxnname]['faults']
-        fxnshist[fxnname]['numfaults']=np.array(list(map(lambda f: len(f.difference(['nom'])), faults)))
+        if type(faults)==dict:  fxnshist[fxnname]['numfaults'] = np.sum([fhist for fhist in faults.values()], axis=0)
+        else:                   fxnshist[fxnname]['numfaults'] = np.array([int(f!='nom') for f in faults])
         faulty = 1 - 1*(fxnshist[fxnname]['numfaults']>0)
         fxnshist[fxnname]['status'] = status*faulty
         faulthist[fxnname]=fxnshist[fxnname]['numfaults']
