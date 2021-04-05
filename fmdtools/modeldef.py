@@ -229,8 +229,9 @@ class FxnBlock(Block):
         flowdict = {}
         if not(flownames) or type(flownames)==dict:
             flowdict = {f.name:f for f in flows}
-            for externalname, internalname in flownames:
-                flowdict[internalname] = flowdict.pop(internalname)
+            if flownames:
+                for externalname, internalname in flownames.items():
+                    flowdict[internalname] = flowdict.pop(externalname)
         elif type(flownames)==list:
             if len(flownames)==len(flows):
                 for ind, flowname in enumerate(flownames):
@@ -307,8 +308,8 @@ class FxnBlock(Block):
         return
 class GenericFxn(FxnBlock):
     """Generic function block. For use when there is no Function Block defined"""
-    def __init__(self, flows):
-        super().__init__(flows)
+    def __init__(self, name, flows):
+        super().__init__(name, flows)
   
         
 class Component(Block):
