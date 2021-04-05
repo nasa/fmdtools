@@ -495,6 +495,10 @@ class Model(object):
         self.bipartite.add_nodes_from(self.fxns, bipartite=0)
         self.bipartite.add_nodes_from(self.flows, bipartite=1)
         self.bipartite.add_edges_from(self._fxnflows)
+        
+        dangling_nodes = [e for e in nx.isolates(self.bipartite)] # check to see that all functions/flows are connected
+        if dangling_nodes: raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
+        
         self.multgraph = nx.projected_graph(self.bipartite, self.fxns,multigraph=True)
         self.graph = nx.projected_graph(self.bipartite, self.fxns)
         attrs={}
