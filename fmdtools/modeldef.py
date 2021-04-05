@@ -431,7 +431,7 @@ class Model(object):
         self.timelyfxns=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
-    def add_flow(self,flowname, flowdict):
+    def add_flow(self,flowname, flowdict={}):
         """
         Adds a flow with given attributes to the model.
 
