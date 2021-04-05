@@ -26,8 +26,8 @@ from fmdtools.modeldef import Model, FxnBlock, Component
 
 
 class ImportLiquid(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['Watout', 'Sig'],flows,{'open':1})
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['Watout', 'Sig'],{'open':1})
         self.assoc_modes({'Stuck':[1e-5,[1,0],0]}, units='hr') # need to add human-induced?
     def behavior(self,time):
         if not self.has_fault('Stuck'):
@@ -39,8 +39,8 @@ class ImportLiquid(FxnBlock):
         
 
 class ExportLiquid(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['Watin', 'Sig'],flows,{'open':1})
+    def __init__(self,name, flows):
+        super().__init__(name,flows,['Watin', 'Sig'],{'open':1})
         self.assoc_modes({'Stuck':[1e-5,[1,0],0]}) # need to add human-induced?
     def behavior(self,time):
         if not self.has_fault('Stuck'):
@@ -51,8 +51,8 @@ class ExportLiquid(FxnBlock):
     
     
 class GuideLiquid(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['Watin','Watout'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['Watin','Watout'])
         self.assoc_modes({'Leak':[1e-5,[1,0],0], 'Clogged':[1e-5,[1,0],0]})
     def behavior(self,time):
         if self.has_fault('Clogged'):
@@ -66,8 +66,8 @@ class GuideLiquid(FxnBlock):
             self.Watin.rate = self.Watout.rate     
     
 class StoreLiquid(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['Watin','Watout', 'Sig'],flows, {'level':10.0, 'net_flow': 0.0})
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['Watin','Watout', 'Sig'], {'level':10.0, 'net_flow': 0.0})
         self.assoc_modes({'Leak':[1e-5,[1,0],0]})
     def behavior(self, time):
         if self.level >= 20.0:
@@ -89,11 +89,11 @@ class StoreLiquid(FxnBlock):
         if time>self.time:          self.level = self.level + self.net_flow
         
 class HumanActions(FxnBlock):
-    def __init__(self,flows, reacttime):
+    def __init__(self,name, flows, reacttime):
         actions = {'look':Look('look'),'detect':Detect('detect'),\
                    'reach':Reach('reach'), 'grasp':Grasp('grasp'),\
                    'turn':Turn('turn')}
-        super().__init__(['Valve_Sig','Tank_Sig', 'OtherValve_Sig'], flows, components=actions,timers={'t1'})
+        super().__init__(name, flows,['Valve_Sig','Tank_Sig', 'OtherValve_Sig'], components=actions,timers={'t1'})
         self.assoc_modes({'FalseDetection_low':[1e-4,[1,1],0],'FalseDetection_high':[1e-4,[1,1],0]}, probtype='rate')
         self.reacttime=reacttime
     def behavior(self,time):        

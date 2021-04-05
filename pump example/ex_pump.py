@@ -48,7 +48,7 @@ class ImportEE(FxnBlock):
 
      This pattern should be used for all functions in a model
     """
-    def __init__(self,flows):
+    def __init__(self,name, flows):
         """
         __init__ is the initialization method for the ImportEE class.
 
@@ -56,7 +56,7 @@ class ImportEE(FxnBlock):
             - flows (a dictionary of flows to be associated with the function)
             - **params (an optional parameter to change parameters of the function)
         """
-        super().__init__(['EEout'],flows)
+        super().__init__(name,flows, flownames = ['EEout'])
         """
         super().__init__() initializes  the function using the FxnBlock super class __init__ function
 
@@ -98,9 +98,9 @@ class ImportEE(FxnBlock):
 
 class ImportWater(FxnBlock):
     """ Import Water is the pipe with water going into the pump """
-    def __init__(self,flows):
+    def __init__(self,name,flows):
         """Here the only flows are the water flowing out"""
-        super().__init__(['Watout'],flows)
+        super().__init__(name,flows, flownames=['Watout'])
         self.failrate=1e-5
         self.assoc_modes({'no_wat':[1.0, [1,1,1], 1000]})
         """
@@ -113,9 +113,9 @@ class ImportWater(FxnBlock):
 
 class ExportWater(FxnBlock):
     """ Import Water is the pipe with water going into the pump """
-    def __init__(self,flows):
+    def __init__(self,name,flows):
         #flows going into/out of the function need to be made properties of the function
-        super().__init__(['Watin'], flows)
+        super().__init__(name, flows, flownames=['Watin'])
         self.failrate=1e-5
         self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 5000]})
     def behavior(self,time):
@@ -124,9 +124,9 @@ class ExportWater(FxnBlock):
 
 class ImportSig(FxnBlock):
     """ Import Signal is the on/off switch """
-    def __init__(self,flows):
+    def __init__(self,name,flows):
         """ Here the main flow is the signal"""
-        super().__init__(['Sigout'],flows)
+        super().__init__(name,flows, flownames=['Sigout'])
         self.failrate=1e-6
         self.assoc_modes({'no_sig':[1.0, [1.5, 1.0, 1.0], 10000]})
     def behavior(self, time):
@@ -143,7 +143,7 @@ class ImportSig(FxnBlock):
 
 class MoveWat(FxnBlock):
     """  Move Water is the pump itself. While one could decompose this further, one function is used for simplicity """
-    def __init__(self,flows, delay):
+    def __init__(self,name, flows, delay):
         """ In this function, more states are initialized than flows:
             - states (internal variables to be given to the function)
                 states are given as {'name':initval}
@@ -154,7 +154,7 @@ class MoveWat(FxnBlock):
         flownames=['EEin', 'Sigin', 'Watin', 'Watout']
         states={'eff':1.0} #effectiveness state
         self.delay=delay #delay parameter
-        super().__init__(flownames,flows,states, timers={'timer'})
+        super().__init__(name,flows,flownames=flownames,states=states, timers={'timer'})
         self.failrate=1e-5
         self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
     def condfaults(self, time):

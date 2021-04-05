@@ -11,7 +11,7 @@ from scipy.optimize import minimize
 import csv
 
 class Area(FxnBlock):
-    def __init__(self,flows, params):
+    def __init__(self,name,flows, params):
 # total polulation
         population = params['pop']
 #         self.extra = params[0]['extra']
@@ -37,7 +37,7 @@ class Area(FxnBlock):
         self.a = self.a0
         self.b=10
         
-        super().__init__(['Transport'],flows, {'Infected':population*1/10,'Susceptible':population*9/10,'Recovered':0.0, 'In_R':0.0, 'Re_R':0.0})
+        super().__init__(name,flows,['Transport'], {'Infected':population*1/10,'Susceptible':population*9/10,'Recovered':0.0, 'In_R':0.0, 'Re_R':0.0})
         self.failrate=1e-5
         self.assoc_modes({'PL1':[1.0, [1,1,1], 1],'PL2':[1.0, [1,1,1], 1]})
                     
@@ -98,8 +98,8 @@ class Area(FxnBlock):
             self.Transport.Stay_R  = self.Recovered
                 
 class Transportation(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['T_Schools', 'T_City', 'T_Suburbs'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['T_Schools', 'T_City', 'T_Suburbs'])
         self.failrate=1e-5
         self.assoc_modes({'na':[1.0, [1,1,1], 1]})
     def behavior(self,time):

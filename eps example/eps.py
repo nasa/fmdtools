@@ -17,7 +17,7 @@ at: https://c3.nasa.gov/dashlink/projects/3/
 from fmdtools.modeldef import FxnBlock, Model
 
 class ImportEE(FxnBlock):
-    def __init__(self,flows):
+    def __init__(self,name,flows):
         """ Static model representation is the same as the dynamic model respresntation, exept in this case 
         there is no opportunity vector. Thus the self.assoc_modes function takes a dictionary of modes with 
         just the vector of failure distribution and results cost. e.g. {'modename':[rate, cost]}.
@@ -27,7 +27,7 @@ class ImportEE(FxnBlock):
         
         Both representations can be used--this just shows this representation.
         """
-        super().__init__(['EEout'],flows)
+        super().__init__(name,flows,['EEout'])
         self.assoc_modes({'low_v':[1e-5, 100], 'high_v':[5e-6, 100], 'no_v':[1e-5,300]})
     def behavior(self,time):
         if self.has_fault('no_v'):      self.EEout.effort=0.0 
@@ -36,8 +36,8 @@ class ImportEE(FxnBlock):
         else:                           self.EEout.effort=1.0
         
 class ImportSig(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['Sigout'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['Sigout'])
         self.assoc_modes({'partial_signal':[1e-5, 750], 'no_signal':[1e-6, 750]})
     def behavior(self,time):
         if  self.has_fault('partial_signal'):   self.Sigout.value=0.5 
@@ -45,8 +45,8 @@ class ImportSig(FxnBlock):
         else:                                   self.Sigout.value = 1.0
         
 class StoreEE(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['EEin','EEout'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['EEin','EEout'])
         self.assoc_modes({'low_storage':[5e-6,2000], 'no_storage':[5e-6, 2000]})
     def behavior(self,time):
         if      self.has_fault('no_storage'):   self.EEout.effort=0.0
@@ -59,8 +59,8 @@ class StoreEE(FxnBlock):
         
         
 class SupplyEE(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['EEin','EEout','Heatout'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['EEin','EEout','Heatout'])
         self.assoc_modes({'adverse_resist':[2e-6,400], 'minor_overload':[1e-5, 400], 'major_overload':[3e-6, 400],\
                           'short':[1e-7,400], 'open_circuit':[5e-8, 200]})
     def condfaults(self,time):
@@ -87,8 +87,8 @@ class SupplyEE(FxnBlock):
             
             
 class DistEE(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['Sigin','EEin','EEoutM','EEoutH','EEoutO'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['Sigin','EEin','EEoutM','EEoutH','EEoutO'])
         self.assoc_modes({'adverse_resist':[1e-5,1500],'poor_alloc':[2e-5,500], 'short':[2e-5,1500], 'open_circuit':[3e-5,1500]})
     def condfaults(self,time):
         if max(self.EEoutM.rate,self.EEoutH.rate,self.EEoutO.rate) > 2.0:     self.add_fault('short')
@@ -115,8 +115,8 @@ class DistEE(FxnBlock):
             self.EEin.rate = max(self.EEoutM.rate,self.EEoutH.rate,self.EEoutO.rate)
         
 class ExportHE(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['HE_in'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['HE_in'])
         self.assoc_modes({'hot_sink':[1e-5,500], 'ineffective_sink':[0.5e-5,1000]})
     def behavior(self,time):
         if self.has_fault('ineffective_sink'):  self.HE_in.effort=4.0
@@ -125,22 +125,22 @@ class ExportHE(FxnBlock):
                  
         
 class ExportME(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['ME_in'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['ME_in'])
     def behavior(self,time):
         self.ME_in.rate = self.ME_in.effort
         
                 
 class ExportOE(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['OE_in'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['OE_in'])
     def behavior(self,time):
         self.OE_in.rate = self.OE_in.effort
         
         
 class EEtoME(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['EE_in','ME_out','HE_out'], flows)
+    def __init__(self,name,flows):
+        super().__init__(name, flows,['EE_in','ME_out','HE_out'])
         self.assoc_modes({'high_torque':[1e-4,200],'low_torque':[1e-4,200],'toohigh_torque':[5e-5,200],\
                           'open_circuit':[5e-5,200], 'short':[5e-5,200]})
     def behavior(self, time):
@@ -173,8 +173,8 @@ class EEtoME(FxnBlock):
             self.EE_in.rate = self.EE_in.effort
         
 class EEtoHE(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['EE_in', 'HE_out'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['EE_in', 'HE_out'])
         self.assoc_modes({'low_heat':[2e-6,200], 'high_heat':[1e-7,200], 'toohigh_heat':[5e-7,200], 'open_circuit':[1e-7,200]})
     def cond_faults(self, time):
         if self.EE_in.effort > 2.0: self.add_fault('open_circuit')
@@ -198,8 +198,8 @@ class EEtoHE(FxnBlock):
         
         
 class EEtoOE(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['EE_in','OE_out', 'HE_out'],flows)
+    def __init__(self,name,flows):
+        super().__init__(name,flows,['EE_in','OE_out', 'HE_out'])
         self.assoc_modes({'optical_resist':[5e-7,70],'burnt_out':[2e-6, 100]})
     def cond_faults(self,time):
         if self.EE_in.effort >= 2.0: self.add_fault('burnt_out')
