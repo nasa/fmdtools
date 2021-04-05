@@ -264,7 +264,7 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True)
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
         mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(scenlist)}
     else:
-        for i, scen in enumerate(tqdm.tqdm(scenlist), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
+        for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
             if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(c_mdl[scen['properties']['time']], scen, nomresgraph,nomhist, track=track, staged=staged)
             else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged)
             
@@ -321,7 +321,7 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True)
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
         mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(scenlist)}
     else:
-        for i, scen in enumerate(tqdm.tqdm(scenlist), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
+        for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
             if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(c_mdl[scen['properties']['time']], scen, nomresgraph,nomhist, track=track, staged=staged)
             else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged)
     return endclasses, mdlhists
