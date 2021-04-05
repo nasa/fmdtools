@@ -64,8 +64,9 @@ def nominal(mdl, track='all', gtype='normal'):
     
     resgraph = mdl.return_stategraph(gtype=gtype)   
     endfaults, endfaultprops = mdl.return_faultmodes()
-    endclass=mdl.find_classification(scen, {'nominal': mdlhist, 'faulty':mdlhist})
+    if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     
+    endclass=mdl.find_classification(scen, {'nominal': mdlhist, 'faulty':mdlhist})
     endresults={'faults': endfaults, 'classification':endclass}
     
     mdl.reset()
@@ -111,11 +112,15 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
     if staged:
         nommdlhist, mdls = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes=[time])
         nomresgraph = mdl.return_stategraph(gtype)
+        endfaults, endfaultprops = mdl.return_faultmodes()
+        if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
         mdl.reset()
         mdl = mdls[time]
     else:
         nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=staged)
         nomresgraph = mdl.return_stategraph(gtype)
+        endfaults, endfaultprops = mdl.return_faultmodes()
+        if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
         mdl.reset()
         mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     #run with fault present, get relevant results
@@ -181,6 +186,8 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal'):
     
     nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False)
     nomresgraph = mdl.return_stategraph(gtype)
+    endfaults, endfaultprops = mdl.return_faultmodes()
+    if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     mdl.reset()
     
     mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
@@ -252,6 +259,8 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True)
     else:
         nomhist, c_mdl = prop_one_scen(mdl, nomscen, track=track)
     nomresgraph = mdl.return_stategraph()
+    endfaults, endfaultprops = mdl.return_faultmodes()
+    if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     mdl.reset()
     
     endclasses = {}
@@ -308,6 +317,8 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True)
     else:
         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track)
     nomresgraph = mdl.return_stategraph()
+    endfaults, endfaultprops = mdl.return_faultmodes()
+    if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     mdl.reset()
     
     endclasses = {}
