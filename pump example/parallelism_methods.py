@@ -36,14 +36,14 @@ def one_delay_helper(delay):
 def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True):
     exectimes = {}
     starttime = time.time()
-    endclasses, mdlhists = propagate.approach(mdl,app, pool=False, staged = staged, track=track)
+    endclasses, mdlhists = propagate.approach(mdl,app, pool=False, staged = staged, track=track, showprogress=False)
     exectime_single = time.time() - starttime
     if verbose: print("single-thread exec time: "+str(exectime_single))
     exectimes['single'] = exectime_single
     
     for pool in pools:
         starttime = time.time()
-        endclasses, mdlhists = propagate.approach(mdl,app, pool=pools[pool], staged = staged, track=track)
+        endclasses, mdlhists = propagate.approach(mdl,app, pool=pools[pool], staged = staged, track=track, showprogress=False)
         exectime_par = time.time() - starttime
         if verbose: print(pool+" exec time: "+str(exectime_par))
         exectimes[pool] = exectime_par

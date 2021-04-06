@@ -63,14 +63,14 @@ if __name__=='__main__':
     
     print("--MANY SIMULATIONS--")
     mdl=Pump(params={'cost':{'repair'}, 'delay':10}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,500]}, 'times':[0,20, 500], 'tstep':1})
-    app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':10})
+    app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':3})
     
     cores = 4
     pools = {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores)} #, 'Ray': RayPool(cores) }
     
     
-    print("STAGED + SOME TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_1':['pressure', 'flowrate']}})
+    #print("STAGED + SOME TRACKING")
+    #compare_pools(mdl,app,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_1':['pressure', 'flowrate']}})
     
     
     print("STAGED + FULL MODEL TRACKING")
