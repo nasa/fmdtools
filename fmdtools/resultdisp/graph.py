@@ -427,7 +427,7 @@ def get_plotlabels(g, reshist, t_ind):
         if reshist['functions'][function]['numfaults'][t_ind]:
             faultfxns+=[function] 
             if type(reshist['functions'][function]['faults']) == dict:
-                faultlabels[function] = {fault for fault, occ in reshist['functions'][function]['faults'].items() if occ}
+                faultlabels[function] = {fault for fault, occ in reshist['functions'][function]['faults'].items() if occ[t_ind]}
             else: faultlabels[function] = reshist['functions'][function]['faults'][t_ind]
         if not reshist['functions'][function]['status'][t_ind]:
             degfxns+=[function]

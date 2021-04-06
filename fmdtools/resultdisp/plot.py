@@ -138,10 +138,12 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
                 if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
             elif objtype=="functions":
                 nomhist=copy.deepcopy(mdlhists['nominal']["functions"][fxnflow])
-                del nomhist['faults']
+                if len(nomhist.get('faults',[])) > 0:
+                    if type(nomhist.get('faults',[]))!=np.ndarray: del nomhist['faults']
                 if 'faulty' in mdlhists: 
                     hist = copy.deepcopy(mdlhists['faulty']["functions"][fxnflow])
-                    del hist['faults']
+                    if len(hist.get('faults',[])) > 0:
+                        if type(hist.get('faults',[]))!=np.ndarray: del hist['faults']
 
             for var in nomhist:
                 if fxnflowvals: #if in the list of values

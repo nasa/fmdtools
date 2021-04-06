@@ -679,8 +679,9 @@ def init_fxnhist(mdl, timerange, track='all'):
             states, faults = fxn.return_states()
             fxnhist[fxnname]={}
             if track == 'all' or track['functions'][fxnname]=='all' or 'faults' in track['functions'][fxnname]:
-                if fxn.exclusive_faultmodes == False:   fxnhist[fxnname]["faults"] = {faultmode:[0 for i in timerange] for faultmode in fxn.faultmodes} 
-                elif fxn.exclusive_faultmodes == True:  fxnhist[fxnname]["faults"]=[faults for i in timerange]
+                if fxn.faultmodes:
+                    if fxn.exclusive_faultmodes == False:   fxnhist[fxnname]["faults"] = {faultmode:np.array([0 for i in timerange]) for faultmode in fxn.faultmodes} 
+                    elif fxn.exclusive_faultmodes == True:  fxnhist[fxnname]["faults"]=np.array([faults for i in timerange])
             for state, value in states.items():
                 if track == 'all' or track['functions'][fxnname]=='all' or state in track['functions'][fxnname]:
                     fxnhist[fxnname][state] = np.full([len(timerange)], value)
