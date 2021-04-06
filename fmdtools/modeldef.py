@@ -290,7 +290,7 @@ class FxnBlock(Block):
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
-    def updatefxn(self,faults=['nom'], time=0):
+    def updatefxn(self,faults=[], time=0):
         """
         Updates the state of the function at a given time and injects faults.
 
@@ -312,6 +312,8 @@ class FxnBlock(Block):
             for compname, comp in self.components.items():
                 self.faults.update(comp.faults) 
         self.time=time
+        if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
+        elif len(self.faults)==0:           self.faults.update(['nom'])
         return
 class GenericFxn(FxnBlock):
     """Generic function block. For use when there is no Function Block defined"""
