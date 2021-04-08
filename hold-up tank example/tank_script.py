@@ -6,7 +6,10 @@ Created on Tue Mar 10 12:08:05 2020
 """
 
 import sys
-sys.path.append('../')
+# for use in development - makes sure git version is used instead of pip-installed version
+paths = sys.path
+if paths[1]!='../':
+    sys.path=[sys.path[0]] + ['../'] + paths
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
