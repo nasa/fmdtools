@@ -34,6 +34,10 @@ class Block(object):
                 - dist : (float of % failures due to this fualt)
                 - oppvect : (list of relative probabilities of the fault occuring in each phase)
                 - rcost : cost of repairing the fault
+    opermodes : list
+        possible modes for the block to enter
+    mode : string
+        current mode of block operation
     """
     def __init__(self, states={}, timely=True):
         """
@@ -71,14 +75,18 @@ class Block(object):
         if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
         elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
         self.failrate = gtp*EPC_f
-    def assoc_modes(self, modes, name='', probtype='rate', units='hr', exclusive=False):
+    def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False):
         """
-        Associates modes with the block when called in the function or component.
+        Associates fault and operational modes with the block when called in the function or component.
 
         Parameters
         ----------
-        modes : dict
-            Dictionary of modes with structure {faultname:[dist,oppvect, rcost]}
+        faultmodes : dict, optional
+            Dictionary of faultmodes with structure {faultname:[dist,oppvect, rcost]}
+        opermodes : list, optional
+            List of operational modes
+        initmode : str, optional
+            Initial operational mode. Default is 'nom'
         name : str, optional
             (for components only) Name of the component. The default is ''.
         probtype : str, optional
@@ -87,36 +95,49 @@ class Block(object):
         exclusive : True/False
             Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present). 
         """
+        if opermodes:
+            self.opermodes = opermodes
+            if initmode in self.opermodes:
+                self._states.append('mode')
+                self._initstates['mode'] = initmode
+                self.mode = initmode
+            else: raise Exception("Initial mode "+initmode+" not in defined modes for "+self.name)
         self.exclusive_faultmodes = exclusive
         if not getattr(self, 'faultmodes', []): 
             if name: self.faultmodes=dict()
-            else:    self.faultmodes=dict.fromkeys(modes)
-        for mode in modes:
+            else:    self.faultmodes=dict.fromkeys(faultmodes)
+        for mode in faultmodes:
             self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
             self.faultmodes[name+mode]['probtype'] = probtype
             self.faultmodes[name+mode]['units'] = units
-            if type(modes) == set: # minimum information - here the modes are only a set of labels
-                self.faultmodes[name+mode]['dist'] =     1.0/len(modes)
+            if type(faultmodes) == set: # minimum information - here the faultmodes are only a set of labels
+                self.faultmodes[name+mode]['dist'] =     1.0/len(faultmodes)
                 self.faultmodes[name+mode]['oppvect'] =  [1.0]
                 self.faultmodes[name+mode]['rcost'] =    0.0
-            elif type(modes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
-                self.faultmodes[name+mode]['dist'] =     modes[mode]
+            elif type(faultmodes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
+                self.faultmodes[name+mode]['dist'] =     faultmodes[mode]
                 self.faultmodes[name+mode]['oppvect'] =  [1.0]
                 self.faultmodes[name+mode]['rcost'] =    0.0
-            elif len(modes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
-                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
-                self.faultmodes[name+mode]['oppvect'] =  modes[mode][1]
-                self.faultmodes[name+mode]['rcost'] =    modes[mode][2]
-            elif len(modes[mode]) == 2:  # dist, repair costs
-                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+            elif len(faultmodes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
+                self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
+                self.faultmodes[name+mode]['oppvect'] =  faultmodes[mode][1]
+                self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][2]
+            elif len(faultmodes[mode]) == 2:  # dist, repair costs
+                self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
                 self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                self.faultmodes[name+mode]['rcost'] =    modes[mode][1]
-            elif len(modes[mode]) == 1:  # dist only
-                self.faultmodes[name+mode]['dist'] =     modes[mode][0]
+                self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][1]
+            elif len(faultmodes[mode]) == 1:  # dist only
+                self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
                 self.faultmodes[name+mode]['oppvect'] =  [1.0]
                 self.faultmodes[name+mode]['rcost'] =    0.0
             else:
-                raise Exception("Invalid mode definition")                            
+                raise Exception("Invalid mode definition")
+    def set_mode(self, mode):
+        """Sets a mode in the block"""
+        self.mode = mode
+    def in_mode(self,mode):
+        "Checks if the system is in a given operational mode"
+        return self.mode==mode                       
     def has_fault(self,fault): 
         """Check if the block has fault (a str)"""
         return self.faults.intersection(set([fault]))
@@ -129,16 +150,25 @@ class Block(object):
     def add_fault(self,fault): 
         """Adds fault (a str) to the block"""
         self.faults.update([fault])
+        if self.exclusive_faultmodes: self.set_mode(fault)
     def add_faults(self,faults): 
         """Adds list of faults to the block"""
         self.faults.update(faults)
+        if self.exclusive_faultmodes: 
+            if len(faults)>1:   raise Exception("Multiple fault modes added to function with exclusive fault representation")
+            elif len(faults)==1: self.set_mode(faults[0])
     def replace_fault(self, fault_to_replace,fault_to_add): 
         """Replaces fault_to_replace with fault_to_add in the set of faults"""
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
-    def remove_fault(self, fault_to_remove):
-        """Removes fault in the set of faults"""
+        if self.exclusive_faultmodes: self.set_mode(fault_to_add)
+    def remove_fault(self, fault_to_remove, opermode=False):
+        """Removes fault in the set of faults and returns to given operational mode"""
         self.faults.discard(fault_to_remove)
+        if len(self.faults) == 0: self.faults.add('nom')
+        if opermode:    self.mode = opermode
+        if self.exclusive_faultmodes and not(opermode):
+            raise Exception("Unclear which operational mode to enter with fault removed")
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used (only for components) when resetting the model"""
         self.faults.clear()
@@ -301,7 +331,7 @@ class FxnBlock(Block):
         time : float, optional
             Model time. The default is 0.
         """
-        self.faults.update(faults)  #if there is a fault, it is instantiated in the function
+        self.add_faults(faults)  #if there is a fault, it is instantiated in the function
         self.condfaults(time)           #conditional faults and behavior are then run
         if self.components:     # propogate faults from function level to component level
             for fault in self.faults:
