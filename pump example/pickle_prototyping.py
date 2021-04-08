@@ -22,6 +22,7 @@ import multiprocessing as mp
 import multiprocess as ms
 
 from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
+from parallelism_methods import compare_pools
 # from ray.util.multiprocessing import Pool as RayPool (need to figure out how to use Ray)
 #IE = ImportEE([{'current':1.0, 'voltage':1.0}])
 #mdl = Pump()
@@ -55,8 +56,8 @@ from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
 
 ## attempting parallelism?
 # Note: Presently these work when used in the console but not in a script?!?!?
- 
-from parallelism_methods import compare_pools
+def instantiate_pools(cores):
+    return  {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores)} #, 'Ray': RayPool(cores) }
 
 if __name__=='__main__':
     #resultslist = parallel_mc3()
@@ -66,21 +67,19 @@ if __name__=='__main__':
     app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':3})
     
     cores = 4
-    pools = {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores)} #, 'Ray': RayPool(cores) }
-    
     
     #print("STAGED + SOME TRACKING")
     #compare_pools(mdl,app,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_1':['pressure', 'flowrate']}})
     
     
     print("STAGED + FULL MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='all')
+    #compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='all')
     print("STAGED + FLOW TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='flows')
+    #compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='flows')
     print("STAGED + FUNCTION TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='functions')
+    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='functions')
     print("STAGED + NO TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='none')
+    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='none')
     
     # print("--FEW SIMULATIONS--")
     # mdl=Pump(params={'cost':{'repair'}, 'delay':10}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,500]}, 'times':[0,20, 500], 'tstep':1})
