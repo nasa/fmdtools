@@ -30,6 +30,7 @@ import copy
 import networkx as nx
 import numpy as np
 import pandas as pd
+from ordered_set import OrderedSet
 
 def hists(mdlhists, returndiff=True):
     """
@@ -139,6 +140,43 @@ def fxnhist(mdlhist, returndiff=True):
     numfaults = np.sum(np.array(list(faulthist.values())), axis=0)
     numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
     return fxnshist, numfaults, degfxns, numdegfxns, diff
+def modephases(mdlhist, defaultphases={}):
+    """
+    Identifies the phases of operation for the system based on its modes
+
+    Parameters
+    ----------
+    mdlhist : dict
+        Model history from the nominal run
+    defaultphases : dict, optional
+        Default phases to use if there is no mode history. Structured {'phase':[beginning, end]}
+
+    Returns
+    -------
+    modephases : dict
+        Dictionary of modes that the system passes through, of the form: {'fxn':'mode':[[beg, end], [beg, end]]}
+
+    """
+    modephases=dict.fromkeys(mdlhist["functions"].keys())
+    for fxn in modephases:
+        modehist = mdlhist["functions"][fxn].get('mode', [])
+        if len(modehist)==0:    
+            if defaultphases:   modephases[fxn] = defaultphases
+            else:               modephases[fxn] = {'operating':[mdlhist['time'][0],mdlhist['time'][0]]}
+        else:
+            modes = OrderedSet(modehist)
+            modephases[fxn]=dict.fromkeys(modes)
+            for mode in modes:
+                modeinds = [ind for ind,m in enumerate(modehist) if m==mode]
+                phases =[]
+                startind = modeinds[0]
+                for i, ind in enumerate(modeinds):
+                    if ind+1 not in modeinds:
+                        phases.append([startind, ind])
+                        if i!=len(modeinds)-1: startind = modeinds[i+1]
+                modephases[fxn][mode] = phases
+    return modephases
+
 def graphflows(g, nomg, gtype='normal'):
     """
     Extracts non-nominal flows by comparing the a results graph with a nominal results graph.
