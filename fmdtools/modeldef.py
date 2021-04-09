@@ -1053,7 +1053,7 @@ class SampleApproach():
         """ Returns the rates for each mode """
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
         
-    
+
 def phases(times, names=[]):
     """ Creates named phases from a set of times defining the edges of hte intervals """
     if not names: names = range(len(times)-1)
