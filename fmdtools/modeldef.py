@@ -140,10 +140,13 @@ class Block(object):
         return self.mode==mode                       
     def has_fault(self,fault): 
         """Check if the block has fault (a str)"""
-        return self.faults.intersection(set([fault]))
+        return any(self.faults.intersection(set([fault])))
+    def no_fault(self,fault): 
+        """Check if the block has fault (a str)"""
+        return not(any(self.faults.intersection(set([fault]))))
     def has_faults(self,faults): 
         """Check if the block has any in the list of faults"""
-        return self.faults.intersection(set(faults))
+        return any(self.faults.intersection(set(faults)))
     def any_faults(self):
         """check if the block has any fault modes"""
         return any(self.faults.difference({'nom'}))
@@ -731,7 +734,7 @@ class SampleApproach():
     scenids : dict
         a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,phase):listofnames}
     """
-    def __init__(self, mdl, faults='all', phases='all', jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
+    def __init__(self, mdl, faults='all', phases='all', modephases={}, jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
         """
         Initializes the sample approach for a given model
 
@@ -768,12 +771,13 @@ class SampleApproach():
                     quadrature object if the quadrature option is selected.
         """
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
-        if phases=='all':   self.phases = mdl.phases
-        else:               self.phases = {ph:mdl.phases[ph] for ph in phases}
+        if phases=='all':           self.globalphases = mdl.phases; self.phases = {fxn:mdl.phases for fxn in mdl.fxns}
+        elif type(phases)==list:    self.globalphases = {ph:mdl.phases[ph] for ph in phases}; self.phases = {fxn:self.globalphases for fxn in mdl.fxns}
+        elif type(phases)==dict:    self.globalphases = mdl.phases; self.phases = phases
         self.tstep = mdl.tstep
         self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)
-        self.init_rates(mdl, jointfaults=jointfaults)
+        self.init_rates(mdl, jointfaults=jointfaults, modephases=modephases)
         self.create_sampletimes(sampparams, defaultsamp)
         self.create_scenarios()
     def init_modelist(self,mdl, faults, jointfaults={'faults':'None'}):
@@ -817,21 +821,36 @@ class SampleApproach():
                     jointmodes = [jm for jm in jointmodes if not any([jm[i-1][0] ==j[0] for i in range(1, len(jm)) for j in jm[i:]])]
                 self.jointmodes = self.jointmodes + jointmodes
         elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
-    def init_rates(self,mdl, jointfaults={'faults':'None'}):
+    def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}):
         """ Initializes rates, rates_timeless"""
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
         for (fxnname, mode) in self._fxnmodes:
-            self.rates[fxnname, mode]=dict.fromkeys(self.phases)
-            self.rates_timeless[fxnname, mode]=dict.fromkeys(self.phases)
+            self.rates[fxnname, mode]=dict.fromkeys(self.phases[fxnname])
+            self.rates_timeless[fxnname, mode]=dict.fromkeys(self.phases[fxnname])
             overallrate = self.fxnrates[fxnname]
             if self.comprates[fxnname]:
                 for compname, component in mdl.fxns[fxnname].components.items():
                     if mode in component.faultmodes:
                         overallrate=self.comprates[fxnname][compname]
             
-            for ind, (phase, times) in enumerate(self.phases.items()):
-                opp = self._fxnmodes[fxnname, mode]['oppvect'][ind]/sum(self._fxnmodes[fxnname, mode]['oppvect']) #forces to be a conditional probability
+            if modephases:
+                modevect = self._fxnmodes[fxnname, mode]['oppvect']
+                oppvect = {phase:0 for phase in self.phases[fxnname]}
+                oppvect.update({phase:modevect[mode]/len(phases)  for mode,phases in modephases[fxnname].items() for phase in phases})
+            else:
+                if type(self._fxnmodes[fxnname, mode]['oppvect'])==dict: 
+                    oppvect = {phase:0 for phase in self.phases[fxnname]}
+                    oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
+                else: oppvect = self._fxnmodes[fxnname, mode]['oppvect']
+            for ind, (phase, times) in enumerate(self.phases[fxnname].items()):
+                if type(self._fxnmodes[fxnname, mode]['oppvect'])==list:
+                    if len(oppvect)==len(self.phases[fxnname]): opp = oppvect[ind]/sum(oppvect)
+                    elif len(oppvect)==1:                       opp = oppvect[0]
+                    else: raise Exception("Invalid Opportunity vector: "+fxnname+": "+mode)
+                elif type(self._fxnmodes[fxnname, mode]['oppvect'])==dict:
+                    if len(oppvect)==len(self.phases[fxnname]): opp = oppvect[phase]/sum(oppvect.values())
+                    else: raise Exception("Invalid Opportunity vector: "+fxnname+": "+mode+" provide modephases or key oppvect by phases?")
                 dist = self._fxnmodes[fxnname, mode]['dist']
                 if self._fxnmodes[fxnname, mode]['probtype']=='rate':      
                     dt = float(times[1]-times[0]) 
@@ -844,9 +863,9 @@ class SampleApproach():
                 
         if getattr(self, 'jointmodes',False):
             for (j_ind, jointmode) in enumerate(self.jointmodes):
-                self.rates.update({jointmode:dict.fromkeys(self.phases)})
-                self.rates_timeless.update({jointmode:dict.fromkeys(self.phases)})
-                for (phase, times) in self.phases.items():
+                self.rates.update({jointmode:dict.fromkeys(self.globalphases)})
+                self.rates_timeless.update({jointmode:dict.fromkeys(self.globalphases)})
+                for (phase, times) in self.globalphases.items():
                     rates=[self.rates[fmode][phase] for fmode in jointmode]
                     if not jointfaults.get('pcond', False): # if no input, assume independence
                         prob = np.prod(1-np.exp(-np.array(rates)))
@@ -858,23 +877,25 @@ class SampleApproach():
                     self.rates_timeless[jointmode][phase] = self.rates[jointmode][phase]/(times[1]-times[0])          
     def create_sampletimes(self, params={}, default={'samp':'evenspacing','numpts':1}):
         """ Initializes weights and sampletimes """
-        self.sampletimes=dict.fromkeys(self.phases.keys())
+        self.sampletimes={}
         self.weights={fxnmode:dict.fromkeys(rate) for fxnmode,rate in self.rates.items()}
         self.sampparams={}
-        for phase, times in self.phases.items():
-            possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
-            for fxnmode in self.rates:
-                param = params.get((fxnmode,phase), default)
-                self.sampparams[fxnmode, phase] = param
-                if param['samp']=='likeliest':
-                    weights=[]
-                    if self.rates[fxnmode][phase] == max(list(self.rates[fxnmode].values())):
-                        phasetimes = [round(np.quantile(possible_phasetimes, 0.5)/self.tstep)*self.tstep]
-                    else: phasetimes = []
-                else: 
-                    pts, weights = self.select_points(param, [pt for pt, t in enumerate(possible_phasetimes)])
-                    phasetimes = [possible_phasetimes[pt] for pt in pts]
-                self.add_phasetimes(fxnmode, phase, phasetimes, weights=weights)
+        for fxn in self.phases:
+            for phase, times in self.phases[fxn].items():
+                possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
+                for fxnmode in self.rates:
+                    if phase in self.rates[fxnmode]:
+                        param = params.get((fxnmode,phase), default)
+                        self.sampparams[fxnmode, phase] = param
+                        if param['samp']=='likeliest':
+                            weights=[]
+                            if self.rates[fxnmode][phase] == max(list(self.rates[fxnmode].values())):
+                                phasetimes = [round(np.quantile(possible_phasetimes, 0.5)/self.tstep)*self.tstep]
+                            else: phasetimes = []
+                        else: 
+                            pts, weights = self.select_points(param, [pt for pt, t in enumerate(possible_phasetimes)])
+                            phasetimes = [possible_phasetimes[pt] for pt in pts]
+                        self.add_phasetimes(fxnmode, phase, phasetimes, weights=weights)
     def select_points(self, param, possible_pts):
         """
         Selects points in the list possible_points according to a given sample strategy.

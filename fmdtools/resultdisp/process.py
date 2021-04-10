@@ -153,29 +153,36 @@ def modephases(mdlhist, defaultphases={}):
 
     Returns
     -------
+    phases : dict
+        Dictionary of phases that the system passes through, of the form: {'fxn':{'mode1':[beg, end], mode2:[beg, end]}}
     modephases : dict
-        Dictionary of modes that the system passes through, of the form: {'fxn':'mode':[[beg, end], [beg, end]]}
+        Dictionary of phases associated with a given mode, of the form {'fxn':{'mode'{'mode','mode1',mode2}}
 
     """
     modephases=dict.fromkeys(mdlhist["functions"].keys())
+    phases=dict.fromkeys(mdlhist["functions"].keys())
     for fxn in modephases:
         modehist = mdlhist["functions"][fxn].get('mode', [])
         if len(modehist)==0:    
-            if defaultphases:   modephases[fxn] = defaultphases
-            else:               modephases[fxn] = {'operating':[mdlhist['time'][0],mdlhist['time'][0]]}
+            if defaultphases:   phases[fxn] = defaultphases
+            else:               phases[fxn] = {'operating':[mdlhist['time'][0],mdlhist['time'][0]]}
         else:
             modes = OrderedSet(modehist)
             modephases[fxn]=dict.fromkeys(modes)
+            phases[fxn] = dict()
             for mode in modes:
                 modeinds = [ind for ind,m in enumerate(modehist) if m==mode]
-                phases =[]
                 startind = modeinds[0]
+                phasenum = 0; phaseid=mode
+                modephases[fxn][mode] = set()
                 for i, ind in enumerate(modeinds):
                     if ind+1 not in modeinds:
-                        phases.append([startind, ind])
-                        if i!=len(modeinds)-1: startind = modeinds[i+1]
-                modephases[fxn][mode] = phases
-    return modephases
+                        phases[fxn][phaseid] =[startind, ind]
+                        modephases[fxn][mode].add(phaseid)
+                        if i!=len(modeinds)-1: 
+                            startind = modeinds[i+1]
+                            phasenum+=1; phaseid=mode+str(phasenum)
+    return phases, modephases
 
 def graphflows(g, nomg, gtype='normal'):
     """
