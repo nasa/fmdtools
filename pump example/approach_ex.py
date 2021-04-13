@@ -7,7 +7,10 @@ Tests a variety of sampling methods
 @author: Daniel Hulse
 """
 import sys
-sys.path.append('../')
+# for use in development - makes sure git version is used instead of pip-installed version
+paths = sys.path
+if paths[1]!='../':
+    sys.path=[sys.path[0]] + ['../'] + paths
 
 import numpy as np
 import quadpy
@@ -19,7 +22,7 @@ import time
 #mdl = Pump(params={'repair', 'ee', 'water', 'delay'})
 mdl = Pump(params={'cost':{'ee', 'repair', 'water'}, 'delay':10}) # should give identical utilities
 
-app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad': quadpy.line_segment.gauss_patterson(1)})
+app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad': quadpy.c1.gauss_patterson(1)})
 
 app_full = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
 app_maxlike = SampleApproach(mdl, defaultsamp={'samp':'likeliest'})
