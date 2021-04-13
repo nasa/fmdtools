@@ -693,7 +693,7 @@ class Model(object):
             fxn.reset()
     def find_classification(self, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
-        return {'rate':scen['properties']['rate'], 'cost': 1, 'expected cost': 1}
+        return {'rate':scen['properties']['rate'], 'cost': 1, 'expected cost': scen['properties']['rate']}
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) """
@@ -830,13 +830,14 @@ class SampleApproach():
         """ Initializes rates, rates_timeless"""
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
+        self.mode_phase_map=dict.fromkeys(self._fxnmodes)
         for (fxnname, mode) in self._fxnmodes:
             key_phases = mdl.fxns[fxnname].key_phases_by
             if key_phases=='global': fxnphases = self.globalphases
             elif key_phases=='none': fxnphases = {'operating':[mdl.times[0], mdl.times[-1]]} 
             else: fxnphases = self.phases[key_phases]
             fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))
-            self.rates[fxnname, mode]=dict(); self.rates_timeless[fxnname, mode]=dict() 
+            self.rates[fxnname, mode]=dict(); self.rates_timeless[fxnname, mode]=dict(); self.mode_phase_map[fxnname, mode] = dict()
             overallrate = self.fxnrates[fxnname]
             if self.comprates[fxnname]:
                 for compname, component in mdl.fxns[fxnname].components.items():
@@ -867,6 +868,7 @@ class SampleApproach():
                     unitfactor = 1
                 self.rates[fxnname, mode][key_phases, phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
                 self.rates_timeless[fxnname, mode][key_phases, phase] = overallrate*opp*dist
+                self.mode_phase_map[fxnname, mode][key_phases, phase] = times
                 
         if getattr(self, 'jointmodes',False):
             for (j_ind, jointmode) in enumerate(self.jointmodes):
@@ -890,21 +892,21 @@ class SampleApproach():
         for (fxnname, mode), ratedict in self.rates.items():
             for (phasetype, phase), rate in ratedict.items():
                 if rate > 0.0:
-                    if phasetype=='global': times = mdl.globalphases[phase]
+                    if phasetype=='global': times = mdl.phases[phase]
                     elif phasetype=='none': times = [mdl.times[0], mdl.times[-1]]
-                    else:                   times = mdl.phases[phase]
+                    else:                   times = self.phases[phasetype][phase]
                     possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
                     param = params.get(((fxnname, mode),phase), default)
                     self.sampparams[(fxnname, mode), phase] = param
                     if param['samp']=='likeliest':
                         weights=[]
-                        if self.rates[fxnname, mode][phase] == max(list(self.rates[fxnname, mode].values())):
+                        if self.rates[fxnname, mode][phasetype, phase] == max(list(self.rates[fxnname, mode].values())):
                             phasetimes = [round(np.quantile(possible_phasetimes, 0.5)/self.tstep)*self.tstep]
                         else: phasetimes = []
                     else: 
                         pts, weights = self.select_points(param, [pt for pt, t in enumerate(possible_phasetimes)])
                         phasetimes = [possible_phasetimes[pt] for pt in pts]
-                    self.add_phasetimes((fxnname, mode), phase, phasetimes, weights=weights)
+                    self.add_phasetimes(fxnname, mode, phasetype, phase, phasetimes, weights=weights)
     def select_points(self, param, possible_pts):
         """
         Selects points in the list possible_points according to a given sample strategy.
@@ -959,19 +961,17 @@ class SampleApproach():
         if len(pts)!=len(set(pts)):
             raise Exception("Too many pts for quadrature at this discretization")
         return pts, weights
-    def add_phasetimes(self, fxnmode, phase, phasetimes, weights=[]):
+    def add_phasetimes(self, fxnname, mode, phasetype, phase, phasetimes, weights=[]):
         """ Adds a set of times for a given mode to sampletimes"""
         if phasetimes:
-            if not self.weights[fxnmode].get(phase): self.weights[fxnmode][phase] = {t: 1/len(phasetimes) for t in phasetimes}
+            if not self.weights[fxnname, mode].get((phasetype, phase)): self.weights[fxnname, mode][phasetype, phase] = {t: 1/len(phasetimes) for t in phasetimes}
             for (ind, time) in enumerate(phasetimes):
-                if self.rates[fxnmode][phase]==0.0:
-                    break
-                if not self.sampletimes.get(phase): 
-                    self.sampletimes[phase] = {time:[]}
-                if self.sampletimes[phase].get(time): self.sampletimes[phase][time] = self.sampletimes[phase][time] + [fxnmode]
-                else: self.sampletimes[phase][time] = [fxnmode]
-                if any(weights): self.weights[fxnmode][phase][time] = weights[ind]
-                else:       self.weights[fxnmode][phase][time] = 1/len(phasetimes)
+                if not self.sampletimes.get((phasetype, phase)): 
+                    self.sampletimes[phasetype, phase] = {time:[]}
+                if self.sampletimes[phasetype, phase].get(time): self.sampletimes[phasetype, phase][time] = self.sampletimes[phasetype, phase][time] + [(fxnname, mode)]
+                else: self.sampletimes[phasetype, phase][time] = [(fxnname, mode)]
+                if any(weights): self.weights[fxnname, mode][phasetype, phase][time] = weights[ind]
+                else:       self.weights[fxnname, mode][phasetype, phase][time] = 1/len(phasetimes)
     def create_nomscen(self, mdl):
         """ Creates a nominal scenario """
         nomscen={'faults':{},'properties':{}}
@@ -987,7 +987,7 @@ class SampleApproach():
         self.scenlist=[]
         self.times = []
         self.scenids = {}
-        for phase, samples in self.sampletimes.items():
+        for (phasetype, phase), samples in self.sampletimes.items():
             if samples:
                 for time, faultlist in samples.items():
                     self.times+=[time]
@@ -995,7 +995,7 @@ class SampleApproach():
                         if self.sampparams[fxnmode, phase]['samp']=='maxlike':    
                             rate = sum(self.rates[fxnmode].values())
                         else: 
-                            rate = self.rates[fxnmode][phase] * self.weights[fxnmode][phase][time]
+                            rate = self.rates[fxnmode][phasetype, phase] * self.weights[fxnmode][phasetype, phase][time]
                         if type(fxnmode[0])==str:
                             name = fxnmode[0]+' '+fxnmode[1]+', t='+str(time)
                             scen={'faults':{fxnmode[0]:fxnmode[1]}, 'properties':{'type': 'single-fault', 'function': fxnmode[0],\
@@ -1008,8 +1008,8 @@ class SampleApproach():
                             scen = {'faults':faults, 'properties':{'type': str(len(fxnmode))+'-joint-faults', 'functions':{fm[0] for fm in fxnmode}, \
                                     'modes':{fm[1] for fm in fxnmode}, 'rate': rate, 'time': time, 'name': name}}
                         self.scenlist=self.scenlist+[scen]
-                        if self.scenids.get((fxnmode, phase)): self.scenids[fxnmode, phase] = self.scenids[fxnmode, phase] + [name]
-                        else: self.scenids[fxnmode, phase] = [name]
+                        if self.scenids.get((fxnmode, (phasetype,phase))): self.scenids[fxnmode, (phasetype,phase)] = self.scenids[fxnmode, (phasetype,phase)] + [name]
+                        else: self.scenids[fxnmode, (phasetype,phase)] = [name]
         self.times.sort()
     def prune_scenarios(self,endclasses,samptype='piecewise', threshold=0.1, sampparam={'samp':'evenspacing','numpts':1}):
         """

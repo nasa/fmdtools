@@ -76,7 +76,7 @@ class ImportEE(FxnBlock):
         Note that these rates are given in occurences/hr by default. To change the units, use the option units='sec'/'min'/'hr'/'day' etc
         """
         self.failrate=1e-5
-        self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[0.20, [0,1,0], 5000]})
+        self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[0.20, [0,1,0], 5000]}, key_phases_by='global')
 
     def condfaults(self,time):
         """
@@ -102,7 +102,7 @@ class ImportWater(FxnBlock):
         """Here the only flows are the water flowing out"""
         super().__init__(name,flows, flownames=['Watout'])
         self.failrate=1e-5
-        self.assoc_modes({'no_wat':[1.0, [1,1,1], 1000]})
+        self.assoc_modes({'no_wat':[1.0, [1,1,1], 1000]}, key_phases_by='global')
         """
         in this function, no conditional faults are modelled, so it doesn't need to be included
         """
@@ -117,7 +117,7 @@ class ExportWater(FxnBlock):
         #flows going into/out of the function need to be made properties of the function
         super().__init__(name, flows, flownames=['Watin'])
         self.failrate=1e-5
-        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 5000]})
+        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 5000]}, key_phases_by='global')
     def behavior(self,time):
         """ Here a blockage changes the area the output water flows through """
         if self.has_fault('block'): self.Watin.area=0.01
@@ -128,7 +128,7 @@ class ImportSig(FxnBlock):
         """ Here the main flow is the signal"""
         super().__init__(name,flows, flownames=['Sigout'])
         self.failrate=1e-6
-        self.assoc_modes({'no_sig':[1.0, [1.5, 1.0, 1.0], 10000]})
+        self.assoc_modes({'no_sig':[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by='global')
     def behavior(self, time):
         """ This function has time-dependent behavior.
         To have different operational modes depending on the time, use if/else statements on the time variable, which is the system time.
@@ -156,7 +156,7 @@ class MoveWat(FxnBlock):
         self.delay=delay #delay parameter
         super().__init__(name,flows,flownames=flownames,states=states, timers={'timer'})
         self.failrate=1e-5
-        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
+        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by='global')
     def condfaults(self, time):
         """
             Here we use the timer to define a conditional fault that only occurs after a state is present after 10 seconds.

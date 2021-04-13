@@ -193,15 +193,17 @@ def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
             - 'fullint' for the full integral (sampling every possible time)
     """
     associated_scens=[]
-    for phase in app.phases:
-        associated_scens = associated_scens + app.scenids.get((fxnmode, phase), [])
+    for phasetup in app.mode_phase_map[fxnmode]:
+        associated_scens = associated_scens + app.scenids.get((fxnmode, phasetup), [])
     costs = np.array([endclasses[scen]['cost'] for scen in associated_scens])
     times = np.array([time  for phase, timemodes in app.sampletimes.items() if timemodes for time in timemodes if fxnmode in timemodes.get(time)] )  
+    times = sorted(times)
     rates = np.array(list(app.rates_timeless[fxnmode].values()))
     
     tPlot, axes = plt.subplots(2, 1, sharey=False, gridspec_kw={'height_ratios': [3, 1]})
-    phasetimes_start =[times[0] for phase, times in app.phases.items()]
-    phasetimes_end =[times[1] for phase, times in app.phases.items()]
+    
+    phasetimes_start =[times[0] for phase, times in app.mode_phase_map[fxnmode].items()]
+    phasetimes_end =[times[1] for phase, times in app.mode_phase_map[fxnmode].items()]
     ratetimes =[]
     ratesvect =[]
     phaselocs = []
@@ -215,7 +217,7 @@ def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
         #axes[1].text(middletime, 0.5*max(rates),  list(app.phases.keys())[ind], ha='center', backgroundcolor="white")
     #rate plots
     axes[1].set_xticks(phaselocs)
-    axes[1].set_xticklabels(list(app.phases.keys()))
+    axes[1].set_xticklabels([phasetup[1] for phasetup in app.mode_phase_map[fxnmode]])
     
     axes[1].plot(ratetimes, ratesvect)
     axes[1].set_xlim(phasetimes_start[0], phasetimes_end[-1])
@@ -230,7 +232,7 @@ def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
         axes[0].plot(times, costs, label="cost")
     else:
         if samptype=='quadrature' or samptype=='pruned piecewise-linear': 
-            sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for phase, timeweights in app.weights[fxnmode].items() for time, weight in timeweights.items() if time in times])
+            sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for (phasetype, phase), timeweights in app.weights[fxnmode].items() if timeweights for time, weight in timeweights.items() if time in times])
             axes[0].scatter(times, costs,s=sizes, label="cost", alpha=0.5)
         axes[0].stem(times, costs, label="cost", markerfmt=",", use_line_collection=True)
     
