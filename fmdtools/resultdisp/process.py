@@ -140,7 +140,7 @@ def fxnhist(mdlhist, returndiff=True):
     numfaults = np.sum(np.array(list(faulthist.values())), axis=0)
     numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
     return fxnshist, numfaults, degfxns, numdegfxns, diff
-def modephases(mdlhist, defaultphases={}):
+def modephases(mdlhist):
     """
     Identifies the phases of operation for the system based on its modes
 
@@ -155,21 +155,16 @@ def modephases(mdlhist, defaultphases={}):
     -------
     phases : dict
         Dictionary of phases that the system passes through, of the form: {'fxn':{'mode1':[beg, end], mode2:[beg, end]}}
-    modephases : dict
-        Dictionary of phases associated with a given mode, of the form {'fxn':{'mode'{'mode','mode1',mode2}}
 
     """
-    modephases=dict.fromkeys(mdlhist["functions"].keys())
-    phases=dict.fromkeys(mdlhist["functions"].keys())
-    for fxn in modephases:
+    modephases={}
+    phases={}
+    for fxn in mdlhist["functions"].keys():
         modehist = mdlhist["functions"][fxn].get('mode', [])
-        if len(modehist)==0:    
-            if defaultphases:   phases[fxn] = defaultphases
-            else:               phases[fxn] = {'operating':[mdlhist['time'][0],mdlhist['time'][0]]}
-        else:
+        if len(modehist)!=0:    
             modes = OrderedSet(modehist)
             modephases[fxn]=dict.fromkeys(modes)
-            phases[fxn] = dict()
+            phases_unsorted = dict()
             for mode in modes:
                 modeinds = [ind for ind,m in enumerate(modehist) if m==mode]
                 startind = modeinds[0]
@@ -177,11 +172,12 @@ def modephases(mdlhist, defaultphases={}):
                 modephases[fxn][mode] = set()
                 for i, ind in enumerate(modeinds):
                     if ind+1 not in modeinds:
-                        phases[fxn][phaseid] =[startind, ind]
+                        phases_unsorted [phaseid] =[startind, ind]
                         modephases[fxn][mode].add(phaseid)
                         if i!=len(modeinds)-1: 
                             startind = modeinds[i+1]
                             phasenum+=1; phaseid=mode+str(phasenum)
+            phases[fxn] = dict(sorted(phases_unsorted.items(), key = lambda item: item[1][0]))
     return phases, modephases
 
 def graphflows(g, nomg, gtype='normal'):

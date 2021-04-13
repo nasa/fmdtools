@@ -75,7 +75,7 @@ class Block(object):
         if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
         elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
         self.failrate = gtp*EPC_f
-    def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False):
+    def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False, key_phases_by='none'):
         """
         Associates fault and operational modes with the block when called in the function or component.
 
@@ -94,6 +94,8 @@ class Block(object):
             The default is 'rate'
         exclusive : True/False
             Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present). 
+        key_phases_by : 'none'/'global'/'fxnname'
+            Phases to key the faultmodes by (if not defined locally). Default is the current function name
         """
         if opermodes:
             self.opermodes = opermodes
@@ -122,6 +124,7 @@ class Block(object):
                 self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
                 self.faultmodes[name+mode]['oppvect'] =  faultmodes[mode][1]
                 self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][2]
+                if key_phases_by =='none': raise Exception("How should he opportunity vector be keyed? Provide 'key_phases_by' option.")
             elif len(faultmodes[mode]) == 2:  # dist, repair costs
                 self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
                 self.faultmodes[name+mode]['oppvect'] =  [1.0]
@@ -132,6 +135,8 @@ class Block(object):
                 self.faultmodes[name+mode]['rcost'] =    0.0
             else:
                 raise Exception("Invalid mode definition")
+        if key_phases_by=='self':   self.key_phases_by = self.name
+        else:                       self.key_phases_by = key_phases_by
     def set_mode(self, mode):
         """Sets a mode in the block"""
         self.mode = mode
@@ -734,7 +739,7 @@ class SampleApproach():
     scenids : dict
         a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,phase):listofnames}
     """
-    def __init__(self, mdl, faults='all', phases='all', modephases={}, jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
+    def __init__(self, mdl, faults='all', phases='global', modephases={}, jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
         """
         Initializes the sample approach for a given model
 
@@ -771,9 +776,9 @@ class SampleApproach():
                     quadrature object if the quadrature option is selected.
         """
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
-        if phases=='all':           self.globalphases = mdl.phases; self.phases = {fxn:mdl.phases for fxn in mdl.fxns}
-        elif type(phases)==list:    self.globalphases = {ph:mdl.phases[ph] for ph in phases}; self.phases = {fxn:self.globalphases for fxn in mdl.fxns}
-        elif type(phases)==dict:    self.globalphases = mdl.phases; self.phases = phases
+        if phases=='global':        self.globalphases = mdl.phases; self.phases = {}; self.modephases = modephases
+        elif type(phases)==list:    self.globalphases = {ph:mdl.phases[ph] for ph in phases}; self.phases = {}; self.modephases = modephases
+        elif type(phases)==dict:    self.globalphases = mdl.phases; self.phases = phases; self.modephases = modephases
         self.tstep = mdl.tstep
         self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)
@@ -826,31 +831,33 @@ class SampleApproach():
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
         for (fxnname, mode) in self._fxnmodes:
-            self.rates[fxnname, mode]=dict.fromkeys(self.phases[fxnname])
-            self.rates_timeless[fxnname, mode]=dict.fromkeys(self.phases[fxnname])
+            if mdl.fxns[fxnname].key_phases_by=='global': fxnphases = self.globalphases
+            elif mdl.fxns[fxnname].key_phases_by=='none': fxnphases = {'operating':[mdl.times[0], mdl.times[-1]]} 
+            else: fxnphases = self.phases[mdl.fxns[fxnname].key_phases_by]
+            fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))
+            self.rates[fxnname, mode]=dict.fromkeys(fxnphases)
+            self.rates_timeless[fxnname, mode]=dict.fromkeys(fxnphases)  
             overallrate = self.fxnrates[fxnname]
             if self.comprates[fxnname]:
                 for compname, component in mdl.fxns[fxnname].components.items():
                     if mode in component.faultmodes:
                         overallrate=self.comprates[fxnname][compname]
             
-            if modephases:
+            if modephases and (mdl.fxns[fxnname].key_phases_by not in ['global', 'none']):
                 modevect = self._fxnmodes[fxnname, mode]['oppvect']
-                oppvect = {phase:0 for phase in self.phases[fxnname]}
-                oppvect.update({phase:modevect[mode]/len(phases)  for mode,phases in modephases[fxnname].items() for phase in phases})
+                oppvect = {phase:0 for phase in fxnphases}
+                oppvect.update({phase:modevect.get(mode, 0)/len(phases)  for mode,phases in modephases[mdl.fxns[fxnname].key_phases_by].items() for phase in phases})
             else:
                 if type(self._fxnmodes[fxnname, mode]['oppvect'])==dict: 
-                    oppvect = {phase:0 for phase in self.phases[fxnname]}
+                    oppvect = {phase:0 for phase in fxnphases}
                     oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
-                else: oppvect = self._fxnmodes[fxnname, mode]['oppvect']
-            for ind, (phase, times) in enumerate(self.phases[fxnname].items()):
-                if type(self._fxnmodes[fxnname, mode]['oppvect'])==list:
-                    if len(oppvect)==len(self.phases[fxnname]): opp = oppvect[ind]/sum(oppvect)
-                    elif len(oppvect)==1:                       opp = oppvect[0]
-                    else: raise Exception("Invalid Opportunity vector: "+fxnname+": "+mode)
-                elif type(self._fxnmodes[fxnname, mode]['oppvect'])==dict:
-                    if len(oppvect)==len(self.phases[fxnname]): opp = oppvect[phase]/sum(oppvect.values())
-                    else: raise Exception("Invalid Opportunity vector: "+fxnname+": "+mode+" provide modephases or key oppvect by phases?")
+                else:
+                    oppvect = self._fxnmodes[fxnname, mode]['oppvect']
+                    if len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
+                    elif len(oppvect)!=len(fxnphases): raise Exception("Invalid Opportunity vector: "+fxnname+". Invalid length.")
+                    else: oppvect = {phase:oppvect[i] for i, phase in enumerate(fxnphases)}
+            for phase, times in fxnphases.items():
+                opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
                 dist = self._fxnmodes[fxnname, mode]['dist']
                 if self._fxnmodes[fxnname, mode]['probtype']=='rate':      
                     dt = float(times[1]-times[0]) 
