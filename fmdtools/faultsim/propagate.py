@@ -235,7 +235,7 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True)
         or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
         The default is 'all'.
     pool : process pool, optional
-        Process Pool Object from multiprocessing or pathos packages. Pathos is recommended.
+        Process Pool Object from multiprocessing or pathos packages. multiprocessing is recommended.
         e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
         or parallelpool = ProcessPool(nodes=n) for n cores (pathos)
         If False, the set of scenarios is run serially. The default is False
