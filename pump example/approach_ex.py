@@ -22,6 +22,9 @@ import time
 #mdl = Pump(params={'repair', 'ee', 'water', 'delay'})
 mdl = Pump(params={'cost':{'ee', 'repair', 'water'}, 'delay':10}) # should give identical utilities
 
+app_joint = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':3}, jointfaults={'faults':3})
+
+
 app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad': quadpy.c1.gauss_patterson(1)})
 
 app_full = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
@@ -59,8 +62,6 @@ rd.plot.costovertime(endclasses_full, app_full)
 
 endclasses_ml, mdlhists = propagate.approach(mdl, app_maxlike)
 rd.plot.samplecosts(app_maxlike, endclasses_ml)
-
-
 
 
 # adding joint faults could look something like this:

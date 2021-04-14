@@ -124,7 +124,7 @@ class Block(object):
                 self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
                 self.faultmodes[name+mode]['oppvect'] =  faultmodes[mode][1]
                 self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][2]
-                if key_phases_by =='none': raise Exception("How should he opportunity vector be keyed? Provide 'key_phases_by' option.")
+                if key_phases_by =='none': raise Exception("How should the opportunity vector be keyed? Provide 'key_phases_by' option.")
             elif len(faultmodes[mode]) == 2:  # dist, repair costs
                 self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
                 self.faultmodes[name+mode]['oppvect'] =  [1.0]
@@ -875,7 +875,7 @@ class SampleApproach():
                 self.rates.update({jointmode:dict()})
                 self.rates_timeless.update({jointmode:dict()})
                 for (phase, times) in self.globalphases.items():
-                    rates=[self.rates[fmode][phase] for fmode in jointmode]
+                    rates=[self.rates[fmode]['global', phase] for fmode in jointmode]
                     if not jointfaults.get('pcond', False): # if no input, assume independence
                         prob = np.prod(1-np.exp(-np.array(rates)))
                         self.rates[jointmode]['global', phase] = -np.log(1.0-prob)
@@ -889,24 +889,24 @@ class SampleApproach():
         self.sampletimes={}
         self.weights={fxnmode:dict.fromkeys(rate) for fxnmode,rate in self.rates.items()}
         self.sampparams={}
-        for (fxnname, mode), ratedict in self.rates.items():
+        for fxnmode, ratedict in self.rates.items():
             for (phasetype, phase), rate in ratedict.items():
                 if rate > 0.0:
                     if phasetype=='global': times = mdl.phases[phase]
                     elif phasetype=='none': times = [mdl.times[0], mdl.times[-1]]
                     else:                   times = self.phases[phasetype][phase]
                     possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
-                    param = params.get(((fxnname, mode),phase), default)
-                    self.sampparams[(fxnname, mode), phase] = param
+                    param = params.get((fxnmode,phase), default)
+                    self.sampparams[fxnmode, phase] = param
                     if param['samp']=='likeliest':
                         weights=[]
-                        if self.rates[fxnname, mode][phasetype, phase] == max(list(self.rates[fxnname, mode].values())):
+                        if self.rates[fxnmode][phasetype, phase] == max(list(self.rates[fxnmode].values())):
                             phasetimes = [round(np.quantile(possible_phasetimes, 0.5)/self.tstep)*self.tstep]
                         else: phasetimes = []
                     else: 
                         pts, weights = self.select_points(param, [pt for pt, t in enumerate(possible_phasetimes)])
                         phasetimes = [possible_phasetimes[pt] for pt in pts]
-                    self.add_phasetimes(fxnname, mode, phasetype, phase, phasetimes, weights=weights)
+                    self.add_phasetimes(fxnmode, phasetype, phase, phasetimes, weights=weights)
     def select_points(self, param, possible_pts):
         """
         Selects points in the list possible_points according to a given sample strategy.
@@ -961,17 +961,17 @@ class SampleApproach():
         if len(pts)!=len(set(pts)):
             raise Exception("Too many pts for quadrature at this discretization")
         return pts, weights
-    def add_phasetimes(self, fxnname, mode, phasetype, phase, phasetimes, weights=[]):
+    def add_phasetimes(self, fxnmode, phasetype, phase, phasetimes, weights=[]):
         """ Adds a set of times for a given mode to sampletimes"""
         if phasetimes:
-            if not self.weights[fxnname, mode].get((phasetype, phase)): self.weights[fxnname, mode][phasetype, phase] = {t: 1/len(phasetimes) for t in phasetimes}
+            if not self.weights[fxnmode].get((phasetype, phase)): self.weights[fxnmode][phasetype, phase] = {t: 1/len(phasetimes) for t in phasetimes}
             for (ind, time) in enumerate(phasetimes):
                 if not self.sampletimes.get((phasetype, phase)): 
                     self.sampletimes[phasetype, phase] = {time:[]}
-                if self.sampletimes[phasetype, phase].get(time): self.sampletimes[phasetype, phase][time] = self.sampletimes[phasetype, phase][time] + [(fxnname, mode)]
-                else: self.sampletimes[phasetype, phase][time] = [(fxnname, mode)]
-                if any(weights): self.weights[fxnname, mode][phasetype, phase][time] = weights[ind]
-                else:       self.weights[fxnname, mode][phasetype, phase][time] = 1/len(phasetimes)
+                if self.sampletimes[phasetype, phase].get(time): self.sampletimes[phasetype, phase][time] = self.sampletimes[phasetype, phase][time] + [(fxnmode)]
+                else: self.sampletimes[phasetype, phase][time] = [(fxnmode)]
+                if any(weights): self.weights[fxnmode][phasetype, phase][time] = weights[ind]
+                else:       self.weights[fxnmode][phasetype, phase][time] = 1/len(phasetimes)
     def create_nomscen(self, mdl):
         """ Creates a nominal scenario """
         nomscen={'faults':{},'properties':{}}
