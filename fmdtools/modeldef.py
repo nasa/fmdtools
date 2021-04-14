@@ -82,7 +82,16 @@ class Block(object):
         Parameters
         ----------
         faultmodes : dict, optional
-            Dictionary of faultmodes with structure {faultname:[dist,oppvect, rcost]}
+            Dictionary/Set of faultmodes with structure, which can have the forms:
+                - set {'fault1', 'fault2', 'fault3'} (just the respective faults)
+                - dict {'fault1': faultattributes, 'fault2': faultattributes}, where faultattributes is:
+                    - float: rate for the mode
+                    - [float, float]: rate and repair cost for the mode
+                    - float, oppvect, float]: rate, opportunity vector, and repair cost for the mode
+                    opportunity vector can be specified as:
+                        [float1, float2,...], a vector of relative likelihoods for each phase, or
+                        {opermode:float1, opermode:float1}, a dict of relative likelihoods for each phase/mode
+                        the phases/modes to key by are defined in "key_phases_by"
         opermodes : list, optional
             List of operational modes
         initmode : str, optional
@@ -92,10 +101,12 @@ class Block(object):
         probtype : str, optional
             Type of probability in the probability model, a per-time 'rate' or per-run 'prob'. 
             The default is 'rate'
+        units : str, optional
+            Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr' 
         exclusive : True/False
             Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present). 
-        key_phases_by : 'none'/'global'/'fxnname'
-            Phases to key the faultmodes by (if not defined locally). Default is the current function name
+        key_phases_by : 'self'/'none'/'global'/'fxnname'
+            Phases to key the faultmodes by (using local, global, or an external function's modes'). Default is 'none'
         """
         if opermodes:
             self.opermodes = opermodes
@@ -459,7 +470,10 @@ class Model(object):
         """
         Instantiates internal model attributes with predetermined:
             - params (design variables of he model), and
-            - modelparams (dictionary of phases, times, and timestep to run the model with)
+            - modelparams (dictionary of 
+                           global phases {'phase': [starttime, endtime]}
+                           times [starttime, ..., endtime] (middle time used for sampling), 
+                           timestep (float) to run the model with)
             - valparams (`all`/`flows`/`fxns`/or dict of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
         """
         self.type='model'
@@ -727,17 +741,19 @@ class SampleApproach():
     jointmodes : list
         (if any) joint fault modes to be injected in the approach
     rates : dict
-        rates of each mode (fxn, mode) in each phase, structured {fxnmode: {phase:rate}}
+        rates of each mode (fxn, mode) in each model phase, structured {fxnmode: {(phasetype, phase):rate}}
     sampletimes : dict
-        faults to inject at each time in each phase, structured {phase:time:fnxmode}
+        faults to inject at each time in each phase, structured {(phasetype, phase):time:fnxmode}
     weights : dict
-        weight to put on each time each fault was injected, structured {fxnmode:phase:time:weight}
+        weight to put on each time each fault was injected, structured {fxnmode:(phasetype, phase):time:weight}
     sampparams : dict
         parameters used to sample each mode
     scenlist : list
         list of fault scenarios (dicts of faults and properties) that fault propagation iterates through
     scenids : dict
-        a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,phase):listofnames}
+        a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,(phasetype, phase)):listofnames}
+    mode_phase_map : dict
+        a dict of modes and their respective phases to inject with structure {fxnmode:{mode_phase_map:[starttime, endtime]}}
     """
     def __init__(self, mdl, faults='all', phases='global', modephases={}, jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
         """
@@ -749,6 +765,15 @@ class SampleApproach():
             Model to sample.
         faults : str (all/single-component) or list, optional
             List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'. 'single-components' uses faults from a single component to represent faults form all components
+        phases: dict or 'global'
+            Local phases in the model to sample. Has structure:
+                {'Function':{'phase':[starttime, endtime]}}
+            Defaults to 'global',here only the phases defined in mdl.phases are used.
+        modephases: dict
+            Dictionary of modes associated with each phase. 
+            For use when a mode is entered multiple times in a simulation, resulting in 
+            multiple phases associated with that mode. Has structure:
+                {'Function':{'mode':{'phase','phase1', 'phase2'...}}}
         jointfaults : dict, optional
             Defines how the approach considers joint faults. The default is {'faults':'None'}. Has structure:
                 - faults : float    
