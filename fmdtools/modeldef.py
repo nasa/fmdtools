@@ -769,11 +769,14 @@ class SampleApproach():
             Local phases in the model to sample. Has structure:
                 {'Function':{'phase':[starttime, endtime]}}
             Defaults to 'global',here only the phases defined in mdl.phases are used.
+            Phases and modephases can be gotten from process.modephases(mdlhist)
         modephases: dict
             Dictionary of modes associated with each phase. 
-            For use when a mode is entered multiple times in a simulation, resulting in 
+            For use when the opportunity vector is keyed to modes and each mode is 
+            entered multiple times in a simulation, resulting in 
             multiple phases associated with that mode. Has structure:
                 {'Function':{'mode':{'phase','phase1', 'phase2'...}}}
+                Phases and modephases can be gotten from process.modephases(mdlhist)
         jointfaults : dict, optional
             Defines how the approach considers joint faults. The default is {'faults':'None'}. Has structure:
                 - faults : float    
