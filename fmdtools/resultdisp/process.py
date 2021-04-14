@@ -142,20 +142,22 @@ def fxnhist(mdlhist, returndiff=True):
     return fxnshist, numfaults, degfxns, numdegfxns, diff
 def modephases(mdlhist):
     """
-    Identifies the phases of operation for the system based on its modes
+    Identifies the phases of operation for the system based on its modes.
 
     Parameters
     ----------
     mdlhist : dict
         Model history from the nominal run
-    defaultphases : dict, optional
-        Default phases to use if there is no mode history. Structured {'phase':[beginning, end]}
 
     Returns
     -------
     phases : dict
-        Dictionary of phases that the system passes through, of the form: {'fxn':{'mode1':[beg, end], mode2:[beg, end]}}
-
+        Dictionary of distict phases that the system functions pass through, of the form: 
+            {'fxn':{'phase1':[beg, end], phase2:[beg, end]}}
+            where each phase is defined by its corresponding mode in the modelhist
+            (numbered mode, mode1, mode2... for multiple modes)
+    modephases : dict
+        Dictionary of phases that the system passes through, of the form: {'fxn':{'mode1':{'phase1', 'phase2''}}}
     """
     modephases={}
     phases={}
