@@ -32,7 +32,7 @@ from fmdtools.modeldef import Model, FxnBlock, Component
 class ImportLiquid(FxnBlock):
     def __init__(self,name,flows):
         super().__init__(name,flows,['Watout', 'Sig'],{'open':1})
-        self.assoc_modes({'Stuck':[1e-5,[1,0],0]}, units='hr') # need to add human-induced?
+        self.assoc_modes({'Stuck':[1e-5,[1,0],0]}, units='hr', key_phases_by='global') # need to add human-induced?
     def behavior(self,time):
         if not self.has_fault('Stuck'):
             if   self.Sig.action>=2:    self.open=2
@@ -45,7 +45,7 @@ class ImportLiquid(FxnBlock):
 class ExportLiquid(FxnBlock):
     def __init__(self,name, flows):
         super().__init__(name,flows,['Watin', 'Sig'],{'open':1})
-        self.assoc_modes({'Stuck':[1e-5,[1,0],0]}) # need to add human-induced?
+        self.assoc_modes({'Stuck':[1e-5,[1,0],0]}, key_phases_by='global') # need to add human-induced?
     def behavior(self,time):
         if not self.has_fault('Stuck'):
             if self.Sig.action==1:      self.open = 1
@@ -57,7 +57,7 @@ class ExportLiquid(FxnBlock):
 class GuideLiquid(FxnBlock):
     def __init__(self,name,flows):
         super().__init__(name,flows,['Watin','Watout'])
-        self.assoc_modes({'Leak':[1e-5,[1,0],0], 'Clogged':[1e-5,[1,0],0]})
+        self.assoc_modes({'Leak':[1e-5,[1,0],0], 'Clogged':[1e-5,[1,0],0]}, key_phases_by='global')
     def behavior(self,time):
         if self.has_fault('Clogged'):
             self.Watin.rate=0.0
@@ -72,7 +72,7 @@ class GuideLiquid(FxnBlock):
 class StoreLiquid(FxnBlock):
     def __init__(self,name,flows):
         super().__init__(name,flows,['Watin','Watout', 'Sig'], {'level':10.0, 'net_flow': 0.0})
-        self.assoc_modes({'Leak':[1e-5,[1,0],0]})
+        self.assoc_modes({'Leak':[1e-5,[1,0],0]}, key_phases_by='global')
     def behavior(self, time):
         if self.level >= 20.0:
             self.Watin.rate = 0.0 * self.Watin.effort
@@ -98,7 +98,7 @@ class HumanActions(FxnBlock):
                    'reach':Reach('reach'), 'grasp':Grasp('grasp'),\
                    'turn':Turn('turn')}
         super().__init__(name, flows,['Valve_Sig','Tank_Sig', 'OtherValve_Sig'], components=actions,timers={'t1'})
-        self.assoc_modes({'FalseDetection_low':[1e-4,[1,1],0],'FalseDetection_high':[1e-4,[1,1],0]}, probtype='rate')
+        self.assoc_modes({'FalseDetection_low':[1e-4,[1,1],0],'FalseDetection_high':[1e-4,[1,1],0]}, probtype='rate', key_phases_by='global')
         self.reacttime=reacttime
     def behavior(self,time):        
         if time > self.time:
@@ -133,7 +133,7 @@ class Look(Component):
     def __init__(self, name):
         super().__init__(name)
         self.add_he_rate(0.02, EPCs=[[4,0.1],[4,0.6],[1.1,0.9]]) #using lists as inputs leaves the EPCs unlabeled
-        self.assoc_modes({'NotVisible':[1,[1,0],0]}, probtype='prob')
+        self.assoc_modes({'NotVisible':[1,[1,0],0]}, probtype='prob', key_phases_by='global')
     def behavior(self):
         if self.has_fault('NotVisible'):    return 0
         else:                               return 1
@@ -141,7 +141,7 @@ class Detect(Component):
     def __init__(self,name):
         super().__init__(name)
         self.add_he_rate(0.03, EPCs={2:[11,0.1],10:[10,0.2],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0.6]})
-        self.assoc_modes({'NotDetected':[1,[1,0],0]}, probtype='prob') # add failed detection, etc modes
+        self.assoc_modes({'NotDetected':[1,[1,0],0]}, probtype='prob', key_phases_by='global') # add failed detection, etc modes
     def behavior(self, look, signal):
         if self.has_fault('NotDetected'):   detect = 0
         else:                               detect = look * signal
@@ -150,7 +150,7 @@ class Reach(Component):
     def __init__(self,name):
         super().__init__(name)
         self.add_he_rate(0.09, EPCs={2:[11,0.1],10:[10,0.0],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0]})
-        self.assoc_modes({'FalseReach':[0.5,[1,0],0], 'CannotReach':[0.5,[1,0],0]}, probtype='prob')
+        self.assoc_modes({'FalseReach':[0.5,[1,0],0], 'CannotReach':[0.5,[1,0],0]}, probtype='prob', key_phases_by='global')
     def behavior(self):
         if self.has_fault('CannotReach'):   return 0,0
         elif self.has_fault('FalseReach'):  return 0,1
@@ -159,7 +159,7 @@ class Grasp(Component):
     def __init__(self,name):
         super().__init__(name)
         self.add_he_rate(0.02) #in the case with no EPCs, we can just leave it out
-        self.assoc_modes({'CannotGrasp':[1,[1,0],0]}, probtype='prob')
+        self.assoc_modes({'CannotGrasp':[1,[1,0],0]}, probtype='prob', key_phases_by='global')
     def behavior(self):
         if self.has_fault('CannotGrasp'):   return 0
         else:                               return 1
@@ -167,7 +167,7 @@ class Turn(Component):
     def __init__(self,name):
         super().__init__(name)
         self.add_he_rate(0.009, EPCs={2:[11,0.4],10:[10,0.2],13:[4,0],14:[4,0],17:[3,0.6],34:[1.1,0]})
-        self.assoc_modes({'CannotTurn':[1,[1,0],0]}, probtype='prob')
+        self.assoc_modes({'CannotTurn':[1,[1,0],0]}, probtype='prob', key_phases_by='global')
     def behavior(self,grasp, intended_turn):
         if self.has_fault('CannotTurn') or grasp == 0:  return 0
         else:                                           return intended_turn
