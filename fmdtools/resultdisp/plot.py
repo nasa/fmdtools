@@ -176,7 +176,9 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
 def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     """
     Plots the sample cost and rate of a given fault over the injection times defined in the app sampleapproach
-
+    
+    (note: not currently compatible with joint fault modes)
+    
     Parameters
     ----------
     app : sampleapproach
