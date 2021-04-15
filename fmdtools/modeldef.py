@@ -741,17 +741,17 @@ class SampleApproach():
     jointmodes : list
         (if any) joint fault modes to be injected in the approach
     rates : dict
-        rates of each mode (fxn, mode) in each model phase, structured {fxnmode: {(phasetype, phase):rate}}
+        rates of each mode (fxn, mode) in each model phase, structured {fxnmode: {phaseid:rate}}
     sampletimes : dict
-        faults to inject at each time in each phase, structured {(phasetype, phase):time:fnxmode}
+        faults to inject at each time in each phase, structured {phaseid:time:fnxmode}
     weights : dict
-        weight to put on each time each fault was injected, structured {fxnmode:(phasetype, phase):time:weight}
+        weight to put on each time each fault was injected, structured {fxnmode:phaseid:time:weight}
     sampparams : dict
         parameters used to sample each mode
     scenlist : list
         list of fault scenarios (dicts of faults and properties) that fault propagation iterates through
     scenids : dict
-        a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,(phasetype, phase)):listofnames}
+        a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,phaseid):listofnames}
     mode_phase_map : dict
         a dict of modes and their respective phases to inject with structure {fxnmode:{mode_phase_map:[starttime, endtime]}}
     """
@@ -902,39 +902,46 @@ class SampleApproach():
             for (j_ind, jointmode) in enumerate(self.jointmodes):
                 self.rates.update({jointmode:dict()})
                 self.rates_timeless.update({jointmode:dict()})
-                for (phase, times) in self.globalphases.items():
-                    rates=[self.rates[fmode]['global', phase] for fmode in jointmode]
-                    if not jointfaults.get('pcond', False): # if no input, assume independence
-                        prob = np.prod(1-np.exp(-np.array(rates)))
-                        self.rates[jointmode]['global', phase] = -np.log(1.0-prob)
-                    elif type(jointfaults['pcond'])==float:
-                        self.rates[jointmode]['global', phase] = jointfaults['pcond']*max(rates)
-                    elif type(jointfaults['pcond'])==list:
-                        self.rates[jointmode]['global', phase] = jointfaults['pcond'][j_ind]*max(rates)  
-                    self.rates_timeless[jointmode]['global',phase] = self.rates[jointmode]['global',phase]/(times[1]-times[0])          
+                self.mode_phase_map.update({jointmode:dict()})
+                jointphase_list = [self.mode_phase_map[mode] for mode in jointmode]
+                jointphase_dict = {k:v for mode in jointmode for k,v in self.mode_phase_map[mode].items()}
+                for phase_combo in itertools.product(*jointphase_list):
+                    intervals = [jointphase_dict[phase] for phase in phase_combo]
+                    overlap = find_overlap_n(intervals)
+                    if overlap: 
+                        phaseid = tuple(set(phase_combo))
+                        if len(phaseid) == 1: phaseid = phaseid[0]
+                        rates = [self.rates[fmode][phase_combo[i]]* np.subtract(*overlap)/np.subtract(*self.mode_phase_map[fmode][phase_combo[i]]) for i,fmode in enumerate(jointmode)]
+                        if not jointfaults.get('pcond', False): # if no input, assume independence
+                            prob = np.prod(1-np.exp(-np.array(rates)))
+                            self.rates[jointmode][phaseid] = -np.log(1.0-prob)
+                        elif type(jointfaults['pcond'])==float:
+                            self.rates[jointmode][phaseid] = jointfaults['pcond']*max(rates)
+                        elif type(jointfaults['pcond'])==list:
+                            self.rates[jointmode][phaseid] = jointfaults['pcond'][j_ind]*max(rates)  
+                        self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(overlap[1]-overlap[0])
+                        self.mode_phase_map[jointmode][phaseid] = overlap        
     def create_sampletimes(self,mdl, params={}, default={'samp':'evenspacing','numpts':1}):
         """ Initializes weights and sampletimes """
         self.sampletimes={}
         self.weights={fxnmode:dict.fromkeys(rate) for fxnmode,rate in self.rates.items()}
         self.sampparams={}
         for fxnmode, ratedict in self.rates.items():
-            for (phasetype, phase), rate in ratedict.items():
+            for phaseid, rate in ratedict.items():
                 if rate > 0.0:
-                    if phasetype=='global': times = mdl.phases[phase]
-                    elif phasetype=='none': times = [mdl.times[0], mdl.times[-1]]
-                    else:                   times = self.phases[phasetype][phase]
+                    times = self.mode_phase_map[fxnmode][phaseid]
                     possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
-                    param = params.get((fxnmode,phase), default)
-                    self.sampparams[fxnmode, phase] = param
+                    param = params.get((fxnmode,phaseid), default)
+                    self.sampparams[fxnmode, phaseid] = param
                     if param['samp']=='likeliest':
                         weights=[]
-                        if self.rates[fxnmode][phasetype, phase] == max(list(self.rates[fxnmode].values())):
+                        if self.rates[fxnmode][phaseid] == max(list(self.rates[fxnmode].values())):
                             phasetimes = [round(np.quantile(possible_phasetimes, 0.5)/self.tstep)*self.tstep]
                         else: phasetimes = []
                     else: 
                         pts, weights = self.select_points(param, [pt for pt, t in enumerate(possible_phasetimes)])
                         phasetimes = [possible_phasetimes[pt] for pt in pts]
-                    self.add_phasetimes(fxnmode, phasetype, phase, phasetimes, weights=weights)
+                    self.add_phasetimes(fxnmode, phaseid, phasetimes, weights=weights)
     def select_points(self, param, possible_pts):
         """
         Selects points in the list possible_points according to a given sample strategy.
@@ -989,17 +996,17 @@ class SampleApproach():
         if len(pts)!=len(set(pts)):
             raise Exception("Too many pts for quadrature at this discretization")
         return pts, weights
-    def add_phasetimes(self, fxnmode, phasetype, phase, phasetimes, weights=[]):
+    def add_phasetimes(self, fxnmode, phaseid, phasetimes, weights=[]):
         """ Adds a set of times for a given mode to sampletimes"""
         if phasetimes:
-            if not self.weights[fxnmode].get((phasetype, phase)): self.weights[fxnmode][phasetype, phase] = {t: 1/len(phasetimes) for t in phasetimes}
+            if not self.weights[fxnmode].get(phaseid): self.weights[fxnmode][phaseid] = {t: 1/len(phasetimes) for t in phasetimes}
             for (ind, time) in enumerate(phasetimes):
-                if not self.sampletimes.get((phasetype, phase)): 
-                    self.sampletimes[phasetype, phase] = {time:[]}
-                if self.sampletimes[phasetype, phase].get(time): self.sampletimes[phasetype, phase][time] = self.sampletimes[phasetype, phase][time] + [(fxnmode)]
-                else: self.sampletimes[phasetype, phase][time] = [(fxnmode)]
-                if any(weights): self.weights[fxnmode][phasetype, phase][time] = weights[ind]
-                else:       self.weights[fxnmode][phasetype, phase][time] = 1/len(phasetimes)
+                if not self.sampletimes.get(phaseid): 
+                    self.sampletimes[phaseid] = {time:[]}
+                if self.sampletimes[phaseid].get(time): self.sampletimes[phaseid][time] = self.sampletimes[phaseid][time] + [(fxnmode)]
+                else: self.sampletimes[phaseid][time] = [(fxnmode)]
+                if any(weights): self.weights[fxnmode][phaseid][time] = weights[ind]
+                else:       self.weights[fxnmode][phaseid][time] = 1/len(phasetimes)
     def create_nomscen(self, mdl):
         """ Creates a nominal scenario """
         nomscen={'faults':{},'properties':{}}
@@ -1015,15 +1022,15 @@ class SampleApproach():
         self.scenlist=[]
         self.times = []
         self.scenids = {}
-        for (phasetype, phase), samples in self.sampletimes.items():
+        for phaseid, samples in self.sampletimes.items():
             if samples:
                 for time, faultlist in samples.items():
                     self.times+=[time]
                     for fxnmode in faultlist:
-                        if self.sampparams[fxnmode, phase]['samp']=='maxlike':    
+                        if self.sampparams[fxnmode, phaseid]['samp']=='maxlike':    
                             rate = sum(self.rates[fxnmode].values())
                         else: 
-                            rate = self.rates[fxnmode][phasetype, phase] * self.weights[fxnmode][phasetype, phase][time]
+                            rate = self.rates[fxnmode][phaseid] * self.weights[fxnmode][phaseid][time]
                         if type(fxnmode[0])==str:
                             name = fxnmode[0]+' '+fxnmode[1]+', t='+str(time)
                             scen={'faults':{fxnmode[0]:fxnmode[1]}, 'properties':{'type': 'single-fault', 'function': fxnmode[0],\
@@ -1036,8 +1043,8 @@ class SampleApproach():
                             scen = {'faults':faults, 'properties':{'type': str(len(fxnmode))+'-joint-faults', 'functions':{fm[0] for fm in fxnmode}, \
                                     'modes':{fm[1] for fm in fxnmode}, 'rate': rate, 'time': time, 'name': name}}
                         self.scenlist=self.scenlist+[scen]
-                        if self.scenids.get((fxnmode, (phasetype,phase))): self.scenids[fxnmode, (phasetype,phase)] = self.scenids[fxnmode, (phasetype,phase)] + [name]
-                        else: self.scenids[fxnmode, (phasetype,phase)] = [name]
+                        if self.scenids.get((fxnmode, phaseid)): self.scenids[fxnmode, phaseid] = self.scenids[fxnmode, phaseid] + [name]
+                        else: self.scenids[fxnmode, phaseid] = [name]
         self.times.sort()
     def prune_scenarios(self,endclasses,samptype='piecewise', threshold=0.1, sampparam={'samp':'evenspacing','numpts':1}):
         """
@@ -1110,10 +1117,25 @@ class SampleApproach():
     def list_moderates(self):
         """ Returns the rates for each mode """
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
-        
+
+
+def find_overlap_n(intervals):
+    upper_limits = [interval[1] for interval in intervals]
+    lower_limits = [interval[0] for interval in intervals]
+    if any(u < l for u in upper_limits for l in lower_limits): return []
+    orderedintervals = np.sort(upper_limits+lower_limits)
+    return [orderedintervals[len(intervals)-1],orderedintervals[len(intervals)]]
+
+def find_overlap(interval1, interval2):
+    """Finds the overlap between two intervals"""
+    if interval1[1] < interval2[0] or interval1[0] > interval2[1]: return []
+    else: 
+        orderedintervals = np.sort(interval1 + interval2)
+        return [orderedintervals[1], orderedintervals[2]]
+    
 
 def phases(times, names=[]):
-    """ Creates named phases from a set of times defining the edges of hte intervals """
+    """ Creates named phases from a set of times defining the edges of the intervals """
     if not names: names = range(len(times)-1)
     return {names[i]:[times[i], times[i+1]] for (i, _) in enumerate(times) if i < len(times)-1}
 
