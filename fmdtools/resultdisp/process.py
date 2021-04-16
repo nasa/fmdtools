@@ -10,6 +10,7 @@ Uses methods:
     - hist:                     Compares model history with the nominal model history over time to make a history of degradation.
         - fxnhist:              Compares the history of function states in mdlhist over time.
         - flowhist:             Compares the history of flow states in mdlhist over time.
+    - modephases:               Identifies the phases of operation for the system based on a mdlhist with a history of its modes
     - graphflows:               Extracts non-nominal flows by comparing the a results graph with a nominal results graph.
     - resultsgraph:        Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
     - resultsgraphs:       Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
