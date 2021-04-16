@@ -8,6 +8,7 @@ Description: Plots quantities of interest over time using matplotlib.
 Uses the following methods:
     - mdlhist:         plots function and flow histories over time (with different plots for each funciton/flow)
     - mdlhistvals:     plots function and flow histories over time on a single plot 
+    - phases:          plots the phases of operation that the model progresses through.
     - samplecost:      plots the costs for a single fault sampled by a SampleApproach over time with rates
     - samplecosts:     plots the costs for a set of faults sampled by a SampleApproach over time with rates on separate plots
     - costovertime:    plots the total cost/explected cost of a set of faults sampled by a SampleApproach over time
@@ -16,6 +17,8 @@ import matplotlib.pyplot as plt
 import copy
 import numpy as np
 from fmdtools.resultdisp.tabulate import costovertime as cost_table
+from matplotlib.collections import PolyCollection
+import matplotlib.colors as mcolors
 
 def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel='Time', units=[]):
     """
@@ -172,6 +175,76 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     plt.subplots_adjust(top=1-0.05-0.15/(num_plots/cols))
     if returnfig: return fig
     else: plt.show()
+
+def phases(mdlphases, modephases=[], mdl=[], singleplot = True):
+    """
+    Plots the phases of operation that the model progresses through.
+
+    Parameters
+    ----------
+    mdlphases : dict
+        phases that the functions of the model progresses through (e.g. from rd.process.mdlhist)
+        of structure {'fxnname':'phase':[start, end]}
+    modephases : dict, optional
+        dictionary that maps the phases to operational modes, if it is desired to track the progression
+        through modes
+    mdl : Model, optional
+        model, if it is desired to additionally plot the phases of the model with the function phases
+    singleplot : bool, optional
+        Whether the functions' progressions through phases are plotted on the same plot or on different plots.
+        The default is True.
+
+    Returns
+    -------
+    fig/figs : Figure or list of Figures
+        Matplotlib figures to edit/use.
+
+    """
+    if mdl: mdlphases["Model"] = mdl.phases
+    
+    if singleplot:
+        num_plots = len(mdlphases)
+        fig = plt.figure()
+    else: figs = []
+    
+    for i,(fxn, fxnphases) in enumerate(mdlphases.items()):
+        if singleplot:  ax = plt.subplot(num_plots, 1,i+1, label=fxn)
+        else:           fig, ax = plt.subplots()
+        
+        if modephases and modephases.get(fxn, False): 
+            mode_nums = {ph:i for i,(k,v) in enumerate(modephases[fxn].items()) for ph in v}
+            ylabels = list(modephases[fxn].keys())
+        else:
+            mode_nums = {ph:i for i,ph in enumerate(fxnphases)}
+            ylabels = list(mode_nums.keys())
+        
+        phaseboxes = [((v[0],mode_nums[k]-.4),(v[0],mode_nums[k]+.4),(v[1],mode_nums[k]+.4),(v[1],mode_nums[k]-.4)) for k,v in fxnphases.items()]
+        colors = list(mcolors.TABLEAU_COLORS.keys())[0:len(ylabels)]
+        bars = PolyCollection(phaseboxes, facecolors=colors)
+        
+        ax.add_collection(bars)
+        ax.autoscale()
+        
+        ax.set_yticks(list(set(mode_nums.values())))
+        ax.set_yticklabels(ylabels)
+        
+        times = [0]+[v[1] for k,v in fxnphases.items()]
+        ax.set_xticks(list(set(list(ax.get_xticks())+times)))
+        ax.set_xlim(times[0], times[-1])
+        plt.grid(which='both', axis='x')
+        if singleplot:
+            plt.title(fxn)
+        else:
+            plt.title("Progression of "+fxn+" through operational phases")
+            figs.append(fig)
+    if singleplot:
+        plt.suptitle("Progression of model through operational phases")
+        plt.tight_layout(pad=1)
+        plt.subplots_adjust(top=1-0.15-0.05/num_plots)
+        return fig
+    else:           return figs
+        
+        
 
 def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     """
