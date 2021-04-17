@@ -176,7 +176,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     if returnfig: return fig
     else: plt.show()
 
-def phases(mdlphases, modephases=[], mdl=[], singleplot = True):
+def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'both'):
     """
     Plots the phases of operation that the model progresses through.
 
@@ -193,7 +193,8 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True):
     singleplot : bool, optional
         Whether the functions' progressions through phases are plotted on the same plot or on different plots.
         The default is True.
-
+    phase_ticks : 'std'/'phases'/'both'
+        x-ticks to use (standard, at the edge of phases, or both). Default is 'both'
     Returns
     -------
     fig/figs : Figure or list of Figures
@@ -218,8 +219,9 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True):
             mode_nums = {ph:i for i,ph in enumerate(fxnphases)}
             ylabels = list(mode_nums.keys())
         
-        phaseboxes = [((v[0],mode_nums[k]-.4),(v[0],mode_nums[k]+.4),(v[1],mode_nums[k]+.4),(v[1],mode_nums[k]-.4)) for k,v in fxnphases.items()]
-        colors = list(mcolors.TABLEAU_COLORS.keys())[0:len(ylabels)]
+        phaseboxes = [((v[0]-.5,mode_nums[k]-.4),(v[0]-.5,mode_nums[k]+.4),(v[1]+.5,mode_nums[k]+.4),(v[1]+.5,mode_nums[k]-.4)) for k,v in fxnphases.items()]
+        color_options = list(mcolors.TABLEAU_COLORS.keys())[0:len(ylabels)]
+        colors = [color_options[mode_nums[phase]] for phase in fxnphases]
         bars = PolyCollection(phaseboxes, facecolors=colors)
         
         ax.add_collection(bars)
@@ -229,7 +231,8 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True):
         ax.set_yticklabels(ylabels)
         
         times = [0]+[v[1] for k,v in fxnphases.items()]
-        ax.set_xticks(list(set(list(ax.get_xticks())+times)))
+        if phase_ticks=='both':     ax.set_xticks(list(set(list(ax.get_xticks())+times)))
+        elif phase_ticks=='phases':  ax.set_xticks(times)
         ax.set_xlim(times[0], times[-1])
         plt.grid(which='both', axis='x')
         if singleplot:

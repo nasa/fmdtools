@@ -153,7 +153,10 @@ class Block(object):
         self.mode = mode
     def in_mode(self,mode):
         "Checks if the system is in a given operational mode"
-        return self.mode==mode                       
+        return self.mode==mode 
+    def in_modes(self, modes):
+        "Checks if the block has one of the given list of operational modes"
+        return self.mode in modes                      
     def has_fault(self,fault): 
         """Check if the block has fault (a str)"""
         return any(self.faults.intersection(set([fault])))
@@ -166,6 +169,11 @@ class Block(object):
     def any_faults(self):
         """check if the block has any fault modes"""
         return any(self.faults.difference({'nom'}))
+    def to_fault(self,fault): 
+        """Moves from the current fault mode to a new fault mode"""
+        self.faults.clear()
+        self.faults.add(fault)
+        if self.exclusive_faultmodes: self.set_mode(fault)
     def add_fault(self,fault): 
         """Adds fault (a str) to the block"""
         self.faults.update([fault])
@@ -185,6 +193,13 @@ class Block(object):
         """Removes fault in the set of faults and returns to given operational mode"""
         self.faults.discard(fault_to_remove)
         if len(self.faults) == 0: self.faults.add('nom')
+        if opermode:    self.mode = opermode
+        if self.exclusive_faultmodes and not(opermode):
+            raise Exception("Unclear which operational mode to enter with fault removed")
+    def remove_any_faults(self, opermode=False):
+        """Resets fault mode to nominal and returns to the given operational mode"""
+        self.faults.clear()
+        self.faults.add('nom')
         if opermode:    self.mode = opermode
         if self.exclusive_faultmodes and not(opermode):
             raise Exception("Unclear which operational mode to enter with fault removed")
