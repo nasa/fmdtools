@@ -121,6 +121,9 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
         elif gtype=='bipartite':    
             g=mdl.bipartite 
             if not pos: pos=mdl.bipartite_pos
+        elif gtype=='component':
+            g = mdl.return_stategraph('component')
+            if not pos: pos=nx.spring_layout(g)
     plt.figure()
     fig_axis = 0
     if gtype=='normal':
@@ -140,9 +143,9 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows, font_size=font_size, font_weight='bold')
             labels={node:node for node in g.nodes} 
             nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, font_weight='bold')
-        elif not list(g.nodes(data='status'))[0][1]:    
-            nx.draw_networkx(g,pos,node_size=nodesize,node_shape='s', node_color=colors[0], width=3,font_size=font_size, font_weight='bold')
-            nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows,font_size=font_size)
+        #elif not list(g.nodes(data='status'))[0][1]:    
+        #    nx.draw_networkx(g,pos,node_size=nodesize,node_shape='s', node_color=colors[0], width=3,font_size=font_size, font_weight='bold')
+        #    nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows,font_size=font_size)
         else:
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
@@ -162,20 +165,22 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             colors = []
             for node in labels.keys():
                 colors = colors + [heatmap.get(node, 0.0)]
-            nx.draw(g, pos, node_color=colors, cmap=cmap, alpha=0.6, node_size=nodesize)
+            nx.draw_networkx_edges(g, pos)
+            nx.draw_networkx_nodes(g, pos, nodelist=mdl.fxns.keys(),  node_color=colors, cmap=cmap, alpha=0.6, node_size=nodesize, node_shape='s')
+            nx.draw_networkx_nodes(g, pos, nodelist=mdl.flows.keys(),  node_color=colors, cmap=cmap, alpha=0.6, node_size=nodesize)
             nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, node_size=nodesize, font_weight='bold')
             if faultscen:
                 plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
             plt.show()
-        elif not list(g.nodes(data='status'))[0][1]: #just plots graph if no status information 
-            nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize,node_color = colors[0], font_weight='bold')
+        #elif not list(g.nodes(data='status'))[0][1]: #just plots graph if no status information 
+        #    nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize,node_color = colors[0], font_weight='bold')
         else:                                      #plots graph with status information 
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
             degradednodes=[node for node,status in statuses.items() if status=='Degraded']
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
-            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale, pos=pos, retfig=retfig,colors=colors)
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = mdl.fxns.keys(), flows=mdl.flows.keys())
     if retfig: 
         if fig_axis: return fig_axis
         else: return plt.gcf(), plt.gca()
@@ -237,7 +242,7 @@ def result_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultla
         labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
         degnodes = degfxns + degflows
         
-        fig_axis = plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos=pos, retfig=retfig, colors=colors)
+        fig_axis = plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos=pos, retfig=retfig, colors=colors, functions = mdl.fxns.keys(), flows=mdl.flows.keys())
     elif gtype=='normal':
         g = mdl.graph.copy()
         labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
@@ -335,7 +340,7 @@ def update_bipplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, s
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     degnodes = degfxns + degflows
-    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors)
+    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = reshist['functions'].keys(), flows=reshist['flows'].keys())
 def update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red']):
     """Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
     time = reshist['time'][t_ind]
@@ -363,17 +368,27 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
         return plt.gcf(), plt.gca()
     elif show: plt.show()
 
-def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, retfig=False, colors=['lightgray','orange', 'red'], title=[]):
+def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, retfig=False, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[]):
     """ Plots a bipartite graph. Used in other functions"""
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
     nodesize=scale*700
     font_size=scale*6
     if not pos: pos=nx.spring_layout(g)
-    
-    nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
-    nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize, font_weight='bold')
-    nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize, font_weight='bold')
+    if functions and flows:
+        nx.draw_networkx_edges(g, pos)
+        nx.draw_networkx_nodes(g, pos, nodelist = functions, node_shape='s', labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist = flows, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1],labels=labels, node_size=nodesize, font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2],labels=labels, node_size=nodesize, font_weight='bold')
+        nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, node_size=nodesize, font_weight='bold')
+
+    elif functions or flows:
+        raise Exception("Invalid option--either provide list of functions and flows, or neither")
+    else:
+        nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize, font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize, font_weight='bold')
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
