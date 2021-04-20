@@ -364,6 +364,7 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
         nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows,font_size=font_size, font_color=colors[1])
+    plt.axis('off')
     if retfig:
         return plt.gcf(), plt.gca()
     elif show: plt.show()
@@ -373,7 +374,7 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
     nodesize=scale*700
-    font_size=scale*6
+    font_size=scale*8
     if not pos: pos=nx.spring_layout(g)
     if functions and flows:
         nx.draw_networkx_edges(g, pos)
@@ -392,6 +393,7 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
+    plt.axis('off')
     if retfig:
         return plt.gcf(), plt.gca()
     elif show: plt.show()
