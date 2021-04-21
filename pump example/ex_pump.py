@@ -257,7 +257,7 @@ class Pump(Model):
         self.add_fxn('MoveWater', ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'],fclass=MoveWat, fparams = params['delay'])
         self.add_fxn('ExportWater', ['Wat_2'], fclass=ExportWater)
 
-        self.construct_graph()
+        self.build_model()
     def find_classification(self,scen, mdlhists):
         """
             Model classes use find_classification() to classify the results based on a fault scenario, returning

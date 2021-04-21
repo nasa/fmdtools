@@ -33,7 +33,7 @@ class ImportLiquid(FxnBlock):
     def __init__(self,name,flows):
         super().__init__(name,flows,['Watout', 'Sig'],{'open':1})
         self.assoc_modes({'Stuck':[1e-5,[1,0],0]}, units='hr', key_phases_by='global') # need to add human-induced?
-    def behavior(self,time):
+    def static_behavior(self,time):
         if not self.has_fault('Stuck'):
             if   self.Sig.action>=2:    self.open=2
             elif self.Sig.action==1:      self.open = 1
@@ -46,7 +46,7 @@ class ExportLiquid(FxnBlock):
     def __init__(self,name, flows):
         super().__init__(name,flows,['Watin', 'Sig'],{'open':1})
         self.assoc_modes({'Stuck':[1e-5,[1,0],0]}, key_phases_by='global') # need to add human-induced?
-    def behavior(self,time):
+    def static_behavior(self,time):
         if not self.has_fault('Stuck'):
             if self.Sig.action==1:      self.open = 1
             elif self.Sig.action==-1:   self.open = 0
@@ -58,7 +58,7 @@ class GuideLiquid(FxnBlock):
     def __init__(self,name,flows):
         super().__init__(name,flows,['Watin','Watout'])
         self.assoc_modes({'Leak':[1e-5,[1,0],0], 'Clogged':[1e-5,[1,0],0]}, key_phases_by='global')
-    def behavior(self,time):
+    def static_behavior(self,time):
         if self.has_fault('Clogged'):
             self.Watin.rate=0.0
             self.Watout.effort=0.0
@@ -73,7 +73,7 @@ class StoreLiquid(FxnBlock):
     def __init__(self,name,flows):
         super().__init__(name,flows,['Watin','Watout', 'Sig'], {'level':10.0, 'net_flow': 0.0})
         self.assoc_modes({'Leak':[1e-5,[1,0],0]}, key_phases_by='global')
-    def behavior(self, time):
+    def static_behavior(self, time):
         if self.level >= 20.0:
             self.Watin.rate = 0.0 * self.Watin.effort
             self.Watout.effort = 2.0 * self.Watin.effort
@@ -90,7 +90,8 @@ class StoreLiquid(FxnBlock):
         
         if self.has_fault('Leak'):  self.net_flow = self.Watin.rate - self.Watout.rate - 1.0
         else:                       self.net_flow = self.Watin.rate - self.Watout.rate
-        if time>self.time:          self.level = self.level + self.net_flow
+    def dynamic_behavior(self,time):
+        self.level = self.level + self.net_flow
         
 class HumanActions(FxnBlock):
     def __init__(self,name, flows, reacttime):
@@ -100,34 +101,33 @@ class HumanActions(FxnBlock):
         super().__init__(name, flows,['Valve_Sig','Tank_Sig', 'OtherValve_Sig'], components=actions,timers={'t1'})
         self.assoc_modes({'FalseDetection_low':[1e-4,[1,1],0],'FalseDetection_high':[1e-4,[1,1],0]}, probtype='rate', key_phases_by='global')
         self.reacttime=reacttime
-    def behavior(self,time):        
-        if time > self.time:
-            if self.t1.time == 0:
-                self.look = self.components['look'].behavior()
-                self.detect = self.components['detect'].behavior(self.look,self.Tank_Sig.indicator)
-                if self.detect or self.has_fault('FalseDetection_low') or self.has_fault('FalseDetection_high'): 
-                    self.t1.inc(1)
-            elif self.t1.time < self.reacttime: self.t1.inc(1)
-            elif self.t1.time >= self.reacttime:
-                
-                if self.Tank_Sig.indicator == 1 or self.has_fault('FalseDetection_low'):
-                    if self.Valve_Sig.indicator >= 1:   intended_turn = 2
-                    elif self.Valve_Sig.indicator == 0: intended_turn = 1
-                elif self.Tank_Sig.indicator == -1 or self.has_fault('FalseDetection_high'):
-                    if self.Valve_Sig.indicator >= 2:   intended_turn = 1
-                    else:                               intended_turn = -1
-                else: intended_turn = 0
-                
-                self.reach = self.components['reach'].behavior()
-                self.grasp = self.components['grasp'].behavior()
-                self.turn  = self.components['turn'].behavior(self.grasp, intended_turn)
-                if self.reach[0]:
-                    self.Valve_Sig.action = self.turn
-                if self.reach[1]:
-                    self.OtherValve_Sig.action = self.turn
-                self.t1.reset()
-                self.remove_fault('FalseDetection_low')
-                self.remove_fault('FalseDetection_high')
+    def dynamic_behavior(self,time):        
+        if self.t1.time == 0:
+            self.look = self.components['look'].behavior()
+            self.detect = self.components['detect'].behavior(self.look,self.Tank_Sig.indicator)
+            if self.detect or self.has_fault('FalseDetection_low') or self.has_fault('FalseDetection_high'): 
+                self.t1.inc(1)
+        elif self.t1.time < self.reacttime: self.t1.inc(1)
+        elif self.t1.time >= self.reacttime:
+            
+            if self.Tank_Sig.indicator == 1 or self.has_fault('FalseDetection_low'):
+                if self.Valve_Sig.indicator >= 1:   intended_turn = 2
+                elif self.Valve_Sig.indicator == 0: intended_turn = 1
+            elif self.Tank_Sig.indicator == -1 or self.has_fault('FalseDetection_high'):
+                if self.Valve_Sig.indicator >= 2:   intended_turn = 1
+                else:                               intended_turn = -1
+            else: intended_turn = 0
+            
+            self.reach = self.components['reach'].behavior()
+            self.grasp = self.components['grasp'].behavior()
+            self.turn  = self.components['turn'].behavior(self.grasp, intended_turn)
+            if self.reach[0]:
+                self.Valve_Sig.action = self.turn
+            if self.reach[1]:
+                self.OtherValve_Sig.action = self.turn
+            self.t1.reset()
+            self.remove_fault('FalseDetection_low')
+            self.remove_fault('FalseDetection_high')
             
 class Look(Component):
     def __init__(self, name):
@@ -193,7 +193,7 @@ class Tank(Model):
         self.add_fxn('Export_Water', ['Wat_out_2', 'Valve2_Sig'], fclass =ExportLiquid)
         self.add_fxn('Human', ['Valve1_Sig', 'Tank_Sig', 'Valve2_Sig'], fclass =HumanActions, fparams = params['reacttime'])
         
-        self.construct_graph()
+        self.build_model()
     def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high
         if any(mdlhists['faulty']['functions']['Store_Water']['level']>=20):    totcost = 1000000

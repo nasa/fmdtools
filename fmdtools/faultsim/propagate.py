@@ -467,20 +467,19 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}):
         mdlhist = init_mdlhist(mdl, timerange, track=track)
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes)
-    flowstates={}
     if type(scen['properties']['time'])==list:    singletime=False
     else:                                         singletime=True
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
            if singletime:
-               if t==scen['properties']['time']: flowstates = propagate(mdl, scen['faults'], t, flowstates)
-               else: flowstates = propagate(mdl,[],t, flowstates)
+               if t==scen['properties']['time']:    propagate(mdl, scen['faults'], t)
+               else:                                propagate(mdl,{},t)
            else:
                if t in scen['properties']['time']:
                    ind = scen['properties']['time'].index(t)
-                   flowstates = propagate(mdl, scen['faults'][ind], t, flowstates)
-               else: flowstates = propagate(mdl,[],t, flowstates)
+                   propagate(mdl, scen['faults'][ind], t)
+               else: propagate(mdl,{},t)
            update_mdlhist(mdl, mdlhist, t_ind+shift, track=track)
            if t in ctimes: c_mdl[t]=mdl.copy()
        except:
@@ -489,7 +488,7 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}):
             break
     return mdlhist, c_mdl
 
-def propagate(mdl, initfaults, time, flowstates={}):
+def propagate(mdl, initfaults, time):
     """
     Injects and propagates faults through the graph at one time-step
 
@@ -501,33 +500,22 @@ def propagate(mdl, initfaults, time, flowstates={}):
         The faults to inject in the model with structure {fxn:fault}
     time : float
         The current timestep.
-    flowstates : dict, optional
-        States of the model at the previous time-step (if used). The default is {}.
 
     Returns
     -------
     flowstates : dict
         States of the model at the current time-step.
     """
-    #set up history of flows to see if any has changed
-    activefxns=mdl.timelyfxns.copy()
-    nextfxns=set()
-    #Step 1: Find out what the current value of the flows are (if not generated in the last iteration)
-    if not flowstates:
-        for flowname, flow in mdl.flows.items():
-            flowstates[flowname]=flow.status()
-    #Step 2: Inject faults if present
-    if initfaults:
-        flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults)
-    for fxnname in initfaults:
+    #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
+    for fxnname in mdl.dynamicfxns.union(initfaults.keys()):
         fxn=mdl.fxns[fxnname]
-        if type(initfaults[fxnname])==list: fxn.updatefxn(faults=initfaults[fxnname], time=time)
-        else:                               fxn.updatefxn(faults=[initfaults[fxnname]], time=time)
-        activefxns.update([fxnname])
-    #Step 3: Propagate faults through graph
-    flowstates = prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults)
+        faults = initfaults.get(fxnname, [])
+        if type(faults)==list: fxn.updatefxn('dynamic', faults=faults, time=time)
+        else:                  fxn.updatefxn('dynamic', faults=[faults], time=time)
+    #Step 2: Run Static Propagation Methods
+    flowstates = prop_time(mdl, time, initfaults)
     return flowstates
-def prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults):
+def prop_time(mdl, time, initfaults):
     """
     Propagates faults through model graph.
 
@@ -535,12 +523,6 @@ def prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults):
     ----------
     mdl : model
         Model to propagate faults in
-    activefxns : set
-        Set of functions that are active (must be checked, e.g. because a fault was injected)
-    nextfxns : set
-        Set of active functions for the next iteration.
-    flowstates : dict
-        States of each flow in the model.
     time : float
         Current time-step.
     initfaults : dict
@@ -551,19 +533,26 @@ def prop_time(mdl, activefxns, nextfxns, flowstates, time, initfaults):
     flowstates : dict
         States of each flow in the model after propagation
     """
+    #set up history of flows to see if any has changed
+    activefxns=mdl.staticfxns.copy()
+    nextfxns=set()
+    flowstates=dict.fromkeys(mdl.staticflows)
+    for flowname in mdl.staticflows:
+        flowstates[flowname]=mdl.flows[flowname].status()
+    
     n=0
     while activefxns:
         for fxnname in list(activefxns).copy():
             #Update functions with new values, check to see if new faults or states
             oldstates, oldfaults = mdl.fxns[fxnname].return_states()
-            mdl.fxns[fxnname].updatefxn(time=time)
+            mdl.fxns[fxnname].updatefxn('static', time=time)
             newstates, newfaults = mdl.fxns[fxnname].return_states() 
             if oldstates != newstates or oldfaults != newfaults: nextfxns.update([fxnname])
         #Check to see what flows have new values and add connected functions
-        for flowname, flow in mdl.flows.items():
-            if flowstates[flowname]!=flow.status():
-                nextfxns.update(set([n for n in mdl.bipartite.neighbors(flowname)]))
-            flowstates[flowname]=flow.status()
+        for flowname in mdl.staticflows:
+            if flowstates[flowname]!=mdl.flows[flowname].status():
+                nextfxns.update(set([n for n in mdl.bipartite.neighbors(flowname) if n in mdl.staticfxns]))
+            flowstates[flowname]=mdl.flows[flowname].status()
         activefxns=nextfxns.copy()
         nextfxns.clear()
         n+=1
