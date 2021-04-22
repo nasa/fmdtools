@@ -254,7 +254,7 @@ class EPS(Model):
         self.add_fxn('Export_waste_HO', ['waste_HE_O'], fclass = ExportHE)
         self.add_fxn('Export_waste_HM', ['waste_HE_M'], fclass = ExportHE)
         
-        self.construct_graph()
+        self.build_model()
     def find_classification(self, scen, mdlhists):
         
         outflows = ['HE','ME', 'OE']
