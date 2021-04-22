@@ -370,6 +370,8 @@ class FxnBlock(Block):
         self.time=time
         if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
         elif len(self.faults)==0:           self.faults.update(['nom'])
+        if self.exclusive_faultmodes==True and len(self.faults)>1: 
+            raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.faults)+"\n Is the mode representation nonexclusive?")
         return
 class GenericFxn(FxnBlock):
     """Generic function block. For use when there is no Function Block defined"""
