@@ -364,6 +364,7 @@ def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True):
         The default is 'all'.
     """
     if staged:
+        mdl = mdl.copy()
         mdlhist, _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
     else:
         mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
@@ -467,19 +468,20 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}):
         mdlhist = init_mdlhist(mdl, timerange, track=track)
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes)
+    flowstates=dict.fromkeys(mdl.staticflows)
     if type(scen['properties']['time'])==list:    singletime=False
     else:                                         singletime=True
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
            if singletime:
-               if t==scen['properties']['time']:    propagate(mdl, scen['faults'], t)
-               else:                                propagate(mdl,{},t)
+               if t==scen['properties']['time']:    flowstates = propagate(mdl, scen['faults'], t, flowstates)
+               else:                                flowstates = propagate(mdl,{},t, flowstates)
            else:
                if t in scen['properties']['time']:
                    ind = scen['properties']['time'].index(t)
-                   propagate(mdl, scen['faults'][ind], t)
-               else: propagate(mdl,{},t)
+                   propagate(mdl, scen['faults'][ind], t, flowstates)
+               else: propagate(mdl,{},t, flowstates)
            update_mdlhist(mdl, mdlhist, t_ind+shift, track=track)
            if t in ctimes: c_mdl[t]=mdl.copy()
        except:
@@ -488,7 +490,7 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}):
             break
     return mdlhist, c_mdl
 
-def propagate(mdl, initfaults, time):
+def propagate(mdl, initfaults, time, flowstates={}):
     """
     Injects and propagates faults through the graph at one time-step
 
@@ -513,9 +515,9 @@ def propagate(mdl, initfaults, time):
         if type(faults)==list: fxn.updatefxn('dynamic', faults=faults, time=time)
         else:                  fxn.updatefxn('dynamic', faults=[faults], time=time)
     #Step 2: Run Static Propagation Methods
-    flowstates = prop_time(mdl, time, initfaults)
+    flowstates = prop_time(mdl, time, initfaults, flowstates)
     return flowstates
-def prop_time(mdl, time, initfaults):
+def prop_time(mdl, time, initfaults, flowstates={}):
     """
     Propagates faults through model graph.
 
@@ -536,10 +538,10 @@ def prop_time(mdl, time, initfaults):
     #set up history of flows to see if any has changed
     activefxns=mdl.staticfxns.copy()
     nextfxns=set()
-    flowstates=dict.fromkeys(mdl.staticflows)
-    for flowname in mdl.staticflows:
-        flowstates[flowname]=mdl.flows[flowname].status()
-    
+    if not flowstates: 
+        flowstates=dict.fromkeys(mdl.staticflows)
+        for flowname in mdl.staticflows:
+            flowstates[flowname]=mdl.flows[flowname].status()
     n=0
     while activefxns:
         for fxnname in list(activefxns).copy():
@@ -610,7 +612,7 @@ def update_fxnhist(mdl, mdlhist, t_ind):
                 for fault in mdlhist["functions"][fxnname]["faults"]:
                     if fault in faults: mdlhist["functions"][fxnname]["faults"][fault][t_ind] = 1
             else:
-                if len(faults) > 1: raise Exception("More than one fault present in "+fxnname+"\n at t= "+t_ind+"\n faults: "+str(faults)+"\n Is the mode representation nonexclusive?")
+                if len(faults) > 1: raise Exception("More than one fault present in "+fxnname+"\n at t= "+str(t_ind)+"\n faults: "+str(faults)+"\n Is the mode representation nonexclusive?")
                 else:               mdlhist["functions"][fxnname]["faults"][t_ind]=faults.pop()
         for state, value in states.items():
             if state in mdlhist["functions"][fxnname]:  mdlhist["functions"][fxnname][state][t_ind] = value 
