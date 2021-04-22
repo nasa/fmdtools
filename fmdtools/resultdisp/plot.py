@@ -57,7 +57,7 @@ def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=Tru
                 if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
             elif objtype=="functions":
                 nomhist=copy.deepcopy(mdlhists['nominal']["functions"][fxnflow])
-                del nomhist['faults']
+                if nomhist.get('faults',False): del nomhist['faults']
                 if 'faulty' in mdlhists: 
                     hist = copy.deepcopy(mdlhists['faulty']["functions"][fxnflow])
                     del hist['faults']

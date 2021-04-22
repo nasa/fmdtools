@@ -143,17 +143,16 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows, font_size=font_size, font_weight='bold')
             labels={node:node for node in g.nodes} 
             nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, font_weight='bold')
-        #elif not list(g.nodes(data='status'))[0][1]:    
-        #    nx.draw_networkx(g,pos,node_size=nodesize,node_shape='s', node_color=colors[0], width=3,font_size=font_size, font_weight='bold')
-        #    nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows,font_size=font_size)
         else:
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
             degradednodes=[node for node,status in statuses.items() if status=='Degraded']
-            faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
-            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
+            if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
+            else:
+                faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
+                faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
             fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=pos, retfig=retfig,colors=colors)
     elif gtype == 'bipartite' or 'component':
         labels={node:node for node in g.nodes}
