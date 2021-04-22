@@ -55,6 +55,14 @@ class Block(object):
         self.time=0.0
     def __repr__(self):
         return self.name+' '+self.__class__.__name__+' '+self.type+': '+str(self.return_states())
+    def add_params(self, *params):
+        """Adds given dictionary(s) of parameters to the function/block.
+        e.g. self.add_params({'x':1,'y':1}) results in a block where:
+            self.x = 1, self.y = 1
+        """
+        for param in params:
+            for attr, val in param.items():
+                setattr(self, attr, val) 
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
@@ -282,6 +290,7 @@ class FxnBlock(Block):
         ----------
         flownames : list or dict or empty
             names of flows corresponding to flows
+            using {externalname: internalname}
         flows : list
             flows
 
