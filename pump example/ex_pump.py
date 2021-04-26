@@ -29,7 +29,8 @@ if paths[1]!='../':
 
 
 from fmdtools.modeldef import *
-
+import fmdtools.resultdisp as rd
+import fmdtools.faultsim.propagate as propagate
 
 """
 DEFINE MODEL FUNCTIONS
@@ -292,3 +293,12 @@ class Pump(Model):
         life=1e5
         expcost=rate*life*totcost
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
+
+if __name__=="__main__":
+    mdl = Pump()
+
+    #rd.graph.exec_order(mdl)
+    
+    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'MoveWater', 'mech_break', time=0, staged=False)
+    reshist,diff1, summary = rd.process.hist(mdlhist)
+    rd.graph.result_from(mdl, reshist, 50, gtype='normal')

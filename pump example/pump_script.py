@@ -133,3 +133,4 @@ endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'MoveWater', 'mech_break'
 rd.plot.mdlhist(mdlhist, 'mech_break', time=0, fxnflows=['Wat_1','Wat_2', 'EE_1', 'Sig_1'])
 
 #resultstab.write('tab.ecsv', overwrite=True)
+#rd.graph.result_from(mdl, reshist, 10, gtype='normal')

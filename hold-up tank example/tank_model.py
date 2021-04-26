@@ -202,6 +202,4 @@ class Tank(Model):
         rate=scen['properties']['rate']
         life=1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': rate*life*totcost}
-        
-        
-        
+             
