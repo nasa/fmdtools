@@ -19,6 +19,7 @@ import numpy as np
 from fmdtools.resultdisp.tabulate import costovertime as cost_table
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
+from matplotlib.ticker import AutoMinorLocator
 
 def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel='Time', units=[]):
     """
@@ -176,6 +177,64 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     if returnfig: return fig
     else: plt.show()
 
+def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
+    """
+    Plots the run order for the model during the dynamic propagation step used 
+    by dynamic_behavior() methods, where the x-direction is the order of each
+    function executed and the y are the corresponding flows acted on by the 
+    given methods.
+
+    Parameters
+    ----------
+    mdl : Model
+        fmdtools model
+    rotateticks : Bool, optional
+        Whether to rotate the x-ticks (for bigger plots). The default is False.
+    title : str, optional
+        String to use for the title (if any). The default is "Dynamic Run Order".
+
+    Returns
+    -------
+    fig : figure
+        Matplotlib figure object 
+    ax : axis
+        Corresponding matplotlib axis
+
+    """
+    fxnorder = list(mdl.dynamicfxns)
+    times = [i+0.5 for i in range(len(fxnorder))]
+    fxntimes = {f:i for i,f in enumerate(fxnorder)}
+    
+    flowtimes = {f:[fxntimes[n] for n in mdl.bipartite.neighbors(f) if n in mdl.dynamicfxns] for f in mdl.flows}
+    
+    lengthorder = {k:v for k,v in sorted(flowtimes.items(), key=lambda x: len(x[1]), reverse=True)}
+    starttimeorder = {k:v for k,v in sorted(lengthorder.items(), key=lambda x: x[1][0], reverse=True)}
+    endtimeorder = [k for k,v in sorted(starttimeorder.items(), key=lambda x: x[1][-1], reverse=True)]
+    flowtimedict = {flow:i for i,flow in enumerate(endtimeorder)}
+    
+    fig, ax = plt.subplots()
+    
+    for flow in flowtimes:
+        phaseboxes = [((t,flowtimedict[flow]-0.5),(t,flowtimedict[flow]+0.5),(t+1.0,flowtimedict[flow]+0.5),(t+1.0,flowtimedict[flow]-0.5)) for t in flowtimes[flow]]
+        bars = PolyCollection(phaseboxes)
+        ax.add_collection(bars)
+        
+    flowtimes = [i+0.5 for i in range(len(mdl.flows))]
+    ax.set_yticks(list(flowtimedict.values()))
+    ax.set_yticklabels(list(flowtimedict.keys()))
+    ax.set_ylim(-0.5,len(flowtimes)-0.5)
+    ax.set_xticks(times)
+    ax.set_xticklabels(fxnorder, rotation=90*rotateticks)
+    ax.set_xlim(0,len(times))
+    ax.xaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.grid(which='minor',  linewidth=2)
+    ax.tick_params(axis='x', bottom=False, top=False, labelbottom=False, labeltop=True)
+    if title: 
+        if rotateticks: fig.suptitle(title,fontweight='bold',y=1.15)
+        else:           fig.suptitle(title,fontweight='bold')
+    return fig, ax
+
 def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'both'):
     """
     Plots the phases of operation that the model progresses through.
@@ -246,8 +305,7 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'b
         plt.subplots_adjust(top=1-0.15-0.05/num_plots)
         return fig
     else:           return figs
-        
-        
+             
 
 def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     """
