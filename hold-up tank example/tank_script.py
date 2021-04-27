@@ -54,6 +54,7 @@ def run_faults():
     endclasses, mdlhists = propagate.approach(mdl, app_full)
 
 mdl = Tank()
-rd.graph.exec_order(mdl)
+rd.graph.exec_order(mdl) #, gtype = 'normal')
+rd.graph.exec_order(mdl, gtype='normal') 
 
 #run_faulty()
