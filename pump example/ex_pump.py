@@ -302,3 +302,4 @@ if __name__=="__main__":
     endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'MoveWater', 'mech_break', time=0, staged=False)
     reshist,diff1, summary = rd.process.hist(mdlhist)
     rd.graph.result_from(mdl, reshist, 50, gtype='normal')
+    rd.graph.exec_order(mdl, gtype = 'normal')

@@ -25,6 +25,7 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation
+from matplotlib.patches import Patch
 import netgraph
 
 def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=8, initpos={}):
@@ -86,7 +87,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=8, init
         elif gtype=='bipartite':    mdl.bipartite_pos = pos  
     return pos
 
-def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, heatmap={},highlight=[], retfig=False, colors=['lightgray','orange', 'red'],cmap=plt.cm.coolwarm):
+def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, retfig=False, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
     """
     Plots a single graph object g.
 
@@ -106,10 +107,16 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
         Time of fault injection. The default is [].
     showfaultlabels : bool, optional
         Whether or not to label the faults on the functions. The default is True.
+    retfig : bool, optional
+        Whether to return the figure. The default is False.
+    highlight : list, optional
+        Functions/flows to highlight using [faulty functions, degraded functions, degraded flows] labelling scheme.
+        Used for custom overlays. Default is []
+    colors : list, optional
+        List of colors to use for nominal, degraded, and faulty functions/flows.
+        Default is: ['lightgray','orange', 'red']
     heatmap : dict, optional
         A heatmap dictionary to overlay on the plot. The default is {}.
-    colors : list, optional
-        List of colors to use for nominal, degraded, and faulty functions/flows
     cmap : mpl colormap
         Colormap to use for heatmap visualizations
     """
@@ -146,10 +153,11 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
         elif highlight:
             faultnodes = highlight[0]
             degradednodes = highlight[1]
-            faultedges = mdl.graph.edges(mdl.dynamicfxns)
-            faultlabels = {}
+            faultedges = highlight[2]
+            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
+            else:               faultlabels = {}
             faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge])]) for edge in faultedges}
-            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=pos, retfig=retfig,colors=colors)
+            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=scale, pos=pos, retfig=retfig,colors=colors)
         else:
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
@@ -182,8 +190,13 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             if faultscen:
                 plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
             plt.show()
-        #elif not list(g.nodes(data='status'))[0][1]: #just plots graph if no status information 
-        #    nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize,node_color = colors[0], font_weight='bold')
+        elif highlight:
+            faultnodes = highlight[0]
+            degradednodes = highlight[1]
+            if showfaultlabels: 
+                faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
+            else:               faultlabels={}
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = functions, flows=flows)
         else:                                      #plots graph with status information 
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
@@ -195,10 +208,52 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
         if fig_axis: return fig_axis
         else: return plt.gcf(), plt.gca()
         
+def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cyan','teal'], show_dyn_order=True, retfig=True, title="Function Execution Order", legend=True):
+    """
+    Displays the execution order/types of the model, where the functions and flows in the
+    static step are highlighted and the functions in the dynamic step are listed (with corresponding order)
 
-def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray','orange', 'red'],cmap=plt.cm.coolwarm, retfig=True):
-    fig_axis = show(mdl, gtype='normal', pos=[], highlight=[mdl.staticfxns,mdl.dynamicfxns], scale=1, colors=['lightgray','orange', 'red'],cmap=plt.cm.coolwarm, retfig=True)
+    Parameters
+    ----------
+    mdl : fmdtools Model
+        Model of the system to visualize.
+    gtype : 'normal'/'bipartite', optional
+        Representation of the model to use. The default is 'bipartite'.
+    pos : dict optional
+        Dictionary of positions for the model. The default is [].
+    scale : float, optional
+        Scale factor for the node sizes. The default is 1.
+    colors : list, optional
+        Colors to use for unexecuted functions, static propagation steps, and dynamic functions. 
+        The default is ['lightgray', 'cyan','teal'].
+    show_dyn_order : bool, optional
+        Whether to label the execution order for dynamic functions. The default is True.
+    retfig : bool, optional
+        Whether to retun the figure and axis objects. The default is True.
+    title : str, optional
+        Title for the plot. The default is "Function Execution Order".
+    legend : bool, optional
+        Whether to show a legend. The default is True.
+
+    Returns
+    -------
+    tuple of form (figure, axis) (if retfig is true)
+
+    """
+    if gtype =='normal': fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[mdl.dynamicfxns, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], scale=scale, colors=colors, retfig=True, showfaultlabels= show_dyn_order)
+    else:
+        staticnodes = list(mdl.staticfxns) + list(set([n for node in mdl.staticfxns for n in mdl.bipartite.neighbors(node)]))
+        dynamicnodes = list(mdl.dynamicfxns) #+ list(set().union(*[nx.node_connected_component(mdl.bipartite, node) for node in mdl.dynamicfxns]))
+        fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[dynamicnodes, staticnodes], scale=scale, colors=colors, retfig=True, showfaultlabels= show_dyn_order)
     
+    if legend:
+        legend_elements = [Patch(facecolor=colors[0], edgecolor=colors[0], label='No Execution'),
+                           Patch(facecolor=colors[2], edgecolor=colors[2], label='Dynamic Step'),
+                           Patch(facecolor=colors[1], edgecolor=colors[1], label='Static Step')]
+        
+        fig_axis[1].legend(handles = legend_elements, ncol=3, bbox_to_anchor = (1.0,-0.05))
+    if title: fig_axis[1].set_title(title)
+    if retfig: return fig_axis
     
 def history(ghist, gtype='normal', pos=[], scale=1, faultscen=[],showfaultlabels=True, colors=['lightgray','orange', 'red']):
     """
@@ -371,8 +426,8 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
     if not pos: pos=nx.shell_layout(g)
     nx.draw_networkx(g,pos,node_size=nodesize,font_size=font_size, node_shape='s',edge_color='gray', node_color=colors[0], width=3, font_weight='bold')
     nx.draw_networkx_edge_labels(g,pos,font_size=font_size, edge_labels=edgeflows)
-    nx.draw_networkx_nodes(g, pos, nodelist=degfxns,node_shape='s', node_color = colors[1],width=3,font_size=font_size, font_weight='bold', node_size = nodesize*1.15)
-    nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
+    nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2],width=3,font_size=font_size, font_weight='bold', node_size = nodesize*1.2)
+    nx.draw_networkx_nodes(g, pos, nodelist=degfxns,node_shape='s', node_color = colors[1],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
     nx.draw_networkx_edges(g,pos,edgelist=faultedges, edge_color=colors[1],font_size=font_size, width=2)
         
     if showfaultlabels:
@@ -397,17 +452,17 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
         nx.draw_networkx_nodes(g, pos, nodelist = flows, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
         degfxns = [node for node in degnodes if node in functions]
         degflows = [node for node in degnodes if node in flows]
-        nx.draw_networkx_nodes(g, pos, nodelist=degfxns, node_shape='s', node_color = colors[1],labels=labels, node_size=nodesize*1.15, font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns, node_shape='s', node_color = colors[2],labels=labels, node_size=nodesize*1.2, font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=degfxns, node_shape='s', node_color = colors[1],labels=labels, node_size=nodesize, font_weight='bold')
         nx.draw_networkx_nodes(g, pos, nodelist=degflows,node_color = colors[1],labels=labels, node_size=nodesize, font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns, node_shape='s', node_color = colors[2],labels=labels, node_size=nodesize, font_weight='bold')
         nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, node_size=nodesize, font_weight='bold')
 
     elif functions or flows:
         raise Exception("Invalid option--either provide list of functions and flows, or neither")
     else:
+        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize*1.2, font_weight='bold')
         nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize*1.15, font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize, font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize, font_weight='bold')
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
