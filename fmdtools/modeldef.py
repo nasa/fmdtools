@@ -367,7 +367,7 @@ class FxnBlock(Block):
             for fault in self.faults:
                 if fault in self.compfaultmodes:
                     self.components[self.compfaultmodes[fault]].add_fault(fault)
-        if hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
+        if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
         elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: self.dynamic_behavior(time)
         elif proptype=='reset':                                                             
@@ -558,6 +558,18 @@ class Model(object):
         """ Returns a list of the model flow objects """
         return [self.flows[flowname] for flowname in flownames]
     def build_model(self, functionorder=[], graph_pos={}, bipartite_pos={}):
+        """
+        Builds the model graph after the functions have been added.
+
+        Parameters
+        ----------
+        functionorder : list, optional
+            The order for the functions to be executed in. The default is [].
+        graph_pos : dict, optional
+            position of graph nodes. The default is {}.
+        bipartite_pos : dict, optional
+            position of bipartite graph nodes. The default is {}.
+        """
         if functionorder: self.set_functionorder(functionorder)
         self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False)])
         self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'dynamic_behavior', False)])
