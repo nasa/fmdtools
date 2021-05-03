@@ -669,11 +669,13 @@ def init_fxnhist(mdl, timerange, track='all'):
         if track=='all' or fxnname in track['functions']:
             states, faults = fxn.return_states()
             fxnhist[fxnname]={}
+            modelength = max([0]+[len(modename) for modename in fxn.opermodes+list(fxn.faultmodes.keys())])
             if track == 'all' or track['functions'][fxnname]=='all' or 'faults' in track['functions'][fxnname]:
                 if fxn.faultmodes:
                     if fxn.exclusive_faultmodes == False:   fxnhist[fxnname]["faults"] = {faultmode:np.array([0 for i in timerange]) for faultmode in fxn.faultmodes} 
-                    elif fxn.exclusive_faultmodes == True:  fxnhist[fxnname]["faults"]=np.array([faults for i in timerange])
+                    elif fxn.exclusive_faultmodes == True:  fxnhist[fxnname]["faults"]=np.full([len(timerange)], list(faults)[0], dtype="U"+str(modelength))
             for state, value in states.items():
                 if track == 'all' or track['functions'][fxnname]=='all' or state in track['functions'][fxnname]:
-                    fxnhist[fxnname][state] = np.full([len(timerange)], value)
+                    if state == 'mode': fxnhist[fxnname][state] = np.full([len(timerange)], value, dtype="U"+str(modelength))
+                    else:               fxnhist[fxnname][state] = np.full([len(timerange)], value)
     return fxnhist
