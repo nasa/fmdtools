@@ -52,6 +52,8 @@ class Block(object):
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
+        self.opermodes=[]
+        self.faultmodes={}
         self.time=0.0
     def __repr__(self):
         return self.name+' '+self.__class__.__name__+' '+self.type+': '+str(self.return_states())
