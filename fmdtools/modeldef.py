@@ -20,8 +20,6 @@ class Block(object):
     
     Attributes
     ----------
-    timely : bool
-        Whether or not the block state depends on time (or just inputs and outputs)
     failrate : float
         Failure rate for the block
     time : float
@@ -39,7 +37,7 @@ class Block(object):
     mode : string
         current mode of block operation
     """
-    def __init__(self, states={}, timely=True):
+    def __init__(self, states={}):
         """
         Instance superclass. Called by FxnBlock and Component classes.
 
@@ -47,19 +45,26 @@ class Block(object):
         ----------
         states : dict, optional
             Internal states (variables, essentially) of the block. The default is {}.
-        timely : bool, optional
-            Whether or not the function is dependent on time (or just inputs/outputs). The default is True.
         """
-        self.timely=timely
         self._states=list(states.keys())
         self._initstates=states.copy()
         self.failrate = getattr(self, 'failrate', 1.0)
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
-        if timely: self.time=0.0
+        self.opermodes=[]
+        self.faultmodes={}
+        self.time=0.0
     def __repr__(self):
         return self.name+' '+self.__class__.__name__+' '+self.type+': '+str(self.return_states())
+    def add_params(self, *params):
+        """Adds given dictionary(s) of parameters to the function/block.
+        e.g. self.add_params({'x':1,'y':1}) results in a block where:
+            self.x = 1, self.y = 1
+        """
+        for param in params:
+            for attr, val in param.items():
+                setattr(self, attr, val) 
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
@@ -153,7 +158,10 @@ class Block(object):
         self.mode = mode
     def in_mode(self,mode):
         "Checks if the system is in a given operational mode"
-        return self.mode==mode                       
+        return self.mode==mode 
+    def in_modes(self, modes):
+        "Checks if the block has one of the given list of operational modes"
+        return self.mode in modes                      
     def has_fault(self,fault): 
         """Check if the block has fault (a str)"""
         return any(self.faults.intersection(set([fault])))
@@ -166,6 +174,11 @@ class Block(object):
     def any_faults(self):
         """check if the block has any fault modes"""
         return any(self.faults.difference({'nom'}))
+    def to_fault(self,fault): 
+        """Moves from the current fault mode to a new fault mode"""
+        self.faults.clear()
+        self.faults.add(fault)
+        if self.exclusive_faultmodes: self.set_mode(fault)
     def add_fault(self,fault): 
         """Adds fault (a str) to the block"""
         self.faults.update([fault])
@@ -185,6 +198,13 @@ class Block(object):
         """Removes fault in the set of faults and returns to given operational mode"""
         self.faults.discard(fault_to_remove)
         if len(self.faults) == 0: self.faults.add('nom')
+        if opermode:    self.mode = opermode
+        if self.exclusive_faultmodes and not(opermode):
+            raise Exception("Unclear which operational mode to enter with fault removed")
+    def remove_any_faults(self, opermode=False):
+        """Resets fault mode to nominal and returns to the given operational mode"""
+        self.faults.clear()
+        self.faults.add('nom')
         if opermode:    self.mode = opermode
         if self.exclusive_faultmodes and not(opermode):
             raise Exception("Unclear which operational mode to enter with fault removed")
@@ -229,7 +249,7 @@ class FxnBlock(Block):
     tstep : float
         timestep of the model in the function (added in model definition)
     """
-    def __init__(self,name, flows, flownames=[], states={}, components={},timers={}, timely=True):
+    def __init__(self,name, flows, flownames=[], states={}, components={},timers={}):
         """
         Intances the function superclass with the relevant parameters.
 
@@ -247,8 +267,6 @@ class FxnBlock(Block):
             Component objects to associate with the function. The default is {}.
         timers : set, optional
             Set of names of timers to use in the function. The default is {}.
-        timely : bool, optional
-            Whether or not the function depends on time (or just input/output). The default is True.
         """
         self.type = 'function'
         self.name = name
@@ -265,7 +283,7 @@ class FxnBlock(Block):
         self.timers = timers
         for timername in timers:
             setattr(self, timername, Timer(timername))
-        super().__init__(states, timely)
+        super().__init__(states)
     def make_flowdict(self,flownames,flows):
         """
         Puts a list of flows with a list of flow names in a dictionary.
@@ -274,6 +292,7 @@ class FxnBlock(Block):
         ----------
         flownames : list or dict or empty
             names of flows corresponding to flows
+            using {externalname: internalname}
         flows : list
             flows
 
@@ -295,12 +314,6 @@ class FxnBlock(Block):
             else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
         else:       raise Exception("Invalid flownames option in "+self.name)
         return flowdict
-    def condfaults(self,time):
-        """ Placeholder for function condfaults methods """
-        return 0
-    def behavior(self,time):
-        """ Placeholder for function behavior methods """
-        return 0        
     def reset(self):            
         """
         Resets the internal states and faults of the function to the intial state. Used when reseting the model. Requires associated flows to be cleared first.
@@ -315,7 +328,7 @@ class FxnBlock(Block):
             getattr(self, timername).reset()
         if hasattr(self, 'time'): self.time=0.0
         if hasattr(self, 'tstep'): self.tstep=self.tstep
-        self.updatefxn(faults=['nom'], time=0)
+        self.updatefxn('reset', faults=['nom'], time=0)
     def copy(self, newflows, *attr):
         """
         Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.
@@ -339,7 +352,7 @@ class FxnBlock(Block):
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
-    def updatefxn(self,faults=[], time=0):
+    def updatefxn(self,proptype, faults=[], time=0):
         """
         Updates the state of the function at a given time and injects faults.
 
@@ -351,18 +364,25 @@ class FxnBlock(Block):
             Model time. The default is 0.
         """
         self.add_faults(faults)  #if there is a fault, it is instantiated in the function
-        self.condfaults(time)           #conditional faults and behavior are then run
+        if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if self.components:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
                     self.components[self.compfaultmodes[fault]].add_fault(fault)
-        self.behavior(time)
+        if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
+        if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
+        elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: self.dynamic_behavior(time)
+        elif proptype=='reset':                                                             
+            if hasattr(self,'static_behavior'):  self.static_behavior
+            if hasattr(self,'dynamic_behavior'): self.dynamic_behavior
         if self.components:     # propogate faults from component level to function level
             for compname, comp in self.components.items():
                 self.faults.update(comp.faults) 
         self.time=time
         if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
         elif len(self.faults)==0:           self.faults.update(['nom'])
+        if self.exclusive_faultmodes==True and len(self.faults)>1: 
+            raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.faults)+"\n Is the mode representation nonexclusive?")
         return
 class GenericFxn(FxnBlock):
     """Generic function block. For use when there is no Function Block defined"""
@@ -374,7 +394,7 @@ class Component(Block):
     """
     Superclass for components (most attributes and methods inherited from Block superclass)
     """
-    def __init__(self,name, states={}, timely=True):
+    def __init__(self,name, states={}):
         """
         Inherit the component class
 
@@ -384,12 +404,10 @@ class Component(Block):
             Unique name ID for the component
         states : dict, optional
             States to use in the component. The default is {}.
-        timely : bool, optional
-            Whether the component depends on time or just input/output behavior. The default is True.
         """
         self.type = 'component'
         self.name = name
-        super().__init__(states, timely)
+        super().__init__(states)
     def behavior(self,time):
         """ Placeholder for component behavior methods """
         return 0
@@ -459,8 +477,6 @@ class Model(object):
         dictionary of functions in the model indexed by name
     params : dict
         dictionary of (optional) parameters for a given instantiation of a model
-    timelyfxns : set
-        set of functions that are timely (depend on time, not just input/output)
     bipartite : networkx graph
         bipartite graph view of the functions and flows
     graph : networkx graph
@@ -489,7 +505,7 @@ class Model(object):
         self.tstep = modelparams.get('tstep', 1.0)
         self.units = modelparams.get('units', 'hr')
         
-        self.timelyfxns=OrderedSet() #set is ordered and executed in the order specified in the model
+        self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
     def add_flow(self,flowname, flowdict={}):
@@ -506,7 +522,7 @@ class Model(object):
             If an empty set is given, it will be represented w- {flowname: 1}
         """
         if not flowdict:                self.flows[flowname]=Flow({flowname:1}, flowname)
-        elif type(flowdict) == set:       self.flows[flowname]=Flow({f:1 for f in flowdict}, flowname)
+        elif type(flowdict) == set:     self.flows[flowname]=Flow({f:1 for f in flowdict}, flowname)
         elif type(flowdict) == dict:    self.flows[flowname]=Flow(flowdict, flowname)
         elif isinstance(flowdict, Flow):self.flows[flowname] = flowdict
         else: raise Exception('Invalid flow. Must be dict or flow')
@@ -534,15 +550,33 @@ class Model(object):
             self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams}
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
-        if self.fxns[name].timely: self.timelyfxns.update([name])
+        self.functionorder.update([name])
         self.fxns[name].tstep=self.tstep
-    def set_fxnorder(self,fxnlist):
+    def set_functionorder(self,functionorder):
         """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
-        if not self.timelyfxns.difference(fxnlist): self.timelyfxns=OrderedSet(fxnlist)
-        else:                                       raise Exception("Invalid fxnlist: "+str(fxnlist)+" should have elements: "+str(self.timelyfxns))
+        if not self.functionorder.difference(functionorder): self.functionorder=OrderedSet(functionorder)
+        else:                                       raise Exception("Invalid list: "+str(functionorder)+" should have elements: "+str(self.functionorder))
     def get_flows(self,flownames):
         """ Returns a list of the model flow objects """
         return [self.flows[flowname] for flowname in flownames]
+    def build_model(self, functionorder=[], graph_pos={}, bipartite_pos={}):
+        """
+        Builds the model graph after the functions have been added.
+
+        Parameters
+        ----------
+        functionorder : list, optional
+            The order for the functions to be executed in. The default is [].
+        graph_pos : dict, optional
+            position of graph nodes. The default is {}.
+        bipartite_pos : dict, optional
+            position of bipartite graph nodes. The default is {}.
+        """
+        if functionorder: self.set_functionorder(functionorder)
+        self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False)])
+        self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'dynamic_behavior', False)])
+        self.construct_graph(graph_pos, bipartite_pos)
+        self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.bipartite.neighbors(flow)])]
     def construct_graph(self, graph_pos={}, bipartite_pos={}):
         """
         Creates and returns a graph representation of the model
@@ -697,7 +731,7 @@ class Model(object):
             flows = copy.get_flows(flownames)
             if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows)
             else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams)
-        _ = copy.construct_graph(graph_pos=self.graph_pos, bipartite_pos=self.bipartite_pos)
+        copy.build_model(functionorder = self.functionorder, graph_pos=self.graph_pos, bipartite_pos=self.bipartite_pos)
         return copy
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
