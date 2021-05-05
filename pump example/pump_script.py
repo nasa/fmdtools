@@ -128,4 +128,9 @@ a = time.time()
 endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'MoveWater', 'short', time=10, staged=False)
 b = time.time()
 print(b-a)
+
+endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'MoveWater', 'mech_break', time=0, staged=False)
+rd.plot.mdlhist(mdlhist, 'mech_break', time=0, fxnflows=['Wat_1','Wat_2', 'EE_1', 'Sig_1'])
+
 #resultstab.write('tab.ecsv', overwrite=True)
+#rd.graph.result_from(mdl, reshist, 10, gtype='normal')

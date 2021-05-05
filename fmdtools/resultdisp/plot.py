@@ -19,6 +19,7 @@ import numpy as np
 from fmdtools.resultdisp.tabulate import costovertime as cost_table
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
+from matplotlib.ticker import AutoMinorLocator
 
 def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel='Time', units=[]):
     """
@@ -57,7 +58,7 @@ def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=Tru
                 if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
             elif objtype=="functions":
                 nomhist=copy.deepcopy(mdlhists['nominal']["functions"][fxnflow])
-                del nomhist['faults']
+                if nomhist.get('faults',False): del nomhist['faults']
                 if 'faulty' in mdlhists: 
                     hist = copy.deepcopy(mdlhists['faulty']["functions"][fxnflow])
                     del hist['faults']
@@ -176,7 +177,65 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     if returnfig: return fig
     else: plt.show()
 
-def phases(mdlphases, modephases=[], mdl=[], singleplot = True):
+def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
+    """
+    Plots the run order for the model during the dynamic propagation step used 
+    by dynamic_behavior() methods, where the x-direction is the order of each
+    function executed and the y are the corresponding flows acted on by the 
+    given methods.
+
+    Parameters
+    ----------
+    mdl : Model
+        fmdtools model
+    rotateticks : Bool, optional
+        Whether to rotate the x-ticks (for bigger plots). The default is False.
+    title : str, optional
+        String to use for the title (if any). The default is "Dynamic Run Order".
+
+    Returns
+    -------
+    fig : figure
+        Matplotlib figure object 
+    ax : axis
+        Corresponding matplotlib axis
+
+    """
+    fxnorder = list(mdl.dynamicfxns)
+    times = [i+0.5 for i in range(len(fxnorder))]
+    fxntimes = {f:i for i,f in enumerate(fxnorder)}
+    
+    flowtimes = {f:[fxntimes[n] for n in mdl.bipartite.neighbors(f) if n in mdl.dynamicfxns] for f in mdl.flows}
+    
+    lengthorder = {k:v for k,v in sorted(flowtimes.items(), key=lambda x: len(x[1]), reverse=True) if len(v)>0}
+    starttimeorder = {k:v for k,v in sorted(lengthorder.items(), key=lambda x: x[1][0], reverse=True)}
+    endtimeorder = [k for k,v in sorted(starttimeorder.items(), key=lambda x: x[1][-1], reverse=True)]
+    flowtimedict = {flow:i for i,flow in enumerate(endtimeorder)}
+    
+    fig, ax = plt.subplots()
+    
+    for flow in flowtimes:
+        phaseboxes = [((t,flowtimedict[flow]-0.5),(t,flowtimedict[flow]+0.5),(t+1.0,flowtimedict[flow]+0.5),(t+1.0,flowtimedict[flow]-0.5)) for t in flowtimes[flow]]
+        bars = PolyCollection(phaseboxes)
+        ax.add_collection(bars)
+        
+    flowtimes = [i+0.5 for i in range(len(mdl.flows))]
+    ax.set_yticks(list(flowtimedict.values()))
+    ax.set_yticklabels(list(flowtimedict.keys()))
+    ax.set_ylim(-0.5,len(flowtimes)-0.5)
+    ax.set_xticks(times)
+    ax.set_xticklabels(fxnorder, rotation=90*rotateticks)
+    ax.set_xlim(0,len(times))
+    ax.xaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.grid(which='minor',  linewidth=2)
+    ax.tick_params(axis='x', bottom=False, top=False, labelbottom=False, labeltop=True)
+    if title: 
+        if rotateticks: fig.suptitle(title,fontweight='bold',y=1.15)
+        else:           fig.suptitle(title,fontweight='bold')
+    return fig, ax
+
+def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'both'):
     """
     Plots the phases of operation that the model progresses through.
 
@@ -193,7 +252,8 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True):
     singleplot : bool, optional
         Whether the functions' progressions through phases are plotted on the same plot or on different plots.
         The default is True.
-
+    phase_ticks : 'std'/'phases'/'both'
+        x-ticks to use (standard, at the edge of phases, or both). Default is 'both'
     Returns
     -------
     fig/figs : Figure or list of Figures
@@ -218,8 +278,9 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True):
             mode_nums = {ph:i for i,ph in enumerate(fxnphases)}
             ylabels = list(mode_nums.keys())
         
-        phaseboxes = [((v[0],mode_nums[k]-.4),(v[0],mode_nums[k]+.4),(v[1],mode_nums[k]+.4),(v[1],mode_nums[k]-.4)) for k,v in fxnphases.items()]
-        colors = list(mcolors.TABLEAU_COLORS.keys())[0:len(ylabels)]
+        phaseboxes = [((v[0]-.5,mode_nums[k]-.4),(v[0]-.5,mode_nums[k]+.4),(v[1]+.5,mode_nums[k]+.4),(v[1]+.5,mode_nums[k]-.4)) for k,v in fxnphases.items()]
+        color_options = list(mcolors.TABLEAU_COLORS.keys())[0:len(ylabels)]
+        colors = [color_options[mode_nums[phase]] for phase in fxnphases]
         bars = PolyCollection(phaseboxes, facecolors=colors)
         
         ax.add_collection(bars)
@@ -229,7 +290,8 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True):
         ax.set_yticklabels(ylabels)
         
         times = [0]+[v[1] for k,v in fxnphases.items()]
-        ax.set_xticks(list(set(list(ax.get_xticks())+times)))
+        if phase_ticks=='both':     ax.set_xticks(list(set(list(ax.get_xticks())+times)))
+        elif phase_ticks=='phases':  ax.set_xticks(times)
         ax.set_xlim(times[0], times[-1])
         plt.grid(which='both', axis='x')
         if singleplot:
@@ -243,8 +305,7 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True):
         plt.subplots_adjust(top=1-0.15-0.05/num_plots)
         return fig
     else:           return figs
-        
-        
+             
 
 def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     """
