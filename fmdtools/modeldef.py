@@ -14,7 +14,99 @@ import networkx as nx
 from ordered_set import OrderedSet
 
 # MAJOR CLASSES
-class Block(object):
+
+class Common(object):
+    def set_atts(self, **kwargs):
+        """Sets the given arguments to a given value. Mainly useful for 
+        reducing length/adding clarity to assignment statements in __init__ methods
+        (self.put is reccomended otherwise so that the iteration is on function/flow *states*)
+        e.g., self.set_attr(maxpower=1, maxvoltage=1) is the same as saying
+              self.maxpower=1; self.maxvoltage=1
+        """
+        for name, value in kwargs.items():
+            setattr(self, name, value)
+    def put(self,**kwargs):
+        """Sets the given arguments to a given value. Mainly useful for 
+        reducing length/adding clarity to assignment statements.
+        e.g., self.EE.put(v=1, a=1) is the same as saying
+              self.EE.v=1; self.EE.a=1
+        """
+        for name, value in kwargs.items():
+            if name not in self._states: raise Exception(name+" not a property of "+self.name)
+            setattr(self, name, value)
+    def assign(self,obj,*states):
+        """ Sets the same-named values of the current flow/function object to those of a given flow. 
+        Further arguments specify which values.
+        e.g. self.EE1.assign(EE2, 'v', 'a') is the same as saying
+            self.EE1.a = self.EE2.a; self.EE1.v = self.EE2.v
+        """
+        if len(states)==0: states= obj._states
+        for state in states:
+            if state not in self._states: raise Exception(state+" not a property of "+self.name)
+            setattr(self, state, getattr(obj,state))
+    def get(self, *attnames):
+        """Returns the given attribute names (strings). Mainly useful for reducing length
+        of lines/adding clarity to assignment statements. 
+        e.g., x,y = self.Pos.get('x','y') is the same as
+              x,y = self.Pos.x, self.Pos.y
+        """
+        if len(attnames)==1:   return getattr(self,attnames[0])
+        else:                   return tuple(getattr(self,name) for name in attnames)
+    def inc(self,**kwargs):
+        """Increments the given arguments by a given value. Mainly useful for
+        reducing length/adding clarity to increment statements.
+        e.g., self.Pos.inc(x=1,y=1) is the same as
+             self.Pos.x+=1; self.Pos.y+=1, or
+             self.Pos.x = self.Pos.x + 1; self.Pos.y = self.Pos.y +1
+             
+        Can additionally be provided with a second value denoting a limit on the increments
+        e.g. self.Pos.inc(x=(1,10)) will increment x by 1 until it reaches 10
+        """
+        for name, value in kwargs.items():
+            if name not in self._states: raise Exception(name+" not a property of "+self.name)
+            if type(value)==tuple:  
+                current = getattr(self,name)
+                sign = np.sign(value[0])
+                newval = current + value[0]
+                if sign*newval <= sign*value[1]:    setattr(self, name, newval)
+                else:                               setattr(self,name,value[1])
+            else:                   setattr(self, name, getattr(self,name)+ value)
+    def limit(self,**kwargs):
+        """Enforces limits on the value of a given property. Mainly useful for
+        reducing length/adding clarity to increment statements.
+        e.g., self.EE.limit(a=(0,100), v=(0,12)) is the same as
+            self.EE.a = min(100, max(0,self.EE.a));
+            self.EE.v = min(12, max(0,self.EE.v))
+        """
+        for name, value in kwargs.items():
+            if name not in self._states: raise Exception(name+" not a property of "+self.name)
+            setattr(self, name, min(value[1], max(value[0], getattr(self,name))))
+    def mul(self,*states):
+        """Returns the multiplication of given states of the function/flow"""
+        a= getattr(self,states[0])
+        for state in states[1:]:
+            a = a * getattr(self,state)
+        return a
+    def div(self,*states):
+        """Returns the division of given states of the function/flow"""
+        a= getattr(self,states[0])
+        for state in states[1:]:
+            a = a / getattr(self,state)
+        return a
+    def add(self,*states):
+        """Returns the addition of given states of the function/flow"""
+        a= 0.0
+        for state in states:
+            a += getattr(self,state)
+        return a
+    def sub(self,*states):
+        """Returns the addition of given states of the function/flow"""
+        a= getattr(self,states[0])
+        for state in states[1:]:
+            a -= getattr(self,state)
+        return a
+    
+class Block(Common):
     """ 
     Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
     
@@ -80,7 +172,7 @@ class Block(object):
         if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
         elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
         self.failrate = gtp*EPC_f
-    def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False, key_phases_by='none'):
+    def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False, key_phases_by='none', longnames={}):
         """
         Associates fault and operational modes with the block when called in the function or component.
 
@@ -112,6 +204,8 @@ class Block(object):
             Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present). 
         key_phases_by : 'self'/'none'/'global'/'fxnname'
             Phases to key the faultmodes by (using local, global, or an external function's modes'). Default is 'none'
+        longnames : dict
+            Longer names for the faults (if desired). {faultname: longname}
         """
         if opermodes:
             self.opermodes = opermodes
@@ -151,11 +245,14 @@ class Block(object):
                 self.faultmodes[name+mode]['rcost'] =    0.0
             else:
                 raise Exception("Invalid mode definition")
+            self.faultmodes[name+mode]['longname'] = longnames.get(mode,mode)
         if key_phases_by=='self':   self.key_phases_by = self.name
         else:                       self.key_phases_by = key_phases_by
     def set_mode(self, mode):
         """Sets a mode in the block"""
-        self.mode = mode
+        if self.exclusive_faultmodes and self.any_faults():
+            raise Exception("Cannot set mode from fault state without removing faults.")
+        else:   self.mode = mode
     def in_mode(self,mode):
         "Checks if the system is in a given operational mode"
         return self.mode==mode 
@@ -178,22 +275,22 @@ class Block(object):
         """Moves from the current fault mode to a new fault mode"""
         self.faults.clear()
         self.faults.add(fault)
-        if self.exclusive_faultmodes: self.set_mode(fault)
+        if self.exclusive_faultmodes: self.mode = fault
     def add_fault(self,fault): 
         """Adds fault (a str) to the block"""
         self.faults.update([fault])
-        if self.exclusive_faultmodes: self.set_mode(fault)
+        if self.exclusive_faultmodes: self.mode = fault
     def add_faults(self,faults): 
         """Adds list of faults to the block"""
         self.faults.update(faults)
         if self.exclusive_faultmodes: 
             if len(faults)>1:   raise Exception("Multiple fault modes added to function with exclusive fault representation")
-            elif len(faults)==1: self.set_mode(faults[0])
+            elif len(faults)==1: self.mode =faults[0]
     def replace_fault(self, fault_to_replace,fault_to_add): 
         """Replaces fault_to_replace with fault_to_add in the set of faults"""
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
-        if self.exclusive_faultmodes: self.set_mode(fault_to_add)
+        if self.exclusive_faultmodes: self.mode = fault_to_add
     def remove_fault(self, fault_to_remove, opermode=False):
         """Removes fault in the set of faults and returns to given operational mode"""
         self.faults.discard(fault_to_remove)
@@ -208,6 +305,7 @@ class Block(object):
         if opermode:    self.mode = opermode
         if self.exclusive_faultmodes and not(opermode):
             raise Exception("Unclear which operational mode to enter with fault removed")
+            
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used (only for components) when resetting the model"""
         self.faults.clear()
@@ -412,54 +510,54 @@ class Component(Block):
         """ Placeholder for component behavior methods """
         return 0
 
-class Flow(object):
+class Flow(Common):
     """
     Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
     """
-    def __init__(self, attributes, name):
+    def __init__(self, states, name):
         """
-        Instances the flow with given attributes.
+        Instances the flow with given states.
 
         Parameters
         ----------
-        attributes : dict
-            attributes and their values to be associated with the flow
+        states : dict
+            states and their values to be associated with the flow
         name : str
             name of the flow
         """
         self.type='flow'
         self.name=name
-        self._initattributes=attributes.copy()
-        self._attributes=list(attributes.keys())
-        for attribute in self._attributes:
-            setattr(self, attribute, attributes[attribute])
+        self._initstates=states.copy()
+        self._states=list(states.keys())
+        for state in self._states:
+            setattr(self, state, states[state])
     def __repr__(self):
         return self.name+' '+self.type+': '+str(self.status())
     def reset(self):
         """ Resets the flow to the initial state"""
-        for attribute in self._initattributes:
-            setattr(self, attribute, self._initattributes[attribute])
+        for state in self._initstates:
+            setattr(self, state, self._initstates[state])
     def status(self):
         """
         Returns a dict with the current states of the flow.
         """
-        attributes={}
-        for attribute in self._attributes:
-            attributes[attribute]=getattr(self,attribute)
-        return attributes
+        states={}
+        for state in self._states:
+            states[state]=getattr(self,state)
+        return states
     def copy(self):
         """
         Returns a copy of the flow object (used when copying the model)
         """
-        attributes={}
-        for attribute in self._attributes:
-            attributes[attribute]=getattr(self,attribute)
+        states={}
+        for state in self._states:
+            states[state]=getattr(self,state)
         if self.__class__==Flow:
-            copy = self.__class__(attributes, self.name)
+            copy = self.__class__(states, self.name)
         else:
             copy = self.__class__()
-            for attribute in self._attributes:
-                setattr(copy, attribute, getattr(self,attribute))
+            for state in self._states:
+                setattr(copy, state, getattr(self,state))
         return copy
 
 #Model superclass    
