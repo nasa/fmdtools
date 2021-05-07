@@ -16,6 +16,15 @@ from ordered_set import OrderedSet
 # MAJOR CLASSES
 
 class Common(object):
+    def set_atts(self, **kwargs):
+        """Sets the given arguments to a given value. Mainly useful for 
+        reducing length/adding clarity to assignment statements in __init__ methods
+        (self.put is reccomended otherwise so that the iteration is on function/flow *states*)
+        e.g., self.set_attr(maxpower=1, maxvoltage=1) is the same as saying
+              self.maxpower=1; self.maxvoltage=1
+        """
+        for name, value in kwargs.items():
+            setattr(self, name, value)
     def put(self,**kwargs):
         """Sets the given arguments to a given value. Mainly useful for 
         reducing length/adding clarity to assignment statements.
@@ -49,10 +58,19 @@ class Common(object):
         e.g., self.Pos.inc(x=1,y=1) is the same as
              self.Pos.x+=1; self.Pos.y+=1, or
              self.Pos.x = self.Pos.x + 1; self.Pos.y = self.Pos.y +1
+             
+        Can additionally be provided with a second value denoting a limit on the increments
+        e.g. self.Pos.inc(x=(1,10)) will increment x by 1 until it reaches 10
         """
         for name, value in kwargs.items():
             if name not in self._states: raise Exception(name+" not a property of "+self.name)
-            setattr(self, name, getattr(self,name)+ value)
+            if type(value)==tuple:  
+                current = getattr(self,name)
+                sign = np.sign(value[0])
+                newval = current + value[0]
+                if sign*newval <= sign*value[1]:    setattr(self, name, newval)
+                else:                               setattr(self,name,value[1])
+            else:                   setattr(self, name, getattr(self,name)+ value)
     def limit(self,**kwargs):
         """Enforces limits on the value of a given property. Mainly useful for
         reducing length/adding clarity to increment statements.
@@ -152,7 +170,7 @@ class Block(Common):
         if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
         elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
         self.failrate = gtp*EPC_f
-    def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False, key_phases_by='none'):
+    def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False, key_phases_by='none', longnames={}):
         """
         Associates fault and operational modes with the block when called in the function or component.
 
@@ -184,6 +202,8 @@ class Block(Common):
             Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present). 
         key_phases_by : 'self'/'none'/'global'/'fxnname'
             Phases to key the faultmodes by (using local, global, or an external function's modes'). Default is 'none'
+        longnames : dict
+            Longer names for the faults (if desired). {faultname: longname}
         """
         if opermodes:
             self.opermodes = opermodes
@@ -223,11 +243,14 @@ class Block(Common):
                 self.faultmodes[name+mode]['rcost'] =    0.0
             else:
                 raise Exception("Invalid mode definition")
+            self.faultmodes[name+mode]['longname'] = longnames.get(mode,mode)
         if key_phases_by=='self':   self.key_phases_by = self.name
         else:                       self.key_phases_by = key_phases_by
     def set_mode(self, mode):
         """Sets a mode in the block"""
-        self.mode = mode
+        if self.exclusive_faultmodes and self.any_faults():
+            raise Exception("Cannot set mode from fault state without removing faults.")
+        else:   self.mode = mode
     def in_mode(self,mode):
         "Checks if the system is in a given operational mode"
         return self.mode==mode 
@@ -250,22 +273,22 @@ class Block(Common):
         """Moves from the current fault mode to a new fault mode"""
         self.faults.clear()
         self.faults.add(fault)
-        if self.exclusive_faultmodes: self.set_mode(fault)
+        if self.exclusive_faultmodes: self.mode = fault
     def add_fault(self,fault): 
         """Adds fault (a str) to the block"""
         self.faults.update([fault])
-        if self.exclusive_faultmodes: self.set_mode(fault)
+        if self.exclusive_faultmodes: self.mode = fault
     def add_faults(self,faults): 
         """Adds list of faults to the block"""
         self.faults.update(faults)
         if self.exclusive_faultmodes: 
             if len(faults)>1:   raise Exception("Multiple fault modes added to function with exclusive fault representation")
-            elif len(faults)==1: self.set_mode(faults[0])
+            elif len(faults)==1: self.mode =faults[0]
     def replace_fault(self, fault_to_replace,fault_to_add): 
         """Replaces fault_to_replace with fault_to_add in the set of faults"""
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
-        if self.exclusive_faultmodes: self.set_mode(fault_to_add)
+        if self.exclusive_faultmodes: self.mode = fault_to_add
     def remove_fault(self, fault_to_remove, opermode=False):
         """Removes fault in the set of faults and returns to given operational mode"""
         self.faults.discard(fault_to_remove)
