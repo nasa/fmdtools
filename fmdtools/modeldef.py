@@ -657,6 +657,12 @@ class Model(object):
     def get_flows(self,flownames):
         """ Returns a list of the model flow objects """
         return [self.flows[flowname] for flowname in flownames]
+    def fxns_of_class(self, ftype):
+        """Returns dict of functionname:functionobjects corresponding to the given class name ftype"""
+        return {fxn:obj for fxn, obj in self.fxns.items() if obj.__class__.__name__==ftype}
+    def fxnclasses(self):
+        """Returns the set of class names used in the model"""
+        return {obj.__class__.__name__ for fxn, obj in self.fxns.items()}
     def build_model(self, functionorder=[], graph_pos={}, bipartite_pos={}):
         """
         Builds the model graph after the functions have been added.
@@ -855,6 +861,47 @@ class Timer():
     def reset(self):
         """ Resets the time to zero"""
         self.time=0
+        
+class NominalApproach():
+    """
+    Class for defining sets of nominal simulations. To explain, a given system 
+    may have a number of input situations (missions, terrain, etc) which the 
+    user may want to simulate to ensure the system operates as desired. This 
+    class (in conjunction with propagate.nominal_approach()) can be used to 
+    perform these simulations.
+    """
+    def __init__(self):
+        self.scenarios = {}
+        self.num_scenarios = 0
+    def add_param_ranges(self,paramfunc, *fixedargs, **inputranges):
+        """
+        Adds a set of scenarios to the approach.
+
+        Parameters
+        ----------
+        paramfunc : method
+            Python method which generates a set of model parameters given the input arguments.
+            method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
+        *fixedargs : any
+            Fixed positional arguments in the parameter generator function. 
+            Useful for discrete modes with different parameters.
+        **inputranges : key=tuple
+            Ranges for each input argument to be iterated over specified as key = (start, end, step)
+            (note that end is not inclusive)
+        """
+        ranges = (np.arange(*arg) for k,arg in inputranges.items())
+        fullspace = [x for x in itertools.product(*ranges)]
+        inputnames = list(inputranges.keys())
+        for xvals in fullspace:
+            self.num_scenarios+=1
+            inputparams = {name:xvals[i] for i,name in enumerate(inputnames)}
+            params = paramfunc(*fixedargs, **inputparams)
+            scenname = 'nominal_'+str(self.num_scenarios)
+            self.scenarios[scenname]={'faults':{},\
+                                      'properties':{'type':'nominal', 'name':scenname,\
+                                                    'params':params,'inputparams':inputparams,\
+                                                    'paramfunc':paramfunc, 'fixedargs':fixedargs}}
+   
 
 class SampleApproach():
     """
