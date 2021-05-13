@@ -72,6 +72,53 @@ def nominal(mdl, track='all', gtype='normal'):
     mdl.reset()
     return endresults, resgraph, mdlhist
 
+def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False):
+    """
+    Simulates a set of nominal scenarios through a model. Useful to understand
+    the sets of parameters where the system will run nominally and/or lead to 
+    a fault.
+
+    Parameters
+    ----------
+    mdl : Model
+        Model to simulate
+    nomapp : NominalApproach
+        Nominal Approach defining the nominal scenarios to run the system over.
+    track : str, optional
+        States to track during simulation. The default is 'all'.
+    showprogress : bool, optional
+        Whether to display progress during simulation. The default is True.
+    pool : Pool, optional
+        Parallel pool (e.g. multiprocessing.Pool) to simulate with 
+        (if using parallelism). The default is False.
+
+    Returns
+    -------
+    endclasses : Dict
+        Classifications of the set of scenarios, with structure {'name':classification}
+    mdlhists : Dict
+        Dictionary of model histories, with structure {'name':mdlhist}
+
+    """
+    mdlhists = dict.fromkeys(nomapp.scenarios)
+    endclasses = dict.fromkeys(nomapp.scenarios)
+    if pool:
+        inputs = [(mdl.__class__(scen['properties']['params'], mdl.modelparams, mdl.valparams), scen, track) for scen in nomapp.scenarios.values()]
+        result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
+        endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
+        mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
+    else:
+        for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
+            mdl = mdl.__class__(params=scen['properties']['params'], modelparams = mdl.modelparams, valparams=mdl.valparams)
+            mdlhists[scenname], _ = prop_one_scen(mdl, scen, track=track, staged=False)
+            endfaults, endfaultprops = mdl.return_faultmodes()
+            endclasses[scenname]=mdl.find_classification(scen, {'nominal': mdlhists[scenname], 'faulty':mdlhists[scenname]})
+    return endclasses, mdlhists
+def exec_nom_helper(arg):
+    mdlhist, _ =prop_one_scen(arg[0], arg[1], track=arg[2], staged=False)
+    endclass=arg[0].find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
+    return endclass, mdlhist
+
 def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'normal'):
     """
     Runs one fault in the model at a specified time.
