@@ -898,7 +898,7 @@ class NominalApproach():
             params = paramfunc(*fixedargs, **inputparams)
             scenname = 'nominal_'+str(self.num_scenarios)
             self.scenarios[scenname]={'faults':{},\
-                                      'properties':{'type':'nominal', 'name':scenname,\
+                                      'properties':{'type':'nominal','time':0.0, 'name':scenname,\
                                                     'params':params,'inputparams':inputparams,\
                                                     'paramfunc':paramfunc, 'fixedargs':fixedargs}}
    
