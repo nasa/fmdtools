@@ -176,6 +176,25 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     plt.subplots_adjust(top=1-0.05-0.15/(num_plots/cols))
     if returnfig: return fig
     else: plt.show()
+    
+def nominal_vals(app, endclasses, param1, param2, param3=0, title="Nominal Operational Envelope"):
+    fig = plt.figure()
+    
+    data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in app.scenarios.items()\
+            if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False))]
+    names = [d[0] for d in data]
+    classifications = [endclasses[name]['classification'] for name in names] 
+    discrete_classes = set(classifications)
+    for cl in discrete_classes:
+        xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
+        ydata = [d[2] for i,d in enumerate(data) if classifications[i]==cl]
+        plt.scatter(xdata, ydata, label=cl)
+    plt.legend()
+    plt.xlabel(param1)
+    plt.ylabel(param2)
+    plt.title(title)
+    plt.grid(which='both')
+    return fig
 
 def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
     """
