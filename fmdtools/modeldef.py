@@ -873,6 +873,7 @@ class NominalApproach():
     def __init__(self):
         self.scenarios = {}
         self.num_scenarios = 0
+        self.ranges = {}
     def add_param_ranges(self,paramfunc, *fixedargs, **inputranges):
         """
         Adds a set of scenarios to the approach.
@@ -889,6 +890,7 @@ class NominalApproach():
             Ranges for each input argument to be iterated over specified as key = (start, end, step)
             (note that end is not inclusive)
         """
+        self.ranges.update(inputranges)
         ranges = (np.arange(*arg) for k,arg in inputranges.items())
         fullspace = [x for x in itertools.product(*ranges)]
         inputnames = list(inputranges.keys())
