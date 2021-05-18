@@ -20,6 +20,7 @@ from fmdtools.resultdisp.tabulate import costovertime as cost_table
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
+from mpl_toolkits.mplot3d import Axes3D
 
 def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel='Time', units=[]):
     """
@@ -176,8 +177,79 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     plt.subplots_adjust(top=1-0.05-0.15/(num_plots/cols))
     if returnfig: return fig
     else: plt.show()
+
+def nominal_vals_1d(app, endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal'):
+    """
+    Visualizes the nominal operational envelope along one given parameter
+
+    Parameters
+    ----------
+    app : NominalApproach
+        Nominal sample approach simulated in the model.
+    endclasses : dict
+        End-classifications for the set of simulations in the model.
+    param1 : str
+        Parameter range desired to visualize in the operational envelope
+    title : str, optional
+        Plot title. The default is "Nominal Operational Envelope".
+    nomlabel : str, optional
+        Flag for nominal end-states. The default is 'nominal'.
+
+    Returns
+    -------
+    fig : matplotlib figure
+        Figure for the plot.
+
+    """
     
-def nominal_vals(app, endclasses, param1, param2, param3=0, title="Nominal Operational Envelope"):
+    fig = plt.figure()
+    
+    data = [(x, scen['properties']['inputparams'][param1]) for x,scen in app.scenarios.items()\
+            if (scen['properties']['inputparams'].get(param1,False))]
+    names = [d[0] for d in data]
+    classifications = [endclasses[name]['classification'] for name in names] 
+    discrete_classes = set(classifications)
+    min_x = np.min([d[1] for i,d in enumerate(data)])
+    max_x = np.max([d[1] for i,d in enumerate(data)])
+    plt.hlines(1,min_x-1, max_x+1)
+    
+    for cl in discrete_classes:
+        xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
+        if nomlabel in cl:  plt.eventplot(xdata, label=cl, color='blue', alpha=0.5)
+        else:               plt.eventplot(xdata, label=cl, color='red', alpha=0.5)
+    plt.legend()
+    plt.xlim(min_x-1, max_x+1)
+    axis = plt.gca()
+    axis.yaxis.set_ticklabels([])
+    plt.xlabel(param1)
+    plt.title(title)
+    plt.grid(which='both', axis='x')
+    return fig
+
+def nominal_vals_2d(app, endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal'):
+    """
+    Visualizes the nominal operational envelope along two given parameters
+
+    Parameters
+    ----------
+    app : NominalApproach
+        Nominal sample approach simulated in the model.
+    endclasses : dict
+        End-classifications for the set of simulations in the model.
+    param1 : str
+        First parameter (x) desired to visualize in the operational envelope
+    param2 : str
+        Second arameter (y) desired to visualize in the operational envelope
+    title : str, optional
+        Plot title. The default is "Nominal Operational Envelope".
+    nomlabel : str, optional
+        Flag for nominal end-states. The default is 'nominal'.
+
+    Returns
+    -------
+    fig : matplotlib figure
+        Figure for the plot.
+    """
     fig = plt.figure()
     
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in app.scenarios.items()\
@@ -188,10 +260,59 @@ def nominal_vals(app, endclasses, param1, param2, param3=0, title="Nominal Opera
     for cl in discrete_classes:
         xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
         ydata = [d[2] for i,d in enumerate(data) if classifications[i]==cl]
-        plt.scatter(xdata, ydata, label=cl)
+        if nomlabel in cl:  plt.scatter(xdata, ydata, label=cl, marker="o")
+        else:               plt.scatter(xdata, ydata, label=cl, marker="X")
     plt.legend()
     plt.xlabel(param1)
     plt.ylabel(param2)
+    plt.title(title)
+    plt.grid(which='both')
+    return fig
+
+def nominal_vals_3d(app, endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal'):
+    """
+    Visualizes the nominal operational envelope along three given parameters
+
+    Parameters
+    ----------
+    app : NominalApproach
+        Nominal sample approach simulated in the model.
+    endclasses : dict
+        End-classifications for the set of simulations in the model.
+    param1 : str
+        First parameter (x) desired to visualize in the operational envelope
+    param2 : str
+        Second parameter (y) desired to visualize in the operational envelope
+    param3 : str
+        Third parameter (y) desired to visualize in the operational envelope
+    title : str, optional
+        Plot title. The default is "Nominal Operational Envelope".
+    nomlabel : str, optional
+        Flag for nominal end-states. The default is 'nominal'.
+
+    Returns
+    -------
+    fig : matplotlib figure
+        Figure for the plot.
+    """
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    
+    data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2], scen['properties']['inputparams'][param3]) for x,scen in app.scenarios.items()\
+            if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False)and scen['properties']['inputparams'].get(param3,False))]
+    names = [d[0] for d in data]
+    classifications = [endclasses[name]['classification'] for name in names] 
+    discrete_classes = set(classifications)
+    for cl in discrete_classes:
+        xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
+        ydata = [d[2] for i,d in enumerate(data) if classifications[i]==cl]
+        zdata = [d[3] for i,d in enumerate(data) if classifications[i]==cl]
+        if nomlabel in cl:  ax.scatter(xdata, ydata, zdata, label=cl, marker="o")
+        else:               ax.scatter(xdata, ydata, zdata, label=cl, marker="X")
+    ax.legend()
+    ax.set_xlabel(param1)
+    ax.set_ylabel(param2)
+    ax.set_zlabel(param3)
     plt.title(title)
     plt.grid(which='both')
     return fig
