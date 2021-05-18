@@ -378,6 +378,11 @@ def expfaultsheatmap(reshists, endclasses):
     return expfaulttable.mean().to_dict()
 def totalcost(endclasses):
     return sum([e['expected cost'] for k,e in endclasses.items()])
-def state_probabities(endclasses):
+def state_probabilities(endclasses):
+    classifications = set([props['classification'] for k,props in endclasses.items()])
+    probabilities = dict.fromkeys(classifications)
+    for classif in classifications:
+        probabilities[classif] = sum([props['prob'] for k,props in endclasses.items() if classif==props['classification']])
+    return probabilities
     
     
