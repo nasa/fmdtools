@@ -874,7 +874,7 @@ class NominalApproach():
         self.scenarios = {}
         self.num_scenarios = 0
         self.ranges = {}
-    def add_param_ranges(self,paramfunc, *fixedargs, **inputranges):
+    def add_param_ranges(self,paramfunc, rangeid, *fixedargs, **inputranges):
         """
         Adds a set of scenarios to the approach.
 
@@ -883,27 +883,89 @@ class NominalApproach():
         paramfunc : method
             Python method which generates a set of model parameters given the input arguments.
             method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
+        rangeid : str
+            Name for the range being used. Default is 'nominal'
         *fixedargs : any
             Fixed positional arguments in the parameter generator function. 
             Useful for discrete modes with different parameters.
         **inputranges : key=tuple
-            Ranges for each input argument to be iterated over specified as key = (start, end, step)
+            Ranges for each input argument to be iterated over specified as input = (start, end, step)
             (note that end is not inclusive)
         """
-        self.ranges.update(inputranges)
         ranges = (np.arange(*arg) for k,arg in inputranges.items())
         fullspace = [x for x in itertools.product(*ranges)]
         inputnames = list(inputranges.keys())
+        self.ranges[rangeid] = {'fixedargs':fixedargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace)}
         for xvals in fullspace:
             self.num_scenarios+=1
             inputparams = {name:xvals[i] for i,name in enumerate(inputnames)}
             params = paramfunc(*fixedargs, **inputparams)
-            scenname = 'nominal_'+str(self.num_scenarios)
+            scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'faults':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname,\
                                                     'params':params,'inputparams':inputparams,\
-                                                    'paramfunc':paramfunc, 'fixedargs':fixedargs}}
-   
+                                                    'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':1/len(fullspace)}}
+            self.ranges[rangeid]['scenarios'].append(scenname)
+    def assoc_probs(self, rangeid, prob_weight=1.0, **inputpdfs):
+        """
+        Associates a probability model (assuming variable independence) with a 
+        given previously-defined range of scenarios using given pdfs
+
+        Parameters
+        ----------
+        rangeid : str
+            Name of the range to apply the probability model to.
+        prob_weight : float, optional
+            Overall probability for the set of scenarios (to use if adding more ranges 
+            or if the range does not cover the space of probability). The default is 1.0.
+        **inputpdfs : key=(pdf, params)
+            pdf to associate with the different variables of the model. 
+            Where the pdf has form pdf(x, **kwargs) where x is the location and **kwargs is parameters
+            (for example, scipy.stats.norm.pdf)
+            and params is a dictionary of parameters (e.g., {'mu':1,'std':1}) to use '
+            as the key/parameter inputs to the pdf
+        """
+        for scenname in self.ranges[rangeid]['scenarios']:
+            inputparams = self.scenarios[scenname]['properties']['inputparams']
+            inputprobs = [inpdf[0](inputparams[name], **inpdf[1]) for name, inpdf in inputpdfs.items()]
+            self.scenarios[scenname]['properties']['prob'] = np.prod(inputprobs)
+        totprobs = sum([p['properties']['prob'] for n,p in self.scenarios.items()])
+        for scenname in self.ranges[rangeid]['scenarios']:
+            self.scenarios[scenname]['properties']['prob'] = self.scenarios[scenname]['properties']['prob']*prob_weight/totprobs
+    def add_rand_params(self, paramfunc, rangeid='nominal', prob_weight=1.0, num_pts=1000, *fixedargs, **randvars):
+        """
+        Adds a set of random scenarios to the approach.
+
+        Parameters
+        ----------
+        paramfunc : method
+            Python method which generates a set of model parameters given the input arguments.
+            method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
+        rangeid : str
+            Name for the range being used. Default is 'nominal'
+        prob_weight : float (0-1)
+            Overall probability for the set of scenarios (to use if adding more ranges). Default is 1.0
+        *fixedargs : any
+            Fixed positional arguments in the parameter generator function. 
+            Useful for discrete modes with different parameters.
+        **inputranges : key=tuple
+            Specification for each random input parameter, specified as 
+            input = (randfunc, param1, param2...)
+            where randfunc is the method producing random outputs (e.g. numpy.random.rand)
+            and the successive parameters param1, param2, etc are inputs to the method
+        """
+        self.num_scenarios+=num_pts
+        self.ranges[rangeid] = {'fixedargs':fixedargs, 'randvars':randvars, 'scenarios':[], 'num_pts':num_pts}
+        for i in range(num_pts):
+            inputparams = {name: (ins() if callable(ins) else ins[0](*ins[1:])) for name, ins in randvars.items()}
+            params = paramfunc(*fixedargs, **inputparams)
+            scenname = rangeid+'_'+str(self.num_scenarios)
+            self.scenarios[scenname]={'faults':{},\
+                                      'properties':{'type':'nominal','time':0.0, 'name':scenname,\
+                                                    'params':params,'inputparams':inputparams,\
+                                                    'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/num_pts}}
+            self.ranges[rangeid]['scenarios'].append(scenname)
+            
 
 class SampleApproach():
     """
