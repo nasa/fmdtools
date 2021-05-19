@@ -1,3 +1,4 @@
+scipy
 tqdm
 multiprocessing
 networkx

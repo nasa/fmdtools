@@ -12,9 +12,10 @@ Uses methods:
         - flowhist:             Compares the history of flow states in mdlhist over time.
     - modephases:               Identifies the phases of operation for the system based on a mdlhist with a history of its modes
     - graphflows:               Extracts non-nominal flows by comparing the a results graph with a nominal results graph.
-    - resultsgraph:        Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
-    - resultsgraphs:       Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
-
+    - resultsgraph:         Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
+    - resultsgraphs:        Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
+    - totalcost:            Calculates the total host of a set of given end classifications
+    - state_probabilities:  Calculates the probabilities of given end-state classifications given an endclasses dictionary
 Also used for graph heatmaps, which use the results history to map results history statistics onto the graph, returning a dictonary with structure {fxn/flow: value}:         
     - heatmaps:            Makes a dict of heatmaps given a results history and a history of the differences between nominal and faulty models.
     - degtimemap:          Makes a heatmap dictionary of degraded time for functions given a result history
@@ -377,8 +378,35 @@ def expfaultsheatmap(reshists, endclasses):
     expfaulttable = faulttable.multiply(rates).transpose()
     return expfaulttable.mean().to_dict()
 def totalcost(endclasses):
+    """
+    Tabulates the total expected cost of given endlcasses from a run.
+
+    Parameters
+    ----------
+    endclasses : dict
+        Dictionary of end-state classifications with 'expected cost' attributes
+
+    Returns
+    -------
+    totalcost : Float
+        The total expected cost of the scenarios.
+    """
     return sum([e['expected cost'] for k,e in endclasses.items()])
 def state_probabilities(endclasses):
+    """
+    Tabulates the probabilities of different states in endclasses.
+
+    Parameters
+    ----------
+    endclasses : dict
+        Dictionary of end-state classifications 'classification' and 'prob' attributes
+
+    Returns
+    -------
+    probabilities : dict
+        Dictionary of probabilities of different simulation classifications
+
+    """
     classifications = set([props['classification'] for k,props in endclasses.items()])
     probabilities = dict.fromkeys(classifications)
     for classif in classifications:
