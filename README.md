@@ -5,7 +5,7 @@
 
 fmdtools (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
 
-This release is version 0.7.0.
+This release is version 0.7.1.
 
 [![DOI](https://zenodo.org/badge/212862445.svg)](https://zenodo.org/badge/latestdoi/212862445)
 
@@ -24,10 +24,11 @@ This release is version 0.7.0.
 - fmdtools provides convenience methods for quickly visualizing the results of fault simulations with commonly-used Python libraries to enable one to quickly assess:
   - effects of faults on functions and flows in the model graph at a given time-step
   - the behavior of system states over time in nominal and faulty scenarios
+  - the effect of model input parameters (e.g., ranges, stochastic inputs) on nominal/faulty operations
   - the high-level results of a set of simulations in an FMEA-style table of faults, effects, rates, costs, and overall risk
   - fault injection times, responses, and weightings of a fault injection approach
 
-In the future, we would like to add features for optimization/design exploration, uncertainty quantification, non-deterministic fault propagation, and parallelism.
+In the future, we would like to add features for optimization/design exploration, non-deterministic fault propagation, and parallelism.
 
 Finally, fmdtools is a research code and is under active development. As a result, Some use-cases may not work as desired and may change. If you find a bug or would like to contribute, contact the contributors.
 
@@ -46,6 +47,7 @@ fmdtools requires Python 3 and depends on these packages:
 - `dill`
 - `pickle`
 - `tqdm`
+- `scipy` 				(for using statistical distributions in parameter sampling)
 - `multiprocessing`     (for parallel execution--Pathos and multiprocess can also be used)
 - `matplotlib`			(for plots)
 - `pandas`				(for tables)
