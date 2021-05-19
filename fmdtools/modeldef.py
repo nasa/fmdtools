@@ -929,10 +929,10 @@ class NominalApproach():
             inputparams = self.scenarios[scenname]['properties']['inputparams']
             inputprobs = [inpdf[0](inputparams[name], **inpdf[1]) for name, inpdf in inputpdfs.items()]
             self.scenarios[scenname]['properties']['prob'] = np.prod(inputprobs)
-        totprobs = sum([p['properties']['prob'] for n,p in self.scenarios.items()])
+        totprobs = sum([self.scenarios[scenname]['properties']['prob'] for scenname in self.ranges[rangeid]['scenarios']])
         for scenname in self.ranges[rangeid]['scenarios']:
             self.scenarios[scenname]['properties']['prob'] = self.scenarios[scenname]['properties']['prob']*prob_weight/totprobs
-    def add_rand_params(self, paramfunc, rangeid='nominal', prob_weight=1.0, num_pts=1000, *fixedargs, **randvars):
+    def add_rand_params(self, paramfunc, rangeid, *fixedargs, prob_weight=1.0, num_pts=1000, **randvars):
         """
         Adds a set of random scenarios to the approach.
 
@@ -954,9 +954,9 @@ class NominalApproach():
             where randfunc is the method producing random outputs (e.g. numpy.random.rand)
             and the successive parameters param1, param2, etc are inputs to the method
         """
-        self.num_scenarios+=num_pts
         self.ranges[rangeid] = {'fixedargs':fixedargs, 'randvars':randvars, 'scenarios':[], 'num_pts':num_pts}
         for i in range(num_pts):
+            self.num_scenarios+=1
             inputparams = {name: (ins() if callable(ins) else ins[0](*ins[1:])) for name, ins in randvars.items()}
             params = paramfunc(*fixedargs, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
