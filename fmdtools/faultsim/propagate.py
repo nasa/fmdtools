@@ -32,7 +32,7 @@ import tqdm
 
 ## FAULT PROPAGATION
 
-def nominal(mdl, track='all', gtype='normal'):
+def nominal(mdl, track='all', gtype='normal', track_times="all"):
     """
     Runs the model over time in the nominal scenario.
 
@@ -60,7 +60,7 @@ def nominal(mdl, track='all', gtype='normal'):
     mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     nomscen=construct_nomscen(mdl)
     scen=nomscen.copy()
-    mdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False)
+    mdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False, track_times = track_times)
     
     resgraph = mdl.return_stategraph(gtype=gtype)   
     endfaults, endfaultprops = mdl.return_faultmodes()
@@ -72,7 +72,7 @@ def nominal(mdl, track='all', gtype='normal'):
     mdl.reset()
     return endresults, resgraph, mdlhist
 
-def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False):
+def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, track_times="all"):
     """
     Simulates a set of nominal scenarios through a model. Useful to understand
     the sets of parameters where the system will run nominally and/or lead to 
@@ -103,23 +103,23 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False):
     mdlhists = dict.fromkeys(nomapp.scenarios)
     endclasses = dict.fromkeys(nomapp.scenarios)
     if pool:
-        inputs = [(mdl.__class__(scen['properties']['params'], mdl.modelparams, mdl.valparams), scen, track) for scen in nomapp.scenarios.values()]
+        inputs = [(mdl.__class__(scen['properties']['params'], mdl.modelparams, mdl.valparams), scen, track, track_times) for scen in nomapp.scenarios.values()]
         result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
         mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
     else:
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
             mdl = mdl.__class__(params=scen['properties']['params'], modelparams = mdl.modelparams, valparams=mdl.valparams)
-            mdlhists[scenname], _ = prop_one_scen(mdl, scen, track=track, staged=False)
+            mdlhists[scenname], _ = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times)
             endfaults, endfaultprops = mdl.return_faultmodes()
             endclasses[scenname]=mdl.find_classification(scen, {'nominal': mdlhists[scenname], 'faulty':mdlhists[scenname]})
     return endclasses, mdlhists
 def exec_nom_helper(arg):
-    mdlhist, _ =prop_one_scen(arg[0], arg[1], track=arg[2], staged=False)
+    mdlhist, _ =prop_one_scen(arg[0], arg[1], track=arg[2], staged=False, track_times=arg[3])
     endclass=arg[0].find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
     return endclass, mdlhist
 
-def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'normal'):
+def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'normal', track_times="all"):
     """
     Runs one fault in the model at a specified time.
 
@@ -157,14 +157,14 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
     mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     nomscen=construct_nomscen(mdl)
     if staged:
-        nommdlhist, mdls = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes=[time])
+        nommdlhist, mdls = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes=[time], track_times=track_times)
         nomresgraph = mdl.return_stategraph(gtype)
         endfaults, endfaultprops = mdl.return_faultmodes()
         if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
         mdl.reset()
         mdl = mdls[time]
     else:
-        nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=staged)
+        nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=staged, track_times=track_times)
         nomresgraph = mdl.return_stategraph(gtype)
         endfaults, endfaultprops = mdl.return_faultmodes()
         if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
@@ -182,7 +182,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
         scen['properties']['rate'] = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist']
     scen['properties']['time']=time
     
-    faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=staged, prevhist=nommdlhist)
+    faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=staged, prevhist=nommdlhist, track_times=track_times)
     faultresgraph = mdl.return_stategraph(gtype)
     
     #process model run
@@ -197,7 +197,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal'):
+def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal', track_times="all"):
     """
     Runs one fault in the model at a specified time.
 
@@ -231,7 +231,7 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal'):
     mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     nomscen=construct_nomscen(mdl)
     
-    nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False)
+    nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False, track_times=track_times)
     nomresgraph = mdl.return_stategraph(gtype)
     endfaults, endfaultprops = mdl.return_faultmodes()
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
@@ -246,7 +246,7 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal'):
     scen['properties']['rate']=rate # this rate is on a per-simulation basis
     scen['properties']['time']=list(faultseq.keys())
     
-    faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=False, prevhist=nommdlhist)
+    faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=False, prevhist=nommdlhist, track_times=track_times)
     faultresgraph = mdl.return_stategraph(gtype)
     
     #process model run
@@ -261,7 +261,7 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal'):
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True):
+def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True, track_times="all"):
     """
     Creates and propagates a list of failure scenarios in a model.
     
@@ -302,9 +302,9 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True)
     nomscen=construct_nomscen(mdl)
     mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     if staged:
-        nomhist, c_mdl = prop_one_scen(mdl, nomscen, track=track, ctimes=mdl.times)
+        nomhist, c_mdl = prop_one_scen(mdl, nomscen, track=track, ctimes=mdl.times, track_times=track_times)
     else:
-        nomhist, c_mdl = prop_one_scen(mdl, nomscen, track=track)
+        nomhist, c_mdl = prop_one_scen(mdl, nomscen, track=track, track_times=track_times)
     nomresgraph = mdl.return_stategraph()
     endfaults, endfaultprops = mdl.return_faultmodes()
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
@@ -314,19 +314,19 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True)
     mdlhists = {}
     mdlhists['nominal'] = nomhist
     if pool:
-        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged) for scen in scenlist]
-        else: inputs = [(mdl, scen, nomresgraph, nomhist, track, staged) for scen in scenlist]
+        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged, track_times) for scen in scenlist]
+        else: inputs = [(mdl, scen, nomresgraph, nomhist, track, staged, track_times) for scen in scenlist]
         result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
         mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(scenlist)}
     else:
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
-            if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(c_mdl[scen['properties']['time']], scen, nomresgraph,nomhist, track=track, staged=staged)
-            else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged)
+            if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(c_mdl[scen['properties']['time']], scen, nomresgraph,nomhist, track=track, staged=staged, track_times=track_times)
+            else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged, track_times = track_times)
             
     return endclasses, mdlhists
 
-def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True):
+def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True, track_times="all"):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -360,9 +360,9 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True)
     """
     mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     if staged:
-        nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times)
+        nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times, track_times=track_times)
     else:
-        nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track)
+        nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, track_times=track_times)
     nomresgraph = mdl.return_stategraph()
     endfaults, endfaultprops = mdl.return_faultmodes()
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
@@ -373,20 +373,20 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True)
     mdlhists['nominal'] = nomhist
     scenlist = app.scenlist
     if pool:
-        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged) for scen in scenlist]
-        else: inputs = [(mdl, scen, nomresgraph, nomhist, track, staged) for scen in scenlist]
+        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged, track_times) for scen in scenlist]
+        else: inputs = [(mdl, scen, nomresgraph, nomhist, track, staged, track_times) for scen in scenlist]
         result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
         mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(scenlist)}
     else:
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
-            if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(c_mdl[scen['properties']['time']], scen, nomresgraph,nomhist, track=track, staged=staged)
-            else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged)
+            if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(c_mdl[scen['properties']['time']], scen, nomresgraph,nomhist, track=track, staged=staged, track_times=track_times)
+            else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']] = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged, track_times=track_times)
     return endclasses, mdlhists
 
 def exec_scen_par(args):
     return exec_scen(args[0], args[1], args[2], args[3], track=args[4], staged=args[5])
-def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True):
+def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True, track_times="all"):
     """ 
     Executes a scenario and generates results and classifications given a model and nominal model history
     
@@ -412,10 +412,10 @@ def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True):
     """
     if staged:
         mdl = mdl.copy()
-        mdlhist, _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist)
+        mdlhist, _ =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist, track_times=track_times)
     else:
         mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
-        mdlhist, _ =prop_one_scen(mdl, scen, track=track)
+        mdlhist, _ =prop_one_scen(mdl, scen, track=track, track_times=track_times)
     endclass = mdl.find_classification(scen, {'nominal':nomhist, 'faulty':mdlhist})
     return endclass, mdlhist 
 
@@ -473,7 +473,7 @@ def list_init_faults(mdl):
                 faultlist.append(newscen)
     return faultlist
        
-def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}):
+def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, track_times="all"):
     """
     Runs a fault scenario in the model over time
 
@@ -506,13 +506,25 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}):
     # using a copy of the input model (which is the nominal run) at this time
     if staged:
         timerange=np.arange(scen['properties']['time'], mdl.times[-1]+1, mdl.tstep)
-        shift = len(np.arange(mdl.times[0], scen['properties']['time'], mdl.tstep))
+        prevtimerange = np.arange(mdl.times[0], scen['properties']['time'], mdl.tstep)
+        if track_times == "all":            
+            histrange = timerange
+            shift = len(prevtimerange)
+        elif track_times[0]=='interval':    
+            histrange = timerange[0:len(timerange):track_times[1]]
+            shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
+        elif track_times[0]=='times':       
+            histrange = track_times[1]
+            shift=0
         if prevhist:    mdlhist = copy.deepcopy(prevhist)
-        else:           mdlhist = init_mdlhist(mdl, timerange, track=track)
+        else:           mdlhist = init_mdlhist(mdl, histrange, track=track)
     else: 
         timerange = np.arange(mdl.times[0], mdl.times[-1]+1, mdl.tstep)
+        if track_times == "all":            histrange = timerange
+        elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
+        elif track_times[0]=='times':       histrange = track_times[0]
         shift = 0
-        mdlhist = init_mdlhist(mdl, timerange, track=track)
+        mdlhist = init_mdlhist(mdl, histrange, track=track)
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes)
     flowstates=dict.fromkeys(mdl.staticflows)
@@ -529,7 +541,11 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}):
                    ind = scen['properties']['time'].index(t)
                    propagate(mdl, scen['faults'][ind], t, flowstates)
                else: propagate(mdl,{},t, flowstates)
-           update_mdlhist(mdl, mdlhist, t_ind+shift, track=track)
+           if track_times=='all':   update_mdlhist(mdl, mdlhist, t_ind+shift, track=track)
+           elif track_times[0]=='interval':
+               if t_ind%track_times[1]: update_mdlhist(mdl, mdlhist, t_ind//track_times[1]+shift, track=track)
+           elif track_times[0]=='times':
+               if t in track_times[1]: update_mdlhist(mdl, mdlhist, track_times[1].index(t), track=track)
            if t in ctimes: c_mdl[t]=mdl.copy()
        except:
             print("Error at t="+str(t))
