@@ -385,7 +385,7 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     return endclasses, mdlhists
 
 def exec_scen_par(args):
-    return exec_scen(args[0], args[1], args[2], args[3], track=args[4], staged=args[5])
+    return exec_scen(args[0], args[1], args[2], args[3], track=args[4], staged=args[5], track_times=args[6])
 def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True, track_times="all"):
     """ 
     Executes a scenario and generates results and classifications given a model and nominal model history
@@ -548,7 +548,7 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
                if t in track_times[1]: update_mdlhist(mdl, mdlhist, track_times[1].index(t), track=track)
            if t in ctimes: c_mdl[t]=mdl.copy()
        except:
-            print("Error at t="+str(t))
+            print("Error at t="+str(t)+' in scenario '+str(scen))
             raise
             break
     return mdlhist, c_mdl
