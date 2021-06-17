@@ -47,7 +47,11 @@ def nominal(mdl, track='all', gtype='normal', track_times="all"):
         The default is 'all'.
     gtype : TYPE, optional
         The type of graph to return (normal or bipartite). The default is 'normal'.
-
+    track_times : str/tuple
+        Defines what times to include in the history. Options are:
+            'all'--all simulated times
+            ('interval', n)--includes every nth time in the history
+            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     Returns
     -------
     endresults : Dict
@@ -91,14 +95,17 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
     pool : Pool, optional
         Parallel pool (e.g. multiprocessing.Pool) to simulate with 
         (if using parallelism). The default is False.
-
+    track_times : str/tuple
+        Defines what times to include in the history. Options are:
+            'all'--all simulated times
+            ('interval', n)--includes every nth time in the history
+            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     Returns
     -------
     endclasses : Dict
         Classifications of the set of scenarios, with structure {'name':classification}
     mdlhists : Dict
         Dictionary of model histories, with structure {'name':mdlhist}
-
     """
     mdlhists = dict.fromkeys(nomapp.scenarios)
     endclasses = dict.fromkeys(nomapp.scenarios)
@@ -142,7 +149,11 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). The default is False.
     gtype : str, optional
         The graph type to return ('bipartite' or 'normal'). The default is 'normal'.
-
+    track_times : str/tuple
+        Defines what times to include in the history. Options are:
+            'all'--all simulated times
+            ('interval', n)--includes every nth time in the history
+            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     Returns
     -------
     endresults : dict
@@ -151,7 +162,6 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
         A graph object with function faults and degraded flows noted as attributes
     mdlhists : dict
         A dictionary of the states of the model of each fault scenario over time.
-
     """
     #run model nominally, get relevant results
     mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
@@ -216,7 +226,11 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal', track_ti
         Input rate for the sequence (must be calculated elsewhere)
     gtype : str, optional
         The graph type to return ('bipartite' or 'normal'). The default is 'normal'.
-
+    track_times : str/tuple
+        Defines what times to include in the history. Options are:
+            'all'--all simulated times
+            ('interval', n)--includes every nth time in the history
+            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     Returns
     -------
     endresults : dict
@@ -288,6 +302,11 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
         If False, the set of scenarios is run serially. The default is False
     showprogress: bool, optional
         whether to show a progress bar during execution. default is true
+    track_times : str/tuple
+        Defines what times to include in the history. Options are:
+            'all'--all simulated times
+            ('interval', n)--includes every nth time in the history
+            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
 
     Returns
     -------
@@ -350,7 +369,11 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
         If False, the set of scenarios is run serially. The default is False
     showprogress: bool, optional
         whether to show a progress bar during execution. default is true
-
+    track_times : str/tuple
+        Defines what times to include in the history. Options are:
+            'all'--all simulated times
+            ('interval', n)--includes every nth time in the history
+            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     Returns
     -------
     endclasses : dict
@@ -409,6 +432,11 @@ def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True, track_
         'all', 'none', 'valparams' (model states specified in mdl.valparams),
         or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
         The default is 'all'.
+    track_times : str/tuple
+        Defines what times to include in the history. Options are:
+            'all'--all simulated times
+            ('interval', n)--includes every nth time in the history
+            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     """
     if staged:
         mdl = mdl.copy()
@@ -501,6 +529,11 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
         A dictionary with a history of modelstates.
     c_mdl : dict
         A dictionary of models at each time given in ctimes with structure {time:model}
+    track_times : str/tuple
+        Defines what times to include in the history. Options are:
+            'all'--all simulated times
+            ('interval', n)--includes every nth time in the history
+            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     """
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time

@@ -33,17 +33,17 @@ def one_delay_helper(delay):
     endresults,resgraph, mdlhists = propagate.one_fault(mdl, 'ExportWater', 'block')
     return endresults
 
-def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True):
+def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, track_times='all'):
     exectimes = {}
     starttime = time.time()
-    endclasses, mdlhists = propagate.approach(mdl,app, pool=False, staged = staged, track=track, showprogress=False)
+    endclasses, mdlhists = propagate.approach(mdl,app, pool=False, staged = staged, track=track, showprogress=False, track_times=track_times)
     exectime_single = time.time() - starttime
     if verbose: print("single-thread exec time: "+str(exectime_single))
     exectimes['single'] = exectime_single
     
     for pool in pools:
         starttime = time.time()
-        endclasses, mdlhists = propagate.approach(mdl,app, pool=pools[pool], staged = staged, track=track, showprogress=False)
+        endclasses, mdlhists = propagate.approach(mdl,app, pool=pools[pool], staged = staged, track=track, showprogress=False, track_times=track_times)
         exectime_par = time.time() - starttime
         if verbose: print(pool+" exec time: "+str(exectime_par))
         exectimes[pool] = exectime_par
