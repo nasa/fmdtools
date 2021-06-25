@@ -87,6 +87,16 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=8, init
         elif gtype=='bipartite':    mdl.bipartite_pos = pos  
     return pos
 
+def classes(mdl):
+    g = nx.DiGraph()
+    modelname = type(mdl).__name__
+    g.add_node(modelname)
+    g.add_nodes_from(mdl.fxnclasses())
+    function_connections = [(modelname, fname) for fname in mdl.fxnclasses()]
+    g.add_edges_from(function_connections)
+    nx.draw(g, with_labels=True)
+    
+
 def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, retfig=False, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
     """
     Plots a single graph object g.
