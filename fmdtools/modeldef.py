@@ -285,7 +285,7 @@ class Block(Common):
         self.faults.update(faults)
         if self.exclusive_faultmodes: 
             if len(faults)>1:   raise Exception("Multiple fault modes added to function with exclusive fault representation")
-            elif len(faults)==1: self.mode =faults[0]
+            elif len(faults)==1 and list(faults)[0]!='nom': self.mode =faults[0]
     def replace_fault(self, fault_to_replace,fault_to_add): 
         """Replaces fault_to_replace with fault_to_add in the set of faults"""
         self.faults.add(fault_to_add)

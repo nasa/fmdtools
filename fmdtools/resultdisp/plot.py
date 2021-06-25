@@ -25,9 +25,9 @@ import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
 from mpl_toolkits.mplot3d import Axes3D
 
-def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=True, timelabel='Time', units=[]):
+def mdlhist(mdlhist, fault='', time=0, fxnflows=[],cols=2, returnfigs=False, legend=True, timelabel='Time', units=[], phases={}, modephases={}, label_phases=True):
     """
-    Plots the states of a model over time given a history.
+    Plots all states of the model at a time given a model history on separate plots.
 
     Parameters
     ----------
@@ -39,67 +39,34 @@ def mdlhist(mdlhist, fault='', time=0, fxnflows=[], returnfigs=False, legend=Tru
         Time of fault injection. The default is 0.
     fxnflows : list, optional
         List of functions and flows to plot. The default is [], which returns all.
+    cols : int, optional
+        columns to use in the figure. The default is 2.
     returnfigs: bool, optional
         Whether to return the figure objects in a list. The default is False.
     legend: bool, optional
-        Whether the plot should have a legend for faulty and nominal states. The default is true
+        Whether the plot should have a legend for faulty and nominal states. The default is true.
+    timelabel : str, optional
+        Label to use for the x-axes (e.g., seconds, minutes). Default is "time".
+    units : dict, optional
+        Labels to use for the y-axes (e.g., power, voltage). Default is ''
+    phases : dict, optional
+        Phase dictionary from process.modephases. Overlays lines over function values corresponding to the phase progression.
+    modephases : dict, optional
+        Modephase dictionary from process.modephases. Makes the phase overlay labels correspond to mode names instead of phases.
+    label_phases : book, optional
+        Whether to overlay labels on phases (or just leave lines)
     """
     mdlhists={}
     if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
     else: mdlhists=mdlhist
-    times = mdlhists["nominal"]["time"]
-    unitdict = dict(enumerate(units))
-    z=0
-    figs =[]
-    objtypes = list(set(mdlhists['nominal'].keys()).difference({'time'}))
-    for objtype in objtypes:
-        for fxnflow in mdlhists['nominal'][objtype]:
-            if fxnflows: #if in the list 
-                if fxnflow not in fxnflows: continue
-            
-            if objtype =="flows":
-                nomhist=mdlhists['nominal']["flows"][fxnflow]
-                if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
-            elif objtype=="functions":
-                nomhist=copy.deepcopy(mdlhists['nominal']["functions"][fxnflow])
-                if nomhist.get('faults',False): del nomhist['faults']
-                if 'faulty' in mdlhists: 
-                    hist = copy.deepcopy(mdlhists['faulty']["functions"][fxnflow])
-                    del hist['faults']
-            plots=len(nomhist)
-            if plots:
-                fig = plt.figure()
-                figs = figs +[fig]
-                if legend: fig.add_subplot(np.ceil((plots+1)/2),2,plots)
-                else: fig.add_subplot(np.ceil((plots)/2),2,plots)
-                
-                plt.tight_layout(pad=2.5, w_pad=2.5, h_pad=2.5, rect=[0, 0.03, 1, 0.95])
-                n=1
-                for var in nomhist:
-                    plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+var)
-                    n+=1
-                    if 'faulty' in mdlhists:
-                        a, = plt.plot(times, hist[var], color='r')
-                        c = plt.axvline(x=time, color='k')
-                        b, =plt.plot(times, nomhist[var], ls='--', color='b')
-                    else:
-                        b, =plt.plot(times, nomhist[var], color='b')
-                    plt.title(var)
-                    plt.xlabel(timelabel)
-                    plt.ylabel(unitdict.get(z, ''))
-                    z+=1
-                if 'faulty' in mdlhists:
-                    fig.suptitle('Dynamic Response of '+fxnflow+' to fault'+' '+fault)
-                    if legend:
-                        ax_l = plt.subplot(np.ceil((plots+1)/2),2,n, label=fxnflow+'legend')
-                        plt.legend([a,b],['faulty', 'nominal'], loc='center')
-                        plt.box(on=None)
-                        ax_l.get_xaxis().set_visible(False)
-                        ax_l.get_yaxis().set_visible(False)
-                plt.show()
-    if returnfigs: return figs
-
-def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=False, legend=True, timelabel="time", units=[]):
+    figs = []
+    if not fxnflows: fxnflows = {fxnflow:"all" for fxnflow in list(mdlhist['nominal']['functions'].keys())+list(mdlhist['nominal']['flows'].keys()) if any(mdlhist['nominal']['functions'].get(fxnflow, [])) or any(mdlhist['nominal']['flows'].get(fxnflow, []))}
+    for fxnflow in fxnflows:
+        fig = mdlhistvals(mdlhists.copy(), fault=fault, time=time, fxnflowvals={fxnflow:'all'}, cols=cols, returnfig=True, legend=legend, timelabel=timelabel, units=units, phases=phases, modephases=modephases, label_phases=label_phases)
+        figs.append(fig)
+    if returnfigs:
+        return figs
+def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=False, legend=True, timelabel="time", units=[], phases={}, modephases={}, label_phases=True):
     """
     Plots the states of a model over time given a history.
 
@@ -113,13 +80,22 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
         Time of fault injection. The default is 0.
     fxnflowsvals : dict, optional
         dict of flow values to plot with structure {fxnflow:[vals]}. The default is {}, which returns all.
-    cols: int, optional
+    cols : int, optional
         columns to use in the figure. The default is 2.
-    returnfig: bool, optional
+    returnfig : bool, optional
         Whether to return the figure. The default is False.
-    legend: bool, optional
+    legend : bool, optional
         Whether the plot should have a legend for faulty and nominal states. The default is true
-        
+    timelabel : str, optional
+        Label to use for the x-axes (e.g., seconds, minutes). Default is "time".
+    units : dict, optional
+        Labels to use for the y-axes (e.g., power, voltage). Default is ''
+    phases : dict, optional
+        Phase dictionary from process.modephases. Overlays lines over function values corresponding to the phase progression.
+    modephases : dict, optional
+        Modephase dictionary from process.modephases. Makes the phase overlay labels correspond to mode names instead of phases.
+    label_phases : book, optional
+        Whether to overlay labels on phases (or just leave lines)
     """
     mdlhists={}
     if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
@@ -127,8 +103,13 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     times = mdlhists["nominal"]["time"]
     
     unitdict = dict(enumerate(units))
-    
-    if fxnflowvals: num_plots = sum([len(val) for k,val in fxnflowvals.items()])
+
+    if fxnflowvals: 
+        all_vals = [f for f,v in fxnflowvals.items() if v=='all']
+        for fxnflow in all_vals:
+            if fxnflow in mdlhist['nominal']['functions']:  fxnflowvals[fxnflow]=list(mdlhist['nominal']['functions'][fxnflow].keys())
+            elif fxnflow in mdlhist['nominal']['flows']:    fxnflowvals[fxnflow]=list(mdlhist['nominal']['flows'][fxnflow].keys())
+        num_plots = sum([len(val) for k,val in fxnflowvals.items()]) + int(legend)
     else: 
         num_flow_plots = sum([len(flow) for flow in mdlhists['nominal']['flows'].values()])
         num_fxn_plots = sum([len([a for a in atts if a!='faults']) for fname, atts in mdlhists['nominal'].get('functions',{}).items()])
@@ -164,14 +145,26 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
                     b, =plt.plot(times, nomhist[var], ls='--', color='b')
                 else:
                     b, =plt.plot(times, nomhist[var], color='b')
+                if phases.get(fxnflow):
+                    ymin, ymax = plt.ylim()
+                    phaseseps = [i[0] for i in list(phases[fxnflow].values())[1:]]
+                    plt.vlines(phaseseps,ymin, ymax, colors='gray',linestyles='dashed')
+                    if label_phases:
+                        for phase in phases[fxnflow]:
+                            if modephases: phasetext = [m for m,p in modephases[fxnflow].items() if phase in p][0]
+                            else: phasetext = phase
+                            bbox_props = dict(boxstyle="round,pad=0.3", fc="white", lw=0, alpha=0.5)
+                            plt.text(np.average(phases[fxnflow][phase]), (ymin+ymax)/2, phasetext, ha='center', bbox=bbox_props)
                 plt.title(fxnflow+": "+var)
                 plt.xlabel(timelabel)
                 plt.ylabel(unitdict.get(n-2, ''))
-    if 'faulty' in mdlhists:
-        if fxnflowvals: fig.suptitle('Dynamic Response of '+str(list(fxnflowvals.keys()))+' to fault'+' '+fault)
+    if 'faulty' in mdlhists and any(nomhist):
+        if fxnflowvals: 
+            if len(fxnflowvals)==1: fig.suptitle('Dynamic Response of '+list(fxnflowvals.keys())[0]+' to fault'+' '+fault)
+            else:                   fig.suptitle('Dynamic Response of '+str(list(fxnflowvals.keys()))+' to fault'+' '+fault)
         else:           fig.suptitle('Dynamic Response of Model States to fault'+' '+fault)
         if legend:
-            ax_l = plt.subplot(np.ceil((num_plots+1)/cols),cols,n, label='legend')
+            ax_l = plt.subplot(np.ceil((num_plots)/cols),cols,n, label='legend')
             plt.legend([a,b],['faulty', 'nominal'], loc='center')
             plt.box(on=None)
             ax_l.get_xaxis().set_visible(False)
