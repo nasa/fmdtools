@@ -514,7 +514,7 @@ class Flow(Common):
     """
     Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
     """
-    def __init__(self, states, name):
+    def __init__(self, states, name, ftype='generic'):
         """
         Instances the flow with given states.
 
@@ -525,14 +525,14 @@ class Flow(Common):
         name : str
             name of the flow
         """
-        self.type='flow'
+        self.type=ftype
         self.name=name
         self._initstates=states.copy()
         self._states=list(states.keys())
         for state in self._states:
             setattr(self, state, states[state])
     def __repr__(self):
-        return self.name+' '+self.type+': '+str(self.status())
+        return self.name+' '+self.type+' flow: '+str(self.status())
     def reset(self):
         """ Resets the flow to the initial state"""
         for state in self._initstates:
@@ -553,7 +553,7 @@ class Flow(Common):
         for state in self._states:
             states[state]=getattr(self,state)
         if self.__class__==Flow:
-            copy = self.__class__(states, self.name)
+            copy = self.__class__(states, self.name, self.type)
         else:
             copy = self.__class__()
             for state in self._states:
@@ -606,7 +606,21 @@ class Model(object):
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
-    def add_flow(self,flowname, flowdict={}):
+    def add_flows(self, flownames, flowdict={}, flowtype='generic'):
+        """
+        Adds a set of flows with the same type and initial parameters
+
+        Parameters
+        ----------
+        flowname : list
+            Unique flow names to give the flows in the model
+        flowattributes : dict, Flow, set or empty set
+            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object.
+            If a set of attribute names is provided, each will be given a value of 1
+            If an empty set is given, it will be represented w- {flowname: 1}
+        """
+    for flowname in flownames: self.add_flows(flowname, flowdict, flowtype)
+    def add_flow(self,flowname, flowdict={}, flowtype='generic'):
         """
         Adds a flow with given attributes to the model.
 
@@ -619,9 +633,9 @@ class Model(object):
             If a set of attribute names is provided, each will be given a value of 1
             If an empty set is given, it will be represented w- {flowname: 1}
         """
-        if not flowdict:                self.flows[flowname]=Flow({flowname:1}, flowname)
-        elif type(flowdict) == set:     self.flows[flowname]=Flow({f:1 for f in flowdict}, flowname)
-        elif type(flowdict) == dict:    self.flows[flowname]=Flow(flowdict, flowname)
+        if not flowdict:                self.flows[flowname]=Flow({flowname:1}, flowname, flowtype)
+        elif type(flowdict) == set:     self.flows[flowname]=Flow({f:1 for f in flowdict}, flowname, flowtype)
+        elif type(flowdict) == dict:    self.flows[flowname]=Flow(flowdict, flowname,flowtype)
         elif isinstance(flowdict, Flow):self.flows[flowname] = flowdict
         else: raise Exception('Invalid flow. Must be dict or flow')
     def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None'):
