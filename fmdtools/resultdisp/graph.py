@@ -55,7 +55,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=8, init
         dict of node positions for use in graph plotting functions
     """
     set_mdl=False
-    if not type(g)==nx.classes.graph.Graph:
+    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         set_mdl=True
         if gtype=='normal':         g=mdl.graph
@@ -85,17 +85,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=8, init
     if set_mdl:
         if gtype=='normal':         mdl.graph_pos = pos
         elif gtype=='bipartite':    mdl.bipartite_pos = pos  
-    return pos
-
-def classes(mdl):
-    g = nx.DiGraph()
-    modelname = type(mdl).__name__
-    g.add_node(modelname)
-    g.add_nodes_from(mdl.fxnclasses())
-    function_connections = [(modelname, fname) for fname in mdl.fxnclasses()]
-    g.add_edges_from(function_connections)
-    nx.draw(g, with_labels=True)
-    
+    return pos    
 
 def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, retfig=False, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
     """
@@ -130,7 +120,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
     cmap : mpl colormap
         Colormap to use for heatmap visualizations
     """
-    if not type(g)==nx.classes.graph.Graph:
+    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         if gtype=='normal':         
             g=mdl.graph
@@ -179,7 +169,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
                 faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
                 faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
             fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=pos, retfig=retfig,colors=colors)
-    elif gtype == 'bipartite' or 'component':
+    elif gtype in ['bipartite', 'component']:
         labels={node:node for node in g.nodes}
         functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
         flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
@@ -214,6 +204,8 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
             fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = functions, flows=flows)
+    elif gtype == 'typegraph':
+        nx.draw(g, pos=pos, with_labels=True, node_size=scale*700, font_size=scale*8, font_weight='bold', node_color=colors[0])
     if retfig: 
         if fig_axis: return fig_axis
         else: return plt.gcf(), plt.gca()

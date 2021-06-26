@@ -305,7 +305,9 @@ class Block(Common):
         if opermode:    self.mode = opermode
         if self.exclusive_faultmodes and not(opermode):
             raise Exception("Unclear which operational mode to enter with fault removed")
-            
+    def get_flowtypes(self):
+        """Returns the names of the flow types in the model"""
+        return {obj.type for name, obj in self.flows.items()}
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used (only for components) when resetting the model"""
         self.faults.clear()
@@ -619,8 +621,8 @@ class Model(object):
             If a set of attribute names is provided, each will be given a value of 1
             If an empty set is given, it will be represented w- {flowname: 1}
         """
-    for flowname in flownames: self.add_flows(flowname, flowdict, flowtype)
-    def add_flow(self,flowname, flowdict={}, flowtype='generic'):
+        for flowname in flownames: self.add_flow(flowname, flowdict, flowtype)
+    def add_flow(self,flowname, flowdict={}, flowtype=''):
         """
         Adds a flow with given attributes to the model.
 
@@ -633,6 +635,7 @@ class Model(object):
             If a set of attribute names is provided, each will be given a value of 1
             If an empty set is given, it will be represented w- {flowname: 1}
         """
+        if not flowtype: flowtype = flowname
         if not flowdict:                self.flows[flowname]=Flow({flowname:1}, flowname, flowtype)
         elif type(flowdict) == set:     self.flows[flowname]=Flow({f:1 for f in flowdict}, flowname, flowtype)
         elif type(flowdict) == dict:    self.flows[flowname]=Flow(flowdict, flowname,flowtype)
@@ -677,6 +680,16 @@ class Model(object):
     def fxnclasses(self):
         """Returns the set of class names used in the model"""
         return {obj.__class__.__name__ for fxn, obj in self.fxns.items()}
+    def flowtypes(self):
+        """Returns the set of flow types used in the model"""
+        return {obj.type for fxn, obj in self.flows.items()}
+    def flowtypes_for_fxnclasses(self):
+        class_relationship = dict()
+        for fxn, obj in self.fxns.items():
+            if class_relationship.get(obj.__class__.__name__,False):
+                class_relationship[obj.__class__.__name__].update(obj.get_flowtypes())
+            else: class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
+        return class_relationship
     def build_model(self, functionorder=[], graph_pos={}, bipartite_pos={}):
         """
         Builds the model graph after the functions have been added.
@@ -729,6 +742,19 @@ class Model(object):
         self.graph_pos=graph_pos
         self.bipartite_pos=bipartite_pos
         return self.graph
+    def return_typegraph(self, withflows = True):
+        g = nx.DiGraph()
+        modelname = type(self).__name__
+        g.add_node(modelname)
+        g.add_nodes_from(self.fxnclasses())
+        function_connections = [(modelname, fname) for fname in self.fxnclasses()]
+        g.add_edges_from(function_connections)
+        if withflows:
+            g.add_nodes_from(self.flowtypes())
+            fxnclass_flowtype = self.flowtypes_for_fxnclasses()
+            flow_edges = [(fxn, flow) for fxn, flows in fxnclass_flowtype.items() for flow in flows]
+            g.add_edges_from(flow_edges)
+        return g
     def return_paramgraph(self):
         """ Returns a graph representation of the flows in the model, where flows are nodes and edges are 
         associations in functions """
