@@ -745,12 +745,12 @@ class Model(object):
     def return_typegraph(self, withflows = True):
         g = nx.DiGraph()
         modelname = type(self).__name__
-        g.add_node(modelname)
-        g.add_nodes_from(self.fxnclasses())
+        g.add_node(modelname, level=1)
+        g.add_nodes_from(self.fxnclasses(), level=2)
         function_connections = [(modelname, fname) for fname in self.fxnclasses()]
         g.add_edges_from(function_connections)
         if withflows:
-            g.add_nodes_from(self.flowtypes())
+            g.add_nodes_from(self.flowtypes(), level=3)
             fxnclass_flowtype = self.flowtypes_for_fxnclasses()
             flow_edges = [(fxn, flow) for fxn, flows in fxnclass_flowtype.items() for flow in flows]
             g.add_edges_from(flow_edges)

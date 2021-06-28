@@ -1,0 +1,120 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 1000px;
+            height: 500px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"bipartite": 0, "id": "Power", "label": "Power", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "EE_15", "label": "EE_15", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "EE_5", "label": "EE_5", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "EE_12", "label": "EE_12", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "Control", "label": "Control", "shape": "dot", "size": 10}, {"bipartite": 0, "id": "Operator", "label": "Operator", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "Comms", "label": "Comms", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "OverrideComms", "label": "OverrideComms", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "Pos_Signal", "label": "Pos_Signal", "shape": "dot", "size": 10}, {"bipartite": 0, "id": "Communications", "label": "Communications", "shape": "dot", "size": 10}, {"bipartite": 0, "id": "Perception", "label": "Perception", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "Ground", "label": "Ground", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "Video", "label": "Video", "shape": "dot", "size": 10}, {"bipartite": 0, "id": "Avionics", "label": "Avionics", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "AvionicsControl", "label": "AvionicsControl", "shape": "dot", "size": 10}, {"bipartite": 0, "id": "Override", "label": "Override", "shape": "dot", "size": 10}, {"bipartite": 1, "id": "MotorControl", "label": "MotorControl", "shape": "dot", "size": 10}, {"bipartite": 0, "id": "Drive", "label": "Drive", "shape": "dot", "size": 10}, {"bipartite": 0, "id": "Environment", "label": "Environment", "shape": "dot", "size": 10}]);
+        edges = new vis.DataSet([{"from": "Power", "to": "EE_15", "weight": 1}, {"from": "Power", "to": "EE_5", "weight": 1}, {"from": "Power", "to": "EE_12", "weight": 1}, {"from": "Power", "to": "Control", "weight": 1}, {"from": "Operator", "to": "Comms", "weight": 1}, {"from": "Operator", "to": "OverrideComms", "weight": 1}, {"from": "Operator", "to": "Pos_Signal", "weight": 1}, {"from": "Operator", "to": "Control", "weight": 1}, {"from": "Communications", "to": "Comms", "weight": 1}, {"from": "Communications", "to": "EE_12", "weight": 1}, {"from": "Communications", "to": "Pos_Signal", "weight": 1}, {"from": "Perception", "to": "Ground", "weight": 1}, {"from": "Perception", "to": "EE_12", "weight": 1}, {"from": "Perception", "to": "Video", "weight": 1}, {"from": "Avionics", "to": "Video", "weight": 1}, {"from": "Avionics", "to": "Comms", "weight": 1}, {"from": "Avionics", "to": "EE_5", "weight": 1}, {"from": "Avionics", "to": "Pos_Signal", "weight": 1}, {"from": "Avionics", "to": "Ground", "weight": 1}, {"from": "Avionics", "to": "AvionicsControl", "weight": 1}, {"from": "Override", "to": "OverrideComms", "weight": 1}, {"from": "Override", "to": "EE_5", "weight": 1}, {"from": "Override", "to": "MotorControl", "weight": 1}, {"from": "Override", "to": "AvionicsControl", "weight": 1}, {"from": "Drive", "to": "Ground", "weight": 1}, {"from": "Drive", "to": "EE_15", "weight": 1}, {"from": "Drive", "to": "EE_5", "weight": 1}, {"from": "Drive", "to": "MotorControl", "weight": 1}, {"from": "Environment", "to": "Ground", "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
