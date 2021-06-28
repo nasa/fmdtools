@@ -164,6 +164,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
         elif gtype=='component':
             g = mdl.return_stategraph('component')
             if not pos: pos=nx.spring_layout(g)
+        elif gtype=='typegraph': g=mdl.return_typegraph()
     plt.figure()
     fig_axis = 0
     if gtype=='normal':
@@ -238,7 +239,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
             fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = functions, flows=flows)
     elif gtype == 'typegraph':
-        if not pos: pos = netgraph.get_sugiyama_layout(list(classgraph.edges), nodes=classgraph.nodes)
+        if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
         nx.draw(g, pos=pos, with_labels=True, node_size=scale*700, font_size=scale*8, font_weight='bold', node_color=colors[0])
     if retfig: 
         if fig_axis: return fig_axis
