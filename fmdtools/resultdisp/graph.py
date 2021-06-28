@@ -28,7 +28,7 @@ import matplotlib.animation
 from matplotlib.patches import Patch
 import netgraph
 
-def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=8, initpos={}):
+def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, initpos={}):
     """
     Provides graphical interface to set graph node positions. If model is provided, it will also set the positions in the model object. 
     
@@ -59,7 +59,8 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=8, init
         mdl=g
         set_mdl=True
         if gtype=='normal':         g=mdl.graph
-        elif gtype=='bipartite':    g=mdl.bipartite    
+        elif gtype=='bipartite':    g=mdl.bipartite
+        elif gtype=='typegraph':    mdl.return_typegraph()
     plt.ion()
     fig = plt.figure()
     if gtype=='normal':
@@ -68,10 +69,12 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=8, init
         for edge in g.edges:
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
             edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
-        plot_instance = netgraph.InteractiveGraph(g,node_size=20*scale,node_shape='s',node_color=node_color, node_edge_width=0, node_positions=initpos, edge_labels=edgeflows, edge_label_font_size=label_size, node_labels={n:n for n in g.nodes},node_label_font_size=label_size)
+        plot_instance = netgraph.InteractiveGraph(g,node_size=20*scale,node_shape='s',node_color=node_color, node_edge_width=0, node_positions=initpos, edge_labels=edgeflows, edge_label_font_size=label_size, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
     elif gtype=='bipartite':
         if not initpos: initpos = nx.spring_layout(g)
-        plot_instance = netgraph.InteractiveGraph(g,node_size=7*scale,node_color=node_color, node_edge_width=0, node_positions=initpos, node_labels={n:n for n in g.nodes},node_label_font_size=label_size)
+        plot_instance = netgraph.InteractiveGraph(g,node_size=7*scale,node_color=node_color, node_edge_width=0, node_positions=initpos, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
+    elif gtype=='typegraph':
+        plot_instance = netgraph.InteractiveGraph(g,node_size=7*scale,node_color=node_color, node_edge_width=0, node_layout='dot', node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
     plt.title("Click and drag to place nodes.")
     plt.xlabel("Close window to continue...")
     plt.show(block=False)
@@ -85,7 +88,37 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=8, init
     if set_mdl:
         if gtype=='normal':         mdl.graph_pos = pos
         elif gtype=='bipartite':    mdl.bipartite_pos = pos  
-    return pos    
+    return pos
+
+def show_pyvis(g, gtype='hierarchical', filename="typegraph.html", width=1000, filt=True, physics=False):
+    """
+    Method for plotting graphs with pyvis. Produces interactive HTML!
+
+    Parameters
+    ----------
+    g : networkx graph
+        Graph to plot.
+    gtype : 'hierarchical'/'bipartite'/'component', optional
+        Type of model graph to plot The default is 'hierarchical'.
+    filename : str, optional
+        File to save the html to. The default is "typegraph.html".
+    width : int, optional
+        Width of the frame in px. The default is 1000.
+    filt : Dict/Bool, optional
+        Whether to display sliders. The default is True.
+    physics : Bool, optional
+        Whether to use physics during node placement. The default is False.
+    """
+    from pyvis.network import Network
+    width = str(width)+"px"
+    
+    if gtype=='hierarchical':   n = Network(directed=True, layout='hierarchical', width=width)
+    elif gtype in ["component", "bipartite"]: n = Network(width=width)
+    else:   raise Exception("Not a valid graph type")     
+    n.from_nx(g)
+    n.toggle_physics(physics)
+    if filt: n.show_buttons(filter_=filt)
+    n.show(filename)
 
 def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, retfig=False, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
     """
@@ -205,6 +238,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
             fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = functions, flows=flows)
     elif gtype == 'typegraph':
+        if not pos: pos = netgraph.get_sugiyama_layout(list(classgraph.edges), nodes=classgraph.nodes)
         nx.draw(g, pos=pos, with_labels=True, node_size=scale*700, font_size=scale*8, font_weight='bold', node_color=colors[0])
     if retfig: 
         if fig_axis: return fig_axis
@@ -551,7 +585,6 @@ def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, fau
     if retfig:
         return plt.gcf(), plt.gca()
     elif show: plt.show()
-
 
 
 
