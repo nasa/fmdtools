@@ -6,6 +6,7 @@ numpy
 matplotlib
 pandas
 netgraph
+pyvis
 quadpy
 ordered-set
 dill 
