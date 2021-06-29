@@ -27,6 +27,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation
 from matplotlib.patches import Patch
 import netgraph
+from pyvis.network import Network
 
 def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, initpos={}):
     """
@@ -90,7 +91,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, init
         elif gtype=='bipartite':    mdl.bipartite_pos = pos  
     return pos
 
-def show_pyvis(g, gtype='hierarchical', filename="typegraph.html", width=1000, filt=True, physics=False):
+def show_pyvis(g, gtype='typegraph', filename="typegraph.html", width=1000, filt=True, physics=False, notebook=False):
     """
     Method for plotting graphs with pyvis. Produces interactive HTML!
 
@@ -109,16 +110,16 @@ def show_pyvis(g, gtype='hierarchical', filename="typegraph.html", width=1000, f
     physics : Bool, optional
         Whether to use physics during node placement. The default is False.
     """
-    from pyvis.network import Network
     width = str(width)+"px"
     
-    if gtype=='hierarchical':   n = Network(directed=True, layout='hierarchical', width=width)
-    elif gtype in ["component", "bipartite"]: n = Network(width=width)
+    if gtype=='typegraph':   n = Network(directed=True, layout='hierarchical', width=width, notebook=notebook)
+    elif gtype in ["component", "bipartite"]: n = Network(width=width, notebook=notebook)
     else:   raise Exception("Not a valid graph type")     
     n.from_nx(g)
     n.toggle_physics(physics)
     if filt: n.show_buttons(filter_=filt)
     n.show(filename)
+    return n
 
 def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, retfig=False, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
     """
