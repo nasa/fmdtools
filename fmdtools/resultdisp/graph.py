@@ -121,7 +121,7 @@ def show_pyvis(g, gtype='typegraph', filename="typegraph.html", width=1000, filt
     n.show(filename)
     return n
 
-def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, retfig=False, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
+def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
     """
     Plots a single graph object g.
 
@@ -141,8 +141,6 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
         Time of fault injection. The default is [].
     showfaultlabels : bool, optional
         Whether or not to label the faults on the functions. The default is True.
-    retfig : bool, optional
-        Whether to return the figure. The default is False.
     highlight : list, optional
         Functions/flows to highlight using [faulty functions, degraded functions, degraded flows] labelling scheme.
         Used for custom overlays. Default is []
@@ -156,16 +154,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
     """
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
-        if gtype=='normal':         
-            g=mdl.graph
-            if not pos: pos=mdl.graph_pos
-        elif gtype=='bipartite':    
-            g=mdl.bipartite 
-            if not pos: pos=mdl.bipartite_pos
-        elif gtype=='component':
-            g = mdl.return_stategraph('component')
-            if not pos: pos=nx.spring_layout(g)
-        elif gtype=='typegraph': g=mdl.return_typegraph()
+        g, pos = get_graph_pos(mdl, pos, gtype)
     plt.figure()
     fig_axis = 0
     if gtype=='normal':
@@ -192,7 +181,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
             else:               faultlabels = {}
             faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge])]) for edge in faultedges}
-            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=scale, pos=pos, retfig=retfig,colors=colors)
+            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=scale, pos=pos,colors=colors, show=False)
         else:
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
@@ -203,7 +192,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             else:
                 faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
                 faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
-            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=pos, retfig=retfig,colors=colors)
+            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=pos,colors=colors, show=False)
     elif gtype in ['bipartite', 'component']:
         labels={node:node for node in g.nodes}
         functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
@@ -231,14 +220,14 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             if showfaultlabels: 
                 faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
             else:               faultlabels={}
-            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = functions, flows=flows)
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False)
         else:                                      #plots graph with status information 
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
             degradednodes=[node for node,status in statuses.items() if status=='Degraded']
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
-            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = functions, flows=flows)
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False)
     elif gtype == 'typegraph':
         if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
         if heatmap or highlight: raise Exception("Invalid option for typegraph--not implemented")
@@ -252,13 +241,12 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             degradednodes=[node for node,status in statuses.items() if status=='Degraded']
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {fclass:set(fxns.keys()) for fclass, fxns in g.nodes(data='modes') if fxns and set([mode for modes in fxns.values() for mode in modes if mode!='nom'])}
-            plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, retfig=retfig,colors=colors)
+            plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False)
         
-    if retfig: 
-        if fig_axis: return fig_axis
-        else: return plt.gcf(), plt.gca()
+    if fig_axis: return fig_axis
+    else: return plt.gcf(), plt.gca()
         
-def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cyan','teal'], show_dyn_order=True, retfig=True, title="Function Execution Order", legend=True):
+def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True):
     """
     Displays the execution order/types of the model, where the functions and flows in the
     static step are highlighted and the functions in the dynamic step are listed (with corresponding order)
@@ -278,8 +266,6 @@ def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cy
         The default is ['lightgray', 'cyan','teal'].
     show_dyn_order : bool, optional
         Whether to label the execution order for dynamic functions. The default is True.
-    retfig : bool, optional
-        Whether to retun the figure and axis objects. The default is True.
     title : str, optional
         Title for the plot. The default is "Function Execution Order".
     legend : bool, optional
@@ -287,14 +273,14 @@ def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cy
 
     Returns
     -------
-    tuple of form (figure, axis) (if retfig is true)
+    tuple of form (figure, axis) 
 
     """
-    if gtype =='normal': fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[mdl.dynamicfxns, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], scale=scale, colors=colors, retfig=True, showfaultlabels= show_dyn_order)
+    if gtype =='normal': fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[mdl.dynamicfxns, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], scale=scale, colors=colors, showfaultlabels= show_dyn_order)
     else:
         staticnodes = list(mdl.staticfxns) + list(set([n for node in mdl.staticfxns for n in mdl.bipartite.neighbors(node)]))
         dynamicnodes = list(mdl.dynamicfxns) #+ list(set().union(*[nx.node_connected_component(mdl.bipartite, node) for node in mdl.dynamicfxns]))
-        fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[dynamicnodes, staticnodes], scale=scale, colors=colors, retfig=True, showfaultlabels= show_dyn_order)
+        fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[dynamicnodes, staticnodes], scale=scale, colors=colors, showfaultlabels= show_dyn_order)
     
     if legend:
         legend_elements = [Patch(facecolor=colors[0], edgecolor=colors[0], label='No Execution'),
@@ -303,7 +289,7 @@ def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cy
         
         fig_axis[1].legend(handles = legend_elements, ncol=3, bbox_to_anchor = (1.0,-0.05))
     if title: fig_axis[1].set_title(title)
-    if retfig: return fig_axis
+    return fig_axis
     
 def history(ghist, gtype='normal', pos=[], scale=1, faultscen=[],showfaultlabels=True, colors=['lightgray','orange', 'red']):
     """
@@ -330,7 +316,7 @@ def history(ghist, gtype='normal', pos=[], scale=1, faultscen=[],showfaultlabels
     for time, graph in ghist.items():
         show(graph,gtype=gtype,pos=pos, scale=scale, faultscen=faultscen, time=time, showfaultlabels=showfaultlabels, colors=colors)
 
-def result_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[], retfig=False, colors=['lightgray','orange', 'red']):
+def result_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[], colors=['lightgray','orange', 'red'], figsize=(6,4)):
     """
     Plots a representation of the model graph at a specific time in the results history.
 
@@ -352,24 +338,16 @@ def result_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultla
         Scale factor for the node/label sizes. The default is 1.
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
-    retfig:, bool, optional
-        whether to return the figure and axis objects of the plot. The default is False.
     """
-    if gtype=='normal' and not pos:         pos=mdl.graph_pos
-    elif gtype=='bipartite' and not pos:    pos=mdl.bipartite_pos
+    g, pos = get_graph_pos(mdl, pos, gtype)
     [[t_ind,],] = np.where(reshist['time']==time)
-    if gtype=='bipartite':
-        g = mdl.bipartite.copy()
-        labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-        degnodes = degfxns + degflows
-        fig_axis = plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos=pos, retfig=retfig, colors=colors, functions = mdl.fxns.keys(), flows=mdl.flows.keys())
-    elif gtype=='normal':
-        g = mdl.graph.copy()
-        labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-        fig_axis= plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, retfig=retfig, colors=colors)
-    if retfig: return fig_axis
+    fig, ax = plt.subplots(figsize=figsize)
+    if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors)
+    elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors)
+    elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors)
+    return fig
 
-def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[],colors=['lightgray','orange', 'red']):
+def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[],colors=['lightgray','orange', 'red'],figsize=(6,4)):
     """
     Plots a set of representations of the model graph at given times in the results history.
 
@@ -391,23 +369,23 @@ def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfault
         Scale factor for the node/label sizes. The default is 1.
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
+        
+    Returns
+    ----------
+    frames : Dict
+        Dictionary of mpl figures keyed at each time {time:fig} 
     """
-    if gtype=='normal' and not pos:         pos=mdl.graph_pos
-    elif gtype=='bipartite' and not pos:    pos=mdl.bipartite_pos
-    if times=='all':
-        t_inds= [i for i in range(0,len(reshist['time']))]
-    else:
-        t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
-    if gtype=='bipartite':
-        g = mdl.bipartite.copy()
-        pos=nx.spring_layout(g)
-        for t_ind in t_inds:
-            update_bipplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors)
-    elif gtype=='normal':
-        g = mdl.graph.copy()
-        pos=nx.shell_layout(g)
-        for t_ind in t_inds:
-            update_graphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors)
+    g, pos = get_graph_pos(mdl, pos, gtype)
+    if times=='all':    t_inds= [i for i in range(0,len(reshist['time']))]
+    else:               t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
+    frames = {}
+    for t_ind in t_inds:
+        fig, ax = plt.subplots(figsize=figsize)
+        if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
+        elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
+        elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
+        frames[t_ind] = fig
+    return frames
 
 def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, show=False, pos=[], colors=['lightgray','orange', 'red']):
     """
@@ -436,24 +414,16 @@ def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfau
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
     """
-    if gtype=='normal' and not pos:         pos=mdl.graph_pos
-    elif gtype=='bipartite' and not pos:    pos=mdl.bipartite_pos
-    if times=='all':
-        t_inds= [i for i in range(0,len(reshist['time']))]
-    else:
-        t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
-    if gtype=='bipartite':
-        g = mdl.bipartite.copy()
-        if not pos: pos=nx.spring_layout(g)
-        fig, ax = plt.subplots(figsize=(6,4))
-        ani = matplotlib.animation.FuncAnimation(fig, update_bipplot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False, colors))
-        if show: plt.show()
-    elif gtype=='normal':
-        g = mdl.graph.copy()
-        if not pos: pos=nx.shell_layout(g)
-        fig, ax = plt.subplots(figsize=(6,4))
-        ani = matplotlib.animation.FuncAnimation(fig, update_graphplot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False, colors))
-        if show: plt.show()
+    g, pos = get_graph_pos(mdl, pos, gtype)
+    if times=='all':    t_inds= [i for i in range(0,len(reshist['time']))]
+    else:   t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
+    if gtype=='bipartite':  update_plot = update_bipplot
+    elif gtype=='normal':   update_plot = update_graphplot
+    elif gtype=='typegraph':update_plot = update_graphplot
+    
+    fig, ax = plt.subplots(figsize=(6,4))
+    ani = matplotlib.animation.FuncAnimation(fig, update_plot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False, colors))
+    if show: plt.show()
     return ani
 def update_bipplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red']):
     """Updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
@@ -466,8 +436,14 @@ def update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True,
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors)
-
-def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, retfig=False, colors=['lightgray','orange', 'red'], title=[]):
+def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red']):
+    """Updates a typegraph-stype plot at a given timestep t_ind given the result history reshist"""
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
+    degnodes = degfxns + degflows
+    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors)
+    
+def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[]):
     """ Plots a standard graph. Used in other functions"""
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
@@ -485,11 +461,10 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
         nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows,font_size=font_size, font_color=colors[1])
     plt.axis('off')
-    if retfig:
-        return plt.gcf(), plt.gca()
-    elif show: plt.show()
+    if show: plt.show()
+    return plt.gcf(), plt.gca()
 
-def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, retfig=False, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[]):
+def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[]):
     """ Plots a bipartite graph. Used in other functions"""
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
@@ -517,9 +492,28 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
     plt.axis('off')
-    if retfig:
-        return plt.gcf(), plt.gca()
-    elif show: plt.show()
+    if show: plt.show()
+    return plt.gcf(), plt.gca()
+
+def get_graph_pos(mdl, pos, gtype):
+    """Helper function for getting the right graph/positions from a model"""
+    if gtype=='normal': 
+        g = mdl.graph.copy()
+        if not pos:
+            if mdl.graph_pos:   pos=mdl.graph_pos
+            else:               pos=nx.shell_layout(g)
+    elif gtype=='bipartite':
+        g = mdl.bipartite.copy()
+        if not pos:
+            if mdl.bipartite_pos:   pos=mdl.bipartite_pos
+            else:                   pos=nx.spring_layout(g)
+    elif gtype=='typegraph':
+        g=mdl.return_typegraph()
+        if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
+    elif gtype=='component':
+        g = mdl.return_stategraph('component')
+        if not pos: pos=nx.spring_layout(g)
+    return g,pos
 
 def get_plotlabels(g, reshist, t_ind):
     """
@@ -580,7 +574,7 @@ def get_plotlabels(g, reshist, t_ind):
     faultedgeflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if reshist['flows'][flow][t_ind]==0)]) for edge in faultedges}
     return labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgelabels
 
-def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, retfig=False, colors=['lightgray','orange', 'red']):
+def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red']):
     """ Experimental method for plotting with netgraph instead of networkx"""
     nodesize=scale*20
     font_size=scale*12
@@ -597,9 +591,8 @@ def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, fau
         netgraph.draw_edge_labels(list(faultedgeflows.keys()), faultedgeflows, pos, font_size=font_size, font_color=colors[1])
     if faultscen:
         plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    if retfig:
-        return plt.gcf(), plt.gca()
-    elif show: plt.show()
+    if show: plt.show()
+    return plt.gcf(), plt.gca()
 
 
 

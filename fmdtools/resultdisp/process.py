@@ -62,6 +62,37 @@ def hists(mdlhists, returndiff=True):
         reshists[scenname], diffs[scenname], summaries[scenname] = hist(history, nomhist=nomhist, returndiff=returndiff)
     mdlhists['nominal']=nomhist
     return reshists, diffs, summaries
+def typehist(mdl, reshist):
+    """
+    Summarizes results history reshist over model classes
+
+    Parameters
+    ----------
+    mdl : Model
+        Model used in the simulation
+    reshist : Dict
+        Results history from rd.process.hist(mdlhist)
+
+    Returns
+    -------
+    typehist : Dict
+        Results history of flow types/function classes with structure: 
+            {'functions':{'status':[],'faults':{fxn1:[], fxn2:[]},'numfaults':[]}, 'flows':[], 'flowvals'{'flow1':[], 'flow2':[]}}
+    """
+    typehist = {'flows':{}, 'flowvals':{}, 'functions':{}, 'time':reshist['time']}
+    for flowtype in mdl.flowtypes():
+        flows = mdl.flows_of_type(flowtype)
+        typehist['flows'][flowtype] = np.prod([reshist['flows'][flow] for flow in flows], axis=0)
+        typehist['flowvals'][flowtype] = flows
+    
+    for fxnclass in mdl.fxnclasses():
+        fxns = mdl.fxns_of_class(fxnclass)
+        typehist['functions'][fxnclass] = dict.fromkeys(['status', 'numfaults', 'faults'])
+        typehist['functions'][fxnclass]['status'] = np.prod([reshist['functions'][fxn]['status'] for fxn in fxns], axis=0)
+        typehist['functions'][fxnclass]['numfaults'] = np.sum([reshist['functions'][fxn]['numfaults'] for fxn in fxns], axis=0)
+        typehist['functions'][fxnclass]['faults'] = {fxn:reshist['functions'][fxn]['numfaults'] for fxn in fxns}
+    return typehist
+    
 def hist(mdlhist, nomhist={}, returndiff=True):
     """
     Compares model history with the nominal model history over time to make a history of degradation.
