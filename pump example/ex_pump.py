@@ -204,7 +204,7 @@ class Water(Flow):
                     'pressure':1.0, \
                     'area':1.0, \
                     'level':1.0}
-        super().__init__(attributes, 'Water')
+        super().__init__(attributes, 'Water',ftype='Water')
         self.customattribute='hello'
 
 ##DEFINE MODEL OBJECT

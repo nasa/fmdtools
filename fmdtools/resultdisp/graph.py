@@ -97,8 +97,8 @@ def show_pyvis(g, gtype='typegraph', filename="typegraph.html", width=1000, filt
 
     Parameters
     ----------
-    g : networkx graph
-        Graph to plot.
+    g : networkx graph or model
+        Graph to plot or fmdtools model (which will be used to get the graph)
     gtype : 'hierarchical'/'bipartite'/'component', optional
         Type of model graph to plot The default is 'hierarchical'.
     filename : str, optional
@@ -110,6 +110,9 @@ def show_pyvis(g, gtype='typegraph', filename="typegraph.html", width=1000, filt
     physics : Bool, optional
         Whether to use physics during node placement. The default is False.
     """
+    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
+        mdl=g
+        g, pos = get_graph_pos(mdl, pos, gtype)
     width = str(width)+"px"
     
     if gtype=='typegraph':   n = Network(directed=True, layout='hierarchical', width=width, notebook=notebook)
@@ -121,7 +124,7 @@ def show_pyvis(g, gtype='typegraph', filename="typegraph.html", width=1000, filt
     n.show(filename)
     return n
 
-def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
+def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[],figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
     """
     Plots a single graph object g.
 
@@ -155,8 +158,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         g, pos = get_graph_pos(mdl, pos, gtype)
-    plt.figure()
-    fig_axis = 0
+    fig, ax = plt.subplots(figsize=figsize)
     if gtype=='normal':
         edgeflows=dict()
         if not pos: pos=nx.shell_layout(g)
@@ -211,14 +213,11 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             nx.draw_networkx_nodes(g, pos, nodelist=functions,  node_color=functioncolors, cmap=cmap, alpha=0.6, node_size=nodesize, node_shape='s')
             nx.draw_networkx_nodes(g, pos, nodelist=flows,  node_color=flowcolors, cmap=cmap, alpha=0.6, node_size=nodesize)
             nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, node_size=nodesize, font_weight='bold')
-            if faultscen:
-                plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-            plt.show()
+            if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
         elif highlight:
             faultnodes = highlight[0]
             degradednodes = highlight[1]
-            if showfaultlabels: 
-                faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
+            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
             else:               faultlabels={}
             fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False)
         else:                                      #plots graph with status information 
@@ -241,10 +240,8 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             degradednodes=[node for node,status in statuses.items() if status=='Degraded']
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {fclass:set(fxns.keys()) for fclass, fxns in g.nodes(data='modes') if fxns and set([mode for modes in fxns.values() for mode in modes if mode!='nom'])}
-            plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False)
-        
-    if fig_axis: return fig_axis
-    else: return plt.gcf(), plt.gca()
+            fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False)
+    return fig, ax
         
 def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True):
     """
@@ -325,7 +322,7 @@ def result_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultla
     mdl : model
         The model the faults were run in.
     reshist : dict
-        A dictionary of results (from compare_hists())
+        A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
     time : float
         The time in the history to plot the graph at.
     faultscen : str, optional
@@ -342,9 +339,9 @@ def result_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultla
     g, pos = get_graph_pos(mdl, pos, gtype)
     [[t_ind,],] = np.where(reshist['time']==time)
     fig, ax = plt.subplots(figsize=figsize)
-    if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors)
-    elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors)
-    elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors)
+    if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
+    elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
+    elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
     return fig
 
 def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[],colors=['lightgray','orange', 'red'],figsize=(6,4)):
@@ -356,7 +353,7 @@ def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfault
     mdl : model
         The model the faults were run in.
     reshist : dict
-        A dictionary of results (from compare_hists())
+        A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
     times : list or 'all'
         The times in the history to plot the graph at. If 'all', plots them all
     faultscen : str, optional
@@ -387,7 +384,7 @@ def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfault
         frames[t_ind] = fig
     return frames
 
-def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, show=False, pos=[], colors=['lightgray','orange', 'red']):
+def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite',figsize=(6,4), showfaultlabels=True, scale=1, show=False, pos=[], colors=['lightgray','orange', 'red']):
     """
     Creates an animation of the model graph using results at given times in the results history.
     To view, use %matplotlib qt from spyder or %matplotlib notebook from jupyter
@@ -398,7 +395,7 @@ def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfau
     mdl : model
         The model the faults were run in.
     reshist : dict
-        A dictionary of results (from compare_hists())
+        A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
     times : list or 'all'
         The times in the history to plot the graph at. If 'all', plots them all
     faultscen : str, optional
@@ -421,7 +418,7 @@ def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfau
     elif gtype=='normal':   update_plot = update_graphplot
     elif gtype=='typegraph':update_plot = update_graphplot
     
-    fig, ax = plt.subplots(figsize=(6,4))
+    fig, ax = plt.subplots(figsize=figsize)
     ani = matplotlib.animation.FuncAnimation(fig, update_plot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False, colors))
     if show: plt.show()
     return ani
@@ -524,7 +521,7 @@ def get_plotlabels(g, reshist, t_ind):
     g : networkx graph
         The graph to get labels for
     reshist : dict
-        The dict of results history over time (e.g. from compare_mdlhist)
+        The dict of results history over time (from process.hists() or process.typehist() for the typegraph option)
     t_ind : float
         The time in reshist to update the graph at
 
