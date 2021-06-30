@@ -683,6 +683,9 @@ class Model(object):
     def flowtypes(self):
         """Returns the set of flow types used in the model"""
         return {obj.type for fxn, obj in self.flows.items()}
+    def flows_of_type(self, ftype):
+        """Returns the set of flows for each flow type"""
+        return {flow for flow, obj in self.flows.items() if obj.type==ftype}
     def flowtypes_for_fxnclasses(self):
         class_relationship = dict()
         for fxn, obj in self.fxns.items():
@@ -785,7 +788,7 @@ class Model(object):
         Parameters
         ----------
         gtype : str, optional
-            Type of graph to return (normal, bipartite, or component). The default is 'normal'.
+            Type of graph to return (normal, bipartite, component, or typegraph). The default is 'normal'.
 
         Returns
         -------
@@ -800,7 +803,9 @@ class Model(object):
             graph=self.bipartite.copy()
             for fxnname, fxn in self.fxns.items():
                 graph.add_nodes_from(fxn.components, bipartite=1)
-                graph.add_edges_from([(fxnname, component) for component in fxn.components])     
+                graph.add_edges_from([(fxnname, component) for component in fxn.components])
+        elif gtype=='typegraph':
+            graph=self.return_typegraph()
         edgevals, fxnmodes, fxnstates, flowstates, compmodes, compstates, comptypes ={}, {}, {}, {}, {}, {}, {}
         if gtype=='normal': #set edge values for normal graph
             for edge in graph.edges:
@@ -815,20 +820,29 @@ class Model(object):
             for flowname, flow in self.flows.items():
                 flowstates[flowname]=flow.status()
             nx.set_node_attributes(graph, flowstates, 'states')
+        elif gtype=='typegraph':
+            for flowtype in self.flowtypes():
+                flowstates[flowtype] = {flow:self.flows[flow].status() for flow in self.flows_of_type(flowtype)}
+            nx.set_node_attributes(graph, flowstates, 'states')
         #set node values for functions
-        for fxnname, fxn in self.fxns.items():
-            fxnstates[fxnname], fxnmodes[fxnname] = fxn.return_states()
-            if gtype=='normal': del graph.nodes[fxnname]['bipartite']
-            if gtype=='component':
-                for mode in fxnmodes[fxnname].copy():
-                    for compname, comp in fxn.components.items():
-                        compstates[compname]={}
-                        comptypes[compname]=True
-                        if mode in comp.faultmodes:
-                            compmodes[compname]=compmodes.get(compname, set())
-                            compmodes[compname].update([mode])
-                            fxnmodes[fxnname].remove(mode)
-                            fxnmodes[fxnname].update(['Comp_Fault'])
+        if gtype=='typegraph':
+            for fxnclass in self.fxnclasses(): 
+                fxnstates[fxnclass] = {fxn:self.fxns[fxn].return_states()[0] for fxn in self.fxns_of_class(fxnclass)}
+                fxnmodes[fxnclass] = {fxn:self.fxns[fxn].return_states()[1] for fxn in self.fxns_of_class(fxnclass)}
+        else:
+            for fxnname, fxn in self.fxns.items():
+                fxnstates[fxnname], fxnmodes[fxnname] = fxn.return_states()
+                if gtype=='normal': del graph.nodes[fxnname]['bipartite']
+                if gtype=='component':
+                    for mode in fxnmodes[fxnname].copy():
+                        for compname, comp in fxn.components.items():
+                            compstates[compname]={}
+                            comptypes[compname]=True
+                            if mode in comp.faultmodes:
+                                compmodes[compname]=compmodes.get(compname, set())
+                                compmodes[compname].update([mode])
+                                fxnmodes[fxnname].remove(mode)
+                                fxnmodes[fxnname].update(['Comp_Fault'])
         nx.set_node_attributes(graph, fxnstates, 'states')
         nx.set_node_attributes(graph, fxnmodes, 'modes')
         if gtype=='component': 
