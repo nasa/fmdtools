@@ -252,12 +252,24 @@ def resultsgraph(g, nomg, gtype='normal'):
             elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
             else: status='Nominal'
             rg.nodes[node]['status']=status
-    elif gtype=='bipartite' or 'component':
+    elif gtype=='bipartite' or gtype=='component':
         for node in g.nodes:        
             if g.nodes[node]['bipartite']==0 or g.nodes[node].get('iscomponent', False): #condition only checked for functions
                 if g.nodes[node].get('modes', {'nom'}).difference(['nom']): status='Faulty'
+                elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
                 else: status='Nominal'
             elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
+            else: status='Nominal'
+            rg.nodes[node]['status']=status
+    elif gtype=='typegraph':
+        for node in g.nodes:
+            if g.nodes[node]['level']==2:
+                if any({fxn for fxn, m in g.nodes[node]['modes'].items() if m not in [{'nom'},{}]}): status='Faulty'
+                elif g.nodes[node]['states']!=nomg.nodes[node]['states']:   status='Degraded'
+                else: status='Nominal'
+            elif g.nodes[node]['level']==3:
+                if g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
+                else: status='Nominal'
             else: status='Nominal'
             rg.nodes[node]['status']=status
     return rg

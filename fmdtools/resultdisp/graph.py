@@ -231,17 +231,29 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[], showfaultlab
             if showfaultlabels: 
                 faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
             else:               faultlabels={}
-            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = functions, flows=flows)
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = functions, flows=flows)
         else:                                      #plots graph with status information 
             statuses=dict(g.nodes(data='status', default='Nominal'))
             faultnodes=[node for node,status in statuses.items() if status=='Faulty']
             degradednodes=[node for node,status in statuses.items() if status=='Degraded']
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
-            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=True, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = functions, flows=flows)
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, retfig=retfig,colors=colors, functions = functions, flows=flows)
     elif gtype == 'typegraph':
         if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
-        nx.draw(g, pos=pos, with_labels=True, node_size=scale*700, font_size=scale*8, font_weight='bold', node_color=colors[0])
+        if heatmap or highlight: raise Exception("Invalid option for typegraph--not implemented")
+        if "mdl" in locals():
+            nx.draw(g, pos=pos, with_labels=True, node_size=scale*700, font_size=scale*8, font_weight='bold', node_color=colors[0])
+        else:
+            #faultnodes = list({o.__class__.__name__ for f,o in mdl.fxns.items() if o.any_faults()})
+            labels={node:node for node in g.nodes}
+            statuses=dict(g.nodes(data='status', default='Nominal'))
+            faultnodes=[node for node,status in statuses.items() if status=='Faulty']
+            degradednodes=[node for node,status in statuses.items() if status=='Degraded']
+            faults=dict(g.nodes(data='modes', default={'nom'}))
+            faultlabels = {fclass:set(fxns.keys()) for fclass, fxns in g.nodes(data='modes') if fxns and set([mode for modes in fxns.values() for mode in modes if mode!='nom'])}
+            plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, retfig=retfig,colors=colors)
+        
     if retfig: 
         if fig_axis: return fig_axis
         else: return plt.gcf(), plt.gca()
@@ -498,8 +510,8 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     elif functions or flows:
         raise Exception("Invalid option--either provide list of functions and flows, or neither")
     else:
-        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize*1.2, font_weight='bold')
         nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize*1.2, font_weight='bold')
         nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize, font_weight='bold')
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
@@ -508,6 +520,7 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     if retfig:
         return plt.gcf(), plt.gca()
     elif show: plt.show()
+
 def get_plotlabels(g, reshist, t_ind):
     """
     Assigns labels to a graph g from reshist at time t so that it can be plotted
