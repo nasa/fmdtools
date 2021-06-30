@@ -120,20 +120,24 @@ def fxnhist(mdlhist, returndiff=True):
     diff = {}
     for fxnname in mdlhist['nominal']['functions']:
         fhist = copy.copy(mdlhist['faulty']['functions'][fxnname])
-        if fhist.get('faults', False):  del fhist['faults']
+        if any(fhist.get('faults', [])):  del fhist['faults']
         fxnshist[fxnname] = {}
         diff[fxnname]={}
         for state in fhist:
             faulty  = mdlhist['faulty']['functions'][fxnname][state]
             nominal = mdlhist['nominal']['functions'][fxnname][state] 
             fxnshist[fxnname][state] = 1* (faulty == nominal)
-            diff[fxnname][state] = nominal - faulty
+            if state=='mode': 
+                diff[fxnname][state] = [int(nominal[i]==faulty[i]) for i,f in enumerate(nominal)]
+            else:   diff[fxnname][state] = nominal - faulty
         if fxnshist[fxnname]: status = np.prod(np.array(list(fxnshist[fxnname].values())), axis = 0) 
         else: status = np.ones(len(mdlhist['faulty']['time']), dtype=int) #should empty be given 1 or nothing?
         fxnshist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname].get('faults', np.zeros(len(mdlhist['faulty']['time'])))
         faults = fxnshist[fxnname]['faults']
-        if type(faults)==dict:  fxnshist[fxnname]['numfaults'] = np.sum([fhist for fhist in faults.values()], axis=0)
-        else:                   fxnshist[fxnname]['numfaults'] = np.array([int(f!='nom') for f in faults])
+        if type(faults)==dict:              fxnshist[fxnname]['numfaults'] = np.sum([fhist for fhist in faults.values()], axis=0)
+        elif type(faults[0])==np.float64:  fxnshist[fxnname]['numfaults'] = faults
+        elif type(faults[0])==np.str_:     fxnshist[fxnname]['numfaults'] = np.array([int(f!='nom') for f in faults])
+        else:   raise Exception("Invalid data type in "+fxnname+" hist: "+str(type(faults)))
         faulty = 1 - 1*(fxnshist[fxnname]['numfaults']>0)
         fxnshist[fxnname]['status'] = status*faulty
         faulthist[fxnname]=fxnshist[fxnname]['numfaults']
