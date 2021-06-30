@@ -60,7 +60,7 @@ def mdlhist(mdlhist, fault='', time=0, fxnflows=[],cols=2, returnfigs=False, leg
     if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
     else: mdlhists=mdlhist
     figs = []
-    if not fxnflows: fxnflows = {fxnflow:"all" for fxnflow in list(mdlhist['nominal']['functions'].keys())+list(mdlhist['nominal']['flows'].keys()) if any(mdlhist['nominal']['functions'].get(fxnflow, [])) or any(mdlhist['nominal']['flows'].get(fxnflow, []))}
+    if not fxnflows: fxnflows = {fxnflow:"all" for fxnflow in list(mdlhists['nominal']['functions'].keys())+list(mdlhists['nominal']['flows'].keys()) if any(mdlhists['nominal']['functions'].get(fxnflow, [])) or any(mdlhists['nominal']['flows'].get(fxnflow, []))}
     for fxnflow in fxnflows:
         fig = mdlhistvals(mdlhists.copy(), fault=fault, time=time, fxnflowvals={fxnflow:'all'}, cols=cols, returnfig=True, legend=legend, timelabel=timelabel, units=units, phases=phases, modephases=modephases, label_phases=label_phases)
         figs.append(fig)
