@@ -61,7 +61,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, init
         set_mdl=True
         if gtype=='normal':         g=mdl.graph
         elif gtype=='bipartite':    g=mdl.bipartite
-        elif gtype=='typegraph':    mdl.return_typegraph()
+        elif gtype=='typegraph':    g=mdl.return_typegraph()
     plt.ion()
     fig = plt.figure()
     if gtype=='normal':
