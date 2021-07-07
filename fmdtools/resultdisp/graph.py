@@ -449,9 +449,9 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
     if not pos: pos=nx.shell_layout(g)
     nx.draw_networkx(g,pos,node_size=nodesize,font_size=font_size, node_shape='s',edge_color='gray', node_color=colors[0], width=3, font_weight='bold')
     nx.draw_networkx_edge_labels(g,pos,font_size=font_size, edge_labels=edgeflows)
-    nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2],width=3,font_size=font_size, font_weight='bold', node_size = nodesize*1.2)
-    nx.draw_networkx_nodes(g, pos, nodelist=degfxns,node_shape='s', node_color = colors[1],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
-    nx.draw_networkx_edges(g,pos,edgelist=faultedges, edge_color=colors[1],font_size=font_size, width=2)
+    nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2], node_size = nodesize*1.2)
+    nx.draw_networkx_nodes(g, pos, nodelist=degfxns,node_shape='s', node_color = colors[1], node_size = nodesize)
+    nx.draw_networkx_edges(g,pos,edgelist=faultedges, edge_color=colors[1])
         
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
@@ -470,21 +470,21 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     if not pos: pos=nx.spring_layout(g)
     if functions and flows:
         nx.draw_networkx_edges(g, pos)
-        nx.draw_networkx_nodes(g, pos, nodelist = functions, node_shape='s', labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist = flows, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist = functions, node_shape='s', node_size=nodesize, node_color = colors[0])
+        nx.draw_networkx_nodes(g, pos, nodelist = flows, node_size=nodesize, node_color = colors[0])
         degfxns = [node for node in degnodes if node in functions]
         degflows = [node for node in degnodes if node in flows]
-        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns, node_shape='s', node_color = colors[2],labels=labels, node_size=nodesize*1.2, font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist=degfxns, node_shape='s', node_color = colors[1],labels=labels, node_size=nodesize, font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist=degflows,node_color = colors[1],labels=labels, node_size=nodesize, font_weight='bold')
-        nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, node_size=nodesize, font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns, node_shape='s', node_color = colors[2], node_size=nodesize*1.2)
+        nx.draw_networkx_nodes(g, pos, nodelist=degfxns, node_shape='s', node_color = colors[1], node_size=nodesize)
+        nx.draw_networkx_nodes(g, pos, nodelist=degflows,node_color = colors[1], node_size=nodesize)
+        nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size,font_weight='bold')
 
     elif functions or flows:
         raise Exception("Invalid option--either provide list of functions and flows, or neither")
     else:
         nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize*1.2, font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize, font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize*1.2)
+        nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize)
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
