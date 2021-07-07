@@ -61,7 +61,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, init
         set_mdl=True
         if gtype=='normal':         g=mdl.graph
         elif gtype=='bipartite':    g=mdl.bipartite
-        elif gtype=='typegraph':    mdl.return_typegraph()
+        elif gtype=='typegraph':    g=mdl.return_typegraph()
     plt.ion()
     fig = plt.figure()
     if gtype=='normal':
@@ -124,7 +124,7 @@ def show_pyvis(g, gtype='typegraph', filename="typegraph.html", width=1000, filt
     n.show(filename)
     return n
 
-def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[],figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
+def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[],figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, graphviz=False, filename="file.dot"):
     """
     Plots a single graph object g.
 
@@ -241,6 +241,8 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[],figsize=(6,4)
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {fclass:set(fxns.keys()) for fclass, fxns in g.nodes(data='modes') if fxns and set([mode for modes in fxns.values() for mode in modes if mode!='nom'])}
             fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False)
+    if graphviz == True:
+        nx_to_graphviz(g, filename)
     return fig, ax
         
 def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True):
@@ -470,14 +472,17 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     if not pos: pos=nx.spring_layout(g)
     if functions and flows:
         nx.draw_networkx_edges(g, pos)
-        nx.draw_networkx_nodes(g, pos, nodelist = functions, node_shape='s', labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist = flows, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist = functions, node_shape='s', label=labels, font_size=font_size,
+                               node_size=nodesize, node_color = colors[0], font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist = flows, label=labels, font_size=font_size, 
+                               node_size=nodesize, node_color = colors[0], font_weight='bold')
         degfxns = [node for node in degnodes if node in functions]
         degflows = [node for node in degnodes if node in flows]
-        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns, node_shape='s', node_color = colors[2],labels=labels, node_size=nodesize*1.2, font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist=degfxns, node_shape='s', node_color = colors[1],labels=labels, node_size=nodesize, font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist=degflows,node_color = colors[1],labels=labels, node_size=nodesize, font_weight='bold')
-        nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, node_size=nodesize, font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns, node_shape='s', node_color = colors[2],label=labels, node_size=nodesize*1.2)#, font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=degfxns, node_shape='s', node_color = colors[1],label=labels, node_size=nodesize)#, font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=degflows,node_color = colors[1],label=labels, node_size=nodesize)#, font_weight='bold')
+        nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, node_size=nodesize, 
+                                font_weight='bold')
 
     elif functions or flows:
         raise Exception("Invalid option--either provide list of functions and flows, or neither")
@@ -591,8 +596,32 @@ def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, fau
     if show: plt.show()
     return plt.gcf(), plt.gca()
 
-
-
-
+def nx_to_graphviz(g, filename = 'file.dot', **kwargs):
+    try:
+        from graphviz import Digraph, Graph
+    except ImportError as error:
+        # Output expected ImportErrors.
+        print(error.__class__.__name__ + ": " + error.message)
+        print("GraphViz not installed. Please see:\n https://pypi.org/project/graphviz/ \n https://www.graphviz.org/download/")
+        return
+    #flows one shape, functions another
+    #print(g.nodes)
+    #print(g.edges)
+    dot = Graph(comment="model network")
+    for node in g.nodes:
+        dot.node(node,style="filled")
+    for edge in g.edges:
+        dot.edge(edge[0], edge[1])
+    dot.attr(outputorder = "edgesfirst")
+    dot.attr(layout='twopi')
+    dot.attr(overlap="voronoi")
+    dot.render(filename = filename.replace(".dot",""), format = 'png', )
+    
+    #A = nx.nx_pydot.write_dot(g,filename)#to_agraph(g)
+    #import pydot
+    #(graph,) = pydot.graph_from_dot_file('file.dot')
+    #graph.write_png('file.png')
+    #A.render(filename)
+    return
 
 
