@@ -112,7 +112,7 @@ def show_pyvis(g, gtype='typegraph', filename="typegraph.html", width=1000, filt
     """
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
-        g, pos = get_graph_pos(mdl, pos, gtype)
+        g, pos = get_graph_pos(mdl, [], gtype)
     width = str(width)+"px"
     
     if gtype=='typegraph':   n = Network(directed=True, layout='hierarchical', width=width, notebook=notebook)
