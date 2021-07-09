@@ -168,8 +168,8 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[],figsize=(6,4)
         mdl=g
         g, pos = get_graph_pos(mdl, pos, gtype)
     if graphviz == True:
-        nx_to_graphviz(g, gtype, filename, colors=colors, heatmap=heatmap, cmap=cmap, highlight=highlight, faultscen=faultscen, time=time, showfaultlabels=showfaultlabels, **kwargs)
-        return
+        dot = nx_to_graphviz(g, gtype, filename, colors=colors, heatmap=heatmap, cmap=cmap, highlight=highlight, faultscen=faultscen, time=time, showfaultlabels=showfaultlabels, **kwargs)
+        return dot
     fig, ax = plt.subplots(figsize=figsize)
     if gtype=='normal':
         edgeflows=dict()
@@ -640,7 +640,7 @@ def nx_to_graphviz(g, gtype='normal', filename='', faultscen=[], time=[], showfa
 
     Returns
     -------
-    None.
+    dot: a graphviz object
 
     """
     try:
@@ -713,7 +713,7 @@ def nx_to_graphviz(g, gtype='normal', filename='', faultscen=[], time=[], showfa
         
         for node in functions+flows:
             node_label = node
-            if node in faultlabels_form:
+            if node in faultlabels_form and showfaultlabels == True:
                 node_label += " \\n "
                 node_label += faultlabels_form[node]
             dot.node(node,label=node_label, style="filled", fillcolor=colors_dict[node], shape=shapes[node])
@@ -770,7 +770,7 @@ def nx_to_graphviz(g, gtype='normal', filename='', faultscen=[], time=[], showfa
     
         for node in g.nodes:
             node_label = node
-            if node in faultlabels_form:
+            if node in faultlabels_form and showfaultlabels == True:
                 node_label += " \\n "
                 node_label += faultlabels_form[node]
             dot.node(node,label=node_label, style="filled", fillcolor=colors_dict[node], shape='box')
@@ -787,4 +787,7 @@ def nx_to_graphviz(g, gtype='normal', filename='', faultscen=[], time=[], showfa
         filename += "_"
     dot.render(filename = filename+gtype, format = 'png', )
     print("graph saved to: ", filename+gtype)
-    return
+    return dot
+
+def plot_gv_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, show=True, colors=['lightgray','orange', 'red'], title=[]):
+    return dot
