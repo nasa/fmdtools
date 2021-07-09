@@ -124,7 +124,7 @@ def show_pyvis(g, gtype='typegraph', filename="typegraph.html", width=1000, filt
     n.show(filename)
     return n
 
-def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[],figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, graphviz=False, filename="file.dot"):
+def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[],figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, graphviz=False, filename="", **kwargs):
     """
     Plots a single graph object g.
 
@@ -154,10 +154,22 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[],figsize=(6,4)
         A heatmap dictionary to overlay on the plot. The default is {}.
     cmap : mpl colormap
         Colormap to use for heatmap visualizations
+    ###The following paramaters are specifically for graphviz rendering -- ideally these can be separated in future renditions.
+    graphviz : bool 
+        default is False. calls nx_to_graphviz() if true.
+    filename : string, optional
+        the filename for the graphviz png output and dot output. The default is ''.
+    **kwargs : dictionary
+        dictionary of graphviz attributes used to customize the output.
+        this includes layout, overlap, node padding, node separation, font, fontsize, etc.
+        see http://www.graphviz.org/doc/info/attrs.html for all options
     """
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         g, pos = get_graph_pos(mdl, pos, gtype)
+    if graphviz == True:
+        nx_to_graphviz(g, gtype, filename, colors=colors, heatmap=heatmap, cmap=cmap, highlight=highlight, faultscen=faultscen, time=time, showfaultlabels=showfaultlabels, **kwargs)
+        return
     fig, ax = plt.subplots(figsize=figsize)
     if gtype=='normal':
         edgeflows=dict()
@@ -212,7 +224,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[],figsize=(6,4)
             nx.draw_networkx_edges(g, pos)
             nx.draw_networkx_nodes(g, pos, nodelist=functions,  node_color=functioncolors, cmap=cmap, alpha=0.6, node_size=nodesize, node_shape='s')
             nx.draw_networkx_nodes(g, pos, nodelist=flows,  node_color=flowcolors, cmap=cmap, alpha=0.6, node_size=nodesize)
-            nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, node_size=nodesize, font_weight='bold')
+            nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, font_weight='bold')
             if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
         elif highlight:
             faultnodes = highlight[0]
@@ -241,9 +253,7 @@ def show(g, gtype='normal', pos=[], scale=1, faultscen=[], time=[],figsize=(6,4)
             faults=dict(g.nodes(data='modes', default={'nom'}))
             faultlabels = {fclass:set(fxns.keys()) for fclass, fxns in g.nodes(data='modes') if fxns and set([mode for modes in fxns.values() for mode in modes if mode!='nom'])}
             fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False)
-    if graphviz == True:
-        nx_to_graphviz(g, filename)
-    return fig, ax
+    return fig, ax, g
         
 def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True):
     """
@@ -593,32 +603,188 @@ def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, fau
     if show: plt.show()
     return plt.gcf(), plt.gca()
 
-def nx_to_graphviz(g, filename = 'file.dot', **kwargs):
+def nx_to_graphviz(g, gtype='normal', filename='', faultscen=[], time=[], showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
+    """
+    Translates an existing nx graph to a graphviz graph. Saves the graph output and dot file.
+    Called from show() by passing in graphviz=True and filename
+    
+    Parameters
+    ----------
+    g : nx graph object or model
+        The multigraph to plot
+    gtype : string, optional
+        Type of graph input to show
+        values are 'normal', 'bipartite', or 'typegraph'. The default is 'normal'.
+    filename : string, optional
+        the filename for the graphviz png output and dot output. The default is ''.
+    faultscen : str, optional
+        Name of the fault scenario (for the title). The default is [].
+    time : float, optional
+        Time of fault injection. The default is [].
+    showfaultlabels : bool, optional
+        Whether or not to label the faults on the functions. The default is True.
+    highlight : list, optional
+        Functions/flows to highlight using [faulty functions, degraded functions, degraded flows] labelling scheme.
+        Used for custom overlays. Default is []
+    colors : list, optional
+        List of colors to use for nominal, degraded, and faulty functions/flows.
+        Default is: ['lightgray','orange', 'red']
+    heatmap : dict, optional
+        A heatmap dictionary to overlay on the plot. The default is {}.
+    cmap : mpl colormap
+        Colormap to use for heatmap visualization
+    **kwargs : dictionary
+        dictionary of graphviz attributes used to customize the output.
+        this includes layout, overlap, node padding, node separation, font, fontsize, etc.
+        see http://www.graphviz.org/doc/info/attrs.html for all options
+
+    Returns
+    -------
+    None.
+
+    """
     try:
         from graphviz import Digraph, Graph
     except ImportError as error:
-        # Output expected ImportErrors.
         print(error.__class__.__name__ + ": " + error.message)
         print("GraphViz not installed. Please see:\n https://pypi.org/project/graphviz/ \n https://www.graphviz.org/download/")
         return
-    #flows one shape, functions another
-    #print(g.nodes)
-    #print(g.edges)
-    dot = Graph(comment="model network")
-    for node in g.nodes:
-        dot.node(node,style="filled")
-    for edge in g.edges:
-        dot.edge(edge[0], edge[1])
-    dot.attr(outputorder = "edgesfirst")
-    dot.attr(layout='twopi')
-    dot.attr(overlap="voronoi")
-    dot.render(filename = filename.replace(".dot",""), format = 'png', )
+    #setting up default layouts for graph types
+    default_args = {'bipartite':{"layout":'twopi', "overlap":"voronoi"},
+                    'component':{},
+                    'typegraph': {"pad":"0.5", "ranksep":"2"},
+                    'normal':{}}
+    if kwargs == {}:
+        kwargs = default_args[gtype]
+    #checking type of g -- calls show if not nx
+    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
+        _,_,g = show(g, gtype=gtype, colors=colors, heatmap=heatmap, cmap=cmap, highlight=highlight, faultscen=faultscen, time=time, showfaultlabels=showfaultlabels)
+    #bipartite
+    if gtype == 'bipartite':
+        #handles passing resulthist graph or bipartite graph
+        bipart = False
+        for f, val in g.nodes.items():
+            if 'bipartite' in val :
+                bipart = True
+        if bipart == True:
+            functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
+            flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
+            edges = g.edges
+        else: 
+            functions = [f for f in g.nodes]
+            flows = [flow for f in g.edges.values() for flow in f]
+            edges = []
+            for pair in g.edges:
+                flow = [key for key in g.edges[pair]]
+                edges.append((flow[0], pair[0]))
+                edges.append((flow[0], pair[1]))
+        #handles faults
+        statuses=dict(g.nodes(data='status', default='Nominal'))
+        if flows[0] not in statuses:
+            flows_dict = {flow: f[flow]['status'] for f in g.edges.values() for flow in f }
+            statuses.update(flows_dict)
+        faultnodes=[node for node,status in statuses.items() if status=='Faulty']
+        degradednodes=[node for node,status in statuses.items() if status=='Degraded']
+        faults=dict(g.nodes(data='modes', default={'nom'}))
+        faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
+        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        #handles heatmap
+        if heatmap == {}:
+            colors_dict = {fn: colors[2] for fn in faultnodes}
+            colors_dict.update({dn: colors[1] for dn in degradednodes})
+            colors_dict.update({f: colors[0] for f in functions+flows if f not in degradednodes and f not in faultnodes})
+        else:
+            colors_dict = {}
+            colors_val_dict = {}
+            for node in functions+flows:
+                colors_val_dict[node] = heatmap.get(node, 0.0)
+            Arange = [colors_val_dict[node] for node in colors_val_dict]
+            node_labels = [node for node in colors_val_dict]
+            norm = matplotlib.colors.Normalize(vmin = min(Arange), vmax = max(Arange))
+            m = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
+            mm = m.to_rgba(Arange)
+            mm = [matplotlib.colors.to_hex(mm_i) for mm_i in mm]
+            for i in range(len(mm)):
+                colors_dict[node_labels[i]] = mm[i]
+        
+        dot = Graph(comment="model network", graph_attr=kwargs)
+        shapes = {f:'box' for f in flows}
+        shapes.update({ f1:'ellipse' for f1 in functions})
+        
+        for node in functions+flows:
+            node_label = node
+            if node in faultlabels_form:
+                node_label += " \\n "
+                node_label += faultlabels_form[node]
+            dot.node(node,label=node_label, style="filled", fillcolor=colors_dict[node], shape=shapes[node])
+        for edge in edges:
+            dot.edge(edge[0], edge[1])
+    #typegraph
+    elif gtype == 'typegraph':
+        dot = Digraph(comment="model type graph network", graph_attr=kwargs)
+        for node in g.nodes:
+            dot.node(node,style="filled")
+        for edge in g.edges:
+            dot.edge(edge[0], edge[1])
+    #normal graph
+    elif gtype == 'normal':
+        #need to address highlight
+        #handles faults
+        edgeflows=dict()
+        for edge in g.edges:
+            flows=list(g.get_edge_data(edge[0],edge[1]).keys())
+            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
+        statuses=dict(g.nodes(data='status', default='Nominal'))
+        faultnodes=[node for node,status in statuses.items() if status=='Faulty']
+        degradednodes=[node for node,status in statuses.items() if status=='Degraded']
+        faults=dict(g.nodes(data='modes', default={'nom'}))
+        faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
+        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
+        else:
+            faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
+            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
+        #handles heatmap
+        if heatmap == {}:
+            colors_dict = {fn: colors[2] for fn in faultnodes}
+            colors_dict.update({dn: colors[1] for dn in degradednodes})
+            colors_dict.update({f: colors[0] for f in g.nodes if f not in degradednodes and f not in faultnodes})
+            colors_dict.update({fe: colors[1] for fe in faultedges})
+            colors_dict.update({ne: colors[0] for ne in g.edges if ne not in faultedges})
+        else:
+            colors_dict = {}
+            colors_val_dict = {}
+            for node in g.nodes:
+                colors_val_dict[node] = heatmap.get(node, 0.0)
+            for node in edgeflows:
+                 colors_dict[node] = "black"
+            Arange = [colors_val_dict[node] for node in colors_val_dict if node not in edgeflows]
+            node_labels = [node for node in colors_val_dict if node not in edgeflows]
+            norm = matplotlib.colors.Normalize(vmin = min(Arange), vmax = max(Arange))
+            m = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
+            mm = m.to_rgba(Arange)
+            mm = [matplotlib.colors.to_hex(mm_i) for mm_i in mm]
+            for i in range(len(mm)):
+                colors_dict[node_labels[i]] = mm[i]
+        dot = Graph(comment="model network", graph_attr=kwargs)
     
-    #A = nx.nx_pydot.write_dot(g,filename)#to_agraph(g)
-    #import pydot
-    #(graph,) = pydot.graph_from_dot_file('file.dot')
-    #graph.write_png('file.png')
-    #A.render(filename)
+        for node in g.nodes:
+            node_label = node
+            if node in faultlabels_form:
+                node_label += " \\n "
+                node_label += faultlabels_form[node]
+            dot.node(node,label=node_label, style="filled", fillcolor=colors_dict[node], shape='box')
+        for edge in edgeflows:
+            edge_label = edgeflows[edge]
+            if edge in faultflows:
+                if (faultflows[edge].strip(" ")) != edgeflows[edge]:
+                    edge_label  += " \\n "
+                    edge_label += faultflows[edge]
+            dot.edge(edge[0], edge[1], label=edge_label, color=colors_dict[edge], labelangle="180")
+    #rendering
+    dot.attr(outputorder = "edgesfirst")
+    if filename != "":
+        filename += "_"
+    dot.render(filename = filename+gtype, format = 'png', )
+    print("graph saved to: ", filename+gtype)
     return
-
-
