@@ -92,7 +92,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, init
         elif gtype=='bipartite':    mdl.bipartite_pos = pos  
     return pos
 
-def show(g, gtype='bipartite', renderer = 'matplotlib', filename="", **kwargs):
+def show(g, gtype='normal', renderer = 'matplotlib', filename="", **kwargs):
     """
     Plots a single graph object g.
 
