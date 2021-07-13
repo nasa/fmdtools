@@ -92,7 +92,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, init
         elif gtype=='bipartite':    mdl.bipartite_pos = pos  
     return pos
 
-def show(g, gtype='biparite', renderer = 'matplotlib', filename="", **kwargs):
+def show(g, gtype='normal', renderer = 'matplotlib', filename="", **kwargs):
     """
     Plots a single graph object g.
 
@@ -120,7 +120,7 @@ def show(g, gtype='biparite', renderer = 'matplotlib', filename="", **kwargs):
         fig, ax = show_matplotlib(g, gtype=gtype, filename=filename, **kwargs)
         return fig, ax
     elif renderer == 'pyviz':
-        n = show_pyviz(g, gtype=gtype, pos=pos, filename=filename, **kwargs)
+        n = show_pyviz(g, gtype=gtype, filename=filename, **kwargs)
         return n
 
 def show_matplotlib(g, gtype='normal', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
@@ -238,7 +238,7 @@ def show_matplotlib(g, gtype='normal', filename='', filetype='png', pos=[], scal
             fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False)
     if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
     return fig, ax
-def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
+def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype='png', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
     """
     Translates an existing nx graph to a graphviz graph. Saves the graph output and dot file.
     Called from show() by passing in graphviz=True and filename
@@ -339,7 +339,7 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='', showfaul
     else:           display(SVG(dot._repr_svg_()))
     return dot
 
-def show_pyvis(g, gtype='typegraph', filename="typegraph", width=1000, filt=True, physics=False, notebook=False):
+def show_pyviz(g, gtype='typegraph', filename="typegraph", width=1000, filt=True, physics=False, notebook=False):
     """
     Method for plotting graphs with pyvis. Produces interactive HTML!
 
@@ -593,6 +593,7 @@ def get_graph_pos(mdl, pos, gtype):
     elif gtype=='component':
         g = mdl.return_stategraph('component')
         if not pos: pos=nx.spring_layout(g)
+    else: raise Exception("Graph type "+gtype+" not valid")
     return g,pos
 def get_graph_annotations(g, gtype='bipartite'):
     """Helper method that returns labels/lists degraded nodes for the plot annotations"""
