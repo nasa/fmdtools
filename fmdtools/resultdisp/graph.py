@@ -280,11 +280,7 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype=
     dot: a graphviz object
 
     """
-    try:
-        from graphviz import Digraph, Graph
-    except ImportError as error:
-        print(error.__class__.__name__ + ": " + error.message)
-        raise Exception("GraphViz not installed. Please see:\n https://pypi.org/project/graphviz/ \n https://www.graphviz.org/download/")
+    Digraph, Graph = gv_import_check()
     #setting up default layouts for graph types
     if gtype == 'bipartite': 
         kwargs["layout"] = kwargs.get("layout", "twopi")
@@ -376,7 +372,7 @@ def show_pyviz(g, gtype='typegraph', filename="typegraph", width=1000, filt=True
     n.show(filename+".html")
     return n
         
-def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True):
+def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True, **kwargs):
     """
     Displays the execution order/types of the model, where the functions and flows in the
     static step are highlighted and the functions in the dynamic step are listed (with corresponding order)
@@ -385,12 +381,10 @@ def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cy
     ----------
     mdl : fmdtools Model
         Model of the system to visualize.
+    renderer : 'matplotlib' or 'graphviz'
+        Renderer to use for the graph
     gtype : 'normal'/'bipartite', optional
         Representation of the model to use. The default is 'bipartite'.
-    pos : dict optional
-        Dictionary of positions for the model. The default is [].
-    scale : float, optional
-        Scale factor for the node sizes. The default is 1.
     colors : list, optional
         Colors to use for unexecuted functions, static propagation steps, and dynamic functions. 
         The default is ['lightgray', 'cyan','teal'].
@@ -400,25 +394,30 @@ def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cy
         Title for the plot. The default is "Function Execution Order".
     legend : bool, optional
         Whether to show a legend. The default is True.
-
+    **kwargs : see arguments for the respective renderers
     Returns
     -------
     tuple of form (figure, axis) 
 
     """
-    if gtype =='normal': fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[mdl.dynamicfxns, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], scale=scale, colors=colors, showfaultlabels= show_dyn_order)
+    if gtype =='normal': fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.dynamicfxns, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], colors=colors, showfaultlabels= show_dyn_order, **kwargs)
     else:
         staticnodes = list(mdl.staticfxns) + list(set([n for node in mdl.staticfxns for n in mdl.bipartite.neighbors(node)]))
         dynamicnodes = list(mdl.dynamicfxns) #+ list(set().union(*[nx.node_connected_component(mdl.bipartite, node) for node in mdl.dynamicfxns]))
-        fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[dynamicnodes, staticnodes], scale=scale, colors=colors, showfaultlabels= show_dyn_order)
+        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[dynamicnodes, staticnodes], colors=colors, showfaultlabels= show_dyn_order, **kwargs)
     
     if legend:
-        legend_elements = [Patch(facecolor=colors[0], edgecolor=colors[0], label='No Execution'),
-                           Patch(facecolor=colors[2], edgecolor=colors[2], label='Dynamic Step'),
-                           Patch(facecolor=colors[1], edgecolor=colors[1], label='Static Step')]
-        
-        fig_axis[1].legend(handles = legend_elements, ncol=3, bbox_to_anchor = (1.0,-0.05))
-    if title: fig_axis[1].set_title(title)
+        if renderer=='graphviz': 
+            print('legend not implemented in graphviz renderer')
+        else:
+            legend_elements = [Patch(facecolor=colors[0], edgecolor=colors[0], label='No Execution'),
+                               Patch(facecolor=colors[2], edgecolor=colors[2], label='Dynamic Step'),
+                               Patch(facecolor=colors[1], edgecolor=colors[1], label='Static Step')]
+            
+            fig_axis[1].legend(handles = legend_elements, ncol=3, bbox_to_anchor = (1.0,-0.05))
+    if title: 
+        if renderer=='graphviz':    print('title not implemented in graphviz renderer')
+        else:                       fig_axis[1].set_title(title)
     return fig_axis
     
 def history(ghist, gtype='normal', pos=[], scale=1, faultscen=[],showfaultlabels=True, colors=['lightgray','orange', 'red']):
@@ -446,7 +445,7 @@ def history(ghist, gtype='normal', pos=[], scale=1, faultscen=[],showfaultlabels
     for time, graph in ghist.items():
         show(graph,gtype=gtype,pos=pos, scale=scale, faultscen=faultscen, time=time, showfaultlabels=showfaultlabels, colors=colors)
 
-def result_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[], colors=['lightgray','orange', 'red'], figsize=(6,4)):
+def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **kwargs):
     """
     Plots a representation of the model graph at a specific time in the results history.
 
@@ -469,13 +468,46 @@ def result_from(mdl, reshist, time, faultscen=[], gtype='bipartite', showfaultla
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
     """
-    g, pos = get_graph_pos(mdl, pos, gtype)
     [[t_ind,],] = np.where(reshist['time']==time)
-    fig, ax = plt.subplots(figsize=figsize)
-    if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
-    elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
-    elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
-    return fig
+    g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
+    if renderer=='matplotlib':
+        fig, ax = plt.subplots(figsize=kwargs.get('figsize', (6,4)))
+        if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, **kwargs)
+        elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, **kwargs)
+        elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, **kwargs)
+        return fig
+    elif renderer=='graphviz':
+        if gtype=='bipartite': dot = update_gv_bipplot(t_ind, reshist, g, **kwargs)
+        display(SVG(dot._repr_svg_()))
+        return dot
+
+def update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
+    """Updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
+    Digraph, Graph = gv_import_check()
+    kwargs["layout"] = kwargs.get("layout", "twopi")
+    kwargs["overlap"] = kwargs.get("overlap", "voronoi")
+    time = reshist['time'][t_ind]
+    functions = list(reshist['functions'].keys()); flows=list(reshist['flows'].keys())
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
+    degnodes = degfxns + degflows
+    colors_dict = gv_colors(g, 'bipartite', colors, heatmap,cmap, faultfxns, degnodes, faultedges=faultedges, edgeflows=edgeflows, functions=functions, flows=flows)
+    faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+    dot = Graph(comment="model network", graph_attr=kwargs)
+    dot = plot_gv_bipartite(g, faultfxns, degnodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, g.edges, dot)
+    return dot
+
+def update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red']):
+    """Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
+    plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors)
+def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red']):
+    """Updates a typegraph-stype plot at a given timestep t_ind given the result history reshist"""
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
+    degnodes = degfxns + degflows
+    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors)
+
 
 def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[],colors=['lightgray','orange', 'red'],figsize=(6,4)):
     """
@@ -720,7 +752,14 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     return plt.gcf(), plt.gca()
 
 ###GRAPHVIZ HELPER FUNCTIONS
-#############################
+############################
+def gv_import_check():
+    try:
+        from graphviz import Digraph, Graph
+    except ImportError as error:
+        print(error.__class__.__name__ + ": " + error.message)
+        raise Exception("GraphViz not installed. Please see:\n https://pypi.org/project/graphviz/ \n https://www.graphviz.org/download/")
+    return Digraph, Graph
 def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultscen, time, showfaultlabels, colors_dict, dot):
     for node in g.nodes:
         node_label = node
