@@ -549,36 +549,9 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='', showfaul
         labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         #handles heatmap
-        if heatmap == {}:
-            colors_dict = {fn: colors[2] for fn in faultnodes}
-            colors_dict.update({dn: colors[1] for dn in degradednodes})
-            colors_dict.update({f: colors[0] for f in functions+flows if f not in degradednodes and f not in faultnodes})
-        else:
-            colors_dict = {}
-            colors_val_dict = {}
-            for node in functions+flows:
-                colors_val_dict[node] = heatmap.get(node, 0.0)
-            Arange = [colors_val_dict[node] for node in colors_val_dict]
-            node_labels = [node for node in colors_val_dict]
-            norm = matplotlib.colors.Normalize(vmin = min(Arange), vmax = max(Arange))
-            m = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
-            mm = m.to_rgba(Arange)
-            mm = [matplotlib.colors.to_hex(mm_i) for mm_i in mm]
-            for i in range(len(mm)):
-                colors_dict[node_labels[i]] = mm[i]
-        
+        colors_dict = gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, functions=functions, flows=flows)
         dot = Graph(comment="model network", graph_attr=kwargs)
-        shapes = {f:'box' for f in flows}
-        shapes.update({ f1:'ellipse' for f1 in functions})
-        
-        for node in functions+flows:
-            node_label = node
-            if node in faultlabels_form and showfaultlabels == True:
-                node_label += " \\n "
-                node_label += faultlabels_form[node]
-            dot.node(node,label=node_label, style="filled", fillcolor=colors_dict[node], shape=shapes[node])
-        for edge in edges:
-            dot.edge(edge[0], edge[1])
+        dot = plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot)
     #typegraph
     elif gtype == 'typegraph':
         dot = Digraph(comment="model type graph network", graph_attr=kwargs)
@@ -601,42 +574,9 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='', showfaul
             faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
             faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
         #handles heatmap
-        if heatmap == {}:
-            colors_dict = {fn: colors[2] for fn in faultnodes}
-            colors_dict.update({dn: colors[1] for dn in degradednodes})
-            colors_dict.update({f: colors[0] for f in g.nodes if f not in degradednodes and f not in faultnodes})
-            colors_dict.update({fe: colors[1] for fe in faultedges})
-            colors_dict.update({ne: colors[0] for ne in g.edges if ne not in faultedges})
-        else:
-            colors_dict = {}
-            colors_val_dict = {}
-            for node in g.nodes:
-                colors_val_dict[node] = heatmap.get(node, 0.0)
-            for node in edgeflows:
-                 colors_dict[node] = "black"
-            Arange = [colors_val_dict[node] for node in colors_val_dict if node not in edgeflows]
-            node_labels = [node for node in colors_val_dict if node not in edgeflows]
-            norm = matplotlib.colors.Normalize(vmin = min(Arange), vmax = max(Arange))
-            m = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
-            mm = m.to_rgba(Arange)
-            mm = [matplotlib.colors.to_hex(mm_i) for mm_i in mm]
-            for i in range(len(mm)):
-                colors_dict[node_labels[i]] = mm[i]
+        colors_dict = gv_colors(g, gtype, colors=colors, heatmap=heatmap, cmap=cmap, faultnodes=faultnodes, degradednodes=degradednodes, faultedges=faultedges, edgeflows=edgeflows)
         dot = Graph(comment="model network", graph_attr=kwargs)
-    
-        for node in g.nodes:
-            node_label = node
-            if node in faultlabels_form and showfaultlabels == True:
-                node_label += " \\n "
-                node_label += faultlabels_form[node]
-            dot.node(node,label=node_label, style="filled", fillcolor=colors_dict[node], shape='box')
-        for edge in edgeflows:
-            edge_label = edgeflows[edge]
-            if edge in faultflows:
-                if (faultflows[edge].strip(" ")) != edgeflows[edge]:
-                    edge_label  += " \\n "
-                    edge_label += faultflows[edge]
-            dot.edge(edge[0], edge[1], label=edge_label, color=colors_dict[edge], labelangle="180")
+        dot = plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
     #rendering
     dot.attr(outputorder = "edgesfirst")
     if filename:    dot.render(filename = filename+gtype, format = filetype)
@@ -795,3 +735,112 @@ def show_pyvis(g, gtype='typegraph', filename="typegraph", width=1000, filt=True
     if filt: n.show_buttons(filter_=filt)
     n.show(filename+".html")
     return n
+
+def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultscen, time, showfaultlabels, colors_dict, dot):
+    for node in g.nodes:
+        node_label = node
+        if node in faultlabels and showfaultlabels == True:
+            node_label += " \\n "
+            node_label += faultlabels[node]
+        dot.node(node,label=node_label, style="filled", fillcolor=colors_dict[node], shape='box')
+    for edge in edgeflows:
+        edge_label = edgeflows[edge]
+        if edge in faultflows:
+            if (faultflows[edge].strip(" ")) != edgeflows[edge]:
+                edge_label  += " \\n "
+                edge_label += faultflows[edge]
+        dot.edge(edge[0], edge[1], label=edge_label, color=colors_dict[edge], labelangle="180")
+    return dot
+
+def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot):
+    shapes = {f:'box' for f in flows}
+    shapes.update({ f1:'ellipse' for f1 in functions})
+    
+    for node in functions+flows:
+        node_label = node
+        if node in faultlabels and showfaultlabels == True:
+            node_label += " \\n "
+            node_label += faultlabels[node]
+        dot.node(node,label=node_label, style="filled", fillcolor=colors_dict[node], shape=shapes[node])
+    for edge in edges:
+        dot.edge(edge[0], edge[1])
+    return dot
+
+def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faultedges=[], edgeflows={}, functions=[], flows=[]):
+    """
+    creates dictonary of node/edge colors for a graphviz plot
+
+    Parameters
+    ----------
+    g : nx graph object or model
+        The multigraph to plot
+    gtype : string, optional
+        Type of graph input to show
+        values are 'normal', 'bipartite', or 'typegraph'.
+    colors : list, optional
+        List of colors to use for nominal, degraded, and faulty functions/flows.
+        Default is: ['lightgray','orange', 'red']
+    heatmap : dict, optional
+        A heatmap dictionary to overlay on the plot. The default is {}.
+    cmap : mpl colormap
+        Colormap to use for heatmap visualization
+    faultnodes : list
+        list of the nodes with faults
+    degradednodes : list
+        list of the nodes with degraded functionality
+    faultedges : list
+        list of edges(flows) that have faults. Only used for 'normal' graph. The default is [].
+    edgeflows : dictionary
+        dictionary of edges (n1,n2) and edge/flow names. The default is {}.
+    functions : list, optional
+        list of function nodes. Only used for 'bipartite' graph. The default is [].
+    flows : list, optional
+        list of flow nodes. Only used for 'bipartite' graph. The default is [].
+
+    Returns
+    -------
+    colors_dict : dictionary
+        dictionary withe keys as nodes/edges and values colors.
+
+    """
+    if gtype == 'normal':
+        if heatmap == {}:
+                colors_dict = {fn: colors[2] for fn in faultnodes}
+                colors_dict.update({dn: colors[1] for dn in degradednodes})
+                colors_dict.update({f: colors[0] for f in g.nodes if f not in degradednodes and f not in faultnodes})
+                colors_dict.update({fe: colors[1] for fe in faultedges})
+                colors_dict.update({ne: colors[0] for ne in g.edges if ne not in faultedges})
+        else:
+            colors_dict = {}
+            colors_val_dict = {}
+            for node in g.nodes:
+                colors_val_dict[node] = heatmap.get(node, 0.0)
+            for node in edgeflows:
+                 colors_dict[node] = "black"
+            Arange = [colors_val_dict[node] for node in colors_val_dict if node not in edgeflows]
+            node_labels = [node for node in colors_val_dict if node not in edgeflows]
+            norm = matplotlib.colors.Normalize(vmin = min(Arange), vmax = max(Arange))
+            m = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
+            mm = m.to_rgba(Arange)
+            mm = [matplotlib.colors.to_hex(mm_i) for mm_i in mm]
+            for i in range(len(mm)):
+                colors_dict[node_labels[i]] = mm[i]
+    elif gtype == 'bipartite':
+        if heatmap == {}:
+            colors_dict = {fn: colors[2] for fn in faultnodes}
+            colors_dict.update({dn: colors[1] for dn in degradednodes})
+            colors_dict.update({f: colors[0] for f in functions+flows if f not in degradednodes and f not in faultnodes})
+        else:
+            colors_dict = {}
+            colors_val_dict = {}
+            for node in functions+flows:
+                colors_val_dict[node] = heatmap.get(node, 0.0)
+            Arange = [colors_val_dict[node] for node in colors_val_dict]
+            node_labels = [node for node in colors_val_dict]
+            norm = matplotlib.colors.Normalize(vmin = min(Arange), vmax = max(Arange))
+            m = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
+            mm = m.to_rgba(Arange)
+            mm = [matplotlib.colors.to_hex(mm_i) for mm_i in mm]
+            for i in range(len(mm)):
+                colors_dict[node_labels[i]] = mm[i]
+    return colors_dict
