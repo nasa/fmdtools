@@ -123,16 +123,258 @@ def show(g, gtype='biparite', renderer = 'matplotlib', filename="", **kwargs):
         n = show_pyviz(g, gtype=gtype, pos=pos, filename=filename, **kwargs)
         return n
 
-def get_graph_annotations(g, gtype='bipartite'):
-    labels={node:node for node in g.nodes}
-    statuses=dict(g.nodes(data='status', default='Nominal'))
-    faultnodes=[node for node,status in statuses.items() if status=='Faulty']
-    degradednodes=[node for node,status in statuses.items() if status=='Degraded']
-    faults=dict(g.nodes(data='modes', default={'nom'}))
-    if gtype=='typegraph':
-        faultlabels = {fclass:set(fxns.keys()) for fclass, fxns in g.nodes(data='modes') if fxns and set([mode for modes in fxns.values() for mode in modes if mode!='nom'])}
-    else: faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
-    return labels, faultnodes, degradednodes, faults, faultlabels
+def show_matplotlib(g, gtype='normal', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
+    """
+    Plots a single graph object g using matplotlib
+
+    Parameters
+    ----------
+    g : networkx graph or model
+        The multigraph to plot
+    gtype : 'normal' or 'bipartite'
+        Type of graph input to show--normal (multgraph) or bipartite
+    filename : string
+        Name to give the saved file, if saved. Default is '' (not saving the file)
+    filetype : string
+        Type of file to save the figure as (if saving)
+    pos : dict
+        Positions for nodes
+    scale: float
+        Changes sizes of nodes in bipartite graph
+    faultscen : str, optional
+        Name of the fault scenario (for the title). The default is [].
+    time : float, optional
+        Time of fault injection. The default is [].
+    showfaultlabels : bool, optional
+        Whether or not to label the faults on the functions. The default is True.
+    highlight : list, optional
+        Functions/flows to highlight using [faulty functions, degraded functions, degraded flows] labelling scheme.
+        Used for custom overlays. Default is []
+    colors : list, optional
+        List of colors to use for nominal, degraded, and faulty functions/flows.
+        Default is: ['lightgray','orange', 'red']
+    heatmap : dict, optional
+        A heatmap dictionary to overlay on the plot. The default is {}.
+    cmap : mpl colormap
+        Colormap to use for heatmap visualizations
+
+    Returns
+    -------
+    fig : matplotlib figure
+        Matplotlib figure object of the drawn graph
+    """
+    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
+        mdl=g
+        g, pos = get_graph_pos(mdl,pos, gtype)
+    fig, ax = plt.subplots(figsize=figsize)
+    if gtype=='normal':
+        edgeflows=dict()
+        if not pos: pos=nx.shell_layout(g)
+        nodesize=scale*2000
+        font_size=scale*12
+        for edge in g.edges:
+            flows=list(g.get_edge_data(edge[0],edge[1]).keys())
+            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
+        if heatmap:
+            colors=[]
+            for node in g.nodes():
+                colors = colors +[heatmap.get(node,0.0)]
+                nx.draw_networkx_edges(g,pos, width=2)
+            nx.draw_networkx_nodes(g,pos,node_size=nodesize, node_shape='s', node_color=colors, cmap=cmap, alpha=0.7)
+            nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows, font_size=font_size, font_weight='bold')
+            labels={node:node for node in g.nodes} 
+            nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, font_weight='bold')
+        elif highlight:
+            faultnodes = highlight[0]
+            degradednodes = highlight[1]
+            faultedges = highlight[2]
+            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
+            else:               faultlabels = {}
+            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge])]) for edge in faultedges}
+            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=scale, pos=pos,colors=colors, show=False)
+        else:
+            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
+            if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
+            else:
+                faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
+                faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
+            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=pos,colors=colors, show=False)
+    elif gtype in ['bipartite', 'component']:
+        labels={node:node for node in g.nodes}
+        functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
+        flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
+        if not pos: pos=nx.spring_layout(g)
+        nodesize=scale*700
+        font_size=scale*6
+        if heatmap:
+            #nx.draw(g, pos, node_size=nodesize,node_color = 'k', alpha=0.3)
+            functioncolors = []; flowcolors = []
+            for node in functions:
+                functioncolors = functioncolors + [heatmap.get(node, 0.0)]
+            for node in flows:
+                flowcolors = flowcolors + [heatmap.get(node, 0.0)]
+            nx.draw_networkx_edges(g, pos)
+            nx.draw_networkx_nodes(g, pos, nodelist=functions,  node_color=functioncolors, cmap=cmap, alpha=0.6, node_size=nodesize, node_shape='s')
+            nx.draw_networkx_nodes(g, pos, nodelist=flows,  node_color=flowcolors, cmap=cmap, alpha=0.6, node_size=nodesize)
+            nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, font_weight='bold')
+            if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+        elif highlight:
+            faultnodes = highlight[0]
+            degradednodes = highlight[1]
+            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
+            else:               faultlabels={}
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False)
+        else:                                      #plots graph with status information 
+            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False)
+    elif gtype == 'typegraph':
+        if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
+        if heatmap or highlight: raise Exception("Invalid option for typegraph--not implemented")
+        if "mdl" in locals():
+            nx.draw(g, pos=pos, with_labels=True, node_size=scale*700, font_size=scale*8, font_weight='bold', node_color=colors[0])
+        else:
+            #faultnodes = list({o.__class__.__name__ for f,o in mdl.fxns.items() if o.any_faults()})
+            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
+            fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False)
+    if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
+    return fig, ax
+def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
+    """
+    Translates an existing nx graph to a graphviz graph. Saves the graph output and dot file.
+    Called from show() by passing in graphviz=True and filename
+    
+    Parameters
+    ----------
+    g : nx graph object or model
+        The multigraph to plot
+    gtype : string, optional
+        Type of graph input to show
+        values are 'normal', 'bipartite', or 'typegraph'. The default is 'normal'.
+    filename : string, optional
+        the filename for the rendered output (if any). The default is '' (in which the file is not saved).
+    filetype : string
+        Type of file to save the figure as (if saving)
+    faultscen : str, optional
+        Name of the fault scenario (for the title). The default is [].
+    time : float, optional
+        Time of fault injection. The default is [].
+    showfaultlabels : bool, optional
+        Whether or not to label the faults on the functions. The default is True.
+    highlight : list, optional
+        Functions/flows to highlight using [faulty functions, degraded functions, degraded flows] labelling scheme.
+        Used for custom overlays. Default is []
+    colors : list, optional
+        List of colors to use for nominal, degraded, and faulty functions/flows.
+        Default is: ['lightgray','orange', 'red']
+    heatmap : dict, optional
+        A heatmap dictionary to overlay on the plot. The default is {}.
+    cmap : mpl colormap
+        Colormap to use for heatmap visualization
+    **kwargs : dictionary
+        dictionary of graphviz attributes used to customize the output.
+        this includes layout, overlap, node padding, node separation, font, fontsize, etc.
+        see http://www.graphviz.org/doc/info/attrs.html for all options
+
+    Returns
+    -------
+    dot: a graphviz object
+
+    """
+    try:
+        from graphviz import Digraph, Graph
+    except ImportError as error:
+        print(error.__class__.__name__ + ": " + error.message)
+        raise Exception("GraphViz not installed. Please see:\n https://pypi.org/project/graphviz/ \n https://www.graphviz.org/download/")
+    #setting up default layouts for graph types
+    if gtype == 'bipartite': 
+        kwargs["layout"] = kwargs.get("layout", "twopi")
+        kwargs["overlap"] = kwargs.get("overlap", "voronoi")
+    elif gtype == 'typegraph':
+        kwargs["pad"] = kwargs.get("pad", "0.5")
+        kwargs["ranksep"] = kwargs.get("ranksep", "2")
+    #checking type of g -- calls show if not nx
+    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
+        mdl=g
+        g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
+    #bipartite
+    if gtype == 'bipartite':
+        functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
+        flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
+        edges = g.edges
+        #handles faults
+        labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
+        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        #handles heatmap
+        colors_dict = gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, functions=functions, flows=flows)
+        dot = Graph(comment="model network", graph_attr=kwargs)
+        dot = plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot)
+    #typegraph
+    elif gtype == 'typegraph':
+        dot = Digraph(comment="model type graph network", graph_attr=kwargs)
+        for node in g.nodes:
+            dot.node(node,style="filled")
+        for edge in g.edges:
+            dot.edge(edge[0], edge[1])
+    #normal graph
+    elif gtype == 'normal':
+        #need to address highlight
+        #handles faults
+        edgeflows=dict()
+        for edge in g.edges:
+            flows=list(g.get_edge_data(edge[0],edge[1]).keys())
+            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
+        labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
+        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
+        else:
+            faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
+            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
+        #handles heatmap
+        colors_dict = gv_colors(g, gtype, colors=colors, heatmap=heatmap, cmap=cmap, faultnodes=faultnodes, degradednodes=degradednodes, faultedges=faultedges, edgeflows=edgeflows)
+        dot = Graph(comment="model network", graph_attr=kwargs)
+        dot = plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
+    #rendering
+    dot.attr(outputorder = "edgesfirst")
+    if filename:    dot.render(filename = filename+gtype, format = filetype)
+    else:           display(SVG(dot._repr_svg_()))
+    return dot
+
+def show_pyvis(g, gtype='typegraph', filename="typegraph", width=1000, filt=True, physics=False, notebook=False):
+    """
+    Method for plotting graphs with pyvis. Produces interactive HTML!
+
+    Parameters
+    ----------
+    g : networkx graph or model
+        Graph to plot or fmdtools model (which will be used to get the graph)
+    gtype : 'hierarchical'/'bipartite'/'component', optional
+        Type of model graph to plot The default is 'hierarchical'.
+    filename : str, optional
+        File to save the html to. The default is "typegraph.html".
+    width : int, optional
+        Width of the frame in px. The default is 1000.
+    filt : Dict/Bool, optional
+        Whether to display sliders. The default is True.
+    physics : Bool, optional
+        Whether to use physics during node placement. The default is False.
+    Returns
+    -------
+    n : pyviz object
+        pyviz object of the drawn graph
+    """
+    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
+        mdl=g
+        g, pos = get_graph_pos(mdl, [], gtype)
+    width = str(width)+"px"
+    
+    if gtype=='typegraph':   n = Network(directed=True, layout='hierarchical', width=width, notebook=notebook)
+    elif gtype in ["component", "bipartite"]: n = Network(width=width, notebook=notebook)
+    else:   raise Exception("Not a valid graph type")     
+    n.from_nx(g)
+    n.toggle_physics(physics)
+    if filt: n.show_buttons(filter_=filt)
+    n.show(filename+".html")
+    return n
         
 def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True):
     """
@@ -330,59 +572,9 @@ def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=T
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     degnodes = degfxns + degflows
     plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors)
-    
-def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[]):
-    """ Plots a standard graph. Used in other functions"""
-    if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    elif title:     plt.title(title)
-    nodesize=scale*2000
-    font_size=scale*12
-    if not pos: pos=nx.shell_layout(g)
-    nx.draw_networkx(g,pos,node_size=nodesize,font_size=font_size, node_shape='s',edge_color='gray', node_color=colors[0], width=3, font_weight='bold')
-    nx.draw_networkx_edge_labels(g,pos,font_size=font_size, edge_labels=edgeflows)
-    nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2], node_size = nodesize*1.2)
-    nx.draw_networkx_nodes(g, pos, nodelist=degfxns,node_shape='s', node_color = colors[1], node_size = nodesize)
-    nx.draw_networkx_edges(g,pos,edgelist=faultedges, edge_color=colors[1])
-        
-    if showfaultlabels:
-        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
-        nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows,font_size=font_size, font_color=colors[1])
-    plt.axis('off')
-    if show: plt.show()
-    return plt.gcf(), plt.gca()
 
-def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[]):
-    """ Plots a bipartite graph. Used in other functions"""
-    if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    elif title:     plt.title(title)
-    nodesize=scale*700
-    font_size=scale*8
-    if not pos: pos=nx.spring_layout(g)
-    if functions and flows:
-        nx.draw_networkx_edges(g, pos)
-        nx.draw_networkx_nodes(g, pos, nodelist = functions, node_shape='s', node_size=nodesize, node_color = colors[0])
-        nx.draw_networkx_nodes(g, pos, nodelist = flows, node_size=nodesize, node_color = colors[0])
-        degfxns = [node for node in degnodes if node in functions]
-        degflows = [node for node in degnodes if node in flows]
-        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns, node_shape='s', node_color = colors[2], node_size=nodesize*1.2)
-        nx.draw_networkx_nodes(g, pos, nodelist=degfxns, node_shape='s', node_color = colors[1], node_size=nodesize)
-        nx.draw_networkx_nodes(g, pos, nodelist=degflows,node_color = colors[1], node_size=nodesize)
-        nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size,font_weight='bold')
-
-    elif functions or flows:
-        raise Exception("Invalid option--either provide list of functions and flows, or neither")
-    else:
-        nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
-        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize*1.2)
-        nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize)
-    if showfaultlabels:
-        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
-    plt.axis('off')
-    if show: plt.show()
-    return plt.gcf(), plt.gca()
-
+###HELPER FUNCTIONS
+#############################
 def get_graph_pos(mdl, pos, gtype):
     """Helper function for getting the right graph/positions from a model"""
     if gtype=='normal': 
@@ -402,7 +594,17 @@ def get_graph_pos(mdl, pos, gtype):
         g = mdl.return_stategraph('component')
         if not pos: pos=nx.spring_layout(g)
     return g,pos
-
+def get_graph_annotations(g, gtype='bipartite'):
+    """Helper method that returns labels/lists degraded nodes for the plot annotations"""
+    labels={node:node for node in g.nodes}
+    statuses=dict(g.nodes(data='status', default='Nominal'))
+    faultnodes=[node for node,status in statuses.items() if status=='Faulty']
+    degradednodes=[node for node,status in statuses.items() if status=='Degraded']
+    faults=dict(g.nodes(data='modes', default={'nom'}))
+    if gtype=='typegraph':
+        faultlabels = {fclass:set(fxns.keys()) for fclass, fxns in g.nodes(data='modes') if fxns and set([mode for modes in fxns.values() for mode in modes if mode!='nom'])}
+    else: faultlabels = {node:fault for node,fault in faults.items() if fault!={'nom'}}
+    return labels, faultnodes, degradednodes, faults, faultlabels
 def get_plotlabels(g, reshist, t_ind):
     """
     Assigns labels to a graph g from reshist at time t so that it can be plotted
@@ -462,280 +664,62 @@ def get_plotlabels(g, reshist, t_ind):
     faultedgeflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if reshist['flows'][flow][t_ind]==0)]) for edge in faultedges}
     return labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgelabels
 
-def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red']):
-    """ Experimental method for plotting with netgraph instead of networkx"""
-    nodesize=scale*20
+###MATPLOTLIB HELPER FUNCTIONS
+#############################
+def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[]):
+    """ Plots a standard graph. Used in other functions"""
+    if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+    elif title:     plt.title(title)
+    nodesize=scale*2000
     font_size=scale*12
     if not pos: pos=nx.shell_layout(g)
-    netgraph.draw(g,pos,node_size=nodesize,font_size=font_size, node_shape='s', node_color=colors[0], width=3, font_weight='bold')
-    netgraph.draw_edge_labels(list(edgeflows.keys()), edgeflows, pos,edge_label_font_size=font_size)
-    netgraph.draw_nodes({n:pos[n] for n in degfxns}, node_labels=degfxns, node_shape='s', node_color = colors[1],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
-    netgraph.draw_nodes({n:pos[n] for n in faultfxns}, node_labels=faultfxns, node_shape='s', node_color = colors[2],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
-    netgraph.draw_edges(faultedges,pos, edge_color=colors[1],font_size=font_size, width=2)
-    netgraph.draw_node_labels({p:p for p in pos}, pos)
+    nx.draw_networkx(g,pos,node_size=nodesize,font_size=font_size, node_shape='s',edge_color='gray', node_color=colors[0], width=3, font_weight='bold')
+    nx.draw_networkx_edge_labels(g,pos,font_size=font_size, edge_labels=edgeflows)
+    nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2], node_size = nodesize*1.2)
+    nx.draw_networkx_nodes(g, pos, nodelist=degfxns,node_shape='s', node_color = colors[1], node_size = nodesize)
+    nx.draw_networkx_edges(g,pos,edgelist=faultedges, edge_color=colors[1])
+        
     if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        netgraph.draw_node_labels(faultlabels_form, pos, font_size=font_size, font_color='k')
-        netgraph.draw_edge_labels(list(faultedgeflows.keys()), faultedgeflows, pos, font_size=font_size, font_color=colors[1])
-    if faultscen:
-        plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+        nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
+        nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows,font_size=font_size, font_color=colors[1])
+    plt.axis('off')
     if show: plt.show()
     return plt.gcf(), plt.gca()
 
-def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
-    """
-    Translates an existing nx graph to a graphviz graph. Saves the graph output and dot file.
-    Called from show() by passing in graphviz=True and filename
-    
-    Parameters
-    ----------
-    g : nx graph object or model
-        The multigraph to plot
-    gtype : string, optional
-        Type of graph input to show
-        values are 'normal', 'bipartite', or 'typegraph'. The default is 'normal'.
-    filename : string, optional
-        the filename for the rendered output (if any). The default is '' (in which the file is not saved).
-    filetype : string
-        Type of file to save the figure as (if saving)
-    faultscen : str, optional
-        Name of the fault scenario (for the title). The default is [].
-    time : float, optional
-        Time of fault injection. The default is [].
-    showfaultlabels : bool, optional
-        Whether or not to label the faults on the functions. The default is True.
-    highlight : list, optional
-        Functions/flows to highlight using [faulty functions, degraded functions, degraded flows] labelling scheme.
-        Used for custom overlays. Default is []
-    colors : list, optional
-        List of colors to use for nominal, degraded, and faulty functions/flows.
-        Default is: ['lightgray','orange', 'red']
-    heatmap : dict, optional
-        A heatmap dictionary to overlay on the plot. The default is {}.
-    cmap : mpl colormap
-        Colormap to use for heatmap visualization
-    **kwargs : dictionary
-        dictionary of graphviz attributes used to customize the output.
-        this includes layout, overlap, node padding, node separation, font, fontsize, etc.
-        see http://www.graphviz.org/doc/info/attrs.html for all options
+def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[]):
+    """ Plots a bipartite graph. Used in other functions"""
+    if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+    elif title:     plt.title(title)
+    nodesize=scale*700
+    font_size=scale*8
+    if not pos: pos=nx.spring_layout(g)
+    if functions and flows:
+        nx.draw_networkx_edges(g, pos)
+        nx.draw_networkx_nodes(g, pos, nodelist = functions, node_shape='s', node_size=nodesize, node_color = colors[0])
+        nx.draw_networkx_nodes(g, pos, nodelist = flows, node_size=nodesize, node_color = colors[0])
+        degfxns = [node for node in degnodes if node in functions]
+        degflows = [node for node in degnodes if node in flows]
+        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns, node_shape='s', node_color = colors[2], node_size=nodesize*1.2)
+        nx.draw_networkx_nodes(g, pos, nodelist=degfxns, node_shape='s', node_color = colors[1], node_size=nodesize)
+        nx.draw_networkx_nodes(g, pos, nodelist=degflows,node_color = colors[1], node_size=nodesize)
+        nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size,font_weight='bold')
 
-    Returns
-    -------
-    dot: a graphviz object
-
-    """
-    try:
-        from graphviz import Digraph, Graph
-    except ImportError as error:
-        print(error.__class__.__name__ + ": " + error.message)
-        raise Exception("GraphViz not installed. Please see:\n https://pypi.org/project/graphviz/ \n https://www.graphviz.org/download/")
-    #setting up default layouts for graph types
-    if gtype == 'bipartite': 
-        kwargs["layout"] = kwargs.get("layout", "twopi")
-        kwargs["overlap"] = kwargs.get("overlap", "voronoi")
-    elif gtype == 'typegraph':
-        kwargs["pad"] = kwargs.get("pad", "0.5")
-        kwargs["ranksep"] = kwargs.get("ranksep", "2")
-    #checking type of g -- calls show if not nx
-    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
-        mdl=g
-        g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
-    #bipartite
-    if gtype == 'bipartite':
-        functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
-        flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
-        edges = g.edges
-        #handles faults
-        labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
+    elif functions or flows:
+        raise Exception("Invalid option--either provide list of functions and flows, or neither")
+    else:
+        nx.draw(g, pos, labels=labels,font_size=font_size, node_size=nodesize, node_color = colors[0], font_weight='bold')
+        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize*1.2)
+        nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize)
+    if showfaultlabels:
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        #handles heatmap
-        colors_dict = gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, functions=functions, flows=flows)
-        dot = Graph(comment="model network", graph_attr=kwargs)
-        dot = plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot)
-    #typegraph
-    elif gtype == 'typegraph':
-        dot = Digraph(comment="model type graph network", graph_attr=kwargs)
-        for node in g.nodes:
-            dot.node(node,style="filled")
-        for edge in g.edges:
-            dot.edge(edge[0], edge[1])
-    #normal graph
-    elif gtype == 'normal':
-        #need to address highlight
-        #handles faults
-        edgeflows=dict()
-        for edge in g.edges:
-            flows=list(g.get_edge_data(edge[0],edge[1]).keys())
-            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
-        labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
-        else:
-            faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
-            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
-        #handles heatmap
-        colors_dict = gv_colors(g, gtype, colors=colors, heatmap=heatmap, cmap=cmap, faultnodes=faultnodes, degradednodes=degradednodes, faultedges=faultedges, edgeflows=edgeflows)
-        dot = Graph(comment="model network", graph_attr=kwargs)
-        dot = plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
-    #rendering
-    dot.attr(outputorder = "edgesfirst")
-    if filename:    dot.render(filename = filename+gtype, format = filetype)
-    else:           display(SVG(dot._repr_svg_()))
-    return dot
+        nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
+    plt.axis('off')
+    if show: plt.show()
+    return plt.gcf(), plt.gca()
 
-def show_matplotlib(g, gtype='normal', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
-    """
-    Plots a single graph object g using matplotlib
-
-    Parameters
-    ----------
-    g : networkx graph or model
-        The multigraph to plot
-    gtype : 'normal' or 'bipartite'
-        Type of graph input to show--normal (multgraph) or bipartite
-    filename : string
-        Name to give the saved file, if saved. Default is '' (not saving the file)
-    filetype : string
-        Type of file to save the figure as (if saving)
-    pos : dict
-        Positions for nodes
-    scale: float
-        Changes sizes of nodes in bipartite graph
-    faultscen : str, optional
-        Name of the fault scenario (for the title). The default is [].
-    time : float, optional
-        Time of fault injection. The default is [].
-    showfaultlabels : bool, optional
-        Whether or not to label the faults on the functions. The default is True.
-    highlight : list, optional
-        Functions/flows to highlight using [faulty functions, degraded functions, degraded flows] labelling scheme.
-        Used for custom overlays. Default is []
-    colors : list, optional
-        List of colors to use for nominal, degraded, and faulty functions/flows.
-        Default is: ['lightgray','orange', 'red']
-    heatmap : dict, optional
-        A heatmap dictionary to overlay on the plot. The default is {}.
-    cmap : mpl colormap
-        Colormap to use for heatmap visualizations
-
-    Returns
-    -------
-    fig : matplotlib figure
-        Matplotlib figure object of the drawn graph
-    """
-    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
-        mdl=g
-        g, pos = get_graph_pos(mdl,pos, gtype)
-    fig, ax = plt.subplots(figsize=figsize)
-    if gtype=='normal':
-        edgeflows=dict()
-        if not pos: pos=nx.shell_layout(g)
-        nodesize=scale*2000
-        font_size=scale*12
-        for edge in g.edges:
-            flows=list(g.get_edge_data(edge[0],edge[1]).keys())
-            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
-        if heatmap:
-            colors=[]
-            for node in g.nodes():
-                colors = colors +[heatmap.get(node,0.0)]
-                nx.draw_networkx_edges(g,pos, width=2)
-            nx.draw_networkx_nodes(g,pos,node_size=nodesize, node_shape='s', node_color=colors, cmap=cmap, alpha=0.7)
-            nx.draw_networkx_edge_labels(g,pos,edge_labels=edgeflows, font_size=font_size, font_weight='bold')
-            labels={node:node for node in g.nodes} 
-            nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, font_weight='bold')
-        elif highlight:
-            faultnodes = highlight[0]
-            degradednodes = highlight[1]
-            faultedges = highlight[2]
-            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
-            else:               faultlabels = {}
-            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge])]) for edge in faultedges}
-            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=scale, pos=pos,colors=colors, show=False)
-        else:
-            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-            if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
-            else:
-                faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
-                faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
-            fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=pos,colors=colors, show=False)
-    elif gtype in ['bipartite', 'component']:
-        labels={node:node for node in g.nodes}
-        functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
-        flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
-        if not pos: pos=nx.spring_layout(g)
-        nodesize=scale*700
-        font_size=scale*6
-        if heatmap:
-            #nx.draw(g, pos, node_size=nodesize,node_color = 'k', alpha=0.3)
-            functioncolors = []; flowcolors = []
-            for node in functions:
-                functioncolors = functioncolors + [heatmap.get(node, 0.0)]
-            for node in flows:
-                flowcolors = flowcolors + [heatmap.get(node, 0.0)]
-            nx.draw_networkx_edges(g, pos)
-            nx.draw_networkx_nodes(g, pos, nodelist=functions,  node_color=functioncolors, cmap=cmap, alpha=0.6, node_size=nodesize, node_shape='s')
-            nx.draw_networkx_nodes(g, pos, nodelist=flows,  node_color=flowcolors, cmap=cmap, alpha=0.6, node_size=nodesize)
-            nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, font_weight='bold')
-            if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-        elif highlight:
-            faultnodes = highlight[0]
-            degradednodes = highlight[1]
-            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
-            else:               faultlabels={}
-            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False)
-        else:                                      #plots graph with status information 
-            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False)
-    elif gtype == 'typegraph':
-        if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
-        if heatmap or highlight: raise Exception("Invalid option for typegraph--not implemented")
-        if "mdl" in locals():
-            nx.draw(g, pos=pos, with_labels=True, node_size=scale*700, font_size=scale*8, font_weight='bold', node_color=colors[0])
-        else:
-            #faultnodes = list({o.__class__.__name__ for f,o in mdl.fxns.items() if o.any_faults()})
-            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-            fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False)
-    if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
-    return fig, ax
-
-def show_pyvis(g, gtype='typegraph', filename="typegraph", width=1000, filt=True, physics=False, notebook=False):
-    """
-    Method for plotting graphs with pyvis. Produces interactive HTML!
-
-    Parameters
-    ----------
-    g : networkx graph or model
-        Graph to plot or fmdtools model (which will be used to get the graph)
-    gtype : 'hierarchical'/'bipartite'/'component', optional
-        Type of model graph to plot The default is 'hierarchical'.
-    filename : str, optional
-        File to save the html to. The default is "typegraph.html".
-    width : int, optional
-        Width of the frame in px. The default is 1000.
-    filt : Dict/Bool, optional
-        Whether to display sliders. The default is True.
-    physics : Bool, optional
-        Whether to use physics during node placement. The default is False.
-    Returns
-    -------
-    n : pyviz object
-        pyviz object of the drawn graph
-    """
-    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
-        mdl=g
-        g, pos = get_graph_pos(mdl, [], gtype)
-    width = str(width)+"px"
-    
-    if gtype=='typegraph':   n = Network(directed=True, layout='hierarchical', width=width, notebook=notebook)
-    elif gtype in ["component", "bipartite"]: n = Network(width=width, notebook=notebook)
-    else:   raise Exception("Not a valid graph type")     
-    n.from_nx(g)
-    n.toggle_physics(physics)
-    if filt: n.show_buttons(filter_=filt)
-    n.show(filename+".html")
-    return n
-
+###GRAPHVIZ HELPER FUNCTIONS
+#############################
 def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultscen, time, showfaultlabels, colors_dict, dot):
     for node in g.nodes:
         node_label = node
@@ -844,3 +828,25 @@ def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faulte
             for i in range(len(mm)):
                 colors_dict[node_labels[i]] = mm[i]
     return colors_dict
+
+###NETGRAPH HELPER FUNCTIONS
+#############################
+def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red']):
+    """ Experimental method for plotting with netgraph instead of networkx"""
+    nodesize=scale*20
+    font_size=scale*12
+    if not pos: pos=nx.shell_layout(g)
+    netgraph.draw(g,pos,node_size=nodesize,font_size=font_size, node_shape='s', node_color=colors[0], width=3, font_weight='bold')
+    netgraph.draw_edge_labels(list(edgeflows.keys()), edgeflows, pos,edge_label_font_size=font_size)
+    netgraph.draw_nodes({n:pos[n] for n in degfxns}, node_labels=degfxns, node_shape='s', node_color = colors[1],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
+    netgraph.draw_nodes({n:pos[n] for n in faultfxns}, node_labels=faultfxns, node_shape='s', node_color = colors[2],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
+    netgraph.draw_edges(faultedges,pos, edge_color=colors[1],font_size=font_size, width=2)
+    netgraph.draw_node_labels({p:p for p in pos}, pos)
+    if showfaultlabels:
+        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        netgraph.draw_node_labels(faultlabels_form, pos, font_size=font_size, font_color='k')
+        netgraph.draw_edge_labels(list(faultedgeflows.keys()), faultedgeflows, pos, font_size=font_size, font_color=colors[1])
+    if faultscen:
+        plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+    if show: plt.show()
+    return plt.gcf(), plt.gca()
