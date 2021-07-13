@@ -457,10 +457,14 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
     time : float
         The time in the history to plot the graph at.
-    faultscen : str, optional
-        Name of the fault scenario. The default is [].
+    renderer : 'matplotlib' or 'graphviz'
+        Renderer to use to plot the graph. Default is 'matplotlib'
     gtype : str, optional
         The type of graph to plot (normal or bipartite). The default is 'bipartite'.
+    MATPLOTLIB OPTIONS:
+    ----------
+    faultscen : str, optional
+        Name of the fault scenario. The default is [].
     showfaultlabels : bool, optional
         Whether or not to list faults on the plot. The default is True.
     scale : float, optional
@@ -485,7 +489,7 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         return dot
     else: raise Exception("Invalid renderer: "+renderer)
 
-def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[],colors=['lightgray','orange', 'red'],figsize=(6,4)):
+def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', **kwargs):
     """
     Plots a set of representations of the model graph at given times in the results history.
 
@@ -497,32 +501,43 @@ def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfault
         A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
     times : list or 'all'
         The times in the history to plot the graph at. If 'all', plots them all
-    faultscen : str, optional
-        Name of the fault scenario. The default is [].
+    renderer : 'matplotlib' or 'graphviz'
+        Renderer to use to plot the graph. Default is 'matplotlib'
     gtype : str, optional
         The type of graph to plot (normal or bipartite). The default is 'bipartite'.
+    MATPLOTLIB OPTIONS:
+    ----------
+    faultscen : str, optional
+        Name of the fault scenario. The default is [].
     showfaultlabels : bool, optional
         Whether or not to list faults on the plot. The default is True.
     scale : float, optional
         Scale factor for the node/label sizes. The default is 1.
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
-        
     Returns
     ----------
     frames : Dict
         Dictionary of mpl figures keyed at each time {time:fig} 
     """
-    g, pos = get_graph_pos(mdl, pos, gtype)
+    g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
     if times=='all':    t_inds= [i for i in range(0,len(reshist['time']))]
     else:               t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
     frames = {}
-    for t_ind in t_inds:
-        fig, ax = plt.subplots(figsize=figsize)
-        if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
-        elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
-        elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, faultscen=faultscen, showfaultlabels=showfaultlabels, scale=scale, colors=colors, show=False)
-        frames[t_ind] = fig
+    if renderer == 'matplotlib':
+        for t_ind in t_inds:
+            fig, ax = plt.subplots(figsize=kwargs.get('figsize', (6,4)))
+            if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, show=False, **kwargs)
+            elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, show=False, **kwargs)
+            elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, show=False, **kwargs)
+            else:           raise Exception("Graph type "+gtype+" not a valid option")
+            frames[t_ind] = fig
+    elif renderer == 'graphviz':
+        for t_ind in t_inds:
+            if gtype=='bipartite': dot = update_gv_bipplot(t_ind, reshist, g, **kwargs)
+            elif gtype=='normal':   dot = update_gv_graphplot(t_ind, reshist, g, **kwargs)
+            else:           raise Exception("Graph type "+gtype+" not a valid option for graphviz renderer")
+            frames[t_ind] = dot
     return frames
 
 def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite',figsize=(6,4), showfaultlabels=True, scale=1, show=False, pos=[], colors=['lightgray','orange', 'red']):
