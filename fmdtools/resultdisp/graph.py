@@ -292,6 +292,10 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype=
     elif gtype == 'typegraph':
         kwargs["pad"] = kwargs.get("pad", "0.5")
         kwargs["ranksep"] = kwargs.get("ranksep", "2")
+    extra_kwargs = ['pos', 'scale']
+    for ex in extra_kwargs:
+        if ex in kwargs:
+            del kwargs[ex]
     #checking type of g -- calls show if not nx
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
@@ -304,7 +308,10 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype=
         #handles faults
         labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        #handles heatmap
+        #handles heatmap and highlight
+        if highlight != []:
+            faultnodes = highlight[0]
+            degradednodes = highlight[1]
         colors_dict = gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, functions=functions, flows=flows)
         dot = Graph(comment="model network", graph_attr=kwargs)
         dot = plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot)
@@ -317,22 +324,30 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype=
             dot.edge(edge[0], edge[1])
     #normal graph
     elif gtype == 'normal':
-        #need to address highlight
         #handles faults
         edgeflows=dict()
         for edge in g.edges:
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
             edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
-        labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
+        if highlight != []:
+            faultnodes = highlight[0]
+            degradednodes = highlight[1]
+            faultedges = highlight[2]
+            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
+            else:               faultlabels = {}
+            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge])]) for edge in faultedges}
         else:
-            faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
-            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
-        #handles heatmap
-        colors_dict = gv_colors(g, gtype, colors=colors, heatmap=heatmap, cmap=cmap, faultnodes=faultnodes, degradednodes=degradednodes, faultedges=faultedges, edgeflows=edgeflows)
+            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
+            if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
+            else:
+                faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
+                faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
+        #handles heatmap and highlight
+        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        colors_dict = gv_colors(g, gtype, colors=colors, heatmap=heatmap, cmap=cmap, faultnodes=faultnodes, degradednodes=degradednodes, faultedges=faultflows, edgeflows=edgeflows)
         dot = Graph(comment="model network", graph_attr=kwargs)
         dot = plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
+            
     #rendering
     dot.attr(outputorder = "edgesfirst")
     if filename:    dot.render(filename = filename+gtype, format = filetype)
@@ -376,7 +391,7 @@ def show_pyviz(g, gtype='typegraph', filename="typegraph", width=1000, filt=True
     n.show(filename+".html")
     return n
         
-def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True):
+def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True, renderer='matplotlib'):
     """
     Displays the execution order/types of the model, where the functions and flows in the
     static step are highlighted and the functions in the dynamic step are listed (with corresponding order)
@@ -406,19 +421,21 @@ def exec_order(mdl, gtype='bipartite', pos=[], scale=1, colors=['lightgray', 'cy
     tuple of form (figure, axis) 
 
     """
-    if gtype =='normal': fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[mdl.dynamicfxns, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], scale=scale, colors=colors, showfaultlabels= show_dyn_order)
+    if gtype =='normal': fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[mdl.dynamicfxns, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], scale=scale, colors=colors, showfaultlabels= show_dyn_order, renderer=renderer)
     else:
         staticnodes = list(mdl.staticfxns) + list(set([n for node in mdl.staticfxns for n in mdl.bipartite.neighbors(node)]))
         dynamicnodes = list(mdl.dynamicfxns) #+ list(set().union(*[nx.node_connected_component(mdl.bipartite, node) for node in mdl.dynamicfxns]))
-        fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[dynamicnodes, staticnodes], scale=scale, colors=colors, showfaultlabels= show_dyn_order)
+        fig_axis = show(mdl, gtype=gtype, pos=pos, highlight=[dynamicnodes, staticnodes], scale=scale, colors=colors, showfaultlabels= show_dyn_order, renderer=renderer)
     
     if legend:
-        legend_elements = [Patch(facecolor=colors[0], edgecolor=colors[0], label='No Execution'),
-                           Patch(facecolor=colors[2], edgecolor=colors[2], label='Dynamic Step'),
-                           Patch(facecolor=colors[1], edgecolor=colors[1], label='Static Step')]
-        
-        fig_axis[1].legend(handles = legend_elements, ncol=3, bbox_to_anchor = (1.0,-0.05))
-    if title: fig_axis[1].set_title(title)
+        if renderer == 'matplotlib':
+            legend_elements = [Patch(facecolor=colors[0], edgecolor=colors[0], label='No Execution'),
+                               Patch(facecolor=colors[2], edgecolor=colors[2], label='Dynamic Step'),
+                               Patch(facecolor=colors[1], edgecolor=colors[1], label='Static Step')]
+            fig_axis[1].legend(handles = legend_elements, ncol=3, bbox_to_anchor = (1.0,-0.05))
+        elif renderer == 'graphviz':
+            gv_execute_order_legend(colors)
+    if title and renderer == 'matplotlib': fig_axis[1].set_title(title)
     return fig_axis
     
 def history(ghist, gtype='normal', pos=[], scale=1, faultscen=[],showfaultlabels=True, colors=['lightgray','orange', 'red']):
@@ -751,7 +768,19 @@ def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time
         dot.edge(edge[0], edge[1])
     return dot
 
-def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faultedges=[], edgeflows={}, functions=[], flows=[]):
+def gv_execute_order_legend(colors):
+    from graphviz import Graph
+    legend = Graph(name='legend')
+    legend.attr(sep="+0")
+    legend.node("No Execution", label="No Execution", style="filled", fillcolor=colors[0], shape='box')
+    legend.node("Dynamic Step", label="Dynamic Step", style="filled", fillcolor=colors[2], shape='box')
+    legend.node("Static Step", label="Static Step", style="filled", fillcolor=colors[1], shape='box')
+    legend.attr(rank='source')
+    display(SVG(legend._repr_svg_()))
+    return
+
+
+def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faultedges=[], edgeflows={}, functions=[], flows=[], highlight=[]):
     """
     creates dictonary of node/edge colors for a graphviz plot
 
@@ -789,13 +818,13 @@ def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faulte
 
     """
     if gtype == 'normal':
-        if heatmap == {}:
+        if heatmap == {}: #or highlight != []:
                 colors_dict = {fn: colors[2] for fn in faultnodes}
                 colors_dict.update({dn: colors[1] for dn in degradednodes})
                 colors_dict.update({f: colors[0] for f in g.nodes if f not in degradednodes and f not in faultnodes})
                 colors_dict.update({fe: colors[1] for fe in faultedges})
-                colors_dict.update({ne: colors[0] for ne in g.edges if ne not in faultedges})
-        else:
+                colors_dict.update({ne: colors[0] for ne in edgeflows if ne not in faultedges})
+        elif heatmap != {}:
             colors_dict = {}
             colors_val_dict = {}
             for node in g.nodes:
