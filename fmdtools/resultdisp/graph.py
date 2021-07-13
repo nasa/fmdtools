@@ -475,14 +475,18 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, **kwargs)
+        else:           raise Exception("Graph type "+gtype+" not a valid option")
         return fig
     elif renderer=='graphviz':
         if gtype=='bipartite': dot = update_gv_bipplot(t_ind, reshist, g, **kwargs)
+        elif gtype=='normal':   dot = update_gv_graphplot(t_ind, reshist, g, **kwargs)
+        else:           raise Exception("Graph type "+gtype+" not a valid option for graphviz renderer")
         display(SVG(dot._repr_svg_()))
         return dot
+    else raise Exception("Invalid renderer: "+renderer)
 
 def update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
-    """Updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
+    """graphviz helper: updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
     Digraph, Graph = gv_import_check()
     kwargs["layout"] = kwargs.get("layout", "twopi")
     kwargs["overlap"] = kwargs.get("overlap", "voronoi")
@@ -496,18 +500,19 @@ def update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, col
     dot = plot_gv_bipartite(g, faultfxns, degnodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, g.edges, dot)
     return dot
 
-def update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red']):
+def update_gv_graphplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
     """Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
+    Digraph, Graph = gv_import_check()
+    kwargs["pad"] = kwargs.get("pad", "0.5")
+    kwargs["ranksep"] = kwargs.get("ranksep", "2")
     time = reshist['time'][t_ind]
+    functions = list(reshist['functions'].keys()); flows=list(reshist['flows'].keys())
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-    plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors)
-def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red']):
-    """Updates a typegraph-stype plot at a given timestep t_ind given the result history reshist"""
-    time = reshist['time'][t_ind]
-    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-    degnodes = degfxns + degflows
-    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors)
-
+    colors_dict = gv_colors(g, 'normal', colors, heatmap,cmap, faultfxns, degfxns, faultedges=faultedges, edgeflows=edgeflows, functions=functions, flows=flows)
+    faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+    dot = Graph(comment="model network", graph_attr=kwargs)
+    dot = plot_gv_normgraph(g, edgeflows, faultfxns, degfxns, degflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
+    return dot
 
 def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[],colors=['lightgray','orange', 'red'],figsize=(6,4)):
     """
