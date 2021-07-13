@@ -483,36 +483,7 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         else:           raise Exception("Graph type "+gtype+" not a valid option for graphviz renderer")
         display(SVG(dot._repr_svg_()))
         return dot
-    else raise Exception("Invalid renderer: "+renderer)
-
-def update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
-    """graphviz helper: updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
-    Digraph, Graph = gv_import_check()
-    kwargs["layout"] = kwargs.get("layout", "twopi")
-    kwargs["overlap"] = kwargs.get("overlap", "voronoi")
-    time = reshist['time'][t_ind]
-    functions = list(reshist['functions'].keys()); flows=list(reshist['flows'].keys())
-    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-    degnodes = degfxns + degflows
-    colors_dict = gv_colors(g, 'bipartite', colors, heatmap,cmap, faultfxns, degnodes, faultedges=faultedges, edgeflows=edgeflows, functions=functions, flows=flows)
-    faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-    dot = Graph(comment="model network", graph_attr=kwargs)
-    dot = plot_gv_bipartite(g, faultfxns, degnodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, g.edges, dot)
-    return dot
-
-def update_gv_graphplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
-    """Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
-    Digraph, Graph = gv_import_check()
-    kwargs["pad"] = kwargs.get("pad", "0.5")
-    kwargs["ranksep"] = kwargs.get("ranksep", "2")
-    time = reshist['time'][t_ind]
-    functions = list(reshist['functions'].keys()); flows=list(reshist['flows'].keys())
-    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-    colors_dict = gv_colors(g, 'normal', colors, heatmap,cmap, faultfxns, degfxns, faultedges=faultedges, edgeflows=edgeflows, functions=functions, flows=flows)
-    faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-    dot = Graph(comment="model network", graph_attr=kwargs)
-    dot = plot_gv_normgraph(g, edgeflows, faultfxns, degfxns, degflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
-    return dot
+    else: raise Exception("Invalid renderer: "+renderer)
 
 def results_from(mdl, reshist, times, faultscen=[], gtype='bipartite', showfaultlabels=True, scale=1, pos=[],colors=['lightgray','orange', 'red'],figsize=(6,4)):
     """
@@ -780,7 +751,6 @@ def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, fault
                 edge_label += faultflows[edge]
         dot.edge(edge[0], edge[1], label=edge_label, color=colors_dict[edge], labelangle="180")
     return dot
-
 def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot):
     shapes = {f:'ellipse' for f in flows}
     shapes.update({ f1:'box' for f1 in functions})
@@ -794,7 +764,33 @@ def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time
     for edge in edges:
         dot.edge(edge[0], edge[1])
     return dot
-
+def update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
+    """graphviz helper: updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
+    Digraph, Graph = gv_import_check()
+    kwargs["layout"] = kwargs.get("layout", "twopi")
+    kwargs["overlap"] = kwargs.get("overlap", "voronoi")
+    time = reshist['time'][t_ind]
+    functions = list(reshist['functions'].keys()); flows=list(reshist['flows'].keys())
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
+    degnodes = degfxns + degflows
+    colors_dict = gv_colors(g, 'bipartite', colors, heatmap,cmap, faultfxns, degnodes, faultedges=faultedges, edgeflows=edgeflows, functions=functions, flows=flows)
+    faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+    dot = Graph(comment="model network", graph_attr=kwargs)
+    dot = plot_gv_bipartite(g, faultfxns, degnodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, g.edges, dot)
+    return dot
+def update_gv_graphplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
+    """graphviz helpwer: Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
+    Digraph, Graph = gv_import_check()
+    kwargs["pad"] = kwargs.get("pad", "0.5")
+    kwargs["ranksep"] = kwargs.get("ranksep", "2")
+    time = reshist['time'][t_ind]
+    functions = list(reshist['functions'].keys()); flows=list(reshist['flows'].keys())
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
+    colors_dict = gv_colors(g, 'normal', colors, heatmap,cmap, faultfxns, degfxns, faultedges=faultedges, edgeflows=edgeflows, functions=functions, flows=flows)
+    faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+    dot = Graph(comment="model network", graph_attr=kwargs)
+    dot = plot_gv_normgraph(g, edgeflows, faultfxns, degfxns, degflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
+    return dot
 def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faultedges=[], edgeflows={}, functions=[], flows=[]):
     """
     creates dictonary of node/edge colors for a graphviz plot
