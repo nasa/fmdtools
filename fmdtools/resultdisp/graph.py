@@ -753,8 +753,8 @@ def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, fault
     return dot
 
 def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot):
-    shapes = {f:'box' for f in flows}
-    shapes.update({ f1:'ellipse' for f1 in functions})
+    shapes = {f:'ellipse' for f in flows}
+    shapes.update({ f1:'box' for f1 in functions})
     
     for node in functions+flows:
         node_label = node
