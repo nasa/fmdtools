@@ -517,8 +517,7 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
         fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[dynamicnodes, staticnodes], colors=colors, showfaultlabels= show_dyn_order, **kwargs)
     
     if legend:
-        if renderer=='graphviz': 
-            gv_execute_order_legend(colors)
+        if renderer=='graphviz': gv_execute_order_legend(colors)
         else:
             legend_elements = [Patch(facecolor=colors[0], edgecolor=colors[0], label='No Execution'),
                                Patch(facecolor=colors[2], edgecolor=colors[2], label='Dynamic Step'),
@@ -567,7 +566,7 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
     time : float
         The time in the history to plot the graph at.
-    renderer : 'matplotlib' or 'graphviz'
+    renderer : 'matplotlib' or 'graphviz' or 'netgraph'
         Renderer to use to plot the graph. Default is 'matplotlib'
     gtype : str, optional
         The type of graph to plot (normal or bipartite). The default is 'bipartite'.
@@ -618,7 +617,7 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
         A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
     times : list or 'all'
         The times in the history to plot the graph at. If 'all', plots them all
-    renderer : 'matplotlib' or 'graphviz'
+    renderer : 'matplotlib' or 'graphviz' or 'netgraph'
         Renderer to use to plot the graph. Default is 'matplotlib'
     gtype : str, optional
         The type of graph to plot (normal or bipartite). The default is 'bipartite'.
@@ -665,7 +664,7 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
             frames[t_ind] = dot
     return frames
 
-def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite',figsize=(6,4), showfaultlabels=True, scale=1, show=False, pos=[], colors=['lightgray','orange', 'red'], renderer='matplotlib'):
+def animation_from(mdl, reshist, times='all', faultscen=[], gtype='bipartite',figsize=(6,4), showfaultlabels=True, scale=1, show=False, pos=[], colors=['lightgray','orange', 'red'], renderer='matplotlib'):
     """
     Creates an animation of the model graph using results at given times in the results history.
     To view, use %matplotlib qt from spyder or %matplotlib notebook from jupyter
@@ -695,11 +694,11 @@ def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite',figsize=
     g, pos = get_graph_pos(mdl, pos, gtype)
     if times=='all':    t_inds= [i for i in range(0,len(reshist['time']))]
     else:   t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
-    if renderer='matplotlib':
+    if renderer=='matplotlib':
         if gtype=='bipartite':  update_plot = update_bipplot
         elif gtype=='normal':   update_plot = update_graphplot
         elif gtype=='typegraph':update_plot = update_typegraphplot
-    elif renderer='netgraph':
+    elif renderer=='netgraph':
         if gtype=='bipartite':  update_plot = update_net_bipplot
         elif gtype=='normal':   update_plot = update_net_graphplot
         elif gtype=='typegraph':update_plot = update_net_typegraphplot
