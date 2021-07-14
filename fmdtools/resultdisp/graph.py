@@ -27,7 +27,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation
 from matplotlib.patches import Patch
 import netgraph
-from pyvis.network import Network
 from IPython.display import Image, display, SVG
 
 def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, initpos={}, figsize=(6,4)):
@@ -466,6 +465,7 @@ def show_pyviz(g, gtype='typegraph', filename="typegraph", width=1000, filt=True
     n : pyviz object
         pyviz object of the drawn graph
     """
+    from pyvis.network import Network
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         g, pos = get_graph_pos(mdl, [], gtype)
