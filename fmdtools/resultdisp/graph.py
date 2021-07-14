@@ -30,7 +30,7 @@ import netgraph
 from pyvis.network import Network
 from IPython.display import Image, display, SVG
 
-def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, initpos={}):
+def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, initpos={}, figsize=(6,4)):
     """
     Provides graphical interface to set graph node positions. If model is provided, it will also set the positions in the model object. 
     
@@ -50,6 +50,8 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, init
         size to use for the labels. The default is 8.
     initpos : dict, optional
         dict of initial positions for the labels (e.g. from nx.spring_layout). The default is {}.
+    figsize : tuple, optional
+        size of matplotlib frame. Default is (6,4)
 
     Returns
     -------
@@ -166,7 +168,7 @@ def show_matplotlib(g, gtype='normal', filename='', filetype='png', pos=[], scal
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         g, pos = get_graph_pos(mdl,pos, gtype)
-    fig, ax = plt.subplots(figsize=figsize)
+    fig = plt.figure(figsize=figsize)
     if gtype=='normal':
         edgeflows=dict()
         if not pos: pos=nx.shell_layout(g)
@@ -237,7 +239,7 @@ def show_matplotlib(g, gtype='normal', filename='', filetype='png', pos=[], scal
             labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
             fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False)
     if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
-    return fig, ax
+    return fig, fig.axes[0]
 def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype='png', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
     """
     Translates an existing nx graph to a graphviz graph. Saves the graph output and dot file.
@@ -288,7 +290,7 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype=
     elif gtype == 'typegraph':
         kwargs["pad"] = kwargs.get("pad", "0.5")
         kwargs["ranksep"] = kwargs.get("ranksep", "2")
-    #checking type of g -- calls show if not nx
+    #checking type of g -- calls :if not nx
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
@@ -475,10 +477,17 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
     [[t_ind,],] = np.where(reshist['time']==time)
     g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
     if renderer=='matplotlib':
-        fig, ax = plt.subplots(figsize=kwargs.get('figsize', (6,4)))
+        fig  = plt.figure(figsize=kwargs.pop('figsize', (6,4)))
         if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, **kwargs)
+        else:           raise Exception("Graph type "+gtype+" not a valid option")
+        return fig
+    elif renderer=='netgraph':
+        fig = plt.figure(figsize=kwargs.pop('figsize', (6,4)))
+        if gtype=='bipartite':      raise Exception("Graph type "+gtype+" not a valid option")
+        elif gtype=='typegraph':    raise Exception("Graph type "+gtype+" not a valid option")
+        elif gtype=='normal':       update_net_graphplot(t_ind, reshist, g, pos, **kwargs)
         else:           raise Exception("Graph type "+gtype+" not a valid option")
         return fig
     elif renderer=='graphviz':
@@ -526,7 +535,7 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
     frames = {}
     if renderer == 'matplotlib':
         for t_ind in t_inds:
-            fig, ax = plt.subplots(figsize=kwargs.get('figsize', (6,4)))
+            fig = plt.figure(figsize=kwargs.get('figsize', (6,4)))
             if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, show=False, **kwargs)
             elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, show=False, **kwargs)
             elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, show=False, **kwargs)
@@ -574,27 +583,10 @@ def animation_from(mdl, reshist, times, faultscen=[], gtype='bipartite',figsize=
     elif gtype=='normal':   update_plot = update_graphplot
     elif gtype=='typegraph':update_plot = update_graphplot
     
-    fig, ax = plt.subplots(figsize=figsize)
+    fig = plt.figure(figsize=figsize)
     ani = matplotlib.animation.FuncAnimation(fig, update_plot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False, colors))
     if show: plt.show()
     return ani
-def update_bipplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red']):
-    """Updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
-    time = reshist['time'][t_ind]
-    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-    degnodes = degfxns + degflows
-    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = reshist['functions'].keys(), flows=reshist['flows'].keys())
-def update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red']):
-    """Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
-    time = reshist['time'][t_ind]
-    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-    plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors)
-def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red']):
-    """Updates a typegraph-stype plot at a given timestep t_ind given the result history reshist"""
-    time = reshist['time'][t_ind]
-    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-    degnodes = degfxns + degflows
-    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors)
 
 ###HELPER FUNCTIONS
 #############################
@@ -690,7 +682,7 @@ def get_plotlabels(g, reshist, t_ind):
 
 ###MATPLOTLIB HELPER FUNCTIONS
 #############################
-def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[]):
+def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[], show_edgelabels=True):
     """ Plots a standard graph. Used in other functions"""
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
@@ -698,7 +690,7 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
     font_size=scale*12
     if not pos: pos=nx.shell_layout(g)
     nx.draw_networkx(g,pos,node_size=nodesize,font_size=font_size, node_shape='s',edge_color='gray', node_color=colors[0], width=3, font_weight='bold')
-    nx.draw_networkx_edge_labels(g,pos,font_size=font_size, edge_labels=edgeflows)
+    if show_edgelabels: nx.draw_networkx_edge_labels(g,pos,font_size=font_size, edge_labels=edgeflows)
     nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2], node_size = nodesize*1.2)
     nx.draw_networkx_nodes(g, pos, nodelist=degfxns,node_shape='s', node_color = colors[1], node_size = nodesize)
     nx.draw_networkx_edges(g,pos,edgelist=faultedges, edge_color=colors[1])
@@ -708,7 +700,6 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
         nx.draw_networkx_edge_labels(g,pos,edge_labels=faultedgeflows,font_size=font_size, font_color=colors[1])
     plt.axis('off')
-    if show: plt.show()
     return plt.gcf(), plt.gca()
 
 def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[]):
@@ -739,8 +730,25 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
     plt.axis('off')
-    if show: plt.show()
     return plt.gcf(), plt.gca()
+def update_bipplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
+    """Updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
+    degnodes = degfxns + degflows
+    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = reshist['functions'].keys(), flows=reshist['flows'].keys(), **kwargs)
+def update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
+    """Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
+    plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors, **kwargs)
+def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
+    """Updates a typegraph-stype plot at a given timestep t_ind given the result history reshist"""
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
+    degnodes = degfxns + degflows
+    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, **kwargs)
+
 
 ###GRAPHVIZ HELPER FUNCTIONS
 ############################
@@ -887,22 +895,43 @@ def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faulte
 
 ###NETGRAPH HELPER FUNCTIONS
 #############################
-def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red']):
+def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[], show_edgelabels=True, **kwargs):
     """ Experimental method for plotting with netgraph instead of networkx"""
-    nodesize=scale*20
-    font_size=scale*12
+    if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
+    elif title:     plt.title(title)
     if not pos: pos=nx.shell_layout(g)
-    netgraph.draw(g,pos,node_size=nodesize,font_size=font_size, node_shape='s', node_color=colors[0], width=3, font_weight='bold')
-    netgraph.draw_edge_labels(list(edgeflows.keys()), edgeflows, pos,edge_label_font_size=font_size)
-    netgraph.draw_nodes({n:pos[n] for n in degfxns}, node_labels=degfxns, node_shape='s', node_color = colors[1],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
-    netgraph.draw_nodes({n:pos[n] for n in faultfxns}, node_labels=faultfxns, node_shape='s', node_color = colors[2],width=3,font_size=font_size, font_weight='bold', node_size = nodesize)
-    netgraph.draw_edges(faultedges,pos, edge_color=colors[1],font_size=font_size, width=2)
-    netgraph.draw_node_labels({p:p for p in pos}, pos)
-    if showfaultlabels:
-        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        netgraph.draw_node_labels(faultlabels_form, pos, font_size=font_size, font_color='k')
-        netgraph.draw_edge_labels(list(faultedgeflows.keys()), faultedgeflows, pos, font_size=font_size, font_color=colors[1])
-    if faultscen:
-        plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    if show: plt.show()
+    from netgraph import Graph
+    node_shape = {}; node_color ={}; node_edge_color={}
+    for n in g.nodes:
+        node_edge_color[n]=colors[0]
+        node_shape[n]='s'
+        if n in degfxns:  
+            node_color[n]=colors[1]
+            if n in faultfxns: node_edge_color[n] = colors[2]
+        elif n in faultfxns: node_color[n]=colors[2]
+        else:               node_color[n]=colors[0]
+        if showfaultlabels and faultlabels.get(n,False):
+            labels[n]=labels[n]+' \n'+' '.join([f for f in faultlabels[n] if f!='nom'])
+            
+    edge_color = {}
+    for e in g.edges:
+        edge_color[e] = colors[0]
+        if e in faultedges: edge_color[e] = colors[1]
+    if showfaultlabels: 
+        edgelabels = faultedgeflows
+        edge_label_fontdict={'size':scale*4, 'color':'red'}
+    elif show_edgelabels: 
+        edgelabels=edgeflows
+        edge_label_fontdict={'size':scale*4, 'color':'black'}
+    else:               
+        edgelabels={}
+        edge_label_fontdict={'size':scale*4, 'color':'black'}
+    gra = Graph(g, node_layout=pos, edge_color=edge_color, edge_size=scale, edge_labels=edgelabels,edge_label_font_size=scale*2, edge_zorder=1,edge_label_fontdict=edge_label_fontdict,\
+                node_label_fontdict={'size':scale*8, 'fontweight':'bold'}, node_size=scale*20, node_edge_width=scale*2,\
+                node_shape = node_shape, node_color = node_color, node_edge_color = node_edge_color, node_labels=labels,  node_zorder=2)
     return plt.gcf(), plt.gca()
+def update_net_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
+    """Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
+    plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors, **kwargs)
