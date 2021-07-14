@@ -47,15 +47,18 @@ fmdtools requires Python 3 and depends on these packages:
 - `dill`
 - `pickle`
 - `tqdm`
-- `scipy` 				(for using statistical distributions in parameter sampling)
-- `multiprocessing`     (for parallel execution--Pathos and multiprocess can also be used)
-- `matplotlib`			(for plots)
-- `pandas`				(for tables)
+- `matplotlib`
+- `pandas`
+- `netgraph`
+
+These packages are optional but reccomended:
 - `jupyter notebook`	(for notebooks)
-- `netgraph`	 		(for setting graph node positions and (>v4.0) hierarchical graph plotting)
+- `multiprocessing`     (for parallel execution--Pathos and multiprocess can also be used)
+- `graphviz`			(to plot using graphviz options)
+- `quadpy` 				(for quadrature sampling)
+- `scipy` 				(for using statistical distributions in parameter sampling)
 - `pyvis`				(for interactive html views of model graphs)
 - `ffmpeg` 				(for animations)
-- `quadpy` 				(for quadrature sampling)
 - `shapely`				(for multirotor model)
 
 These must be installed (e.g. using `pip install packagename` or `conda install packagename`) them before running any of the codes in the repository. 
