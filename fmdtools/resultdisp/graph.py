@@ -294,7 +294,9 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype=
     elif gtype == 'typegraph':
         kwargs["pad"] = kwargs.get("pad", "0.5")
         kwargs["ranksep"] = kwargs.get("ranksep", "2")
-    #checking type of g -- calls :if not nx
+    if kwargs.pop('pos',False):     print('invalid option: pos') 
+    if kwargs.pop('scale', False):  print('invalid option: scale') 
+        
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
@@ -306,7 +308,10 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype=
         #handles faults
         labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
         faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        #handles heatmap
+        #handles heatmap and highlight
+        if highlight != []:
+            faultnodes = highlight[0]
+            degradednodes = highlight[1]
         colors_dict = gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, functions=functions, flows=flows)
         dot = Graph(comment="model network", graph_attr=kwargs)
         dot = plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot)
@@ -319,22 +324,30 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype=
             dot.edge(edge[0], edge[1])
     #normal graph
     elif gtype == 'normal':
-        #need to address highlight
         #handles faults
         edgeflows=dict()
         for edge in g.edges:
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
             edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
-        labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
-        if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
+        if highlight != []:
+            faultnodes = highlight[0]
+            degradednodes = highlight[1]
+            faultedges = highlight[2]
+            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
+            else:               faultlabels = {}
+            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge])]) for edge in faultedges}
         else:
-            faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
-            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
-        #handles heatmap
-        colors_dict = gv_colors(g, gtype, colors=colors, heatmap=heatmap, cmap=cmap, faultnodes=faultnodes, degradednodes=degradednodes, faultedges=faultedges, edgeflows=edgeflows)
+            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
+            if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
+            else:
+                faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
+                faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
+        #handles heatmap and highlight
+        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        colors_dict = gv_colors(g, gtype, colors=colors, heatmap=heatmap, cmap=cmap, faultnodes=faultnodes, degradednodes=degradednodes, faultedges=faultflows, edgeflows=edgeflows)
         dot = Graph(comment="model network", graph_attr=kwargs)
         dot = plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
+            
     #rendering
     dot.attr(outputorder = "edgesfirst")
     if filename:    dot.render(filename = filename+gtype, format = filetype)
@@ -467,6 +480,7 @@ def show_pyviz(g, gtype='typegraph', filename="typegraph", width=1000, filt=True
     n.show(filename+".html")
     return n
         
+
 def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True, **kwargs):
     """
     Displays the execution order/types of the model, where the functions and flows in the
@@ -495,6 +509,7 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
     tuple of form (figure, axis) 
 
     """
+
     if gtype =='normal': fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.dynamicfxns, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], colors=colors, showfaultlabels= show_dyn_order, **kwargs)
     else:
         staticnodes = list(mdl.staticfxns) + list(set([n for node in mdl.staticfxns for n in mdl.bipartite.neighbors(node)]))
@@ -503,7 +518,7 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
     
     if legend:
         if renderer=='graphviz': 
-            print('legend not implemented in graphviz renderer')
+            gv_execute_order_legend(colors)
         else:
             legend_elements = [Patch(facecolor=colors[0], edgecolor=colors[0], label='No Execution'),
                                Patch(facecolor=colors[2], edgecolor=colors[2], label='Dynamic Step'),
@@ -893,6 +908,18 @@ def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time
     for edge in edges:
         dot.edge(edge[0], edge[1])
     return dot
+
+def gv_execute_order_legend(colors):
+    from graphviz import Graph
+    legend = Graph(name='legend')
+    legend.attr(sep="+0")
+    legend.node("No Execution", label="No Execution", style="filled", fillcolor=colors[0], shape='box')
+    legend.node("Dynamic Step", label="Dynamic Step", style="filled", fillcolor=colors[2], shape='box')
+    legend.node("Static Step", label="Static Step", style="filled", fillcolor=colors[1], shape='box')
+    legend.attr(rank='source')
+    display(SVG(legend._repr_svg_()))
+    return
+
 def update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
     """graphviz helper: updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
     Digraph, Graph = gv_import_check()
@@ -920,7 +947,8 @@ def update_gv_graphplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, c
     dot = Graph(comment="model network", graph_attr=kwargs)
     dot = plot_gv_normgraph(g, edgeflows, faultfxns, degfxns, degflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
     return dot
-def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faultedges=[], edgeflows={}, functions=[], flows=[]):
+
+def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faultedges=[], edgeflows={}, functions=[], flows=[], highlight=[]):
     """
     creates dictonary of node/edge colors for a graphviz plot
 
@@ -958,13 +986,13 @@ def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faulte
 
     """
     if gtype == 'normal':
-        if heatmap == {}:
+        if heatmap == {}: #or highlight != []:
                 colors_dict = {fn: colors[2] for fn in faultnodes}
                 colors_dict.update({dn: colors[1] for dn in degradednodes})
                 colors_dict.update({f: colors[0] for f in g.nodes if f not in degradednodes and f not in faultnodes})
                 colors_dict.update({fe: colors[1] for fe in faultedges})
-                colors_dict.update({ne: colors[0] for ne in g.edges if ne not in faultedges})
-        else:
+                colors_dict.update({ne: colors[0] for ne in edgeflows if ne not in faultedges})
+        elif heatmap != {}:
             colors_dict = {}
             colors_val_dict = {}
             for node in g.nodes:
