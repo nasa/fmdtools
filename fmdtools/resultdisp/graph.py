@@ -1,23 +1,20 @@
 """
 File Name: resultdisp/graph.py
-Author: Daniel Hulse
-Created: November 2019 (Refactored April 2020)
+Contributors: Daniel Hulse and Sequoia Andrade
+Created: November 2019 
+Refactored: April 2020
+Added major interfaces: July 2021
 
-Description: Gives graph-level visualizations of the model.
+Description: Gives graph-level visualizations of the model using installed renderers.
 
 Public user-facing methods:
-    - set_pos:                      Set graph node positions manually
-    - show:                         Plots a single graph object g.
-    - history:                      Displays plots of the graph over time given a dict history of graph objects
-    - result_from:                  Plots a representation of the model graph at a specific time in the results history.
-    - results_from:                 Plots a set of representations of the model graph at given times in the results history.
-    - animation_from:               Creates an animation of the model graph using results at given times in the results history.
-Private/helper methods: 
-    - update_bipplot:               updates a bipartite graph plot at a given timestep t_ind given the result history reshist
-    - update_graphplot:             updates a graph plot at a given timestep t_ind given the result history reshist
-    - plot_normgraph:               Plots a standard graph. 
-    - plot_bipgraph:                Plots a bipartite graph. 
-    - get_plotlabels:               Assigns labels to a graph g from reshist at time t so that it can be plotted
+    - set_pos:                      Set graph node positions manually (uses netgraph)
+    - show:                         Plots a single graph object g. Has options for heatmaps/overlays and matplotlib/graphviz/netgraph/pyviz renderers.
+    - exec_order:                   Displays the propagation order and type (dynamic/static) in the model. Works with matplotlib/graphviz/netgraph renderers.
+    - history:                      Displays plots of the graph over time given a dict history of graph objects.  Works with matplotlib/graphviz/netgraph renderers.
+    - result_from:                  Plots a representation of the model graph at a specific time in the results history. Works with matplotlib/graphviz/netgraph renderers.
+    - results_from:                 Plots a set of representations of the model graph at given times in the results history. Works with matplotlib/graphviz/netgraph renderers.
+    - animation_from:               Creates an animation of the model graph using results at given times in the results history.  Works with matplotlib/netgraph renderers.
 """
 
 
@@ -27,7 +24,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation
 from matplotlib.patches import Patch
 import netgraph
-from IPython.display import Image, display, SVG
+from IPython.display import display, SVG
 
 def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, initpos={}, figsize=(6,4)):
     """
@@ -434,11 +431,8 @@ def show_netgraph(g, gtype='normal', filename='', filetype='png', pos=[], scale=
     elif gtype == 'typegraph':
         if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
         if kwargs.get('heatmap', False): raise Exception("Invalid option for typegraph--not implemented")
-        if "mdl" in locals():
-            nx.draw(g, pos=pos, with_labels=True, node_size=scale*700, font_size=scale*8, font_weight='bold', node_color=colors[0])
-        else:
-            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-            fig_axis =plot_bip_netgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False, **kwargs)
+        labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
+        fig_axis =plot_bip_netgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, **kwargs)
     if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
     return fig, fig.axes[0], fig_axis[2]
 
@@ -529,7 +523,7 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
         else:                       fig_axis[1].set_title(title)
     return fig_axis
     
-def history(ghist, gtype='normal', pos=[], scale=1, faultscen=[],showfaultlabels=True, colors=['lightgray','orange', 'red']):
+def history(ghist, **kwargs):
     """
     Displays plots of the graph over time given a dict history of graph objects
 
@@ -540,19 +534,17 @@ def history(ghist, gtype='normal', pos=[], scale=1, faultscen=[],showfaultlabels
        {time: graphobject}, where
            - time is the time where the snapshot of the graph was recorded
            - graphobject is the snapshot of the graph at that time
-    gtype : 'normal' or 'bipartite'
-        Type of graph input to show--normal (multgraph) or bipartite
-    pos : dict
-        Positions for nodes
-    scale: float
-        Changes sizes of nodes in bipartite graph
-    faultscen : str, optional
-        Name of the fault scenario (for the title). The default is [].
-    showfaultlabels : bool, optional
-        Whether or not to label the faults on the functions. The default is True.
+    **kwargs : kwargs
+        keyword arguments for graph.show()
+    Returns
+    ----------
+    figobjs : dict
+        Set of graph objects from graph.show() for the given renderer
     """
+    figobjs={}
     for time, graph in ghist.items():
-        show(graph,gtype=gtype,pos=pos, scale=scale, faultscen=faultscen, time=time, showfaultlabels=showfaultlabels, colors=colors)
+        figobjs[time] = show(graph,**kwargs)
+    return figobjs
 
 def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **kwargs):
     """
