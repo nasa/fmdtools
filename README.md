@@ -5,7 +5,7 @@
 
 fmdtools (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
 
-This release is version 0.7.2.
+This release is version 0.7.3.
 
 [![DOI](https://zenodo.org/badge/212862445.svg)](https://zenodo.org/badge/latestdoi/212862445)
 
@@ -90,6 +90,8 @@ Additionally, this repo provides a few resources to get familiar with fmdtools:
 [Daniel Hulse](https://github.com/hulsed)
 
 [Hannah Walsh](https://github.com/walshh) : Network analysis codes
+
+Sequoia Andrade : Graph visualization graphviz options
 
 [Arpan Biswas](https://github.com/arpanbiswas52) : Multirotor optimization codes
 
