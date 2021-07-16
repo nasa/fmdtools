@@ -219,7 +219,7 @@ def modephases(mdlhist):
             phases[fxn] = dict(sorted(phases_unsorted.items(), key = lambda item: item[1][0]))
     return phases, modephases
 
-def graphflows(g, nomg, gtype='normal'):
+def graphflows(g, nomg, gtype='bipartite'):
     """
     Extracts non-nominal flows by comparing the a results graph with a nominal results graph.
 
@@ -230,7 +230,7 @@ def graphflows(g, nomg, gtype='normal'):
     nomg : networkx graph
         The graph in the nominal fault scenario
     gtype : str, optional
-        The type of graph to return ('normal' or 'bipartite') The default is 'normal'.
+        The type of graph to return ('normal' or 'bipartite') The default is 'bipartite'.
 
     Returns
     -------
@@ -257,7 +257,7 @@ def graphflows(g, nomg, gtype='normal'):
                     for val in vals:
                         if vals[val]!=nomg.nodes[node]['states'][val]: endflows[node][val]=vals[val]     
     return endflows
-def resultsgraph(g, nomg, gtype='normal'):
+def resultsgraph(g, nomg, gtype='bipartite'):
     """
     Makes a graph of nominal/non-nominal states by comparing the nominal graph states with the non-nominal graph states
 
@@ -268,7 +268,7 @@ def resultsgraph(g, nomg, gtype='normal'):
     nomg : networkx Graph
         graph for the nominal scenario where the functions are nodes and flows are edges and with 'faults' and 'states' attributes
     gtype : 'normal' or 'bipartite'
-        whether the graph is a normal multgraph, or a bipartite graph
+        whether the graph is a normal multgraph, or a bipartite graph. the default is 'bipartite'
 
     Returns
     -------
@@ -308,7 +308,7 @@ def resultsgraph(g, nomg, gtype='normal'):
             else: status='Nominal'
             rg.nodes[node]['status']=status
     return rg
-def resultsgraphs(ghist, nomghist, gtype='normal'):
+def resultsgraphs(ghist, nomghist, gtype='bipartite'):
     """
     Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
 
@@ -319,7 +319,7 @@ def resultsgraphs(ghist, nomghist, gtype='normal'):
     nomghist : dict
         dict history of the nominal graph
     gtype : str, optional
-        Type of graph provided/returned (bipartite, component, or normal). The default is 'normal'.
+        Type of graph provided/returned (bipartite, component, or normal). The default is 'bipartite'.
 
     Returns
     -------

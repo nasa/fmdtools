@@ -9,7 +9,7 @@ Description: Gives graph-level visualizations of the model using installed rende
 
 Public user-facing methods:
     - set_pos:                      Set graph node positions manually (uses netgraph)
-    - show:                         Plots a single graph object g. Has options for heatmaps/overlays and matplotlib/graphviz/netgraph/pyviz renderers.
+    - show:                         Plots a single graph object g. Has options for heatmaps/overlays and matplotlib/graphviz/netgraph/pyvis renderers.
     - exec_order:                   Displays the propagation order and type (dynamic/static) in the model. Works with matplotlib/graphviz/netgraph renderers.
     - history:                      Displays plots of the graph over time given a dict history of graph objects.  Works with matplotlib/graphviz/netgraph renderers.
     - result_from:                  Plots a representation of the model graph at a specific time in the results history. Works with matplotlib/graphviz/netgraph renderers.
@@ -24,9 +24,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation
 from matplotlib.patches import Patch
 import netgraph
-from IPython.display import display, SVG
 
-def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, initpos={}, figsize=(6,4)):
+def set_pos(g, gtype='bipartite',scale=1,node_color='lightgray', label_size=7, initpos={}, figsize=(6,4)):
     """
     Provides graphical interface to set graph node positions. If model is provided, it will also set the positions in the model object. 
     
@@ -90,7 +89,7 @@ def set_pos(g, gtype='normal',scale=1,node_color='lightgray', label_size=7, init
         elif gtype=='bipartite':    mdl.bipartite_pos = pos  
     return pos
 
-def show(g, gtype='normal', renderer = 'matplotlib', filename="", **kwargs):
+def show(g, gtype='bipartite', renderer = 'matplotlib', filename="", **kwargs):
     """
     Plots a single graph object g.
 
@@ -100,15 +99,15 @@ def show(g, gtype='normal', renderer = 'matplotlib', filename="", **kwargs):
         The multigraph to plot
     gtype : 'normal' or 'bipartite'
         Type of graph input to show--normal (multgraph) or bipartite
-    renderer : 'matplotlib' or 'graphviz' or 'pyviz' or 'netgraph'
+    renderer : 'matplotlib' or 'graphviz' or 'pyvis' or 'netgraph'
         Renderer to use with the drawing. Renderer must be installed. Default is 'matplotlib'
     filename : string, optional
-        the filename for the output. The default is '' (in which a file is not saved except in pyviz).
+        the filename for the output. The default is '' (in which a file is not saved except in pyvis).
     **kwargs : dictionary
         keyword arguments for the individual methods. See the documentation for 
             graph.show_graphviz
             graph.show_maplotlib
-            graph.show_pyviz
+            graph.show_pyvis
             graph.show_netgraph
         for more information on these arguments
     """
@@ -121,11 +120,12 @@ def show(g, gtype='normal', renderer = 'matplotlib', filename="", **kwargs):
     elif renderer =='netgraph':
         fig, ax, gra = show_netgraph(g, gtype=gtype, filename=filename, **kwargs)
         return fig, ax, gra
-    elif renderer == 'pyviz':
-        n = show_pyviz(g, gtype=gtype, filename=filename, **kwargs)
+    elif renderer == 'pyvis':
+        n = show_pyvis(g, gtype=gtype, filename=filename, **kwargs)
         return n
+    else: raise Exception("Invalid renderer: "+renderer)
 
-def show_matplotlib(g, gtype='normal', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
+def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
     """
     Plots a single graph object g using matplotlib
 
@@ -240,7 +240,7 @@ def show_matplotlib(g, gtype='normal', filename='', filetype='png', pos=[], scal
             fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False)
     if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
     return fig, fig.axes[0]
-def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype='png', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
+def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filetype='png', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
     """
     Translates an existing nx graph to a graphviz graph. Saves the graph output and dot file.
     Called from show() by passing in graphviz=True and filename
@@ -282,6 +282,7 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype=
     dot: a graphviz object
 
     """
+    from IPython.display import display, SVG
     Digraph, Graph = gv_import_check()
     #setting up default layouts for graph types
     if gtype == 'bipartite': 
@@ -349,7 +350,7 @@ def show_graphviz(g, gtype='normal', faultscen=[], time=[],filename='',filetype=
     if filename:    dot.render(filename = filename+gtype, format = filetype)
     else:           display(SVG(dot._repr_svg_()))
     return dot
-def show_netgraph(g, gtype='normal', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], **kwargs):
+def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], **kwargs):
     """
     Plots a single graph object g using netgraph
 
@@ -436,7 +437,7 @@ def show_netgraph(g, gtype='normal', filename='', filetype='png', pos=[], scale=
     if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
     return fig, fig.axes[0], fig_axis[2]
 
-def show_pyviz(g, gtype='typegraph', filename="typegraph", width=1000, filt=True, physics=False, notebook=False):
+def show_pyvis(g, gtype='typegraph', filename="typegraph", width=1000, filt=True, physics=False, notebook=False):
     """
     Method for plotting graphs with pyvis. Produces interactive HTML!
 
@@ -456,8 +457,8 @@ def show_pyviz(g, gtype='typegraph', filename="typegraph", width=1000, filt=True
         Whether to use physics during node placement. The default is False.
     Returns
     -------
-    n : pyviz object
-        pyviz object of the drawn graph
+    n : pyvis object
+        pyvis object of the drawn graph
     """
     from pyvis.network import Network
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
@@ -573,6 +574,7 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
     """
+    from IPython.display import display, SVG
     [[t_ind,],] = np.where(reshist['time']==time)
     g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
     if renderer=='matplotlib':
@@ -902,6 +904,7 @@ def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time
 
 def gv_execute_order_legend(colors):
     from graphviz import Graph
+    from IPython.display import display, SVG
     legend = Graph(name='legend')
     legend.attr(sep="+0")
     legend.node("No Execution", label="No Execution", style="filled", fillcolor=colors[0], shape='box')
