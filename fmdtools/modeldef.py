@@ -781,14 +781,14 @@ class Model(object):
         g.add_nodes_from(self.fxns[fxnname].components, bipartite=1)
         g.add_edges_from([(fxnname, component) for component in self.fxns[fxnname].components])        
         return g
-    def return_stategraph(self, gtype='normal'):
+    def return_stategraph(self, gtype='bipartite'):
         """
         Returns a graph representation of the current state of the model.
 
         Parameters
         ----------
         gtype : str, optional
-            Type of graph to return (normal, bipartite, component, or typegraph). The default is 'normal'.
+            Type of graph to return (normal, bipartite, component, or typegraph). The default is 'bipartite'.
 
         Returns
         -------

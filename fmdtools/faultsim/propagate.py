@@ -32,7 +32,7 @@ import tqdm
 
 ## FAULT PROPAGATION
 
-def nominal(mdl, track='all', gtype='normal', track_times="all"):
+def nominal(mdl, track='all', gtype='bipartite', track_times="all"):
     """
     Runs the model over time in the nominal scenario.
 
@@ -46,7 +46,7 @@ def nominal(mdl, track='all', gtype='normal', track_times="all"):
         or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
         The default is 'all'.
     gtype : TYPE, optional
-        The type of graph to return ('bipartite'/'normal'/'typegraph'). The default is 'normal'.
+        The type of graph to return ('bipartite'/'normal'/'typegraph'). The default is 'bipartite'.
     track_times : str/tuple
         Defines what times to include in the history. Options are:
             'all'--all simulated times
@@ -126,7 +126,7 @@ def exec_nom_helper(arg):
     endclass=arg[0].find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
     return endclass, mdlhist
 
-def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'normal', track_times="all"):
+def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'bipartite', track_times="all"):
     """
     Runs one fault in the model at a specified time.
 
@@ -148,7 +148,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
     staged : bool, optional
         Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). The default is False.
     gtype : str, optional
-        The graph type to return ('bipartite'/'normal'/'typegraph'). The default is 'normal'.
+        The graph type to return ('bipartite'/'normal'/'typegraph'). The default is 'bipartite'.
     track_times : str/tuple
         Defines what times to include in the history. Options are:
             'all'--all simulated times
@@ -207,7 +207,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
     mdl.reset()
     return endresults,resgraph, mdlhists
 
-def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal', track_times="all"):
+def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track_times="all"):
     """
     Runs one fault in the model at a specified time.
 
@@ -225,7 +225,7 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='normal', track_ti
     rate : float, optional
         Input rate for the sequence (must be calculated elsewhere)
     gtype : str, optional
-        The graph type to return ('bipartite'/'normal'/'typegraph'). The default is 'normal'.
+        The graph type to return ('bipartite'/'normal'/'typegraph'). The default is 'bipartite'.
     track_times : str/tuple
         Defines what times to include in the history. Options are:
             'all'--all simulated times
