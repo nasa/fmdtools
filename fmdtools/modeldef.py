@@ -156,7 +156,37 @@ class Block(Common):
         """
         for param in params:
             for attr, val in param.items():
-                setattr(self, attr, val) 
+                setattr(self, attr, val)
+    def add_healthstates(self, hstates, mode_app='single-state'):
+        """Adds health state attributes to the model (as states and associated modes). 
+        
+        Parameters
+        ----------
+        hstates : Dict
+            Health states to incorporate in the model and their respective values. 
+            e.g., {'state':[1,{0,2,-1}]}, {'state':{0,2,-1}}
+        mode_app : str
+            type of modes to elaborate from the given health states.
+        """
+        if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
+        hranges = dict.from_keys(hstates.keys())
+        for state in hstates:
+            self._states.append(state)
+            if type(hstates[state])==set:               
+                self._initstates[state] = 1
+                hranges[state]=hstates[state]
+            elif  type(hstates[state])==list:           
+                self._initstates[state] = hstates[state][0]
+                hranges[state]=hstates[state][1]
+            elif type(hstates[state]) in [float, int]:  
+                self._initstates[state] = hstates[state]
+                hranges[state]={}
+            else: raise Exception("Invalid input option for health state")
+        if not getattr(self, 'faultmodes', []): self.faultmodes = dict()
+        if mode_app=='single_state':
+            for state in hranges:
+                modes = {state+'_'+str(value):{'dist':0,'oppvect':0, 'rcost':0} for value in hranges[state]}
+                self.faultmodes.update(modes)
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
