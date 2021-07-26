@@ -157,7 +157,7 @@ class Block(Common):
         for param in params:
             for attr, val in param.items():
                 setattr(self, attr, val)
-    def add_healthstates(self, hstates, mode_app='single-state'):
+    def assoc_healthstates(self, hstates, mode_app='single-state'):
         """Adds health state attributes to the model (as states and associated modes). 
         
         Parameters
@@ -169,24 +169,35 @@ class Block(Common):
             type of modes to elaborate from the given health states.
         """
         if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
-        hranges = dict.from_keys(hstates.keys())
+        hranges = dict.fromkeys(hstates.keys())
+        nom_hstates = {}
         for state in hstates:
             self._states.append(state)
             if type(hstates[state])==set:               
-                self._initstates[state] = 1
+                nom_hstates[state] = 1
                 hranges[state]=hstates[state]
             elif  type(hstates[state])==list:           
-                self._initstates[state] = hstates[state][0]
+                nom_hstates[state] = hstates[state][0]
                 hranges[state]=hstates[state][1]
             elif type(hstates[state]) in [float, int]:  
-                self._initstates[state] = hstates[state]
+                nom_hstates[state] = hstates[state]
                 hranges[state]={}
             else: raise Exception("Invalid input option for health state")
+            setattr(self, state, nom_hstates[state])
+        self._initstates.update(nom_hstates)
         if not getattr(self, 'faultmodes', []): self.faultmodes = dict()
-        if mode_app=='single_state':
+        self.mode_state_dict = {}
+        if mode_app=='single-state':
             for state in hranges:
                 modes = {state+'_'+str(value):{'dist':0,'oppvect':0, 'rcost':0} for value in hranges[state]}
+                modestates = {state+'_'+str(value): {**nom_hstates, state:value} for value in hranges[state]}
                 self.faultmodes.update(modes)
+                self.mode_state_dict.update(modestates)
+        elif mode_app =='all':
+            statecombos = itertools.product(*hranges.values())
+            self.faultmodes.update({'hmode_'+str(i):{'dist':0,'oppvect':0, 'rcost':0} for i in range(len(statecombos))})
+            self.mode_state_dict = {'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))}
+        else: raise Exception("Invalid mode elaboration approach")
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
@@ -482,6 +493,14 @@ class FxnBlock(Block):
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
+    def update_modestates(self):
+        num_update = 0
+        for fault in self.faults:
+            if fault in self.mode_state_dict:
+                for state, value in self.mode_state_dict[fault].items():
+                    setattr(self, state, value)
+                num_update+=1
+                if num_update > 1: raise Exception("Exclusive fault mode scenarios present at the same time")
     def updatefxn(self,proptype, faults=[], time=0):
         """
         Updates the state of the function at a given time and injects faults.
@@ -495,6 +514,7 @@ class FxnBlock(Block):
         """
         self.add_faults(faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
+        if getattr(self, 'mode_state_dict', False) and self.any_faults(): self.update_modestates()
         if self.components:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
