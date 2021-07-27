@@ -157,8 +157,9 @@ class Block(Common):
         for param in params:
             for attr, val in param.items():
                 setattr(self, attr, val)
-    def assoc_healthstates(self, hstates, mode_app='single-state', probtype='prob', units='hr',):
-        """Adds health state attributes to the model (as states and associated modes). 
+    def assoc_healthstates(self, hstates, mode_app='single-state', probtype='prob', units='hr'):
+        """
+        Adds health state attributes to the model (and a mode approach if desired). 
         
         Parameters
         ----------
@@ -185,21 +186,57 @@ class Block(Common):
             else: raise Exception("Invalid input option for health state")
             setattr(self, state, nom_hstates[state])
         self._initstates.update(nom_hstates)
+        self.assoc_healthstate_modes(hranges=hranges, mode_app=mode_app, probtype=probtype, units=units)
+    def assoc_healthstate_modes(self, hranges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr'):
+        """
+        Associates modes with given healthstates.
+
+        Parameters
+        ----------
+        hranges : dict, optional
+            Dictionary of form {'state':{val1, val2...}) of ranges for each health state (if used to generate modes). The default is {}.
+        mode_app : str
+            type of modes to elaborate from the given health states.
+        manual_modes : dict, optional
+            Dictionary/Set of faultmodes with structure, which has the form:
+                - dict {'fault1': [atts], 'fault2': atts}, where atts may be of form:
+                    - states: {state1: val1, state2, val2}    
+                    - [states, faultattributes], where faultattributes is the same as in assoc_modes
+        probtype : str, optional
+            Type of probability in the probability model, a per-time 'rate' or per-run 'prob'. 
+            The default is 'rate'
+        units : str, optional
+            Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr' 
+        """
         if not getattr(self, 'faultmodes', []): self.faultmodes = dict()
         self.mode_state_dict = {}
-        if mode_app=='single-state':
+        nom_hstates = {state: self._initstates[state] for state in hranges}
+        if mode_app=='none': a=0
+        elif mode_app=='single-state':
             for state in hranges:
                 modes = {state+'_'+str(value):{'dist':0,'oppvect':[1], 'rcost':0, 'probtype':probtype, 'units':units} for value in hranges[state]}
                 modestates = {state+'_'+str(value): {**nom_hstates, state:value} for value in hranges[state]}
                 self.faultmodes.update(modes)
                 self.mode_state_dict.update(modestates)
         elif mode_app =='all':
-            for state in hstates: hranges[state].add(nom_hstates[state])
+            for state in hranges: hranges[state].add(nom_hstates[state])
             statecombos = [i for i in itertools.product(*hranges.values()) if i!=tuple([*nom_hstates.values()])]
             self.faultmodes.update({'hmode_'+str(i):{'dist':0,'oppvect':[1], 'rcost':0, 'probtype':probtype, 'units':units} for i in range(len(statecombos))})
             self.mode_state_dict = {'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))}
         else: raise Exception("Invalid mode elaboration approach")
-        for mode in self.mode_state_dict: self.faultmodes[mode]['dist']= 1/len(self.mode_state_dict)
+        num_synth_modes = len(self.mode_state_dict)
+        for mode,atts in manual_modes.items():
+            if type(atts)==list:
+                self.mode_state_dict.update({mode:atts[0]})
+                if not getattr(self, 'exclusive_faultmodes', False): print("Changing fault mode exclusivity to True")
+                self.assoc_modes(faultmodes={mode:atts[1]}, initmode=getattr(self,'mode', 'nom'), probtype=probtype, proptype=probtype, exclusive=True, key_phases_by=getattr(self,'key_phases_by', 'none'))
+            elif  type(atts)==dict:
+                self.mode_state_dict.update({mode:atts})
+                num_synth_modes+=1
+        for mode in self.mode_state_dict: 
+            if  self.faultmodes[mode]['dist'] == 0:
+                self.faultmodes[mode]['dist'] = 1/num_synth_modes
+        
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.

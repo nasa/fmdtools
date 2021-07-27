@@ -728,8 +728,8 @@ def get_graph_annotations(g, gtype='bipartite'):
     """Helper method that returns labels/lists degraded nodes for the plot annotations"""
     labels={node:node for node in g.nodes}
     statuses=dict(g.nodes(data='status', default='Nominal'))
-    faultnodes=[node for node,status in statuses.items() if status=='Faulty']
-    degradednodes=[node for node,status in statuses.items() if status=='Degraded']
+    faultnodes=[node for node,status in statuses.items() if status=='Faulty' or 'Faulty' in status]
+    degradednodes=[node for node,status in statuses.items() if status=='Degraded' or 'Degraded' in status]
     faults=dict(g.nodes(data='modes', default={'nom'}))
     if gtype=='typegraph':
         faultlabels = {fclass:set(fxns.keys()) for fclass, fxns in g.nodes(data='modes') if fxns and set([mode for modes in fxns.values() for mode in modes if mode!='nom'])}
