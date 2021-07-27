@@ -157,7 +157,7 @@ class Block(Common):
         for param in params:
             for attr, val in param.items():
                 setattr(self, attr, val)
-    def assoc_healthstates(self, hstates, mode_app='single-state'):
+    def assoc_healthstates(self, hstates, mode_app='single-state', probtype='prob', units='hr',):
         """Adds health state attributes to the model (as states and associated modes). 
         
         Parameters
@@ -174,11 +174,11 @@ class Block(Common):
         for state in hstates:
             self._states.append(state)
             if type(hstates[state])==set:               
-                nom_hstates[state] = 1
+                nom_hstates[state] = 1.0
                 hranges[state]=hstates[state]
             elif  type(hstates[state])==list:           
                 nom_hstates[state] = hstates[state][0]
-                hranges[state]=hstates[state][1]
+                hranges[state]=hstates[state][1] 
             elif type(hstates[state]) in [float, int]:  
                 nom_hstates[state] = hstates[state]
                 hranges[state]={}
@@ -189,15 +189,17 @@ class Block(Common):
         self.mode_state_dict = {}
         if mode_app=='single-state':
             for state in hranges:
-                modes = {state+'_'+str(value):{'dist':0,'oppvect':0, 'rcost':0} for value in hranges[state]}
+                modes = {state+'_'+str(value):{'dist':0,'oppvect':[1], 'rcost':0, 'probtype':probtype, 'units':units} for value in hranges[state]}
                 modestates = {state+'_'+str(value): {**nom_hstates, state:value} for value in hranges[state]}
                 self.faultmodes.update(modes)
                 self.mode_state_dict.update(modestates)
         elif mode_app =='all':
-            statecombos = itertools.product(*hranges.values())
-            self.faultmodes.update({'hmode_'+str(i):{'dist':0,'oppvect':0, 'rcost':0} for i in range(len(statecombos))})
+            for state in hstates: hranges[state].add(nom_hstates[state])
+            statecombos = [i for i in itertools.product(*hranges.values()) if i!=tuple([*nom_hstates.values()])]
+            self.faultmodes.update({'hmode_'+str(i):{'dist':0,'oppvect':[1], 'rcost':0, 'probtype':probtype, 'units':units} for i in range(len(statecombos))})
             self.mode_state_dict = {'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))}
         else: raise Exception("Invalid mode elaboration approach")
+        for mode in self.mode_state_dict: self.faultmodes[mode]['dist']= 1/len(self.mode_state_dict)
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
@@ -514,7 +516,7 @@ class FxnBlock(Block):
         """
         self.add_faults(faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
-        if getattr(self, 'mode_state_dict', False) and self.any_faults(): self.update_modestates()
+        if hasattr(self, 'mode_state_dict') and self.any_faults(): self.update_modestates()
         if self.components:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
@@ -523,8 +525,8 @@ class FxnBlock(Block):
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
         elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: self.dynamic_behavior(time)
         elif proptype=='reset':                                                             
-            if hasattr(self,'static_behavior'):  self.static_behavior
-            if hasattr(self,'dynamic_behavior'): self.dynamic_behavior
+            if hasattr(self,'static_behavior'):  self.static_behavior(time)
+            if hasattr(self,'dynamic_behavior'): self.dynamic_behavior(time)
         if self.components:     # propogate faults from component level to function level
             for compname, comp in self.components.items():
                 self.faults.update(comp.faults) 
@@ -1110,8 +1112,8 @@ class SampleApproach():
         ----------
         mdl : Model
             Model to sample.
-        faults : str (all/single-component) or list, optional
-            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'. 'single-components' uses faults from a single component to represent faults form all components
+        faults : str (all/single-component/function of interest) or list, optional
+            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'. 'single-components' uses faults from a single component to represent faults form all components while passing the function name only inludes modes from that function
         phases: dict or 'global'
             Local phases in the model to sample. Has structure:
                 {'Function':{'phase':[starttime, endtime]}}
@@ -1188,6 +1190,8 @@ class SampleApproach():
                     self.fxnrates[fxnname]=fxn.failrate
                     self.comprates[fxnname] = {}
         else:
+            if type(faults)==str:
+                faults = [(faults, mode) for mode in mdl.fxns[faults].faultmodes]
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
             for fxnname, mode in faults: 
                 self._fxnmodes[fxnname, mode]=mdl.fxns[fxnname].faultmodes[mode]
@@ -1229,7 +1233,7 @@ class SampleApproach():
                     oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
                 else:
                     oppvect = self._fxnmodes[fxnname, mode]['oppvect']
-                    if len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
+                    if type(oppvect)==int or len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
                     elif len(oppvect)!=len(fxnphases): raise Exception("Invalid Opportunity vector: "+fxnname+". Invalid length.")
                     else: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(fxnphases)}
             for phase, times in fxnphases.items():

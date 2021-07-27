@@ -699,6 +699,8 @@ def update_flowhist(mdl, mdlhist, t_ind):
                 except:
                     print("Value too large to represent: "+att+"="+str(val))
                     raise
+                if not np.can_cast(type(val), type(mdlhist["flows"][flowname][att][t_ind])):
+                    raise Exception(str(flowname)+" att "+str(att)+" changed type: "+str(type(mdlhist["flows"][flowname][att][t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind))
 def update_fxnhist(mdl, mdlhist, t_ind):
     """ Updates the functions (faults and states) in the model history at t_ind """
     for fxnname in mdlhist["functions"]:
@@ -711,7 +713,11 @@ def update_fxnhist(mdl, mdlhist, t_ind):
                 if len(faults) > 1: raise Exception("More than one fault present in "+fxnname+"\n at t= "+str(t_ind)+"\n faults: "+str(faults)+"\n Is the mode representation nonexclusive?")
                 else:               mdlhist["functions"][fxnname]["faults"][t_ind]=faults.pop()
         for state, value in states.items():
-            if state in mdlhist["functions"][fxnname]:  mdlhist["functions"][fxnname][state][t_ind] = value 
+            if state in mdlhist["functions"][fxnname]:  
+                mdlhist["functions"][fxnname][state][t_ind] = value
+                if not np.can_cast(type(value), type(mdlhist["functions"][fxnname][state][t_ind])):
+                    raise Exception(str(fxnname)+" state "+str(state)+" changed type: "+str(type(mdlhist["functions"][fxnname][state][t_ind]))+" to "+str(type(value))+" at t_ind="+str(t_ind))
+            
 
 def init_mdlhist(mdl, timerange, track = 'all'):
     """
