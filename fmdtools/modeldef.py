@@ -187,7 +187,7 @@ class Block(Common):
             setattr(self, state, nom_hstates[state])
         self._initstates.update(nom_hstates)
         self.assoc_healthstate_modes(hranges=hranges, mode_app=mode_app, probtype=probtype, units=units)
-    def assoc_healthstate_modes(self, hranges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr'):
+    def assoc_healthstate_modes(self, hranges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='none'):
         """
         Associates modes with given healthstates.
 
@@ -209,34 +209,39 @@ class Block(Common):
             Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr' 
         """
         if not getattr(self, 'faultmodes', []): self.faultmodes = dict()
-        self.mode_state_dict = {}
+        if not getattr(self, 'mode_state_dict', False): self.mode_state_dict = {}
         nom_hstates = {state: self._initstates[state] for state in hranges}
         if mode_app=='none': a=0
         elif mode_app=='single-state':
             for state in hranges:
                 modes = {state+'_'+str(value):{'dist':0,'oppvect':[1], 'rcost':0, 'probtype':probtype, 'units':units} for value in hranges[state]}
-                modestates = {state+'_'+str(value): {**nom_hstates, state:value} for value in hranges[state]}
+                modestates = {state+'_'+str(value): {state:value} for value in hranges[state]}
                 self.faultmodes.update(modes)
                 self.mode_state_dict.update(modestates)
         elif mode_app =='all':
             for state in hranges: hranges[state].add(nom_hstates[state])
             statecombos = [i for i in itertools.product(*hranges.values()) if i!=tuple([*nom_hstates.values()])]
             self.faultmodes.update({'hmode_'+str(i):{'dist':0,'oppvect':[1], 'rcost':0, 'probtype':probtype, 'units':units} for i in range(len(statecombos))})
-            self.mode_state_dict = {'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))}
+            self.mode_state_dict.update({'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
         else: raise Exception("Invalid mode elaboration approach")
         num_synth_modes = len(self.mode_state_dict)
         for mode,atts in manual_modes.items():
             if type(atts)==list:
                 self.mode_state_dict.update({mode:atts[0]})
                 if not getattr(self, 'exclusive_faultmodes', False): print("Changing fault mode exclusivity to True")
-                self.assoc_modes(faultmodes={mode:atts[1]}, initmode=getattr(self,'mode', 'nom'), probtype=probtype, proptype=probtype, exclusive=True, key_phases_by=getattr(self,'key_phases_by', 'none'))
+                self.assoc_modes(faultmodes={mode:atts[1]}, initmode=getattr(self,'mode', 'nom'), probtype=probtype, proptype=probtype, exclusive=True, key_phases_by=key_phases_by)
             elif  type(atts)==dict:
                 self.mode_state_dict.update({mode:atts})
+                self.faultmodes.update({mode:{'dist':0,'oppvect':[1], 'rcost':0, 'probtype':probtype, 'units':units}})
                 num_synth_modes+=1
         for mode in self.mode_state_dict: 
             if  self.faultmodes[mode]['dist'] == 0:
                 self.faultmodes[mode]['dist'] = 1/num_synth_modes
-        
+        if not hasattr(self,'key_phases_by'): self.key_phases_by=key_phases_by
+        elif getattr(self, 'key_phases_by', '')!=key_phases_by: 
+            print("Changing key_phases_by to "+key_phases_by)
+            self.key_phases_by=key_phases_by
+            
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
