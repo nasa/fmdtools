@@ -137,6 +137,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
             for var in nomhist:
                 if fxnflowvals: #if in the list of values
                     if var not in fxnflowvals[fxnflow]: continue
+                if var=='faults': continue 
                 plt.subplot(int(np.ceil((num_plots)/cols)),cols,n, label=fxnflow+var)
                 n+=1
                 if 'faulty' in mdlhists:
@@ -155,7 +156,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
                             else: phasetext = phase
                             bbox_props = dict(boxstyle="round,pad=0.3", fc="white", lw=0, alpha=0.5)
                             plt.text(np.average(phases[fxnflow][phase]), (ymin+ymax)/2, phasetext, ha='center', bbox=bbox_props)
-                plt.title(fxnflow+": "+var)
+                plt.title(fxnflow+": "+var+str(n))
                 plt.xlabel(timelabel)
                 plt.ylabel(unitdict.get(n-2, ''))
     if 'faulty' in mdlhists and any(nomhist):
