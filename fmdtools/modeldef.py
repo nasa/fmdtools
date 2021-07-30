@@ -705,7 +705,7 @@ class Model(object):
         self.times=modelparams.get('times',[1])
         self.tstep = modelparams.get('tstep', 1.0)
         self.units = modelparams.get('units', 'hr')
-        if modelparams.has('seed'): np.random.seed(modelparams['seed'])
+        if modelparams.get('seed', False): np.random.seed(modelparams['seed'])
         else:                       
                                     np.random.seed()
                                     self.seed = np.random.get_state()[1][0]
