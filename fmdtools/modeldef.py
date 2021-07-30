@@ -174,12 +174,12 @@ class Block(Common):
         nom_hstates = {}
         for state in hstates:
             self._states.append(state)
-            if type(hstates[state])==set:               
+            if type(hstates[state]) in [set, np.ndarray]:               
                 nom_hstates[state] = 1.0
-                hranges[state]=hstates[state]
+                hranges[state]=set(hstates[state])
             elif  type(hstates[state])==list:           
                 nom_hstates[state] = hstates[state][0]
-                hranges[state]=hstates[state][1] 
+                hranges[state]=set(hstates[state][1]) 
             elif type(hstates[state]) in [float, int]:  
                 nom_hstates[state] = hstates[state]
                 hranges[state]={}
@@ -218,9 +218,12 @@ class Block(Common):
                 modestates = {state+'_'+str(value): {state:value} for value in hranges[state]}
                 self.faultmodes.update(modes)
                 self.mode_state_dict.update(modestates)
-        elif mode_app =='all':
+        elif mode_app =='all' or type(mode_app)==int:
             for state in hranges: hranges[state].add(nom_hstates[state])
             statecombos = [i for i in itertools.product(*hranges.values()) if i!=tuple([*nom_hstates.values()])]
+            if type(mode_app)==int: 
+                sample = np.random.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
+                statecombos = [statecombos[i] for i in sample]
             self.faultmodes.update({'hmode_'+str(i):{'dist':0,'oppvect':[1], 'rcost':0, 'probtype':probtype, 'units':units} for i in range(len(statecombos))})
             self.mode_state_dict.update({'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
         else: raise Exception("Invalid mode elaboration approach")
@@ -531,7 +534,10 @@ class FxnBlock(Block):
             Copy of the given function with new flows
         """
         copy = self.__class__(self.name, newflows, *attr)  # Is this adequate? Wouldn't this give it new components?
+        
         copy.faults = self.faults.copy()
+        if hasattr(copy, 'faultmodes'):         copy.faultmodes = self.faultmodes
+        if hasattr(copy, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
         for state in self._initstates.keys():
             setattr(copy, state, getattr(self, state))
         if hasattr(self, 'time'): copy.time=self.time
@@ -684,6 +690,7 @@ class Model(object):
                            global phases {'phase': [starttime, endtime]}
                            times [starttime, ..., endtime] (middle time used for sampling), 
                            timestep (float) to run the model with)
+                           seed (int) - if present, sets a seed to run the  
             - valparams (`all`/`flows`/`fxns`/or dict of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
         """
         self.type='model'
@@ -698,6 +705,11 @@ class Model(object):
         self.times=modelparams.get('times',[1])
         self.tstep = modelparams.get('tstep', 1.0)
         self.units = modelparams.get('units', 'hr')
+        if modelparams.has('seed'): np.random.seed(modelparams['seed'])
+        else:                       
+                                    np.random.seed()
+                                    self.seed = np.random.get_state()[1][0]
+                                    self.modelparams['seed']=self.seed
         
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
