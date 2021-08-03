@@ -186,10 +186,13 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
     scen['properties']['type']='single fault'
     scen['properties']['function']=fxnname
     scen['properties']['fault']=faultmode
-    if mdl.fxns[fxnname].faultmodes[faultmode]['probtype']=='rate':
-        scen['properties']['rate']=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[faultmode]['units'], mdl.units)*(mdl.times[-1]-mdl.times[0]) # this rate is on a per-simulation basis
-    elif mdl.fxns[fxnname].faultmodes[faultmode]['probtype']=='prob':
-        scen['properties']['rate'] = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist']
+    if not mdl.fxns[fxnname].faultmodes.get(faultmode, False) or mdl.fxns[fxnname].faultmodes[faultmode]=='synth': 
+        scen['properties']['rate'] = 1/len(mdl.fxns[fxnname].faultmodes)
+    else:
+        if mdl.fxns[fxnname].faultmodes[faultmode].get('probtype', '')=='rate':
+            scen['properties']['rate']=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[faultmode]['units'], mdl.units)*(mdl.times[-1]-mdl.times[0]) # this rate is on a per-simulation basis
+        elif mdl.fxns[fxnname].faultmodes[faultmode].get('probtype','')=='prob':
+            scen['properties']['rate'] = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist'] 
     scen['properties']['time']=time
     
     faultmdlhist, _ = prop_one_scen(mdl, scen, track=track, staged=staged, prevhist=nommdlhist, track_times=track_times)
@@ -566,6 +569,7 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
+           if t in ctimes: c_mdl[t]=mdl.copy()
            if singletime:
                if t==scen['properties']['time']:    flowstates = propagate(mdl, scen['faults'], t, flowstates)
                else:                                flowstates = propagate(mdl,{},t, flowstates)
@@ -579,7 +583,6 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
                if t_ind%track_times[1]: update_mdlhist(mdl, mdlhist, t_ind//track_times[1]+shift, track=track)
            elif track_times[0]=='times':
                if t in track_times[1]: update_mdlhist(mdl, mdlhist, track_times[1].index(t), track=track)
-           if t in ctimes: c_mdl[t]=mdl.copy()
        except:
             print("Error at t="+str(t)+' in scenario '+str(scen))
             raise
