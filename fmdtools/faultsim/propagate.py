@@ -32,7 +32,7 @@ import tqdm
 
 ## FAULT PROPAGATION
 
-def nominal(mdl, track='all', gtype='bipartite', track_times="all"):
+def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True):
     """
     Runs the model over time in the nominal scenario.
 
@@ -52,6 +52,10 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all"):
             'all'--all simulated times
             ('interval', n)--includes every nth time in the history
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+    protect : bool
+        Whether or not to protect the model object via copying
+            True (default) - re-instances the model so that multiple simulations can be run successively without causing problems
+            False - Thus, the model object that is returned can be modified and analyzed if needed
     Returns
     -------
     endresults : Dict
@@ -61,7 +65,8 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all"):
     mdlhist : Dict
         A dictionary with a history of modelstates
     """
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+    if protect:
+        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     nomscen=construct_nomscen(mdl)
     scen=nomscen.copy()
     mdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False, track_times = track_times)
@@ -73,7 +78,7 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all"):
     endclass=mdl.find_classification(scen, {'nominal': mdlhist, 'faulty':mdlhist})
     endresults={'faults': endfaults, 'classification':endclass}
     
-    mdl.reset()
+    if protect: mdl.reset()
     return endresults, resgraph, mdlhist
 
 def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, track_times="all"):
@@ -126,7 +131,7 @@ def exec_nom_helper(arg):
     endclass=arg[0].find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
     return endclass, mdlhist
 
-def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'bipartite', track_times="all"):
+def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'bipartite', track_times="all", protect=True):
     """
     Runs one fault in the model at a specified time.
 
@@ -154,6 +159,10 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
             'all'--all simulated times
             ('interval', n)--includes every nth time in the history
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+    protect : bool
+        Whether or not to protect the model object via copying
+            True (default) - re-instances the model so that multiple simulations can be run successively without causing problems
+            False - Thus, the model object that is returned can be modified and analyzed if needed
     Returns
     -------
     endresults : dict
@@ -164,7 +173,8 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
         A dictionary of the states of the model of each fault scenario over time.
     """
     #run model nominally, get relevant results
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+    if protect:
+        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     nomscen=construct_nomscen(mdl)
     if staged:
         nommdlhist, mdls = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes=[time], track_times=track_times)
@@ -207,10 +217,10 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
     
     endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
     
-    mdl.reset()
+    if protect: mdl.reset()
     return endresults,resgraph, mdlhists
 
-def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track_times="all"):
+def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track_times="all", protect=True):
     """
     Runs one fault in the model at a specified time.
 
@@ -234,6 +244,10 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
             'all'--all simulated times
             ('interval', n)--includes every nth time in the history
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+    protect : bool
+        Whether or not to protect the model object via copying
+            True (default) - re-instances the model so that multiple simulations can be run successively without causing problems
+            False - Thus, the model object that is returned can be modified and analyzed if needed
     Returns
     -------
     endresults : dict
@@ -245,7 +259,8 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
 
     """
     #run model nominally, get relevant results
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+    if protect:
+        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     nomscen=construct_nomscen(mdl)
     
     nommdlhist, _ = prop_one_scen(mdl, nomscen, track=track, staged=False, track_times=track_times)
@@ -273,12 +288,11 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
     endclass=mdl.find_classification(scen, mdlhists)
     resgraph = proc.resultsgraph(faultresgraph, nomresgraph, gtype=gtype) 
     
-    endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
-    
-    mdl.reset()
+    endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass} 
+    if protect: mdl.reset()
     return endresults,resgraph, mdlhists
 
-def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True, track_times="all"):
+def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True):
     """
     Creates and propagates a list of failure scenarios in a model.
     
@@ -310,6 +324,10 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
             'all'--all simulated times
             ('interval', n)--includes every nth time in the history
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+    protect : bool
+        Whether or not to protect the model object via copying
+            True (default) - re-instances the model (safe)
+            False - model is not re-instantiated (unsafe--do not use model afterwards)
 
     Returns
     -------
@@ -318,11 +336,10 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-
+    if protect:
+        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     scenlist=list_init_faults(mdl)
-    #run model nominally, get relevant results
     nomscen=construct_nomscen(mdl)
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     if staged:
         nomhist, c_mdl = prop_one_scen(mdl, nomscen, track=track, ctimes=mdl.times, track_times=track_times)
     else:
@@ -348,7 +365,7 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
             
     return endclasses, mdlhists
 
-def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True, track_times="all"):
+def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -377,6 +394,10 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
             'all'--all simulated times
             ('interval', n)--includes every nth time in the history
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+    protect : bool
+        Whether or not to protect the model object via copying
+            True (default) - re-instances the model (safe)
+            False - model is not re-instantiated (unsafe--do not use model afterwards)
     Returns
     -------
     endclasses : dict
@@ -384,7 +405,8 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+    if protect:
+        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
     if staged:
         nomhist, c_mdl = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times, track_times=track_times)
     else:
