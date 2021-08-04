@@ -5,7 +5,7 @@
 
 fmdtools (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
 
-This release is version 0.7.3.
+This release is version 0.7.4.
 
 [![DOI](https://zenodo.org/badge/212862445.svg)](https://zenodo.org/badge/latestdoi/212862445)
 
@@ -60,6 +60,7 @@ These packages are optional but reccomended:
 - `pyvis`				(for interactive html views of model graphs)
 - `ffmpeg` 				(for animations)
 - `shapely`				(for multirotor model)
+- `pycallgraph` 		(for model profiling)
 
 These must be installed (e.g. using `pip install packagename` or `conda install packagename`) them before running any of the codes in the repository. 
 
