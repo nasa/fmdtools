@@ -304,7 +304,7 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
         edges = g.edges
         #handles faults
         labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        faultlabels_form = {node:'\n\n '+str(fault) for node,fault in faultlabels.items() if fault!={'nom'}}
         #handles heatmap and highlight
         if highlight != []:
             faultnodes = highlight[0]
@@ -340,7 +340,7 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
                 faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
                 faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
         #handles heatmap and highlight
-        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        faultlabels_form = {node:'\n\n '+str(fault) for node,fault in faultlabels.items() if fault!={'nom'}}
         colors_dict = gv_colors(g, gtype, colors=colors, heatmap=heatmap, cmap=cmap, faultnodes=faultnodes, degradednodes=degradednodes, faultedges=faultflows, edgeflows=edgeflows)
         dot = Graph(comment="model network", graph_attr=kwargs)
         dot = plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
@@ -841,7 +841,7 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
         nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_color = colors[2], node_size=nodesize*1.2)
         nx.draw_networkx_nodes(g, pos, nodelist=degnodes,node_color = colors[1], node_size=nodesize)
     if showfaultlabels:
-        faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+        faultlabels_form = {node:'\n\n '+str(fault) for node,fault in faultlabels.items() if fault!={'nom'}}
         nx.draw_networkx_labels(g, pos, labels=faultlabels_form, font_size=font_size, font_color='k')
     plt.axis('off')
     return plt.gcf(), plt.gca()
@@ -1078,7 +1078,7 @@ def plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[],
         elif n in faultfxns: node_color[n]=colors[2]
         else:               node_color[n]=colors[0]
         if showfaultlabels and faultlabels.get(n,False):
-            labels[n]=labels[n]+' \n'+' '.join([f for f in faultlabels[n] if f!='nom'])
+            labels[n]=labels[n]+' \n'+''.join([f for f in faultlabels[n] if f!='nom'])
     gra = Graph(g, node_layout=pos, node_label_fontdict={'size':scale*8, 'fontweight':'bold'}, node_size=scale*10, node_edge_width=scale,\
                 node_shape = node_shape, node_color = node_color, node_edge_color = node_edge_color, node_labels=labels,  node_zorder=2, arrows=arrows)
     return plt.gcf(), plt.gca(), gra
