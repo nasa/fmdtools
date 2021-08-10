@@ -137,6 +137,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
             for var in nomhist:
                 if fxnflowvals: #if in the list of values
                     if var not in fxnflowvals[fxnflow]: continue
+                if var=='faults': continue 
                 plt.subplot(int(np.ceil((num_plots)/cols)),cols,n, label=fxnflow+var)
                 n+=1
                 if 'faulty' in mdlhists:

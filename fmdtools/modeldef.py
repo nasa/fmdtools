@@ -148,7 +148,9 @@ class Block(Common):
         self.faultmodes= getattr(self, 'faultmodes', {})
         self.time=0.0
     def __repr__(self):
-        return self.name+' '+self.__class__.__name__+' '+self.type+': '+str(self.return_states())
+        if hasattr(self,'name'):
+            return getattr(self, 'name', '')+' '+self.__class__.__name__+' '+getattr(self,'type', '')+': '+str(self.return_states())
+        else: return 'New uninitialized '+self.__class__.__name__
     def add_params(self, *params):
         """Adds given dictionary(s) of parameters to the function/block.
         e.g. self.add_params({'x':1,'y':1}) results in a block where:
@@ -156,7 +158,94 @@ class Block(Common):
         """
         for param in params:
             for attr, val in param.items():
-                setattr(self, attr, val) 
+                setattr(self, attr, val)
+    def assoc_healthstates(self, hstates, mode_app='single-state', probtype='prob', units='hr'):
+        """
+        Adds health state attributes to the model (and a mode approach if desired). 
+        
+        Parameters
+        ----------
+        hstates : Dict
+            Health states to incorporate in the model and their respective values. 
+            e.g., {'state':[1,{0,2,-1}]}, {'state':{0,2,-1}}
+        mode_app : str
+            type of modes to elaborate from the given health states.
+        """
+        if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
+        hranges = dict.fromkeys(hstates.keys())
+        nom_hstates = {}
+        for state in hstates:
+            self._states.append(state)
+            if type(hstates[state]) in [set, np.ndarray]:               
+                nom_hstates[state] = 1.0
+                hranges[state]=set(hstates[state])
+            elif  type(hstates[state])==list:           
+                nom_hstates[state] = hstates[state][0]
+                hranges[state]=set(hstates[state][1]) 
+            elif type(hstates[state]) in [float, int]:  
+                nom_hstates[state] = hstates[state]
+                hranges[state]={}
+            else: raise Exception("Invalid input option for health state")
+            setattr(self, state, nom_hstates[state])
+            self._initstates.update(nom_hstates)
+        self.assoc_healthstate_modes(hranges=hranges, mode_app=mode_app, probtype=probtype, units=units)
+    def assoc_healthstate_modes(self, hranges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='none'):
+        """
+        Associates modes with given healthstates.
+
+        Parameters
+        ----------
+        hranges : dict, optional
+            Dictionary of form {'state':{val1, val2...}) of ranges for each health state (if used to generate modes). The default is {}.
+        mode_app : str
+            type of modes to elaborate from the given health states.
+        manual_modes : dict, optional
+            Dictionary/Set of faultmodes with structure, which has the form:
+                - dict {'fault1': [atts], 'fault2': atts}, where atts may be of form:
+                    - states: {state1: val1, state2, val2}    
+                    - [states, faultattributes], where faultattributes is the same as in assoc_modes
+        probtype : str, optional
+            Type of probability in the probability model, a per-time 'rate' or per-run 'prob'. 
+            The default is 'rate'
+        units : str, optional
+            Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr' 
+        """
+        if not getattr(self, 'is_copy', False):
+            if not getattr(self, 'faultmodes', []): self.faultmodes = dict()
+            if not getattr(self, 'mode_state_dict', False): self.mode_state_dict = {}
+            nom_hstates = {state: self._initstates[state] for state in hranges}
+            if mode_app=='none': a=0
+            elif mode_app=='single-state':
+                for state in hranges:
+                    modes = {state+'_'+str(value):'synth' for value in hranges[state]}
+                    modestates = {state+'_'+str(value): {state:value} for value in hranges[state]}
+                    self.faultmodes.update(modes)
+                    self.mode_state_dict.update(modestates)
+            elif mode_app =='all' or type(mode_app)==int:
+                for state in hranges: hranges[state].add(nom_hstates[state])
+                nomvals = tuple([*nom_hstates.values()])
+                statecombos = [i for i in itertools.product(*hranges.values()) if i!=nomvals]
+                if type(mode_app)==int: 
+                    sample = np.random.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
+                    statecombos = [statecombos[i] for i in sample]
+                self.faultmodes.update({'hmode_'+str(i):'synth' for i in range(len(statecombos))}) 
+                self.mode_state_dict.update({'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
+            else: raise Exception("Invalid mode elaboration approach")
+            num_synth_modes = len(self.mode_state_dict)
+            for mode,atts in manual_modes.items():
+                if type(atts)==list:
+                    self.mode_state_dict.update({mode:atts[0]})
+                    if not getattr(self, 'exclusive_faultmodes', False): print("Changing fault mode exclusivity to True")
+                    self.assoc_modes(faultmodes={mode:atts[1]}, initmode=getattr(self,'mode', 'nom'), probtype=probtype, proptype=probtype, exclusive=True, key_phases_by=key_phases_by)
+                elif  type(atts)==dict:
+                    self.mode_state_dict.update({mode:atts})
+                    self.faultmodes.update({mode:'synth'})
+                    num_synth_modes+=1
+        if not hasattr(self,'key_phases_by'): self.key_phases_by=key_phases_by
+        elif getattr(self, 'key_phases_by', '')!=key_phases_by: 
+            print("Changing key_phases_by to "+key_phases_by)
+            self.key_phases_by=key_phases_by
+            
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
@@ -215,37 +304,38 @@ class Block(Common):
                 self.mode = initmode
             else: raise Exception("Initial mode "+initmode+" not in defined modes for "+self.name)
         self.exclusive_faultmodes = exclusive
-        if not getattr(self, 'faultmodes', []): 
-            if name: self.faultmodes=dict()
-            else:    self.faultmodes=dict.fromkeys(faultmodes)
-        for mode in faultmodes:
-            self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
-            self.faultmodes[name+mode]['probtype'] = probtype
-            self.faultmodes[name+mode]['units'] = units
-            if type(faultmodes) == set: # minimum information - here the faultmodes are only a set of labels
-                self.faultmodes[name+mode]['dist'] =     1.0/len(faultmodes)
-                self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                self.faultmodes[name+mode]['rcost'] =    0.0
-            elif type(faultmodes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
-                self.faultmodes[name+mode]['dist'] =     faultmodes[mode]
-                self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                self.faultmodes[name+mode]['rcost'] =    0.0
-            elif len(faultmodes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
-                self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
-                self.faultmodes[name+mode]['oppvect'] =  faultmodes[mode][1]
-                self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][2]
-                if key_phases_by =='none': raise Exception("How should the opportunity vector be keyed? Provide 'key_phases_by' option.")
-            elif len(faultmodes[mode]) == 2:  # dist, repair costs
-                self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
-                self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][1]
-            elif len(faultmodes[mode]) == 1:  # dist only
-                self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
-                self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                self.faultmodes[name+mode]['rcost'] =    0.0
-            else:
-                raise Exception("Invalid mode definition")
-            self.faultmodes[name+mode]['longname'] = longnames.get(mode,mode)
+        if not getattr(self, 'is_copy', False): #saves time by using the same fault mode dictionary from previous
+            if not getattr(self, 'faultmodes', []): 
+                if name: self.faultmodes=dict()
+                else:    self.faultmodes=dict.fromkeys(faultmodes)
+            for mode in faultmodes:
+                self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
+                self.faultmodes[name+mode]['probtype'] = probtype
+                self.faultmodes[name+mode]['units'] = units
+                if type(faultmodes) == set: # minimum information - here the faultmodes are only a set of labels
+                    self.faultmodes[name+mode]['dist'] =     1.0/len(faultmodes)
+                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                    self.faultmodes[name+mode]['rcost'] =    0.0
+                elif type(faultmodes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
+                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode]
+                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                    self.faultmodes[name+mode]['rcost'] =    0.0
+                elif len(faultmodes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
+                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
+                    self.faultmodes[name+mode]['oppvect'] =  faultmodes[mode][1]
+                    self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][2]
+                    if key_phases_by =='none': raise Exception("How should the opportunity vector be keyed? Provide 'key_phases_by' option.")
+                elif len(faultmodes[mode]) == 2:  # dist, repair costs
+                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
+                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                    self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][1]
+                elif len(faultmodes[mode]) == 1:  # dist only
+                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
+                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
+                    self.faultmodes[name+mode]['rcost'] =    0.0
+                else:
+                    raise Exception("Invalid mode definition")
+                self.faultmodes[name+mode]['longname'] = longnames.get(mode,mode)
         if key_phases_by=='self':   self.key_phases_by = self.name
         else:                       self.key_phases_by = key_phases_by
     def set_mode(self, mode):
@@ -445,13 +535,25 @@ class FxnBlock(Block):
         copy : FxnBlock
             Copy of the given function with new flows
         """
-        copy = self.__class__(self.name, newflows, *attr)  # Is this adequate? Wouldn't this give it new components?
+        copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
+        copy.is_copy=True
+        copy.__init__(self.name, newflows, *attr)
         copy.faults = self.faults.copy()
+        if hasattr(self, 'faultmodes'):         copy.faultmodes = self.faultmodes
+        if hasattr(self, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
         for state in self._initstates.keys():
             setattr(copy, state, getattr(self, state))
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
+    def update_modestates(self):
+        num_update = 0
+        for fault in self.faults:
+            if fault in self.mode_state_dict:
+                for state, value in self.mode_state_dict[fault].items():
+                    setattr(self, state, value)
+                num_update+=1
+                if num_update > 1: raise Exception("Exclusive fault mode scenarios present at the same time")
     def updatefxn(self,proptype, faults=[], time=0):
         """
         Updates the state of the function at a given time and injects faults.
@@ -465,6 +567,7 @@ class FxnBlock(Block):
         """
         self.add_faults(faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
+        if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
         if self.components:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
@@ -473,8 +576,8 @@ class FxnBlock(Block):
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
         elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: self.dynamic_behavior(time)
         elif proptype=='reset':                                                             
-            if hasattr(self,'static_behavior'):  self.static_behavior
-            if hasattr(self,'dynamic_behavior'): self.dynamic_behavior
+            if hasattr(self,'static_behavior'):  self.static_behavior(time)
+            if hasattr(self,'dynamic_behavior'): self.dynamic_behavior(time)
         if self.components:     # propogate faults from component level to function level
             for compname, comp in self.components.items():
                 self.faults.update(comp.faults) 
@@ -534,7 +637,9 @@ class Flow(Common):
         for state in self._states:
             setattr(self, state, states[state])
     def __repr__(self):
-        return self.name+' '+self.type+' flow: '+str(self.status())
+        if hasattr(self,'name'):    
+            return getattr(self, 'name')+' '+getattr(self, 'type')+' flow: '+str(self.status())
+        else: return "Uninitialized Flow"
     def reset(self):
         """ Resets the flow to the initial state"""
         for state in self._initstates:
@@ -590,6 +695,7 @@ class Model(object):
                            global phases {'phase': [starttime, endtime]}
                            times [starttime, ..., endtime] (middle time used for sampling), 
                            timestep (float) to run the model with)
+                           seed (int) - if present, sets a seed to run the  
             - valparams (`all`/`flows`/`fxns`/or dict of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
         """
         self.type='model'
@@ -604,6 +710,13 @@ class Model(object):
         self.times=modelparams.get('times',[1])
         self.tstep = modelparams.get('tstep', 1.0)
         self.units = modelparams.get('units', 'hr')
+        if modelparams.get('seed', False):  
+            np.random.seed(modelparams['seed'])
+            self.seed=self.modelparams['seed']
+        else:                               
+            np.random.seed()
+            self.seed = np.random.get_state()[1][0]
+            modelparams['seed']=self.seed
         
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
@@ -635,12 +748,13 @@ class Model(object):
             If a set of attribute names is provided, each will be given a value of 1
             If an empty set is given, it will be represented w- {flowname: 1}
         """
-        if not flowtype: flowtype = flowname
-        if not flowdict:                self.flows[flowname]=Flow({flowname:1}, flowname, flowtype)
-        elif type(flowdict) == set:     self.flows[flowname]=Flow({f:1 for f in flowdict}, flowname, flowtype)
-        elif type(flowdict) == dict:    self.flows[flowname]=Flow(flowdict, flowname,flowtype)
-        elif isinstance(flowdict, Flow):self.flows[flowname] = flowdict
-        else: raise Exception('Invalid flow. Must be dict or flow')
+        if not getattr(self, 'is_copy', False):
+            if not flowtype: flowtype = flowname
+            if not flowdict:                self.flows[flowname]=Flow({flowname:1}, flowname, flowtype)
+            elif type(flowdict) == set:     self.flows[flowname]=Flow({f:1 for f in flowdict}, flowname, flowtype)
+            elif type(flowdict) == dict:    self.flows[flowname]=Flow(flowdict, flowname,flowtype)
+            elif isinstance(flowdict, Flow):self.flows[flowname] = flowdict
+            else: raise Exception('Invalid flow. Must be dict or flow')
     def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None'):
         """
         Instantiates a given function in the model.
@@ -656,17 +770,18 @@ class Model(object):
         fparams : arbitrary float, dict, list, etc.
             Other parameters to send to the __init__ method of the function class
         """
-        flows=self.get_flows(flownames)
-        if fparams=='None':
-            self.fxns[name]=fclass(name, flows)
-            self._fxninput[name]={'name':name,'flows': flownames, 'fparams': 'None'}
-        else: 
-            self.fxns[name]=fclass(name, flows,fparams)
-            self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams}
-        for flowname in flownames:
-            self._fxnflows.append((name, flowname))
-        self.functionorder.update([name])
-        self.fxns[name].tstep=self.tstep
+        if not getattr(self, 'is_copy', False):
+            flows=self.get_flows(flownames)
+            if fparams=='None':
+                self.fxns[name]=fclass(name, flows)
+                self._fxninput[name]={'name':name,'flows': flownames, 'fparams': 'None'}
+            else: 
+                self.fxns[name]=fclass(name, flows,fparams)
+                self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams}
+            for flowname in flownames:
+                self._fxnflows.append((name, flowname))
+            self.functionorder.update([name])
+            self.fxns[name].tstep=self.tstep
     def set_functionorder(self,functionorder):
         """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
         if not self.functionorder.difference(functionorder): self.functionorder=OrderedSet(functionorder)
@@ -706,11 +821,12 @@ class Model(object):
         bipartite_pos : dict, optional
             position of bipartite graph nodes. The default is {}.
         """
-        if functionorder: self.set_functionorder(functionorder)
-        self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False)])
-        self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'dynamic_behavior', False)])
-        self.construct_graph(graph_pos, bipartite_pos)
-        self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.bipartite.neighbors(flow)])]
+        if not getattr(self, 'is_copy', False):
+            if functionorder: self.set_functionorder(functionorder)
+            self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False)])
+            self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'dynamic_behavior', False)])
+            self.construct_graph(graph_pos, bipartite_pos)
+            self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.bipartite.neighbors(flow)])]
     def construct_graph(self, graph_pos={}, bipartite_pos={}):
         """
         Creates and returns a graph representation of the model
@@ -880,7 +996,9 @@ class Model(object):
         copy : Model
             Copy of the curent model.
         """
-        copy = self.__class__(params=getattr(self, 'params', {}),modelparams=getattr(self, 'modelparams', {}),valparams=getattr(self, 'valparams', {}))
+        copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
+        copy.is_copy=True
+        copy.__init__(params=getattr(self, 'params', {}),modelparams=getattr(self, 'modelparams', {}),valparams=getattr(self, 'valparams', {}))
         for flowname, flow in self.flows.items():
             copy.flows[flowname]=flow.copy()
         for fxnname, fxn in self.fxns.items():
@@ -889,7 +1007,12 @@ class Model(object):
             flows = copy.get_flows(flownames)
             if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows)
             else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams)
+            copy.fxns[fxnname].tstep=self.tstep
+        copy._fxninput=self._fxninput
+        copy._fxnflows=self._fxnflows
+        copy.is_copy=False
         copy.build_model(functionorder = self.functionorder, graph_pos=self.graph_pos, bipartite_pos=self.bipartite_pos)
+        copy.is_copy=True
         return copy
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
@@ -1060,8 +1183,8 @@ class SampleApproach():
         ----------
         mdl : Model
             Model to sample.
-        faults : str (all/single-component) or list, optional
-            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'. 'single-components' uses faults from a single component to represent faults form all components
+        faults : str (all/single-component/function of interest) or list, optional
+            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'. 'single-components' uses faults from a single component to represent faults form all components while passing the function name only inludes modes from that function
         phases: dict or 'global'
             Local phases in the model to sample. Has structure:
                 {'Function':{'phase':[starttime, endtime]}}
@@ -1120,7 +1243,8 @@ class SampleApproach():
             self.fxnrates=dict.fromkeys(mdl.fxns)
             for fxnname, fxn in  mdl.fxns.items():
                 for mode, params in fxn.faultmodes.items():
-                    self._fxnmodes[fxnname, mode]=params
+                    if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
+                    else:               self._fxnmodes[fxnname, mode] = params
                 self.fxnrates[fxnname]=fxn.failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
         elif faults=='single-component':
@@ -1131,18 +1255,24 @@ class SampleApproach():
                     for mode, params in fxn.faultmodes.items():
                         comp = fxn.compfaultmodes.get(mode, 'fxn')
                         if comp==firstcomp or comp=='fxn':
-                            self._fxnmodes[fxnname, mode]=params
+                            if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
+                            else:               self._fxnmodes[fxnname, mode] = params
                     self.fxnrates[fxnname]=fxn.failrate
                     self.comprates[fxnname] = {firstcomp: sum([comp.failrate for compname, comp in fxn.components.items()])}
                 else:
                     for mode, params in fxn.faultmodes.items():
-                        self._fxnmodes[fxnname, mode]=params
+                        if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
+                        else:               self._fxnmodes[fxnname, mode] = params
                     self.fxnrates[fxnname]=fxn.failrate
                     self.comprates[fxnname] = {}
         else:
+            if type(faults)==str:
+                faults = [(faults, mode) for mode in mdl.fxns[faults].faultmodes]
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
             for fxnname, mode in faults: 
-                self._fxnmodes[fxnname, mode]=mdl.fxns[fxnname].faultmodes[mode]
+                params = mdl.fxns[fxnname].faultmodes[mode]
+                if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(faults),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
+                else:               self._fxnmodes[fxnname, mode] = params
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components.items()}
         if type(jointfaults['faults'])==int:
@@ -1176,12 +1306,13 @@ class SampleApproach():
                 oppvect = {phase:0 for phase in fxnphases}
                 oppvect.update({phase:modevect.get(mode, 0)/len(phases)  for mode,phases in modephases[key_phases].items() for phase in phases})
             else:
+                a=1
                 if type(self._fxnmodes[fxnname, mode]['oppvect'])==dict: 
                     oppvect = {phase:0 for phase in fxnphases}
                     oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
                 else:
                     oppvect = self._fxnmodes[fxnname, mode]['oppvect']
-                    if len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
+                    if type(oppvect)==int or len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
                     elif len(oppvect)!=len(fxnphases): raise Exception("Invalid Opportunity vector: "+fxnname+". Invalid length.")
                     else: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(fxnphases)}
             for phase, times in fxnphases.items():
