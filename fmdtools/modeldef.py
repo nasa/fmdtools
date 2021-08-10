@@ -1103,7 +1103,9 @@ class SampleApproach():
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
         if phases=='global':        self.globalphases = mdl.phases; self.phases = {}; self.modephases = modephases
         elif type(phases)==list:    self.globalphases = {ph:mdl.phases[ph] for ph in phases}; self.phases = {}; self.modephases = modephases
-        elif type(phases)==dict:    self.globalphases = mdl.phases; self.phases = phases; self.modephases = modephases
+        elif type(phases)==dict:    
+            if type(tuple(phases.values())[0][0]) in [int, float]:  self.globalphases = phases; self.phases ={}; self.modephases = modephases
+            else:                                               self.globalphases = mdl.phases; self.phases = phases; self.modephases = modephases
         self.tstep = mdl.tstep
         self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)
