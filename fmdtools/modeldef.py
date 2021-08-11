@@ -437,9 +437,9 @@ class FxnBlock(Block):
     timers : set
         names of timers to be used in the function (if any)
     tstep : float
-        timestep of the model in the function (added in model definition)
+        timestep of the model in the function (added/overridden by model definition)
     """
-    def __init__(self,name, flows, flownames=[], states={}, components={},timers={}):
+    def __init__(self,name, flows, flownames=[], states={}, components={},timers={}, tstep=1.0):
         """
         Intances the function superclass with the relevant parameters.
 
@@ -473,6 +473,7 @@ class FxnBlock(Block):
         self.timers = timers
         for timername in timers:
             setattr(self, timername, Timer(timername))
+        self.tstep=tstep
         super().__init__(states)
     def make_flowdict(self,flownames,flows):
         """
