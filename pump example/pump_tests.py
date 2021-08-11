@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Aug 10 15:44:32 2021
+Below demonstrates simple unit-tests of model constructs in fmdtools using Python's built-in unitttest module.
 
-@author: dhulse
+The use-cases shown are:
+    -Testing function initialization (test_initialization)
+    -Testing single-timestep function behavior (ImportEE)
+    -Testing multi-timestep function behavior (test_condfaults_dynamic)
+    
 """
 
 import sys
