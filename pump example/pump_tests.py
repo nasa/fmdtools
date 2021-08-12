@@ -6,7 +6,7 @@ The use-cases shown are:
     -Testing function initialization (test_initialization)
     -Testing single-timestep function behavior (ImportEE)
     -Testing multi-timestep function behavior (test_condfaults_dynamic)
-    
+    -Testing a model
 """
 
 import sys
@@ -80,8 +80,10 @@ class MoveWat_Tests(unittest.TestCase):
         self.assertIn('short', self.Move_Wat.faultmodes)
         self.assertEqual(self.Move_Wat.eff, 1.0)
     def test_nom(self):
-        self.Move_Wat.behavior(1)
+        self.Move_Wat.behavior(1.0)
         self.assertEqual(self.Move_Wat.EEin.current, 1.0)
+        self.Move_Wat.behavior(1.0)
+        self.assertEqual(self.Move_Wat.EEin.current, 10.0)
         self.assertEqual(self.Move_Wat.Watin.pressure, 10)
         self.assertEqual(self.Move_Wat.Watin.flowrate, 0.3)
     def test_condfaults_dynamic(self):
@@ -97,6 +99,71 @@ class MoveWat_Tests(unittest.TestCase):
         self.assertEqual(self.EE_1.current, 0.2)
         self.assertEqual(self.Wat_2.flowrate, 0.0)
         self.assertEqual(self.Wat_1.flowrate, 0.0)
+
+class Integration_Tests(unittest.TestCase):
+    """Tests the integrated simulation of components"""
+    def setUp(self):
+        self.mdl=Pump()
+    def test_nominal_results(self):
+        """Tests the output of the model when integrated in the nominal scenario"""
+        endresults, resgraph, mdlhist=propagate.nominal(self.mdl, protect=False)
+        modes, modeprops = self.mdl.return_faultmodes()
+        self.assertFalse(modes) # does it have any fault modes in the nominal scenario?
+        for t in range(1,self.mdl.times[-1]): # are the values of the function/flow states what we wanted?
+            if t<5 or t>=50:
+                self.assertEqual(mdlhist['flows']['Sig_1']['power'][t], 0.0)
+                self.assertEqual(mdlhist['flows']['EE_1']['current'][t], 0.0)
+                self.assertEqual(mdlhist['flows']['Wat_1']['flowrate'][t], 0.0)
+                self.assertEqual(mdlhist['flows']['Wat_2']['flowrate'][t], 0.0)
+            else:
+                self.assertEqual(mdlhist['flows']['Sig_1']['power'][t], 1.0)
+                self.assertEqual(mdlhist['flows']['EE_1']['current'][t], 10.0)
+                self.assertEqual(mdlhist['flows']['Wat_1']['flowrate'][t], 0.3)
+                self.assertEqual(mdlhist['flows']['Wat_2']['flowrate'][t], 0.3)
+            self.assertEqual(mdlhist['flows']['EE_1']['voltage'][t], 500.0)
+            self.assertEqual(mdlhist['functions']['MoveWater']['eff'][t], 1.0)
+    def test_blockage_results(self):
+        """Tests the output of the model when integrated in a faulty scenario"""
+        endresults, resgraph, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=10)
+        self.assertIn('MoveWater', endresults['faults'])
+        self.assertIn('ExportWater', endresults['faults'])
+        for t in range(1,self.mdl.times[-1]): # are the values of the function/flow states what we wanted?
+            if t<5 or t>=50:
+                self.assertEqual(mdlhist['faulty']['flows']['Sig_1']['power'][t], 0.0)
+                self.assertEqual(mdlhist['faulty']['flows']['EE_1']['current'][t], 0.0)
+                self.assertEqual(mdlhist['faulty']['flows']['Wat_1']['flowrate'][t], 0.0)
+                self.assertEqual(mdlhist['faulty']['flows']['Wat_2']['flowrate'][t], 0.0)
+            elif t<10: # should see faulty behavior at t=10
+                self.assertEqual(mdlhist['faulty']['flows']['Sig_1']['power'][t], 1.0)
+                self.assertEqual(mdlhist['faulty']['flows']['EE_1']['current'][t], 10.0)
+                self.assertEqual(mdlhist['faulty']['flows']['Wat_1']['flowrate'][t], 0.3)
+                self.assertEqual(mdlhist['faulty']['flows']['Wat_2']['flowrate'][t], 0.3)
+                self.assertEqual(mdlhist['faulty']['functions']['MoveWater']['eff'][t], 1.0)
+            elif t<=20: #at t=20, the conditional damage occurs (depending on the delay)
+                self.assertEqual(mdlhist['faulty']['flows']['Sig_1']['power'][t], 1.0)
+                self.assertEqual(mdlhist['faulty']['flows']['EE_1']['current'][t], 13.0)
+                self.assertEqual(mdlhist['faulty']['flows']['Wat_1']['flowrate'][t], 0.003)
+                self.assertEqual(mdlhist['faulty']['flows']['Wat_2']['flowrate'][t], 0.003)
+                self.assertTrue(mdlhist['faulty']['functions']['ExportWater']['faults']['block'][t])
+            else:
+                self.assertEqual(mdlhist['faulty']['functions']['MoveWater']['eff'][t], 0.0)
+                self.assertTrue(mdlhist['faulty']['functions']['MoveWater']['faults']['mech_break'][t])
+                self.assertTrue(mdlhist['faulty']['functions']['ExportWater']['faults']['block'][t])
+                self.assertEqual(mdlhist['faulty']['flows']['EE_1']['current'][t], 0.2)
+                self.assertEqual(mdlhist['faulty']['flows']['Wat_1']['flowrate'][t], 0.0)
+                self.assertEqual(mdlhist['faulty']['flows']['Wat_2']['flowrate'][t], 0.0)
+
+            self.assertEqual(mdlhist['faulty']['flows']['EE_1']['voltage'][t], 500.0)
+    def test_blockage_static(self):
+        """Checks state of the model itself at a particular time-step. Useful when the model has states which are not recorded."""
+        for t in range(0, 10): propagate.propagate(self.mdl, {}, t)     #simulate time up until t=10
+        
+        propagate.propagate(self.mdl, {'MoveWater': 'mech_break'}, 10)  #instantiate fault at time
+        self.assertTrue(self.mdl.fxns['MoveWater'].has_fault('mech_break'))         #check model properties
+        self.assertEqual(self.mdl.flows['EE_1'].current, 0.2)
+        self.assertEqual(self.mdl.flows['Wat_1'].flowrate, 0.0)
+        self.assertEqual(self.mdl.flows['Wat_2'].flowrate, 0.0)
+                
         
 
 if __name__ == '__main__':
