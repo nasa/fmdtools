@@ -101,7 +101,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
     else: mdlhists=mdlhist
     times = mdlhists["nominal"]["time"]
-    if 'fautly' in mdlhist: f_times = mdlhists["faulty"]["time"]
+    if 'faulty' in mdlhist: f_times = mdlhists["faulty"]["time"]
     
     unitdict = dict(enumerate(units))
 
@@ -142,7 +142,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
                 plt.subplot(int(np.ceil((num_plots)/cols)),cols,n, label=fxnflow+var)
                 n+=1
                 if 'faulty' in mdlhists:
-                    a, = plt.plot(times[:len(hist[var])], hist[var], color='r')
+                    a, = plt.plot(f_times[:len(hist[var])], hist[var], color='r')
                     c = plt.axvline(x=time, color='k')
                     b, =plt.plot(times, nomhist[var], ls='--', color='b')
                 else:
