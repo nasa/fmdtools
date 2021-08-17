@@ -187,7 +187,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
         mdl.reset()
         mdl = mdls[time]
     else:
-        nommdlhist, _, t_end, t_end_nom = prop_one_scen(mdl, nomscen, track=track, staged=staged, track_times=track_times)
+        nommdlhist, _, t_end_nom = prop_one_scen(mdl, nomscen, track=track, staged=staged, track_times=track_times)
         nomresgraph = mdl.return_stategraph(gtype)
         endfaults, endfaultprops = mdl.return_faultmodes()
         if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
@@ -621,6 +621,7 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
             print("Error at t="+str(t)+' in scenario '+str(scen))
             raise
             break
+    if None in c_mdl.values(): raise Exception("Approach times"+str(ctimes)+" go beyond simulation time "+str(t))
     return mdlhist, c_mdl, t_ind+shift
 
 def propagate(mdl, initfaults, time, flowstates={}):

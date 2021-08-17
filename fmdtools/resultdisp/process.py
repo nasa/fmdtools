@@ -33,6 +33,7 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 from ordered_set import OrderedSet
+from fmdtools.faultsim.propagate import cut_mdlhist
 
 def hists(mdlhists, returndiff=True):
     """
@@ -116,6 +117,10 @@ def hist(mdlhist, nomhist={}, returndiff=True):
         A dict with all degraded functions and degraded flows.
     """
     if nomhist: mdlhist={'nominal':nomhist, 'faulty':mdlhist}
+    if len(mdlhist['faulty']['time']) != len(mdlhist['nominal']['time']): 
+           print("Faulty and nominal scenarios have different simulation times--cutting comparison to shared range.")
+           mdlhist['nominal'] = cut_mdlhist(mdlhist['nominal'], len(mdlhist['faulty']['time'])-1)
+           mdlhist['faulty'] = cut_mdlhist(mdlhist['faulty'], len(mdlhist['nominal']['time'])-1)
     reshist = {}
     reshist['time'] = mdlhist['nominal']['time']
     reshist['flowvals'], reshist['flows'], degflows, numdegflows, flowdiff = flowhist(mdlhist, returndiff=returndiff)
