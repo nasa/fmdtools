@@ -605,6 +605,10 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
                if t_ind%track_times[1]: update_mdlhist(mdl, mdlhist, t_ind//track_times[1]+shift, track=track)
            elif track_times[0]=='times':
                if t in track_times[1]: update_mdlhist(mdl, mdlhist, track_times[1].index(t), track=track)
+           if hasattr(mdl, 'end_condition'):
+               if mdl.end_condition(t):
+                   mdl = cut_mdlhist(mdlhist, t_ind+shift)
+                   break
        except:
             print("Error at t="+str(t)+' in scenario '+str(scen))
             raise
@@ -707,7 +711,7 @@ def update_mdlhist(mdl, mdlhist, t_ind, track = 'all'):
         or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
         The default is 'all'.
     """
-    if track == 'valparams':        track = mdl.valparams
+    if track == 'valparams':  track = mdl.valparams
     if  'flows' in track:     update_flowhist(mdl, mdlhist, t_ind)
     if 'functions' in track:  update_fxnhist(mdl, mdlhist, t_ind)
     if track == 'all':      
@@ -742,7 +746,22 @@ def update_fxnhist(mdl, mdlhist, t_ind):
                 mdlhist["functions"][fxnname][state][t_ind] = value
                 if not np.can_cast(type(value), type(mdlhist["functions"][fxnname][state][t_ind])):
                     raise Exception(str(fxnname)+" state "+str(state)+" changed type: "+str(type(mdlhist["functions"][fxnname][state][t_ind]))+" to "+str(type(value))+" at t_ind="+str(t_ind))
-            
+
+def cut_mdlhist(mdlhist, ind):
+    """Cuts unsimulated values from end of array"""
+    mdlhist['time'] = mdlhist['time'][:ind+1]
+    if 'flows' in mdlhist:
+        for flow, values in mdlhist['flows'].items():
+            for value, array in values.items():
+                mdlhist['flows'][flow][value] = array[:ind+1]
+    if 'functions' in mdlhist:
+        for fxnname, atts in mdlhist['functions'].items():
+            for att, array in atts.items():
+                if type(array)==np.ndarray: mdlhist['functions'][fxnname][att] = array[:ind+1]
+                else:
+                    for fault, arr in array.items():
+                        mdlhist['functions'][fxnname][att][fault] = arr[:ind+1]
+    return mdlhist 
 
 def init_mdlhist(mdl, timerange, track = 'all'):
     """
