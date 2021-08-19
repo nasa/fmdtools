@@ -189,7 +189,7 @@ class Block(Common):
             setattr(self, state, nom_hstates[state])
             self._initstates.update(nom_hstates)
         self.assoc_healthstate_modes(hranges=hranges, mode_app=mode_app, probtype=probtype, units=units)
-    def assoc_healthstate_modes(self, hranges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='none'):
+    def assoc_healthstate_modes(self, hranges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='global'):
         """
         Associates modes with given healthstates.
 
@@ -261,7 +261,7 @@ class Block(Common):
         if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
         elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
         self.failrate = gtp*EPC_f
-    def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False, key_phases_by='none', longnames={}):
+    def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False, key_phases_by='global', longnames={}):
         """
         Associates fault and operational modes with the block when called in the function or component.
 
@@ -292,7 +292,7 @@ class Block(Common):
         exclusive : True/False
             Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present). 
         key_phases_by : 'self'/'none'/'global'/'fxnname'
-            Phases to key the faultmodes by (using local, global, or an external function's modes'). Default is 'none'
+            Phases to key the faultmodes by (using local, global, or an external function's modes'). Default is 'global'
         longnames : dict
             Longer names for the faults (if desired). {faultname: longname}
         """
