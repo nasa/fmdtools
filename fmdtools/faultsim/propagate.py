@@ -614,7 +614,7 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
                if t_ind%track_times[1]: update_mdlhist(mdl, mdlhist, t_ind//track_times[1]+shift, track=track)
            elif track_times[0]=='times':
                if t in track_times[1]: update_mdlhist(mdl, mdlhist, track_times[1].index(t), track=track)
-           if hasattr(mdl, 'end_condition'):
+           if (mdl.use_end_condition and hasattr(mdl, 'end_condition')):
                if mdl.end_condition(t):
                    break
        except:
