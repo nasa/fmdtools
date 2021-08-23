@@ -696,7 +696,8 @@ class Model(object):
                            global phases {'phase': [starttime, endtime]}
                            times [starttime, ..., endtime] (middle time used for sampling), 
                            timestep (float) to run the model with)
-                           seed (int) - if present, sets a seed to run the  
+                           seed (int) - if present, sets a seed to run the random number generators from
+                           use_end_condition (bool) - if True (default), uses end_condition() in the model to determine when the simulation ends.
             - valparams (`all`/`flows`/`fxns`/or dict of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
         """
         self.type='model'
@@ -711,6 +712,7 @@ class Model(object):
         self.times=modelparams.get('times',[1])
         self.tstep = modelparams.get('tstep', 1.0)
         self.units = modelparams.get('units', 'hr')
+        self.use_end_condition = modelparams.get('use_end_condition', True)
         if modelparams.get('seed', False):  
             np.random.seed(modelparams['seed'])
             self.seed=self.modelparams['seed']
