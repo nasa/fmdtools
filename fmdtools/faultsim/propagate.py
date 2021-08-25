@@ -124,7 +124,7 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
             mdl = mdl.__class__(params=scen['properties']['params'], modelparams = mdl.modelparams, valparams=mdl.valparams)
             mdlhists[scenname], _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times)
-            mdlhist = cut_mdlhist(mdlhists[scenname], t_end)
+            _ = cut_mdlhist(mdlhists[scenname], t_end)
             endfaults, endfaultprops = mdl.return_faultmodes()
             endclasses[scenname]=mdl.find_classification(scen, {'nominal': mdlhists[scenname], 'faulty':mdlhists[scenname]})
     return endclasses, mdlhists
