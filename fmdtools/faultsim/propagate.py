@@ -29,6 +29,7 @@ import numpy as np
 import copy
 import fmdtools.resultdisp.process as proc
 import tqdm
+from fmdtools.modeldef import SampleApproach
 
 ## FAULT PROPAGATION
 
@@ -491,9 +492,11 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
         mdl = mdl.__class__(params=scen['properties']['params'], modelparams = mdl.modelparams, valparams=mdl.valparams)
         if get_phases:
             nomhist, _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times)
-            phases, modephases = rd.process.modephases(nomhist)
-            if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
-            elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
+            if get_phases=='global':      phases={'global':[0,t_end]}
+            else:
+                phases, modephases = proc.modephases(nomhist)
+                if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
+                elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
             app_args.update({'phases':phases})
         
         app = SampleApproach(mdl,**app_args)
