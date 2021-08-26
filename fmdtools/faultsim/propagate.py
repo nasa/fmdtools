@@ -441,6 +441,65 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
     return endclasses, mdlhists
 
+def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, showprogress=True, pool=False, track_times="all", **app_args):
+    """
+    Simulates a set of fault modes within a set of nominal scenarios defined by a nominal approach.
+
+    Parameters
+    ----------
+    mdl : Model
+        Model Object to use in the simulation.
+    nomapp : NominalApproach
+        NominalApproach defining the nominal situations the model will be run over
+    staged : bool, optional
+        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
+    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
+        Which model states to track over time, which can be given as 'functions', 'flows', 
+        'all', 'none', 'valparams' (model states specified in mdl.valparams),
+        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
+    get_phases : Bool/List/Dict, optional
+        Whether and how to use nominal simulation phases to set up the SampleApproach. The default is False.
+        - If True, all phases from the nominal simulation are passed to SampleApproach()
+        - If a list ['Fxn1', 'Fxn2' etc.], only the phases from the listed functions will be passed.
+        - If a dict {'Fxn1':'phase1'}, only the phase 'phase1' in the function 'Fxn1' will be passed.
+    pool : process pool, optional
+        Process Pool Object from multiprocessing or pathos packages. Pathos is recommended.
+        e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
+        or parallelpool = ProcessPool(nodes=n) for n cores (pathos)
+        If False, the set of scenarios is run serially. The default is False
+    showprogress: bool, optional
+        whether to show a progress bar during execution. default is true
+    track_times : str/tuple
+        Defines what times to include in the history. Options are:
+            'all'--all simulated times
+            ('interval', n)--includes every nth time in the history
+            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+    **app_args : kwargs
+        Keyword arguments for the SampleApproach. See modeldef.SampleApproach documentation.
+
+    Returns
+    -------
+    endclasses : dict
+        A nested dictionary with the rate, cost, and expected cost of each scenario run with structure {'nomscen1':endclasses, 'nomscen2':mdlhists}
+    mdlhists : dict
+        A nested dictionary with the history of all model states for each scenario with structure {'nomscen1':mdlhists, 'nomscen2':mdlhists}
+    """
+    mdlhists = dict.fromkeys(nomapp.scenarios)
+    endclasses = dict.fromkeys(nomapp.scenarios)
+    for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
+        mdl = mdl.__class__(params=scen['properties']['params'], modelparams = mdl.modelparams, valparams=mdl.valparams)
+        if get_phases:
+            nomhist, _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times)
+            phases, modephases = rd.process.modephases(nomhist)
+            if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
+            elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
+            app_args.update({'phases':phases})
+        
+        app = SampleApproach(mdl,**app_args)
+        mdlhists[scenname], endclasses[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times)
+    return endclasses, mdlhists
+
 def exec_scen_par(args):
     return exec_scen(args[0], args[1], args[2], args[3], track=args[4], staged=args[5], track_times=args[6])
 def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True, track_times="all"):

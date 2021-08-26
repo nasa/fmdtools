@@ -1295,7 +1295,7 @@ class SampleApproach():
             key_phases = mdl.fxns[fxnname].key_phases_by
             if key_phases=='global': fxnphases = self.globalphases
             elif key_phases=='none': fxnphases = {'operating':[mdl.times[0], mdl.times[-1]]} 
-            else: fxnphases = self.phases[key_phases]
+            else: fxnphases = self.phases.get(key_phases, self.globalphases)
             fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))
             self.rates[fxnname, mode]=dict(); self.rates_timeless[fxnname, mode]=dict(); self.mode_phase_map[fxnname, mode] = dict()
             overallrate = self.fxnrates[fxnname]
