@@ -1054,6 +1054,32 @@ class NominalApproach():
         self.scenarios = {}
         self.num_scenarios = 0
         self.ranges = {}
+    def add_param_replicates(self,paramfunc, rep_id, num_replicates, *args, **kwargs):
+        """
+        Adds a set of repeated scenarios to the approach. For use in (external) random scenario generation.
+
+        Parameters
+        ----------
+        paramfunc : method
+            Python method which generates a set of model parameters given the input arguments.
+            method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
+        rep_id : str
+            Name for the set of replicates
+        num_replicates : int
+            Number of replicates to use
+        *args : any
+            arguments to send to paramfunc
+        """
+        self.ranges[rep_id] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : num_replicates}
+        for i in range(num_replicates):
+            self.num_scenarios+=1
+            params = paramfunc(*args, **kwargs)
+            scenname = rep_id+'_'+str(self.num_scenarios)
+            self.scenarios[scenname]={'faults':{},\
+                                      'properties':{'type':'nominal','time':0.0, 'name':scenname,\
+                                                    'params':params,'inputparams':kwargs,\
+                                                    'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/num_replicates}}
+            self.ranges[rep_id]['scenarios'].append(scenname)
     def add_param_ranges(self,paramfunc, rangeid, *fixedargs, **inputranges):
         """
         Adds a set of scenarios to the approach.
