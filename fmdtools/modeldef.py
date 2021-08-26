@@ -1268,9 +1268,20 @@ class SampleApproach():
                         else:               self._fxnmodes[fxnname, mode] = params
                     self.fxnrates[fxnname]=fxn.failrate
                     self.comprates[fxnname] = {}
+        elif faults=='single-function':
+            fxnclasses = mdl.fxnclasses();
+            fxns_for_class = {f:mdl.fxns_of_class(f) for f in fxnclasses} 
+            fxns_to_use = {list(fxns)[0]: len(fxns) for f, fxns in fxns_for_class.items()}
+            self.fxnrates=dict.fromkeys(fxns_to_use)
+            for fxnname in fxns_to_use:
+                fxn = mdl.fxns[fxnname]
+                for mode, params in fxn.faultmodes.items():
+                    if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
+                    else:               self._fxnmodes[fxnname, mode] = params
+                self.fxnrates[fxnname]=fxn.failrate * fxns_to_use[fxnname]
+                self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
         else:
-            if type(faults)==str:
-                faults = [(faults, mode) for mode in mdl.fxns[faults].faultmodes]
+            if type(faults)==str:   faults = [(faults, mode) for mode in mdl.fxns[faults].faultmodes]
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
             for fxnname, mode in faults: 
                 params = mdl.fxns[fxnname].faultmodes[mode]
