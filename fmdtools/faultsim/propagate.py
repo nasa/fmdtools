@@ -421,12 +421,11 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
         nomhist, c_mdl, t_end_nom = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, track_times=track_times)
     nomresgraph = mdl.return_stategraph()
     endfaults, endfaultprops = mdl.return_faultmodes()
+    endclass_nominal=mdl.find_classification(construct_nomscen(mdl), {'nominal': nomhist, 'faulty':nomhist})
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     mdl.reset()
     
-    endclasses = {}
-    mdlhists = {}
-    mdlhists['nominal'] = nomhist
+    endclasses, mdlhists = {}, {}
     scenlist = app.scenlist
     if pool:
         if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged, track_times) for scen in scenlist]
@@ -440,6 +439,7 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
             else: endclasses[scen['properties']['name']],mdlhist, t_end = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged, track_times = track_times)
             mdlhists[scen['properties']['name']] = cut_mdlhist(mdlhist, t_end)
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
+    endclasses['nominal'] = endclass_nominal
     return endclasses, mdlhists
 
 def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, showprogress=True, pool=False, track_times="all", **app_args):
