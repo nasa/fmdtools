@@ -1098,6 +1098,7 @@ class NominalApproach():
             Ranges for each input argument to be iterated over specified as input = (start, end, step)
             (note that end is not inclusive)
         """
+        inputranges.update({k:(v,v+1,1) for k,v in inputranges.items() if type(v) in {int, float}})
         ranges = (np.arange(*arg) for k,arg in inputranges.items())
         fullspace = [x for x in itertools.product(*ranges)]
         inputnames = list(inputranges.keys())
