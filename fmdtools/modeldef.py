@@ -1080,7 +1080,7 @@ class NominalApproach():
                                                     'params':params,'inputparams':kwargs,\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/num_replicates}}
             self.ranges[rep_id]['scenarios'].append(scenname)
-    def add_param_ranges(self,paramfunc, rangeid, *fixedargs, **inputranges):
+    def add_param_ranges(self,paramfunc, rangeid, *args, **kwargs):
         """
         Adds a set of scenarios to the approach.
 
@@ -1091,27 +1091,28 @@ class NominalApproach():
             method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
         rangeid : str
             Name for the range being used. Default is 'nominal'
-        *fixedargs : any
-            Fixed positional arguments in the parameter generator function. 
-            Useful for discrete modes with different parameters.
-        **inputranges : key=tuple
-            Ranges for each input argument to be iterated over specified as input = (start, end, step)
-            (note that end is not inclusive)
+        *args: specifies values for positional args of paramfunc.
+            May be given as a fixed float/int/dict/str defining a set value for positional arguments
+        **kwargs : specifies range for keyword args of paramfunc
+            May be given as a fixed float/int/dict/str (k=value) defining a set value for the range (if not the default) or
+            as a tuple k=(start, end, step)
         """
-        inputranges.update({k:(v,v+1,1) for k,v in inputranges.items() if type(v) in {int, float}})
+        inputranges = {ind:rangespec for ind,rangespec in enumerate(args) if type(rangespec)==tuple}
+        fixedkwargs = {k:v for k,v in kwargs.items() if type(v)!=tuple}
+        inputranges = {k:v for k,v in kwargs.items() if type(v)==tuple}
         ranges = (np.arange(*arg) for k,arg in inputranges.items())
         fullspace = [x for x in itertools.product(*ranges)]
         inputnames = list(inputranges.keys())
-        self.ranges[rangeid] = {'fixedargs':fixedargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace)}
+        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace)}
         for xvals in fullspace:
             self.num_scenarios+=1
-            inputparams = {name:xvals[i] for i,name in enumerate(inputnames)}
-            params = paramfunc(*fixedargs, **inputparams)
+            inputparams = {**{name:xvals[i] for i,name in enumerate(inputnames)}, **fixedkwargs}
+            params = paramfunc(*args, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'faults':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname,\
                                                     'params':params,'inputparams':inputparams,\
-                                                    'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':1/len(fullspace)}}
+                                                    'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/len(fullspace)}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def assoc_probs(self, rangeid, prob_weight=1.0, **inputpdfs):
         """
