@@ -464,5 +464,16 @@ def state_probabilities(endclasses):
     for classif in classifications:
         probabilities[classif] = sum([props['prob'] for k,props in endclasses.items() if classif==props['classification']])
     return probabilities
-    
+def expected(endclasses, metric):
+    """Calculates the expected value of a given metric in endclasses using the rate variable in endclasses"""
+    return sum([e[metric]*e['rate'] for k,e in endclasses.items() if not np.isnan(e[metric])])
+def average(endclasses, metric):
+    """Calculates the average value of a given metric in endclasses"""
+    return sum([e[metric] for k,e in endclasses.items() if not np.isnan(e[metric])])/len(endclasses)
+def percent(endclasses, metric):
+    """Calculates the percentage of a given indicator variable being True in endclasses"""
+    return sum([int(bool(e[metric])) for k,e in endclasses.items() if not np.isnan(e[metric])])/len(endclasses)
+def rate(endclasses, metric):
+     """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
+     return sum([int(bool(e[metric]))*e['rate'] for k,e in endclasses.items() if not np.isnan(e[metric])])
     
