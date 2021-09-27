@@ -28,6 +28,7 @@ Also used for FMEA-like tables:
 """
 import pandas as pd
 import numpy as np
+from fmdtools.resultdisp.process import expected, average, percent, rate
 
 #makehisttable
 # put history in a tabular format
@@ -151,7 +152,106 @@ def maptab(mapping):
     """Makes table of a generic map"""
     table = pd.DataFrame(mapping)
     return table.transpose()
-    
+
+def nominal_test(nomapp, endclasses, metrics='all', inputparams='from_range', scenarios='all'):
+    """
+    Makes a table of quantities of interest from endclasses.
+
+    Parameters
+    ----------
+    nomapp : NominalApproach
+        NominalApproach used to generate the simulation.
+    endclasses : dict
+        End-state classifcations for the set of simulations from propagate.nominalapproach()
+    metrics : 'all'/list, optional
+        Metrics to show on the plot. The default is 'all'.
+    inputparams : 'from_range'/'all',list, optional
+        Parameters to show on the plot. The default is 'from_range'.
+    scenarios : 'all','range'/list, optional
+        Scenarios to include in the plot. 'range' is a given range_id in the nominalapproach.
+    Returns
+    -------
+    table : pandas DataFrame
+        Table with the metrics of interest layed out over the input parameters for the set of scenarios in endclasses
+    """
+    if metrics=='all':              metrics = [*endclasses[[*endclasses][0]]]
+    if scenarios=='all':            scens = [*endclasses]
+    elif type(scenarios)==str:      scens = nomapp.ranges[scenarios]['scenarios']
+    elif not type(scenarios)==list: raise Exception("Invalid option for scenarios. Provide 'all'/'rangeid' or list")
+    else:                           scens = scenarios
+    if inputparams=='from_range': 
+        ranges=[*nomapp.ranges]
+        if not(scenarios=='all') and not(type(scenarios)==list):    app_range= scenarios
+        elif len(ranges)==1:                                        app_range=ranges[0]
+        else: raise Exception("Multiple approach ranges "+str(ranges)+" in approach. Use inputparams=`all` or inputparams=[param1, param2,...]")
+        inputparams= [*nomapp.ranges[app_range]['inputranges']]
+    elif inputparams=='all':    inputparams=[*nomapp.scenarios.values()][0]['properties']['inputparams']
+    elif inputparams=='none':   inputparams=[]
+    table_values=[]
+    for inputparam in inputparams:
+        table_values.append([nomapp.scenarios[e]['properties']['inputparams'][inputparam] for e in scens])
+    for metric in metrics:
+        table_values.append([endclasses[e][metric] for e in scens])
+    table = pd.DataFrame(table_values, columns=[*endclasses], index=inputparams+metrics)
+    return table
+
+def nested_test(nomapp, endclasses, percent_metrics=[], rate_metrics=[], average_metrics=[], expected_metrics=[], inputparams='from_range', scenarios='all'):
+    """
+    Makes a table of quantities of interest from endclasses.
+
+    Parameters
+    ----------
+    nomapp : NominalApproach
+        NominalApproach used to generate the simulation.
+    endclasses : dict
+        End-state classifcations for the set of simulations from propagate.nested_approach()
+    percent_metrics : list
+        List of metrics to calculate a percent of (e.g. use with an indicator variable like failure=1/0 or True/False)
+    rate_metrics : list
+        List of metrics to calculate the probability of using the rate variable in endclasses
+    average_metrics : list
+        List of metrics to calculate an average of (e.g., use for float values like speed=25)
+    expected_metrics : list
+        List of metrics to calculate the expected value of using the rate variable in endclasses
+    inputparams : 'from_range'/'all',list, optional
+        Parameters to show on the table. The default is 'from_range'.
+    scenarios : 'all','range'/list, optional
+        Scenarios to include in the table. 'range' is a given range_id in the nominalapproach.
+    Returns
+    -------
+    table : pandas DataFrame
+        Table with the averages/percentages of interest layed out over the input parameters for the set of scenarios in endclasses
+    """
+    if scenarios=='all':            scens = [*endclasses]
+    elif type(scenarios)==str:      scens = nomapp.ranges[scenarios]['scenarios']
+    elif not type(scenarios)==list: raise Exception("Invalid option for scenarios. Provide 'all'/'rangeid' or list")
+    else:                           scens = scenarios
+    if inputparams=='from_range': 
+        ranges=[*nomapp.ranges]
+        if not(scenarios=='all') and not(type(scenarios)==list):    app_range= scenarios
+        elif len(ranges)==1:                                        app_range=ranges[0]
+        else: raise Exception("Multiple approach ranges "+str(ranges)+" in approach. Use inputparams=`all` or inputparams=[param1, param2,...]")
+        inputparams= [*nomapp.ranges[app_range]['inputranges']]
+    elif inputparams=='all':
+        inputparams=[*nomapp.scenarios.values()][0]['properties']['inputparams']
+    table_values=[]; table_rows = inputparams
+    for inputparam in inputparams:
+        table_values.append([nomapp.scenarios[e]['properties']['inputparams'][inputparam] for e in scens])
+    for metric in percent_metrics:  
+        table_values.append([percent(endclasses[e], metric) for e in scens])
+        table_rows.append('perc_'+metric)
+    for metric in rate_metrics:     
+        table_values.append([rate(endclasses[e], metric) for e in scens])
+        table_rows.append('rate_'+metric)
+    for metric in average_metrics:  
+        table_values.append([average(endclasses[e], metric) for e in scens])
+        table_rows.append('ave_'+metric)
+    for metric in expected_metrics: 
+        table_values.append([expected(endclasses[e], metric) for e in scens])
+        table_rows.append('exp_'+metric)
+    table = pd.DataFrame(table_values, columns=[*endclasses], index=table_rows)
+    return table
+
 ##FMEA-like tables
 def simplefmea(endclasses):
     """Makes a simple fmea (rate, cost, expected cost) of the endclasses of a list of fault scenarios run"""
