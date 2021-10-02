@@ -1103,7 +1103,7 @@ class NominalApproach():
         ranges = (np.arange(*arg) for k,arg in inputranges.items())
         fullspace = [x for x in itertools.product(*ranges)]
         inputnames = list(inputranges.keys())
-        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace)}
+        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}}
         for xvals in fullspace:
             self.num_scenarios+=1
             inputparams = {**{name:xvals[i] for i,name in enumerate(inputnames)}, **fixedkwargs}
@@ -1114,6 +1114,7 @@ class NominalApproach():
                                                     'params':params,'inputparams':inputparams,\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/len(fullspace)}}
             self.ranges[rangeid]['scenarios'].append(scenname)
+            self.ranges[rangeid]['levels'][xvals]=scenname
     def assoc_probs(self, rangeid, prob_weight=1.0, **inputpdfs):
         """
         Associates a probability model (assuming variable independence) with a 
@@ -1173,7 +1174,6 @@ class NominalApproach():
                                                     'params':params,'inputparams':inputparams,\
                                                     'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/num_pts}}
             self.ranges[rangeid]['scenarios'].append(scenname)
-            
 
 class SampleApproach():
     """
