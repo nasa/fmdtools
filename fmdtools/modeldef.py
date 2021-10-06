@@ -1080,7 +1080,7 @@ class NominalApproach():
                                                     'params':params,'inputparams':kwargs,\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/num_replicates}}
             self.ranges[rep_id]['scenarios'].append(scenname)
-    def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seed=None, **kwargs):
+    def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds=None, **kwargs):
         """
         Adds a set of scenarios to the approach.
 
@@ -1105,16 +1105,16 @@ class NominalApproach():
         ranges = (np.arange(*arg) for k,arg in inputranges.items())
         fullspace = [x for x in itertools.product(*ranges)]
         inputnames = list(inputranges.keys())       
-        np.random.seed(seed)                     
+        if seeds==None: seeds = np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)               
         
-        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}, 'seed':np.random.get_state()[1][0]}
+        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}, 'replicates':replicates}
         for xvals in fullspace:
-            np.random.seed(self.ranges[rangeid]['seed'])
             inputparams = {**{name:xvals[i] for i,name in enumerate(inputnames)}, **fixedkwargs}
-            params = paramfunc(*args, **inputparams)
             if replicates>1:    self.ranges[rangeid]['levels'][xvals]=[]
             for i in range(replicates):
+                np.random.seed(seeds[i])
                 self.num_scenarios+=1
+                params = paramfunc(*args, **inputparams)
                 scenname = rangeid+'_'+str(self.num_scenarios)
                 self.scenarios[scenname]={'faults':{},\
                                           'properties':{'type':'nominal','time':0.0, 'name':scenname,\
