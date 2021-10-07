@@ -12,6 +12,7 @@ import dill
 import pickle
 import networkx as nx
 from ordered_set import OrderedSet
+from operator import itemgetter
 
 # MAJOR CLASSES
 
@@ -1080,6 +1081,38 @@ class NominalApproach():
                                                     'params':params,'inputparams':kwargs,\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/num_replicates}}
             self.ranges[rep_id]['scenarios'].append(scenname)
+    def get_param_scens(self, rangeid, *level_params):
+        """
+        Returns the scenarios of a range associated with given parameter ranges
+
+        Parameters
+        ----------
+        rangeid : str
+            Range id to check
+        level_params : str (multiple)
+            Level parameters iterate over
+
+        Returns
+        -------
+        param_scens : dict
+            The scenarios associated with each level of parameter (or joint parameters)
+        """
+        inputranges = {param:self.ranges[rangeid]['inputranges'][param] for param in level_params}
+        if len(inputranges)>1:  
+            ranges = (np.arange(*arg) for k,arg in inputranges.items())
+            partialspace = [x for x in itertools.product(*ranges)]
+        else:
+            partialspace = [x for x in np.arange(*[*inputranges.values()][0])]
+        param_scens = {p:set() for p in partialspace}
+        full_indices = list(self.ranges[rangeid]['inputranges'].keys())
+        inds = [full_indices.index(param) for param in level_params]
+        
+        for xvals, scenarios in self.ranges[rangeid]['levels'].items():
+            new_index = itemgetter(*inds)(xvals)
+            param_scens[new_index].update(scenarios)
+        return param_scens
+            
+        return param_scens
     def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds=None, **kwargs):
         """
         Adds a set of scenarios to the approach.
