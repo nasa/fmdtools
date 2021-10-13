@@ -1109,6 +1109,7 @@ class NominalApproach():
         
         for xvals, scenarios in self.ranges[rangeid]['levels'].items():
             new_index = itemgetter(*inds)(xvals)
+            if type(scenarios)==str: scenarios = [scenarios]
             param_scens[new_index].update(scenarios)
         return param_scens
             
