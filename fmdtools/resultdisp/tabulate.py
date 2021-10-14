@@ -234,26 +234,28 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
     if rangeid=='default':
         if len(nomapp.ranges.keys())==1: rangeid=[*nomapp.ranges.keys()][0]
         else:   raise Exception("More than one range in approach--please provide rangid in: "+str(nomapp.ranges.keys()))
-    if faults=='functions':     faults = set([e.partition(' ')[0] for scen in endclasses for e in endclasses[scen]])
-    elif faults=='modes':       faults = set([e.partition(',')[0] for scen in endclasses for e in endclasses[scen]])
+    if faults=='functions':     faultlist = set([e.partition(' ')[0] for scen in endclasses for e in endclasses[scen]])
+    elif faults=='modes':       faultlist = set([e.partition(',')[0] for scen in endclasses for e in endclasses[scen]])
     elif type(faults) ==str: raise Exception("Invalid faults option: "+faults)
-    faults.remove('nominal')
+    else:                       faultlist=faults
+    if 'nominal' in faultlist: faultlist.remove('nominal')
     
     factors = nomapp.get_param_scens(rangeid, *params)
     full_stats=[]
     for factor, scens in factors.items():
         endclass_fact = {scen:endclass for scen, endclass in endclasses.items() if scen in scens}
-        ec_metrics = overall_diff(endclass_fact, value, nan_as=nan_as, as_bool=percent, no_diff=not difference)
+        ec_metrics = overall_diff(endclass_fact, value, nan_as=nan_as, as_ind=percent, no_diff=not difference)
 
         if not percent: nominal_metrics = [nan_to_x(res_scens['nominal'][value], nan_as) for res_scens in endclass_fact.values()]
-        else:           nominal_metrics = [bool(nan_to_x(res_scens['nominal'][value], nan_as)) for res_scens in endclass_fact.values()]
+        else:           nominal_metrics = [np.sign(nan_to_x(res_scens['nominal'][value], nan_as)) for res_scens in endclass_fact.values()]
         factor_stats=[sum(nominal_metrics)/len(nominal_metrics)]
-        for fault in faults:
-            fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen]
+        for fault in faultlist:
+            if faults=='functions':   fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(' ')[0]]
+            else:                       fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(',')[0]]
             if len(fault_metrics)>0:    factor_stats.append(sum(fault_metrics)/len(fault_metrics))
             else:                       factor_stats.append(np.NaN)
         full_stats.append(factor_stats)
-    table = pd.DataFrame(full_stats, columns=['nominal']+list(faults), index=factors)
+    table = pd.DataFrame(full_stats, columns=['nominal']+list(faultlist), index=factors)
     table.columns.name=tuple(params)
     return table
         

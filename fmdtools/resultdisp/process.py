@@ -478,7 +478,7 @@ def percent(endclasses, metric):
     """Calculates the percentage of a given indicator variable being True in endclasses"""
     return sum([int(bool(e[metric])) for k,e in endclasses.items() if not np.isnan(e[metric])])/len(endclasses)
 
-def end_diff(endclasses, metric, nan_as=np.nan, as_bool=False, no_diff=False):
+def end_diff(endclasses, metric, nan_as=np.nan, as_ind=False, no_diff=False):
     """
     Calculates the difference between the nominal and fault scenarios for a set of endclasses
 
@@ -490,8 +490,8 @@ def end_diff(endclasses, metric, nan_as=np.nan, as_bool=False, no_diff=False):
         metric to calculate the difference of in the endclasses
     nan_as : float, optional
         How do deal with nans in the difference. The default is np.nan.
-    as_bool : bool, optional
-        Whether to return the difference as a boolean or real value. The default is False.
+    as_ind : bool, optional
+        Whether to return the difference as an indicator (1,-1,0) or real value. The default is False.
     no_diff : bool, optional
         Option for not computing the difference (but still performing the processing here). The default is False.
     Returns
@@ -501,12 +501,15 @@ def end_diff(endclasses, metric, nan_as=np.nan, as_bool=False, no_diff=False):
     """
     endclasses=endclasses.copy()
     nomendclass = endclasses.pop('nominal')
-    if not no_diff: difference = {scen:nan_to_x(nomendclass[metric], nan_as)-nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
-    else:           difference = {scen:nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
-    if as_bool: difference = {scen:bool(metric) for scen,metric in difference.items()}
+    if not no_diff: 
+        if as_ind:  difference = {scen:bool(nan_to_x(ec[metric], nan_as))-bool(nan_to_x(nomendclass[metric], nan_as)) for scen, ec in endclasses.items()}
+        else:       difference = {scen:nan_to_x(nomendclass[metric], nan_as)-nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
+    else:           
+        difference = {scen:nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
+        if as_ind: difference = {scen:np.sign(metric) for scen,metric in difference.items()}
     return difference
-def overall_diff(endclasses, metric, nan_as=np.nan, as_bool=False, no_diff=False):
-    return {scen:end_diff(endclass, metric, nan_as=nan_as, as_bool=as_bool, no_diff=no_diff) for scen, endclass in endclasses.items()}
+def overall_diff(endclasses, metric, nan_as=np.nan, as_ind=False, no_diff=False):
+    return {scen:end_diff(endclass, metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff) for scen, endclass in endclasses.items()}
 
 def rate(endclasses, metric):
      """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
