@@ -559,4 +559,17 @@ def costovertime(endclasses, app, costtype='expected cost'):
     plt.xlabel("Time ("+str(app.units)+")")
     plt.grid()
 
+def resilience_factor_test(difference_table, faults='all', difference=True):
+    if faults=='all': 
+        faults=[*difference_table.columns]
+        faults.remove('nominal')
+    for fault in faults:
+        plt.figure()
+        xs = np.array([ i for i in range(len(difference_table.index))])
+        plt.bar(xs,[*difference_table['nominal']], tick_label=[str(i) for i in difference_table.index], width=0.4, fill=False, hatch='//', edgecolor='grey', label='nominal')
+        plt.bar(xs,[*difference_table[fault]], tick_label=[str(i) for i in difference_table.index], width=0.4, alpha=0.75, label='fault scenarios')
+        plt.title(fault)
+        plt.legend()
+    
+
 

@@ -28,7 +28,7 @@ Also used for FMEA-like tables:
 """
 import pandas as pd
 import numpy as np
-from fmdtools.resultdisp.process import expected, average, percent, rate
+from fmdtools.resultdisp.process import expected, average, percent, rate, overall_diff, nan_to_x
 
 #makehisttable
 # put history in a tabular format
@@ -195,6 +195,31 @@ def nominal_test(nomapp, endclasses, metrics='all', inputparams='from_range', sc
     table = pd.DataFrame(table_values, columns=[*endclasses], index=inputparams+metrics)
     return table
 
+def resilience_factor_test(nomapp, endclasses, params, value, faults='functions', rangeid='default', nan_as=np.nan, percent=True, difference=True):
+    if rangeid=='default':
+        if len(nomapp.ranges.keys())==1: rangeid=[*nomapp.ranges.keys()][0]
+        else:   raise Exception("More than one range in approach--please provide rangid in: "+str(nomapp.ranges.keys()))
+    if faults=='functions':     faults = set([e.partition(' ')[0] for scen in endclasses for e in endclasses[scen]])
+    elif faults=='modes':       faults = set([e.partition(',')[0] for scen in endclasses for e in endclasses[scen]])
+    faults.remove('nominal')
+    
+    factors = nomapp.get_param_scens(rangeid, *params)
+    full_stats=[]
+    for factor, scens in factors.items():
+        endclass_fact = {scen:endclass for scen, endclass in endclasses.items() if scen in scens}
+        ec_metrics = overall_diff(endclass_fact, value, nan_as=nan_as, as_bool=percent, no_diff=not difference)
+
+        if not percent: nominal_metrics = [nan_to_x(res_scens['nominal'][value], nan_as) for res_scens in endclass_fact.values()]
+        else:           nominal_metrics = [bool(nan_to_x(res_scens['nominal'][value], nan_as)) for res_scens in endclass_fact.values()]
+        factor_stats=[sum(nominal_metrics)/len(nominal_metrics)]
+        for fault in faults:
+            fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen]
+            if len(fault_metrics)>0:    factor_stats.append(sum(fault_metrics)/len(fault_metrics))
+            else:                       factor_stats.append(np.NaN)
+        full_stats.append(factor_stats)
+    table = pd.DataFrame(full_stats, columns=['nominal']+list(faults), index=factors)
+    return table
+        
 def nested_test(nomapp, endclasses, percent_metrics=[], rate_metrics=[], average_metrics=[], expected_metrics=[], inputparams='from_range', scenarios='all'):
     """
     Makes a table of quantities of interest from endclasses.
