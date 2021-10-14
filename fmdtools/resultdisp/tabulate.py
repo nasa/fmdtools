@@ -254,6 +254,7 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
             else:                       factor_stats.append(np.NaN)
         full_stats.append(factor_stats)
     table = pd.DataFrame(full_stats, columns=['nominal']+list(faults), index=factors)
+    table.columns.name=tuple(params)
     return table
         
 def nested_test(nomapp, endclasses, percent_metrics=[], rate_metrics=[], average_metrics=[], expected_metrics=[], inputparams='from_range', scenarios='all'):

@@ -595,7 +595,7 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         faults.remove('nominal')
     columns = np.ceil(len(faults)/rows)
     n=0
-    if maxy=='max': comparison_table.max().max()
+    if maxy=='max': maxy = comparison_table.max().max()
     for fault in faults:
         n+=1
         ax = figure.add_subplot(rows, columns, n, label=str(n))
@@ -611,6 +611,8 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         else: 
             ax.set_ylabel('')
             ax.axes.yaxis.set_ticklabels([])
+        if (n-1) >= (rows-1)*columns: 
+            ax.set_xlabel(comparison_table.columns.name)
         if legend=='all': plt.legend()
         elif legend=='single' and n==1: plt.legend()
     figure.tight_layout(pad=0.3)
