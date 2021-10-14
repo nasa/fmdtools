@@ -559,17 +559,63 @@ def costovertime(endclasses, app, costtype='expected cost'):
     plt.xlabel("Time ("+str(app.units)+")")
     plt.grid()
 
-def resilience_factor_test(difference_table, faults='all', difference=True):
+def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False):
+    """
+    Plots a comparison_table from tabulate.resilience_factor_test as a bar plot for each fault scenario/set of fault scenarios.
+
+    Parameters
+    ----------
+    comparison_table : pandas table
+        Table from tabulate.resilience_factor_test with factors as rows and fault scenarios as columns
+    faults : list, optional
+        list of faults/fault types to include in the bar plot (the columns of the table). The default is 'all'.
+    rows : int, optional
+        Number of rows in the multplot. The default is 1.
+    stat : str, optional
+        Metric being presented in the table (for the y-axis). The default is 'proportion'.
+    figsize : tuple(int, int), optional
+        Size of the figure in (width, height). The default is (12,8).
+    title : string, optional
+        Overall title for the plots. The default is ''.
+    maxy : float, optional
+        Maximum y-value (to ensure same scale). The default is 'max' (finds max value of table).
+    legend : str, optional
+        'all'/'single'/'none'. The default is "single".
+    stack : bool, optional
+        Whether or not to stack the nominal and resilience plots. The default is False.
+
+    Returns
+    -------
+    figure: matplotlib figure
+        Plot handle of the figure.
+    """
+    figure = plt.figure(figsize=figsize)
     if faults=='all': 
-        faults=[*difference_table.columns]
+        faults=[*comparison_table.columns]
         faults.remove('nominal')
+    columns = np.ceil(len(faults)/rows)
+    n=0
+    if maxy=='max': comparison_table.max().max()
     for fault in faults:
-        plt.figure()
-        xs = np.array([ i for i in range(len(difference_table.index))])
-        plt.bar(xs,[*difference_table['nominal']], tick_label=[str(i) for i in difference_table.index], width=0.4, fill=False, hatch='//', edgecolor='grey', label='nominal')
-        plt.bar(xs,[*difference_table[fault]], tick_label=[str(i) for i in difference_table.index], width=0.4, alpha=0.75, label='fault scenarios')
+        n+=1
+        ax = figure.add_subplot(rows, columns, n, label=str(n))
+        ax.set_ylim(top=maxy)
+        xs = np.array([ i for i in range(len(comparison_table.index))])
+        plt.bar(xs,[*comparison_table['nominal']], tick_label=[str(i) for i in comparison_table.index], linewidth=4, fill=False, hatch='//', edgecolor='grey', label='nominal')
+        if stack:   plt.bar(xs,[*comparison_table[fault]], tick_label=[str(i) for i in comparison_table.index], alpha=0.75, linewidth=4, label='fault scenarios', bottom=[*comparison_table['nominal']])
+        else:       plt.bar(xs,[*comparison_table[fault]], tick_label=[str(i) for i in comparison_table.index], alpha=0.75, linewidth=4, label='fault scenarios')
         plt.title(fault)
-        plt.legend()
+        plt.grid(axis='y')
+        if not (n-1)%columns:    
+            ax.set_ylabel(stat)
+        else: 
+            ax.set_ylabel('')
+            ax.axes.yaxis.set_ticklabels([])
+        if legend=='all': plt.legend()
+        elif legend=='single' and n==1: plt.legend()
+    figure.tight_layout(pad=0.3)
+    figure.suptitle(title)
+    return figure
     
 
 
