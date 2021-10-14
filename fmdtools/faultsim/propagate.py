@@ -286,7 +286,7 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
     
     faultmdlhist, _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, prevhist=nommdlhist, track_times=track_times)
     faultmdlhist = cut_mdlhist(faultmdlhist, t_end)
-    nommdlhist = cut_mdlhist(mdlhist, t_end_nom)
+    nommdlhist = cut_mdlhist(nommdlhist, t_end_nom)
     faultresgraph = mdl.return_stategraph(gtype)
     
     #process model run
