@@ -195,12 +195,48 @@ def nominal_test(nomapp, endclasses, metrics='all', inputparams='from_range', sc
     table = pd.DataFrame(table_values, columns=[*endclasses], index=inputparams+metrics)
     return table
 
-def resilience_factor_test(nomapp, endclasses, params, value, faults='functions', rangeid='default', nan_as=np.nan, percent=True, difference=True):
+def resilience_factor_comparison(nomapp, endclasses, params, value, faults='functions', rangeid='default', nan_as=np.nan, percent=True, difference=True):
+    """
+    Compares a metric for a given set of model parameters/factors over a nested set of nominal and fault scenarios.
+
+    Parameters
+    ----------
+    nomapp : NominalApproach
+        Nominal Approach used to generate the simulations
+    endclasses : dict
+        dict of endclasses from propagate.nested_approach with structure: {scen_x:{fault:{metric1:x, metric2:x...}}}
+    params : list
+        List of parameters to use for the factor levels in the comparison
+    value : string
+        metric of the endclass (returned by mdl.find_classification) to use for the comparison.
+    faults : str/list, optional
+        Set of faults to run the comparison over
+            --'modes' (all fault modes),
+            --'functions' (modes for each function are grouped)
+            -- or a list of specific modes/functions. The default is 'functions'.
+    rangeid : str, optional
+        Nominal Approach range to use for the test (must be run over a single range). 
+        The default is 'default', which picks the only range (if there is only one).
+    nan_as : float, optional
+        Number to parse NaNs as (if present). The default is np.nan.
+    percent : bool, optional
+        Whether to compare metrics as bools (True - results in a comparison of percentages of indicator variables) 
+        or as averages (False - results in a comparison of average values of real valued variables). The default is True.
+    difference : bool, optional
+        Whether to tabulate the difference of the metric from the nominal over each scenario (True),
+        or the value of the metric over all (False). The default is True.
+
+    Returns
+    -------
+    table : pandas table
+        Table with the metric statistic (percent or average) over the nominal scenario and each listed function/mode (as differences or averages)
+    """
     if rangeid=='default':
         if len(nomapp.ranges.keys())==1: rangeid=[*nomapp.ranges.keys()][0]
         else:   raise Exception("More than one range in approach--please provide rangid in: "+str(nomapp.ranges.keys()))
     if faults=='functions':     faults = set([e.partition(' ')[0] for scen in endclasses for e in endclasses[scen]])
     elif faults=='modes':       faults = set([e.partition(',')[0] for scen in endclasses for e in endclasses[scen]])
+    elif type(faults) ==str: raise Exception("Invalid faults option: "+faults)
     faults.remove('nominal')
     
     factors = nomapp.get_param_scens(rangeid, *params)
