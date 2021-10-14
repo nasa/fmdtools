@@ -12,6 +12,7 @@ import dill
 import pickle
 import networkx as nx
 from ordered_set import OrderedSet
+from operator import itemgetter
 
 # MAJOR CLASSES
 
@@ -1080,7 +1081,40 @@ class NominalApproach():
                                                     'params':params,'inputparams':kwargs,\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/num_replicates}}
             self.ranges[rep_id]['scenarios'].append(scenname)
-    def add_param_ranges(self,paramfunc, rangeid, *args, **kwargs):
+    def get_param_scens(self, rangeid, *level_params):
+        """
+        Returns the scenarios of a range associated with given parameter ranges
+
+        Parameters
+        ----------
+        rangeid : str
+            Range id to check
+        level_params : str (multiple)
+            Level parameters iterate over
+
+        Returns
+        -------
+        param_scens : dict
+            The scenarios associated with each level of parameter (or joint parameters)
+        """
+        inputranges = {param:self.ranges[rangeid]['inputranges'][param] for param in level_params}
+        if len(inputranges)>1:  
+            ranges = (np.arange(*arg) for k,arg in inputranges.items())
+            partialspace = [x for x in itertools.product(*ranges)]
+        else:
+            partialspace = [x for x in np.arange(*[*inputranges.values()][0])]
+        param_scens = {p:set() for p in partialspace}
+        full_indices = list(self.ranges[rangeid]['inputranges'].keys())
+        inds = [full_indices.index(param) for param in level_params]
+        
+        for xvals, scenarios in self.ranges[rangeid]['levels'].items():
+            new_index = itemgetter(*inds)(xvals)
+            if type(scenarios)==str: scenarios = [scenarios]
+            param_scens[new_index].update(scenarios)
+        return param_scens
+            
+        return param_scens
+    def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds=None, **kwargs):
         """
         Adds a set of scenarios to the approach.
 
@@ -1091,6 +1125,8 @@ class NominalApproach():
             method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
         rangeid : str
             Name for the range being used. Default is 'nominal'
+        replicates : int
+            Number of points to take over each range (for random parameters). Default is 1.
         *args: specifies values for positional args of paramfunc.
             May be given as a fixed float/int/dict/str defining a set value for positional arguments
         **kwargs : specifies range for keyword args of paramfunc
@@ -1102,18 +1138,25 @@ class NominalApproach():
         inputranges = {k:v for k,v in kwargs.items() if type(v)==tuple}
         ranges = (np.arange(*arg) for k,arg in inputranges.items())
         fullspace = [x for x in itertools.product(*ranges)]
-        inputnames = list(inputranges.keys())
-        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace)}
+        inputnames = list(inputranges.keys())       
+        if seeds==None: seeds = np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)               
+        
+        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}, 'replicates':replicates}
         for xvals in fullspace:
-            self.num_scenarios+=1
             inputparams = {**{name:xvals[i] for i,name in enumerate(inputnames)}, **fixedkwargs}
-            params = paramfunc(*args, **inputparams)
-            scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname]={'faults':{},\
-                                      'properties':{'type':'nominal','time':0.0, 'name':scenname,\
-                                                    'params':params,'inputparams':inputparams,\
-                                                    'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/len(fullspace)}}
-            self.ranges[rangeid]['scenarios'].append(scenname)
+            if replicates>1:    self.ranges[rangeid]['levels'][xvals]=[]
+            for i in range(replicates):
+                np.random.seed(seeds[i])
+                self.num_scenarios+=1
+                params = paramfunc(*args, **inputparams)
+                scenname = rangeid+'_'+str(self.num_scenarios)
+                self.scenarios[scenname]={'faults':{},\
+                                          'properties':{'type':'nominal','time':0.0, 'name':scenname,\
+                                                        'params':params,'inputparams':inputparams,\
+                                                        'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
+                self.ranges[rangeid]['scenarios'].append(scenname)
+                if replicates>1:    self.ranges[rangeid]['levels'][xvals].append(scenname)
+                else:               self.ranges[rangeid]['levels'][xvals]=scenname
     def assoc_probs(self, rangeid, prob_weight=1.0, **inputpdfs):
         """
         Associates a probability model (assuming variable independence) with a 
@@ -1173,7 +1216,6 @@ class NominalApproach():
                                                     'params':params,'inputparams':inputparams,\
                                                     'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/num_pts}}
             self.ranges[rangeid]['scenarios'].append(scenname)
-            
 
 class SampleApproach():
     """
