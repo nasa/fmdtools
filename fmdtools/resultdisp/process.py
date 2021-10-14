@@ -464,6 +464,10 @@ def state_probabilities(endclasses):
     for classif in classifications:
         probabilities[classif] = sum([props['prob'] for k,props in endclasses.items() if classif==props['classification']])
     return probabilities
+def nan_to_x(metric, x=0.0):
+    """returns nan as zero if present, otherwise returns the number"""
+    if np.isnan(metric):    return x
+    else:                   return metric
 def expected(endclasses, metric):
     """Calculates the expected value of a given metric in endclasses using the rate variable in endclasses"""
     return sum([e[metric]*e['rate'] for k,e in endclasses.items() if not np.isnan(e[metric])])
@@ -473,6 +477,37 @@ def average(endclasses, metric):
 def percent(endclasses, metric):
     """Calculates the percentage of a given indicator variable being True in endclasses"""
     return sum([int(bool(e[metric])) for k,e in endclasses.items() if not np.isnan(e[metric])])/len(endclasses)
+
+def end_diff(endclasses, metric, nan_as=np.nan, as_bool=False, no_diff=False):
+    """
+    Calculates the difference between the nominal and fault scenarios for a set of endclasses
+
+    Parameters
+    ----------
+    endclasses : dict
+        endclass dictionary for the set {scen:endclass}, where endclass is a dict of metrics
+    metric : str
+        metric to calculate the difference of in the endclasses
+    nan_as : float, optional
+        How do deal with nans in the difference. The default is np.nan.
+    as_bool : bool, optional
+        Whether to return the difference as a boolean or real value. The default is False.
+    no_diff : bool, optional
+        Option for not computing the difference (but still performing the processing here). The default is False.
+    Returns
+    -------
+    difference : dict
+        dictionary of differences over the set of scenarios
+    """
+    endclasses=endclasses.copy()
+    nomendclass = endclasses.pop('nominal')
+    if not no_diff: difference = {scen:nan_to_x(nomendclass[metric], nan_as)-nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
+    else:           difference = {scen:nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
+    if as_bool: difference = {scen:bool(metric) for scen,metric in difference.items()}
+    return difference
+def overall_diff(endclasses, metric, nan_as=np.nan, as_bool=False, no_diff=False):
+    return {scen:end_diff(endclass, metric, nan_as=nan_as, as_bool=as_bool, no_diff=no_diff) for scen, endclass in endclasses.items()}
+
 def rate(endclasses, metric):
      """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
      return sum([int(bool(e[metric]))*e['rate'] for k,e in endclasses.items() if not np.isnan(e[metric])])
