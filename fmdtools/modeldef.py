@@ -543,6 +543,11 @@ class FxnBlock(Block):
         copy.faults = self.faults.copy()
         if hasattr(self, 'faultmodes'):         copy.faultmodes = self.faultmodes
         if hasattr(self, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
+        for timername in self.timers:
+            timer = getattr(self, timername)
+            copytimer = getattr(copy, timername)
+            copytimer.set_timer(timer.time, tstep=timer.tstep)
+            copytimer.mode=timer.mode
         for state in self._initstates.keys():
             setattr(copy, state, getattr(self, state))
         if hasattr(self, 'time'): copy.time=self.time
@@ -1030,19 +1035,44 @@ class Model(object):
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) """
-    def __init__(self, name, tstep=1.0):
+    def __init__(self, name):
         self.name=name
-        self.time=0
+        self.time=0.0
+        self.tstep=-1.0
+        self.mode='standby'
     def t(self):
         """ Returns the time elapsed """
         return self.time
-    def inc(self, tstep):
+    def inc(self, tstep=[]):
         """ Increments the time elapsed by tstep"""
-        self.time+=tstep
+        if self.time>=0.0:
+            if tstep:   self.time+=tstep
+            else:       self.time+=self.tstep
+            self.mode='ticking'
+        else: self.mode='complete'
+        if self.time<=0: self.mode='complete'
     def reset(self):
         """ Resets the time to zero"""
-        self.time=0
-        
+        self.time=0.0
+        self.mode='standby'
+    def set_timer(self,time, tstep=-1.0, overwrite='always'):
+        """ Sets timer to a given time"""
+        if overwrite =='always':                        self.time=time
+        elif overwrite=='if_more' and self.time<time:   self.time=time
+        elif overwrite=='if_less' and self.time>time:   self.time=time
+        elif overwrite=='never':                        self.time=self.time
+        elif overwrite=='increment':                    self.time+=time
+        self.tstep=tstep
+        self.mode='set'
+    def in_standby(self):
+        return self.mode=='standby'
+    def is_ticking(self):
+        return self.mode=='ticking'
+    def is_complete(self):
+        return self.mode=='complete'
+    def is_set(self):
+        return self.mode=='set'
+
 class NominalApproach():
     """
     Class for defining sets of nominal simulations. To explain, a given system 
