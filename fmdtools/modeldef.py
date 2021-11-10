@@ -1286,8 +1286,18 @@ class SampleApproach():
         ----------
         mdl : Model
             Model to sample.
-        faults : str (all/single-component/function of interest) or list, optional
-            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'. 'single-components' uses faults from a single component to represent faults form all components while passing the function name only inludes modes from that function
+        faults : str/list/tuple, optional
+            - The default is 'all', which gets all fault modes from the model.
+            - 'single-components' uses faults from a single component to represent faults form all components 
+            - passing the function name only includes modes from that function
+            - List of faults of form [(fxn, mode)] to inject in the model.
+            -Tuple arguments 
+                - ('mode type', 'mode'), gets all modes with 'mode' as a string (e.g. "mech", "comms", "loss" faults)
+                - ('mode types', ('mode1', 'mode2')), gets all modes with the listed strings (e.g. "mech", "comms", "loss" faults)
+                - ('mode name', 'mode'), gets all modes with the exact name 'mode'
+                - ('mode names', ('mode1', 'mode2')), gets all modes with the exact names defined in the tuple
+                - ('function class', 'Classname'), which gets all modes from a function with class 'Classname'
+                - ('function classes', ('Classname1', 'Classname2')), which gets all modes from a function with the names in the tuple
         phases: dict or 'global'
             Local phases in the model to sample. Has structure:
                 {'Function':{'phase':[starttime, endtime]}}
@@ -1381,7 +1391,17 @@ class SampleApproach():
                 self.fxnrates[fxnname]=fxn.failrate * fxns_to_use[fxnname]
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
         else:
-            if type(faults)==str:   faults = [(faults, mode) for mode in mdl.fxns[faults].faultmodes]
+            if type(faults)==str:   faults = [(faults, mode) for mode in mdl.fxns[faults].faultmodes] #single-function modes
+            elif type(faults)==tuple:
+                if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==faults[1]]  
+                elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==f]  
+                elif faults[0]=='mode type':        faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if faults[1] in mode]
+                elif faults[0]=='mode types':       faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if any([f in mode for f in faults[1]])]
+                elif faults[0]=='function class':   faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns_of_class(faults[1]).items() for mode in fxn.faultmodes]
+                elif faults[0]=='function classes': faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns_of_class(f).items() for mode in fxn.faultmodes]
+                else: raise Exception("Invalid option in tuple argument: "+str(faults[0]))
+            elif type(faults)==list: faults=faults
+            else: raise Exception("Invalid option for faults: "+str(faults)) 
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
             for fxnname, mode in faults: 
                 params = mdl.fxns[fxnname].faultmodes[mode]
