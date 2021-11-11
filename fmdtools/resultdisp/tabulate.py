@@ -213,6 +213,7 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
         Set of faults to run the comparison over
             --'modes' (all fault modes),
             --'functions' (modes for each function are grouped)
+            --'mode type' (modes with the same name are grouped)
             -- or a list of specific modes/functions. The default is 'functions'.
     rangeid : str, optional
         Nominal Approach range to use for the test (must be run over a single range). 
@@ -236,9 +237,10 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
         else:   raise Exception("More than one range in approach--please provide rangid in: "+str(nomapp.ranges.keys()))
     if faults=='functions':     faultlist = set([e.partition(' ')[0] for scen in endclasses for e in endclasses[scen]])
     elif faults=='modes':       faultlist = set([e.partition(',')[0] for scen in endclasses for e in endclasses[scen]])
+    elif faults=='mode type':   faultlist = set([e.partition(',')[0].partition(' ')[2] for scen in endclasses for e in endclasses[scen]])
     elif type(faults) ==str: raise Exception("Invalid faults option: "+faults)
     else:                       faultlist=faults
-    if 'nominal' in faultlist: faultlist.remove('nominal')
+    faultlist.discard('nominal'); faultlist.discard(' '); faultlist.discard('')
     
     factors = nomapp.get_param_scens(rangeid, *params)
     full_stats=[]
@@ -250,7 +252,7 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
         else:           nominal_metrics = [np.sign(nan_to_x(res_scens['nominal'][value], nan_as)) for res_scens in endclass_fact.values()]
         factor_stats=[sum(nominal_metrics)/len(nominal_metrics)]
         for fault in faultlist:
-            if faults=='functions':   fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(' ')[0]]
+            if faults=='functions':     fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(' ')[0]]
             else:                       fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(',')[0]]
             if len(fault_metrics)>0:    factor_stats.append(sum(fault_metrics)/len(fault_metrics))
             else:                       factor_stats.append(np.NaN)

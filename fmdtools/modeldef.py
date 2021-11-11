@@ -1292,7 +1292,7 @@ class SampleApproach():
             - passing the function name only includes modes from that function
             - List of faults of form [(fxn, mode)] to inject in the model.
             -Tuple arguments 
-                - ('mode type', 'mode'), gets all modes with 'mode' as a string (e.g. "mech", "comms", "loss" faults)
+                - ('mode type', 'mode','notmode'), gets all modes with 'mode' as a string (e.g. "mech", "comms", "loss" faults). 'notmode' (if given) specifies strings to remove
                 - ('mode types', ('mode1', 'mode2')), gets all modes with the listed strings (e.g. "mech", "comms", "loss" faults)
                 - ('mode name', 'mode'), gets all modes with the exact name 'mode'
                 - ('mode names', ('mode1', 'mode2')), gets all modes with the exact names defined in the tuple
@@ -1399,7 +1399,7 @@ class SampleApproach():
             elif type(faults)==tuple:
                 if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==faults[1]]  
                 elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==f]  
-                elif faults[0]=='mode type':        faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if faults[1] in mode]
+                elif faults[0]=='mode type':        faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if faults[1] in mode if (len(faults)<3 or not faults[2] in mode)]
                 elif faults[0]=='mode types':       faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if any([f in mode for f in faults[1]])]
                 elif faults[0]=='function class':   faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns_of_class(faults[1]).items() for mode in fxn.faultmodes]
                 elif faults[0]=='function classes': faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns_of_class(f).items() for mode in fxn.faultmodes]
@@ -1707,6 +1707,7 @@ def find_overlap_n(intervals):
     upper_limits = [interval[1] for interval in intervals]
     lower_limits = [interval[0] for interval in intervals]
     if any(u < l for u in upper_limits for l in lower_limits): return []
+    if not upper_limits and not lower_limits: return []
     orderedintervals = np.sort(upper_limits+lower_limits)
     return [orderedintervals[len(intervals)-1],orderedintervals[len(intervals)]]
 
