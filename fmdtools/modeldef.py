@@ -1313,11 +1313,15 @@ class SampleApproach():
         jointfaults : dict, optional
             Defines how the approach considers joint faults. The default is {'faults':'None'}. Has structure:
                 - faults : float    
-                    # of joint faults to inject
+                    # of joint faults to inject. 'all' specifies all faults at the same time
                 - jointfuncs :  bool 
                     determines whether more than one mode can be injected in a single function
                 - pcond (optional) : float in range (0,1) 
                     conditional probabilities for joint faults. If not give, independence is assumed.
+                - inclusive (optional) : bool
+                    specifies whether the fault set includes all joint faults up to the given level, or only the given level
+                    (e.g., True with 'all' means SampleApproach includes every combination of joint fault modes while
+                           False with 'all' means SampleApproach only includes the joint fault mode with all faults)
         sampparams : dict, optional
             Defines how specific modes in the model will be sampled over time. The default is {}. 
             Has structure: {(fxnmode,phase): sampparam}, where sampparam has structure:
@@ -1409,19 +1413,30 @@ class SampleApproach():
                 else:               self._fxnmodes[fxnname, mode] = params
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components.items()}
-        if type(jointfaults['faults'])==int:
+        if type(jointfaults['faults'])==int or jointfaults['faults']=='all':
+            if jointfaults['faults']=='all': num_joint= len(self._fxnmodes)
+            else:                            num_joint=jointfaults['faults']
             self.jointmodes=[]
-            for numjoint in range(2, jointfaults['faults']+1):
-                jointmodes = list(itertools.combinations(self._fxnmodes, numjoint))
+            inclusive = jointfaults.get('inclusive', True)
+            if inclusive:
+                for numjoint in range(2, num_joint+1):
+                    jointmodes = list(itertools.combinations(self._fxnmodes, numjoint))
+                    if not jointfaults.get('jointfuncs', False): 
+                        jointmodes = [jm for jm in jointmodes if not any([jm[i-1][0] ==j[0] for i in range(1, len(jm)) for j in jm[i:]])]
+                    self.jointmodes = self.jointmodes + jointmodes
+            elif not inclusive:
+                jointmodes = list(itertools.combinations(self._fxnmodes, num_joint))
                 if not jointfaults.get('jointfuncs', False): 
                     jointmodes = [jm for jm in jointmodes if not any([jm[i-1][0] ==j[0] for i in range(1, len(jm)) for j in jm[i:]])]
-                self.jointmodes = self.jointmodes + jointmodes
+                self.jointmodes=jointmodes
+            else: raise Exception("Invalid option for jointfault['inclusive']")
         elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
     def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}):
         """ Initializes rates, rates_timeless"""
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
         self.mode_phase_map=dict.fromkeys(self._fxnmodes)
+        
         for (fxnname, mode) in self._fxnmodes:
             key_phases = mdl.fxns[fxnname].key_phases_by
             if key_phases=='global': fxnphases = self.globalphases
@@ -1484,7 +1499,12 @@ class SampleApproach():
                         elif type(jointfaults['pcond'])==list:
                             self.rates[jointmode][phaseid] = jointfaults['pcond'][j_ind]*max(rates)  
                         self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(overlap[1]-overlap[0])
-                        self.mode_phase_map[jointmode][phaseid] = overlap        
+                        self.mode_phase_map[jointmode][phaseid] = overlap 
+            if not jointfaults.get('inclusive', True): 
+                for (fxnname, mode) in self._fxnmodes: 
+                    self.rates.pop((fxnname,mode))
+                    self.rates_timeless.pop((fxnname,mode))
+                    self.mode_phase_map.pop((fxnname,mode))
     def create_sampletimes(self,mdl, params={}, default={'samp':'evenspacing','numpts':1}):
         """ Initializes weights and sampletimes """
         self.sampletimes={}
