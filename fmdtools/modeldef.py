@@ -11,6 +11,7 @@ import itertools
 import dill
 import pickle
 import networkx as nx
+import copy
 from ordered_set import OrderedSet
 from operator import itemgetter
 
@@ -1085,7 +1086,7 @@ class NominalApproach():
         self.scenarios = {}
         self.num_scenarios = 0
         self.ranges = {}
-    def add_param_replicates(self,paramfunc, rep_id, num_replicates, *args, **kwargs):
+    def add_param_replicates(self,paramfunc, rangeid, num_replicates, *args, **kwargs):
         """
         Adds a set of repeated scenarios to the approach. For use in (external) random scenario generation.
 
@@ -1094,23 +1095,23 @@ class NominalApproach():
         paramfunc : method
             Python method which generates a set of model parameters given the input arguments.
             method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
-        rep_id : str
+        angeid : str
             Name for the set of replicates
         num_replicates : int
             Number of replicates to use
         *args : any
             arguments to send to paramfunc
         """
-        self.ranges[rep_id] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : num_replicates}
+        self.ranges[rangeid] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : num_replicates}
         for i in range(num_replicates):
             self.num_scenarios+=1
             params = paramfunc(*args, **kwargs)
-            scenname = rep_id+'_'+str(self.num_scenarios)
+            scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'faults':{},\
-                                      'properties':{'type':'nominal','time':0.0, 'name':scenname,\
+                                      'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                     'params':params,'inputparams':kwargs,\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/num_replicates}}
-            self.ranges[rep_id]['scenarios'].append(scenname)
+            self.ranges[rangeid]['scenarios'].append(scenname)
     def get_param_scens(self, rangeid, *level_params):
         """
         Returns the scenarios of a range associated with given parameter ranges
@@ -1141,8 +1142,6 @@ class NominalApproach():
             new_index = itemgetter(*inds)(xvals)
             if type(scenarios)==str: scenarios = [scenarios]
             param_scens[new_index].update(scenarios)
-        return param_scens
-            
         return param_scens
     def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds=None, **kwargs):
         """
@@ -1181,12 +1180,35 @@ class NominalApproach():
                 params = paramfunc(*args, **inputparams)
                 scenname = rangeid+'_'+str(self.num_scenarios)
                 self.scenarios[scenname]={'faults':{},\
-                                          'properties':{'type':'nominal','time':0.0, 'name':scenname,\
+                                          'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                         'params':params,'inputparams':inputparams,\
                                                         'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
                 self.ranges[rangeid]['scenarios'].append(scenname)
                 if replicates>1:    self.ranges[rangeid]['levels'][xvals].append(scenname)
                 else:               self.ranges[rangeid]['levels'][xvals]=scenname
+    def change_params(self, rangeid='all', **kwargs):
+        """
+        Changes a given parameter accross all scenarios. Modifies 'params' (rather than regenerating params from the paramfunc).
+
+        Parameters
+        ----------
+        rangeid : str
+            Name of the range to modify. Optional. Defaults to "all"
+        **kwargs : any
+            Parameters to change stated as paramname=value or 
+            as a dict paramname={'sub_param':value}, where 'sub_param' is the parameter of the dictionary with name paramname to update
+        """
+        for r in self.ranges:
+            if rangeid=='all' or rangeid==r: 
+                if not self.ranges.get('changes', False):   self.ranges[r]['changes'] = kwargs
+                else:                                       self.ranges[r]['changes'].update(kwargs)
+        for scenname, scen in self.scenarios.items():
+            if rangeid=='all' or rangeid==scen['properties']['rangeid']:
+                if not scen['properties'].get('changes', False):  scen['properties']['changes']=kwargs
+                else:                                             scen['properties']['changes'].update(kwargs)
+                for kwarg, kw_value in kwargs.items(): #updates 
+                    if type(kw_value)==dict:    scen['properties']['params'][kwarg].update(kw_value)
+                    else:                       scen['properties']['params'][kwarg]=kw_value
     def assoc_probs(self, rangeid, prob_weight=1.0, **inputpdfs):
         """
         Associates a probability model (assuming variable independence) with a 
@@ -1242,10 +1264,17 @@ class NominalApproach():
             params = paramfunc(*fixedargs, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'faults':{},\
-                                      'properties':{'type':'nominal','time':0.0, 'name':scenname,\
+                                      'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                     'params':params,'inputparams':inputparams,\
                                                     'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/num_pts}}
             self.ranges[rangeid]['scenarios'].append(scenname)
+    def copy(self):
+        newapp = NominalApproach()
+        newapp.scenarios = copy.deepcopy(self.scenarios)
+        newapp.ranges = copy.deepcopy(self.ranges)
+        newapp.num_scenarios = self.num_scenarios
+        return newapp
+        
 
 class SampleApproach():
     """
