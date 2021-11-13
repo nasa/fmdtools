@@ -214,7 +214,7 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
             --'modes' (all fault modes),
             --'functions' (modes for each function are grouped)
             --'mode type' (modes with the same name are grouped)
-            -- or a list of specific modes/functions. The default is 'functions'.
+            -- or a set of specific modes/functions. The default is 'functions'.
     rangeid : str, optional
         Nominal Approach range to use for the test (must be run over a single range). 
         The default is 'default', which picks the only range (if there is only one).
@@ -239,6 +239,7 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
     elif faults=='modes':       faultlist = set([e.partition(',')[0] for scen in endclasses for e in endclasses[scen]])
     elif faults=='mode type':   faultlist = set([e.partition(',')[0].partition(' ')[2] for scen in endclasses for e in endclasses[scen]])
     elif type(faults) ==str: raise Exception("Invalid faults option: "+faults)
+    elif type(faults)==list:    faultlist =set(faults)
     else:                       faultlist=faults
     faultlist.discard('nominal'); faultlist.discard(' '); faultlist.discard('')
     

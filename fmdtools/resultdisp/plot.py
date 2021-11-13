@@ -559,7 +559,7 @@ def costovertime(endclasses, app, costtype='expected cost'):
     plt.xlabel("Time ("+str(app.units)+")")
     plt.grid()
 
-def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False):
+def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False, xlabel=True):
     """
     Plots a comparison_table from tabulate.resilience_factor_test as a bar plot for each fault scenario/set of fault scenarios.
 
@@ -568,7 +568,8 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
     comparison_table : pandas table
         Table from tabulate.resilience_factor_test with factors as rows and fault scenarios as columns
     faults : list, optional
-        list of faults/fault types to include in the bar plot (the columns of the table). The default is 'all'.
+        iterable of faults/fault types to include in the bar plot (the columns of the table). The default is 'all'.
+        a dictionary {'fault':'title'} will associate the given fault with a title (otherwise 'fault' is used)
     rows : int, optional
         Number of rows in the multplot. The default is 1.
     stat : str, optional
@@ -583,6 +584,8 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         'all'/'single'/'none'. The default is "single".
     stack : bool, optional
         Whether or not to stack the nominal and resilience plots. The default is False.
+    xlabel : bool/str
+        The x-label descriptor for the design factors. Defaults to the column values.
 
     Returns
     -------
@@ -606,7 +609,10 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         plt.bar(xs,[*comparison_table['nominal']], tick_label=[str(i) for i in comparison_table.index], linewidth=4, fill=False, hatch='//', edgecolor='grey', label='nominal')
         if stack:   plt.bar(xs,[*comparison_table[fault]], tick_label=[str(i) for i in comparison_table.index], alpha=0.75, linewidth=4, label='fault scenarios', bottom=[*comparison_table['nominal']])
         else:       plt.bar(xs,[*comparison_table[fault]], tick_label=[str(i) for i in comparison_table.index], alpha=0.75, linewidth=4, label='fault scenarios')
-        plt.title(fault)
+        if len(faults)>1:   
+            if type(faults)==dict:      plt.title(faults[fault])
+            else:                       plt.title(fault)
+        elif title:         plt.title(title)
         plt.grid(axis='y')
         if not (n-1)%columns:    
             ax.set_ylabel(stat)
@@ -614,11 +620,12 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
             ax.set_ylabel('')
             ax.axes.yaxis.set_ticklabels([])
         if (n-1) >= (rows-1)*columns: 
-            ax.set_xlabel(comparison_table.columns.name)
+            if xlabel==True:    ax.set_xlabel(comparison_table.columns.name)
+            else:               ax.set_xlabel(xlabel)
         if legend=='all': plt.legend()
         elif legend=='single' and n==1: plt.legend()
     figure.tight_layout(pad=0.3)
-    figure.suptitle(title)
+    if title and len(faults)>1:               figure.suptitle(title)
     return figure
     
 
