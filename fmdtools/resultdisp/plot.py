@@ -559,7 +559,7 @@ def costovertime(endclasses, app, costtype='expected cost'):
     plt.xlabel("Time ("+str(app.units)+")")
     plt.grid()
 
-def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False, xlabel=True):
+def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False, xlabel=True, error_bars=False):
     """
     Plots a comparison_table from tabulate.resilience_factor_test as a bar plot for each fault scenario/set of fault scenarios.
 
@@ -586,6 +586,8 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         Whether or not to stack the nominal and resilience plots. The default is False.
     xlabel : bool/str
         The x-label descriptor for the design factors. Defaults to the column values.
+    error_bars : bool
+        Whether to include error bars for the factor. Requires comparison_table to have lower and upper bound information
 
     Returns
     -------
@@ -593,8 +595,11 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         Plot handle of the figure.
     """
     figure = plt.figure(figsize=figsize)
+    if type(comparison_table.columns[0])==tuple:    has_bounds = True
+    else:                                           has_bounds=False
     if faults=='all': 
-        faults=[*comparison_table.columns]
+        if has_bounds: faults=list({f[0] for f in comparison_table})
+        else:          faults=[*comparison_table.columns]
         faults.remove('nominal')
     columns = np.ceil(len(faults)/rows)
     n=0
@@ -606,9 +611,27 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         ax = figure.add_subplot(rows, columns, n, label=str(n))
         ax.set_ylim(top=maxy)
         xs = np.array([ i for i in range(len(comparison_table.index))])
-        plt.bar(xs,[*comparison_table['nominal']], tick_label=[str(i) for i in comparison_table.index], linewidth=4, fill=False, hatch='//', edgecolor='grey', label='nominal')
-        if stack:   plt.bar(xs,[*comparison_table[fault]], tick_label=[str(i) for i in comparison_table.index], alpha=0.75, linewidth=4, label='fault scenarios', bottom=[*comparison_table['nominal']])
-        else:       plt.bar(xs,[*comparison_table[fault]], tick_label=[str(i) for i in comparison_table.index], alpha=0.75, linewidth=4, label='fault scenarios')
+        if has_bounds: 
+            nominal_bars = [*comparison_table['nominal','']]
+            fault_bars = [*comparison_table[fault,'']]
+        else:
+            nominal_bars = [*comparison_table['nominal']]
+            fault_bars = [*comparison_table[fault]]
+        if stack:   bottom=fault_bars
+        else:       bottom=np.zeros(len(fault_bars))
+        
+        if error_bars:
+            if not has_bounds: raise Exception("No bounds in the data to construct error bars out of")
+            lower_nom_error = comparison_table['nominal', ''] - comparison_table['nominal', 'LB']
+            upper_nom_error =  comparison_table['nominal', 'UB'] - comparison_table['nominal', '']
+            yerror_nom=[[*lower_nom_error],[*upper_nom_error]]
+            lower_error = comparison_table[fault, ''] - comparison_table[fault, 'LB']
+            upper_error =  comparison_table[fault, 'UB'] - comparison_table[fault, '']
+            yerror = [[*lower_error],[*upper_error]]
+        else: yerror_nom=None; yerror=None
+        
+        plt.bar(xs,nominal_bars, tick_label=[str(i) for i in comparison_table.index], linewidth=4, fill=False, hatch='//', edgecolor='grey', label='nominal', yerr=yerror_nom, ecolor='grey', error_kw={'elinewidth':6})
+        plt.bar(xs,fault_bars, tick_label=[str(i) for i in comparison_table.index], alpha=0.75, linewidth=4, label='fault scenarios', bottom=bottom, yerr=yerror, ecolor='red', error_kw={'elinewidth':2})
         if len(faults)>1:   
             if type(faults)==dict:      plt.title(faults[fault])
             else:                       plt.title(fault)
