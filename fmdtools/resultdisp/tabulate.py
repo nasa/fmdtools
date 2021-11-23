@@ -153,7 +153,7 @@ def maptab(mapping):
     table = pd.DataFrame(mapping)
     return table.transpose()
 
-def nominal_test(nomapp, endclasses, metrics='all', inputparams='from_range', scenarios='all'):
+def nominal_stats(nomapp, endclasses, metrics='all', inputparams='from_range', scenarios='all'):
     """
     Makes a table of quantities of interest from endclasses.
 
@@ -193,6 +193,73 @@ def nominal_test(nomapp, endclasses, metrics='all', inputparams='from_range', sc
     for metric in metrics:
         table_values.append([endclasses[e][metric] for e in scens])
     table = pd.DataFrame(table_values, columns=[*endclasses], index=inputparams+metrics)
+    return table
+
+def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid='default', nan_as=np.nan, percent=True, difference=True, give_ci=False, **kwargs):
+    """
+    Compares a metric for a given set of model parameters/factors over a nested set of nominal and fault scenarios.
+
+    Parameters
+    ----------
+    nomapp : NominalApproach
+        Nominal Approach used to generate the simulations
+    endclasses : dict
+        dict of endclasses from propagate.nominal_approach or nested_approach with structure: 
+            {scen_x:{metric1:x, metric2:x...}} or {scen_x:{fault:{metric1:x, metric2:x...}}} 
+    params : list
+        List of parameters to use for the factor levels in the comparison
+    metrics : 'all'/list, optional
+        Metrics to show in the table. The default is 'all'.
+    rangeid : str, optional
+        Nominal Approach range to use for the test (must be run over a single range). 
+        The default is 'default', which picks the only range (if there is only one).
+    nan_as : float, optional
+        Number to parse NaNs as (if present). The default is np.nan.
+    percent : bool, optional
+        Whether to compare metrics as bools (True - results in a comparison of percentages of indicator variables) 
+        or as averages (False - results in a comparison of average values of real valued variables). The default is True.
+    difference : bool, optional
+        Whether to tabulate the difference of the metric from the nominal over each scenario (True),
+        or the value of the metric over all (False). The default is True.
+    give_ci = bool:
+        gives the bootstrap confidence interval for the given statistic using the given kwargs
+        'combined' combines the values as a strings in the table (for display)
+    kwargs : keyword arguments for bootstrap_confidence_interval (sample_size, num_samples, interval, seed)
+    Returns
+    -------
+    table : pandas table
+        Table with the metric statistic (percent or average) over the nominal scenario and each listed function/mode (as differences or averages)
+    """
+    if rangeid=='default':
+        if len(nomapp.ranges.keys())==1: rangeid=[*nomapp.ranges.keys()][0]
+        else:   raise Exception("More than one range in approach--please provide rangid in: "+str(nomapp.ranges.keys()))
+    if [*endclasses.values()][0].get('nominal', False): endclasses ={scen:ec['nominal'] for scen, ec in endclasses.items()}
+    if metrics=='all':              metrics = [ec for ec,val in [*endclasses.values()][0].items() if type(val) in [float, int]]
+    
+    
+    factors = nomapp.get_param_scens(rangeid, *params)
+    full_stats=[]
+    for metric in metrics:
+        factor_stats = []
+        for factor, scens in factors.items():
+            endclass_fact = {scen:endclass for scen, endclass in endclasses.items() if scen in scens}
+
+            if not percent: nominal_metrics = [nan_to_x(scen[metric], nan_as) for scen in endclass_fact.values()]
+            else:           nominal_metrics = [np.sign(nan_to_x(scen[metric], nan_as)) for scen in endclass_fact.values()]
+            factor_stats= factor_stats + [sum(nominal_metrics)/len(nominal_metrics)]
+            if give_ci: 
+                factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(nominal_metrics, **kwargs)
+                factor_stats = factor_stats + [factor_lb, factor_ub]
+        full_stats.append(factor_stats)
+    if give_ci=='combined': full_stats = [[str(round(v,3))+' ('+str(round(f[i+1],3))+','+str(round(f[i+2],3))+')' for i,v in enumerate(f) if not i%3] for f in full_stats]
+    if give_ci !=True: 
+        table = pd.DataFrame(full_stats, columns = factors, index=metrics)
+        table.columns.name=tuple(params)
+    else:           
+        columns = [(f, stat) for f in factors for stat in ["", "LB", "UB"]]
+        table = pd.DataFrame(full_stats, columns=columns, index=metrics)
+        table.columns = pd.MultiIndex.from_tuples(table.columns, names=['metric', ''])
+        table.columns.name=tuple(params)
     return table
 
 def resilience_factor_comparison(nomapp, endclasses, params, value, faults='functions', rangeid='default', nan_as=np.nan, percent=True, difference=True, give_ci=False, **kwargs):
@@ -281,7 +348,7 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
         table.columns.name=tuple(params)
     return table
 
-def nested_test(nomapp, endclasses, percent_metrics=[], rate_metrics=[], average_metrics=[], expected_metrics=[], inputparams='from_range', scenarios='all'):
+def nested_stats(nomapp, endclasses, percent_metrics=[], rate_metrics=[], average_metrics=[], expected_metrics=[], inputparams='from_range', scenarios='all'):
     """
     Makes a table of quantities of interest from endclasses.
 
