@@ -559,9 +559,65 @@ def costovertime(endclasses, app, costtype='expected cost'):
     plt.xlabel("Time ("+str(app.units)+")")
     plt.grid()
 
+def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', figsize=(6,4), title='', maxy='max', xlabel=True, error_bars=False):
+    """
+    Compares/plots a comparison table from tabulate.nominal_factor_comparison as a bar plot for a given metric.
+
+    Parameters
+    ----------
+    comparison_table : pandas table
+        Table from tabulate.nominal_factor_comparison
+    metrics : string
+        Metric to use in the plot
+    ylabel : string, optional
+        label for the y-axis. The default is 'proportion'.
+    figsize : tuple, optional
+        Size for the plot. The default is (12,8).
+    title : str, optional
+        Plot title. The default is ''.
+    maxy : float
+        Cutoff for the y-axis (to use if the default is bad). The default is 'max'
+    xlabel : TYPE, optional
+        DESCRIPTION. The default is True.
+    error_bars : TYPE, optional
+        DESCRIPTION. The default is False.
+
+    Returns
+    -------
+    figure: matplotlib figure
+    """
+    figure = plt.figure(figsize=figsize)
+    
+    if '' in comparison_table.columns[0]: #bounded table
+        bar = np.array([comparison_table.loc[metric,col[0]][''] for col in comparison_table.columns if col[1]==''])
+        labels= [str(i[0]) for i in comparison_table.columns if i[1]=='']
+        if error_bars:
+            UB = np.array([comparison_table.loc[metric,col[0]]['UB'] for col in comparison_table.columns if col[1]=='UB'])
+            LB = np.array([comparison_table.loc[metric,col[0]]['LB'] for col in comparison_table.columns if col[1]=='LB'])
+            yerr= [bar-LB, UB-bar]
+            if maxy=='max': maxy = comparison_table.loc[metric].max()
+        else: 
+            yerr=[]
+            if maxy=='max': maxy = max(bar)
+    else:  
+        bar = [*comparison_table.loc[metric]]; yerr=[]; labels=[str(i) for i in comparison_table.columns]
+        if maxy=='max': maxy = max(bar)
+    
+    ax = figure.add_subplot(1,1,1)
+    
+    plt.grid(axis='y')
+    ax.set_ylabel(ylabel)
+    ax.set_ylim(top=maxy)
+    xs = np.array([ i for i in range(len(bar))])
+    if yerr:    plt.bar(xs,bar, tick_label=labels, linewidth=4, yerr=yerr, error_kw={'elinewidth':3})
+    else:       plt.bar(xs,bar, tick_label=labels, linewidth=4)
+    
+    
+    return figure
+
 def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False, xlabel=True, error_bars=False):
     """
-    Plots a comparison_table from tabulate.resilience_factor_test as a bar plot for each fault scenario/set of fault scenarios.
+    Plots a comparison_table from tabulate.resilience_factor_comparison as a bar plot for each fault scenario/set of fault scenarios.
 
     Parameters
     ----------
