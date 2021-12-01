@@ -6,11 +6,8 @@ Tests a variety of sampling methods
 
 @author: Daniel Hulse
 """
-import sys
-# for use in development - makes sure git version is used instead of pip-installed version
-paths = sys.path
-if paths[1]!='../':
-    sys.path=[sys.path[0]] + ['../'] + paths
+import sys, os
+sys.path.append(os.path.join('..'))
 
 import numpy as np
 import quadpy
