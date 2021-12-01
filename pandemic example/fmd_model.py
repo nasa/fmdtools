@@ -143,7 +143,7 @@ class PandemicModel(Model):
         super().__init__(params=params, modelparams=modelparams, valparams=valparams)
         x0=self.params['x0']
         
-        travel = {'In_I':0,'In_S':0,'In_R':0,'Out_I':0,'Out_S':0,'Out_R':0,'Stay_I':0,'Stay_S':0,'Stay_R':0}
+        travel = {'In_I':0.0,'In_S':0.0,'In_R':0.0,'Out_I':0.0,'Out_S':0.0,'Out_R':0.0,'Stay_I':0.0,'Stay_S':0.0,'Stay_R':0.0}
         self.add_flow('Travel_Schools', travel)
         self.add_flow('Travel_City', travel)
         self.add_flow('Travel_Suburbs', travel)
@@ -156,7 +156,7 @@ class PandemicModel(Model):
         self.add_fxn('Trasportation',['Travel_Schools','Travel_City','Travel_Suburbs'], fclass=Transportation)
         
         
-        self.construct_graph()
+        self.build_model()
     def find_classification(self, scen, mdlhists):
         # total number of medical staff
         n1 = self.fxns['Schools'].n

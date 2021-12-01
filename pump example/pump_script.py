@@ -5,18 +5,13 @@ Author: Daniel Hulse
 Created: October 2019
 Description: A simple example of I/O using faultprop.py and the pump model in ex_pump.py
 """
-import sys
-paths = sys.path
-if paths[1]!='../':
-    sys.path=[sys.path[0]] + ['../'] + paths
-
 
 #Using the model that was set up, we can now perform a few different operations
 
 #First, import the fault propogation library as well as the model
 #since the package is in a parallel location to examples
-import sys
-sys.path.append('../')
+import sys, os
+sys.path.insert(1,os.path.join(".."))
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd

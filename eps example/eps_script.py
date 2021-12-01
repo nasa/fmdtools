@@ -4,8 +4,8 @@ Created on Sun Mar  8 18:46:24 2020
 
 @author: hulsed
 """
-import sys
-sys.path.append('../')
+import sys, os
+sys.path.append(os.path.join('..'))
 from eps import EPS
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
