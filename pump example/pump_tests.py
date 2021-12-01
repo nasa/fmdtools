@@ -9,11 +9,8 @@ The use-cases shown are:
     -Testing a model
 """
 
-import sys
-# for use in development - makes sure git version is used instead of pip-installed version
-paths = sys.path
-if paths[1]!='../':
-    sys.path=[sys.path[0]] + ['../'] + paths
+import sys, os
+sys.path.append(os.path.join('..'))
 
 
 from fmdtools.modeldef import *
@@ -164,7 +161,6 @@ class Integration_Tests(unittest.TestCase):
         self.assertEqual(self.mdl.flows['Wat_1'].flowrate, 0.0)
         self.assertEqual(self.mdl.flows['Wat_2'].flowrate, 0.0)
                 
-        
 
 if __name__ == '__main__':
     unittest.main()

@@ -1688,7 +1688,9 @@ class SampleApproach():
                 pts=[mins[int(len(mins)/2)]]
                 weights=[1]
             elif samptype=='piecewise':
-                partlocs=[0, len(list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][1], self.tstep)))]
+                if not self.phases: partlocs=[0, len(list(np.arange(self.globalphases[modeinphase[1][1]][0], self.globalphases[modeinphase[1][1]][1], self.tstep)))]
+                else:               partlocs=[0, len(list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][1], self.tstep)))]
+                
                 reset=False
                 for ind, cost in enumerate(costs[1:-1]): # find where fxn is no longer linear
                     if reset==True:

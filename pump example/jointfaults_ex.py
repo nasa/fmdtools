@@ -7,8 +7,8 @@ This code tests some approaches to sampling joing fault scenarios
 @author: Daniel Hulse
 """
 
-import sys
-sys.path.append('../')
+import sys, os
+sys.path.append(os.path.join('..'))
 
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp as rd
