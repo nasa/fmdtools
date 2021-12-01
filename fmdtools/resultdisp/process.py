@@ -403,6 +403,9 @@ def avgdegtimeheatmap(reshists):
     return degtimetable.mean().to_dict()
 def expdegtimeheatmap(reshists, endclasses):
     """ Makes a heatmap dictionary of the expected degraded heat time over a list of scenarios in the dict of results histories based on the rates in endclasses."""
+    if 'nominal' in {*endclasses, *reshists}:
+        if 'nominal' not in reshists:       endclasses=endclasses.copy(); endclasses.pop('nominal')
+        elif 'nominal' not in endclasses:   reshists=reshists.copy(); reshists.pop('nominal')
     degtimetable = pd.DataFrame(degtimemaps(reshists))
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expdegtimetable = degtimetable.multiply(rates).transpose()

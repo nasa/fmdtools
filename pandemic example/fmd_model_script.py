@@ -24,7 +24,7 @@ from scipy.optimize import differential_evolution
 x0 = [0.1 , 2 , 5 , 10 , 0.05 , 10 ]
 dm1 = PandemicModel(params={'x0':x0})
     
-rd.graph.show(dm1.graph)
+rd.graph.show(dm1)
 
 endresults, resgraph, mdlhist_nom = propagate.nominal(dm1)
 
