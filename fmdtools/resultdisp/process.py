@@ -428,6 +428,9 @@ def faultsheatmap(reshists):
     return faulttable.mean().to_dict()
 def expfaultsheatmap(reshists, endclasses):
     """Makes a heatmap dictionary of the expected resulting faults over all scenarios"""
+    if 'nominal' in {*endclasses, *reshists}:
+        if 'nominal' not in reshists:       endclasses=endclasses.copy(); endclasses.pop('nominal')
+        elif 'nominal' not in endclasses:   reshists=reshists.copy(); reshists.pop('nominal')
     faulttable = pd.DataFrame(faultmaps(reshists))
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expfaulttable = faulttable.multiply(rates).transpose()
