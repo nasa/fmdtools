@@ -148,6 +148,8 @@ class Block(Common):
         self.faults=set(['nom'])
         self.opermodes= getattr(self, 'opermodes', [])
         self.faultmodes= getattr(self, 'faultmodes', {})
+        self._generators=getattr(self, '_generators', {})
+        self._generator_params=getattr(self, '_generator_params', {})
         self.time=0.0
     def __repr__(self):
         if hasattr(self,'name'):
@@ -161,7 +163,7 @@ class Block(Common):
         for param in params:
             for attr, val in param.items():
                 setattr(self, attr, val)
-    def assoc_stochastic_state(self,name,default,generator, generator_params):
+    def assoc_stochastic_state(self,name,default,generator_method, generator_params, seed=None):
         """
         Associate a stochastic state with the Block. Enables the simulation of stochastic behavior over time.
 
@@ -171,17 +173,22 @@ class Block(Common):
             name for the parameter
         default : int/float/str/etc
             Default value for the parameter for the parameter
-        generator : str
-            Name of the numpy generator to use. 
+        generator_method : str
+            Name of the numpy random method to use. 
             see: https://numpy.org/doc/1.16/reference/generated/numpy.random.RandomState.html
         generator_params : tuple
             Parameter inputs for the numpy generator function
+        seed : int
+            seed for the random state generator to use. Defaults to None.
         """
         if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
-        self._states[name]=default
+        self._states.append(name)
         self._initstates[name]=default
-        if not hasattr(self,'_generators'): self._generators={name:(default, generator, generator_params)} 
-        else:                               self._generators[name]=(default, generator, generator_params)
+        if not hasattr(self,'_generators'):         self._generators={name:np.random.RandomState(seed)} 
+        else:                                       self._generators[name]=np.random.RandomState(seed)
+        if not seed: seed=self._generators[name].get_state()[1][0]
+        if not hasattr(self,'_generator_params'):   self._generator_params={name:(default, generator_method, generator_params,seed)} 
+        else:                                       self._generator_params[name]=(default, generator_method, generator_params,seed)
     def assoc_healthstates(self, hstates, mode_app='single-state', probtype='prob', units='hr'):
         """
         Adds health state attributes to the model (and a mode approach if desired). 
@@ -426,6 +433,8 @@ class Block(Common):
         self.faults.add('nom')
         for state in self._initstates.keys():
             setattr(self, state,self._initstates[state])
+        for generator in self._generators:
+            self._generators[generator]=np.random.RandomState(self._generator_params[generator][-1])
         self.time=0
     def return_states(self):
         """
@@ -537,6 +546,8 @@ class FxnBlock(Block):
             setattr(self, state,self._initstates[state])
         for name, component in self.components.items():
             component.reset()
+        for generator in self._generators:
+            self._generators[generator]=np.random.RandomState(self._generator_params[generator][-1])
         for timername in self.timers:
             getattr(self, timername).reset()
         if hasattr(self, 'time'): self.time=0.0
@@ -571,6 +582,9 @@ class FxnBlock(Block):
             copytimer.mode=timer.mode
         for state in self._initstates.keys():
             setattr(copy, state, getattr(self, state))
+        for generator in self._generators:
+            copy._generators[generator]=np.random.RandomState(self._generator_params[generator][-1])
+            copy._generators[generator].set_state(self._generators[generator].get_state())
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
@@ -582,6 +596,10 @@ class FxnBlock(Block):
                     setattr(self, state, value)
                 num_update+=1
                 if num_update > 1: raise Exception("Exclusive fault mode scenarios present at the same time")
+    def update_stochastic_states(self):
+        for statename, generator in self._generators.items():
+            gen_method = getattr(generator, self._generator_params[statename][1])
+            setattr(self, statename, gen_method(*self._generator_params[statename][2]))
     def updatefxn(self,proptype, faults=[], time=0):
         """
         Updates the state of the function at a given time and injects faults.
@@ -596,6 +614,7 @@ class FxnBlock(Block):
         self.add_faults(faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
+        if time>self.time: self.update_stochastic_states()
         if self.components:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
