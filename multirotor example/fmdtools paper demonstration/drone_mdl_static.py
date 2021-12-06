@@ -1,19 +1,22 @@
+import sys, os
+sys.path.insert(1,os.path.join("..",".."))
+
 from fmdtools.modeldef import FxnBlock
 from fmdtools.modeldef import Flow
 from fmdtools.modeldef import Model
 from fmdtools.modeldef import m2to1
 
 class StoreEE(FxnBlock):
-    def __init__(self, flows):
+    def __init__(self, name, flows):
         self.failrate=1e-5
         self.assoc_modes({'nocharge':[1,300]})
-        super().__init__(['EEout', 'FS'], flows, {'soc': 2000})
+        super().__init__(name, flows, ['EEout', 'FS'], {'soc': 2000})
     def behavior(self, time):
         if      self.has_fault('nocharge'):   self.EEout.effort=0.0
         else: self.EEout.effort=1.0
 class DistEE(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['EEin','EEmot','EEctl','ST'],flows, {'EEtr':1.0, 'EEte':1.0}, timely=False)
+    def __init__(self,name, flows):
+        super().__init__(name,flows, ['EEin','EEmot','EEctl','ST'], {'EEtr':1.0, 'EEte':1.0})
         self.failrate=1e-5
         self.assoc_modes({'short':[0.3,3000], 'degr':[0.5,1000], 'break':[0.2,2000]})
     def condfaults(self, time):
@@ -33,8 +36,8 @@ class DistEE(FxnBlock):
         self.EEctl.effort=self.EEte*self.EEin.effort
         self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, max(self.EEmot.rate,self.EEctl.rate)])
 class EngageLand(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['forcein', 'forceout'],flows, timely=False)
+    def __init__(self,name, flows):
+        super().__init__(name,flows, ['forcein', 'forceout'])
         self.failrate=1e-5
         self.assoc_modes({'break':[0.2, 1000], 'deform':[0.8, 1000]})
     def condfaults(self, time):
@@ -44,8 +47,8 @@ class EngageLand(FxnBlock):
         self.forceout.value=self.forcein.value/2
             
 class HoldPayload(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['FG', 'Lin', 'ST'],flows, timely=False)
+    def __init__(self,name, flows):
+        super().__init__(name,flows, ['FG', 'Lin', 'ST'])
         self.failrate=1e-6
         self.assoc_modes({'break':[0.2, 10000], 'deform':[0.8, 10000]})
     def condfaults(self, time):
@@ -57,8 +60,8 @@ class HoldPayload(FxnBlock):
         elif self.has_fault('deform'):  self.Lin.support, self.ST.support = 0.5,0.5
         else:                           self.Lin.support, self.ST.support = 1.0,1.0
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
-    def __init__(self, flows):     
-        super().__init__(['EEin', 'Ctlin','DOF','Force'], flows,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, timely=False)
+    def __init__(self,name, flows):     
+        super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Force'],{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0})
         self.failrate=1e-5
         self.assoc_modes({'short':[0.1, 200],'openc':[0.1, 200],'ctlup':[0.2, 500],'ctldn':[0.2, 500],
                           'ctlbreak':[0.2, 1000], 'mechbreak':[0.1, 500], 'mechfriction':[0.05, 500],
@@ -92,8 +95,8 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         self.DOF.planpwr=self.Eto*self.Eti*self.Ctlin.forward*self.Ct*self.Mt*self.Pt    
         
 class CtlDOF(FxnBlock):
-    def __init__(self, flows):
-        super().__init__(['EEin','Dir','Ctl','DOFs','FS'],flows, {'Cs':1.0})
+    def __init__(self,name,flows):
+        super().__init__(name,flows, ['EEin','Dir','Ctl','DOFs','FS'], {'Cs':1.0})
         self.failrate=1e-5
         self.assoc_modes({'noctl':[0.2, 10000], 'degctl':[0.8, 10000]})
     def condfaults(self, time):
@@ -114,8 +117,8 @@ class CtlDOF(FxnBlock):
         self.Ctl.upward=self.EEin.effort*self.Cs*self.Dir.power*upthrottle
 
 class PlanPath(FxnBlock):
-    def __init__(self, flows):
-        super().__init__(['EEin','Env','Dir','FS'], flows)
+    def __init__(self,name, flows):
+        super().__init__(name, flows, ['EEin','Env','Dir','FS'])
         self.failrate=1e-5
         self.assoc_modes({'noloc':[0.2, 10000], 'degloc':[0.8, 10000]})
     def condfaults(self, time):
@@ -130,8 +133,8 @@ class PlanPath(FxnBlock):
             self.Dir.assign([0,0,0])
 
 class Trajectory(FxnBlock):
-    def __init__(self, flows):
-        super().__init__(['Env','DOF', 'Dir', 'Force_GR'], flows)
+    def __init__(self,name, flows):
+        super().__init__(name, flows, ['Env','DOF', 'Dir', 'Force_GR'])
         self.assoc_modes({'crash':[0, 100000], 'lost':[0.0, 50000]})
     def behavior(self, time):
         self.DOF.vertvel = max(min(-2+2*self.DOF.uppwr, 2), -2)
@@ -147,15 +150,15 @@ class Trajectory(FxnBlock):
             self.x=1.0
 
 class ViewEnvironment(FxnBlock):
-    def __init__(self, flows):
-        super().__init__(['Env'], flows)
+    def __init__(self, name, flows):
+        super().__init__(name, flows, ['Env'])
         self.failrate=1e-5
         self.assoc_modes({'poorview':[0.2, 10000]})
 
 class Direc(Flow):
     def __init__(self):
-        self.traj=[0,0,0]
-        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1}, 'Trajectory')
+        self.traj=[0.0,0.0,0.0]
+        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1.0}, 'Trajectory')
     def assign(self, traj):
         self.x=traj[0]
         self.y=traj[1]
@@ -166,8 +169,8 @@ class Direc(Flow):
         return status.copy()
         
 class Drone(Model):
-    def __init__(self, params={'graph_pos':{}, 'bipartite_pos':{}}):
-        super().__init__()
+    def __init__(self, params={'graph_pos':{}, 'bipartite_pos':{}}, modelparams={}, valparams={}):
+        super().__init__(params, modelparams, valparams)
         self.params=params
         #add flows to the model
         self.add_flow('Force_ST', {'support':1.0})
@@ -179,11 +182,10 @@ class Drone(Model):
         self.add_flow('EEctl', {'rate':1.0, 'effort':1.0})
         self.add_flow('Ctl1', {'forward':1.0, 'upward':1.0})
         self.add_flow('DOFs', {'vertvel':1.0, 'planvel':1.0, 'planpwr':1.0, 'uppwr':1.0})
-        self.add_flow('Env1', {'x':0.0,'y':0.0,'elev':50} )
+        self.add_flow('Env1', {'x':0.0,'y':0.0,'elev':50.0} )
         # custom flows
         self.add_flow('Dir1', Direc())
         #add functions to the model
-        flows=['EEctl', 'Force_ST']
         self.add_fxn('StoreEE',['EE_1', 'Force_ST'], fclass=StoreEE)
         self.add_fxn('DistEE', ['EE_1','EEmot','EEctl', 'Force_ST'], fclass=DistEE)
         self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Force_Lin'], fclass=AffectDOF)
@@ -194,12 +196,15 @@ class Drone(Model):
         self.add_fxn('HoldPayload',['Force_LG', 'Force_Lin', 'Force_ST'], fclass=HoldPayload)
         self.add_fxn('ViewEnv', ['Env1'], fclass=ViewEnvironment)
         
-        self.construct_graph(graph_pos=params['graph_pos'], bipartite_pos=params['bipartite_pos'])
-    def find_classification(self, g, endfaults, endflows, scen, mdlhist):
-    
-        repcost=sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()])
+        self.build_model(graph_pos=params['graph_pos'], bipartite_pos=params['bipartite_pos'])
+    def find_classification(self,scen, mdlhist):
+        modes, modeprops = self.return_faultmodes()
+        repcost=sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])
         
         totcost=repcost
         rate=scen['properties']['rate']
         expcost=totcost*rate*1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
+    
+if __name__=="__main__":
+    mdl = Drone()

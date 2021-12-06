@@ -11,6 +11,7 @@ import itertools
 import dill
 import pickle
 import networkx as nx
+import copy
 from ordered_set import OrderedSet
 from operator import itemgetter
 
@@ -563,6 +564,11 @@ class FxnBlock(Block):
         copy.faults = self.faults.copy()
         if hasattr(self, 'faultmodes'):         copy.faultmodes = self.faultmodes
         if hasattr(self, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
+        for timername in self.timers:
+            timer = getattr(self, timername)
+            copytimer = getattr(copy, timername)
+            copytimer.set_timer(timer.time, tstep=timer.tstep)
+            copytimer.mode=timer.mode
         for state in self._initstates.keys():
             setattr(copy, state, getattr(self, state))
         if hasattr(self, 'time'): copy.time=self.time
@@ -1050,19 +1056,44 @@ class Model(object):
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) """
-    def __init__(self, name, tstep=1.0):
+    def __init__(self, name):
         self.name=name
-        self.time=0
+        self.time=0.0
+        self.tstep=-1.0
+        self.mode='standby'
     def t(self):
         """ Returns the time elapsed """
         return self.time
-    def inc(self, tstep):
+    def inc(self, tstep=[]):
         """ Increments the time elapsed by tstep"""
-        self.time+=tstep
+        if self.time>=0.0:
+            if tstep:   self.time+=tstep
+            else:       self.time+=self.tstep
+            self.mode='ticking'
+        else: self.mode='complete'
+        if self.time<=0: self.mode='complete'
     def reset(self):
         """ Resets the time to zero"""
-        self.time=0
-        
+        self.time=0.0
+        self.mode='standby'
+    def set_timer(self,time, tstep=-1.0, overwrite='always'):
+        """ Sets timer to a given time"""
+        if overwrite =='always':                        self.time=time
+        elif overwrite=='if_more' and self.time<time:   self.time=time
+        elif overwrite=='if_less' and self.time>time:   self.time=time
+        elif overwrite=='never':                        self.time=self.time
+        elif overwrite=='increment':                    self.time+=time
+        self.tstep=tstep
+        self.mode='set'
+    def in_standby(self):
+        return self.mode=='standby'
+    def is_ticking(self):
+        return self.mode=='ticking'
+    def is_complete(self):
+        return self.mode=='complete'
+    def is_set(self):
+        return self.mode=='set'
+
 class NominalApproach():
     """
     Class for defining sets of nominal simulations. To explain, a given system 
@@ -1075,7 +1106,7 @@ class NominalApproach():
         self.scenarios = {}
         self.num_scenarios = 0
         self.ranges = {}
-    def add_param_replicates(self,paramfunc, rep_id, num_replicates, *args, **kwargs):
+    def add_param_replicates(self,paramfunc, rangeid, num_replicates, *args, **kwargs):
         """
         Adds a set of repeated scenarios to the approach. For use in (external) random scenario generation.
 
@@ -1084,23 +1115,23 @@ class NominalApproach():
         paramfunc : method
             Python method which generates a set of model parameters given the input arguments.
             method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
-        rep_id : str
+        angeid : str
             Name for the set of replicates
         num_replicates : int
             Number of replicates to use
         *args : any
             arguments to send to paramfunc
         """
-        self.ranges[rep_id] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : num_replicates}
+        self.ranges[rangeid] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : num_replicates}
         for i in range(num_replicates):
             self.num_scenarios+=1
             params = paramfunc(*args, **kwargs)
-            scenname = rep_id+'_'+str(self.num_scenarios)
+            scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'faults':{},\
-                                      'properties':{'type':'nominal','time':0.0, 'name':scenname,\
+                                      'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                     'params':params,'inputparams':kwargs,\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/num_replicates}}
-            self.ranges[rep_id]['scenarios'].append(scenname)
+            self.ranges[rangeid]['scenarios'].append(scenname)
     def get_param_scens(self, rangeid, *level_params):
         """
         Returns the scenarios of a range associated with given parameter ranges
@@ -1131,8 +1162,6 @@ class NominalApproach():
             new_index = itemgetter(*inds)(xvals)
             if type(scenarios)==str: scenarios = [scenarios]
             param_scens[new_index].update(scenarios)
-        return param_scens
-            
         return param_scens
     def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds=None, **kwargs):
         """
@@ -1171,12 +1200,35 @@ class NominalApproach():
                 params = paramfunc(*args, **inputparams)
                 scenname = rangeid+'_'+str(self.num_scenarios)
                 self.scenarios[scenname]={'faults':{},\
-                                          'properties':{'type':'nominal','time':0.0, 'name':scenname,\
+                                          'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                         'params':params,'inputparams':inputparams,\
                                                         'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
                 self.ranges[rangeid]['scenarios'].append(scenname)
                 if replicates>1:    self.ranges[rangeid]['levels'][xvals].append(scenname)
                 else:               self.ranges[rangeid]['levels'][xvals]=scenname
+    def change_params(self, rangeid='all', **kwargs):
+        """
+        Changes a given parameter accross all scenarios. Modifies 'params' (rather than regenerating params from the paramfunc).
+
+        Parameters
+        ----------
+        rangeid : str
+            Name of the range to modify. Optional. Defaults to "all"
+        **kwargs : any
+            Parameters to change stated as paramname=value or 
+            as a dict paramname={'sub_param':value}, where 'sub_param' is the parameter of the dictionary with name paramname to update
+        """
+        for r in self.ranges:
+            if rangeid=='all' or rangeid==r: 
+                if not self.ranges.get('changes', False):   self.ranges[r]['changes'] = kwargs
+                else:                                       self.ranges[r]['changes'].update(kwargs)
+        for scenname, scen in self.scenarios.items():
+            if rangeid=='all' or rangeid==scen['properties']['rangeid']:
+                if not scen['properties'].get('changes', False):  scen['properties']['changes']=kwargs
+                else:                                             scen['properties']['changes'].update(kwargs)
+                for kwarg, kw_value in kwargs.items(): #updates 
+                    if type(kw_value)==dict:    scen['properties']['params'][kwarg].update(kw_value)
+                    else:                       scen['properties']['params'][kwarg]=kw_value
     def assoc_probs(self, rangeid, prob_weight=1.0, **inputpdfs):
         """
         Associates a probability model (assuming variable independence) with a 
@@ -1232,10 +1284,17 @@ class NominalApproach():
             params = paramfunc(*fixedargs, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'faults':{},\
-                                      'properties':{'type':'nominal','time':0.0, 'name':scenname,\
+                                      'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                     'params':params,'inputparams':inputparams,\
                                                     'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/num_pts}}
             self.ranges[rangeid]['scenarios'].append(scenname)
+    def copy(self):
+        newapp = NominalApproach()
+        newapp.scenarios = copy.deepcopy(self.scenarios)
+        newapp.ranges = copy.deepcopy(self.ranges)
+        newapp.num_scenarios = self.num_scenarios
+        return newapp
+        
 
 class SampleApproach():
     """
@@ -1276,8 +1335,18 @@ class SampleApproach():
         ----------
         mdl : Model
             Model to sample.
-        faults : str (all/single-component/function of interest) or list, optional
-            List of faults (tuple (fxn, mode)) to inject in the model. The default is 'all'. 'single-components' uses faults from a single component to represent faults form all components while passing the function name only inludes modes from that function
+        faults : str/list/tuple, optional
+            - The default is 'all', which gets all fault modes from the model.
+            - 'single-components' uses faults from a single component to represent faults form all components 
+            - passing the function name only includes modes from that function
+            - List of faults of form [(fxn, mode)] to inject in the model.
+            -Tuple arguments 
+                - ('mode type', 'mode','notmode'), gets all modes with 'mode' as a string (e.g. "mech", "comms", "loss" faults). 'notmode' (if given) specifies strings to remove
+                - ('mode types', ('mode1', 'mode2')), gets all modes with the listed strings (e.g. "mech", "comms", "loss" faults)
+                - ('mode name', 'mode'), gets all modes with the exact name 'mode'
+                - ('mode names', ('mode1', 'mode2')), gets all modes with the exact names defined in the tuple
+                - ('function class', 'Classname'), which gets all modes from a function with class 'Classname'
+                - ('function classes', ('Classname1', 'Classname2')), which gets all modes from a function with the names in the tuple
         phases: dict or 'global'
             Local phases in the model to sample. Has structure:
                 {'Function':{'phase':[starttime, endtime]}}
@@ -1293,11 +1362,15 @@ class SampleApproach():
         jointfaults : dict, optional
             Defines how the approach considers joint faults. The default is {'faults':'None'}. Has structure:
                 - faults : float    
-                    # of joint faults to inject
+                    # of joint faults to inject. 'all' specifies all faults at the same time
                 - jointfuncs :  bool 
                     determines whether more than one mode can be injected in a single function
                 - pcond (optional) : float in range (0,1) 
                     conditional probabilities for joint faults. If not give, independence is assumed.
+                - inclusive (optional) : bool
+                    specifies whether the fault set includes all joint faults up to the given level, or only the given level
+                    (e.g., True with 'all' means SampleApproach includes every combination of joint fault modes while
+                           False with 'all' means SampleApproach only includes the joint fault mode with all faults)
         sampparams : dict, optional
             Defines how specific modes in the model will be sampled over time. The default is {}. 
             Has structure: {(fxnmode,phase): sampparam}, where sampparam has structure:
@@ -1371,7 +1444,17 @@ class SampleApproach():
                 self.fxnrates[fxnname]=fxn.failrate * fxns_to_use[fxnname]
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
         else:
-            if type(faults)==str:   faults = [(faults, mode) for mode in mdl.fxns[faults].faultmodes]
+            if type(faults)==str:   faults = [(faults, mode) for mode in mdl.fxns[faults].faultmodes] #single-function modes
+            elif type(faults)==tuple:
+                if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==faults[1]]  
+                elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==f]  
+                elif faults[0]=='mode type':        faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if faults[1] in mode if (len(faults)<3 or not faults[2] in mode)]
+                elif faults[0]=='mode types':       faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if any([f in mode for f in faults[1]])]
+                elif faults[0]=='function class':   faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns_of_class(faults[1]).items() for mode in fxn.faultmodes]
+                elif faults[0]=='function classes': faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns_of_class(f).items() for mode in fxn.faultmodes]
+                else: raise Exception("Invalid option in tuple argument: "+str(faults[0]))
+            elif type(faults)==list: faults=faults
+            else: raise Exception("Invalid option for faults: "+str(faults)) 
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
             for fxnname, mode in faults: 
                 params = mdl.fxns[fxnname].faultmodes[mode]
@@ -1379,19 +1462,30 @@ class SampleApproach():
                 else:               self._fxnmodes[fxnname, mode] = params
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components.items()}
-        if type(jointfaults['faults'])==int:
+        if type(jointfaults['faults'])==int or jointfaults['faults']=='all':
+            if jointfaults['faults']=='all': num_joint= len(self._fxnmodes)
+            else:                            num_joint=jointfaults['faults']
             self.jointmodes=[]
-            for numjoint in range(2, jointfaults['faults']+1):
-                jointmodes = list(itertools.combinations(self._fxnmodes, numjoint))
+            inclusive = jointfaults.get('inclusive', True)
+            if inclusive:
+                for numjoint in range(2, num_joint+1):
+                    jointmodes = list(itertools.combinations(self._fxnmodes, numjoint))
+                    if not jointfaults.get('jointfuncs', False): 
+                        jointmodes = [jm for jm in jointmodes if not any([jm[i-1][0] ==j[0] for i in range(1, len(jm)) for j in jm[i:]])]
+                    self.jointmodes = self.jointmodes + jointmodes
+            elif not inclusive:
+                jointmodes = list(itertools.combinations(self._fxnmodes, num_joint))
                 if not jointfaults.get('jointfuncs', False): 
                     jointmodes = [jm for jm in jointmodes if not any([jm[i-1][0] ==j[0] for i in range(1, len(jm)) for j in jm[i:]])]
-                self.jointmodes = self.jointmodes + jointmodes
+                self.jointmodes=jointmodes
+            else: raise Exception("Invalid option for jointfault['inclusive']")
         elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
     def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}):
         """ Initializes rates, rates_timeless"""
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
         self.mode_phase_map=dict.fromkeys(self._fxnmodes)
+        
         for (fxnname, mode) in self._fxnmodes:
             key_phases = mdl.fxns[fxnname].key_phases_by
             if key_phases=='global': fxnphases = self.globalphases
@@ -1454,7 +1548,12 @@ class SampleApproach():
                         elif type(jointfaults['pcond'])==list:
                             self.rates[jointmode][phaseid] = jointfaults['pcond'][j_ind]*max(rates)  
                         self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(overlap[1]-overlap[0])
-                        self.mode_phase_map[jointmode][phaseid] = overlap        
+                        self.mode_phase_map[jointmode][phaseid] = overlap 
+            if not jointfaults.get('inclusive', True): 
+                for (fxnname, mode) in self._fxnmodes: 
+                    self.rates.pop((fxnname,mode))
+                    self.rates_timeless.pop((fxnname,mode))
+                    self.mode_phase_map.pop((fxnname,mode))
     def create_sampletimes(self,mdl, params={}, default={'samp':'evenspacing','numpts':1}):
         """ Initializes weights and sampletimes """
         self.sampletimes={}
@@ -1609,7 +1708,9 @@ class SampleApproach():
                 pts=[mins[int(len(mins)/2)]]
                 weights=[1]
             elif samptype=='piecewise':
-                partlocs=[0, len(list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][1], self.tstep)))]
+                if not self.phases: partlocs=[0, len(list(np.arange(self.globalphases[modeinphase[1][1]][0], self.globalphases[modeinphase[1][1]][1], self.tstep)))]
+                else:               partlocs=[0, len(list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][1], self.tstep)))]
+                
                 reset=False
                 for ind, cost in enumerate(costs[1:-1]): # find where fxn is no longer linear
                     if reset==True:
@@ -1657,6 +1758,7 @@ def find_overlap_n(intervals):
     upper_limits = [interval[1] for interval in intervals]
     lower_limits = [interval[0] for interval in intervals]
     if any(u < l for u in upper_limits for l in lower_limits): return []
+    if not upper_limits and not lower_limits: return []
     orderedintervals = np.sort(upper_limits+lower_limits)
     return [orderedintervals[len(intervals)-1],orderedintervals[len(intervals)]]
 

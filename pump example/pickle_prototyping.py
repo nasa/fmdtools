@@ -5,10 +5,8 @@ Created on Wed Mar 24 16:19:59 2021
 
 @author: dhulse
 """
-import sys
-paths = sys.path
-if paths[1]!='../':
-    sys.path=[sys.path[0]] + ['../'] + paths
+import sys, os
+sys.path.insert(1,os.path.join(".."))
 
 from ex_pump import * 
 from fmdtools.modeldef import SampleApproach

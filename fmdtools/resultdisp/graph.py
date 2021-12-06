@@ -112,7 +112,7 @@ def show(g, gtype='bipartite', renderer = 'matplotlib', filename="", **kwargs):
         for more information on these arguments
     """
     if renderer=='graphviz':
-        dot = show_graphviz(g, gtype, filename='',  **kwargs)
+        dot = show_graphviz(g, gtype, filename=filename,  **kwargs)
         return dot
     elif renderer == 'matplotlib':
         fig, ax = show_matplotlib(g, gtype=gtype, filename=filename, **kwargs)
