@@ -160,6 +160,27 @@ class Block(Common):
         for param in params:
             for attr, val in param.items():
                 setattr(self, attr, val)
+    def assoc_stochastic_state(self,name,default,generator, generator_params):
+        """
+        Associate a stochastic state with the Block. Enables the simulation of stochastic behavior over time.
+
+        Parameters
+        ----------
+        name : str
+            name for the parameter
+        default : int/float/str/etc
+            Default value for the parameter for the parameter
+        generator : str
+            Name of the numpy generator to use. 
+            see: https://numpy.org/doc/1.16/reference/generated/numpy.random.RandomState.html
+        generator_params : tuple
+            Parameter inputs for the numpy generator function
+        """
+        if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
+        self._states[name]=default
+        self._initstates[name]=default
+        if not hasattr(self,'_generators'): self._generators={name:(default, generator, generator_params)} 
+        else:                               self._generators[name]=(default, generator, generator_params)
     def assoc_healthstates(self, hstates, mode_app='single-state', probtype='prob', units='hr'):
         """
         Adds health state attributes to the model (and a mode approach if desired). 
@@ -246,7 +267,6 @@ class Block(Common):
         elif getattr(self, 'key_phases_by', '')!=key_phases_by: 
             print("Changing key_phases_by to "+key_phases_by)
             self.key_phases_by=key_phases_by
-            
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
