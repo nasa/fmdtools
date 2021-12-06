@@ -6,8 +6,8 @@ This script shows some approaches to creating the ideal quadrature based on the 
 
 @author: hulsed
 """
-import sys
-sys.path.append('../')
+import sys, os
+sys.path.insert(1,os.path.join(".."))
 
 import numpy as np
 import quadpy
@@ -20,7 +20,7 @@ import time
 mdl = Pump(params={'cost':{'water'}, 'delay':10, 'units':'hrs'}) # should give identical utilities
 mdl = Pump()
 
-app_full_plin = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
+app_full_plin = SampleApproach(mdl, defaultsamp={'samp':'fullint'}, phases=mdl.phases)
 
 endclasses, mdlhists = propagate.approach(mdl, app_full_plin)
 fmea = rd.tabulate.phasefmea(endclasses, app_full_plin)

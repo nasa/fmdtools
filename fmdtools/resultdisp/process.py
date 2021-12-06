@@ -403,6 +403,9 @@ def avgdegtimeheatmap(reshists):
     return degtimetable.mean().to_dict()
 def expdegtimeheatmap(reshists, endclasses):
     """ Makes a heatmap dictionary of the expected degraded heat time over a list of scenarios in the dict of results histories based on the rates in endclasses."""
+    if 'nominal' in {*endclasses, *reshists}:
+        if 'nominal' not in reshists:       endclasses=endclasses.copy(); endclasses.pop('nominal')
+        elif 'nominal' not in endclasses:   reshists=reshists.copy(); reshists.pop('nominal')
     degtimetable = pd.DataFrame(degtimemaps(reshists))
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expdegtimetable = degtimetable.multiply(rates).transpose()
@@ -425,6 +428,9 @@ def faultsheatmap(reshists):
     return faulttable.mean().to_dict()
 def expfaultsheatmap(reshists, endclasses):
     """Makes a heatmap dictionary of the expected resulting faults over all scenarios"""
+    if 'nominal' in {*endclasses, *reshists}:
+        if 'nominal' not in reshists:       endclasses=endclasses.copy(); endclasses.pop('nominal')
+        elif 'nominal' not in endclasses:   reshists=reshists.copy(); reshists.pop('nominal')
     faulttable = pd.DataFrame(faultmaps(reshists))
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expfaulttable = faulttable.multiply(rates).transpose()
@@ -514,4 +520,42 @@ def overall_diff(endclasses, metric, nan_as=np.nan, as_ind=False, no_diff=False)
 def rate(endclasses, metric):
      """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
      return sum([int(bool(e[metric]))*e['rate'] for k,e in endclasses.items() if not np.isnan(e[metric])])
-    
+ 
+def bootstrap_confidence_interval(data, sample_size='data', num_samples=1000, interval=95, seed=False):
+    """
+    Calculates the bootstrap confidence interval for the mean (if data is float) 
+    or proportion (if data is an indicator variable) of a set of data.
+
+    Parameters
+    ----------
+    data : list/array/etc
+        Iterable with the data. May be float (for mean) or indicator (for proportion)
+    sample_size : int, optional
+        Size of the sample used in the bootstrapping process. The default is 'sample', the size of the data.
+        Specifying the sample size can reduce the computational time for large data, however using the size of the 
+        data gives a narrower confidence interval.
+    num_samples : int, optional
+        Number of samples to bootstrap with. The default is 1000.
+        Increase to decrease monte carlo error. 
+    interval : int, optional
+        Confidence interval to sample. The default is 95.
+    seed : int, false
+        Seed for numpy to use in the randomization
+    Returns
+    -------
+    boot_mean: float
+        bootstrap mean of the sample. should be equivalent to the sample mean (but not always)
+    lb : float
+        lower bound of the confidence interval
+    ub : float
+        upper bound of the confidence interval
+    """
+    tail_perc = (100-interval)/2
+    if sample_size =='data': sample_size=len(data)
+    if sample_size<10: print("Warning: sample size of "+str(sample_size)+" may be too small")
+    if seed: np.random.seed(seed)
+    boot_means = [np.mean(np.random.choice(data, sample_size, True)) for i in range(num_samples)]
+    boot_mean = np.mean(boot_means)
+    lower_bound = np.percentile(boot_means, tail_perc)
+    upper_bound = np.percentile(boot_means, 100-tail_perc)
+    return boot_mean, lower_bound, upper_bound

@@ -559,16 +559,73 @@ def costovertime(endclasses, app, costtype='expected cost'):
     plt.xlabel("Time ("+str(app.units)+")")
     plt.grid()
 
-def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False):
+def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', figsize=(6,4), title='', maxy='max', xlabel=True, error_bars=False):
     """
-    Plots a comparison_table from tabulate.resilience_factor_test as a bar plot for each fault scenario/set of fault scenarios.
+    Compares/plots a comparison table from tabulate.nominal_factor_comparison as a bar plot for a given metric.
+
+    Parameters
+    ----------
+    comparison_table : pandas table
+        Table from tabulate.nominal_factor_comparison
+    metrics : string
+        Metric to use in the plot
+    ylabel : string, optional
+        label for the y-axis. The default is 'proportion'.
+    figsize : tuple, optional
+        Size for the plot. The default is (12,8).
+    title : str, optional
+        Plot title. The default is ''.
+    maxy : float
+        Cutoff for the y-axis (to use if the default is bad). The default is 'max'
+    xlabel : TYPE, optional
+        DESCRIPTION. The default is True.
+    error_bars : TYPE, optional
+        DESCRIPTION. The default is False.
+
+    Returns
+    -------
+    figure: matplotlib figure
+    """
+    figure = plt.figure(figsize=figsize)
+    
+    if '' in comparison_table.columns[0]: #bounded table
+        bar = np.array([comparison_table.loc[metric,col[0]][''] for col in comparison_table.columns if col[1]==''])
+        labels= [str(i[0]) for i in comparison_table.columns if i[1]=='']
+        if error_bars:
+            UB = np.array([comparison_table.loc[metric,col[0]]['UB'] for col in comparison_table.columns if col[1]=='UB'])
+            LB = np.array([comparison_table.loc[metric,col[0]]['LB'] for col in comparison_table.columns if col[1]=='LB'])
+            yerr= [bar-LB, UB-bar]
+            if maxy=='max': maxy = comparison_table.loc[metric].max()
+        else: 
+            yerr=[]
+            if maxy=='max': maxy = max(bar)
+    else:  
+        bar = [*comparison_table.loc[metric]]; yerr=[]; labels=[str(i) for i in comparison_table.columns]
+        if maxy=='max': maxy = max(bar)
+    
+    ax = figure.add_subplot(1,1,1)
+    
+    plt.grid(axis='y')
+    ax.set_ylabel(ylabel)
+    ax.set_ylim(top=maxy)
+    xs = np.array([ i for i in range(len(bar))])
+    if yerr:    plt.bar(xs,bar, tick_label=labels, linewidth=4, yerr=yerr, error_kw={'elinewidth':3})
+    else:       plt.bar(xs,bar, tick_label=labels, linewidth=4)
+    
+    
+    return figure
+
+def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False, xlabel=True, error_bars=False):
+    """
+    Plots a comparison_table from tabulate.resilience_factor_comparison as a bar plot for each fault scenario/set of fault scenarios.
 
     Parameters
     ----------
     comparison_table : pandas table
         Table from tabulate.resilience_factor_test with factors as rows and fault scenarios as columns
     faults : list, optional
-        list of faults/fault types to include in the bar plot (the columns of the table). The default is 'all'.
+        iterable of faults/fault types to include in the bar plot (the columns of the table). The default is 'all'.
+        a dictionary {'fault':'title'} will associate the given fault with a title (otherwise 'fault' is used)
     rows : int, optional
         Number of rows in the multplot. The default is 1.
     stat : str, optional
@@ -583,6 +640,10 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         'all'/'single'/'none'. The default is "single".
     stack : bool, optional
         Whether or not to stack the nominal and resilience plots. The default is False.
+    xlabel : bool/str
+        The x-label descriptor for the design factors. Defaults to the column values.
+    error_bars : bool
+        Whether to include error bars for the factor. Requires comparison_table to have lower and upper bound information
 
     Returns
     -------
@@ -590,8 +651,11 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         Plot handle of the figure.
     """
     figure = plt.figure(figsize=figsize)
+    if type(comparison_table.columns[0])==tuple:    has_bounds = True
+    else:                                           has_bounds=False
     if faults=='all': 
-        faults=[*comparison_table.columns]
+        if has_bounds: faults=list({f[0] for f in comparison_table})
+        else:          faults=[*comparison_table.columns]
         faults.remove('nominal')
     columns = np.ceil(len(faults)/rows)
     n=0
@@ -603,10 +667,31 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         ax = figure.add_subplot(rows, columns, n, label=str(n))
         ax.set_ylim(top=maxy)
         xs = np.array([ i for i in range(len(comparison_table.index))])
-        plt.bar(xs,[*comparison_table['nominal']], tick_label=[str(i) for i in comparison_table.index], linewidth=4, fill=False, hatch='//', edgecolor='grey', label='nominal')
-        if stack:   plt.bar(xs,[*comparison_table[fault]], tick_label=[str(i) for i in comparison_table.index], alpha=0.75, linewidth=4, label='fault scenarios', bottom=[*comparison_table['nominal']])
-        else:       plt.bar(xs,[*comparison_table[fault]], tick_label=[str(i) for i in comparison_table.index], alpha=0.75, linewidth=4, label='fault scenarios')
-        plt.title(fault)
+        if has_bounds: 
+            nominal_bars = [*comparison_table['nominal','']]
+            fault_bars = [*comparison_table[fault,'']]
+        else:
+            nominal_bars = [*comparison_table['nominal']]
+            fault_bars = [*comparison_table[fault]]
+        if stack:   bottom=fault_bars
+        else:       bottom=np.zeros(len(fault_bars))
+        
+        if error_bars:
+            if not has_bounds: raise Exception("No bounds in the data to construct error bars out of")
+            lower_nom_error = comparison_table['nominal', ''] - comparison_table['nominal', 'LB']
+            upper_nom_error =  comparison_table['nominal', 'UB'] - comparison_table['nominal', '']
+            yerror_nom=[[*lower_nom_error],[*upper_nom_error]]
+            lower_error = comparison_table[fault, ''] - comparison_table[fault, 'LB']
+            upper_error =  comparison_table[fault, 'UB'] - comparison_table[fault, '']
+            yerror = [[*lower_error],[*upper_error]]
+        else: yerror_nom=None; yerror=None
+        
+        plt.bar(xs,nominal_bars, tick_label=[str(i) for i in comparison_table.index], linewidth=4, fill=False, hatch='//', edgecolor='grey', label='nominal', yerr=yerror_nom, ecolor='grey', error_kw={'elinewidth':6})
+        plt.bar(xs,fault_bars, tick_label=[str(i) for i in comparison_table.index], alpha=0.75, linewidth=4, label='fault scenarios', bottom=bottom, yerr=yerror, ecolor='red', error_kw={'elinewidth':2})
+        if len(faults)>1:   
+            if type(faults)==dict:      plt.title(faults[fault])
+            else:                       plt.title(fault)
+        elif title:         plt.title(title)
         plt.grid(axis='y')
         if not (n-1)%columns:    
             ax.set_ylabel(stat)
@@ -614,11 +699,12 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
             ax.set_ylabel('')
             ax.axes.yaxis.set_ticklabels([])
         if (n-1) >= (rows-1)*columns: 
-            ax.set_xlabel(comparison_table.columns.name)
+            if xlabel==True:    ax.set_xlabel(comparison_table.columns.name)
+            else:               ax.set_xlabel(xlabel)
         if legend=='all': plt.legend()
         elif legend=='single' and n==1: plt.legend()
     figure.tight_layout(pad=0.3)
-    figure.suptitle(title)
+    if title and len(faults)>1:               figure.suptitle(title)
     return figure
     
 
