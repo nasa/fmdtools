@@ -150,6 +150,9 @@ class Block(Common):
         self.faultmodes= getattr(self, 'faultmodes', {})
         self._generators=getattr(self, '_generators', {})
         self._generator_params=getattr(self, '_generator_params', {})
+        if not getattr(self, 'seed', []): 
+            self.seed=np.random.randint(2147483648)
+        self._init_rng=np.random.default_rng(self.seed)
         self.time=0.0
     def __repr__(self):
         if hasattr(self,'name'):
@@ -184,9 +187,9 @@ class Block(Common):
         if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
         self._states.append(name)
         self._initstates[name]=default
+        if not seed: seed = self._init_rng.integers(2147483648)
         if not hasattr(self,'_generators'):         self._generators={name:np.random.RandomState(seed)} 
         else:                                       self._generators[name]=np.random.RandomState(seed)
-        if not seed: seed=self._generators[name].get_state()[1][0]
         if not hasattr(self,'_generator_params'):   self._generator_params={name:(default, generator_method, generator_params,seed)} 
         else:                                       self._generator_params[name]=(default, generator_method, generator_params,seed)
     def assoc_healthstates(self, hstates, mode_app='single-state', probtype='prob', units='hr'):
@@ -470,7 +473,7 @@ class FxnBlock(Block):
     tstep : float
         timestep of the model in the function (added/overridden by model definition)
     """
-    def __init__(self,name, flows, flownames=[], states={}, components={},timers={}, tstep=1.0):
+    def __init__(self,name, flows, flownames=[], states={}, components={},timers={}, tstep=1.0, seed=None):
         """
         Intances the function superclass with the relevant parameters.
 
@@ -600,7 +603,7 @@ class FxnBlock(Block):
         for statename, generator in self._generators.items():
             gen_method = getattr(generator, self._generator_params[statename][1])
             setattr(self, statename, gen_method(*self._generator_params[statename][2]))
-    def updatefxn(self,proptype, faults=[], time=0):
+    def updatefxn(self,proptype, faults=[], time=0, run_stochastic=False):
         """
         Updates the state of the function at a given time and injects faults.
 
@@ -614,7 +617,7 @@ class FxnBlock(Block):
         self.add_faults(faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
-        if time>self.time: self.update_stochastic_states()
+        if time>self.time and run_stochastic: self.update_stochastic_states()
         if self.components:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
@@ -819,13 +822,16 @@ class Model(object):
         fparams : arbitrary float, dict, list, etc.
             Other parameters to send to the __init__ method of the function class
         """
+        
         if not getattr(self, 'is_copy', False):
+            self.fxns[name]=fclass.__new__(fclass)
+            self.fxns[name].seed=np.random.randint(2147483648)
             flows=self.get_flows(flownames)
             if fparams=='None':
-                self.fxns[name]=fclass(name, flows)
+                self.fxns[name].__init__(name, flows)
                 self._fxninput[name]={'name':name,'flows': flownames, 'fparams': 'None'}
             else: 
-                self.fxns[name]=fclass(name, flows,fparams)
+                self.fxns[name].__init__(name, flows,fparams)
                 self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams}
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
