@@ -127,7 +127,7 @@ class Water(Flow):
 ##DEFINE MODEL OBJECT
 class Pump(Model):
     def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, \
-                 modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}, \
+                 modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':1}, \
                      valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
         super().__init__(params=params, modelparams=modelparams, valparams=valparams)
         self.add_flow('EE_1', {'current':1.0, 'voltage':1.0})
@@ -171,8 +171,14 @@ class Pump(Model):
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
 
 if __name__=="__main__":
-    mdl = Pump()
+    mdl = Pump(modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':2})
 
     
     endresults, resgraph, mdlhist=propagate.nominal(mdl)
+    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate','pressure']})
+    
+    endresults, resgraph, mdlhist=propagate.nominal(mdl,run_stochastic=True)
+    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate','pressure']})
+    
+    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True)
     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate','pressure']})
