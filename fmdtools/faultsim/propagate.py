@@ -57,6 +57,8 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True
         Whether or not to protect the model object via copying
             True (default) - re-instances the model so that multiple simulations can be run successively without causing problems
             False - Thus, the model object that is returned can be modified and analyzed if needed
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values. Default is False.
     Returns
     -------
     endresults : Dict
@@ -83,6 +85,16 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True
     if protect: mdl.reset()
     return endresults, resgraph, mdlhist
 
+def update_params(params, **kwargs):
+    for kwarg in kwargs: 
+        if kwargs.get(kwarg, None)!=None: params[kwarg]=kwargs[kwarg]
+    return params
+def new_scen_params(mdl,scen):
+    params = update_params(mdl.params, **scen['properties'].get('params', {}))
+    modelparams = update_params(mdl.modelparams, **scen['properties'].get('modelparams', {}))
+    valparams = update_params(mdl.valparams, **scen['properties'].get('valparams', {}))
+    return params, modelparams, valparams
+
 def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, track_times="all", run_stochastic=False):
     """
     Simulates a set of nominal scenarios through a model. Useful to understand
@@ -107,6 +119,8 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
             'all'--all simulated times
             ('interval', n)--includes every nth time in the history
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values. Default is False.
     Returns
     -------
     endclasses : Dict
@@ -117,13 +131,13 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
     mdlhists = dict.fromkeys(nomapp.scenarios)
     endclasses = dict.fromkeys(nomapp.scenarios)
     if pool:
-        inputs = [(mdl.__class__(scen['properties']['params'], mdl.modelparams, mdl.valparams), scen, track, track_times, run_stochastic) for scen in nomapp.scenarios.values()]
+        inputs = [(mdl.__class__(*new_scen_params(mdl,scen)), scen, track, track_times, run_stochastic) for scen in nomapp.scenarios.values()]
         result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
         mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
     else:
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
-            mdl = mdl.__class__(params=scen['properties']['params'], modelparams = mdl.modelparams, valparams=mdl.valparams)
+            mdl = mdl.__class__(*new_scen_params(mdl,scen))
             mdlhists[scenname], _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
             _ = cut_mdlhist(mdlhists[scenname], t_end)
             endfaults, endfaultprops = mdl.return_faultmodes()
@@ -167,6 +181,8 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
         Whether or not to protect the model object via copying
             True (default) - re-instances the model so that multiple simulations can be run successively without causing problems
             False - Thus, the model object that is returned can be modified and analyzed if needed
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values. Default is False.
     Returns
     -------
     endresults : dict
@@ -254,6 +270,8 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
         Whether or not to protect the model object via copying
             True (default) - re-instances the model so that multiple simulations can be run successively without causing problems
             False - Thus, the model object that is returned can be modified and analyzed if needed
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     Returns
     -------
     endresults : dict
@@ -336,6 +354,8 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
         Whether or not to protect the model object via copying
             True (default) - re-instances the model (safe)
             False - model is not re-instantiated (unsafe--do not use model afterwards)
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
 
     Returns
     -------
@@ -406,6 +426,8 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
         Whether or not to protect the model object via copying
             True (default) - re-instances the model (safe)
             False - model is not re-instantiated (unsafe--do not use model afterwards)
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     Returns
     -------
     endclasses : dict
@@ -476,6 +498,8 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
             'all'--all simulated times
             ('interval', n)--includes every nth time in the history
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     **app_args : kwargs
         Keyword arguments for the SampleApproach. See modeldef.SampleApproach documentation.
 
@@ -533,6 +557,8 @@ def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True, track_
             'all'--all simulated times
             ('interval', n)--includes every nth time in the history
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     """
     if staged:
         mdl = mdl.copy()
@@ -618,7 +644,8 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
         List of times to copy the model (for use in staged execution). The default is [].
     prevhist : dict, optional
         The previous results hist (for used in staged execution). The default is {}.
-
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     Returns
     -------
     mdlhist : dict
@@ -698,7 +725,8 @@ def propagate(mdl, initfaults, time, flowstates={}, run_stochastic=False):
         The faults to inject in the model with structure {fxn:fault}
     time : float
         The current timestep.
-
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     Returns
     -------
     flowstates : dict
@@ -725,6 +753,8 @@ def prop_time(mdl, time, initfaults, flowstates={}, run_stochastic=False):
         Current time-step.
     initfaults : dict
         Faults to inject during this propagation step.
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
 
     Returns
     -------

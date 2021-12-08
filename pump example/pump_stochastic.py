@@ -92,7 +92,7 @@ class MoveWat(FxnBlock):
     """  Move Water is the pump itself. While one could decompose this further, one function is used for simplicity """
     def __init__(self,name, flows, delay):
         flownames=['EEin', 'Sigin', 'Watin', 'Watout']
-        states={'eff':1.0} #effectiveness state
+        states={'total_flow':0.0} #effectiveness state
         self.delay=delay #delay parameter
         super().__init__(name,flows,flownames=flownames,states=states, timers={'timer'})
         self.failrate=1e-5
@@ -113,6 +113,7 @@ class MoveWat(FxnBlock):
 
         self.Watin.pressure=self.Watout.pressure
         self.Watin.flowrate=self.Watout.flowrate
+        if time>self.time: self.total_flow+=self.Watout.flowrate
 
 
 class Water(Flow):
@@ -171,14 +172,22 @@ class Pump(Model):
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
 
 if __name__=="__main__":
-    mdl = Pump(modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':2})
+    mdl = Pump(modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':3})
 
     
     endresults, resgraph, mdlhist=propagate.nominal(mdl)
     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate','pressure']})
     
     endresults, resgraph, mdlhist=propagate.nominal(mdl,run_stochastic=True)
-    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate','pressure']})
+    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
     
-    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True)
-    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate','pressure']})
+    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False)
+    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, legend=False)
+    
+    
+    app = NominalApproach()
+    app.add_seed_replicates('test_seeds', 10)
+    endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
+    
+    
+    
