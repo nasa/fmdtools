@@ -300,3 +300,6 @@ if __name__=="__main__":
     reshist,diff1, summary = rd.process.hist(mdlhist)
     rd.graph.result_from(mdl, reshist, 50, gtype='normal')
     rd.graph.exec_order(mdl, gtype = 'normal')
+    app = NominalApproach()
+    app.add_seed_replicates('test', 10)
+    

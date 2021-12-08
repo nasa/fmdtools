@@ -151,7 +151,7 @@ class Block(Common):
         self._generators=getattr(self, '_generators', {})
         self._generator_params=getattr(self, '_generator_params', {})
         if not getattr(self, 'seed', []): 
-            self.seed=np.random.randint(2147483648)
+            self.seed=np.random.SeedSequence().entropy
         self._init_rng=np.random.default_rng(self.seed)
         self.time=0.0
     def __repr__(self):
@@ -178,7 +178,7 @@ class Block(Common):
             Default value for the parameter for the parameter
         generator_method : str
             Name of the numpy random method to use. 
-            see: https://numpy.org/doc/1.16/reference/generated/numpy.random.RandomState.html
+            see: https://numpy.org/doc/stable/reference/random/generator.html
         generator_params : tuple
             Parameter inputs for the numpy generator function
         seed : int
@@ -187,9 +187,10 @@ class Block(Common):
         if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
         self._states.append(name)
         self._initstates[name]=default
+        setattr(self, name,default)
         if not seed: seed = self._init_rng.integers(2147483648)
-        if not hasattr(self,'_generators'):         self._generators={name:np.random.RandomState(seed)} 
-        else:                                       self._generators[name]=np.random.RandomState(seed)
+        if not hasattr(self,'_generators'):         self._generators={name:np.random.default_rng(seed)} 
+        else:                                       self._generators[name]=np.random.default_rng(seed)
         if not hasattr(self,'_generator_params'):   self._generator_params={name:(default, generator_method, generator_params,seed)} 
         else:                                       self._generator_params[name]=(default, generator_method, generator_params,seed)
     def assoc_healthstates(self, hstates, mode_app='single-state', probtype='prob', units='hr'):
@@ -259,7 +260,7 @@ class Block(Common):
                 nomvals = tuple([*nom_hstates.values()])
                 statecombos = [i for i in itertools.product(*hranges.values()) if i!=nomvals]
                 if type(mode_app)==int: 
-                    sample = np.random.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
+                    sample = self._init_rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
                     statecombos = [statecombos[i] for i in sample]
                 self.faultmodes.update({'hmode_'+str(i):'synth' for i in range(len(statecombos))}) 
                 self.mode_state_dict.update({'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
@@ -437,7 +438,8 @@ class Block(Common):
         for state in self._initstates.keys():
             setattr(self, state,self._initstates[state])
         for generator in self._generators:
-            self._generators[generator]=np.random.RandomState(self._generator_params[generator][-1])
+            self._generators[generator]=np.random.default_rng(self._generator_params[generator][-1])
+        self._init_rng = np.random.default_rng(self.seed)
         self.time=0
     def return_states(self):
         """
@@ -550,7 +552,7 @@ class FxnBlock(Block):
         for name, component in self.components.items():
             component.reset()
         for generator in self._generators:
-            self._generators[generator]=np.random.RandomState(self._generator_params[generator][-1])
+            self._generators[generator]=np.random.default_rng(self._generator_params[generator][-1])
         for timername in self.timers:
             getattr(self, timername).reset()
         if hasattr(self, 'time'): self.time=0.0
@@ -586,8 +588,8 @@ class FxnBlock(Block):
         for state in self._initstates.keys():
             setattr(copy, state, getattr(self, state))
         for generator in self._generators:
-            copy._generators[generator]=np.random.RandomState(self._generator_params[generator][-1])
-            copy._generators[generator].set_state(self._generators[generator].get_state())
+            copy._generators[generator]=np.random.default_rng(self._generator_params[generator][-1])
+            copy._generators[generator].__setstate__(self._generators[generator].__getstate__())
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
@@ -762,13 +764,11 @@ class Model(object):
         self.tstep = modelparams.get('tstep', 1.0)
         self.units = modelparams.get('units', 'hr')
         self.use_end_condition = modelparams.get('use_end_condition', True)
-        if modelparams.get('seed', False):  
-            np.random.seed(modelparams['seed'])
-            self.seed=self.modelparams['seed']
-        else:                               
-            np.random.seed()
-            self.seed = np.random.get_state()[1][0]
+        if modelparams.get('seed', False):  self.seed = modelparams['seed']
+        else:
+            self.seed= np.random.SeedSequence().entropy                        
             modelparams['seed']=self.seed
+        self._rng = np.random.default_rng(self.seed)
         
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
@@ -825,7 +825,7 @@ class Model(object):
         
         if not getattr(self, 'is_copy', False):
             self.fxns[name]=fclass.__new__(fclass)
-            self.fxns[name].seed=np.random.randint(2147483648)
+            self.fxns[name].seed=self._rng.integers(2147483648)
             flows=self.get_flows(flownames)
             if fparams=='None':
                 self.fxns[name].__init__(name, flows)
@@ -1075,6 +1075,7 @@ class Model(object):
             flow.reset()
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
+        self._rng=np.random.default_rng(self.seed)
     def find_classification(self, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
         return {'rate':scen['properties']['rate'], 'cost': 1, 'expected cost': scen['properties']['rate']}
@@ -1131,6 +1132,25 @@ class NominalApproach():
         self.scenarios = {}
         self.num_scenarios = 0
         self.ranges = {}
+    def add_seed_replicates(self, rangeid, seeds):
+        """
+        Generates an approach with different seeds to use for the model's internal stochastic behaviors
+
+        Parameters
+        ----------
+        rangeid : str
+            Name for the set of replicates
+        seeds : int/list
+            Number of seeds (if an int) or a list of seeds to use.
+        """
+        if type(seeds)==int: seeds = [np.random.SeedSequence().entropy for i in range(seeds)]
+        self.ranges[rangeid] = {'seeds':seeds, 'scenarios':[]}
+        for i in range(len(seeds)):
+            self.num_scenarios+=1
+            scenname = rangeid+'_'+str(self.num_scenarios)
+            self.scenarios[scenname]={'faults':{},'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
+                                                                'modelparams':{'seed':seeds[i]}, 'prob':1/len(seeds)}}
+            self.ranges[rangeid]['scenarios'].append(scenname)
     def add_param_replicates(self,paramfunc, rangeid, num_replicates, *args, **kwargs):
         """
         Adds a set of repeated scenarios to the approach. For use in (external) random scenario generation.
@@ -1140,7 +1160,7 @@ class NominalApproach():
         paramfunc : method
             Python method which generates a set of model parameters given the input arguments.
             method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
-        angeid : str
+        rangeid : str
             Name for the set of replicates
         num_replicates : int
             Number of replicates to use
