@@ -151,7 +151,7 @@ class Block(Common):
         self._generators=getattr(self, '_generators', {})
         self._generator_params=getattr(self, '_generator_params', {})
         if not getattr(self, 'seed', []): 
-            self.seed=np.random.SeedSequence().entropy
+            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]
         self._init_rng=np.random.default_rng(self.seed)
         self.time=0.0
     def __repr__(self):
@@ -766,7 +766,7 @@ class Model(object):
         self.use_end_condition = modelparams.get('use_end_condition', True)
         if modelparams.get('seed', False):  self.seed = modelparams['seed']
         else:
-            self.seed= np.random.SeedSequence().entropy                        
+            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]                       
             modelparams['seed']=self.seed
         self._rng = np.random.default_rng(self.seed)
         
@@ -1143,7 +1143,7 @@ class NominalApproach():
         seeds : int/list
             Number of seeds (if an int) or a list of seeds to use.
         """
-        if type(seeds)==int: seeds = [np.random.SeedSequence().entropy for i in range(seeds)]
+        if type(seeds)==int: seeds = np.random.SeedSequence.generate_state(np.random.SeedSequence(),seeds)
         self.ranges[rangeid] = {'seeds':seeds, 'scenarios':[]}
         for i in range(len(seeds)):
             self.num_scenarios+=1
@@ -1151,7 +1151,7 @@ class NominalApproach():
             self.scenarios[scenname]={'faults':{},'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                                 'modelparams':{'seed':seeds[i]}, 'prob':1/len(seeds)}}
             self.ranges[rangeid]['scenarios'].append(scenname)
-    def add_param_replicates(self,paramfunc, rangeid, num_replicates, *args, **kwargs):
+    def add_param_replicates(self,paramfunc, rangeid, replicates, *args, ind_seeds=True, **kwargs):
         """
         Adds a set of repeated scenarios to the approach. For use in (external) random scenario generation.
 
@@ -1162,20 +1162,30 @@ class NominalApproach():
             method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
         rangeid : str
             Name for the set of replicates
-        num_replicates : int
+        replicates : int
             Number of replicates to use
         *args : any
             arguments to send to paramfunc
+        ind_seeds : Bool/list
+            Whether the models should be run with different seeds (rather than the same seed). Default is True
+            When a list is provided, these seeds are are used. Must be of length replicates.
+        *kwargs : any
+            keyword arguments to send to paramfunc
         """
-        self.ranges[rangeid] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : num_replicates}
-        for i in range(num_replicates):
+        if ind_seeds==True:         seeds = np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)[0]
+        elif type(ind_seeds)==list: 
+            if len(ind_seeds)!=replicates: raise Exception("list ind_seeds must be of length replicates")
+            else:                   seeds=ind_seeds
+        else:                       seeds = [None for i in range(replicates)]
+        self.ranges[rangeid] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : replicates}
+        for i in range(replicates):
             self.num_scenarios+=1
             params = paramfunc(*args, **kwargs)
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'faults':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                    'params':params,'inputparams':kwargs,\
-                                                    'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/num_replicates}}
+                                                    'params':params,'inputparams':kwargs,'modelparams':{'seed':seeds[i]},\
+                                                    'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/replicates}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def get_param_scens(self, rangeid, *level_params):
         """
@@ -1208,7 +1218,7 @@ class NominalApproach():
             if type(scenarios)==str: scenarios = [scenarios]
             param_scens[new_index].update(scenarios)
         return param_scens
-    def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds=None, **kwargs):
+    def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds='shared', **kwargs):
         """
         Adds a set of scenarios to the approach.
 
@@ -1219,10 +1229,16 @@ class NominalApproach():
             method should have form: method(fixedarg, fixedarg..., inputarg=X, inputarg=X)
         rangeid : str
             Name for the range being used. Default is 'nominal'
-        replicates : int
-            Number of points to take over each range (for random parameters). Default is 1.
         *args: specifies values for positional args of paramfunc.
             May be given as a fixed float/int/dict/str defining a set value for positional arguments
+        replicates : int
+            Number of points to take over each range (for random parameters). Default is 1.
+        seeds : str/list
+            Options for seeding models/replicates: (Default is 'shared')
+                - 'shared' creates random seeds and shares them between parameters and models
+                - 'independent' creates separate random seeds for models and parameter generation
+                - 'keep_model' uses the seed provided in the model for all of the model
+            When a list is provided, these seeds are are used (and shared). Must be of length replicates.
         **kwargs : specifies range for keyword args of paramfunc
             May be given as a fixed float/int/dict/str (k=value) defining a set value for the range (if not the default) or
             as a tuple k=(start, end, step)
@@ -1232,8 +1248,14 @@ class NominalApproach():
         inputranges = {k:v for k,v in kwargs.items() if type(v)==tuple}
         ranges = (np.arange(*arg) for k,arg in inputranges.items())
         fullspace = [x for x in itertools.product(*ranges)]
-        inputnames = list(inputranges.keys())       
-        if seeds==None: seeds = np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)               
+        inputnames = list(inputranges.keys())  
+        
+        if type(seeds)==list: 
+            if len(seeds)!=replicates: raise Exception("list seeds must be of length replicates")
+        else: seedstr=seeds;  seeds=np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)
+        if seedstr=='shared':         mdlseeds=seeds
+        elif seedstr=='independent':  mdlseeds=np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)
+        elif seedstr=='keep_model':   mdlseeds= [None for i in range(replicates)]
         
         self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}, 'replicates':replicates}
         for xvals in fullspace:
@@ -1246,7 +1268,7 @@ class NominalApproach():
                 scenname = rangeid+'_'+str(self.num_scenarios)
                 self.scenarios[scenname]={'faults':{},\
                                           'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                        'params':params,'inputparams':inputparams,\
+                                                        'params':params,'inputparams':inputparams,'modelparams':{'seed':mdlseeds[i]},\
                                                         'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
                 self.ranges[rangeid]['scenarios'].append(scenname)
                 if replicates>1:    self.ranges[rangeid]['levels'][xvals].append(scenname)
@@ -1300,7 +1322,7 @@ class NominalApproach():
         totprobs = sum([self.scenarios[scenname]['properties']['prob'] for scenname in self.ranges[rangeid]['scenarios']])
         for scenname in self.ranges[rangeid]['scenarios']:
             self.scenarios[scenname]['properties']['prob'] = self.scenarios[scenname]['properties']['prob']*prob_weight/totprobs
-    def add_rand_params(self, paramfunc, rangeid, *fixedargs, prob_weight=1.0, num_pts=1000, **randvars):
+    def add_rand_params(self, paramfunc, rangeid, *fixedargs, prob_weight=1.0, replicates=1000, seeds='shared', **randvars):
         """
         Adds a set of random scenarios to the approach.
 
@@ -1316,22 +1338,36 @@ class NominalApproach():
         *fixedargs : any
             Fixed positional arguments in the parameter generator function. 
             Useful for discrete modes with different parameters.
+        seeds : str/list
+            Options for seeding models/replicates: (Default is 'shared')
+                - 'shared' creates random seeds and shares them between parameters and models
+                - 'independent' creates separate random seeds for models and parameter generation
+                - 'keep_model' uses the seed provided in the model for all of the model
+            When a list is provided, these seeds are are used (and shared). Must be of length replicates.
         **inputranges : key=tuple
             Specification for each random input parameter, specified as 
             input = (randfunc, param1, param2...)
             where randfunc is the method producing random outputs (e.g. numpy.random.rand)
             and the successive parameters param1, param2, etc are inputs to the method
         """
-        self.ranges[rangeid] = {'fixedargs':fixedargs, 'randvars':randvars, 'scenarios':[], 'num_pts':num_pts}
-        for i in range(num_pts):
+        if type(seeds)==list: 
+            if len(seeds)!=replicates: raise Exception("list seeds must be of length replicates")
+        else: seedstr=seeds;  seeds=np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)
+        if seedstr=='shared':         mdlseeds=seeds
+        elif seedstr=='independent':  mdlseeds=np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)
+        elif seedstr=='keep_model':   mdlseeds= [None for i in range(replicates)]
+        
+        self.ranges[rangeid] = {'fixedargs':fixedargs, 'randvars':randvars, 'scenarios':[], 'num_pts':replicates}
+        for i in range(replicates):
             self.num_scenarios+=1
+            np.random.seed(seeds[i])
             inputparams = {name: (ins() if callable(ins) else ins[0](*ins[1:])) for name, ins in randvars.items()}
             params = paramfunc(*fixedargs, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'faults':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                    'params':params,'inputparams':inputparams,\
-                                                    'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/num_pts}}
+                                                    'params':params,'inputparams':inputparams,'modelparams':{'seed':mdlseeds[i]},\
+                                                    'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/replicates}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def copy(self):
         newapp = NominalApproach()

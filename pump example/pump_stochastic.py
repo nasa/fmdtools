@@ -170,9 +170,6 @@ class Pump(Model):
         life=1e5
         expcost=rate*life*totcost
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
-    
-def try_kwargs(**kwargs):
-    print(kwargs)
 
 if __name__=="__main__":
     mdl = Pump(modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':3})
