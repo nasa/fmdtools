@@ -170,6 +170,9 @@ class Pump(Model):
         life=1e5
         expcost=rate*life*totcost
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
+    
+def try_kwargs(**kwargs):
+    print(kwargs)
 
 if __name__=="__main__":
     mdl = Pump(modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':3})
@@ -181,7 +184,7 @@ if __name__=="__main__":
     endresults, resgraph, mdlhist=propagate.nominal(mdl,run_stochastic=True)
     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
     
-    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False)
+    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, legend=False)
     
     

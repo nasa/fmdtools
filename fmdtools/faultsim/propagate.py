@@ -33,7 +33,7 @@ from fmdtools.modeldef import SampleApproach
 
 ## FAULT PROPAGATION
 
-def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True, run_stochastic=False):
+def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True, run_stochastic=False, **kwargs):
     """
     Runs the model over time in the nominal scenario.
 
@@ -59,6 +59,10 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True
             False - Thus, the model object that is returned can be modified and analyzed if needed
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
+    **kwargs: kwargs (params, modelparams, and/or valparams)
+        passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
+        to be simulated with the given parameters. Parameter dictionaries do not 
+        need to be complete (if incomplete)
     Returns
     -------
     endresults : Dict
@@ -68,8 +72,8 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True
     mdlhist : Dict
         A dictionary with a history of modelstates
     """
-    if protect:
-        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+    if protect or kwargs:
+        mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
     nomscen=construct_nomscen(mdl)
     scen=nomscen.copy()
     mdlhist, _, t_end = prop_one_scen(mdl, nomscen, track=track, staged=False, track_times = track_times, run_stochastic=run_stochastic)
@@ -89,10 +93,10 @@ def update_params(params, **kwargs):
     for kwarg in kwargs: 
         if kwargs.get(kwarg, None)!=None: params[kwarg]=kwargs[kwarg]
     return params
-def new_scen_params(mdl,scen):
-    params = update_params(mdl.params, **scen['properties'].get('params', {}))
-    modelparams = update_params(mdl.modelparams, **scen['properties'].get('modelparams', {}))
-    valparams = update_params(mdl.valparams, **scen['properties'].get('valparams', {}))
+def new_mdl_params(mdl,paramdict):
+    params = update_params(mdl.params, **paramdict.get('params', {}))
+    modelparams = update_params(mdl.modelparams, **paramdict.get('modelparams', {}))
+    valparams = update_params(mdl.valparams, **paramdict.get('valparams', {}))
     return params, modelparams, valparams
 
 def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, track_times="all", run_stochastic=False):
@@ -131,13 +135,13 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
     mdlhists = dict.fromkeys(nomapp.scenarios)
     endclasses = dict.fromkeys(nomapp.scenarios)
     if pool:
-        inputs = [(mdl.__class__(*new_scen_params(mdl,scen)), scen, track, track_times, run_stochastic) for scen in nomapp.scenarios.values()]
+        inputs = [(mdl.__class__(*new_mdl_params(mdl,scen)), scen['properties'], track, track_times, run_stochastic) for scen in nomapp.scenarios.values()]
         result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
         mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
     else:
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
-            mdl = mdl.__class__(*new_scen_params(mdl,scen))
+            mdl = mdl.__class__(*new_mdl_params(mdl,scen['properties']))
             mdlhists[scenname], _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
             _ = cut_mdlhist(mdlhists[scenname], t_end)
             endfaults, endfaultprops = mdl.return_faultmodes()
@@ -149,7 +153,7 @@ def exec_nom_helper(arg):
     endclass=arg[0].find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
     return endclass, mdlhist
 
-def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'bipartite', track_times="all", protect=True, run_stochastic=False):
+def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'bipartite', track_times="all", protect=True, run_stochastic=False, **kwargs):
     """
     Runs one fault in the model at a specified time.
 
@@ -183,6 +187,10 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
             False - Thus, the model object that is returned can be modified and analyzed if needed
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
+    **kwargs: kwargs (params, modelparams, and/or valparams)
+        passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
+        to be simulated with the given parameters. Parameter dictionaries do not 
+        need to be complete (if incomplete)
     Returns
     -------
     endresults : dict
@@ -193,8 +201,8 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
         A dictionary of the states of the model of each fault scenario over time.
     """
     #run model nominally, get relevant results
-    if protect:
-        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+    if protect or kwargs:
+        mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
     nomscen=construct_nomscen(mdl)
     if staged:
         nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes=[time], track_times=track_times, run_stochastic=run_stochastic)
@@ -242,7 +250,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
     if protect: mdl.reset()
     return endresults,resgraph, mdlhists
 
-def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track_times="all", protect=True, run_stochastic=False):
+def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track_times="all", protect=True, run_stochastic=False, **kwargs):
     """
     Runs one fault in the model at a specified time.
 
@@ -272,6 +280,10 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
             False - Thus, the model object that is returned can be modified and analyzed if needed
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+    **kwargs: kwargs (params, modelparams, and/or valparams)
+        passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
+        to be simulated with the given parameters. Parameter dictionaries do not 
+        need to be complete (if incomplete)
     Returns
     -------
     endresults : dict
@@ -283,8 +295,8 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
 
     """
     #run model nominally, get relevant results
-    if protect:
-        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+    if protect or kwargs:
+        mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
     nomscen=construct_nomscen(mdl)
     
     nommdlhist, _, t_end_nom = prop_one_scen(mdl, nomscen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
@@ -318,7 +330,7 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
     if protect: mdl.reset()
     return endresults,resgraph, mdlhists
 
-def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False):
+def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, **kwargs):
     """
     Creates and propagates a list of failure scenarios in a model.
     
@@ -356,6 +368,10 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
             False - model is not re-instantiated (unsafe--do not use model afterwards)
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+    **kwargs: kwargs (params, modelparams, and/or valparams)
+        passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
+        to be simulated with the given parameters. Parameter dictionaries do not 
+        need to be complete (if incomplete)
 
     Returns
     -------
@@ -364,8 +380,8 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    if protect:
-        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+    if protect or kwargs:
+        mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
     scenlist=list_init_faults(mdl)
     nomscen=construct_nomscen(mdl)
     if staged:
@@ -393,7 +409,7 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)  
     return endclasses, mdlhists
 
-def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False):
+def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, **kwargs):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -428,6 +444,10 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
             False - model is not re-instantiated (unsafe--do not use model afterwards)
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+    **kwargs: kwargs (params, modelparams, and/or valparams)
+        passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
+        to be simulated with the given parameters. Parameter dictionaries do not 
+        need to be complete (if incomplete)
     Returns
     -------
     endclasses : dict
@@ -435,8 +455,8 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    if protect:
-        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+    if protect or kwargs:
+        mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
     if staged:
         nomhist, c_mdl, t_end_nom = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times, track_times=track_times)
     else:
@@ -513,7 +533,7 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
     mdlhists = dict.fromkeys(nomapp.scenarios)
     endclasses = dict.fromkeys(nomapp.scenarios)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
-        mdl = mdl.__class__(params=scen['properties']['params'], modelparams = mdl.modelparams, valparams=mdl.valparams)
+        mdl = mdl.__class__(*new_mdl_params(mdl,scen))
         if get_phases:
             nomhist, _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
             if get_phases=='global':      phases={'global':[0,t_end]}
