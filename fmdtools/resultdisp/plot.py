@@ -166,7 +166,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
             else:                   fig.suptitle('Dynamic Response of '+str(list(fxnflowvals.keys()))+' to fault'+' '+fault)
         else:           fig.suptitle('Dynamic Response of Model States to fault'+' '+fault)
         if legend:
-            ax_l = plt.subplot(np.ceil((num_plots)/cols),cols,n, label='legend')
+            ax_l = plt.subplot(int(np.ceil((num_plots)/cols)),cols,n, label='legend')
             plt.legend([a,b],['faulty', 'nominal'], loc='center')
             plt.box(on=None)
             ax_l.get_xaxis().set_visible(False)
@@ -657,10 +657,10 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         if has_bounds: faults=list({f[0] for f in comparison_table})
         else:          faults=[*comparison_table.columns]
         faults.remove('nominal')
-    columns = np.ceil(len(faults)/rows)
+    columns = int(np.ceil(len(faults)/rows))
     n=0
     if maxy=='max':
-        if stack==False: maxy = comparison_table.max().max()
+        if stack==False:    maxy = comparison_table.max().max()
         else:               maxy=comparison_table.iloc[:,1:].max().max()+comparison_table['nominal'].max()
     for fault in faults:
         n+=1

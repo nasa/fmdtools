@@ -396,7 +396,7 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
     endclasses = {}
     mdlhists = {}
     if pool:
-        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged, track_times) for scen in scenlist]
+        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged, track_times, run_stochastic) for scen in scenlist]
         else: inputs = [(mdl, scen, nomresgraph, nomhist, track, staged, track_times, run_stochastic) for scen in scenlist]
         result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
@@ -470,7 +470,7 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     endclasses, mdlhists = {}, {}
     scenlist = app.scenlist
     if pool:
-        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged, track_times) for scen in scenlist]
+        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged, track_times, run_stochastic) for scen in scenlist]
         else: inputs = [(mdl, scen, nomresgraph, nomhist, track, staged, track_times, run_stochastic) for scen in scenlist]
         result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}

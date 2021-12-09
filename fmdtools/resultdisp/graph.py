@@ -595,7 +595,7 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         if gtype=='bipartite': dot = update_gv_bipplot(t_ind, reshist, g, **kwargs)
         elif gtype=='normal':   dot = update_gv_graphplot(t_ind, reshist, g, **kwargs)
         else:           raise Exception("Graph type "+gtype+" not a valid option for graphviz renderer")
-        display(SVG(dot._repr_svg_()))
+        display(SVG(dot._repr_image_svg_xml()))
         return dot
     else: raise Exception("Invalid renderer: "+renderer)
 
