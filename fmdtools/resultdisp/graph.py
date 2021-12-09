@@ -348,7 +348,7 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
     #rendering
     dot.attr(outputorder = "edgesfirst")
     if filename:    dot.render(filename = filename+gtype, format = filetype)
-    else:           display(SVG(dot._repr_svg_()))
+    else:           display(SVG(dot._repr_image_svg_xml()))
     return dot
 def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], **kwargs):
     """
