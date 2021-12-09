@@ -66,7 +66,7 @@ def mdlhist(mdlhist, fault='', time=0, fxnflows=[],cols=2, returnfigs=False, leg
         figs.append(fig)
     if returnfigs:
         return figs
-def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=False, legend=True, timelabel="time", units=[], phases={}, modephases={}, label_phases=True):
+def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=True, legend=True, timelabel="time", units=[], phases={}, modephases={}, label_phases=True):
     """
     Plots the states of a model over time given a history.
 
@@ -175,6 +175,42 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Fal
     plt.subplots_adjust(top=1-0.05-0.15/(num_plots/cols))
     if returnfig: return fig
     else: plt.show()
+
+def aggregate_mdlhistvals(mdlhists, fxnflowvals, cols=2, aggragation='individual', legend_loc=-1):
+    """
+    Plot the aggregate behavior over time of the given function/flow values 
+    over a set of nominal scenarios
+
+    Parameters
+    ----------
+    mdlhists : dict
+        Aggregate model history with structure {'scen':mdlhist}
+    fxnflowsvals : dict, optional
+        dict of flow values to plot with structure {fxnflow:[vals]}. The default is {}, which returns all.
+    cols : int, optional
+        columns to use in the figure. The default is 2.
+    aggratation : str
+        Way of aggregating the plot values. The default is 'individual'
+    legend_loc : int/bool
+        Location for the legend. If not legend, provide False. Default is -1 (the last plot)
+    """
+    
+    plot_values = [(objname, objval) for objname in fxnflowvals for objval in fxnflowvals[objname]]
+    num_plots = len(plot_values)
+    rows = int(np.ceil(num_plots/cols))
+    fig, axs = plt.subplots(cols, rows, sharex=True,figsize=(cols*3, 2*num_plots/cols)) 
+    axs = axs.flatten()
+    for i, plot_value in enumerate(plot_values):
+        ax = axs[i]
+        ax.set_title(' '.join(plot_value))
+        for scen in mdlhists:
+            if plot_value[0] in mdlhists[scen]['flows']:        ax.plot(mdlhists[scen]['flows'][plot_value[0]][plot_value[1]], label=scen)
+            elif plot_value[0] in mdlhists[scen]['functions']:  ax.plot(mdlhists[scen]['functions'][plot_value[0]][plot_value[1]], label=scen)
+    if legend_loc!=False: 
+        if legend_loc==-1:  ax.legend(prop={'size': 8})
+        else:               axs[legend_loc].legend(prop={'size': 8})
+        
+
 
 def nominal_vals_1d(app, endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal'):
     """

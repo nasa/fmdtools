@@ -186,8 +186,10 @@ if __name__=="__main__":
     
     
     app = NominalApproach()
-    app.add_seed_replicates('test_seeds', 10)
+    app.add_seed_replicates('test_seeds', 3)
     endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
+    rd.plot.aggregate_mdlhistvals(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
     
+    #rd.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
     
     
