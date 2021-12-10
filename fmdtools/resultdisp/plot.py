@@ -19,11 +19,13 @@ Uses the following methods:
 import matplotlib.pyplot as plt
 import copy
 import numpy as np
+from scipy.stats import bootstrap
 from fmdtools.resultdisp.tabulate import costovertime as cost_table
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
 from mpl_toolkits.mplot3d import Axes3D
+from fmdtools.faultsim.propagate import cut_mdlhist
 
 def mdlhist(mdlhist, fault='', time=0, fxnflows=[],cols=2, returnfigs=False, legend=True, timelabel='Time', units=[], phases={}, modephases={}, label_phases=True):
     """
@@ -176,10 +178,13 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Tru
     if returnfig: return fig
     else: plt.show()
 
-def aggregate_mdlhistvals(mdlhists, fxnflowvals, cols=2, aggragation='individual', legend_loc=-1):
+def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_groups={}, 
+             legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
+             fillalpha=0.3, boundcolor='gray',boundlinestyle='--', 
+             title='', indiv_kwargs={}, time_slice=[], figsize='default', **kwargs):
     """
-    Plot the aggregate behavior over time of the given function/flow values 
-    over a set of nominal scenarios
+    Plot the behavior over time of the given function/flow values 
+    over a set of scenarios, with ability to aggregate behaviors as needed.
 
     Parameters
     ----------
@@ -189,28 +194,128 @@ def aggregate_mdlhistvals(mdlhists, fxnflowvals, cols=2, aggragation='individual
         dict of flow values to plot with structure {fxnflow:[vals]}. The default is {}, which returns all.
     cols : int, optional
         columns to use in the figure. The default is 2.
-    aggratation : str
+    aggregation : str
         Way of aggregating the plot values. The default is 'individual'
-    legend_loc : int/bool
-        Location for the legend. If not legend, provide False. Default is -1 (the last plot)
+        Note that only the `individual` option can be used for histories of non-numeric quantities
+        (e.g., modes, which are recorded as strings)
+        - 'individual' plots each run individually. 
+        - 'mean_std' plots the mean values over the sim with standard deviation error bars
+        - 'mean_ci'  plots the mean values over the sim with mean confidence interval error bars
+            - optional argument ci (float 0.0-1.0) specifies the confidence interval (Default:0.95)
+        - 'mean_bound' plots the mean values over the sim with variable bound error bars
+        - 'percentile' plots the percentile distribution of the sim over time (does not reject outliers)
+            - optional argument 'perc_range' (int 0-100) specifies the percentile range of the inner bars (Default: 50) 
+    comp_groups : dict
+        Dictionary for comparison groups (if more than one) with structure:
+            {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')} Default is {}
+            If a legend is shown, group names are used as labels.
+    legend_loc : int
+        Specifies the plot to place the legend on, if runs are bine compared. Default is -1 (the last plot)
+        To remove the legend, give a value of False
+    `indiv_kwargs` dict
+        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where 
+        where kwargs is an individual dict of keyword arguments for the
+        comparison group comp (or scenario, if not aggregated) which overrides 
+        the global kwargs (or default behavior). 
+    xlabel : str
+        Label for the x-axes. Default is 'time'
+    ylabel : dict
+        Label for the y-axes with structure {(fxnflowname, value):'label'}
+    max_ind : int
+        index (usually correlates to time) cutoff for the simulation. Default is 'max' which uses the first simulation termination time.
+    boundtype : 'fill' or 'line'
+        -'fill' plots the error bounds as a filled area
+            - optional fillalpha (float) changes the alpha of this area.
+        -'line' plots the error bounds as lines
+            - optional boundcolor (str) changes the color of the bounds (default 'gray')
+            - optional boundlinestyle (str) changes the style of the bound lines (default '--')
+    title : str
+        overall title for the plot. Default is ''
+    time_slice : int/list
+        overlays a bar or bars at the given index when the fault was injected (if any). Default is []
+    figsize : tuple (float,float)
+        x-y size for the figure. The default is 'default', which dymanically gives 3 for each column and 2 for each row
+    **kwargs : kwargs
+        keyword arguments to mpl.plot e.g. linestyle, color, etc. See 'aggregation' for specification.
     """
     
     plot_values = [(objname, objval) for objname in fxnflowvals for objval in fxnflowvals[objname]]
     num_plots = len(plot_values)
     rows = int(np.ceil(num_plots/cols))
-    fig, axs = plt.subplots(cols, rows, sharex=True,figsize=(cols*3, 2*num_plots/cols)) 
+    if figsize=='default': figsize=(cols*3, 2*rows)
+    fig, axs = plt.subplots(cols, rows, sharex=True, figsize=figsize) 
     axs = axs.flatten()
+    
+    if not (type(max_ind)==int and aggregation in ['individual','joint']):
+        if max_ind=='max': max_ind = np.min([len(mdlhists[scen]['time']) for scen in mdlhists])-1
+        inds = [i for i in range(len(mdlhists[[*mdlhists.keys()][0]]['time']))]
+        for scen in mdlhists:
+            mdlhists[scen] = cut_mdlhist(mdlhists[scen], max_ind)
+    times = mdlhists[[*mdlhists.keys()][0]]['time']
+    if not comp_groups: 
+        if aggregation=='individual':   grouphists = mdlhists
+        else:                           grouphists = {'default':mdlhists}
+    else:   grouphists = {group:{scen:mdlhists[scen] for scen in scens} for group, scens in comp_groups.items()}
     for i, plot_value in enumerate(plot_values):
         ax = axs[i]
         ax.set_title(' '.join(plot_value))
-        for scen in mdlhists:
-            if plot_value[0] in mdlhists[scen]['flows']:        ax.plot(mdlhists[scen]['flows'][plot_value[0]][plot_value[1]], label=scen)
-            elif plot_value[0] in mdlhists[scen]['functions']:  ax.plot(mdlhists[scen]['functions'][plot_value[0]][plot_value[1]], label=scen)
-    if legend_loc!=False: 
+        ax.grid()
+        if i >= (rows-1)*cols and xlabel: ax.set_xlabel(xlabel)
+        if ylabels.get(plot_value, False): ax.set_ylabel(ylabels[plot_value])
+        if plot_value[0] in mdlhists[[*mdlhists.keys()][0]]['flows']:        f_type='flows'
+        elif plot_value[0] in mdlhists[[*mdlhists.keys()][0]]['functions']:  f_type='functions'
+        for group, hists in grouphists.items():
+            local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
+            if aggregation=='individual':
+                ax.plot(times, hists[f_type][plot_value[0]][plot_value[1]], label=scen, **local_kwargs)
+            elif aggregation=='mean_std':
+                mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                std_dev = np.std([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
+            elif aggregation=='mean_ci':
+                mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                vals = [[hist[f_type][plot_value[0]][plot_value[1]][t] for hist in hists.values()] for t in inds]
+                boot_stats =[bootstrap([vals[t]], np.mean, confidence_level=kwargs.get('ci',0.95)) if not vals[t].count(vals[t][0])>1 else phony_bs(vals[t][0]) for t in inds]
+                lows = [stat.confidence_interval.low for stat in boot_stats]
+                highs = [stat.confidence_interval.high for stat in boot_stats]
+                plot_line_and_err(ax, times, mean, lows, highs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
+            elif aggregation=='mean_bound':
+                mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                maxs = np.max([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                mins = np.min([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                plot_line_and_err(ax, times, mean, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
+            elif aggregation=='percentile':
+                median= np.median([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                maxs = np.max([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                mins = np.min([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                low_perc = np.percentile([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()],50-kwargs.get('perc_range',50)/2, axis=0)
+                high_perc = np.percentile([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()],50+kwargs.get('perc_range',50)/2, axis=0)
+                plot_line_and_err(ax, times, median, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
+                if boundtype=='fill':       ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
+                elif boundtype=='line':     plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
+            else: raise Exception("Invalid aggregation option: "+aggregation)
+        if type(time_slice)==int: ax.axvline(x=time_slice, color='k')
+        else:   
+            for ts in time_slice: ax.axvline(x=ts, color='k')
+    if len(grouphists)>1 and legend_loc!=False: 
         if legend_loc==-1:  ax.legend(prop={'size': 8})
         else:               axs[legend_loc].legend(prop={'size': 8})
-        
-
+    if title: plt.suptitle(title)
+    return fig, axs
+def plot_line_and_err(ax, times, line, lows, highs, boundtype, boundcolor='gray', boundlinestyle='--', fillalpha=0.3, **kwargs):
+    ax.plot(line, **kwargs)
+    if boundtype=='fill':   ax.fill_between(times,lows, highs,alpha=fillalpha, color=ax.lines[-1].get_color())
+    elif boundtype=='line': plot_err_lines(ax, times, lows, highs, color=boundcolor, linestyle=boundlinestyle)
+    else:                   raise Exception("Invalid bound type: "+boundtype)
+def plot_err_lines(ax, times, lows, highs, **kwargs):
+    ax.plot(times, highs **kwargs)
+    ax.plot(times, lows, **kwargs)
+class phony_bs:
+    def __init__(self, only_value):
+        self.confidence_interval=phony_ci(only_value)
+class phony_ci:
+    def __init__(self, only_value):
+        self.low=only_value; self.high=only_value
 
 def nominal_vals_1d(app, endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal'):
     """
