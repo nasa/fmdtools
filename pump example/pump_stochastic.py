@@ -184,12 +184,27 @@ if __name__=="__main__":
     endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, legend=False)
     
+    rd.plot.mdlhists(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
     
     app = NominalApproach()
-    app.add_seed_replicates('test_seeds', 3)
+    app.add_seed_replicates('test_seeds', 100)
     endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
-    rd.plot.aggregate_mdlhistvals(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
+    rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']},\
+                                  ylabels={('Wat_2', 'flowrate'):'liters/s'}, color='blue', alpha=0.1, legend_loc=False)
+    rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_std',\
+                                  ylabels={('Wat_2', 'flowrate'):'liters/s'})
+    rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_bound',\
+                                  ylabels={('Wat_2', 'flowrate'):'liters/s'})
+    rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='percentile',\
+                              ylabels={('Wat_2', 'flowrate'):'liters/s'})     
     
+    rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_ci',\
+                                  ylabels={('Wat_2', 'flowrate'):'liters/s'}, time_slice=[3,5,7])
+        
+    rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_ci',\
+                     comp_groups={'test_1':[*mdlhists.keys()][:50], 'test_2':[*mdlhists.keys()][50:]},\
+                                  ylabels={('Wat_2', 'flowrate'):'liters/s'}, time_slice=[3,5,7])
+
     #rd.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
     
     
