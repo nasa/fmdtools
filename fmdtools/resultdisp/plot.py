@@ -19,8 +19,8 @@ Uses the following methods:
 import matplotlib.pyplot as plt
 import copy
 import numpy as np
-from scipy.stats import bootstrap
 from fmdtools.resultdisp.tabulate import costovertime as cost_table
+from fmdtools.resultdisp.process import bootstrap_confidence_interval
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
@@ -180,7 +180,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Tru
 
 def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_groups={}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
-             fillalpha=0.3, boundcolor='gray',boundlinestyle='--', 
+             fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
              title='', indiv_kwargs={}, time_slice=[], figsize='default', **kwargs):
     """
     Plot the behavior over time of the given function/flow values 
@@ -275,10 +275,8 @@ def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_group
             elif aggregation=='mean_ci':
                 mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
                 vals = [[hist[f_type][plot_value[0]][plot_value[1]][t] for hist in hists.values()] for t in inds]
-                boot_stats =[bootstrap([vals[t]], np.mean, confidence_level=kwargs.get('ci',0.95)) if not vals[t].count(vals[t][0])>1 else phony_bs(vals[t][0]) for t in inds]
-                lows = [stat.confidence_interval.low for stat in boot_stats]
-                highs = [stat.confidence_interval.high for stat in boot_stats]
-                plot_line_and_err(ax, times, mean, lows, highs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
+                boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True, confidence_level=ci) for val in vals]).transpose()
+                plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2],boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
             elif aggregation=='mean_bound':
                 mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
                 maxs = np.max([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
@@ -310,12 +308,6 @@ def plot_line_and_err(ax, times, line, lows, highs, boundtype, boundcolor='gray'
 def plot_err_lines(ax, times, lows, highs, **kwargs):
     ax.plot(times, highs **kwargs)
     ax.plot(times, lows, **kwargs)
-class phony_bs:
-    def __init__(self, only_value):
-        self.confidence_interval=phony_ci(only_value)
-class phony_ci:
-    def __init__(self, only_value):
-        self.low=only_value; self.high=only_value
 
 def nominal_vals_1d(app, endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal'):
     """

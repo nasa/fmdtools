@@ -34,6 +34,7 @@ import numpy as np
 import pandas as pd
 from ordered_set import OrderedSet
 from fmdtools.faultsim.propagate import cut_mdlhist
+from scipy.stats import bootstrap
 
 def hists(mdlhists, returndiff=True):
     """
@@ -521,41 +522,26 @@ def rate(endclasses, metric):
      """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
      return sum([int(bool(e[metric]))*e['rate'] for k,e in endclasses.items() if not np.isnan(e[metric])])
  
-def bootstrap_confidence_interval(data, sample_size='data', num_samples=1000, interval=95, seed=False):
+def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
     """
-    Calculates the bootstrap confidence interval for the mean (if data is float) 
-    or proportion (if data is an indicator variable) of a set of data.
+    Convenience wrapper for scipy.bootstrap. See
 
     Parameters
     ----------
     data : list/array/etc
         Iterable with the data. May be float (for mean) or indicator (for proportion)
-    sample_size : int, optional
-        Size of the sample used in the bootstrapping process. The default is 'sample', the size of the data.
-        Specifying the sample size can reduce the computational time for large data, however using the size of the 
-        data gives a narrower confidence interval.
-    num_samples : int, optional
-        Number of samples to bootstrap with. The default is 1000.
-        Increase to decrease monte carlo error. 
-    interval : int, optional
-        Confidence interval to sample. The default is 95.
-    seed : int, false
-        Seed for numpy to use in the randomization
+    method : 
+        numpy method to give scipy.bootstrap.
+    return_anyway: bool
+        Gives a dummy interval of (stat, stat) if no . Used for plotting
     Returns
-    -------
-    boot_mean: float
-        bootstrap mean of the sample. should be equivalent to the sample mean (but not always)
-    lb : float
-        lower bound of the confidence interval
-    ub : float
-        upper bound of the confidence interval
+    ----------
+    statistic, lower bound, upper bound
     """
-    tail_perc = (100-interval)/2
-    if sample_size =='data': sample_size=len(data)
-    if sample_size<10: print("Warning: sample size of "+str(sample_size)+" may be too small")
-    if seed: np.random.seed(seed)
-    boot_means = [np.mean(np.random.choice(data, sample_size, True)) for i in range(num_samples)]
-    boot_mean = np.mean(boot_means)
-    lower_bound = np.percentile(boot_means, tail_perc)
-    upper_bound = np.percentile(boot_means, 100-tail_perc)
-    return boot_mean, lower_bound, upper_bound
+    if 'interval' in kwargs: kwargs['confidence_level']=kwargs.pop('interval')*0.01
+    if not data.count(data[0])>1:
+        bs = bootstrap([data], np.mean, **kwargs)
+        return method(data), bs.confidence_interval.low, bs.confidence_interval.high
+    elif return_anyway: return method(data), method(data), method(data)
+    else: raise Exception("All data are the same!")
+
