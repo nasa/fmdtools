@@ -5,14 +5,17 @@ Author: Daniel Hulse
 Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
+import sys, os
+sys.path.append(os.path.join('..','..'))
 import numpy as np
 from fmdtools.modeldef import *
+import fmdtools.faultsim as fs
 
 class StoreEE(FxnBlock):
-    def __init__(self, flows):
+    def __init__(self, name, flows):
         self.failrate=1e-5
         self.assoc_modes({'nocharge':[1,300]})
-        super().__init__(['EEout', 'FS'], flows, {'soc': 100})
+        super().__init__(name, flows, ['EEout', 'FS'], {'soc': 100.0})
     def condfaults(self,time):
         if self.soc<1:
             self.soc=0
@@ -23,8 +26,8 @@ class StoreEE(FxnBlock):
         if time > self.time:
             self.soc=self.soc-self.EEout.effort*self.EEout.rate*(time-self.time)/2
 class DistEE(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['EEin','EEmot','EEctl','ST'],flows, {'EEtr':1.0, 'EEte':1.0}, timely=False)
+    def __init__(self, name,flows):
+        super().__init__(name, flows, ['EEin','EEmot','EEctl','ST'], {'EEtr':1.0, 'EEte':1.0})
         self.failrate=1e-5
         self.assoc_modes({'short':[0.3,3000], 'degr':[0.5,1000], 'break':[0.2,2000]})
     def condfaults(self, time):
@@ -44,8 +47,8 @@ class DistEE(FxnBlock):
         self.EEctl.effort=self.EEte*self.EEin.effort
         self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, 0.9*self.EEmot.rate+0.1*self.EEctl.rate])
 class EngageLand(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['forcein', 'forceout'],flows, timely=False)
+    def __init__(self, name,flows):
+        super().__init__(name, flows, ['forcein', 'forceout'])
         self.failrate=1e-5
         self.assoc_modes({'break':[0.2, 1000], 'deform':[0.8, 1000]})
     def condfaults(self, time):
@@ -55,8 +58,8 @@ class EngageLand(FxnBlock):
         self.forceout.value=self.forcein.value/2
             
 class HoldPayload(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['FG', 'Lin', 'ST'],flows, timely=False)
+    def __init__(self, name,flows):
+        super().__init__(name, flows, ['FG', 'Lin', 'ST'])
         self.failrate=1e-6
         self.assoc_modes({'break':[0.2, 10000], 'deform':[0.8, 10000]})
     def condfaults(self, time):
@@ -68,8 +71,8 @@ class HoldPayload(FxnBlock):
         elif self.has_fault('deform'):  self.Lin.support, self.ST.support = 0.5,0.5
         else:                           self.Lin.support, self.ST.support = 1.0,1.0
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
-    def __init__(self, flows):     
-        super().__init__(['EEin', 'Ctlin','DOF','Force'], flows,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, timely=False)
+    def __init__(self, name, flows):     
+        super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Force'], {'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0})
         self.failrate=1e-5
         self.assoc_modes({'short':[0.1, [0.33, 0.33, 0.33], 200],'openc':[0.1, [0.33, 0.33, 0.33], 200],\
                           'ctlup':[0.2, [0.33, 0.33, 0.33], 500],'ctldn':[0.2, [0.33, 0.33, 0.33], 500],\
@@ -107,8 +110,8 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         self.DOF.planpwr=self.Eto*self.Eti*self.Ctlin.forward*self.Ct*self.Mt*self.Pt    
         
 class CtlDOF(FxnBlock):
-    def __init__(self, flows):
-        super().__init__(['EEin','Dir','Ctl','DOFs','FS'],flows, {'vel':0.0, 'Cs':1.0})
+    def __init__(self, name, flows):
+        super().__init__(name, flows, ['EEin','Dir','Ctl','DOFs','FS'], {'vel':0.0, 'Cs':1.0})
         self.failrate=1e-5
         self.assoc_modes({'noctl':[0.2, 10000], 'degctl':[0.8, 10000]})
     def condfaults(self, time):
@@ -138,8 +141,8 @@ class CtlDOF(FxnBlock):
         self.Ctl.upward=self.EEin.effort*self.Cs*self.Dir.power*upthrottle
 
 class PlanPath(FxnBlock):
-    def __init__(self, flows):
-        super().__init__(['EEin','Env','Dir','FS'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'},timers={'pause'})
+    def __init__(self, name, flows):
+        super().__init__(name, flows, ['EEin','Env','Dir','FS'], states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'},timers={'pause'})
         
         self.goals = {1:[0,0,50], 2:[100, 0, 50], 3:[100, 100, 50], 4:[150, 150, 50], 5:[0,0,50], 6:[0,0,0]}
         self.goal = self.goals[1]
@@ -181,8 +184,8 @@ class PlanPath(FxnBlock):
             self.Dir.assign([0,0,0])
 
 class Trajectory(FxnBlock):
-    def __init__(self, flows):
-        super().__init__(['Env','DOF', 'Dir', 'Force_GR'], flows)
+    def __init__(self, name, flows):
+        super().__init__(name, flows, ['Env','DOF', 'Dir', 'Force_GR'])
         #self.assoc_modes({'crash':[0, 100000], 'lost':[0.0, 50000]})
     def behavior(self, time):
         if time>self.time:            
@@ -206,8 +209,8 @@ class Trajectory(FxnBlock):
             self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
 
 class ViewEnvironment(FxnBlock):
-    def __init__(self, flows):
-        super().__init__(['Env'], flows)
+    def __init__(self, name, flows):
+        super().__init__(name, flows, ['Env'])
         sq=square([0,150], 160, 160)
         self.viewingarea = {(x,y):'unviewed' for x in range(int(sq[0][0]),int(sq[1][0])+10,10) for y in range(int(sq[0][1]),int(sq[2][1])+10,10)}
     def behavior(self, time):
@@ -217,8 +220,8 @@ class ViewEnvironment(FxnBlock):
 
 class Direc(Flow):
     def __init__(self):
-        self.traj=[0,0,0]
-        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1}, 'Trajectory')
+        self.traj=[0.0,0.0,0.0]
+        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1.0}, 'Trajectory')
     def assign(self, traj):
         self.x=traj[0]
         self.y=traj[1]
@@ -229,10 +232,9 @@ class Direc(Flow):
         return status.copy()
         
 class Drone(Model):
-    def __init__(self, params={'graph_pos':{}, 'bipartite_pos':{}}):
-        super().__init__(modelparams={'phases': {'ascend':[0,5],'forward':[5,95], 'descend':[95, 100]},
-                                     'times':[0,135], 'units':'sec'})
-        self.params=params
+    def __init__(self, params={'graph_pos':{}, 'bipartite_pos':{}},\
+            modelparams={'phases': {'ascend':[0,5],'forward':[5,95],'descend':[95, 100]}, 'times':[0,135],'units':'sec'}, valparams={}):
+        super().__init__(params, modelparams, valparams)
         #add flows to the model
         self.add_flow('Force_ST', {'support':1.0})
         self.add_flow('Force_Lin', {'support':1.0})
@@ -258,28 +260,31 @@ class Drone(Model):
         self.add_fxn('HoldPayload',['Force_LG', 'Force_Lin', 'Force_ST'], fclass=HoldPayload)
         self.add_fxn('ViewEnv', ['Env1'], fclass=ViewEnvironment)
         
-        self.construct_graph(graph_pos=params['graph_pos'], bipartite_pos=params['bipartite_pos'])
-    def find_classification(self, g, endfaults, endflows, scen, mdlhist):
-        if -5 >mdlhist['faulty']['flows']['Env1']['x'][-1] or 5<mdlhist['faulty']['flows']['Env1']['x'][-1]:
+        self.build_model(graph_pos=params['graph_pos'], bipartite_pos=params['bipartite_pos'])
+    def find_classification(self,scen, mdlhists):
+        if -5 >mdlhists['faulty']['flows']['Env1']['x'][-1] or 5<mdlhists['faulty']['flows']['Env1']['x'][-1]:
             lostcost=50000
-        elif -5 >mdlhist['faulty']['flows']['Env1']['y'][-1] or 5<mdlhist['faulty']['flows']['Env1']['y'][-1]:
+        elif -5 >mdlhists['faulty']['flows']['Env1']['y'][-1] or 5<mdlhists['faulty']['flows']['Env1']['y'][-1]:
             lostcost=50000
-        elif mdlhist['faulty']['flows']['Env1']['elev'][-1] >5:
+        elif mdlhists['faulty']['flows']['Env1']['elev'][-1] >5:
             lostcost=50000
         else:
             lostcost=0
         
-        if any(abs(mdlhist['faulty']['flows']['Force_GR']['value'])>2):
+        if any(abs(mdlhists['faulty']['flows']['Force_GR']['value'])>2.0):
             crashcost = 100000
         else:
             crashcost = 0
         
-        repcost=sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()])
+        modes, modeprops = self.return_faultmodes()
+        repcost = sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])
         
         totcost=repcost + crashcost + lostcost
         rate=scen['properties']['rate']
         expcost=totcost*rate*1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
+    
+    
 def square(center,xw,yw):
     square=[[center[0]-xw/2,center[1]-yw/2],\
             [center[0]+xw/2,center[1]-yw/2], \
@@ -305,3 +310,12 @@ def vectdist(p1, p2):
 
 def vectdir(p1, p2):
     return vectdist(p1,p2)/finddist(p1,p2)
+
+if __name__=="__main__":
+    mdl = Drone()
+    app = SampleApproach(mdl)
+    
+    mdl_quad_comp = Drone()
+    quad_comp_app = SampleApproach(mdl_quad_comp, faults=[('AffectDOF', 'mechbreak')],defaultsamp={'samp':'evenspacing','numpts':5})
+    quad_comp_endclasses, quad_comp_mdlhists = fs.propagate.approach(mdl_quad_comp, quad_comp_app, staged=True)
+    
