@@ -83,7 +83,7 @@ def x_to_ocost(xdes, xoper, loc='rural'):
 
 # Resilience Model
 def calc_res(mdl, fullcosts=False, faultmodes = 'all'):
-    app = SampleApproach(mdl, faults='single-component', phases={'forward'})   
+    app = SampleApproach(mdl, faults='single-component', phases=['forward'])   
     if faultmodes == 'battery':     app.scenlist = [scen for scen in app.scenlist if list(scen['faults'].keys())[0]=='StoreEE']
     elif faultmodes == 'line':      app.scenlist = [scen for scen in app.scenlist if list(scen['faults'].keys())[0]=='AffectDOF']
     elif faultmodes == 'notvars':   app.scenlist = [scen for scen in app.scenlist if list(scen['faults'].keys())[0] not in {'StoreEE', 'AffectDOF'}]

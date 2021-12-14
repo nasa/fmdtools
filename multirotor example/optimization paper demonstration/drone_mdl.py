@@ -11,8 +11,8 @@ from fmdtools.modeldef import *
 #Define specialized flows
 class Direc(Flow):
     def __init__(self):
-        self.traj=[0,0,0]
-        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1}, 'Trajectory')
+        self.traj=[0.0,0.0,0.0]
+        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1.0}, 'Trajectory')
     def assign(self, traj):
         self.x, self.y, self.z = traj[0], traj[1], traj[2]
         self.traj=traj
@@ -22,7 +22,7 @@ class Direc(Flow):
 
 #Define functions
 class StoreEE(FxnBlock):
-    def __init__(self, flows, params):
+    def __init__(self, name, flows, params):
         self.archtype=params['bat']
         
         #weight, cap, voltage, drag_factor
@@ -43,14 +43,14 @@ class StoreEE(FxnBlock):
         #failrate for function w- component only applies to function modes
         self.failrate=1e-4
         self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],0],'lowcharge':[0.7,[0.6,0.2,0.2],0]})
-        super().__init__(['EEout', 'FS', 'HSig'], flows, {'soc': 100}, components)
+        super().__init__(name, flows, ['EEout', 'FS', 'HSig'], {'soc': 100.0}, components)
     def condfaults(self, time):
         if self.soc<20:                     self.add_fault('lowcharge')
         elif self.has_fault('lowcharge'):   
-            for batname, bat in self.components.items(): bat.soc=19
+            for batname, bat in self.components.items(): bat.soc=19.0
         if self.soc<1:                      self.replace_fault('lowcharge','nocharge')
         elif self.has_fault('nocharge'):
-            for batname, bat in self.components.items(): bat.soc=0
+            for batname, bat in self.components.items(): bat.soc=0.0
     def behavior(self, time):
         EE, soc = {}, {}
         rate_res=0
@@ -70,7 +70,7 @@ class StoreEE(FxnBlock):
 
 class Battery(Component):
     def __init__(self, name, batparams):
-        super().__init__(name, {'soc':100, 'EEe':1.0, 'Et':1.0})
+        super().__init__(name, {'soc':100.0, 'EEe':1.0, 'Et':1.0})
         self.failrate=1e-4
         self.avail_eff = 1/batparams['p']
         self.maxa = 2/batparams['s']
@@ -98,8 +98,8 @@ class Battery(Component):
         return self.Et, self.soc, Er_res
 
 class DistEE(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['EEin','EEmot','EEctl','ST'],flows, {'EEtr':1.0, 'EEte':1.0}, timely=False)
+    def __init__(self,name, flows):
+        super().__init__(name, flows, ['EEin','EEmot','EEctl','ST'], {'EEtr':1.0, 'EEte':1.0})
         self.failrate=1e-5
         self.assoc_modes({'short':[0.3,[0.33, 0.33, 0.33],300], 'degr':[0.5,[0.33, 0.33, 0.33],100],\
                           'break':[0.2,[0.33, 0.33, 0.33],200]})
@@ -115,8 +115,8 @@ class DistEE(FxnBlock):
         self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, 0.99*self.EEmot.rate+0.01*self.EEctl.rate])
             
 class HoldPayload(FxnBlock):
-    def __init__(self,flows):
-        super().__init__(['DOF', 'Lin', 'ST'],flows, timely=False, states={'Force_GR':1.0})
+    def __init__(self,name, flows):
+        super().__init__(name,flows, ['DOF', 'Lin', 'ST'], states={'Force_GR':1.0})
         self.failrate=1e-6
         self.assoc_modes({'break':[0.2, [0.33, 0.33, 0.33], 1000], 'deform':[0.8, [0.33, 0.33, 0.33], 1000]})
     def condfaults(self, time):
@@ -131,15 +131,15 @@ class HoldPayload(FxnBlock):
         else:                           self.Lin.support, self.ST.support = 1.0,1.0
     
 class ManageHealth(FxnBlock):
-    def __init__(self,flows,respolicy):
+    def __init__(self,name, flows,respolicy):
         self.respolicy = respolicy
         flownames=['EECtl','FS','DOFshealth', 'Bathealth', 'Trajconfig' ]
-        super().__init__(flownames, flows)
+        super().__init__(name, flows, flownames)
         
         self.failrate=1e-6 #{'falsemaintenance':[0.8,[1.0, 0.0,0.0,0.0,0.0],1000],\
-        self.assoc_modes({'falsemasking':[0.1,[1.0, 0.2,0.4,0.4,0.0],1000],\
-                         'falseemland':[0.05,[0.0, 0.2,0.4,0.4,0.0],1000],\
-                         'lostfunction':[0.05,[0.2, 0.2,0.2,0.2,0.2],1000]})
+        self.assoc_modes({'falsemasking':[0.1,[0.6,0.4,0.0],1000],\
+                         'falseemland':[0.05,[0.6,0.4,0.0],1000],\
+                         'lostfunction':[0.05,[0.4,0.3,0.3],1000]})
     def condfaults(self, time):
         if self.FS.support<0.5 or self.EECtl.effort>2.0: self.add_fault('lostfunction')
     def behavior(self, time):
@@ -150,7 +150,7 @@ class ManageHealth(FxnBlock):
             # trajconfig: continue, to_home, to_nearest, emland
     
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
-    def __init__(self, flows, archtype):     
+    def __init__(self,name, flows, archtype):     
         self.archtype=archtype
         if archtype=='quad':
             components={'RF':Line('RF'), 'LF':Line('LF'), 'LR':Line('LR'), 'RR':Line('RR')}
@@ -170,7 +170,8 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5,'RF2':0.5,'LF2':0.5,'LR2':-0.5,'RR2':-0.5}
             self.LR = {'L':{'LF', 'LR','LF2', 'LR2'}, 'R':{'RF','RR','RF2','RR2'}}
             self.FR = {'F':{'LF', 'RF','LF2', 'RF2'}, 'R':{'LR', 'RR','LR2', 'RR2'}}
-        super().__init__(['EEin', 'Ctlin','DOF','Dir','Force','HSig'], flows,{'LRstab':0.0, 'FRstab':0.0}, components) 
+        super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Dir','Force','HSig'], {'LRstab':0.0, 'FRstab':0.0}, components) 
+        self.assoc_modes()
     def behavior(self, time):
         Air,EEin={},{}
         #injects faults into lines
@@ -226,7 +227,7 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
 
 class Line(Component):
     def __init__(self, name):
-        super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, timely=False)
+        super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0})
         self.failrate=1e-5
         self.assoc_modes({'short':[0.1, [0.33, 0.33, 0.33], 200],'openc':[0.1, [0.33, 0.33, 0.33], 200],\
                           'ctlbreak':[0.2, [0.33, 0.33, 0.33], 100], 'mechbreak':[0.1, [0.33, 0.33, 0.33], 500],\
@@ -247,8 +248,8 @@ class Line(Component):
         self.EE_in=m2to1([EEin,self.Eto])  
     
 class CtlDOF(FxnBlock):
-    def __init__(self, flows):
-        super().__init__(['EEin','Dir','Ctl','DOFs','FS'],flows, {'vel':0.0, 'Cs':1.0})
+    def __init__(self,name, flows):
+        super().__init__(name,flows, ['EEin','Dir','Ctl','DOFs','FS'], {'vel':0.0, 'Cs':1.0})
         self.failrate=1e-5
         self.assoc_modes({'noctl':[0.2, [0.6, 0.3, 0.1], 1000], 'degctl':[0.8, [0.6, 0.3, 0.1], 1000]})
     def condfaults(self, time):
@@ -268,8 +269,8 @@ class CtlDOF(FxnBlock):
         self.Ctl.upward=self.EEin.effort*self.Cs*upthrottle*self.Dir.power
 
 class PlanPath(FxnBlock):
-    def __init__(self, flows, params):
-        super().__init__(['EEin','Env','Dir','FS','Rsig'], flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'})
+    def __init__(self, name, flows, params):
+        super().__init__(name, flows, ['EEin','Env','Dir','FS','Rsig'], states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'})
         self.nearest = params['safe'][0:2]+[0]
         self.goals = params['flightplan']
         self.goal=self.goals[1]
@@ -312,10 +313,11 @@ class PlanPath(FxnBlock):
             
 class Drone(Model):
     def __init__(self, params={'flightplan':{1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic', 'linearch':'quad','respolicy':{'bat':'to_home','line':'emland'}, 
-                               'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10], 'loc':'rural', 'landtime':12}):
-        super().__init__()
-        super().__init__(modelparams={'phases': {'ascend':[0,1],'forward':[1,params['landtime']],'taxis':[params['landtime'], 20]},
-                                     'times':[0,30],'units':'min'}, params=params)
+                               'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10], 'loc':'rural', 'landtime':12},
+                 modelparams={'phases': {'ascend':[0,1],'forward':[1,12],'taxis':[12, 20]},'times':[0,30],'units':'min'}, valparams={}):
+        modelparams['phases']['forward'][1]=params.get('landtime', 12)
+        modelparams['phases']['taxis'][0]=params.get('landtime', 12)
+        super().__init__(params, modelparams, valparams)
         
         self.start_area = square(self.params['start'][0:2],self.params['start'][2],self.params['start'][3] )
         self.safe_area = square(self.params['safe'][0:2],self.params['safe'][2],self.params['safe'][3] )
@@ -375,9 +377,9 @@ class Drone(Model):
                   'DOFs': [0.8194232270836169, 0.3883256382522293],
                   'Dir1': [0.9276094920710914, 0.6064107724557304]}
         
-        self.construct_graph(graph_pos=pos, bipartite_pos=bippos)
+        self.build_model(graph_pos=pos, bipartite_pos=bippos)
         
-    def find_classification(self, g, endfaults, endflows, scen, mdlhist):
+    def find_classification(self, scen, mdlhist):
         
         
         #landing costs
@@ -385,7 +387,7 @@ class Drone(Model):
         viewed_value = sum([0.5+2*view for k,view in viewed.items() if view!='unviewed'])
         
         fhist=mdlhist['faulty']
-        faulttime = sum([any([fhist['functions'][f]['faults'][t]!={'nom'} for f in fhist['functions']]) for t in range(len(fhist['time'])) if fhist['flows']['DOFs']['elev'][t]])
+        faulttime = sum([any([hist['faults'][f][t]!={'nom'} for hist in fhist['functions'].values() for f in hist['faults']]) for t in range(len(fhist['time'])) if fhist['flows']['DOFs']['elev'][t]])
         
         Env=self.flows['DOFs']
         if  inrange(self.start_area, Env.x, Env.y):     landloc = 'nominal' # nominal landing
@@ -435,7 +437,8 @@ class Drone(Model):
         safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes) + unsafecost[self.params['loc']] * faulttime
         landcost = property_restrictions*propertycost[self.params['loc']]
         #repair costs
-        repcost=min(sum([ c['rcost'] for f,m in endfaults.items() for a, c in m.items()]), 1500)
+        modes, modeprops = self.return_faultmodes()
+        repcost=min(sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()]), 1500)
         rate=scen['properties']['rate']
         p_safety = 1-np.exp(-(body_strikes+head_strikes) * 60/self.times[1]) #convert to pfh
         classifications = {'hazardous':rate*p_safety, 'minor':rate*(1-p_safety)}
@@ -540,6 +543,7 @@ def plan_flight(elev, square, landing):
     flightplan.update(newplan)
     flightplan.update({max(flightplan)+1:flightplan[1], max(flightplan)+2:flightplan[0]})
     return flightplan
+
 
 # likelihood class schedule (pfh)
 p_allowable = {'small airplane':{'no requirement':'na', 'probable':1e-3, 'remote':1e-4, 'extremely remote':1e-5, 'extremely improbable':1e-6},
