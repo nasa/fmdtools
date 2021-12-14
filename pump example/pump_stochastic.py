@@ -146,9 +146,8 @@ class Pump(Model):
         self.build_model()
     def find_classification(self,scen, mdlhists):
         #get fault costs and rates
-        modes, modeprops = self.return_faultmodes()
-        if 'repair' in self.params['cost']: repcost = sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])
-        else: repcost = 0.0
+        if 'repair' in self.params['cost']: repcost= self.calc_repaircost()
+        else:                               repcost = 0.0
         if 'water' in self.params['cost']:
             lostwat = sum(mdlhists['nominal']['flows']['Wat_2']['flowrate'] - mdlhists['faulty']['flows']['Wat_2']['flowrate'])
             watcost = 750 * lostwat  * self.tstep

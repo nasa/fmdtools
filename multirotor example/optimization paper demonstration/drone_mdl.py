@@ -437,8 +437,7 @@ class Drone(Model):
         safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes) + unsafecost[self.params['loc']] * faulttime
         landcost = property_restrictions*propertycost[self.params['loc']]
         #repair costs
-        modes, modeprops = self.return_faultmodes()
-        repcost=min(sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()]), 1500)
+        repcost= self.calc_repaircost(max_cost=1500)
         rate=scen['properties']['rate']
         p_safety = 1-np.exp(-(body_strikes+head_strikes) * 60/self.times[1]) #convert to pfh
         classifications = {'hazardous':rate*p_safety, 'minor':rate*(1-p_safety)}

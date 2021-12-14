@@ -267,8 +267,7 @@ class EPS(Model):
         
         flowcost = -5*sum([qualfunc[discrep(self.flows[fl].effort)][discrep(self.flows[fl].rate)] for fl in outflows])
         
-        modes, modeprops = self.return_faultmodes()
-        repcost = sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])
+        repcost= self.calc_repaircost()
         cost = repcost+flowcost
         
         rate = scen['properties']['rate'] 
