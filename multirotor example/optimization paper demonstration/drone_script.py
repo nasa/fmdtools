@@ -32,7 +32,7 @@ params={'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50
         'respolicy':{'bat':'emland','line':'emland'}}   #continue, to_home, to_nearest, emland
 mdl = Drone(params=params)
 endresults_nom, resgraph, mdlhist =propagate.nominal(mdl)
-rd.graph.show(resgraph, pos=mdl.graph_pos) #, showfaultlabels=False)
+rd.graph.show(mdl) #, showfaultlabels=False)
 #fp.plotflowhist(flowhist3, 'N/A', time=0)
 ## 
 
@@ -64,9 +64,9 @@ rd.plot.mdlhistvals(mdlhist,'StoreEE S1P1nocharge', time=5)
 
 
 
+app = SampleApproach(mdl, faults='single-component',phases=['forward'])
 
-
-app = SampleApproach(mdl, faults='single-component')
+#app = SampleApproach(mdl, faults='single-component',phases={'forward'})
 a, b = propagate.approach(mdl, app)
 
 p_hazardous = np.sum([v['severities']['hazardous'] for k,v in a.items()])

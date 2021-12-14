@@ -1471,11 +1471,12 @@ class SampleApproach():
                     quadrature object if the quadrature option is selected.
         """
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
-        if phases=='global':        self.globalphases = mdl.phases; self.phases = {}; self.modephases = modephases
-        elif type(phases)==list:    self.globalphases = {ph:mdl.phases[ph] for ph in phases}; self.phases = {}; self.modephases = modephases
+        if phases=='global':                self.globalphases = mdl.phases; self.phases = {}; self.modephases = modephases
+        elif type(phases) in [list, set]:   self.globalphases = {ph:mdl.phases[ph] for ph in phases}; self.phases={}; self.modephases = modephases
         elif type(phases)==dict:    
             if type(tuple(phases.values())[0][0]) in [int, float]:  self.globalphases = phases; self.phases ={}; self.modephases = modephases
             else:                                               self.globalphases = mdl.phases; self.phases = phases; self.modephases = modephases
+        #elif type(phases)==set:    self.globalphases=mdl.phases; self.phases = {ph:mdl.phases[ph] for ph in phases}
         self.tstep = mdl.tstep
         self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)
@@ -1592,6 +1593,7 @@ class SampleApproach():
                 else:
                     oppvect = self._fxnmodes[fxnname, mode]['oppvect']
                     if type(oppvect)==int or len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
+                    elif self.globalphases!=mdl.phases: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(mdl.phases)}
                     elif len(oppvect)!=len(fxnphases): raise Exception("Invalid Opportunity vector: "+fxnname+". Invalid length.")
                     else: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(fxnphases)}
             for phase, times in fxnphases.items():
