@@ -1021,6 +1021,31 @@ class Model(object):
             nx.set_node_attributes(graph, compmodes, 'modes') 
             nx.set_node_attributes(graph, comptypes, 'iscomponent')
         return graph
+    def calc_repaircost(self, additional_cost=0, default_cost=0, max_cost=np.inf):
+        """
+        Calculates the repair cost of the fault modes in the model based on given
+        mode cost information for each function mode (in fxn.assoc_faultmodes).
+
+        Parameters
+        ----------
+        additional_cost : int/float
+            Additional cost to add if there are faults in the model. Default is 0.
+        default_cost : int/float
+            Cost to use for each fault mode if no fault cost information given 
+            in assoc_faultmodes/ Default is 0.
+        max_cost : int/float
+            Maximum cost of repair (e.g. cost of replacement). Default is np.inf
+
+        Returns
+        -------
+        repair_cost : float
+            Cost of repairing the fault modes in the given model
+
+        """
+        repmodes, modeprops = self.return_faultmodes()
+        modecost = sum([ c['rcost'] if c['rcost']>0.0 else default_cost for m in modeprops.values() for c in m.values()])
+        repair_cost = np.min([modecost, max_cost])
+        return repair_cost
     def return_faultmodes(self):
         """
         Returns faultmodes present in the model
