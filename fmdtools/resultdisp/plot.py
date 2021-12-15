@@ -243,7 +243,7 @@ def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_group
     num_plots = len(plot_values)
     rows = int(np.ceil(num_plots/cols))
     if figsize=='default': figsize=(cols*3, 2*rows)
-    fig, axs = plt.subplots(cols, rows, sharex=True, figsize=figsize) 
+    fig, axs = plt.subplots(rows,cols, sharex=True, figsize=figsize) 
     axs = axs.flatten()
     
     if not (type(max_ind)==int and aggregation in ['individual','joint']):
@@ -267,7 +267,7 @@ def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_group
         for group, hists in grouphists.items():
             local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
             if aggregation=='individual':
-                ax.plot(times, hists[f_type][plot_value[0]][plot_value[1]], label=scen, **local_kwargs)
+                ax.plot(times, hists[f_type][plot_value[0]][plot_value[1]], label=group, **local_kwargs)
             elif aggregation=='mean_std':
                 mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
                 std_dev = np.std([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)

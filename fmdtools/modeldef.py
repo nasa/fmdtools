@@ -148,8 +148,8 @@ class Block(Common):
         self.faults=set(['nom'])
         self.opermodes= getattr(self, 'opermodes', [])
         self.faultmodes= getattr(self, 'faultmodes', {})
-        self._generators=getattr(self, '_generators', {})
-        self._generator_params=getattr(self, '_generator_params', {})
+        self.rngs=getattr(self, 'rngs', {})
+        self._rng_params=getattr(self, '_rng_params', {})
         if not getattr(self, 'seed', []): 
             self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]
         self._init_rng=np.random.default_rng(self.seed)
@@ -166,33 +166,56 @@ class Block(Common):
         for param in params:
             for attr, val in param.items():
                 setattr(self, attr, val)
-    def assoc_stochastic_state(self,name,default,generator_method, generator_params, seed=None):
+    def assoc_rand_states(self, *states):
+        """
+        Associates multiple random states with the model
+
+        Parameters
+        ----------
+        *states : tuple
+            can give any number of tuples for each of the states. 
+            The tuple is of the form (name, default), where:
+                name : str
+                    name for the parameter to use in the model behavior.
+                default : int/float/str/etc
+                    Default value for the parameter 
+        """
+        if type(states[0])==tuple:
+            for state in states:
+                self.assoc_rand_state(*state)
+        else: self.assoc_rand_state(*states)
+    def assoc_rand_state(self,name,default, seed=None, auto_update=[]):
         """
         Associate a stochastic state with the Block. Enables the simulation of stochastic behavior over time.
 
         Parameters
         ----------
         name : str
-            name for the parameter
+            name for the parameter to use in the model behavior.
         default : int/float/str/etc
             Default value for the parameter for the parameter
-        generator_method : str
-            Name of the numpy random method to use. 
-            see: https://numpy.org/doc/stable/reference/random/generator.html
-        generator_params : tuple
-            Parameter inputs for the numpy generator function
         seed : int
             seed for the random state generator to use. Defaults to None.
+        auto_update : list, optional
+            If given, updates the state with the given numpy method at each time-step.
+            List is made up of two arguments:
+            - generator_method : str
+                Name of the numpy random method to use. 
+                see: https://numpy.org/doc/stable/reference/random/generator.html
+            - generator_params : tuple
+                Parameter inputs for the numpy generator function
         """
+        if not auto_update: generator_method, generator_params= None,None
+        else:               generator_method, generator_params = auto_update
         if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
         self._states.append(name)
         self._initstates[name]=default
         setattr(self, name,default)
         if not seed: seed = self._init_rng.integers(2147483648)
-        if not hasattr(self,'_generators'):         self._generators={name:np.random.default_rng(seed)} 
-        else:                                       self._generators[name]=np.random.default_rng(seed)
-        if not hasattr(self,'_generator_params'):   self._generator_params={name:(default, generator_method, generator_params,seed)} 
-        else:                                       self._generator_params[name]=(default, generator_method, generator_params,seed)
+        if not hasattr(self,'rngs'):         self.rngs={name:np.random.default_rng(seed)} 
+        else:                                 self.rngs[name]=np.random.default_rng(seed)
+        if not hasattr(self,'_rng_params'):   self._rng_params={name:(default, generator_method, generator_params,seed)} 
+        else:                                 self._rng_params[name]=(default, generator_method, generator_params,seed)
     def assoc_healthstates(self, hstates, mode_app='single-state', probtype='prob', units='hr'):
         """
         Adds health state attributes to the model (and a mode approach if desired). 
@@ -371,6 +394,29 @@ class Block(Common):
                 self.faultmodes[name+mode]['longname'] = longnames.get(mode,mode)
         if key_phases_by=='self':   self.key_phases_by = self.name
         else:                       self.key_phases_by = key_phases_by
+    def set_rand(self,statename,methodname, *args):
+        """
+        Update the given random state with a given method and arguments
+
+        Parameters
+        ----------
+        statename : str
+            name of the random state defined in assoc_rand_state(s)
+        methodname : 
+            str name of the numpy method to call in the rng
+        *args : args
+            arguments for the numpy method
+        """
+        if getattr(self, 'run_stochastic', True):
+            gen_method = getattr(self.rngs[statename], methodname)
+            setattr(self, statename, gen_method(*args))
+    def to_default(self,statename):
+        """Resets random state to its original values"""
+        setattr(self, statename, self._rng_params[statename][0])
+    def to_defaults(self,*statenames):
+        """ Resets (given or all by default) random states to their default values"""
+        if not statenames: statenames=self._rng_params.keys()
+        for statename in statenames: self.to_default(statename)
     def set_mode(self, mode):
         """Sets a mode in the block"""
         if self.exclusive_faultmodes and self.any_faults():
@@ -437,8 +483,8 @@ class Block(Common):
         self.faults.add('nom')
         for state in self._initstates.keys():
             setattr(self, state,self._initstates[state])
-        for generator in self._generators:
-            self._generators[generator]=np.random.default_rng(self._generator_params[generator][-1])
+        for generator in self.rngs:
+            self.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
         self._init_rng = np.random.default_rng(self.seed)
         self.time=0
     def return_states(self):
@@ -551,8 +597,8 @@ class FxnBlock(Block):
             setattr(self, state,self._initstates[state])
         for name, component in self.components.items():
             component.reset()
-        for generator in self._generators:
-            self._generators[generator]=np.random.default_rng(self._generator_params[generator][-1])
+        for generator in self.rngs:
+            self.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
         for timername in self.timers:
             getattr(self, timername).reset()
         if hasattr(self, 'time'): self.time=0.0
@@ -587,9 +633,9 @@ class FxnBlock(Block):
             copytimer.mode=timer.mode
         for state in self._initstates.keys():
             setattr(copy, state, getattr(self, state))
-        for generator in self._generators:
-            copy._generators[generator]=np.random.default_rng(self._generator_params[generator][-1])
-            copy._generators[generator].__setstate__(self._generators[generator].__getstate__())
+        for generator in self.rngs:
+            copy.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
+            copy.rngs[generator].__setstate__(self.rngs[generator].__getstate__())
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
@@ -602,9 +648,10 @@ class FxnBlock(Block):
                 num_update+=1
                 if num_update > 1: raise Exception("Exclusive fault mode scenarios present at the same time")
     def update_stochastic_states(self):
-        for statename, generator in self._generators.items():
-            gen_method = getattr(generator, self._generator_params[statename][1])
-            setattr(self, statename, gen_method(*self._generator_params[statename][2]))
+        for statename, generator in self.rngs.items():
+            if self._rng_params[statename][1]:
+                gen_method = getattr(generator, self._rng_params[statename][1])
+                setattr(self, statename, gen_method(*self._rng_params[statename][2]))
     def updatefxn(self,proptype, faults=[], time=0, run_stochastic=False):
         """
         Updates the state of the function at a given time and injects faults.
@@ -616,6 +663,7 @@ class FxnBlock(Block):
         time : float, optional
             Model time. The default is 0.
         """
+        self.run_stochastic=run_stochastic
         self.add_faults(faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
