@@ -39,14 +39,18 @@ class ImportEE(FxnBlock):
         super().__init__(name,flows, flownames = ['EEout'])
         self.failrate=1e-5
         self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[0.20, [0,1,0], 5000]}, key_phases_by='global')
-
+        self.assoc_rand_states(('effstate', 1.0), ('grid_noise',1.0))
     def condfaults(self,time):
         if self.EEout.current>15.0: self.add_fault('no_v')
     def behavior(self,time):
-        if self.has_fault('no_v'): self.effstate=0.0 #an open circuit means no voltage is exported
-        elif self.has_fault('inf_v'): self.effstate=100.0 #a voltage spike means voltage is much higher
-        else: self.effstate=1.0 #normally, voltage is 500 V
-        self.EEout.voltage=self.effstate * 500
+        if self.has_fault('no_v'):      self.effstate=0.0 #an open circuit means no voltage is exported
+        elif self.has_fault('inf_v'):   self.effstate=100.0 #a voltage spike means voltage is much higher
+        else:                           
+            if time>self.time: self.set_rand('effstate','triangular',0.9,1,1.1)
+        if time>self.time:
+            self.set_rand('grid_noise','normal',1, 0.1*(2+np.sin(np.pi/2*time)))
+        
+        self.EEout.voltage= self.grid_noise*self.effstate * 500
 
 class ImportWater(FxnBlock):
     """ Import Water is the pipe with water going into the pump """
@@ -81,12 +85,15 @@ class ImportSig(FxnBlock):
         super().__init__(name,flows, flownames=['Sigout'])
         self.failrate=1e-6
         self.assoc_modes({'no_sig':[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by='global')
+        self.assoc_rand_state('sig_noise',1.0)
     def behavior(self, time):
         if self.has_fault('no_sig'): self.Sigout.power=0.0 #an open circuit means no voltage is exported
         else:
-            if time<5:      self.Sigout.power=0.0
-            elif time<50:   self.Sigout.power=1.0
-            else:           self.Sigout.power=0.0
+            if time<5:      self.Sigout.power=0.0;self.to_default('sig_noise')
+            elif time<50: 
+                if not time%5:  self.set_rand('sig_noise', 'choice', [1.0, 0.9, 1.1])
+                self.Sigout.power=1.0*self.sig_noise
+            else:           self.Sigout.power=0.0; self.to_defaults()
 
 class MoveWat(FxnBlock):
     """  Move Water is the pump itself. While one could decompose this further, one function is used for simplicity """
@@ -97,7 +104,8 @@ class MoveWat(FxnBlock):
         super().__init__(name,flows,flownames=flownames,states=states, timers={'timer'})
         self.failrate=1e-5
         self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by='global')
-        self.assoc_stochastic_state("eff",1.0,'normal', (1.0, 0.2))
+        self.assoc_rand_state("eff",1.0,auto_update=['normal', (1.0, 0.2)])
+        self.assoc_rand_states("light_emf", 0.0)
     def condfaults(self, time):
         if self.delay:
             if self.Watout.pressure>15.0:
@@ -203,7 +211,10 @@ if __name__=="__main__":
     rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_ci',\
                      comp_groups={'test_1':[*mdlhists.keys()][:50], 'test_2':[*mdlhists.keys()][50:]},\
                                   ylabels={('Wat_2', 'flowrate'):'liters/s'}, time_slice=[3,5,7])
-
+    rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure'], 'ImportEE':['effstate', 'grid_noise'], 'EE_1':['voltage','current'], 'Sig_1':['power']},\
+                                  ylabels={('Wat_2', 'flowrate'):'liters/s'}, cols=2, color='blue', alpha=0.1, legend_loc=False)
+    rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure'], 'ImportEE':['effstate', 'grid_noise'], 'EE_1':['voltage','current'], 'Sig_1':['power']}, aggregation='percentile',\
+                                  ylabels={('Wat_2', 'flowrate'):'liters/s'}, cols=2, color='blue', alpha=0.1, legend_loc=False)
     #rd.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
     
     
