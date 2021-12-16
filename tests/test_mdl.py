@@ -380,9 +380,14 @@ def test_model_2():
     assert sus_err < 0.06
     assert inf_err < 0.06
     assert rec_err < 0.06
+    
+if __name__=="__main__":
+    import pytest
+    retcode = pytest.main()
 
-x0 = [0.1 , 2 , 5 , 10 , 0.05 , 10 ]   
-result0=list(SimplePandemicModel(x0))
+    #x0 = [0.1 , 2 , 5 , 10 , 0.05 , 10 ]   
+    #result0=list(SimplePandemicModel(x0))
+
 
 #fmdmdl = PandemicModel(params={'x0':x0})
 #endresults, resgraph, mdlhist_nom = propagate.nominal(fmdmdl)
