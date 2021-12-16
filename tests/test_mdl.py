@@ -389,6 +389,7 @@ if __name__=="__main__":
     #result0=list(SimplePandemicModel(x0))
 
 
+
 #fmdmdl = PandemicModel(params={'x0':x0})
 #endresults, resgraph, mdlhist_nom = propagate.nominal(fmdmdl)
 #sus_mdl = mdlhist_nom['functions']['City']['Susceptible']
