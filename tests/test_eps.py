@@ -31,7 +31,7 @@ class eps_tests(unittest.TestCase):
         self.assertEqual(endresults['faults']['Distribute_EE'], ['short'])
     def test_all_faults(self):
         """ Some basic tests for propagating lists of faults in the model--
-        that histories have lengh 1, endresults have >0 costs, and total costs are higher
+        that histories have length 1, endresults have >0 costs, and total costs are higher
         than repairs"""
         endclasses, reshists = propagate.single_faults(self.mdl, showprogress=False)
         actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])

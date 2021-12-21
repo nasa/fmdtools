@@ -1,5 +1,5 @@
 import sys, os
-sys.path.insert(1,os.path.join("..",".."))
+sys.path.insert(1,os.path.join(".."))
 
 from fmdtools.modeldef import FxnBlock
 from fmdtools.modeldef import Flow

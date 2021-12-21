@@ -7,7 +7,7 @@ Description: A fault model of a multi-rotor drone.
 """
 
 import sys, os
-sys.path.append(os.path.join('..','..'))
+sys.path.append(os.path.join('..'))
 
 import matplotlib.pyplot as plt
 import numpy as np
