@@ -316,6 +316,7 @@ class Block(Common):
         """
         if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
         elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
+        else: raise Exception("Invalid type for EPCs: "+str(type(EPCs)))
         self.failrate = gtp*EPC_f
     def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False, key_phases_by='global', longnames={}):
         """
