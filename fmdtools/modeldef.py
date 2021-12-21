@@ -1501,9 +1501,10 @@ class SampleApproach():
                 - ('mode names', ('mode1', 'mode2')), gets all modes with the exact names defined in the tuple
                 - ('function class', 'Classname'), which gets all modes from a function with class 'Classname'
                 - ('function classes', ('Classname1', 'Classname2')), which gets all modes from a function with the names in the tuple
-        phases: dict or 'global'
-            Local phases in the model to sample. Has structure:
-                {'Function':{'phase':[starttime, endtime]}}
+        phases: dict or 'global' or list
+            Local phases in the model to sample. 
+                Dict has structure: {'Function':{'phase':[starttime, endtime]}}
+                List has structure: ['phase1', 'phase2'] where phases are phases in mdl.phases
             Defaults to 'global',here only the phases defined in mdl.phases are used.
             Phases and modephases can be gotten from process.modephases(mdlhist)
         modephases: dict
@@ -1608,7 +1609,9 @@ class SampleApproach():
                 elif faults[0]=='function class':   faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns_of_class(faults[1]).items() for mode in fxn.faultmodes]
                 elif faults[0]=='function classes': faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns_of_class(f).items() for mode in fxn.faultmodes]
                 else: raise Exception("Invalid option in tuple argument: "+str(faults[0]))
-            elif type(faults)==list: faults=faults
+            elif type(faults)==list: 
+                if type(faults[0])!=tuple: raise Exception("Invalid list option: "+str(faults)+" , provide list of tuples") 
+                faults=faults
             else: raise Exception("Invalid option for faults: "+str(faults)) 
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
             for fxnname, mode in faults: 
@@ -1635,6 +1638,7 @@ class SampleApproach():
                 self.jointmodes=jointmodes
             else: raise Exception("Invalid option for jointfault['inclusive']")
         elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
+        elif jointfaults['faults']!='None': raise Exception("Invalid jointfaults argument type: "+str(type(jointfaults['faults'])))
     def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}):
         """ Initializes rates, rates_timeless"""
         self.rates=dict.fromkeys(self._fxnmodes)
@@ -1672,10 +1676,10 @@ class SampleApproach():
             for phase, times in fxnphases.items():
                 opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
                 dist = self._fxnmodes[fxnname, mode]['dist']
-                if self._fxnmodes[fxnname, mode]['probtype']=='rate':      
+                if self._fxnmodes[fxnname, mode]['probtype']=='rate' and len(times)>1:      
                     dt = float(times[1]-times[0]) 
                     unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
-                elif self._fxnmodes[fxnname, mode]['probtype']=='prob':    
+                elif self._fxnmodes[fxnname, mode]['probtype']=='prob' or len(times)>=1:    
                     dt = 1
                     unitfactor = 1
                 self.rates[fxnname, mode][key_phases, phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
@@ -1694,16 +1698,20 @@ class SampleApproach():
                     overlap = find_overlap_n(intervals)
                     if overlap: 
                         phaseid = tuple(set(phase_combo))
-                        if len(phaseid) == 1: phaseid = phaseid[0]
-                        rates = [self.rates[fmode][phase_combo[i]]* np.subtract(*overlap)/np.subtract(*self.mode_phase_map[fmode][phase_combo[i]]) for i,fmode in enumerate(jointmode)]
+                        if len(phaseid) == 1: 
+                            phaseid = phaseid[0]
+                            rates=[self.rates[fmode][phaseid] for fmode in jointmode]
+                        else:
+                            rates = [self.rates[fmode][phase_combo[i]]* np.subtract(*overlap)/np.subtract(*self.mode_phase_map[fmode][phase_combo[i]]) for i,fmode in enumerate(jointmode)]
                         if not jointfaults.get('pcond', False): # if no input, assume independence
                             prob = np.prod(1-np.exp(-np.array(rates)))
                             self.rates[jointmode][phaseid] = -np.log(1.0-prob)
                         elif type(jointfaults['pcond'])==float:
                             self.rates[jointmode][phaseid] = jointfaults['pcond']*max(rates)
                         elif type(jointfaults['pcond'])==list:
-                            self.rates[jointmode][phaseid] = jointfaults['pcond'][j_ind]*max(rates)  
-                        self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(overlap[1]-overlap[0])
+                            self.rates[jointmode][phaseid] = jointfaults['pcond'][j_ind]*max(rates)
+                        if len(overlap)>1:  self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(overlap[1]-overlap[0])
+                        else:               self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]
                         self.mode_phase_map[jointmode][phaseid] = overlap 
             if not jointfaults.get('inclusive', True): 
                 for (fxnname, mode) in self._fxnmodes: 
@@ -1719,18 +1727,20 @@ class SampleApproach():
             for phaseid, rate in ratedict.items():
                 if rate > 0.0:
                     times = self.mode_phase_map[fxnmode][phaseid]
-                    possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
                     param = params.get((fxnmode,phaseid), default)
                     self.sampparams[fxnmode, phaseid] = param
-                    if param['samp']=='likeliest':
-                        weights=[]
-                        if self.rates[fxnmode][phaseid] == max(list(self.rates[fxnmode].values())):
-                            phasetimes = [round(np.quantile(possible_phasetimes, 0.5)/self.tstep)*self.tstep]
-                        else: phasetimes = []
-                    else: 
-                        pts, weights = self.select_points(param, [pt for pt, t in enumerate(possible_phasetimes)])
-                        phasetimes = [possible_phasetimes[pt] for pt in pts]
-                    self.add_phasetimes(fxnmode, phaseid, phasetimes, weights=weights)
+                    if len(times)<=1: self.add_phasetimes(fxnmode, phaseid, times)
+                    else:
+                        possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
+                        if param['samp']=='likeliest':
+                            weights=[]
+                            if self.rates[fxnmode][phaseid] == max(list(self.rates[fxnmode].values())):
+                                phasetimes = [round(np.quantile(possible_phasetimes, 0.5)/self.tstep)*self.tstep]
+                            else: phasetimes = []
+                        else: 
+                            pts, weights = self.select_points(param, [pt for pt, t in enumerate(possible_phasetimes)])
+                            phasetimes = [possible_phasetimes[pt] for pt in pts]
+                        self.add_phasetimes(fxnmode, phaseid, phasetimes, weights=weights)
     def select_points(self, param, possible_pts):
         """
         Selects points in the list possible_points according to a given sample strategy.
@@ -1911,12 +1921,18 @@ class SampleApproach():
 
 
 def find_overlap_n(intervals):
-    upper_limits = [interval[1] for interval in intervals]
-    lower_limits = [interval[0] for interval in intervals]
-    if any(u < l for u in upper_limits for l in lower_limits): return []
-    if not upper_limits and not lower_limits: return []
-    orderedintervals = np.sort(upper_limits+lower_limits)
-    return [orderedintervals[len(intervals)-1],orderedintervals[len(intervals)]]
+    try:
+        upper_limits = [interval[1] for interval in intervals]
+        lower_limits = [interval[0] for interval in intervals]
+        if any(u < l for u in upper_limits for l in lower_limits): return []
+        if not upper_limits and not lower_limits: return []
+        orderedintervals = np.sort(upper_limits+lower_limits)
+        return [orderedintervals[len(intervals)-1],orderedintervals[len(intervals)]]
+    except IndexError:
+        limits = [interval[0] for interval in intervals]
+        if all(intervals[0]==i for i in intervals): return intervals[0]
+        else:                                       return 0
+        
 
 def find_overlap(interval1, interval2):
     """Finds the overlap between two intervals"""

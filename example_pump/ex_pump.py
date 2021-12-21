@@ -164,7 +164,7 @@ class MoveWat(FxnBlock):
         if self.delay:
             if self.Watout.pressure>15.0:
                 if time>self.time:                  self.timer.inc(self.tstep)
-                if self.timer.time>self.delay:      self.add_fault('mech_break')
+                if self.timer.time>=self.delay:      self.add_fault('mech_break')
         else:
             if self.Watout.pressure>15.0: self.add_fault('mech_break')
 

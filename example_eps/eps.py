@@ -48,14 +48,17 @@ class StoreEE(FxnBlock):
     def __init__(self,name,flows):
         super().__init__(name,flows,['EEin','EEout'])
         self.assoc_modes({'low_storage':[5e-6,2000], 'no_storage':[5e-6, 2000]})
+    def condfaults(self,time):
+        if self.EEout.effort*self.EEout.rate>=4.0:   self.add_fault('no_storage')
+        elif self.EEout.effort*self.EEout.rate>=2.0: self.add_fault('low_storage') 
     def behavior(self,time):
-        if      self.has_fault('no_storage'):   self.EEout.effort=0.0
+        if      self.has_fault('no_storage'):   self.EEout.effort=0.0; self.EEin.rate=1.0
         elif    self.has_fault('low_storage'):  
             self.EEout.effort=1.0
-            self.EEout.rate=0.5
+            self.EEin.rate=self.EEout.rate
         else:
             self.EEout.effort=self.EEin.effort
-            self.EEout.rate=1.0
+            self.EEin.rate=self.EEout.rate
         
         
 class SupplyEE(FxnBlock):
@@ -72,7 +75,7 @@ class SupplyEE(FxnBlock):
             self.EEin.rate=1.0
         elif self.has_fault('short'):
             self.EEout.effort=self.EEin.effort*4.0
-            self.EEin.rate=self.EEout.rate
+            self.EEin.rate=4.0
         elif self.has_fault('major_overload'):
             self.EEout.effort = self.EEin.effort+1.0
             self.Heatout.effort=2.0

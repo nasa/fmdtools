@@ -1,0 +1,26 @@
+Models tested:
+[ ] eps
+	- [x] undirected propagation 
+	- [x] static use-cases
+		- [x] length 1 history
+		
+[ ] pump
+	- dynamic response is as predicted
+	- model copy/reset
+[ ] pump_stochastic
+	- test seed generation
+	- summary stats are within obunds
+	- copied models replicate behavior
+	- identical seeds replicate behavior
+[ ] hold-up tank
+	- test components 
+		- mode naming
+		- mode propagation up/down the hierarchy
+		-copy/reset/etc
+	- he probability model
+[ ] drone
+	- network methods??
+	- static 
+	- test components (same as hold-up tank)
+[ ] pandemic
+	- migrate to unittest
