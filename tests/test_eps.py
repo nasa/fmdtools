@@ -13,7 +13,7 @@ import fmdtools.resultdisp as rd
 from fmdtools.modeldef import SampleApproach
 import numpy as np
 
-class eps_tests(unittest.TestCase):
+class epsTests(unittest.TestCase):
     def setUp(self):
         self.mdl = EPS()
     def test_backward_fault_prop_1(self):
@@ -33,7 +33,8 @@ class eps_tests(unittest.TestCase):
         """ Some basic tests for propagating lists of faults in the model--
         that histories have length 1, endresults have >0 costs, and total costs are higher
         than repairs"""
-        endclasses, reshists = propagate.single_faults(self.mdl, showprogress=False)
+        mdl=self.mdl
+        endclasses, reshists = propagate.single_faults(mdl, showprogress=False)
         actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])
         self.assertEqual(len(endclasses), actual_num_faults)
         hist_len_is_1 = all([all([all([len(j)==1 for j in i.values()]) for i in f['flows'].values()]) for  f in reshists.values()])

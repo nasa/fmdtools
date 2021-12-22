@@ -383,7 +383,7 @@ def heatmaps(reshist, diff):
         heatmaps['maxdiff'][flowname] = max(flowdiff) /( len_time * len(diff[flowname].keys()))
         heatmaps['intdiff'][flowname] = sum(flowdiff) /( len_time * len(diff[flowname].keys()))
     return heatmaps
-def degtimemap(reshist):
+def degtime_heatmap(reshist):
     """ Makes a heatmap dictionary of degraded time for functions given a result history"""
     len_time = len(reshist['time'])
     degtimemap={}
@@ -392,47 +392,47 @@ def degtimemap(reshist):
     for flowname in reshist['flows'].keys():
         degtimemap[flowname]=1.0 - sum(reshist['flows'][flowname])/len_time
     return degtimemap
-def degtimemaps(reshists):
+def degtime_heatmaps(reshists):
     """ Makes a dict of heatmap dictionaries of degraded time for functions given results histories"""
     degtimemaps=dict.fromkeys(reshists.keys())
     for reshist in reshists:
-        degtimemaps[reshist]=degtimemap(reshists[reshist])
+        degtimemaps[reshist]=degtime_heatmap(reshists[reshist])
     return degtimemaps
-def avgdegtimeheatmap(reshists):
+def avg_degtime_heatmap(reshists):
     """ Makes a heatmap dictionary of the average degraded heat time over a list of scenarios in the dict of results histories."""
-    degtimetable = pd.DataFrame(degtimemaps(reshists)).transpose()
+    degtimetable = pd.DataFrame(degtime_heatmaps(reshists)).transpose()
     return degtimetable.mean().to_dict()
-def expdegtimeheatmap(reshists, endclasses):
+def exp_degtime_heatmap(reshists, endclasses):
     """ Makes a heatmap dictionary of the expected degraded heat time over a list of scenarios in the dict of results histories based on the rates in endclasses."""
     if 'nominal' in {*endclasses, *reshists}:
         if 'nominal' not in reshists:       endclasses=endclasses.copy(); endclasses.pop('nominal')
         elif 'nominal' not in endclasses:   reshists=reshists.copy(); reshists.pop('nominal')
-    degtimetable = pd.DataFrame(degtimemaps(reshists))
+    degtimetable = pd.DataFrame(degtime_heatmaps(reshists))
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expdegtimetable = degtimetable.multiply(rates).transpose()
     return expdegtimetable.sum().to_dict()
-def faultmap(reshist):
+def fault_heatmap(reshist):
     """ Makes a heatmap dictionary of faults given a results history."""
     heatmap={}
     for fxnname in reshist['functions'].keys():
         heatmap[fxnname] = max(reshist['functions'][fxnname]['numfaults'])
     return heatmap
-def faultmaps(reshists):
+def fault_heatmaps(reshists):
     """ Makes dict of heatmaps dictionaries of resulting faults given a results history."""
     faulttimemaps=dict.fromkeys(reshists.keys())
     for reshist in reshists:
-        faulttimemaps[reshist]=faultmap(reshists[reshist])
+        faulttimemaps[reshist]=fault_heatmap(reshists[reshist])
     return faulttimemaps
-def faultsheatmap(reshists):
+def faults_heatmap(reshists):
     """Makes a heatmap dictionary of the average resulting faults over all scenarios"""
-    faulttable = pd.DataFrame(faultmaps(reshists)).transpose()
+    faulttable = pd.DataFrame(fault_heatmaps(reshists)).transpose()
     return faulttable.mean().to_dict()
-def expfaultsheatmap(reshists, endclasses):
+def exp_faults_heatmap(reshists, endclasses):
     """Makes a heatmap dictionary of the expected resulting faults over all scenarios"""
     if 'nominal' in {*endclasses, *reshists}:
         if 'nominal' not in reshists:       endclasses=endclasses.copy(); endclasses.pop('nominal')
         elif 'nominal' not in endclasses:   reshists=reshists.copy(); reshists.pop('nominal')
-    faulttable = pd.DataFrame(faultmaps(reshists))
+    faulttable = pd.DataFrame(fault_heatmaps(reshists))
     rates = list(pd.DataFrame(endclasses).transpose()['rate'])
     expfaulttable = faulttable.multiply(rates).transpose()
     return expfaulttable.mean().to_dict()
@@ -515,8 +515,28 @@ def end_diff(endclasses, metric, nan_as=np.nan, as_ind=False, no_diff=False):
         difference = {scen:nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
         if as_ind: difference = {scen:np.sign(metric) for scen,metric in difference.items()}
     return difference
-def overall_diff(endclasses, metric, nan_as=np.nan, as_ind=False, no_diff=False):
-    return {scen:end_diff(endclass, metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff) for scen, endclass in endclasses.items()}
+def overall_diff(nested_endclasses, metric, nan_as=np.nan, as_ind=False, no_diff=False):
+    """
+    Calculates the difference between the nominal and fault scenarios over a set of 
+
+    Parameters
+    ----------
+    nested_endclasses : dict
+        Nested dict of endclasses from propogate.nested
+    metric : str
+        metric to calculate the difference of in the endclasses
+    nan_as : float, optional
+        How do deal with nans in the difference. The default is np.nan.
+    as_ind : bool, optional
+        Whether to return the difference as an indicator (1,-1,0) or real value. The default is False.
+    no_diff : bool, optional
+        Option for not computing the difference (but still performing the processing here). The default is False.
+    Returns
+    -------
+    differences : dict
+        nested dictionary of differences over the set of fault scenarios nested in nominal scenarios 
+    """
+    return {scen:end_diff(endclass, metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff) for scen, endclass in nested_endclasses.items()}
 
 def rate(endclasses, metric):
      """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""

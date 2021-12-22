@@ -48,12 +48,17 @@ class Common(object):
             setattr(self, state, getattr(obj,state))
     def get(self, *attnames):
         """Returns the given attribute names (strings). Mainly useful for reducing length
-        of lines/adding clarity to assignment statements. 
+        of lines/adding clarity to assignment statements.
         e.g., x,y = self.Pos.get('x','y') is the same as
-              x,y = self.Pos.x, self.Pos.y
+              x,y = self.Pos.x, self.Pos.y, or
+              z = self.Pos.get('x','y') is the same as
+              z = np.array([self.Pos.x, self.Pos.y])
         """
-        if len(attnames)==1:   return getattr(self,attnames[0])
-        else:                   return tuple(getattr(self,name) for name in attnames)
+        if len(attnames)==1:    states = getattr(self,attnames[0])
+        else:                   states = [getattr(self,name) for name in attnames]
+        if type(states) in  [int,float, str,complex, bool]: return states
+        elif len(states)==1:                                return states[0]
+        else:                                               return np.array(states)
     def inc(self,**kwargs):
         """Increments the given arguments by a given value. Mainly useful for
         reducing length/adding clarity to increment statements.
@@ -84,28 +89,40 @@ class Common(object):
             if name not in self._states: raise Exception(name+" not a property of "+self.name)
             setattr(self, name, min(value[1], max(value[0], getattr(self,name))))
     def mul(self,*states):
-        """Returns the multiplication of given states of the function/flow"""
-        a= getattr(self,states[0])
+        """Returns the multiplication of given attributes of the model construct.
+        e.g.,   a = self.mul('x','y','z') is the same as
+                a = self.x*self.y*self.z
+        """
+        a= self.get(states[0])
         for state in states[1:]:
-            a = a * getattr(self,state)
+            a = a * self.get(state)
         return a
     def div(self,*states):
-        """Returns the division of given states of the function/flow"""
-        a= getattr(self,states[0])
+        """Returns the division of given attributes of the model construct
+        e.g.,   a = self.div('x','y','z') is the same as
+                a = (self.x/self.y)/self.z
+        """
+        a= self.get(states[0])
         for state in states[1:]:
-            a = a / getattr(self,state)
+            a = a / self.get(state)
         return a
     def add(self,*states):
-        """Returns the addition of given states of the function/flow"""
-        a= 0.0
-        for state in states:
-            a += getattr(self,state)
+        """Returns the addition of given attributes of the model construct
+        e.g.,   a = self.add('x','y','z') is the same as
+                a = self.x+self.y+self.z
+        """
+        a= self.get(states[0])
+        for state in states[1:]:
+            a += self.get(state)
         return a
     def sub(self,*states):
-        """Returns the addition of given states of the function/flow"""
-        a= getattr(self,states[0])
+        """Returns the addition of given attributes of the model construct
+        e.g.,   a = self.div('x','y','z') is the same as
+                a = (self.x-self.y)-self.z
+        """
+        a= self.get(states[0])
         for state in states[1:]:
-            a -= getattr(self,state)
+            a -= self.get(state)
         return a
     
 class Block(Common):
@@ -128,6 +145,10 @@ class Block(Common):
                 - rcost : cost of repairing the fault
     opermodes : list
         possible modes for the block to enter
+    rngs : dict
+        dictionary of random number generators for random states
+    seed : int
+        seed sequence for internal random number generator
     mode : string
         current mode of block operation
     """
@@ -211,7 +232,7 @@ class Block(Common):
         self._states.append(name)
         self._initstates[name]=default
         setattr(self, name,default)
-        if not seed: seed = self._init_rng.integers(2147483648)
+        if not seed: seed = self._init_rng.integers(np.iinfo(np.int32).max)
         if not hasattr(self,'rngs'):         self.rngs={name:np.random.default_rng(seed)} 
         else:                                 self.rngs[name]=np.random.default_rng(seed)
         if not hasattr(self,'_rng_params'):   self._rng_params={name:(default, generator_method, generator_params,seed)} 
@@ -411,65 +432,116 @@ class Block(Common):
         if getattr(self, 'run_stochastic', True):
             gen_method = getattr(self.rngs[statename], methodname)
             setattr(self, statename, gen_method(*args))
-    def to_default(self,statename):
-        """Resets random state to its original values"""
-        setattr(self, statename, self._rng_params[statename][0])
-    def to_defaults(self,*statenames):
-        """ Resets (given or all by default) random states to their default values"""
+    def to_default(self,*statenames):
+        """ Resets (given or all by default) random states to their default values
+        
+        Parameters
+        ----------
+        *statenames : str, str, str...
+            names of the random state defined in assoc_rand_state(s)
+        """
         if not statenames: statenames=self._rng_params.keys()
-        for statename in statenames: self.to_default(statename)
+        for statename in statenames: setattr(self, statename, self._rng_params[statename][0])
     def set_mode(self, mode):
-        """Sets a mode in the block"""
+        """Sets a mode in the block
+        
+        Parameters
+        ----------
+        mode : str
+            name of the mode to enter.
+        """
         if self.exclusive_faultmodes and self.any_faults():
             raise Exception("Cannot set mode from fault state without removing faults.")
         else:   self.mode = mode
-    def in_mode(self,mode):
-        "Checks if the system is in a given operational mode"
-        return self.mode==mode 
-    def in_modes(self, modes):
-        "Checks if the block has one of the given list of operational modes"
-        return self.mode in modes                      
-    def has_fault(self,fault): 
-        """Check if the block has fault (a str)"""
-        return any(self.faults.intersection(set([fault])))
-    def no_fault(self,fault): 
-        """Check if the block has fault (a str)"""
-        return not(any(self.faults.intersection(set([fault]))))
-    def has_faults(self,faults): 
-        """Check if the block has any in the list of faults"""
+    def in_mode(self,*modes):
+        """Checks if the system is in a given operational mode
+        
+        Parameters
+        ----------
+        *modes : strs
+            names of the mode to check
+        """
+        return self.mode in modes                    
+    def has_fault(self,*faults): 
+        """Check if the block has fault (a str)
+        
+        Parameters
+        ----------
+        *faults : strs
+            names of the fault to check.
+        """
         return any(self.faults.intersection(set(faults)))
+    def no_fault(self,fault): 
+        """Check if the block does not have fault (a str)
+        
+        Parameters
+        ----------
+        fault : str
+            name of the fault to check.
+        """
+        return not(any(self.faults.intersection(set([fault]))))
     def any_faults(self):
         """check if the block has any fault modes"""
         return any(self.faults.difference({'nom'}))
     def to_fault(self,fault): 
-        """Moves from the current fault mode to a new fault mode"""
+        """Moves from the current fault mode to a new fault mode
+        
+        Parameters
+        ----------
+        fault : str
+            name of the fault mode to switch to
+        """
         self.faults.clear()
         self.faults.add(fault)
         if self.exclusive_faultmodes: self.mode = fault
-    def add_fault(self,fault): 
-        """Adds fault (a str) to the block"""
-        self.faults.update([fault])
-        if self.exclusive_faultmodes: self.mode = fault
-    def add_faults(self,faults): 
-        """Adds list of faults to the block"""
+    def add_fault(self,*faults): 
+        """Adds fault (a str) to the block
+        
+        Parameters
+        ----------
+        *fault : str(s)
+            name(s) of the fault to add to the black
+        """
         self.faults.update(faults)
         if self.exclusive_faultmodes: 
             if len(faults)>1:   raise Exception("Multiple fault modes added to function with exclusive fault representation")
             elif len(faults)==1 and list(faults)[0]!='nom': self.mode =faults[0]
     def replace_fault(self, fault_to_replace,fault_to_add): 
-        """Replaces fault_to_replace with fault_to_add in the set of faults"""
+        """Replaces fault_to_replace with fault_to_add in the set of faults
+        
+        Parameters
+        ----------
+        fault_to_replace : str
+            name of the fault to replace
+        fault_to_add : str
+            name of the fault to add in its place
+        """
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
         if self.exclusive_faultmodes: self.mode = fault_to_add
     def remove_fault(self, fault_to_remove, opermode=False):
-        """Removes fault in the set of faults and returns to given operational mode"""
+        """Removes fault in the set of faults and returns to given operational mode
+        
+        Parameters
+        ----------
+        fault_to_replace : str
+            name of the fault to remove
+        opermode : str (optional)
+            operational mode to return to when the fault mode is removed
+        """
         self.faults.discard(fault_to_remove)
         if len(self.faults) == 0: self.faults.add('nom')
         if opermode:    self.mode = opermode
         if self.exclusive_faultmodes and not(opermode):
             raise Exception("Unclear which operational mode to enter with fault removed")
     def remove_any_faults(self, opermode=False):
-        """Resets fault mode to nominal and returns to the given operational mode"""
+        """Resets fault mode to nominal and returns to the given operational mode
+        
+        Parameters
+        ----------
+        opermode : str (optional)
+            operational mode to return to when the fault mode is removed
+        """
         self.faults.clear()
         self.faults.add('nom')
         if opermode:    self.mode = opermode
@@ -479,7 +551,8 @@ class Block(Common):
         """Returns the names of the flow types in the model"""
         return {obj.type for name, obj in self.flows.items()}
     def reset(self):            #reset requires flows to be cleared first
-        """ Resets the block to the initial state with no faults. Used (only for components) when resetting the model"""
+        """ Resets the block to the initial state with no faults. Used by default in 
+        derived objects when resetting the model. Requires associated flows to be cleared first."""
         self.faults.clear()
         self.faults.add('nom')
         for state in self._initstates.keys():
@@ -487,7 +560,14 @@ class Block(Common):
         for generator in self.rngs:
             self.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
         self._init_rng = np.random.default_rng(self.seed)
-        self.time=0
+        if hasattr(self, 'time'): self.time=0.0
+        if hasattr(self, 'tstep'): self.tstep=self.tstep
+        if self.type=='function':
+            for name, component in self.components.items():
+                component.reset()
+            for timername in self.timers:
+                getattr(self, timername).reset()
+            self.updatefxn('reset', faults=['nom'], time=0)
     def return_states(self):
         """
         Returns states of the block at the current state. Used (iteratively) to record states over time.
@@ -509,7 +589,7 @@ class FxnBlock(Block):
     """
     Superclass for functions.
     
-    Attributes
+    Attributes (specific to FxnBlock--see Block glass for more)
     ----------
     type : str
         labels the function as a function (may not be necessary) Default is 'function'
@@ -588,23 +668,6 @@ class FxnBlock(Block):
             else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
         else:       raise Exception("Invalid flownames option in "+self.name)
         return flowdict
-    def reset(self):            
-        """
-        Resets the internal states and faults of the function to the intial state. Used when reseting the model. Requires associated flows to be cleared first.
-        """
-        self.faults.clear()
-        self.faults.add('nom')
-        for state in self._initstates.keys():
-            setattr(self, state,self._initstates[state])
-        for name, component in self.components.items():
-            component.reset()
-        for generator in self.rngs:
-            self.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
-        for timername in self.timers:
-            getattr(self, timername).reset()
-        if hasattr(self, 'time'): self.time=0.0
-        if hasattr(self, 'tstep'): self.tstep=self.tstep
-        self.updatefxn('reset', faults=['nom'], time=0)
     def copy(self, newflows, *attr):
         """
         Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.
@@ -641,6 +704,7 @@ class FxnBlock(Block):
         if hasattr(self, 'tstep'): copy.tstep=self.tstep
         return copy
     def update_modestates(self):
+        """Updates states of the model associated with a specific fault mode (see assoc_modes)."""
         num_update = 0
         for fault in self.faults:
             if fault in self.mode_state_dict:
@@ -649,6 +713,7 @@ class FxnBlock(Block):
                 num_update+=1
                 if num_update > 1: raise Exception("Exclusive fault mode scenarios present at the same time")
     def update_stochastic_states(self):
+        """Updates the defined stochastic states defined to auto-update (see assoc_randstates)."""
         for statename, generator in self.rngs.items():
             if self._rng_params[statename][1]:
                 gen_method = getattr(generator, self._rng_params[statename][1])
@@ -665,7 +730,7 @@ class FxnBlock(Block):
             Model time. The default is 0.
         """
         self.run_stochastic=run_stochastic
-        self.add_faults(faults)  #if there is a fault, it is instantiated in the function
+        self.add_fault(*faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
         if time>self.time and run_stochastic: self.update_stochastic_states()
@@ -689,7 +754,8 @@ class FxnBlock(Block):
             raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.faults)+"\n Is the mode representation nonexclusive?")
         return
 class GenericFxn(FxnBlock):
-    """Generic function block. For use when there is no Function Block defined"""
+    """Generic function block. For use when the user has not yet defined a class for the
+    given (to be implemented) function block. Acts as a placeholder that enables simulation."""
     def __init__(self, name, flows):
         super().__init__(name, flows)
   
@@ -713,7 +779,8 @@ class Component(Block):
         self.name = name
         super().__init__(states)
     def behavior(self,time):
-        """ Placeholder for component behavior methods """
+        """ Placeholder for component behavior methods. Enables one to include components
+        without yet having a defined behavior for them."""
         return 0
 
 class Flow(Common):
@@ -781,24 +848,49 @@ class Model(object):
         dictionary of flows objects in the model indexed by name
     fxns : dict
         dictionary of functions in the model indexed by name
-    params : dict
-        dictionary of (optional) parameters for a given instantiation of a model
+    params,modelparams,valparams : dict
+        dictionaries of (optional) parameters for a given instantiation of a model
+    modelparams : dict
+        dictionary of parameters for running a simulation. defines these parameters in the model:
+            phases : dict
+                phases {'name':[start, end]} that the simulation progresses through
+            times : array
+                array of times to sample (if desired) [starttime, sampletime1, sampletime2,... endtime]
+            tstep : float
+                timestep used in the simulation. default is 1.0
+            units : str
+                time-units. default is hours
+            use_end_condition : bool
+                whether to use an end-condition method (defined by user-defined end_condition method) 
+                or defined end time to end the simulation 
+            seed : int
+                seed used for the internal random number generator
+    valparams : 
+        dictionary of parameters for defining what simulation constructs to record for find_classification
     bipartite : networkx graph
         bipartite graph view of the functions and flows
     graph : networkx graph
         multigraph view of functions and flows
+    
     """
     def __init__(self, params={},modelparams={}, valparams='all'):
         """
         Instantiates internal model attributes with predetermined:
-            - params (design variables of he model), and
-            - modelparams (dictionary of 
-                           global phases {'phase': [starttime, endtime]}
-                           times [starttime, ..., endtime] (middle time used for sampling), 
-                           timestep (float) to run the model with)
-                           seed (int) - if present, sets a seed to run the random number generators from
-                           use_end_condition (bool) - if True (default), uses end_condition() in the model to determine when the simulation ends.
-            - valparams (`all`/`flows`/`fxns`/or dict of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
+        
+        Parameters
+        ----------
+        params : dict 
+            design variables of the model
+        modelparams : dict 
+            dictionary of: 
+                       - global phases {'phase': [starttime, endtime]}
+                       - times [starttime, ..., endtime] (middle time used for sampling), 
+                       - timestep (float) to run the model with)
+                       - seed (int) - if present, sets a seed to run the random number generators from
+                       - use_end_condition (bool) - if True (default), uses end_condition() in the model to determine when the simulation ends.
+        valparams dict or (`all`/`flows`/`fxns`)
+            parameters to keep a history of in params needed for find_classification. default is 'all'
+            dict option is of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
         """
         self.type='model'
         self.flows={}
@@ -874,7 +966,7 @@ class Model(object):
         
         if not getattr(self, 'is_copy', False):
             self.fxns[name]=fclass.__new__(fclass)
-            self.fxns[name].seed=self._rng.integers(2147483648)
+            self.fxns[name].seed=self._rng.integers(np.iinfo(np.int32).max)
             flows=self.get_flows(flownames)
             if fparams=='None':
                 self.fxns[name].__init__(name, flows)
@@ -906,6 +998,7 @@ class Model(object):
         """Returns the set of flows for each flow type"""
         return {flow for flow, obj in self.flows.items() if obj.type==ftype}
     def flowtypes_for_fxnclasses(self):
+        """Returns the flows required by each function class in the model (as a dict)"""
         class_relationship = dict()
         for fxn, obj in self.fxns.items():
             if class_relationship.get(obj.__class__.__name__,False):
@@ -966,6 +1059,19 @@ class Model(object):
         self.bipartite_pos=bipartite_pos
         return self.graph
     def return_typegraph(self, withflows = True):
+        """
+        Returns a graph with the type containment relationships of the different model constructs.
+
+        Parameters
+        ----------
+        withflows : bool, optional
+            Whether to include flows. The default is True.
+
+        Returns
+        -------
+        g : nx.DiGraph
+            networkx directed graph of the type relationships
+        """
         g = nx.DiGraph()
         modelname = type(self).__name__
         g.add_node(modelname, level=1)
@@ -1155,8 +1261,27 @@ class Model(object):
         return {'rate':scen['properties']['rate'], 'cost': 1, 'expected cost': scen['properties']['rate']}
 
 class Timer():
-    """class for model timers used in functions (e.g. for conditional faults) """
+    """class for model timers used in functions (e.g. for conditional faults) 
+    Attributes
+    ----------
+    name : str
+        timer name
+    time : float
+        internal timer clock time
+    tstep : float
+        time to increment at each time-step
+    mode : str (standby/ticking/complete)
+        the internal state of the timer
+    """
     def __init__(self, name):
+        """
+        Initializes the Tymer
+
+        Parameters
+        ----------
+        name : str
+            Name for the timer
+        """
         self.name=name
         self.time=0.0
         self.tstep=-1.0
@@ -1177,21 +1302,40 @@ class Timer():
         self.time=0.0
         self.mode='standby'
     def set_timer(self,time, tstep=-1.0, overwrite='always'):
-        """ Sets timer to a given time"""
+        """ Sets timer to a given time
+        
+        Parameters
+        ----------
+        time : float
+            set time to count down in the timer
+        tstep : float (default -1.0)
+            time to increment the timer at each time-step
+        overwrite : str
+            whether/how to overwrite the previous time
+            'always' (default) sets the time to the given time
+            'if_more' only overwrites the old time if the new time is greater
+            'if_less' only overwrites the old time if the new time is less
+            'never' doesn't overwrite an existing timer unless it has reached 0.0
+            'increment' increments the previous time by the new time
+        """
         if overwrite =='always':                        self.time=time
         elif overwrite=='if_more' and self.time<time:   self.time=time
         elif overwrite=='if_less' and self.time>time:   self.time=time
-        elif overwrite=='never':                        self.time=self.time
+        elif overwrite=='never' and self.time==0.0:     self.time=time
         elif overwrite=='increment':                    self.time+=time
         self.tstep=tstep
         self.mode='set'
     def in_standby(self):
+        """Whether the timer is in standby (time has not been set)"""
         return self.mode=='standby'
     def is_ticking(self):
+        """Whether the timer is ticking (time is incrementing)"""
         return self.mode=='ticking'
     def is_complete(self):
+        """Whether the timer is complete (after time is done incrementing)"""
         return self.mode=='complete'
     def is_set(self):
+        """Whether the timer is set (before time increments)"""
         return self.mode=='set'
 
 class NominalApproach():
@@ -1201,8 +1345,18 @@ class NominalApproach():
     user may want to simulate to ensure the system operates as desired. This 
     class (in conjunction with propagate.nominal_approach()) can be used to 
     perform these simulations.
+    
+    Attributes
+    ----------
+    scenarios : dict
+        scenarios to inject based on the approach
+    num_scenarios : int
+        number of scenarios in the approach
+    ranges : dict
+        dict of the parameters defined in each method for the approach
     """
     def __init__(self):
+        """Instantiates NominalApproach (simulation params are defined using methods)"""
         self.scenarios = {}
         self.num_scenarios = 0
         self.ranges = {}
@@ -1444,6 +1598,7 @@ class NominalApproach():
                                                     'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/replicates}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def copy(self):
+        """Copies the given sampleapproach. Used in nested scenario sampling."""
         newapp = NominalApproach()
         newapp.scenarios = copy.deepcopy(self.scenarios)
         newapp.ranges = copy.deepcopy(self.ranges)
@@ -1458,7 +1613,13 @@ class SampleApproach():
     Attributes
     ----------
     phases : dict
+        phases given to sample the fault modes in
+    globalphases : dict
         phases defined in the model
+    modephases : dict
+        Dictionary of modes associated with each state
+    mode_phase_map : dict
+        Mapping of modes to their corresponding phases
     tstep : float
         timestep defined in the model
     fxnrates : dict
@@ -1467,7 +1628,7 @@ class SampleApproach():
         overall failure rates for each component
     jointmodes : list
         (if any) joint fault modes to be injected in the approach
-    rates : dict
+    rates/comprates/rates_timeless : dict
         rates of each mode (fxn, mode) in each model phase, structured {fxnmode: {phaseid:rate}}
     sampletimes : dict
         faults to inject at each time in each phase, structured {phaseid:time:fnxmode}
@@ -1481,6 +1642,10 @@ class SampleApproach():
         a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,phaseid):listofnames}
     mode_phase_map : dict
         a dict of modes and their respective phases to inject with structure {fxnmode:{mode_phase_map:[starttime, endtime]}}
+    units : str
+        time-units to use in the approach probability model
+    unit_factors : dict
+        multiplication factors for converting some time units to others.
     """
     def __init__(self, mdl, faults='all', phases='global', modephases={}, jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
         """
@@ -1922,6 +2087,8 @@ class SampleApproach():
 
 
 def find_overlap_n(intervals):
+    """Finds the overlap between given intervals.
+    Used to sample joint fault modes with different (potentially overlapping) phases """
     try:
         upper_limits = [interval[1] for interval in intervals]
         lower_limits = [interval[0] for interval in intervals]
@@ -1930,17 +2097,8 @@ def find_overlap_n(intervals):
         orderedintervals = np.sort(upper_limits+lower_limits)
         return [orderedintervals[len(intervals)-1],orderedintervals[len(intervals)]]
     except IndexError:
-        limits = [interval[0] for interval in intervals]
         if all(intervals[0]==i for i in intervals): return intervals[0]
         else:                                       return 0
-        
-
-def find_overlap(interval1, interval2):
-    """Finds the overlap between two intervals"""
-    if interval1[1] < interval2[0] or interval1[0] > interval2[1]: return []
-    else: 
-        orderedintervals = np.sort(interval1 + interval2)
-        return [orderedintervals[1], orderedintervals[2]]
     
 
 def phases(times, names=[]):
@@ -1970,16 +2128,21 @@ def m2to1(x):
     else:               y=x[0]*x[1]
     return y
 
-def trunc(x):
-    """truncates a value to 2 (useful if behavior unchanged by increases)"""
-    if x>2.0:   y=2.0
-    else:       y=x
-    return y
-
-def truncn(x, n):
-    """truncates a value to n (useful if behavior unchanged by increases)"""
-    if x>n: y=n
-    else:   y=x
+def trunc(x, n=2.0, truncif='greater'):
+    """truncates a value to a given number (useful if behavior unchanged by increases)
+    
+    Parameters
+    ----------
+    x : float/int 
+        number to truncate
+    n : float/int (optional)
+        number to truncate to if >= number
+    truncif: 'greater'/'less'
+        whether to truncate if greater or less than the given number
+    """
+    if truncif=='greater' and x>n:      y=n
+    elif  truncif=='greater' and x<n:   y=n
+    else:                               y=x
     return y
 
 def union(probs):

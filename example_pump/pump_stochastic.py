@@ -93,7 +93,7 @@ class ImportSig(FxnBlock):
             elif time<50: 
                 if not time%5:  self.set_rand('sig_noise', 'choice', [1.0, 0.9, 1.1])
                 self.Sigout.power=1.0*self.sig_noise
-            else:           self.Sigout.power=0.0; self.to_defaults()
+            else:           self.Sigout.power=0.0; self.to_default()
 
 class MoveWat(FxnBlock):
     """  Move Water is the pump itself. While one could decompose this further, one function is used for simplicity """

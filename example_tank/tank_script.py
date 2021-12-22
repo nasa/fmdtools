@@ -32,8 +32,9 @@ def run_faulty():
     endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Human','FalseReach', time=2, gtype='component')
     
     rd.plot.mdlhistvals(mdlhist,fault='FalseReach',time=2)
-    rd.graph.show(resgraph,gtype='bipartite',faultscen='FalseReach', time=2)
-
+    rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time=2)
+    rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time=2, renderer='netgraph')
+    rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time=2, renderer='graphviz')
 #import matplotlib.pyplot as plt
 #plt.figure()
 #reshist, diff, summary = rp.compare_hist(mdlhist)
@@ -51,7 +52,7 @@ def run_faults():
     endclasses, mdlhists = propagate.approach(mdl, app_full)
 
 mdl = Tank()
-rd.graph.exec_order(mdl) #, gtype = 'normal')
-rd.graph.exec_order(mdl, gtype='normal') 
+#rd.graph.exec_order(mdl) #, gtype = 'normal')
+#rd.graph.exec_order(mdl, gtype='normal') 
 
-#run_faulty()
+run_faulty()

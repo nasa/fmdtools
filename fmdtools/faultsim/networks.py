@@ -25,6 +25,9 @@ def calc_aspl(mdl, gtype='parameter'):
         Parameters
         ----------
         mdl : model or graph
+            graph to run the analysis for. (will get from model if provided)
+        gtype : str
+            type of graph representation of the model to show. default is 'bipartite'
         
         Returns
         -------
@@ -41,6 +44,9 @@ def calc_modularity(mdl, gtype='parameter'):
         Parameters
         ----------
         mdl : model or graph
+            graph to run the analysis for. (will get from model if provided)
+        gtype : str
+            type of graph representation of the model to show. default is 'bipartite'
         
         Returns
         -------
@@ -58,6 +64,15 @@ def find_bridging_nodes(mdl,plot='off', gtype = 'parameter', pos={}, scale=1):
         Parameters
         ----------
         mdl : model or graph
+            graph to run the analysis for. (will get from model if provided)
+        plot : str (optional)
+            plots graph with high degree nodes visualized if set to 'on'
+        gtype : str
+            type of graph representation of the model to show. default is 'bipartite'
+        pos : dict  (optional)
+            dict of node positions in the model (if desired)
+        scale : int (optional)
+            scale for the plot. Default is 1. 
         
         Returns
         -------
@@ -101,8 +116,17 @@ def find_high_degree_nodes(mdl,p=90,plot='off', gtype='bipartite', pos={}, scale
         Parameters
         ----------
         mdl : model or graph
-        p : percentile of degrees to return, between 0 and 100
-        plot : plots graph with high degree nodes visualized if set to 'on'
+            graph to run the analysis for. (will get from model if provided)
+        p : int (optional)
+            percentile of degrees to return, between 0 and 100
+        plot : str (optional)
+            plots graph with high degree nodes visualized if set to 'on'
+        gtype : str
+            type of graph representation of the model to show. default is 'bipartite'
+        pos : dict  (optional)
+            dict of node positions in the model (if desired)
+        scale : int (optional)
+            scale for the plot. Default is 1. 
         
         Returns
         -------
@@ -117,11 +141,9 @@ def find_high_degree_nodes(mdl,p=90,plot='off', gtype='bipartite', pos={}, scale
     sortedDegrees = [x[1] for x in sortedNodes]
     sortedDegreesSet = set(sortedDegrees)
     sortedDegreesUnique = list(sortedDegreesSet)
-    numDegrees = len(sortedDegreesUnique)
     sortedDegreesUniqueArray = np.array(sortedDegreesUnique)
     topPercentileDegree = np.percentile(sortedDegreesUniqueArray,p)
     numNodes = len(sortedNodes)
-    highestDegree = sortedNodes[0][1]
     highDegreeNodes = [sortedNodes[0]]
     for i in range(1,numNodes):
         if sortedNodes[i][1] < topPercentileDegree:
@@ -144,7 +166,11 @@ def calc_robustness_coefficient(mdl,trials=100, gtype='bipartite'):
         Parameters
         ----------
         mdl : model or graph
-        trials : number of times to run robustness coefficient algorithm (result is averaged over all trials)
+            graph to calculate robustness coefficent for. (will get from model if provided)
+        trials : int 
+            number of times to run robustness coefficient algorithm (result is averaged over all trials)
+        gtype : str
+            type of graph representation of the model to show. default is 'bipartite'
         
         Returns
         -------
@@ -174,10 +200,13 @@ def degree_dist(mdl, gtype='bipartite'):
         Parameters
         ----------
         mdl : model or graph
-        
+            graph to calculated degree distribution for. (will get from model if provided)
+        gtype : str
+            type of graph representation of the model to show. default is 'bipartite'
         Returns
         -------
-        
+        fig : matplotlib figure
+            plot of distribution
         """
     if type(mdl)==nx.classes.graph.Graph:   g = mdl
     else:                                   g = get_graph(mdl, gtype)
@@ -208,12 +237,19 @@ def sff_model(mdl,gtype='parameter',endtime=5,pi=.1,pr=.1,num_trials=100,start_n
     Parameters
     ----------
     mdl : model or graph
-    endtime: simulation end time
-    pi = infection (failure spread) rate
-    pf = recovery (fix) rate
-    start_node = option for selecting start node or letting a random node be chosen
-    error_bar_option = option for plotting error bars (first to third quartile), default is off
-    num_trials = number of times to run the epidemic model, default is 100
+        graph to run trials over (will get from model if provided)
+    endtime: int
+        simulation end time
+    pi : float
+        infection (failure spread) rate
+    pf : float
+        recovery (fix) rate
+    num_trials : int 
+        number of times to run the epidemic model, default is 100
+    error_bar_option : str 
+        option for plotting error bars (first to third quartile), default is off
+    start_node : str
+        start node to use in the trial. default is 'random'
     
     Returns
     -------
@@ -226,80 +262,14 @@ def sff_model(mdl,gtype='parameter',endtime=5,pi=.1,pr=.1,num_trials=100,start_n
         nodes = list(g.nodes)
         start_node_selected= nodes[random.randint(0,len(nodes))]
     else: start_node_selected=start_node
-    
-    def sff_one_trial(start_node_selected,g):
-   		nodes = list(g.nodes)
-   		num_nodes = len(nodes)
-   		time = 0
-   		susc_nodes = nodes
-   		susc_nodes.remove(start_node_selected)
-   		fail_nodes = [start_node_selected]
-   		fix_nodes = []
-   		num_susc = [num_nodes-1]
-   		num_fail = [1]
-   		num_fix = [0]
-   		while time < endtime:
-   			time = time + 1
-   			new_exposed_nodes = []
-   			for i in range(0,len(fail_nodes)):
-   				n = list(g.neighbors(fail_nodes[i]))
-   				new_exposed_nodes.extend(n)
-   			ri_list = [random.random() for iter in range(len(new_exposed_nodes))]
-   			new_fail_nodes = []
-   			for i in range(0,len(new_exposed_nodes)):
-   				if new_exposed_nodes[i] in fix_nodes:
-   					pass
-   				else:
-   					if ri_list[i] <= pi:
-   						new_fail_nodes.append(new_exposed_nodes[i])
-   			new_fail_nodes_set = set(new_fail_nodes)
-   			new_fail_nodes = list(new_fail_nodes_set)
-   			for i in range(0,len(new_fail_nodes)):
-   				if new_fail_nodes[i] in fail_nodes:
-   					pass
-   				else:
-   					susc_nodes.remove(new_fail_nodes[i])
-   			fail_nodes.extend(new_fail_nodes)
-   			fail_nodes_set = set(fail_nodes)
-   			fail_nodes = list(fail_nodes_set)
-   			rf_list = [random.random() for iter in range(len(fail_nodes))]
-   			new_fix_nodes = []
-   			for i in range(0,len(fail_nodes)):
-   				if rf_list[i] <= pr:
-   					new_fix_nodes.append(fail_nodes[i])
-   			fix_nodes.extend(new_fix_nodes)
-   			fail_nodes = list(set(fail_nodes)-set(new_fix_nodes))
-   			num_susc.append(len(susc_nodes))
-   			num_fail.append(len(fail_nodes))
-   			num_fix.append(len(fix_nodes))
-   		return num_susc, num_fail, num_fix
-   
     num_susc_all_trials = []
     num_fail_all_trials = []
     num_fix_all_trials = []
     for trials in range(0,num_trials):
-   		num_susc_trial, num_fail_trial, num_fix_trial = sff_one_trial(start_node_selected,g)
+   		num_susc_trial, num_fail_trial, num_fix_trial = sff_one_trial(start_node_selected,g,endtime=endtime,pi=pi,pr=pr)
    		num_susc_all_trials.append(num_susc_trial)
    		num_fail_all_trials.append(num_fail_trial)
    		num_fix_all_trials.append(num_fix_trial)
-   	
-    def data_average(data):
-   		list_average = []
-   		for i in range(0,len(data[0])):
-   			list_average.append(sum(x[i] for x in data)/len(data))
-   		return list_average
-   
-    def data_error(data,average):
-   		q1 = []
-   		q3 = []
-   		for i in range(0,len(data[0])):
-   			current_array = np.array([float(x[i]) for x in data])
-   			q1.append(np.percentile(current_array,25))
-   			q3.append(np.percentile(current_array,75))
-   		lower_error = [x - y for x, y in zip(average,q1)]
-   		upper_error = [x - y for x, y in zip(q3,average)]
-   		return lower_error, upper_error
-   
     num_susc_average = data_average(num_susc_all_trials)
     num_fail_average = data_average(num_fail_all_trials)
     num_fix_average = data_average(num_fix_all_trials)
@@ -327,10 +297,89 @@ def sff_model(mdl,gtype='parameter',endtime=5,pi=.1,pr=.1,num_trials=100,start_n
     plt.show()
     return fig
 
+def sff_one_trial(start_node_selected,g,endtime=5,pi=.1,pr=.1):
+    """
+    Calculates one trial of the sff model
+    
+    Parameters
+    ----------
+    start_node_selected : str
+        node to start the trial from
+    g : networkx graph
+        graph to run the trial over
+    endtime: int
+        simulation end time
+    pi : float
+        infection (failure spread) rate
+    pf : float
+        recovery (fix) rate
+    """
+    nodes = list(g.nodes)
+    num_nodes = len(nodes)
+    time = 0
+    susc_nodes = nodes
+    susc_nodes.remove(start_node_selected)
+    fail_nodes = [start_node_selected]
+    fix_nodes = []
+    num_susc = [num_nodes-1]
+    num_fail = [1]
+    num_fix = [0]
+    while time < endtime:
+        time = time + 1
+        new_exposed_nodes = []
+        for i in range(0,len(fail_nodes)):
+            n = list(g.neighbors(fail_nodes[i])) 
+            new_exposed_nodes.extend(n)
+        ri_list = [random.random() for iter in range(len(new_exposed_nodes))]
+        new_fail_nodes = []
+        for i in range(0,len(new_exposed_nodes)):
+            if new_exposed_nodes[i] in fix_nodes: pass
+            else:
+                if ri_list[i] <= pi:
+                    new_fail_nodes.append(new_exposed_nodes[i])
+        new_fail_nodes_set = set(new_fail_nodes)
+        new_fail_nodes = list(new_fail_nodes_set)
+        for i in range(0,len(new_fail_nodes)):
+            if new_fail_nodes[i] in fail_nodes: pass
+            else: susc_nodes.remove(new_fail_nodes[i])
+        fail_nodes.extend(new_fail_nodes)
+        fail_nodes_set = set(fail_nodes)
+        fail_nodes = list(fail_nodes_set)
+        rf_list = [random.random() for iter in range(len(fail_nodes))]
+        new_fix_nodes = []
+        for i in range(0,len(fail_nodes)):
+            if rf_list[i] <= pr:
+                new_fix_nodes.append(fail_nodes[i])
+        fix_nodes.extend(new_fix_nodes)
+        fail_nodes = list(set(fail_nodes)-set(new_fix_nodes))
+        num_susc.append(len(susc_nodes))
+        num_fail.append(len(fail_nodes))
+        num_fix.append(len(fix_nodes))
+    return num_susc, num_fail, num_fix
+
+def data_average(data):
+    """Averages each column in data"""
+    list_average = []
+    for i in range(0,len(data[0])):
+        list_average.append(sum(x[i] for x in data)/len(data))
+    return list_average
+
+def data_error(data,average):
+    """Calculates error for each column in data"""
+    q1 = []
+    q3 = []
+    for i in range(0,len(data[0])):
+        current_array = np.array([float(x[i]) for x in data])
+        q1.append(np.percentile(current_array,25))
+        q3.append(np.percentile(current_array,75))
+    lower_error = [x - y for x, y in zip(average,q1)]
+    upper_error = [x - y for x, y in zip(q3,average)]
+    return lower_error, upper_error
+
 def get_graph(mdl, gtype):
     "gets the appropriate graph of type gtype from mdl"
     if gtype == 'normal':       g = mdl.graph
-    elif gtype == 'bipartite':  g=mdl.bipartite
+    elif gtype == 'bipartite':  g = mdl.bipartite
     elif gtype == 'parameter':  g = mdl.return_paramgraph()
     elif gtype == 'component':  g = mdl.return_stategraph(gtype='component')
     return g
