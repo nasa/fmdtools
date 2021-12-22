@@ -35,7 +35,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_run_approach(self):
          mdl = Pump()
          nomapp = NominalApproach()
-         nomapp.add_seed_replicates('default',1000)
+         nomapp.add_seed_replicates('default',2000)
          endresults, mdlhists = propagate.nominal_approach(mdl, nomapp, showprogress=False, run_stochastic=True)
          ave_effs=[]; std_effs=[]
          for scen in mdlhists:

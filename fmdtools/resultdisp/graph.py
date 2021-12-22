@@ -285,7 +285,7 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
     from IPython.display import display, SVG
     Digraph, Graph = gv_import_check()
     #setting up default layouts for graph types
-    if gtype == 'bipartite': 
+    if gtype in  ['bipartite', 'component']: 
         kwargs["layout"] = kwargs.get("layout", "twopi")
         kwargs["overlap"] = kwargs.get("overlap", "voronoi")
     elif gtype == 'typegraph':
@@ -298,7 +298,7 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
         mdl=g
         g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
     #bipartite
-    if gtype == 'bipartite':
+    if gtype in ['bipartite', 'component']:
         functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
         flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
         edges = g.edges
@@ -829,8 +829,12 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
         nx.draw_networkx_nodes(g, pos, nodelist = flows, node_size=nodesize, node_color = colors[0])
         degfxns = [node for node in degnodes if node in functions]
         degflows = [node for node in degnodes if node in flows]
-        nx.draw_networkx_nodes(g, pos, nodelist=faultfxns, node_shape='s', node_color = colors[2], node_size=nodesize*1.2)
+        square_faultfxns = [f for f in faultfxns if f in functions]
+        circle_faultfxns = [f for f in faultfxns if f in flows]
+        nx.draw_networkx_nodes(g, pos, nodelist=square_faultfxns, node_shape='s', node_color = colors[2], node_size=nodesize*1.2)
+        nx.draw_networkx_nodes(g, pos, nodelist=circle_faultfxns, node_color = colors[2], node_size=nodesize*1.2)
         nx.draw_networkx_nodes(g, pos, nodelist=degfxns, node_shape='s', node_color = colors[1], node_size=nodesize)
+        
         nx.draw_networkx_nodes(g, pos, nodelist=degflows,node_color = colors[1], node_size=nodesize)
         nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size,font_weight='bold')
 
@@ -867,6 +871,7 @@ def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=T
 ###GRAPHVIZ HELPER FUNCTIONS
 ############################
 def gv_import_check():
+    """Checks if graphviz is installed on the system before plotting."""
     try:
         from graphviz import Digraph, Graph
     except ImportError as error:
@@ -874,6 +879,7 @@ def gv_import_check():
         raise Exception("GraphViz not installed. Please see:\n https://pypi.org/project/graphviz/ \n https://www.graphviz.org/download/")
     return Digraph, Graph
 def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultscen, time, showfaultlabels, colors_dict, dot):
+    """ Plots a normal graph representation using the graphviz toolkit. Used in other functions"""
     for node in g.nodes:
         node_label = node
         if node in faultlabels and showfaultlabels == True:
@@ -889,6 +895,7 @@ def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, fault
         dot.edge(edge[0], edge[1], label=edge_label, color=colors_dict[edge], labelangle="180")
     return dot
 def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot):
+    """ Plots a bipartite graph representation using the graphviz toolkit. Used in other functions"""
     shapes = {f:'ellipse' for f in flows}
     shapes.update({ f1:'box' for f1 in functions})
     
@@ -903,6 +910,7 @@ def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time
     return dot
 
 def gv_execute_order_legend(colors):
+    """Provides legend for model execution order in the graphviz toolkit"""
     from graphviz import Graph
     from IPython.display import display, SVG
     legend = Graph(name='legend')
@@ -1001,7 +1009,7 @@ def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faulte
             mm = [matplotlib.colors.to_hex(mm_i) for mm_i in mm]
             for i in range(len(mm)):
                 colors_dict[node_labels[i]] = mm[i]
-    elif gtype == 'bipartite':
+    elif gtype in ['bipartite', 'component']:
         if heatmap == {}:
             colors_dict = {fn: colors[2] for fn in faultnodes}
             colors_dict.update({dn: colors[1] for dn in degradednodes})

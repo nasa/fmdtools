@@ -65,7 +65,7 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True
         need to be complete (if incomplete)
     Returns
     -------
-    endresults : Dict
+    endresult : Dict
         A dictionary summary of results at the end of the simulation with structure {faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val} }
     resgraph : MultiGraph
         A networkx graph object with function faults and degraded flows as graph attributes
@@ -84,16 +84,51 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     
     endclass=mdl.find_classification(scen, {'nominal': mdlhist, 'faulty':mdlhist})
-    endresults={'faults': endfaults, 'classification':endclass}
+    endresult={'faults': endfaults, 'classification':endclass}
     
     if protect: mdl.reset()
-    return endresults, resgraph, mdlhist
+    return endresult, resgraph, mdlhist
 
 def update_params(params, **kwargs):
+    """
+    Updates a dictionary with the given keyword arguments
+
+    Parameters
+    ----------
+    params : dict
+        Parameter dictionary
+    **kwargs : kwargs
+        New arguments to add/update in the parameter dictionary
+
+    Returns
+    -------
+    params : dict
+        Updated parameter dictionary
+    """
     for kwarg in kwargs: 
         if kwargs.get(kwarg, None)!=None: params[kwarg]=kwargs[kwarg]
     return params
 def new_mdl_params(mdl,paramdict):
+    """
+    Creates parameter inputs for a new model. Used for exploring parameter ranges and seeding models.
+
+    Parameters
+    ----------
+    mdl : Model
+        fmdtools simulation model 
+    paramdict : Dict
+        Dict of parameters to update with structure params/modelparams/valparams to update
+        e.g. {'params':{'param1': 1.0}}
+
+    Returns
+    -------
+    params : dict
+        Updated param dictionary
+    modelparams : dict
+        Updated modelparam dictionary
+    valparams : dict
+        Updated valparam dictionary
+    """
     params = update_params(mdl.params, **paramdict.get('params', {}))
     modelparams = update_params(mdl.modelparams, **paramdict.get('modelparams', {}))
     valparams = update_params(mdl.valparams, **paramdict.get('valparams', {}))
@@ -127,27 +162,28 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
         Whether to run stochastic behaviors or use default values. Default is False.
     Returns
     -------
-    endclasses : Dict
-        Classifications of the set of scenarios, with structure {'name':classification}
-    mdlhists : Dict
-        Dictionary of model histories, with structure {'name':mdlhist}
+    nomapp_endclasses : Dict
+        Classifications of the set of scenarios, with structure {'scenname':classification}
+    nomapp_mdlhists : Dict
+        Dictionary of model histories, with structure {'scenname':mdlhist}
     """
-    mdlhists = dict.fromkeys(nomapp.scenarios)
-    endclasses = dict.fromkeys(nomapp.scenarios)
+    nomapp_mdlhists = dict.fromkeys(nomapp.scenarios)
+    nomapp_endclasses = dict.fromkeys(nomapp.scenarios)
     if pool:
         inputs = [(mdl.__class__(*new_mdl_params(mdl,scen)), scen['properties'], track, track_times, run_stochastic) for scen in nomapp.scenarios.values()]
         result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
-        endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
-        mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
+        nomapp_endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
+        nomapp_mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
     else:
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
             mdl = mdl.__class__(*new_mdl_params(mdl,scen['properties']))
-            mdlhists[scenname], _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
-            _ = cut_mdlhist(mdlhists[scenname], t_end)
+            nomapp_mdlhists[scenname], _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
+            _ = cut_mdlhist(nomapp_mdlhists[scenname], t_end)
             endfaults, endfaultprops = mdl.return_faultmodes()
-            endclasses[scenname]=mdl.find_classification(scen, {'nominal': mdlhists[scenname], 'faulty':mdlhists[scenname]})
-    return endclasses, mdlhists
+            nomapp_endclasses[scenname]=mdl.find_classification(scen, {'nominal': nomapp_mdlhists[scenname], 'faulty':nomapp_mdlhists[scenname]})
+    return nomapp_endclasses, nomapp_mdlhists
 def exec_nom_helper(arg):
+    """Helper function for executing nominal scenarios"""
     mdlhist, _, t_end =prop_one_scen(arg[0], arg[1], track=arg[2], staged=False, track_times=arg[3], run_stochastic=arg[4])
     mdlhist = cut_mdlhist(mdlhist, t_end)
     endclass=arg[0].find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
@@ -193,7 +229,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
         need to be complete (if incomplete)
     Returns
     -------
-    endresults : dict
+    endresult : dict
         A dictionary summary of results at the end of the simulation with structure {flows:{flow:attribute:value},faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val}
     resgraph : networkx.classes.graph.Graph
         A graph object with function faults and degraded flows noted as attributes
@@ -245,10 +281,10 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
     endclass=mdl.find_classification(scen, mdlhists)
     resgraph = proc.resultsgraph(faultresgraph, nomresgraph, gtype=gtype) 
     
-    endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
+    endresult={'flows': endflows, 'faults': endfaults, 'classification':endclass}  
     
     if protect: mdl.reset()
-    return endresults,resgraph, mdlhists
+    return endresult,resgraph, mdlhists
 
 def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track_times="all", protect=True, run_stochastic=False, **kwargs):
     """
@@ -286,7 +322,7 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
         need to be complete (if incomplete)
     Returns
     -------
-    endresults : dict
+    endresult : dict
         A dictionary summary of results at the end of the simulation with structure {flows:{flow:attribute:value},faults:{function:{faults}}, classification:{rate:val, cost:val, expected cost: val}
     resgraph : networkx.classes.graph.Graph
         A graph object with function faults and degraded flows noted as attributes
@@ -326,9 +362,9 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
     endclass=mdl.find_classification(scen, mdlhists)
     resgraph = proc.resultsgraph(faultresgraph, nomresgraph, gtype=gtype) 
     
-    endresults={'flows': endflows, 'faults': endfaults, 'classification':endclass} 
+    endresult={'flows': endflows, 'faults': endfaults, 'classification':endclass} 
     if protect: mdl.reset()
-    return endresults,resgraph, mdlhists
+    return endresult,resgraph, mdlhists
 
 def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, **kwargs):
     """
@@ -525,13 +561,13 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
 
     Returns
     -------
-    endclasses : dict
+    nested_endclasses : dict
         A nested dictionary with the rate, cost, and expected cost of each scenario run with structure {'nomscen1':endclasses, 'nomscen2':mdlhists}
-    mdlhists : dict
+    nested_mdlhists : dict
         A nested dictionary with the history of all model states for each scenario with structure {'nomscen1':mdlhists, 'nomscen2':mdlhists}
     """
-    mdlhists = dict.fromkeys(nomapp.scenarios)
-    endclasses = dict.fromkeys(nomapp.scenarios)
+    nested_mdlhists = dict.fromkeys(nomapp.scenarios)
+    nested_endclasses = dict.fromkeys(nomapp.scenarios)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
         mdl = mdl.__class__(*new_mdl_params(mdl,scen))
         if get_phases:
@@ -544,10 +580,11 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
             app_args.update({'phases':phases})
         
         app = SampleApproach(mdl,**app_args)
-        mdlhists[scenname], endclasses[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic)
-    return endclasses, mdlhists
+        nested_mdlhists[scenname], nested_endclasses[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic)
+    return nested_endclasses, nested_mdlhists
 
 def exec_scen_par(args):
+    """Helper function for executing the scenario in parallel"""
     return exec_scen(args[0], args[1], args[2], args[3], track=args[4], staged=args[5], track_times=args[6], run_stochastic=args[7])
 def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True, track_times="all", run_stochastic=False):
     """ 
@@ -609,6 +646,8 @@ def construct_nomscen(mdl):
 
 
 def eq_units(rateunit, timeunit):
+    """Provides conversion factor for from rateunit (str) to timeunit (str)
+    Options for units are: 'sec', 'min', 'hr', 'day', 'wk', 'month', and 'year' """
     factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
     return factors[timeunit]/factors[rateunit]
 
@@ -839,7 +878,17 @@ def update_mdlhist(mdl, mdlhist, t_ind, track = 'all'):
         update_flowhist(mdl, mdlhist, t_ind)
         update_fxnhist(mdl, mdlhist, t_ind)
 def update_flowhist(mdl, mdlhist, t_ind):
-    """ Updates the flows in the model history at t_ind """
+    """ Updates the flows in the model history at t_ind 
+    
+    Parameters
+    ----------
+    mdl : model
+        the Model object
+    mdlhist : dict
+        dictionary of model histories for functions/flows
+    t_ind : int
+        index to update the history at
+    """
     for flowname in mdlhist["flows"]:
         atts=mdl.flows[flowname].status()
         for att, val in atts.items():
@@ -852,7 +901,17 @@ def update_flowhist(mdl, mdlhist, t_ind):
                 if not np.can_cast(type(val), type(mdlhist["flows"][flowname][att][t_ind])):
                     raise Exception(str(flowname)+" att "+str(att)+" changed type: "+str(type(mdlhist["flows"][flowname][att][t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind))
 def update_fxnhist(mdl, mdlhist, t_ind):
-    """ Updates the functions (faults and states) in the model history at t_ind """
+    """ Updates the functions (faults and states) in the model history at t_ind 
+    
+    Parameters
+    ----------
+    mdl : model
+        the Model object
+    mdlhist : dict
+        dictionary of model histories for functions/flows
+    t_ind : int
+        index to update the history at
+    """
     for fxnname in mdlhist["functions"]:
         states, faults = mdl.fxns[fxnname].return_states()
         if 'faults' in mdlhist["functions"][fxnname]:
@@ -869,7 +928,20 @@ def update_fxnhist(mdl, mdlhist, t_ind):
                     raise Exception(str(fxnname)+" state "+str(state)+" changed type: "+str(type(mdlhist["functions"][fxnname][state][t_ind]))+" to "+str(type(value))+" at t_ind="+str(t_ind))
 
 def cut_mdlhist(mdlhist, ind):
-    """Cuts unsimulated values from end of array"""
+    """Cuts unsimulated values from end of array
+    
+    Parameters
+    ----------
+    mdlhist : dict
+        dictionary of model histories for functions/flows
+    ind : int
+        index to cut the history at
+        
+    Returns
+    -------
+    mdlhist : dict
+        The model history until the given index.
+    """
     if len(mdlhist['time'])>ind+1:
         mdlhist['time'] = mdlhist['time'][:ind+1]
         if 'flows' in mdlhist:
@@ -920,7 +992,23 @@ def init_mdlhist(mdl, timerange, track = 'all'):
     mdlhist["time"]=np.array([i for i in timerange])
     return mdlhist
 def init_flowhist(mdl, timerange, track='all'):
-    """ Initializes the flow history flowhist of the model mdl over the time range timerange"""
+    """ Initializes the flow history flowhist of the model mdl over the time range timerange
+    
+    Parameters
+    ----------
+    mdl : model
+        the Model object
+    timerange : array
+        Numpy array of times to initialize in the dictionary.
+    track : 'all' or dict, 'none'), optional
+        Which model states to track over time, which can be given as 'all' or a 
+        dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
+    Returns
+    -------
+    flowhist : dict
+        A dictionary history of each recorded flow state over the given timerange.
+    """
     flowhist={}
     for flowname, flow in mdl.flows.items():
         if track=='all' or flowname in track['flows']:
@@ -931,7 +1019,23 @@ def init_flowhist(mdl, timerange, track='all'):
                     flowhist[flowname][att] = np.full([len(timerange)], val)
     return flowhist
 def init_fxnhist(mdl, timerange, track='all'):
-    """Initializes the function state history fxnhist of the model mdl over the time range timerange"""
+    """Initializes the function state history fxnhist of the model mdl over the time range timerange
+    
+    Parameters
+    ----------
+    mdl : model
+        the Model object
+    timerange : array
+        Numpy array of times to initialize in the dictionary.
+    track : 'all' or dict, 'none'), optional
+        Which model states to track over time, which can be given as 'all' or a 
+        dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
+    Returns
+    -------
+    fxnhist : dict
+        A dictionary history of each recorded function state over the given timerange.
+    """
     fxnhist = {}
     for fxnname, fxn in mdl.fxns.items():
         if track=='all' or fxnname in track['functions']:

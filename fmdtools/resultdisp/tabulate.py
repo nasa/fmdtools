@@ -153,7 +153,7 @@ def maptab(mapping):
     table = pd.DataFrame(mapping)
     return table.transpose()
 
-def nominal_stats(nomapp, endclasses, metrics='all', inputparams='from_range', scenarios='all'):
+def nominal_stats(nomapp, nomapp_endclasses, metrics='all', inputparams='from_range', scenarios='all'):
     """
     Makes a table of quantities of interest from endclasses.
 
@@ -161,7 +161,7 @@ def nominal_stats(nomapp, endclasses, metrics='all', inputparams='from_range', s
     ----------
     nomapp : NominalApproach
         NominalApproach used to generate the simulation.
-    endclasses : dict
+    nomapp_endclasses: dict
         End-state classifcations for the set of simulations from propagate.nominalapproach()
     metrics : 'all'/list, optional
         Metrics to show on the plot. The default is 'all'.
@@ -174,8 +174,8 @@ def nominal_stats(nomapp, endclasses, metrics='all', inputparams='from_range', s
     table : pandas DataFrame
         Table with the metrics of interest layed out over the input parameters for the set of scenarios in endclasses
     """
-    if metrics=='all':              metrics = [*endclasses[[*endclasses][0]]]
-    if scenarios=='all':            scens = [*endclasses]
+    if metrics=='all':              metrics = [*nomapp_endclasses[[*nomapp_endclasses][0]]]
+    if scenarios=='all':            scens = [*nomapp_endclasses]
     elif type(scenarios)==str:      scens = nomapp.ranges[scenarios]['scenarios']
     elif not type(scenarios)==list: raise Exception("Invalid option for scenarios. Provide 'all'/'rangeid' or list")
     else:                           scens = scenarios
@@ -191,8 +191,8 @@ def nominal_stats(nomapp, endclasses, metrics='all', inputparams='from_range', s
     for inputparam in inputparams:
         table_values.append([nomapp.scenarios[e]['properties']['inputparams'][inputparam] for e in scens])
     for metric in metrics:
-        table_values.append([endclasses[e][metric] for e in scens])
-    table = pd.DataFrame(table_values, columns=[*endclasses], index=inputparams+metrics)
+        table_values.append([nomapp_endclasses[e][metric] for e in scens])
+    table = pd.DataFrame(table_values, columns=[*nomapp_endclasses], index=inputparams+metrics)
     return table
 
 def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid='default', nan_as=np.nan, percent=True, difference=True, give_ci=False, **kwargs):
@@ -262,7 +262,7 @@ def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid
         table.columns.name=tuple(params)
     return table
 
-def resilience_factor_comparison(nomapp, endclasses, params, value, faults='functions', rangeid='default', nan_as=np.nan, percent=True, difference=True, give_ci=False, **kwargs):
+def resilience_factor_comparison(nomapp, nested_endclasses, params, value, faults='functions', rangeid='default', nan_as=np.nan, percent=True, difference=True, give_ci=False, **kwargs):
     """
     Compares a metric for a given set of model parameters/factors over a nested set of nominal and fault scenarios.
 
@@ -270,7 +270,7 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
     ----------
     nomapp : NominalApproach
         Nominal Approach used to generate the simulations
-    endclasses : dict
+    nested_endclasses : dict
         dict of endclasses from propagate.nested_approach with structure: {scen_x:{fault:{metric1:x, metric2:x...}}}
     params : list
         List of parameters to use for the factor levels in the comparison
@@ -305,9 +305,9 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
     if rangeid=='default':
         if len(nomapp.ranges.keys())==1: rangeid=[*nomapp.ranges.keys()][0]
         else:   raise Exception("More than one range in approach--please provide rangid in: "+str(nomapp.ranges.keys()))
-    if faults=='functions':     faultlist = set([e.partition(' ')[0] for scen in endclasses for e in endclasses[scen]])
-    elif faults=='modes':       faultlist = set([e.partition(',')[0] for scen in endclasses for e in endclasses[scen]])
-    elif faults=='mode type':   faultlist = set([e.partition(',')[0].partition(' ')[2] for scen in endclasses for e in endclasses[scen]])
+    if faults=='functions':     faultlist = set([e.partition(' ')[0] for scen in nested_endclasses for e in nested_endclasses[scen]])
+    elif faults=='modes':       faultlist = set([e.partition(',')[0] for scen in nested_endclasses for e in nested_endclasses[scen]])
+    elif faults=='mode type':   faultlist = set([e.partition(',')[0].partition(' ')[2] for scen in nested_endclasses for e in nested_endclasses[scen]])
     elif type(faults) ==str: raise Exception("Invalid faults option: "+faults)
     elif type(faults)==list:    faultlist =set(faults)
     else:                       faultlist=faults
@@ -316,7 +316,7 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
     factors = nomapp.get_param_scens(rangeid, *params)
     full_stats=[]
     for factor, scens in factors.items():
-        endclass_fact = {scen:endclass for scen, endclass in endclasses.items() if scen in scens}
+        endclass_fact = {scen:endclass for scen, endclass in nested_endclasses.items() if scen in scens}
         ec_metrics = overall_diff(endclass_fact, value, nan_as=nan_as, as_ind=percent, no_diff=not difference)
 
         if not percent: nominal_metrics = [nan_to_x(res_scens['nominal'][value], nan_as) for res_scens in endclass_fact.values()]
@@ -348,7 +348,7 @@ def resilience_factor_comparison(nomapp, endclasses, params, value, faults='func
         table.columns.name=tuple(params)
     return table
 
-def nested_stats(nomapp, endclasses, percent_metrics=[], rate_metrics=[], average_metrics=[], expected_metrics=[], inputparams='from_range', scenarios='all'):
+def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[], average_metrics=[], expected_metrics=[], inputparams='from_range', scenarios='all'):
     """
     Makes a table of quantities of interest from endclasses.
 
@@ -375,7 +375,7 @@ def nested_stats(nomapp, endclasses, percent_metrics=[], rate_metrics=[], averag
     table : pandas DataFrame
         Table with the averages/percentages of interest layed out over the input parameters for the set of scenarios in endclasses
     """
-    if scenarios=='all':            scens = [*endclasses]
+    if scenarios=='all':            scens = [*nested_endclasses]
     elif type(scenarios)==str:      scens = nomapp.ranges[scenarios]['scenarios']
     elif not type(scenarios)==list: raise Exception("Invalid option for scenarios. Provide 'all'/'rangeid' or list")
     else:                           scens = scenarios
@@ -391,18 +391,18 @@ def nested_stats(nomapp, endclasses, percent_metrics=[], rate_metrics=[], averag
     for inputparam in inputparams:
         table_values.append([nomapp.scenarios[e]['properties']['inputparams'][inputparam] for e in scens])
     for metric in percent_metrics:  
-        table_values.append([percent(endclasses[e], metric) for e in scens])
+        table_values.append([percent(nested_endclasses[e], metric) for e in scens])
         table_rows.append('perc_'+metric)
     for metric in rate_metrics:     
-        table_values.append([rate(endclasses[e], metric) for e in scens])
+        table_values.append([rate(nested_endclasses[e], metric) for e in scens])
         table_rows.append('rate_'+metric)
     for metric in average_metrics:  
-        table_values.append([average(endclasses[e], metric) for e in scens])
+        table_values.append([average(nested_endclasses[e], metric) for e in scens])
         table_rows.append('ave_'+metric)
     for metric in expected_metrics: 
-        table_values.append([expected(endclasses[e], metric) for e in scens])
+        table_values.append([expected(nested_endclasses[e], metric) for e in scens])
         table_rows.append('exp_'+metric)
-    table = pd.DataFrame(table_values, columns=[*endclasses], index=table_rows)
+    table = pd.DataFrame(table_values, columns=[*nested_endclasses], index=table_rows)
     return table
 
 ##FMEA-like tables

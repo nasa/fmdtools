@@ -301,23 +301,67 @@ def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_group
     if title: plt.suptitle(title)
     return fig, axs
 def plot_line_and_err(ax, times, line, lows, highs, boundtype, boundcolor='gray', boundlinestyle='--', fillalpha=0.3, **kwargs):
+    """
+    Plots a line with a given range of uncertainty around it.
+
+    Parameters
+    ----------
+    ax : mpl axis
+        axis to plot the line on
+    times : list/array
+        x data (time, typically)
+    line : list/array
+        y center data to plot
+    lows : list/array
+        y lower bound to plot 
+    highs : list/array
+        y upper bound to plot
+    boundtype : 'fill' or 'line'
+        Whether the bounds should be marked with lines or a fill
+    boundcolor : str, optional
+        Color for bound fill The default is 'gray'.
+    boundlinestyle : str, optional
+        linestyle for bound lines (if any). The default is '--'.
+    fillalpha : float, optional
+        Alpha for fill. The default is 0.3.
+    **kwargs : kwargs
+        kwargs for the line
+    """
     ax.plot(line, **kwargs)
     if boundtype=='fill':   ax.fill_between(times,lows, highs,alpha=fillalpha, color=ax.lines[-1].get_color())
     elif boundtype=='line': plot_err_lines(ax, times, lows, highs, color=boundcolor, linestyle=boundlinestyle)
     else:                   raise Exception("Invalid bound type: "+boundtype)
 def plot_err_lines(ax, times, lows, highs, **kwargs):
+    """
+    Plots error lines on the given plot
+
+    Parameters
+    ----------
+    ax : mpl axis
+        axis to plot the line on
+    times : list/array
+        x data (time, typically)
+    line : list/array
+        y center data to plot
+    lows : list/array
+        y lower bound to plot 
+    highs : list/array
+        y upper bound to plot
+    **kwargs : kwargs
+        kwargs for the line
+    """
     ax.plot(times, highs **kwargs)
     ax.plot(times, lows, **kwargs)
 
-def nominal_vals_1d(app, endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal'):
+def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal'):
     """
     Visualizes the nominal operational envelope along one given parameter
 
     Parameters
     ----------
-    app : NominalApproach
+    nomapp : NominalApproach
         Nominal sample approach simulated in the model.
-    endclasses : dict
+    nomapp_endclasses : dict
         End-classifications for the set of simulations in the model.
     param1 : str
         Parameter range desired to visualize in the operational envelope
@@ -335,10 +379,10 @@ def nominal_vals_1d(app, endclasses, param1, title="Nominal Operational Envelope
     
     fig = plt.figure()
     
-    data = [(x, scen['properties']['inputparams'][param1]) for x,scen in app.scenarios.items()\
+    data = [(x, scen['properties']['inputparams'][param1]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False))]
     names = [d[0] for d in data]
-    classifications = [endclasses[name]['classification'] for name in names] 
+    classifications = [nomapp_endclasses[name]['classification'] for name in names] 
     discrete_classes = set(classifications)
     min_x = np.min([d[1] for i,d in enumerate(data)])
     max_x = np.max([d[1] for i,d in enumerate(data)])
@@ -357,15 +401,15 @@ def nominal_vals_1d(app, endclasses, param1, title="Nominal Operational Envelope
     plt.grid(which='both', axis='x')
     return fig
 
-def nominal_vals_2d(app, endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal'):
+def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal'):
     """
     Visualizes the nominal operational envelope along two given parameters
 
     Parameters
     ----------
-    app : NominalApproach
+    nomapp : NominalApproach
         Nominal sample approach simulated in the model.
-    endclasses : dict
+    nomapp_endclasses : dict
         End-classifications for the set of simulations in the model.
     param1 : str
         First parameter (x) desired to visualize in the operational envelope
@@ -383,10 +427,10 @@ def nominal_vals_2d(app, endclasses, param1, param2, title="Nominal Operational 
     """
     fig = plt.figure()
     
-    data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in app.scenarios.items()\
+    data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False))]
     names = [d[0] for d in data]
-    classifications = [endclasses[name]['classification'] for name in names] 
+    classifications = [nomapp_endclasses[name]['classification'] for name in names] 
     discrete_classes = set(classifications)
     for cl in discrete_classes:
         xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
@@ -400,15 +444,15 @@ def nominal_vals_2d(app, endclasses, param1, param2, title="Nominal Operational 
     plt.grid(which='both')
     return fig
 
-def nominal_vals_3d(app, endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal'):
+def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal'):
     """
     Visualizes the nominal operational envelope along three given parameters
 
     Parameters
     ----------
-    app : NominalApproach
+    nomapp : NominalApproach
         Nominal sample approach simulated in the model.
-    endclasses : dict
+    nomapp_endclasses : dict
         End-classifications for the set of simulations in the model.
     param1 : str
         First parameter (x) desired to visualize in the operational envelope
@@ -429,10 +473,10 @@ def nominal_vals_3d(app, endclasses, param1, param2, param3, title="Nominal Oper
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
     
-    data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2], scen['properties']['inputparams'][param3]) for x,scen in app.scenarios.items()\
+    data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2], scen['properties']['inputparams'][param3]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False)and scen['properties']['inputparams'].get(param3,False))]
     names = [d[0] for d in data]
-    classifications = [endclasses[name]['classification'] for name in names] 
+    classifications = [nomapp_endclasses[name]['classification'] for name in names] 
     discrete_classes = set(classifications)
     for cl in discrete_classes:
         xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
