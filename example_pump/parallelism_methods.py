@@ -5,10 +5,8 @@ Created on Fri Mar 26 12:23:14 2021
 @author: dhulse
 """
 
-import sys
-paths = sys.path
-if paths[1]!='../':
-    sys.path=[sys.path[0]] + ['../'] + paths
+import sys, os
+sys.path.append(os.path.join('..'))
 
 from ex_pump import * 
 from fmdtools.modeldef import SampleApproach
@@ -83,5 +81,25 @@ def parallel_mc3():
     resultslist = pool.map(one_fault_helper, inputlist)
     return resultslist
 
+def instantiate_pools(cores):
+    from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
+    from parallelism_methods import compare_pools
+    return  {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores)} #, 'Ray': RayPool(cores) }
+
+
 if __name__=='__main__':
-    a=1
+    mdl=Pump(params={'cost':{'repair'}, 'delay':10}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,500]}, 'times':[0,20, 500], 'tstep':1})
+    app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':3})
+    
+    cores = 4
+    
+    print("STAGED + SOME TRACKING")
+    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track={'flows':{'EE_1':'all', 'Wat_1':['pressure', 'flowrate']}})
+    print("STAGED + FULL MODEL TRACKING")
+    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='all')
+    print("STAGED + FLOW TRACKING")
+    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='flows')
+    print("STAGED + FUNCTION TRACKING")
+    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='functions')
+    print("STAGED + NO TRACKING")
+    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='none')

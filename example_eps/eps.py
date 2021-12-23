@@ -283,6 +283,29 @@ def discrep(value):
     elif    value<=2.0:     return 3
     else:                   return 4 
     
-    
+if __name__ == '__main__':
+    import fmdtools.faultsim.propagate as propagate
+    import fmdtools.resultdisp as rd
+
+    mdl= EPS()
+    rd.graph.show(mdl.bipartite, gtype='bipartite')
+
+    endresults,resgraph, mdlhists = propagate.one_fault(mdl, 'EE_to_ME', 'toohigh_torque')
+    rd.graph.show(resgraph)
+
+
+    endclasses, mdlhists = propagate.single_faults(mdl)
+
+    reshists, diffs, summary = rd.process.hists(mdlhists)
+
+    sumtable = rd.tabulate.summary(summary)
+
+
+    degtimemap = rd.process.avg_degtime_heatmap(reshists)
+
+    rd.graph.show(mdl.bipartite,gtype='bipartite', heatmap=degtimemap)
+    rd.graph.show(resgraph,heatmap=degtimemap)
+
+    endclasses, mdlhists = propagate.single_faults(mdl)
     
         

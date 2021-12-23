@@ -136,7 +136,7 @@ class Line(Component):
                           'propstuck':[0.02, [0.0, 0.5,0.5], 200], 'propbreak':[0.03, [0.0, 0.5,0.5], 200]},name=name)
 
     def behavior(self, EEin, Ctlin, cmds, Force):
-        if Force<=0.0:   self.add_faults([self.name+'mechbreak', self.name+'propbreak'])
+        if Force<=0.0:   self.add_fault(self.name+'mechbreak', self.name+'propbreak')
         elif Force<=0.5: self.add_fault(self.name+'mechfriction')
             
         if self.has_fault(self.name+'short'):

@@ -2,6 +2,9 @@
 """
 Below demonstrates simple unit-tests of model constructs in fmdtools using Python's built-in unitttest module.
 
+Unit testing can help ensure that model constructs actually embody the intended
+dynamic behavior, and help when error-checking a large model. 
+
 The use-cases shown are:
     -Testing function initialization (test_initialization)
     -Testing single-timestep function behavior (ImportEE)
@@ -90,7 +93,7 @@ class MoveWat_Tests(unittest.TestCase):
         for t in range(0, 20):
             self.Move_Wat.condfaults(t)
             self.Move_Wat.behavior(t)
-            if t<=10: self.assertFalse(self.Move_Wat.has_fault('mech_break')) # checks each time-step to ensure the fault has not been added until the delay
+            if t<10: self.assertFalse(self.Move_Wat.has_fault('mech_break')) # checks each time-step to ensure the fault has not been added until the delay
         self.assertTrue(self.Move_Wat.has_fault('mech_break'))
         self.assertEqual(self.Move_Wat.eff, 0.0)
         self.assertEqual(self.EE_1.current, 0.2)
@@ -136,7 +139,7 @@ class Integration_Tests(unittest.TestCase):
                 self.assertEqual(mdlhist['faulty']['flows']['Wat_1']['flowrate'][t], 0.3)
                 self.assertEqual(mdlhist['faulty']['flows']['Wat_2']['flowrate'][t], 0.3)
                 self.assertEqual(mdlhist['faulty']['functions']['MoveWater']['eff'][t], 1.0)
-            elif t<=20: #at t=20, the conditional damage occurs (depending on the delay)
+            elif t<20: #at t=20, the conditional damage occurs (depending on the delay)
                 self.assertEqual(mdlhist['faulty']['flows']['Sig_1']['power'][t], 1.0)
                 self.assertEqual(mdlhist['faulty']['flows']['EE_1']['current'][t], 13.0)
                 self.assertEqual(mdlhist['faulty']['flows']['Wat_1']['flowrate'][t], 0.003)

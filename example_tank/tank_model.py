@@ -199,4 +199,33 @@ class Tank(Model):
         rate=scen['properties']['rate']
         life=1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': rate*life*totcost}
+
+if __name__ == '__main__':
+    import fmdtools.faultsim.propagate as propagate
+    import fmdtools.resultdisp as rd
+    from fmdtools.modeldef import SampleApproach
+    
+    mdl = Tank()
+    ## nominal run
+    endresults, resgraph, mdlhist = propagate.nominal(mdl)
+    rd.plot.mdlhistvals(mdlhist)
+    rd.graph.show(resgraph)
+    
+    
+    ## faulty run
+    endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Human','NotVisible', time=2)
+    
+    rd.plot.mdlhistvals(mdlhist, fault='NotVisible', time=2)
+    rd.graph.show(resgraph,faultscen='NotVisible', time=2)
+    
+    endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Human','FalseReach', time=2, gtype='component')
+    
+    rd.plot.mdlhistvals(mdlhist,fault='FalseReach',time=2)
+    rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time=2)
+    
+    ## run all faults - note: all faults get caught!
+    endclasses, mdlhists = propagate.single_faults(mdl)
+    
+    app_full = SampleApproach(mdl)
+    endclasses, mdlhists = propagate.approach(mdl, app_full)
              

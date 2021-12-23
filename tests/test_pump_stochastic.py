@@ -35,7 +35,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_run_approach(self):
          mdl = Pump()
          nomapp = NominalApproach()
-         nomapp.add_seed_replicates('default',2000)
+         nomapp.add_seed_replicates('default',1000)
          endresults, mdlhists = propagate.nominal_approach(mdl, nomapp, showprogress=False, run_stochastic=True)
          ave_effs=[]; std_effs=[]
          for scen in mdlhists:
@@ -43,7 +43,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
              std_effs.append(np.std(mdlhists[scen]['functions']['MoveWater']['eff']))
          ave_eff = np.mean(ave_effs); std_eff = np.mean(std_effs)
          self.assertAlmostEqual(ave_eff, mdl.fxns['MoveWater']._rng_params['eff'][2][0], 2) # test means
-         self.assertAlmostEqual(std_eff, mdl.fxns['MoveWater']._rng_params['eff'][2][1], 2)
+         self.assertLess(abs(std_eff-mdl.fxns['MoveWater']._rng_params['eff'][2][1]), 0.05)
     def test_model_copy_same(self):
         self.check_model_copy_same(Pump(), Pump(), [10,20,30], 25, max_time=55, run_stochastic=True)
     def test_model_copy_different(self):
