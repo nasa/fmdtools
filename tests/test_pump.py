@@ -38,7 +38,7 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_app_prop_values(self):
         """Test that the delayed fault behavior occurs at the time specified (with approach)"""
         approach = SampleApproach(self.water_mdl, faults=[('MoveWater','mech_break')], phases=['on'],defaultsamp={'samp':'evenspacing','numpts':5})
-        endclasses, mdlhists = propagate.approach(self.water_mdl, approach)
+        endclasses, mdlhists = propagate.approach(self.water_mdl, approach, showprogress=False)
         for scen in approach.scenlist:
             name = scen['properties']['name']
             exp_wcost = self.expected_water_cost(scen['properties']['time'])
@@ -57,10 +57,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         mdl = Pump(); inj_times= [10,20,30,40]
         mdl_reset = Pump()
         self.check_model_reset(mdl, mdl_reset, inj_times, max_time=55)
-        
-        
-
-            
+                 
 
 if __name__ == '__main__':
     unittest.main()

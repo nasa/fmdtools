@@ -38,8 +38,6 @@ tab=rd.tabulate.samptime(app_multipt.sampletimes)
 app_short = SampleApproach(mdl, faults=[('ImportEE', 'inf_v')], defaultsamp={'samp':'evenspacing', 'numpts':3})
 
 
-#newscenids = prune_app(app_full, mdl)
-
 #endclasses, mdlhists = fp.run_approach(mdl, app_full)
 
 #rp.plot_samplecosts(app_full, endclasses)
@@ -76,7 +74,7 @@ def resilquant(approach, mdl):
     fmea = rd.tabulate.summfmea(endclasses, approach)
     fmea2 = rd.tabulate.phasefmea(endclasses, approach)
     util=sum(fmea['expected cost'])
-    expdegtimes = rd.process.expdegtimeheatmap(reshists, endclasses)
+    expdegtimes = rd.process.exp_degtime_heatmap(reshists, endclasses)
     return util, expdegtimes, fmea, fmea2
 
 util_full, expdegtimes_full, fmea_full, f_f= resilquant(app_full, mdl)
@@ -103,18 +101,6 @@ maxlike_error = {i:(expdegtimes_full[i] - expdegtimes_maxlike[i])/expdegtimes_fu
 rd.graph.show(mdl.bipartite,gtype='bipartite', heatmap=maxlike_error)
 
 util_multipt, expdegtimes_multipt, fmea_multipt, f_mi = resilquant(app_multipt, mdl)
-
-def prune_app(app, mdl):
-    endclasses, mdlhists = propagate.approach(mdl, app)
-    newscenids = dict.fromkeys(app.scenids.keys())
-    
-    for modeinphase in app.scenids:
-        costs= np.array([endclasses[scen]['cost'] for scen in app.scenids[modeinphase]])
-        fullint = np.mean(costs)
-        errs = abs(fullint - costs)
-        mins = np.where(errs == errs.min())[0]
-        newscenids[modeinphase] =  [app.scenids[modeinphase][mins[int(len(mins)/2)]]]
-    return newscenids
 
 
 sampparams = {'scen':{'numpts', 'type'}}

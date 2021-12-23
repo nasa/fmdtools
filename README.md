@@ -5,9 +5,19 @@
 
 fmdtools (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
 
-This release is version 0.8.0
+This release is version 0.9.0
 
 [![DOI](https://zenodo.org/badge/212862445.svg)](https://zenodo.org/badge/latestdoi/212862445)
+
+## Overview:
+
+The main impetus for the development of the fmdtools project was a lack existing tools to enable early function-based fault simulation for early functional hazard assessment. Researchers thus had to re-implement modelling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools resolves this problem by separating resilience modelling, simulation, and analysis constructs from the model under study, enabling reuse of methodology between case studies. Towards this end, the fmdtools package provides three major pieces of functionality:
+
+1. Model definition constructs which enable systematic early specification of the high level structure and behaviors of a system with concise syntax (fmdtools.modeldef).
+
+2. Simulation methods which enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios over a wide range of model types (fmdtools.faultsim).
+
+3. Analysis methods for quantifying resilience and summarizing and visualizing behaviors and properties of interest (fmdtools.resultdisp).
 
 ##### Key Features:
 
@@ -77,9 +87,8 @@ Additionally, this repo provides a few resources to get familiar with fmdtools:
 - A shorter overview the toolkit methods and structure is provided in `docs/overview`.
 - Some documented examples are provided, including:
   - A baseline example of most provided methods in conceptual design-stage pump system in `pump example/ex_pump.py` and `pump example/Pump Example Notebook.ipynb`
-  - An case study following the modelling process of going from a less detailed to more detailed model is provided in `multirotor example\paper demonstration\Demonstration.ipynb` for the design of a multirotor drone.
+  - An case study following the modelling process of going from a less detailed to more detailed model is provided in `multirotor example\Demonstration.ipynb` for the design of a multirotor drone.
   - An example replicating previous the simple electric power system implemented in [IBFM](https://github.com/DesignEngrLab/IBFM) in the `eps example` directory, with some basic fault propagation and visualization.
-  - An example of modelling a dynamical system (without faults) is shown in the `\pandemic example` directory, with a reference stand-alone model is provided in `simple_model.py` and `fmd_model.py` and `fmd_model_script.py` showing how one might implement a distributed version of this model in `fmdtools`.
   - Using the `component` class to model human interactions with the modelled system in `hold-up tank example`.
 
 - More detailed documentation for each of the classes/methods/modules is provided and can be viewed by going through the fmdtools source code (or by using `help(methodname)`)
@@ -91,7 +100,7 @@ Additionally, this repo provides a few resources to get familiar with fmdtools:
 
 [Hannah Walsh](https://github.com/walshh) : Network analysis codes
 
-Sequoia Andrade : Graph visualization graphviz options
+Sequoia Andrade : Graph visualization graphviz options, Code review
 
 ----
 ## License

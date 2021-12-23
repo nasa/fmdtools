@@ -440,7 +440,7 @@ class Block(Common):
         *statenames : str, str, str...
             names of the random state defined in assoc_rand_state(s)
         """
-        if not statenames: statenames=self._rng_params.keys()
+        if not statenames: statenames=list(self._rng_params.keys())
         for statename in statenames: setattr(self, statename, self._rng_params[statename][0])
     def set_mode(self, mode):
         """Sets a mode in the block
