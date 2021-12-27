@@ -14,6 +14,7 @@ import networkx as nx
 import copy
 from ordered_set import OrderedSet
 from operator import itemgetter
+from collections.abc import Iterable
 
 # MAJOR CLASSES
 
@@ -46,7 +47,7 @@ class Common(object):
         for state in states:
             if state not in self._states: raise Exception(state+" not a property of "+self.name)
             setattr(self, state, getattr(obj,state))
-    def get(self, *attnames):
+    def get(self, *attnames, **kwargs):
         """Returns the given attribute names (strings). Mainly useful for reducing length
         of lines/adding clarity to assignment statements.
         e.g., x,y = self.Pos.get('x','y') is the same as
@@ -56,9 +57,19 @@ class Common(object):
         """
         if len(attnames)==1:    states = getattr(self,attnames[0])
         else:                   states = [getattr(self,name) for name in attnames]
-        if type(states) in  [int,float, str,complex, bool]: return states
-        elif len(states)==1:                                return states[0]
-        else:                                               return np.array(states)
+        if not is_iter(states):                 return states
+        elif len(states)==1:                    return states[0]
+        elif kwargs.get('as_array', True):      return np.array(states)
+        else:                                   return states
+    def gett(self, *attnames):
+        """Alternative to self.get that returns the given constructs as a tuple instead
+        of as an array. Useful when a numpy array would translate the underlying data types
+        poorly (e.g., np.array([1,'b'] would make 1 a string--using a tuple instead preserves
+        the data type)"""
+        states = self.get(*attnames,as_array=False)
+        if not is_iter(states):                 return states
+        elif len(states)==1:                    return states[0]
+        else:                                   return tuple(states)
     def inc(self,**kwargs):
         """Increments the given arguments by a given value. Mainly useful for
         reducing length/adding clarity to increment statements.
@@ -124,6 +135,22 @@ class Common(object):
         for state in states[1:]:
             a -= self.get(state)
         return a
+    def same(self,values, *states):
+        """Tests whether a given iterable values has the same value as each
+        give state in the model construct.
+        e.g.,   self.same([1,2],'a','b') is the same as
+                all([1,2]==[self.a, self.b])"""
+        test = values==self.get(*states)
+        if is_iter(test):   return all(test)
+        else:               return test
+    def different(self,values, *states):
+        """Tests whether a given iterable values has any different value the
+        given states in the model construct.
+        e.g.,   self.same([1,2],'a','b') is the same as
+                any([1,2]!=[self.a, self.b])"""
+        test = values!=self.get(*states)
+        if is_iter(test):   return any(test)
+        else:               return test
     
 class Block(Common):
     """ 
@@ -2168,6 +2195,11 @@ def accumulate(vec):
     """ Accummulates vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])"""
     return [sum(vec[:i+1]) for i in range(len(vec)) ]
 
+def is_iter(data):
+    """ Checks whether a data type should be interpreted as an iterable or not and returned
+    as a single value or tuple/array"""
+    if isinstance(data, Iterable) and type(data)!=str:  return True
+    else:                                               return False
 """Model checking"""
 def check_pickleability(obj):
     """ Checks to see which attributes of an object will pickle (and thus parallelize)"""
