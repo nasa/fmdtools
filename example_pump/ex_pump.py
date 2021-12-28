@@ -256,6 +256,18 @@ class Pump(Model):
         self.add_fxn('ExportWater', ['Wat_2'], fclass=ExportWater)
 
         self.build_model()
+    def end_condition(self,time):
+        """
+        End conditions can be used to stop the simulation when certain conditions are met.
+        This method is optional, but helpful when the simulation is expensive and there are 
+        defined end conditions (e.g., reaching a destination or failing to do so).
+        
+        It returns True when the end condition is met and False otherwise. Here 
+        a dummy method is provided to demonstrate, in practice this would depend on
+        the intended end-states of the model.
+        """
+        if time>self.times[-1]: return True
+        else:                   return False
     def find_classification(self,scen, mdlhists):
         """
             Model classes use find_classification() to classify the results based on a fault scenario, returning

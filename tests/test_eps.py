@@ -10,7 +10,7 @@ sys.path.insert(1, os.path.join('..'))
 from example_eps.eps import EPS
 from fmdtools.faultsim import propagate
 import fmdtools.resultdisp as rd
-from fmdtools.modeldef import SampleApproach
+from fmdtools.modeldef import SampleApproach, check_pickleability
 import numpy as np
 
 class epsTests(unittest.TestCase):
@@ -51,7 +51,9 @@ class epsTests(unittest.TestCase):
             approach = SampleApproach(self.mdl, jointfaults={'faults':num_joint, 'jointfuncs':True, 'pcond':1.0, 'inclusive':False})
             self.assertEqual(len(approach.scenlist), np.math.comb(actual_num_faults,num_joint)) # tests the length
             endclasses, reshists = propagate.approach(self.mdl, approach, showprogress=False)
-
+    def test_pickleability(self):
+        unpickleable = check_pickleability(self.mdl, verbose=False)
+        self.assertTrue(unpickleable==[])
 if __name__ == '__main__':
     unittest.main()
     

@@ -1740,8 +1740,9 @@ class SampleApproach():
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
         if phases=='global':                self.globalphases = mdl.phases; self.phases = {}; self.modephases = modephases
         elif type(phases) in [list, set]:   self.globalphases = {ph:mdl.phases[ph] for ph in phases}; self.phases={}; self.modephases = modephases
-        elif type(phases)==dict:    
-            if type(tuple(phases.values())[0][0]) in [int, float]:  self.globalphases = phases; self.phases ={}; self.modephases = modephases
+        elif type(phases)==dict: 
+            if   type(tuple(phases.values())[0])==dict:         self.globalphases = mdl.phases; self.phases = phases; self.modephases = modephases
+            elif type(tuple(phases.values())[0][0]) in [int, float]:  self.globalphases = phases; self.phases ={}; self.modephases = modephases
             else:                                               self.globalphases = mdl.phases; self.phases = phases; self.modephases = modephases
         #elif type(phases)==set:    self.globalphases=mdl.phases; self.phases = {ph:mdl.phases[ph] for ph in phases}
         self.tstep = mdl.tstep
@@ -2067,9 +2068,11 @@ class SampleApproach():
                 pts=[mins[int(len(mins)/2)]]
                 weights=[1]
             elif samptype=='piecewise':
-                if not self.phases: partlocs=[0, len(list(np.arange(self.globalphases[modeinphase[1][1]][0], self.globalphases[modeinphase[1][1]][1], self.tstep)))]
-                else:               partlocs=[0, len(list(np.arange(self.phases[modeinphase[1]][0], self.phases[modeinphase[1]][1], self.tstep)))]
-                
+                if not self.phases or modeinphase[1][0]=='global': 
+                    beginning, end = self.globalphases[modeinphase[1][1]]
+                else: 
+                    beginning, end = self.phases[modeinphase[1][0]][modeinphase[1][1]]
+                partlocs=[0, len(list(np.arange(beginning,end, self.tstep)))]
                 reset=False
                 for ind, cost in enumerate(costs[1:-1]): # find where fxn is no longer linear
                     if reset==True:
@@ -2201,14 +2204,15 @@ def is_iter(data):
     if isinstance(data, Iterable) and type(data)!=str:  return True
     else:                                               return False
 """Model checking"""
-def check_pickleability(obj):
+def check_pickleability(obj, verbose=True):
     """ Checks to see which attributes of an object will pickle (and thus parallelize)"""
     unpickleable = []
     for name, attribute in vars(obj).items():
         if not dill.pickles(attribute):
             unpickleable = unpickleable + [name]
-    if unpickleable: print("The following attributes will not pickle: "+str(unpickleable))
-    else:           print("The object is pickleable")
+    if verbose:
+        if unpickleable: print("The following attributes will not pickle: "+str(unpickleable))
+        else:           print("The object is pickleable")
     return unpickleable
 
 def check_model_pickleability(model):
