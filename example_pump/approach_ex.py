@@ -17,7 +17,7 @@ from ex_pump import * #required to import entire module
 import time
 
 #mdl = Pump(params={'repair', 'ee', 'water', 'delay'})
-mdl = Pump(params={'cost':{'ee', 'repair', 'water'}, 'delay':10}) # should give identical utilities
+mdl = Pump(params={'cost':{'ee', 'repair', 'water'}, 'delay':0}) # should give identical utilities
 
 app_joint = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':3}, jointfaults={'faults':3})
 
