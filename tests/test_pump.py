@@ -13,6 +13,7 @@ import fmdtools.resultdisp as rd
 from fmdtools.modeldef import SampleApproach
 from CommonTests import CommonTests
 import numpy as np
+import quadpy
 
 class PumpTests(unittest.TestCase, CommonTests):
     def setUp(self):
@@ -57,7 +58,54 @@ class PumpTests(unittest.TestCase, CommonTests):
         mdl = Pump(); inj_times= [10,20,30,40]
         mdl_reset = Pump()
         self.check_model_reset(mdl, mdl_reset, inj_times, max_time=55)
-                 
+    def test_approach_cost_calc(self):
+        """Test that the (linear) resilience loss function is perfectly approximated 
+        using the given sampling methods"""
+        mdl = Pump(params={'cost':{'ee', 'repair', 'water'}, 'delay':0})
+        app_full = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
+        full_util=exp_cost_quant(app_full,mdl)
+        
+        app_multipt = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':3})
+        multipt_util=exp_cost_quant(app_multipt,mdl)
+        self.assertAlmostEqual(full_util, multipt_util)
+        app_center = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':1})
+        center_util=exp_cost_quant(app_center,mdl)
+        self.assertAlmostEqual(full_util, center_util)
+        app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad': quadpy.c1.gauss_patterson(1)})
+        quad_util=exp_cost_quant(app_quad,mdl)
+        self.assertAlmostEqual(full_util, quad_util)
+        #test pruning
+        
+    def test_approach_parallelism(self):
+        """Test whether the pump simulates the same when simulated using parallel or staged options"""
+        app = SampleApproach(self.default_mdl)
+        from multiprocessing import Pool
+        endclasses, mdlhists = propagate.approach(self.default_mdl, app, showprogress=False,pool=False)
+        endclasses_staged, mdlhist_staged = propagate.approach(self.default_mdl, app, showprogress=False,pool=False, staged=True)
+        self.assertEqual([*endclasses.values()], [*endclasses_staged.values()])
+        endclasses_par, mdlhists_par = propagate.approach(self.default_mdl, app, showprogress=False,pool=Pool(4), staged=False)
+        self.assertEqual([*endclasses.values()], [*endclasses_par.values()])
+        endclasses_staged_par, mdlhists_staged_par = propagate.approach(self.default_mdl, app, showprogress=False,pool=Pool(4), staged=True)
+        self.assertEqual([*endclasses.values()], [*endclasses_staged_par.values()])
+    def test_approach_pruning(self):
+        """Tests that sample approach pruning places points in the center of their
+        respective intervals for linear resilience loss functions."""
+        mdl = Pump(params={'cost':{'ee', 'repair', 'water'}, 'delay':0})
+        app_full = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
+        app_center = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':1})
+        endclasses, mdlhists = propagate.approach(mdl, app_full, showprogress=False)
+        self.assertNotEqual(app_full.times, app_center.times)
+        app_full.prune_scenarios(endclasses)
+        self.assertEqual(app_full.times, app_center.times)
+        
+def exp_cost_quant(approach, mdl):
+    """ Calculates the expected cost of faults over a given sampling approach 
+    on the given model"""
+    endclasses, mdlhists = propagate.approach(mdl, approach, showprogress=False)
+    reshists, diffs, summaries = rd.process.hists(mdlhists)
+    fmea = rd.tabulate.summfmea(endclasses, approach)
+    util=sum(fmea['expected cost'])
+    return util
 
 if __name__ == '__main__':
     unittest.main()
