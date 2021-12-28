@@ -10,7 +10,7 @@ sys.path.insert(1, os.path.join('..'))
 from example_pump.ex_pump import Pump
 from fmdtools.faultsim import propagate
 import fmdtools.resultdisp as rd
-from fmdtools.modeldef import SampleApproach
+from fmdtools.modeldef import SampleApproach, check_pickleability
 from CommonTests import CommonTests
 import numpy as np
 import quadpy
@@ -97,6 +97,9 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.assertNotEqual(app_full.times, app_center.times)
         app_full.prune_scenarios(endclasses)
         self.assertEqual(app_full.times, app_center.times)
+    def test_pickleability(self):
+        unpickleable = check_pickleability(Pump(), verbose=False)
+        self.assertTrue(unpickleable==[])
         
 def exp_cost_quant(approach, mdl):
     """ Calculates the expected cost of faults over a given sampling approach 
