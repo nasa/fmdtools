@@ -170,7 +170,7 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
     nomapp_mdlhists = dict.fromkeys(nomapp.scenarios)
     nomapp_endclasses = dict.fromkeys(nomapp.scenarios)
     if pool:
-        inputs = [(mdl.__class__(*new_mdl_params(mdl,scen)), scen['properties'], track, track_times, run_stochastic) for scen in nomapp.scenarios.values()]
+        inputs = [(mdl.__class__(*new_mdl_params(mdl,scen['properties'])), scen, track, track_times, run_stochastic) for scen in nomapp.scenarios.values()]
         result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         nomapp_endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
         nomapp_mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
@@ -569,7 +569,7 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
     nested_mdlhists = dict.fromkeys(nomapp.scenarios)
     nested_endclasses = dict.fromkeys(nomapp.scenarios)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
-        mdl = mdl.__class__(*new_mdl_params(mdl,scen))
+        mdl = mdl.__class__(*new_mdl_params(mdl,scen['properties']))
         if get_phases:
             nomhist, _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
             if get_phases=='global':      phases={'global':[0,t_end]}
@@ -580,7 +580,7 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
             app_args.update({'phases':phases})
         
         app = SampleApproach(mdl,**app_args)
-        nested_mdlhists[scenname], nested_endclasses[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic)
+        nested_endclasses[scenname], nested_mdlhists[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic)
     return nested_endclasses, nested_mdlhists
 
 def exec_scen_par(args):

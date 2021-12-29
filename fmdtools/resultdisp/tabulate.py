@@ -210,8 +210,8 @@ def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid
     endclasses : dict
         dict of endclasses from propagate.nominal_approach or nested_approach with structure: 
             {scen_x:{metric1:x, metric2:x...}} or {scen_x:{fault:{metric1:x, metric2:x...}}} 
-    params : list
-        List of parameters to use for the factor levels in the comparison
+    params : list/str
+        List of parameters (or parameter) to use for the factor levels in the comparison
     metrics : 'all'/list, optional
         Metrics to show in the table. The default is 'all'.
     rangeid : str, optional
@@ -240,7 +240,7 @@ def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid
     if [*endclasses.values()][0].get('nominal', False): endclasses ={scen:ec['nominal'] for scen, ec in endclasses.items()}
     if metrics=='all':              metrics = [ec for ec,val in [*endclasses.values()][0].items() if type(val) in [float, int]]
     
-    
+    if type(params)==str: params=[params]
     factors = nomapp.get_param_scens(rangeid, *params)
     full_stats=[]
     for metric in metrics:
@@ -276,8 +276,8 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
         Nominal Approach used to generate the simulations
     nested_endclasses : dict
         dict of endclasses from propagate.nested_approach with structure: {scen_x:{fault:{metric1:x, metric2:x...}}}
-    params : list
-        List of parameters to use for the factor levels in the comparison
+    params : list/str
+        List of parameters (or parameter) to use for the factor levels in the comparison
     value : string
         metric of the endclass (returned by mdl.find_classification) to use for the comparison.
     faults : str/list, optional
@@ -316,6 +316,7 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
     elif type(faults)==list:    faultlist =set(faults)
     else:                       faultlist=faults
     faultlist.discard('nominal'); faultlist.discard(' '); faultlist.discard('')
+    if type(params)==str: params=[params]
     
     factors = nomapp.get_param_scens(rangeid, *params)
     full_stats=[]
