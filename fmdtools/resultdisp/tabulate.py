@@ -20,6 +20,10 @@ Uses methods:
     - result:         Makes a table of results (degraded functions/flows, cost, rate, expected cost) of a single run
     - dicttab:           Makes table of a generic dictionary
     - maptab:            Makes table of a generic map
+    - nominal_stats:  Makes a table of quantities of interest from endclasses from a nominal approach.
+    - nested_stats:   Makes a table of quantities of interest from endclasses from a nested approach.
+    - nominal_factor_comparison: Compares a metric for a given set of model parameters/factors over a set of nominal scenarios.
+    - nested_factor_comparison: Compares a metric for a given set of model parameters/factors over a nested set of nominal and fault scenarios.
 Also used for FMEA-like tables:
     - simplefmea:          Makes a simple fmea (rate, cost, expected cost) of the endclasses of a list of fault scenarios run
     - phasefmea:           Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
@@ -197,7 +201,7 @@ def nominal_stats(nomapp, nomapp_endclasses, metrics='all', inputparams='from_ra
 
 def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid='default', nan_as=np.nan, percent=True, difference=True, give_ci=False, **kwargs):
     """
-    Compares a metric for a given set of model parameters/factors over a nested set of nominal and fault scenarios.
+    Compares a metric for a given set of model parameters/factors over set of nominal scenarios.
 
     Parameters
     ----------
