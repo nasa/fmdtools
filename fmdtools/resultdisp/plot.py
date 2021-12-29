@@ -6,11 +6,14 @@ Created: November 2019 (Refactored April 2020)
 Description: Plots quantities of interest over time using matplotlib.
 
 Uses the following methods:
-    - mdlhist:         plots function and flow histories over time (with different plots for each funciton/flow)
-    - mdlhistvals:     plots function and flow histories over time on a single plot 
+    - mdlhist:         plots function and flow histories over time (with different plots for each function/flow)
+    - mdlhistvals:     plots function and flow histories over time on a single plot
+    - mdlhists:        plots function and flow histories over time with multiple scenarios on the same plot
     - nominal_vals_1d: plots the end-state classification of a system over a (1-D) range of nominal runs
     - nominal_vals_2d: plots the end-state classification of a system over a (2-D) range of nominal runs
     - nominal_vals_3d: plots the end-state classification of a system over a (3-D) range of nominal runs
+    - nominal_factor_comparison:    gives a bar plot of nominal simulation statistics over given factors
+    - resilience_factor_comparison: gives a bar plot of fault simulation statistics over given factors
     - phases:          plots the phases of operation that the model progresses through.
     - samplecost:      plots the costs for a single fault sampled by a SampleApproach over time with rates
     - samplecosts:     plots the costs for a set of faults sampled by a SampleApproach over time with rates on separate plots

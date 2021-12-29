@@ -16,6 +16,13 @@ Uses methods:
     - resultsgraphs:        Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
     - totalcost:            Calculates the total host of a set of given end classifications
     - state_probabilities:  Calculates the probabilities of given end-state classifications given an endclasses dictionary
+    - bootstrap_confidence_interval: Convenience wrapper for scipy.bootstrap. 
+    - overall_diff:         Calculates the difference between the nominal and fault scenarios for a set of nested endclasses
+    - end_diff:             Calculates the difference between the nominal and fault scenarios for a set of endclasses
+    - percent:              Calculates the percentage of a given indicator variable being True in endclasses
+    - average:              Calculates the average value of a given metric in endclasses
+    - expected:             Calculates the expected value of a given metric in endclasses using the rate variable in endclasses
+    - rate:                Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses
 Also used for graph heatmaps, which use the results history to map results history statistics onto the graph, returning a dictonary with structure {fxn/flow: value}:         
     - heatmaps:            Makes a dict of heatmaps given a results history and a history of the differences between nominal and faulty models.
     - degtimemap:          Makes a heatmap dictionary of degraded time for functions given a result history
@@ -484,7 +491,9 @@ def average(endclasses, metric):
 def percent(endclasses, metric):
     """Calculates the percentage of a given indicator variable being True in endclasses"""
     return sum([int(bool(e[metric])) for k,e in endclasses.items() if not np.isnan(e[metric])])/len(endclasses)
-
+def rate(endclasses, metric):
+     """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
+     return sum([int(bool(e[metric]))*e['rate'] for k,e in endclasses.items() if not np.isnan(e[metric])])
 def end_diff(endclasses, metric, nan_as=np.nan, as_ind=False, no_diff=False):
     """
     Calculates the difference between the nominal and fault scenarios for a set of endclasses
@@ -517,7 +526,7 @@ def end_diff(endclasses, metric, nan_as=np.nan, as_ind=False, no_diff=False):
     return difference
 def overall_diff(nested_endclasses, metric, nan_as=np.nan, as_ind=False, no_diff=False):
     """
-    Calculates the difference between the nominal and fault scenarios over a set of 
+    Calculates the difference between the nominal and fault scenarios over a set of endclasses
 
     Parameters
     ----------
@@ -537,14 +546,9 @@ def overall_diff(nested_endclasses, metric, nan_as=np.nan, as_ind=False, no_diff
         nested dictionary of differences over the set of fault scenarios nested in nominal scenarios 
     """
     return {scen:end_diff(endclass, metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff) for scen, endclass in nested_endclasses.items()}
-
-def rate(endclasses, metric):
-     """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
-     return sum([int(bool(e[metric]))*e['rate'] for k,e in endclasses.items() if not np.isnan(e[metric])])
- 
 def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
     """
-    Convenience wrapper for scipy.bootstrap. See
+    Convenience wrapper for scipy.bootstrap. 
 
     Parameters
     ----------

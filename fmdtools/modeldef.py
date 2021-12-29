@@ -1599,7 +1599,7 @@ class NominalApproach():
                 - 'independent' creates separate random seeds for models and parameter generation
                 - 'keep_model' uses the seed provided in the model for all of the model
             When a list is provided, these seeds are are used (and shared). Must be of length replicates.
-        **inputranges : key=tuple
+        **randvars : key=tuple
             Specification for each random input parameter, specified as 
             input = (randfunc, param1, param2...)
             where randfunc is the method producing random outputs (e.g. numpy.random.rand)
