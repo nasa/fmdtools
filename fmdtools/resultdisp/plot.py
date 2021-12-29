@@ -356,7 +356,7 @@ def plot_err_lines(ax, times, lows, highs, **kwargs):
     ax.plot(times, highs **kwargs)
     ax.plot(times, lows, **kwargs)
 
-def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal'):
+def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification'):
     """
     Visualizes the nominal operational envelope along one given parameter
 
@@ -385,7 +385,7 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
     data = [(x, scen['properties']['inputparams'][param1]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False))]
     names = [d[0] for d in data]
-    classifications = [nomapp_endclasses[name]['classification'] for name in names] 
+    classifications = [nomapp_endclasses[name][metric] for name in names] 
     discrete_classes = set(classifications)
     min_x = np.min([d[1] for i,d in enumerate(data)])
     max_x = np.max([d[1] for i,d in enumerate(data)])
@@ -404,7 +404,7 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
     plt.grid(which='both', axis='x')
     return fig
 
-def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal'):
+def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification'):
     """
     Visualizes the nominal operational envelope along two given parameters
 
@@ -433,7 +433,7 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False))]
     names = [d[0] for d in data]
-    classifications = [nomapp_endclasses[name]['classification'] for name in names] 
+    classifications = [nomapp_endclasses[name][metric] for name in names] 
     discrete_classes = set(classifications)
     for cl in discrete_classes:
         xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
@@ -447,7 +447,7 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
     plt.grid(which='both')
     return fig
 
-def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal'):
+def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification'):
     """
     Visualizes the nominal operational envelope along three given parameters
 
@@ -479,7 +479,7 @@ def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="No
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2], scen['properties']['inputparams'][param3]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False)and scen['properties']['inputparams'].get(param3,False))]
     names = [d[0] for d in data]
-    classifications = [nomapp_endclasses[name]['classification'] for name in names] 
+    classifications = [nomapp_endclasses[name][metric] for name in names] 
     discrete_classes = set(classifications)
     for cl in discrete_classes:
         xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
@@ -768,7 +768,7 @@ def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', fig
     """
     figure = plt.figure(figsize=figsize)
     
-    if '' in comparison_table.columns[0]: #bounded table
+    if type(comparison_table.columns[0])==tuple and '' in comparison_table.columns[0]: #bounded table
         bar = np.array([comparison_table.loc[metric,col[0]][''] for col in comparison_table.columns if col[1]==''])
         labels= [str(i[0]) for i in comparison_table.columns if i[1]=='']
         if error_bars:
@@ -788,11 +788,10 @@ def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', fig
     plt.grid(axis='y')
     ax.set_ylabel(ylabel)
     ax.set_ylim(top=maxy)
+    if title: plt.title(title)
     xs = np.array([ i for i in range(len(bar))])
     if yerr:    plt.bar(xs,bar, tick_label=labels, linewidth=4, yerr=yerr, error_kw={'elinewidth':3})
     else:       plt.bar(xs,bar, tick_label=labels, linewidth=4)
-    
-    
     return figure
 
 def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False, xlabel=True, error_bars=False):
@@ -853,7 +852,7 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
         else:
             nominal_bars = [*comparison_table['nominal']]
             fault_bars = [*comparison_table[fault]]
-        if stack:   bottom=fault_bars
+        if stack:   bottom=nominal_bars
         else:       bottom=np.zeros(len(fault_bars))
         
         if error_bars:
