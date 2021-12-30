@@ -105,7 +105,6 @@ class MoveWat(FxnBlock):
         self.failrate=1e-5
         self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by='global')
         self.assoc_rand_state("eff",1.0,auto_update=['normal', (1.0, 0.2)])
-        self.assoc_rand_states("light_emf", 0.0)
     def condfaults(self, time):
         if self.delay:
             if self.Watout.pressure>15.0:
@@ -116,8 +115,12 @@ class MoveWat(FxnBlock):
 
     def behavior(self, time):
         """ here we can define how the function will behave with different faults """
-        self.Watout.pressure = 10/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level/self.Watout.area
-        self.Watout.flowrate = 0.3/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level*self.Watout.area
+        if self.has_fault('mech_break'):
+            self.Watout.pressure = 0.0
+            self.Watout.flowrate = 0.0
+        else:
+            self.Watout.pressure = 10/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level/self.Watout.area
+            self.Watout.flowrate = 0.3/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level*self.Watout.area
 
         self.Watin.pressure=self.Watout.pressure
         self.Watin.flowrate=self.Watout.flowrate
@@ -178,7 +181,15 @@ class Pump(Model):
         expcost=rate*life*totcost
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
 
+def paramfunc(delay):
+    return {'delay':delay}
+
 if __name__=="__main__":
+    
+    app = NominalApproach()
+    app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
+    app.add_param_replicates(paramfunc, 'delay_10', 100, (10))
+    
     mdl = Pump(modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':3})
 
     
@@ -216,5 +227,6 @@ if __name__=="__main__":
     rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure'], 'ImportEE':['effstate', 'grid_noise'], 'EE_1':['voltage','current'], 'Sig_1':['power']}, aggregation='percentile',\
                                   ylabels={('Wat_2', 'flowrate'):'liters/s'}, cols=2, color='blue', alpha=0.1, legend_loc=False)
     #rd.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
+    
     
     

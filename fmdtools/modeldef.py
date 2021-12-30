@@ -1424,10 +1424,10 @@ class NominalApproach():
         ind_seeds : Bool/list
             Whether the models should be run with different seeds (rather than the same seed). Default is True
             When a list is provided, these seeds are are used. Must be of length replicates.
-        *kwargs : any
+        **kwargs : any
             keyword arguments to send to paramfunc
         """
-        if ind_seeds==True:         seeds = np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)[0]
+        if ind_seeds==True:         seeds = np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)
         elif type(ind_seeds)==list: 
             if len(ind_seeds)!=replicates: raise Exception("list ind_seeds must be of length replicates")
             else:                   seeds=ind_seeds
