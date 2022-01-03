@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Use this scripts to run all tests in the repository.
+Use this script to run all tests in the repository.
 """
 import unittest
 import os, sys
 
-if __name__==__main__:
+if __name__=="__main__":
 
     loader = unittest.TestLoader()
     suite = loader.discover(os.getcwd())
