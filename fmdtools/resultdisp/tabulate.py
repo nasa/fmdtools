@@ -215,8 +215,10 @@ def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid
     metrics : 'all'/list, optional
         Metrics to show in the table. The default is 'all'.
     rangeid : str, optional
-        Nominal Approach range to use for the test (must be run over a single range). 
-        The default is 'default', which picks the only range (if there is only one).
+        Nominal Approach range to use for the test, if run over a single range.
+        The default is 'default', which either:
+            - picks the only range (if there is only one), or
+            - compares between ranges (if more than one)
     nan_as : float, optional
         Number to parse NaNs as (if present). The default is np.nan.
     percent : bool, optional
@@ -235,13 +237,15 @@ def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid
         Table with the metric statistic (percent or average) over the nominal scenario and each listed function/mode (as differences or averages)
     """
     if rangeid=='default':
-        if len(nomapp.ranges.keys())==1: rangeid=[*nomapp.ranges.keys()][0]
-        else:   raise Exception("More than one range in approach--please provide rangid in: "+str(nomapp.ranges.keys()))
+        if len(nomapp.ranges.keys())==1: 
+            rangeid=[*nomapp.ranges.keys()][0]
+            factors = nomapp.get_param_scens(rangeid, *params)
+        else:
+            factors = {rangeid:nomapp.ranges[rangeid]['scenarios'] for rangeid in nomapp.ranges}
     if [*endclasses.values()][0].get('nominal', False): endclasses ={scen:ec['nominal'] for scen, ec in endclasses.items()}
     if metrics=='all':              metrics = [ec for ec,val in [*endclasses.values()][0].items() if type(val) in [float, int]]
     
     if type(params)==str: params=[params]
-    factors = nomapp.get_param_scens(rangeid, *params)
     full_stats=[]
     for metric in metrics:
         factor_stats = []
@@ -287,8 +291,10 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
             --'mode type' (modes with the same name are grouped)
             -- or a set of specific modes/functions. The default is 'functions'.
     rangeid : str, optional
-        Nominal Approach range to use for the test (must be run over a single range). 
-        The default is 'default', which picks the only range (if there is only one).
+        Nominal Approach range to use for the test, if run over a single range.
+        The default is 'default', which either:
+            - picks the only range (if there is only one), or
+            - compares between ranges (if more than one)
     nan_as : float, optional
         Number to parse NaNs as (if present). The default is np.nan.
     percent : bool, optional
@@ -307,8 +313,11 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
         Table with the metric statistic (percent or average) over the nominal scenario and each listed function/mode (as differences or averages)
     """
     if rangeid=='default':
-        if len(nomapp.ranges.keys())==1: rangeid=[*nomapp.ranges.keys()][0]
-        else:   raise Exception("More than one range in approach--please provide rangid in: "+str(nomapp.ranges.keys()))
+        if len(nomapp.ranges.keys())==1: 
+            rangeid=[*nomapp.ranges.keys()][0]
+            factors = nomapp.get_param_scens(rangeid, *params)
+        else:
+            factors = {rangeid:nomapp.ranges[rangeid]['scenarios'] for rangeid in nomapp.ranges}
     if faults=='functions':     faultlist = set([e.partition(' ')[0] for scen in nested_endclasses for e in nested_endclasses[scen]])
     elif faults=='modes':       faultlist = set([e.partition(',')[0] for scen in nested_endclasses for e in nested_endclasses[scen]])
     elif faults=='mode type':   faultlist = set([e.partition(',')[0].partition(' ')[2] for scen in nested_endclasses for e in nested_endclasses[scen]])
@@ -317,8 +326,6 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
     else:                       faultlist=faults
     faultlist.discard('nominal'); faultlist.discard(' '); faultlist.discard('')
     if type(params)==str: params=[params]
-    
-    factors = nomapp.get_param_scens(rangeid, *params)
     full_stats=[]
     for factor, scens in factors.items():
         endclass_fact = {scen:endclass for scen, endclass in nested_endclasses.items() if scen in scens}
