@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Overview: &#8212; fmdtools 0.9.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <p><img alt="logo" src="_images/logo_detailed.jpg" /></p>
+<p>fmdtools (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based <em>design environment</em> where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.</p>
+<p>This release is version 0.9.2</p>
+<p><a class="reference external" href="https://zenodo.org/badge/latestdoi/212862445"><img alt="DOI" src="https://zenodo.org/badge/212862445.svg" /></a></p>
+<section id="overview">
+<h1>Overview:<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>The main impetus for the development of the fmdtools project was a lack existing tools to enable early function-based fault simulation for early functional hazard assessment. Researchers thus had to re-implement modelling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools resolves this problem by separating resilience modelling, simulation, and analysis constructs from the model under study, enabling reuse of methodology between case studies. Towards this end, the fmdtools package provides three major pieces of functionality:</p>
+<ol class="simple">
+<li><p>Model definition constructs which enable systematic early specification of the high level structure and behaviors of a system with concise syntax (fmdtools.modeldef).</p></li>
+<li><p>Simulation methods which enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios over a wide range of model types (fmdtools.faultsim).</p></li>
+<li><p>Analysis methods for quantifying resilience and summarizing and visualizing behaviors and properties of interest (fmdtools.resultdisp).</p></li>
+</ol>
+<section id="key-features">
+<h2>Key Features:<a class="headerlink" href="#key-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>fmdtools uses an object-oriented undirected graph-based model representation which enables arbitrary propagation of flow states through a model graph. As opposed to a <em>procedural</em> <em>directed</em> graph-based model representation (a typical strategy for developing fault models in code in which each function or component is represented by a method, the inputs and outputs are which are connected with connected functions/components in a larger model method), this enables one to:</p>
+<ul>
+<li><p>propagate behaviors in multiple directions in a model graph, e.g., closing a valve will not just reduce flow in the downstream pipe but also increase pressure in upstream pipes.</p></li>
+<li><p>define the data structures defining a function/component (e.g. states, faults, timed events) with the behavioral methods in a single logical structure that can be re-used and modified for similar components and methods (that is, a class, instead of a set of unstructured variables and methods)</p></li>
+</ul>
+</li>
+<li><p>fmdtools can represent the system at varying levels of fidelity through the design process so that one can start with a simple model and analysis and make it more detailed as the design is elaborated. A typical process of representing the system (from less to more detail) would involve:</p>
+<ul>
+<li><p>Creating a network representation of the model functions and flows to visualize the system and identify structurally-important parts of the model’s causal structure</p></li>
+<li><p>Elaborating the flow attributes and function failure logic in a static propagation to simulate the timeless effects of faults in the model</p></li>
+<li><p>Adding dynamic states and behaviors to the functions as well as a simulation times and operational phases in a dynamic propagation model to simulate the dynamic effects of faults simulated during different time-steps</p></li>
+<li><p>Instantiating functions with component architectures to compare the expected resilience and behaviors of each</p></li>
+<li><p>Defining stochastic behavioral and input parameters to simulate and analyze system resilience throughout the operational envelope</p></li>
+</ul>
+</li>
+<li><p>fmdtools provides convenience methods for quickly visualizing the results of fault simulations with commonly-used Python libraries to enable one to quickly assess:</p>
+<ul>
+<li><p>effects of faults on functions and flows in the model graph at a given time-step</p></li>
+<li><p>the behavior of system states over time in nominal and faulty scenarios over a range of operational parameters</p></li>
+<li><p>the effect of model input parameters (e.g., ranges, stochastic inputs) on nominal/faulty operations</p></li>
+<li><p>the high-level results of a set of simulations in an FMEA-style table of faults, effects, rates, costs, and overall risk</p></li>
+<li><p>simulation responses over a range or distribution of model and scenario parameters</p></li>
+</ul>
+</li>
+</ul>
+<p>fmdtools is a research code and is under active development. As a result, Some use-cases may not work as desired and may change. If you find a bug or would like to contribute, contact the contributors.</p>
+<hr class="docutils" />
+</section>
+</section>
+<section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>A version of the fmdtools toolkit can also be installed directly from the <a class="reference external" href="https://pypi.org/project/fmdtools/">PyPI package repository</a> using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fmdtools</span></code>.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>fmdtools requires Python 3 and depends on these packages:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">networkx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ordered-dict</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dill</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pickle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tqdm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matplotlib</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pandas</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">netgraph</span></code></p></li>
+</ul>
+<p>These packages are optional but reccomended:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code>	(for notebooks)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code>     (for parallel execution–Pathos and multiprocess can also be used)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">graphviz</span></code>			(to plot using graphviz options)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quadpy</span></code> 				(for quadrature sampling)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scipy</span></code> 				(for using statistical distributions in parameter sampling)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyvis</span></code>				(for interactive html views of model graphs)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code> 				(for animations)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shapely</span></code>				(for multirotor model)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pycallgraph</span></code> 		(for model profiling)</p></li>
+</ul>
+<p>These must be installed (e.g. using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">packagename</span></code> or <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">packagename</span></code>) them before running any of the codes in the repository.</p>
+<p>While it is not required to use any of the methods, Jupyter notebook/Jupyter lab is helpful for analyzing model simulations and is required to follow through the provided examples.</p>
+</section>
+<section id="documentation-and-examples">
+<h2>Documentation and Examples<a class="headerlink" href="#documentation-and-examples" title="Permalink to this headline">¶</a></h2>
+<p>An overview of fmdtools is provided in the accomanying paper:</p>
+<p><a class="reference external" href="https://doi.org/10.36001/ijphm.2021.v12i3.2954">Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., &amp; Goebel, K. (2021). fmdtools: A Fault Propagation Toolkit for Resilience Assessment in Early Design. International Journal of Prognostics and Health Management, 12(3).</a></p>
+<p>Additionally, this repo provides a few resources to get familiar with fmdtools:</p>
+<p>[Intro to fmdtools powerpoint](docs/Intro to fmdtools.pptx) and the corresponding tutorial <code class="docutils literal notranslate"><span class="pre">pump</span> <span class="pre">example/ex_pump.py</span></code>, and <code class="docutils literal notranslate"><span class="pre">pump</span> <span class="pre">example/tutorial_complete.ipynb</span></code></p>
+<p>[Tutorial](pump example/tutorial_complete.ipynb)</p>
+<ul class="simple">
+<li><p>Some documented examples are provided, including:</p>
+<ul>
+<li><p>A baseline example of most provided methods in conceptual design-stage pump system in <code class="docutils literal notranslate"><span class="pre">pump</span> <span class="pre">example/ex_pump.py</span></code> and <code class="docutils literal notranslate"><span class="pre">pump</span> <span class="pre">example/Pump</span> <span class="pre">Example</span> <span class="pre">Notebook.ipynb</span></code></p></li>
+<li><p>An case study following the modelling process of going from a less detailed to more detailed model is provided in <code class="docutils literal notranslate"><span class="pre">multirotor</span> <span class="pre">example\Demonstration.ipynb</span></code> for the design of a multirotor drone.</p></li>
+<li><p>An example replicating previous the simple electric power system implemented in <a class="reference external" href="https://github.com/DesignEngrLab/IBFM">IBFM</a> in the <code class="docutils literal notranslate"><span class="pre">eps</span> <span class="pre">example</span></code> directory, with some basic fault propagation and visualization.</p></li>
+<li><p>Using the <code class="docutils literal notranslate"><span class="pre">component</span></code> class to model human interactions with the modelled system in <code class="docutils literal notranslate"><span class="pre">hold-up</span> <span class="pre">tank</span> <span class="pre">example</span></code>.</p></li>
+</ul>
+</li>
+<li><p>More detailed documentation for each of the classes/methods/modules is provided and can be viewed by going through the fmdtools source code (or by using <code class="docutils literal notranslate"><span class="pre">help(methodname)</span></code>)</p></li>
+</ul>
+<hr class="docutils" />
+</section>
+</section>
+<section id="contributors">
+<h1>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/hulsed">Daniel Hulse</a></p>
+<p><a class="reference external" href="https://github.com/walshh">Hannah Walsh</a> : Network analysis codes</p>
+<p>Sequoia Andrade : Graph visualization graphviz options, Code review</p>
+</section>
+<hr class="docutils" />
+<section id="license">
+<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p>MIT</p>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">fmdtools</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;NASA.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/README.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
