@@ -1,0 +1,1508 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Stochastic Modelling in fmdtools &#8212; fmdtools 0.9.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Stochastic-Modelling-in-fmdtools">
+<h1>Stochastic Modelling in fmdtools<a class="headerlink" href="#Stochastic-Modelling-in-fmdtools" title="Permalink to this headline">¶</a></h1>
+<p>This notebook covers the basics of stochastic modelling in fmdtools. Stochastic models are models which run <em>non-determinsitically</em>, meaning that simulating the model at the same inputs results in different outputs because of randomness or uncertainty in the model behavior. Thus, to determine the <em>distribution of outcomes</em> which may result from a simulation, a stochastic model must be run a number of times. This notebook will cover: - How to construct a stochastic model by adding <em>stochastic
+states</em> to function blocks and incorporating them in function behavior - How to simulate single scenarios and distributions of scenarios in <code class="docutils literal notranslate"><span class="pre">propagate</span></code> methods - How to visualize and analyze the results of stochastic model simulations</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">))</span>
+
+<span class="kn">from</span> <span class="nn">fmdtools.modeldef</span> <span class="kn">import</span> <span class="n">SampleApproach</span><span class="p">,</span> <span class="n">NominalApproach</span>
+<span class="kn">import</span> <span class="nn">fmdtools.faultsim.propagate</span> <span class="k">as</span> <span class="nn">propagate</span>
+<span class="kn">import</span> <span class="nn">fmdtools.resultdisp</span> <span class="k">as</span> <span class="nn">rd</span>
+
+<span class="kn">import</span> <span class="nn">inspect</span> <span class="c1"># we will be using inspect to look at</span>
+</pre></div>
+</div>
+</div>
+<p>This notebook uses Pump model in <code class="docutils literal notranslate"><span class="pre">pump_stochastic.py</span></code>, which is an adaptation of the original <code class="docutils literal notranslate"><span class="pre">ex_pump.py</span></code> model with stochastic states added.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pump_stochastic</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<p>Below is the structure, with the same functions/flows as before.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">Pump</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 432x288 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_5_1.png" src="../_images/example_pump_Stochastic_Modelling_5_1.png" />
+</div>
+</div>
+<section id="Model-Setup">
+<h2>Model Setup<a class="headerlink" href="#Model-Setup" title="Permalink to this headline">¶</a></h2>
+<p>This model has been augmented stochastic states and behaviors to enable stochastic simulation. The main method for incorporating stochastic states is <code class="docutils literal notranslate"><span class="pre">assoc_rand_state</span></code>, which is called at function initialization.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">FxnBlock</span><span class="o">.</span><span class="n">assoc_rand_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Help on function assoc_rand_state in module fmdtools.modeldef:
+
+assoc_rand_state(self, name, default, seed=None, auto_update=[])
+    Associate a stochastic state with the Block. Enables the simulation of stochastic behavior over time.
+
+    Parameters
+    ----------
+    name : str
+        name for the parameter to use in the model behavior.
+    default : int/float/str/etc
+        Default value for the parameter for the parameter
+    seed : int
+        seed for the random state generator to use. Defaults to None.
+    auto_update : list, optional
+        If given, updates the state with the given numpy method at each time-step.
+        List is made up of two arguments:
+        - generator_method : str
+            Name of the numpy random method to use.
+            see: https://numpy.org/doc/stable/reference/random/generator.html
+        - generator_params : tuple
+            Parameter inputs for the numpy generator function
+
+</pre></div></div>
+</div>
+<p>The main parameters for <code class="docutils literal notranslate"><span class="pre">assoc_rand_state</span></code> are a name, which will be the name of the variable in the behavior, and default a value, which is both the initial value of the parameter <em>and</em> the value of the parameter when the model is run deterministically. That is, fmdtools enables one to run stochastic models <em>both</em> using stochastic behaviors (where this number will be updated stochastically) and deterministically (where it will take its default value).</p>
+<p><code class="docutils literal notranslate"><span class="pre">assoc_rand_states</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">assoc_rand_state</span></code>, except one can use it to instantiate multiple states by providing tuples with the form: (name, default).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">FxnBlock</span><span class="o">.</span><span class="n">assoc_rand_states</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Help on function assoc_rand_states in module fmdtools.modeldef:
+
+assoc_rand_states(self, *states)
+    Associates multiple random states with the model
+
+    Parameters
+    ----------
+    *states : tuple
+        can give any number of tuples for each of the states.
+        The tuple is of the form (name, default), where:
+            name : str
+                name for the parameter to use in the model behavior.
+            default : int/float/str/etc
+                Default value for the parameter
+
+</pre></div></div>
+</div>
+<p>Below, <code class="docutils literal notranslate"><span class="pre">assoc_rand_states</span></code> is used in the ImportEE function to add two random states: - effstate, the quality of the input voltage (i.e. large fluctuations from a step change in power) - grid_noise, which is meant to be fluctuations in voltage from the power source (i.e., more ordinary noise)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">ImportEE</span><span class="o">.</span><span class="fm">__init__</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+    def __init__(self,name, flows):
+        super().__init__(name,flows, flownames = [&#39;EEout&#39;])
+        self.failrate=1e-5
+        self.assoc_modes({&#39;no_v&#39;:[0.80,[0,1,0], 10000], &#39;inf_v&#39;:[0.20, [0,1,0], 5000]}, key_phases_by=&#39;global&#39;)
+        self.assoc_rand_states((&#39;effstate&#39;, 1.0), (&#39;grid_noise&#39;,1.0))
+
+</pre></div></div>
+</div>
+<p>This is then reflected in the behavior, which is defined in the <code class="docutils literal notranslate"><span class="pre">Block.set_rand</span></code> method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">set_rand</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Help on function set_rand in module fmdtools.modeldef:
+
+set_rand(self, statename, methodname, *args)
+    Update the given random state with a given method and arguments
+
+    Parameters
+    ----------
+    statename : str
+        name of the random state defined in assoc_rand_state(s)
+    methodname :
+        str name of the numpy method to call in the rng
+    *args : args
+        arguments for the numpy method
+
+</pre></div></div>
+</div>
+<p>In this method, <code class="docutils literal notranslate"><span class="pre">statename</span></code> is the name of the random state, while <code class="docutils literal notranslate"><span class="pre">methodname</span></code> corresponds to the name of a random distribution to update the state from. These distributions are pulled from a numpy random number generator and thus the options for distributions are provided in the numpy documentation: <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#distributions">https://numpy.org/doc/stable/reference/random/generator.html#distributions</a> . These distributions include most one might need including normal, beta, uniform, etc.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*args</span></code> in <code class="docutils literal notranslate"><span class="pre">set_rand</span></code> refers to the corresponding arguments to call the given method with, which should be pulled from the corresponding documentation. Below, we have points where this is called. - First, to pull <code class="docutils literal notranslate"><span class="pre">effstate</span></code> from a triangular distribution with minimum 0.9, mode 1.0, and max 1.1 - Parameters are provided here: <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.triangular.html#numpy.random.Generator.triangular">https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.triangular.html#numpy.random.Generator.triangular</a> - Second, to pull <code class="docutils literal notranslate"><span class="pre">grid_noise</span></code> from
+a normal distribution centered on 1 with a standard deviation that varies over time according to a sine wave. - Parameters are provided here: <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html#numpy.random.Generator.normal">https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html#numpy.random.Generator.normal</a></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">ImportEE</span><span class="o">.</span><span class="n">behavior</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+    def behavior(self,time):
+        if self.has_fault(&#39;no_v&#39;):      self.effstate=0.0 #an open circuit means no voltage is exported
+        elif self.has_fault(&#39;inf_v&#39;):   self.effstate=100.0 #a voltage spike means voltage is much higher
+        else:
+            if time&gt;self.time: self.set_rand(&#39;effstate&#39;,&#39;triangular&#39;,0.9,1,1.1)
+        if time&gt;self.time:
+            self.set_rand(&#39;grid_noise&#39;,&#39;normal&#39;,1, 0.1*(2+np.sin(np.pi/2*time)))
+
+        self.EEout.voltage= self.grid_noise*self.effstate * 500
+
+</pre></div></div>
+</div>
+<p>The Import Signal function has a similar setup, where <code class="docutils literal notranslate"><span class="pre">sig_noise</span></code> is associated as a random state and then pulled as a random choice from a given set of options. To vary the behavior, here the noise is only pulled every five seconds.</p>
+<p>This function also uses the <code class="docutils literal notranslate"><span class="pre">to_default</span></code> method, whic resets a given stochastic state to its default value. Here this is used to zero out any signal noise which would otherwise occur when there is no power.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">to_default</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Help on function to_default in module fmdtools.modeldef:
+
+to_default(self, *statenames)
+    Resets (given or all by default) random states to their default values
+
+    Parameters
+    ----------
+    *statenames : str, str, str...
+        names of the random state defined in assoc_rand_state(s)
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">ImportSig</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class ImportSig(FxnBlock):
+    &#34;&#34;&#34; Import Signal is the on/off switch &#34;&#34;&#34;
+    def __init__(self,name,flows):
+        &#34;&#34;&#34; Here the main flow is the signal&#34;&#34;&#34;
+        super().__init__(name,flows, flownames=[&#39;Sigout&#39;])
+        self.failrate=1e-6
+        self.assoc_modes({&#39;no_sig&#39;:[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by=&#39;global&#39;)
+        self.assoc_rand_state(&#39;sig_noise&#39;,1.0)
+    def behavior(self, time):
+        if self.has_fault(&#39;no_sig&#39;): self.Sigout.power=0.0 #an open circuit means no voltage is exported
+        else:
+            if time&lt;5:      self.Sigout.power=0.0;self.to_default(&#39;sig_noise&#39;)
+            elif time&lt;50:
+                if not time%5:  self.set_rand(&#39;sig_noise&#39;, &#39;choice&#39;, [1.0, 0.9, 1.1])
+                self.Sigout.power=1.0*self.sig_noise
+            else:           self.Sigout.power=0.0; self.to_default()
+
+</pre></div></div>
+</div>
+<p>Finally, below the same is done for the <code class="docutils literal notranslate"><span class="pre">eff</span></code> state in <code class="docutils literal notranslate"><span class="pre">MoveWat</span></code>. This function takes advantage of the auto_update option in <code class="docutils literal notranslate"><span class="pre">assoc_rand_state</span></code>, which makes it so that the state automatically updates at each time-step.</p>
+<p>This auto-update option uses similar syntax to <code class="docutils literal notranslate"><span class="pre">set_rand</span></code>, where the first argument is the name of the numpy method and the second argument is its parameters.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">MoveWat</span><span class="o">.</span><span class="fm">__init__</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+    def __init__(self,name, flows, delay):
+        flownames=[&#39;EEin&#39;, &#39;Sigin&#39;, &#39;Watin&#39;, &#39;Watout&#39;]
+        states={&#39;total_flow&#39;:0.0} #effectiveness state
+        self.delay=delay #delay parameter
+        super().__init__(name,flows,flownames=flownames,states=states, timers={&#39;timer&#39;})
+        self.failrate=1e-5
+        self.assoc_modes({&#39;mech_break&#39;:[0.6, [0.1, 1.2, 0.1], 5000], &#39;short&#39;:[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by=&#39;global&#39;)
+        self.assoc_rand_state(&#34;eff&#34;,1.0,auto_update=[&#39;normal&#39;, (1.0, 0.2)])
+
+</pre></div></div>
+</div>
+<p>The advantage of this is that simple stochastic behaviors do not need to be defined in the behavior method, however, it is less flexible than the previous approach, since one is limited to always drawing from the same distribution at each time-step. The resulting behavior method (below) thus has no <code class="docutils literal notranslate"><span class="pre">set_rand</span></code> call, since the state <code class="docutils literal notranslate"><span class="pre">eff</span></code> is automaticall updated outside the behavior definition.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">MoveWat</span><span class="o">.</span><span class="n">behavior</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+    def behavior(self, time):
+        &#34;&#34;&#34; here we can define how the function will behave with different faults &#34;&#34;&#34;
+        if self.has_fault(&#39;mech_break&#39;):
+            self.Watout.pressure = 0.0
+            self.Watout.flowrate = 0.0
+        else:
+            self.Watout.pressure = 10/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level/self.Watout.area
+            self.Watout.flowrate = 0.3/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level*self.Watout.area
+
+        self.Watin.pressure=self.Watout.pressure
+        self.Watin.flowrate=self.Watout.flowrate
+        if time&gt;self.time: self.total_flow+=self.Watout.flowrate
+
+</pre></div></div>
+</div>
+<p>Finally, it can be helpful for stochastic simulation to include a default seed in the model’s modelparams, as shown.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Pump</span><span class="o">.</span><span class="fm">__init__</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+    def __init__(self, params={&#39;cost&#39;:{&#39;repair&#39;, &#39;water&#39;}, &#39;delay&#39;:10, &#39;units&#39;:&#39;hrs&#39;}, \
+                 modelparams = {&#39;phases&#39;:{&#39;start&#39;:[0,5], &#39;on&#39;:[5, 50], &#39;end&#39;:[50,55]}, &#39;times&#39;:[0,20, 55], &#39;tstep&#39;:1,&#39;seed&#39;:1}, \
+                     valparams={&#39;flows&#39;:{&#39;Wat_2&#39;:&#39;flowrate&#39;, &#39;EE_1&#39;:&#39;current&#39;}}):
+        super().__init__(params=params, modelparams=modelparams, valparams=valparams)
+        self.add_flow(&#39;EE_1&#39;, {&#39;current&#39;:1.0, &#39;voltage&#39;:1.0})
+        self.add_flow(&#39;Sig_1&#39;,  {&#39;power&#39;:1.0})
+        # custom flows which we defined earlier can be added also:
+        self.add_flow(&#39;Wat_1&#39;, Water())
+        self.add_flow(&#39;Wat_2&#39;, Water())
+
+        self.add_fxn(&#39;ImportEE&#39;,[&#39;EE_1&#39;],fclass=ImportEE)
+        self.add_fxn(&#39;ImportWater&#39;,[&#39;Wat_1&#39;],fclass=ImportWater)
+        self.add_fxn(&#39;ImportSignal&#39;,[&#39;Sig_1&#39;],fclass=ImportSig)
+        self.add_fxn(&#39;MoveWater&#39;, [&#39;EE_1&#39;, &#39;Sig_1&#39;, &#39;Wat_1&#39;, &#39;Wat_2&#39;],fclass=MoveWat, fparams = params[&#39;delay&#39;])
+        self.add_fxn(&#39;ExportWater&#39;, [&#39;Wat_2&#39;], fclass=ExportWater)
+
+        self.build_model()
+
+</pre></div></div>
+</div>
+<p>This <code class="docutils literal notranslate"><span class="pre">seed</span></code> parameter ensures that each simulation in the same random thread will produce the same results, and that results can be replicated from stochastic simulation by running the model with the same seed.</p>
+</section>
+<section id="Simulation-and-Analysis">
+<h2>Simulation and Analysis<a class="headerlink" href="#Simulation-and-Analysis" title="Permalink to this headline">¶</a></h2>
+<p>With this model set up, we can now simulate it using the methods in <code class="docutils literal notranslate"><span class="pre">propagate</span></code>.</p>
+</section>
+</section>
+<section id="Single-Scenario-Simulation">
+<h1>Single-Scenario Simulation<a class="headerlink" href="#Single-Scenario-Simulation" title="Permalink to this headline">¶</a></h1>
+<p>First, let’s simulate it in the nominal scenario:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_28_0.png" src="../_images/example_pump_Stochastic_Modelling_28_0.png" />
+</div>
+</div>
+<p>As shown, even with all of these random states, it doesn’t appear that the behavior actually changes stochastically over time. This is because, by default, <code class="docutils literal notranslate"><span class="pre">propagate</span></code> methods run <em>deterministically</em>, meaning the stochastic states take their default values. To run stochastically, we use the option <code class="docutils literal notranslate"><span class="pre">run_stochastic=True</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_31_0.png" src="../_images/example_pump_Stochastic_Modelling_31_0.png" />
+</div>
+</div>
+<p>As shown, this is more what we would expect from a random . Note that this simulation comes from the default model seed, and will this will always be the same. To get a different seed, we can pass new modelparams as an argument to <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">modelparams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_33_0.png" src="../_images/example_pump_Stochastic_Modelling_33_0.png" />
+</div>
+</div>
+<p>We can further simulate faults as we would before.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span><span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">modelparams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;MoveWater&#39;</span><span class="p">:[</span><span class="s1">&#39;eff&#39;</span><span class="p">,</span><span class="s1">&#39;total_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">]},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_35_0.png" src="../_images/example_pump_Stochastic_Modelling_35_0.png" />
+</div>
+</div>
+<p>As shown the stochastic states still simulated over time after the fault. One thing to watch is thus that the stochastic update in the faulty scenario does or does not change the variables compared to the nominal state–since many of the visualizations (e.g., in <code class="docutils literal notranslate"><span class="pre">graph</span></code>) are based on finding <em>differences</em> between faulty and nominal models to visualize degradation, these methods may be less useful/reliable.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_37_0.png" src="../_images/example_pump_Stochastic_Modelling_37_0.png" />
+</div>
+</div>
+<p>In the blockage scenario, there is no effect on the underlying stochastic states, since nothing was set up for this in the behavior. In the <code class="docutils literal notranslate"><span class="pre">no_sig</span></code> fault, on the other hand, we defined the signal noise to go to zero, as shown:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">,</span> <span class="s1">&#39;no_sig&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">modelparams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_39_0.png" src="../_images/example_pump_Stochastic_Modelling_39_0.png" />
+</div>
+</div>
+</section>
+<section id="Multi-Scenario-Simulation">
+<h1>Multi-Scenario Simulation<a class="headerlink" href="#Multi-Scenario-Simulation" title="Permalink to this headline">¶</a></h1>
+<p>Because stochastic models are non-deterministic, we are often interested not in the results of a single thread, but of the distribution of outcomes that might occur. To perform this kind of assessment, we can use a <code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code> to instantiate the model with a number of different seeds.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">NominalApproach</span><span class="o">.</span><span class="n">add_seed_replicates</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Help on function add_seed_replicates in module fmdtools.modeldef:
+
+add_seed_replicates(self, rangeid, seeds)
+    Generates an approach with different seeds to use for the model&#39;s internal stochastic behaviors
+
+    Parameters
+    ----------
+    rangeid : str
+        Name for the set of replicates
+    seeds : int/list
+        Number of seeds (if an int) or a list of seeds to use.
+
+</pre></div></div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">seeds</span></code> option can also be used in several other NominalApproach methods to simultaneously change the input parameters and seeds of the model. Below, we create an approach to simulate the model 100 times.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">NominalApproach</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">add_seed_replicates</span><span class="p">(</span><span class="s1">&#39;test_seeds&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">nominal_approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|███████████████████████████████████████████████████████████| 100/100 [00:00&lt;00:00, 110.00it/s]
+</pre></div></div>
+</div>
+<p>To evaluate this behavior over time, we can then use <code class="docutils literal notranslate"><span class="pre">rd.plot.mdlhists</span></code>, which will plot the <em>distribution</em> of behaviors over time.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Help on function mdlhists in module fmdtools.resultdisp.plot:
+
+mdlhists(mdlhists, fxnflowvals, cols=2, aggregation=&#39;individual&#39;, comp_groups={}, legend_loc=-1, xlabel=&#39;time&#39;, ylabels={}, max_ind=&#39;max&#39;, boundtype=&#39;fill&#39;, fillalpha=0.3, boundcolor=&#39;gray&#39;, boundlinestyle=&#39;--&#39;, ci=0.95, title=&#39;&#39;, indiv_kwargs={}, time_slice=[], figsize=&#39;default&#39;, **kwargs)
+    Plot the behavior over time of the given function/flow values
+    over a set of scenarios, with ability to aggregate behaviors as needed.
+
+    Parameters
+    ----------
+    mdlhists : dict
+        Aggregate model history with structure {&#39;scen&#39;:mdlhist}
+    fxnflowsvals : dict, optional
+        dict of flow values to plot with structure {fxnflow:[vals]}. The default is {}, which returns all.
+    cols : int, optional
+        columns to use in the figure. The default is 2.
+    aggregation : str
+        Way of aggregating the plot values. The default is &#39;individual&#39;
+        Note that only the `individual` option can be used for histories of non-numeric quantities
+        (e.g., modes, which are recorded as strings)
+        - &#39;individual&#39; plots each run individually.
+        - &#39;mean_std&#39; plots the mean values over the sim with standard deviation error bars
+        - &#39;mean_ci&#39;  plots the mean values over the sim with mean confidence interval error bars
+            - optional argument ci (float 0.0-1.0) specifies the confidence interval (Default:0.95)
+        - &#39;mean_bound&#39; plots the mean values over the sim with variable bound error bars
+        - &#39;percentile&#39; plots the percentile distribution of the sim over time (does not reject outliers)
+            - optional argument &#39;perc_range&#39; (int 0-100) specifies the percentile range of the inner bars (Default: 50)
+    comp_groups : dict
+        Dictionary for comparison groups (if more than one) with structure:
+            {&#39;group1&#39;:(&#39;scen1&#39;, &#39;scen2&#39;), &#39;group2&#39;:(&#39;scen3&#39;, &#39;scen4&#39;)} Default is {}
+            If a legend is shown, group names are used as labels.
+    legend_loc : int
+        Specifies the plot to place the legend on, if runs are bine compared. Default is -1 (the last plot)
+        To remove the legend, give a value of False
+    `indiv_kwargs` dict
+        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where
+        where kwargs is an individual dict of keyword arguments for the
+        comparison group comp (or scenario, if not aggregated) which overrides
+        the global kwargs (or default behavior).
+    xlabel : str
+        Label for the x-axes. Default is &#39;time&#39;
+    ylabel : dict
+        Label for the y-axes with structure {(fxnflowname, value):&#39;label&#39;}
+    max_ind : int
+        index (usually correlates to time) cutoff for the simulation. Default is &#39;max&#39; which uses the first simulation termination time.
+    boundtype : &#39;fill&#39; or &#39;line&#39;
+        -&#39;fill&#39; plots the error bounds as a filled area
+            - optional fillalpha (float) changes the alpha of this area.
+        -&#39;line&#39; plots the error bounds as lines
+            - optional boundcolor (str) changes the color of the bounds (default &#39;gray&#39;)
+            - optional boundlinestyle (str) changes the style of the bound lines (default &#39;--&#39;)
+    title : str
+        overall title for the plot. Default is &#39;&#39;
+    time_slice : int/list
+        overlays a bar or bars at the given index when the fault was injected (if any). Default is []
+    figsize : tuple (float,float)
+        x-y size for the figure. The default is &#39;default&#39;, which dymanically gives 3 for each column and 2 for each row
+    **kwargs : kwargs
+        keyword arguments to mpl.plot e.g. linestyle, color, etc. See &#39;aggregation&#39; for specification.
+
+</pre></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">rd.plot.mdlhists</span></code> has a number of different options for visualization. For example, below we plot model states as individual lines:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;MoveWater&#39;</span><span class="p">:[</span><span class="s1">&#39;eff&#39;</span><span class="p">,</span><span class="s1">&#39;total_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">],</span> <span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s1">&#39;effstate&#39;</span><span class="p">,</span> <span class="s1">&#39;grid_noise&#39;</span><span class="p">],</span> <span class="s1">&#39;EE_1&#39;</span><span class="p">:[</span><span class="s1">&#39;voltage&#39;</span><span class="p">],</span> <span class="s1">&#39;Sig_1&#39;</span><span class="p">:[</span><span class="s1">&#39;power&#39;</span><span class="p">]},</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_48_0.png" src="../_images/example_pump_Stochastic_Modelling_48_0.png" />
+</div>
+</div>
+<p>Or as percentiles:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;MoveWater&#39;</span><span class="p">:[</span><span class="s1">&#39;eff&#39;</span><span class="p">,</span><span class="s1">&#39;total_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">],</span> <span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s1">&#39;effstate&#39;</span><span class="p">,</span> <span class="s1">&#39;grid_noise&#39;</span><span class="p">],</span> <span class="s1">&#39;EE_1&#39;</span><span class="p">:[</span><span class="s1">&#39;voltage&#39;</span><span class="p">],</span> <span class="s1">&#39;Sig_1&#39;</span><span class="p">:[</span><span class="s1">&#39;power&#39;</span><span class="p">]},</span> <span class="n">aggregation</span><span class="o">=</span><span class="s1">&#39;percentile&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_50_0.png" src="../_images/example_pump_Stochastic_Modelling_50_0.png" />
+</div>
+</div>
+<p>Or as a mean with confidence interval:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;MoveWater&#39;</span><span class="p">:[</span><span class="s1">&#39;eff&#39;</span><span class="p">,</span><span class="s1">&#39;total_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">],</span> <span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s1">&#39;effstate&#39;</span><span class="p">,</span> <span class="s1">&#39;grid_noise&#39;</span><span class="p">],</span> <span class="s1">&#39;EE_1&#39;</span><span class="p">:[</span><span class="s1">&#39;voltage&#39;</span><span class="p">],</span> <span class="s1">&#39;Sig_1&#39;</span><span class="p">:[</span><span class="s1">&#39;power&#39;</span><span class="p">]},</span> <span class="n">aggregation</span><span class="o">=</span><span class="s1">&#39;mean_ci&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_52_0.png" src="../_images/example_pump_Stochastic_Modelling_52_0.png" />
+</div>
+</div>
+</section>
+<section id="Nested-Fault-Simulation">
+<h1>Nested Fault Simulation<a class="headerlink" href="#Nested-Fault-Simulation" title="Permalink to this headline">¶</a></h1>
+<p>We can also compare stochastic output over a set of scenarios using <code class="docutils literal notranslate"><span class="pre">plot.mdlhistvals</span></code> with the <code class="docutils literal notranslate"><span class="pre">comp_groups</span></code> parameter, which places the scenarios in different groups.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">paramfunc</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="n">delay</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>This can be done by first creating an approach with two parameters we wish to compare. The pump still has one real parameter–the fault delay.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app_comp</span> <span class="o">=</span> <span class="n">NominalApproach</span><span class="p">()</span>
+<span class="n">app_comp</span><span class="o">.</span><span class="n">add_param_replicates</span><span class="p">(</span><span class="n">paramfunc</span><span class="p">,</span> <span class="s1">&#39;delay_1&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">app_comp</span><span class="o">.</span><span class="n">add_param_replicates</span><span class="p">(</span><span class="n">paramfunc</span><span class="p">,</span> <span class="s1">&#39;delay_10&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Since this delay only shows up in blockage fault modes, to compare the behaviors, we will first simulate it in a nested approach with only the blockage fault added.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">nested_approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app_comp</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span><span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">pool</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:   0%|                                                               | 0/200 [00:00&lt;?, ?it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:   0%|▎                                                      | 1/200 [00:01&lt;05:29,  1.65s/it]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:   6%|███▏                                                  | 12/200 [00:03&lt;00:28,  6.50it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  11%|█████▉                                                | 22/200 [00:03&lt;00:12, 14.36it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  14%|███████▎                                              | 27/200 [00:03&lt;00:09, 18.79it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  21%|███████████▎                                          | 42/200 [00:03&lt;00:05, 30.60it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  24%|████████████▋                                         | 47/200 [00:04&lt;00:04, 33.18it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  28%|███████████████▍                                      | 57/200 [00:04&lt;00:03, 36.89it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  34%|██████████████████                                    | 67/200 [00:04&lt;00:03, 38.89it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  38%|████████████████████▊                                 | 77/200 [00:04&lt;00:03, 39.99it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  44%|███████████████████████▍                              | 87/200 [00:05&lt;00:02, 40.85it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  48%|██████████████████████████▏                           | 97/200 [00:05&lt;00:02, 41.51it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████| 200/200 [00:07&lt;00:00, 25.70it/s]
+</pre></div></div>
+</div>
+<p>Next, we get just the scenarios of interest:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp_mdlhists</span> <span class="o">=</span> <span class="p">{</span><span class="n">scen</span><span class="p">:</span><span class="n">mdlhist</span><span class="p">[</span><span class="s1">&#39;ExportWater block, t=27&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span><span class="n">mdlhist</span> <span class="ow">in</span> <span class="n">mdlhists</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+</pre></div>
+</div>
+</div>
+<p>Finally, we create some comparison groups to group the results by:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp_groups</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;delay_1&#39;</span><span class="p">:</span> <span class="n">app_comp</span><span class="o">.</span><span class="n">ranges</span><span class="p">[</span><span class="s1">&#39;delay_1&#39;</span><span class="p">][</span><span class="s1">&#39;scenarios&#39;</span><span class="p">],</span> <span class="s1">&#39;delay_10&#39;</span><span class="p">:</span><span class="n">app_comp</span><span class="o">.</span><span class="n">ranges</span><span class="p">[</span><span class="s1">&#39;delay_10&#39;</span><span class="p">][</span><span class="s1">&#39;scenarios&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
+</div>
+<p>These are the resulting behaviors:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">comp_mdlhists</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;MoveWater&#39;</span><span class="p">:[</span><span class="s1">&#39;eff&#39;</span><span class="p">,</span><span class="s1">&#39;total_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">]},</span> <span class="n">comp_groups</span><span class="o">=</span><span class="n">comp_groups</span><span class="p">,</span> <span class="n">aggregation</span><span class="o">=</span><span class="s1">&#39;percentile&#39;</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="mi">27</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Stochastic_Modelling_66_0.png" src="../_images/example_pump_Stochastic_Modelling_66_0.png" />
+</div>
+</div>
+<p>There a few interesting aspects of this simulation: - First, some of the <code class="docutils literal notranslate"><span class="pre">delay_1</span></code> design simulations have a zero flowrate before the fault is injected. This is because the reduced delay means that nominal behavior can easily cause the fault–all that nees to happen is for the pressure to go over 15 for two time-steps, which is entirely forseeable with all the variability in the simulation. This can also be seen in the “total_flow” graph. - Second, the <code class="docutils literal notranslate"><span class="pre">delay_10</span></code> gives the nominal behavior
+until the fault time, when pressure increases dramatically. This is also observed in the <code class="docutils literal notranslate"><span class="pre">delay_1</span></code> design, but with a much smaller delay (1 instead of 1).</p>
+<p>Finally, running multiple simulations relies on the NominalApproach, it can be combined fairly easily with existing methods used in conjunction with NominalApproach. (e.g., <code class="docutils literal notranslate"><span class="pre">tabulate.nested_stats</span></code>).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">nested_stats</span><span class="p">(</span><span class="n">app_comp</span><span class="p">,</span> <span class="n">endclasses</span><span class="p">,</span> <span class="n">average_metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">],</span> <span class="n">inputparams</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;delay&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>delay_1_1</th>
+      <th>delay_1_2</th>
+      <th>delay_1_3</th>
+      <th>delay_1_4</th>
+      <th>delay_1_5</th>
+      <th>delay_1_6</th>
+      <th>delay_1_7</th>
+      <th>delay_1_8</th>
+      <th>delay_1_9</th>
+      <th>delay_1_10</th>
+      <th>...</th>
+      <th>delay_10_191</th>
+      <th>delay_10_192</th>
+      <th>delay_10_193</th>
+      <th>delay_10_194</th>
+      <th>delay_10_195</th>
+      <th>delay_10_196</th>
+      <th>delay_10_197</th>
+      <th>delay_10_198</th>
+      <th>delay_10_199</th>
+      <th>delay_10_200</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>delay</th>
+      <td>1.000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.00000</td>
+      <td>1.000000</td>
+      <td>1.00000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>...</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.00000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+    </tr>
+    <tr>
+      <th>ave_cost</th>
+      <td>12047.481</td>
+      <td>9704.926554</td>
+      <td>9902.772044</td>
+      <td>9970.041994</td>
+      <td>8991.76441</td>
+      <td>9951.531744</td>
+      <td>12584.24885</td>
+      <td>12128.869103</td>
+      <td>10475.316805</td>
+      <td>11150.976817</td>
+      <td>...</td>
+      <td>10389.226105</td>
+      <td>10170.589217</td>
+      <td>10300.64816</td>
+      <td>9963.804855</td>
+      <td>10100.371529</td>
+      <td>10307.337124</td>
+      <td>10022.831267</td>
+      <td>9755.299692</td>
+      <td>10074.886941</td>
+      <td>10231.796737</td>
+    </tr>
+  </tbody>
+</table>
+<p>2 rows × 200 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">resilience_factor_comparison</span><span class="p">(</span><span class="n">app_comp</span><span class="p">,</span> <span class="n">endclasses</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;delay&#39;</span><span class="p">],</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span> <span class="n">difference</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">percent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>(delay,)</th>
+      <th>nominal</th>
+      <th>ExportWater</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>delay_1</th>
+      <td>3600.0</td>
+      <td>12515.568381</td>
+    </tr>
+    <tr>
+      <th>delay_10</th>
+      <td>0.0</td>
+      <td>13400.999963</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">fmdtools</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;NASA.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/example_pump/Stochastic Modelling.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

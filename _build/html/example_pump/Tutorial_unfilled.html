@@ -1,0 +1,1106 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>fmdtools Tutorial &#8212; fmdtools 0.9.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="fmdtools-Tutorial">
+<h1>fmdtools Tutorial<a class="headerlink" href="#fmdtools-Tutorial" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial notebook will show some of the basic commands needed to perform resilience analysis in fmdtools.</p>
+<p>For some context, it may be helpful to look through the accompanying presentation. This notebook uses the model defined in <code class="docutils literal notranslate"><span class="pre">ex_pump.py</span></code>. In this notebook, we will:</p>
+<ul class="simple">
+<li><p>Load an environment and model</p></li>
+<li><p>Simulate the system in nominal and faulty scenarios</p></li>
+<li><p>Visualize and quantify the results</p></li>
+</ul>
+<section id="1.)-Loading-the-environment-and-model">
+<h2>1.) Loading the environment and model<a class="headerlink" href="#1.)-Loading-the-environment-and-model" title="Permalink to this headline">¶</a></h2>
+<p>To load the <code class="docutils literal notranslate"><span class="pre">fmdtools</span></code> environment, we have to import it.</p>
+<p>Since we’re in a subfolder of the repository, we need to add the fmdtools folder to the system path. (This would be unnecessary if we installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code>)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>There are a number of different syntaxes for importing modules. Because of the long names of the module trees, it is often helpful to load the modules individually and abbreviate (e.g. <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">fmdtools.faultsim.propagate</span> <span class="pre">as</span> <span class="pre">propagate</span></code>). Below, import the propagate <code class="docutils literal notranslate"><span class="pre">fmdtools.faultsim.propagate</span></code> and <code class="docutils literal notranslate"><span class="pre">fmdtools.resultdisp</span></code> modules, as well as the <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> from <code class="docutils literal notranslate"><span class="pre">fmdtools.modeldef</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>Now, import the Pump class defined in the ex_pump module.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>We can then use that to instantiate a model object. See:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>To get started, it can be helpful to view some of the aspects of the model. Try <code class="docutils literal notranslate"><span class="pre">dir(mdl)</span></code>, <code class="docutils literal notranslate"><span class="pre">mdl.fxns</span></code>, <code class="docutils literal notranslate"><span class="pre">mdl.flows</span></code>, <code class="docutils literal notranslate"><span class="pre">mdl.graph</span></code>, etc.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;ImportEE&#39;: ImportEE ImportEE function: ({}, {&#39;nom&#39;}),
+ &#39;ImportWater&#39;: ImportWater ImportWater function: ({}, {&#39;nom&#39;}),
+ &#39;ImportSignal&#39;: ImportSignal ImportSig function: ({}, {&#39;nom&#39;}),
+ &#39;MoveWater&#39;: MoveWater MoveWat function: ({&#39;eff&#39;: 1.0}, {&#39;nom&#39;}),
+ &#39;ExportWater&#39;: ExportWater ExportWater function: ({}, {&#39;nom&#39;})}
+</pre></div></div>
+</div>
+<p>We can also instantiate this model with different model parameters. By default, this model gets <code class="docutils literal notranslate"><span class="pre">params={'cost':{'repair',</span> <span class="pre">'water'},</span> <span class="pre">'delay':10,</span> <span class="pre">'units':'hrs'}</span></code> but we can pass any set of costs that is a subset of <code class="docutils literal notranslate"><span class="pre">{'repair',</span> <span class="pre">'water',</span> <span class="pre">'water_exp',</span> <span class="pre">'ee'}</span></code> and any int <code class="docutils literal notranslate"><span class="pre">delay</span></code> parameter.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="2.)-and-3.)-Simulate-and-visualize-the-results!">
+<h1>2.) and 3.) Simulate and visualize the results!<a class="headerlink" href="#2.)-and-3.)-Simulate-and-visualize-the-results!" title="Permalink to this headline">¶</a></h1>
+<p>Now, we will use the methods in <code class="docutils literal notranslate"><span class="pre">propagate</span></code> and the visualization modules in <code class="docutils literal notranslate"><span class="pre">rd</span></code> to simulate the model and visualize the results.</p>
+<p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code> method.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>What do the results look like? Explore results structures.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;faults&#39;: {},
+ &#39;classification&#39;: {&#39;rate&#39;: 1.0, &#39;cost&#39;: 0.0, &#39;expected cost&#39;: 0.0}}
+</pre></div></div>
+</div>
+<p>First, we can show the model graph using <code class="docutils literal notranslate"><span class="pre">rd.graph.show</span></code> to see that it was set up correctly. We can do this both on the model graph itself <code class="docutils literal notranslate"><span class="pre">mdl.graph</span></code> and the results of the nominal run <code class="docutils literal notranslate"><span class="pre">resgraph_nominal</span></code> to verify both are fault-free.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Tutorial_unfilled_19_0.png" src="../_images/example_pump_Tutorial_unfilled_19_0.png" />
+</div>
+</div>
+<p>We can also view the flow values of the model using ‘’rd.plot.mdlhistvals’’. It may be helpful to only view flows of interest.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Tutorial_unfilled_21_0.png" src="../_images/example_pump_Tutorial_unfilled_21_0.png" />
+</div>
+</div>
+<p>Note: for quick access to the syntax and options for these methods, type the <code class="docutils literal notranslate"><span class="pre">?method</span></code> or <code class="docutils literal notranslate"><span class="pre">help(method)</span></code> in the terminal. For example <code class="docutils literal notranslate"><span class="pre">?rd.plot.mdlhistvals</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.one_fault</span></code> method. The set of possible faults is defined in the function definitions in <code class="docutils literal notranslate"><span class="pre">ex_pump.py</span></code>, and we can propagate a fault at any time in the operational interval (0-55 seconds).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>We can also view the results for from this. In this case <code class="docutils literal notranslate"><span class="pre">mdlhist</span></code> gives a history of results for both the nominal and faulty runs.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;flows&#39;: {&#39;EE_1&#39;: {&#39;voltage&#39;: 0.0}},
+ &#39;faults&#39;: {&#39;ImportEE&#39;: [&#39;no_v&#39;], &#39;MoveWater&#39;: [&#39;short&#39;]},
+ &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 29000.000000000007,
+  &#39;expected cost&#39;: 1595000.0000000005}}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;nominal&#39;, &#39;faulty&#39;])
+</pre></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">rd.plot.mdlhistvals</span></code> also works for a mdlhists given from <code class="docutils literal notranslate"><span class="pre">propagate.one_fault</span></code>. We can view these results below. As shown, the function will give the nominal result in a blue dotted line and the faulty result in a red line.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Tutorial_unfilled_30_0.png" src="../_images/example_pump_Tutorial_unfilled_30_0.png" />
+</div>
+</div>
+<p>We can also view this result graph using ‘rd.graph.show’. In this case, it shows the state of the model at the final time-step of the model run. Thus, while the <code class="docutils literal notranslate"><span class="pre">EE_1</span></code> flow is shown in orange (because it is off-nominal), the Water flows are not, because they have the same state at the final time-step.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Tutorial_unfilled_32_0.png" src="../_images/example_pump_Tutorial_unfilled_32_0.png" />
+</div>
+</div>
+<p>If we want to view the graph at another time-step, we can use ‘rd.process.hist’ and ‘rd.graph.result_from’ to first process the model states into results which can be visualized and then map that onto a graph view at a given time.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Tutorial_unfilled_35_0.png" src="../_images/example_pump_Tutorial_unfilled_35_0.png" />
+</div>
+</div>
+<p>To simulate the set of fault modes, we first choose a <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code>. For simplicity, we can choose default parameters at first.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[75]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[76]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>It can be helpful to view what these results look like–a dictionary of faults injected at particular times with their respective results dictionaries.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[77]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[77]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;ImportWater no_wat, t=2&#39;: {&#39;rate&#39;: 1.6666666666666667e-05,
+  &#39;cost&#39;: 11125.000000000007,
+  &#39;expected cost&#39;: 18541.66666666668},
+ &#39;ImportSignal no_sig, t=2&#39;: {&#39;rate&#39;: 2.1428571428571427e-06,
+  &#39;cost&#39;: 20125.000000000007,
+  &#39;expected cost&#39;: 4312.500000000001},
+ &#39;MoveWater mech_break, t=2&#39;: {&#39;rate&#39;: 2.1428571428571427e-06,
+  &#39;cost&#39;: 15125.000000000007,
+  &#39;expected cost&#39;: 3241.07142857143},
+ &#39;MoveWater short, t=2&#39;: {&#39;rate&#39;: 2.1428571428571428e-05,
+  &#39;cost&#39;: 30125.000000000007,
+  &#39;expected cost&#39;: 64553.57142857144},
+ &#39;ExportWater block, t=2&#39;: {&#39;rate&#39;: 2.1428571428571428e-05,
+  &#39;cost&#39;: 29779.750000000007,
+  &#39;expected cost&#39;: 63813.750000000015},
+ &#39;ImportEE no_v, t=27&#39;: {&#39;rate&#39;: 0.0003600000000000001,
+  &#39;cost&#39;: 15174.999999999998,
+  &#39;expected cost&#39;: 546300.0},
+ &#39;ImportEE inf_v, t=27&#39;: {&#39;rate&#39;: 9.000000000000002e-05,
+  &#39;cost&#39;: 20175.0,
+  &#39;expected cost&#39;: 181575.00000000003},
+ &#39;ImportWater no_wat, t=27&#39;: {&#39;rate&#39;: 0.00015,
+  &#39;cost&#39;: 6174.999999999998,
+  &#39;expected cost&#39;: 92624.99999999996},
+ &#39;ImportSignal no_sig, t=27&#39;: {&#39;rate&#39;: 1.2857142857142856e-05,
+  &#39;cost&#39;: 15174.999999999998,
+  &#39;expected cost&#39;: 19510.714285714283},
+ &#39;MoveWater mech_break, t=27&#39;: {&#39;rate&#39;: 0.00023142857142857142,
+  &#39;cost&#39;: 10174.999999999998,
+  &#39;expected cost&#39;: 235478.5714285714},
+ &#39;MoveWater short, t=27&#39;: {&#39;rate&#39;: 0.00012857142857142858,
+  &#39;cost&#39;: 25175.0,
+  &#39;expected cost&#39;: 323678.5714285714},
+ &#39;ExportWater block, t=27&#39;: {&#39;rate&#39;: 0.00012857142857142858,
+  &#39;cost&#39;: 24829.75,
+  &#39;expected cost&#39;: 319239.6428571429},
+ &#39;ImportWater no_wat, t=52&#39;: {&#39;rate&#39;: 1.6666666666666667e-05,
+  &#39;cost&#39;: 1000.0,
+  &#39;expected cost&#39;: 1666.6666666666667},
+ &#39;ImportSignal no_sig, t=52&#39;: {&#39;rate&#39;: 1.4285714285714284e-06,
+  &#39;cost&#39;: 10000.0,
+  &#39;expected cost&#39;: 1428.5714285714284},
+ &#39;MoveWater mech_break, t=52&#39;: {&#39;rate&#39;: 2.1428571428571427e-06,
+  &#39;cost&#39;: 5000.0,
+  &#39;expected cost&#39;: 1071.4285714285713},
+ &#39;MoveWater short, t=52&#39;: {&#39;rate&#39;: 1.4285714285714285e-05,
+  &#39;cost&#39;: 10000.0,
+  &#39;expected cost&#39;: 14285.714285714286},
+ &#39;ExportWater block, t=52&#39;: {&#39;rate&#39;: 1.4285714285714285e-05,
+  &#39;cost&#39;: 5000.0,
+  &#39;expected cost&#39;: 7142.857142857143}}
+</pre></div></div>
+</div>
+<p>It can be helpful to explore different approach parameters (e.g. focussing on single faults, different numbers of sample points, etc)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[(&#39;MoveWater&#39;, &#39;short&#39;)]
+</pre></div></div>
+</div>
+<p>There are a number of different ways to sample the scenarios in the approach:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[73]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[74]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[74]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[0, 1, 2, 3, 4, 12, 20, 27, 34, 42, 50, 51, 52, 53, 54]
+</pre></div></div>
+</div>
+<p>Using this fault approach, we can now make an FMEA-like analyses of the different fault modes. <code class="docutils literal notranslate"><span class="pre">rd.tabulate.summfmea</span></code> organizes endclasses into a table for each fault.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[89]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[89]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>cost</th>
+      <th>expected cost</th>
+      <th>rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ImportWater</th>
+      <th>no_wat</th>
+      <td>6100.000000</td>
+      <td>112833.333333</td>
+      <td>0.000183</td>
+    </tr>
+    <tr>
+      <th>ImportSignal</th>
+      <th>no_sig</th>
+      <td>15100.000000</td>
+      <td>25251.785714</td>
+      <td>0.000016</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">MoveWater</th>
+      <th>mech_break</th>
+      <td>10100.000000</td>
+      <td>239791.071429</td>
+      <td>0.000236</td>
+    </tr>
+    <tr>
+      <th>short</th>
+      <td>21766.666667</td>
+      <td>402517.857143</td>
+      <td>0.000164</td>
+    </tr>
+    <tr>
+      <th>ExportWater</th>
+      <th>block</th>
+      <td>19869.833333</td>
+      <td>390196.250000</td>
+      <td>0.000164</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">ImportEE</th>
+      <th>no_v</th>
+      <td>15175.000000</td>
+      <td>546300.000000</td>
+      <td>0.000360</td>
+    </tr>
+    <tr>
+      <th>inf_v</th>
+      <td>20175.000000</td>
+      <td>181575.000000</td>
+      <td>0.000090</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>We can also use <code class="docutils literal notranslate"><span class="pre">rd.tabulatefullmea</span></code> with the processed results histories to get a better picture of which flows and functions degrade in each scenario</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[90]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[92]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[92]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>degraded flows</th>
+      <th>degraded functions</th>
+      <th>cost</th>
+      <th>expected cost</th>
+      <th>rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ImportWater no_wat, t=2</th>
+      <td>[EE_1, Wat_1, Wat_2]</td>
+      <td>[ImportWater]</td>
+      <td>11125</td>
+      <td>18541.7</td>
+      <td>1.66667e-05</td>
+    </tr>
+    <tr>
+      <th>ImportSignal no_sig, t=2</th>
+      <td>[EE_1, Sig_1, Wat_1, Wat_2]</td>
+      <td>[ImportSignal]</td>
+      <td>20125</td>
+      <td>4312.5</td>
+      <td>2.14286e-06</td>
+    </tr>
+    <tr>
+      <th>MoveWater mech_break, t=2</th>
+      <td>[EE_1, Wat_1, Wat_2]</td>
+      <td>[MoveWater]</td>
+      <td>15125</td>
+      <td>3241.07</td>
+      <td>2.14286e-06</td>
+    </tr>
+    <tr>
+      <th>MoveWater short, t=2</th>
+      <td>[EE_1, Wat_1, Wat_2]</td>
+      <td>[ImportEE, MoveWater]</td>
+      <td>30125</td>
+      <td>64553.6</td>
+      <td>2.14286e-05</td>
+    </tr>
+    <tr>
+      <th>ExportWater block, t=2</th>
+      <td>[EE_1, Wat_1, Wat_2]</td>
+      <td>[MoveWater, ExportWater]</td>
+      <td>29779.8</td>
+      <td>63813.8</td>
+      <td>2.14286e-05</td>
+    </tr>
+    <tr>
+      <th>ImportEE no_v, t=27</th>
+      <td>[EE_1, Wat_1, Wat_2]</td>
+      <td>[ImportEE]</td>
+      <td>15175</td>
+      <td>546300</td>
+      <td>0.00036</td>
+    </tr>
+    <tr>
+      <th>ImportEE inf_v, t=27</th>
+      <td>[EE_1, Wat_1, Wat_2]</td>
+      <td>[ImportEE]</td>
+      <td>20175</td>
+      <td>181575</td>
+      <td>9e-05</td>
+    </tr>
+    <tr>
+      <th>ImportWater no_wat, t=27</th>
+      <td>[EE_1, Wat_1, Wat_2]</td>
+      <td>[ImportWater]</td>
+      <td>6175</td>
+      <td>92625</td>
+      <td>0.00015</td>
+    </tr>
+    <tr>
+      <th>ImportSignal no_sig, t=27</th>
+      <td>[EE_1, Sig_1, Wat_1, Wat_2]</td>
+      <td>[ImportSignal]</td>
+      <td>15175</td>
+      <td>19510.7</td>
+      <td>1.28571e-05</td>
+    </tr>
+    <tr>
+      <th>MoveWater mech_break, t=27</th>
+      <td>[EE_1, Wat_1, Wat_2]</td>
+      <td>[MoveWater]</td>
+      <td>10175</td>
+      <td>235479</td>
+      <td>0.000231429</td>
+    </tr>
+    <tr>
+      <th>MoveWater short, t=27</th>
+      <td>[EE_1, Wat_1, Wat_2]</td>
+      <td>[ImportEE, MoveWater]</td>
+      <td>25175</td>
+      <td>323679</td>
+      <td>0.000128571</td>
+    </tr>
+    <tr>
+      <th>ExportWater block, t=27</th>
+      <td>[EE_1, Wat_1, Wat_2]</td>
+      <td>[MoveWater, ExportWater]</td>
+      <td>24829.8</td>
+      <td>319240</td>
+      <td>0.000128571</td>
+    </tr>
+    <tr>
+      <th>ImportWater no_wat, t=52</th>
+      <td>[Wat_1]</td>
+      <td>[ImportWater]</td>
+      <td>1000</td>
+      <td>1666.67</td>
+      <td>1.66667e-05</td>
+    </tr>
+    <tr>
+      <th>ImportSignal no_sig, t=52</th>
+      <td>[]</td>
+      <td>[ImportSignal]</td>
+      <td>10000</td>
+      <td>1428.57</td>
+      <td>1.42857e-06</td>
+    </tr>
+    <tr>
+      <th>MoveWater mech_break, t=52</th>
+      <td>[]</td>
+      <td>[MoveWater]</td>
+      <td>5000</td>
+      <td>1071.43</td>
+      <td>2.14286e-06</td>
+    </tr>
+    <tr>
+      <th>MoveWater short, t=52</th>
+      <td>[]</td>
+      <td>[MoveWater]</td>
+      <td>10000</td>
+      <td>14285.7</td>
+      <td>1.42857e-05</td>
+    </tr>
+    <tr>
+      <th>ExportWater block, t=52</th>
+      <td>[Wat_2]</td>
+      <td>[ExportWater]</td>
+      <td>5000</td>
+      <td>7142.86</td>
+      <td>1.42857e-05</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="5.)-Saving-Work">
+<h1>5.) Saving Work<a class="headerlink" href="#5.)-Saving-Work" title="Permalink to this headline">¶</a></h1>
+<p>In detailed simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. The <code class="docutils literal notranslate"><span class="pre">dill</span></code> package gives one a very simple method of saving and reloading a workspace one is working on: - <code class="docutils literal notranslate"><span class="pre">dill.dump_session(&quot;filename.pkl&quot;)</span></code> to save the session, and - <code class="docutils literal notranslate"><span class="pre">dill.load_session(&quot;filename.pk1&quot;)</span></code> to load the session.</p>
+<p>Below, we demonstrate this by saving the session, clearing the workspace, and then loading the workspace again.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dill</span>
+</pre></div>
+</div>
+</div>
+<p>Viewing a workspace variable:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>Dumping the session:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>Reseting the workspace and viewing the variables:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">reset</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>Loading session and viewing variables:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dill</span></code> can also save/load individual, which may be more helpful when a notebook contains multiple large simulations. For this, use: - <code class="docutils literal notranslate"><span class="pre">dill.dump(variablename,</span> <span class="pre">'filename.pkl')</span></code> and - <code class="docutils literal notranslate"><span class="pre">variablename</span> <span class="pre">=</span> <span class="pre">dill.load('filename.pkl)</span></code>, respectively.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">dill</span></code> documentation: <a class="reference external" href="https://dill.readthedocs.io/en/latest/dill.html">https://dill.readthedocs.io/en/latest/dill.html</a></p>
+<p>Sometimes <code class="docutils literal notranslate"><span class="pre">dill</span></code> may not be able to dump the session, if there are variables in the session which are unpickleable. Frequent offenders are variables which hold iterators (e.g. self.a={1:2}.keys(), so it can be helpful to look out for those. You can debug dill by running <code class="docutils literal notranslate"><span class="pre">dill.detect.trace(True)</span></code> or using other methods in the <code class="docutils literal notranslate"><span class="pre">dill.detect</span></code> module.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">fmdtools</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;NASA.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/example_pump/Tutorial_unfilled.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

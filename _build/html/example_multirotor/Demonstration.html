@@ -1,0 +1,1863 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Initial Model &#8212; fmdtools 0.9.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">))</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+
+<span class="kn">import</span> <span class="nn">fmdtools.faultsim</span> <span class="k">as</span> <span class="nn">fs</span>
+<span class="kn">import</span> <span class="nn">fmdtools.resultdisp</span> <span class="k">as</span> <span class="nn">rd</span>
+<span class="kn">import</span> <span class="nn">quadpy</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+<span class="kn">from</span> <span class="nn">fmdtools.modeldef</span> <span class="kn">import</span> <span class="n">SampleApproach</span>
+<span class="kn">from</span> <span class="nn">fmdtools.modeldef</span> <span class="kn">import</span> <span class="n">Model</span>
+</pre></div>
+</div>
+</div>
+<section id="Initial-Model">
+<h1>Initial Model<a class="headerlink" href="#Initial-Model" title="Permalink to this headline">¶</a></h1>
+<p>In our initial model, all we have is the flows, functions, and connections between them. These are set up in a model class as shown:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Drone</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="c1">#add flows to the model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;Force_ST&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;Force_Lin&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;Force_GR&#39;</span> <span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;Force_LG&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;EE_1&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;EEmot&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;EEctl&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;Ctl1&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;DOFs&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;Env1&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;Dir1&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="c1">#add functions to the model</span>
+        <span class="n">flows</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;EEctl&#39;</span><span class="p">,</span> <span class="s1">&#39;Force_ST&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s1">&#39;StoreEE&#39;</span><span class="p">,[</span><span class="s1">&#39;EE_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Force_ST&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s1">&#39;DistEE&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;EE_1&#39;</span><span class="p">,</span><span class="s1">&#39;EEmot&#39;</span><span class="p">,</span><span class="s1">&#39;EEctl&#39;</span><span class="p">,</span> <span class="s1">&#39;Force_ST&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">,[</span><span class="s1">&#39;EEmot&#39;</span><span class="p">,</span><span class="s1">&#39;Ctl1&#39;</span><span class="p">,</span><span class="s1">&#39;DOFs&#39;</span><span class="p">,</span><span class="s1">&#39;Force_Lin&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s1">&#39;CtlDOF&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;EEctl&#39;</span><span class="p">,</span> <span class="s1">&#39;Dir1&#39;</span><span class="p">,</span> <span class="s1">&#39;Ctl1&#39;</span><span class="p">,</span> <span class="s1">&#39;DOFs&#39;</span><span class="p">,</span> <span class="s1">&#39;Force_ST&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s1">&#39;Planpath&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;EEctl&#39;</span><span class="p">,</span> <span class="s1">&#39;Env1&#39;</span><span class="p">,</span><span class="s1">&#39;Dir1&#39;</span><span class="p">,</span> <span class="s1">&#39;Force_ST&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s1">&#39;Trajectory&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Env1&#39;</span><span class="p">,</span><span class="s1">&#39;DOFs&#39;</span><span class="p">,</span><span class="s1">&#39;Dir1&#39;</span><span class="p">,</span> <span class="s1">&#39;Force_GR&#39;</span><span class="p">]</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s1">&#39;EngageLand&#39;</span><span class="p">,[</span><span class="s1">&#39;Force_GR&#39;</span><span class="p">,</span> <span class="s1">&#39;Force_LG&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s1">&#39;HoldPayload&#39;</span><span class="p">,[</span><span class="s1">&#39;Force_LG&#39;</span><span class="p">,</span> <span class="s1">&#39;Force_Lin&#39;</span><span class="p">,</span> <span class="s1">&#39;Force_ST&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s1">&#39;ViewEnv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Env1&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">build_model</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Setting-Node-Positions">
+<h1>Setting Node Positions<a class="headerlink" href="#Setting-Node-Positions" title="Permalink to this headline">¶</a></h1>
+<p>As shown below, it can be difficult to make sense of a model structure using the default shell graph layout. We might instead want to see something that more closely approximates a flow chart of the system.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Drone</span><span class="p">()</span>
+<span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 432x288 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_5_1.png" src="../_images/example_multirotor_Demonstration_5_1.png" />
+</div>
+</div>
+<p>To set node positions, we can use <code class="docutils literal notranslate"><span class="pre">rd.graph.set_pos()</span></code>, which lets one drag the nodes to their desired locations. If a model is sent to <code class="docutils literal notranslate"><span class="pre">set_pos</span></code>, it will set those locations in the model going forward, though it is good practice to save node locations when one is done in the script or the model class file (they can be used as inputs to <code class="docutils literal notranslate"><span class="pre">construct_graph()</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%matplotlib qt5</span>
+<span class="c1">#pos = rd.graph.set_pos(mdl)</span>
+<span class="c1">#pos</span>
+</pre></div>
+</div>
+</div>
+<p>We can use the same process to arrange the bipartite graph:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%matplotlib qt5</span>
+<span class="c1">#pos = rd.graph.set_pos(mdl, gtype=&#39;bipartite&#39;)</span>
+</pre></div>
+</div>
+</div>
+<p>As shown, in a large model, the Bipartite graph is often easier to arrange to get a good layout. Since the model will be redefined several times going forward, we will use these positions to keep a consistent layout:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bipartite_pos</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;StoreEE&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.067135163123663</span><span class="p">,</span> <span class="mf">0.32466987344741055</span><span class="p">],</span>
+ <span class="s1">&#39;DistEE&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.617149602161968</span><span class="p">,</span> <span class="mf">0.3165981670924663</span><span class="p">],</span>
+ <span class="s1">&#39;AffectDOF&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.11827439153655106</span><span class="p">,</span> <span class="mf">0.10792528450121897</span><span class="p">],</span>
+ <span class="s1">&#39;CtlDOF&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.2636856982162134</span><span class="p">,</span> <span class="mf">0.42422600969836144</span><span class="p">],</span>
+ <span class="s1">&#39;Planpath&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.9347151173753852</span><span class="p">,</span> <span class="mf">0.6943421719257798</span><span class="p">],</span>
+ <span class="s1">&#39;Trajectory&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.6180477286739998</span><span class="p">,</span> <span class="mf">0.32930706399226856</span><span class="p">],</span>
+ <span class="s1">&#39;EngageLand&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0015917696269229786</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2399760932810826</span><span class="p">],</span>
+ <span class="s1">&#39;HoldPayload&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.8833099612826893</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.247201580673997</span><span class="p">],</span>
+ <span class="s1">&#39;ViewEnv&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5725955705698363</span><span class="p">,</span> <span class="mf">0.6901513410348765</span><span class="p">],</span>
+ <span class="s1">&#39;Force_ST&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.8925771348524384</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.025638904424547027</span><span class="p">],</span>
+ <span class="s1">&#39;Force_Lin&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5530952425102891</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.10380834289626095</span><span class="p">],</span>
+ <span class="s1">&#39;Force_GR&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.568921162299461</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.22991830334765573</span><span class="p">],</span>
+ <span class="s1">&#39;Force_LG&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.37244114591548894</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2355298479531287</span><span class="p">],</span>
+ <span class="s1">&#39;EE_1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.809433489993954</span><span class="p">,</span> <span class="mf">0.319191761486317</span><span class="p">],</span>
+ <span class="s1">&#39;EEmot&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.33469985340998853</span><span class="p">,</span> <span class="mf">0.1307636433702345</span><span class="p">],</span>
+ <span class="s1">&#39;EEctl&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.48751243650229525</span><span class="p">,</span> <span class="mf">0.4852032717825657</span><span class="p">],</span>
+ <span class="s1">&#39;Ctl1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.06913038312848868</span><span class="p">,</span> <span class="mf">0.2445174568603189</span><span class="p">],</span>
+ <span class="s1">&#39;DOFs&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.2606664304933561</span><span class="p">,</span> <span class="mf">0.3243482171363975</span><span class="p">],</span>
+ <span class="s1">&#39;Env1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.06157634305459603</span><span class="p">,</span> <span class="mf">0.7099922980251693</span><span class="p">],</span>
+ <span class="s1">&#39;Dir1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.13617863906968142</span><span class="p">,</span> <span class="mf">0.6037252153639261</span><span class="p">]}</span>
+
+<span class="n">graph_pos</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;StoreEE&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0787279392101061</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.06903523859088145</span><span class="p">],</span>
+ <span class="s1">&#39;DistEE&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.361531174332526</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0935883732235363</span><span class="p">],</span>
+ <span class="s1">&#39;AffectDOF&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.36541282312106205</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.09674444529230719</span><span class="p">],</span>
+ <span class="s1">&#39;CtlDOF&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.4664934329906758</span><span class="p">,</span> <span class="mf">0.5822138245848214</span><span class="p">],</span>
+ <span class="s1">&#39;Planpath&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.7095750728126631</span><span class="p">,</span> <span class="mf">0.8482786785038505</span><span class="p">],</span>
+ <span class="s1">&#39;Trajectory&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.1006824683444765</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.10423208715241583</span><span class="p">],</span>
+ <span class="s1">&#39;EngageLand&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.8423521094741182</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8813666134484857</span><span class="p">],</span>
+ <span class="s1">&#39;HoldPayload&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5857395187723944</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.86974898769837</span><span class="p">],</span>
+ <span class="s1">&#39;ViewEnv&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.1035500215472247</span><span class="p">,</span> <span class="mf">0.9373523025760659</span><span class="p">]}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">graph_pos</span><span class="p">,</span> <span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
+<span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">bipartite_pos</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 432x288 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_12_1.png" src="../_images/example_multirotor_Demonstration_12_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_12_2.png" src="../_images/example_multirotor_Demonstration_12_2.png" />
+</div>
+</div>
+</section>
+<section id="Network-Model">
+<h1>Network Model<a class="headerlink" href="#Network-Model" title="Permalink to this headline">¶</a></h1>
+<p>A network model can be used to compute network metrics and visualize network vulnerabilities.</p>
+<p>We can calculate network metrics using calc_aspl, calc_modularity, and calc_robustness_coefficient in the <code class="docutils literal notranslate"><span class="pre">networks</span></code> module.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aspl</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">calc_aspl</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">calc_modularity</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
+<span class="n">rc</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">calc_robustness_coefficient</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ASPL: </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">round</span><span class="p">(</span><span class="n">aspl</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Modularity: </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">round</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Robustness Coefficient: </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">round</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ASPL: 1.44
+Modularity: 0.12
+Robustness Coefficient: 95.21
+</pre></div></div>
+</div>
+<p>Next, we visualize network vulnerabilities using find_bridging_nodes and find_high_degree_nodes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">bridging_nodes</span><span class="p">,</span><span class="n">fig_bridging_nodes</span><span class="p">,</span><span class="n">ax_bridging_nodes</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">find_bridging_nodes</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">graph_pos</span><span class="p">)</span>
+<span class="n">fig_bridging_nodes</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;bridgingnodes.pdf&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_17_0.png" src="../_images/example_multirotor_Demonstration_17_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">high_degree_nodes</span><span class="p">,</span><span class="n">fig_high_degree_nodes</span><span class="p">,</span><span class="n">ax_high_degree_nodes</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">find_high_degree_nodes</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">graph_pos</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_18_0.png" src="../_images/example_multirotor_Demonstration_18_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#fig_high_degree_nodes.subplots_adjust(left=0.2, right=1.3, top=1.0, bottom=0.2)</span>
+<span class="n">ax_high_degree_nodes</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+<span class="n">ax_high_degree_nodes</span><span class="o">.</span><span class="n">margins</span><span class="p">(</span><span class="mf">0.08</span><span class="p">)</span>
+<span class="n">fig_high_degree_nodes</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">fig_high_degree_nodes</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_19_0.png" src="../_images/example_multirotor_Demonstration_19_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig_high_degree_nodes</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;highdegreenodes.pdf&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>High degree nodes (along with their degrees) and bridging nodes are also obtainable as lists.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Bridging Nodes:&#39;</span><span class="p">,</span><span class="n">bridging_nodes</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;High Degree Nodes:&#39;</span><span class="p">,</span><span class="n">high_degree_nodes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Bridging Nodes: [&#39;AffectDOF&#39;, &#39;CtlDOF&#39;, &#39;DistEE&#39;, &#39;EngageLand&#39;, &#39;HoldPayload&#39;, &#39;Planpath&#39;, &#39;StoreEE&#39;, &#39;Trajectory&#39;]
+High Degree Nodes: [(&#39;CtlDOF&#39;, 6), (&#39;Planpath&#39;, 6), (&#39;HoldPayload&#39;, 6)]
+</pre></div></div>
+</div>
+<p>Finally, we can plot the degree distribution of the network using degree_dist.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">degree_dist</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;degreedist.pdf&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_24_0.png" src="../_images/example_multirotor_Demonstration_24_0.png" />
+</div>
+</div>
+<p>The above analysis includes only function nodes. It is also possible to treat the bipartite graph (containing both functions and flows) as a unipartite-like graph and perform similar analysis on both function and flow nodes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aspl</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">calc_aspl</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;bipartite&#39;</span><span class="p">)</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">calc_modularity</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;bipartite&#39;</span><span class="p">)</span>
+<span class="n">rc</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">calc_robustness_coefficient</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;bipartite&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ASPL, functions and flows: </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">round</span><span class="p">(</span><span class="n">aspl</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Modularity, functions and flows: </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">round</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Robustness Coefficient, functions and flows: </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">round</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ASPL, functions and flows: 2.77
+Modularity, functions and flows: 0.35
+Robustness Coefficient, functions and flows: 79.77
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">bridging_nodes</span><span class="p">,</span><span class="n">fig_bridging_nodes</span><span class="p">,</span><span class="n">ax_bridging_nodes</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">find_bridging_nodes</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;bipartite&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">bipartite_pos</span><span class="p">)</span>
+<span class="p">[</span><span class="n">high_degree_nodes</span><span class="p">,</span><span class="n">fig_high_degree_nodes</span><span class="p">,</span><span class="n">ax_high_degree_nodes</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">find_high_degree_nodes</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;bipartite&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">bipartite_pos</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_27_0.png" src="../_images/example_multirotor_Demonstration_27_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_27_1.png" src="../_images/example_multirotor_Demonstration_27_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Bridging Nodes:&#39;</span><span class="p">,</span><span class="n">bridging_nodes</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;High Degree Nodes:&#39;</span><span class="p">,</span><span class="n">high_degree_nodes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Bridging Nodes: [&#39;AffectDOF&#39;, &#39;Ctl1&#39;, &#39;CtlDOF&#39;, &#39;DOFs&#39;, &#39;Dir1&#39;, &#39;DistEE&#39;, &#39;EEctl&#39;, &#39;EEmot&#39;, &#39;Env1&#39;, &#39;Force_GR&#39;, &#39;Force_Lin&#39;, &#39;Force_ST&#39;, &#39;HoldPayload&#39;, &#39;Planpath&#39;, &#39;StoreEE&#39;, &#39;Trajectory&#39;]
+High Degree Nodes: [(&#39;CtlDOF&#39;, 5), (&#39;Force_ST&#39;, 5)]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">degree_dist</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;bipartite&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_29_0.png" src="../_images/example_multirotor_Demonstration_29_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_29_1.png" src="../_images/example_multirotor_Demonstration_29_1.png" />
+</div>
+</div>
+<p>The SFF model can be simulated with options for simulation time, infection (failure) rate, and recovery (fix) rate. The start node can be selected or chosen randomly. Plotting includes an option for error bars. This models the system’s response to a failure using an analogy of an epidemic spreading through a network.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">=</span><span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">sff_model</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span><span class="n">endtime</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">pi</span><span class="o">=</span><span class="mf">.3</span><span class="p">,</span><span class="n">pr</span><span class="o">=</span><span class="mf">.1</span><span class="p">,</span><span class="n">start_node</span><span class="o">=</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">,</span><span class="n">error_bar_option</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;sff_model.pdf&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_31_0.png" src="../_images/example_multirotor_Demonstration_31_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">=</span><span class="n">fs</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">sff_model</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span><span class="n">endtime</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">pi</span><span class="o">=</span><span class="mf">.3</span><span class="p">,</span><span class="n">pr</span><span class="o">=</span><span class="mf">.1</span><span class="p">,</span><span class="n">start_node</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span><span class="n">error_bar_option</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_32_0.png" src="../_images/example_multirotor_Demonstration_32_0.png" />
+</div>
+</div>
+</section>
+<section id="Static-Model">
+<h1>Static Model<a class="headerlink" href="#Static-Model" title="Permalink to this headline">¶</a></h1>
+<p>In this demonstration, we will use a static representation of the system model to displaygraph views of fault scenarios and produce a static FMEA</p>
+<p>The static model is located in <code class="docutils literal notranslate"><span class="pre">drone_mdl_static.py</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">drone_mdl_static</span> <span class="kn">import</span> <span class="n">Drone</span> <span class="k">as</span> <span class="n">Drone_Static</span>
+</pre></div>
+</div>
+</div>
+<p>In design, it often helps to quantify the relative impact of fault scenarios. Here we produce a scenario-based FMEA to show which scenarios are most important in the model:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">static_mdl</span> <span class="o">=</span> <span class="n">Drone_Static</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph_pos&#39;</span><span class="p">:</span><span class="n">graph_pos</span><span class="p">,</span> <span class="s1">&#39;bipartite_pos&#39;</span><span class="p">:</span><span class="n">bipartite_pos</span><span class="p">})</span>
+<span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">static_mdl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 25/25 [00:00&lt;00:00, 363.30it/s]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshists</span><span class="p">,</span> <span class="n">diffs</span><span class="p">,</span> <span class="n">summaries</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">hists</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">)</span>
+<span class="n">static_fmea</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">fullfmea</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">summaries</span><span class="p">)</span>
+<span class="n">static_fmea</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>degraded functions</th>
+      <th>degraded flows</th>
+      <th>rate</th>
+      <th>cost</th>
+      <th>expected cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>StoreEE nocharge, t=1</th>
+      <td>[StoreEE, DistEE, CtlDOF, Planpath, Trajectory...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EE_1...</td>
+      <td>0.00001</td>
+      <td>183300.0</td>
+      <td>183300.0</td>
+    </tr>
+    <tr>
+      <th>Planpath degloc, t=1</th>
+      <td>[DistEE, CtlDOF, Planpath, Trajectory, EngageL...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EEmo...</td>
+      <td>0.000008</td>
+      <td>193000.0</td>
+      <td>154400.0</td>
+    </tr>
+    <tr>
+      <th>DistEE short, t=1</th>
+      <td>[DistEE, CtlDOF, Planpath, Trajectory, EngageL...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EEmo...</td>
+      <td>0.000003</td>
+      <td>186000.0</td>
+      <td>55800.0</td>
+    </tr>
+    <tr>
+      <th>AffectDOF ctlbreak, t=1</th>
+      <td>[DistEE, AffectDOF, CtlDOF, Planpath, Trajecto...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EEmo...</td>
+      <td>0.000002</td>
+      <td>184000.0</td>
+      <td>36800.0</td>
+    </tr>
+    <tr>
+      <th>AffectDOF ctlup, t=1</th>
+      <td>[DistEE, AffectDOF, CtlDOF, Planpath, Trajecto...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EEmo...</td>
+      <td>0.000002</td>
+      <td>183500.0</td>
+      <td>36700.0</td>
+    </tr>
+    <tr>
+      <th>DistEE break, t=1</th>
+      <td>[DistEE, CtlDOF, Planpath, Trajectory, EngageL...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EEmo...</td>
+      <td>0.000002</td>
+      <td>183000.0</td>
+      <td>36600.0</td>
+    </tr>
+    <tr>
+      <th>CtlDOF noctl, t=1</th>
+      <td>[DistEE, CtlDOF, Planpath, Trajectory, EngageL...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EEmo...</td>
+      <td>0.000002</td>
+      <td>183000.0</td>
+      <td>36600.0</td>
+    </tr>
+    <tr>
+      <th>AffectDOF short, t=1</th>
+      <td>[DistEE, AffectDOF, CtlDOF, Planpath, Trajecto...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EE_1...</td>
+      <td>0.000001</td>
+      <td>186200.0</td>
+      <td>18620.0</td>
+    </tr>
+    <tr>
+      <th>AffectDOF mechbreak, t=1</th>
+      <td>[DistEE, AffectDOF, CtlDOF, Planpath, Trajecto...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EEmo...</td>
+      <td>0.000001</td>
+      <td>183500.0</td>
+      <td>18350.0</td>
+    </tr>
+    <tr>
+      <th>AffectDOF openc, t=1</th>
+      <td>[DistEE, AffectDOF, CtlDOF, Planpath, Trajecto...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EEmo...</td>
+      <td>0.000001</td>
+      <td>183200.0</td>
+      <td>18320.0</td>
+    </tr>
+    <tr>
+      <th>Planpath noloc, t=1</th>
+      <td>[Planpath, Trajectory]</td>
+      <td>[Ctl1, DOFs, Dir1]</td>
+      <td>0.000002</td>
+      <td>60000.0</td>
+      <td>12000.0</td>
+    </tr>
+    <tr>
+      <th>CtlDOF degctl, t=1</th>
+      <td>[CtlDOF]</td>
+      <td>[Force_GR, Force_LG, Ctl1, DOFs]</td>
+      <td>0.000008</td>
+      <td>10000.0</td>
+      <td>8000.0</td>
+    </tr>
+    <tr>
+      <th>AffectDOF propbreak, t=1</th>
+      <td>[DistEE, AffectDOF, CtlDOF, Planpath, Trajecto...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EEmo...</td>
+      <td>0.0</td>
+      <td>183200.0</td>
+      <td>5496.0</td>
+    </tr>
+    <tr>
+      <th>AffectDOF propstuck, t=1</th>
+      <td>[DistEE, AffectDOF, CtlDOF, Planpath, Trajecto...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EE_1...</td>
+      <td>0.0</td>
+      <td>186200.0</td>
+      <td>3724.0</td>
+    </tr>
+    <tr>
+      <th>HoldPayload break, t=1</th>
+      <td>[DistEE, CtlDOF, Planpath, Trajectory, EngageL...</td>
+      <td>[Force_ST, Force_Lin, Force_GR, Force_LG, EEmo...</td>
+      <td>0.0</td>
+      <td>183000.0</td>
+      <td>3660.0</td>
+    </tr>
+    <tr>
+      <th>ViewEnv poorview, t=1</th>
+      <td>[ViewEnv]</td>
+      <td>[]</td>
+      <td>0.000002</td>
+      <td>10000.0</td>
+      <td>2000.0</td>
+    </tr>
+    <tr>
+      <th>EngageLand deform, t=1</th>
+      <td>[EngageLand]</td>
+      <td>[]</td>
+      <td>0.000008</td>
+      <td>1000.0</td>
+      <td>800.0</td>
+    </tr>
+    <tr>
+      <th>HoldPayload deform, t=1</th>
+      <td>[HoldPayload]</td>
+      <td>[Force_ST, Force_Lin]</td>
+      <td>0.000001</td>
+      <td>10000.0</td>
+      <td>800.0</td>
+    </tr>
+    <tr>
+      <th>DistEE degr, t=1</th>
+      <td>[DistEE]</td>
+      <td>[Force_GR, Force_LG, EEmot, EEctl, Ctl1, DOFs]</td>
+      <td>0.000005</td>
+      <td>1000.0</td>
+      <td>500.0</td>
+    </tr>
+    <tr>
+      <th>EngageLand break, t=1</th>
+      <td>[EngageLand]</td>
+      <td>[]</td>
+      <td>0.000002</td>
+      <td>1000.0</td>
+      <td>200.0</td>
+    </tr>
+    <tr>
+      <th>AffectDOF ctldn, t=1</th>
+      <td>[AffectDOF]</td>
+      <td>[Force_GR, Force_LG, DOFs]</td>
+      <td>0.000002</td>
+      <td>500.0</td>
+      <td>100.0</td>
+    </tr>
+    <tr>
+      <th>AffectDOF mechfriction, t=1</th>
+      <td>[AffectDOF]</td>
+      <td>[EE_1, EEmot]</td>
+      <td>0.000001</td>
+      <td>500.0</td>
+      <td>25.0</td>
+    </tr>
+    <tr>
+      <th>AffectDOF propwarp, t=1</th>
+      <td>[AffectDOF]</td>
+      <td>[Force_GR, Force_LG, DOFs]</td>
+      <td>0.0</td>
+      <td>200.0</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>Trajectory crash, t=1</th>
+      <td>[Trajectory]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>100000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>Trajectory lost, t=1</th>
+      <td>[Trajectory]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>50000.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">static_fmea</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to_latex</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+\begin{tabular}{llllll}
+\toprule
+{} &amp;                                 degraded functions &amp;                                     degraded flows &amp;      rate &amp;      cost &amp; expected cost \\
+\midrule
+StoreEE nocharge, t=1       &amp;  [StoreEE, DistEE, CtlDOF, Planpath, Trajectory... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EE\_1... &amp;   0.00001 &amp;  183300.0 &amp;      183300.0 \\
+Planpath degloc, t=1        &amp;  [DistEE, CtlDOF, Planpath, Trajectory, EngageL... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EEmo... &amp;  0.000008 &amp;  193000.0 &amp;      154400.0 \\
+DistEE short, t=1           &amp;  [DistEE, CtlDOF, Planpath, Trajectory, EngageL... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EEmo... &amp;  0.000003 &amp;  186000.0 &amp;       55800.0 \\
+AffectDOF ctlbreak, t=1     &amp;  [DistEE, AffectDOF, CtlDOF, Planpath, Trajecto... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EEmo... &amp;  0.000002 &amp;  184000.0 &amp;       36800.0 \\
+AffectDOF ctlup, t=1        &amp;  [DistEE, AffectDOF, CtlDOF, Planpath, Trajecto... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EEmo... &amp;  0.000002 &amp;  183500.0 &amp;       36700.0 \\
+DistEE break, t=1           &amp;  [DistEE, CtlDOF, Planpath, Trajectory, EngageL... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EEmo... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
+CtlDOF noctl, t=1           &amp;  [DistEE, CtlDOF, Planpath, Trajectory, EngageL... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EEmo... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
+AffectDOF short, t=1        &amp;  [DistEE, AffectDOF, CtlDOF, Planpath, Trajecto... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EE\_1... &amp;  0.000001 &amp;  186200.0 &amp;       18620.0 \\
+AffectDOF mechbreak, t=1    &amp;  [DistEE, AffectDOF, CtlDOF, Planpath, Trajecto... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EEmo... &amp;  0.000001 &amp;  183500.0 &amp;       18350.0 \\
+AffectDOF openc, t=1        &amp;  [DistEE, AffectDOF, CtlDOF, Planpath, Trajecto... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EEmo... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
+Planpath noloc, t=1         &amp;                             [Planpath, Trajectory] &amp;                                 [Ctl1, DOFs, Dir1] &amp;  0.000002 &amp;   60000.0 &amp;       12000.0 \\
+CtlDOF degctl, t=1          &amp;                                           [CtlDOF] &amp;                   [Force\_GR, Force\_LG, Ctl1, DOFs] &amp;  0.000008 &amp;   10000.0 &amp;        8000.0 \\
+AffectDOF propbreak, t=1    &amp;  [DistEE, AffectDOF, CtlDOF, Planpath, Trajecto... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EEmo... &amp;       0.0 &amp;  183200.0 &amp;        5496.0 \\
+AffectDOF propstuck, t=1    &amp;  [DistEE, AffectDOF, CtlDOF, Planpath, Trajecto... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EE\_1... &amp;       0.0 &amp;  186200.0 &amp;        3724.0 \\
+HoldPayload break, t=1      &amp;  [DistEE, CtlDOF, Planpath, Trajectory, EngageL... &amp;  [Force\_ST, Force\_Lin, Force\_GR, Force\_LG, EEmo... &amp;       0.0 &amp;  183000.0 &amp;        3660.0 \\
+ViewEnv poorview, t=1       &amp;                                          [ViewEnv] &amp;                                                 [] &amp;  0.000002 &amp;   10000.0 &amp;        2000.0 \\
+EngageLand deform, t=1      &amp;                                       [EngageLand] &amp;                                                 [] &amp;  0.000008 &amp;    1000.0 &amp;         800.0 \\
+HoldPayload deform, t=1     &amp;                                      [HoldPayload] &amp;                              [Force\_ST, Force\_Lin] &amp;  0.000001 &amp;   10000.0 &amp;         800.0 \\
+DistEE degr, t=1            &amp;                                           [DistEE] &amp;     [Force\_GR, Force\_LG, EEmot, EEctl, Ctl1, DOFs] &amp;  0.000005 &amp;    1000.0 &amp;         500.0 \\
+EngageLand break, t=1       &amp;                                       [EngageLand] &amp;                                                 [] &amp;  0.000002 &amp;    1000.0 &amp;         200.0 \\
+AffectDOF ctldn, t=1        &amp;                                        [AffectDOF] &amp;                         [Force\_GR, Force\_LG, DOFs] &amp;  0.000002 &amp;     500.0 &amp;         100.0 \\
+AffectDOF mechfriction, t=1 &amp;                                        [AffectDOF] &amp;                                      [EE\_1, EEmot] &amp;  0.000001 &amp;     500.0 &amp;          25.0 \\
+AffectDOF propwarp, t=1     &amp;                                        [AffectDOF] &amp;                         [Force\_GR, Force\_LG, DOFs] &amp;       0.0 &amp;     200.0 &amp;           2.0 \\
+Trajectory crash, t=1       &amp;                                       [Trajectory] &amp;                                                 [] &amp;       0.0 &amp;  100000.0 &amp;           0.0 \\
+Trajectory lost, t=1        &amp;                                       [Trajectory] &amp;                                                 [] &amp;       0.0 &amp;   50000.0 &amp;           0.0 \\
+\bottomrule
+\end{tabular}
+
+</pre></div></div>
+</div>
+<p>We can in turn visualize these faults on the graph representation of the system. Here we will focus on the break of one of the rotors in the AffectDOF function, the effects of which are shown below:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">static_mdl</span> <span class="o">=</span> <span class="n">Drone_Static</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph_pos&#39;</span><span class="p">:</span><span class="n">graph_pos</span><span class="p">,</span> <span class="s1">&#39;bipartite_pos&#39;</span><span class="p">:</span><span class="n">bipartite_pos</span><span class="p">})</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">static_mdl</span><span class="p">,</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">,</span> <span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;bipartite&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">bipartite_pos</span><span class="p">,</span> <span class="n">faultscen</span><span class="o">=</span><span class="s1">&#39;AffectDOF: Mechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;bipartite&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;static_propagation.pdf&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_40_0.png" src="../_images/example_multirotor_Demonstration_40_0.png" />
+</div>
+</div>
+</section>
+<section id="Dynamic-Model">
+<h1>Dynamic Model<a class="headerlink" href="#Dynamic-Model" title="Permalink to this headline">¶</a></h1>
+<p>In the dynamic model, we add time ranges and dynamic behaviors to generate behavior-over-time graphs and dynamic/phase-based FMEAs.</p>
+<p>This model is located in <code class="docutils literal notranslate"><span class="pre">drone_mdl_dynamic.py</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">drone_mdl_dynamic</span> <span class="kn">import</span> <span class="n">Drone</span> <span class="k">as</span> <span class="n">Drone_Dynamic</span>
+</pre></div>
+</div>
+</div>
+<p>Here we can see how the system operates over time in the nominal case:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: because of the complicated functions, the model must be re-instantiated for each function in order to work in this case</span>
+<span class="n">dynamic_mdl</span> <span class="o">=</span> <span class="n">Drone_Dynamic</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph_pos&#39;</span><span class="p">:</span><span class="n">graph_pos</span><span class="p">,</span> <span class="s1">&#39;bipartite_pos&#39;</span><span class="p">:</span><span class="n">bipartite_pos</span><span class="p">})</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">dynamic_mdl</span><span class="p">)</span>
+<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_44_0.png" src="../_images/example_multirotor_Demonstration_44_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_44_1.png" src="../_images/example_multirotor_Demonstration_44_1.png" />
+</div>
+</div>
+<p>As shown below, in the case of the break in the AffectDOF function, the system crashes:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dynamic_mdl</span> <span class="o">=</span> <span class="n">Drone_Dynamic</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph_pos&#39;</span><span class="p">:</span><span class="n">graph_pos</span><span class="p">,</span> <span class="s1">&#39;bipartite_pos&#39;</span><span class="p">:</span><span class="n">bipartite_pos</span><span class="p">})</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">dynamic_mdl</span><span class="p">,</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span><span class="s1">&#39;AffectDOF mechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Env1&#39;</span><span class="p">:[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;elev&#39;</span><span class="p">],</span> <span class="s1">&#39;StoreEE&#39;</span><span class="p">:[</span><span class="s1">&#39;soc&#39;</span><span class="p">]},</span> <span class="n">units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;%&#39;</span><span class="p">],</span><span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">returnfig</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timelabel</span><span class="o">=</span><span class="s1">&#39;time (s)&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;faulty&#39;</span><span class="p">,</span> <span class="s1">&#39;nominal&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;fault_behavior.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_47_0.png" src="../_images/example_multirotor_Demonstration_47_0.png" />
+</div>
+</div>
+<p>Finally, we can see how the cost function of this scenario changes over time. As shown, when the fault is injected early, it has a lower cost because it crashes at the landing pad and not in a dangerous area. When it is injected at the end, the cost is minimal because the drone has already landed.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_quad_comp</span> <span class="o">=</span> <span class="n">Drone_Dynamic</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph_pos&#39;</span><span class="p">:</span><span class="n">graph_pos</span><span class="p">,</span> <span class="s1">&#39;bipartite_pos&#39;</span><span class="p">:</span><span class="n">bipartite_pos</span><span class="p">})</span>
+<span class="n">quad_comp_app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl_quad_comp</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">)],</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">})</span>
+<span class="n">quad_comp_endclasses</span><span class="p">,</span> <span class="n">quad_comp_mdlhists</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl_quad_comp</span><span class="p">,</span> <span class="n">quad_comp_app</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 15/15 [00:09&lt;00:00,  1.65it/s]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_mdlhists</span><span class="p">[</span><span class="s1">&#39;AffectDOF mechbreak, t=20.0&#39;</span><span class="p">][</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Env1&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+9.977765842580308
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">samplecost</span><span class="p">(</span><span class="n">quad_comp_app</span><span class="p">,</span> <span class="n">quad_comp_endclasses</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">,</span> <span class="s1">&#39;mechbreak&#39;</span><span class="p">))</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cost_over_time.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_51_0.png" src="../_images/example_multirotor_Demonstration_51_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_endclasses</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;AffectDOF mechbreak, t=0.0&#39;: {&#39;rate&#39;: 9.259259259259263e-10,
+  &#39;cost&#39;: 500,
+  &#39;expected cost&#39;: 0.046296296296296315},
+ &#39;AffectDOF mechbreak, t=1.0&#39;: {&#39;rate&#39;: 9.259259259259263e-10,
+  &#39;cost&#39;: 500,
+  &#39;expected cost&#39;: 0.046296296296296315},
+ &#39;AffectDOF mechbreak, t=2.0&#39;: {&#39;rate&#39;: 9.259259259259263e-10,
+  &#39;cost&#39;: 133500,
+  &#39;expected cost&#39;: 12.361111111111114},
+ &#39;AffectDOF mechbreak, t=3.0&#39;: {&#39;rate&#39;: 9.259259259259263e-10,
+  &#39;cost&#39;: 133500,
+  &#39;expected cost&#39;: 12.361111111111114},
+ &#39;AffectDOF mechbreak, t=4.0&#39;: {&#39;rate&#39;: 9.259259259259263e-10,
+  &#39;cost&#39;: 133500,
+  &#39;expected cost&#39;: 12.361111111111114},
+ &#39;AffectDOF mechbreak, t=20.0&#39;: {&#39;rate&#39;: 1.6666666666666674e-08,
+  &#39;cost&#39;: 183500,
+  &#39;expected cost&#39;: 305.8333333333335},
+ &#39;AffectDOF mechbreak, t=35.0&#39;: {&#39;rate&#39;: 1.6666666666666674e-08,
+  &#39;cost&#39;: 183500,
+  &#39;expected cost&#39;: 305.8333333333335},
+ &#39;AffectDOF mechbreak, t=49.0&#39;: {&#39;rate&#39;: 1.6666666666666674e-08,
+  &#39;cost&#39;: 183500,
+  &#39;expected cost&#39;: 305.8333333333335},
+ &#39;AffectDOF mechbreak, t=64.0&#39;: {&#39;rate&#39;: 1.6666666666666674e-08,
+  &#39;cost&#39;: 183500,
+  &#39;expected cost&#39;: 305.8333333333335},
+ &#39;AffectDOF mechbreak, t=79.0&#39;: {&#39;rate&#39;: 1.6666666666666674e-08,
+  &#39;cost&#39;: 133500,
+  &#39;expected cost&#39;: 222.50000000000009},
+ &#39;AffectDOF mechbreak, t=95.0&#39;: {&#39;rate&#39;: 9.259259259259263e-10,
+  &#39;cost&#39;: 500,
+  &#39;expected cost&#39;: 0.046296296296296315},
+ &#39;AffectDOF mechbreak, t=96.0&#39;: {&#39;rate&#39;: 9.259259259259263e-10,
+  &#39;cost&#39;: 500,
+  &#39;expected cost&#39;: 0.046296296296296315},
+ &#39;AffectDOF mechbreak, t=97.0&#39;: {&#39;rate&#39;: 9.259259259259263e-10,
+  &#39;cost&#39;: 500,
+  &#39;expected cost&#39;: 0.046296296296296315},
+ &#39;AffectDOF mechbreak, t=98.0&#39;: {&#39;rate&#39;: 9.259259259259263e-10,
+  &#39;cost&#39;: 500,
+  &#39;expected cost&#39;: 0.046296296296296315},
+ &#39;AffectDOF mechbreak, t=99.0&#39;: {&#39;rate&#39;: 9.259259259259263e-10,
+  &#39;cost&#39;: 500,
+  &#39;expected cost&#39;: 0.046296296296296315},
+ &#39;nominal&#39;: {&#39;rate&#39;: 1.0, &#39;cost&#39;: 0, &#39;expected cost&#39;: 0.0}}
+</pre></div></div>
+</div>
+</section>
+<section id="Hierarchical-Model">
+<h1>Hierarchical Model<a class="headerlink" href="#Hierarchical-Model" title="Permalink to this headline">¶</a></h1>
+<p>In the hierarchical model, we can use the simulation to compare system architectures. First by seeing how faults effect the behaviors in each architechture, then by seing how it affects the overall system resilience.</p>
+<p>This model is located in <code class="docutils literal notranslate"><span class="pre">drone_mdl_hierarchical.py</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">drone_mdl_hierarchical</span> <span class="kn">import</span> <span class="n">Drone</span> <span class="k">as</span> <span class="n">Drone_Hierarchical</span>
+</pre></div>
+</div>
+</div>
+<p>First, we can model how the quadrotor architecture behaves under faults–in this case, identically to the non-hierarchical model:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hierarchical_model</span> <span class="o">=</span> <span class="n">Drone_Hierarchical</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph_pos&#39;</span><span class="p">:</span><span class="n">graph_pos</span><span class="p">,</span> <span class="s1">&#39;bipartite_pos&#39;</span><span class="p">:</span><span class="n">bipartite_pos</span><span class="p">,</span><span class="s1">&#39;arch&#39;</span><span class="p">:</span><span class="s1">&#39;quad&#39;</span><span class="p">})</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">hierarchical_model</span><span class="p">,</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">,</span> <span class="s1">&#39;RFmechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span><span class="s1">&#39;AffectDOF mechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Env1&#39;</span><span class="p">:[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;elev&#39;</span><span class="p">],</span> <span class="s1">&#39;StoreEE&#39;</span><span class="p">:[</span><span class="s1">&#39;soc&#39;</span><span class="p">]},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_57_0.png" src="../_images/example_multirotor_Demonstration_57_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_57_1.png" src="../_images/example_multirotor_Demonstration_57_1.png" />
+</div>
+</div>
+<p>Then we can see how the octorotor architecture performs in the same case:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hierarchical_model</span> <span class="o">=</span> <span class="n">Drone_Hierarchical</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph_pos&#39;</span><span class="p">:</span><span class="n">graph_pos</span><span class="p">,</span> <span class="s1">&#39;bipartite_pos&#39;</span><span class="p">:</span><span class="n">bipartite_pos</span><span class="p">,</span><span class="s1">&#39;arch&#39;</span><span class="p">:</span><span class="s1">&#39;oct&#39;</span><span class="p">})</span>
+<span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">hierarchical_model</span><span class="p">,</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">,</span> <span class="s1">&#39;RFmechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span><span class="s1">&#39;AffectDOF: RFmechbreak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Env1&#39;</span><span class="p">:[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;elev&#39;</span><span class="p">],</span> <span class="s1">&#39;StoreEE&#39;</span><span class="p">:[</span><span class="s1">&#39;soc&#39;</span><span class="p">]},</span> <span class="n">units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;%&#39;</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">returnfig</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;faulty&#39;</span><span class="p">,</span> <span class="s1">&#39;nominal&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;red_fault_behavior.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_multirotor_Demonstration_60_0.png" src="../_images/example_multirotor_Demonstration_60_0.png" />
+</div>
+</div>
+<p>As shown, the octorotor architecture enables the quadrotor to recover from the fault and land.</p>
+<p>Next, we can compare how each architecture mitigates the set of faults that originiate in each function: ### Quadcopter Resilience</p>
+<p>Here we quantify the expected costs of faults originiating in the quadcopter architecture:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_quad</span> <span class="o">=</span> <span class="n">Drone_Hierarchical</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph_pos&#39;</span><span class="p">:</span><span class="n">graph_pos</span><span class="p">,</span> <span class="s1">&#39;bipartite_pos&#39;</span><span class="p">:</span><span class="n">bipartite_pos</span><span class="p">,</span><span class="s1">&#39;arch&#39;</span><span class="p">:</span><span class="s1">&#39;quad&#39;</span><span class="p">})</span>
+<span class="n">mdl_quad</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">faultmodes</span>
+<span class="n">quad_faults</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">,</span> <span class="n">fault</span><span class="p">)</span> <span class="k">for</span> <span class="n">fault</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">mdl_quad</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">faultmodes</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl_quad</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="n">quad_faults</span><span class="p">)</span>
+<span class="n">quad_endclasses</span><span class="p">,</span> <span class="n">quad_mdlhists</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl_quad</span><span class="p">,</span> <span class="n">quad_app</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 104/104 [01:07&lt;00:00,  1.54it/s]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_tab</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">simplefmea</span><span class="p">(</span><span class="n">quad_endclasses</span><span class="p">)</span>
+<span class="n">quad_tab</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>rate</th>
+      <th>cost</th>
+      <th>expected cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>AffectDOF LRctlbreak, t=49.0</th>
+      <td>1.666667e-07</td>
+      <td>186800.0</td>
+      <td>3113.333333</td>
+    </tr>
+    <tr>
+      <th>AffectDOF RRctlbreak, t=49.0</th>
+      <td>1.666667e-07</td>
+      <td>186800.0</td>
+      <td>3113.333333</td>
+    </tr>
+    <tr>
+      <th>AffectDOF LFctlbreak, t=49.0</th>
+      <td>1.666667e-07</td>
+      <td>186800.0</td>
+      <td>3113.333333</td>
+    </tr>
+    <tr>
+      <th>AffectDOF RFctlbreak, t=49.0</th>
+      <td>1.666667e-07</td>
+      <td>186800.0</td>
+      <td>3113.333333</td>
+    </tr>
+    <tr>
+      <th>AffectDOF LFctlup, t=49.0</th>
+      <td>1.666667e-07</td>
+      <td>186300.0</td>
+      <td>3105.000000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>AffectDOF RRpropwarp, t=97.0</th>
+      <td>6.944444e-10</td>
+      <td>200.0</td>
+      <td>0.013889</td>
+    </tr>
+    <tr>
+      <th>AffectDOF RFpropwarp, t=97.0</th>
+      <td>6.944444e-10</td>
+      <td>200.0</td>
+      <td>0.013889</td>
+    </tr>
+    <tr>
+      <th>AffectDOF LRpropwarp, t=97.0</th>
+      <td>6.944444e-10</td>
+      <td>200.0</td>
+      <td>0.013889</td>
+    </tr>
+    <tr>
+      <th>AffectDOF LFpropwarp, t=97.0</th>
+      <td>6.944444e-10</td>
+      <td>200.0</td>
+      <td>0.013889</td>
+    </tr>
+    <tr>
+      <th>nominal</th>
+      <td>1.000000e+00</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>105 rows × 3 columns</p>
+</div></div>
+</div>
+<p>Based on this model, we can calculate some metrics that quantify how resilient the system was to the set of faults, such as the cost of resilience:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_res</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">quad_tab</span><span class="p">[</span><span class="s1">&#39;expected cost&#39;</span><span class="p">])</span>
+<span class="n">quad_res</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+45564.95370370373
+</pre></div></div>
+</div>
+<p>The overall rate of crashes:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_crashes</span> <span class="o">=</span> <span class="n">quad_tab</span><span class="p">[</span><span class="n">quad_tab</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">100000</span><span class="p">]</span>
+<span class="n">quad_rate</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">quad_crashes</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span>
+<span class="n">quad_rate</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2.3796296296296308e-06
+</pre></div></div>
+</div>
+<p>The number of crashes:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_num_crashes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">quad_crashes</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span>
+<span class="n">quad_num_crashes</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+46
+</pre></div></div>
+</div>
+<p>The percentage of crashes:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_perc_crashes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">quad_crashes</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">quad_tab</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span>
+<span class="n">quad_perc_crashes</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.4380952380952381
+</pre></div></div>
+</div>
+<section id="Octocopter-Resilience">
+<h2>Octocopter Resilience<a class="headerlink" href="#Octocopter-Resilience" title="Permalink to this headline">¶</a></h2>
+<p>Here we quantify the expected costs of faults originiating in the octocopter architecture:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_oct</span> <span class="o">=</span> <span class="n">Drone_Hierarchical</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph_pos&#39;</span><span class="p">:</span><span class="n">graph_pos</span><span class="p">,</span> <span class="s1">&#39;bipartite_pos&#39;</span><span class="p">:</span><span class="n">bipartite_pos</span><span class="p">,</span><span class="s1">&#39;arch&#39;</span><span class="p">:</span><span class="s1">&#39;oct&#39;</span><span class="p">})</span>
+<span class="n">mdl_oct</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">faultmodes</span>
+<span class="n">oct_faults</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">,</span> <span class="n">fault</span><span class="p">)</span> <span class="k">for</span> <span class="n">fault</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">mdl_oct</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;AffectDOF&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">faultmodes</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl_oct</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="n">oct_faults</span><span class="p">)</span>
+<span class="n">oct_endclasses</span><span class="p">,</span> <span class="n">oct_mdlhists</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl_oct</span><span class="p">,</span> <span class="n">oct_app</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 208/208 [02:58&lt;00:00,  1.17it/s]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_tab</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">simplefmea</span><span class="p">(</span><span class="n">oct_endclasses</span><span class="p">)</span>
+<span class="n">oct_tab</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>rate</th>
+      <th>cost</th>
+      <th>expected cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>AffectDOF LRshort, t=49.0</th>
+      <td>8.333333e-08</td>
+      <td>191800.0</td>
+      <td>1598.333333</td>
+    </tr>
+    <tr>
+      <th>AffectDOF RF2short, t=49.0</th>
+      <td>8.333333e-08</td>
+      <td>191800.0</td>
+      <td>1598.333333</td>
+    </tr>
+    <tr>
+      <th>AffectDOF LR2short, t=49.0</th>
+      <td>8.333333e-08</td>
+      <td>191800.0</td>
+      <td>1598.333333</td>
+    </tr>
+    <tr>
+      <th>AffectDOF LFshort, t=49.0</th>
+      <td>8.333333e-08</td>
+      <td>191800.0</td>
+      <td>1598.333333</td>
+    </tr>
+    <tr>
+      <th>AffectDOF RRshort, t=49.0</th>
+      <td>8.333333e-08</td>
+      <td>191800.0</td>
+      <td>1598.333333</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>AffectDOF LF2propwarp, t=97.0</th>
+      <td>6.944444e-10</td>
+      <td>200.0</td>
+      <td>0.013889</td>
+    </tr>
+    <tr>
+      <th>AffectDOF RRpropwarp, t=97.0</th>
+      <td>6.944444e-10</td>
+      <td>200.0</td>
+      <td>0.013889</td>
+    </tr>
+    <tr>
+      <th>AffectDOF RR2propwarp, t=97.0</th>
+      <td>6.944444e-10</td>
+      <td>200.0</td>
+      <td>0.013889</td>
+    </tr>
+    <tr>
+      <th>AffectDOF RF2propwarp, t=97.0</th>
+      <td>6.944444e-10</td>
+      <td>200.0</td>
+      <td>0.013889</td>
+    </tr>
+    <tr>
+      <th>nominal</th>
+      <td>1.000000e+00</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>209 rows × 3 columns</p>
+</div></div>
+</div>
+<p>Based on this model, we can calculate some metrics that quantify how resilient the system was to the set of faults, such as the cost of resilience:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_res</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oct_tab</span><span class="p">[</span><span class="s1">&#39;expected cost&#39;</span><span class="p">])</span>
+<span class="n">oct_res</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+19358.870370370398
+</pre></div></div>
+</div>
+<p>The overall rate of crashes:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_crashes</span> <span class="o">=</span> <span class="n">oct_tab</span><span class="p">[</span><span class="n">oct_tab</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">100000</span><span class="p">]</span>
+<span class="n">oct_rate</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oct_crashes</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span>
+<span class="n">oct_rate</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+7.037037037037039e-07
+</pre></div></div>
+</div>
+<p>Number of crashes:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_num_crashes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oct_crashes</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span>
+<span class="n">oct_num_crashes</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+16
+</pre></div></div>
+</div>
+<p>Percent of crashes:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_perc_crashes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oct_crashes</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">oct_tab</span><span class="p">[</span><span class="s1">&#39;rate&#39;</span><span class="p">])</span>
+<span class="n">oct_perc_crashes</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.07655502392344497
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_crashes</span><span class="p">[</span><span class="mi">35</span><span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>rate</th>
+      <th>cost</th>
+      <th>expected cost</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">fmdtools</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;NASA.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/example_multirotor/Demonstration.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
