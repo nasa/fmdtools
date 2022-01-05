@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-File name: modeldef.py
-Author: Daniel Hulse
-Created: October 2019
+Description: A module to define resilience models and simulations.
 
-Description: A module to simplify model definition
+    - :class:`Common`:      Class defining common methods accessible by Function/Flow/Component Classes
+    - :class:`FxnBlock`:    Class defining Model Functions and their attributes
+    - :class:`Flow`:        Class defining Model Flows and their attributes
+    - :class:`Component`:   Class defining Function Components and their attributes
+    - :class:`SampleApproach`:  Class defining fault sampling approaches
+    - :class:`NominalApproach`: Class defining parameter sampling approaches
 """
+#File name: modeldef.py
+#Author: Daniel Hulse
+#Created: October 2019
+
 import numpy as np
 import itertools
 import dill

@@ -1,9 +1,6 @@
 fmdtools.faultsim package
 =========================
 
-Submodules
-----------
-
 fmdtools.faultsim.networks module
 ---------------------------------
 
@@ -20,10 +17,3 @@ fmdtools.faultsim.propagate module
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
-
-.. automodule:: fmdtools.faultsim
-   :members:
-   :undoc-members:
-   :show-inheritance:

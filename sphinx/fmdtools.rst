@@ -1,4 +1,4 @@
-fmdtools package
+Module Reference
 ================
 
 Subpackages
@@ -10,9 +10,6 @@ Subpackages
    fmdtools.faultsim
    fmdtools.resultdisp
 
-Submodules
-----------
-
 fmdtools.modeldef module
 ------------------------
 
@@ -21,10 +18,3 @@ fmdtools.modeldef module
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
-
-.. automodule:: fmdtools
-   :members:
-   :undoc-members:
-   :show-inheritance:

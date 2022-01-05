@@ -1,9 +1,6 @@
 fmdtools.resultdisp package
 ===========================
 
-Submodules
-----------
-
 fmdtools.resultdisp.graph module
 --------------------------------
 
@@ -36,10 +33,3 @@ fmdtools.resultdisp.tabulate module
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
-
-.. automodule:: fmdtools.resultdisp
-   :members:
-   :undoc-members:
-   :show-inheritance:

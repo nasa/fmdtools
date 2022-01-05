@@ -1,35 +1,35 @@
 """
-File Name: resultdisp/tabulate.py
-Author: Daniel Hulse
-Created: November 2019 (Refactored April 2020)
-
 Description: Translates simulation outputs to pandas tables for display, export, etc.
 
 Uses methods:
-    - hist:           Returns formatted pandas dataframe of model history
-    - objtab:         Make table of function OR flow value attributes - objtype = 'function' or 'flow'
-    - stats:          Makes a table of #of degraded flows, # of degraded functions, and # of total faults over time given a single result history
-    - degflows:       Makes a  of flows over time, where 0 is degraded and 1 is nominal
-    - degflowvals:    Makes a table of individual flow state values over time, where 0 is degraded and 1 is nominal
-    - degfxns:        Makes a table showing which functions are degraded over time (0 for degraded, 1 for nominal)
-    - deghist:        Makes a table of all funcitons and flows that are degraded over time. If withstats=True, the total # of each type degraded is provided in the last columns
-    - heatmaps:       Makes a table of a heatmap dictionary
-    - costovertime:   Makes a table of the total cost, rate, and expected cost of all faults over time
-    - samptime:       Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)
-    - summary:        Makes a table of a summary dictionary from a given model run
-    - result:         Makes a table of results (degraded functions/flows, cost, rate, expected cost) of a single run
-    - dicttab:           Makes table of a generic dictionary
-    - maptab:            Makes table of a generic map
-    - nominal_stats:  Makes a table of quantities of interest from endclasses from a nominal approach.
-    - nested_stats:   Makes a table of quantities of interest from endclasses from a nested approach.
-    - nominal_factor_comparison: Compares a metric for a given set of model parameters/factors over a set of nominal scenarios.
-    - nested_factor_comparison: Compares a metric for a given set of model parameters/factors over a nested set of nominal and fault scenarios.
+    - :meth:`hist`:           Returns formatted pandas dataframe of model history
+    - :meth:`objtab`:         Make table of function OR flow value attributes - objtype = 'function' or 'flow'
+    - :meth:`stats`:          Makes a table of #of degraded flows, # of degraded functions, and # of total faults over time given a single result history
+    - :meth:`degflows`:       Makes a  of flows over time, where 0 is degraded and 1 is nominal
+    - :meth:`degflowvals`:    Makes a table of individual flow state values over time, where 0 is degraded and 1 is nominal
+    - :meth:`degfxns`:        Makes a table showing which functions are degraded over time (0 for degraded, 1 for nominal)
+    - :meth:`deghist`:        Makes a table of all funcitons and flows that are degraded over time. If withstats=True, the total # of each type degraded is provided in the last columns
+    - :meth:`heatmaps`:       Makes a table of a heatmap dictionary
+    - :meth:`costovertime`:   Makes a table of the total cost, rate, and expected cost of all faults over time
+    - :meth:`samptime`:       Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)
+    - :meth:`summary:`        Makes a table of a summary dictionary from a given model run
+    - :meth:`result`:         Makes a table of results (degraded functions/flows, cost, rate, expected cost) of a single run
+    - :meth:`dicttab`:           Makes table of a generic dictionary
+    - :meth:`maptab`:            Makes table of a generic map
+    - :meth:`nominal_stats`:  Makes a table of quantities of interest from endclasses from a nominal approach.
+    - :meth:`nested_stats`:   Makes a table of quantities of interest from endclasses from a nested approach.
+    - :meth:`nominal_factor_comparison`: Compares a metric for a given set of model parameters/factors over a set of nominal scenarios.
+    - :meth:`nested_factor_comparison`: Compares a metric for a given set of model parameters/factors over a nested set of nominal and fault scenarios.
 Also used for FMEA-like tables:
-    - simplefmea:          Makes a simple fmea (rate, cost, expected cost) of the endclasses of a list of fault scenarios run
-    - phasefmea:           Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
-    - summfmea:            Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
-    - fullfmea:            Makes full fmea table (degraded functions/flows, cost, rate, expected cost) of scenarios given endclasses dict (cost, rate, expected cost) and summaries dict (degraded functions, degraded flows)
+    - :meth:`simplefmea`:          Makes a simple fmea (rate, cost, expected cost) of the endclasses of a list of fault scenarios run
+    - :meth:`phasefmea`:           Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
+    - :meth:`summfmea`:            Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
+    - :meth:`fullfmea`:            Makes full fmea table (degraded functions/flows, cost, rate, expected cost) of scenarios given endclasses dict (cost, rate, expected cost) and summaries dict (degraded functions, degraded flows)
 """
+#File Name: resultdisp/tabulate.py
+#Author: Daniel Hulse
+#Created: November 2019 (Refactored April 2020)
+
 import pandas as pd
 import numpy as np
 from fmdtools.resultdisp.process import expected, average, percent, rate, overall_diff, nan_to_x, bootstrap_confidence_interval
