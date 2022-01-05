@@ -2,18 +2,18 @@
 Description: Plots quantities of interest over time using matplotlib.
 
 Uses the following methods:
-    - :meth:`mdlhist`:         plots function and flow histories over time (with different plots for each function/flow)
-    - :meth:`mdlhistvals`:     plots function and flow histories over time on a single plot
-    - :meth:`mdlhists`:        plots function and flow histories over time with multiple scenarios on the same plot
-    - :meth:`nominal_vals_1d`: plots the end-state classification of a system over a (1-D) range of nominal runs
-    - :meth:`nominal_vals_2d`: plots the end-state classification of a system over a (2-D) range of nominal runs
-    - :meth:`nominal_vals_3d`: plots the end-state classification of a system over a (3-D) range of nominal runs
-    - :meth:`nominal_factor_comparison`:    gives a bar plot of nominal simulation statistics over given factors
-    - :meth:`resilience_factor_comparison`: gives a bar plot of fault simulation statistics over given factors
-    - :meth:`phases`:          plots the phases of operation that the model progresses through.
-    - :meth:`samplecost`:      plots the costs for a single fault sampled by a SampleApproach over time with rates
-    - :meth:`samplecosts`:     plots the costs for a set of faults sampled by a SampleApproach over time with rates on separate plots
-    - :meth:`costovertime`:    plots the total cost/explected cost of a set of faults sampled by a SampleApproach over time
+    - :func:`mdlhist`:         plots function and flow histories over time (with different plots for each function/flow)
+    - :func:`mdlhistvals`:     plots function and flow histories over time on a single plot
+    - :func:`mdlhists`:        plots function and flow histories over time with multiple scenarios on the same plot
+    - :func:`nominal_vals_1d`: plots the end-state classification of a system over a (1-D) range of nominal runs
+    - :func:`nominal_vals_2d`: plots the end-state classification of a system over a (2-D) range of nominal runs
+    - :func:`nominal_vals_3d`: plots the end-state classification of a system over a (3-D) range of nominal runs
+    - :func:`nominal_factor_comparison`:    gives a bar plot of nominal simulation statistics over given factors
+    - :func:`resilience_factor_comparison`: gives a bar plot of fault simulation statistics over given factors
+    - :func:`phases`:          plots the phases of operation that the model progresses through.
+    - :func:`samplecost`:      plots the costs for a single fault sampled by a SampleApproach over time with rates
+    - :func:`samplecosts`:     plots the costs for a set of faults sampled by a SampleApproach over time with rates on separate plots
+    - :func:`costovertime`:    plots the total cost/explected cost of a set of faults sampled by a SampleApproach over time
 """
 #File Name: resultdisp/plot.py
 #Author: Daniel Hulse

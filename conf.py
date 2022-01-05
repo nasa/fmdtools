@@ -18,11 +18,11 @@ sys.path.insert(0, os.path.abspath('.'))
 # -- Project information -----------------------------------------------------
 
 project = 'fmdtools'
-copyright = 'NASA'
+#copyright = 'NASA'
 author = 'Daniel Hulse, Sequoia Andrade, Hannah Walsh'
 
 # The full version, including alpha/beta/rc tags
-release = '0.9.3'
+release = '0.9.4'
 
 
 # -- General configuration ---------------------------------------------------
@@ -60,3 +60,9 @@ html_logo = 'docs/figures/logo_glow.png'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+
+
+# -- Latex Option ---------------
+
+latex_engine = 'xelatex'

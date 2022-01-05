@@ -7,8 +7,6 @@ fmdtools Version |release|.
 
 .. include:: README.rst
 
-.. include:: Examples.rst
-
 Licenses
 ====================================
 
@@ -19,11 +17,10 @@ TABLE OF CONTENTS
 ==============================================
 
 .. toctree::
- :maxdepth: 4
  :glob:
  
  README
  Examples
- sphinx/fmdtools
+ docs/fmdtools
  
  :ref:`genindex`
