@@ -1,21 +1,20 @@
 """
-File Name: resultdisp/graph.py
-Contributors: Daniel Hulse and Sequoia Andrade
-Created: November 2019 
-Refactored: April 2020
-Added major interfaces: July 2021
-
 Description: Gives graph-level visualizations of the model using installed renderers.
 
 Public user-facing methods:
-    - set_pos:                      Set graph node positions manually (uses netgraph)
-    - show:                         Plots a single graph object g. Has options for heatmaps/overlays and matplotlib/graphviz/netgraph/pyvis renderers.
-    - exec_order:                   Displays the propagation order and type (dynamic/static) in the model. Works with matplotlib/graphviz/netgraph renderers.
-    - history:                      Displays plots of the graph over time given a dict history of graph objects.  Works with matplotlib/graphviz/netgraph renderers.
-    - result_from:                  Plots a representation of the model graph at a specific time in the results history. Works with matplotlib/graphviz/netgraph renderers.
-    - results_from:                 Plots a set of representations of the model graph at given times in the results history. Works with matplotlib/graphviz/netgraph renderers.
-    - animation_from:               Creates an animation of the model graph using results at given times in the results history.  Works with matplotlib/netgraph renderers.
+    - :meth:`set_pos`:              Set graph node positions manually (uses netgraph)
+    - :meth:`show`:                         Plots a single graph object g. Has options for heatmaps/overlays and matplotlib/graphviz/netgraph/pyvis renderers.
+    - :meth:`exec_order`:                   Displays the propagation order and type (dynamic/static) in the model. Works with matplotlib/graphviz/netgraph renderers.
+    - :meth:`history`:                      Displays plots of the graph over time given a dict history of graph objects.  Works with matplotlib/graphviz/netgraph renderers.
+    - :meth:`result_from`:                  Plots a representation of the model graph at a specific time in the results history. Works with matplotlib/graphviz/netgraph renderers.
+    - :meth:`results_from`:                 Plots a set of representations of the model graph at given times in the results history. Works with matplotlib/graphviz/netgraph renderers.
+    - :meth:`animation_from`:               Creates an animation of the model graph using results at given times in the results history.  Works with matplotlib/netgraph renderers.
 """
+#File Name: resultdisp/graph.py
+#Contributors: Daniel Hulse and Sequoia Andrade
+#Created: November 2019 
+#Refactored: April 2020
+#Added major interfaces: July 2021
 
 
 import networkx as nx

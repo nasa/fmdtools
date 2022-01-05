@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-File name: networks.py
-Author: Hannah Walsh
-Created: April 2020
+Description: Methods for high-level network simulation and analysis.
 
-
+Main Methods:
+    - :meth:`calc_aspl()`:              Computes average shortest path length of graph representation of model mdl.
+    - :meth:`calc_modularity()`:        Computes graph modularity given a graph representation of model mdl.
+    - :meth:`find_bridging_nodes()`:    Determines bridging nodes in a graph representation of model mdl.
+    - :meth:`find_high_degree_nodes()`: Determines highest degree nodes, up to percentile p, in graph representation of model mdl.
+    - :meth:`calc_robustness_coefficient()`:    Computes robustness coefficient of graph representation of model mdl.
+    - :meth:`sff_model()`:                      Susceptible-Fixed-Failed Model Simulation
+    - :meth:`degree_dist()`:            Plots degree distribution of graph representation of model mdl.
 """
+#File name: networks.py
+#Author: Hannah Walsh
+#Created: April 2020
 
 import numpy as np
 import networkx as nx

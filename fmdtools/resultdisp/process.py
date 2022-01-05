@@ -1,39 +1,38 @@
 """
-File Name: resultdisp/process.py
-Author: Daniel Hulse
-Created: November 2019 (Refactored April 2020)
-
 Description: Processes model results for visualization
 
 Uses methods:
-    - hists:                    Processes a model histories for each scenario into results histories by comparing the states over time in each scenario with the states in the nominal scenario.
-    - hist:                     Compares model history with the nominal model history over time to make a history of degradation.
-        - fxnhist:              Compares the history of function states in mdlhist over time.
-        - flowhist:             Compares the history of flow states in mdlhist over time.
-    - modephases:               Identifies the phases of operation for the system based on a mdlhist with a history of its modes
-    - graphflows:               Extracts non-nominal flows by comparing the a results graph with a nominal results graph.
-    - resultsgraph:         Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
-    - resultsgraphs:        Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
-    - totalcost:            Calculates the total host of a set of given end classifications
-    - state_probabilities:  Calculates the probabilities of given end-state classifications given an endclasses dictionary
-    - bootstrap_confidence_interval: Convenience wrapper for scipy.bootstrap. 
-    - overall_diff:         Calculates the difference between the nominal and fault scenarios for a set of nested endclasses
-    - end_diff:             Calculates the difference between the nominal and fault scenarios for a set of endclasses
-    - percent:              Calculates the percentage of a given indicator variable being True in endclasses
-    - average:              Calculates the average value of a given metric in endclasses
-    - expected:             Calculates the expected value of a given metric in endclasses using the rate variable in endclasses
-    - rate:                Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses
+    - meth:`hists`:                    Processes a model histories for each scenario into results histories by comparing the states over time in each scenario with the states in the nominal scenario.
+    - meth:`hist`:                     Compares model history with the nominal model history over time to make a history of degradation.
+        - meth:`fxnhist`:              Compares the history of function states in mdlhist over time.
+        - meth:`flowhist`:             Compares the history of flow states in mdlhist over time.
+    - meth:`modephases`:               Identifies the phases of operation for the system based on a mdlhist with a history of its modes
+    - meth:`graphflows`:               Extracts non-nominal flows by comparing the a results graph with a nominal results graph.
+    - meth:`resultsgraph`:         Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
+    - meth:`resultsgraphs`:        Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
+    - meth:`totalcost`:            Calculates the total host of a set of given end classifications
+    - meth:`state_probabilities`:  Calculates the probabilities of given end-state classifications given an endclasses dictionary
+    - meth:`bootstrap_confidence_interval`: Convenience wrapper for scipy.bootstrap. 
+    - meth:`overall_diff`:         Calculates the difference between the nominal and fault scenarios for a set of nested endclasses
+    - meth:`end_diff`:             Calculates the difference between the nominal and fault scenarios for a set of endclasses
+    - meth:`percent`:              Calculates the percentage of a given indicator variable being True in endclasses
+    - meth:`average`:              Calculates the average value of a given metric in endclasses
+    - meth:`expected`:             Calculates the expected value of a given metric in endclasses using the rate variable in endclasses
+    - meth:`rate`:                Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses
 Also used for graph heatmaps, which use the results history to map results history statistics onto the graph, returning a dictonary with structure {fxn/flow: value}:         
-    - heatmaps:            Makes a dict of heatmaps given a results history and a history of the differences between nominal and faulty models.
-    - degtimemap:          Makes a heatmap dictionary of degraded time for functions given a result history
-    - degtimemaps:         Makes a dict of heatmap dictionaries of degraded time for functions given results histories
-    - avgdegtimeheatmap:   Makes a heatmap dictionary of the average degraded heat time over a list of scenarios in the dict of results histories.
-    - expdegtimeheatmap:   Makes a heatmap dictionary of the expected degraded heat time over a list of scenarios in the dict of results histories based on the rates in endclasses.
-    - faultmap:            Makes a heatmap dictionary of faults given a results history.
-    - faultmaps:           Makes dict of heatmaps dictionaries of resulting faults given a results history.
-    - faultsheatmap:       Makes a heatmap dictionary of the average resulting faults over all scenarios
-    - expfaultsheatmap:    Makes a heatmap dictionary of the expected resulting faults over all scenarios
+    - meth:`heatmaps`:            Makes a dict of heatmaps given a results history and a history of the differences between nominal and faulty models.
+    - meth:`degtimemap`:          Makes a heatmap dictionary of degraded time for functions given a result history
+    - meth:`degtimemaps`:         Makes a dict of heatmap dictionaries of degraded time for functions given results histories
+    - meth:`avgdegtimeheatmap`:   Makes a heatmap dictionary of the average degraded heat time over a list of scenarios in the dict of results histories.
+    - meth:`expdegtimeheatmap`:   Makes a heatmap dictionary of the expected degraded heat time over a list of scenarios in the dict of results histories based on the rates in endclasses.
+    - meth:`faultmap`:            Makes a heatmap dictionary of faults given a results history.
+    - meth:`faultmaps`:           Makes dict of heatmaps dictionaries of resulting faults given a results history.
+    - meth:`faultsheatmap`:       Makes a heatmap dictionary of the average resulting faults over all scenarios
+    - meth:`expfaultsheatmap`:    Makes a heatmap dictionary of the expected resulting faults over all scenarios
 """
+#File Name: resultdisp/process.py
+#Author: Daniel Hulse
+#Created: November 2019 (Refactored April 2020)
 
 import copy
 import networkx as nx
