@@ -638,7 +638,7 @@ class FxnBlock(Block):
     """
     def __init__(self,name, flows, flownames=[], states={}, components={},timers={}, tstep=1.0, seed=None):
         """
-        Intances the function superclass with the relevant parameters.
+        Instantiates the function superclass with the relevant parameters.
 
         Parameters
         ----------

@@ -48,7 +48,7 @@ Getting Started
 
 The latest public version of fmdtools can be downloaded from the `fmdtools github repository <https://github.com/NASA-SW-VnV/fmdtools/>`_ e.g., using:
 
-.. code-block:: bash
+::
 
    git clone https://github.com/NASA-SW-VnV/fmdtools.git
 
@@ -57,9 +57,9 @@ A version of the fmdtools toolkit can also be installed directly from the `PyPI 
 Prerequisites
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-fmdtools requires Python 3 and depends directly on `these packages <requirements.txt>`:
+fmdtools requires Python 3 and depends directly on these packages (see requirements.txt):
 
-.. code-block:: bash
+::
 
    scipy
    tqdm
@@ -72,9 +72,9 @@ fmdtools requires Python 3 and depends directly on `these packages <requirements
    dill 
    pickle
 
-These packages are optional but recommended to enable specific fmdtools use-cases and work with examples in the respository:
+These packages are optional but recommended to enable specific fmdtools use-cases and work with examples in the repository:
 
-.. code-block:: bash
+::
 
    jupyter notebook			#(for repository notebooks)
    graphviz				#(to plot using graphviz options)

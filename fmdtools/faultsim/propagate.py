@@ -3,24 +3,24 @@
 Description: functions to propagate faults through a user-defined fault model
 
 Main Methods:
-    - :meth:`nominal()`:            Runs the model over time in the nominal scenario.
-    - :meth:`one_fault()`:          Runs one fault in the model at a specified time.
-    - :meth:`mult_fault()`:         Runs arbitrary scenario of fault modes at specified times
-    - :meth:`singlefaults()`:       Creates and propagates a list of failure scenarios in a model over given model times
-    - :meth:`approach`:             Injects and propagates faults in the model defined by a given sample approach.
-    - :meth:`nominal_approach`:     Simulates a model over a range of parameters defined by a nominal approach.
-    - :meth:`nested_approach`:      Injects and propagates faults in the model defined by a given sample approach over a range of parameters defined by a nominal approach. 
+    - :func:`nominal()`:            Runs the model over time in the nominal scenario.
+    - :func:`one_fault()`:          Runs one fault in the model at a specified time.
+    - :func:`mult_fault()`:         Runs arbitrary scenario of fault modes at specified times
+    - :func:`singlefaults()`:       Creates and propagates a list of failure scenarios in a model over given model times
+    - :func:`approach`:             Injects and propagates faults in the model defined by a given sample approach.
+    - :func:`nominal_approach`:     Simulates a model over a range of parameters defined by a nominal approach.
+    - :func:`nested_approach`:      Injects and propagates faults in the model defined by a given sample approach over a range of parameters defined by a nominal approach. 
 Private Methods:
-    - :meth:`list_init_faults()`:   Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
-    - :meth:`prop_one_scen()`:      Runs a fault scenario in the model over time
-    - :meth:`propagate()`:          Injects and propagates faults through the graph at one time-step
-    - :meth:`prop_time()`:          Propagates faults through model graph.
-    - :meth:`update_mdlhist()`:     Updates the model history at a given time.
-        - :meth:`update_flowhist()`:Updates the flows in the model history at t_ind
-        - :meth:`update_fxnhist()`: Updates the functions (faults and states) in the model history at t_ind
-    - :meth:`init_mdlhist()`:       Initializes the model history over a given timerange
-        - :meth:`init_flowhist()`:  Initializes the flow history flowhist of the model mdl over the time range timerange
-        - :meth:`init_fxnhist()`:   Initializes the function state history fxnhist of the model mdl over the time range timerange
+    - :func:`list_init_faults()`:   Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
+    - :func:`prop_one_scen()`:      Runs a fault scenario in the model over time
+    - :func:`propagate()`:          Injects and propagates faults through the graph at one time-step
+    - :func:`prop_time()`:          Propagates faults through model graph.
+    - :func:`update_mdlhist()`:     Updates the model history at a given time.
+        - :func:`update_flowhist()`:Updates the flows in the model history at t_ind
+        - :func:`update_fxnhist()`: Updates the functions (faults and states) in the model history at t_ind
+    - :func:`init_mdlhist()`:       Initializes the model history over a given timerange
+        - :func:`init_flowhist()`:  Initializes the flow history flowhist of the model mdl over the time range timerange
+        - :func:`init_fxnhist()`:   Initializes the function state history fxnhist of the model mdl over the time range timerange
 """
 #File name: propagate.py
 #Author: Daniel Hulse
