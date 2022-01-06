@@ -52,7 +52,7 @@ The latest public version of fmdtools can be downloaded from the `fmdtools githu
 
    git clone https://github.com/NASA-SW-VnV/fmdtools.git
 
-A version of the fmdtools toolkit can also be installed directly from the `PyPI package repository <https://pypi.org/project/fmdtools/>`_ using `pip install fmdtools`. 
+A version of the fmdtools toolkit can also be installed directly from the `PyPI package repository <https://pypi.org/project/fmdtools/>`_ using ``pip install fmdtools``. 
 
 Prerequisites
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
