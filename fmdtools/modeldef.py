@@ -659,7 +659,7 @@ class FxnBlock(Block):
         self.name = name
         self.flows=self.make_flowdict(flownames,flows)
         for flow in self.flows.keys():
-            setattr(self, flow,self.flows[flow])
+            setattr(self, flow, self.flows[flow])
         self.components=components
         if not getattr(self, 'faultmodes', []): self.faultmodes={}
         if self.components: self.compfaultmodes= dict()
@@ -2235,3 +2235,21 @@ def check_model_pickleability(model):
         for fxnname, fxn in model.fxns.items():
             print(fxnname)
             check_pickleability(fxn)
+            
+class Action(FxnBlock):
+    """
+    Superclass for actions (most attributes and methods inherited from Block superclass)
+    """
+    def __init__(self,name, flows, flownames=[], states={}):
+        """
+        Inherit the Block class
+
+        Parameters
+        ----------
+        name : str
+            Unique name ID for the action
+        states : dict, optional
+            States to use in the action. The default is {}.
+        """
+        self.type = 'action'
+        super().__init__(name, flows, flownames, states)
