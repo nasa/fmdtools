@@ -337,7 +337,7 @@ class Block(Common):
                 for state in hranges: hranges[state].add(nom_hstates[state])
                 nomvals = tuple([*nom_hstates.values()])
                 statecombos = [i for i in itertools.product(*hranges.values()) if i!=nomvals]
-                if type(mode_app)==int: 
+                if type(mode_app)==int and len(statecombos)>0: 
                     sample = self._init_rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
                     statecombos = [statecombos[i] for i in sample]
                 self.faultmodes.update({'hmode_'+str(i):'synth' for i in range(len(statecombos))}) 
