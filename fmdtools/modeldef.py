@@ -596,6 +596,9 @@ class Block(Common):
         self._init_rng = np.random.default_rng(self.seed)
         if hasattr(self, 'time'): self.time=0.0
         if hasattr(self, 'tstep'): self.tstep=self.tstep
+        if hasattr(self, 'internal_flows'):
+            for flowname, flow in self.internal_flows.items():
+                flow.reset()
         if self.type=='function':
             for name, component in self.components.items():
                 component.reset()
@@ -657,6 +660,7 @@ class FxnBlock(Block):
         """
         self.type = 'function'
         self.name = name
+        self.internal_flows=dict()
         self.flows=self.make_flowdict(flownames,flows)
         for flow in self.flows.keys():
             setattr(self, flow,self.flows[flow])
@@ -671,6 +675,8 @@ class FxnBlock(Block):
         for timername in timers:
             setattr(self, timername, Timer(timername))
         self.tstep=tstep
+        self.actions={}; self.conditions={}; self.condition_edges={}
+        self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
         super().__init__(states)
     def make_flowdict(self,flownames,flows):
         """
@@ -702,6 +708,80 @@ class FxnBlock(Block):
             else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
         else:       raise Exception("Invalid flownames option in "+self.name)
         return flowdict
+    def add_act(self, name, action, *flows, **params):
+        """
+        Associate an Action with the Function Block for use in the Action Sequence Graph
+
+        Parameters
+        ----------
+        name : str
+            Internal Name for the Action
+        action : Action
+            Action class to instantiate
+        *flows : flow
+            Flows (optional) which connect the actions
+        **params : any
+            parameters to instantiate the Action with.
+        """
+        self.actions[name] = action(name,flows, **params)
+        self.action_graph.add_node(name)
+        self.flow_graph.add_node(name)
+        for flow in flows:
+            self.flow_graph.add_node(flow.name)
+            self.flow_graph.add_edge(name,flow.name)
+    def add_cond(self, name, condition, start_action, end_action):
+        """
+        Associates a Condition with the Function Block for use in the Action Sequence Graph
+
+        Parameters
+        ----------
+        name : TYPE
+            DESCRIPTION.
+        condition : TYPE
+            DESCRIPTION.
+        start_action : TYPE
+            DESCRIPTION.
+        end_action : TYPE
+            DESCRIPTION.
+        """
+        self.conditions[name] = condition
+        self.condition_edges[name] = (start_action, end_action)
+        self.action_graph.add_edge(start_action, end_action, name=name)
+    def show_ASG(self, gtype='composite', with_cond_labels=True):
+        """
+        Shows a visual representation of the internal Action Sequence Graph of the Function Block
+        """
+        if gtype=='composite':      graph = nx.compose(self.flow_graph, self.action_graph)
+        elif gtype=='flows':        graph = self.flow_graph
+        elif gtype=='conditions':   graph = self.action_graph
+        pos=nx.planar_layout(graph)
+        nx.draw(graph, pos=pos, with_labels=True, node_color='grey')
+        nx.draw_networkx_nodes(self.action_graph, pos=pos, node_shape='s', node_color='skyblue')
+        edge_labels = {(in_node, out_node): label for in_node, out_node, label in graph.edges(data='name') if label}
+        if with_cond_labels: nx.draw_networkx_edge_labels(graph, pos, edge_labels)
+        if gtype=='composite' or gtype=='conditions':
+            nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=4, arrowstyle='wedge', node_shape='s', node_size=10)
+    def add_internal_flow(self,flowname, flowdict={}, flowtype=''):
+        """
+        Adds a flow with given attributes to the Function Block
+
+        Parameters
+        ----------
+        flowname : str
+            Unique flow name to give the flow in the function
+        flowattributes : dict, Flow, set or empty set
+            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object.
+            If a set of attribute names is provided, each will be given a value of 1
+            If an empty set is given, it will be represented w- {flowname: 1}
+        """
+        if not getattr(self, 'is_copy', False):
+            if not flowtype: flowtype = flowname
+            if not flowdict:                self.internal_flows[flowname]=Flow({flowname:1}, flowname, flowtype)
+            elif type(flowdict) == set:     self.internal_flows[flowname]=Flow({f:1 for f in flowdict}, flowname, flowtype)
+            elif type(flowdict) == dict:    self.internal_flows[flowname]=Flow(flowdict, flowname,flowtype)
+            elif isinstance(flowdict, Flow):self.internal_flows[flowname] = flowdict
+            else: raise Exception('Invalid flow. Must be dict or flow')
+        setattr(self, flowname, self.internal_flows[flowname])
     def copy(self, newflows, *attr):
         """
         Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.
@@ -724,6 +804,9 @@ class FxnBlock(Block):
         copy.faults = self.faults.copy()
         if hasattr(self, 'faultmodes'):         copy.faultmodes = self.faultmodes
         if hasattr(self, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
+        for flowname, flow in self.internal_flows.items():
+            copy.internal_flows[flowname] = flow.copy()
+            setattr(copy, flowname, copy.internal_flows[flowname])
         for timername in self.timers:
             timer = getattr(self, timername)
             copytimer = getattr(copy, timername)
