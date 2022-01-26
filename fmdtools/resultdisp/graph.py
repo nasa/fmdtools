@@ -918,7 +918,7 @@ def gv_execute_order_legend(colors):
     legend.node("Dynamic Step", label="Dynamic Step", style="filled", fillcolor=colors[2], shape='box')
     legend.node("Static Step", label="Static Step", style="filled", fillcolor=colors[1], shape='box')
     legend.attr(rank='source')
-    display(SVG(legend._repr_svg_()))
+    display(SVG(legend._repr_image_svg_xml()))
     return
 
 def update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
