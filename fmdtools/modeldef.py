@@ -68,6 +68,8 @@ class Common(object):
         elif len(states)==1:                    return states[0]
         elif kwargs.get('as_array', True):      return np.array(states)
         else:                                   return states
+    def values(self):
+        return self.gett(*self._states)
     def gett(self, *attnames):
         """Alternative to self.get that returns the given constructs as a tuple instead
         of as an array. Useful when a numpy array would translate the underlying data types
@@ -158,6 +160,36 @@ class Common(object):
         test = values!=self.get(*states)
         if is_iter(test):   return any(test)
         else:               return test
+    def make_flowdict(self,flownames,flows):
+        """
+        Puts a list of flows with a list of flow names in a dictionary.
+
+        Parameters
+        ----------
+        flownames : list or dict or empty
+            names of flows corresponding to flows
+            using {externalname: internalname}
+        flows : list
+            flows
+
+        Returns
+        -------
+        flowdict : dict
+            dict of flows indexed by flownames
+        """
+        flowdict = {}
+        if not(flownames) or type(flownames)==dict:
+            flowdict = {f.name:f for f in flows}
+            if flownames:
+                for externalname, internalname in flownames.items():
+                    flowdict[internalname] = flowdict.pop(externalname)
+        elif type(flownames)==list:
+            if len(flownames)==len(flows):
+                for ind, flowname in enumerate(flownames):
+                    flowdict[flowname]=flows[ind]
+            else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
+        else:       raise Exception("Invalid flownames option in "+self.name)
+        return flowdict
     
 class Block(Common):
     """ 
@@ -415,6 +447,7 @@ class Block(Common):
                 self._initstates['mode'] = initmode
                 self.mode = initmode
             else: raise Exception("Initial mode "+initmode+" not in defined modes for "+self.name)
+        else: self.mode=initmode
         self.exclusive_faultmodes = exclusive
         if not getattr(self, 'is_copy', False): #saves time by using the same fault mode dictionary from previous
             if not getattr(self, 'faultmodes', []): 
@@ -666,7 +699,7 @@ class FxnBlock(Block):
             setattr(self, flow, self.flows[flow])
         self.components=components
         if not getattr(self, 'faultmodes', []): self.faultmodes={}
-        if self.components: self.compfaultmodes= dict()
+        self.compfaultmodes= dict()
         self.exclusive_faultmodes = False
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
@@ -675,39 +708,9 @@ class FxnBlock(Block):
         for timername in timers:
             setattr(self, timername, Timer(timername))
         self.tstep=tstep
-        self.actions={}; self.conditions={}; self.condition_edges={}
+        self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
         super().__init__(states)
-    def make_flowdict(self,flownames,flows):
-        """
-        Puts a list of flows with a list of flow names in a dictionary.
-
-        Parameters
-        ----------
-        flownames : list or dict or empty
-            names of flows corresponding to flows
-            using {externalname: internalname}
-        flows : list
-            flows
-
-        Returns
-        -------
-        flowdict : dict
-            dict of flows indexed by flownames
-        """
-        flowdict = {}
-        if not(flownames) or type(flownames)==dict:
-            flowdict = {f.name:f for f in flows}
-            if flownames:
-                for externalname, internalname in flownames.items():
-                    flowdict[internalname] = flowdict.pop(externalname)
-        elif type(flownames)==list:
-            if len(flownames)==len(flows):
-                for ind, flowname in enumerate(flownames):
-                    flowdict[flowname]=flows[ind]
-            else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
-        else:       raise Exception("Invalid flownames option in "+self.name)
-        return flowdict
     def add_act(self, name, action, *flows, **params):
         """
         Associate an Action with the Function Block for use in the Action Sequence Graph
@@ -735,18 +738,66 @@ class FxnBlock(Block):
 
         Parameters
         ----------
-        name : TYPE
-            DESCRIPTION.
-        condition : TYPE
-            DESCRIPTION.
-        start_action : TYPE
-            DESCRIPTION.
-        end_action : TYPE
-            DESCRIPTION.
+        name : str
+            Name for the condition
+        condition : method
+            Method in the class to use as a condition.
+        start_action : str
+            Action where the condition is checked
+        end_action : str
+            Action that the condition leads to.
         """
         self.conditions[name] = condition
         self.condition_edges[name] = (start_action, end_action)
         self.action_graph.add_edge(start_action, end_action, name=name)
+    def build_ASG(self, initial_action="auto",state_rep="finite-state", max_action_prop="until_false", mode_rep="replace", asg_proptype='dynamic'):
+        """
+        Constructs the Action Sequence Graph with the given parameters.
+        
+        Parameters
+        ----------
+        initial_action : str/list
+            Initial action to set as active. Default is 'auto'
+                - 'auto' finds the starting node of the graph and uses it
+                - 'ActionName' sets the given action as the first active action
+                - providing a list of actions will set them all to active (if multi-state rep is used)
+        state_rep : 'finite-state'/'multi-state'
+            How the states of the system are represented. Default is 'finite-state'
+                - 'finite-state' means only one action in the system can be active at once (i.e., a finite state machine)
+                - 'multi-state' means multiple actions can be performed at once
+        max_action_prop : 'until_false'/'manual'/int
+            How actions progress. Default is 'until_false'
+                - 'until_false' means actions are simulated until all outgoing conditions are false
+                - providing an integer places a limit on the number of actions that can be performed per timestep
+        mode_rep : 'replace'/'independent'
+            How actions are used to represent modes. Default is 'replace.'
+                - 'replace' uses the actions to represent the operational modes of the system (only compatible with 'exclusive' representation)
+                - 'independent' keeps the actions and function-level mode seperate
+        asg_proptype : 'static'/'dynamic'/'manual'
+            Which propagation step to execute the Action Sequence Graph in. Default is 'dynamic'
+                - 'manual' means that the propagation is performed manually (defined in a behavior method)
+        """
+        if initial_action=='auto': initial_action = [act for act, in_degree  in self.action_graph.in_degree if in_degree==0]
+        if type(initial_action)==str: 
+            if initial_action in self.actions: initial_action = [initial_action]
+            else: raise Exception("initial_action="+initial_action+" not in self.actions: "+str(self.actions))
+        if type(initial_action)==list:
+            self.active_actions = set(initial_action)
+            if any(self.active_actions.difference(self.actions)): raise Exception("Initial actions not associated with model: "+str(self.active_actions.difference(self.actions)))
+        else: raise Exception("Invalid option for initial_action")
+        self.set_atts(state_rep=state_rep, max_action_prop=max_action_prop, mode_rep=mode_rep, asg_proptype=asg_proptype)
+        if self.state_rep=='finite-state' and len(initial_action)>1: raise Exception("Cannot have more than one initial action with finite-state representation")
+        
+        for aname in self.actions:
+            self.faultmodes.update(self.actions[aname].faultmodes)
+            self.actfaultmodes.update({modename:aname for modename in self.actions[aname].faultmodes})
+        
+        if self.mode_rep=='replace':
+            if not self.exclusive_faultmodes:           raise Exception("Cannot use mode_rep='replace' option without an exclusive_faultmodes representation (set in assoc_modes)")
+            elif not self.state_rep=='finite-state':    raise Exception("Cannot use mode_rep='replace' option without using state_rep=`finite-state`")
+            else: self.mode=initial_action[0]
+        elif self.mode_rep=='independent':
+            if self.exclusive_faultmodes:               raise Exception("Cannot use mode_rep='independent option' without a non-exclusive fault mode representation (set in assoc_modes)")
     def show_ASG(self, gtype='composite', with_cond_labels=True):
         """
         Shows a visual representation of the internal Action Sequence Graph of the Function Block
@@ -807,6 +858,11 @@ class FxnBlock(Block):
         for flowname, flow in self.internal_flows.items():
             copy.internal_flows[flowname] = flow.copy()
             setattr(copy, flowname, copy.internal_flows[flowname])
+        for action in self.actions: 
+            for state in copy.actions[action]._initstates.keys():
+                setattr(copy.actions[action], state, getattr(self.actions[action], state))
+            copy.actions[action].faults=self.actions[action].faults.copy()
+        copy.active_actions = self.active_actions
         for timername in self.timers:
             timer = getattr(self, timername)
             copytimer = getattr(copy, timername)
@@ -835,9 +891,9 @@ class FxnBlock(Block):
             if self._rng_params[statename][1]:
                 gen_method = getattr(generator, self._rng_params[statename][1])
                 setattr(self, statename, gen_method(*self._rng_params[statename][2]))
-    def updatefxn(self,proptype, faults=[], time=0, run_stochastic=False):
+    def prop_internal(self, faults, time, run_stochastic):
         """
-        Updates the state of the function at a given time and injects faults.
+        Propagates behaviors through the internal Action Sequence Graph
 
         Parameters
         ----------
@@ -845,24 +901,69 @@ class FxnBlock(Block):
             Faults to inject in the function. The default is ['nom'].
         time : float, optional
             Model time. The default is 0.
+        run_stochastic : book
+            Whether to run the simulation using stochastic or deterministic behavior
+        """
+        active_actions = self.active_actions
+        num_prop = 0
+        while active_actions:
+            new_active_actions=set(active_actions)
+            for action in active_actions:
+                self.actions[action].updateact(time, run_stochastic)
+                action_cond_edges = self.action_graph.out_edges(action, data=True)
+                for act_in, act_out, atts in action_cond_edges:
+                    if self.conditions[atts['name']]():
+                        new_active_actions.add(act_out)
+                        new_active_actions.discard(act_in)
+            if len(new_active_actions)>1 and self.state_rep=='finite-state':
+                raise Exception("Multiple active actions in a finite-state representation: "+str(new_active_actions))
+            num_prop +=1 
+            if type(self.asg_proptype)==int and num_prop>=self.asg_proptype:
+                break
+            if new_active_actions==set(active_actions):
+                break
+            else: active_actions=new_active_actions
+            if num_prop>10000: raise Exception("Undesired looping in Function ASG for: "+self.name)
+        self.active_actions = [*active_actions]
+        if self.mode_rep=='replace': self.mode=self.active_actions[0]
+    def updatefxn(self,proptype, faults=[], time=0, run_stochastic=False):
+        """
+        Updates the state of the function at a given time and injects faults.
+
+        Parameters
+        ----------
+        proptype : str
+            Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
+        faults : list, optional
+            Faults to inject in the function. The default is ['nom'].
+        time : float, optional
+            Model time. The default is 0.
+        run_stochastic : book
+            Whether to run the simulation using stochastic or deterministic behavior
         """
         self.run_stochastic=run_stochastic
         self.add_fault(*faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
         if time>self.time and run_stochastic: self.update_stochastic_states()
-        if self.components:     # propogate faults from function level to component level
+        comp_actions = {**self.components, **self.actions} 
+        if comp_actions:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
                     self.components[self.compfaultmodes[fault]].add_fault(fault)
+                if fault in self.actfaultmodes:
+                    self.actions[self.actfaultmodes[fault]].add_fault(fault)
+        if any(self.actions) and self.asg_proptype==proptype: self.prop_internal(faults, time, run_stochastic)
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
         elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: self.dynamic_behavior(time)
         elif proptype=='reset':                                                             
             if hasattr(self,'static_behavior'):  self.static_behavior(time)
             if hasattr(self,'dynamic_behavior'): self.dynamic_behavior(time)
-        if self.components:     # propogate faults from component level to function level
-            for compname, comp in self.components.items():
+        if comp_actions:     # propogate faults from component level to function level
+            self.faults.difference_update(self.compfaultmodes)
+            self.faults.difference_update(self.actfaultmodes)
+            for compname, comp in comp_actions.items():
                 self.faults.update(comp.faults) 
         self.time=time
         if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
@@ -876,7 +977,6 @@ class GenericFxn(FxnBlock):
     def __init__(self, name, flows):
         super().__init__(name, flows)
   
-        
 class Component(Block):
     """
     Superclass for components (most attributes and methods inherited from Block superclass)
@@ -899,6 +999,42 @@ class Component(Block):
         """ Placeholder for component behavior methods. Enables one to include components
         without yet having a defined behavior for them."""
         return 0
+class Action(Block):
+    """
+    Superclass for actions (most attributes and methods inherited from Block superclass)
+    """
+    def __init__(self,name, flows, flownames=[], states={}):
+        """
+        Inherit the Block class
+
+        Parameters
+        ----------
+        name : str
+            Unique name ID for the action
+        states : dict, optional
+            States to use in the action. The default is {}.
+        """
+        self.type = 'action'
+        self.name = name
+        self.flows=self.make_flowdict(flownames,flows)
+        for flow in self.flows.keys():
+            setattr(self, flow, self.flows[flow])
+        super().__init__(states)
+    def updateact(self, time=0, run_stochastic=False):
+        """
+        Updates the behaviors, faults, times, etc of the action 
+
+        Parameters
+        ----------
+        time : float, optional
+            Model time. The default is 0.
+        run_stochastic : book
+            Whether to run the simulation using stochastic or deterministic behavior
+        """
+        self.run_stochastic=run_stochastic
+        if time>self.time and run_stochastic: self.update_stochastic_states()
+        self.behavior(time)
+        self.time=time
 
 class Flow(Common):
     """
@@ -2318,21 +2454,3 @@ def check_model_pickleability(model):
         for fxnname, fxn in model.fxns.items():
             print(fxnname)
             check_pickleability(fxn)
-            
-class Action(FxnBlock):
-    """
-    Superclass for actions (most attributes and methods inherited from Block superclass)
-    """
-    def __init__(self,name, flows, flownames=[], states={}):
-        """
-        Inherit the Block class
-
-        Parameters
-        ----------
-        name : str
-            Unique name ID for the action
-        states : dict, optional
-            States to use in the action. The default is {}.
-        """
-        self.type = 'action'
-        super().__init__(name, flows, flownames, states)
