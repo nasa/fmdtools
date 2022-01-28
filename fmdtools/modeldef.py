@@ -447,7 +447,10 @@ class Block(Common):
                 self._initstates['mode'] = initmode
                 self.mode = initmode
             else: raise Exception("Initial mode "+initmode+" not in defined modes for "+self.name)
-        else: self.mode=initmode
+        else: 
+            self._states.append('mode')
+            self._initstates['mode'] = initmode
+            self.mode = initmode
         self.exclusive_faultmodes = exclusive
         if not getattr(self, 'is_copy', False): #saves time by using the same fault mode dictionary from previous
             if not getattr(self, 'faultmodes', []): 
@@ -727,26 +730,31 @@ class FxnBlock(Block):
             parameters to instantiate the Action with.
         """
         self.actions[name] = action(name,flows, **params)
+        setattr(self, name, self.actions[name])
         self.action_graph.add_node(name)
         self.flow_graph.add_node(name)
         for flow in flows:
             self.flow_graph.add_node(flow.name)
             self.flow_graph.add_edge(name,flow.name)
-    def add_cond(self, name, condition, start_action, end_action):
+    def cond_pass(self):
+        return True
+    def add_cond(self, start_action, end_action, name='auto',condition='pass'):
         """
         Associates a Condition with the Function Block for use in the Action Sequence Graph
 
         Parameters
         ----------
-        name : str
-            Name for the condition
-        condition : method
-            Method in the class to use as a condition.
         start_action : str
             Action where the condition is checked
         end_action : str
             Action that the condition leads to.
+        name : str
+            Name for the condition. Defaults to numbered conditions if none are provided.
+        condition : method
+            Method in the class to use as a condition. Defaults to self.condition_pass if none are provided
         """
+        if name=='auto': name = str(len(self.conditions)+1)
+        if condition=='pass': condition = self.cond_pass
         self.conditions[name] = condition
         self.condition_edges[name] = (start_action, end_action)
         self.action_graph.add_edge(start_action, end_action, name=name)
@@ -795,7 +803,10 @@ class FxnBlock(Block):
         if self.mode_rep=='replace':
             if not self.exclusive_faultmodes:           raise Exception("Cannot use mode_rep='replace' option without an exclusive_faultmodes representation (set in assoc_modes)")
             elif not self.state_rep=='finite-state':    raise Exception("Cannot use mode_rep='replace' option without using state_rep=`finite-state`")
-            else: self.mode=initial_action[0]
+            elif self.opermodes:                        raise Exception("Cannot use mode_rep='replace' option simultaneously with defined operational modes in assoc_modes()")
+            else:
+                self.opermodes = [*self.actions.keys()]
+                self.mode=initial_action[0]
         elif self.mode_rep=='independent':
             if self.exclusive_faultmodes:               raise Exception("Cannot use mode_rep='independent option' without a non-exclusive fault mode representation (set in assoc_modes)")
     def show_ASG(self, gtype='composite', with_cond_labels=True):
@@ -811,7 +822,7 @@ class FxnBlock(Block):
         edge_labels = {(in_node, out_node): label for in_node, out_node, label in graph.edges(data='name') if label}
         if with_cond_labels: nx.draw_networkx_edge_labels(graph, pos, edge_labels)
         if gtype=='composite' or gtype=='conditions':
-            nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=4, arrowstyle='wedge', node_shape='s', node_size=10)
+            nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=30, arrowstyle='->', node_shape='s', node_size=100)
     def add_internal_flow(self,flowname, flowdict={}, flowtype=''):
         """
         Adds a flow with given attributes to the Function Block
@@ -1035,6 +1046,9 @@ class Action(Block):
         if time>self.time and run_stochastic: self.update_stochastic_states()
         self.behavior(time)
         self.time=time
+    def behavior(self, time):
+        """Placeholder behavior method for actions"""
+        a=0
 
 class Flow(Common):
     """
@@ -1273,8 +1287,8 @@ class Model(object):
         """
         if not getattr(self, 'is_copy', False):
             if functionorder: self.set_functionorder(functionorder)
-            self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False)])
-            self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'dynamic_behavior', False)])
+            self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False) or getattr(fxn, 'asg_proptype','na')=='static'])
+            self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'dynamic_behavior', False) or getattr(fxn, 'asg_proptype','na')=='dynamic'])
             self.construct_graph(graph_pos, bipartite_pos)
             self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.bipartite.neighbors(flow)])]
     def construct_graph(self, graph_pos={}, bipartite_pos={}):
