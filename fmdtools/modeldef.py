@@ -809,20 +809,22 @@ class FxnBlock(Block):
                 self.mode=initial_action[0]
         elif self.mode_rep=='independent':
             if self.exclusive_faultmodes:               raise Exception("Cannot use mode_rep='independent option' without a non-exclusive fault mode representation (set in assoc_modes)")
-    def show_ASG(self, gtype='composite', with_cond_labels=True):
+    def show_ASG(self, gtype='composite', with_cond_labels=True, pos=[]):
         """
         Shows a visual representation of the internal Action Sequence Graph of the Function Block
         """
+        import matplotlib.pyplot as plt
         if gtype=='composite':      graph = nx.compose(self.flow_graph, self.action_graph)
         elif gtype=='flows':        graph = self.flow_graph
         elif gtype=='conditions':   graph = self.action_graph
-        pos=nx.planar_layout(graph)
+        if not pos: pos=nx.planar_layout(graph)
         nx.draw(graph, pos=pos, with_labels=True, node_color='grey')
         nx.draw_networkx_nodes(self.action_graph, pos=pos, node_shape='s', node_color='skyblue')
         edge_labels = {(in_node, out_node): label for in_node, out_node, label in graph.edges(data='name') if label}
         if with_cond_labels: nx.draw_networkx_edge_labels(graph, pos, edge_labels)
         if gtype=='composite' or gtype=='conditions':
             nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=30, arrowstyle='->', node_shape='s', node_size=100)
+        return plt.gcf()
     def add_internal_flow(self,flowname, flowdict={}, flowtype=''):
         """
         Adds a flow with given attributes to the Function Block
@@ -873,7 +875,7 @@ class FxnBlock(Block):
             for state in copy.actions[action]._initstates.keys():
                 setattr(copy.actions[action], state, getattr(self.actions[action], state))
             copy.actions[action].faults=self.actions[action].faults.copy()
-        copy.active_actions = self.active_actions
+        setattr(copy, 'active_actions', getattr(self, 'active_actions', {}))
         for timername in self.timers:
             timer = getattr(self, timername)
             copytimer = getattr(copy, timername)
