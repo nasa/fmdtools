@@ -758,7 +758,7 @@ class FxnBlock(Block):
         self.conditions[name] = condition
         self.condition_edges[name] = (start_action, end_action)
         self.action_graph.add_edge(start_action, end_action, name=name)
-    def build_ASG(self, initial_action="auto",state_rep="finite-state", max_action_prop="until_false", mode_rep="replace", asg_proptype='dynamic'):
+    def build_ASG(self, initial_action="auto",state_rep="finite-state", max_action_prop="until_false", mode_rep="replace", asg_proptype='dynamic', per_timestep=False):
         """
         Constructs the Action Sequence Graph with the given parameters.
         
@@ -784,16 +784,12 @@ class FxnBlock(Block):
         asg_proptype : 'static'/'dynamic'/'manual'
             Which propagation step to execute the Action Sequence Graph in. Default is 'dynamic'
                 - 'manual' means that the propagation is performed manually (defined in a behavior method)
+        per_timestep : bool
+            Defines whether the action sequence graph is reset to the initial state each time-step (True) or stays in the current action (False). Default is False
         """
         if initial_action=='auto': initial_action = [act for act, in_degree  in self.action_graph.in_degree if in_degree==0]
-        if type(initial_action)==str: 
-            if initial_action in self.actions: initial_action = [initial_action]
-            else: raise Exception("initial_action="+initial_action+" not in self.actions: "+str(self.actions))
-        if type(initial_action)==list:
-            self.active_actions = set(initial_action)
-            if any(self.active_actions.difference(self.actions)): raise Exception("Initial actions not associated with model: "+str(self.active_actions.difference(self.actions)))
-        else: raise Exception("Invalid option for initial_action")
-        self.set_atts(state_rep=state_rep, max_action_prop=max_action_prop, mode_rep=mode_rep, asg_proptype=asg_proptype)
+        self.set_active_actions(initial_action)
+        self.set_atts(state_rep=state_rep, max_action_prop=max_action_prop, mode_rep=mode_rep, asg_proptype=asg_proptype,initial_action=initial_action, per_timestep=per_timestep)
         if self.state_rep=='finite-state' and len(initial_action)>1: raise Exception("Cannot have more than one initial action with finite-state representation")
         
         for aname in self.actions:
@@ -809,6 +805,15 @@ class FxnBlock(Block):
                 self.mode=initial_action[0]
         elif self.mode_rep=='independent':
             if self.exclusive_faultmodes:               raise Exception("Cannot use mode_rep='independent option' without a non-exclusive fault mode representation (set in assoc_modes)")
+    def set_active_actions(self, actions):
+        """Helper method for setting given action(s) as active"""
+        if type(actions)==str: 
+            if actions in self.actions: actions = [actions]
+            else: raise Exception("initial_action="+actions+" not in self.actions: "+str(self.actions))
+        if type(actions)==list:
+            self.active_actions = set(actions)
+            if any(self.active_actions.difference(self.actions)): raise Exception("Initial actions not associated with model: "+str(self.active_actions.difference(self.actions)))
+        else: raise Exception("Invalid option for initial_action")
     def show_ASG(self, gtype='composite', with_cond_labels=True, pos=[]):
         """
         Shows a visual representation of the internal Action Sequence Graph of the Function Block
@@ -825,7 +830,7 @@ class FxnBlock(Block):
         if gtype=='composite' or gtype=='conditions':
             nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=30, arrowstyle='->', node_shape='s', node_size=100)
         return plt.gcf()
-    def add_internal_flow(self,flowname, flowdict={}, flowtype=''):
+    def add_flow(self,flowname, flowdict={}, flowtype=''):
         """
         Adds a flow with given attributes to the Function Block
 
@@ -960,6 +965,7 @@ class FxnBlock(Block):
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
         if time>self.time and run_stochastic: self.update_stochastic_states()
         comp_actions = {**self.components, **self.actions} 
+        if getattr(self, 'per_timestep', False): self.set_active_actions(self.initial_action)
         if comp_actions:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
