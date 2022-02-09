@@ -427,7 +427,7 @@ class Block(Common):
         initmode : str, optional
             Initial operational mode. Default is 'nom'
         name : str, optional
-            (for components only) Name of the component. The default is ''.
+            (for components/actions only) Name of the component. The default is ''.
         probtype : str, optional
             Type of probability in the probability model, a per-time 'rate' or per-run 'prob'. 
             The default is 'rate'
@@ -520,9 +520,11 @@ class Block(Common):
         mode : str
             name of the mode to enter.
         """
-        if self.exclusive_faultmodes and self.any_faults():
-            raise Exception("Cannot set mode from fault state without removing faults.")
-        else:   self.mode = mode
+        if self.exclusive_faultmodes:
+            if self.any_faults():           raise Exception("Cannot set mode from fault state without removing faults.")
+            elif  mode in self.faultmodes:  self.to_fault(mode)
+            else:                           self.mode=mode
+        else:                               self.mode = mode
     def in_mode(self,*modes):
         """Checks if the system is in a given operational mode
         
@@ -792,19 +794,23 @@ class FxnBlock(Block):
         self.set_atts(state_rep=state_rep, max_action_prop=max_action_prop, mode_rep=mode_rep, asg_proptype=asg_proptype,initial_action=initial_action, per_timestep=per_timestep)
         if self.state_rep=='finite-state' and len(initial_action)>1: raise Exception("Cannot have more than one initial action with finite-state representation")
         
-        for aname in self.actions:
-            self.faultmodes.update(self.actions[aname].faultmodes)
-            self.actfaultmodes.update({modename:aname for modename in self.actions[aname].faultmodes})
-        
         if self.mode_rep=='replace':
             if not self.exclusive_faultmodes:           raise Exception("Cannot use mode_rep='replace' option without an exclusive_faultmodes representation (set in assoc_modes)")
             elif not self.state_rep=='finite-state':    raise Exception("Cannot use mode_rep='replace' option without using state_rep=`finite-state`")
             elif self.opermodes:                        raise Exception("Cannot use mode_rep='replace' option simultaneously with defined operational modes in assoc_modes()")
+            if len(self.faultmodes)>0:                  raise Exception("Cannot use mode_rep='replace option while having Function-level fault modes (define at Action level)")
             else:
                 self.opermodes = [*self.actions.keys()]
                 self.mode=initial_action[0]
         elif self.mode_rep=='independent':
             if self.exclusive_faultmodes:               raise Exception("Cannot use mode_rep='independent option' without a non-exclusive fault mode representation (set in assoc_modes)")
+        for aname in self.actions:
+            self.faultmodes.update(self.actions[aname].faultmodes)
+            fmode_intersect = set(self.actions[aname].faultmodes).intersection(self.actfaultmodes)
+            if any(fmode_intersect):
+                raise Exception("Action "+aname+" overwrites existing fault modes: "+str(fmode_intersect))
+            self.actfaultmodes.update({modename:aname for modename in self.actions[aname].faultmodes})
+        
     def set_active_actions(self, actions):
         """Helper method for setting given action(s) as active"""
         if type(actions)==str: 
