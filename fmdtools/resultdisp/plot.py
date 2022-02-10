@@ -123,6 +123,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Tru
     fig = plt.figure(figsize=(cols*3, 2*num_plots/cols))
     n=1
     objtypes = set(mdlhists['nominal'].keys()).difference({'time'})
+    nomhist={}
     for objtype in objtypes:
         for fxnflow in mdlhists['nominal'][objtype]:
             if fxnflowvals: #if in the list 
@@ -184,7 +185,7 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Tru
 def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_groups={}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
              fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
-             title='', indiv_kwargs={}, time_slice=[], figsize='default', **kwargs):
+             title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default', **kwargs):
     """
     Plot the behavior over time of the given function/flow values 
     over a set of scenarios, with ability to aggregate behaviors as needed.
@@ -247,7 +248,8 @@ def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_group
     rows = int(np.ceil(num_plots/cols))
     if figsize=='default': figsize=(cols*3, 2*rows)
     fig, axs = plt.subplots(rows,cols, sharex=True, figsize=figsize) 
-    axs = axs.flatten()
+    if type(axs)==np.ndarray:   axs = axs.flatten()
+    else:                       axs=[axs]
     
     if not (type(max_ind)==int and aggregation in ['individual','joint']):
         if max_ind=='max': max_ind = np.min([len(mdlhists[scen]['time']) for scen in mdlhists])-1
@@ -270,7 +272,12 @@ def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_group
         for group, hists in grouphists.items():
             local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
             if aggregation=='individual':
-                ax.plot(times, hists[f_type][plot_value[0]][plot_value[1]], label=group, **local_kwargs)
+                if {'flows', 'functions','time'}.issubset(hists.keys()):
+                    ax.plot(times, hists[f_type][plot_value[0]][plot_value[1]], label=group, **local_kwargs)
+                else:
+                    if 'color' not in local_kwargs: local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
+                    for hist in hists.values():
+                        ax.plot(times, hist[f_type][plot_value[0]][plot_value[1]], label=group, **local_kwargs)
             elif aggregation=='mean_std':
                 mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
                 std_dev = np.std([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
@@ -295,12 +302,15 @@ def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_group
                 if boundtype=='fill':       ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
                 elif boundtype=='line':     plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
             else: raise Exception("Invalid aggregation option: "+aggregation)
-        if type(time_slice)==int: ax.axvline(x=time_slice, color='k')
+        if type(time_slice)==int: ax.axvline(x=time_slice, color='k', label=time_slice_label)
         else:   
-            for ts in time_slice: ax.axvline(x=ts, color='k')
-    if len(grouphists)>1 and legend_loc!=False: 
-        if legend_loc==-1:  ax.legend(prop={'size': 8})
-        else:               axs[legend_loc].legend(prop={'size': 8})
+            for ts in time_slice: ax.axvline(x=ts, color='k', label=time_slice_label)
+    if len(grouphists)>1 and legend_loc!=False:
+        ax.legend()
+        handles, labels = ax.get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        if legend_loc==-1:  ax.legend(by_label.values(), by_label.keys(), prop={'size': 8})
+        else:               axs[legend_loc].legend(by_label.values(), by_label.keys(), prop={'size': 8})
     if title: plt.suptitle(title)
     return fig, axs
 def plot_line_and_err(ax, times, line, lows, highs, boundtype, boundcolor='gray', boundlinestyle='--', fillalpha=0.3, **kwargs):
@@ -404,7 +414,7 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
     plt.grid(which='both', axis='x')
     return fig
 
-def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification'):
+def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', legendloc='best'):
     """
     Visualizes the nominal operational envelope along two given parameters
 
@@ -440,7 +450,7 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
         ydata = [d[2] for i,d in enumerate(data) if classifications[i]==cl]
         if nomlabel in cl:  plt.scatter(xdata, ydata, label=cl, marker="o")
         else:               plt.scatter(xdata, ydata, label=cl, marker="X")
-    plt.legend()
+    plt.legend(loc=legendloc)
     plt.xlabel(param1)
     plt.ylabel(param2)
     plt.title(title)
