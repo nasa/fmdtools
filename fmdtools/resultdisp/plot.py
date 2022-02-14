@@ -366,7 +366,7 @@ def plot_err_lines(ax, times, lows, highs, **kwargs):
     ax.plot(times, highs **kwargs)
     ax.plot(times, lows, **kwargs)
 
-def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification'):
+def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4)):
     """
     Visualizes the nominal operational envelope along one given parameter
 
@@ -390,7 +390,7 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
 
     """
     
-    fig = plt.figure()
+    fig = plt.figure(figsize=figsize)
     
     data = [(x, scen['properties']['inputparams'][param1]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False))]
@@ -414,7 +414,7 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
     plt.grid(which='both', axis='x')
     return fig
 
-def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', legendloc='best'):
+def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', legendloc='best', figsize=(6,4)):
     """
     Visualizes the nominal operational envelope along two given parameters
 
@@ -438,7 +438,7 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
     fig : matplotlib figure
         Figure for the plot.
     """
-    fig = plt.figure()
+    fig = plt.figure(figsize=figsize)
     
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False))]
@@ -457,7 +457,7 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
     plt.grid(which='both')
     return fig
 
-def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification'):
+def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4)):
     """
     Visualizes the nominal operational envelope along three given parameters
 
@@ -483,7 +483,7 @@ def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="No
     fig : matplotlib figure
         Figure for the plot.
     """
-    fig = plt.figure()
+    fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
     
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2], scen['properties']['inputparams'][param3]) for x,scen in nomapp.scenarios.items()\
