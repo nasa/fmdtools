@@ -1563,10 +1563,12 @@ class Timer():
         name : str
             Name for the timer
         """
-        self.name=name
+        self.name=str(name)
         self.time=0.0
         self.tstep=-1.0
         self.mode='standby'
+    def __repr__(self):
+        return 'Timer '+self.name+': mode= '+self.mode+', time= '+str(self.time)
     def t(self):
         """ Returns the time elapsed """
         return self.time
@@ -1576,8 +1578,7 @@ class Timer():
             if tstep:   self.time+=tstep
             else:       self.time+=self.tstep
             self.mode='ticking'
-        else: self.mode='complete'
-        if self.time<=0: self.mode='complete'
+        if self.time<=0: self.time=0.0; self.mode='complete'
     def reset(self):
         """ Resets the time to zero"""
         self.time=0.0
