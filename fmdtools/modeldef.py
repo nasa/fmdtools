@@ -19,6 +19,7 @@ import dill
 import pickle
 import networkx as nx
 import copy
+import warnings
 from ordered_set import OrderedSet
 from operator import itemgetter
 from collections.abc import Iterable
@@ -190,6 +191,9 @@ class Common(object):
             else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
         else:       raise Exception("Invalid flownames option in "+self.name)
         return flowdict
+    def warn(self, *messages, stacklevel=2):
+        """Prints warning message(s) when called."""
+        warnings.warn(' '.join(messages), stacklevel=stacklevel)
     
 class Block(Common):
     """ 
@@ -239,7 +243,7 @@ class Block(Common):
         self._rng_params=getattr(self, '_rng_params', {})
         if not getattr(self, 'seed', []): 
             self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]
-        self._init_rng=np.random.default_rng(self.seed)
+        self.rng=np.random.default_rng(self.seed)
         self.time=0.0
     def __repr__(self):
         if hasattr(self,'name'):
@@ -298,7 +302,7 @@ class Block(Common):
         self._states.append(name)
         self._initstates[name]=default
         setattr(self, name,default)
-        if not seed: seed = self._init_rng.integers(np.iinfo(np.int32).max)
+        if not seed: seed = self.rng.integers(np.iinfo(np.int32).max)
         if not hasattr(self,'rngs'):         self.rngs={name:np.random.default_rng(seed)} 
         else:                                 self.rngs[name]=np.random.default_rng(seed)
         if not hasattr(self,'_rng_params'):   self._rng_params={name:(default, generator_method, generator_params,seed)} 
@@ -370,7 +374,7 @@ class Block(Common):
                 nomvals = tuple([*nom_hstates.values()])
                 statecombos = [i for i in itertools.product(*hranges.values()) if i!=nomvals]
                 if type(mode_app)==int and len(statecombos)>0: 
-                    sample = self._init_rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
+                    sample = self.rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
                     statecombos = [statecombos[i] for i in sample]
                 self.faultmodes.update({'hmode_'+str(i):'synth' for i in range(len(statecombos))}) 
                 self.mode_state_dict.update({'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
@@ -486,6 +490,28 @@ class Block(Common):
                 self.faultmodes[name+mode]['longname'] = longnames.get(mode,mode)
         if key_phases_by=='self':   self.key_phases_by = self.name
         else:                       self.key_phases_by = key_phases_by
+    def choose_rand_fault(self, faults, default='first', combinations=1):
+        """
+        Randomly chooses a fault or combination of faults to insert in the function. 
+
+        Parameters
+        ----------
+        faults : list
+            list of fault modes to choose from
+        default : str/list, optional
+            Default fault to inject when model is run deterministically. 
+            The default is 'first', which chooses the first in the list. 
+            Can provide a mode as a str or a list of modes
+        combinations : int, optional
+            Number of combinations of faults to elaborate and select from. 
+            The default is 1, which just chooses single fault modes.
+        """
+        if getattr(self, 'run_stochastic', True):
+            faults = [list(x) for x in itertools.combinations(faults, combinations)]
+            self.add_fault(*self.rng.choice(faults))
+        elif default=='first':      self.add_fault(faults[0])
+        elif type(default)==str:    self.add_fault(default)
+        else:                       self.add_fault(*default)
     def set_rand(self,statename,methodname, *args):
         """
         Update the given random state with a given method and arguments
@@ -591,7 +617,7 @@ class Block(Common):
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
         if self.exclusive_faultmodes: self.mode = fault_to_add
-    def remove_fault(self, fault_to_remove, opermode=False):
+    def remove_fault(self, fault_to_remove, opermode=False, warnmessage=False):
         """Removes fault in the set of faults and returns to given operational mode
         
         Parameters
@@ -600,25 +626,31 @@ class Block(Common):
             name of the fault to remove
         opermode : str (optional)
             operational mode to return to when the fault mode is removed
+        warnmessage : str/False
+            Warning to give when performing operation. Default is False (no warning)
         """
         self.faults.discard(fault_to_remove)
         if len(self.faults) == 0: self.faults.add('nom')
         if opermode:    self.mode = opermode
         if self.exclusive_faultmodes and not(opermode):
             raise Exception("Unclear which operational mode to enter with fault removed")
-    def remove_any_faults(self, opermode=False):
+        if warnmessage: self.warn(warnmessage,"Fault mode `"+fault_to_remove+"' removed.", stacklevel=3)
+    def remove_any_faults(self, opermode=False, warnmessage=False):
         """Resets fault mode to nominal and returns to the given operational mode
         
         Parameters
         ----------
         opermode : str (optional)
             operational mode to return to when the fault mode is removed
+        warnmessage : str/False
+            Warning to give when performing operation. Default is False (no warning)
         """
         self.faults.clear()
         self.faults.add('nom')
         if opermode:    self.mode = opermode
         if self.exclusive_faultmodes and not(opermode):
             raise Exception("Unclear which operational mode to enter with fault removed")
+        if warnmessage: self.warn(warnmessage, "All faults removed.")
     def get_flowtypes(self):
         """Returns the names of the flow types in the model"""
         return {obj.type for name, obj in self.flows.items()}
@@ -631,7 +663,7 @@ class Block(Common):
             setattr(self, state,self._initstates[state])
         for generator in self.rngs:
             self.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
-        self._init_rng = np.random.default_rng(self.seed)
+        self.rng = np.random.default_rng(self.seed)
         if hasattr(self, 'time'): self.time=0.0
         if hasattr(self, 'tstep'): self.tstep=self.tstep
         if hasattr(self, 'internal_flows'):
@@ -981,7 +1013,7 @@ class FxnBlock(Block):
         comp_actions = {**self.components, **self.actions} 
         if getattr(self, 'per_timestep', False): 
             self.set_active_actions(self.initial_action)
-            for action in self.active_actions: action.t_loc=0.0
+            for action in self.active_actions: self.actions[action].t_loc=0.0
         if comp_actions:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
@@ -2499,3 +2531,4 @@ def check_model_pickleability(model):
         for fxnname, fxn in model.fxns.items():
             print(fxnname)
             check_pickleability(fxn)
+
