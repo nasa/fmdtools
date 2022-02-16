@@ -716,7 +716,7 @@ class FxnBlock(Block):
         self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
         super().__init__(states)
-    def add_act(self, name, action, *flows, **params):
+    def add_act(self, name, action, *flows, duration=0.0, **params):
         """
         Associate an Action with the Function Block for use in the Action Sequence Graph
 
@@ -729,9 +729,10 @@ class FxnBlock(Block):
         *flows : flow
             Flows (optional) which connect the actions
         **params : any
-            parameters to instantiate the Action with.
+            parameters to instantiate the Action with. 
         """
         self.actions[name] = action(name,flows, **params)
+        self.actions[name].duration=duration
         setattr(self, name, self.actions[name])
         self.action_graph.add_node(name)
         self.flow_graph.add_node(name)
@@ -915,7 +916,7 @@ class FxnBlock(Block):
             if self._rng_params[statename][1]:
                 gen_method = getattr(generator, self._rng_params[statename][1])
                 setattr(self, statename, gen_method(*self._rng_params[statename][2]))
-    def prop_internal(self, faults, time, run_stochastic):
+    def prop_internal(self, faults, time, run_stochastic, proptype):
         """
         Propagates behaviors through the internal Action Sequence Graph
 
@@ -927,16 +928,19 @@ class FxnBlock(Block):
             Model time. The default is 0.
         run_stochastic : book
             Whether to run the simulation using stochastic or deterministic behavior
+        proptype : str
+            Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
         """
         active_actions = self.active_actions
         num_prop = 0
         while active_actions:
             new_active_actions=set(active_actions)
             for action in active_actions:
-                self.actions[action].updateact(time, run_stochastic)
+                self.actions[action].updateact(time, run_stochastic, proptype=proptype, tstep=self.tstep)
                 action_cond_edges = self.action_graph.out_edges(action, data=True)
                 for act_in, act_out, atts in action_cond_edges:
-                    if self.conditions[atts['name']]():
+                    if self.conditions[atts['name']]() and getattr(self.actions[action], 'duration',0.0)+self.tstep<=self.actions[action].t_loc:
+                        self.actions[action].t_loc=0.0
                         new_active_actions.add(act_out)
                         new_active_actions.discard(act_in)
             if len(new_active_actions)>1 and self.state_rep=='finite-state':
@@ -971,14 +975,16 @@ class FxnBlock(Block):
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
         if time>self.time and run_stochastic: self.update_stochastic_states()
         comp_actions = {**self.components, **self.actions} 
-        if getattr(self, 'per_timestep', False): self.set_active_actions(self.initial_action)
+        if getattr(self, 'per_timestep', False): 
+            self.set_active_actions(self.initial_action)
+            for action in self.active_actions: action.t_loc=0.0
         if comp_actions:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
                     self.components[self.compfaultmodes[fault]].add_fault(fault)
                 if fault in self.actfaultmodes:
                     self.actions[self.actfaultmodes[fault]].add_fault(fault)
-        if any(self.actions) and self.asg_proptype==proptype: self.prop_internal(faults, time, run_stochastic)
+        if any(self.actions) and self.asg_proptype==proptype: self.prop_internal(faults, time, run_stochastic, proptype)
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
         elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: self.dynamic_behavior(time)
@@ -1044,8 +1050,8 @@ class Action(Block):
         self.flows=self.make_flowdict(flownames,flows)
         for flow in self.flows.keys():
             setattr(self, flow, self.flows[flow])
-        super().__init__(states)
-    def updateact(self, time=0, run_stochastic=False):
+        super().__init__({**states, 't_loc':0.0})
+    def updateact(self, time=0, run_stochastic=False, proptype='dynamic', tstep=1.0):
         """
         Updates the behaviors, faults, times, etc of the action 
 
@@ -1059,6 +1065,9 @@ class Action(Block):
         self.run_stochastic=run_stochastic
         if time>self.time and run_stochastic: self.update_stochastic_states()
         self.behavior(time)
+        if proptype=='dynamic':
+            if self.time<time:  self.t_loc+=tstep
+        else:                   self.t_loc+=tstep
         self.time=time
     def behavior(self, time):
         """Placeholder behavior method for actions"""
