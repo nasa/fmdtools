@@ -1207,6 +1207,7 @@ class Model(object):
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
+    def __repr__(self):
         fxnstr = ''.join(['- '+fxnname+':'+str(fxn.return_states())+' '+str(getattr(fxn,'active_actions',''))+'\n' for fxnname,fxn in self.fxns.items()])
         flowstr = ''.join(['- '+flowname+':'+str(flow.status())+'\n' for flowname,flow in self.flows.items()])
         return self.__class__.__name__+' model at: '+hex(id(self))+' \n'+'functions: \n'+fxnstr+'flows: \n'+flowstr
