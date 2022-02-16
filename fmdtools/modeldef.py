@@ -716,6 +716,10 @@ class FxnBlock(Block):
         self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
         super().__init__(states)
+    def __repr__(self):
+        blockret = super().__repr__()
+        if getattr(self, 'actions'): return blockret+', active: '+str(self.active_actions)
+        else:                        return blockret
     def add_act(self, name, action, *flows, duration=0.0, **params):
         """
         Associate an Action with the Function Block for use in the Action Sequence Graph
@@ -952,8 +956,8 @@ class FxnBlock(Block):
                 break
             else: active_actions=new_active_actions
             if num_prop>10000: raise Exception("Undesired looping in Function ASG for: "+self.name)
-        self.active_actions = [*active_actions]
-        if self.mode_rep=='replace': self.mode=self.active_actions[0]
+        if self.mode_rep=='replace': self.mode=[*active_actions][0]
+        self.active_actions = active_actions
     def updatefxn(self,proptype, faults=[], time=0, run_stochastic=False):
         """
         Updates the state of the function at a given time and injects faults.
@@ -1064,10 +1068,9 @@ class Action(Block):
         """
         self.run_stochastic=run_stochastic
         if time>self.time and run_stochastic: self.update_stochastic_states()
-        self.behavior(time)
         if proptype=='dynamic':
-            if self.time<time:  self.t_loc+=tstep
-        else:                   self.t_loc+=tstep
+            if self.time<time:  self.behavior(time); self.t_loc+=tstep
+        else:                   self.behavior(time); self.t_loc+=tstep
         self.time=time
     def behavior(self, time):
         """Placeholder behavior method for actions"""
