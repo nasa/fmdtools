@@ -234,6 +234,7 @@ class Block(Common):
         self._states=list(states.keys())
         self._initstates=states.copy()
         self.failrate = getattr(self, 'failrate', 1.0)
+        self.localname=''
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
@@ -456,38 +457,39 @@ class Block(Common):
             self._initstates['mode'] = initmode
             self.mode = initmode
         self.exclusive_faultmodes = exclusive
+        self.localname = name
         if not getattr(self, 'is_copy', False): #saves time by using the same fault mode dictionary from previous
             if not getattr(self, 'faultmodes', []): 
                 if name: self.faultmodes=dict()
                 else:    self.faultmodes=dict.fromkeys(faultmodes)
             for mode in faultmodes:
-                self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
-                self.faultmodes[name+mode]['probtype'] = probtype
-                self.faultmodes[name+mode]['units'] = units
+                self.faultmodes[mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
+                self.faultmodes[mode]['probtype'] = probtype
+                self.faultmodes[mode]['units'] = units
                 if type(faultmodes) == set: # minimum information - here the faultmodes are only a set of labels
-                    self.faultmodes[name+mode]['dist'] =     1.0/len(faultmodes)
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    0.0
+                    self.faultmodes[mode]['dist'] =     1.0/len(faultmodes)
+                    self.faultmodes[mode]['oppvect'] =  [1.0]
+                    self.faultmodes[mode]['rcost'] =    0.0
                 elif type(faultmodes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
-                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode]
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    0.0
+                    self.faultmodes[mode]['dist'] =     faultmodes[mode]
+                    self.faultmodes[mode]['oppvect'] =  [1.0]
+                    self.faultmodes[mode]['rcost'] =    0.0
                 elif len(faultmodes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
-                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[name+mode]['oppvect'] =  faultmodes[mode][1]
-                    self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][2]
+                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
+                    self.faultmodes[mode]['oppvect'] =  faultmodes[mode][1]
+                    self.faultmodes[mode]['rcost'] =    faultmodes[mode][2]
                     if key_phases_by =='none': raise Exception("How should the opportunity vector be keyed? Provide 'key_phases_by' option.")
                 elif len(faultmodes[mode]) == 2:  # dist, repair costs
-                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][1]
+                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
+                    self.faultmodes[mode]['oppvect'] =  [1.0]
+                    self.faultmodes[mode]['rcost'] =    faultmodes[mode][1]
                 elif len(faultmodes[mode]) == 1:  # dist only
-                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    0.0
+                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
+                    self.faultmodes[mode]['oppvect'] =  [1.0]
+                    self.faultmodes[mode]['rcost'] =    0.0
                 else:
                     raise Exception("Invalid mode definition")
-                self.faultmodes[name+mode]['longname'] = longnames.get(mode,mode)
+                self.faultmodes[mode]['longname'] = longnames.get(mode,mode)
         if key_phases_by=='self':   self.key_phases_by = self.name
         else:                       self.key_phases_by = key_phases_by
     def choose_rand_fault(self, faults, default='first', combinations=1):
@@ -740,7 +742,7 @@ class FxnBlock(Block):
         self.exclusive_faultmodes = False
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
-            self.compfaultmodes.update({modename:cname for modename in components[cname].faultmodes})
+            self.compfaultmodes.update({components[cname].localname+modename:cname for modename in components[cname].faultmodes})
         self.timers = timers
         for timername in timers:
             setattr(self, timername, Timer(timername))
@@ -841,12 +843,13 @@ class FxnBlock(Block):
                 self.mode=initial_action[0]
         elif self.mode_rep=='independent':
             if self.exclusive_faultmodes:               raise Exception("Cannot use mode_rep='independent option' without a non-exclusive fault mode representation (set in assoc_modes)")
-        for aname in self.actions:
-            self.faultmodes.update(self.actions[aname].faultmodes)
-            fmode_intersect = set(self.actions[aname].faultmodes).intersection(self.actfaultmodes)
+        for aname, action in self.actions.items():
+            modes_to_add = {action.localname+f:val for f,val in action.faultmodes.items()}
+            self.faultmodes.update(modes_to_add)
+            fmode_intersect = set(modes_to_add).intersection(self.actfaultmodes)
             if any(fmode_intersect):
                 raise Exception("Action "+aname+" overwrites existing fault modes: "+str(fmode_intersect))
-            self.actfaultmodes.update({modename:aname for modename in self.actions[aname].faultmodes})
+            self.actfaultmodes.update({action.localname+modename:aname for modename in action.faultmodes})
         
     def set_active_actions(self, actions):
         """Helper method for setting given action(s) as active"""
@@ -1017,9 +1020,11 @@ class FxnBlock(Block):
         if comp_actions:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
-                    self.components[self.compfaultmodes[fault]].add_fault(fault)
+                    component = self.components[self.compfaultmodes[fault]]
+                    component.add_fault(fault[len(component.localname):])
                 if fault in self.actfaultmodes:
-                    self.actions[self.actfaultmodes[fault]].add_fault(fault)
+                    action = self.actions[self.actfaultmodes[fault]]
+                    action.add_fault(fault[len(action.localname):])
         if any(self.actions) and self.asg_proptype==proptype: self.prop_internal(faults, time, run_stochastic, proptype)
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
@@ -1031,7 +1036,7 @@ class FxnBlock(Block):
             self.faults.difference_update(self.compfaultmodes)
             self.faults.difference_update(self.actfaultmodes)
             for compname, comp in comp_actions.items():
-                self.faults.update(comp.faults) 
+                self.faults.update({comp.localname+f for f in comp.faults if f!='nom'}) 
         self.time=time
         if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
         elif len(self.faults)==0:           self.faults.update(['nom'])
@@ -1549,7 +1554,8 @@ class Model(object):
                 modes[fxnname] = ms
             for mode in ms:
                 if mode!='nom': 
-                    modeprops[fxnname][mode] = fxn.faultmodes[mode]
+                    modeprops[fxnname][mode] = fxn.faultmodes.get(mode)
+                    if mode not in fxn.faultmodes: warnings.warn("Mode "+mode+" not in faultmodes for fxn "+fxnname+" and may not be tracked.")
         return modes, modeprops
     def copy(self):
         """
