@@ -30,9 +30,30 @@ from matplotlib.ticker import AutoMinorLocator
 from mpl_toolkits.mplot3d import Axes3D
 from fmdtools.faultsim.propagate import cut_mdlhist
 
+def get_plotable(mdlhist, fxnflowvals='all'):
+    plotable = {}
+    plotable= flatten_hist(mdlhist,plotable,  to_plot=fxnflowvals)
+    return plotable
+def flatten_hist(hist, newhist, prevname=(), to_plot='all'):
+    for att, val in hist.items():
+        newname = prevname+tuple([att])
+        if type(val)==dict: 
+            if type(to_plot)==list and att in to_plot: new_to_plot = 'all'
+            elif type(to_plot)==dict and att in to_plot: new_to_plot = to_plot[att]
+            elif type(to_plot)==str and att== to_plot: new_to_plot = 'all'
+            elif to_plot =='all': new_to_plot='all'
+            elif att in ['functions', 'flows']: new_to_plot = to_plot
+            else: new_to_plot= False
+            if new_to_plot: flatten_hist(val, newhist, newname, new_to_plot)
+        elif to_plot=='all' or att in to_plot: 
+            if len(newname)==1: newhist[newname[0]] = val
+            else:               newhist[newname] = val
+    return newhist
+
+
 def mdlhist(mdlhist, fault='', time=0, fxnflows=[],cols=2, returnfigs=False, legend=True, timelabel='Time', units=[], phases={}, modephases={}, label_phases=True):
     """
-    Plots all states of the model at a time given a model history on separate plots.
+    Iteratively all states of the model at a time given a model history on separate plots.
 
     Parameters
     ----------
@@ -185,7 +206,8 @@ def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=Tru
 def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_groups={}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
              fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
-             title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default', **kwargs):
+             title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
+             phases={}, modephases={}, label_phases=True,  **kwargs):
     """
     Plot the behavior over time of the given function/flow values 
     over a set of scenarios, with ability to aggregate behaviors as needed.
@@ -242,75 +264,94 @@ def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_group
     **kwargs : kwargs
         keyword arguments to mpl.plot e.g. linestyle, color, etc. See 'aggregation' for specification.
     """
-    
-    plot_values = [(objname, objval) for objname in fxnflowvals for objval in fxnflowvals[objname]]
+    #Process data - clip and flatten
+    if 'time' in mdlhists: mdlhists={'nominal':mdlhists}
+    if max_ind=='max': max_ind = np.min([len(mdlhists[scen]['time']) for scen in mdlhists])-1
+    inds = [i for i in range(len(mdlhists[[*mdlhists.keys()][0]]['time']))]
+    for scen in mdlhists:
+        mdlhists[scen] = cut_mdlhist(mdlhists[scen], max_ind)
+    times = mdlhists[[*mdlhists.keys()][0]]['time']
+    flat_mdlhists = {scen:get_plotable(mdlhist, fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    #Sort into comparison gorups
+    if not comp_groups: 
+        if aggregation=='individual':   grouphists = flat_mdlhists
+        else:                           grouphists = {'default':flat_mdlhists}
+    else:   grouphists = {group:{scen:flat_mdlhists[scen] for scen in scens} for group, scens in comp_groups.items()}
+    # Set up plots and iteration
+    template = [*flat_mdlhists.values()][0]
+    plot_values = [*template.keys()]
     num_plots = len(plot_values)
+    if num_plots==1: cols=1
     rows = int(np.ceil(num_plots/cols))
     if figsize=='default': figsize=(cols*3, 2*rows)
     fig, axs = plt.subplots(rows,cols, sharex=True, figsize=figsize) 
     if type(axs)==np.ndarray:   axs = axs.flatten()
     else:                       axs=[axs]
     
-    if not (type(max_ind)==int and aggregation in ['individual','joint']):
-        if max_ind=='max': max_ind = np.min([len(mdlhists[scen]['time']) for scen in mdlhists])-1
-        inds = [i for i in range(len(mdlhists[[*mdlhists.keys()][0]]['time']))]
-        for scen in mdlhists:
-            mdlhists[scen] = cut_mdlhist(mdlhists[scen], max_ind)
-    times = mdlhists[[*mdlhists.keys()][0]]['time']
-    if not comp_groups: 
-        if aggregation=='individual':   grouphists = mdlhists
-        else:                           grouphists = {'default':mdlhists}
-    else:   grouphists = {group:{scen:mdlhists[scen] for scen in scens} for group, scens in comp_groups.items()}
     for i, plot_value in enumerate(plot_values):
         ax = axs[i]
         ax.set_title(' '.join(plot_value))
         ax.grid()
         if i >= (rows-1)*cols and xlabel: ax.set_xlabel(xlabel)
         if ylabels.get(plot_value, False): ax.set_ylabel(ylabels[plot_value])
-        if plot_value[0] in mdlhists[[*mdlhists.keys()][0]]['flows']:        f_type='flows'
-        elif plot_value[0] in mdlhists[[*mdlhists.keys()][0]]['functions']:  f_type='functions'
         for group, hists in grouphists.items():
             local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
             if aggregation=='individual':
-                if {'flows', 'functions','time'}.issubset(hists.keys()):
-                    ax.plot(times, hists[f_type][plot_value[0]][plot_value[1]], label=group, **local_kwargs)
+                if any([type(h)==tuple for h in hists.keys()]):
+                    ax.plot(times, hists[plot_value], label=group, **local_kwargs)
                 else:
                     if 'color' not in local_kwargs: local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
                     for hist in hists.values():
-                        ax.plot(times, hist[f_type][plot_value[0]][plot_value[1]], label=group, **local_kwargs)
+                        ax.plot(times, hist[plot_value], label=group, **local_kwargs)
             elif aggregation=='mean_std':
-                mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                std_dev = np.std([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
+                std_dev = np.std([hist[plot_value] for hist in hists.values()], axis=0)
                 plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
             elif aggregation=='mean_ci':
-                mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                vals = [[hist[f_type][plot_value[0]][plot_value[1]][t] for hist in hists.values()] for t in inds]
+                mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
+                vals = [[hist[plot_value][t] for hist in hists.values()] for t in inds]
                 boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True, confidence_level=ci) for val in vals]).transpose()
                 plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2],boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
             elif aggregation=='mean_bound':
-                mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                maxs = np.max([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                mins = np.min([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
+                maxs = np.max([hist[plot_value] for hist in hists.values()], axis=0)
+                mins = np.min([hist[plot_value] for hist in hists.values()], axis=0)
                 plot_line_and_err(ax, times, mean, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
             elif aggregation=='percentile':
-                median= np.median([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                maxs = np.max([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                mins = np.min([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                low_perc = np.percentile([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()],50-kwargs.get('perc_range',50)/2, axis=0)
-                high_perc = np.percentile([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()],50+kwargs.get('perc_range',50)/2, axis=0)
+                median= np.median([hist[plot_value] for hist in hists.values()], axis=0)
+                maxs = np.max([hist[plot_value] for hist in hists.values()], axis=0)
+                mins = np.min([hist[plot_value] for hist in hists.values()], axis=0)
+                low_perc = np.percentile([hist[plot_value] for hist in hists.values()],50-kwargs.get('perc_range',50)/2, axis=0)
+                high_perc = np.percentile([hist[plot_value] for hist in hists.values()],50+kwargs.get('perc_range',50)/2, axis=0)
                 plot_line_and_err(ax, times, median, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                 if boundtype=='fill':       ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
                 elif boundtype=='line':     plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
             else: raise Exception("Invalid aggregation option: "+aggregation)
+            if phases.get(plot_value[1]):
+                ymin, ymax = ax.get_ylim()
+                phaseseps = [i[0] for i in list(phases[plot_value[1]].values())[1:]]
+                ax.vlines(phaseseps,ymin, ymax, colors='gray',linestyles='dashed')
+                if label_phases:
+                    for phase in phases[plot_value[1]]:
+                        if modephases: phasetext = [m for m,p in modephases[plot_value[1]].items() if phase in p][0]
+                        else: phasetext = phase
+                        bbox_props = dict(boxstyle="round,pad=0.3", fc="white", lw=0, alpha=0.5)
+                        ax.text(np.average(phases[plot_value[1]][phase]), (ymin+ymax)/2, phasetext, ha='center', bbox=bbox_props)
         if type(time_slice)==int: ax.axvline(x=time_slice, color='k', label=time_slice_label)
         else:   
             for ts in time_slice: ax.axvline(x=ts, color='k', label=time_slice_label)
     if len(grouphists)>1 and legend_loc!=False:
         ax.legend()
         handles, labels = ax.get_legend_handles_labels()
+        ax.get_legend().remove()
+        ax_l = axs[legend_loc]
         by_label = dict(zip(labels, handles))
-        if legend_loc==-1:  ax.legend(by_label.values(), by_label.keys(), prop={'size': 8})
-        else:               axs[legend_loc].legend(by_label.values(), by_label.keys(), prop={'size': 8})
+        if ax_l !=ax and legend_loc in [-1, len(axs)]:
+            ax_l.set_frame_on(False)
+            ax_l.get_xaxis().set_visible(False)
+            ax_l.get_yaxis().set_visible(False)
+            ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, loc='center')
+        else: ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8})
     if title: plt.suptitle(title)
     return fig, axs
 def plot_line_and_err(ax, times, line, lows, highs, boundtype, boundcolor='gray', boundlinestyle='--', fillalpha=0.3, **kwargs):
