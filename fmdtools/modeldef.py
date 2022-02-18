@@ -192,7 +192,16 @@ class Common(object):
         else:       raise Exception("Invalid flownames option in "+self.name)
         return flowdict
     def warn(self, *messages, stacklevel=2):
-        """Prints warning message(s) when called."""
+        """
+        Prints warning message(s) when called.
+
+        Parameters
+        ----------
+        *messages : str
+            Strings to make up the message (will be joined by spaces)
+        stacklevel : int
+            Where the warning points to. The default is 2 (points to the place in the model)
+        """
         warnings.warn(' '.join(messages), stacklevel=stacklevel)
     
 class Block(Common):
