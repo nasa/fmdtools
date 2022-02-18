@@ -18,9 +18,11 @@ Private Methods:
     - :func:`update_mdlhist()`:     Updates the model history at a given time.
         - :func:`update_flowhist()`:Updates the flows in the model history at t_ind
         - :func:`update_fxnhist()`: Updates the functions (faults and states) in the model history at t_ind
+        - :func:`update_blockhist()`:Updates the blocks in the model history at t_ind
     - :func:`init_mdlhist()`:       Initializes the model history over a given timerange
         - :func:`init_flowhist()`:  Initializes the flow history flowhist of the model mdl over the time range timerange
         - :func:`init_fxnhist()`:   Initializes the function state history fxnhist of the model mdl over the time range timerange
+        - :func:`init_blockhist()`: Initializes the block state history fxnhist of the model mdl over the time range timerange
 """
 #File name: propagate.py
 #Author: Daniel Hulse
@@ -902,7 +904,7 @@ def update_flowhist(mdl, mdlhist, t_ind):
                 if not np.can_cast(type(val), type(mdlhist["flows"][flowname][att][t_ind])):
                     raise Exception(str(flowname)+" att "+str(att)+" changed type: "+str(type(mdlhist["flows"][flowname][att][t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind))
 def update_fxnhist(mdl, mdlhist, t_ind):
-    """ Updates the functions (faults and states) in the model history at t_ind 
+    """ Updates the functions (faults, states, components, actions) in the model history at t_ind 
     
     Parameters
     ----------
@@ -924,6 +926,19 @@ def update_fxnhist(mdl, mdlhist, t_ind):
                 for att, val in flow.status().items():
                         mdlhist['functions'][fxnname][flowname][att][t_ind] = val
 def update_blockhist(blockname, block, blockhist, t_ind):
+    """ Updates the blocks (faults, states) in the model history at t_ind 
+    
+    Parameters
+    ----------
+    blockname : str
+        Name of the block 
+    block : Block
+        Object for the block
+    blockhist : dict
+        Dictionary history of the given block
+    t_ind : int
+        index to update the history at
+    """
     states, faults = block.return_states()
     if 'faults' in blockhist:
         if type(blockhist["faults"]) == dict:
@@ -963,6 +978,21 @@ def cut_mdlhist(mdlhist, ind):
                 mdlhist['functions'][fxnname] = cut_hist(atts, ind)
     return mdlhist 
 def cut_hist(hist, ind):
+    """
+    Recursively cuts the given individual (flow or function) history at ind.
+
+    Parameters
+    ----------
+    hist : dict
+        history to cut
+    ind : int
+        index to cut the history at
+
+    Returns
+    -------
+    newhist : dict
+        Cut history
+    """
     newhist = {}
     for attname, vals in hist.items():
         if type(vals)==dict:            newhist[attname] = cut_hist(vals, ind)
@@ -1063,6 +1093,22 @@ def init_fxnhist(mdl, timerange, track='all'):
                             fxnhist[fxnname][flowname][att] = np.full([len(timerange)], val)
     return fxnhist
 def init_blockhist(blockname, block, timerange, track='all'):
+    """ 
+    Instantiates the block hist (faults, states) over the given timerange
+    
+    Parameters
+    ----------
+    blockname : str
+        Name of the block 
+    block : Block
+        Object for the block
+    timerange : array
+        Numpy array of times to initialize in the dictionary.
+    track : 'all' or dict, 'none'), optional
+        Which model states to track over time, which can be given as 'all' or a 
+        dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
+    """
     states, faults = block.return_states()
     blockhist={}
     modelength = max([0]+[len(modename) for modename in block.opermodes+list(block.faultmodes.keys())])
