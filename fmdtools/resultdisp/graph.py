@@ -61,16 +61,20 @@ def set_pos(g, gtype='bipartite',scale=1,node_color='lightgray', label_size=7, i
         elif gtype=='typegraph':    g=mdl.return_typegraph()
     plt.ion()
     fig = plt.figure()
+    
+    if type(initpos)==dict and len(initpos)<len(g.nodes): 
+        initpos.update({f:[0.5,0.5] for f in g.nodes if f not in initpos})
+    
     if gtype=='normal':
         if not initpos: initpos = nx.shell_layout(g)
         edgeflows={}
         for edge in g.edges:
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
             edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
-        plot_instance = netgraph.InteractiveGraph(g,node_size=20*scale,node_shape='s',node_color=node_color, node_edge_width=0, node_positions=initpos, edge_labels=edgeflows, edge_label_font_size=label_size, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
+        plot_instance = netgraph.InteractiveGraph(g, node_layout=initpos, node_size=20*scale,node_shape='s',node_color=node_color, node_edge_width=0, edge_labels=edgeflows, edge_label_font_size=label_size, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
     elif gtype=='bipartite':
         if not initpos: initpos = nx.spring_layout(g)
-        plot_instance = netgraph.InteractiveGraph(g,node_size=7*scale,node_color=node_color, node_edge_width=0, node_positions=initpos, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
+        plot_instance = netgraph.InteractiveGraph(g, node_layout=initpos, node_size=7*scale,node_color=node_color, node_edge_width=0, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
     elif gtype=='typegraph':
         plot_instance = netgraph.InteractiveGraph(g,node_size=7*scale,node_color=node_color, node_edge_width=0, node_layout='dot', node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
     plt.title("Click and drag to place nodes.")
@@ -82,7 +86,7 @@ def set_pos(g, gtype='bipartite',scale=1,node_color='lightgray', label_size=7, i
         t+=0.1
     if t< 0.2:
         print("Cannot place nodes in inline version of plot. Use '%matplotlib qt' (or '%matplotlib osx') to open in external window")
-    pos = {node:list(loc) for node,loc in plot_instance.node_positions.items()}
+    pos = {node:[round(loc[0], 3),round(loc[1], 3)] for node,loc in plot_instance.node_positions.items()}
     if set_mdl:
         if gtype=='normal':         mdl.graph_pos = pos
         elif gtype=='bipartite':    mdl.bipartite_pos = pos  
@@ -222,7 +226,7 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
         elif highlight:
             faultnodes = highlight[0]
             degradednodes = highlight[1]
-            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
+            if showfaultlabels: faultlabels = {f:str(i) for i,f in enumerate(faultnodes)}
             else:               faultlabels={}
             fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False)
         else:                                      #plots graph with status information 
@@ -329,7 +333,7 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
             faultnodes = highlight[0]
             degradednodes = highlight[1]
             faultedges = highlight[2]
-            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
+            if showfaultlabels: faultlabels = {f:str(i) for i,f in enumerate(faultnodes)}
             else:               faultlabels = {}
             faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge])]) for edge in faultedges}
         else:
