@@ -782,9 +782,9 @@ class FxnBlock(Block):
         self.actions[name].duration=duration
         setattr(self, name, self.actions[name])
         self.action_graph.add_node(name)
-        self.flow_graph.add_node(name)
+        self.flow_graph.add_node(name, bipartite=0)
         for flow in flows:
-            self.flow_graph.add_node(flow.name)
+            self.flow_graph.add_node(flow.name, bipartite=1)
             self.flow_graph.add_edge(name,flow.name)
     def cond_pass(self):
         return True
@@ -807,7 +807,7 @@ class FxnBlock(Block):
         if condition=='pass': condition = self.cond_pass
         self.conditions[name] = condition
         self.condition_edges[name] = (start_action, end_action)
-        self.action_graph.add_edge(start_action, end_action, name=name)
+        self.action_graph.add_edge(start_action, end_action, **{'name':name, name:'name', 'arrow':True})
     def build_ASG(self, initial_action="auto",state_rep="finite-state", max_action_prop="until_false", mode_rep="replace", asg_proptype='dynamic', per_timestep=False):
         """
         Constructs the Action Sequence Graph with the given parameters.
