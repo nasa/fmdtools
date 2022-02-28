@@ -32,7 +32,7 @@ def set_pos(g, gtype='bipartite',scale=1,node_color='lightgray', label_size=7, i
 
     Parameters
     ----------
-    g : networkx graph or model
+    g : networkx graph or model or function
         normal or bipartite graph of the model of interest
     gtype : 'normal' or 'bipartite', optional
         Type of graph to plot. The default is 'normal'.
@@ -70,7 +70,7 @@ def set_pos(g, gtype='bipartite',scale=1,node_color='lightgray', label_size=7, i
         edgeflows={}
         for edge in g.edges:
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
-            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
+            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows if flow not in ['name', 'arrow'])
         plot_instance = netgraph.InteractiveGraph(g, node_layout=initpos, node_size=20*scale,node_shape='s',node_color=node_color, node_edge_width=0, edge_labels=edgeflows, edge_label_font_size=label_size, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
     elif gtype=='bipartite':
         if not initpos: initpos = nx.spring_layout(g)
@@ -98,10 +98,17 @@ def show(g, gtype='bipartite', renderer = 'matplotlib', filename="", **kwargs):
 
     Parameters
     ----------
-    g : networkx graph or model
+    g : networkx graph or model or function
         The multigraph to plot
-    gtype : 'normal' or 'bipartite'
-        Type of graph input to show--normal (multgraph) or bipartite
+    gtype : str (optional)
+        - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
+        - 'bipartite'   (for graph/model input): plots functions and flows as nodes
+        - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
+        - 'typegraph'   (for graph/model input): plots the class structure of the model, functions, and flows
+        - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
+        - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
+        - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        NOTE: Not all gtypes and options are supported by all renderers. See show_<renderer> for more details
     renderer : 'matplotlib' or 'graphviz' or 'pyvis' or 'netgraph'
         Renderer to use with the drawing. Renderer must be installed. Default is 'matplotlib'
     filename : string, optional
@@ -128,15 +135,22 @@ def show(g, gtype='bipartite', renderer = 'matplotlib', filename="", **kwargs):
         return n
     else: raise Exception("Invalid renderer: "+renderer)
 
-def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, seqgraph=[], arrows=False):
+def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, seqgraph={},seqlabels=False, arrows=False):
     """
     Plots a single graph object g using matplotlib
 
     Parameters
     ----------
-    g : networkx graph or model
+    g : networkx graph or model or function
         The multigraph to plot
-    gtype : 'normal' or 'bipartite'
+    gtype : str (optional)
+        - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
+        - 'bipartite'   (for graph/model input): plots functions and flows as nodes
+        - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
+        - 'typegraph'   (for graph/model input): plots the class structure of the model, functions, and flows
+        - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
+        - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
+        - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
         Type of graph input to show--normal (multgraph) or bipartite
     filename : string
         Name to give the saved file, if saved. Default is '' (not saving the file)
@@ -162,15 +176,27 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
         A heatmap dictionary to overlay on the plot. The default is {}.
     cmap : mpl colormap
         Colormap to use for heatmap visualizations
-
+    arrows : bool, optional
+        Whether to display arrows on normal plots (for 'actions' ASGs--default is False)
+    seqgraph: networkx graph, optional
+        Directed graph to overlay on graph views (for 'flows'/'combined' ASGs--default is {})
+    seqlabels: bool
+        Whether to show directed edge labels on overlaid seqgraph
     Returns
     -------
     fig, ax : matplotlib figure/axis
         Matplotlib figure object of the drawn graph
     """
-    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
+    if getattr(g,'type', '')=='model':
         mdl=g
         g, pos = get_graph_pos(mdl,pos, gtype)
+    elif getattr(g,'type', '')=='function':
+        fxn=g
+        g,gtype, pos, seqgraph, arrows = get_asg_pos(fxn,pos, gtype, arrows)
+        a=1
+    elif isinstance(g, nx.classes.graph.Graph):
+        a=1
+    else: raise Exception("Invalid object type: "+str(type(g))+" use a model, function, or networkx graph instead")
     fig = plt.figure(figsize=figsize)
     if gtype=='normal':
         edgeflows=dict()
@@ -179,7 +205,7 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
         font_size=scale*12
         for edge in g.edges:
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
-            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
+            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows if flow not in ['name', 'arrow'])
         if heatmap:
             colors=[]
             for node in g.nodes():
@@ -228,10 +254,10 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
             degradednodes = highlight[1]
             if showfaultlabels: faultlabels = {f:str(i) for i,f in enumerate(faultnodes)}
             else:               faultlabels={}
-            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False, seqgraph=seqgraph)
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False, seqgraph=seqgraph, seqlabels=seqlabels)
         else:                                      #plots graph with status information 
             labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False, seqgraph=seqgraph)
+            fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False, seqgraph=seqgraph, seqlabels=seqlabels)
     elif gtype == 'typegraph':
         if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
         if heatmap or highlight: raise Exception("Invalid option for typegraph--not implemented")
@@ -243,18 +269,24 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
             fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False, seqgraph=seqgraph)
     if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
     return fig, fig.axes[0]
-def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filetype='png', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm,arrows=False, seqgraph=[], seqlabels=False, **kwargs):
+def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filetype='png', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm,arrows=False, seqgraph={}, seqlabels=False, **kwargs):
     """
     Translates an existing nx graph to a graphviz graph. Saves the graph output and dot file.
     Called from show() by passing in graphviz=True and filename
     
     Parameters
     ----------
-    g : nx graph object or model
+    g : networkx graph or model or function
         The multigraph to plot
-    gtype : string, optional
-        Type of graph input to show
-        values are 'normal', 'bipartite', or 'typegraph'. The default is 'normal'.
+    gtype : str (optional)
+        - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
+        - 'bipartite'   (for graph/model input): plots functions and flows as nodes
+        - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
+        - 'typegraph'   (for graph/model input): plots the class structure of the model, functions, and flows
+        - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
+        - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
+        - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        Type of graph input to show--normal (multgraph) or bipartite
     filename : string, optional
         the filename for the rendered output (if any). The default is '' (in which the file is not saved).
     filetype : string
@@ -275,6 +307,12 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
         A heatmap dictionary to overlay on the plot. The default is {}.
     cmap : mpl colormap
         Colormap to use for heatmap visualization
+    arrows : bool, optional
+        Whether to display arrows on normal plots (for 'actions' ASGs--default is False)
+    seqgraph: networkx graph, optional
+        Directed graph to overlay on graph views (for 'flows'/'combined' ASGs--default is {})
+    seqlabels: bool
+        Whether to show directed edge labels on overlaid seqgraph
     **kwargs : dictionary
         dictionary of graphviz attributes used to customize the output.
         this includes layout, overlap, node padding, node separation, font, fontsize, etc.
@@ -297,9 +335,16 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
     if kwargs.pop('pos',False):     print('invalid option: pos') 
     if kwargs.pop('scale', False):  print('invalid option: scale') 
         
-    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
+    if getattr(g,'type', '')=='model':
         mdl=g
-        g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
+        g, pos = get_graph_pos(mdl,kwargs.get('pos',[]), gtype)
+    elif getattr(g,'type', '')=='function':
+        fxn=g
+        g,gtype, pos, seqgraph, arrows = get_asg_pos(fxn,kwargs.get('pos',[]), gtype, arrows)
+        a=1
+    elif isinstance(g, nx.classes.graph.Graph):
+        a=1
+    else: raise Exception("Invalid object type: "+str(type(g))+" use a model, function, or networkx graph instead")
     #bipartite
     if gtype in ['bipartite', 'component']:
         functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
@@ -361,9 +406,16 @@ def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], sca
 
     Parameters
     ----------
-    g : networkx graph or model
+    g : networkx graph or model or function
         The multigraph to plot
-    gtype : 'normal' or 'bipartite'
+    gtype : str (optional)
+        - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
+        - 'bipartite'   (for graph/model input): plots functions and flows as nodes
+        - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
+        - 'typegraph'   (for graph/model input): plots the class structure of the model, functions, and flows
+        - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
+        - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
+        - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
         Type of graph input to show--normal (multgraph) or bipartite
     filename : string
         Name to give the saved file, if saved. Default is '' (not saving the file)
@@ -385,6 +437,12 @@ def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], sca
     colors : list, optional
         List of colors to use for nominal, degraded, and faulty functions/flows.
         Default is: ['lightgray','orange', 'red']
+    arrows : bool, optional
+        Whether to display arrows on normal plots (for 'actions' ASGs--default is False)
+    seqgraph: networkx graph, optional
+        Directed graph to overlay on graph views (for 'flows'/'combined' ASGs--default is {})
+    seqlabels: bool
+        Whether to show directed edge labels on overlaid seqgraph
     Returns
     -------
     fig, ax : matplotlib figure/axis
@@ -394,16 +452,23 @@ def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], sca
     """
     from netgraph import Graph
     if kwargs.get('heatmap',False):     raise Exception("Heatmap option not implemented in netgraph renderer")
-    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
+    if getattr(g,'type', '')=='model':
         mdl=g
-        g, pos = get_graph_pos(mdl,pos, gtype)
+        g, pos = get_graph_pos(mdl,kwargs.get('pos',[]), gtype)
+    elif getattr(g,'type', '')=='function':
+        fxn=g
+        g,gtype, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(fxn,kwargs.get('pos',[]), gtype, kwargs.get('arrows', False))
+        a=1
+    elif isinstance(g, nx.classes.graph.Graph):
+        a=1
+    else: raise Exception("Invalid object type: "+str(type(g))+" use a model, function, or networkx graph instead")
     fig = plt.figure(figsize=figsize)
     if gtype=='normal':
         edgeflows=dict()
         if not pos: pos=nx.shell_layout(g)
         for edge in g.edges:
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
-            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
+            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows if flow not in ['name', 'arrow'])
         if highlight:
             faultnodes = highlight[0]
             degradednodes = highlight[1]
@@ -581,7 +646,12 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
     """
     from IPython.display import display, SVG
     [[t_ind,],] = np.where(reshist['time']==time)
-    g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
+    if getattr(mdl,'type', '')=='model':    g, pos = get_graph_pos(mdl,kwargs.get('pos',[]), gtype)
+    elif getattr(g,'type', '')=='function': 
+        g,gtype, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(mdl,kwargs.get('pos',[]), gtype, kwargs.get('arrows',False))
+    elif isinstance(g, nx.classes.graph.Graph):
+        a=1
+    else: raise Exception("Invalid object type: "+str(type(g))+" use a model or function instead")
     if renderer=='matplotlib':
         fig  = plt.figure(figsize=kwargs.pop('figsize', (6,4)))
         if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, **kwargs)
@@ -635,7 +705,12 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
     frames : Dict
         Dictionary of mpl figures keyed at each time {time:fig} 
     """
-    g, pos = get_graph_pos(mdl, kwargs.get('pos', []), gtype)
+    if getattr(mdl,'type', '')=='model':    g, pos = get_graph_pos(mdl,kwargs.get('pos',[]), gtype)
+    elif getattr(g,'type', '')=='function': 
+        g,gtype, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(mdl,kwargs.get('pos',[]), gtype, kwargs.get('arrows',False))
+    elif isinstance(g, nx.classes.graph.Graph):
+        a=1
+    else: raise Exception("Invalid object type: "+str(type(g))+" use a model or function instead")
     if times=='all':    t_inds= [i for i in range(0,len(reshist['time']))]
     else:               t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
     frames = {}
@@ -729,6 +804,22 @@ def get_graph_pos(mdl, pos, gtype):
         if not pos: pos=nx.spring_layout(g)
     else: raise Exception("Graph type "+gtype+" not valid")
     return g,pos
+def get_asg_pos(fxn, pos, gtype, arrows):
+    """Helper function for getting the right graph/positions from a function."""
+    if gtype=='actions':    
+        gtype='normal'
+        g= fxn.action_graph; seqgraph={}; arrows=True
+        if not pos: pos = getattr(fxn, 'action_graph_pos', nx.shell_layout(g))
+    elif gtype=='flows':    
+        gtype='bipartite'
+        g= fxn.flow_graph; seqgraph={}
+        if not pos: pos = getattr(fxn, 'flow_graph_pos', nx.spring_layout(g))
+    elif gtype=='combined': 
+        gtype='bipartite'
+        g= fxn.flow_graph; seqgraph=fxn.action_graph
+        if not pos: pos = getattr(fxn, 'flow_graph_pos', nx.spring_layout(g))
+    else: raise Exception("Graph type "+gtype+" not valid")
+    return g,gtype, pos, seqgraph, arrows
 def get_graph_annotations(g, gtype='bipartite'):
     """Helper method that returns labels/lists degraded nodes for the plot annotations"""
     labels={node:node for node in g.nodes}
@@ -821,7 +912,7 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
     plt.axis('off')
     return plt.gcf(), plt.gca()
 
-def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[], seqgraph=[], seqlabels=True):
+def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[], seqgraph={}, seqlabels=True):
     """ Plots a bipartite graph. Used in other functions"""
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
@@ -905,7 +996,7 @@ def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, fault
                 edge_label += faultflows[edge]
         dot.edge(edge[0], edge[1], label=edge_label, color=colors_dict[edge], labelangle="180",arrowhead="normal", arrowsize='2')
     return dot
-def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot, seqgraph=[], seqlabels=False,):
+def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot, seqgraph={}, seqlabels=False,):
     """ Plots a bipartite graph representation using the graphviz toolkit. Used in other functions"""
     shapes = {f:'ellipse' for f in flows}
     shapes.update({ f1:'box' for f1 in functions})
@@ -918,9 +1009,10 @@ def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time
         dot.node(node,label=node_label, style="filled", fillcolor=colors_dict[node], shape=shapes[node])
     for edge in edges:
         dot.edge(edge[0], edge[1], arrowhead='none')
-    for edge in seqgraph.edges():
-        if seqlabels:   dot.edge(edge[0], edge[1], label=seqgraph.get_edge_data(edge[0], edge[1])['name'], labelangle="180",arrowhead="normal", arrowsize='2')
-        else:           dot.edge(edge[0], edge[1], arrowhead="normal", arrowsize='2')
+    if seqgraph:        
+        for edge in seqgraph.edges():
+            if seqlabels:   dot.edge(edge[0], edge[1], label=seqgraph.get_edge_data(edge[0], edge[1])['name'], labelangle="180",arrowhead="normal", arrowsize='2')
+            else:           dot.edge(edge[0], edge[1], arrowhead="normal", arrowsize='2')
     return dot
 
 def gv_execute_order_legend(colors):
@@ -1080,7 +1172,7 @@ def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, fau
                 node_label_fontdict={'size':scale*8, 'fontweight':'bold'}, node_size=scale*20, node_edge_width=scale*2, arrows=arrows,\
                 node_shape = node_shape, node_color = node_color, node_edge_color = node_edge_color, node_labels=labels,  node_zorder=2, edge_label_rotate=False)
     return plt.gcf(), plt.gca(), gra
-def plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[],seqgraph=[],seqlabels=False, **kwargs):
+def plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[],seqgraph={},seqlabels=False, **kwargs):
     """ Experimental method for plotting with netgraph instead of networkx"""
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)

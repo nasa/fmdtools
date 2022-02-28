@@ -1471,8 +1471,9 @@ class Model(object):
         elif gtype=='component':
             graph=self.bipartite.copy()
             for fxnname, fxn in self.fxns.items():
-                graph.add_nodes_from(fxn.components, bipartite=1)
-                graph.add_edges_from([(fxnname, component) for component in fxn.components])
+                if {**fxn.components, **fxn.actions}: 
+                    graph.add_nodes_from({**fxn.components, **fxn.actions}, bipartite=1)
+                    graph.add_edges_from([(fxnname, comp) for comp in {**fxn.components, **fxn.actions}])
         elif gtype=='typegraph':
             graph=self.return_typegraph()
         edgevals, fxnmodes, fxnstates, flowstates, compmodes, compstates, comptypes ={}, {}, {}, {}, {}, {}, {}
@@ -1504,7 +1505,7 @@ class Model(object):
                 if gtype=='normal': del graph.nodes[fxnname]['bipartite']
                 if gtype=='component':
                     for mode in fxnmodes[fxnname].copy():
-                        for compname, comp in fxn.components.items():
+                        for compname, comp in {**fxn.actions, **fxn.components}.items():
                             compstates[compname]={}
                             comptypes[compname]=True
                             if mode in comp.faultmodes:
