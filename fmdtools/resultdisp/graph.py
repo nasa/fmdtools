@@ -243,7 +243,7 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
             fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False, seqgraph=seqgraph)
     if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
     return fig, fig.axes[0]
-def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filetype='png', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm,arrows=False, **kwargs):
+def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filetype='png', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm,arrows=False, seqgraph=[], seqlabels=False, **kwargs):
     """
     Translates an existing nx graph to a graphviz graph. Saves the graph output and dot file.
     Called from show() by passing in graphviz=True and filename
@@ -313,8 +313,9 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
             faultnodes = highlight[0]
             degradednodes = highlight[1]
         colors_dict = gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, functions=functions, flows=flows)
-        dot = Graph(comment="model network", graph_attr=kwargs)
-        dot = plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot)
+        if seqgraph:    dot = Digraph(comment="model network", graph_attr=kwargs)
+        else:           dot = Graph(comment="model network", graph_attr=kwargs)
+        dot = plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot, seqgraph, seqlabels)
     #typegraph
     elif gtype == 'typegraph':
         dot = Digraph(comment="model type graph network", graph_attr=kwargs)
@@ -904,7 +905,7 @@ def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, fault
                 edge_label += faultflows[edge]
         dot.edge(edge[0], edge[1], label=edge_label, color=colors_dict[edge], labelangle="180",arrowhead="normal", arrowsize='2')
     return dot
-def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot):
+def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot, seqgraph=[], seqlabels=False,):
     """ Plots a bipartite graph representation using the graphviz toolkit. Used in other functions"""
     shapes = {f:'ellipse' for f in flows}
     shapes.update({ f1:'box' for f1 in functions})
@@ -916,7 +917,10 @@ def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time
             node_label += faultlabels[node]
         dot.node(node,label=node_label, style="filled", fillcolor=colors_dict[node], shape=shapes[node])
     for edge in edges:
-        dot.edge(edge[0], edge[1])
+        dot.edge(edge[0], edge[1], arrowhead='none')
+    for edge in seqgraph.edges():
+        if seqlabels:   dot.edge(edge[0], edge[1], label=seqgraph.get_edge_data(edge[0], edge[1])['name'], labelangle="180",arrowhead="normal", arrowsize='2')
+        else:           dot.edge(edge[0], edge[1], arrowhead="normal", arrowsize='2')
     return dot
 
 def gv_execute_order_legend(colors):
