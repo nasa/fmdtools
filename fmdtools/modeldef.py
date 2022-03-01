@@ -808,7 +808,7 @@ class FxnBlock(Block):
         self.conditions[name] = condition
         self.condition_edges[name] = (start_action, end_action)
         self.action_graph.add_edge(start_action, end_action, **{'name':name, name:'name', 'arrow':True})
-    def build_ASG(self, initial_action="auto",state_rep="finite-state", max_action_prop="until_false", mode_rep="replace", asg_proptype='dynamic', per_timestep=False):
+    def build_ASG(self, initial_action="auto",state_rep="finite-state", max_action_prop="until_false", mode_rep="replace", asg_proptype='dynamic', per_timestep=False, asg_pos={}):
         """
         Constructs the Action Sequence Graph with the given parameters.
         
@@ -836,6 +836,8 @@ class FxnBlock(Block):
                 - 'manual' means that the propagation is performed manually (defined in a behavior method)
         per_timestep : bool
             Defines whether the action sequence graph is reset to the initial state each time-step (True) or stays in the current action (False). Default is False
+        asg_pos : dict, optional
+            Positions of the nodes of the action/flow graph {node: [x,y]}. Default is {}
         """
         if initial_action=='auto': initial_action = [act for act, in_degree  in self.action_graph.in_degree if in_degree==0]
         self.set_active_actions(initial_action)
@@ -859,6 +861,7 @@ class FxnBlock(Block):
             if any(fmode_intersect):
                 raise Exception("Action "+aname+" overwrites existing fault modes: "+str(fmode_intersect))
             self.actfaultmodes.update({action.localname+modename:aname for modename in action.faultmodes})
+        self.asg_pos=asg_pos
         
     def set_active_actions(self, actions):
         """Helper method for setting given action(s) as active"""

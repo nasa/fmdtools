@@ -871,6 +871,7 @@ def get_graph_pos(mdl, pos, gtype):
     return g,pos
 def get_asg_pos(fxn, pos, gtype, arrows):
     """Helper function for getting the right graph/positions from a function."""
+    if not pos: pos=fxn.asg_pos
     if gtype=='actions':    
         gtype='normal'
         g= fxn.action_graph; seqgraph={}; arrows=True
