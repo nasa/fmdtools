@@ -101,6 +101,7 @@ def show(g, gtype='bipartite', renderer = 'matplotlib', filename="", **kwargs):
     g : networkx graph or model or function
         The multigraph to plot
     gtype : str (optional)
+        Type of graph input to show. Default is 'bipartite.'
         - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
         - 'bipartite'   (for graph/model input): plots functions and flows as nodes
         - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
@@ -144,6 +145,7 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
     g : networkx graph or model or function
         The multigraph to plot
     gtype : str (optional)
+        Type of graph input to show. Default is 'bipartite.'
         - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
         - 'bipartite'   (for graph/model input): plots functions and flows as nodes
         - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
@@ -151,7 +153,7 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
         - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
         - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
         - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
-        Type of graph input to show--normal (multgraph) or bipartite
+        NOTE: Not all gtypes and options are supported by all renderers. See show_<renderer> for more details
     filename : string
         Name to give the saved file, if saved. Default is '' (not saving the file)
     filetype : string
@@ -279,6 +281,7 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
     g : networkx graph or model or function
         The multigraph to plot
     gtype : str (optional)
+        Type of graph input to show. Default is 'bipartite.'
         - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
         - 'bipartite'   (for graph/model input): plots functions and flows as nodes
         - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
@@ -286,7 +289,7 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
         - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
         - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
         - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
-        Type of graph input to show--normal (multgraph) or bipartite
+        NOTE: Not all gtypes and options are supported by all renderers. See show_<renderer> for more details
     filename : string, optional
         the filename for the rendered output (if any). The default is '' (in which the file is not saved).
     filetype : string
@@ -409,6 +412,7 @@ def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], sca
     g : networkx graph or model or function
         The multigraph to plot
     gtype : str (optional)
+        Type of graph input to show. Default is 'bipartite.'
         - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
         - 'bipartite'   (for graph/model input): plots functions and flows as nodes
         - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
@@ -416,7 +420,7 @@ def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], sca
         - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
         - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
         - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
-        Type of graph input to show--normal (multgraph) or bipartite
+        NOTE: Not all gtypes and options are supported by all renderers. See show_<renderer> for more details
     filename : string
         Name to give the saved file, if saved. Default is '' (not saving the file)
     filetype : string
@@ -546,7 +550,7 @@ def show_pyvis(g, gtype='typegraph', filename="typegraph", width=1000, filt=True
     return n
         
 
-def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray', 'cyan','teal'], show_dyn_order=True, title="Function Execution Order", legend=True, **kwargs):
+def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray', 'cyan','teal'], show_dyn_order=True, show_dyn_arrows=False, title="Execution Order", legend=True,  **kwargs):
     """
     Displays the execution order/types of the model, where the functions and flows in the
     static step are highlighted and the functions in the dynamic step are listed (with corresponding order)
@@ -557,13 +561,21 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
         Model of the system to visualize.
     renderer : 'matplotlib' or 'graphviz'
         Renderer to use for the graph
-    gtype : 'normal'/'bipartite', optional
+    gtype : str, optional
         Representation of the model to use. The default is 'bipartite'.
+        - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
+        - 'bipartite'   (for graph/model input): plots functions and flows as nodes
+        - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
+        - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
+        - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        NOTE: Not all gtypes and options are supported by all renderers. See show_<renderer> for more details
     colors : list, optional
         Colors to use for unexecuted functions, static propagation steps, and dynamic functions. 
         The default is ['lightgray', 'cyan','teal'].
     show_dyn_order : bool, optional
         Whether to label the execution order for dynamic functions. The default is True.
+    show_dyn_arrows:
+        Whether to place arrows to denote the sequence between functions. The default is False.
     title : str, optional
         Title for the plot. The default is "Function Execution Order".
     legend : bool, optional
@@ -576,10 +588,17 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
     """
 
     if gtype =='normal': fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.dynamicfxns, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], colors=colors, showfaultlabels= show_dyn_order, **kwargs)
-    else:
+    elif gtype=='bipartite':
         staticnodes = list(mdl.staticfxns) + list(set([n for node in mdl.staticfxns for n in mdl.bipartite.neighbors(node)]))
         dynamicnodes = list(mdl.dynamicfxns) #+ list(set().union(*[nx.node_connected_component(mdl.bipartite, node) for node in mdl.dynamicfxns]))
-        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[dynamicnodes, staticnodes], colors=colors, showfaultlabels= show_dyn_order, **kwargs)
+        if show_dyn_arrows:
+            seqgraph = nx.DiGraph([(dynamicnodes[n], dynamicnodes[n+1]) for n in range(len(dynamicnodes)-1)])
+        else: seqgraph=[]
+        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[dynamicnodes, staticnodes], colors=colors, showfaultlabels= show_dyn_order, seqgraph=seqgraph, **kwargs)
+    elif gtype=='actions':
+        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.actions, [],  []], colors=colors, showfaultlabels= show_dyn_order, arrows=show_dyn_arrows, **kwargs)
+    elif gtype in ['flows', 'combined']:
+        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.actions, [],  []], colors=colors, showfaultlabels= show_dyn_order,  **kwargs)
     
     if legend:
         if renderer=='graphviz': gv_execute_order_legend(colors)
@@ -631,8 +650,16 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         The time in the history to plot the graph at.
     renderer : 'matplotlib' or 'graphviz' or 'netgraph'
         Renderer to use to plot the graph. Default is 'matplotlib'
-    gtype : str, optional
-        The type of graph to plot (normal or bipartite). The default is 'bipartite'.
+    gtype : str (optional)
+        Type of graph input to show. Default is 'bipartite.'
+        - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
+        - 'bipartite'   (for graph/model input): plots functions and flows as nodes
+        - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
+        - 'typegraph'   (for graph/model input): plots the class structure of the model, functions, and flows
+        - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
+        - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
+        - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        NOTE: Not all gtypes and options are supported by all renderers. See show_<renderer> for more details
     MATPLOTLIB OPTIONS:
     ----------
     faultscen : str, optional
@@ -694,8 +721,16 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
         The times in the history to plot the graph at. If 'all', plots them all
     renderer : 'matplotlib' or 'graphviz' or 'netgraph'
         Renderer to use to plot the graph. Default is 'matplotlib'
-    gtype : str, optional
-        The type of graph to plot (normal or bipartite). The default is 'bipartite'.
+    gtype : str (optional)
+        Type of graph input to show. Default is 'bipartite.'
+        - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
+        - 'bipartite'   (for graph/model input): plots functions and flows as nodes
+        - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
+        - 'typegraph'   (for graph/model input): plots the class structure of the model, functions, and flows
+        - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
+        - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
+        - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        NOTE: Not all gtypes and options are supported by all renderers. See show_<renderer> for more details
     MATPLOTLIB OPTIONS:
     ----------
     faultscen : str, optional
@@ -764,8 +799,16 @@ def animation_from(mdl, reshist, times='all', faultscen=[], gtype='bipartite',fi
         The times in the history to plot the graph at. If 'all', plots them all
     faultscen : str, optional
         Name of the fault scenario. The default is [].
-    gtype : str, optional
-        The type of graph to plot (normal or bipartite). The default is 'bipartite'.
+    gtype : str (optional)
+        Type of graph input to show. Default is 'bipartite.'
+        - 'normal'      (for graph/model input): plots functions as nodes and flows as edges
+        - 'bipartite'   (for graph/model input): plots functions and flows as nodes
+        - 'component'   (for graph/model input): plots functions, flows, and componenets as nodes
+        - 'typegraph'   (for graph/model input): plots the class structure of the model, functions, and flows
+        - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
+        - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
+        - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        NOTE: Not all gtypes and options are supported by all renderers. See show_<renderer> for more details
     showfaultlabels : bool, optional
         Whether or not to list faults on the plot. The default is True.
     scale : float, optional
@@ -913,6 +956,39 @@ def get_plotlabels(g, reshist, t_ind):
     return labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgelabels
 
 def get_asg_plotlabels(g, fxn, reshist, t_ind):
+    """
+    Assigns labels to the ASG graph g in the given fxn from reshist at time t so that it can be plotted
+
+    Parameters
+    ----------
+    g : networkx graph
+        The graph to get labels for
+    fxn : FxnBlock
+        Corresponding function block for the graph g
+    reshist : dict
+        The dict of results history over time (from process.hists() or process.typehist() for the typegraph option)
+    t_ind : float
+        The time in reshist to update the graph at
+
+    Returns
+    -------
+    labels : dict
+        labels for the graph.
+    faultfxns : dict
+        functions with faults in them
+    degfxns : dict
+        functions that are degraded
+    degflows : dict
+        flows that are degraded
+    faultlabels : dict
+        names of each fault
+    faultedges : dict
+        edges with faults in them
+    faultedgeflows : dict
+        names of flows that are degraded on each edge
+    edgelabels : dict
+        labels of each edge
+    """
     labels={node:node for node in g.nodes}
     fxnname=fxn.name
     rhist = reshist['functions'][fxnname]
@@ -1022,10 +1098,12 @@ def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=T
     degnodes = degfxns + degflows
     plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, **kwargs)
 def update_actplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], arrows=True, **kwargs):
+    """Updates an action graph plot at a given timestep t_ind given the result history reshist"""
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
     plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors, arrows=True, **kwargs)
 def update_flowgraphplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], seqgraph={}, seqlabels=True, **kwargs):
+    """Updates an ASG plot with flows at a given timestep t_ind given the result history reshist"""
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
     degnodes = degfxns + degflows
@@ -1103,7 +1181,7 @@ def update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, col
     dot = plot_gv_bipartite(g, faultfxns, degnodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, g.edges, dot)
     return dot
 def update_gv_graphplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, arrows=False, **kwargs):
-    """graphviz helpwer: Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
+    """graphviz helper: Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
     Digraph, Graph = gv_import_check()
     kwargs["pad"] = kwargs.get("pad", "0.5")
     kwargs["ranksep"] = kwargs.get("ranksep", "2")
@@ -1117,6 +1195,7 @@ def update_gv_graphplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, c
     return dot
 
 def update_gv_actplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, arrows=True, seqgraph={}, **kwargs):
+    """Updates an action graph plot at a given timestep t_ind given the result history reshist"""
     Digraph, Graph = gv_import_check()
     kwargs["pad"] = kwargs.get("pad", "0.5")
     kwargs["ranksep"] = kwargs.get("ranksep", "2")
@@ -1130,6 +1209,7 @@ def update_gv_actplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=
     dot = plot_gv_normgraph(g, edgeflows, faultfxns, degfxns, degflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot, **kwargs)
     return dot
 def update_gv_flowgraphplot(t_ind,fxn, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, arrows=[],seqgraph={}, seqlabels=False, **kwargs):
+    """Updates an ASG plot with flows at a given timestep t_ind given the result history reshist"""
     Digraph, Graph = gv_import_check()
     kwargs["pad"] = kwargs.get("pad", "0.5")
     kwargs["ranksep"] = kwargs.get("ranksep", "2")
@@ -1302,18 +1382,20 @@ def update_net_bipplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=Tru
     fig, ax, gra = plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = reshist['functions'].keys(), flows=reshist['flows'].keys(), **kwargs)
     return fig, ax, gra
 def update_net_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
-    """Updates a typegraph-stype plot at a given timestep t_ind given the result history reshist"""
+    """Updates a typegraph-style plot at a given timestep t_ind given the result history reshist"""
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     degnodes = degfxns + degflows
     fig, ax, gra = plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, **kwargs)
     return fig, ax, gra
 def update_net_actplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], arrows=True, **kwargs):
+    """Updates an action graph plot at a given timestep t_ind given the result history reshist"""
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
     fig, ax, gra = plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors, arrows=arrows, **kwargs)
     return fig, ax, gra
 def update_net_flowgraphplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], arrows=True, seqgraph={}, **kwargs):
+    """Updates an ASG plot with flows at a given timestep t_ind given the result history reshist"""
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
     degnodes = degfxns + degflows
