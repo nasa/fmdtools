@@ -656,8 +656,8 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, **kwargs)
-        elif gtype=='actions':      update_actplot(mdl, t_ind, reshist, g, pos, **kwargs)
-        elif gtype in ['flows', 'combined']: update_flowgraphplot(mdl, t_ind, reshist, g, pos, **kwargs)
+        elif gtype=='actions':      update_actplot(t_ind,mdl, reshist, g, pos, **kwargs)
+        elif gtype in ['flows', 'combined']: update_flowgraphplot( t_ind,mdl, reshist, g, pos, **kwargs)
         else:           raise Exception("Graph type "+gtype+" not a valid option")
         return fig
     elif renderer=='netgraph':
@@ -665,12 +665,17 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         if gtype=='bipartite':      fig, ax, gra = update_net_bipplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='typegraph':    fig, ax, gra = update_net_typegraphplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='normal':       fig, ax, gra = update_net_graphplot(t_ind, reshist, g, pos, **kwargs)
-        else:                       raise Exception("Graph type "+gtype+" not a valid option")
+        elif gtype=='actions':      fig, ax, gra =update_net_actplot(t_ind,mdl, reshist, g, pos, **kwargs)
+        elif gtype in ['flows', 'combined']: fig, ax, gra = update_net_flowgraphplot(t_ind,mdl, reshist, g, pos, **kwargs)
+        else:           raise Exception("Graph type "+gtype+" not a valid option")
         return fig, gra
     elif renderer=='graphviz':
-        if gtype=='bipartite': dot = update_gv_bipplot(t_ind, reshist, g, **kwargs)
-        elif gtype=='normal':   dot = update_gv_graphplot(t_ind, reshist, g, **kwargs)
+        if gtype=='bipartite':                  dot = update_gv_bipplot(t_ind, reshist, g, **kwargs)
+        elif gtype=='normal':                   dot = update_gv_graphplot(t_ind, reshist, g, **kwargs)
+        elif gtype=='actions':                  dot =update_gv_actplot(t_ind,mdl, reshist, g, pos, **kwargs)
+        elif gtype in ['flows', 'combined']:    dot = update_gv_flowgraphplot(t_ind,mdl, reshist, g, pos, **kwargs)
         else:           raise Exception("Graph type "+gtype+" not a valid option for graphviz renderer")
+        a=1
         display(SVG(dot._repr_image_svg_xml()))
         return dot
     else: raise Exception("Invalid renderer: "+renderer)
@@ -719,27 +724,31 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
             if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, show=False, **kwargs)
             elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, show=False, **kwargs)
             elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, show=False, **kwargs)
-            elif gtype=='actions':      update_actplot(mdl, t_ind, reshist, g, pos, **kwargs)
-            elif gtype in ['flows', 'combined']: update_flowgraphplot(mdl, t_ind, reshist, g, pos, **kwargs)
+            elif gtype=='actions':      update_actplot(t_ind,mdl, reshist, g, pos, **kwargs)
+            elif gtype in ['flows', 'combined']: update_flowgraphplot(t_ind,mdl, reshist, g, pos, **kwargs)
             else:           raise Exception("Graph type "+gtype+" not a valid option")
             frames[t_ind] = fig
     elif renderer == 'netgraph':
-        for ind in t_inds:
+        for t_ind in t_inds:
             fig = plt.figure(figsize=kwargs.get('figsize', (6,4)))
             if gtype=='bipartite':      update_net_bipplot(t_ind, reshist, g, pos, **kwargs)
             elif gtype=='typegraph':    update_net_typegraphplot(t_ind, reshist, g, pos, **kwargs)
             elif gtype=='normal':       update_net_graphplot(t_ind, reshist, g, pos, **kwargs)
+            elif gtype=='actions':      update_net_actplot(t_ind,mdl, reshist, g, pos, **kwargs)
+            elif gtype in ['flows', 'combined']: update_net_flowgraphplot(t_ind,mdl, reshist, g, pos, **kwargs)
             else:           raise Exception("Graph type "+gtype+" not a valid option")
             frames[t_ind] = fig
     elif renderer == 'graphviz':
         for t_ind in t_inds:
-            if gtype=='bipartite': dot = update_gv_bipplot(t_ind, reshist, g, **kwargs)
-            elif gtype=='normal':   dot = update_gv_graphplot(t_ind, reshist, g, **kwargs)
+            if gtype=='bipartite':                  dot = update_gv_bipplot(t_ind, reshist, g, **kwargs)
+            elif gtype=='normal':                   dot = update_gv_graphplot(t_ind, reshist, g, **kwargs)
+            elif gtype=='actions':                  dot =update_gv_actplot(t_ind,mdl, reshist, g, pos, **kwargs)
+            elif gtype in ['flows', 'combined']:    dot = update_gv_flowgraphplot(t_ind,mdl, reshist, g, pos, **kwargs)
             else:           raise Exception("Graph type "+gtype+" not a valid option for graphviz renderer")
             frames[t_ind] = dot
     return frames
 
-def animation_from(mdl, reshist, times='all', faultscen=[], gtype='bipartite',figsize=(6,4), showfaultlabels=True, scale=1, show=False, pos=[], colors=['lightgray','orange', 'red'], renderer='matplotlib'):
+def animation_from(mdl, reshist, times='all', faultscen=[], gtype='bipartite',figsize=(6,4), showfaultlabels=True, scale=1, show=False, pos=[], colors=['lightgray','orange', 'red'], renderer='matplotlib', **kwargs):
     """
     Creates an animation of the model graph using results at given times in the results history.
     To view, use %matplotlib qt from spyder or %matplotlib notebook from jupyter
@@ -766,20 +775,32 @@ def animation_from(mdl, reshist, times='all', faultscen=[], gtype='bipartite',fi
     pos : dict, optional
         dict of node positions (if re-using positions). The default is [].
     """
-    g, pos = get_graph_pos(mdl, pos, gtype)
+    if getattr(mdl,'type', '')=='model':      g, pos = get_graph_pos(mdl,kwargs.pop('pos',[]), gtype)
+    elif getattr(mdl,'type', '')=='function': g,_, pos, seqgraph, arrows = get_asg_pos(mdl,kwargs.pop('pos',[]), gtype, kwargs.get('arrows',False))
+    else: raise Exception("Invalid object type: "+str(type(mdl))+" use a model or function instead")
     if times=='all':    t_inds= [i for i in range(0,len(reshist['time']))]
     else:   t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
     if renderer=='matplotlib':
-        if gtype=='bipartite':  update_plot = update_bipplot
-        elif gtype=='normal':   update_plot = update_graphplot
-        elif gtype=='typegraph':update_plot = update_typegraphplot
+        if gtype=='bipartite':               update_plot = update_bipplot
+        elif gtype=='normal':                update_plot = update_graphplot
+        elif gtype=='typegraph':             update_plot = update_typegraphplot
+        elif gtype=='actions':               update_plot =update_actplot
+        elif gtype in ['flows', 'combined']: update_plot =update_flowgraphplot
     elif renderer=='netgraph':
-        if gtype=='bipartite':  update_plot = update_net_bipplot
-        elif gtype=='normal':   update_plot = update_net_graphplot
-        elif gtype=='typegraph':update_plot = update_net_typegraphplot
-    
+        if gtype=='bipartite':               update_plot = update_net_bipplot
+        elif gtype=='normal':                update_plot = update_net_graphplot
+        elif gtype=='typegraph':             update_plot = update_net_typegraphplot
+        elif gtype=='actions':               update_plot =update_net_actplot
+        elif gtype in ['flows', 'combined']: update_plot =update_net_flowgraphplot
     fig = plt.figure(figsize=figsize)
-    ani = matplotlib.animation.FuncAnimation(fig, update_plot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False, colors))
+    if gtype in ['bipartite', 'normal', 'typegraph']:
+        ani = matplotlib.animation.FuncAnimation(fig, update_plot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False, colors))
+    elif gtype=='actions':
+        ani = matplotlib.animation.FuncAnimation(fig, update_plot, frames=t_inds, fargs=(mdl,reshist, g, pos, faultscen, showfaultlabels, scale, False, colors, arrows))
+    elif gtype=='flows':
+        ani = matplotlib.animation.FuncAnimation(fig, update_plot, frames=t_inds, fargs=(mdl,reshist, g, pos, faultscen, showfaultlabels, scale, False, colors))
+    elif gtype=='combined':
+        ani = matplotlib.animation.FuncAnimation(fig, update_plot, frames=t_inds, fargs=(mdl,reshist, g, pos, faultscen, showfaultlabels, scale, False, colors, seqgraph, kwargs.get('seqlabels', True)))
     if show: plt.show()
     return ani
 
@@ -1000,15 +1021,15 @@ def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=T
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     degnodes = degfxns + degflows
     plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, **kwargs)
-def update_actplot(fxn, t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
+def update_actplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], arrows=True, **kwargs):
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
-    plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors, **kwargs)
-def update_flowgraphplot(fxn, t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
+    plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors, arrows=True, **kwargs)
+def update_flowgraphplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], seqgraph={}, seqlabels=True, **kwargs):
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
     degnodes = degfxns + degflows
-    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = fxn.actions, flows = [f for f in {**fxn.flows, **fxn.internal_flows} if f in g], **kwargs)
+    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = fxn.actions, flows = [f for f in {**fxn.flows, **fxn.internal_flows} if f in g], seqgraph=seqgraph, seqlabels=seqlabels, **kwargs)
 ###GRAPHVIZ HELPER FUNCTIONS
 ############################
 def gv_import_check():
@@ -1019,7 +1040,7 @@ def gv_import_check():
         print(error.__class__.__name__ + ": " + error.message)
         raise Exception("GraphViz not installed. Please see:\n https://pypi.org/project/graphviz/ \n https://www.graphviz.org/download/")
     return Digraph, Graph
-def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultscen, time, showfaultlabels, colors_dict, dot):
+def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultscen, time, showfaultlabels, colors_dict, dot, **kwargs):
     """ Plots a normal graph representation using the graphviz toolkit. Used in other functions"""
     for node in g.nodes:
         node_label = node
@@ -1035,7 +1056,7 @@ def plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, fault
                 edge_label += faultflows[edge]
         dot.edge(edge[0], edge[1], label=edge_label, color=colors_dict[edge], labelangle="180",arrowhead="normal", arrowsize='2')
     return dot
-def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot, seqgraph={}, seqlabels=False,):
+def plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot, seqgraph={}, seqlabels=False,**kwargs):
     """ Plots a bipartite graph representation using the graphviz toolkit. Used in other functions"""
     shapes = {f:'ellipse' for f in flows}
     shapes.update({ f1:'box' for f1 in functions})
@@ -1093,6 +1114,34 @@ def update_gv_graphplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, c
     faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
     dot = Graph(comment="model network", graph_attr=kwargs)
     dot = plot_gv_normgraph(g, edgeflows, faultfxns, degfxns, degflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
+    return dot
+
+def update_gv_actplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, arrows=True, seqgraph={}, **kwargs):
+    Digraph, Graph = gv_import_check()
+    kwargs["pad"] = kwargs.get("pad", "0.5")
+    kwargs["ranksep"] = kwargs.get("ranksep", "2")
+    time = reshist['time'][t_ind]
+    functions = [*fxn.actions]; flows = [f for f in {**fxn.flows, **fxn.internal_flows}]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
+    colors_dict = gv_colors(g, 'normal', colors, heatmap,cmap, faultfxns, degfxns, faultedges=faultedges, edgeflows=edgeflows, functions=functions, flows=flows)
+    faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+    if arrows:  dot = Digraph(comment="model network", graph_attr=kwargs)
+    else:       dot = Graph(comment="model network", graph_attr=kwargs)
+    dot = plot_gv_normgraph(g, edgeflows, faultfxns, degfxns, degflows, faultlabels_form, faultedges, faultscen, time, showfaultlabels, colors_dict, dot, **kwargs)
+    return dot
+def update_gv_flowgraphplot(t_ind,fxn, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, arrows=[],seqgraph={}, seqlabels=False, **kwargs):
+    Digraph, Graph = gv_import_check()
+    kwargs["pad"] = kwargs.get("pad", "0.5")
+    kwargs["ranksep"] = kwargs.get("ranksep", "2")
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
+    functions =  [*fxn.actions]; flows = [f for f in {**fxn.flows, **fxn.internal_flows}]
+    degnodes = degfxns + degflows
+    colors_dict = gv_colors(g, 'bipartite', colors, heatmap,cmap, faultfxns, degnodes, faultedges=faultedges, edgeflows=edgeflows, functions=functions, flows=flows)
+    faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
+    if seqgraph:    dot = Digraph(comment="model network", graph_attr=kwargs)
+    else:           dot = Graph(comment="model network", graph_attr=kwargs)
+    dot = plot_gv_bipartite(g, faultfxns, degnodes, faultlabels_form, faultscen, time, showfaultlabels, colors_dict, functions, flows, g.edges, dot, seqgraph=seqgraph, seqlabels=seqlabels)
     return dot
 
 def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faultedges=[], edgeflows={}, functions=[], flows=[], highlight=[]):
@@ -1258,4 +1307,15 @@ def update_net_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabe
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     degnodes = degfxns + degflows
     fig, ax, gra = plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, **kwargs)
+    return fig, ax, gra
+def update_net_actplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], arrows=True, **kwargs):
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
+    fig, ax, gra = plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors, arrows=arrows, **kwargs)
+    return fig, ax, gra
+def update_net_flowgraphplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], arrows=True, seqgraph={}, **kwargs):
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
+    degnodes = degfxns + degflows
+    fig, ax, gra = plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = fxn.actions, flows = [f for f in {**fxn.flows, **fxn.internal_flows} if f in g], **kwargs)
     return fig, ax, gra
