@@ -337,10 +337,10 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
         
     if getattr(g,'type', '')=='model':
         mdl=g
-        g, pos = get_graph_pos(mdl,kwargs.get('pos',[]), gtype)
+        g, pos = get_graph_pos(mdl,kwargs.pop('pos',[]), gtype)
     elif getattr(g,'type', '')=='function':
         fxn=g
-        g,gtype, pos, seqgraph, arrows = get_asg_pos(fxn,kwargs.get('pos',[]), gtype, arrows)
+        g,gtype, pos, seqgraph, arrows = get_asg_pos(fxn,kwargs.pop('pos',[]), gtype, arrows)
         a=1
     elif isinstance(g, nx.classes.graph.Graph):
         a=1
@@ -454,10 +454,10 @@ def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], sca
     if kwargs.get('heatmap',False):     raise Exception("Heatmap option not implemented in netgraph renderer")
     if getattr(g,'type', '')=='model':
         mdl=g
-        g, pos = get_graph_pos(mdl,kwargs.get('pos',[]), gtype)
+        g, pos = get_graph_pos(mdl,kwargs.pop('pos',[]), gtype)
     elif getattr(g,'type', '')=='function':
         fxn=g
-        g,gtype, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(fxn,kwargs.get('pos',[]), gtype, kwargs.get('arrows', False))
+        g,gtype, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(fxn,kwargs.pop('pos',[]), gtype, kwargs.get('arrows', False))
         a=1
     elif isinstance(g, nx.classes.graph.Graph):
         a=1
@@ -646,17 +646,18 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
     """
     from IPython.display import display, SVG
     [[t_ind,],] = np.where(reshist['time']==time)
-    if getattr(mdl,'type', '')=='model':    g, pos = get_graph_pos(mdl,kwargs.get('pos',[]), gtype)
-    elif getattr(g,'type', '')=='function': 
-        g,gtype, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(mdl,kwargs.get('pos',[]), gtype, kwargs.get('arrows',False))
-    elif isinstance(g, nx.classes.graph.Graph):
-        a=1
-    else: raise Exception("Invalid object type: "+str(type(g))+" use a model or function instead")
+    if getattr(mdl,'type', '')=='model':    
+        g, pos = get_graph_pos(mdl,kwargs.pop('pos',[]), gtype)
+    elif getattr(mdl,'type', '')=='function': 
+        g,_, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(mdl,kwargs.pop('pos',[]), gtype, kwargs.get('arrows',False))
+    else: raise Exception("Invalid object type: "+str(type(mdl))+" use a model or function instead")
     if renderer=='matplotlib':
         fig  = plt.figure(figsize=kwargs.pop('figsize', (6,4)))
         if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, **kwargs)
+        elif gtype=='actions':      update_actplot(mdl, t_ind, reshist, g, pos, **kwargs)
+        elif gtype in ['flows', 'combined']: update_flowgraphplot(mdl, t_ind, reshist, g, pos, **kwargs)
         else:           raise Exception("Graph type "+gtype+" not a valid option")
         return fig
     elif renderer=='netgraph':
@@ -705,12 +706,10 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
     frames : Dict
         Dictionary of mpl figures keyed at each time {time:fig} 
     """
-    if getattr(mdl,'type', '')=='model':    g, pos = get_graph_pos(mdl,kwargs.get('pos',[]), gtype)
-    elif getattr(g,'type', '')=='function': 
-        g,gtype, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(mdl,kwargs.get('pos',[]), gtype, kwargs.get('arrows',False))
-    elif isinstance(g, nx.classes.graph.Graph):
-        a=1
-    else: raise Exception("Invalid object type: "+str(type(g))+" use a model or function instead")
+    if getattr(mdl,'type', '')=='model':    g, pos = get_graph_pos(mdl,kwargs.pop('pos',[]), gtype)
+    elif getattr(mdl,'type', '')=='function': 
+        g,_, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(mdl,kwargs.pop('pos',[]), gtype, kwargs.get('arrows',False))
+    else: raise Exception("Invalid object type: "+str(type(mdl))+" use a model or function instead")
     if times=='all':    t_inds= [i for i in range(0,len(reshist['time']))]
     else:               t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
     frames = {}
@@ -720,6 +719,8 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
             if gtype=='bipartite':      update_bipplot(t_ind, reshist, g, pos, show=False, **kwargs)
             elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, show=False, **kwargs)
             elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, show=False, **kwargs)
+            elif gtype=='actions':      update_actplot(mdl, t_ind, reshist, g, pos, **kwargs)
+            elif gtype in ['flows', 'combined']: update_flowgraphplot(mdl, t_ind, reshist, g, pos, **kwargs)
             else:           raise Exception("Graph type "+gtype+" not a valid option")
             frames[t_ind] = fig
     elif renderer == 'netgraph':
@@ -890,9 +891,40 @@ def get_plotlabels(g, reshist, t_ind):
     faultedgeflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if reshist['flows'][flow][t_ind]==0)]) for edge in faultedges}
     return labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgelabels
 
+def get_asg_plotlabels(g, fxn, reshist, t_ind):
+    labels={node:node for node in g.nodes}
+    fxnname=fxn.name
+    rhist = reshist['functions'][fxnname]
+    actions = fxn.actions
+    
+    faultfxns = []
+    degfxns = []
+    degflows = []
+    faultlabels = {}
+    edgelabels=dict()
+    for edge in g.edges:
+        edgelabels[edge[0],edge[1]]=g.get_edge_data(edge[0],edge[1]).get('name','')
+    for action in actions:
+        if rhist[action]['numfaults'][t_ind]:
+            faultfxns+=[action] 
+            if type(rhist[action]['faults']) == dict:
+                faultlabels[action] = {fault for fault, occ in rhist[action]['faults'].items() if occ[t_ind]}
+            else: faultlabels[action] = rhist['faults'][t_ind]
+        if not rhist['status'][t_ind]:
+            degfxns+=[action]
+        if faultlabels: faultfxns+=[action]
+    flows = [flow for flow in {**fxn.flows, **fxn.internal_flows} if flow in g]
+    for flow in flows:
+        if flow in rhist and any([v[t_ind]!=1 for v in rhist[flow].values()]):
+            degflows+=[flow] 
+        elif flow in reshist['flows'] and not reshist['flows'][flow][t_ind]==1:
+            degflows+=[flow]
+    faultedges = [] #[edge for edge in g.edges if any([reshist['flows'][flow][t_ind]==0 for flow in g.edges[edge].keys()])]
+    faultedgeflows = {} #{edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if reshist['flows'][flow][t_ind]==0)]) for edge in faultedges}
+    return labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgelabels
 ###MATPLOTLIB HELPER FUNCTIONS
 #############################
-def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[], show_edgelabels=True, arrows=False):
+def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[], show_edgelabels=True, arrows=False, **kwargs):
     """ Plots a standard graph. Used in other functions"""
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
@@ -912,7 +944,7 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
     plt.axis('off')
     return plt.gcf(), plt.gca()
 
-def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[], seqgraph={}, seqlabels=True):
+def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[], seqgraph={}, seqlabels=True, **kwargs):
     """ Plots a bipartite graph. Used in other functions"""
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
@@ -968,8 +1000,15 @@ def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=T
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     degnodes = degfxns + degflows
     plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, **kwargs)
-
-
+def update_actplot(fxn, t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
+    plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors, **kwargs)
+def update_flowgraphplot(fxn, t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
+    time = reshist['time'][t_ind]
+    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
+    degnodes = degfxns + degflows
+    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = fxn.actions, flows = [f for f in {**fxn.flows, **fxn.internal_flows} if f in g], **kwargs)
 ###GRAPHVIZ HELPER FUNCTIONS
 ############################
 def gv_import_check():

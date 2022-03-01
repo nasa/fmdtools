@@ -167,28 +167,45 @@ def fxnhist(mdlhist, returndiff=True):
         fxnshist[fxnname] = {}
         diff[fxnname]={}
         for state in fhist:
-            faulty  = mdlhist['faulty']['functions'][fxnname][state]
-            nominal = mdlhist['nominal']['functions'][fxnname][state] 
-            fxnshist[fxnname][state] = 1* (faulty == nominal)
-            if state=='mode': 
-                diff[fxnname][state] = [int(nominal[i]==faulty[i]) for i,f in enumerate(nominal)]
-            else:   diff[fxnname][state] = nominal - faulty
-        if fxnshist[fxnname]: status = np.prod(np.array(list(fxnshist[fxnname].values())), axis = 0) 
-        else: status = np.ones(len(mdlhist['faulty']['time']), dtype=int) #should empty be given 1 or nothing?
+            if type(fhist[state])==dict:
+                fxnshist[fxnname][state] = {}
+                diff[fxnname][state]={}
+                for substate in fhist[state]:
+                    if substate!='faults':
+                        get_diff_fxnhist(mdlhist['faulty']['functions'][fxnname][state][substate], mdlhist['nominal']['functions'][fxnname][state][substate], \
+                                         diff[fxnname][state], fxnshist[fxnname][state], substate)
+                if {'faults', 't_loc','mode'}.intersection(fhist[state]):
+                    fxnshist[fxnname][state]['faults']= mdlhist['faulty']['functions'][fxnname][state].get('faults', np.zeros(len(mdlhist['faulty']['time'])))
+                    fxnshist[fxnname][state]['numfaults'] = get_fault_hist(fxnshist[fxnname][state]['faults'], fxnname)
+                fxnshist[fxnname][state]['status'] = get_status(len(mdlhist['faulty']['time']),fxnshist[fxnname][state])
+            else:
+                get_diff_fxnhist(mdlhist['faulty']['functions'][fxnname][state], mdlhist['nominal']['functions'][fxnname][state], \
+                                 diff[fxnname], fxnshist[fxnname], state)
         fxnshist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname].get('faults', np.zeros(len(mdlhist['faulty']['time'])))
-        faults = fxnshist[fxnname]['faults']
-        if type(faults)==dict:              fxnshist[fxnname]['numfaults'] = np.sum([fhist for fhist in faults.values()], axis=0)
-        elif type(faults[0])==np.float64:  fxnshist[fxnname]['numfaults'] = faults
-        elif type(faults[0])==np.str_:     fxnshist[fxnname]['numfaults'] = np.array([int(f!='nom') for f in faults])
-        else:   raise Exception("Invalid data type in "+fxnname+" hist: "+str(type(faults)))
-        faulty = 1 - 1*(fxnshist[fxnname]['numfaults']>0)
-        fxnshist[fxnname]['status'] = status*faulty
+        fxnshist[fxnname]['numfaults'] = get_fault_hist(fxnshist[fxnname]['faults'], fxnname)
+        fxnshist[fxnname]['status'] = get_status(len(mdlhist['faulty']['time']),fxnshist[fxnname])
         faulthist[fxnname]=fxnshist[fxnname]['numfaults']
         deghist[fxnname] = fxnshist[fxnname]['status']
         if 0 in deghist[fxnname] or any(0 < faulthist[fxnname]): degfxns+=[fxnname]
     numfaults = np.sum(np.array(list(faulthist.values())), axis=0)
     numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
     return fxnshist, numfaults, degfxns, numdegfxns, diff
+def get_status(timelen, fhist=[]):
+    stat=np.prod(np.array(list([i for j,i in fhist.items() if (type(i)!=dict and j not in ['faults', 'numfaults'])])), axis = 0)
+    #if not stat:       stat = np.ones(timelen, dtype=int)
+    return stat * (1 - 1*(fhist.get('numfaults', 0)>0)) 
+def get_diff_fxnhist(faulty, nominal, diff, fxnhist, state):
+    fxnhist[state] = 1* (faulty == nominal)
+    if state=='mode' or faulty.dtype.type==np.str_: 
+        diff[state] = [int(nominal[i]!=faulty[i]) for i,f in enumerate(nominal)]
+    elif faulty.dtype.type==np.bool_:
+        diff[state] = 1*nominal - 1*faulty
+    else:   diff[state] = nominal - faulty
+def get_fault_hist(faults, fxnname):
+    if type(faults)==dict:             return np.sum([fhist for fhist in faults.values()], axis=0)
+    elif type(faults[0])==np.float64:  return faults
+    elif type(faults[0])==np.str_:     return np.array([int(f!='nom') for f in faults])
+    else:   raise Exception("Invalid data type in "+fxnname+" hist: "+str(type(faults)))
 def modephases(mdlhist):
     """
     Identifies the phases of operation for the system based on its modes.
