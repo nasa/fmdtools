@@ -701,6 +701,9 @@ class Block(Common):
         for state in self._states:
             states[state]=getattr(self,state)
         return states, self.faults.copy()
+    def check_update_nominal_faults(self):
+        if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
+        elif len(self.faults)==0:           self.faults.update(['nom'])
 
 #Function superclass 
 class FxnBlock(Block):
@@ -1066,8 +1069,7 @@ class FxnBlock(Block):
             for compname, comp in comp_actions.items():
                 self.faults.update({comp.localname+f for f in comp.faults if f!='nom'}) 
         self.time=time
-        if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
-        elif len(self.faults)==0:           self.faults.update(['nom'])
+        self.check_update_nominal_faults()
         if self.exclusive_faultmodes==True and len(self.faults)>1: 
             raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.faults)+"\n Is the mode representation nonexclusive?")
         return
@@ -1137,6 +1139,7 @@ class Action(Block):
             if self.time<time:  self.behavior(time); self.t_loc+=tstep
         else:                   self.behavior(time); self.t_loc+=tstep
         self.time=time
+        self.check_update_nominal_faults()
     def behavior(self, time):
         """Placeholder behavior method for actions"""
         a=0

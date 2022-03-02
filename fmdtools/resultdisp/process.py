@@ -149,7 +149,7 @@ def flowhist(mdlhist, returndiff=True):
             faulty  = mdlhist['faulty']['flows'][flowname][att]
             nominal = mdlhist['nominal']['flows'][flowname][att]
             flowshist[flowname][att] = 1* (faulty == nominal)
-            if returndiff: diff[flowname][att] = nominal - faulty
+            if returndiff: get_diff(faulty, nominal, att, diff[flowname])
         summhist[flowname] = np.prod(np.array(list(flowshist[flowname].values())), axis = 0)
         if 0 in summhist[flowname]: degflows+=[flowname]
     numdegflows = len(summhist) - np.sum(np.array(list(summhist.values())), axis=0)
@@ -196,6 +196,8 @@ def get_status(timelen, fhist=[]):
     return stat * (1 - 1*(fhist.get('numfaults', 0)>0)) 
 def get_diff_fxnhist(faulty, nominal, diff, fxnhist, state):
     fxnhist[state] = 1* (faulty == nominal)
+    get_diff(faulty, nominal, state, diff)
+def get_diff(faulty, nominal, state, diff):
     if state=='mode' or faulty.dtype.type==np.str_: 
         diff[state] = [int(nominal[i]!=faulty[i]) for i,f in enumerate(nominal)]
     elif faulty.dtype.type==np.bool_:
