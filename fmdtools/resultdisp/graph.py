@@ -66,14 +66,14 @@ def set_pos(g, gtype='bipartite',scale=1,node_color='lightgray', label_size=7, i
         initpos.update({f:[0.5,0.5] for f in g.nodes if f not in initpos})
     
     if gtype=='normal':
-        if not initpos: initpos = nx.shell_layout(g)
+        if not initpos: initpos = nx.planar_layout(g)
         edgeflows={}
         for edge in g.edges:
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
             edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows if flow not in ['name', 'arrow'])
         plot_instance = netgraph.InteractiveGraph(g, node_layout=initpos, node_size=20*scale,node_shape='s',node_color=node_color, node_edge_width=0, edge_labels=edgeflows, edge_label_font_size=label_size, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
     elif gtype=='bipartite':
-        if not initpos: initpos = nx.spring_layout(g)
+        if not initpos: initpos = nx.planar_layout(g)
         plot_instance = netgraph.InteractiveGraph(g, node_layout=initpos, node_size=7*scale,node_color=node_color, node_edge_width=0, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
     elif gtype=='typegraph':
         plot_instance = netgraph.InteractiveGraph(g,node_size=7*scale,node_color=node_color, node_edge_width=0, node_layout='dot', node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
@@ -202,7 +202,7 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
     fig = plt.figure(figsize=figsize)
     if gtype=='normal':
         edgeflows=dict()
-        if not pos: pos=nx.shell_layout(g)
+        if not pos: pos=nx.planar_layout(g)
         nodesize=scale*2000
         font_size=scale*12
         for edge in g.edges:
@@ -236,7 +236,7 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
         labels={node:node for node in g.nodes}
         functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
         flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
-        if not pos: pos=nx.spring_layout(g)
+        if not pos: pos=nx.planar_layout(g)
         nodesize=scale*700
         font_size=scale*6
         if heatmap:
@@ -469,7 +469,7 @@ def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], sca
     fig = plt.figure(figsize=figsize)
     if gtype=='normal':
         edgeflows=dict()
-        if not pos: pos=nx.shell_layout(g)
+        if not pos: pos=nx.planar_layout(g)
         for edge in g.edges:
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
             edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows if flow not in ['name', 'arrow'])
@@ -492,7 +492,7 @@ def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], sca
         labels={node:node for node in g.nodes}
         functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
         flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
-        if not pos: pos=nx.spring_layout(g)
+        if not pos: pos=nx.planar_layout(g)
         if highlight:
             faultnodes = highlight[0]
             degradednodes = highlight[1]
@@ -855,18 +855,18 @@ def get_graph_pos(mdl, pos, gtype):
         g = mdl.graph.copy()
         if not pos:
             if mdl.graph_pos:   pos=mdl.graph_pos
-            else:               pos=nx.shell_layout(g)
+            else:               pos=nx.planar_layout(g)
     elif gtype=='bipartite':
         g = mdl.bipartite.copy()
         if not pos:
             if mdl.bipartite_pos:   pos=mdl.bipartite_pos
-            else:                   pos=nx.spring_layout(g)
+            else:                   pos=nx.planar_layout(g)
     elif gtype=='typegraph':
         g=mdl.return_typegraph()
         if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
     elif gtype=='component':
         g = mdl.return_stategraph('component')
-        if not pos: pos=nx.spring_layout(g)
+        if not pos: pos=nx.planar_layout(g)
     else: raise Exception("Graph type "+gtype+" not valid")
     return g,pos
 def get_asg_pos(fxn, pos, gtype, arrows):
@@ -875,15 +875,15 @@ def get_asg_pos(fxn, pos, gtype, arrows):
     if gtype=='actions':    
         gtype='normal'
         g= fxn.action_graph; seqgraph={}; arrows=True
-        if not pos: pos = getattr(fxn, 'action_graph_pos', nx.shell_layout(g))
+        if not pos: pos = getattr(fxn, 'action_graph_pos', nx.planar_layout(g))
     elif gtype=='flows':    
         gtype='bipartite'
         g= fxn.flow_graph; seqgraph={}
-        if not pos: pos = getattr(fxn, 'flow_graph_pos', nx.spring_layout(g))
+        if not pos: pos = getattr(fxn, 'flow_graph_pos', nx.planar_layout(g))
     elif gtype=='combined': 
         gtype='bipartite'
         g= fxn.flow_graph; seqgraph=fxn.action_graph
-        if not pos: pos = getattr(fxn, 'flow_graph_pos', nx.spring_layout(g))
+        if not pos: pos = getattr(fxn, 'flow_graph_pos', nx.planar_layout(g))
     else: raise Exception("Graph type "+gtype+" not valid")
     return g,gtype, pos, seqgraph, arrows
 def get_graph_annotations(g, gtype='bipartite'):
@@ -1010,7 +1010,6 @@ def get_asg_plotlabels(g, fxn, reshist, t_ind):
             else: faultlabels[action] = rhist['faults'][t_ind]
         if not rhist['status'][t_ind]:
             degfxns+=[action]
-        if faultlabels: faultfxns+=[action]
     flows = [flow for flow in {**fxn.flows, **fxn.internal_flows} if flow in g]
     for flow in flows:
         if flow in rhist and any([v[t_ind]!=1 for v in rhist[flow].values()]):
@@ -1028,7 +1027,7 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
     elif title:     plt.title(title)
     nodesize=scale*2000
     font_size=scale*12
-    if not pos: pos=nx.shell_layout(g)
+    if not pos: pos=nx.planar_layout(g)
     nx.draw_networkx(g,pos,node_size=nodesize,font_size=font_size, node_shape='s',edge_color='gray', node_color=colors[0], width=3, font_weight='bold')
     if show_edgelabels: nx.draw_networkx_edge_labels(g,pos,font_size=font_size, edge_labels=edgeflows, rotate=False)
     nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2], node_size = nodesize*1.2)
@@ -1048,7 +1047,7 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     elif title:     plt.title(title)
     nodesize=scale*700
     font_size=scale*8
-    if not pos: pos=nx.spring_layout(g)
+    if not pos: pos=nx.planar_layout(g)
     if functions and flows:
         nx.draw_networkx_edges(g, pos)
         nx.draw_networkx_nodes(g, pos, nodelist = functions, node_shape='s', node_size=nodesize, node_color = colors[0])
@@ -1310,7 +1309,7 @@ def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, fau
     """ Experimental method for plotting with netgraph instead of networkx"""
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
-    if not pos: pos=nx.shell_layout(g)
+    if not pos: pos=nx.planar_layout(g)
     from netgraph import Graph
     node_shape = {}; node_color ={}; node_edge_color={}
     for n in g.nodes:
@@ -1345,7 +1344,7 @@ def plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[],
     """ Experimental method for plotting with netgraph instead of networkx"""
     if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
     elif title:     plt.title(title)
-    if not pos: pos=nx.spring_layout(g)
+    if not pos: pos=nx.planar_layout(g)
     if type(g)==nx.classes.digraph.DiGraph: arrows = True
     else:                                   arrows = False
     from netgraph import Graph
