@@ -840,6 +840,7 @@ class FxnBlock(Block):
             Positions of the nodes of the action/flow graph {node: [x,y]}. Default is {}
         """
         if initial_action=='auto': initial_action = [act for act, in_degree  in self.action_graph.in_degree if in_degree==0]
+        elif type(initial_action)==str: initial_action=[initial_action]
         self.set_active_actions(initial_action)
         self.set_atts(state_rep=state_rep, max_action_prop=max_action_prop, mode_rep=mode_rep, asg_proptype=asg_proptype,initial_action=initial_action, per_timestep=per_timestep)
         if self.state_rep=='finite-state' and len(initial_action)>1: raise Exception("Cannot have more than one initial action with finite-state representation")
@@ -859,7 +860,7 @@ class FxnBlock(Block):
             self.faultmodes.update(modes_to_add)
             fmode_intersect = set(modes_to_add).intersection(self.actfaultmodes)
             if any(fmode_intersect):
-                raise Exception("Action "+aname+" overwrites existing fault modes: "+str(fmode_intersect))
+                raise Exception("Action "+aname+" overwrites existing fault modes: "+str(fmode_intersect)+". Rename the faults (or use name option in assoc_modes)")
             self.actfaultmodes.update({action.localname+modename:aname for modename in action.faultmodes})
         self.asg_pos=asg_pos
         
@@ -872,20 +873,35 @@ class FxnBlock(Block):
             self.active_actions = set(actions)
             if any(self.active_actions.difference(self.actions)): raise Exception("Initial actions not associated with model: "+str(self.active_actions.difference(self.actions)))
         else: raise Exception("Invalid option for initial_action")
-    def show_ASG(self, gtype='composite', with_cond_labels=True, pos=[]):
+    def show_ASG(self, gtype='combined', with_cond_labels=True, pos=[]):
         """
         Shows a visual representation of the internal Action Sequence Graph of the Function Block
+
+        Parameters
+        ----------
+        gtype : 'combined'/'flows'/'actions'
+            Gives a graphical representation of the ASG. Default is 'combined'
+            - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
+            - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
+            - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        with_cond_labels: Bool
+            Whether or not to label the conditions
+        pos : dict
+            Dictionary of node positions for actions/flows
         """
         import matplotlib.pyplot as plt
-        if gtype=='composite':      graph = nx.compose(self.flow_graph, self.action_graph)
+        if gtype=='combined':      graph = nx.compose(self.flow_graph, self.action_graph)
         elif gtype=='flows':        graph = self.flow_graph
-        elif gtype=='conditions':   graph = self.action_graph
-        if not pos: pos=nx.planar_layout(graph)
+        elif gtype=='actions':   graph = self.action_graph
+        if not pos: 
+            if not self.asg_pos: pos=nx.planar_layout(graph)
+            else: pos=self.asg_pos
         nx.draw(graph, pos=pos, with_labels=True, node_color='grey')
         nx.draw_networkx_nodes(self.action_graph, pos=pos, node_shape='s', node_color='skyblue')
+        nx.draw_networkx_nodes(self.action_graph, nodelist=self.active_actions, pos=pos, node_shape='s', node_color='green')
         edge_labels = {(in_node, out_node): label for in_node, out_node, label in graph.edges(data='name') if label}
         if with_cond_labels: nx.draw_networkx_edge_labels(graph, pos, edge_labels)
-        if gtype=='composite' or gtype=='conditions':
+        if gtype=='combined' or gtype=='conditions':
             nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=30, arrowstyle='->', node_shape='s', node_size=100)
         return plt.gcf()
     def add_flow(self,flowname, flowdict={}, flowtype=''):
