@@ -242,6 +242,7 @@ def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid
             factors = nomapp.get_param_scens(rangeid, *params)
         else:
             factors = {rangeid:nomapp.ranges[rangeid]['scenarios'] for rangeid in nomapp.ranges}
+    else: factors = nomapp.get_param_scens(rangeid, *params)
     if [*endclasses.values()][0].get('nominal', False): endclasses ={scen:ec['nominal'] for scen, ec in endclasses.items()}
     if metrics=='all':              metrics = [ec for ec,val in [*endclasses.values()][0].items() if type(val) in [float, int]]
     
@@ -318,6 +319,7 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
             factors = nomapp.get_param_scens(rangeid, *params)
         else:
             factors = {rangeid:nomapp.ranges[rangeid]['scenarios'] for rangeid in nomapp.ranges}
+    else: factors = nomapp.get_param_scens(rangeid, *params)
     if faults=='functions':     faultlist = set([e.partition(' ')[0] for scen in nested_endclasses for e in nested_endclasses[scen]])
     elif faults=='modes':       faultlist = set([e.partition(',')[0] for scen in nested_endclasses for e in nested_endclasses[scen]])
     elif faults=='mode type':   faultlist = set([e.partition(',')[0].partition(' ')[2] for scen in nested_endclasses for e in nested_endclasses[scen]])

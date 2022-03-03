@@ -2,13 +2,15 @@
 Description: Gives graph-level visualizations of the model using installed renderers.
 
 Public user-facing methods:
-    - :func:`set_pos`:              Set graph node positions manually 
+    - :func:`set_pos`:                      Set graph node positions manually 
     - :func:`show`:                         Plots a single graph object g. Has options for heatmaps/overlays and matplotlib/graphviz/pyvis renderers.
     - :func:`exec_order`:                   Displays the propagation order and type (dynamic/static) in the model. Works with matplotlib/graphviz renderers.
     - :func:`history`:                      Displays plots of the graph over time given a dict history of graph objects.  Works with matplotlib/graphviz renderers.
     - :func:`result_from`:                  Plots a representation of the model graph at a specific time in the results history. Works with matplotlib/graphviz renderers.
     - :func:`results_from`:                 Plots a set of representations of the model graph at given times in the results history. Works with matplotlib/graphviz renderers.
     - :func:`animation_from`:               Creates an animation of the model graph using results at given times in the results history.  Works with matplotlib renderers.
+Private class:
+    - :class:`GraphInteractor`:             Used to set nodes in set_pos
 """
 #File Name: resultdisp/graph.py
 #Contributors: Daniel Hulse and Sequoia Andrade
@@ -34,7 +36,7 @@ class GraphInteractor:
         self.fig, (self.bax, self.ax) = plt.subplots(2, gridspec_kw={'height_ratios': [1,10]})
         self.g=g
         self.gtype=gtype
-        if not pos: pos = nx.planar_layout(g)
+        pos=get_pos_robust(g, gtype,pos)
         self.pos=pos
         self.kwargs=kwargs
         self.refresh_plot()
@@ -208,7 +210,7 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         g, pos = get_graph_pos(mdl,pos, gtype)
-    if not pos: pos=nx.planar_layout(g)
+    pos=get_pos_robust(g, gtype,pos)
     if not fig: fig = plt.figure(figsize=figsize)
     if gtype=='normal':
         edgeflows=dict()
@@ -648,10 +650,17 @@ def get_graph_pos(mdl, pos, gtype):
         g=mdl.return_typegraph()
     elif gtype=='component':
         g = mdl.return_stategraph('component')
-        
     else: raise Exception("Graph type "+gtype+" not valid")
-    if not pos: pos=nx.planar_layout(g)
+    pos=get_pos_robust(g, gtype,pos)
     return g,pos
+def get_pos_robust(g, gtype='bipartite', pos={}):
+    """Tries to get the best positions for the graph"""
+    if not pos: 
+        if gtype=='typegraph': pos=nx.multipartite_layout(g, 'level')
+        else:
+            try: pos=nx.planar_layout(g)
+            except: pos=nx.spectral_layout(g)
+    return pos
 def get_graph_annotations(g, gtype='bipartite'):
     """Helper method that returns labels/lists degraded nodes for the plot annotations"""
     labels={node:node for node in g.nodes}
@@ -730,7 +739,7 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
     elif title:     plt.title(title)
     nodesize=scale*2000
     font_size=scale*12
-    if not pos: pos=nx.planar_layout(g)
+    pos=get_pos_robust(g, 'normal',pos)
     nx.draw_networkx(g,pos,node_size=nodesize,font_size=font_size, node_shape='s',edge_color='gray', node_color=colors[0], width=3, font_weight='bold')
     if show_edgelabels: nx.draw_networkx_edge_labels(g,pos,font_size=font_size, edge_labels=edgeflows)
     nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2], node_size = nodesize*1.2)
@@ -750,7 +759,7 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     elif title:     plt.title(title)
     nodesize=scale*700
     font_size=scale*8
-    if not pos: pos=nx.planar_layout(g)
+    pos=get_pos_robust(g,'bipartite',pos)
     if functions and flows:
         nx.draw_networkx_edges(g, pos)
         nx.draw_networkx_nodes(g, pos, nodelist = functions, node_shape='s', node_size=nodesize, node_color = colors[0])
@@ -794,7 +803,6 @@ def update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=T
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
     degnodes = degfxns + degflows
     plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, **kwargs)
-
 
 ###GRAPHVIZ HELPER FUNCTIONS
 ############################
@@ -847,7 +855,7 @@ def gv_execute_order_legend(colors):
     legend.node("Dynamic Step", label="Dynamic Step", style="filled", fillcolor=colors[2], shape='box')
     legend.node("Static Step", label="Static Step", style="filled", fillcolor=colors[1], shape='box')
     legend.attr(rank='source')
-    display(SVG(legend._repr_svg_()))
+    display(SVG(legend._repr_image_svg_xml()))
     return
 
 def update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, **kwargs):
