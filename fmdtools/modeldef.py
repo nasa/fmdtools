@@ -755,6 +755,7 @@ class FxnBlock(Block):
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
             self.compfaultmodes.update({components[cname].localname+modename:cname for modename in components[cname].faultmodes})
+            setattr(self, cname, components[cname])
         self.timers = timers
         for timername in timers:
             setattr(self, timername, Timer(timername))

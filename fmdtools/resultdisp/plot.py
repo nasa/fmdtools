@@ -233,24 +233,24 @@ def indiv_mdlhists(mdlhist, fxnflows={}, cols=2, aggregation='individual', comp_
     figs : list
         List of individual figures.
     """
-    inputs = locals()
+    inputs = copy.copy(locals())
     inputs.pop('mdlhist',''); inputs.pop('fxnflows',''); inputs.pop('kwargs','')
     inputs = {**inputs, **kwargs}
     figs = []
     if 'time' in mdlhist: mdlhist={'nominal':mdlhist}
-    if not fxnflows: fxnflows = {fxnflow:"all" for fxnflow in list(mdlhists['nominal']['functions'].keys())+list(mdlhists['nominal']['flows'].keys()) if any(mdlhists['nominal']['functions'].get(fxnflow, [])) or any(mdlhists['nominal']['flows'].get(fxnflow, []))}
+    if not fxnflows: fxnflows = {fxnflow:"all" for fxnflow in list(mdlhist['nominal']['functions'].keys())+list(mdlhist['nominal']['flows'].keys()) if any(mdlhist['nominal']['functions'].get(fxnflow, [])) or any(mdlhist['nominal']['flows'].get(fxnflow, []))}
     for fxnflow in fxnflows:
         fig = mdlhists(mdlhist.copy(), fxnflowvals={fxnflow:fxnflows.get(fxnflow,'all')}, **inputs, **kwargs)
         figs.append(fig)
     return figs
-def mdlhist(mdlhist, fault='', time=0, fxnflows=[],cols=2, returnfigs=False, legend=-1, timelabel='Time', units={}, phases={}, modephases={}, label_phases=True):
+def mdlhist(mdlhist, fault='', time=0, fxnflows={},cols=2, returnfigs=False, legend=-1, timelabel='Time', units={}, phases={}, modephases={}, label_phases=True):
     """
     Deprecated legacy plotting function. Use resultdisp.plot.indiv_mdlhists instead.
     """
     warnings.warn("Deprecated function. Use resultdisp.plot.indiv_mdlhists instead.")
     figs = indiv_mdlhists(mdlhist, fxnflows, cols, title=fault, time_slice=time, legend_loc=legend, xlabel=timelabel, ylabels=units, phases=phases, modephases=modephases, label_phases=label_phases)
     if returnfigs: return figs
-def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=True, legend=-1, timelabel="time", units={}, phases={}, modephases={}, label_phases=True):
+def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals='all', cols=2, returnfig=True, legend=-1, timelabel="time", units={}, phases={}, modephases={}, label_phases=True):
     """
     Deprecated legacy plotting function. Use resultdisp.plot.mdlhists instead.
     """

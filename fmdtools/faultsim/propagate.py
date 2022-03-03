@@ -939,6 +939,7 @@ def update_blockhist(blockname, block, blockhist, t_ind):
     t_ind : int
         index to update the history at
     """
+    if block.type not in ['function', 'component', 'action', 'block']: raise Exception(blockname+" is not a block. Is it being overwritten?")
     states, faults = block.return_states()
     if 'faults' in blockhist:
         if type(blockhist["faults"]) == dict:

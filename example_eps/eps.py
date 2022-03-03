@@ -295,7 +295,6 @@ if __name__ == '__main__':
 
 
     endclasses, mdlhists = propagate.single_faults(mdl)
-
     reshists, diffs, summary = rd.process.hists(mdlhists)
 
     sumtable = rd.tabulate.summary(summary)
@@ -307,5 +306,6 @@ if __name__ == '__main__':
     rd.graph.show(resgraph,heatmap=degtimemap)
 
     endclasses, mdlhists = propagate.single_faults(mdl)
+    
     
         
