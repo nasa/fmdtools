@@ -1733,16 +1733,20 @@ class SampleApproach():
                     sample strategy to use (quadrature, full integral, even spacing, random times, likeliest, or symmetric random times)
                 - 'numpts' : float
                     number of points to use (for evenspacing, randtimes, and symrandtimes only)
-                - 'quad' : quadpy quadrature
-                    quadrature object if the quadrature option is selected.
+                - 'quad' : dict
+                    dict with structure {'nodes'[nodelist], 'weights':weightlist}
+                    where the nodes in the nodelist range between -1 and 1
+                    and the weights in the weightlist sum to 2.
         defaultsamp : TYPE, optional
             Defines how the model will be sampled over time by default. The default is {'samp':'evenspacing','numpts':1}. Has structure:
                 - 'samp' : str ('quad', 'fullint', 'evenspacing','randtimes','symrandtimes')
                     sample strategy to use (quadrature, full integral, even spacing, random times,likeliest, or symmetric random times)
                 - 'numpts' : float
                     number of points to use (for evenspacing, randtimes, and symrandtimes only)
-                - 'quad' : quadpy quadrature
-                    quadrature object if the quadrature option is selected.
+                - 'quad' : dict
+                    dict with structure {'nodes'[nodelist], 'weights':weightlist}
+                    where the nodes in the nodelist range between -1 and 1
+                    and the weights in the weightlist sum to 2.
         """
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
         if phases=='global':                self.globalphases = mdl.phases; self.phases = {}; self.modephases = modephases
@@ -1954,8 +1958,10 @@ class SampleApproach():
                     sample strategy to use (quadrature, full integral, even spacing, random times, or symmetric random times)
                 - 'numpts' : float
                     number of points to use (for evenspacing, randtimes, and symrandtimes only)
-                - 'quad' : quadpy quadrature
-                    quadrature object if the quadrature option is selected.
+                - 'quad' : dict
+                    dict with structure {'nodes'[nodelist], 'weights':weightlist}
+                    where the nodes in the nodelist range between -1 and 1
+                    and the weights in the weightlist sum to 2.
         possible_pts : 
             list of possible points in time.
 
@@ -1972,11 +1978,11 @@ class SampleApproach():
             if param['numpts']+2 > len(possible_pts): pts = possible_pts
             else: pts= [int(round(np.quantile(possible_pts, p/(param['numpts']+1)))) for p in range(param['numpts']+2)][1:-1]
         elif param['samp']=='quadrature':
-            quantiles = param['quad'].points/2 +0.5
+            quantiles = param['quad']['nodes']/2 +0.5
             if len(quantiles) > len(possible_pts): pts = possible_pts
             else: 
                 pts= [int(round(np.quantile(possible_pts, q))) for q in quantiles]
-                weights=param['quad'].weights/sum(param['quad'].weights)
+                weights=param['quad']['weights']/sum(param['quad']['weights'])
         elif param['samp']=='randtimes':
             if param['numpts']>=len(possible_pts): pts = possible_pts
             else: pts= [possible_pts.pop(np.random.randint(len(possible_pts))) for i in range(min(param['numpts'], len(possible_pts)))]
