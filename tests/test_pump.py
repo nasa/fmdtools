@@ -13,7 +13,6 @@ import fmdtools.resultdisp as rd
 from fmdtools.modeldef import SampleApproach, check_pickleability
 from CommonTests import CommonTests
 import numpy as np
-import quadpy
 
 class PumpTests(unittest.TestCase, CommonTests):
     def setUp(self):
@@ -71,10 +70,11 @@ class PumpTests(unittest.TestCase, CommonTests):
         app_center = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':1})
         center_util=exp_cost_quant(app_center,mdl)
         self.assertAlmostEqual(full_util, center_util)
-        app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad': quadpy.c1.gauss_patterson(1)})
+        from scipy import integrate
+        nodes, weights = integrate._quadrature._cached_roots_legendre(3)
+        app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad':{'nodes':nodes,'weights':weights}})
         quad_util=exp_cost_quant(app_quad,mdl)
         self.assertAlmostEqual(full_util, quad_util)
-        #test pruning
         
     def test_approach_parallelism(self):
         """Test whether the pump simulates the same when simulated using parallel or staged options"""
