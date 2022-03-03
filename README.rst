@@ -84,13 +84,12 @@ fmdtools requires Python 3 and depends directly on these packages (see requireme
    dill 
    pickle
 
-These packages are optional but recommended to enable specific fmdtools use-cases and work with examples in the repository:
+These packages are optional but recommended to enable specific fmdtools use-cases and to work with examples in the repository:
 
 ::
 
    jupyter notebook			#(for repository notebooks)
    graphviz				#(to plot using graphviz options)
-   netgraph				#(to adjust node positions in graphs)
    pyvis				#(for interactive html views of model graphs)
    quadpy 				#(for quadrature sampling)
    ffmpeg 				#(for animations)

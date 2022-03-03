@@ -36,12 +36,12 @@ from fmdtools.modeldef import *
 # propagation (e.g. updatefxn()) are added to the object
 class ImportEE(FxnBlock):
     #Initializing the function requires the flows going in and out of the function
-    def __init__(self,flows):
+    def __init__(self,name,flows):
         #this initializes the fault state of the system and adds needed flows
         #self.faults will be used to store which faults are in the function
         #flows will now be attibutes with names given by the keys in the input
         # dict, e.g. {'EEout':EEout} means self.EEout will be the EEout flow
-        super().__init__(['EEout'],flows)
+        super().__init__(name,flows,['EEout'])
 
         #fault modes that originate in the function are listed here in a dictionary
         #these modes will be used to generate a list of scenarios
@@ -73,10 +73,10 @@ class ImportEE(FxnBlock):
 
 class ImportWater(FxnBlock):
     #Initializing the function requires the flows going in and out of the function
-    def __init__(self,flows):
+    def __init__(self,name,flows):
         #init requires a dictionary of flows with the internal variable name and
         # the object reference
-        super().__init__(['Watout'],flows)
+        super().__init__(name,flows,['Watout'])
         self.failrate=1e-5
         self.assoc_modes({'no_wat':[1.0, [1,1,1], 1000]})
     #in this function, no conditional faults are modelled, so we don't need to include it
@@ -91,9 +91,9 @@ class ImportWater(FxnBlock):
 # Import Water is the pipe with water going into the pump
 class ExportWater(FxnBlock):
     #Initializing the function requires the flows going in and out of the function
-    def __init__(self,flows):
+    def __init__(self,name,flows):
         #flows going into/out of the function need to be made properties of the function
-        super().__init__(['Watin'], flows)
+        super().__init__(name, flows,['Watin'])
         self.failrate=1e-5
         self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 5000]})
     def behavior(self,time):
@@ -102,9 +102,9 @@ class ExportWater(FxnBlock):
 
 # Import Signal is the on/off switch
 class ImportSig(FxnBlock):
-    def __init__(self,flows):
+    def __init__(self,name,flows):
         #flows going into/out of the function need to be made properties of the function
-        super().__init__(['Sigout'],flows)
+        super().__init__(name,flows,['Sigout'])
         self.failrate=1e-6
         self.assoc_modes({'no_sig':[1.0, [1.5, 1.0, 1.0], 10000]})
     #when the behavior changes over time (and not just internal state) time must
@@ -126,13 +126,13 @@ class ImportSig(FxnBlock):
 # Move Water is the pump itself. While one could decompose this further,
 # one function is used for simplicity
 class MoveWat(FxnBlock):
-    def __init__(self,flows, delay):
+    def __init__(self,name,flows, delay):
         flownames=['EEin', 'Sigin', 'Watin', 'Watout']
         #here we also define the states of a model, which are also added as 
         #attributes to the function
         states={'eff':1.0} #effectiveness state
         self.delay=delay
-        super().__init__(flownames,flows,states, timers={'timer'})
+        super().__init__(name,flows,flownames,states, timers={'timer'})
         self.failrate=1e-5
         self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]})
         #timers can be set by adding variables to functions also
@@ -227,7 +227,7 @@ class Pump(Model):
         self.add_fxn('MoveWater',  ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'],fclass=MoveWat, fparams=params['delay'])
         self.add_fxn('ExportWater', ['Wat_2'], fclass=ExportWater)
         
-        self.construct_graph()
+        self.build_model()
         
     #PROVIDE MEANS OF CLASSIFYING RESULTS
     # this function classifies the faults into severities based on the state of faults

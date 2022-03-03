@@ -2,13 +2,13 @@
 Description: Gives graph-level visualizations of the model using installed renderers.
 
 Public user-facing methods:
-    - :func:`set_pos`:              Set graph node positions manually (uses netgraph)
-    - :func:`show`:                         Plots a single graph object g. Has options for heatmaps/overlays and matplotlib/graphviz/netgraph/pyvis renderers.
-    - :func:`exec_order`:                   Displays the propagation order and type (dynamic/static) in the model. Works with matplotlib/graphviz/netgraph renderers.
-    - :func:`history`:                      Displays plots of the graph over time given a dict history of graph objects.  Works with matplotlib/graphviz/netgraph renderers.
-    - :func:`result_from`:                  Plots a representation of the model graph at a specific time in the results history. Works with matplotlib/graphviz/netgraph renderers.
-    - :func:`results_from`:                 Plots a set of representations of the model graph at given times in the results history. Works with matplotlib/graphviz/netgraph renderers.
-    - :func:`animation_from`:               Creates an animation of the model graph using results at given times in the results history.  Works with matplotlib/netgraph renderers.
+    - :func:`set_pos`:              Set graph node positions manually 
+    - :func:`show`:                         Plots a single graph object g. Has options for heatmaps/overlays and matplotlib/graphviz/pyvis renderers.
+    - :func:`exec_order`:                   Displays the propagation order and type (dynamic/static) in the model. Works with matplotlib/graphviz renderers.
+    - :func:`history`:                      Displays plots of the graph over time given a dict history of graph objects.  Works with matplotlib/graphviz renderers.
+    - :func:`result_from`:                  Plots a representation of the model graph at a specific time in the results history. Works with matplotlib/graphviz renderers.
+    - :func:`results_from`:                 Plots a set of representations of the model graph at given times in the results history. Works with matplotlib/graphviz renderers.
+    - :func:`animation_from`:               Creates an animation of the model graph using results at given times in the results history.  Works with matplotlib renderers.
 """
 #File Name: resultdisp/graph.py
 #Contributors: Daniel Hulse and Sequoia Andrade
@@ -22,13 +22,88 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation
 from matplotlib.patches import Patch
-import netgraph
+from matplotlib.widgets import Button
+from matplotlib import get_backend
 
-def set_pos(g, gtype='bipartite',scale=1,node_color='lightgray', label_size=7, initpos={}, figsize=(6,4)):
+class GraphInteractor:
+    """A simple interactive graph for consistent node placement, etc--used in set_pos to set node positions"""
+    showverts = True
+    epsilon = 0.2  # max pixel distance to count as a vertex hit
+    def __init__(self, g, gtype='bipartite', pos=[], **kwargs):   
+        self.t=0
+        self.fig, (self.bax, self.ax) = plt.subplots(2, gridspec_kw={'height_ratios': [1,10]})
+        self.g=g
+        self.gtype=gtype
+        if not pos: pos = nx.planar_layout(g)
+        self.pos=pos
+        self.kwargs=kwargs
+        self.refresh_plot()
+        self._clicked_node=None
+        bnext = Button(self.bax, 'Print positions')
+        bnext.on_clicked(self.print_pos)
+        self.fig.canvas.mpl_connect('button_press_event', self.on_button_press)
+        self.fig.canvas.mpl_connect('button_release_event', self.on_button_release)
+        self.fig.canvas.mpl_connect('motion_notify_event', self.on_mouse_move)
+    def get_closest_point(self, event):
+        """Finds the closest node to the given click to see if it should be moved"""
+        pt_x = np.array([x[0] for x in self.pos.values()])
+        pt_y = np.array([x[1] for x in self.pos.values()])
+        pt_names =[*self.pos.keys()]
+        
+        dists = np.hypot(pt_x - event.xdata, pt_y - event.ydata)
+        closest_pt = pt_names[dists.argmin()]
+        if dists.min()>= self.epsilon:
+            closest_pt = None
+        return closest_pt
+    def on_button_press(self, event):
+        """Determines what to do when a button is pressed"""
+        if event.inaxes is None:
+            return
+        if event.inaxes==self.bax:
+            self.print_pos()
+            return
+        if event.button != 1:
+            return
+        self._clicked_node = self.get_closest_point(event)
+    def on_button_release(self, event):
+        """Determines what to do when the mouse is released"""
+        if event.button != 1:
+            return
+        self._clicked_node = None
+        self.ax.clear()
+        self.refresh_plot()
+    def on_mouse_move(self, event):
+        """Changes the node position when the user drags it"""
+        if not self.showverts:
+            return
+        if event.inaxes is None:
+            return
+        if event.button != 1:
+            return
+        x, y = event.xdata, event.ydata
+        if self._clicked_node: self.pos[self._clicked_node]=[x,y]
+    def refresh_plot(self):
+        """Refreshes the plot with the new positions."""
+        self.pos = {pt:np.round(loc,2) for pt, loc in self.pos.items()}
+        show(self.g, self.gtype, pos=self.pos, fig=self.fig, **self.kwargs)
+        self.ax.set_xlim(-1,1)
+        self.ax.set_ylim(-1,1)
+        limits=plt.axis('on')
+        self.ax.tick_params(left=True, bottom=True, labelleft=True, labelbottom=True)
+        self.ax.set_aspect('equal')
+        self.ax.grid(True, which='both')
+        self.ax.set_title('Drag nodes to change their positions')
+        self.t+=1
+        plt.pause(0.0001)
+        plt.show()
+    def print_pos(self):
+        print(self.pos)
+        
+
+def set_pos(g, gtype='bipartite', **kwargs):
     """
-    Provides graphical interface to set graph node positions. If model is provided, it will also set the positions in the model object. 
-    
-    To work, this method must be opened in an external window, so change the IPython before use usings %matplotlib qt' (or '%matplotlib osx')
+    Sets the position of nodes for plots in resultdisp.graph using a graphical tool.
+    Note: make sure matplotlib is set to plot in an external window (e.g using '%matplotlib qt)
 
     Parameters
     ----------
@@ -36,23 +111,14 @@ def set_pos(g, gtype='bipartite',scale=1,node_color='lightgray', label_size=7, i
         normal or bipartite graph of the model of interest
     gtype : 'normal' or 'bipartite', optional
         Type of graph to plot. The default is 'normal'.
-    scale : float, optional
-        scale for the node sizes. The default is 1.
-    node_color : str, optional
-        color to use for the nodes. The default is 'lightgray'.
-    label_size : float, optional
-        size to use for the labels. The default is 8.
-    initpos : dict, optional
-        dict of initial positions for the labels (e.g. from nx.spring_layout). The default is {}.
-    figsize : tuple, optional
-        size of matplotlib frame. Default is (6,4)
+    **kwargs : kwargs
+        keyword arguments for graph.show_matplotlib
 
     Returns
     -------
-    pos: dict
-        dict of node positions for use in graph plotting functions
+    p : GraphIterator
+        Graph Iterator (in resultdisp.Graph)
     """
-    set_mdl=False
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         set_mdl=True
@@ -60,33 +126,10 @@ def set_pos(g, gtype='bipartite',scale=1,node_color='lightgray', label_size=7, i
         elif gtype=='bipartite':    g=mdl.bipartite
         elif gtype=='typegraph':    g=mdl.return_typegraph()
     plt.ion()
-    fig = plt.figure()
-    if gtype=='normal':
-        if not initpos: initpos = nx.shell_layout(g)
-        edgeflows={}
-        for edge in g.edges:
-            flows=list(g.get_edge_data(edge[0],edge[1]).keys())
-            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
-        plot_instance = netgraph.InteractiveGraph(g,node_size=20*scale,node_shape='s',node_color=node_color, node_edge_width=0, node_positions=initpos, edge_labels=edgeflows, edge_label_font_size=label_size, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
-    elif gtype=='bipartite':
-        if not initpos: initpos = nx.spring_layout(g)
-        plot_instance = netgraph.InteractiveGraph(g,node_size=7*scale,node_color=node_color, node_edge_width=0, node_positions=initpos, node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
-    elif gtype=='typegraph':
-        plot_instance = netgraph.InteractiveGraph(g,node_size=7*scale,node_color=node_color, node_edge_width=0, node_layout='dot', node_labels={n:n for n in g.nodes},node_label_fontdict={'size':label_size, 'fontweight':'bold'})
-    plt.title("Click and drag to place nodes.")
-    plt.xlabel("Close window to continue...")
-    plt.show(block=False)
-    t=0
-    while plt.fignum_exists(fig.number):
-        plt.pause(0.1)
-        t+=0.1
-    if t< 0.2:
+    p = GraphInteractor(g, gtype)
+    if 'inline' in get_backend():
         print("Cannot place nodes in inline version of plot. Use '%matplotlib qt' (or '%matplotlib osx') to open in external window")
-    pos = {node:list(loc) for node,loc in plot_instance.node_positions.items()}
-    if set_mdl:
-        if gtype=='normal':         mdl.graph_pos = pos
-        elif gtype=='bipartite':    mdl.bipartite_pos = pos  
-    return pos
+    return p
 
 def show(g, gtype='bipartite', renderer = 'matplotlib', filename="", **kwargs):
     """
@@ -98,7 +141,7 @@ def show(g, gtype='bipartite', renderer = 'matplotlib', filename="", **kwargs):
         The multigraph to plot
     gtype : 'normal' or 'bipartite'
         Type of graph input to show--normal (multgraph) or bipartite
-    renderer : 'matplotlib' or 'graphviz' or 'pyvis' or 'netgraph'
+    renderer : 'matplotlib' or 'graphviz' or 'pyvis' 
         Renderer to use with the drawing. Renderer must be installed. Default is 'matplotlib'
     filename : string, optional
         the filename for the output. The default is '' (in which a file is not saved except in pyvis).
@@ -107,24 +150,20 @@ def show(g, gtype='bipartite', renderer = 'matplotlib', filename="", **kwargs):
             graph.show_graphviz
             graph.show_maplotlib
             graph.show_pyvis
-            graph.show_netgraph
         for more information on these arguments
     """
     if renderer=='graphviz':
         dot = show_graphviz(g, gtype, filename=filename,  **kwargs)
         return dot
     elif renderer == 'matplotlib':
-        fig, ax = show_matplotlib(g, gtype=gtype, filename=filename, **kwargs)
+        fig, ax= show_matplotlib(g, gtype=gtype, filename=filename, **kwargs)
         return fig, ax
-    elif renderer =='netgraph':
-        fig, ax, gra = show_netgraph(g, gtype=gtype, filename=filename, **kwargs)
-        return fig, ax, gra
     elif renderer == 'pyvis':
         n = show_pyvis(g, gtype=gtype, filename=filename, **kwargs)
         return n
     else: raise Exception("Invalid renderer: "+renderer)
 
-def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm):
+def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm, fig=[]):
     """
     Plots a single graph object g using matplotlib
 
@@ -158,6 +197,8 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
         A heatmap dictionary to overlay on the plot. The default is {}.
     cmap : mpl colormap
         Colormap to use for heatmap visualizations
+    fig : mpl figure
+        Current matplotlib figure to plot on
 
     Returns
     -------
@@ -167,10 +208,10 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
     if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
         mdl=g
         g, pos = get_graph_pos(mdl,pos, gtype)
-    fig = plt.figure(figsize=figsize)
+    if not pos: pos=nx.planar_layout(g)
+    if not fig: fig = plt.figure(figsize=figsize)
     if gtype=='normal':
         edgeflows=dict()
-        if not pos: pos=nx.shell_layout(g)
         nodesize=scale*2000
         font_size=scale*12
         for edge in g.edges:
@@ -204,7 +245,6 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
         labels={node:node for node in g.nodes}
         functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
         flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
-        if not pos: pos=nx.spring_layout(g)
         nodesize=scale*700
         font_size=scale*6
         if heatmap:
@@ -229,7 +269,6 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
             labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
             fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False)
     elif gtype == 'typegraph':
-        if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
         if heatmap or highlight: raise Exception("Invalid option for typegraph--not implemented")
         if "mdl" in locals():
             nx.draw(g, pos=pos, with_labels=True, node_size=scale*700, font_size=scale*8, font_weight='bold', node_color=colors[0])
@@ -349,92 +388,6 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
     if filename:    dot.render(filename = filename+gtype, format = filetype)
     else:           display(SVG(dot._repr_image_svg_xml()))
     return dot
-def show_netgraph(g, gtype='bipartite', filename='', filetype='png', pos=[], scale=1, faultscen=[], time=[], figsize=(6,4), showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], **kwargs):
-    """
-    Plots a single graph object g using netgraph
-
-    Parameters
-    ----------
-    g : networkx graph or model
-        The multigraph to plot
-    gtype : 'normal' or 'bipartite'
-        Type of graph input to show--normal (multgraph) or bipartite
-    filename : string
-        Name to give the saved file, if saved. Default is '' (not saving the file)
-    filetype : string
-        Type of file to save the figure as (if saving)
-    pos : dict
-        Positions for nodes
-    scale: float
-        Changes sizes of nodes in bipartite graph
-    faultscen : str, optional
-        Name of the fault scenario (for the title). The default is [].
-    time : float, optional
-        Time of fault injection. The default is [].
-    showfaultlabels : bool, optional
-        Whether or not to label the faults on the functions. The default is True.
-    highlight : list, optional
-        Functions/flows to highlight using [faulty functions, degraded functions, degraded flows] labelling scheme.
-        Used for custom overlays. Default is []
-    colors : list, optional
-        List of colors to use for nominal, degraded, and faulty functions/flows.
-        Default is: ['lightgray','orange', 'red']
-    Returns
-    -------
-    fig, ax : matplotlib figure/axis
-        Matplotlib figure object of the drawn graph
-    gra : netgraph Graph
-        Netgraph object which can be further manipulated
-    """
-    from netgraph import Graph
-    if kwargs.get('heatmap',False):     raise Exception("Heatmap option not implemented in netgraph renderer")
-    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
-        mdl=g
-        g, pos = get_graph_pos(mdl,pos, gtype)
-    fig = plt.figure(figsize=figsize)
-    if gtype=='normal':
-        edgeflows=dict()
-        if not pos: pos=nx.shell_layout(g)
-        for edge in g.edges:
-            flows=list(g.get_edge_data(edge[0],edge[1]).keys())
-            edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows)
-        if highlight:
-            faultnodes = highlight[0]
-            degradednodes = highlight[1]
-            faultedges = highlight[2]
-            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
-            else:               faultlabels = {}
-            faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge])]) for edge in faultedges}
-            fig_axis = plot_norm_netgraph(g, g.nodes(), faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=scale, pos=pos, colors=colors, show=False, **kwargs)
-        else:
-            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-            if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
-            else:
-                faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
-                faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
-            fig_axis = plot_norm_netgraph(g, labels, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=scale, pos=pos, colors=colors, show=False, **kwargs)
-    elif gtype in ['bipartite', 'component']:
-        labels={node:node for node in g.nodes}
-        functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
-        flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
-        if not pos: pos=nx.spring_layout(g)
-        if highlight:
-            faultnodes = highlight[0]
-            degradednodes = highlight[1]
-            if showfaultlabels: 
-                faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
-            else:               faultlabels={}
-            fig_axis = plot_bip_netgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False, **kwargs)
-        else:                                      #plots graph with status information 
-            labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-            fig_axis = plot_bip_netgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False, **kwargs)
-    elif gtype == 'typegraph':
-        if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
-        if kwargs.get('heatmap', False): raise Exception("Invalid option for typegraph--not implemented")
-        labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-        fig_axis =plot_bip_netgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, **kwargs)
-    if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
-    return fig, fig.axes[0], fig_axis[2]
 
 def show_pyvis(g, gtype='typegraph', filename="typegraph", width=1000, filt=True, physics=False, notebook=False):
     """
@@ -558,7 +511,7 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
     time : float
         The time in the history to plot the graph at.
-    renderer : 'matplotlib' or 'graphviz' or 'netgraph'
+    renderer : 'matplotlib' or 'graphviz' 
         Renderer to use to plot the graph. Default is 'matplotlib'
     gtype : str, optional
         The type of graph to plot (normal or bipartite). The default is 'bipartite'.
@@ -582,14 +535,7 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
         elif gtype=='typegraph':    update_typegraphplot(t_ind, reshist, g, pos, **kwargs)
         elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, **kwargs)
         else:           raise Exception("Graph type "+gtype+" not a valid option")
-        return fig
-    elif renderer=='netgraph':
-        fig = plt.figure(figsize=kwargs.pop('figsize', (6,4)))
-        if gtype=='bipartite':      fig, ax, gra = update_net_bipplot(t_ind, reshist, g, pos, **kwargs)
-        elif gtype=='typegraph':    fig, ax, gra = update_net_typegraphplot(t_ind, reshist, g, pos, **kwargs)
-        elif gtype=='normal':       fig, ax, gra = update_net_graphplot(t_ind, reshist, g, pos, **kwargs)
-        else:                       raise Exception("Graph type "+gtype+" not a valid option")
-        return fig, gra
+        return fig, plt.gca()
     elif renderer=='graphviz':
         if gtype=='bipartite': dot = update_gv_bipplot(t_ind, reshist, g, **kwargs)
         elif gtype=='normal':   dot = update_gv_graphplot(t_ind, reshist, g, **kwargs)
@@ -610,7 +556,7 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
         A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
     times : list or 'all'
         The times in the history to plot the graph at. If 'all', plots them all
-    renderer : 'matplotlib' or 'graphviz' or 'netgraph'
+    renderer : 'matplotlib' or 'graphviz' or 
         Renderer to use to plot the graph. Default is 'matplotlib'
     gtype : str, optional
         The type of graph to plot (normal or bipartite). The default is 'bipartite'.
@@ -641,14 +587,6 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
             elif gtype=='normal':       update_graphplot(t_ind, reshist, g, pos, show=False, **kwargs)
             else:           raise Exception("Graph type "+gtype+" not a valid option")
             frames[t_ind] = fig
-    elif renderer == 'netgraph':
-        for ind in t_inds:
-            fig = plt.figure(figsize=kwargs.get('figsize', (6,4)))
-            if gtype=='bipartite':      update_net_bipplot(t_ind, reshist, g, pos, **kwargs)
-            elif gtype=='typegraph':    update_net_typegraphplot(t_ind, reshist, g, pos, **kwargs)
-            elif gtype=='normal':       update_net_graphplot(t_ind, reshist, g, pos, **kwargs)
-            else:           raise Exception("Graph type "+gtype+" not a valid option")
-            frames[t_ind] = fig
     elif renderer == 'graphviz':
         for t_ind in t_inds:
             if gtype=='bipartite': dot = update_gv_bipplot(t_ind, reshist, g, **kwargs)
@@ -657,7 +595,7 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
             frames[t_ind] = dot
     return frames
 
-def animation_from(mdl, reshist, times='all', faultscen=[], gtype='bipartite',figsize=(6,4), showfaultlabels=True, scale=1, show=False, pos=[], colors=['lightgray','orange', 'red'], renderer='matplotlib'):
+def animation_from(mdl, reshist, times='all', faultscen=[], gtype='bipartite',figsize=(6,4), showfaultlabels=True, scale=1, show=False, pos=[], colors=['lightgray','orange', 'red']):
     """
     Creates an animation of the model graph using results at given times in the results history.
     To view, use %matplotlib qt from spyder or %matplotlib notebook from jupyter
@@ -687,15 +625,10 @@ def animation_from(mdl, reshist, times='all', faultscen=[], gtype='bipartite',fi
     g, pos = get_graph_pos(mdl, pos, gtype)
     if times=='all':    t_inds= [i for i in range(0,len(reshist['time']))]
     else:   t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
-    if renderer=='matplotlib':
-        if gtype=='bipartite':  update_plot = update_bipplot
-        elif gtype=='normal':   update_plot = update_graphplot
-        elif gtype=='typegraph':update_plot = update_typegraphplot
-    elif renderer=='netgraph':
-        if gtype=='bipartite':  update_plot = update_net_bipplot
-        elif gtype=='normal':   update_plot = update_net_graphplot
-        elif gtype=='typegraph':update_plot = update_net_typegraphplot
     
+    if gtype=='bipartite':  update_plot = update_bipplot
+    elif gtype=='normal':   update_plot = update_graphplot
+    elif gtype=='typegraph':update_plot = update_typegraphplot
     fig = plt.figure(figsize=figsize)
     ani = matplotlib.animation.FuncAnimation(fig, update_plot, frames=t_inds, fargs=(reshist, g, pos, faultscen, showfaultlabels, scale, False, colors))
     if show: plt.show()
@@ -707,21 +640,17 @@ def get_graph_pos(mdl, pos, gtype):
     """Helper function for getting the right graph/positions from a model"""
     if gtype=='normal': 
         g = mdl.graph.copy()
-        if not pos:
-            if mdl.graph_pos:   pos=mdl.graph_pos
-            else:               pos=nx.shell_layout(g)
+        if not pos: pos=mdl.graph_pos
     elif gtype=='bipartite':
         g = mdl.bipartite.copy()
-        if not pos:
-            if mdl.bipartite_pos:   pos=mdl.bipartite_pos
-            else:                   pos=nx.spring_layout(g)
+        if not pos: pos=mdl.bipartite_pos
     elif gtype=='typegraph':
         g=mdl.return_typegraph()
-        if not pos: pos = netgraph.get_sugiyama_layout(list(g.edges), nodes=g.nodes)
     elif gtype=='component':
         g = mdl.return_stategraph('component')
-        if not pos: pos=nx.spring_layout(g)
+        
     else: raise Exception("Graph type "+gtype+" not valid")
+    if not pos: pos=nx.planar_layout(g)
     return g,pos
 def get_graph_annotations(g, gtype='bipartite'):
     """Helper method that returns labels/lists degraded nodes for the plot annotations"""
@@ -801,7 +730,7 @@ def plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faulted
     elif title:     plt.title(title)
     nodesize=scale*2000
     font_size=scale*12
-    if not pos: pos=nx.shell_layout(g)
+    if not pos: pos=nx.planar_layout(g)
     nx.draw_networkx(g,pos,node_size=nodesize,font_size=font_size, node_shape='s',edge_color='gray', node_color=colors[0], width=3, font_weight='bold')
     if show_edgelabels: nx.draw_networkx_edge_labels(g,pos,font_size=font_size, edge_labels=edgeflows)
     nx.draw_networkx_nodes(g, pos, nodelist=faultfxns,node_shape='s',node_color = colors[2], node_size = nodesize*1.2)
@@ -821,7 +750,7 @@ def plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], tim
     elif title:     plt.title(title)
     nodesize=scale*700
     font_size=scale*8
-    if not pos: pos=nx.spring_layout(g)
+    if not pos: pos=nx.planar_layout(g)
     if functions and flows:
         nx.draw_networkx_edges(g, pos)
         nx.draw_networkx_nodes(g, pos, nodelist = functions, node_shape='s', node_size=nodesize, node_color = colors[0])
@@ -1027,85 +956,3 @@ def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faulte
             for i in range(len(mm)):
                 colors_dict[node_labels[i]] = mm[i]
     return colors_dict
-
-###NETGRAPH HELPER FUNCTIONS
-#############################
-def plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[], show_edgelabels=True, **kwargs):
-    """ Experimental method for plotting with netgraph instead of networkx"""
-    if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    elif title:     plt.title(title)
-    if not pos: pos=nx.shell_layout(g)
-    from netgraph import Graph
-    node_shape = {}; node_color ={}; node_edge_color={}
-    for n in g.nodes:
-        node_edge_color[n]=colors[0]
-        node_shape[n]='s'
-        if n in degfxns:  
-            node_color[n]=colors[1]
-            if n in faultfxns: node_edge_color[n] = colors[2]
-        elif n in faultfxns: node_color[n]=colors[2]
-        else:               node_color[n]=colors[0]
-        if showfaultlabels and faultlabels.get(n,False):
-            labels[n]=labels[n]+' \n'+' '.join([f for f in faultlabels[n] if f!='nom'])
-            
-    edge_color = {}
-    for e in g.edges:
-        edge_color[e] = colors[0]
-        if e in faultedges: edge_color[e] = colors[1]
-    if showfaultlabels and any(faultedgeflows): 
-        edgelabels = faultedgeflows
-        edge_label_fontdict={'size':scale*4, 'color':'red'}
-    elif show_edgelabels: 
-        edgelabels=edgeflows
-        edge_label_fontdict={'size':scale*4, 'color':'black'}
-    else:               
-        edgelabels={}
-        edge_label_fontdict={'size':scale*4, 'color':'black'}
-    gra = Graph(g, node_layout=pos, edge_color=edge_color, edge_size=scale, edge_labels=edgelabels,edge_label_font_size=scale*2, edge_zorder=1,edge_label_fontdict=edge_label_fontdict,\
-                node_label_fontdict={'size':scale*8, 'fontweight':'bold'}, node_size=scale*20, node_edge_width=scale*2,\
-                node_shape = node_shape, node_color = node_color, node_edge_color = node_edge_color, node_labels=labels,  node_zorder=2)
-    return plt.gcf(), plt.gca(), gra
-def plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=['lightgray','orange', 'red'], title=[],functions=[], flows=[], **kwargs):
-    """ Experimental method for plotting with netgraph instead of networkx"""
-    if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
-    elif title:     plt.title(title)
-    if not pos: pos=nx.spring_layout(g)
-    if type(g)==nx.classes.digraph.DiGraph: arrows = True
-    else:                                   arrows = False
-    from netgraph import Graph
-    node_shape = {}; node_color ={}; node_edge_color={}
-    for n in g.nodes:
-        if n in functions: node_shape[n]='s'
-        else:               node_shape[n]='o'
-        node_edge_color[n]=colors[0]
-        if n in degnodes:  
-            node_color[n]=colors[1]
-            if n in faultfxns: node_edge_color[n] = colors[2]
-            else:               node_edge_color[n] = colors[1]
-        elif n in faultfxns: node_color[n]=colors[2]
-        else:               node_color[n]=colors[0]
-        if showfaultlabels and faultlabels.get(n,False):
-            labels[n]=labels[n]+' \n'+''.join([f for f in faultlabels[n] if f!='nom'])
-    gra = Graph(g, node_layout=pos, node_label_fontdict={'size':scale*8, 'fontweight':'bold'}, node_size=scale*10, node_edge_width=scale,\
-                node_shape = node_shape, node_color = node_color, node_edge_color = node_edge_color, node_labels=labels,  node_zorder=2, arrows=arrows)
-    return plt.gcf(), plt.gca(), gra
-def update_net_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
-    """Updates a normal graph plot at a given timestep t_ind given the result history reshist"""
-    time = reshist['time'][t_ind]
-    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-    fig, ax, gra = plot_norm_netgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale, pos, show, colors=colors, **kwargs)
-    return fig, ax, gra
-def update_net_bipplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
-    """Updates a bipartite graph plot at a given timestep t_ind given the result history reshist"""
-    time = reshist['time'][t_ind]
-    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-    degnodes = degfxns + degflows
-    fig, ax, gra = plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = reshist['functions'].keys(), flows=reshist['flows'].keys(), **kwargs)
-    return fig, ax, gra
-def update_net_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=['lightgray','orange', 'red'], **kwargs):
-    """Updates a typegraph-stype plot at a given timestep t_ind given the result history reshist"""
-    time = reshist['time'][t_ind]
-    labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_plotlabels(g, reshist, t_ind)
-    degnodes = degfxns + degflows
-    fig, ax, gra = plot_bip_netgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, **kwargs)
-    return fig, ax, gra
