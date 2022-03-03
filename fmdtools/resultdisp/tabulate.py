@@ -56,26 +56,36 @@ def objtab(hist, objtype):
     df = pd.DataFrame()
     labels = []
     for fxn, atts in hist[objtype].items():
-        for att, val in atts.items():
+        for att, val in atts.items():                
             if att != 'faults':
-                label=(fxn, att)
-                labels=labels+[label]
-                df[label]=val
+                if type(val)==dict:
+                    for subatt, subval in val.items():
+                        if subatt!= 'faults':
+                            label=(fxn, att+'_'+subatt)
+                            labels=labels+[label]
+                            df[label]=subval
+                        else:
+                            label_faults(hist[objtype][fxn][att].get('faults', {}), df, fxn+'_'+subatt, labels)
+                else:
+                    label=(fxn, att)
+                    labels=labels+[label]
+                    df[label]=val
         if objtype =='functions':
-            faulthist = hist[objtype][fxn].get('faults', {})
-            if type(faulthist)==dict:
-                for fault in faulthist:
-                    label=(fxn, fault+' fault')
-                    labels+=[label]
-                    df[label]=hist[objtype][fxn]['faults'][fault]
-            elif len(faulthist)==1:
-                label=(fxn, 'faults')
-                labels+=[label]
-                df[label]=hist[objtype][fxn]['faults']
-                
+            label_faults(hist[objtype][fxn].get('faults', {}), df, fxn, labels)
     index = pd.MultiIndex.from_tuples(labels)
     df = df.reindex(index, axis="columns")
     return df
+def label_faults(faulthist, df, fxnlab, labels):
+    if type(faulthist)==dict:
+        for fault in faulthist:
+            label=(fxnlab, fault+' fault')
+            labels+=[label]
+            df[label]=faulthist[fault]
+    elif len(faulthist)==1:
+        label=(fxnlab, 'faults')
+        labels+=[label]
+        df[label]=faulthist
+
 def stats(reshist):
     """Makes a table of #of degraded flows, # of degraded functions, and # of total faults over time given a single result history"""
     table = pd.DataFrame(reshist['stats'])

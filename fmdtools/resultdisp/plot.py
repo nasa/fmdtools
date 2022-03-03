@@ -3,8 +3,7 @@ Description: Plots quantities of interest over time using matplotlib.
 
 Uses the following methods:
     - :func:`mdlhist`:         plots function and flow histories over time (with different plots for each function/flow)
-    - :func:`mdlhistvals`:     plots function and flow histories over time on a single plot
-    - :func:`mdlhists`:        plots function and flow histories over time with multiple scenarios on the same plot
+    - :func:`mdlhists`:        plots function and flow histories over time on the same plot
     - :func:`nominal_vals_1d`: plots the end-state classification of a system over a (1-D) range of nominal runs
     - :func:`nominal_vals_2d`: plots the end-state classification of a system over a (2-D) range of nominal runs
     - :func:`nominal_vals_3d`: plots the end-state classification of a system over a (3-D) range of nominal runs
@@ -17,10 +16,11 @@ Uses the following methods:
 """
 #File Name: resultdisp/plot.py
 #Author: Daniel Hulse
-#Created: November 2019 (Refactored April 2020)
+#Created: November 2019 (Refactored April 2020, Feb 2022)
 
 import matplotlib.pyplot as plt
 import copy
+import warnings
 import numpy as np
 from fmdtools.resultdisp.tabulate import costovertime as cost_table
 from fmdtools.resultdisp.process import bootstrap_confidence_interval
@@ -30,161 +30,12 @@ from matplotlib.ticker import AutoMinorLocator
 from mpl_toolkits.mplot3d import Axes3D
 from fmdtools.faultsim.propagate import cut_mdlhist
 
-def mdlhist(mdlhist, fault='', time=0, fxnflows=[],cols=2, returnfigs=False, legend=True, timelabel='Time', units=[], phases={}, modephases={}, label_phases=True):
-    """
-    Plots all states of the model at a time given a model history on separate plots.
 
-    Parameters
-    ----------
-    mdlhist : dict
-        History of states over time. Can be just the scenario states or a dict of scenario states and nominal states per {'nominal':nomhist,'faulty':mdlhist}
-    fault : str, optional
-        Name of the fault (for the title). The default is ''.
-    time : float, optional
-        Time of fault injection. The default is 0.
-    fxnflows : list, optional
-        List of functions and flows to plot. The default is [], which returns all.
-    cols : int, optional
-        columns to use in the figure. The default is 2.
-    returnfigs: bool, optional
-        Whether to return the figure objects in a list. The default is False.
-    legend: bool, optional
-        Whether the plot should have a legend for faulty and nominal states. The default is true.
-    timelabel : str, optional
-        Label to use for the x-axes (e.g., seconds, minutes). Default is "time".
-    units : dict, optional
-        Labels to use for the y-axes (e.g., power, voltage). Default is ''
-    phases : dict, optional
-        Phase dictionary from process.modephases. Overlays lines over function values corresponding to the phase progression.
-    modephases : dict, optional
-        Modephase dictionary from process.modephases. Makes the phase overlay labels correspond to mode names instead of phases.
-    label_phases : book, optional
-        Whether to overlay labels on phases (or just leave lines)
-    """
-    mdlhists={}
-    if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
-    else: mdlhists=mdlhist
-    figs = []
-    if not fxnflows: fxnflows = {fxnflow:"all" for fxnflow in list(mdlhists['nominal']['functions'].keys())+list(mdlhists['nominal']['flows'].keys()) if any(mdlhists['nominal']['functions'].get(fxnflow, [])) or any(mdlhists['nominal']['flows'].get(fxnflow, []))}
-    for fxnflow in fxnflows:
-        fig = mdlhistvals(mdlhists.copy(), fault=fault, time=time, fxnflowvals={fxnflow:'all'}, cols=cols, returnfig=True, legend=legend, timelabel=timelabel, units=units, phases=phases, modephases=modephases, label_phases=label_phases)
-        figs.append(fig)
-    if returnfigs:
-        return figs
-def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=True, legend=True, timelabel="time", units=[], phases={}, modephases={}, label_phases=True):
-    """
-    Plots the states of a model over time given a history.
-
-    Parameters
-    ----------
-    mdlhist : dict
-        History of states over time. Can be just the scenario states or a dict of scenario states and nominal states per {'nominal':nomhist,'faulty':mdlhist}
-    fault : str, optional
-        Name of the fault (for the title). The default is ''.
-    time : float, optional
-        Time of fault injection. The default is 0.
-    fxnflowsvals : dict, optional
-        dict of flow values to plot with structure {fxnflow:[vals]}. The default is {}, which returns all.
-    cols : int, optional
-        columns to use in the figure. The default is 2.
-    returnfig : bool, optional
-        Whether to return the figure. The default is False.
-    legend : bool, optional
-        Whether the plot should have a legend for faulty and nominal states. The default is true
-    timelabel : str, optional
-        Label to use for the x-axes (e.g., seconds, minutes). Default is "time".
-    units : dict, optional
-        Labels to use for the y-axes (e.g., power, voltage). Default is ''
-    phases : dict, optional
-        Phase dictionary from process.modephases. Overlays lines over function values corresponding to the phase progression.
-    modephases : dict, optional
-        Modephase dictionary from process.modephases. Makes the phase overlay labels correspond to mode names instead of phases.
-    label_phases : book, optional
-        Whether to overlay labels on phases (or just leave lines)
-    """
-    mdlhists={}
-    if 'nominal' not in mdlhist: mdlhists['nominal']=mdlhist
-    else: mdlhists=mdlhist
-    times = mdlhists["nominal"]["time"]
-    if 'faulty' in mdlhist: f_times = mdlhists["faulty"]["time"]
-    
-    unitdict = dict(enumerate(units))
-
-    if fxnflowvals: 
-        all_vals = [f for f,v in fxnflowvals.items() if v=='all']
-        for fxnflow in all_vals:
-            if fxnflow in mdlhist['nominal']['functions']:  fxnflowvals[fxnflow]=list(mdlhist['nominal']['functions'][fxnflow].keys())
-            elif fxnflow in mdlhist['nominal']['flows']:    fxnflowvals[fxnflow]=list(mdlhist['nominal']['flows'][fxnflow].keys())
-        num_plots = sum([len(val) for k,val in fxnflowvals.items()]) + int(legend)
-    else: 
-        num_flow_plots = sum([len(flow) for flow in mdlhists['nominal']['flows'].values()])
-        num_fxn_plots = sum([len([a for a in atts if a!='faults']) for fname, atts in mdlhists['nominal'].get('functions',{}).items()])
-        num_plots = num_fxn_plots + num_flow_plots + int(legend)
-    fig = plt.figure(figsize=(cols*3, 2*num_plots/cols))
-    n=1
-    objtypes = set(mdlhists['nominal'].keys()).difference({'time'})
-    for objtype in objtypes:
-        for fxnflow in mdlhists['nominal'][objtype]:
-            if fxnflowvals: #if in the list 
-                if fxnflow not in fxnflowvals: continue
-            
-            if objtype =="flows":
-                nomhist=mdlhists['nominal']["flows"][fxnflow]
-                if 'faulty' in mdlhists: hist = mdlhists['faulty']["flows"][fxnflow]
-            elif objtype=="functions":
-                nomhist=copy.deepcopy(mdlhists['nominal']["functions"][fxnflow])
-                if len(nomhist.get('faults',[])) > 0:
-                    if type(nomhist.get('faults',[]))!=np.ndarray: del nomhist['faults']
-                if 'faulty' in mdlhists: 
-                    hist = copy.deepcopy(mdlhists['faulty']["functions"][fxnflow])
-                    if len(hist.get('faults',[])) > 0:
-                        if type(hist.get('faults',[]))!=np.ndarray: del hist['faults']
-
-            for var in nomhist:
-                if fxnflowvals: #if in the list of values
-                    if var not in fxnflowvals[fxnflow]: continue
-                if var=='faults': continue 
-                plt.subplot(int(np.ceil((num_plots)/cols)),cols,n, label=fxnflow+var)
-                n+=1
-                if 'faulty' in mdlhists:
-                    a, = plt.plot(f_times[:len(hist[var])], hist[var], color='r')
-                    c = plt.axvline(x=time, color='k')
-                    b, =plt.plot(times, nomhist[var], ls='--', color='b')
-                else:
-                    b, =plt.plot(times, nomhist[var], color='b')
-                if phases.get(fxnflow):
-                    ymin, ymax = plt.ylim()
-                    phaseseps = [i[0] for i in list(phases[fxnflow].values())[1:]]
-                    plt.vlines(phaseseps,ymin, ymax, colors='gray',linestyles='dashed')
-                    if label_phases:
-                        for phase in phases[fxnflow]:
-                            if modephases: phasetext = [m for m,p in modephases[fxnflow].items() if phase in p][0]
-                            else: phasetext = phase
-                            bbox_props = dict(boxstyle="round,pad=0.3", fc="white", lw=0, alpha=0.5)
-                            plt.text(np.average(phases[fxnflow][phase]), (ymin+ymax)/2, phasetext, ha='center', bbox=bbox_props)
-                plt.title(fxnflow+": "+var)
-                plt.xlabel(timelabel)
-                plt.ylabel(unitdict.get(n-2, ''))
-    if 'faulty' in mdlhists and any(nomhist):
-        if fxnflowvals: 
-            if len(fxnflowvals)==1: fig.suptitle('Dynamic Response of '+list(fxnflowvals.keys())[0]+' to fault'+' '+fault)
-            else:                   fig.suptitle('Dynamic Response of '+str(list(fxnflowvals.keys()))+' to fault'+' '+fault)
-        else:           fig.suptitle('Dynamic Response of Model States to fault'+' '+fault)
-        if legend:
-            ax_l = plt.subplot(int(np.ceil((num_plots)/cols)),cols,n, label='legend')
-            plt.legend([a,b],['faulty', 'nominal'], loc='center')
-            plt.box(on=None)
-            ax_l.get_xaxis().set_visible(False)
-            ax_l.get_yaxis().set_visible(False)
-    plt.tight_layout(pad=1)
-    plt.subplots_adjust(top=1-0.05-0.15/(num_plots/cols))
-    if returnfig: return fig
-    else: plt.show()
-
-def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_groups={}, 
+def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp_groups={}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
              fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
-             title='', indiv_kwargs={}, time_slice=[], figsize='default', **kwargs):
+             title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
+             phases={}, modephases={}, label_phases=True,  **kwargs):
     """
     Plot the behavior over time of the given function/flow values 
     over a set of scenarios, with ability to aggregate behaviors as needed.
@@ -192,12 +43,13 @@ def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_group
     Parameters
     ----------
     mdlhists : dict
-        Aggregate model history with structure {'scen':mdlhist}
+        Aggregate model history with structure {'scen':mdlhist} (or single mdlhist)
     fxnflowsvals : dict, optional
-        dict of flow values to plot with structure {fxnflow:[vals]}. The default is {}, which returns all.
+        dict of flow values to plot with structure {fxnflow:[vals], fxnflow:'val'/all, fxnflow:{'comp':[vals]}}. 
+        The default is 'all', which returns all.
     cols : int, optional
         columns to use in the figure. The default is 2.
-    aggregation : str
+    aggregation : str, optional
         Way of aggregating the plot values. The default is 'individual'
         Note that only the `individual` option can be used for histories of non-numeric quantities
         (e.g., modes, which are recorded as strings)
@@ -208,101 +60,203 @@ def mdlhists(mdlhists, fxnflowvals, cols=2, aggregation='individual', comp_group
         - 'mean_bound' plots the mean values over the sim with variable bound error bars
         - 'percentile' plots the percentile distribution of the sim over time (does not reject outliers)
             - optional argument 'perc_range' (int 0-100) specifies the percentile range of the inner bars (Default: 50) 
-    comp_groups : dict
+    comp_groups : dict, optional
         Dictionary for comparison groups (if more than one) with structure:
             {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')} Default is {}
             If a legend is shown, group names are used as labels.
-    legend_loc : int
+    legend_loc : int, optional
         Specifies the plot to place the legend on, if runs are bine compared. Default is -1 (the last plot)
         To remove the legend, give a value of False
-    `indiv_kwargs` dict
-        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where 
-        where kwargs is an individual dict of keyword arguments for the
-        comparison group comp (or scenario, if not aggregated) which overrides 
-        the global kwargs (or default behavior). 
-    xlabel : str
+    xlabel : str, optional
         Label for the x-axes. Default is 'time'
-    ylabel : dict
+    ylabels : dict, optional
         Label for the y-axes with structure {(fxnflowname, value):'label'}
-    max_ind : int
+    max_ind : int, optional
         index (usually correlates to time) cutoff for the simulation. Default is 'max' which uses the first simulation termination time.
-    boundtype : 'fill' or 'line'
+    boundtype : 'fill' or 'line', optional
         -'fill' plots the error bounds as a filled area
             - optional fillalpha (float) changes the alpha of this area.
         -'line' plots the error bounds as lines
             - optional boundcolor (str) changes the color of the bounds (default 'gray')
             - optional boundlinestyle (str) changes the style of the bound lines (default '--')
-    title : str
+    fillalpha : float
+        alpha value for fill in aggregated plots. Default is 0.3.
+    boundcolor : str, optional
+        color to make the bounds in aggregated plots. Default is 'gray'
+    boundlinestyle : str, optional
+        linestyle to use for bounds in aggregated plots. Default is '--'
+    ci : float, optional
+        Bootstrap confidence interval (0-1) to use in 'mean_ci' bound argument. Default is 0.95.
+    title : str, optional
         overall title for the plot. Default is ''
-    time_slice : int/list
+    indiv_kwargs : dict, optional
+        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where 
+        where kwargs is an individual dict of keyword arguments for the
+        comparison group comp (or scenario, if not aggregated) which overrides 
+        the global kwargs (or default behavior). If no comparison groups are given,
+        use 'default' for a single history or 'nominal'/'faulty' for a fault history
+        e.g. kwargs = {'nominal':{color:'green'}} would make the nominal color green   
+        Default is {}.
+    time_slice : int/list, optional
         overlays a bar or bars at the given index when the fault was injected (if any). Default is []
+    time_slice_label : str, optional
+        label to use for the time slice bars in the legend. Default is None
     figsize : tuple (float,float)
         x-y size for the figure. The default is 'default', which dymanically gives 3 for each column and 2 for each row
+    phases : dict, optional
+        Provide to overlay phases on the individual function histories, where phases
+        is from rd.process.mdlhist and of structure {'fxnname':'phase':[start, end]}. 
+        Default is {}.
+    modephases : dict, optional
+        dictionary that maps the phases to operational modes, if it is desired to track the progression
+        through modes
     **kwargs : kwargs
         keyword arguments to mpl.plot e.g. linestyle, color, etc. See 'aggregation' for specification.
+        phases={}, modephases={}, label_phases=True,  **kwargs):
     """
-    
-    plot_values = [(objname, objval) for objname in fxnflowvals for objval in fxnflowvals[objname]]
+    #Process data - clip and flatten
+    if 'time' in mdlhists: mdlhists={'nominal':mdlhists}
+    if max_ind=='max': max_ind = np.min([len(mdlhists[scen]['time']) for scen in mdlhists])-1
+    inds = [i for i in range(len(mdlhists[[*mdlhists.keys()][0]]['time']))]
+    for scen in mdlhists:
+        mdlhists[scen] = cut_mdlhist(mdlhists[scen], max_ind)
+    times = mdlhists[[*mdlhists.keys()][0]]['time']
+    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_plot=fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    #Sort into comparison groups
+    if not comp_groups: 
+        if aggregation=='individual':   grouphists = flat_mdlhists
+        else:                           grouphists = {'default':flat_mdlhists}
+    else:   grouphists = {group:{scen:flat_mdlhists[scen] for scen in scens} for group, scens in comp_groups.items()}
+    # Set up plots and iteration
+    if 'nominal' in grouphists.keys() and len(grouphists)>1: 
+        indiv_kwargs['nominal'] = indiv_kwargs.get('nominal', {'color':'blue', 'ls':'--'})
+    else: indiv_kwargs.pop('nominal','')
+    if 'faulty' in grouphists.keys(): 
+        indiv_kwargs['faulty'] = indiv_kwargs.get('faulty', {'color':'red'})  
+    else: indiv_kwargs.pop('faulty','')
+    template = [*flat_mdlhists.values()][0]
+    plot_values = [*template.keys()]
     num_plots = len(plot_values)
+    if num_plots==1: cols=1
     rows = int(np.ceil(num_plots/cols))
     if figsize=='default': figsize=(cols*3, 2*rows)
     fig, axs = plt.subplots(rows,cols, sharex=True, figsize=figsize) 
-    axs = axs.flatten()
+    if type(axs)==np.ndarray:   axs = axs.flatten()
+    else:                       axs=[axs]
     
-    if not (type(max_ind)==int and aggregation in ['individual','joint']):
-        if max_ind=='max': max_ind = np.min([len(mdlhists[scen]['time']) for scen in mdlhists])-1
-        inds = [i for i in range(len(mdlhists[[*mdlhists.keys()][0]]['time']))]
-        for scen in mdlhists:
-            mdlhists[scen] = cut_mdlhist(mdlhists[scen], max_ind)
-    times = mdlhists[[*mdlhists.keys()][0]]['time']
-    if not comp_groups: 
-        if aggregation=='individual':   grouphists = mdlhists
-        else:                           grouphists = {'default':mdlhists}
-    else:   grouphists = {group:{scen:mdlhists[scen] for scen in scens} for group, scens in comp_groups.items()}
     for i, plot_value in enumerate(plot_values):
         ax = axs[i]
         ax.set_title(' '.join(plot_value))
         ax.grid()
         if i >= (rows-1)*cols and xlabel: ax.set_xlabel(xlabel)
         if ylabels.get(plot_value, False): ax.set_ylabel(ylabels[plot_value])
-        if plot_value[0] in mdlhists[[*mdlhists.keys()][0]]['flows']:        f_type='flows'
-        elif plot_value[0] in mdlhists[[*mdlhists.keys()][0]]['functions']:  f_type='functions'
         for group, hists in grouphists.items():
             local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
             if aggregation=='individual':
-                ax.plot(times, hists[f_type][plot_value[0]][plot_value[1]], label=group, **local_kwargs)
+                if any([type(h)==tuple for h in hists.keys()]):
+                    ax.plot(times, hists[plot_value], label=group, **local_kwargs)
+                else:
+                    if 'color' not in local_kwargs: local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
+                    for hist in hists.values():
+                        ax.plot(times, hist[plot_value], label=group, **local_kwargs)
             elif aggregation=='mean_std':
-                mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                std_dev = np.std([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
+                std_dev = np.std([hist[plot_value] for hist in hists.values()], axis=0)
                 plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
             elif aggregation=='mean_ci':
-                mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                vals = [[hist[f_type][plot_value[0]][plot_value[1]][t] for hist in hists.values()] for t in inds]
+                mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
+                vals = [[hist[plot_value][t] for hist in hists.values()] for t in inds]
                 boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True, confidence_level=ci) for val in vals]).transpose()
                 plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2],boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
             elif aggregation=='mean_bound':
-                mean = np.mean([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                maxs = np.max([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                mins = np.min([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
+                mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
+                maxs = np.max([hist[plot_value] for hist in hists.values()], axis=0)
+                mins = np.min([hist[plot_value] for hist in hists.values()], axis=0)
                 plot_line_and_err(ax, times, mean, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
             elif aggregation=='percentile':
-                median= np.median([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                maxs = np.max([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                mins = np.min([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()], axis=0)
-                low_perc = np.percentile([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()],50-kwargs.get('perc_range',50)/2, axis=0)
-                high_perc = np.percentile([hist[f_type][plot_value[0]][plot_value[1]] for hist in hists.values()],50+kwargs.get('perc_range',50)/2, axis=0)
+                median= np.median([hist[plot_value] for hist in hists.values()], axis=0)
+                maxs = np.max([hist[plot_value] for hist in hists.values()], axis=0)
+                mins = np.min([hist[plot_value] for hist in hists.values()], axis=0)
+                low_perc = np.percentile([hist[plot_value] for hist in hists.values()],50-kwargs.get('perc_range',50)/2, axis=0)
+                high_perc = np.percentile([hist[plot_value] for hist in hists.values()],50+kwargs.get('perc_range',50)/2, axis=0)
                 plot_line_and_err(ax, times, median, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                 if boundtype=='fill':       ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
                 elif boundtype=='line':     plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
             else: raise Exception("Invalid aggregation option: "+aggregation)
-        if type(time_slice)==int: ax.axvline(x=time_slice, color='k')
+            if phases.get(plot_value[1]):
+                ymin, ymax = ax.get_ylim()
+                phaseseps = [i[0] for i in list(phases[plot_value[1]].values())[1:]]
+                ax.vlines(phaseseps,ymin, ymax, colors='gray',linestyles='dashed')
+                if label_phases:
+                    for phase in phases[plot_value[1]]:
+                        if modephases: phasetext = [m for m,p in modephases[plot_value[1]].items() if phase in p][0]
+                        else: phasetext = phase
+                        bbox_props = dict(boxstyle="round,pad=0.3", fc="white", lw=0, alpha=0.5)
+                        ax.text(np.average(phases[plot_value[1]][phase]), (ymin+ymax)/2, phasetext, ha='center', bbox=bbox_props)
+        if type(time_slice)==int: ax.axvline(x=time_slice, color='k', label=time_slice_label)
         else:   
-            for ts in time_slice: ax.axvline(x=ts, color='k')
-    if len(grouphists)>1 and legend_loc!=False: 
-        if legend_loc==-1:  ax.legend(prop={'size': 8})
-        else:               axs[legend_loc].legend(prop={'size': 8})
+            for ts in time_slice: ax.axvline(x=ts, color='k', label=time_slice_label)
+    if len(grouphists)>1 and legend_loc!=False:
+        ax.legend()
+        handles, labels = ax.get_legend_handles_labels()
+        ax.get_legend().remove()
+        ax_l = axs[legend_loc]
+        by_label = dict(zip(labels, handles))
+        if ax_l !=ax and legend_loc in [-1, len(axs)]:
+            ax_l.set_frame_on(False)
+            ax_l.get_xaxis().set_visible(False)
+            ax_l.get_yaxis().set_visible(False)
+            ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, loc='center')
+        else: ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8})
     if title: plt.suptitle(title)
     return fig, axs
+def indiv_mdlhists(mdlhist, fxnflows={}, cols=2, aggregation='individual', comp_groups={}, 
+             legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
+             fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
+             title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
+             phases={}, modephases={}, label_phases=True,  **kwargs):
+    """
+    Successively calls rd.plot.mdlhists to plot a number of seperate plots. Each
+    function or flow is given its own plot.
+
+    Parameters
+    ----------
+    mdlhists : dict
+        Aggregate model history with structure {'scen':mdlhist} (or single mdlhist)
+    fxnflows : dict, optional
+        dict of flow values to plot with structure {fxnflow:[vals], fxnflow:'val'/all, fxnflow:{'comp':[vals]}}.
+        Each mdlhist is given an individual plot.
+        The default is {}, which returns all.
+    **kwargs : see kwargs for rd.plot.mdlhists
+    Returns
+    -------
+    figs : list
+        List of individual figures.
+    """
+    inputs = locals()
+    inputs.pop('mdlhist',''); inputs.pop('fxnflows',''); inputs.pop('kwargs','')
+    inputs = {**inputs, **kwargs}
+    figs = []
+    if 'time' in mdlhist: mdlhist={'nominal':mdlhist}
+    if not fxnflows: fxnflows = {fxnflow:"all" for fxnflow in list(mdlhists['nominal']['functions'].keys())+list(mdlhists['nominal']['flows'].keys()) if any(mdlhists['nominal']['functions'].get(fxnflow, [])) or any(mdlhists['nominal']['flows'].get(fxnflow, []))}
+    for fxnflow in fxnflows:
+        fig = mdlhists(mdlhist.copy(), fxnflowvals={fxnflow:fxnflows.get(fxnflow,'all')}, **inputs, **kwargs)
+        figs.append(fig)
+    return figs
+def mdlhist(mdlhist, fault='', time=0, fxnflows=[],cols=2, returnfigs=False, legend=-1, timelabel='Time', units={}, phases={}, modephases={}, label_phases=True):
+    """
+    Deprecated legacy plotting function. Use resultdisp.plot.indiv_mdlhists instead.
+    """
+    warnings.warn("Deprecated function. Use resultdisp.plot.indiv_mdlhists instead.")
+    figs = indiv_mdlhists(mdlhist, fxnflows, cols, title=fault, time_slice=time, legend_loc=legend, xlabel=timelabel, ylabels=units, phases=phases, modephases=modephases, label_phases=label_phases)
+    if returnfigs: return figs
+def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals={}, cols=2, returnfig=True, legend=-1, timelabel="time", units={}, phases={}, modephases={}, label_phases=True):
+    """
+    Deprecated legacy plotting function. Use resultdisp.plot.mdlhists instead.
+    """
+    warnings.warn("Deprecated function. Use resultdisp.plot.mdlhists instead.")
+    fig = mdlhists(mdlhist, fxnflowvals, cols, title=fault, time_slice=time, legend_loc=legend, xlabel=timelabel, ylabels=units, phases=phases, modephases=modephases, label_phases=label_phases)
+    if returnfig: return fig
 def plot_line_and_err(ax, times, line, lows, highs, boundtype, boundcolor='gray', boundlinestyle='--', fillalpha=0.3, **kwargs):
     """
     Plots a line with a given range of uncertainty around it.
@@ -355,8 +309,44 @@ def plot_err_lines(ax, times, lows, highs, **kwargs):
     """
     ax.plot(times, highs **kwargs)
     ax.plot(times, lows, **kwargs)
+def flatten_hist(hist, newhist = {}, prevname=(), to_plot='all'):
+    """
+    Recursively creates a flattenned history of the given nested model history
 
-def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification'):
+    Parameters
+    ----------
+    hist : dict
+        Model history (e.g., from faultsim.propagate.nominal).
+    newhist : dict, optional
+        Flattened Model History (used when called recursively). The default is {}.
+    prevname : tuple, optional
+        Current key of the flattened history (used when called recursively). The default is ().
+    to_plot : str/list/dict, optional
+        What attributes to plot in the dict. The default is 'all'. Can be of form
+        - list e.g. ['att1', 'att2', 'att3'] to plot the given attributes
+        - dict e.g. fxnflowvals {'flow1':['att1', 'att2'], 'fxn1':'all', 'fxn2':['comp1':all, 'comp2':['att1']]}
+        - str e.g. 'att1' for attribute 1 or 'all' for all attributes
+    Returns
+    -------
+    newhist : dict
+        Flattened model history of form: {(fxnflow, ..., attname):array(att)}
+    """
+    for att, val in hist.items():
+        newname = prevname+tuple([att])
+        if type(val)==dict: 
+            if type(to_plot)==list and att in to_plot: new_to_plot = 'all'
+            elif type(to_plot)==dict and att in to_plot: new_to_plot = to_plot[att]
+            elif type(to_plot)==str and att== to_plot: new_to_plot = 'all'
+            elif to_plot =='all': new_to_plot='all'
+            elif att in ['functions', 'flows']: new_to_plot = to_plot
+            else: new_to_plot= False
+            if new_to_plot: flatten_hist(val, newhist, newname, new_to_plot)
+        elif to_plot=='all' or att in to_plot: 
+            if len(newname)==1: newhist[newname[0]] = val
+            else:               newhist[newname] = val
+    return newhist
+
+def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4)):
     """
     Visualizes the nominal operational envelope along one given parameter
 
@@ -380,7 +370,7 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
 
     """
     
-    fig = plt.figure()
+    fig = plt.figure(figsize=figsize)
     
     data = [(x, scen['properties']['inputparams'][param1]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False))]
@@ -404,7 +394,7 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
     plt.grid(which='both', axis='x')
     return fig
 
-def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification'):
+def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', legendloc='best', figsize=(6,4)):
     """
     Visualizes the nominal operational envelope along two given parameters
 
@@ -428,7 +418,7 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
     fig : matplotlib figure
         Figure for the plot.
     """
-    fig = plt.figure()
+    fig = plt.figure(figsize=figsize)
     
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False))]
@@ -440,14 +430,14 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
         ydata = [d[2] for i,d in enumerate(data) if classifications[i]==cl]
         if nomlabel in cl:  plt.scatter(xdata, ydata, label=cl, marker="o")
         else:               plt.scatter(xdata, ydata, label=cl, marker="X")
-    plt.legend()
+    plt.legend(loc=legendloc)
     plt.xlabel(param1)
     plt.ylabel(param2)
     plt.title(title)
     plt.grid(which='both')
     return fig
 
-def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification'):
+def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4)):
     """
     Visualizes the nominal operational envelope along three given parameters
 
@@ -473,7 +463,7 @@ def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="No
     fig : matplotlib figure
         Figure for the plot.
     """
-    fig = plt.figure()
+    fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
     
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2], scen['properties']['inputparams'][param3]) for x,scen in nomapp.scenarios.items()\

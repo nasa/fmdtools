@@ -19,6 +19,7 @@ import dill
 import pickle
 import networkx as nx
 import copy
+import warnings
 from ordered_set import OrderedSet
 from operator import itemgetter
 from collections.abc import Iterable
@@ -68,6 +69,8 @@ class Common(object):
         elif len(states)==1:                    return states[0]
         elif kwargs.get('as_array', True):      return np.array(states)
         else:                                   return states
+    def values(self):
+        return self.gett(*self._states)
     def gett(self, *attnames):
         """Alternative to self.get that returns the given constructs as a tuple instead
         of as an array. Useful when a numpy array would translate the underlying data types
@@ -158,6 +161,48 @@ class Common(object):
         test = values!=self.get(*states)
         if is_iter(test):   return any(test)
         else:               return test
+    def make_flowdict(self,flownames,flows):
+        """
+        Puts a list of flows with a list of flow names in a dictionary.
+
+        Parameters
+        ----------
+        flownames : list or dict or empty
+            names of flows corresponding to flows
+            using {externalname: internalname}
+        flows : list
+            flows
+
+        Returns
+        -------
+        flowdict : dict
+            dict of flows indexed by flownames
+        """
+        flowdict = {}
+        if not(flownames) or type(flownames)==dict:
+            flowdict = {f.name:f for f in flows}
+            if flownames:
+                for externalname, internalname in flownames.items():
+                    flowdict[internalname] = flowdict.pop(externalname)
+        elif type(flownames)==list:
+            if len(flownames)==len(flows):
+                for ind, flowname in enumerate(flownames):
+                    flowdict[flowname]=flows[ind]
+            else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
+        else:       raise Exception("Invalid flownames option in "+self.name)
+        return flowdict
+    def warn(self, *messages, stacklevel=2):
+        """
+        Prints warning message(s) when called.
+
+        Parameters
+        ----------
+        *messages : str
+            Strings to make up the message (will be joined by spaces)
+        stacklevel : int
+            Where the warning points to. The default is 2 (points to the place in the model)
+        """
+        warnings.warn(' '.join(messages), stacklevel=stacklevel)
     
 class Block(Common):
     """ 
@@ -198,6 +243,7 @@ class Block(Common):
         self._states=list(states.keys())
         self._initstates=states.copy()
         self.failrate = getattr(self, 'failrate', 1.0)
+        self.localname=''
         for state in states.keys():
             setattr(self, state,states[state])
         self.faults=set(['nom'])
@@ -207,7 +253,7 @@ class Block(Common):
         self._rng_params=getattr(self, '_rng_params', {})
         if not getattr(self, 'seed', []): 
             self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]
-        self._init_rng=np.random.default_rng(self.seed)
+        self.rng=np.random.default_rng(self.seed)
         self.time=0.0
     def __repr__(self):
         if hasattr(self,'name'):
@@ -266,7 +312,7 @@ class Block(Common):
         self._states.append(name)
         self._initstates[name]=default
         setattr(self, name,default)
-        if not seed: seed = self._init_rng.integers(np.iinfo(np.int32).max)
+        if not seed: seed = self.rng.integers(np.iinfo(np.int32).max)
         if not hasattr(self,'rngs'):         self.rngs={name:np.random.default_rng(seed)} 
         else:                                 self.rngs[name]=np.random.default_rng(seed)
         if not hasattr(self,'_rng_params'):   self._rng_params={name:(default, generator_method, generator_params,seed)} 
@@ -338,7 +384,7 @@ class Block(Common):
                 nomvals = tuple([*nom_hstates.values()])
                 statecombos = [i for i in itertools.product(*hranges.values()) if i!=nomvals]
                 if type(mode_app)==int and len(statecombos)>0: 
-                    sample = self._init_rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
+                    sample = self.rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
                     statecombos = [statecombos[i] for i in sample]
                 self.faultmodes.update({'hmode_'+str(i):'synth' for i in range(len(statecombos))}) 
                 self.mode_state_dict.update({'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
@@ -395,7 +441,7 @@ class Block(Common):
         initmode : str, optional
             Initial operational mode. Default is 'nom'
         name : str, optional
-            (for components only) Name of the component. The default is ''.
+            (for components/actions only) Name of the component. The default is ''.
         probtype : str, optional
             Type of probability in the probability model, a per-time 'rate' or per-run 'prob'. 
             The default is 'rate'
@@ -415,41 +461,68 @@ class Block(Common):
                 self._initstates['mode'] = initmode
                 self.mode = initmode
             else: raise Exception("Initial mode "+initmode+" not in defined modes for "+self.name)
+        else: 
+            self._states.append('mode')
+            self._initstates['mode'] = initmode
+            self.mode = initmode
         self.exclusive_faultmodes = exclusive
+        self.localname = name
         if not getattr(self, 'is_copy', False): #saves time by using the same fault mode dictionary from previous
             if not getattr(self, 'faultmodes', []): 
                 if name: self.faultmodes=dict()
                 else:    self.faultmodes=dict.fromkeys(faultmodes)
             for mode in faultmodes:
-                self.faultmodes[name+mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
-                self.faultmodes[name+mode]['probtype'] = probtype
-                self.faultmodes[name+mode]['units'] = units
+                self.faultmodes[mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
+                self.faultmodes[mode]['probtype'] = probtype
+                self.faultmodes[mode]['units'] = units
                 if type(faultmodes) == set: # minimum information - here the faultmodes are only a set of labels
-                    self.faultmodes[name+mode]['dist'] =     1.0/len(faultmodes)
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    0.0
+                    self.faultmodes[mode]['dist'] =     1.0/len(faultmodes)
+                    self.faultmodes[mode]['oppvect'] =  [1.0]
+                    self.faultmodes[mode]['rcost'] =    0.0
                 elif type(faultmodes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
-                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode]
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    0.0
+                    self.faultmodes[mode]['dist'] =     faultmodes[mode]
+                    self.faultmodes[mode]['oppvect'] =  [1.0]
+                    self.faultmodes[mode]['rcost'] =    0.0
                 elif len(faultmodes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
-                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[name+mode]['oppvect'] =  faultmodes[mode][1]
-                    self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][2]
+                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
+                    self.faultmodes[mode]['oppvect'] =  faultmodes[mode][1]
+                    self.faultmodes[mode]['rcost'] =    faultmodes[mode][2]
                     if key_phases_by =='none': raise Exception("How should the opportunity vector be keyed? Provide 'key_phases_by' option.")
                 elif len(faultmodes[mode]) == 2:  # dist, repair costs
-                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    faultmodes[mode][1]
+                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
+                    self.faultmodes[mode]['oppvect'] =  [1.0]
+                    self.faultmodes[mode]['rcost'] =    faultmodes[mode][1]
                 elif len(faultmodes[mode]) == 1:  # dist only
-                    self.faultmodes[name+mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[name+mode]['oppvect'] =  [1.0]
-                    self.faultmodes[name+mode]['rcost'] =    0.0
+                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
+                    self.faultmodes[mode]['oppvect'] =  [1.0]
+                    self.faultmodes[mode]['rcost'] =    0.0
                 else:
                     raise Exception("Invalid mode definition")
-                self.faultmodes[name+mode]['longname'] = longnames.get(mode,mode)
+                self.faultmodes[mode]['longname'] = longnames.get(mode,mode)
         if key_phases_by=='self':   self.key_phases_by = self.name
         else:                       self.key_phases_by = key_phases_by
+    def choose_rand_fault(self, faults, default='first', combinations=1):
+        """
+        Randomly chooses a fault or combination of faults to insert in the function. 
+
+        Parameters
+        ----------
+        faults : list
+            list of fault modes to choose from
+        default : str/list, optional
+            Default fault to inject when model is run deterministically. 
+            The default is 'first', which chooses the first in the list. 
+            Can provide a mode as a str or a list of modes
+        combinations : int, optional
+            Number of combinations of faults to elaborate and select from. 
+            The default is 1, which just chooses single fault modes.
+        """
+        if getattr(self, 'run_stochastic', True):
+            faults = [list(x) for x in itertools.combinations(faults, combinations)]
+            self.add_fault(*self.rng.choice(faults))
+        elif default=='first':      self.add_fault(faults[0])
+        elif type(default)==str:    self.add_fault(default)
+        else:                       self.add_fault(*default)
     def set_rand(self,statename,methodname, *args):
         """
         Update the given random state with a given method and arguments
@@ -484,9 +557,11 @@ class Block(Common):
         mode : str
             name of the mode to enter.
         """
-        if self.exclusive_faultmodes and self.any_faults():
-            raise Exception("Cannot set mode from fault state without removing faults.")
-        else:   self.mode = mode
+        if self.exclusive_faultmodes:
+            if self.any_faults():           raise Exception("Cannot set mode from fault state without removing faults.")
+            elif  mode in self.faultmodes:  self.to_fault(mode)
+            else:                           self.mode=mode
+        else:                               self.mode = mode
     def in_mode(self,*modes):
         """Checks if the system is in a given operational mode
         
@@ -553,7 +628,7 @@ class Block(Common):
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
         if self.exclusive_faultmodes: self.mode = fault_to_add
-    def remove_fault(self, fault_to_remove, opermode=False):
+    def remove_fault(self, fault_to_remove, opermode=False, warnmessage=False):
         """Removes fault in the set of faults and returns to given operational mode
         
         Parameters
@@ -562,25 +637,31 @@ class Block(Common):
             name of the fault to remove
         opermode : str (optional)
             operational mode to return to when the fault mode is removed
+        warnmessage : str/False
+            Warning to give when performing operation. Default is False (no warning)
         """
         self.faults.discard(fault_to_remove)
         if len(self.faults) == 0: self.faults.add('nom')
         if opermode:    self.mode = opermode
         if self.exclusive_faultmodes and not(opermode):
             raise Exception("Unclear which operational mode to enter with fault removed")
-    def remove_any_faults(self, opermode=False):
+        if warnmessage: self.warn(warnmessage,"Fault mode `"+fault_to_remove+"' removed.", stacklevel=3)
+    def remove_any_faults(self, opermode=False, warnmessage=False):
         """Resets fault mode to nominal and returns to the given operational mode
         
         Parameters
         ----------
         opermode : str (optional)
             operational mode to return to when the fault mode is removed
+        warnmessage : str/False
+            Warning to give when performing operation. Default is False (no warning)
         """
         self.faults.clear()
         self.faults.add('nom')
         if opermode:    self.mode = opermode
         if self.exclusive_faultmodes and not(opermode):
             raise Exception("Unclear which operational mode to enter with fault removed")
+        if warnmessage: self.warn(warnmessage, "All faults removed.")
     def get_flowtypes(self):
         """Returns the names of the flow types in the model"""
         return {obj.type for name, obj in self.flows.items()}
@@ -593,9 +674,12 @@ class Block(Common):
             setattr(self, state,self._initstates[state])
         for generator in self.rngs:
             self.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
-        self._init_rng = np.random.default_rng(self.seed)
+        self.rng = np.random.default_rng(self.seed)
         if hasattr(self, 'time'): self.time=0.0
         if hasattr(self, 'tstep'): self.tstep=self.tstep
+        if hasattr(self, 'internal_flows'):
+            for flowname, flow in self.internal_flows.items():
+                flow.reset()
         if self.type=='function':
             for name, component in self.components.items():
                 component.reset()
@@ -617,6 +701,9 @@ class Block(Common):
         for state in self._states:
             states[state]=getattr(self,state)
         return states, self.faults.copy()
+    def check_update_nominal_faults(self):
+        if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
+        elif len(self.faults)==0:           self.faults.update(['nom'])
 
 #Function superclass 
 class FxnBlock(Block):
@@ -657,51 +744,190 @@ class FxnBlock(Block):
         """
         self.type = 'function'
         self.name = name
+        self.internal_flows=dict()
         self.flows=self.make_flowdict(flownames,flows)
         for flow in self.flows.keys():
-            setattr(self, flow,self.flows[flow])
+            setattr(self, flow, self.flows[flow])
         self.components=components
         if not getattr(self, 'faultmodes', []): self.faultmodes={}
-        if self.components: self.compfaultmodes= dict()
+        self.compfaultmodes= dict()
         self.exclusive_faultmodes = False
         for cname in components:
             self.faultmodes.update(components[cname].faultmodes)
-            self.compfaultmodes.update({modename:cname for modename in components[cname].faultmodes})
+            self.compfaultmodes.update({components[cname].localname+modename:cname for modename in components[cname].faultmodes})
         self.timers = timers
         for timername in timers:
             setattr(self, timername, Timer(timername))
         self.tstep=tstep
+        self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
+        self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
         super().__init__(states)
-    def make_flowdict(self,flownames,flows):
+    def __repr__(self):
+        blockret = super().__repr__()
+        if getattr(self, 'actions'): return blockret+', active: '+str(self.active_actions)
+        else:                        return blockret
+    def add_act(self, name, action, *flows, duration=0.0, **params):
         """
-        Puts a list of flows with a list of flow names in a dictionary.
+        Associate an Action with the Function Block for use in the Action Sequence Graph
 
         Parameters
         ----------
-        flownames : list or dict or empty
-            names of flows corresponding to flows
-            using {externalname: internalname}
-        flows : list
-            flows
-
-        Returns
-        -------
-        flowdict : dict
-            dict of flows indexed by flownames
+        name : str
+            Internal Name for the Action
+        action : Action
+            Action class to instantiate
+        *flows : flow
+            Flows (optional) which connect the actions
+        **params : any
+            parameters to instantiate the Action with. 
         """
-        flowdict = {}
-        if not(flownames) or type(flownames)==dict:
-            flowdict = {f.name:f for f in flows}
-            if flownames:
-                for externalname, internalname in flownames.items():
-                    flowdict[internalname] = flowdict.pop(externalname)
-        elif type(flownames)==list:
-            if len(flownames)==len(flows):
-                for ind, flowname in enumerate(flownames):
-                    flowdict[flowname]=flows[ind]
-            else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
-        else:       raise Exception("Invalid flownames option in "+self.name)
-        return flowdict
+        self.actions[name] = action(name,flows, **params)
+        self.actions[name].duration=duration
+        setattr(self, name, self.actions[name])
+        self.action_graph.add_node(name)
+        self.flow_graph.add_node(name, bipartite=0)
+        for flow in flows:
+            self.flow_graph.add_node(flow.name, bipartite=1)
+            self.flow_graph.add_edge(name,flow.name)
+    def cond_pass(self):
+        return True
+    def add_cond(self, start_action, end_action, name='auto',condition='pass'):
+        """
+        Associates a Condition with the Function Block for use in the Action Sequence Graph
+
+        Parameters
+        ----------
+        start_action : str
+            Action where the condition is checked
+        end_action : str
+            Action that the condition leads to.
+        name : str
+            Name for the condition. Defaults to numbered conditions if none are provided.
+        condition : method
+            Method in the class to use as a condition. Defaults to self.condition_pass if none are provided
+        """
+        if name=='auto': name = str(len(self.conditions)+1)
+        if condition=='pass': condition = self.cond_pass
+        self.conditions[name] = condition
+        self.condition_edges[name] = (start_action, end_action)
+        self.action_graph.add_edge(start_action, end_action, **{'name':name, name:'name', 'arrow':True})
+    def build_ASG(self, initial_action="auto",state_rep="finite-state", max_action_prop="until_false", mode_rep="replace", asg_proptype='dynamic', per_timestep=False, asg_pos={}):
+        """
+        Constructs the Action Sequence Graph with the given parameters.
+        
+        Parameters
+        ----------
+        initial_action : str/list
+            Initial action to set as active. Default is 'auto'
+                - 'auto' finds the starting node of the graph and uses it
+                - 'ActionName' sets the given action as the first active action
+                - providing a list of actions will set them all to active (if multi-state rep is used)
+        state_rep : 'finite-state'/'multi-state'
+            How the states of the system are represented. Default is 'finite-state'
+                - 'finite-state' means only one action in the system can be active at once (i.e., a finite state machine)
+                - 'multi-state' means multiple actions can be performed at once
+        max_action_prop : 'until_false'/'manual'/int
+            How actions progress. Default is 'until_false'
+                - 'until_false' means actions are simulated until all outgoing conditions are false
+                - providing an integer places a limit on the number of actions that can be performed per timestep
+        mode_rep : 'replace'/'independent'
+            How actions are used to represent modes. Default is 'replace.'
+                - 'replace' uses the actions to represent the operational modes of the system (only compatible with 'exclusive' representation)
+                - 'independent' keeps the actions and function-level mode seperate
+        asg_proptype : 'static'/'dynamic'/'manual'
+            Which propagation step to execute the Action Sequence Graph in. Default is 'dynamic'
+                - 'manual' means that the propagation is performed manually (defined in a behavior method)
+        per_timestep : bool
+            Defines whether the action sequence graph is reset to the initial state each time-step (True) or stays in the current action (False). Default is False
+        asg_pos : dict, optional
+            Positions of the nodes of the action/flow graph {node: [x,y]}. Default is {}
+        """
+        if initial_action=='auto': initial_action = [act for act, in_degree  in self.action_graph.in_degree if in_degree==0]
+        elif type(initial_action)==str: initial_action=[initial_action]
+        self.set_active_actions(initial_action)
+        self.set_atts(state_rep=state_rep, max_action_prop=max_action_prop, mode_rep=mode_rep, asg_proptype=asg_proptype,initial_action=initial_action, per_timestep=per_timestep)
+        if self.state_rep=='finite-state' and len(initial_action)>1: raise Exception("Cannot have more than one initial action with finite-state representation")
+        
+        if self.mode_rep=='replace':
+            if not self.exclusive_faultmodes:           raise Exception("Cannot use mode_rep='replace' option without an exclusive_faultmodes representation (set in assoc_modes)")
+            elif not self.state_rep=='finite-state':    raise Exception("Cannot use mode_rep='replace' option without using state_rep=`finite-state`")
+            elif self.opermodes:                        raise Exception("Cannot use mode_rep='replace' option simultaneously with defined operational modes in assoc_modes()")
+            if len(self.faultmodes)>0:                  raise Exception("Cannot use mode_rep='replace option while having Function-level fault modes (define at Action level)")
+            else:
+                self.opermodes = [*self.actions.keys()]
+                self.mode=initial_action[0]
+        elif self.mode_rep=='independent':
+            if self.exclusive_faultmodes:               raise Exception("Cannot use mode_rep='independent option' without a non-exclusive fault mode representation (set in assoc_modes)")
+        for aname, action in self.actions.items():
+            modes_to_add = {action.localname+f:val for f,val in action.faultmodes.items()}
+            self.faultmodes.update(modes_to_add)
+            fmode_intersect = set(modes_to_add).intersection(self.actfaultmodes)
+            if any(fmode_intersect):
+                raise Exception("Action "+aname+" overwrites existing fault modes: "+str(fmode_intersect)+". Rename the faults (or use name option in assoc_modes)")
+            self.actfaultmodes.update({action.localname+modename:aname for modename in action.faultmodes})
+        self.asg_pos=asg_pos
+        
+    def set_active_actions(self, actions):
+        """Helper method for setting given action(s) as active"""
+        if type(actions)==str: 
+            if actions in self.actions: actions = [actions]
+            else: raise Exception("initial_action="+actions+" not in self.actions: "+str(self.actions))
+        if type(actions)==list:
+            self.active_actions = set(actions)
+            if any(self.active_actions.difference(self.actions)): raise Exception("Initial actions not associated with model: "+str(self.active_actions.difference(self.actions)))
+        else: raise Exception("Invalid option for initial_action")
+    def show_ASG(self, gtype='combined', with_cond_labels=True, pos=[]):
+        """
+        Shows a visual representation of the internal Action Sequence Graph of the Function Block
+
+        Parameters
+        ----------
+        gtype : 'combined'/'flows'/'actions'
+            Gives a graphical representation of the ASG. Default is 'combined'
+            - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
+            - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
+            - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        with_cond_labels: Bool
+            Whether or not to label the conditions
+        pos : dict
+            Dictionary of node positions for actions/flows
+        """
+        import matplotlib.pyplot as plt
+        if gtype=='combined':      graph = nx.compose(self.flow_graph, self.action_graph)
+        elif gtype=='flows':        graph = self.flow_graph
+        elif gtype=='actions':   graph = self.action_graph
+        if not pos: 
+            if not self.asg_pos: pos=nx.planar_layout(graph)
+            else: pos=self.asg_pos
+        nx.draw(graph, pos=pos, with_labels=True, node_color='grey')
+        nx.draw_networkx_nodes(self.action_graph, pos=pos, node_shape='s', node_color='skyblue')
+        nx.draw_networkx_nodes(self.action_graph, nodelist=self.active_actions, pos=pos, node_shape='s', node_color='green')
+        edge_labels = {(in_node, out_node): label for in_node, out_node, label in graph.edges(data='name') if label}
+        if with_cond_labels: nx.draw_networkx_edge_labels(graph, pos, edge_labels)
+        if gtype=='combined' or gtype=='conditions':
+            nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=30, arrowstyle='->', node_shape='s', node_size=100)
+        return plt.gcf()
+    def add_flow(self,flowname, flowdict={}, flowtype=''):
+        """
+        Adds a flow with given attributes to the Function Block
+
+        Parameters
+        ----------
+        flowname : str
+            Unique flow name to give the flow in the function
+        flowattributes : dict, Flow, set or empty set
+            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object.
+            If a set of attribute names is provided, each will be given a value of 1
+            If an empty set is given, it will be represented w- {flowname: 1}
+        """
+        if not getattr(self, 'is_copy', False):
+            if not flowtype: flowtype = flowname
+            if not flowdict:                self.internal_flows[flowname]=Flow({flowname:1}, flowname, flowtype)
+            elif type(flowdict) == set:     self.internal_flows[flowname]=Flow({f:1 for f in flowdict}, flowname, flowtype)
+            elif type(flowdict) == dict:    self.internal_flows[flowname]=Flow(flowdict, flowname,flowtype)
+            elif isinstance(flowdict, Flow):self.internal_flows[flowname] = flowdict
+            else: raise Exception('Invalid flow. Must be dict or flow')
+        setattr(self, flowname, self.internal_flows[flowname])
     def copy(self, newflows, *attr):
         """
         Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.
@@ -724,6 +950,14 @@ class FxnBlock(Block):
         copy.faults = self.faults.copy()
         if hasattr(self, 'faultmodes'):         copy.faultmodes = self.faultmodes
         if hasattr(self, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
+        for flowname, flow in self.internal_flows.items():
+            copy.internal_flows[flowname] = flow.copy()
+            setattr(copy, flowname, copy.internal_flows[flowname])
+        for action in self.actions: 
+            for state in copy.actions[action]._initstates.keys():
+                setattr(copy.actions[action], state, getattr(self.actions[action], state))
+            copy.actions[action].faults=self.actions[action].faults.copy()
+        setattr(copy, 'active_actions', getattr(self, 'active_actions', {}))
         for timername in self.timers:
             timer = getattr(self, timername)
             copytimer = getattr(copy, timername)
@@ -752,9 +986,9 @@ class FxnBlock(Block):
             if self._rng_params[statename][1]:
                 gen_method = getattr(generator, self._rng_params[statename][1])
                 setattr(self, statename, gen_method(*self._rng_params[statename][2]))
-    def updatefxn(self,proptype, faults=[], time=0, run_stochastic=False):
+    def prop_internal(self, faults, time, run_stochastic, proptype):
         """
-        Updates the state of the function at a given time and injects faults.
+        Propagates behaviors through the internal Action Sequence Graph
 
         Parameters
         ----------
@@ -762,28 +996,80 @@ class FxnBlock(Block):
             Faults to inject in the function. The default is ['nom'].
         time : float, optional
             Model time. The default is 0.
+        run_stochastic : book
+            Whether to run the simulation using stochastic or deterministic behavior
+        proptype : str
+            Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
+        """
+        active_actions = self.active_actions
+        num_prop = 0
+        while active_actions:
+            new_active_actions=set(active_actions)
+            for action in active_actions:
+                self.actions[action].updateact(time, run_stochastic, proptype=proptype, tstep=self.tstep)
+                action_cond_edges = self.action_graph.out_edges(action, data=True)
+                for act_in, act_out, atts in action_cond_edges:
+                    if self.conditions[atts['name']]() and getattr(self.actions[action], 'duration',0.0)+self.tstep<=self.actions[action].t_loc:
+                        self.actions[action].t_loc=0.0
+                        new_active_actions.add(act_out)
+                        new_active_actions.discard(act_in)
+            if len(new_active_actions)>1 and self.state_rep=='finite-state':
+                raise Exception("Multiple active actions in a finite-state representation: "+str(new_active_actions))
+            num_prop +=1 
+            if type(self.asg_proptype)==int and num_prop>=self.asg_proptype:
+                break
+            if new_active_actions==set(active_actions):
+                break
+            else: active_actions=new_active_actions
+            if num_prop>10000: raise Exception("Undesired looping in Function ASG for: "+self.name)
+        if self.mode_rep=='replace': self.mode=[*active_actions][0]
+        self.active_actions = active_actions
+    def updatefxn(self,proptype, faults=[], time=0, run_stochastic=False):
+        """
+        Updates the state of the function at a given time and injects faults.
+
+        Parameters
+        ----------
+        proptype : str
+            Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
+        faults : list, optional
+            Faults to inject in the function. The default is ['nom'].
+        time : float, optional
+            Model time. The default is 0.
+        run_stochastic : book
+            Whether to run the simulation using stochastic or deterministic behavior
         """
         self.run_stochastic=run_stochastic
         self.add_fault(*faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
         if time>self.time and run_stochastic: self.update_stochastic_states()
-        if self.components:     # propogate faults from function level to component level
+        comp_actions = {**self.components, **self.actions} 
+        if getattr(self, 'per_timestep', False): 
+            self.set_active_actions(self.initial_action)
+            for action in self.active_actions: self.actions[action].t_loc=0.0
+        if comp_actions:     # propogate faults from function level to component level
             for fault in self.faults:
                 if fault in self.compfaultmodes:
-                    self.components[self.compfaultmodes[fault]].add_fault(fault)
+                    component = self.components[self.compfaultmodes[fault]]
+                    component.add_fault(fault[len(component.localname):])
+                if fault in self.actfaultmodes:
+                    action = self.actions[self.actfaultmodes[fault]]
+                    action.add_fault(fault[len(action.localname):])
+        if any(self.actions) and self.asg_proptype==proptype: self.prop_internal(faults, time, run_stochastic, proptype)
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
         elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: self.dynamic_behavior(time)
         elif proptype=='reset':                                                             
             if hasattr(self,'static_behavior'):  self.static_behavior(time)
             if hasattr(self,'dynamic_behavior'): self.dynamic_behavior(time)
-        if self.components:     # propogate faults from component level to function level
-            for compname, comp in self.components.items():
-                self.faults.update(comp.faults) 
+        if comp_actions:     # propogate faults from component level to function level
+            self.faults.difference_update(self.compfaultmodes)
+            self.faults.difference_update(self.actfaultmodes)
+            for compname, comp in comp_actions.items():
+                self.faults.update({comp.localname+f for f in comp.faults if f!='nom'}) 
         self.time=time
-        if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
-        elif len(self.faults)==0:           self.faults.update(['nom'])
+        self.check_update_nominal_faults()
         if self.exclusive_faultmodes==True and len(self.faults)>1: 
             raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.faults)+"\n Is the mode representation nonexclusive?")
         return
@@ -793,7 +1079,6 @@ class GenericFxn(FxnBlock):
     def __init__(self, name, flows):
         super().__init__(name, flows)
   
-        
 class Component(Block):
     """
     Superclass for components (most attributes and methods inherited from Block superclass)
@@ -816,6 +1101,48 @@ class Component(Block):
         """ Placeholder for component behavior methods. Enables one to include components
         without yet having a defined behavior for them."""
         return 0
+class Action(Block):
+    """
+    Superclass for actions (most attributes and methods inherited from Block superclass)
+    """
+    def __init__(self,name, flows, flownames=[], states={}):
+        """
+        Inherit the Block class
+
+        Parameters
+        ----------
+        name : str
+            Unique name ID for the action
+        states : dict, optional
+            States to use in the action. The default is {}.
+        """
+        self.type = 'action'
+        self.name = name
+        self.flows=self.make_flowdict(flownames,flows)
+        for flow in self.flows.keys():
+            setattr(self, flow, self.flows[flow])
+        super().__init__({**states, 't_loc':0.0})
+    def updateact(self, time=0, run_stochastic=False, proptype='dynamic', tstep=1.0):
+        """
+        Updates the behaviors, faults, times, etc of the action 
+
+        Parameters
+        ----------
+        time : float, optional
+            Model time. The default is 0.
+        run_stochastic : book
+            Whether to run the simulation using stochastic or deterministic behavior
+        """
+        self.run_stochastic=run_stochastic
+        if time>self.time and run_stochastic: self.update_stochastic_states()
+        if proptype=='dynamic':
+            if self.time<time:  self.behavior(time); self.t_loc+=tstep
+        else:                   self.behavior(time); self.t_loc+=tstep
+        self.time=time
+        self.check_update_nominal_faults()
+    def behavior(self, time):
+        """Placeholder behavior method for actions"""
+        a=0
 
 class Flow(Common):
     """
@@ -948,6 +1275,10 @@ class Model(object):
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
+    def __repr__(self):
+        fxnstr = ''.join(['- '+fxnname+':'+str(fxn.return_states())+' '+str(getattr(fxn,'active_actions',''))+'\n' for fxnname,fxn in self.fxns.items()])
+        flowstr = ''.join(['- '+flowname+':'+str(flow.status())+'\n' for flowname,flow in self.flows.items()])
+        return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'functions: \n'+fxnstr+'flows: \n'+flowstr
     def add_flows(self, flownames, flowdict={}, flowtype='generic'):
         """
         Adds a set of flows with the same type and initial parameters
@@ -1054,8 +1385,8 @@ class Model(object):
         """
         if not getattr(self, 'is_copy', False):
             if functionorder: self.set_functionorder(functionorder)
-            self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False)])
-            self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'dynamic_behavior', False)])
+            self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False) or getattr(fxn, 'asg_proptype','na')=='static'])
+            self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'dynamic_behavior', False) or getattr(fxn, 'asg_proptype','na')=='dynamic'])
             self.construct_graph(graph_pos, bipartite_pos)
             self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.bipartite.neighbors(flow)])]
     def construct_graph(self, graph_pos={}, bipartite_pos={}):
@@ -1162,8 +1493,9 @@ class Model(object):
         elif gtype=='component':
             graph=self.bipartite.copy()
             for fxnname, fxn in self.fxns.items():
-                graph.add_nodes_from(fxn.components, bipartite=1)
-                graph.add_edges_from([(fxnname, component) for component in fxn.components])
+                if {**fxn.components, **fxn.actions}: 
+                    graph.add_nodes_from({**fxn.components, **fxn.actions}, bipartite=1)
+                    graph.add_edges_from([(fxnname, comp) for comp in {**fxn.components, **fxn.actions}])
         elif gtype=='typegraph':
             graph=self.return_typegraph()
         edgevals, fxnmodes, fxnstates, flowstates, compmodes, compstates, comptypes ={}, {}, {}, {}, {}, {}, {}
@@ -1195,7 +1527,7 @@ class Model(object):
                 if gtype=='normal': del graph.nodes[fxnname]['bipartite']
                 if gtype=='component':
                     for mode in fxnmodes[fxnname].copy():
-                        for compname, comp in fxn.components.items():
+                        for compname, comp in {**fxn.actions, **fxn.components}.items():
                             compstates[compname]={}
                             comptypes[compname]=True
                             if mode in comp.faultmodes:
@@ -1254,7 +1586,8 @@ class Model(object):
                 modes[fxnname] = ms
             for mode in ms:
                 if mode!='nom': 
-                    modeprops[fxnname][mode] = fxn.faultmodes[mode]
+                    modeprops[fxnname][mode] = fxn.faultmodes.get(mode)
+                    if mode not in fxn.faultmodes: warnings.warn("Mode "+mode+" not in faultmodes for fxn "+fxnname+" and may not be tracked.")
         return modes, modeprops
     def copy(self):
         """
@@ -1316,10 +1649,12 @@ class Timer():
         name : str
             Name for the timer
         """
-        self.name=name
+        self.name=str(name)
         self.time=0.0
         self.tstep=-1.0
         self.mode='standby'
+    def __repr__(self):
+        return 'Timer '+self.name+': mode= '+self.mode+', time= '+str(self.time)
     def t(self):
         """ Returns the time elapsed """
         return self.time
@@ -1329,8 +1664,7 @@ class Timer():
             if tstep:   self.time+=tstep
             else:       self.time+=self.tstep
             self.mode='ticking'
-        else: self.mode='complete'
-        if self.time<=0: self.mode='complete'
+        if self.time<=0: self.time=0.0; self.mode='complete'
     def reset(self):
         """ Resets the time to zero"""
         self.time=0.0
@@ -2241,3 +2575,4 @@ def check_model_pickleability(model):
         for fxnname, fxn in model.fxns.items():
             print(fxnname)
             check_pickleability(fxn)
+

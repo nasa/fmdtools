@@ -18,9 +18,11 @@ Private Methods:
     - :func:`update_mdlhist()`:     Updates the model history at a given time.
         - :func:`update_flowhist()`:Updates the flows in the model history at t_ind
         - :func:`update_fxnhist()`: Updates the functions (faults and states) in the model history at t_ind
+        - :func:`update_blockhist()`:Updates the blocks in the model history at t_ind
     - :func:`init_mdlhist()`:       Initializes the model history over a given timerange
         - :func:`init_flowhist()`:  Initializes the flow history flowhist of the model mdl over the time range timerange
         - :func:`init_fxnhist()`:   Initializes the function state history fxnhist of the model mdl over the time range timerange
+        - :func:`init_blockhist()`: Initializes the block state history fxnhist of the model mdl over the time range timerange
 """
 #File name: propagate.py
 #Author: Daniel Hulse
@@ -902,7 +904,7 @@ def update_flowhist(mdl, mdlhist, t_ind):
                 if not np.can_cast(type(val), type(mdlhist["flows"][flowname][att][t_ind])):
                     raise Exception(str(flowname)+" att "+str(att)+" changed type: "+str(type(mdlhist["flows"][flowname][att][t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind))
 def update_fxnhist(mdl, mdlhist, t_ind):
-    """ Updates the functions (faults and states) in the model history at t_ind 
+    """ Updates the functions (faults, states, components, actions) in the model history at t_ind 
     
     Parameters
     ----------
@@ -914,20 +916,43 @@ def update_fxnhist(mdl, mdlhist, t_ind):
         index to update the history at
     """
     for fxnname in mdlhist["functions"]:
-        states, faults = mdl.fxns[fxnname].return_states()
-        if 'faults' in mdlhist["functions"][fxnname]:
-            if type(mdlhist["functions"][fxnname]["faults"]) == dict:
-                for fault in mdlhist["functions"][fxnname]["faults"]:
-                    if fault in faults: mdlhist["functions"][fxnname]["faults"][fault][t_ind] = 1
-            else:
-                if len(faults) > 1: raise Exception("More than one fault present in "+fxnname+"\n at t= "+str(t_ind)+"\n faults: "+str(faults)+"\n Is the mode representation nonexclusive?")
-                else:               mdlhist["functions"][fxnname]["faults"][t_ind]=faults.pop()
-        for state, value in states.items():
-            if state in mdlhist["functions"][fxnname]:  
-                mdlhist["functions"][fxnname][state][t_ind] = value
-                if not np.can_cast(type(value), type(mdlhist["functions"][fxnname][state][t_ind])):
-                    raise Exception(str(fxnname)+" state "+str(state)+" changed type: "+str(type(mdlhist["functions"][fxnname][state][t_ind]))+" to "+str(type(value))+" at t_ind="+str(t_ind))
-
+        fxn=mdl.fxns[fxnname]
+        update_blockhist(fxnname, fxn, mdlhist['functions'][fxnname], t_ind)
+        for comp_act in {*fxn.components, *fxn.actions}:
+            if comp_act in mdlhist['functions'][fxnname]:
+                update_blockhist(comp_act, getattr(fxn, comp_act), mdlhist['functions'][fxnname][comp_act], t_ind)
+        for flowname, flow in fxn.internal_flows.items():
+            if flowname in mdlhist['functions'][fxnname]:
+                for att, val in flow.status().items():
+                        mdlhist['functions'][fxnname][flowname][att][t_ind] = val
+def update_blockhist(blockname, block, blockhist, t_ind):
+    """ Updates the blocks (faults, states) in the model history at t_ind 
+    
+    Parameters
+    ----------
+    blockname : str
+        Name of the block 
+    block : Block
+        Object for the block
+    blockhist : dict
+        Dictionary history of the given block
+    t_ind : int
+        index to update the history at
+    """
+    states, faults = block.return_states()
+    if 'faults' in blockhist:
+        if type(blockhist["faults"]) == dict:
+            for fault in blockhist["faults"]:
+                if fault in faults: blockhist["faults"][fault][t_ind] = 1
+        else:
+            if len(faults) > 1: raise Exception("More than one fault present in "+blockname+"\n at t= "+str(t_ind)+"\n faults: "+str(faults)+"\n Is the mode representation nonexclusive?")
+            else:               blockhist["faults"][t_ind]=faults.pop()
+    for state, value in states.items():
+        if state in blockhist:  
+            blockhist[state][t_ind] = value
+            if not np.can_cast(type(value), type(blockhist[state][t_ind])):
+                raise Exception(str(blockname)+" state "+str(state)+" changed type: "+str(type(blockhist[state][t_ind]))+" to "+str(type(value))+" at t_ind="+str(t_ind))
+    
 def cut_mdlhist(mdlhist, ind):
     """Cuts unsimulated values from end of array
     
@@ -946,17 +971,34 @@ def cut_mdlhist(mdlhist, ind):
     if len(mdlhist['time'])>ind+1:
         mdlhist['time'] = mdlhist['time'][:ind+1]
         if 'flows' in mdlhist:
-            for flow, values in mdlhist['flows'].items():
-                for value, array in values.items():
-                    mdlhist['flows'][flow][value] = array[:ind+1]
+            for flowname, atts in mdlhist['flows'].items():
+                mdlhist['flows'][flowname] = cut_hist(atts, ind)
         if 'functions' in mdlhist:
             for fxnname, atts in mdlhist['functions'].items():
-                for att, array in atts.items():
-                    if type(array)==np.ndarray: mdlhist['functions'][fxnname][att] = array[:ind+1]
-                    else:
-                        for fault, arr in array.items():
-                            mdlhist['functions'][fxnname][att][fault] = arr[:ind+1]
+                mdlhist['functions'][fxnname] = cut_hist(atts, ind)
     return mdlhist 
+def cut_hist(hist, ind):
+    """
+    Recursively cuts the given individual (flow or function) history at ind.
+
+    Parameters
+    ----------
+    hist : dict
+        history to cut
+    ind : int
+        index to cut the history at
+
+    Returns
+    -------
+    newhist : dict
+        Cut history
+    """
+    newhist = {}
+    for attname, vals in hist.items():
+        if type(vals)==dict:            newhist[attname] = cut_hist(vals, ind)
+        elif type(vals)==np.ndarray:    newhist[attname] = vals[:ind+1]
+        else:                           newhist[attname] = vals[:ind+1]
+    return newhist
 
 def init_mdlhist(mdl, timerange, track = 'all'):
     """
@@ -1040,15 +1082,43 @@ def init_fxnhist(mdl, timerange, track='all'):
     fxnhist = {}
     for fxnname, fxn in mdl.fxns.items():
         if track=='all' or fxnname in track['functions']:
-            states, faults = fxn.return_states()
-            fxnhist[fxnname]={}
-            modelength = max([0]+[len(modename) for modename in fxn.opermodes+list(fxn.faultmodes.keys())])
-            if track == 'all' or track['functions'][fxnname]=='all' or 'faults' in track['functions'][fxnname]:
-                if fxn.faultmodes:
-                    if fxn.exclusive_faultmodes == False:   fxnhist[fxnname]["faults"] = {faultmode:np.array([0 for i in timerange]) for faultmode in fxn.faultmodes} 
-                    elif fxn.exclusive_faultmodes == True:  fxnhist[fxnname]["faults"]=np.full([len(timerange)], list(faults)[0], dtype="U"+str(modelength))
-            for state, value in states.items():
-                if track == 'all' or track['functions'][fxnname]=='all' or state in track['functions'][fxnname]:
-                    if state == 'mode': fxnhist[fxnname][state] = np.full([len(timerange)], value, dtype="U"+str(modelength))
-                    else:               fxnhist[fxnname][state] = np.full([len(timerange)], value)
+            fxnhist[fxnname] = init_blockhist(fxnname, fxn, timerange, track)
+            for comp_act in {*fxn.components, *fxn.actions}:
+                if track == 'all' or track['functions'][fxnname]=='all' or comp_act in track['functions'][fxnname]:
+                    fxnhist[fxnname][comp_act]=init_blockhist(comp_act, getattr(fxn, comp_act), timerange, track='all')
+            for flowname, flow in fxn.internal_flows.items():
+                if track == 'all' or track['functions'][fxnname]=='all' or flowname in track['functions'][fxnname]:
+                    fxnhist[fxnname][flowname] = {}
+                    for att, val in flow.status().items():
+                            fxnhist[fxnname][flowname][att] = np.full([len(timerange)], val)
     return fxnhist
+def init_blockhist(blockname, block, timerange, track='all'):
+    """ 
+    Instantiates the block hist (faults, states) over the given timerange
+    
+    Parameters
+    ----------
+    blockname : str
+        Name of the block 
+    block : Block
+        Object for the block
+    timerange : array
+        Numpy array of times to initialize in the dictionary.
+    track : 'all' or dict, 'none'), optional
+        Which model states to track over time, which can be given as 'all' or a 
+        dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
+    """
+    states, faults = block.return_states()
+    blockhist={}
+    modelength = max([0]+[len(modename) for modename in block.opermodes+list(block.faultmodes.keys())])
+    if track == 'all' or track['functions'][blockname]=='all' or 'faults' in track['functions'][blockname]:
+        if block.faultmodes:
+            if block.exclusive_faultmodes == False:   blockhist["faults"] = {faultmode:np.array([0 for i in timerange]) for faultmode in block.faultmodes} 
+            elif block.exclusive_faultmodes == True:  blockhist["faults"]=np.full([len(timerange)], list(faults)[0], dtype="U"+str(modelength))
+    for state, value in states.items():
+        if track == 'all' or track['functions'][blockname]=='all' or state in track['functions'][blockname]:
+            if state == 'mode': blockhist[state] = np.full([len(timerange)], value, dtype="U"+str(modelength))
+            else:               blockhist[state] = np.full([len(timerange)], value)
+    return blockhist
+    
