@@ -37,7 +37,7 @@ class GraphInteractor:
         self.g=g
         self.gtype=gtype
         if type(pos)==dict and len(pos)<len(g.nodes):
-            pos.update({f:[0.5,0.5] for f in g.nodes if f not in initpos})
+            pos.update({f:[0.5,0.5] for f in g.nodes if f not in pos})
         pos=get_pos_robust(g, gtype,pos)
         self.pos=pos
         self.kwargs=kwargs
@@ -123,15 +123,13 @@ def set_pos(g, gtype='bipartite', **kwargs):
     p : GraphIterator
         Graph Iterator (in resultdisp.Graph)
     """
-    if type(g) not in [nx.classes.graph.Graph, nx.classes.digraph.DiGraph]:
+    if getattr(g,'type', '')=='model':
         mdl=g
-        set_mdl=True
-        if gtype=='normal':         g=mdl.graph
-        elif gtype=='bipartite':    g=mdl.bipartite
-        elif gtype=='typegraph':    g=mdl.return_typegraph()
+        g, pos = get_graph_pos(mdl,kwargs.get('pos',{}), gtype)
+    elif getattr(g,'type', '')=='function':
+        fxn=g
+        g,gtype, kwargs['pos'], kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(fxn, kwargs.get('pos',{}),gtype, kwargs.get('arrows', False))
     plt.ion()
-    if type(initpos)==dict and len(initpos)<len(g.nodes):
-        initpos.update({f:[0.5,0.5] for f in g.nodes if f not in initpos})
     p = GraphInteractor(g, gtype, **kwargs)
     if 'inline' in get_backend():
         print("Cannot place nodes in inline version of plot. Use '%matplotlib qt' (or '%matplotlib osx') to open in external window")
@@ -783,7 +781,7 @@ def get_asg_pos(fxn, pos, gtype, arrows):
     if gtype=='actions':
         gtype='normal'
         g= fxn.action_graph; seqgraph={}; arrows=True
-        if not pos: pos = getattr(fxn, 'action_graph_pos', {}})
+        if not pos: pos = getattr(fxn, 'action_graph_pos', {})
     elif gtype=='flows':
         gtype='bipartite'
         g= fxn.flow_graph; seqgraph={}
