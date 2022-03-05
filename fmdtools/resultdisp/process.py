@@ -581,7 +581,7 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
     statistic, lower bound, upper bound
     """
     if 'interval' in kwargs: kwargs['confidence_level']=kwargs.pop('interval')*0.01
-    if not data.count(data[0])>1:
+    if data.count(data[0])>1:
         bs = bootstrap([data], np.mean, **kwargs)
         return method(data), bs.confidence_interval.low, bs.confidence_interval.high
     elif return_anyway: return method(data), method(data), method(data)
