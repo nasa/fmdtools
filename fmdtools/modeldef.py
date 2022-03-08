@@ -317,43 +317,43 @@ class Block(Common):
         else:                                 self.rngs[name]=np.random.default_rng(seed)
         if not hasattr(self,'_rng_params'):   self._rng_params={name:(default, generator_method, generator_params,seed)} 
         else:                                 self._rng_params[name]=(default, generator_method, generator_params,seed)
-    def assoc_healthstates(self, hstates, mode_app='single-state', probtype='prob', units='hr'):
+    def assoc_faultstates(self, fstates, mode_app='single-state', probtype='prob', units='hr'):
         """
         Adds health state attributes to the model (and a mode approach if desired). 
         
         Parameters
         ----------
-        hstates : Dict
+        fstates : Dict
             Health states to incorporate in the model and their respective values. 
             e.g., {'state':[1,{0,2,-1}]}, {'state':{0,2,-1}}
         mode_app : str
             type of modes to elaborate from the given health states.
         """
         if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
-        hranges = dict.fromkeys(hstates.keys())
-        nom_hstates = {}
-        for state in hstates:
+        franges = dict.fromkeys(fstates.keys())
+        nom_fstates = {}
+        for state in fstates:
             self._states.append(state)
-            if type(hstates[state]) in [set, np.ndarray]:               
-                nom_hstates[state] = 1.0
-                hranges[state]=set(hstates[state])
-            elif  type(hstates[state])==list:           
-                nom_hstates[state] = hstates[state][0]
-                hranges[state]=set(hstates[state][1]) 
-            elif type(hstates[state]) in [float, int]:  
-                nom_hstates[state] = hstates[state]
-                hranges[state]={}
+            if type(fstates[state]) in [set, np.ndarray]:               
+                nom_fstates[state] = 1.0
+                franges[state]=set(fstates[state])
+            elif  type(fstates[state])==list:           
+                nom_fstates[state] = fstates[state][0]
+                franges[state]=set(fstates[state][1]) 
+            elif type(fstates[state]) in [float, int]:  
+                nom_fstates[state] = fstates[state]
+                franges[state]={}
             else: raise Exception("Invalid input option for health state")
-            setattr(self, state, nom_hstates[state])
-            self._initstates.update(nom_hstates)
-        self.assoc_healthstate_modes(hranges=hranges, mode_app=mode_app, probtype=probtype, units=units)
-    def assoc_healthstate_modes(self, hranges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='global'):
+            setattr(self, state, nom_fstates[state])
+            self._initstates.update(nom_fstates)
+        self.assoc_faultstate_modes(franges=franges, mode_app=mode_app, probtype=probtype, units=units)
+    def assoc_faultstate_modes(self, franges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='global'):
         """
-        Associates modes with given healthstates.
+        Associates modes with given faultstates.
 
         Parameters
         ----------
-        hranges : dict, optional
+        franges : dict, optional
             Dictionary of form {'state':{val1, val2...}) of ranges for each health state (if used to generate modes). The default is {}.
         mode_app : str
             type of modes to elaborate from the given health states.
@@ -371,23 +371,23 @@ class Block(Common):
         if not getattr(self, 'is_copy', False):
             if not getattr(self, 'faultmodes', []): self.faultmodes = dict()
             if not getattr(self, 'mode_state_dict', False): self.mode_state_dict = {}
-            nom_hstates = {state: self._initstates[state] for state in hranges}
+            nom_fstates = {state: self._initstates[state] for state in franges}
             if mode_app=='none': a=0
             elif mode_app=='single-state':
-                for state in hranges:
-                    modes = {state+'_'+str(value):'synth' for value in hranges[state]}
-                    modestates = {state+'_'+str(value): {state:value} for value in hranges[state]}
+                for state in franges:
+                    modes = {state+'_'+str(value):'synth' for value in franges[state]}
+                    modestates = {state+'_'+str(value): {state:value} for value in franges[state]}
                     self.faultmodes.update(modes)
                     self.mode_state_dict.update(modestates)
             elif mode_app =='all' or type(mode_app)==int:
-                for state in hranges: hranges[state].add(nom_hstates[state])
-                nomvals = tuple([*nom_hstates.values()])
-                statecombos = [i for i in itertools.product(*hranges.values()) if i!=nomvals]
+                for state in franges: franges[state].add(nom_fstates[state])
+                nomvals = tuple([*nom_fstates.values()])
+                statecombos = [i for i in itertools.product(*franges.values()) if i!=nomvals]
                 if type(mode_app)==int and len(statecombos)>0: 
                     sample = self.rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
                     statecombos = [statecombos[i] for i in sample]
                 self.faultmodes.update({'hmode_'+str(i):'synth' for i in range(len(statecombos))}) 
-                self.mode_state_dict.update({'hmode_'+str(i): {list(hranges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
+                self.mode_state_dict.update({'hmode_'+str(i): {list(franges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
             else: raise Exception("Invalid mode elaboration approach")
             num_synth_modes = len(self.mode_state_dict)
             for mode,atts in manual_modes.items():
@@ -1371,7 +1371,7 @@ class Model(object):
                 class_relationship[obj.__class__.__name__].update(obj.get_flowtypes())
             else: class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
         return class_relationship
-    def build_model(self, functionorder=[], graph_pos={}, bipartite_pos={}):
+    def build_model(self, functionorder=[], graph_pos={}, bipartite_pos={}, require_connections=True):
         """
         Builds the model graph after the functions have been added.
 
@@ -1388,9 +1388,9 @@ class Model(object):
             if functionorder: self.set_functionorder(functionorder)
             self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False) or getattr(fxn, 'asg_proptype','na')=='static'])
             self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'dynamic_behavior', False) or getattr(fxn, 'asg_proptype','na')=='dynamic'])
-            self.construct_graph(graph_pos, bipartite_pos)
+            self.construct_graph(graph_pos, bipartite_pos, require_connections=require_connections)
             self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.bipartite.neighbors(flow)])]
-    def construct_graph(self, graph_pos={}, bipartite_pos={}):
+    def construct_graph(self, graph_pos={}, bipartite_pos={}, require_connections=True):
         """
         Creates and returns a graph representation of the model
 
@@ -1405,7 +1405,7 @@ class Model(object):
         self.bipartite.add_edges_from(self._fxnflows)
         
         dangling_nodes = [e for e in nx.isolates(self.bipartite)] # check to see that all functions/flows are connected
-        if dangling_nodes: raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
+        if dangling_nodes and require_connections: raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
         
         self.multgraph = nx.projected_graph(self.bipartite, self.fxns,multigraph=True)
         self.graph = nx.projected_graph(self.bipartite, self.fxns)
@@ -1626,7 +1626,7 @@ class Model(object):
         self._rng=np.random.default_rng(self.seed)
     def find_classification(self, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
-        return {'rate':scen['properties']['rate'], 'cost': 1, 'expected cost': scen['properties']['rate']}
+        return {'rate':scen['properties'].get('rate', 0), 'cost': 1, 'expected cost': scen['properties'].get('rate',0)}
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) 

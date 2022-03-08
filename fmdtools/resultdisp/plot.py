@@ -135,7 +135,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
         indiv_kwargs['faulty'] = indiv_kwargs.get('faulty', {'color':'red'})  
     else: indiv_kwargs.pop('faulty','')
     template = [*flat_mdlhists.values()][0]
-    plot_values = [*template.keys()]
+    plot_values = [i for i in template.keys() if i!='time']
     num_plots = len(plot_values)
     if num_plots==1: cols=1
     rows = int(np.ceil(num_plots/cols))
