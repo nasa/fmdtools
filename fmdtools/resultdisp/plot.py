@@ -4,6 +4,8 @@ Description: Plots quantities of interest over time using matplotlib.
 Uses the following methods:
     - :func:`mdlhist`:         plots function and flow histories over time (with different plots for each function/flow)
     - :func:`mdlhists`:        plots function and flow histories over time on the same plot
+    - :func:`metric_dist`:     Plots the histogram of given metric(s) separated by comparison groups over a set of scenarios
+    - :func:`metric_dist_from`:Plot the distribution of model history function/flow value over at defined time(s) over a number of scenarios.
     - :func:`nominal_vals_1d`: plots the end-state classification of a system over a (1-D) range of nominal runs
     - :func:`nominal_vals_2d`: plots the end-state classification of a system over a (2-D) range of nominal runs
     - :func:`nominal_vals_3d`: plots the end-state classification of a system over a (3-D) range of nominal runs
@@ -35,6 +37,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
              fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
              title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
+             v_padding=None, h_padding=None, title_padding=None,
              phases={}, modephases={}, label_phases=True,  **kwargs):
     """
     Plot the behavior over time of the given function/flow values 
@@ -103,6 +106,12 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
         label to use for the time slice bars in the legend. Default is None
     figsize : tuple (float,float)
         x-y size for the figure. The default is 'default', which dymanically gives 3 for each column and 2 for each row
+    v_padding : float
+        vertical padding between subplots as a fraction of axis height
+    h_padding : float
+        horizontal padding between subplots as a fraction of axis width
+    title_padding : float
+        padding for title as a fraction of figure height
     phases : dict, optional
         Provide to overlay phases on the individual function histories, where phases
         is from rd.process.mdlhist and of structure {'fxnname':'phase':[start, end]}. 
@@ -196,19 +205,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
         if type(time_slice)==int: ax.axvline(x=time_slice, color='k', label=time_slice_label)
         else:   
             for ts in time_slice: ax.axvline(x=ts, color='k', label=time_slice_label)
-    if len(grouphists)>1 and legend_loc!=False:
-        ax.legend()
-        handles, labels = ax.get_legend_handles_labels()
-        ax.get_legend().remove()
-        ax_l = axs[legend_loc]
-        by_label = dict(zip(labels, handles))
-        if ax_l !=ax and legend_loc in [-1, len(axs)]:
-            ax_l.set_frame_on(False)
-            ax_l.get_xaxis().set_visible(False)
-            ax_l.get_yaxis().set_visible(False)
-            ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, loc='center')
-        else: ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8})
-    if title: plt.suptitle(title)
+    multiplot_legend_title(grouphists, axs, ax, legend_loc, title, v_padding, h_padding, title_padding)
     return fig, axs
 def indiv_mdlhists(mdlhist, fxnflows={}, cols=2, aggregation='individual', comp_groups={}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
@@ -345,6 +342,135 @@ def flatten_hist(hist, newhist = {}, prevname=(), to_plot='all'):
             if len(newname)==1: newhist[newname[0]] = val
             else:               newhist[newname] = val
     return newhist
+def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_padding=None, h_padding=None, title_padding=None):
+    """ Helper function for multiplot legends and titles"""
+    if len(groupmetrics)>1 and legend_loc!=False:
+        ax.legend()
+        handles, labels = ax.get_legend_handles_labels()
+        ax.get_legend().remove()
+        ax_l = axs[legend_loc]
+        by_label = dict(zip(labels, handles))
+        if ax_l !=ax and legend_loc in [-1, len(axs)]:
+            ax_l.set_frame_on(False)
+            ax_l.get_xaxis().set_visible(False)
+            ax_l.get_yaxis().set_visible(False)
+            ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, loc='center')
+        else: ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8})
+    plt.subplots_adjust(hspace=v_padding, wspace=h_padding)
+    if title: plt.suptitle(title)
+    
+
+def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=None, metric_bins={}, legend_loc=-1, 
+                xlabels={}, ylabel='count', title='', indiv_kwargs={}, figsize='default', 
+                v_padding=0.4, h_padding=0.05, title_padding=0.1, **kwargs):
+    """
+    Plots the histogram of given metric(s) separated by comparison groups over a set of scenarios
+
+    Parameters
+    ----------
+    endclasses : dict
+        Dictionary of metrics with structure {'scen':{'metric':value}}
+    metrics : list, optional
+        list of metrics in the dictionary to plot
+    cols : int, optional
+        columns to use in the figure. The default is 2. 
+    comp_groups : dict, optional
+        Dictionary for comparison groups (if more than one) with structure:
+            {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')} Default is {}
+            If a legend is shown, group names are used as labels.
+    bins : int
+        Number of bins to use (for all plots). Default is None
+    metric_bins : dict,
+        Dictionary of number of bins to use for each metric with structure {'metric':num}
+        Default is {}
+    legend_loc : int, optional
+        Specifies the plot to place the legend on, if runs are being compared. Default is -1 (the last plot)
+        To remove the legend, give a value of False
+    xlabels : dict, optional
+        Label for the x-axes with structure {'metric':'label'}
+    ylabel : str, optional
+        Label for the y-axes. Default is 'time'
+    title : str, optional
+        overall title for the plot. Default is ''
+    indiv_kwargs : dict, optional
+        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where 
+        where kwargs is an individual dict of keyword arguments for the
+        comparison group comp (or scenario, if not aggregated) which overrides 
+        the global kwargs (or default behavior).
+    figsize : tuple (float,float)
+        x-y size for the figure. The default is 'default', which dymanically gives 3 for each column and 2 for each row
+    v_padding : float
+        vertical padding between subplots as a fraction of axis height
+    h_padding : float
+        horizontal padding between subplots as a fraction of axis width
+    title_padding : float
+        padding for title as a fraction of figure height
+    **kwargs : kwargs
+        keyword arguments to mpl.hist e.g. bins, etc
+    """
+    #Sort into comparison groups
+    if not comp_groups:     groupmetrics = {'default':endclasses}
+    else:                   groupmetrics = {group:{ec:cl for ec,cl in endclasses.items() if ec in groupscens} for group, groupscens in comp_groups.items()}
+    template = [*endclasses.values()][0]
+    if metrics=='all':  plot_values = [i for i in template.keys()]
+    else:               plot_values = [i for i in template.keys() if i in metrics]
+    num_plots = len(plot_values)
+    if num_plots==1: cols=1
+    rows = int(np.ceil(num_plots/cols))
+    if figsize=='default': figsize=(cols*3, 2*rows)
+    fig, axs = plt.subplots(rows,cols, sharey=True, sharex=False, figsize=figsize) 
+    if type(axs)==np.ndarray:   axs = axs.flatten()
+    else:                       axs=[axs]
+    num_bins = bins
+    for i, plot_value in enumerate(plot_values):
+        ax = axs[i]
+        xlabel = xlabels.get(plot_value, plot_value)
+        if type(xlabel)==str:   ax.set_xlabel(xlabel)
+        else:                   ax.set_xlabel(' '.join(xlabel))
+        ax.grid(axis='y')
+        fulldata = [ec[plot_value] for endc in groupmetrics.values() for ec in endc.values()]
+        bins = np.histogram(fulldata, metric_bins.get(plot_value, num_bins))[1]
+        if not i%cols: ax.set_ylabel(ylabel)
+        for group, endclasses in groupmetrics.items():
+            local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
+            x = [ec[plot_value] for ec in endclasses.values()]
+            ax.hist(x, bins, label=group, **local_kwargs)
+    
+    multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,v_padding, h_padding, title_padding)
+    return fig, axs
+
+def metric_dist_from(mdlhists, times, fxnflowvals='all', **kwargs):
+    """
+    Plot the distribution of model history function/flow value over at defined time(s) over a number of scenarios.
+
+    Parameters
+    ----------
+    mdlhists : dict
+        Aggregate model history with structure {'scen':mdlhist} (or single mdlhist)
+    times : list/int
+        List of times (or single time) to key the model history from. 
+        If more than one time is provided, it takes the place of comp_groups.
+    fxnflowsvals : dict, optional
+        dict of flow values to plot with structure {fxnflow:[vals], fxnflow:'val'/all, fxnflow:{'comp':[vals]}}. 
+        The default is 'all', which returns all.
+    comp_groups : dict, optional
+        Dictionary for comparison groups (if not comparing times) with structure:
+            {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')} Default is {}
+            If a legend is shown, group names are used as labels.
+    **kwargs : kwargs
+        keyword arguments to plot.metric_dist
+    """
+    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_plot=fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    if type(times) in [int, float]: times=[times]
+    if len(times)==1 and kwargs.get('comp_groups', False):
+        time_classes = {scen:{metric:val[times[0]] for metric, val in flat_hist.items()} for scen, flat_hist in flat_mdlhists.items()}
+        comp_groups=kwargs.pop('comp_groups')
+    elif kwargs.get('comp_groups', False): raise Exception("Cannot compare times and comp_groups at the same time")
+    else:
+        time_classes = {str(t)+'_'+scen:{metric:val[t] for metric, val in flat_hist.items()} for scen, flat_hist in flat_mdlhists.items() for t in times}
+        comp_groups = {t:{str(t)+'_'+scen for scen in flat_mdlhists} for t in times}
+    fig, axs= metric_dist(time_classes,comp_groups=comp_groups, **kwargs)
+    return fig, axs
 
 def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4)):
     """
@@ -875,6 +1001,7 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
     figure.tight_layout(pad=0.3)
     if title and len(faults)>1:               figure.suptitle(title)
     return figure
-    
+
+
 
 
