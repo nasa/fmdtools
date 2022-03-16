@@ -360,7 +360,7 @@ def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_
     if title: plt.suptitle(title)
     
 
-def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=None, metric_bins={}, legend_loc=-1, 
+def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metric_bins={}, legend_loc=-1, 
                 xlabels={}, ylabel='count', title='', indiv_kwargs={}, figsize='default', 
                 v_padding=0.4, h_padding=0.05, title_padding=0.1, **kwargs):
     """
@@ -472,7 +472,7 @@ def metric_dist_from(mdlhists, times, fxnflowvals='all', **kwargs):
     fig, axs= metric_dist(time_classes,comp_groups=comp_groups, **kwargs)
     return fig, axs
 
-def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4)):
+def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4), xlabel=''):
     """
     Visualizes the nominal operational envelope along one given parameter
 
@@ -488,6 +488,8 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
         Plot title. The default is "Nominal Operational Envelope".
     nomlabel : str, optional
         Flag for nominal end-states. The default is 'nominal'.
+    xlabel: str, optional
+        label for x-axis (defaults to parameter name for param1)
 
     Returns
     -------
@@ -501,26 +503,31 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
     data = [(x, scen['properties']['inputparams'][param1]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False))]
     names = [d[0] for d in data]
-    classifications = [nomapp_endclasses[name][metric] for name in names] 
-    discrete_classes = set(classifications)
+    classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
+    all_classes = set(classifications)
+    nom_classes = [c for c in all_classes if nomlabel in c]
+    non_nom_classes = [c for c in all_classes if nomlabel not in c]
+    discrete_classes = nom_classes + non_nom_classes
+    
     min_x = np.min([d[1] for i,d in enumerate(data)])
     max_x = np.max([d[1] for i,d in enumerate(data)])
     plt.hlines(1,min_x-1, max_x+1)
     
     for cl in discrete_classes:
         xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
-        if nomlabel in cl:  plt.eventplot(xdata, label=cl, color='blue', alpha=0.5)
-        else:               plt.eventplot(xdata, label=cl, color='red', alpha=0.5)
+        if str(nomlabel) in cl:  plt.eventplot(xdata, label=cl, color='blue', alpha=0.5)
+        else:                   plt.eventplot(xdata, label=cl, color='red', alpha=0.5)
     plt.legend()
     plt.xlim(min_x-1, max_x+1)
     axis = plt.gca()
     axis.yaxis.set_ticklabels([])
-    plt.xlabel(param1)
+    if not xlabel: xlabel=param1
+    plt.xlabel(xlabel)
     plt.title(title)
     plt.grid(which='both', axis='x')
     return fig
 
-def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', legendloc='best', figsize=(6,4)):
+def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', legendloc='best', figsize=(6,4), xlabel='', ylabel=''):
     """
     Visualizes the nominal operational envelope along two given parameters
 
@@ -538,6 +545,10 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
         Plot title. The default is "Nominal Operational Envelope".
     nomlabel : str, optional
         Flag for nominal end-states. The default is 'nominal'.
+    xlabel: str, optional
+        label for x-axis (defaults to parameter name for param1)
+    ylabel: str, optional
+        label for y-axis (defaults to parameter name for param2)
 
     Returns
     -------
@@ -549,21 +560,27 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False))]
     names = [d[0] for d in data]
-    classifications = [nomapp_endclasses[name][metric] for name in names] 
-    discrete_classes = set(classifications)
+    classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
+    all_classes = set(classifications)
+    nom_classes = [c for c in all_classes if nomlabel in c]
+    non_nom_classes = [c for c in all_classes if nomlabel not in c]
+    discrete_classes = nom_classes + non_nom_classes
+    
     for cl in discrete_classes:
         xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
         ydata = [d[2] for i,d in enumerate(data) if classifications[i]==cl]
-        if nomlabel in cl:  plt.scatter(xdata, ydata, label=cl, marker="o")
-        else:               plt.scatter(xdata, ydata, label=cl, marker="X")
+        if str(nomlabel) in cl:     plt.scatter(xdata, ydata, label=cl, marker="o")
+        else:                       plt.scatter(xdata, ydata, label=cl, marker="X")
     plt.legend(loc=legendloc)
-    plt.xlabel(param1)
-    plt.ylabel(param2)
+    if not xlabel: xlabel=param1
+    if not ylabel: ylabel=param2
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.title(title)
     plt.grid(which='both')
     return fig
 
-def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4)):
+def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4), xlabel='', ylabel='', zlabel=''):
     """
     Visualizes the nominal operational envelope along three given parameters
 
@@ -583,6 +600,12 @@ def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="No
         Plot title. The default is "Nominal Operational Envelope".
     nomlabel : str, optional
         Flag for nominal end-states. The default is 'nominal'.
+    xlabel: str, optional
+        label for x-axis (defaults to parameter name for param1)
+    ylabel: str, optional
+        label for y-axis (defaults to parameter name for param2)
+    zlabel: str, optional
+        label for z-axis (defaults to parameter name for param3)
 
     Returns
     -------
@@ -595,18 +618,24 @@ def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="No
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2], scen['properties']['inputparams'][param3]) for x,scen in nomapp.scenarios.items()\
             if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False)and scen['properties']['inputparams'].get(param3,False))]
     names = [d[0] for d in data]
-    classifications = [nomapp_endclasses[name][metric] for name in names] 
-    discrete_classes = set(classifications)
+    classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
+    all_classes = set(classifications)
+    nom_classes = [c for c in all_classes if nomlabel in c]
+    non_nom_classes = [c for c in all_classes if nomlabel not in c]
+    discrete_classes = nom_classes + non_nom_classes
     for cl in discrete_classes:
         xdata = [d[1] for i,d in enumerate(data) if classifications[i]==cl]
         ydata = [d[2] for i,d in enumerate(data) if classifications[i]==cl]
         zdata = [d[3] for i,d in enumerate(data) if classifications[i]==cl]
-        if nomlabel in cl:  ax.scatter(xdata, ydata, zdata, label=cl, marker="o")
-        else:               ax.scatter(xdata, ydata, zdata, label=cl, marker="X")
+        if str(nomlabel) in cl:  ax.scatter(xdata, ydata, zdata, label=cl, marker="o")
+        else:                   ax.scatter(xdata, ydata, zdata, label=cl, marker="X")
     ax.legend()
-    ax.set_xlabel(param1)
-    ax.set_ylabel(param2)
-    ax.set_zlabel(param3)
+    if not xlabel: xlabel=param1
+    if not ylabel: ylabel=param2
+    if not zlabel: xlabel=param3
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_zlabel(zlabel)
     plt.title(title)
     plt.grid(which='both')
     return fig
