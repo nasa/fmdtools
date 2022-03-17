@@ -1,0 +1,10 @@
+scipy
+tqdm
+multiprocessing
+networkx
+numpy
+matplotlib
+pandas
+ordered-set
+dill 
+pickle

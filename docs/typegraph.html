@@ -1,0 +1,134 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 1000px;
+            height: 500px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "Rover", "label": "Rover", "level": 1, "shape": "dot", "size": 10}, {"id": "Store_Energy", "label": "Store_Energy", "level": 2, "shape": "dot", "size": 10}, {"id": "Control_Rover", "label": "Control_Rover", "level": 2, "shape": "dot", "size": 10}, {"id": "Move_Rover", "label": "Move_Rover", "level": 2, "shape": "dot", "size": 10}, {"id": "GenericFxn", "label": "GenericFxn", "level": 2, "shape": "dot", "size": 10}, {"id": "Control", "label": "Control", "level": 3, "shape": "dot", "size": 10}, {"id": "Force", "label": "Force", "level": 3, "shape": "dot", "size": 10}, {"id": "EE", "label": "EE", "level": 3, "shape": "dot", "size": 10}, {"id": "Video", "label": "Video", "level": 3, "shape": "dot", "size": 10}, {"id": "Comms", "label": "Comms", "level": 3, "shape": "dot", "size": 10}, {"id": "Ground", "label": "Ground", "level": 3, "shape": "dot", "size": 10}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "Rover", "to": "Store_Energy", "weight": 1}, {"arrows": "to", "from": "Rover", "to": "Control_Rover", "weight": 1}, {"arrows": "to", "from": "Rover", "to": "Move_Rover", "weight": 1}, {"arrows": "to", "from": "Rover", "to": "GenericFxn", "weight": 1}, {"arrows": "to", "from": "Store_Energy", "to": "Control", "weight": 1}, {"arrows": "to", "from": "Store_Energy", "to": "Force", "weight": 1}, {"arrows": "to", "from": "Store_Energy", "to": "EE", "weight": 1}, {"arrows": "to", "from": "Control_Rover", "to": "Control", "weight": 1}, {"arrows": "to", "from": "Control_Rover", "to": "Video", "weight": 1}, {"arrows": "to", "from": "Control_Rover", "to": "Comms", "weight": 1}, {"arrows": "to", "from": "Control_Rover", "to": "Force", "weight": 1}, {"arrows": "to", "from": "Control_Rover", "to": "EE", "weight": 1}, {"arrows": "to", "from": "Move_Rover", "to": "Ground", "weight": 1}, {"arrows": "to", "from": "Move_Rover", "to": "Control", "weight": 1}, {"arrows": "to", "from": "Move_Rover", "to": "Force", "weight": 1}, {"arrows": "to", "from": "Move_Rover", "to": "EE", "weight": 1}, {"arrows": "to", "from": "GenericFxn", "to": "Video", "weight": 1}, {"arrows": "to", "from": "GenericFxn", "to": "Comms", "weight": 1}, {"arrows": "to", "from": "GenericFxn", "to": "Ground", "weight": 1}, {"arrows": "to", "from": "GenericFxn", "to": "Force", "weight": 1}, {"arrows": "to", "from": "GenericFxn", "to": "EE", "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": true
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
