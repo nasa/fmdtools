@@ -104,9 +104,9 @@ Contributions
 
 fmdtools is developed primarily by the `Resilience Analysis and Design <https://ti.arc.nasa.gov/tech/rse/research/rad/>`_ research project. External contributions are welcome under a Contributor License Agreement:
 
-`Individual CLA <fmdtools_Individual_CLA.pdf>`_
+- `Individual CLA <fmdtools_Individual_CLA.pdf>`_
 
-`Corporate CLA <fmdtools_Corporate_CLA.pdf>`_
+- `Corporate CLA <fmdtools_Corporate_CLA.pdf>`_
 
 Contributors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
