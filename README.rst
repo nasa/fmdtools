@@ -102,7 +102,11 @@ These must be installed (e.g. using ``pip install packagename`` or ``conda insta
 Contributions
 ====================================
 
-fmdtools is developed primarily by the `Resilience Analysis and Design <https://ti.arc.nasa.gov/tech/rse/research/rad/>`_ research project. External contributions are welcome under a Contributor License Agreement.
+fmdtools is developed primarily by the `Resilience Analysis and Design <https://ti.arc.nasa.gov/tech/rse/research/rad/>`_ research project. External contributions are welcome under a Contributor License Agreement:
+
+:download:`Individual CLA <fmdtools_Individual_CLA.pdf>`
+
+:download:`Corporate CLA <fmdtools_Corporate_CLA.pdf>`
 
 Contributors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
