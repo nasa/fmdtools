@@ -1,0 +1,24 @@
+<svg height="44pt" viewBox="0.00 0.00 309.00 44.00" width="309pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" id="graph0" transform="scale(1 1) rotate(0) translate(4 40)">
+<title>legend</title>
+<polygon fill="white" points="-4,4 -4,-40 305,-40 305,4 -4,4" stroke="transparent"/>
+<!-- No Execution -->
+<g class="node" id="node1">
+<title>No Execution</title>
+<polygon fill="lightgray" points="93,-36 0,-36 0,0 93,0 93,-36" stroke="black"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="46.5" y="-14.3">No Execution</text>
+</g>
+<!-- Dynamic Step -->
+<g class="node" id="node2">
+<title>Dynamic Step</title>
+<polygon fill="teal" points="206,-36 111,-36 111,0 206,0 206,-36" stroke="black"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="158.5" y="-14.3">Dynamic Step</text>
+</g>
+<!-- Static Step -->
+<g class="node" id="node3">
+<title>Static Step</title>
+<polygon fill="cyan" points="301,-36 224,-36 224,0 301,0 301,-36" stroke="black"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="262.5" y="-14.3">Static Step</text>
+</g>
+</g>
+</svg>
