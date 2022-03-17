@@ -1,0 +1,95 @@
+<svg height="392pt" viewBox="0.00 0.00 468.00 392.00" width="468pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" id="graph0" transform="scale(1 1) rotate(0) translate(4 388)">
+<polygon fill="white" points="-4,4 -4,-388 464,-388 464,4 -4,4" stroke="transparent"/>
+<!-- Control_Rover&#45;&#45;Store_Energy -->
+<g class="edge" id="edge4">
+<title>Control_Rover--Store_Energy</title>
+<path d="M161.99,-347.8C175.69,-333.05 195.34,-311.92 209.04,-297.18" fill="none" stroke="lightgray"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="236.5" y="-318.8">ControlEEForce</text>
+</g>
+<!-- Control_Rover&#45;&#45;Move_Rover -->
+<g class="edge" id="edge2">
+<title>Control_Rover--Move_Rover</title>
+<path d="M120.92,-347.97C94.15,-327.59 57.98,-292.29 77,-261 95.43,-230.67 132.26,-213.25 162.19,-203.66" fill="none" stroke="lightgray"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="123.5" y="-275.3">ControlEEForce</text>
+</g>
+<!-- Control_Rover&#45;&#45;View_Ground -->
+<g class="edge" id="edge3">
+<title>Control_Rover--View_Ground</title>
+<path d="M196.78,-360.46C225.11,-356.03 260.03,-347.28 287,-330 344.51,-293.16 360.39,-274.45 383,-210 388.3,-194.9 389.07,-188.8 383,-174 374.45,-153.14 356.08,-135.26 340.73,-123.07" fill="none" stroke="lightgray"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="418" y="-231.8">VideoEEForce</text>
+</g>
+<!-- Control_Rover&#45;&#45;Communicate_Externally -->
+<g class="edge" id="edge1">
+<title>Control_Rover--Communicate_Externally</title>
+<path d="M95.35,-356.88C53.18,-346.89 0,-325.31 0,-280 0,-280 0,-280 0,-104 0,-65.37 37.6,-44.16 75.65,-32.59" fill="none" stroke="lightgray"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="47" y="-188.3">CommsEEForce</text>
+</g>
+<!-- Store_Energy&#45;&#45;Move_Rover -->
+<g class="edge" id="edge6">
+<title>Store_Energy--Move_Rover</title>
+<path d="M221.56,-260.8C218.61,-246.05 214.38,-224.92 211.44,-210.18" fill="none" stroke="lightgray"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="263.5" y="-231.8">ControlEEForce</text>
+</g>
+<!-- Store_Energy&#45;&#45;View_Ground -->
+<g class="edge" id="edge7">
+<title>Store_Energy--View_Ground</title>
+<path d="M271.94,-270.51C287.96,-265.47 304.27,-257.06 314,-243 339.04,-206.81 328.93,-151.38 321.4,-123.42" fill="none" stroke="lightgray"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="354" y="-188.3">EEForce</text>
+</g>
+<!-- Store_Energy&#45;&#45;Communicate_Externally -->
+<g class="edge" id="edge5">
+<title>Store_Energy--Communicate_Externally</title>
+<path d="M201.47,-260.79C185.94,-248.3 166.26,-230.11 154,-210 120.08,-154.37 138.23,-71.61 148.5,-36.14" fill="none" stroke="lightgray"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="160" y="-144.8">EEForce</text>
+</g>
+<!-- Move_Rover&#45;&#45;View_Ground -->
+<g class="edge" id="edge9">
+<title>Move_Rover--View_Ground</title>
+<path d="M208.55,-173.83C209.75,-163.19 212.93,-149.91 221,-141 233.15,-127.58 250.91,-119.3 267.79,-114.18" fill="none" stroke="lightgray"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="268" y="-144.8">GroundEEForce</text>
+</g>
+<!-- Move_Rover&#45;&#45;Communicate_Externally -->
+<g class="edge" id="edge8">
+<title>Move_Rover--Communicate_Externally</title>
+<path d="M202.62,-173.88C192.27,-140.91 169.69,-68.97 159.35,-36.05" fill="none" stroke="lightgray"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="211" y="-101.3">EEForce</text>
+</g>
+<!-- View_Ground&#45;&#45;Communicate_Externally -->
+<g class="edge" id="edge10">
+<title>View_Ground--Communicate_Externally</title>
+<path d="M283.22,-86.8C255.02,-72 214.56,-50.78 186.46,-36.03" fill="none" stroke="lightgray"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="269" y="-57.8">EEForce</text>
+</g>
+<!-- Control_Rover -->
+<g class="node" id="node1">
+<title>Control_Rover</title>
+<polygon fill="lightgray" points="196.5,-384 95.5,-384 95.5,-348 196.5,-348 196.5,-384" stroke="black"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="146" y="-362.3">Control_Rover</text>
+</g>
+<!-- Store_Energy -->
+<g class="node" id="node2">
+<title>Store_Energy</title>
+<polygon fill="lightgray" points="271.5,-297 178.5,-297 178.5,-261 271.5,-261 271.5,-297" stroke="black"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="225" y="-275.3">Store_Energy</text>
+</g>
+<!-- Move_Rover -->
+<g class="node" id="node3">
+<title>Move_Rover</title>
+<polygon fill="lightgray" points="253.5,-210 162.5,-210 162.5,-174 253.5,-174 253.5,-210" stroke="black"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="208" y="-188.3">Move_Rover</text>
+</g>
+<!-- View_Ground -->
+<g class="node" id="node4">
+<title>View_Ground</title>
+<polygon fill="lightgray" points="364,-123 268,-123 268,-87 364,-87 364,-123" stroke="black"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="316" y="-101.3">View_Ground</text>
+</g>
+<!-- Communicate_Externally -->
+<g class="node" id="node5">
+<title>Communicate_Externally</title>
+<polygon fill="lightgray" points="232,-36 76,-36 76,0 232,0 232,-36" stroke="black"/>
+<text font-family="Times New Roman,serif" font-size="14.00" text-anchor="middle" x="154" y="-14.3">Communicate_Externally</text>
+</g>
+</g>
+</svg>
