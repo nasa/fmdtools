@@ -27,7 +27,3 @@ lib/
 dist/
 fmdtools.egg-info/
 fmdtools_hulsed.egg-info
-
-#sphinx output
-_static/
-_templates/
