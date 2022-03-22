@@ -75,14 +75,12 @@ fmdtools requires Python 3 and depends directly on these packages (see requireme
 
    scipy
    tqdm
-   multiprocessing
    networkx
    numpy
    matplotlib
    pandas
    ordered-set
    dill 
-   pickle
 
 These packages are optional but recommended to enable specific fmdtools use-cases and to work with examples in the repository:
 
