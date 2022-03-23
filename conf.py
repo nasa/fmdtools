@@ -32,6 +32,7 @@ release = '1.0.0'
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', "nbsphinx", "myst_parser", "sphinx.ext.githubpages"]
 
+
 exclude_patterns = ['_build', '**.ipynb_checkpoints', 'rad_models*']
 
 # Add any paths that contain templates here, relative to this directory.
