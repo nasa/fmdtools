@@ -58,11 +58,11 @@ fmdtools is a research code and is under active development. As a result, Some u
 Getting Started
 ====================================
 
-The latest public version of fmdtools can be downloaded from the `fmdtools github repository <https://github.com/NASA-SW-VnV/fmdtools/>`_ e.g., using:
+The latest public version of fmdtools can be downloaded from the `fmdtools github repository <https://github.com/nasa/fmdtools/>`_ e.g., using:
 
 ::
 
-   git clone https://github.com/NASA-SW-VnV/fmdtools.git
+   git clone https://github.com/nasa/fmdtools.git
 
 A version of the fmdtools toolkit can also be installed directly from the `PyPI package repository <https://pypi.org/project/fmdtools/>`_ using ``pip install fmdtools``. 
 
@@ -108,6 +108,8 @@ Contributors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 `Daniel Hulse <https://github.com/hulsed>`_ : Primary Author and point-of-contact
+
+`Lukman Irshad <https://ti.arc.nasa.gov/profile/irshad/>`_ : Action Sequence Graph
 
 `Hannah Walsh <https://github.com/walshh>`_ : Network Analysis Codes
 

@@ -22,7 +22,7 @@ Information in Engineering Conference. American Society of Mechanical Engineers
 Digital Collection.
 """
 import sys, os
-sys.path.append(os.path.join('..'))
+sys.path.insert(0, os.path.join('..'))
 from fmdtools.modeldef import Model, FxnBlock, Component
 
 

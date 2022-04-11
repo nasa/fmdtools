@@ -8,9 +8,9 @@ from fmdtools.modeldef import m2to1
 
 class StoreEE(FxnBlock):
     def __init__(self, name, flows):
+        super().__init__(name, flows, ['EEout', 'FS'], {'soc': 2000})
         self.failrate=1e-5
         self.assoc_modes({'nocharge':[1,300]})
-        super().__init__(name, flows, ['EEout', 'FS'], {'soc': 2000})
     def behavior(self, time):
         if      self.has_fault('nocharge'):   self.EEout.effort=0.0
         else: self.EEout.effort=1.0
