@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stochastic Modelling in fmdtools &mdash; fmdtools 1.0.0 documentation</title>
+  <title>Stochastic Modelling in fmdtools &mdash; fmdtools 1.1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -147,12 +147,14 @@
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Model-Setup">Model Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Simulation-and-Analysis">Simulation and Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Simulation-and-Analysis">Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../example_tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
@@ -510,24 +512,15 @@ states</em> to function blocks and incorporating them in function behavior - How
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">Pump</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">Pump</span><span class="p">())</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Stochastic_Modelling_5_1.png" src="../_images/example_pump_Stochastic_Modelling_5_1.png" />
+<img alt="../_images/example_pump_Stochastic_Modelling_5_0.png" src="../_images/example_pump_Stochastic_Modelling_5_0.png" />
 </div>
 </div>
 <section id="Model-Setup">
@@ -835,10 +828,8 @@ class ImportSig(FxnBlock):
 <section id="Simulation-and-Analysis">
 <h2>Simulation and Analysis<a class="headerlink" href="#Simulation-and-Analysis" title="Permalink to this headline"></a></h2>
 <p>With this model set up, we can now simulate it using the methods in <code class="docutils literal notranslate"><span class="pre">propagate</span></code>.</p>
-</section>
-</section>
 <section id="Single-Scenario-Simulation">
-<h1>Single-Scenario Simulation<a class="headerlink" href="#Single-Scenario-Simulation" title="Permalink to this headline"></a></h1>
+<h3>Single-Scenario Simulation<a class="headerlink" href="#Single-Scenario-Simulation" title="Permalink to this headline"></a></h3>
 <p>First, let’s simulate it in the nominal scenario:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
@@ -846,7 +837,7 @@ class ImportSig(FxnBlock):
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
 <span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">})</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">})</span>
 </pre></div>
 </div>
 </div>
@@ -871,7 +862,7 @@ class ImportSig(FxnBlock):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">})</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">})</span>
 </pre></div>
 </div>
 </div>
@@ -889,7 +880,7 @@ class ImportSig(FxnBlock):
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
 <span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">modelparams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">})</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">})</span>
 </pre></div>
 </div>
 </div>
@@ -907,7 +898,7 @@ class ImportSig(FxnBlock):
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
 <span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span><span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">modelparams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;MoveWater&#39;</span><span class="p">:[</span><span class="s1">&#39;eff&#39;</span><span class="p">,</span><span class="s1">&#39;total_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">]},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Pump Response to Blockage&quot;</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;MoveWater&#39;</span><span class="p">:[</span><span class="s1">&#39;eff&#39;</span><span class="p">,</span><span class="s1">&#39;total_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">]},</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -923,7 +914,7 @@ class ImportSig(FxnBlock):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">},</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -941,7 +932,7 @@ class ImportSig(FxnBlock):
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
 <span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">,</span> <span class="s1">&#39;no_sig&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">modelparams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ImportEE&#39;</span><span class="p">:[</span><span class="s2">&quot;effstate&quot;</span><span class="p">,</span><span class="s2">&quot;grid_noise&quot;</span><span class="p">],</span> <span class="s1">&#39;ImportSignal&#39;</span><span class="p">:</span><span class="s1">&#39;sig_noise&#39;</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">:</span><span class="s1">&#39;eff&#39;</span> <span class="p">},</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -954,7 +945,7 @@ class ImportSig(FxnBlock):
 </div>
 </section>
 <section id="Multi-Scenario-Simulation">
-<h1>Multi-Scenario Simulation<a class="headerlink" href="#Multi-Scenario-Simulation" title="Permalink to this headline"></a></h1>
+<h3>Multi-Scenario Simulation<a class="headerlink" href="#Multi-Scenario-Simulation" title="Permalink to this headline"></a></h3>
 <p>Because stochastic models are non-deterministic, we are often interested not in the results of a single thread, but of the distribution of outcomes that might occur. To perform this kind of assessment, we can use a <code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code> to instantiate the model with a number of different seeds.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
@@ -1006,7 +997,7 @@ add_seed_replicates(self, rangeid, seeds)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|███████████████████████████████████████████████████████████| 100/100 [00:00&lt;00:00, 105.30it/s]
+SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 100/100 [00:01&lt;00:00, 93.27it/s]
 </pre></div></div>
 </div>
 <p>To evaluate this behavior over time, we can then use <code class="docutils literal notranslate"><span class="pre">rd.plot.mdlhists</span></code>, which will plot the <em>distribution</em> of behaviors over time.</p>
@@ -1025,19 +1016,20 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 <div class="highlight"><pre>
 Help on function mdlhists in module fmdtools.resultdisp.plot:
 
-mdlhists(mdlhists, fxnflowvals, cols=2, aggregation=&#39;individual&#39;, comp_groups={}, legend_loc=-1, xlabel=&#39;time&#39;, ylabels={}, max_ind=&#39;max&#39;, boundtype=&#39;fill&#39;, fillalpha=0.3, boundcolor=&#39;gray&#39;, boundlinestyle=&#39;--&#39;, ci=0.95, title=&#39;&#39;, indiv_kwargs={}, time_slice=[], figsize=&#39;default&#39;, **kwargs)
+mdlhists(mdlhists, fxnflowvals=&#39;all&#39;, cols=2, aggregation=&#39;individual&#39;, comp_groups={}, legend_loc=-1, xlabel=&#39;time&#39;, ylabels={}, max_ind=&#39;max&#39;, boundtype=&#39;fill&#39;, fillalpha=0.3, boundcolor=&#39;gray&#39;, boundlinestyle=&#39;--&#39;, ci=0.95, title=&#39;&#39;, indiv_kwargs={&#39;nominal&#39;: {&#39;color&#39;: &#39;blue&#39;, &#39;ls&#39;: &#39;--&#39;}, &#39;faulty&#39;: {&#39;color&#39;: &#39;red&#39;}}, time_slice=[], time_slice_label=None, figsize=&#39;default&#39;, v_padding=None, h_padding=None, title_padding=None, phases={}, modephases={}, label_phases=True, **kwargs)
     Plot the behavior over time of the given function/flow values
     over a set of scenarios, with ability to aggregate behaviors as needed.
 
     Parameters
     ----------
     mdlhists : dict
-        Aggregate model history with structure {&#39;scen&#39;:mdlhist}
+        Aggregate model history with structure {&#39;scen&#39;:mdlhist} (or single mdlhist)
     fxnflowsvals : dict, optional
-        dict of flow values to plot with structure {fxnflow:[vals]}. The default is {}, which returns all.
+        dict of flow values to plot with structure {fxnflow:[vals], fxnflow:&#39;val&#39;/all, fxnflow:{&#39;comp&#39;:[vals]}}.
+        The default is &#39;all&#39;, which returns all.
     cols : int, optional
         columns to use in the figure. The default is 2.
-    aggregation : str
+    aggregation : str, optional
         Way of aggregating the plot values. The default is &#39;individual&#39;
         Note that only the `individual` option can be used for histories of non-numeric quantities
         (e.g., modes, which are recorded as strings)
@@ -1048,38 +1040,65 @@ mdlhists(mdlhists, fxnflowvals, cols=2, aggregation=&#39;individual&#39;, comp_g
         - &#39;mean_bound&#39; plots the mean values over the sim with variable bound error bars
         - &#39;percentile&#39; plots the percentile distribution of the sim over time (does not reject outliers)
             - optional argument &#39;perc_range&#39; (int 0-100) specifies the percentile range of the inner bars (Default: 50)
-    comp_groups : dict
+    comp_groups : dict, optional
         Dictionary for comparison groups (if more than one) with structure:
             {&#39;group1&#39;:(&#39;scen1&#39;, &#39;scen2&#39;), &#39;group2&#39;:(&#39;scen3&#39;, &#39;scen4&#39;)} Default is {}
             If a legend is shown, group names are used as labels.
-    legend_loc : int
+    legend_loc : int, optional
         Specifies the plot to place the legend on, if runs are bine compared. Default is -1 (the last plot)
         To remove the legend, give a value of False
-    `indiv_kwargs` dict
-        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where
-        where kwargs is an individual dict of keyword arguments for the
-        comparison group comp (or scenario, if not aggregated) which overrides
-        the global kwargs (or default behavior).
-    xlabel : str
+    xlabel : str, optional
         Label for the x-axes. Default is &#39;time&#39;
-    ylabel : dict
+    ylabels : dict, optional
         Label for the y-axes with structure {(fxnflowname, value):&#39;label&#39;}
-    max_ind : int
+    max_ind : int, optional
         index (usually correlates to time) cutoff for the simulation. Default is &#39;max&#39; which uses the first simulation termination time.
-    boundtype : &#39;fill&#39; or &#39;line&#39;
+    boundtype : &#39;fill&#39; or &#39;line&#39;, optional
         -&#39;fill&#39; plots the error bounds as a filled area
             - optional fillalpha (float) changes the alpha of this area.
         -&#39;line&#39; plots the error bounds as lines
             - optional boundcolor (str) changes the color of the bounds (default &#39;gray&#39;)
             - optional boundlinestyle (str) changes the style of the bound lines (default &#39;--&#39;)
-    title : str
+    fillalpha : float
+        alpha value for fill in aggregated plots. Default is 0.3.
+    boundcolor : str, optional
+        color to make the bounds in aggregated plots. Default is &#39;gray&#39;
+    boundlinestyle : str, optional
+        linestyle to use for bounds in aggregated plots. Default is &#39;--&#39;
+    ci : float, optional
+        Bootstrap confidence interval (0-1) to use in &#39;mean_ci&#39; bound argument. Default is 0.95.
+    title : str, optional
         overall title for the plot. Default is &#39;&#39;
-    time_slice : int/list
+    indiv_kwargs : dict, optional
+        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where
+        where kwargs is an individual dict of keyword arguments for the
+        comparison group comp (or scenario, if not aggregated) which overrides
+        the global kwargs (or default behavior). If no comparison groups are given,
+        use &#39;default&#39; for a single history or &#39;nominal&#39;/&#39;faulty&#39; for a fault history
+        e.g. kwargs = {&#39;nominal&#39;:{color:&#39;green&#39;}} would make the nominal color green
+        Default is {}.
+    time_slice : int/list, optional
         overlays a bar or bars at the given index when the fault was injected (if any). Default is []
+    time_slice_label : str, optional
+        label to use for the time slice bars in the legend. Default is None
     figsize : tuple (float,float)
         x-y size for the figure. The default is &#39;default&#39;, which dymanically gives 3 for each column and 2 for each row
+    v_padding : float
+        vertical padding between subplots as a fraction of axis height
+    h_padding : float
+        horizontal padding between subplots as a fraction of axis width
+    title_padding : float
+        padding for title as a fraction of figure height
+    phases : dict, optional
+        Provide to overlay phases on the individual function histories, where phases
+        is from rd.process.mdlhist and of structure {&#39;fxnname&#39;:&#39;phase&#39;:[start, end]}.
+        Default is {}.
+    modephases : dict, optional
+        dictionary that maps the phases to operational modes, if it is desired to track the progression
+        through modes
     **kwargs : kwargs
         keyword arguments to mpl.plot e.g. linestyle, color, etc. See &#39;aggregation&#39; for specification.
+        phases={}, modephases={}, label_phases=True,  **kwargs):
 
 </pre></div></div>
 </div>
@@ -1133,7 +1152,7 @@ mdlhists(mdlhists, fxnflowvals, cols=2, aggregation=&#39;individual&#39;, comp_g
 </div>
 </section>
 <section id="Nested-Fault-Simulation">
-<h1>Nested Fault Simulation<a class="headerlink" href="#Nested-Fault-Simulation" title="Permalink to this headline"></a></h1>
+<h3>Nested Fault Simulation<a class="headerlink" href="#Nested-Fault-Simulation" title="Permalink to this headline"></a></h3>
 <p>We can also compare stochastic output over a set of scenarios using <code class="docutils literal notranslate"><span class="pre">plot.mdlhistvals</span></code> with the <code class="docutils literal notranslate"><span class="pre">comp_groups</span></code> parameter, which places the scenarios in different groups.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
@@ -1193,47 +1212,7 @@ Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   0%|▎                                                      | 1/200 [00:01&lt;05:37,  1.70s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   4%|█▉                                                     | 7/200 [00:03&lt;01:01,  3.16it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  10%|█████▏                                                | 19/200 [00:03&lt;00:15, 12.06it/s]
+NESTED SCENARIOS COMPLETE:   3%|█▋                                                     | 6/200 [00:03&lt;01:12,  2.66it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1254,30 +1233,7 @@ Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  14%|███████▊                                              | 29/200 [00:03&lt;00:07, 21.40it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  16%|████████▉                                             | 33/200 [00:03&lt;00:06, 24.76it/s]
+NESTED SCENARIOS COMPLETE:   7%|███▊                                                  | 14/200 [00:03&lt;00:22,  8.14it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1299,7 +1255,7 @@ Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  23%|████████████▍                                         | 46/200 [00:04&lt;00:04, 33.24it/s]
+NESTED SCENARIOS COMPLETE:  11%|█████▉                                                | 22/200 [00:03&lt;00:11, 15.24it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1321,7 +1277,7 @@ Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  27%|██████████████▌                                       | 54/200 [00:04&lt;00:04, 36.01it/s]
+NESTED SCENARIOS COMPLETE:  15%|████████                                              | 30/200 [00:03&lt;00:07, 22.07it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1343,7 +1299,27 @@ Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  30%|███████████████▉                                      | 59/200 [00:04&lt;00:03, 37.50it/s]
+NESTED SCENARIOS COMPLETE:  19%|██████████▎                                           | 38/200 [00:04&lt;00:05, 27.53it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  23%|████████████▍                                         | 46/200 [00:04&lt;00:04, 31.49it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1358,6 +1334,27 @@ Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]
 Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
 Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
 Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  27%|██████████████▌                                       | 54/200 [00:04&lt;00:04, 33.74it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
 Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
 </pre></div></div>
 </div>
@@ -1366,7 +1363,69 @@ Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  34%|██████████████████▋                                   | 69/200 [00:04&lt;00:03, 39.15it/s]
+NESTED SCENARIOS COMPLETE:  33%|█████████████████▊                                    | 66/200 [00:04&lt;00:03, 34.48it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  35%|██████████████████▉                                   | 70/200 [00:05&lt;00:03, 34.92it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  41%|██████████████████████▏                               | 82/200 [00:05&lt;00:03, 35.96it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  45%|████████████████████████▎                             | 90/200 [00:05&lt;00:03, 36.02it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1387,68 +1446,7 @@ Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  40%|█████████████████████▎                                | 79/200 [00:05&lt;00:03, 38.30it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  44%|███████████████████████▍                              | 87/200 [00:05&lt;00:03, 36.53it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  46%|████████████████████████▌                             | 91/200 [00:05&lt;00:03, 34.34it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  50%|██████████████████████████▋                           | 99/200 [00:05&lt;00:02, 34.08it/s]
+NESTED SCENARIOS COMPLETE:  51%|███████████████████████████                          | 102/200 [00:05&lt;00:02, 35.26it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1467,7 +1465,7 @@ Faults found during the nominal run {&#39;MoveWater&#39;: [&#39;mech_break&#39;]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████| 200/200 [00:08&lt;00:00, 23.67it/s]
+NESTED SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████| 200/200 [00:08&lt;00:00, 22.88it/s]
 </pre></div></div>
 </div>
 <p>Next, we get just the scenarios of interest:</p>
@@ -1568,16 +1566,13 @@ until the fault time, when pressure increases dramatically. This is also observe
       <td>1.000000</td>
       <td>1.000000</td>
       <td>1.000000</td>
-      <td>1.00000</td>
-      <td>1.00000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
       <td>1.000000</td>
       <td>1.000000</td>
       <td>1.000000</td>
       <td>1.000000</td>
       <td>...</td>
-      <td>10.000000</td>
-      <td>10.000000</td>
-      <td>10.000000</td>
       <td>10.000000</td>
       <td>10.000000</td>
       <td>10.000000</td>
@@ -1585,30 +1580,33 @@ until the fault time, when pressure increases dramatically. This is also observe
       <td>10.000000</td>
       <td>10.00000</td>
       <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
     </tr>
     <tr>
       <th>ave_cost</th>
-      <td>10236.943139</td>
-      <td>11422.351109</td>
-      <td>11287.660471</td>
-      <td>10863.280355</td>
-      <td>9744.60791</td>
-      <td>9770.52802</td>
-      <td>9822.550902</td>
-      <td>11228.201504</td>
-      <td>11501.963207</td>
-      <td>12111.234789</td>
+      <td>9704.328171</td>
+      <td>9613.676357</td>
+      <td>9497.077546</td>
+      <td>9953.543615</td>
+      <td>11882.487226</td>
+      <td>11209.215377</td>
+      <td>9737.742957</td>
+      <td>10839.049023</td>
+      <td>9799.965127</td>
+      <td>9840.129221</td>
       <td>...</td>
-      <td>10069.273024</td>
-      <td>10013.929217</td>
-      <td>9838.965583</td>
-      <td>9875.493315</td>
-      <td>10087.487482</td>
-      <td>9760.917256</td>
-      <td>10366.914445</td>
-      <td>10100.641217</td>
-      <td>9819.74324</td>
-      <td>10361.314884</td>
+      <td>10045.004156</td>
+      <td>9749.667743</td>
+      <td>10025.226785</td>
+      <td>10248.784117</td>
+      <td>10141.448923</td>
+      <td>10215.53883</td>
+      <td>9751.527488</td>
+      <td>10191.035047</td>
+      <td>10006.521226</td>
+      <td>9993.594303</td>
     </tr>
   </tbody>
 </table>
@@ -1653,13 +1651,13 @@ until the fault time, when pressure increases dramatically. This is also observe
   <tbody>
     <tr>
       <th>delay_1</th>
-      <td>4000.0</td>
-      <td>12438.539502</td>
+      <td>3700.0</td>
+      <td>12260.375595</td>
     </tr>
     <tr>
       <th>delay_10</th>
       <td>0.0</td>
-      <td>13416.737256</td>
+      <td>13377.396531</td>
     </tr>
   </tbody>
 </table>
@@ -1673,6 +1671,8 @@ until the fault time, when pressure increases dramatically. This is also observe
 </pre></div>
 </div>
 </div>
+</section>
+</section>
 </section>
 
 

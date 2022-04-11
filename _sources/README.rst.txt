@@ -4,7 +4,7 @@
 Overview
 ====================================
 
-The main impetus for the development of the fmdtools project was a lack existing tools to enable early function-based fault simulation for early functional hazard assessment. Researchers thus had to re-implement modelling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools resolves this problem by separating resilience modelling, simulation, and analysis constructs from the model under study, enabling reuse of methodology between case studies. Towards this end, the fmdtools package provides three major pieces of functionality:
+The main impetus for the development of the fmdtools project was a lack existing tools to enable early function-based fault simulation for early functional hazard assessment. Researchers thus had to re-implement modelling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools resolves this problem by separating resilience modelling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. Towards this end, the fmdtools package provides three major pieces of functionality:
 
 1. Model definition constructs which enable systematic early specification of the high level structure and behaviors of a system with concise syntax (fmdtools.modeldef).
 
@@ -32,7 +32,7 @@ fmdtools was developed with a number of unique features that differentiate it fr
   - Adding dynamic states and behaviors to the functions as well as a simulation times and operational phases in a dynamic propagation model to simulate the dynamic effects of faults simulated during different time-steps
   
   - Instantiating functions with component architectures to compare the expected resilience and behaviors of each
-  
+  o
   - Defining stochastic behavioral and input parameters to simulate and analyze system resilience throughout the operational envelope
 
 - fmdtools provides convenience methods for quickly visualizing the results of fault simulations with commonly-used Python libraries to enable one to quickly assess:
@@ -110,6 +110,8 @@ Contributors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 `Daniel Hulse <https://github.com/hulsed>`_ : Primary Author and point-of-contact
+
+`Lukman Irshad <https://ti.arc.nasa.gov/profile/irshad/>`_ : Action Sequence Graph
 
 `Hannah Walsh <https://github.com/walshh>`_ : Network Analysis Codes
 

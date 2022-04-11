@@ -20,9 +20,8 @@ The flows are:
     - Water_out
     - Signal input (on/off)
 """
-
 import sys, os
-sys.path.append(os.path.join('..'))
+sys.path.insert(0, os.path.join('..'))
 
 
 from fmdtools.modeldef import *

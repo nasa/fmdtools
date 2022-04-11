@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Module Reference &mdash; fmdtools 1.0.0 documentation</title>
+  <title>Module Reference &mdash; fmdtools 1.1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -145,12 +145,14 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../example_tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
@@ -265,6 +267,33 @@
 <li><p><a class="reference internal" href="#fmdtools.modeldef.NominalApproach" title="fmdtools.modeldef.NominalApproach"><code class="xref py py-class docutils literal notranslate"><span class="pre">NominalApproach</span></code></a>: Class defining parameter sampling approaches</p></li>
 </ul>
 </div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.modeldef.Action">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.modeldef.</span></span><span class="sig-name descname"><span class="pre">Action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flownames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Action" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.modeldef.Block" title="fmdtools.modeldef.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.modeldef.Block</span></code></a></p>
+<p>Superclass for actions (most attributes and methods inherited from Block superclass)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.Action.behavior">
+<span class="sig-name descname"><span class="pre">behavior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Action.behavior" title="Permalink to this definition"></a></dt>
+<dd><p>Placeholder behavior method for actions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.Action.updateact">
+<span class="sig-name descname"><span class="pre">updateact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proptype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dynamic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Action.updateact" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the behaviors, faults, times, etc of the action</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em><em>, </em><em>optional</em>) – Model time. The default is 0.</p></li>
+<li><p><strong>run_stochastic</strong> (<em>book</em>) – Whether to run the simulation using stochastic or deterministic behavior</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.modeldef.Block">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.modeldef.</span></span><span class="sig-name descname"><span class="pre">Block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block" title="Permalink to this definition"></a></dt>
@@ -414,13 +443,13 @@ e.g. self.add_params({‘x’:1,’y’:1}) results in a block where:</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.modeldef.Block.assoc_healthstate_modes">
-<span class="sig-name descname"><span class="pre">assoc_healthstate_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prob'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_phases_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.assoc_healthstate_modes" title="Permalink to this definition"></a></dt>
-<dd><p>Associates modes with given healthstates.</p>
+<dt class="sig sig-object py" id="fmdtools.modeldef.Block.assoc_faultstate_modes">
+<span class="sig-name descname"><span class="pre">assoc_faultstate_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">franges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prob'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_phases_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.assoc_faultstate_modes" title="Permalink to this definition"></a></dt>
+<dd><p>Associates modes with given faultstates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hranges</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of form {‘state’:{val1, val2…}) of ranges for each health state (if used to generate modes). The default is {}.</p></li>
+<li><p><strong>franges</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of form {‘state’:{val1, val2…}) of ranges for each health state (if used to generate modes). The default is {}.</p></li>
 <li><p><strong>mode_app</strong> (<em>str</em>) – type of modes to elaborate from the given health states.</p></li>
 <li><p><strong>manual_modes</strong> (<em>dict</em><em>, </em><em>optional</em>) – <dl class="simple">
 <dt>Dictionary/Set of faultmodes with structure, which has the form:</dt><dd><ul>
@@ -445,13 +474,13 @@ The default is ‘rate’</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.modeldef.Block.assoc_healthstates">
-<span class="sig-name descname"><span class="pre">assoc_healthstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hstates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'single-state'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prob'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hr'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.assoc_healthstates" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.modeldef.Block.assoc_faultstates">
+<span class="sig-name descname"><span class="pre">assoc_faultstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fstates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'single-state'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prob'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hr'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.assoc_faultstates" title="Permalink to this definition"></a></dt>
 <dd><p>Adds health state attributes to the model (and a mode approach if desired).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hstates</strong> (<em>Dict</em>) – Health states to incorporate in the model and their respective values.
+<li><p><strong>fstates</strong> (<em>Dict</em>) – Health states to incorporate in the model and their respective values.
 e.g., {‘state’:[1,{0,2,-1}]}, {‘state’:{0,2,-1}}</p></li>
 <li><p><strong>mode_app</strong> (<em>str</em>) – type of modes to elaborate from the given health states.</p></li>
 </ul>
@@ -490,7 +519,7 @@ the phases/modes to key by are defined in “key_phases_by”</p>
 </p></li>
 <li><p><strong>opermodes</strong> (<em>list</em><em>, </em><em>optional</em>) – List of operational modes</p></li>
 <li><p><strong>initmode</strong> (<em>str</em><em>, </em><em>optional</em>) – Initial operational mode. Default is ‘nom’</p></li>
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – (for components only) Name of the component. The default is ‘’.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – (for components/actions only) Name of the component. The default is ‘’.</p></li>
 <li><p><strong>probtype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of probability in the probability model, a per-time ‘rate’ or per-run ‘prob’.
 The default is ‘rate’</p></li>
 <li><p><strong>units</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of units (‘sec’/’min’/’hr’/’day’) used for the rates. Default is ‘hr’</p></li>
@@ -554,6 +583,29 @@ The tuple is of the form (name, default), where:</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.Block.check_update_nominal_faults">
+<span class="sig-name descname"><span class="pre">check_update_nominal_faults</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.check_update_nominal_faults" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.Block.choose_rand_fault">
+<span class="sig-name descname"><span class="pre">choose_rand_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'first'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combinations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.choose_rand_fault" title="Permalink to this definition"></a></dt>
+<dd><p>Randomly chooses a fault or combination of faults to insert in the function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>faults</strong> (<em>list</em>) – list of fault modes to choose from</p></li>
+<li><p><strong>default</strong> (<em>str/list</em><em>, </em><em>optional</em>) – Default fault to inject when model is run deterministically.
+The default is ‘first’, which chooses the first in the list.
+Can provide a mode as a str or a list of modes</p></li>
+<li><p><strong>combinations</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of combinations of faults to elaborate and select from.
+The default is 1, which just chooses single fault modes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.modeldef.Block.get_flowtypes">
 <span class="sig-name descname"><span class="pre">get_flowtypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.get_flowtypes" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the names of the flow types in the model</p>
@@ -594,24 +646,28 @@ The tuple is of the form (name, default), where:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.modeldef.Block.remove_any_faults">
-<span class="sig-name descname"><span class="pre">remove_any_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opermode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.remove_any_faults" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">remove_any_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opermode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warnmessage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.remove_any_faults" title="Permalink to this definition"></a></dt>
 <dd><p>Resets fault mode to nominal and returns to the given operational mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>opermode</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – operational mode to return to when the fault mode is removed</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>opermode</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – operational mode to return to when the fault mode is removed</p></li>
+<li><p><strong>warnmessage</strong> (<em>str/False</em>) – Warning to give when performing operation. Default is False (no warning)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.modeldef.Block.remove_fault">
-<span class="sig-name descname"><span class="pre">remove_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault_to_remove</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opermode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.remove_fault" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">remove_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault_to_remove</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opermode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warnmessage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Block.remove_fault" title="Permalink to this definition"></a></dt>
 <dd><p>Removes fault in the set of faults and returns to given operational mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fault_to_replace</strong> (<em>str</em>) – name of the fault to remove</p></li>
 <li><p><strong>opermode</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – operational mode to return to when the fault mode is removed</p></li>
+<li><p><strong>warnmessage</strong> (<em>str/False</em>) – Warning to give when performing operation. Default is False (no warning)</p></li>
 </ul>
 </dd>
 </dl>
@@ -798,6 +854,27 @@ self.EE.v = min(12, max(0,self.EE.v))</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.Common.make_flowdict">
+<span class="sig-name descname"><span class="pre">make_flowdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flownames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flows</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Common.make_flowdict" title="Permalink to this definition"></a></dt>
+<dd><p>Puts a list of flows with a list of flow names in a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flownames</strong> (<em>list</em><em> or </em><em>dict</em><em> or </em><em>empty</em>) – names of flows corresponding to flows
+using {externalname: internalname}</p></li>
+<li><p><strong>flows</strong> (<em>list</em>) – flows</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>flowdict</strong> – dict of flows indexed by flownames</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.modeldef.Common.mul">
 <span class="sig-name descname"><span class="pre">mul</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Common.mul" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the multiplication of given attributes of the model construct.
@@ -849,6 +926,25 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <blockquote>
 <div><p>a = (self.x-self.y)-self.z</p>
 </div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.Common.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Common.values" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.Common.warn">
+<span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">messages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stacklevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Common.warn" title="Permalink to this definition"></a></dt>
+<dd><p>Prints warning message(s) when called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*messages</strong> (<em>str</em>) – Strings to make up the message (will be joined by spaces)</p></li>
+<li><p><strong>stacklevel</strong> (<em>int</em>) – Where the warning points to. The default is 2 (points to the place in the model)</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -910,6 +1006,113 @@ without yet having a defined behavior for them.</p>
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.FxnBlock.add_act">
+<span class="sig-name descname"><span class="pre">add_act</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.FxnBlock.add_act" title="Permalink to this definition"></a></dt>
+<dd><p>Associate an Action with the Function Block for use in the Action Sequence Graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Internal Name for the Action</p></li>
+<li><p><strong>action</strong> (<a class="reference internal" href="#fmdtools.modeldef.Action" title="fmdtools.modeldef.Action"><em>Action</em></a>) – Action class to instantiate</p></li>
+<li><p><strong>*flows</strong> (<em>flow</em>) – Flows (optional) which connect the actions</p></li>
+<li><p><strong>**params</strong> (<em>any</em>) – parameters to instantiate the Action with.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.FxnBlock.add_cond">
+<span class="sig-name descname"><span class="pre">add_cond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pass'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.FxnBlock.add_cond" title="Permalink to this definition"></a></dt>
+<dd><p>Associates a Condition with the Function Block for use in the Action Sequence Graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_action</strong> (<em>str</em>) – Action where the condition is checked</p></li>
+<li><p><strong>end_action</strong> (<em>str</em>) – Action that the condition leads to.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name for the condition. Defaults to numbered conditions if none are provided.</p></li>
+<li><p><strong>condition</strong> (<em>method</em>) – Method in the class to use as a condition. Defaults to self.condition_pass if none are provided</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.FxnBlock.add_flow">
+<span class="sig-name descname"><span class="pre">add_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flowdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flowtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.FxnBlock.add_flow" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a flow with given attributes to the Function Block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flowname</strong> (<em>str</em>) – Unique flow name to give the flow in the function</p></li>
+<li><p><strong>flowattributes</strong> (<em>dict</em><em>, </em><a class="reference internal" href="#fmdtools.modeldef.Flow" title="fmdtools.modeldef.Flow"><em>Flow</em></a><em>, </em><em>set</em><em> or </em><em>empty set</em>) – Dictionary of flow attributes e.g. {‘value’:XX}, or the Flow object.
+If a set of attribute names is provided, each will be given a value of 1
+If an empty set is given, it will be represented w- {flowname: 1}</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.FxnBlock.build_ASG">
+<span class="sig-name descname"><span class="pre">build_ASG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'finite-state'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_action_prop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'until_false'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'replace'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asg_proptype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dynamic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_timestep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asg_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.FxnBlock.build_ASG" title="Permalink to this definition"></a></dt>
+<dd><p>Constructs the Action Sequence Graph with the given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_action</strong> (<em>str/list</em>) – <dl class="simple">
+<dt>Initial action to set as active. Default is ‘auto’</dt><dd><ul>
+<li><p>’auto’ finds the starting node of the graph and uses it</p></li>
+<li><p>’ActionName’ sets the given action as the first active action</p></li>
+<li><p>providing a list of actions will set them all to active (if multi-state rep is used)</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>state_rep</strong> (<em>'finite-state'/'multi-state'</em>) – <dl class="simple">
+<dt>How the states of the system are represented. Default is ‘finite-state’</dt><dd><ul>
+<li><p>’finite-state’ means only one action in the system can be active at once (i.e., a finite state machine)</p></li>
+<li><p>’multi-state’ means multiple actions can be performed at once</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>max_action_prop</strong> (<em>'until_false'/'manual'/int</em>) – <dl class="simple">
+<dt>How actions progress. Default is ‘until_false’</dt><dd><ul>
+<li><p>’until_false’ means actions are simulated until all outgoing conditions are false</p></li>
+<li><p>providing an integer places a limit on the number of actions that can be performed per timestep</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>mode_rep</strong> (<em>'replace'/'independent'</em>) – <dl class="simple">
+<dt>How actions are used to represent modes. Default is ‘replace.’</dt><dd><ul>
+<li><p>’replace’ uses the actions to represent the operational modes of the system (only compatible with ‘exclusive’ representation)</p></li>
+<li><p>’independent’ keeps the actions and function-level mode seperate</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>asg_proptype</strong> (<em>'static'/'dynamic'/'manual'</em>) – <dl class="simple">
+<dt>Which propagation step to execute the Action Sequence Graph in. Default is ‘dynamic’</dt><dd><ul>
+<li><p>’manual’ means that the propagation is performed manually (defined in a behavior method)</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>per_timestep</strong> (<em>bool</em>) – Defines whether the action sequence graph is reset to the initial state each time-step (True) or stays in the current action (False). Default is False</p></li>
+<li><p><strong>asg_pos</strong> (<em>dict</em><em>, </em><em>optional</em>) – Positions of the nodes of the action/flow graph {node: [x,y]}. Default is {}</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.FxnBlock.cond_pass">
+<span class="sig-name descname"><span class="pre">cond_pass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.FxnBlock.cond_pass" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.modeldef.FxnBlock.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newflows</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.FxnBlock.copy" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.</p>
@@ -930,22 +1133,41 @@ without yet having a defined behavior for them.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.modeldef.FxnBlock.make_flowdict">
-<span class="sig-name descname"><span class="pre">make_flowdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flownames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flows</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.FxnBlock.make_flowdict" title="Permalink to this definition"></a></dt>
-<dd><p>Puts a list of flows with a list of flow names in a dictionary.</p>
+<dt class="sig sig-object py" id="fmdtools.modeldef.FxnBlock.prop_internal">
+<span class="sig-name descname"><span class="pre">prop_internal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proptype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.FxnBlock.prop_internal" title="Permalink to this definition"></a></dt>
+<dd><p>Propagates behaviors through the internal Action Sequence Graph</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>flownames</strong> (<em>list</em><em> or </em><em>dict</em><em> or </em><em>empty</em>) – names of flows corresponding to flows
-using {externalname: internalname}</p></li>
-<li><p><strong>flows</strong> (<em>list</em>) – flows</p></li>
+<li><p><strong>faults</strong> (<em>list</em><em>, </em><em>optional</em>) – Faults to inject in the function. The default is [‘nom’].</p></li>
+<li><p><strong>time</strong> (<em>float</em><em>, </em><em>optional</em>) – Model time. The default is 0.</p></li>
+<li><p><strong>run_stochastic</strong> (<em>book</em>) – Whether to run the simulation using stochastic or deterministic behavior</p></li>
+<li><p><strong>proptype</strong> (<em>str</em>) – Type of propagation step to update (‘behavior’, ‘static_behavior’, or ‘dynamic_behavior’)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>flowdict</strong> – dict of flows indexed by flownames</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dict</p>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.FxnBlock.set_active_actions">
+<span class="sig-name descname"><span class="pre">set_active_actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.FxnBlock.set_active_actions" title="Permalink to this definition"></a></dt>
+<dd><p>Helper method for setting given action(s) as active</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.modeldef.FxnBlock.show_ASG">
+<span class="sig-name descname"><span class="pre">show_ASG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'combined'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_cond_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.FxnBlock.show_ASG" title="Permalink to this definition"></a></dt>
+<dd><p>Shows a visual representation of the internal Action Sequence Graph of the Function Block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gtype</strong> (<em>'combined'/'flows'/'actions'</em>) – Gives a graphical representation of the ASG. Default is ‘combined’
+- ‘actions’     (for function input):    plots the sequence of actions in the function’s Action Sequence Graph
+- ‘flows’       (for function input):    plots the action/flow connections in the function’s Action Sequence Graph
+- ‘combined’    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections</p></li>
+<li><p><strong>with_cond_labels</strong> (<em>Bool</em>) – Whether or not to label the conditions</p></li>
+<li><p><strong>pos</strong> (<em>dict</em>) – Dictionary of node positions for actions/flows</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -969,8 +1191,10 @@ using {externalname: internalname}</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>proptype</strong> (<em>str</em>) – Type of propagation step to update (‘behavior’, ‘static_behavior’, or ‘dynamic_behavior’)</p></li>
 <li><p><strong>faults</strong> (<em>list</em><em>, </em><em>optional</em>) – Faults to inject in the function. The default is [‘nom’].</p></li>
 <li><p><strong>time</strong> (<em>float</em><em>, </em><em>optional</em>) – Model time. The default is 0.</p></li>
+<li><p><strong>run_stochastic</strong> (<em>book</em>) – Whether to run the simulation using stochastic or deterministic behavior</p></li>
 </ul>
 </dd>
 </dl>
@@ -1141,7 +1365,7 @@ If an empty set is given, it will be represented w- {flowname: 1}</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.modeldef.Model.build_model">
-<span class="sig-name descname"><span class="pre">build_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functionorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bipartite_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Model.build_model" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">build_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functionorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bipartite_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">require_connections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Model.build_model" title="Permalink to this definition"></a></dt>
 <dd><p>Builds the model graph after the functions have been added.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1179,7 +1403,7 @@ in assoc_faultmodes/ Default is 0.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.modeldef.Model.construct_graph">
-<span class="sig-name descname"><span class="pre">construct_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bipartite_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Model.construct_graph" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">construct_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bipartite_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">require_connections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.modeldef.Model.construct_graph" title="Permalink to this definition"></a></dt>
 <dd><p>Creates and returns a graph representation of the model</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
