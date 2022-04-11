@@ -7,4 +7,3 @@ matplotlib
 pandas
 ordered-set
 dill 
-pickle
