@@ -6,7 +6,7 @@ Created on Fri Mar 26 12:23:14 2021
 """
 
 import sys, os
-sys.path.append(os.path.join('..'))
+sys.path.insert(0, os.path.join('..'))
 
 from ex_pump import * 
 from fmdtools.modeldef import SampleApproach

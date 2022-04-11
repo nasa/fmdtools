@@ -6,7 +6,7 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import sys, os
-sys.path.append(os.path.join('..'))
+sys.path.insert(1,os.path.join('..'))
 import numpy as np
 from fmdtools.modeldef import *
 import fmdtools.faultsim as fs
@@ -14,8 +14,8 @@ import fmdtools.faultsim as fs
 class StoreEE(FxnBlock):
     def __init__(self, name, flows):
         self.failrate=1e-5
-        self.assoc_modes({'nocharge':[1,300]})
         super().__init__(name, flows, ['EEout', 'FS'], {'soc': 100.0})
+        self.assoc_modes({'nocharge':[1,300]})
     def condfaults(self,time):
         if self.soc<1:
             self.soc=0

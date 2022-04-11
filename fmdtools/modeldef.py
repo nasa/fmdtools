@@ -753,7 +753,7 @@ class FxnBlock(Block):
         self.compfaultmodes= dict()
         self.exclusive_faultmodes = False
         for cname in components:
-            self.faultmodes.update(components[cname].faultmodes)
+            self.faultmodes.update({components[cname].localname+f:vals for f, vals in components[cname].faultmodes.items()})
             self.compfaultmodes.update({components[cname].localname+modename:cname for modename in components[cname].faultmodes})
             setattr(self, cname, components[cname])
         self.timers = timers
