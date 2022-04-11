@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.faultsim &mdash; fmdtools 1.0.0 documentation</title>
+  <title>fmdtools.faultsim &mdash; fmdtools 1.1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -145,12 +145,14 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../example_tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
@@ -467,6 +469,7 @@
 <dt><a class="reference internal" href="#fmdtools.faultsim.propagate.update_mdlhist" title="fmdtools.faultsim.propagate.update_mdlhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">update_mdlhist()</span></code></a>:     Updates the model history at a given time.</dt><dd><ul>
 <li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.update_flowhist" title="fmdtools.faultsim.propagate.update_flowhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">update_flowhist()</span></code></a>:Updates the flows in the model history at t_ind</p></li>
 <li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.update_fxnhist" title="fmdtools.faultsim.propagate.update_fxnhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">update_fxnhist()</span></code></a>: Updates the functions (faults and states) in the model history at t_ind</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.update_blockhist" title="fmdtools.faultsim.propagate.update_blockhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">update_blockhist()</span></code></a>:Updates the blocks in the model history at t_ind</p></li>
 </ul>
 </dd>
 </dl>
@@ -475,6 +478,7 @@
 <dt><a class="reference internal" href="#fmdtools.faultsim.propagate.init_mdlhist" title="fmdtools.faultsim.propagate.init_mdlhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_mdlhist()</span></code></a>:       Initializes the model history over a given timerange</dt><dd><ul>
 <li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.init_flowhist" title="fmdtools.faultsim.propagate.init_flowhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_flowhist()</span></code></a>:  Initializes the flow history flowhist of the model mdl over the time range timerange</p></li>
 <li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.init_fxnhist" title="fmdtools.faultsim.propagate.init_fxnhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_fxnhist()</span></code></a>:   Initializes the function state history fxnhist of the model mdl over the time range timerange</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.init_blockhist" title="fmdtools.faultsim.propagate.init_blockhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_blockhist()</span></code></a>: Initializes the block state history fxnhist of the model mdl over the time range timerange</p></li>
 </ul>
 </dd>
 </dl>
@@ -543,6 +547,26 @@ need to be complete (if incomplete)</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>scen</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.cut_hist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">cut_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.cut_hist" title="Permalink to this definition"></a></dt>
+<dd><p>Recursively cuts the given individual (flow or function) history at ind.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hist</strong> (<em>dict</em>) – history to cut</p></li>
+<li><p><strong>ind</strong> (<em>int</em>) – index to cut the history at</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>newhist</strong> – Cut history</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -621,6 +645,24 @@ The default is ‘all’.</p>
 <dt class="sig sig-object py" id="fmdtools.faultsim.propagate.exec_scen_par">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">exec_scen_par</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.exec_scen_par" title="Permalink to this definition"></a></dt>
 <dd><p>Helper function for executing the scenario in parallel</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.init_blockhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">init_blockhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">blockname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.init_blockhist" title="Permalink to this definition"></a></dt>
+<dd><p>Instantiates the block hist (faults, states) over the given timerange</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>blockname</strong> (<em>str</em>) – Name of the block</p></li>
+<li><p><strong>block</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Block" title="fmdtools.modeldef.Block"><em>Block</em></a>) – Object for the block</p></li>
+<li><p><strong>timerange</strong> (<em>array</em>) – Numpy array of times to initialize in the dictionary.</p></li>
+<li><p><strong>track</strong> (<em>'all'</em><em> or </em><em>dict</em><em>, </em><em>'none'</em><em>)</em><em>, </em><em>optional</em>) – Which model states to track over time, which can be given as ‘all’ or a
+dict of form {‘functions’:{‘fxn1’:’att1’}, ‘flows’:{‘flow1’:’att1’}}
+The default is ‘all’.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -1084,6 +1126,22 @@ need to be complete (if incomplete)</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.update_blockhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">update_blockhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">blockname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blockhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.update_blockhist" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the blocks (faults, states) in the model history at t_ind</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>blockname</strong> (<em>str</em>) – Name of the block</p></li>
+<li><p><strong>block</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Block" title="fmdtools.modeldef.Block"><em>Block</em></a>) – Object for the block</p></li>
+<li><p><strong>blockhist</strong> (<em>dict</em>) – Dictionary history of the given block</p></li>
+<li><p><strong>t_ind</strong> (<em>int</em>) – index to update the history at</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.faultsim.propagate.update_flowhist">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">update_flowhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.update_flowhist" title="Permalink to this definition"></a></dt>
 <dd><p>Updates the flows in the model history at t_ind</p>
@@ -1101,7 +1159,7 @@ need to be complete (if incomplete)</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.faultsim.propagate.update_fxnhist">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">update_fxnhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.update_fxnhist" title="Permalink to this definition"></a></dt>
-<dd><p>Updates the functions (faults and states) in the model history at t_ind</p>
+<dd><p>Updates the functions (faults, states, components, actions) in the model history at t_ind</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
