@@ -29,4 +29,7 @@ fmdtools.egg-info/
 fmdtools_hulsed.egg-info
 
 #sphinx output
+_build/
+_static/
+_templates/
 LICENSE.bak

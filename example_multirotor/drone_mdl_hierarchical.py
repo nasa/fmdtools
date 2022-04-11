@@ -7,7 +7,7 @@ Description: A fault model of a multi-rotor drone.
 """
 
 import sys, os
-sys.path.append(os.path.join('..'))
+sys.path.insert(1, os.path.join('..'))
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,8 +27,8 @@ from fmdtools.modeldef import SampleApproach
 class StoreEE(FxnBlock):
     def __init__(self, name, flows):
         self.failrate=1e-5
-        self.assoc_modes({'nocharge':[1,[0.6,0.1,0.1],300]})
         super().__init__(name, flows, ['EEout', 'FS'], {'soc': 100.0})
+        self.assoc_modes({'nocharge':[1,[0.6,0.1,0.1],300]})
     def condfaults(self,time):
         if self.soc<1:
             self.soc=0
@@ -91,14 +91,14 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
             components={'RF':Line('RF'), 'LF':Line('LF'), 'LR':Line('LR'), 'RR':Line('RR')}
             self.upward={'RF':1,'LF':1,'LR':1,'RR':1}
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5}
-            self.LR = {'L':{'LF', 'LR'}, 'R':{'RF','RR'}}
-            self.FR = {'F':{'LF', 'RF'}, 'R':{'LR', 'RR'}}
+            self.LR_dict = {'L':{'LF', 'LR'}, 'R':{'RF','RR'}}
+            self.FR_dict = {'F':{'LF', 'RF'}, 'R':{'LR', 'RR'}}
         elif archtype=='oct':
             components={'RF':Line('RF'), 'LF':Line('LF'), 'LR':Line('LR'), 'RR':Line('RR'),'RF2':Line('RF2'), 'LF2':Line('LF2'), 'LR2':Line('LR2'), 'RR2':Line('RR2')}
             self.upward={'RF':1,'LF':1,'LR':1,'RR':1,'RF2':1,'LF2':1,'LR2':1,'RR2':1}
             self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5,'RF2':0.5,'LF2':0.5,'LR2':-0.5,'RR2':-0.5}
-            self.LR = {'L':{'LF', 'LR','LF2', 'LR2'}, 'R':{'RF','RR','RF2','RR2'}}
-            self.FR = {'F':{'LF', 'RF','LF2', 'RF2'}, 'R':{'LR', 'RR','LR2', 'RR2'}}
+            self.LR_dict = {'L':{'LF', 'LR','LF2', 'LR2'}, 'R':{'RF','RR','RF2','RR2'}}
+            self.FR_dict = {'F':{'LF', 'RF','LF2', 'RF2'}, 'R':{'LR', 'RR','LR2', 'RR2'}}
         super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Force'], {'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, components)
         self.assoc_modes()
     def behavior(self, time):
@@ -114,8 +114,8 @@ class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         elif any(value!=0.0 for value in EEin.values()): self.EEin.rate=sum(EEin.values())/len(EEin) #should it really be max?
         else: self.EEin.rate=0.0
         
-        self.LRstab = (sum([Air[comp] for comp in self.LR['L']])-sum([Air[comp] for comp in self.LR['R']]))/len(Air)
-        self.FRstab = (sum([Air[comp] for comp in self.FR['R']])-sum([Air[comp] for comp in self.FR['F']]))/len(Air)
+        self.LRstab = (sum([Air[comp] for comp in self.LR_dict['L']])-sum([Air[comp] for comp in self.LR_dict['R']]))/len(Air)
+        self.FRstab = (sum([Air[comp] for comp in self.FR_dict['R']])-sum([Air[comp] for comp in self.FR_dict['F']]))/len(Air)
         
         if abs(self.LRstab) >=0.4 or abs(self.FRstab)>=0.75:
             self.DOF.uppwr=0
@@ -136,30 +136,30 @@ class Line(Component):
                           'propstuck':[0.02, [0.0, 0.5,0.5], 200], 'propbreak':[0.03, [0.0, 0.5,0.5], 200]},name=name)
 
     def behavior(self, EEin, Ctlin, cmds, Force):
-        if Force<=0.0:   self.add_fault(self.name+'mechbreak', self.name+'propbreak')
-        elif Force<=0.5: self.add_fault(self.name+'mechfriction')
+        if Force<=0.0:   self.add_fault('mechbreak','propbreak')
+        elif Force<=0.5: self.add_fault('mechfriction')
             
-        if self.has_fault(self.name+'short'):
+        if self.has_fault('short'):
             self.Eti=0.0
             self.Eto=np.inf
-        elif self.has_fault(self.name+'openc'):
+        elif self.has_fault('openc'):
             self.Eti=0.0
             self.Eto=0.0
         elif Ctlin.upward==0 and Ctlin.forward == 0:
             self.Eto = 0.0
-        if self.has_fault(self.name+'ctlbreak'): self.Ct=0.0
-        elif self.has_fault(self.name+'ctldn'):  self.Ct=0.5
-        elif self.has_fault(self.name+'ctlup'):  self.Ct=2.0
-        if self.has_fault(self.name+'mechbreak'): self.Mt=0.0
-        elif self.has_fault(self.name+'mechfriction'):
+        if self.has_fault('ctlbreak'): self.Ct=0.0
+        elif self.has_fault('ctldn'):  self.Ct=0.5
+        elif self.has_fault('ctlup'):  self.Ct=2.0
+        if self.has_fault('mechbreak'): self.Mt=0.0
+        elif self.has_fault('mechfriction'):
             self.Mt=0.5
             self.Eti=2.0
-        if self.has_fault(self.name+'propstuck'):
+        if self.has_fault('propstuck'):
             self.Pt=0.0
             self.Mt=0.0
             self.Eti=4.0
-        elif self.has_fault(self.name+'propbreak'): self.Pt=0.0
-        elif self.has_fault(self.name+'propwarp'):  self.Pt=0.5
+        elif self.has_fault('propbreak'): self.Pt=0.0
+        elif self.has_fault('propwarp'):  self.Pt=0.5
         
         self.Airout=m2to1([EEin,self.Eti,Ctlin.upward*cmds['up']+Ctlin.forward*cmds['for'],self.Ct,self.Mt,self.Pt])
         self.EE_in=m2to1([EEin,self.Eto])   
@@ -331,9 +331,7 @@ class Drone(Model):
             crashcost = 100000
         else:
             crashcost = 0
-        
-        modes, modeprops = self.return_faultmodes()
-        repcost = sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])
+        repcost = self.calc_repaircost()
         
         totcost=repcost + crashcost + lostcost
         rate=scen['properties']['rate']
@@ -398,10 +396,14 @@ graph_pos = {'StoreEE': [-1.0787279392101061, -0.06903523859088145],
 
 
 if __name__=="__main__":
+    
+    hierarchical_model = Drone(params={'graph_pos':graph_pos, 'bipartite_pos':bipartite_pos,'arch':'quad'})
+    endresults, resgraph, mdlhist = fs.propagate.one_fault(hierarchical_model,'AffectDOF', 'RFmechbreak', time=50)
+    
     mdl = Drone(params={'graph_pos':graph_pos, 'bipartite_pos':bipartite_pos,'arch':'oct'})
     app = SampleApproach(mdl, faults=[('AffectDOF', 'RR2propstuck')])
     endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=False)
-    rd.plot.mdlhistvals({'nominal': mdlhists['nominal'],'faulty': mdlhists['AffectDOF RR2propstuck, t=49.0']})
+    rd.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['AffectDOF RR2propstuck, t=49.0']})
 
 
 

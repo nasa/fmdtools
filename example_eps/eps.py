@@ -13,7 +13,8 @@ using solely the functions of the system.
 Further information about this system (data, more detailed models) is presented
 at: https://c3.nasa.gov/dashlink/projects/3/
 """
-
+import sys, os
+sys.path.insert(0, os.path.join('..'))
 from fmdtools.modeldef import FxnBlock, Model
 
 class ImportEE(FxnBlock):
@@ -295,7 +296,6 @@ if __name__ == '__main__':
 
 
     endclasses, mdlhists = propagate.single_faults(mdl)
-
     reshists, diffs, summary = rd.process.hists(mdlhists)
 
     sumtable = rd.tabulate.summary(summary)
@@ -307,5 +307,6 @@ if __name__ == '__main__':
     rd.graph.show(resgraph,heatmap=degtimemap)
 
     endclasses, mdlhists = propagate.single_faults(mdl)
+    
     
         

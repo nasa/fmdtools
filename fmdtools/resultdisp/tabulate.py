@@ -56,26 +56,36 @@ def objtab(hist, objtype):
     df = pd.DataFrame()
     labels = []
     for fxn, atts in hist[objtype].items():
-        for att, val in atts.items():
+        for att, val in atts.items():                
             if att != 'faults':
-                label=(fxn, att)
-                labels=labels+[label]
-                df[label]=val
+                if type(val)==dict:
+                    for subatt, subval in val.items():
+                        if subatt!= 'faults':
+                            label=(fxn, att+'_'+subatt)
+                            labels=labels+[label]
+                            df[label]=subval
+                        else:
+                            label_faults(hist[objtype][fxn][att].get('faults', {}), df, fxn+'_'+subatt, labels)
+                else:
+                    label=(fxn, att)
+                    labels=labels+[label]
+                    df[label]=val
         if objtype =='functions':
-            faulthist = hist[objtype][fxn].get('faults', {})
-            if type(faulthist)==dict:
-                for fault in faulthist:
-                    label=(fxn, fault+' fault')
-                    labels+=[label]
-                    df[label]=hist[objtype][fxn]['faults'][fault]
-            elif len(faulthist)==1:
-                label=(fxn, 'faults')
-                labels+=[label]
-                df[label]=hist[objtype][fxn]['faults']
-                
+            label_faults(hist[objtype][fxn].get('faults', {}), df, fxn, labels)
     index = pd.MultiIndex.from_tuples(labels)
     df = df.reindex(index, axis="columns")
     return df
+def label_faults(faulthist, df, fxnlab, labels):
+    if type(faulthist)==dict:
+        for fault in faulthist:
+            label=(fxnlab, fault+' fault')
+            labels+=[label]
+            df[label]=faulthist[fault]
+    elif len(faulthist)==1:
+        label=(fxnlab, 'faults')
+        labels+=[label]
+        df[label]=faulthist
+
 def stats(reshist):
     """Makes a table of #of degraded flows, # of degraded functions, and # of total faults over time given a single result history"""
     table = pd.DataFrame(reshist['stats'])
@@ -334,7 +344,7 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
         ec_metrics = overall_diff(endclass_fact, value, nan_as=nan_as, as_ind=percent, no_diff=not difference)
 
         if not percent: nominal_metrics = [nan_to_x(res_scens['nominal'][value], nan_as) for res_scens in endclass_fact.values()]
-        else:           nominal_metrics = [np.sign(nan_to_x(res_scens['nominal'][value], nan_as)) for res_scens in endclass_fact.values()]
+        else:           nominal_metrics = [np.sign(float(nan_to_x(res_scens['nominal'][value]), nan_as)) for res_scens in endclass_fact.values()]
         factor_stats=[sum(nominal_metrics)/len(nominal_metrics)]
         if give_ci: 
             factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(nominal_metrics, **kwargs)
