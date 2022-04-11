@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hold-up Tank Model &mdash; fmdtools 1.0.0 documentation</title>
+  <title>Hold-up Tank Model &mdash; fmdtools 1.1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -147,12 +147,14 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
+</ul>
+</li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Hold-up Tank Model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#What-happens-under-component-faults?">What happens under component faults?</a></li>
@@ -554,26 +556,18 @@ dict_keys([&#39;flows&#39;, &#39;functions&#39;, &#39;time&#39;])
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_6_0.png" src="../_images/example_tank_Tank_Analysis_6_0.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_6_1.png" src="../_images/example_tank_Tank_Analysis_6_1.png" />
+<img alt="../_images/example_tank_Tank_Analysis_6_0.png" src="../_images/example_tank_Tank_Analysis_6_0.png" />
 </div>
 </div>
 </section>
@@ -581,38 +575,28 @@ dict_keys([&#39;flows&#39;, &#39;functions&#39;, &#39;time&#39;])
 <h2>What happens under component faults?<a class="headerlink" href="#What-happens-under-component-faults?" title="Permalink to this headline"></a></h2>
 <p>Here we model a leak of the tank. To compensate for this leak, the operator opens the first valve to a higher setting, maintaining the level of the tank</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">,</span><span class="s1">&#39;Leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
-<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fault</span><span class="o">=</span><span class="s1">&#39;Leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">:[</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;net_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Tank_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;indicator&#39;</span><span class="p">],</span> <span class="s1">&#39;Valve1_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;action&#39;</span><span class="p">]},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span><span class="n">faultscen</span><span class="o">=</span><span class="s1">&#39;Leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Tank response to leak at t=3&quot;</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">:[</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;net_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Tank_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;indicator&#39;</span><span class="p">],</span> <span class="s1">&#39;Valve1_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;action&#39;</span><span class="p">]},</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span><span class="n">faultscen</span><span class="o">=</span><span class="s1">&#39;Leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <br/></pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 1 Axes&gt;,
- &lt;AxesSubplot:title={&#39;center&#39;:&#39;Propagation of faults to Leak at t=3&#39;}&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_8_1.png" src="../_images/example_tank_Tank_Analysis_8_1.png" />
+<img alt="../_images/example_tank_Tank_Analysis_8_0.png" src="../_images/example_tank_Tank_Analysis_8_0.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_8_2.png" src="../_images/example_tank_Tank_Analysis_8_2.png" />
+<img alt="../_images/example_tank_Tank_Analysis_8_1.png" src="../_images/example_tank_Tank_Analysis_8_1.png" />
 </div>
 </div>
 </section>
@@ -621,73 +605,53 @@ dict_keys([&#39;flows&#39;, &#39;functions&#39;, &#39;time&#39;])
 <p>Here we evaluate what happens if the operator thinks they see a low or high indicator and takes those given actions.</p>
 <p>Note that in these cases, because of the indicator/procedures, the operators are able to correct for the fault.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span><span class="s1">&#39;FalseDetection_low&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
-<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fault</span><span class="o">=</span><span class="s1">&#39;FalseDetection_low&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">:[</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;net_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Tank_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;indicator&#39;</span><span class="p">],</span> <span class="s1">&#39;Valve1_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;action&#39;</span><span class="p">]},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span><span class="n">faultscen</span><span class="o">=</span><span class="s1">&#39;FalseDetection_low&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;FalseDetection_low&#39;</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">:[</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;net_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Tank_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;indicator&#39;</span><span class="p">],</span> <span class="s1">&#39;Valve1_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;action&#39;</span><span class="p">]},</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span><span class="n">faultscen</span><span class="o">=</span><span class="s1">&#39;FalseDetection_low&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 1 Axes&gt;,
- &lt;AxesSubplot:title={&#39;center&#39;:&#39;Propagation of faults to FalseDetection_low at t=3&#39;}&gt;)
-</pre></div></div>
+<img alt="../_images/example_tank_Tank_Analysis_10_0.png" src="../_images/example_tank_Tank_Analysis_10_0.png" />
 </div>
-<div class="nboutput docutils container">
+</div>
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <img alt="../_images/example_tank_Tank_Analysis_10_1.png" src="../_images/example_tank_Tank_Analysis_10_1.png" />
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_10_2.png" src="../_images/example_tank_Tank_Analysis_10_2.png" />
-</div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="s1">&#39;Human&#39;</span><span class="p">,</span><span class="s1">&#39;FalseDetection_high&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
-<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fault</span><span class="o">=</span><span class="s1">&#39;FalseDetection_high&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">:[</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;net_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Tank_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;indicator&#39;</span><span class="p">],</span> <span class="s1">&#39;Valve1_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;action&#39;</span><span class="p">]},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span><span class="n">faultscen</span><span class="o">=</span><span class="s1">&#39;FalseDetection_high&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;FalseDetection_high&#39;</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">:[</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;net_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Tank_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;indicator&#39;</span><span class="p">],</span> <span class="s1">&#39;Valve1_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;action&#39;</span><span class="p">]},</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span><span class="n">faultscen</span><span class="o">=</span><span class="s1">&#39;FalseDetection_high&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 1 Axes&gt;,
- &lt;AxesSubplot:title={&#39;center&#39;:&#39;Propagation of faults to FalseDetection_high at t=3&#39;}&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_11_1.png" src="../_images/example_tank_Tank_Analysis_11_1.png" />
+<img alt="../_images/example_tank_Tank_Analysis_11_0.png" src="../_images/example_tank_Tank_Analysis_11_0.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_11_2.png" src="../_images/example_tank_Tank_Analysis_11_2.png" />
+<img alt="../_images/example_tank_Tank_Analysis_11_1.png" src="../_images/example_tank_Tank_Analysis_11_1.png" />
 </div>
 </div>
 </section>
@@ -695,7 +659,7 @@ dict_keys([&#39;flows&#39;, &#39;functions&#39;, &#39;time&#39;])
 <h2>Evaluating Joint Component-Human fault modes<a class="headerlink" href="#Evaluating-Joint-Component-Human-fault-modes" title="Permalink to this headline"></a></h2>
 <p>To understand where the risks of failure are, we need to find the scenarios, that, with the modelled human controls, still lead to failures. To assess this, we develop a sample approach.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#app_full = SampleApproach(mdl)</span>
@@ -705,7 +669,7 @@ dict_keys([&#39;flows&#39;, &#39;functions&#39;, &#39;time&#39;])
 </div>
 <p>Here we consider all single and joint-fault scenarios in the set of simulations to see which ones lead to failure:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app_joint_faults</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
@@ -720,13 +684,13 @@ dict_keys([&#39;flows&#39;, &#39;functions&#39;, &#39;time&#39;])
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-C:\Users\dhulse\Documents\GitHub\fmdtools\example_tank\..\fmdtools\modeldef.py:1918: RuntimeWarning: invalid value encountered in double_scalars
+C:\Users\dhulse\Documents\GitHub\fmdtools\example_tank\..\fmdtools\modeldef.py:2253: RuntimeWarning: invalid value encountered in double_scalars
   if len(overlap)&gt;1:  self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(overlap[1]-overlap[0])
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 92/92 [00:00&lt;00:00, 278.36it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 92/92 [00:00&lt;00:00, 214.94it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -827,7 +791,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <p>Next, we can filter out non-failures and sort by the failures with the highest expected cost (though rate would give the same results here)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">failure_tab</span> <span class="o">=</span> <span class="n">fmea_tab</span><span class="p">[</span><span class="n">fmea_tab</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span>
@@ -836,7 +800,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -943,7 +907,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
       <td>18402.454166</td>
     </tr>
     <tr>
-      <th>Guide_Water_In: Clogged, Human: FalseReach, t=0</th>
+      <th>Guide_Water_In: Leak, Human: CannotReach, t=0</th>
       <td>1.840245e-07</td>
       <td>1000000.0</td>
       <td>18402.454166</td>
@@ -955,25 +919,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
       <td>18402.454166</td>
     </tr>
     <tr>
-      <th>Guide_Water_Out: Leak, Human: CannotReach, t=0</th>
-      <td>1.840245e-07</td>
-      <td>1000000.0</td>
-      <td>18402.454166</td>
-    </tr>
-    <tr>
-      <th>Guide_Water_Out: Clogged, Human: FalseReach, t=0</th>
-      <td>1.840245e-07</td>
-      <td>1000000.0</td>
-      <td>18402.454166</td>
-    </tr>
-    <tr>
-      <th>Guide_Water_In: Leak, Human: CannotReach, t=0</th>
-      <td>1.840245e-07</td>
-      <td>1000000.0</td>
-      <td>18402.454166</td>
-    </tr>
-    <tr>
-      <th>Guide_Water_In: Clogged, Human: CannotReach, t=0</th>
+      <th>Store_Water: Leak, Human: CannotReach, t=0</th>
       <td>1.840245e-07</td>
       <td>1000000.0</td>
       <td>18402.454166</td>
@@ -985,7 +931,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
       <td>18402.454166</td>
     </tr>
     <tr>
-      <th>Store_Water: Leak, Human: CannotReach, t=0</th>
+      <th>Guide_Water_Out: Clogged, Human: FalseReach, t=0</th>
       <td>1.840245e-07</td>
       <td>1000000.0</td>
       <td>18402.454166</td>
@@ -997,7 +943,37 @@ SCENARIOS COMPLETE: 100%|██████████████████�
       <td>18402.454166</td>
     </tr>
     <tr>
+      <th>Guide_Water_In: Clogged, Human: CannotReach, t=0</th>
+      <td>1.840245e-07</td>
+      <td>1000000.0</td>
+      <td>18402.454166</td>
+    </tr>
+    <tr>
+      <th>Guide_Water_In: Clogged, Human: FalseReach, t=0</th>
+      <td>1.840245e-07</td>
+      <td>1000000.0</td>
+      <td>18402.454166</td>
+    </tr>
+    <tr>
+      <th>Guide_Water_Out: Leak, Human: CannotReach, t=0</th>
+      <td>1.840245e-07</td>
+      <td>1000000.0</td>
+      <td>18402.454166</td>
+    </tr>
+    <tr>
+      <th>Guide_Water_Out: Clogged, Human: NotVisible, t=0</th>
+      <td>1.271420e-07</td>
+      <td>1000000.0</td>
+      <td>12714.203610</td>
+    </tr>
+    <tr>
       <th>Guide_Water_In: Clogged, Human: NotVisible, t=0</th>
+      <td>1.271420e-07</td>
+      <td>1000000.0</td>
+      <td>12714.203610</td>
+    </tr>
+    <tr>
+      <th>Store_Water: Leak, Human: NotVisible, t=0</th>
       <td>1.271420e-07</td>
       <td>1000000.0</td>
       <td>12714.203610</td>
@@ -1015,37 +991,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
       <td>12714.203610</td>
     </tr>
     <tr>
-      <th>Store_Water: Leak, Human: NotVisible, t=0</th>
-      <td>1.271420e-07</td>
-      <td>1000000.0</td>
-      <td>12714.203610</td>
-    </tr>
-    <tr>
-      <th>Guide_Water_Out: Clogged, Human: NotVisible, t=0</th>
-      <td>1.271420e-07</td>
-      <td>1000000.0</td>
-      <td>12714.203610</td>
-    </tr>
-    <tr>
-      <th>Store_Water: Leak, Human: CannotGrasp, t=0</th>
-      <td>3.300218e-08</td>
-      <td>1000000.0</td>
-      <td>3300.218420</td>
-    </tr>
-    <tr>
-      <th>Guide_Water_Out: Clogged, Human: CannotGrasp, t=0</th>
-      <td>3.300218e-08</td>
-      <td>1000000.0</td>
-      <td>3300.218420</td>
-    </tr>
-    <tr>
       <th>Guide_Water_In: Clogged, Human: CannotGrasp, t=0</th>
-      <td>3.300218e-08</td>
-      <td>1000000.0</td>
-      <td>3300.218420</td>
-    </tr>
-    <tr>
-      <th>Guide_Water_In: Leak, Human: CannotGrasp, t=0</th>
       <td>3.300218e-08</td>
       <td>1000000.0</td>
       <td>3300.218420</td>
@@ -1057,13 +1003,13 @@ SCENARIOS COMPLETE: 100%|██████████████████�
       <td>3300.218420</td>
     </tr>
     <tr>
-      <th>Guide_Water_Out: Leak, Human: FalseDetection_low, t=0</th>
+      <th>Guide_Water_Out: Leak, Human: FalseDetection_high, t=0</th>
       <td>1.388878e-11</td>
       <td>1000000.0</td>
       <td>1.388878</td>
     </tr>
     <tr>
-      <th>Guide_Water_Out: Leak, Human: FalseDetection_high, t=0</th>
+      <th>Guide_Water_Out: Leak, Human: FalseDetection_low, t=0</th>
       <td>1.388878e-11</td>
       <td>1000000.0</td>
       <td>1.388878</td>
@@ -1164,53 +1110,37 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <p>One of the top modes is a joint human-component failure mode. Let’s see what happens in this case:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scenhists</span> <span class="o">=</span><span class="p">{</span><span class="s1">&#39;nominal&#39;</span><span class="p">:</span><span class="n">mdlhists</span><span class="p">[</span><span class="s1">&#39;nominal&#39;</span><span class="p">],</span> <span class="s1">&#39;faulty&#39;</span><span class="p">:</span><span class="n">mdlhists</span><span class="p">[</span><span class="s1">&#39;Guide_Water_Out: Leak, Human: FalseDetection_high, t=0&#39;</span><span class="p">]}</span>
-<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">scenhists</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">scenhists</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <img alt="../_images/example_tank_Tank_Analysis_19_0.png" src="../_images/example_tank_Tank_Analysis_19_0.png" />
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_19_1.png" src="../_images/example_tank_Tank_Analysis_19_1.png" />
-</div>
-</div>
 <p>In this case, there is a leak, but the operator cannot turn the valve, resulting in the tank filling too high, which is a failure.</p>
 <p>To consider the leak again, we can see what happens when the leak is not detected:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scenhists</span> <span class="o">=</span><span class="p">{</span><span class="s1">&#39;nominal&#39;</span><span class="p">:</span><span class="n">mdlhists</span><span class="p">[</span><span class="s1">&#39;nominal&#39;</span><span class="p">],</span> <span class="s1">&#39;faulty&#39;</span><span class="p">:</span><span class="n">mdlhists</span><span class="p">[</span><span class="s1">&#39;Guide_Water_Out: Leak, Human: FalseDetection_low, t=0&#39;</span><span class="p">]}</span>
-<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">scenhists</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">scenhists</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_22_0.png" src="../_images/example_tank_Tank_Analysis_22_0.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_22_1.png" src="../_images/example_tank_Tank_Analysis_22_1.png" />
+<img alt="../_images/example_tank_Tank_Analysis_22_0.png" src="../_images/example_tank_Tank_Analysis_22_0.png" />
 </div>
 </div>
 <p>In this case, there is a leak, but it is not caugh, resulting in a failure again.</p>
@@ -1219,7 +1149,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 <h2>Testing different reaction times<a class="headerlink" href="#Testing-different-reaction-times" title="Permalink to this headline"></a></h2>
 <p>The model set up in <code class="docutils literal notranslate"><span class="pre">tank_model</span></code> is parameterized by the reaction time of the operator. As a result, we can assess how long or short reaction times affect the given scenarios.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_long_reaction_time</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;reacttime&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
@@ -1228,38 +1158,28 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <p>In this case, we will show the affect of reaction time on the operator’s ability to catch a leak.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl_long_reaction_time</span><span class="p">,</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">,</span><span class="s1">&#39;Leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
-<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fault</span><span class="o">=</span><span class="s1">&#39;Leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">:[</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;net_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Tank_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;indicator&#39;</span><span class="p">],</span> <span class="s1">&#39;Valve1_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;action&#39;</span><span class="p">]},</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span><span class="n">faultscen</span><span class="o">=</span><span class="s1">&#39;Leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Response of Tank to Leak&quot;</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">:[</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;net_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Tank_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;indicator&#39;</span><span class="p">],</span> <span class="s1">&#39;Valve1_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;action&#39;</span><span class="p">]},</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span><span class="n">faultscen</span><span class="o">=</span><span class="s1">&#39;Leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <br/></pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 1 Axes&gt;,
- &lt;AxesSubplot:title={&#39;center&#39;:&#39;Propagation of faults to Leak at t=3&#39;}&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_27_1.png" src="../_images/example_tank_Tank_Analysis_27_1.png" />
+<img alt="../_images/example_tank_Tank_Analysis_27_0.png" src="../_images/example_tank_Tank_Analysis_27_0.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_tank_Tank_Analysis_27_2.png" src="../_images/example_tank_Tank_Analysis_27_2.png" />
+<img alt="../_images/example_tank_Tank_Analysis_27_1.png" src="../_images/example_tank_Tank_Analysis_27_1.png" />
 </div>
 </div>
 <p>As shown, the operator does not respond in time, resulting in the tank draining all the way, a failure state. We can further use the <code class="docutils literal notranslate"><span class="pre">propagate.approach</span></code> function to compare the number of scenarios caught in this system compared with the other.</p>
