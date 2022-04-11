@@ -22,7 +22,7 @@ Information in Engineering Conference. American Society of Mechanical Engineers
 Digital Collection.
 """
 import sys, os
-sys.path.append(os.path.join('..'))
+sys.path.insert(0, os.path.join('..'))
 from fmdtools.modeldef import Model, FxnBlock, Component
 
 
@@ -100,9 +100,9 @@ class HumanActions(FxnBlock):
         self.reacttime=reacttime
     def dynamic_behavior(self,time):        
         if self.t1.time == 0:
-            self.look = self.components['look'].behavior()
-            self.detect = self.components['detect'].behavior(self.look,self.Tank_Sig.indicator)
-            if self.detect or self.has_fault('FalseDetection_low') or self.has_fault('FalseDetection_high'): 
+            self.looked = self.look.behavior()
+            self.detected = self.detect.behavior(self.looked,self.Tank_Sig.indicator)
+            if self.detected or self.has_fault('FalseDetection_low') or self.has_fault('FalseDetection_high'): 
                 self.t1.inc(1)
         elif self.t1.time < self.reacttime: self.t1.inc(1)
         elif self.t1.time >= self.reacttime:
@@ -115,13 +115,13 @@ class HumanActions(FxnBlock):
                 else:                               intended_turn = -1
             else: intended_turn = 0
             
-            self.reach = self.components['reach'].behavior()
-            self.grasp = self.components['grasp'].behavior()
-            self.turn  = self.components['turn'].behavior(self.grasp, intended_turn)
-            if self.reach[0]:
-                self.Valve_Sig.action = self.turn
-            if self.reach[1]:
-                self.OtherValve_Sig.action = self.turn
+            self.reached = self.reach.behavior()
+            self.grasped = self.grasp.behavior()
+            self.turned  = self.turn.behavior(self.grasp, intended_turn)
+            if self.reached[0]:
+                self.Valve_Sig.action = self.turned
+            if self.reached[1]:
+                self.OtherValve_Sig.action = self.turned
             self.t1.reset()
             self.remove_fault('FalseDetection_low')
             self.remove_fault('FalseDetection_high')
@@ -208,19 +208,19 @@ if __name__ == '__main__':
     mdl = Tank()
     ## nominal run
     endresults, resgraph, mdlhist = propagate.nominal(mdl)
-    rd.plot.mdlhistvals(mdlhist)
+    rd.plot.mdlhists(mdlhist)
     rd.graph.show(resgraph)
     
     
     ## faulty run
     endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Human','NotVisible', time=2)
     
-    rd.plot.mdlhistvals(mdlhist, fault='NotVisible', time=2)
+    rd.plot.mdlhists(mdlhist, title='NotVisible', time_slice=2)
     rd.graph.show(resgraph,faultscen='NotVisible', time=2)
     
     endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Human','FalseReach', time=2, gtype='component')
     
-    rd.plot.mdlhistvals(mdlhist,fault='FalseReach',time=2)
+    rd.plot.mdlhists(mdlhist,title='FalseReach',time_slice=2)
     rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time=2)
     
     ## run all faults - note: all faults get caught!
