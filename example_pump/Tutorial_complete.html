@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Tutorial &mdash; fmdtools 1.0.0 documentation</title>
+  <title>fmdtools Tutorial &mdash; fmdtools 1.1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -147,12 +147,14 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../example_tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
@@ -512,6 +514,24 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmdtools</span>
+<span class="n">fmdtools</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;module &#39;fmdtools&#39; from &#39;C:\\Users\\dhulse\\Documents\\GitHub\\fmdtools_public\\example_pump\\..\\fmdtools\\__init__.py&#39;&gt;
+</pre></div></div>
+</div>
 <p>Now, import the Pump class defined in the ex_pump module.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -545,42 +565,32 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;ImportEE&#39;: ImportEE ImportEE function: ({}, {&#39;nom&#39;}),
- &#39;ImportWater&#39;: ImportWater ImportWater function: ({}, {&#39;nom&#39;}),
- &#39;ImportSignal&#39;: ImportSignal ImportSig function: ({}, {&#39;nom&#39;}),
- &#39;MoveWater&#39;: MoveWater MoveWat function: ({&#39;eff&#39;: 1.0}, {&#39;nom&#39;}),
- &#39;ExportWater&#39;: ExportWater ExportWater function: ({}, {&#39;nom&#39;})}
+{&#39;ImportEE&#39;: ImportEE ImportEE function: ({&#39;mode&#39;: &#39;nom&#39;}, {&#39;nom&#39;}),
+ &#39;ImportWater&#39;: ImportWater ImportWater function: ({&#39;mode&#39;: &#39;nom&#39;}, {&#39;nom&#39;}),
+ &#39;ImportSignal&#39;: ImportSignal ImportSig function: ({&#39;mode&#39;: &#39;nom&#39;}, {&#39;nom&#39;}),
+ &#39;MoveWater&#39;: MoveWater MoveWat function: ({&#39;eff&#39;: 1.0, &#39;mode&#39;: &#39;nom&#39;}, {&#39;nom&#39;}),
+ &#39;ExportWater&#39;: ExportWater ExportWater function: ({&#39;mode&#39;: &#39;nom&#39;}, {&#39;nom&#39;})}
 </pre></div></div>
 </div>
 <p>We can also view the run order to see how the model will be simulated.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">exec_order</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">exec_order</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 1 Axes&gt;,
- &lt;AxesSubplot:title={&#39;center&#39;:&#39;Function Execution Order&#39;}&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_12_1.png" src="../_images/example_pump_Tutorial_complete_12_1.png" />
+<img alt="../_images/example_pump_Tutorial_complete_13_0.png" src="../_images/example_pump_Tutorial_complete_13_0.png" />
 </div>
 </div>
 <p>As shown, because all of the methods were defined as generic behaviors, they are each run in the static propagation step. No order is shown in the static step because the static propagation step iterates between model functions until the values have converged. Nevertheless, one can view the initial static order using:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">staticfxns</span>
@@ -588,7 +598,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -598,7 +608,7 @@ OrderedSet([&#39;ImportEE&#39;, &#39;ImportWater&#39;, &#39;ImportSignal&#39;, &
 </div>
 <p>and the dynamic step order (if there was one):</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">dynamicfxns</span>
@@ -606,7 +616,7 @@ OrderedSet([&#39;ImportEE&#39;, &#39;ImportWater&#39;, &#39;ImportSignal&#39;, &
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -616,7 +626,7 @@ OrderedSet()
 </div>
 <p>We can also instantiate this model with different model parameters. By default, this model gets <code class="docutils literal notranslate"><span class="pre">params={'cost':{'repair',</span> <span class="pre">'water'},</span> <span class="pre">'delay':10,</span> <span class="pre">'units':'hrs'}</span></code> but we can pass any set of costs that is a subset of <code class="docutils literal notranslate"><span class="pre">{'repair',</span> <span class="pre">'water',</span> <span class="pre">'water_exp',</span> <span class="pre">'ee'}</span></code> and any int <code class="docutils literal notranslate"><span class="pre">delay</span></code> parameter.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl2</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">,</span> <span class="s1">&#39;water&#39;</span><span class="p">,</span> <span class="s1">&#39;ee&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span><span class="s1">&#39;hrs&#39;</span><span class="p">})</span>
@@ -631,7 +641,7 @@ OrderedSet()
 <h3>2a.) Simulate nominal<a class="headerlink" href="#2a.)-Simulate-nominal" title="Permalink to this headline"></a></h3>
 <p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code> method.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults_nominal</span><span class="p">,</span> <span class="n">resgraph_nominal</span><span class="p">,</span> <span class="n">mdlhist_nominal</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
@@ -640,7 +650,7 @@ OrderedSet()
 </div>
 <p>What do the results look like? Explore results structures.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults_nominal</span>
@@ -648,7 +658,7 @@ OrderedSet()
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -662,51 +672,42 @@ OrderedSet()
 <h3>2b.) Visualize nominal model<a class="headerlink" href="#2b.)-Visualize-nominal-model" title="Permalink to this headline"></a></h3>
 <p>First, we can show the model graph using <code class="docutils literal notranslate"><span class="pre">rd.graph.show</span></code> to see that it was set up correctly. We can do this both on the model graph itself <code class="docutils literal notranslate"><span class="pre">mdl.graph</span></code> and the results of the nominal run <code class="docutils literal notranslate"><span class="pre">resgraph_nominal</span></code> to verify both are fault-free.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_25_1.png" src="../_images/example_pump_Tutorial_complete_25_1.png" />
-</div>
-</div>
-<p>We can also view the flow values of the model using ‘’rd.plot.mdlhistvals’’. It may be helpful to only view flows of interest.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist_nominal</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Wat_1&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">],</span> <span class="s1">&#39;EE_1&#39;</span><span class="p">:[</span><span class="s1">&#39;voltage&#39;</span><span class="p">,</span> <span class="s1">&#39;current&#39;</span><span class="p">]},</span> <span class="n">returnfig</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_27_0.png" src="../_images/example_pump_Tutorial_complete_27_0.png" />
-</div>
-</div>
-<p>Note: for quick access to the syntax and options for these methods, type the <code class="docutils literal notranslate"><span class="pre">?method</span></code> or <code class="docutils literal notranslate"><span class="pre">help(method)</span></code> in the terminal. For example <code class="docutils literal notranslate"><span class="pre">?rd.plot.mdlhistvals</span></code></p>
-<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">?</span>rd.plot.mdlhistvals
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Tutorial_complete_26_0.png" src="../_images/example_pump_Tutorial_complete_26_0.png" />
+</div>
+</div>
+<p>We can also view the flow values of the model using ‘’rd.plot.mdlhists’’. It may be helpful to only view flows of interest.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist_nominal</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Wat_1&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">],</span> <span class="s1">&#39;EE_1&#39;</span><span class="p">:[</span><span class="s1">&#39;voltage&#39;</span><span class="p">,</span> <span class="s1">&#39;current&#39;</span><span class="p">]})</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_Tutorial_complete_28_0.png" src="../_images/example_pump_Tutorial_complete_28_0.png" />
+</div>
+</div>
+<p>Note: for quick access to the syntax and options for these methods, type the <code class="docutils literal notranslate"><span class="pre">?method</span></code> or <code class="docutils literal notranslate"><span class="pre">help(method)</span></code> in the terminal. For example <code class="docutils literal notranslate"><span class="pre">?rd.plot.mdlhists</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">?</span>rd.plot.mdlhists
 </pre></div>
 </div>
 </div>
@@ -715,7 +716,7 @@ OrderedSet()
 <h3>2b.) Simulate a fault mode<a class="headerlink" href="#2b.)-Simulate-a-fault-mode" title="Permalink to this headline"></a></h3>
 <p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.one_fault</span></code> method. The set of possible faults is defined in the function definitions in <code class="docutils literal notranslate"><span class="pre">ex_pump.py</span></code>, and we can propagate a fault at any time in the operational interval (0-55 seconds).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults_fault</span><span class="p">,</span> <span class="n">resgraph_fault</span><span class="p">,</span> <span class="n">mdlhist_fault</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;MoveWater&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -724,7 +725,7 @@ OrderedSet()
 </div>
 <p>We can also view the results for from this. In this case <code class="docutils literal notranslate"><span class="pre">mdlhist</span></code> gives a history of results for both the nominal and faulty runs.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults_fault</span>
@@ -732,7 +733,7 @@ OrderedSet()
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -745,7 +746,7 @@ OrderedSet()
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">mdlhist_fault</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -753,7 +754,7 @@ OrderedSet()
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -766,10 +767,10 @@ OrderedSet()
 <h3>3b.) Visualize fault model states<a class="headerlink" href="#3b.)-Visualize-fault-model-states" title="Permalink to this headline"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">rd.plot.mdlhistvals</span></code> also works for a mdlhists given from <code class="docutils literal notranslate"><span class="pre">propagate.one_fault</span></code>. We can view these results below. As shown, the function will give the nominal result in a blue dotted line and the faulty result in a red line.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist_fault</span><span class="p">,</span> <span class="n">fault</span><span class="o">=</span><span class="s1">&#39;Motor Short&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Wat_1&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">],</span> <span class="s1">&#39;EE_1&#39;</span><span class="p">:[</span><span class="s1">&#39;voltage&#39;</span><span class="p">,</span> <span class="s1">&#39;current&#39;</span><span class="p">]},</span> <span class="n">returnfig</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist_fault</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Pump Response to Motor Short Fault&#39;</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Wat_1&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span><span class="s1">&#39;pressure&#39;</span><span class="p">],</span> <span class="s1">&#39;EE_1&#39;</span><span class="p">:[</span><span class="s1">&#39;voltage&#39;</span><span class="p">,</span> <span class="s1">&#39;current&#39;</span><span class="p">]})</span>
 </pre></div>
 </div>
 </div>
@@ -777,37 +778,28 @@ OrderedSet()
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_36_0.png" src="../_images/example_pump_Tutorial_complete_36_0.png" />
+<img alt="../_images/example_pump_Tutorial_complete_37_0.png" src="../_images/example_pump_Tutorial_complete_37_0.png" />
 </div>
 </div>
 <p>We can also view this result graph using ‘rd.graph.show’. In this case, it shows the state of the model at the final time-step of the model run. Thus, while the <code class="docutils literal notranslate"><span class="pre">EE_1</span></code> flow is shown in orange (because it is off-nominal), the Water flows are not, because they have the same state at the final time-step.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph_fault</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph_fault</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_38_1.png" src="../_images/example_pump_Tutorial_complete_38_1.png" />
+<img alt="../_images/example_pump_Tutorial_complete_39_0.png" src="../_images/example_pump_Tutorial_complete_39_0.png" />
 </div>
 </div>
 <p>If we want to view the graph at another time-step, we can use ‘rd.process.hist’ and ‘rd.graph.result_from’ to first process the model states into results which can be visualized and then map that onto a graph view at a given time.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshist_fault</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhist_fault</span><span class="p">)</span>
@@ -815,27 +807,18 @@ OrderedSet()
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">result_from</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">reshist_fault</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">result_from</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">reshist_fault</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_41_1.png" src="../_images/example_pump_Tutorial_complete_41_1.png" />
+<img alt="../_images/example_pump_Tutorial_complete_42_0.png" src="../_images/example_pump_Tutorial_complete_42_0.png" />
 </div>
 </div>
 </section>
@@ -843,7 +826,7 @@ OrderedSet()
 <h3>4a.) Simulate set of fault modes<a class="headerlink" href="#4a.)-Simulate-set-of-fault-modes" title="Permalink to this headline"></a></h3>
 <p>To simulate the set of fault modes, we first choose a <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code>. For simplicity, we can choose default parameters at first.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
@@ -851,7 +834,7 @@ OrderedSet()
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_app</span><span class="p">,</span> <span class="n">mdlhists_app</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">app</span><span class="p">)</span>
@@ -863,12 +846,12 @@ OrderedSet()
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 221.28it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 165.43it/s]
 </pre></div></div>
 </div>
 <p>It can be helpful to view what these results look like–a dictionary of faults injected at particular times with their respective results dictionaries.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_app</span>
@@ -876,7 +859,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -937,7 +920,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <p>It can be helpful to explore different approach parameters (e.g. focussing on single faults, different numbers of sample points, etc)</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app2</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;MoveWater&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">)])</span>
@@ -945,7 +928,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app2</span><span class="o">.</span><span class="n">list_modes</span><span class="p">()</span>
@@ -953,7 +936,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -963,7 +946,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <p>There are a number of different ways to sample the scenarios in the approach:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app3</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span> <span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">})</span>
@@ -971,7 +954,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app3</span><span class="o">.</span><span class="n">times</span>
@@ -979,7 +962,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -992,7 +975,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 <h3>4b.) Visualize set of fault modes<a class="headerlink" href="#4b.)-Visualize-set-of-fault-modes" title="Permalink to this headline"></a></h3>
 <p>Using this fault approach, we can now make an FMEA-like analyses of the different fault modes. <code class="docutils literal notranslate"><span class="pre">rd.tabulate.summfmea</span></code> organizes endclasses into a table for each fault.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summary_fmea</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">summfmea</span><span class="p">(</span><span class="n">endclasses_app</span><span class="p">,</span> <span class="n">app</span><span class="p">)</span>
@@ -1001,7 +984,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1083,7 +1066,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <p>We can also use <code class="docutils literal notranslate"><span class="pre">rd.tabulatefullmea</span></code> with the processed results histories to get a better picture of which flows and functions degrade in each scenario</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshist_fault</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">summaries</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">hists</span><span class="p">(</span><span class="n">mdlhists_app</span><span class="p">)</span>
@@ -1091,7 +1074,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">fullfmea</span><span class="p">(</span><span class="n">endclasses_app</span><span class="p">,</span> <span class="n">summaries</span><span class="p">)</span>
@@ -1099,7 +1082,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1284,7 +1267,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 <p>In detailed simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. The <code class="docutils literal notranslate"><span class="pre">dill</span></code> package gives one a very simple method of saving and reloading a workspace one is working on: - <code class="docutils literal notranslate"><span class="pre">dill.dump_session(&quot;filename.pkl&quot;)</span></code> to save the session, and - <code class="docutils literal notranslate"><span class="pre">dill.load_session(&quot;filename.pk1&quot;)</span></code> to load the session.</p>
 <p>Below, we demonstrate this by saving the session, clearing the workspace, and then loading the workspace again.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dill</span>
@@ -1293,7 +1276,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <p>Viewing a workspace variable:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_app</span>
@@ -1301,7 +1284,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1362,7 +1345,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <p>Dumping the session:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dill</span><span class="o">.</span><span class="n">dump_session</span><span class="p">(</span><span class="s1">&#39;Tutorial.pkl&#39;</span><span class="p">)</span>
@@ -1371,7 +1354,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <p>Reseting the workspace and viewing the variables:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">reset</span>
@@ -1387,7 +1370,7 @@ Once deleted, variables cannot be recovered. Proceed (y/[n])? y
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_app</span>
@@ -1401,7 +1384,7 @@ Once deleted, variables cannot be recovered. Proceed (y/[n])? y
 <div class="highlight"><pre>
 <span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
 <span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_8564/2177989256.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_2352/2177989256.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>endclasses_app
 
 <span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;endclasses_app&#39; is not defined
@@ -1409,7 +1392,7 @@ Once deleted, variables cannot be recovered. Proceed (y/[n])? y
 </div>
 <p>Loading Session:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dill</span>
@@ -1418,7 +1401,7 @@ Once deleted, variables cannot be recovered. Proceed (y/[n])? y
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_app</span>
@@ -1426,7 +1409,7 @@ Once deleted, variables cannot be recovered. Proceed (y/[n])? y
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
