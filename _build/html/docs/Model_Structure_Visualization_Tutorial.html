@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Defining and Visualizing fmdtools Model Structures &mdash; fmdtools 1.0.0 documentation</title>
+  <title>Defining and Visualizing fmdtools Model Structures &mdash; fmdtools 1.1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -147,12 +147,14 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../example_tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
@@ -579,7 +581,7 @@ CLASSES
      |  showverts = True
 
 FUNCTIONS
-    animation_from(mdl, reshist, times=&#39;all&#39;, faultscen=[], gtype=&#39;bipartite&#39;, figsize=(6, 4), showfaultlabels=True, scale=1, show=False, pos=[], colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;])
+    animation_from(mdl, reshist, times=&#39;all&#39;, faultscen=[], gtype=&#39;bipartite&#39;, figsize=(6, 4), showfaultlabels=True, scale=1, show=False, pos=[], colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], **kwargs)
         Creates an animation of the model graph using results at given times in the results history.
         To view, use %matplotlib qt from spyder or %matplotlib notebook from jupyter
         To save (or do anything useful)h, make sure ffmpeg is installed  https://www.wikihow.com/Install-FFmpeg-on-Windows
@@ -594,8 +596,16 @@ FUNCTIONS
             The times in the history to plot the graph at. If &#39;all&#39;, plots them all
         faultscen : str, optional
             Name of the fault scenario. The default is [].
-        gtype : str, optional
-            The type of graph to plot (normal or bipartite). The default is &#39;bipartite&#39;.
+        gtype : str (optional)
+            Type of graph input to show. Default is &#39;bipartite.&#39;
+            - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+            - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+            - &#39;component&#39;   (for graph/model input): plots functions, flows, and componenets as nodes
+            - &#39;typegraph&#39;   (for graph/model input): plots the class structure of the model, functions, and flows
+            - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+            - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+            - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+            NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
         showfaultlabels : bool, optional
             Whether or not to list faults on the plot. The default is True.
         scale : float, optional
@@ -605,7 +615,7 @@ FUNCTIONS
         pos : dict, optional
             dict of node positions (if re-using positions). The default is [].
 
-    exec_order(mdl, renderer=&#39;matplotlib&#39;, gtype=&#39;bipartite&#39;, colors=[&#39;lightgray&#39;, &#39;cyan&#39;, &#39;teal&#39;], show_dyn_order=True, title=&#39;Function Execution Order&#39;, legend=True, **kwargs)
+    exec_order(mdl, renderer=&#39;matplotlib&#39;, gtype=&#39;bipartite&#39;, colors=[&#39;lightgray&#39;, &#39;cyan&#39;, &#39;teal&#39;], show_dyn_order=True, show_dyn_arrows=False, title=&#39;Execution Order&#39;, legend=True, **kwargs)
         Displays the execution order/types of the model, where the functions and flows in the
         static step are highlighted and the functions in the dynamic step are listed (with corresponding order)
 
@@ -615,13 +625,21 @@ FUNCTIONS
             Model of the system to visualize.
         renderer : &#39;matplotlib&#39; or &#39;graphviz&#39;
             Renderer to use for the graph
-        gtype : &#39;normal&#39;/&#39;bipartite&#39;, optional
+        gtype : str, optional
             Representation of the model to use. The default is &#39;bipartite&#39;.
+            - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+            - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+            - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+            - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+            - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+            NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
         colors : list, optional
             Colors to use for unexecuted functions, static propagation steps, and dynamic functions.
             The default is [&#39;lightgray&#39;, &#39;cyan&#39;,&#39;teal&#39;].
         show_dyn_order : bool, optional
             Whether to label the execution order for dynamic functions. The default is True.
+        show_dyn_arrows:
+            Whether to place arrows to denote the sequence between functions. The default is False.
         title : str, optional
             Title for the plot. The default is &#34;Function Execution Order&#34;.
         legend : bool, optional
@@ -630,6 +648,42 @@ FUNCTIONS
         Returns
         -------
         tuple of form (figure, axis)
+
+    get_asg_plotlabels(g, fxn, reshist, t_ind)
+        Assigns labels to the ASG graph g in the given fxn from reshist at time t so that it can be plotted
+
+        Parameters
+        ----------
+        g : networkx graph
+            The graph to get labels for
+        fxn : FxnBlock
+            Corresponding function block for the graph g
+        reshist : dict
+            The dict of results history over time (from process.hists() or process.typehist() for the typegraph option)
+        t_ind : float
+            The time in reshist to update the graph at
+
+        Returns
+        -------
+        labels : dict
+            labels for the graph.
+        faultfxns : dict
+            functions with faults in them
+        degfxns : dict
+            functions that are degraded
+        degflows : dict
+            flows that are degraded
+        faultlabels : dict
+            names of each fault
+        faultedges : dict
+            edges with faults in them
+        faultedgeflows : dict
+            names of flows that are degraded on each edge
+        edgelabels : dict
+            labels of each edge
+
+    get_asg_pos(fxn, pos, gtype, arrows)
+        Helper function for getting the right graph/positions from a function.
 
     get_graph_annotations(g, gtype=&#39;bipartite&#39;)
         Helper method that returns labels/lists degraded nodes for the plot annotations
@@ -729,16 +783,16 @@ FUNCTIONS
         figobjs : dict
             Set of graph objects from graph.show() for the given renderer
 
-    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], title=[], functions=[], flows=[])
+    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen=[], time=0, showfaultlabels=True, scale=1, pos=[], show=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], title=[], functions=[], flows=[], seqgraph={}, seqlabels=True, **kwargs)
         Plots a bipartite graph. Used in other functions
 
-    plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot)
+    plot_gv_bipartite(g, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels, colors_dict, functions, flows, edges, dot, seqgraph={}, seqlabels=False, **kwargs)
         Plots a bipartite graph representation using the graphviz toolkit. Used in other functions
 
-    plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultscen, time, showfaultlabels, colors_dict, dot)
+    plot_gv_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultscen, time, showfaultlabels, colors_dict, dot, **kwargs)
         Plots a normal graph representation using the graphviz toolkit. Used in other functions
 
-    plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], title=[], show_edgelabels=True)
+    plot_normgraph(g, labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, faultscen, time, showfaultlabels, edgeflows, scale=1, pos=[], show=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], title=[], show_edgelabels=True, arrows=False, **kwargs)
         Plots a standard graph. Used in other functions
 
     result_from(mdl, reshist, time, renderer=&#39;matplotlib&#39;, gtype=&#39;bipartite&#39;, **kwargs)
@@ -754,8 +808,16 @@ FUNCTIONS
             The time in the history to plot the graph at.
         renderer : &#39;matplotlib&#39; or &#39;graphviz&#39;
             Renderer to use to plot the graph. Default is &#39;matplotlib&#39;
-        gtype : str, optional
-            The type of graph to plot (normal or bipartite). The default is &#39;bipartite&#39;.
+        gtype : str (optional)
+            Type of graph input to show. Default is &#39;bipartite.&#39;
+            - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+            - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+            - &#39;component&#39;   (for graph/model input): plots functions, flows, and componenets as nodes
+            - &#39;typegraph&#39;   (for graph/model input): plots the class structure of the model, functions, and flows
+            - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+            - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+            - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+            NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
         MATPLOTLIB OPTIONS:
         ----------
         faultscen : str, optional
@@ -780,8 +842,16 @@ FUNCTIONS
             The times in the history to plot the graph at. If &#39;all&#39;, plots them all
         renderer : &#39;matplotlib&#39; or &#39;graphviz&#39; or
             Renderer to use to plot the graph. Default is &#39;matplotlib&#39;
-        gtype : str, optional
-            The type of graph to plot (normal or bipartite). The default is &#39;bipartite&#39;.
+        gtype : str (optional)
+            Type of graph input to show. Default is &#39;bipartite.&#39;
+            - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+            - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+            - &#39;component&#39;   (for graph/model input): plots functions, flows, and componenets as nodes
+            - &#39;typegraph&#39;   (for graph/model input): plots the class structure of the model, functions, and flows
+            - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+            - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+            - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+            NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
         MATPLOTLIB OPTIONS:
         ----------
         faultscen : str, optional
@@ -803,7 +873,7 @@ FUNCTIONS
 
         Parameters
         ----------
-        g : networkx graph or model
+        g : networkx graph or model or function
             normal or bipartite graph of the model of interest
         gtype : &#39;normal&#39; or &#39;bipartite&#39;, optional
             Type of graph to plot. The default is &#39;normal&#39;.
@@ -820,10 +890,18 @@ FUNCTIONS
 
         Parameters
         ----------
-        g : networkx graph or model
+        g : networkx graph or model or function
             The multigraph to plot
-        gtype : &#39;normal&#39; or &#39;bipartite&#39;
-            Type of graph input to show--normal (multgraph) or bipartite
+        gtype : str (optional)
+            Type of graph input to show. Default is &#39;bipartite.&#39;
+            - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+            - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+            - &#39;component&#39;   (for graph/model input): plots functions, flows, and componenets as nodes
+            - &#39;typegraph&#39;   (for graph/model input): plots the class structure of the model, functions, and flows
+            - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+            - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+            - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+            NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
         renderer : &#39;matplotlib&#39; or &#39;graphviz&#39; or &#39;pyvis&#39;
             Renderer to use with the drawing. Renderer must be installed. Default is &#39;matplotlib&#39;
         filename : string, optional
@@ -835,17 +913,24 @@ FUNCTIONS
                 graph.show_pyvis
             for more information on these arguments
 
-    show_graphviz(g, gtype=&#39;bipartite&#39;, faultscen=[], time=[], filename=&#39;&#39;, filetype=&#39;png&#39;, showfaultlabels=True, highlight=[], colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], heatmap={}, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x0000023CE67BCA30&gt;, **kwargs)
+    show_graphviz(g, gtype=&#39;bipartite&#39;, faultscen=[], time=[], filename=&#39;&#39;, filetype=&#39;png&#39;, showfaultlabels=True, highlight=[], colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], heatmap={}, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x00000195A79FCB50&gt;, arrows=False, seqgraph={}, seqlabels=False, **kwargs)
         Translates an existing nx graph to a graphviz graph. Saves the graph output and dot file.
         Called from show() by passing in graphviz=True and filename
 
         Parameters
         ----------
-        g : nx graph object or model
+        g : networkx graph or model or function
             The multigraph to plot
-        gtype : string, optional
-            Type of graph input to show
-            values are &#39;normal&#39;, &#39;bipartite&#39;, or &#39;typegraph&#39;. The default is &#39;normal&#39;.
+        gtype : str (optional)
+            Type of graph input to show. Default is &#39;bipartite.&#39;
+            - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+            - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+            - &#39;component&#39;   (for graph/model input): plots functions, flows, and componenets as nodes
+            - &#39;typegraph&#39;   (for graph/model input): plots the class structure of the model, functions, and flows
+            - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+            - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+            - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+            NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
         filename : string, optional
             the filename for the rendered output (if any). The default is &#39;&#39; (in which the file is not saved).
         filetype : string
@@ -866,6 +951,12 @@ FUNCTIONS
             A heatmap dictionary to overlay on the plot. The default is {}.
         cmap : mpl colormap
             Colormap to use for heatmap visualization
+        arrows : bool, optional
+            Whether to display arrows on normal plots (for &#39;actions&#39; ASGs--default is False)
+        seqgraph: networkx graph, optional
+            Directed graph to overlay on graph views (for &#39;flows&#39;/&#39;combined&#39; ASGs--default is {})
+        seqlabels: bool
+            Whether to show directed edge labels on overlaid seqgraph
         **kwargs : dictionary
             dictionary of graphviz attributes used to customize the output.
             this includes layout, overlap, node padding, node separation, font, fontsize, etc.
@@ -875,15 +966,23 @@ FUNCTIONS
         -------
         dot: a graphviz object
 
-    show_matplotlib(g, gtype=&#39;bipartite&#39;, filename=&#39;&#39;, filetype=&#39;png&#39;, pos=[], scale=1, faultscen=[], time=[], figsize=(6, 4), showfaultlabels=True, highlight=[], colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], heatmap={}, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x0000023CE67BCA30&gt;, fig=[])
+    show_matplotlib(g, gtype=&#39;bipartite&#39;, filename=&#39;&#39;, filetype=&#39;png&#39;, pos=[], scale=1, faultscen=[], time=[], figsize=(6, 4), showfaultlabels=True, highlight=[], colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], heatmap={}, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x00000195A79FCB50&gt;, seqgraph={}, seqlabels=False, arrows=False, fig=[])
         Plots a single graph object g using matplotlib
 
         Parameters
         ----------
-        g : networkx graph or model
+        g : networkx graph or model or function
             The multigraph to plot
-        gtype : &#39;normal&#39; or &#39;bipartite&#39;
-            Type of graph input to show--normal (multgraph) or bipartite
+        gtype : str (optional)
+            Type of graph input to show. Default is &#39;bipartite.&#39;
+            - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+            - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+            - &#39;component&#39;   (for graph/model input): plots functions, flows, and componenets as nodes
+            - &#39;typegraph&#39;   (for graph/model input): plots the class structure of the model, functions, and flows
+            - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+            - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+            - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+            NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
         filename : string
             Name to give the saved file, if saved. Default is &#39;&#39; (not saving the file)
         filetype : string
@@ -908,9 +1007,14 @@ FUNCTIONS
             A heatmap dictionary to overlay on the plot. The default is {}.
         cmap : mpl colormap
             Colormap to use for heatmap visualizations
+        arrows : bool, optional
+            Whether to display arrows on normal plots (for &#39;actions&#39; ASGs--default is False)
+        seqgraph: networkx graph, optional
+            Directed graph to overlay on graph views (for &#39;flows&#39;/&#39;combined&#39; ASGs--default is {})
+        seqlabels: bool
+            Whether to show directed edge labels on overlaid seqgraph
         fig : mpl figure
             Current matplotlib figure to plot on
-
         Returns
         -------
         fig, ax : matplotlib figure/axis
@@ -938,17 +1042,29 @@ FUNCTIONS
         n : pyvis object
             pyvis object of the drawn graph
 
+    update_actplot(t_ind, fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], arrows=True, **kwargs)
+        Updates an action graph plot at a given timestep t_ind given the result history reshist
+
     update_bipplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], **kwargs)
         Updates a bipartite graph plot at a given timestep t_ind given the result history reshist
+
+    update_flowgraphplot(t_ind, fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], seqgraph={}, seqlabels=True, **kwargs)
+        Updates an ASG plot with flows at a given timestep t_ind given the result history reshist
 
     update_graphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], **kwargs)
         Updates a normal graph plot at a given timestep t_ind given the result history reshist
 
-    update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], heatmap={}, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x0000023CE67BCA30&gt;, **kwargs)
+    update_gv_actplot(t_ind, fxn, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], heatmap={}, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x00000195A79FCB50&gt;, arrows=True, seqgraph={}, **kwargs)
+        Updates an action graph plot at a given timestep t_ind given the result history reshist
+
+    update_gv_bipplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], heatmap={}, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x00000195A79FCB50&gt;, **kwargs)
         graphviz helper: updates a bipartite graph plot at a given timestep t_ind given the result history reshist
 
-    update_gv_graphplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], heatmap={}, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x0000023CE67BCA30&gt;, **kwargs)
-        graphviz helpwer: Updates a normal graph plot at a given timestep t_ind given the result history reshist
+    update_gv_flowgraphplot(t_ind, fxn, reshist, g, faultscen=[], showfaultlabels=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], heatmap={}, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x00000195A79FCB50&gt;, arrows=[], seqgraph={}, seqlabels=False, **kwargs)
+        Updates an ASG plot with flows at a given timestep t_ind given the result history reshist
+
+    update_gv_graphplot(t_ind, reshist, g, faultscen=[], showfaultlabels=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], heatmap={}, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x00000195A79FCB50&gt;, arrows=False, **kwargs)
+        graphviz helper: Updates a normal graph plot at a given timestep t_ind given the result history reshist
 
     update_typegraphplot(t_ind, reshist, g, pos, faultscen=[], showfaultlabels=True, scale=1, show=True, colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], **kwargs)
         Updates a typegraph-stype plot at a given timestep t_ind given the result history reshist
@@ -980,10 +1096,18 @@ show(g, gtype=&#39;bipartite&#39;, renderer=&#39;matplotlib&#39;, filename=&#39;
 
     Parameters
     ----------
-    g : networkx graph or model
+    g : networkx graph or model or function
         The multigraph to plot
-    gtype : &#39;normal&#39; or &#39;bipartite&#39;
-        Type of graph input to show--normal (multgraph) or bipartite
+    gtype : str (optional)
+        Type of graph input to show. Default is &#39;bipartite.&#39;
+        - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+        - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+        - &#39;component&#39;   (for graph/model input): plots functions, flows, and componenets as nodes
+        - &#39;typegraph&#39;   (for graph/model input): plots the class structure of the model, functions, and flows
+        - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+        - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+        - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
     renderer : &#39;matplotlib&#39; or &#39;graphviz&#39; or &#39;pyvis&#39;
         Renderer to use with the drawing. Renderer must be installed. Default is &#39;matplotlib&#39;
     filename : string, optional
@@ -1027,7 +1151,7 @@ static) lead to the system entering a fault mode (e.g., conditional faults). - <
 <div class="highlight"><pre>
 Help on function build_model in module fmdtools.modeldef:
 
-build_model(self, functionorder=[], graph_pos={}, bipartite_pos={})
+build_model(self, functionorder=[], graph_pos={}, bipartite_pos={}, require_connections=True)
     Builds the model graph after the functions have been added.
 
     Parameters
@@ -1057,7 +1181,7 @@ build_model(self, functionorder=[], graph_pos={}, bipartite_pos={})
 <div class="highlight"><pre>
 Help on function exec_order in module fmdtools.resultdisp.graph:
 
-exec_order(mdl, renderer=&#39;matplotlib&#39;, gtype=&#39;bipartite&#39;, colors=[&#39;lightgray&#39;, &#39;cyan&#39;, &#39;teal&#39;], show_dyn_order=True, title=&#39;Function Execution Order&#39;, legend=True, **kwargs)
+exec_order(mdl, renderer=&#39;matplotlib&#39;, gtype=&#39;bipartite&#39;, colors=[&#39;lightgray&#39;, &#39;cyan&#39;, &#39;teal&#39;], show_dyn_order=True, show_dyn_arrows=False, title=&#39;Execution Order&#39;, legend=True, **kwargs)
     Displays the execution order/types of the model, where the functions and flows in the
     static step are highlighted and the functions in the dynamic step are listed (with corresponding order)
 
@@ -1067,13 +1191,21 @@ exec_order(mdl, renderer=&#39;matplotlib&#39;, gtype=&#39;bipartite&#39;, colors
         Model of the system to visualize.
     renderer : &#39;matplotlib&#39; or &#39;graphviz&#39;
         Renderer to use for the graph
-    gtype : &#39;normal&#39;/&#39;bipartite&#39;, optional
+    gtype : str, optional
         Representation of the model to use. The default is &#39;bipartite&#39;.
+        - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+        - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+        - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+        - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+        - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
     colors : list, optional
         Colors to use for unexecuted functions, static propagation steps, and dynamic functions.
         The default is [&#39;lightgray&#39;, &#39;cyan&#39;,&#39;teal&#39;].
     show_dyn_order : bool, optional
         Whether to label the execution order for dynamic functions. The default is True.
+    show_dyn_arrows:
+        Whether to place arrows to denote the sequence between functions. The default is False.
     title : str, optional
         Title for the plot. The default is &#34;Function Execution Order&#34;.
     legend : bool, optional
@@ -1445,7 +1577,7 @@ flow only connects two functions.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Figure size 432x288 with 1 Axes&gt;,
- &lt;AxesSubplot:title={&#39;center&#39;:&#39;Function Execution Order&#39;}&gt;)
+ &lt;AxesSubplot:title={&#39;center&#39;:&#39;Execution Order&#39;}&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1524,26 +1656,18 @@ title not implemented in graphviz renderer
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Move_Rover&#39;</span><span class="p">:</span><span class="s1">&#39;power&#39;</span><span class="p">,</span> <span class="s1">&#39;Store_Energy&#39;</span><span class="p">:[</span><span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="s1">&#39;charge&#39;</span><span class="p">],</span> <span class="s1">&#39;EE&#39;</span><span class="p">:[</span><span class="s1">&#39;v_supply&#39;</span><span class="p">,</span> <span class="s1">&#39;a_supply&#39;</span><span class="p">]},</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Move_Rover&#39;</span><span class="p">:</span><span class="s1">&#39;power&#39;</span><span class="p">,</span> <span class="s1">&#39;Store_Energy&#39;</span><span class="p">:[</span><span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="s1">&#39;charge&#39;</span><span class="p">],</span> <span class="s1">&#39;EE&#39;</span><span class="p">:[</span><span class="s1">&#39;v_supply&#39;</span><span class="p">,</span> <span class="s1">&#39;a_supply&#39;</span><span class="p">]},</span> <span class="n">time_slice</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/docs_Model_Structure_Visualization_Tutorial_48_0.png" src="../_images/docs_Model_Structure_Visualization_Tutorial_48_0.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/docs_Model_Structure_Visualization_Tutorial_48_1.png" src="../_images/docs_Model_Structure_Visualization_Tutorial_48_1.png" />
+<img alt="../_images/docs_Model_Structure_Visualization_Tutorial_48_0.png" src="../_images/docs_Model_Structure_Visualization_Tutorial_48_0.png" />
 </div>
 </div>
 <p>As shown, the static propagation step enables the mode to propagate back to the <code class="docutils literal notranslate"><span class="pre">Store_Energy</span></code> function (causing the <code class="docutils literal notranslate"><span class="pre">no_charge</span></code> fault) in the same timestep it is injected, even though it occurs later in the propagation order.</p>
@@ -1611,8 +1735,16 @@ result_from(mdl, reshist, time, renderer=&#39;matplotlib&#39;, gtype=&#39;bipart
         The time in the history to plot the graph at.
     renderer : &#39;matplotlib&#39; or &#39;graphviz&#39;
         Renderer to use to plot the graph. Default is &#39;matplotlib&#39;
-    gtype : str, optional
-        The type of graph to plot (normal or bipartite). The default is &#39;bipartite&#39;.
+    gtype : str (optional)
+        Type of graph input to show. Default is &#39;bipartite.&#39;
+        - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+        - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+        - &#39;component&#39;   (for graph/model input): plots functions, flows, and componenets as nodes
+        - &#39;typegraph&#39;   (for graph/model input): plots the class structure of the model, functions, and flows
+        - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+        - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+        - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
     MATPLOTLIB OPTIONS:
     ----------
     faultscen : str, optional
@@ -1695,7 +1827,7 @@ result_from(mdl, reshist, time, renderer=&#39;matplotlib&#39;, gtype=&#39;bipart
 <div class="highlight"><pre>
 Help on function animation_from in module fmdtools.resultdisp.graph:
 
-animation_from(mdl, reshist, times=&#39;all&#39;, faultscen=[], gtype=&#39;bipartite&#39;, figsize=(6, 4), showfaultlabels=True, scale=1, show=False, pos=[], colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;])
+animation_from(mdl, reshist, times=&#39;all&#39;, faultscen=[], gtype=&#39;bipartite&#39;, figsize=(6, 4), showfaultlabels=True, scale=1, show=False, pos=[], colors=[&#39;lightgray&#39;, &#39;orange&#39;, &#39;red&#39;], **kwargs)
     Creates an animation of the model graph using results at given times in the results history.
     To view, use %matplotlib qt from spyder or %matplotlib notebook from jupyter
     To save (or do anything useful)h, make sure ffmpeg is installed  https://www.wikihow.com/Install-FFmpeg-on-Windows
@@ -1710,8 +1842,16 @@ animation_from(mdl, reshist, times=&#39;all&#39;, faultscen=[], gtype=&#39;bipar
         The times in the history to plot the graph at. If &#39;all&#39;, plots them all
     faultscen : str, optional
         Name of the fault scenario. The default is [].
-    gtype : str, optional
-        The type of graph to plot (normal or bipartite). The default is &#39;bipartite&#39;.
+    gtype : str (optional)
+        Type of graph input to show. Default is &#39;bipartite.&#39;
+        - &#39;normal&#39;      (for graph/model input): plots functions as nodes and flows as edges
+        - &#39;bipartite&#39;   (for graph/model input): plots functions and flows as nodes
+        - &#39;component&#39;   (for graph/model input): plots functions, flows, and componenets as nodes
+        - &#39;typegraph&#39;   (for graph/model input): plots the class structure of the model, functions, and flows
+        - &#39;actions&#39;     (for function input):    plots the sequence of actions in the function&#39;s Action Sequence Graph
+        - &#39;flows&#39;       (for function input):    plots the action/flow connections in the function&#39;s Action Sequence Graph
+        - &#39;combined&#39;    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
+        NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;renderer&gt; for more details
     showfaultlabels : bool, optional
         Whether or not to list faults on the plot. The default is True.
     scale : float, optional
@@ -1929,42 +2069,42 @@ input[type=range].anim-slider {
 </style>
 
 <div class="animation">
-  <img id="_anim_imgf9a01cbb2b284320811486e64b0fb17b">
+  <img id="_anim_imge29fcfda5d8c4609b44cd9d289083738">
   <div class="anim-controls">
-    <input id="_anim_sliderf9a01cbb2b284320811486e64b0fb17b" type="range" class="anim-slider"
+    <input id="_anim_slidere29fcfda5d8c4609b44cd9d289083738" type="range" class="anim-slider"
            name="points" min="0" max="1" step="1" value="0"
-           oninput="animf9a01cbb2b284320811486e64b0fb17b.set_frame(parseInt(this.value));"></input>
+           oninput="anime29fcfda5d8c4609b44cd9d289083738.set_frame(parseInt(this.value));"></input>
     <div class="anim-buttons">
-      <button title="Decrease speed" aria-label="Decrease speed" onclick="animf9a01cbb2b284320811486e64b0fb17b.slower()">
+      <button title="Decrease speed" aria-label="Decrease speed" onclick="anime29fcfda5d8c4609b44cd9d289083738.slower()">
           <i class="fa fa-minus"></i></button>
-      <button title="First frame" aria-label="First frame" onclick="animf9a01cbb2b284320811486e64b0fb17b.first_frame()">
+      <button title="First frame" aria-label="First frame" onclick="anime29fcfda5d8c4609b44cd9d289083738.first_frame()">
         <i class="fa fa-fast-backward"></i></button>
-      <button title="Previous frame" aria-label="Previous frame" onclick="animf9a01cbb2b284320811486e64b0fb17b.previous_frame()">
+      <button title="Previous frame" aria-label="Previous frame" onclick="anime29fcfda5d8c4609b44cd9d289083738.previous_frame()">
           <i class="fa fa-step-backward"></i></button>
-      <button title="Play backwards" aria-label="Play backwards" onclick="animf9a01cbb2b284320811486e64b0fb17b.reverse_animation()">
+      <button title="Play backwards" aria-label="Play backwards" onclick="anime29fcfda5d8c4609b44cd9d289083738.reverse_animation()">
           <i class="fa fa-play fa-flip-horizontal"></i></button>
-      <button title="Pause" aria-label="Pause" onclick="animf9a01cbb2b284320811486e64b0fb17b.pause_animation()">
+      <button title="Pause" aria-label="Pause" onclick="anime29fcfda5d8c4609b44cd9d289083738.pause_animation()">
           <i class="fa fa-pause"></i></button>
-      <button title="Play" aria-label="Play" onclick="animf9a01cbb2b284320811486e64b0fb17b.play_animation()">
+      <button title="Play" aria-label="Play" onclick="anime29fcfda5d8c4609b44cd9d289083738.play_animation()">
           <i class="fa fa-play"></i></button>
-      <button title="Next frame" aria-label="Next frame" onclick="animf9a01cbb2b284320811486e64b0fb17b.next_frame()">
+      <button title="Next frame" aria-label="Next frame" onclick="anime29fcfda5d8c4609b44cd9d289083738.next_frame()">
           <i class="fa fa-step-forward"></i></button>
-      <button title="Last frame" aria-label="Last frame" onclick="animf9a01cbb2b284320811486e64b0fb17b.last_frame()">
+      <button title="Last frame" aria-label="Last frame" onclick="anime29fcfda5d8c4609b44cd9d289083738.last_frame()">
           <i class="fa fa-fast-forward"></i></button>
-      <button title="Increase speed" aria-label="Increase speed" onclick="animf9a01cbb2b284320811486e64b0fb17b.faster()">
+      <button title="Increase speed" aria-label="Increase speed" onclick="anime29fcfda5d8c4609b44cd9d289083738.faster()">
           <i class="fa fa-plus"></i></button>
     </div>
-    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selectf9a01cbb2b284320811486e64b0fb17b"
+    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selecte29fcfda5d8c4609b44cd9d289083738"
           class="anim-state">
-      <input type="radio" name="state" value="once" id="_anim_radio1_f9a01cbb2b284320811486e64b0fb17b"
+      <input type="radio" name="state" value="once" id="_anim_radio1_e29fcfda5d8c4609b44cd9d289083738"
              >
-      <label for="_anim_radio1_f9a01cbb2b284320811486e64b0fb17b">Once</label>
-      <input type="radio" name="state" value="loop" id="_anim_radio2_f9a01cbb2b284320811486e64b0fb17b"
+      <label for="_anim_radio1_e29fcfda5d8c4609b44cd9d289083738">Once</label>
+      <input type="radio" name="state" value="loop" id="_anim_radio2_e29fcfda5d8c4609b44cd9d289083738"
              checked>
-      <label for="_anim_radio2_f9a01cbb2b284320811486e64b0fb17b">Loop</label>
-      <input type="radio" name="state" value="reflect" id="_anim_radio3_f9a01cbb2b284320811486e64b0fb17b"
+      <label for="_anim_radio2_e29fcfda5d8c4609b44cd9d289083738">Loop</label>
+      <input type="radio" name="state" value="reflect" id="_anim_radio3_e29fcfda5d8c4609b44cd9d289083738"
              >
-      <label for="_anim_radio3_f9a01cbb2b284320811486e64b0fb17b">Reflect</label>
+      <label for="_anim_radio3_e29fcfda5d8c4609b44cd9d289083738">Reflect</label>
     </form>
   </div>
 </div>
@@ -1974,9 +2114,9 @@ input[type=range].anim-slider {
   /* Instantiate the Animation class. */
   /* The IDs given should match those used in the template above. */
   (function() {
-    var img_id = "_anim_imgf9a01cbb2b284320811486e64b0fb17b";
-    var slider_id = "_anim_sliderf9a01cbb2b284320811486e64b0fb17b";
-    var loop_select_id = "_anim_loop_selectf9a01cbb2b284320811486e64b0fb17b";
+    var img_id = "_anim_imge29fcfda5d8c4609b44cd9d289083738";
+    var slider_id = "_anim_slidere29fcfda5d8c4609b44cd9d289083738";
+    var loop_select_id = "_anim_loop_selecte29fcfda5d8c4609b44cd9d289083738";
     var frames = new Array(61);
 
   frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAAEgCAYAAADVKCZpAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
@@ -21555,7 +21695,7 @@ AAAASUVORK5CYII=\
     /* set a timeout to make sure all the above elements are created before
        the object is initialized. */
     setTimeout(function() {
-        animf9a01cbb2b284320811486e64b0fb17b = new Animation(frames, img_id, slider_id, 200.0,
+        anime29fcfda5d8c4609b44cd9d289083738 = new Animation(frames, img_id, slider_id, 200.0,
                                  loop_select_id);
     }, 0);
   })()

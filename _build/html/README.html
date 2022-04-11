@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overview &mdash; fmdtools 1.0.0 documentation</title>
+  <title>Overview &mdash; fmdtools 1.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/fmdtools_ico.ico"/>
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Examples" href="Examples.html" />
-    <link rel="prev" title="fmdtools Version 1.0.0." href="index.html" /> 
+    <link rel="prev" title="fmdtools Version 1.1.0." href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -145,12 +145,14 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="example_pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="example_pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="example_tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="example_tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="example_tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
@@ -231,7 +233,7 @@
 <p><strong>fmdtools</strong> (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based <em>design environment</em> where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.</p>
 <section id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h1>
-<p>The main impetus for the development of the fmdtools project was a lack existing tools to enable early function-based fault simulation for early functional hazard assessment. Researchers thus had to re-implement modelling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools resolves this problem by separating resilience modelling, simulation, and analysis constructs from the model under study, enabling reuse of methodology between case studies. Towards this end, the fmdtools package provides three major pieces of functionality:</p>
+<p>The main impetus for the development of the fmdtools project was a lack existing tools to enable early function-based fault simulation for early functional hazard assessment. Researchers thus had to re-implement modelling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools resolves this problem by separating resilience modelling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. Towards this end, the fmdtools package provides three major pieces of functionality:</p>
 <ol class="arabic simple">
 <li><p>Model definition constructs which enable systematic early specification of the high level structure and behaviors of a system with concise syntax (fmdtools.modeldef).</p></li>
 <li><p>Simulation methods which enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios over a wide range of model types (fmdtools.faultsim).</p></li>
@@ -240,24 +242,25 @@
 <section id="key-features">
 <h2>Key Features<a class="headerlink" href="#key-features" title="Permalink to this headline"></a></h2>
 <p>fmdtools was developed with a number of unique features that differentiate it from existing safety/resilience simulation tools.</p>
-<ul class="simple">
-<li><p>fmdtools uses an object-oriented undirected graph-based model representation which enables arbitrary propagation of flow states through a model graph. As opposed to a <em>procedural</em> <em>directed</em> graph-based model representation (a typical strategy for developing fault models in code in which each function or component is represented by a method, the inputs and outputs are which are connected with connected functions/components in a larger model method), this enables one to:</p>
 <ul>
+<li><p>fmdtools uses an object-oriented undirected graph-based model representation which enables arbitrary propagation of flow states through a model graph. As opposed to a <em>procedural</em> <em>directed</em> graph-based model representation (a typical strategy for developing fault models in code in which each function or component is represented by a method, the inputs and outputs are which are connected with connected functions/components in a larger model method), this enables one to:</p>
+<ul class="simple">
 <li><p>propagate behaviors in multiple directions in a model graph, e.g., closing a valve will not just reduce flow in the downstream pipe but also increase pressure in upstream pipes.</p></li>
 <li><p>define the data structures defining a function/component (e.g. states, faults, timed events) with the behavioral methods in a single logical structure that can be re-used and modified for similar components and methods (that is, a class, instead of a set of unstructured variables and methods)</p></li>
 </ul>
 </li>
 <li><p>fmdtools can represent the system at varying levels of fidelity through the design process so that one can start with a simple model and analysis and make it more detailed as the design is elaborated. A typical process of representing the system (from less to more detail) would involve:</p>
-<ul>
+<ul class="simple">
 <li><p>Creating a network representation of the model functions and flows to visualize the system and identify structurally-important parts of the model’s causal structure</p></li>
 <li><p>Elaborating the flow attributes and function failure logic in a static propagation to simulate the timeless effects of faults in the model</p></li>
 <li><p>Adding dynamic states and behaviors to the functions as well as a simulation times and operational phases in a dynamic propagation model to simulate the dynamic effects of faults simulated during different time-steps</p></li>
 <li><p>Instantiating functions with component architectures to compare the expected resilience and behaviors of each</p></li>
-<li><p>Defining stochastic behavioral and input parameters to simulate and analyze system resilience throughout the operational envelope</p></li>
 </ul>
+<p>o
+- Defining stochastic behavioral and input parameters to simulate and analyze system resilience throughout the operational envelope</p>
 </li>
 <li><p>fmdtools provides convenience methods for quickly visualizing the results of fault simulations with commonly-used Python libraries to enable one to quickly assess:</p>
-<ul>
+<ul class="simple">
 <li><p>effects of faults on functions and flows in the model graph at a given time-step</p></li>
 <li><p>the behavior of system states over time in nominal and faulty scenarios over a range of operational parameters</p></li>
 <li><p>the effect of model input parameters (e.g., ranges, stochastic inputs) on nominal/faulty operations</p></li>
@@ -314,6 +317,7 @@
 <section id="contributors">
 <h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline"></a></h2>
 <p><a class="reference external" href="https://github.com/hulsed">Daniel Hulse</a> : Primary Author and point-of-contact</p>
+<p><a class="reference external" href="https://ti.arc.nasa.gov/profile/irshad/">Lukman Irshad</a> : Action Sequence Graph</p>
 <p><a class="reference external" href="https://github.com/walshh">Hannah Walsh</a> : Network Analysis Codes</p>
 <p><a class="reference external" href="https://ti.arc.nasa.gov/profile/andrade/">Sequoia Andrade</a> : Graph visualization graphviz options, Code review</p>
 </section>
@@ -333,7 +337,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="fmdtools Version 1.0.0." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="fmdtools Version 1.1.0." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
