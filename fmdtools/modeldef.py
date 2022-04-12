@@ -23,6 +23,7 @@ import warnings
 from ordered_set import OrderedSet
 from operator import itemgetter
 from collections.abc import Iterable
+from inspect import signature
 
 # MAJOR CLASSES
 
@@ -1334,10 +1335,17 @@ class Model(object):
             self.fxns[name]=fclass.__new__(fclass)
             self.fxns[name].seed=self._rng.integers(np.iinfo(np.int32).max)
             flows=self.get_flows(flownames)
+            class_init_params = list(signature(fclass).parameters.keys())
+            if 'name'!=class_init_params[0]:
+                raise Exception('Invalid class specification for: '+str(fclass)+'. Make sure to include a name as the second argument of __init__.')
+            if len(class_init_params)<2 or 'flows'!=class_init_params[1]:
+                raise Exception('Invalid class specification for: '+str(fclass)+'. Make sure to include a name as the third argument of __init__.')
             if fparams=='None':
+                if len(class_init_params)>2: raise Exception("fparams required by class "+str(fclass)+" __init__ method but not passed. Found in: "+name)
                 self.fxns[name].__init__(name, flows)
                 self._fxninput[name]={'name':name,'flows': flownames, 'fparams': 'None'}
             else: 
+                if len(class_init_params)<=2: raise Exception("fparams given to class "+str(fclass)+" but __init__ has no params argument. Found in: "+name)
                 self.fxns[name].__init__(name, flows,fparams)
                 self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams}
             for flowname in flownames:
