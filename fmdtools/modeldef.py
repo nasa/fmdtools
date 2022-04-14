@@ -1878,6 +1878,31 @@ class NominalApproach():
                 self.ranges[rangeid]['scenarios'].append(scenname)
                 if replicates>1:    self.ranges[rangeid]['levels'][xvals].append(scenname)
                 else:               self.ranges[rangeid]['levels'][xvals]=scenname
+    def update_factor_seeds(self, rangeid, inputparam, seeds='new'):
+        """
+        Changes/randomizes the seeds along a given factor in a range
+
+        Parameters
+        ----------
+        rangeid : str
+            Name of the range being updated
+        inputparam : str
+            Name of the parameter to vary the seeds over
+        seeds : str/list, optional
+            List of seeds to update to. The default is 'new', which picks them randomly
+        """
+        param_loc = [*self.ranges[rangeid]['inputranges'].keys()].index(inputparam)
+        levels = [i for i in range(*self.ranges[rangeid]['inputranges'][inputparam])]
+        if type(seeds) == list:
+            if len(seeds)!=levels: raise Exception("Seeds (len: "+str(len(seeds))+") should math number of levels for "+inputparam+': '+str(len(levels)))
+        elif seeds=="new":
+            seeds = np.random.SeedSequence.generate_state(np.random.SeedSequence(), len(levels))
+        else: raise Exception("Invalid option for seeds: "+str(seeds))
+        for i, level in enumerate(levels):
+            scens = [scen for lev, scen in self.ranges[rangeid]['levels'].items() if lev[param_loc]==level]
+            for scen in scens:
+                self.scenarios[scen]['properties']['modelparams']['seed'] = seeds[i]
+            
     def change_params(self, rangeid='all', **kwargs):
         """
         Changes a given parameter accross all scenarios. Modifies 'params' (rather than regenerating params from the paramfunc).
