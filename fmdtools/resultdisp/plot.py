@@ -501,7 +501,7 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
     fig = plt.figure(figsize=figsize)
     
     data = [(x, scen['properties']['inputparams'][param1]) for x,scen in nomapp.scenarios.items()\
-            if (scen['properties']['inputparams'].get(param1,False))]
+            if (scen['properties']['inputparams'].get(param1,False)!=False)]
     names = [d[0] for d in data]
     classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
     all_classes = set(classifications)
@@ -558,7 +558,7 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
     fig = plt.figure(figsize=figsize)
     
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in nomapp.scenarios.items()\
-            if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False))]
+            if (scen['properties']['inputparams'].get(param1,False)!=False and scen['properties']['inputparams'].get(param2,False)!=False)]
     names = [d[0] for d in data]
     classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
     all_classes = set(classifications)
@@ -616,7 +616,7 @@ def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="No
     ax = fig.add_subplot(projection='3d')
     
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2], scen['properties']['inputparams'][param3]) for x,scen in nomapp.scenarios.items()\
-            if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False)and scen['properties']['inputparams'].get(param3,False))]
+            if (scen['properties']['inputparams'].get(param1,False)!=False and scen['properties']['inputparams'].get(param2,False)!=False and scen['properties']['inputparams'].get(param3,False)!=False)]
     names = [d[0] for d in data]
     classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
     all_classes = set(classifications)
@@ -914,11 +914,11 @@ def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', fig
     figure = plt.figure(figsize=figsize)
     
     if type(comparison_table.columns[0])==tuple and '' in comparison_table.columns[0]: #bounded table
-        bar = np.array([comparison_table.loc[metric,col[0]][''] for col in comparison_table.columns if col[1]==''])
+        bar = np.array([comparison_table.at[metric,col] for col in comparison_table.columns if col[1]==''])
         labels= [str(i[0]) for i in comparison_table.columns if i[1]=='']
         if error_bars:
-            UB = np.array([comparison_table.loc[metric,col[0]]['UB'] for col in comparison_table.columns if col[1]=='UB'])
-            LB = np.array([comparison_table.loc[metric,col[0]]['LB'] for col in comparison_table.columns if col[1]=='LB'])
+            UB = np.array([comparison_table.at[metric,col] for col in comparison_table.columns if col[1]=='UB'])
+            LB = np.array([comparison_table.at[metric,col] for col in comparison_table.columns if col[1]=='LB'])
             yerr= [bar-LB, UB-bar]
             if maxy=='max': maxy = comparison_table.loc[metric].max()
         else: 
