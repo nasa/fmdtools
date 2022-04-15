@@ -666,6 +666,12 @@ class Block(Common):
     def get_flowtypes(self):
         """Returns the names of the flow types in the model"""
         return {obj.type for name, obj in self.flows.items()}
+    def update_stochastic_states(self):
+        """Updates the defined stochastic states defined to auto-update (see assoc_randstates)."""
+        for statename, generator in self.rngs.items():
+            if self._rng_params[statename][1]:
+                gen_method = getattr(generator, self._rng_params[statename][1])
+                setattr(self, statename, gen_method(*self._rng_params[statename][2]))
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used by default in 
         derived objects when resetting the model. Requires associated flows to be cleared first."""
@@ -982,12 +988,6 @@ class FxnBlock(Block):
                     setattr(self, state, value)
                 num_update+=1
                 if num_update > 1: raise Exception("Exclusive fault mode scenarios present at the same time")
-    def update_stochastic_states(self):
-        """Updates the defined stochastic states defined to auto-update (see assoc_randstates)."""
-        for statename, generator in self.rngs.items():
-            if self._rng_params[statename][1]:
-                gen_method = getattr(generator, self._rng_params[statename][1])
-                setattr(self, statename, gen_method(*self._rng_params[statename][2]))
     def prop_internal(self, faults, time, run_stochastic, proptype):
         """
         Propagates behaviors through the internal Action Sequence Graph
