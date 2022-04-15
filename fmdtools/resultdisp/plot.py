@@ -929,10 +929,8 @@ def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', fig
         if maxy=='max': maxy = max(bar)
     
     ax = figure.add_subplot(1,1,1)
-    
-    plt.grid(axis='y')
+    multibar_helper(ax,comparison_table.columns, maxy)
     ax.set_ylabel(ylabel)
-    ax.set_ylim(top=maxy)
     if title: plt.title(title)
     xs = np.array([ i for i in range(len(bar))])
     if yerr:    plt.bar(xs,bar, tick_label=labels, linewidth=4, yerr=yerr, error_kw={'elinewidth':3})
@@ -989,7 +987,7 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
     for fault in faults:
         n+=1
         ax = figure.add_subplot(rows, columns, n, label=str(n))
-        ax.set_ylim(top=maxy)
+        multibar_helper(ax,comparison_table.index, maxy)
         xs = np.array([ i for i in range(len(comparison_table.index))])
         if has_bounds: 
             nominal_bars = [*comparison_table['nominal','']]
@@ -1016,7 +1014,6 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
             if type(faults)==dict:      plt.title(faults[fault])
             else:                       plt.title(fault)
         elif title:         plt.title(title)
-        plt.grid(axis='y')
         if not (n-1)%columns:    
             ax.set_ylabel(stat)
         else: 
@@ -1031,6 +1028,23 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
     if title and len(faults)>1:               figure.suptitle(title)
     return figure
 
-
-
-
+def multibar_helper(ax, bar_index, maxy):
+    """Shared plotting helper for resilience_factor_comparison and nominal_factor_comparison.
+    Adds seperators to table groups (if any), limits the bounds of the plot, adds a grid, etc."""
+    ax.set_ylim(top=maxy)
+    plt.grid(axis='y')
+    ax.set_xlim(-0.5, len(bar_index)-0.5)
+    if len(bar_index[0])>2: # color top-level categories
+        first_inds = [i[0] for i in bar_index]
+        reverse_inds = [i[0] for i in bar_index]
+        reverse_inds.reverse()
+        first_vals = set(first_inds)
+        first_areas = {i:[first_inds.index(i), len(reverse_inds)-reverse_inds.index(i)] for i in first_vals}
+        for i, area in enumerate(first_areas.values()):
+            if i%2:
+                ax.axvspan(area[0]-0.5, area[1]-0.5, color="ivory", zorder=-2)
+    if len(bar_index[0])>1: # put lines between mid-level categories
+        second_inds = { i[0:2]:pos for pos,i in enumerate(bar_index)}
+        second_inds = [*second_inds.values()]
+        for i in second_inds[:-1]:
+            ax.axvline(i+0.5, color='black')
