@@ -264,7 +264,7 @@ def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid
             endclass_fact = {scen:endclass for scen, endclass in endclasses.items() if scen in scens}
 
             if not percent: nominal_metrics = [nan_to_x(scen[metric], nan_as) for scen in endclass_fact.values()]
-            else:           nominal_metrics = [np.sign(nan_to_x(scen[metric], nan_as)) for scen in endclass_fact.values()]
+            else:           nominal_metrics = [np.sign(float(nan_to_x(scen[metric], nan_as))) for scen in endclass_fact.values()]
             factor_stats= factor_stats + [sum(nominal_metrics)/len(nominal_metrics)]
             if give_ci: 
                 factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(nominal_metrics, **kwargs)
@@ -344,7 +344,7 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
         ec_metrics = overall_diff(endclass_fact, value, nan_as=nan_as, as_ind=percent, no_diff=not difference)
 
         if not percent: nominal_metrics = [nan_to_x(res_scens['nominal'][value], nan_as) for res_scens in endclass_fact.values()]
-        else:           nominal_metrics = [np.sign(float(nan_to_x(res_scens['nominal'][value]), nan_as)) for res_scens in endclass_fact.values()]
+        else:           nominal_metrics = [np.sign(float(nan_to_x(nan_to_x(res_scens['nominal'][value]), nan_as))) for res_scens in endclass_fact.values()]
         factor_stats=[sum(nominal_metrics)/len(nominal_metrics)]
         if give_ci: 
             factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(nominal_metrics, **kwargs)
