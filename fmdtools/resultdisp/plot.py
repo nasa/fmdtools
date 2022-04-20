@@ -1033,18 +1033,20 @@ def multibar_helper(ax, bar_index, maxy):
     Adds seperators to table groups (if any), limits the bounds of the plot, adds a grid, etc."""
     ax.set_ylim(top=maxy)
     plt.grid(axis='y')
+    if 'MultiIndex' in str(type(bar_index)):
+        if bar_index[0][1]=='': bar_index = [ind[0] for ind in bar_index][0:-1:3] # catches error bars
+        if len(bar_index[0])>2: # color top-level categories
+            first_inds = [i[0] for i in bar_index]
+            reverse_inds = [i[0] for i in bar_index]
+            reverse_inds.reverse()
+            first_vals = set(first_inds)
+            first_areas = {i:[first_inds.index(i), len(reverse_inds)-reverse_inds.index(i)] for i in first_vals}
+            for i, area in enumerate(first_areas.values()):
+                if i%2:
+                    ax.axvspan(area[0]-0.5, area[1]-0.5, color="ivory", zorder=-2)
+        if len(bar_index[0])>1: # put lines between mid-level categories
+            second_inds = { i[0:len(bar_index[0])-1]:pos for pos,i in enumerate(bar_index)}
+            second_inds = [*second_inds.values()]
+            for i in second_inds[:-1]:
+                ax.axvline(i+0.5, color='black')
     ax.set_xlim(-0.5, len(bar_index)-0.5)
-    if len(bar_index[0])>2: # color top-level categories
-        first_inds = [i[0] for i in bar_index]
-        reverse_inds = [i[0] for i in bar_index]
-        reverse_inds.reverse()
-        first_vals = set(first_inds)
-        first_areas = {i:[first_inds.index(i), len(reverse_inds)-reverse_inds.index(i)] for i in first_vals}
-        for i, area in enumerate(first_areas.values()):
-            if i%2:
-                ax.axvspan(area[0]-0.5, area[1]-0.5, color="ivory", zorder=-2)
-    if len(bar_index[0])>1: # put lines between mid-level categories
-        second_inds = { i[0:2]:pos for pos,i in enumerate(bar_index)}
-        second_inds = [*second_inds.values()]
-        for i in second_inds[:-1]:
-            ax.axvline(i+0.5, color='black')
