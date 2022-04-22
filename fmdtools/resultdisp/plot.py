@@ -332,6 +332,7 @@ def flatten_hist(hist, newhist = {}, prevname=(), to_plot='all'):
         newname = prevname+tuple([att])
         if type(val)==dict: 
             if type(to_plot)==list and att in to_plot: new_to_plot = 'all'
+            elif type(to_plot)==set and att in to_plot: new_to_plot = 'all'
             elif type(to_plot)==dict and att in to_plot: new_to_plot = to_plot[att]
             elif type(to_plot)==str and att== to_plot: new_to_plot = 'all'
             elif to_plot =='all': new_to_plot='all'
