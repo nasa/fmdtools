@@ -21,6 +21,7 @@ Uses the following methods:
 #Created: November 2019 (Refactored April 2020, Feb 2022)
 
 import matplotlib.pyplot as plt
+plt.rcParams['pdf.fonttype'] = 42 
 import copy
 import warnings
 import numpy as np
