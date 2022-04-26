@@ -22,6 +22,7 @@ Private class:
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
+plt.rcParams['pdf.fonttype'] = 42 
 import matplotlib.animation
 from matplotlib.patches import Patch
 from matplotlib.widgets import Button

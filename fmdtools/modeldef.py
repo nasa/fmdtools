@@ -900,7 +900,7 @@ class FxnBlock(Block):
         pos : dict
             Dictionary of node positions for actions/flows
         """
-        import matplotlib.pyplot as plt
+        import matplotlib.pyplot as plt; plt.rcParams['pdf.fonttype'] = 42 
         if gtype=='combined':      graph = nx.compose(self.flow_graph, self.action_graph)
         elif gtype=='flows':        graph = self.flow_graph
         elif gtype=='actions':   graph = self.action_graph
