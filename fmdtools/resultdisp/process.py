@@ -587,3 +587,72 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
     elif return_anyway: return method(data), method(data), method(data)
     else: raise Exception("All data are the same!")
 
+def save_result(variable, filename, filetype="pickle"):
+    import dill, json, csv
+    if filetype=='pickle':
+        with open(filename, 'wb') as file_handle:
+            dill.dump(variable, file_handle)
+    elif filetype=='csv': # add support for nested dict mdlhist using flatten_hist?
+        with open(filename, 'w') as file_handle:
+            writer = csv.DictWriter(file_handle, fieldnames = [*variable.keys()])
+            writer.writeheader()
+            writer.writerows(variable)
+    elif filetype=='json':
+        with open(filename, 'w', encoding='utf8') as file_handle:
+            strs = json.dumps(variable, indent=4, sort_keys=True, separators=(',', ': '), ensure_ascii=False)
+            file_handle.write(str(strs))
+    else:
+        raise Exception("Invalid File Type")
+def load_result(filename, filetype="pickle"):
+    import dill, json, csv
+    if filetype=='pickle':
+        with open(filename, 'rb') as file_handle:
+            return dill.load(file_handle)
+    elif filetype=='csv': # add support for nested dict mdlhist using flatten_hist?
+        with open(filename, 'r') as file_handle:
+            reader = csv.reader(file_handle, delimeter=",", quotechar='"')
+            return [row for row in reader]
+    elif filetype=='json':
+        with open(filename, 'r', encoding='utf8') as file_handle:
+            return json.load(file_handle)
+    else:
+        raise Exception("Invalid File Type")
+        
+def flatten_hist(hist, newhist = dict(), prevname=(), to_include='all'):
+    """
+    Recursively creates a flattenned history of the given nested model history
+
+    Parameters
+    ----------
+    hist : dict
+        Model history (e.g., from faultsim.propagate.nominal).
+    newhist : dict, optional
+        Flattened Model History (used when called recursively). The default is {}.
+    prevname : tuple, optional
+        Current key of the flattened history (used when called recursively). The default is ().
+    to_include : str/list/dict, optional
+        What attributes to include in the dict. The default is 'all'. Can be of form
+        - list e.g. ['att1', 'att2', 'att3'] to include the given attributes
+        - dict e.g. fxnflowvals {'flow1':['att1', 'att2'], 'fxn1':'all', 'fxn2':['comp1':all, 'comp2':['att1']]}
+        - str e.g. 'att1' for attribute 1 or 'all' for all attributes
+    Returns
+    -------
+    newhist : dict
+        Flattened model history of form: {(fxnflow, ..., attname):array(att)}
+    """
+    for att, val in hist.items():
+        newname = prevname+tuple([att])
+        if type(val)==dict: 
+            if type(to_include)==list and att in to_include: new_to_include = 'all'
+            elif type(to_include)==set and att in to_include: new_to_include = 'all'
+            elif type(to_include)==dict and att in to_include: new_to_include = to_include[att]
+            elif type(to_include)==str and att== to_include: new_to_include = 'all'
+            elif to_include =='all': new_to_include='all'
+            elif att in ['functions', 'flows']: new_to_include = to_include
+            else: new_to_include= False
+            if new_to_include: flatten_hist(val, newhist, newname, new_to_include)
+        elif to_include=='all' or att in to_include: 
+            if len(newname)==1: newhist[newname[0]] = val
+            else:               newhist[newname] = val
+    return newhist
+

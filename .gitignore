@@ -33,3 +33,4 @@ _build/
 _static/
 _templates/
 LICENSE.bak
+*.pkl

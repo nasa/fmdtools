@@ -26,7 +26,7 @@ import copy
 import warnings
 import numpy as np
 from fmdtools.resultdisp.tabulate import costovertime as cost_table
-from fmdtools.resultdisp.process import bootstrap_confidence_interval
+from fmdtools.resultdisp.process import bootstrap_confidence_interval, flatten_hist
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
@@ -131,7 +131,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     for scen in mdlhists:
         mdlhists[scen] = cut_mdlhist(mdlhists[scen], max_ind)
     times = mdlhists[[*mdlhists.keys()][0]]['time']
-    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_plot=fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_include=fxnflowvals) for scen, mdlhist in mdlhists.items()}
     #Sort into comparison groups
     if not comp_groups: 
         if aggregation=='individual':   grouphists = flat_mdlhists
@@ -307,43 +307,6 @@ def plot_err_lines(ax, times, lows, highs, **kwargs):
     """
     ax.plot(times, highs **kwargs)
     ax.plot(times, lows, **kwargs)
-def flatten_hist(hist, newhist = {}, prevname=(), to_plot='all'):
-    """
-    Recursively creates a flattenned history of the given nested model history
-
-    Parameters
-    ----------
-    hist : dict
-        Model history (e.g., from faultsim.propagate.nominal).
-    newhist : dict, optional
-        Flattened Model History (used when called recursively). The default is {}.
-    prevname : tuple, optional
-        Current key of the flattened history (used when called recursively). The default is ().
-    to_plot : str/list/dict, optional
-        What attributes to plot in the dict. The default is 'all'. Can be of form
-        - list e.g. ['att1', 'att2', 'att3'] to plot the given attributes
-        - dict e.g. fxnflowvals {'flow1':['att1', 'att2'], 'fxn1':'all', 'fxn2':['comp1':all, 'comp2':['att1']]}
-        - str e.g. 'att1' for attribute 1 or 'all' for all attributes
-    Returns
-    -------
-    newhist : dict
-        Flattened model history of form: {(fxnflow, ..., attname):array(att)}
-    """
-    for att, val in hist.items():
-        newname = prevname+tuple([att])
-        if type(val)==dict: 
-            if type(to_plot)==list and att in to_plot: new_to_plot = 'all'
-            elif type(to_plot)==set and att in to_plot: new_to_plot = 'all'
-            elif type(to_plot)==dict and att in to_plot: new_to_plot = to_plot[att]
-            elif type(to_plot)==str and att== to_plot: new_to_plot = 'all'
-            elif to_plot =='all': new_to_plot='all'
-            elif att in ['functions', 'flows']: new_to_plot = to_plot
-            else: new_to_plot= False
-            if new_to_plot: flatten_hist(val, newhist, newname, new_to_plot)
-        elif to_plot=='all' or att in to_plot: 
-            if len(newname)==1: newhist[newname[0]] = val
-            else:               newhist[newname] = val
-    return newhist
 def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_padding=None, h_padding=None, title_padding=None):
     """ Helper function for multiplot legends and titles"""
     if len(groupmetrics)>1 and legend_loc!=False:
@@ -462,7 +425,7 @@ def metric_dist_from(mdlhists, times, fxnflowvals='all', **kwargs):
     **kwargs : kwargs
         keyword arguments to plot.metric_dist
     """
-    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_plot=fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_include=fxnflowvals) for scen, mdlhist in mdlhists.items()}
     if type(times) in [int, float]: times=[times]
     if len(times)==1 and kwargs.get('comp_groups', False):
         time_classes = {scen:{metric:val[times[0]] for metric, val in flat_hist.items()} for scen, flat_hist in flat_mdlhists.items()}

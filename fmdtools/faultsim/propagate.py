@@ -1123,34 +1123,5 @@ def init_blockhist(blockname, block, timerange, track='all'):
             else:               blockhist[state] = np.full([len(timerange)], value)
     return blockhist
 
-def save_result(variable, filename, filetype="pickle"):
-    import dill, json, csv
-    if filetype=='pickle':
-        with open(filename, 'wb') as file_handle:
-            dill.dump(variable, file_handle)
-    elif filetype=='csv': # add support for nested dict mdlhist using flatten_hist?
-        with open(filename, 'w') as file_handle:
-            writer = csv.DictWriter(file_handle, fieldnames = [*variable.keys()])
-            writer.writeheader()
-            writer.writerows(variable)
-    elif filetype=='json':
-        with open(filename, 'w', encoding='utf8') as file_handle:
-            strs = json.dumps(variable, indent=4, sort_keys=True, separators=(',', ': '), ensure_ascii=False)
-            file_handle.write(str(strs))
-    else:
-        raise Exception("Invalid File Type")
-def load_result(filename, filetype="pickle"):
-    import dill, json, csv
-    if filetype=='pickle':
-        with open(filename, 'rb') as file_handle:
-            return dill.load(file_handle)
-    elif filetype=='csv': # add support for nested dict mdlhist using flatten_hist?
-        with open(filename, 'r') as file_handle:
-            reader = csv.reader(file_handle, delimeter=",", quotechar='"')
-            return [row for row in reader]
-    elif filetype=='json':
-        with open(filename, 'r', encoding='utf8') as file_handle:
-            return json.load(file_handle)
-    else:
-        raise Exception("Invalid File Type")
+
     
