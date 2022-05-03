@@ -607,7 +607,12 @@ def save_result(variable, filename, filetype="", overwrite=False):
             writer.writerows(zip(*variable.values()))
     elif filename[-5:]=='.json':
         with open(filename, 'w', encoding='utf8') as file_handle:
-            strs = json.dumps(variable, indent=4, sort_keys=True, separators=(',', ': '), ensure_ascii=False)
+            variable = flatten_hist(variable)
+            new_variable = {}
+            for key in variable:
+                if isinstance(variable[key], np.ndarray):
+                    new_variable[str(key)] =  [var.item() for var in variable[key]]
+            strs = json.dumps(new_variable, indent=4, sort_keys=True, separators=(',', ': '), ensure_ascii=False)
             file_handle.write(str(strs))
     else:
         raise Exception("Invalid File Type")
@@ -628,7 +633,13 @@ def load_result(filename, filetype="", renest_dict=True):
         return resultdict
     elif filetype=='json':
         with open(filename, 'r', encoding='utf8') as file_handle:
-            return json.load(file_handle)
+            loadeddict = json.load(file_handle)
+            resultdict = {}
+            for key in loadeddict:
+                newkey = tuple(key.replace("'","").replace("(","").replace(")","").split(", "))
+                resultdict[newkey]=loadeddict[key]
+            if renest_dict: resultdict = nest_flattened_hist(resultdict)
+            return resultdict
     else:
         raise Exception("Invalid File Type")
 def auto_filetype(filename, filetype=""):
