@@ -35,9 +35,9 @@ Also used for graph heatmaps, which use the results history to map results histo
 #Created: November 2019 (Refactored April 2020)
 
 import copy
-import networkx as nx
 import numpy as np
 import pandas as pd
+import os
 from ordered_set import OrderedSet
 from fmdtools.faultsim.propagate import cut_mdlhist
 from scipy.stats import bootstrap
@@ -587,38 +587,60 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
     elif return_anyway: return method(data), method(data), method(data)
     else: raise Exception("All data are the same!")
 
-def save_result(variable, filename, filetype="pickle"):
+
+def save_result(variable, filename, filetype="", overwrite=False):
     import dill, json, csv
+    if os.path.exists(filename):
+        if not overwrite: raise Exception("File already exists: "+filename)
+        else:                   
+            print("File already exists: "+filename+", writing anyway...")
+            os.remove(filename)
+    filetype = auto_filetype(filename, filetype)
     if filetype=='pickle':
         with open(filename, 'wb') as file_handle:
             dill.dump(variable, file_handle)
-    elif filetype=='csv': # add support for nested dict mdlhist using flatten_hist?
-        with open(filename, 'w') as file_handle:
-            writer = csv.DictWriter(file_handle, fieldnames = [*variable.keys()])
-            writer.writeheader()
-            writer.writerows(variable)
-    elif filetype=='json':
+    elif filename[-4:]=='.csv': # add support for nested dict mdlhist using flatten_hist?
+        variable = flatten_hist(variable)
+        with open(filename, 'w', newline='') as file_handle:
+            writer = csv.writer(file_handle)
+            writer.writerow(variable.keys())
+            writer.writerows(zip(*variable.values()))
+    elif filename[-5:]=='.json':
         with open(filename, 'w', encoding='utf8') as file_handle:
             strs = json.dumps(variable, indent=4, sort_keys=True, separators=(',', ': '), ensure_ascii=False)
             file_handle.write(str(strs))
     else:
         raise Exception("Invalid File Type")
-def load_result(filename, filetype="pickle"):
-    import dill, json, csv
+def load_result(filename, filetype="", renest_dict=True):
+    import dill, json, csv, pandas
+    if not os.path.exists(filename): raise Exception("File does not exist: "+filename)
+    filetype = auto_filetype(filename, filetype)
     if filetype=='pickle':
         with open(filename, 'rb') as file_handle:
             return dill.load(file_handle)
     elif filetype=='csv': # add support for nested dict mdlhist using flatten_hist?
-        with open(filename, 'r') as file_handle:
-            reader = csv.reader(file_handle, delimeter=",", quotechar='"')
-            return [row for row in reader]
+        resulttab = pandas.read_csv(filename)
+        resulttab.columns = [tuple(col.replace("'","").replace("(","").replace(")","").split(", ")) for col in resulttab.columns]
+        resultdict = resulttab.to_dict("list")
+        for key in resultdict:
+            resultdict[key] = np.array(resultdict[key])
+        if renest_dict: resultdict = nest_flattened_hist(resultdict)
+        return resultdict
     elif filetype=='json':
         with open(filename, 'r', encoding='utf8') as file_handle:
             return json.load(file_handle)
     else:
         raise Exception("Invalid File Type")
+def auto_filetype(filename, filetype=""):
+    if not filetype:
+        if '.' not in filename: raise Exception("No file extension")
+        if filename[-4:]=='.pkl':       filetype="pickle"
+        elif filename[-4:]=='.csv':     filetype="csv"     
+        elif filename[-5:]=='.json':    filetype="json"
+        else: raise Exception("Invalid File Type in: "+filename+", ensure extension is pkl, csv, or json ")
+    return filetype
         
-def flatten_hist(hist, newhist = dict(), prevname=(), to_include='all'):
+def flatten_hist(hist, newhist = False, prevname=(), to_include='all'):
     """
     Recursively creates a flattenned history of the given nested model history
 
@@ -627,7 +649,7 @@ def flatten_hist(hist, newhist = dict(), prevname=(), to_include='all'):
     hist : dict
         Model history (e.g., from faultsim.propagate.nominal).
     newhist : dict, optional
-        Flattened Model History (used when called recursively). The default is {}.
+        Flattened Model History (used when called recursively). The default is False.
     prevname : tuple, optional
         Current key of the flattened history (used when called recursively). The default is ().
     to_include : str/list/dict, optional
@@ -640,6 +662,7 @@ def flatten_hist(hist, newhist = dict(), prevname=(), to_include='all'):
     newhist : dict
         Flattened model history of form: {(fxnflow, ..., attname):array(att)}
     """
+    if newhist==False: newhist = dict()
     for att, val in hist.items():
         newname = prevname+tuple([att])
         if type(val)==dict: 
@@ -655,4 +678,15 @@ def flatten_hist(hist, newhist = dict(), prevname=(), to_include='all'):
             if len(newname)==1: newhist[newname[0]] = val
             else:               newhist[newname] = val
     return newhist
+
+def nest_flattened_hist(hists, prefix = ()):
+    newhist = {}
+    key_options = set([h[0] for h in hists.keys()])
+    for key in key_options:
+        if (key,) in hists:     newhist[key] = hists[(key,)]
+        else:
+            subdict = {histkey[1:]:val for histkey, val in hists.items() if key==histkey[0]}                       
+            newhist[key] = nest_flattened_hist(subdict)
+    return newhist
+            
 
