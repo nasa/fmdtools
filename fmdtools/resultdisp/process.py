@@ -38,6 +38,7 @@ import copy
 import numpy as np
 import pandas as pd
 import os
+import codecs
 from ordered_set import OrderedSet
 from fmdtools.faultsim.propagate import cut_mdlhist
 from scipy.stats import bootstrap
@@ -587,24 +588,33 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
     elif return_anyway: return method(data), method(data), method(data)
     else: raise Exception("All data are the same!")
 
-
-def save_result(variable, filename, filetype="", overwrite=False):
+def save_result(variable, filename, filetype="", overwrite=False, result_id=''):
     import dill, json, csv
     if os.path.exists(filename):
         if not overwrite: raise Exception("File already exists: "+filename)
         else:                   
             print("File already exists: "+filename+", writing anyway...")
             os.remove(filename)
+    if "/" in filename:
+        last_split_index = filename.rfind("/")
+        foldername = filename[:last_split_index]
+        if not os.path.exists(foldername): os.makedirs(foldername)
+    
     filetype = auto_filetype(filename, filetype)
     if filetype=='pickle':
         with open(filename, 'wb') as file_handle:
+            if result_id: variable = {result_id:variable}
             dill.dump(variable, file_handle)
     elif filename[-4:]=='.csv': # add support for nested dict mdlhist using flatten_hist?
         variable = flatten_hist(variable)
         with open(filename, 'w', newline='') as file_handle:
             writer = csv.writer(file_handle)
+            if result_id: writer.writerow([result_id])
             writer.writerow(variable.keys())
-            writer.writerows(zip(*variable.values()))
+            if isinstance([*variable.values()][0], np.ndarray):
+                writer.writerows(zip(*variable.values()))
+            else:
+                writer.writerow([*variable.values()])
     elif filename[-5:]=='.json':
         with open(filename, 'w', encoding='utf8') as file_handle:
             variable = flatten_hist(variable)
@@ -612,11 +622,21 @@ def save_result(variable, filename, filetype="", overwrite=False):
             for key in variable:
                 if isinstance(variable[key], np.ndarray):
                     new_variable[str(key)] =  [var.item() for var in variable[key]]
+                else:
+                    new_variable[str(key)] =  variable[key]
+            if result_id: new_variable = {result_id:new_variable}
             strs = json.dumps(new_variable, indent=4, sort_keys=True, separators=(',', ': '), ensure_ascii=False)
             file_handle.write(str(strs))
     else:
         raise Exception("Invalid File Type")
-def load_result(filename, filetype="", renest_dict=True):
+def scenname_to_hexname(scenname):
+    hex_rep = codecs.encode(scenname.encode(), "hex_codec")
+    return hex_rep.decode("utf-8")
+def hexname_to_scenname(hexname):
+    byte_rep = codecs.decode(hexname, "hex_codec")
+    return byte_rep.decode("utf-8")
+        
+def load_result(filename, filetype="", renest_dict=True, indiv_csv=False):
     import dill, json, csv, pandas
     if not os.path.exists(filename): raise Exception("File does not exist: "+filename)
     filetype = auto_filetype(filename, filetype)
@@ -624,12 +644,18 @@ def load_result(filename, filetype="", renest_dict=True):
         with open(filename, 'rb') as file_handle:
             return dill.load(file_handle)
     elif filetype=='csv': # add support for nested dict mdlhist using flatten_hist?
-        resulttab = pandas.read_csv(filename)
+        if indiv_csv:   resulttab = pandas.read_csv(filename, skiprows=1)
+        else:           resulttab = pandas.read_csv(filename)
         resulttab.columns = [tuple(col.replace("'","").replace("(","").replace(")","").split(", ")) for col in resulttab.columns]
         resultdict = resulttab.to_dict("list")
         for key in resultdict:
-            resultdict[key] = np.array(resultdict[key])
+            if len(resultdict[key])==1 and isinstance(resultdict[key], list):
+                resultdict[key] = resultdict[key][0]
+            else: resultdict[key] = np.array(resultdict[key])             
         if renest_dict: resultdict = nest_flattened_hist(resultdict)
+        if indiv_csv: 
+            scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
+            resultdict = {scenname: resultdict}
         return resultdict
     elif filetype=='json':
         with open(filename, 'r', encoding='utf8') as file_handle:
@@ -642,6 +668,18 @@ def load_result(filename, filetype="", renest_dict=True):
             return resultdict
     else:
         raise Exception("Invalid File Type")
+def load_results(folder, filetype, renest_dict=True):
+    files = os.listdir(folder)
+    files_toread = []
+    for file in files:
+        read_filetype = auto_filetype(file)
+        if read_filetype==filetype:
+            files_toread.append(file)
+    resultdict = {}
+    for filename in files_toread:
+        resultdict.update(load_result(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv_csv=True))
+    return resultdict
+
 def auto_filetype(filename, filetype=""):
     if not filetype:
         if '.' not in filename: raise Exception("No file extension")
@@ -650,6 +688,11 @@ def auto_filetype(filename, filetype=""):
         elif filename[-5:]=='.json':    filetype="json"
         else: raise Exception("Invalid File Type in: "+filename+", ensure extension is pkl, csv, or json ")
     return filetype
+def create_indiv_filename(filename, indiv_id, splitchar='_'):
+    filename_parts = filename.split(".")
+    filename_parts.insert(1,'.')
+    filename_parts.insert(1,splitchar+indiv_id)   
+    return "".join(filename_parts)
         
 def flatten_hist(hist, newhist = False, prevname=(), to_include='all'):
     """

@@ -20,6 +20,15 @@ mdl = Pump()
 # nominal, single-fault, mult-fault
 endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
 
+if os.path.exists("test_singlefaults.pkl"): os.remove("test_singlefaults.pkl")
+endclasses, mdlhists = propagate.single_faults(mdl, save_args={'mdlhist':{'filename':'test_singlefaults.pkl'}})
+mdlhists_loaded = rd.process.load_result('test_singlefaults.pkl')
+
+endclasses, mdlhists = propagate.single_faults(mdl, save_args={'endclasses':{'filename':'folder/test_singlefaults_1.csv', 'overwrite':True}, 'indiv':True})
+
+endclasses_loaded = rd.process.load_results('folder/test_singlefaults_1', 'csv')
+
+#mdlhists_loaded = rd.process.load_result('test_singlefaults.pkl')
 
 # pickle, CSV, json
 mdlhist_flattened = rd.process.flatten_hist(mdlhist)
