@@ -12,9 +12,9 @@ Uses the following methods:
     - :func:`nominal_factor_comparison`:    gives a bar plot of nominal simulation statistics over given factors
     - :func:`resilience_factor_comparison`: gives a bar plot of fault simulation statistics over given factors
     - :func:`phases`:          plots the phases of operation that the model progresses through.
-    - :func:`samplecost`:      plots the costs for a single fault sampled by a SampleApproach over time with rates
-    - :func:`samplecosts`:     plots the costs for a set of faults sampled by a SampleApproach over time with rates on separate plots
-    - :func:`costovertime`:    plots the total cost/explected cost of a set of faults sampled by a SampleApproach over time
+    - :func:`samplemetric`:      plots a metric for a single fault sampled by a SampleApproach over time with rates
+    - :func:`samplemetrics`:     plots a metric for a set of faults sampled by a SampleApproach over time with rates on separate plots
+    - :func:`metricovertime`:    plots the total metric/explected metric of a set of faults sampled by a SampleApproach over time
 """
 #File Name: resultdisp/plot.py
 #Author: Daniel Hulse
@@ -25,7 +25,7 @@ plt.rcParams['pdf.fonttype'] = 42
 import copy
 import warnings
 import numpy as np
-from fmdtools.resultdisp.tabulate import costovertime as cost_table
+from fmdtools.resultdisp.tabulate import metricovertime as metric_table
 from fmdtools.resultdisp.process import bootstrap_confidence_interval, flatten_hist
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
@@ -735,9 +735,9 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'b
     else:           return figs
              
 
-def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
+def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cost'):
     """
-    Plots the sample cost and rate of a given fault over the injection times defined in the app sampleapproach
+    Plots the sample metric and rate of a given fault over the injection times defined in the app sampleapproach
     
     (note: not currently compatible with joint fault modes)
     
@@ -746,9 +746,11 @@ def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     app : sampleapproach
         Sample approach defining the underlying samples to take and probability model of the list of scenarios.
     endclasses : dict
-        A dict with the end classification of each fault (costs, etc)
+        A dict with the end classification of each fault (metrics, etc)
     fxnmode : tuple
         tuple (or tuple of tuples) with structure ('function name', 'mode name') defining the fault mode
+    metric : str
+        Metric to plot. The default is 'cost'
     samptype : str, optional
         The type of sample approach used:
             - 'std' for a single point for each interval
@@ -759,7 +761,7 @@ def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     associated_scens=[]
     for phasetup in app.mode_phase_map[fxnmode]:
         associated_scens = associated_scens + app.scenids.get((fxnmode, phasetup), [])
-    costs = np.array([endclasses[scen]['cost'] for scen in associated_scens])
+    costs = np.array([endclasses[scen][metric] for scen in associated_scens])
     times = np.array([time  for phase, timemodes in app.sampletimes.items() if timemodes for time in timemodes if fxnmode in timemodes.get(time)] )  
     times = sorted(times)
     rates = np.array(list(app.rates_timeless[fxnmode].values()))
@@ -793,21 +795,21 @@ def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     axes[0].set_xlim(phasetimes_start[0], phasetimes_end[-1])
     axes[0].set_ylim(0, 1.2*np.max(costs))
     if samptype=='fullint':
-        axes[0].plot(times, costs, label="cost")
+        axes[0].plot(times, costs, label=metric)
     else:
         if samptype=='quadrature' or samptype=='pruned piecewise-linear': 
             sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for (phasetype, phase), timeweights in app.weights[fxnmode].items() if timeweights for time, weight in timeweights.items() if time in times])
-            axes[0].scatter(times, costs,s=sizes, label="cost", alpha=0.5)
-        axes[0].stem(times, costs, label="cost", markerfmt=",", use_line_collection=True)
+            axes[0].scatter(times, costs,s=sizes, label=metric, alpha=0.5)
+        axes[0].stem(times, costs, label=metric, markerfmt=",", use_line_collection=True)
     
     axes[0].set_ylabel("Cost")
     axes[0].grid()
     if title: axes[0].set_title(title)
-    elif type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+str(fxnmode)+" over time")
-    else:                       axes[0].set_title("Cost function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
+    elif type(fxnmode[0])==tuple: axes[0].set_title(metric+" function of "+str(fxnmode)+" over time")
+    else:                       axes[0].set_title(metric+" function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
     #plt.subplot_adjust()
     plt.tight_layout()
-def samplecosts(app, endclasses, joint=False, title=""):
+def samplemetrics(app, endclasses, joint=False, title="", metric='cost'):
     """
     Plots the costs and rates of a set of faults injected over time according to the approach app
 
@@ -819,6 +821,10 @@ def samplecosts(app, endclasses, joint=False, title=""):
         A dict of results for each of the scenarios.
     joint : bool, optional
         Whether to include joint fault scenarios. The default is False.
+    title : str
+        Optional title.
+    metric : str
+        Metric to plot. The default is 'cost'
     """
     for fxnmode in app.list_modes(joint):
         if any([True for (fm, phase), val in app.sampparams.items() if val['samp']=='fullint' and fm==fxnmode]):
@@ -827,9 +833,9 @@ def samplecosts(app, endclasses, joint=False, title=""):
             st='quadrature'
         else: 
             st='std'
-        samplecost(app, endclasses, fxnmode, samptype=st, title="")
+        samplemetric(app, endclasses, fxnmode, samptype=st, title="")
 
-def costovertime(endclasses, app, costtype='expected cost'):
+def metricovertime(endclasses, app, metric='cost', metrictype='expected cost'):
     """
     Plots the total cost or total expected cost of faults over time.
 
@@ -839,15 +845,21 @@ def costovertime(endclasses, app, costtype='expected cost'):
         dict with rate,cost, and expected cost for each injected scenario (e.g. from run_approach())
     app : sampleapproach
         sample approach used to generate the list of scenarios
-    costtype : str, optional
-        type of cost to plot ('cost', 'expected cost' or 'rate'). The default is 'expected cost'.
+    metric : str
+        metric to plot ovre time. Default is 'cost'
+    metrictype : str, optional
+        type of cost to plot (e.g,'cost', 'expected cost' or 'rate'). The default is 'expected cost'.
+    Returns
+    -------
+    figure: matplotlib figure
     """
-    costovertime = cost_table(endclasses, app)
-    plt.plot(list(costovertime.index), costovertime[costtype])
-    plt.title('Total '+costtype+' of all faults over time.')
-    plt.ylabel(costtype)
+    costovertime = metric_table(endclasses, app, metric=metric)
+    plt.plot(list(costovertime.index), costovertime[metrictype])
+    plt.title('Total '+metrictype+' of all faults over time.')
+    plt.ylabel(metrictype)
     plt.xlabel("Time ("+str(app.units)+")")
     plt.grid()
+    return plt.gcf()
 
 def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', figsize=(6,4), title='', maxy='max', xlabel=True, error_bars=False):
     """

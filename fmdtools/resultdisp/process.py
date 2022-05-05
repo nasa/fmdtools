@@ -2,6 +2,11 @@
 Description: Processes model results for visualization
 
 Uses methods:
+    - :func:`save_result`:              Saves a given result variable (endclasses or mdlhists) to a file filename. 
+    - :func:`load_result`:              Loads a given (endclasses or mdlhists) results dictionary from a (pickle/csv/json) file.
+    - :func:`load_results`:             Loads endclass/mdlhist results from a given folder 
+    - :func:`flatten_hist`:             Recursively creates a flattenned (single-level dictionary) history of the given nested model history
+    - :func:`renest_flattened_hist:     Re-nests a flattened history.  
     - :func:`hists`:                    Processes a model histories for each scenario into results histories by comparing the states over time in each scenario with the states in the nominal scenario.
     - :func:`hist`:                     Compares model history with the nominal model history over time to make a history of degradation.
         - :func:`fxnhist`:              Compares the history of function states in mdlhist over time.
@@ -823,7 +828,7 @@ def flatten_hist(hist, newhist = False, prevname=(), to_include='all'):
 
 def nest_flattened_hist(hists, prefix = ()):
     """
-    Re-nests a flattened history    
+    Re-nests a flattened history.   
 
     Parameters
     ----------

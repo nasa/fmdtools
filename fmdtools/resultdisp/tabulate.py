@@ -10,7 +10,7 @@ Uses methods:
     - :meth:`degfxns`:        Makes a table showing which functions are degraded over time (0 for degraded, 1 for nominal)
     - :meth:`deghist`:        Makes a table of all funcitons and flows that are degraded over time. If withstats=True, the total # of each type degraded is provided in the last columns
     - :meth:`heatmaps`:       Makes a table of a heatmap dictionary
-    - :meth:`costovertime`:   Makes a table of the total cost, rate, and expected cost of all faults over time
+    - :meth:`metricovertime`: Makes a table of the total metric, rate, and expected metric of all faults over time
     - :meth:`samptime`:       Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)
     - :meth:`summary:`        Makes a table of a summary dictionary from a given model run
     - :meth:`result`:         Makes a table of results (degraded functions/flows, cost, rate, expected cost) of a single run
@@ -121,28 +121,30 @@ def heatmaps(heatmaps):
     """Makes a table of a heatmap dictionary"""
     table = pd.DataFrame(heatmaps)
     return table.transpose()
-def costovertime(endclasses, app):
+def metricovertime(endclasses, app, metric='cost'):
     """
-    Makes a table of the total cost, rate, and expected cost of all faults over time
+    Makes a table of the total metric, rate, and expected metric of all faults over time
 
     Parameters
     ----------
     endclasses : dict
-        dict with rate,cost, and expected cost for each injected scenario
+        dict with rate, metric, and expected metric values for each injected scenario
     app : sampleapproach
         sample approach used to generate the list of scenarios
-
+    metric : str
+        metric from dict to tabulate over time. Default is 'cost'
     Returns
     -------
-    costovertime : dataframe
-        pandas dataframe with the total cost, rate, and expected cost for the set of scenarios
+    met_overtime : dataframe
+        pandas dataframe with the total metric, rate, and expected metric for the set of scenarios
     """
-    costovertime={'cost':{time:0.0 for time in app.times}, 'rate':{time:0.0 for time in app.times}, 'expected cost':{time:0.0 for time in app.times}}
+    expected_metric = "expected "+metric
+    met_overtime={metric:{time:0.0 for time in app.times}, 'rate':{time:0.0 for time in app.times}, expected_metric:{time:0.0 for time in app.times}}
     for scen in app.scenlist:
-        costovertime['cost'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['cost']
-        costovertime['rate'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['rate']
-        costovertime['expected cost'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['expected cost'] 
-    return pd.DataFrame.from_dict(costovertime)
+        met_overtime[metric][scen['properties']['time']]+=endclasses[scen['properties']['name']][metric]
+        met_overtime['rate'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['rate']
+        met_overtime[expected_metric][scen['properties']['time']]+=endclasses[scen['properties']['name']][expected_metric] 
+    return pd.DataFrame.from_dict(met_overtime)
 def samptime(sampletimes):
     """Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)"""
     table = pd.DataFrame()
@@ -153,7 +155,7 @@ def summary(summary):
     """Makes a table of a summary dictionary from a given model run"""
     return pd.DataFrame.from_dict(summary, orient = 'index')    
 def result(endresults, summary):
-    """Makes a table of results (degraded functions/flows, cost, rate, expected cost) of a single run"""
+    """Makes a table of results (degraded functions/flows, classification) of a single run"""
     table = pd.DataFrame(endresults['classification'], index=[0])
     table['degraded functions'] = [summary['degraded functions']]
     table['degraded flows'] = [summary['degraded flows']]
@@ -431,10 +433,10 @@ def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[],
 
 ##FMEA-like tables
 def simplefmea(endclasses):
-    """Makes a simple fmea (rate, cost, expected cost) of the endclasses of a list of fault scenarios run"""
+    """Makes a simple fmea (rate, classification) of the endclasses of a list of fault scenarios run"""
     table = pd.DataFrame(endclasses)
     return table.transpose()
-def phasefmea(endclasses, app):
+def phasefmea(endclasses, app, metric='cost'):
     """
     Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
 
@@ -444,21 +446,22 @@ def phasefmea(endclasses, app):
         dict of endclasses of the simulation runs
     app : sampleapproach
         sample approach used for the underlying probability model of the set of scenarios run
-
+    metric : str
+        metric to query. The default is 'cost'
     Returns
     -------
     table: dataframe
-        table with cost, rate, and expected cost of each fault in each phase
+        table with metric, rate, and expected metric of each fault in each phase
     """
     fmeadict = dict.fromkeys(app.scenids.keys())
     for modephase, ids in app.scenids.items():
         rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
-        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
-        fmeadict[modephase] = {'rate':rate, 'cost':cost, 'expected cost': expcost}
+        cost= sum(np.array([endclasses[scenid][metric] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
+        expcost= sum([endclasses[scenid]['expected '+metric] for scenid in ids])
+        fmeadict[modephase] = {'rate':rate, metric:cost, 'expected '+metric: expcost}
     table=pd.DataFrame(fmeadict)
     return table.transpose()    
-def summfmea(endclasses, app):
+def summfmea(endclasses, app, metric='cost'):
     """
     Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
 
@@ -468,23 +471,24 @@ def summfmea(endclasses, app):
         dict of endclasses of the simulation runs
     app : sampleapproach
         sample approach used for the underlying probability model of the set of scenarios run
-
+    metric : str
+        metric to query. The default is 'cost'
     Returns
     -------
     table: dataframe
-        table with cost, rate, and expected cost of each fault (over all phases)
+        table with metric, rate, and expected cost of each fault (over all phases)
     """
     fmeadict = dict()
     for modephase, ids in app.scenids.items():
         rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
-        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
+        cost= sum(np.array([endclasses[scenid][metric] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
+        expcost= sum([endclasses[scenid]['expected '+metric] for scenid in ids])
         if getattr(app, 'jointmodes', []):  index = str(modephase[0])
         else:                               index = modephase[0]
-        if not fmeadict.get(modephase[0]): fmeadict[index]= {'rate': 0.0, 'cost':0.0, 'expected cost':0.0}
+        if not fmeadict.get(modephase[0]): fmeadict[index]= {'rate': 0.0, metric:0.0, 'expected '+metric:0.0}
         fmeadict[index]['rate'] += rate
-        fmeadict[index]['cost'] += cost/len([1.0 for (fxnmode,phase) in app.scenids if fxnmode==modephase[0]])
-        fmeadict[index]['expected cost'] += expcost
+        fmeadict[index][metric] += cost/len([1.0 for (fxnmode,phase) in app.scenids if fxnmode==modephase[0]])
+        fmeadict[index]['expected '+metric] += expcost
     table=pd.DataFrame(fmeadict)
     return table.transpose()
 def fullfmea(endclasses, summaries):
