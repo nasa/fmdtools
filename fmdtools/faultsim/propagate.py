@@ -488,6 +488,7 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
     else:
         nomhist, c_mdl, t_end_nom = prop_one_scen(mdl, nomscen, track=track, track_times=track_times, run_stochastic=run_stochastic)
     nomresgraph = mdl.return_stategraph()
+    endclass_nominal=mdl.find_classification(construct_nomscen(mdl), {'nominal': nomhist, 'faulty':nomhist})
     endfaults, endfaultprops = mdl.return_faultmodes()
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     mdl.reset()
@@ -505,6 +506,8 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
             if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']], t_end = exec_scen(c_mdl[scen['properties']['time']], scen, nomresgraph,nomhist, track=track, staged=staged, track_times=track_times, run_stochastic=run_stochastic, save_args=save_args, indiv_id=str(i))
             else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']], t_end = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged, track_times = track_times, run_stochastic=run_stochastic, save_args=save_args, indiv_id=str(i))
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
+    endclasses['nominal'] = endclass_nominal
+    save_helper(save_args, endclasses['nominal'], mdlhists['nominal'], indiv_id=str(i+1),result_id='nominal')
     save_helper(save_args, endclasses, mdlhists)
     return endclasses, mdlhists
 
@@ -654,7 +657,7 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
         
         app = SampleApproach(mdl,**app_args)
         nested_endclasses[scenname], nested_mdlhists[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic)
-        save_helper(save_args, nested_endclasses, nested_mdlhists, indiv_id=scenname)
+        save_helper(save_args, nested_endclasses[scenname], nested_mdlhists[scenname], indiv_id=scenname, result_id=scenname)
     save_helper(save_args, nested_endclasses, nested_mdlhists)
     return nested_endclasses, nested_mdlhists
 
