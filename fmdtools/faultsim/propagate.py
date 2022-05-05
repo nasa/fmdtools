@@ -23,6 +23,9 @@ Private Methods:
         - :func:`init_flowhist()`:  Initializes the flow history flowhist of the model mdl over the time range timerange
         - :func:`init_fxnhist()`:   Initializes the function state history fxnhist of the model mdl over the time range timerange
         - :func:`init_blockhist()`: Initializes the block state history fxnhist of the model mdl over the time range timerange
+    - :func:`cut_mdlhist()`:        Cuts a given model history only to the time simulated
+        - :func:`cut_hist()`:       Recursively cuts the given individual (flow or function) history at ind.
+    - :func:`save_helper()`:        Helper function for inline results saving.
 """
 #File name: propagate.py
 #Author: Daniel Hulse
@@ -100,7 +103,7 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True
 
 def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
     """
-    Helper function for inline saving in single-fault scenarios.
+    Helper function for inline results saving.
 
     Parameters
     ----------
