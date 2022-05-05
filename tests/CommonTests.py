@@ -56,6 +56,7 @@ class CommonTests():
                         propagate.propagate(mdl_copy, faultscen, t)
                         self.check_diff_model(mdl, mdl_copy)
     def check_same_model(self, mdl, mdl2):
+        """Checks if models mdl and mdl2 have the same attributes"""
         for flname, fl in mdl.flows.items():
             for state in fl._states:
                 self.assertEqual(getattr(fl, state), getattr(mdl2.flows[flname], state))
@@ -64,6 +65,7 @@ class CommonTests():
                 self.assertEqual(getattr(fxn, state), getattr(mdl2.fxns[fxnname], state))
             self.assertEqual(fxn.faults, mdl2.fxns[fxnname].faults)
     def check_diff_model(self, mdl, mdl2):
+        """Checks if models mdl and mdl2 have different attributes"""
         same=1
         for flname, fl in mdl.flows.items():
             for state in fl._states:
@@ -79,6 +81,20 @@ class CommonTests():
             a=1
         self.assertEqual(same,0)
     def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):
+        """
+        Checks if the results from the mdl are the same when saved from a given one-run propagate method as 
+        the direct output.
+
+        Parameters
+        ----------
+        mdl : Model
+        mfile : name of file to save mdlhists in
+        ecfile : name of file to save endclasses in
+        runtype : propagate method to test ('nominal', 'one_fault', 'mult_fault')
+        faultscen : dict/tuple, optional
+            - for one_fault, the (functionname, faultname, faulttime)
+            - for mult_fault, the faultseq dict input
+        """
         if os.path.exists(mfile):   os.remove(mfile)
         if os.path.exists(ecfile):  os.remove(ecfile)
         check_link=False
@@ -103,6 +119,7 @@ class CommonTests():
 
         os.remove(mfile), os.remove(ecfile)
     def check_same_file(self, result, resfile, check_link=False):
+        """ Checks if the mdlhist/endclass result is the same as the result loaded from resfile """
         result_flattened = proc.flatten_hist(result)
         result_saved = proc.load_result(resfile)
         result_saved_flattened = proc.flatten_hist(result_saved)
@@ -112,6 +129,7 @@ class CommonTests():
             result_flattened['time'][0]=100 #check to see that they aren't linked somehow
             self.assertNotEqual(result_flattened['time'][0], result_saved_flattened['time'][0])
     def compare_results(self,result_true, result_check):
+        """Checks if two flattened endclass/mdlhist results dictionaries are the same"""
         for hist_key in result_true: # test to see that all values of the arrays in the hist are the same
             if  not isinstance(result_true[hist_key], (np.ndarray,list)):
                 if isinstance(result_true[hist_key], (float, np.number)) and not np.isnan(result_true[hist_key]) :   
@@ -123,6 +141,9 @@ class CommonTests():
             else:
                 np.testing.assert_array_equal(result_true[hist_key],result_check[hist_key])
     def check_same_files(self, result, resfolder, filetype, check_link=False):
+        """Checks to see if the given endclass/mdlhist result is the same as the results
+        loaded from resfolder. filetype is the type of file in resfolder, while check_link
+        checks if modifying one modifies the other (set to False--usually not applicable)"""
         result_flattened = proc.flatten_hist(result)
         result_saved = proc.load_results(resfolder, filetype)
         result_saved_flattened = proc.flatten_hist(result_saved)
@@ -132,6 +153,18 @@ class CommonTests():
             result_flattened['time'][0]=100 #check to see that they aren't linked somehow
             self.assertNotEqual(result_flattened['time'][0], result_saved_flattened['time'][0])
     def check_save_load_approach(self,mdl, mfile, ecfile, runtype, app={}, **kwargs):
+        """
+        Checks to see if saved results are the same as the direct outputs of a given propagate method
+
+        Parameters
+        ----------
+        mdl : Model
+        mfile : name of file to save mdlhists in
+        ecfile : name of file to save endclasses in
+        runtype : propagate method to test ('single_faults', 'nominal_approach', 'nested_approach', 'approach')
+        app : nominal/sampleapproach to send to the method (if any)
+        **kwargs : kwargs to send to the propagate method (if any)
+        """
         if os.path.exists(mfile):   os.remove(mfile)
         if os.path.exists(ecfile):  os.remove(ecfile)
         
@@ -156,6 +189,19 @@ class CommonTests():
         self.check_same_file(endclasses, ecfile)
         os.remove(mfile), os.remove(ecfile)
     def check_save_load_approach_indiv(self, mdl, mfolder, ecfolder, ext, runtype, app={}, **kwargs):
+        """
+        Checks to see if saved results are the same as the direct outputs of a given propagate method when using individual saving option
+
+        Parameters
+        ----------
+        mdl : Model
+        mfolder : name of folder to save mdlhists in
+        ecfolder : name of folder to save endclasses in
+        ext : file extension ('pkl','csv','json')
+        runtype : propagate method to test ('single_faults', 'nominal_approach', 'nested_approach', 'approach')
+        app : nominal/sampleapproach to send to the method (if any)
+        **kwargs : kwargs to send to the propagate method (if any)
+        """
         if os.path.exists(mfolder):   shutil.rmtree(mfolder)
         if os.path.exists(ecfolder):  shutil.rmtree(ecfolder)
         
