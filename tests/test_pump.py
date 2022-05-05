@@ -100,6 +100,9 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_pickleability(self):
         unpickleable = check_pickleability(Pump(), verbose=False)
         self.assertTrue(unpickleable==[])
+    def test_save_load_nominal(self):
+        for extension in [".pkl",".csv",".json"]:
+            self.check_save_load_nominal(self.default_mdl, "pump_mdlhists"+extension, "pump_endclasses"+extension)
         
 def exp_cost_quant(approach, mdl):
     """ Calculates the expected cost of faults over a given sampling approach 

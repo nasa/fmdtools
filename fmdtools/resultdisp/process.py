@@ -629,6 +629,7 @@ def save_result(variable, filename, filetype="", overwrite=False, result_id=''):
             file_handle.write(str(strs))
     else:
         raise Exception("Invalid File Type")
+    file_handle.close()
 def scenname_to_hexname(scenname):
     hex_rep = codecs.encode(scenname.encode(), "hex_codec")
     return hex_rep.decode("utf-8")
@@ -636,38 +637,63 @@ def hexname_to_scenname(hexname):
     byte_rep = codecs.decode(hexname, "hex_codec")
     return byte_rep.decode("utf-8")
         
-def load_result(filename, filetype="", renest_dict=True, indiv_csv=False):
+def load_result(filename, filetype="", renest_dict=True, indiv=False):
     import dill, json, csv, pandas
     if not os.path.exists(filename): raise Exception("File does not exist: "+filename)
     filetype = auto_filetype(filename, filetype)
     if filetype=='pickle':
         with open(filename, 'rb') as file_handle:
             return dill.load(file_handle)
+        file_handle.close()
     elif filetype=='csv': # add support for nested dict mdlhist using flatten_hist?
-        if indiv_csv:   resulttab = pandas.read_csv(filename, skiprows=1)
+        if indiv:   resulttab = pandas.read_csv(filename, skiprows=1)
         else:           resulttab = pandas.read_csv(filename)
-        resulttab.columns = [tuple(col.replace("'","").replace("(","").replace(")","").split(", ")) for col in resulttab.columns]
         resultdict = resulttab.to_dict("list")
+        resultdict = clean_resultdict_keys(resultdict)
         for key in resultdict:
             if len(resultdict[key])==1 and isinstance(resultdict[key], list):
                 resultdict[key] = resultdict[key][0]
             else: resultdict[key] = np.array(resultdict[key])             
         if renest_dict: resultdict = nest_flattened_hist(resultdict)
-        if indiv_csv: 
+        if indiv: 
             scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
             resultdict = {scenname: resultdict}
         return resultdict
     elif filetype=='json':
         with open(filename, 'r', encoding='utf8') as file_handle:
             loadeddict = json.load(file_handle)
-            resultdict = {}
-            for key in loadeddict:
-                newkey = tuple(key.replace("'","").replace("(","").replace(")","").split(", "))
-                resultdict[newkey]=loadeddict[key]
+            if indiv:   
+                key = [*loadeddict.keys()][0]
+                loadeddict = loadeddict[key]
+                loadeddict= {key+", "+innerkey:values for innerkey, values in loadeddict.items()}
+                resultdict = clean_resultdict_keys(loadeddict)
+            else:       resultdict = clean_resultdict_keys(loadeddict)
+            
             if renest_dict: resultdict = nest_flattened_hist(resultdict)
             return resultdict
+        file_handle.close()
     else:
         raise Exception("Invalid File Type")
+def clean_resultdict_keys(resultdict_dirty):
+    resultdict = {}
+    for key in resultdict_dirty:
+        newkey = tuple(key.replace("'","").replace("(","").replace(")","").split(", "))
+        #if 'flows' in newkey:           joinfirst =[*newkey].index('flows')
+        #elif 'functions' in newkey:     joinfirst = [*newkey].index('functions')
+        #elif 'time' in newkey:          joinfirst = [*newkey].index('time')
+        if any(['t=' in strs for strs in  newkey]):
+            joinfirst = [ind for ind, strs in enumerate(newkey) if 't=' in strs][0] +1
+        else:                           joinfirst=0
+        if joinfirst==2:
+            newkey = tuple([", ".join(newkey[:2])])+newkey[2:]
+        elif joinfirst>2:
+            nomscen = newkey[:joinfirst-2]
+            faultscen = tuple([", ".join(newkey[joinfirst-2:joinfirst])])
+            vals = newkey[joinfirst:]
+            newkey = nomscen+faultscen+vals
+        resultdict[newkey]=resultdict_dirty[key]
+    return resultdict
+
 def load_results(folder, filetype, renest_dict=True):
     files = os.listdir(folder)
     files_toread = []
@@ -677,7 +703,7 @@ def load_results(folder, filetype, renest_dict=True):
             files_toread.append(file)
     resultdict = {}
     for filename in files_toread:
-        resultdict.update(load_result(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv_csv=True))
+        resultdict.update(load_result(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
     return resultdict
 
 def auto_filetype(filename, filetype=""):
