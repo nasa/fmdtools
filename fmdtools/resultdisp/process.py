@@ -38,7 +38,6 @@ import copy
 import numpy as np
 import pandas as pd
 import os
-import codecs
 from ordered_set import OrderedSet
 from fmdtools.faultsim.propagate import cut_mdlhist
 from scipy.stats import bootstrap
@@ -589,6 +588,23 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
     else: raise Exception("All data are the same!")
 
 def save_result(variable, filename, filetype="", overwrite=False, result_id=''):
+    """
+    Saves a given result variable (endclasses or mdlhists) to a file filename. 
+    Files can be saved as pkl, csv, or json.
+
+    Parameters
+    ----------
+    variable : dict
+        Results dictionary (endclasses or mdlhists)
+    filename : str
+        File name for the file. Can be nested in a folder if desired.
+    filetype : str, optional
+        Optional specifier of file type (if not included in filename). The default is "".
+    overwrite : bool, optional
+        Whether to overwrite existing files with this name. The default is False.
+    result_id : str, optional
+        For individual results saving. Places an identifier for the result in the file. The default is ''.
+    """
     import dill, json, csv
     if os.path.exists(filename):
         if not overwrite: raise Exception("File already exists: "+filename)
@@ -630,20 +646,35 @@ def save_result(variable, filename, filetype="", overwrite=False, result_id=''):
     else:
         raise Exception("Invalid File Type")
     file_handle.close()
-def scenname_to_hexname(scenname):
-    hex_rep = codecs.encode(scenname.encode(), "hex_codec")
-    return hex_rep.decode("utf-8")
-def hexname_to_scenname(hexname):
-    byte_rep = codecs.decode(hexname, "hex_codec")
-    return byte_rep.decode("utf-8")
         
 def load_result(filename, filetype="", renest_dict=True, indiv=False):
+    """
+    Loads a given (endclasses or mdlhists) results dictionary from a (pickle/csv/json) file.
+    e.g. a file saved using process.save_result or save_args in propagate functions.
+
+    Parameters
+    ----------
+    filename : str
+        Name of the file.
+    filetype : str, optional
+        Use to specify a filetype for the file (if not included in the filename). The default is "".
+    renest_dict : bool, optional
+        Whether to return . The default is True.
+    indiv : bool, optional
+        Whether the result is an individual file (e.g. in a folder of results for a given simulation). 
+        The default is False.
+
+    Returns
+    -------
+    resultdict : dict
+        Corresponding results dictionary from the file.
+    """
     import dill, json, csv, pandas
     if not os.path.exists(filename): raise Exception("File does not exist: "+filename)
     filetype = auto_filetype(filename, filetype)
     if filetype=='pickle':
         with open(filename, 'rb') as file_handle:
-            return dill.load(file_handle)
+            resultdict = dill.load(file_handle)
         file_handle.close()
     elif filetype=='csv': # add support for nested dict mdlhist using flatten_hist?
         if indiv:   resulttab = pandas.read_csv(filename, skiprows=1)
@@ -658,7 +689,6 @@ def load_result(filename, filetype="", renest_dict=True, indiv=False):
         if indiv: 
             scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
             resultdict = {scenname: resultdict}
-        return resultdict
     elif filetype=='json':
         with open(filename, 'r', encoding='utf8') as file_handle:
             loadeddict = json.load(file_handle)
@@ -670,17 +700,28 @@ def load_result(filename, filetype="", renest_dict=True, indiv=False):
             else:       resultdict = clean_resultdict_keys(loadeddict)
             
             if renest_dict: resultdict = nest_flattened_hist(resultdict)
-            return resultdict
         file_handle.close()
     else:
         raise Exception("Invalid File Type")
+    return resultdict
 def clean_resultdict_keys(resultdict_dirty):
+    """
+    Helper function for recreating results dictionary keys (tuples) from a dictionary loaded from a file (where keys are strings)
+    (used in csv/json results)
+
+    Parameters
+    ----------
+    resultdict_dirty : dict
+        Results dictionary where keys are strings
+
+    Returns
+    -------
+    resultdict : dict
+        Results dictionary where keys are tuples
+    """
     resultdict = {}
     for key in resultdict_dirty:
         newkey = tuple(key.replace("'","").replace("(","").replace(")","").split(", "))
-        #if 'flows' in newkey:           joinfirst =[*newkey].index('flows')
-        #elif 'functions' in newkey:     joinfirst = [*newkey].index('functions')
-        #elif 'time' in newkey:          joinfirst = [*newkey].index('time')
         if any(['t=' in strs for strs in  newkey]):
             joinfirst = [ind for ind, strs in enumerate(newkey) if 't=' in strs][0] +1
         else:                           joinfirst=0
@@ -695,6 +736,25 @@ def clean_resultdict_keys(resultdict_dirty):
     return resultdict
 
 def load_results(folder, filetype, renest_dict=True):
+    """
+    Loads endclass/mdlhist results from a given folder 
+    (e.g., that have been saved from multi-scenario propagate methods with 'indiv':True)
+
+    Parameters
+    ----------
+    folder : str
+        Name of the folder. Must be in the current directory
+    filetype : str
+        Type of files in the folder ('pickle', 'csv', or 'json')
+    renest_dict : bool, optional
+        Whether to return result as a nested dict (as opposed to a flattenned dict). 
+        The default is True.
+
+    Returns
+    -------
+    resultdict : dict
+        endclasses/mdlhists result dictionary reconstructed by the files in the folder.
+    """
     files = os.listdir(folder)
     files_toread = []
     for file in files:
@@ -707,6 +767,7 @@ def load_results(folder, filetype, renest_dict=True):
     return resultdict
 
 def auto_filetype(filename, filetype=""):
+    """Helper function that automatically determines the filetype (pickle, csv, or json) of a given filename"""
     if not filetype:
         if '.' not in filename: raise Exception("No file extension")
         if filename[-4:]=='.pkl':       filetype="pickle"
@@ -715,6 +776,7 @@ def auto_filetype(filename, filetype=""):
         else: raise Exception("Invalid File Type in: "+filename+", ensure extension is pkl, csv, or json ")
     return filetype
 def create_indiv_filename(filename, indiv_id, splitchar='_'):
+    """Helper file that creates an individualized name for a file given the general filename and an individual id"""
     filename_parts = filename.split(".")
     filename_parts.insert(1,'.')
     filename_parts.insert(1,splitchar+indiv_id)   
@@ -760,6 +822,14 @@ def flatten_hist(hist, newhist = False, prevname=(), to_include='all'):
     return newhist
 
 def nest_flattened_hist(hists, prefix = ()):
+    """
+    Re-nests a flattened history    
+
+    Parameters
+    ----------
+    hists : dict
+        Flattened Model history (e.g. from flatten_hist)
+    """
     newhist = {}
     key_options = set([h[0] for h in hists.keys()])
     for key in key_options:

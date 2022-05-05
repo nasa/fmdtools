@@ -370,9 +370,11 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
         Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs},
+        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
         where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
         (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
+        and indiv is an (optional) bool specifying whether to save results individually (in a folder)
+        or as a monolythic file
     **kwargs: kwargs (params, modelparams, and/or valparams)
         passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
         to be simulated with the given parameters. Parameter dictionaries do not 
@@ -464,9 +466,11 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
         Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs},
+        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
         where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
         (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
+        and indiv is an (optional) bool specifying whether to save results individually (in a folder)
+        or as a monolythic file
     **kwargs: kwargs (params, modelparams, and/or valparams)
         passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
         to be simulated with the given parameters. Parameter dictionaries do not 
@@ -548,9 +552,11 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
         Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs},
+        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
         where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
         (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
+        and indiv is an (optional) bool specifying whether to save results individually (in a folder)
+        or as a monolythic file
     **kwargs: kwargs (params, modelparams, and/or valparams)
         passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
         to be simulated with the given parameters. Parameter dictionaries do not 
@@ -630,9 +636,11 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
         Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs},
+        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
         where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
         (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
+        and indiv is an (optional) bool specifying whether to save results individually (in a folder)
+        or as a monolythic file
     **app_args : kwargs
         Keyword arguments for the SampleApproach. See modeldef.SampleApproach documentation.
 
