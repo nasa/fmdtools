@@ -232,7 +232,7 @@ def exec_nom_helper(arg):
     mdlhist, _, t_end =prop_one_scen(arg[0], arg[1], track=arg[2], staged=False, track_times=arg[3], run_stochastic=arg[4])
     mdlhist = cut_mdlhist(mdlhist, t_end)
     endclass=arg[0].find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
-    save_helper(arg[5], mdlhist, endclass, arg[6], arg[6])
+    save_helper(arg[5], endclass, mdlhist, arg[6], arg[6])
     return endclass, mdlhist
 
 def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'bipartite', track_times="all", protect=True, run_stochastic=False, save_args={}, **kwargs):
@@ -507,7 +507,7 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
             else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']], t_end = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged, track_times = track_times, run_stochastic=run_stochastic, save_args=save_args, indiv_id=str(i))
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
     endclasses['nominal'] = endclass_nominal
-    save_helper(save_args, endclasses['nominal'], mdlhists['nominal'], indiv_id=str(i+1),result_id='nominal')
+    save_helper(save_args, endclasses['nominal'], mdlhists['nominal'], indiv_id=str(len(endclasses)-1),result_id='nominal')
     save_helper(save_args, endclasses, mdlhists)
     return endclasses, mdlhists
 
@@ -588,6 +588,7 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
             else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']], t_end = exec_scen(mdl, scen, nomresgraph,nomhist, track=track, staged=staged, track_times = track_times, run_stochastic=run_stochastic, save_args=save_args, indiv_id=str(i))
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
     endclasses['nominal'] = endclass_nominal
+    save_helper(save_args, endclasses['nominal'], mdlhists['nominal'], indiv_id=str(len(endclasses)-1),result_id='nominal')
     save_helper(save_args, endclasses, mdlhists)
     return endclasses, mdlhists
 

@@ -16,6 +16,8 @@ import numpy as np
 
 
 class TankTests(unittest.TestCase, CommonTests):
+    def setUp(self):
+        self.mdl = Tank()
     def test_model_copy_same(self):
         self.check_model_copy_same(Tank(),Tank(), [5,10,15], 10, max_time=20)
     def test_model_copy_different(self):
@@ -47,7 +49,59 @@ class TankTests(unittest.TestCase, CommonTests):
         mdl=Tank()
         ratecalc = 0.02 * ((4-1)*0.1+1)* ((4-1)*0.6+1)* ((1.1-1)*0.9+1)
         self.assertEqual(mdl.fxns['Human'].components['look'].failrate, ratecalc)
-        
+    def test_save_load_nominal(self):
+        for extension in [".pkl",".csv",".json"]:
+            self.check_save_load_onerun(self.mdl, "tank_mdlhist"+extension, "tank_endclass"+extension, 'nominal')
+    def test_save_load_onefault(self):
+        for extension in [".pkl",".csv",".json"]:
+            self.check_save_load_onerun(self.mdl, "tank_mdlhist"+extension, "tank_endclass"+extension, 'one_fault', faultscen=('Import_Water', 'stuck', 5))
+    def test_save_load_multfault(self):
+        for extension in [".pkl",".csv",".json"]:
+            faultscen = {5:{"Import_Water": ['stuck']},10:{"Store_Water":["Leak"]}}
+            self.check_save_load_onerun(self.mdl, "tank_mdlhist"+extension, "tank_endclass"+extension, 'mult_fault', faultscen =faultscen )
+    def test_save_load_singlefaults(self):
+        self.check_save_load_approach(self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", 'single_faults')
+        self.check_save_load_approach(self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", 'single_faults')
+        self.check_save_load_approach(self.mdl, "tank_mdlhists.json", "tank_endclasses.json", 'single_faults')
+    def test_save_load_singlefaults_indiv(self):
+        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "pkl", 'single_faults')
+        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "csv", 'single_faults')
+        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "json", 'single_faults')
+    def test_save_load_nominalapproach(self):
+        app = NominalApproach()
+        app.add_seed_replicates("replicates", 10)
+        self.check_save_load_approach(self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", 'nominal_approach', app=app)
+        self.check_save_load_approach(self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", 'nominal_approach', app=app)
+        self.check_save_load_approach(self.mdl, "tank_mdlhists.json", "tank_endclasses.json", 'nominal_approach', app=app)
+    def test_save_load_nominalapproach_indiv(self):
+        app = NominalApproach()
+        app.add_seed_replicates("replicates", 10)
+        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "pkl", 'nominal_approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "csv", 'nominal_approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "json", 'nominal_approach', app=app)
+    def test_save_load_nestedapproach(self):
+        app = NominalApproach()
+        app.add_seed_replicates("replicates", 10)
+        self.check_save_load_approach(self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", 'nested_approach', app=app)
+        self.check_save_load_approach(self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", 'nested_approach', app=app)
+        self.check_save_load_approach(self.mdl, "tank_mdlhists.json", "tank_endclasses.json", 'nested_approach', app=app)
+    def test_save_load_nestedapproach_indiv(self):
+        app = NominalApproach()
+        app.add_seed_replicates("replicates", 10)
+        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "pkl", 'nested_approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "csv", 'nested_approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "json", 'nested_approach', app=app)
+    def test_save_load_approach(self):
+        app = SampleApproach(self.mdl)
+        self.check_save_load_approach(self.mdl,"tank_mdlhists.pkl", "tank_endclasses.pkl", 'approach', app=app)
+        self.check_save_load_approach(self.mdl,"tank_mdlhists.csv", "tank_endclasses.csv", 'approach', app=app)
+        self.check_save_load_approach(self.mdl,"tank_mdlhists.json", "tank_endclasses.json", 'approach', app=app)
+    def test_save_load_approach_indiv(self):
+        app = SampleApproach(self.mdl)
+        self.check_save_load_approach_indiv(self.mdl,"tank_mdlhists", "tank_endclasses", "pkl", 'approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl,"tank_mdlhists", "tank_endclasses", "csv", 'approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl,"tank_mdlhists", "tank_endclasses", "json", 'approach', app=app)
+
 if __name__ == '__main__':
     unittest.main()
     

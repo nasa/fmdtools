@@ -196,7 +196,7 @@ class Tank(Model):
         if any(mdlhists['faulty']['functions']['Store_Water']['level']>=20):    totcost = 1000000
         elif any(mdlhists['faulty']['functions']['Store_Water']['level']<=0):   totcost = 1000000
         else:                                                                   totcost = 0
-        rate=scen['properties']['rate']
+        rate=scen['properties'].get('rate',0.0)
         life=1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': rate*life*totcost}
 
