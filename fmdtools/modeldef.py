@@ -2059,7 +2059,8 @@ class SampleApproach():
             Model to sample.
         faults : str/list/tuple, optional
             - The default is 'all', which gets all fault modes from the model.
-            - 'single-components' uses faults from a single component to represent faults form all components 
+            - 'single-components' uses faults from a single component to represent faults from all components 
+            - 'single-function' uses faults from a single function to represent faults from that type
             - passing the function name only includes modes from that function
             - List of faults of form [(fxn, mode)] to inject in the model.
             -Tuple arguments 
