@@ -1846,12 +1846,13 @@ class NominalApproach():
             When a list is provided, these seeds are are used (and shared). Must be of length replicates.
         **kwargs : specifies range for keyword args of paramfunc
             May be given as a fixed float/int/dict/str (k=value) defining a set value for the range (if not the default) or
-            as a tuple k=(start, end, step)
+            as a tuple k=(start, end, step) for the range, or
+            as a set k={value1, value2, value3} for discrete individual values to include in the range
         """
         inputranges = {ind:rangespec for ind,rangespec in enumerate(args) if type(rangespec)==tuple}
-        fixedkwargs = {k:v for k,v in kwargs.items() if type(v)!=tuple}
-        inputranges = {k:v for k,v in kwargs.items() if type(v)==tuple}
-        ranges = (np.arange(*arg) for k,arg in inputranges.items())
+        fixedkwargs = {k:v for k,v in kwargs.items() if type(v) not in [tuple, set]}
+        inputranges = {k:v for k,v in kwargs.items() if type(v) in [tuple,set]}
+        ranges = (np.arange(*arg) if type(arg)==tuple else tuple(arg) for k,arg in inputranges.items())
         fullspace = [x for x in itertools.product(*ranges)]
         inputnames = list(inputranges.keys())  
         

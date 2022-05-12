@@ -432,10 +432,15 @@ def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[],
     return table
 
 ##FMEA-like tables
-def simplefmea(endclasses):
+def simplefmea(endclasses, metrics=["rate", "cost", "expected cost"]):
     """Makes a simple fmea (rate, classification) of the endclasses of a list of fault scenarios run"""
     table = pd.DataFrame(endclasses)
-    return table.transpose()
+    table = table.transpose()
+    if metrics=='all':          return table
+    elif type(metrics)==list:   return table.loc[:, metrics]
+    else: 
+        raise Exception("invalid metrics option: "+str(metrics))
+    return 
 def phasefmea(endclasses, app, metric='cost'):
     """
     Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
