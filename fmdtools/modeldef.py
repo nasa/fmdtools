@@ -1809,12 +1809,8 @@ class NominalApproach():
             The scenarios associated with each level of parameter (or joint parameters)
         """
         inputranges = {param:self.ranges[rangeid]['inputranges'][param] for param in level_params}
-        if len(inputranges)>1:  
-            ranges = (np.arange(*arg) for k,arg in inputranges.items())
-            partialspace = [x for x in itertools.product(*ranges)]
-        else:
-            partialspace = [x for x in np.arange(*[*inputranges.values()][0])]
-        param_scens = {p:set() for p in partialspace}
+        partialspace= self.range_to_space(inputranges)
+        param_scens = {(p if len(p)>1 else p[0]):set() for p in partialspace}
         full_indices = list(self.ranges[rangeid]['inputranges'].keys())
         inds = [full_indices.index(param) for param in level_params]
         
@@ -1823,7 +1819,11 @@ class NominalApproach():
             if type(scenarios)==str: scenarios = [scenarios]
             param_scens[new_index].update(scenarios)
         return param_scens
-    def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds='shared', **kwargs):
+    def range_to_space(self,inputranges):
+        ranges = (np.arange(*arg) if type(arg)==tuple else tuple(arg) for k,arg in inputranges.items())
+        space = [x for x in itertools.product(*ranges)]
+        return space
+    def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds='shared',set_args={}, **kwargs):
         """
         Adds a set of scenarios to the approach.
 
@@ -1844,16 +1844,17 @@ class NominalApproach():
                 - 'independent' creates separate random seeds for models and parameter generation
                 - 'keep_model' uses the seed provided in the model for all of the model
             When a list is provided, these seeds are are used (and shared). Must be of length replicates.
+        set_args : dict
+            Dictionary of lists of values for each param e.g., {'param1':[value1, value2, value3]}
         **kwargs : specifies range for keyword args of paramfunc
             May be given as a fixed float/int/dict/str (k=value) defining a set value for the range (if not the default) or
             as a tuple k=(start, end, step) for the range, or
-            as a set k={value1, value2, value3} for discrete individual values to include in the range
         """
         inputranges = {ind:rangespec for ind,rangespec in enumerate(args) if type(rangespec)==tuple}
-        fixedkwargs = {k:v for k,v in kwargs.items() if type(v) not in [tuple, set]}
-        inputranges = {k:v for k,v in kwargs.items() if type(v) in [tuple,set]}
-        ranges = (np.arange(*arg) if type(arg)==tuple else tuple(arg) for k,arg in inputranges.items())
-        fullspace = [x for x in itertools.product(*ranges)]
+        fixedkwargs = {k:v for k,v in kwargs.items() if not type(v)==tuple}
+        inputranges = {k:v for k,v in kwargs.items() if type(v)==tuple}
+        inputranges.update(set_args)
+        fullspace = self.range_to_space(inputranges)
         inputnames = list(inputranges.keys())  
         
         if type(seeds)==list: 
