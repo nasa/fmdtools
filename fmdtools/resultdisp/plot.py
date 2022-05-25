@@ -307,7 +307,7 @@ def plot_err_lines(ax, times, lows, highs, **kwargs):
     """
     ax.plot(times, highs **kwargs)
     ax.plot(times, lows, **kwargs)
-def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_padding=None, h_padding=None, title_padding=None):
+def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_padding=None, h_padding=None, title_padding=0.0):
     """ Helper function for multiplot legends and titles"""
     if len(groupmetrics)>1 and legend_loc!=False:
         ax.legend()
@@ -322,7 +322,7 @@ def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_
             ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, loc='center')
         else: ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8})
     plt.subplots_adjust(hspace=v_padding, wspace=h_padding)
-    if title: plt.suptitle(title)
+    if title: plt.suptitle(title, y=1.0+title_padding)
     
 
 def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metric_bins={}, legend_loc=-1, 
