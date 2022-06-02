@@ -211,7 +211,7 @@ def nominal_stats(nomapp, nomapp_endclasses, metrics='all', inputparams='from_ra
     table = pd.DataFrame(table_values, columns=[*nomapp_endclasses], index=inputparams+metrics)
     return table
 
-def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid='default', nan_as=np.nan, percent=True, difference=True, give_ci=False, **kwargs):
+def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid='default', nan_as=np.nan, percent=True,  give_ci=False, **kwargs):
     """
     Compares a metric for a given set of model parameters/factors over set of nominal scenarios.
 
@@ -236,9 +236,6 @@ def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid
     percent : bool, optional
         Whether to compare metrics as bools (True - results in a comparison of percentages of indicator variables) 
         or as averages (False - results in a comparison of average values of real valued variables). The default is True.
-    difference : bool, optional
-        Whether to tabulate the difference of the metric from the nominal over each scenario (True),
-        or the value of the metric over all (False). The default is True.
     give_ci = bool:
         gives the bootstrap confidence interval for the given statistic using the given kwargs
         'combined' combines the values as a strings in the table (for display)
@@ -441,7 +438,7 @@ def simplefmea(endclasses, metrics=["rate", "cost", "expected cost"]):
     else: 
         raise Exception("invalid metrics option: "+str(metrics))
     return 
-def phasefmea(endclasses, app, metric='cost'):
+def phasefmea(endclasses, app, metrics=["rate", "expected cost"], weighted_metrics = ["cost"], sort_by=None, ascending=False):
     """
     Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
 
@@ -451,22 +448,34 @@ def phasefmea(endclasses, app, metric='cost'):
         dict of endclasses of the simulation runs
     app : sampleapproach
         sample approach used for the underlying probability model of the set of scenarios run
-    metric : str
-        metric to query. The default is 'cost'
+    metrics : list
+        unweighted metrics to query. The default is ['rate', 'expected cost']
+    weighted_metrics: list
+        weighted metrics to query. The default is ['cost']. 
+        Weights are used to calculate an average, rather than a total.
+    sort_by : str
+        metric to stort the table by. default is 'expected cost'
+    ascending : bool
+        whether to sort ascending. Default is False.
     Returns
     -------
     table: dataframe
-        table with metric, rate, and expected metric of each fault in each phase
+        table with metrics of each fault in each phase
     """
     fmeadict = dict.fromkeys(app.scenids.keys())
     for modephase, ids in app.scenids.items():
-        rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= sum(np.array([endclasses[scenid][metric] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
-        expcost= sum([endclasses[scenid]['expected '+metric] for scenid in ids])
-        fmeadict[modephase] = {'rate':rate, metric:cost, 'expected '+metric: expcost}
+        fmeadict[modephase]={}
+        for metric in metrics+weighted_metrics:
+            if metric in weighted_metrics:
+                metric_value = sum(np.array([endclasses[scenid][metric] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
+            else: metric_value = sum([endclasses[scenid][metric] for scenid in ids])
+            fmeadict[modephase][metric]= metric_value
+    if not sort_by: sort_by=metrics[0]
     table=pd.DataFrame(fmeadict)
-    return table.transpose()    
-def summfmea(endclasses, app, metric='cost'):
+    table=table.transpose() 
+    table=table.sort_values(sort_by, ascending=ascending)
+    return table
+def summfmea(endclasses, app, metrics=["rate", "expected cost"], weighted_metrics = ["cost"], sort_by=None, ascending=False):
     """
     Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
 
@@ -476,26 +485,38 @@ def summfmea(endclasses, app, metric='cost'):
         dict of endclasses of the simulation runs
     app : sampleapproach
         sample approach used for the underlying probability model of the set of scenarios run
-    metric : str
-        metric to query. The default is 'cost'
+    metrics : list
+        unweighted metrics to query. The default is ['rate', 'expected cost']
+    weighted_metrics: list
+        weighted metrics to query. The default is ['cost']. 
+        Weights are used to calculate an average, rather than a total.
+    sort_by : str
+        metric to stort the table by. default is 'expected cost'
+    ascending : bool
+        whether to sort ascending. Default is False
     Returns
     -------
     table: dataframe
-        table with metric, rate, and expected cost of each fault (over all phases)
+        table with metrics of each fault (over all phases)
     """
     fmeadict = dict()
     for modephase, ids in app.scenids.items():
-        rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= sum(np.array([endclasses[scenid][metric] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
-        expcost= sum([endclasses[scenid]['expected '+metric] for scenid in ids])
         if getattr(app, 'jointmodes', []):  index = str(modephase[0])
         else:                               index = modephase[0]
-        if not fmeadict.get(modephase[0]): fmeadict[index]= {'rate': 0.0, metric:0.0, 'expected '+metric:0.0}
-        fmeadict[index]['rate'] += rate
-        fmeadict[index][metric] += cost/len([1.0 for (fxnmode,phase) in app.scenids if fxnmode==modephase[0]])
-        fmeadict[index]['expected '+metric] += expcost
+        if not fmeadict.get(modephase[0]): fmeadict[index]= {m:0.0 for m in metrics+weighted_metrics}
+        
+        for metric in metrics+weighted_metrics:
+            if metric in weighted_metrics:
+                metric_value = sum(np.array([endclasses[scenid][metric] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
+                fmeadict[index][metric] += metric_value/len([1.0 for (fxnmode,phase) in app.scenids if fxnmode==modephase[0]])
+            else: 
+                metric_value = sum([endclasses[scenid][metric] for scenid in ids])
+                fmeadict[index][metric] += metric_value
+    if not sort_by: sort_by=metrics[0]
     table=pd.DataFrame(fmeadict)
-    return table.transpose()
+    table=table.transpose() 
+    table=table.sort_values(sort_by, ascending=ascending)
+    return table
 def fullfmea(endclasses, summaries):
     """Makes full fmea table (degraded functions/flows, cost, rate, expected cost) of scenarios given endclasses dict (cost, rate, expected cost) and summaries dict (degraded functions, degraded flows)"""
     degradedtable = pd.DataFrame(summaries)

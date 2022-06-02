@@ -217,6 +217,7 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
     nomapp_endclasses = dict.fromkeys(nomapp.scenarios)
     if pool:
         inputs = [(mdl.__class__(*new_mdl_params(mdl,scen['properties'])), scen, track, track_times, run_stochastic, save_args, name) for name,scen in nomapp.scenarios.items()]
+        a=1
         result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         nomapp_endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
         nomapp_mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}

@@ -735,7 +735,7 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'b
     else:           return figs
              
 
-def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cost'):
+def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cost', ylims=None):
     """
     Plots the sample metric and rate of a given fault over the injection times defined in the app sampleapproach
     
@@ -763,15 +763,23 @@ def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cos
         associated_scens = associated_scens + app.scenids.get((fxnmode, phasetup), [])
     costs = np.array([endclasses[scen][metric] for scen in associated_scens])
     times = np.array([time  for phase, timemodes in app.sampletimes.items() if timemodes for time in timemodes if fxnmode in timemodes.get(time)] )  
-    times = sorted(times)
-    rates = np.array(list(app.rates_timeless[fxnmode].values()))
+    timesort = np.argsort(times)
+    times = times[timesort]; costs=costs[timesort]
     
     tPlot, axes = plt.subplots(2, 1, sharey=False, gridspec_kw={'height_ratios': [3, 1]})
     
-    phasetimes_start =[times[0] for phase, times in app.mode_phase_map[fxnmode].items()]
-    phasetimes_end =[times[1] for phase, times in app.mode_phase_map[fxnmode].items()]
+    phasetimes_start=[]; phasetimes_end=[]; ratesvect=[]; phaselabels=[]
+    for phase, ptimes in app.mode_phase_map[fxnmode].items():
+        if type(ptimes[0])==list:
+            phasetimes_start+=[t[0] for t in ptimes]
+            phasetimes_end+=[t[1] for t in ptimes]
+            ratesvect += [app.rates_timeless[fxnmode][phase] for t in ptimes] *2
+            phaselabels+=[phase[1] for t in ptimes]
+        else: 
+            phasetimes_start.append(ptimes[0]); phasetimes_end.append(ptimes[1])
+            ratesvect = ratesvect + [app.rates_timeless[fxnmode][phase]]*2
+            phaselabels.append(phase[1])
     ratetimes =[]
-    ratesvect =[]
     phaselocs = []
     for (ind, phasetime) in enumerate(phasetimes_start):
         axes[0].axvline(phasetime, color="black")        
@@ -779,13 +787,16 @@ def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cos
 
         axes[1].axvline(phasetime, color="black") 
         ratetimes = ratetimes + [phasetimes_start[ind]] + [phasetimes_end[ind]]
-        ratesvect = ratesvect + [rates[ind]] + [rates[ind]]
+        
         #axes[1].text(middletime, 0.5*max(rates),  list(app.phases.keys())[ind], ha='center', backgroundcolor="white")
     #rate plots
     axes[1].set_xticks(phaselocs)
-    axes[1].set_xticklabels([phasetup[1] for phasetup in app.mode_phase_map[fxnmode]])
+    axes[1].set_xticklabels(phaselabels)
     
-    axes[1].plot(ratetimes, ratesvect)
+    sorty = np.argsort(phasetimes_start)
+    phasetimes_start=np.array(phasetimes_start)[sorty]; phasetimes_end=np.array(phasetimes_end)[sorty]
+    sortx = np.argsort(ratetimes)
+    axes[1].plot(np.array(ratetimes)[sortx], np.array(ratesvect)[sortx])
     axes[1].set_xlim(phasetimes_start[0], phasetimes_end[-1])
     axes[1].set_ylim(0, np.max(ratesvect)*1.2 )
     axes[1].set_ylabel("Rate")
@@ -793,7 +804,9 @@ def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cos
     axes[1].grid()
     #cost plots
     axes[0].set_xlim(phasetimes_start[0], phasetimes_end[-1])
-    axes[0].set_ylim(0, 1.2*np.max(costs))
+    if not ylims:
+        ylims = [min(1.2*np.min(costs),-1e-5),max(1.2*np.max(costs),1e-5)]
+    axes[0].set_ylim(*ylims)
     if samptype=='fullint':
         axes[0].plot(times, costs, label=metric)
     else:
@@ -802,7 +815,7 @@ def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cos
             axes[0].scatter(times, costs,s=sizes, label=metric, alpha=0.5)
         axes[0].stem(times, costs, label=metric, markerfmt=",", use_line_collection=True)
     
-    axes[0].set_ylabel("Cost")
+    axes[0].set_ylabel(metric)
     axes[0].grid()
     if title: axes[0].set_title(title)
     elif type(fxnmode[0])==tuple: axes[0].set_title(metric+" function of "+str(fxnmode)+" over time")
@@ -833,7 +846,7 @@ def samplemetrics(app, endclasses, joint=False, title="", metric='cost'):
             st='quadrature'
         else: 
             st='std'
-        samplemetric(app, endclasses, fxnmode, samptype=st, title="")
+        samplemetric(app, endclasses, fxnmode, samptype=st, title="", metric=metric)
 
 def metricovertime(endclasses, app, metric='cost', metrictype='expected cost'):
     """
