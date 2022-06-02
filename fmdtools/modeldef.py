@@ -2183,8 +2183,11 @@ class SampleApproach():
             elif type(faults)==tuple:
                 if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==faults[1]]  
                 elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==f]  
-                elif faults[0]=='mode type':        faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if faults[1] in mode if (len(faults)<3 or not faults[2] in mode)]
-                elif faults[0]=='mode types':       faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if any([f in mode for f in faults[1]])]
+                elif faults[0]=='mode type':        faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if (faults[1] in mode and (len(faults)<3 or not faults[2] in mode))]
+                elif faults[0]=='mode types':       
+                    if type(faults[1])==str:    secondarg=(faults[1],)
+                    else:                       secondarg=faults[1]
+                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if any([f in mode for f in secondarg])]
                 elif faults[0]=='function class':   faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns_of_class(faults[1]).items() for mode in fxn.faultmodes]
                 elif faults[0]=='function classes': faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns_of_class(f).items() for mode in fxn.faultmodes]
                 else: raise Exception("Invalid option in tuple argument: "+str(faults[0]))
