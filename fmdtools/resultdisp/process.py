@@ -513,7 +513,7 @@ def average(endclasses, metric):
     return np.mean([e[metric] for k,e in endclasses.items() if not np.isnan(e[metric])])
 def percent(endclasses, metric):
     """Calculates the percentage of a given indicator variable being True in endclasses"""
-    return sum([int(bool(e[metric])) for k,e in endclasses.items() if not np.isnan(e[metric])])/len(endclasses)
+    return sum([int(bool(e[metric])) for k,e in endclasses.items() if not np.isnan(e[metric])])/(len(endclasses)+1e-16)
 def rate(endclasses, metric):
      """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
      return sum([int(bool(e[metric]))*e['rate'] for k,e in endclasses.items() if not np.isnan(e[metric])])
