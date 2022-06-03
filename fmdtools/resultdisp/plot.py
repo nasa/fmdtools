@@ -38,7 +38,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
              fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
              title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
-             v_padding=None, h_padding=None, title_padding=None,
+             v_padding=None, h_padding=None, title_padding=0.0,
              phases={}, modephases={}, label_phases=True,  **kwargs):
     """
     Plot the behavior over time of the given function/flow values 

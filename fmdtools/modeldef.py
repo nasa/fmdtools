@@ -2183,7 +2183,8 @@ class SampleApproach():
             elif type(faults)==tuple:
                 if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==faults[1]]  
                 elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==f]  
-                elif faults[0]=='mode type':        faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if (faults[1] in mode and (len(faults)<3 or not faults[2] in mode))]
+                elif faults[0]=='mode type':        
+                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if (faults[1] in mode and (len(faults)<3 or not faults[2] in mode))]
                 elif faults[0]=='mode types':       
                     if type(faults[1])==str:    secondarg=(faults[1],)
                     else:                       secondarg=faults[1]
@@ -2520,7 +2521,77 @@ class SampleApproach():
     def list_moderates(self):
         """ Returns the rates for each mode """
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
-
+    def get_scenid_groups(self,group_by='phases', group_dict={}):
+        """
+        Returns a dict with different scenario ids grouped according to group_by. 
+        group_by: str, with options:
+        - 'none':           Returns {'scenid':'scenid'} for all scenarios
+        - 'phase':          Returns {(fxnmode, fxnphase):{scenids}}--identical scenarios within a given phase are grouped 
+        - 'fxnfault':       Returns {fxnmode:{scenids}} All identical scenarios (fxn, mode) are grouped
+        - 'mode':           Returns {mode:{scenids}}. All scenarios with the same mode name are grouped
+        - 'mode type':      Returns {modetype:scenids}. All scenarios with the same mode type (mode types must be given to the sampleapproach) are grouped
+        - 'functions':      Returns {function:scenids}. All scenarios and modes from a given function are grouped.
+        - 'times':          Returns {time:scenids}. All scenarios at a given time are grouped.
+        - 'fxnclassfault':  Returns {(fxnclass, mode):scenids}. All scenarios (fxnclass, mode) from a given function class are grouped.
+        - 'fxnclass':       Returns {fxnclass:scendis}. All scenarios from a given function class are grouped.
+        For 'fxnclass', 'fxnclassfault', and 'modetype', a group_dict dictionary must be provided that groups the function/mode classes/types.
+        -------------------
+        Returns:
+        - grouped_scens: dict
+              A dictionary of the scenario ids associated with the given group {group:scenids}  
+        """
+        if group_by in ['fxnclass', 'fxnclassfault', 'modetype'] and not group_dict:
+            raise Exception("group_dict must be provided to group by these")
+        if group_by=='none':         grouped_scens =   {s:[s] for v in self.scenids.values() for s in v}
+        elif group_by=='phase':      grouped_scens =   self.scenids
+        elif group_by=='fxnfault':   
+            grouped_scens = {m:set() for m in self.list_modes()}
+            for modephase, ids in self.scenids.items(): grouped_scens[modephase[0]].update(ids)
+        elif group_by=='mode':
+            grouped_scens = {m[1]:set() for m in self.list_modes()}
+            for modephase, ids in self.scenids.items(): grouped_scens[modephase[0][1]].update(ids)
+        elif group_by=='functions':
+            grouped_scens = {m[0]:set() for m in self.list_modes()}
+            for modephase, ids in self.scenids.items(): grouped_scens[modephase[0][0]].update(ids)
+        elif group_by=='times':
+            grouped_scens = {float(t):set() for t in self.times}
+            for scen in self.scenlist: 
+                time = float(scen['properties']['time'])
+                grouped_scens[time].add(scen['properties']['time'])
+        elif group_by=='fxnclass':
+            fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
+            grouped_scens= {fxn_groups[fxnmode[0]]:set() for fxnmode in self.list_modes()}
+            for modephase, ids in self.scenids.items(): 
+                fxn = modephase[0][0]
+                group = fxn_groups[fxn]
+                grouped_scens[group].update(ids)
+        elif group_by=='fxnclassfault':
+            fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
+            grouped_scens= {(fxn_groups[fxnmode[0]], fxnmode[1]):set() for fxnmode in self.list_modes()}
+            for modephase, ids in self.scenids.items(): 
+                fxn, mode = modephase[0]
+                group = fxn_groups[fxn]
+                grouped_scens[group, mode].update(ids)
+        elif group_by=='modetype':
+            grouped_scens= {group:set() for group in group_dict}
+            grouped_scens['ungrouped'] =set()
+            for modephase, ids in self.scenids.items(): 
+                mode = modephase[0][1]
+                grouped=False
+                for group in grouped_scens:
+                    if group in mode: 
+                        grouped_scens[group].update(ids)
+                        grouped=True
+                        break
+                if not grouped: grouped_scens['ungrouped'].update(ids)    
+        else: raise Exception("Invalid option for group_by: "+group_by)
+        return grouped_scens
+    def get_id_weights(self):
+        id_weights ={}
+        for scens, ids in self.scenids.items():
+            weights = [*self.weights[scens[0]][scens[1]].values()]
+            id_weights.update({scenid:weights[i] for i,scenid in enumerate(ids)})
+        return id_weights
 
 def find_overlap_n(intervals):
     """Finds the overlap between given intervals.
