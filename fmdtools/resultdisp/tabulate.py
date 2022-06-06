@@ -438,9 +438,8 @@ def simplefmea(endclasses, metrics=["rate", "cost", "expected cost"]):
     else: 
         raise Exception("invalid metrics option: "+str(metrics))
     return 
-def fmea(endclasses, app, metrics=[], weight_metrics=["rate"], avg_metrics = ["cost"], perc_metrics=[],
-         mult_metrics={"expected cost":['rate', 'cost']}, extra_classes={},
-         group_by='none', sort_by="expected cost", mdl={}, mode_types={}, ascending=False):
+def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_metrics=[],
+         mult_metrics={}, extra_classes={}, group_by='none', sort_by=False, mdl={}, mode_types={}, ascending=False):
     """
     Makes a user-definable fmea of the endclasses of a set of fault scenarios.
 
@@ -507,11 +506,21 @@ def fmea(endclasses, app, metrics=[], weight_metrics=["rate"], avg_metrics = ["c
     if type(perc_metrics)==str:     perc_metrics=[perc_metrics]
     if type(avg_metrics)==str:      avg_metrics=[avg_metrics]
     
+    if not metrics and not weight_metrics and not perc_metrics and not avg_metrics and not mult_metrics:
+        #default fmea is a cost-based table
+        weight_metrics=["rate"]; avg_metrics = ["cost"] 
+        mult_metrics={"expected cost":['rate', 'cost']}
+    
     endclasses.update(extra_classes)
     
     id_weights = app.get_id_weights()
     
     allmetrics = metrics+weight_metrics+avg_metrics+perc_metrics+[*mult_metrics.keys()]
+    
+    if not sort_by:
+        if "expected cost" in mult_metrics: sort_by="expected_cost"
+        else:                               sort_by=allmetrics[-1]
+    
     fmeadict = {g:dict.fromkeys(allmetrics) for g in grouped_scens}
     for group, ids in grouped_scens.items():
         for metric in metrics:

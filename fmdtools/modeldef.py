@@ -16,7 +16,6 @@ Description: A module to define resilience models and simulations.
 import numpy as np
 import itertools
 import dill
-import pickle
 import networkx as nx
 import copy
 import warnings
@@ -2554,10 +2553,10 @@ class SampleApproach():
             grouped_scens = {m[0]:set() for m in self.list_modes()}
             for modephase, ids in self.scenids.items(): grouped_scens[modephase[0][0]].update(ids)
         elif group_by=='times':
-            grouped_scens = {float(t):set() for t in self.times}
+            grouped_scens = {float(t):set() for t in set(self.times)}
             for scen in self.scenlist: 
                 time = float(scen['properties']['time'])
-                grouped_scens[time].add(scen['properties']['time'])
+                grouped_scens[time].add(scen['properties']['name'])
         elif group_by=='fxnclass':
             fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
             grouped_scens= {fxn_groups[fxnmode[0]]:set() for fxnmode in self.list_modes()}
