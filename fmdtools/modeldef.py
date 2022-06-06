@@ -16,7 +16,6 @@ Description: A module to define resilience models and simulations.
 import numpy as np
 import itertools
 import dill
-import pickle
 import networkx as nx
 import copy
 import warnings
@@ -431,12 +430,15 @@ class Block(Common):
                 - set {'fault1', 'fault2', 'fault3'} (just the respective faults)
                 - dict {'fault1': faultattributes, 'fault2': faultattributes}, where faultattributes is:
                     - float: rate for the mode
-                    - [float, float]: rate and repair cost for the mode
-                    - float, oppvect, float]: rate, opportunity vector, and repair cost for the mode
-                    opportunity vector can be specified as:
-                        [float1, float2,...], a vector of relative likelihoods for each phase, or
-                        {opermode:float1, opermode:float1}, a dict of relative likelihoods for each phase/mode
-                        the phases/modes to key by are defined in "key_phases_by"
+                    - dict/set/str: opportunity vector for the mode specified as a dictionary/set/string
+                    - list: [rate, oppvect, rcost]
+                        - a list of arguments where the float arguments are specified in the order rate, rcost (if provided) and
+                            an oppvect opportunity vector is provided (anywhere) with the form:
+                                -list: [float1, float2,...], a vector of relative likelihoods for each phase, or
+                                -dict: {opermode:float1, opermode:float1}, a dict of relative likelihoods for each phase/mode
+                                -set: {opermode, opermode,...}, a set of applicable phases (assumed equally likely).
+                                the phases/modes to key by are defined in "key_phases_by"
+                                -str: 'all'/'modename', either specifying all operational modes/phases or a single operational mode/phase
         opermodes : list, optional
             List of operational modes
         initmode : str, optional
@@ -476,29 +478,27 @@ class Block(Common):
                 self.faultmodes[mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
                 self.faultmodes[mode]['probtype'] = probtype
                 self.faultmodes[mode]['units'] = units
-                if type(faultmodes) == set: # minimum information - here the faultmodes are only a set of labels
-                    self.faultmodes[mode]['dist'] =     1.0/len(faultmodes)
-                    self.faultmodes[mode]['oppvect'] =  [1.0]
-                    self.faultmodes[mode]['rcost'] =    0.0
-                elif type(faultmodes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
-                    self.faultmodes[mode]['dist'] =     faultmodes[mode]
-                    self.faultmodes[mode]['oppvect'] =  [1.0]
-                    self.faultmodes[mode]['rcost'] =    0.0
-                elif len(faultmodes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
-                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[mode]['oppvect'] =  faultmodes[mode][1]
-                    self.faultmodes[mode]['rcost'] =    faultmodes[mode][2]
-                    if key_phases_by =='none': raise Exception("How should the opportunity vector be keyed? Provide 'key_phases_by' option.")
-                elif len(faultmodes[mode]) == 2:  # dist, repair costs
-                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[mode]['oppvect'] =  [1.0]
-                    self.faultmodes[mode]['rcost'] =    faultmodes[mode][1]
-                elif len(faultmodes[mode]) == 1:  # dist only
-                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[mode]['oppvect'] =  [1.0]
-                    self.faultmodes[mode]['rcost'] =    0.0
-                else:
-                    raise Exception("Invalid mode definition")
+                dist=1.0/len(faultmodes); oppvect=[1.0]; rcost=0.0
+                if type(faultmodes) in {set,str}:     a=1 # minimum information - here the faultmodes are only a set of labels
+                elif type(faultmodes[mode]) == float:   dist  =  faultmodes[mode] # dict of modes: dist, where dist is the distribution (or individual rate/probability)
+                elif type(faultmodes[mode]) == dict:    oppvect = faultmodes[mode] # provided oppvect in dict form
+                elif type(faultmodes[mode]) == list: # provided list with oppvect, dist, rcost (rcost always after dist)
+                    oppvect_loc = [i for i,e in enumerate(faultmodes[mode]) if type(e) in [dict, set, list, str]]
+                    if oppvect_loc: oppvect= faultmodes[mode].pop(oppvect_loc[0])
+                    for i,e in enumerate(faultmodes[mode]):  
+                        if i>=1:          rcost = e
+                        else:             dist = e
+                else:   raise Exception("Invalid mode definition")
+                if 'all' in oppvect or oppvect=='all':      
+                    oppvect = {*opermodes}
+                    if key_phases_by!='self': raise Exception("'all' option for oppvect only applies to key_phases_by='self'")
+                elif type(oppvect)==str:                    oppvect={oppvect}
+                if type(oppvect)==set:                      oppvect = {o:1.0 for o in oppvect}
+                if key_phases_by =='none' and oppvect!=[1.0]: 
+                    raise Exception("How should the opportunity vector be keyed? Provide 'key_phases_by' option.")                
+                self.faultmodes[mode]['dist'] =     dist
+                self.faultmodes[mode]['oppvect'] =  oppvect
+                self.faultmodes[mode]['rcost'] =    rcost
                 self.faultmodes[mode]['longname'] = longnames.get(mode,mode)
         if key_phases_by=='self':   self.key_phases_by = self.name
         else:                       self.key_phases_by = key_phases_by
@@ -2051,7 +2051,7 @@ class SampleApproach():
     unit_factors : dict
         multiplication factors for converting some time units to others.
     """
-    def __init__(self, mdl, faults='all', phases='global', modephases={}, jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
+    def __init__(self, mdl, faults='all', phases='global', modephases={},join_modephases=False, jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
         """
         Initializes the sample approach for a given model
 
@@ -2085,6 +2085,8 @@ class SampleApproach():
             multiple phases associated with that mode. Has structure:
                 {'Function':{'mode':{'phase','phase1', 'phase2'...}}}
                 Phases and modephases can be gotten from process.modephases(mdlhist)
+        join_modephases: bool
+            Whether to join phases with the same modes defined in modephases. Default is False
         jointfaults : dict, optional
             Defines how the approach considers joint faults. The default is {'faults':'None'}. Has structure:
                 - faults : float    
@@ -2130,7 +2132,7 @@ class SampleApproach():
         self.tstep = mdl.tstep
         self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)
-        self.init_rates(mdl, jointfaults=jointfaults, modephases=modephases)
+        self.init_rates(mdl, jointfaults=jointfaults, modephases=modephases, join_modephases=join_modephases)
         self.create_sampletimes(mdl, sampparams, defaultsamp)
         self.create_scenarios()
     def init_modelist(self,mdl, faults, jointfaults={'faults':'None'}):
@@ -2180,8 +2182,12 @@ class SampleApproach():
             elif type(faults)==tuple:
                 if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==faults[1]]  
                 elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==f]  
-                elif faults[0]=='mode type':        faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if faults[1] in mode if (len(faults)<3 or not faults[2] in mode)]
-                elif faults[0]=='mode types':       faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if any([f in mode for f in faults[1]])]
+                elif faults[0]=='mode type':        
+                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if (faults[1] in mode and (len(faults)<3 or not faults[2] in mode))]
+                elif faults[0]=='mode types':       
+                    if type(faults[1])==str:    secondarg=(faults[1],)
+                    else:                       secondarg=faults[1]
+                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if any([f in mode for f in secondarg])]
                 elif faults[0]=='function class':   faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns_of_class(faults[1]).items() for mode in fxn.faultmodes]
                 elif faults[0]=='function classes': faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns_of_class(f).items() for mode in fxn.faultmodes]
                 else: raise Exception("Invalid option in tuple argument: "+str(faults[0]))
@@ -2215,49 +2221,57 @@ class SampleApproach():
             else: raise Exception("Invalid option for jointfault['inclusive']")
         elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
         elif jointfaults['faults']!='None': raise Exception("Invalid jointfaults argument type: "+str(type(jointfaults['faults'])))
-    def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}):
+    def calc_intervaltime(self,times, tstep):
+        return float(times[1]-times[0])+tstep
+    def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}, join_modephases=False):
         """ Initializes rates, rates_timeless"""
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
         self.mode_phase_map=dict.fromkeys(self._fxnmodes)
         
         for (fxnname, mode) in self._fxnmodes:
-            key_phases = mdl.fxns[fxnname].key_phases_by
-            if key_phases=='global': fxnphases = self.globalphases
-            elif key_phases=='none': fxnphases = {'operating':[mdl.times[0], mdl.times[-1]]} 
-            else: fxnphases = self.phases.get(key_phases, self.globalphases)
-            fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))
             self.rates[fxnname, mode]=dict(); self.rates_timeless[fxnname, mode]=dict(); self.mode_phase_map[fxnname, mode] = dict()
             overallrate = self.fxnrates[fxnname]
+            dist = self._fxnmodes[fxnname, mode]['dist']
             if self.comprates[fxnname]:
                 for compname, component in mdl.fxns[fxnname].components.items():
                     if mode in component.faultmodes:
                         overallrate=self.comprates[fxnname][compname]
+            key_phases = mdl.fxns[fxnname].key_phases_by
             
-            if modephases and (key_phases not in ['global', 'none']):
-                modevect = self._fxnmodes[fxnname, mode]['oppvect']
-                oppvect = {phase:0 for phase in fxnphases}
-                oppvect.update({phase:modevect.get(mode, 0)/len(phases)  for mode,phases in modephases[key_phases].items() for phase in phases})
+            if modephases and join_modephases and (key_phases not in ['global', 'none']):
+                oppvect = {**{phase:0 for phase in modephases[fxnname]}, **self._fxnmodes[fxnname, mode]['oppvect']}
+                fxnphases = {m:[self.phases[fxnname][ph] for ph in m_phs] for m, m_phs in modephases[fxnname].items()}
             else:
-                a=1
-                if type(self._fxnmodes[fxnname, mode]['oppvect'])==dict: 
+                if key_phases=='global': fxnphases = self.globalphases
+                elif key_phases=='none': fxnphases = {'operating':[mdl.times[0], mdl.times[-1]]} 
+                else: fxnphases = self.phases.get(key_phases, self.globalphases)
+                fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))  
+                if modephases and (key_phases not in ['global', 'none']):
+                    modevect = self._fxnmodes[fxnname, mode]['oppvect']
                     oppvect = {phase:0 for phase in fxnphases}
-                    oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
+                    oppvect.update({phase:modevect.get(mode, 0)/len(phases)  for mode,phases in modephases[key_phases].items() for phase in phases})
                 else:
-                    oppvect = self._fxnmodes[fxnname, mode]['oppvect']
-                    if type(oppvect)==int or len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
-                    elif self.globalphases!=mdl.phases: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(mdl.phases)}
-                    elif len(oppvect)!=len(fxnphases): raise Exception("Invalid Opportunity vector: "+fxnname+". Invalid length.")
-                    else: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(fxnphases)}
+                    a=1
+                    if type(self._fxnmodes[fxnname, mode]['oppvect'])==dict: 
+                        oppvect = {phase:0 for phase in fxnphases}
+                        oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
+                    else:
+                        oppvect = self._fxnmodes[fxnname, mode]['oppvect']
+                        if type(oppvect)==int or len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
+                        elif self.globalphases!=mdl.phases: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(mdl.phases)}
+                        elif len(oppvect)!=len(fxnphases): raise Exception("Invalid Opportunity vector: "+fxnname+". Invalid length.")
+                        else: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(fxnphases)}
             for phase, times in fxnphases.items():
                 opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
-                dist = self._fxnmodes[fxnname, mode]['dist']
-                if self._fxnmodes[fxnname, mode]['probtype']=='rate' and len(times)>1:      
-                    dt = float(times[1]-times[0]) 
+                
+                if self._fxnmodes[fxnname, mode]['probtype']=='prob': dt = mdl.tstep; unitfactor = 1
+                elif type(times[0])==list:
+                    dt = sum([self.calc_intervaltime(ts, mdl.tstep) for ts in times])
                     unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
-                elif self._fxnmodes[fxnname, mode]['probtype']=='prob' or len(times)>=1:    
-                    dt = 1
-                    unitfactor = 1
+                elif self._fxnmodes[fxnname, mode]['probtype']=='rate' and len(times)>1:      
+                    dt = self.calc_intervaltime(times, mdl.tstep)
+                    unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
                 self.rates[fxnname, mode][key_phases, phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
                 self.rates_timeless[fxnname, mode][key_phases, phase] = overallrate*opp*dist
                 self.mode_phase_map[fxnname, mode][key_phases, phase] = times
@@ -2305,9 +2319,17 @@ class SampleApproach():
                     times = self.mode_phase_map[fxnmode][phaseid]
                     param = params.get((fxnmode,phaseid), default)
                     self.sampparams[fxnmode, phaseid] = param
-                    if len(times)<=1: self.add_phasetimes(fxnmode, phaseid, times)
+                    if type(times[0])!=list: times=[times]
+                    possible_phasetimes=[]
+                    for ts in times: 
+                        if ts[0]==ts[1]:    possible_phasetimes = possible_phasetimes + [ts[0]]
+                        else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[1], self.tstep))
+                    possible_phasetimes.sort()
+                    possible_phasetimes=list(set(possible_phasetimes))
+                    if len(possible_phasetimes)<=1: 
+                        a=1
+                        self.add_phasetimes(fxnmode, phaseid, possible_phasetimes)
                     else:
-                        possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
                         if param['samp']=='likeliest':
                             weights=[]
                             if self.rates[fxnmode][phaseid] == max(list(self.rates[fxnmode].values())):
@@ -2498,7 +2520,77 @@ class SampleApproach():
     def list_moderates(self):
         """ Returns the rates for each mode """
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
-
+    def get_scenid_groups(self,group_by='phases', group_dict={}):
+        """
+        Returns a dict with different scenario ids grouped according to group_by. 
+        group_by: str, with options:
+        - 'none':           Returns {'scenid':'scenid'} for all scenarios
+        - 'phase':          Returns {(fxnmode, fxnphase):{scenids}}--identical scenarios within a given phase are grouped 
+        - 'fxnfault':       Returns {fxnmode:{scenids}} All identical scenarios (fxn, mode) are grouped
+        - 'mode':           Returns {mode:{scenids}}. All scenarios with the same mode name are grouped
+        - 'mode type':      Returns {modetype:scenids}. All scenarios with the same mode type (mode types must be given to the sampleapproach) are grouped
+        - 'functions':      Returns {function:scenids}. All scenarios and modes from a given function are grouped.
+        - 'times':          Returns {time:scenids}. All scenarios at a given time are grouped.
+        - 'fxnclassfault':  Returns {(fxnclass, mode):scenids}. All scenarios (fxnclass, mode) from a given function class are grouped.
+        - 'fxnclass':       Returns {fxnclass:scendis}. All scenarios from a given function class are grouped.
+        For 'fxnclass', 'fxnclassfault', and 'modetype', a group_dict dictionary must be provided that groups the function/mode classes/types.
+        -------------------
+        Returns:
+        - grouped_scens: dict
+              A dictionary of the scenario ids associated with the given group {group:scenids}  
+        """
+        if group_by in ['fxnclass', 'fxnclassfault', 'modetype'] and not group_dict:
+            raise Exception("group_dict must be provided to group by these")
+        if group_by=='none':         grouped_scens =   {s:[s] for v in self.scenids.values() for s in v}
+        elif group_by=='phase':      grouped_scens =   self.scenids
+        elif group_by=='fxnfault':   
+            grouped_scens = {m:set() for m in self.list_modes()}
+            for modephase, ids in self.scenids.items(): grouped_scens[modephase[0]].update(ids)
+        elif group_by=='mode':
+            grouped_scens = {m[1]:set() for m in self.list_modes()}
+            for modephase, ids in self.scenids.items(): grouped_scens[modephase[0][1]].update(ids)
+        elif group_by=='functions':
+            grouped_scens = {m[0]:set() for m in self.list_modes()}
+            for modephase, ids in self.scenids.items(): grouped_scens[modephase[0][0]].update(ids)
+        elif group_by=='times':
+            grouped_scens = {float(t):set() for t in set(self.times)}
+            for scen in self.scenlist: 
+                time = float(scen['properties']['time'])
+                grouped_scens[time].add(scen['properties']['name'])
+        elif group_by=='fxnclass':
+            fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
+            grouped_scens= {fxn_groups[fxnmode[0]]:set() for fxnmode in self.list_modes()}
+            for modephase, ids in self.scenids.items(): 
+                fxn = modephase[0][0]
+                group = fxn_groups[fxn]
+                grouped_scens[group].update(ids)
+        elif group_by=='fxnclassfault':
+            fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
+            grouped_scens= {(fxn_groups[fxnmode[0]], fxnmode[1]):set() for fxnmode in self.list_modes()}
+            for modephase, ids in self.scenids.items(): 
+                fxn, mode = modephase[0]
+                group = fxn_groups[fxn]
+                grouped_scens[group, mode].update(ids)
+        elif group_by=='modetype':
+            grouped_scens= {group:set() for group in group_dict}
+            grouped_scens['ungrouped'] =set()
+            for modephase, ids in self.scenids.items(): 
+                mode = modephase[0][1]
+                grouped=False
+                for group in grouped_scens:
+                    if group in mode: 
+                        grouped_scens[group].update(ids)
+                        grouped=True
+                        break
+                if not grouped: grouped_scens['ungrouped'].update(ids)    
+        else: raise Exception("Invalid option for group_by: "+group_by)
+        return grouped_scens
+    def get_id_weights(self):
+        id_weights ={}
+        for scens, ids in self.scenids.items():
+            weights = [*self.weights[scens[0]][scens[1]].values()]
+            id_weights.update({scenid:weights[i] for i,scenid in enumerate(ids)})
+        return id_weights
 
 def find_overlap_n(intervals):
     """Finds the overlap between given intervals.
