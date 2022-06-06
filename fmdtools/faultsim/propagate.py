@@ -35,6 +35,7 @@ import numpy as np
 import copy
 import fmdtools.resultdisp.process as proc
 import tqdm
+import dill
 from fmdtools.modeldef import SampleApproach
 
 ## FAULT PROPAGATION
@@ -120,7 +121,7 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
     if 'mdlhists' in save_args:     save_args['mdlhist'] = save_args.pop('mdlhists')
     if 'endclasses' in save_args:   save_args['endclass'] = save_args.pop('endclasses')
     for save_arg in save_args:
-        if save_arg not in {'mdlhist', 'endclass', 'indiv'}: raise Exception("Invalid key in save_args: "+save_arg)
+        if save_arg not in {'mdlhist', 'endclass', 'indiv', 'apps'}: raise Exception("Invalid key in save_args: "+save_arg)
     
     if save_args.get('indiv', False) and indiv_id:
         if 'mdlhist' in save_args:
@@ -639,11 +640,12 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
         Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
+        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv, 'apps':'filename.pkl'},
         where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
         (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
         and indiv is an (optional) bool specifying whether to save results individually (in a folder)
         or as a monolythic file
+        and filename.pkl is an optional file name to save the generated SampleApproaches to (if desired)
     **app_args : kwargs
         Keyword arguments for the SampleApproach. See modeldef.SampleApproach documentation.
 
@@ -653,9 +655,14 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
         A nested dictionary with the rate, cost, and expected cost of each scenario run with structure {'nomscen1':endclasses, 'nomscen2':mdlhists}
     nested_mdlhists : dict
         A nested dictionary with the history of all model states for each scenario with structure {'nomscen1':mdlhists, 'nomscen2':mdlhists}
+    apps : dict
+        A dictionary of the SampleApproaches generated corresponding to each nominal scenario with structure {'nomscen1':app1}
+        
     """
     nested_mdlhists = dict.fromkeys(nomapp.scenarios)
     nested_endclasses = dict.fromkeys(nomapp.scenarios)
+    apps = dict.fromkeys(nomapp.scenarios)
+    save_app_as = save_args.pop("apps", False)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
         mdl = mdl.__class__(*new_mdl_params(mdl,scen['properties']))
         if get_phases:
@@ -668,10 +675,14 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
             app_args.update({'phases':phases})
         
         app = SampleApproach(mdl,**app_args)
+        apps[scenname]=app
         nested_endclasses[scenname], nested_mdlhists[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic)
         save_helper(save_args, nested_endclasses[scenname], nested_mdlhists[scenname], indiv_id=scenname, result_id=scenname)
     save_helper(save_args, nested_endclasses, nested_mdlhists)
-    return nested_endclasses, nested_mdlhists
+    if save_app_as:
+        with open(save_app_as, 'wb') as file_handle:
+            dill.dump(file_handle, save_app_as)
+    return nested_endclasses, nested_mdlhists, apps
 
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
