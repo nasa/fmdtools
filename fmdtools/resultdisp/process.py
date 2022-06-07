@@ -592,6 +592,14 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
     elif return_anyway: return method(data), method(data), method(data)
     else: raise Exception("All data are the same!")
 
+def file_check(filename, overwrite):
+    """Check if files exists and whether to overwrite the file"""
+    if os.path.exists(filename):
+        if not overwrite: raise Exception("File already exists: "+filename)
+        else:                   
+            print("File already exists: "+filename+", writing anyway...")
+            os.remove(filename)
+
 def save_result(variable, filename, filetype="", overwrite=False, result_id=''):
     """
     Saves a given result variable (endclasses or mdlhists) to a file filename. 
@@ -611,11 +619,8 @@ def save_result(variable, filename, filetype="", overwrite=False, result_id=''):
         For individual results saving. Places an identifier for the result in the file. The default is ''.
     """
     import dill, json, csv
-    if os.path.exists(filename):
-        if not overwrite: raise Exception("File already exists: "+filename)
-        else:                   
-            print("File already exists: "+filename+", writing anyway...")
-            os.remove(filename)
+    file_check(filename, overwrite)
+    
     if "/" in filename:
         last_split_index = filename.rfind("/")
         foldername = filename[:last_split_index]

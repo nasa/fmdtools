@@ -2560,6 +2560,7 @@ class SampleApproach():
         elif group_by=='fxnclass':
             fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
             grouped_scens= {fxn_groups[fxnmode[0]]:set() for fxnmode in self.list_modes()}
+            grouped_scens['nominal']={'nominal'}
             for modephase, ids in self.scenids.items(): 
                 fxn = modephase[0][0]
                 group = fxn_groups[fxn]
@@ -2567,6 +2568,7 @@ class SampleApproach():
         elif group_by=='fxnclassfault':
             fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
             grouped_scens= {(fxn_groups[fxnmode[0]], fxnmode[1]):set() for fxnmode in self.list_modes()}
+            grouped_scens['nominal']={'nominal'}
             for modephase, ids in self.scenids.items(): 
                 fxn, mode = modephase[0]
                 group = fxn_groups[fxn]
