@@ -84,6 +84,7 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True
     mdlhist : Dict
         A dictionary with a history of modelstates
     """
+    check_overwrite(save_args)
     if protect or kwargs:
         mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
     nomscen=construct_nomscen(mdl)
@@ -121,7 +122,7 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
     if 'mdlhists' in save_args:     save_args['mdlhist'] = save_args.pop('mdlhists')
     if 'endclasses' in save_args:   save_args['endclass'] = save_args.pop('endclasses')
     for save_arg in save_args:
-        if save_arg not in {'mdlhist', 'endclass', 'indiv', 'apps'}: raise Exception("Invalid key in save_args: "+save_arg)
+        if save_arg not in {'mdlhist', 'endclass', 'indiv'}: raise Exception("Invalid key in save_args: "+save_arg)
     
     if save_args.get('indiv', False) and indiv_id:
         if 'mdlhist' in save_args:
@@ -214,6 +215,7 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
     nomapp_mdlhists : Dict
         Dictionary of model histories, with structure {'scenname':mdlhist}
     """
+    check_overwrite(save_args)
     nomapp_mdlhists = dict.fromkeys(nomapp.scenarios)
     nomapp_endclasses = dict.fromkeys(nomapp.scenarios)
     if pool:
@@ -292,6 +294,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
     mdlhists : dict
         A dictionary of the states of the model of each fault scenario over time.
     """
+    check_overwrite(save_args)
     #run model nominally, get relevant results
     if protect or kwargs:
         mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
@@ -394,6 +397,7 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
         A dictionary of the states of the model of each fault scenario over time.
 
     """
+    check_overwrite(save_args)
     #run model nominally, get relevant results
     if protect or kwargs:
         mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
@@ -488,6 +492,7 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
+    check_overwrite(save_args)
     if protect or kwargs:
         mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
     scenlist=list_init_faults(mdl)
@@ -573,6 +578,7 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
+    check_overwrite(save_args)
     if protect or kwargs:
         mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
     if staged:
@@ -602,6 +608,11 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     save_helper(save_args, endclasses['nominal'], mdlhists['nominal'], indiv_id=str(len(endclasses)-1),result_id='nominal')
     save_helper(save_args, endclasses, mdlhists)
     return endclasses, mdlhists
+
+def check_overwrite(save_args):
+    for arg, args in save_args.items():
+        if arg!='indiv':
+            if args.get('filename', False): proc.file_check(args['filename'], args.get('overwrite', False))
 
 def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, showprogress=True, pool=False, track_times="all",run_stochastic=False, save_args={}, **app_args):
     """
@@ -660,10 +671,11 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
         A dictionary of the SampleApproaches generated corresponding to each nominal scenario with structure {'nomscen1':app1}
         
     """
+    check_overwrite(save_args)
     nested_mdlhists = dict.fromkeys(nomapp.scenarios)
     nested_endclasses = dict.fromkeys(nomapp.scenarios)
     apps = dict.fromkeys(nomapp.scenarios)
-    save_app_as = save_args.pop("apps", False)
+    save_app = save_args.pop("apps", False)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
         mdl = mdl.__class__(*new_mdl_params(mdl,scen['properties']))
         if get_phases:
@@ -680,9 +692,9 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
         nested_endclasses[scenname], nested_mdlhists[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic)
         save_helper(save_args, nested_endclasses[scenname], nested_mdlhists[scenname], indiv_id=scenname, result_id=scenname)
     save_helper(save_args, nested_endclasses, nested_mdlhists)
-    if save_app_as:
-        with open(save_app_as, 'wb') as file_handle:
-            dill.dump(file_handle, save_app_as)
+    if save_app:
+        with open(save_app['filename'], 'wb') as file_handle:
+            dill.dump(apps, file_handle)
     return nested_endclasses, nested_mdlhists, apps
 
 def exec_scen_par(args):
