@@ -267,6 +267,12 @@ class Block(Common):
         for param in params:
             for attr, val in param.items():
                 setattr(self, attr, val)
+    def assoc_timers(self, timers):
+        """Associates timer objects with the given function/block"""
+        if not getattr(self, 'timers', False): self.timers=set()
+        self.timers.update(timers)
+        for timername in timers:
+            setattr(self, timername, Timer(timername))
     def assoc_rand_states(self, *states):
         """
         Associates multiple random states with the model
@@ -478,7 +484,9 @@ class Block(Common):
                 self.faultmodes[mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
                 self.faultmodes[mode]['probtype'] = probtype
                 self.faultmodes[mode]['units'] = units
-                dist=1.0/len(faultmodes); oppvect=[1.0]; rcost=0.0
+                if key_phases_by=='self': oppvect='all'
+                else:                     oppvect=[1.0]
+                dist=1.0/len(faultmodes); rcost=0.0
                 if type(faultmodes) in {set,str}:     a=1 # minimum information - here the faultmodes are only a set of labels
                 elif type(faultmodes[mode]) == float:   dist  =  faultmodes[mode] # dict of modes: dist, where dist is the distribution (or individual rate/probability)
                 elif type(faultmodes[mode]) == dict:    oppvect = faultmodes[mode] # provided oppvect in dict form
@@ -489,8 +497,9 @@ class Block(Common):
                         if i>=1:          rcost = e
                         else:             dist = e
                 else:   raise Exception("Invalid mode definition")
-                if 'all' in oppvect or oppvect=='all':      
-                    oppvect = {*opermodes}
+                if 'all' in oppvect or oppvect=='all': 
+                    if not opermodes:   oppvect = {'nom'}
+                    else:               oppvect = {*opermodes}
                     if key_phases_by!='self': raise Exception("'all' option for oppvect only applies to key_phases_by='self'")
                 elif type(oppvect)==str:                    oppvect={oppvect}
                 if type(oppvect)==set:                      oppvect = {o:1.0 for o in oppvect}
@@ -763,9 +772,7 @@ class FxnBlock(Block):
             self.faultmodes.update({components[cname].localname+f:vals for f, vals in components[cname].faultmodes.items()})
             self.compfaultmodes.update({components[cname].localname+modename:cname for modename in components[cname].faultmodes})
             setattr(self, cname, components[cname])
-        self.timers = timers
-        for timername in timers:
-            setattr(self, timername, Timer(timername))
+        self.assoc_timers(timers)
         self.tstep=tstep
         self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
@@ -2240,6 +2247,8 @@ class SampleApproach():
             key_phases = mdl.fxns[fxnname].key_phases_by
             
             if modephases and join_modephases and (key_phases not in ['global', 'none']):
+                if type (self._fxnmodes[fxnname, mode]['oppvect'])==list:
+                    raise Exception("Poorly specified oppvect for fxn: "+fxnname+" mode: "+mode+"--provide a dict to use with modephases")
                 oppvect = {**{phase:0 for phase in modephases[fxnname]}, **self._fxnmodes[fxnname, mode]['oppvect']}
                 fxnphases = {m:[self.phases[fxnname][ph] for ph in m_phs] for m, m_phs in modephases[fxnname].items()}
             else:

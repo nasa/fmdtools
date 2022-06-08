@@ -300,6 +300,12 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
             --'functions' (modes for each function are grouped)
             --'mode type' (modes with the same name are grouped)
             -- or a set of specific modes/functions. The default is 'functions'.
+            -- or a tuple of form (group_by, apps, *arg), where
+                - group_by is an argument to SampleApproach.get_scenid_groups
+                - apps is a dictionary of approaches corresponding to the endclasses (from prop.nested_approach)
+                - arg is:
+                    - when using 'fxnclassfault' and 'fxnclass' options: a model
+                    - when using 'modetype' options: a dictionary grouping modes by type
     rangeid : str, optional
         Nominal Approach range to use for the test, if run over a single range.
         The default is 'default', which either:
@@ -334,8 +340,17 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
     elif faults=='mode type':   faultlist = set([e.partition(',')[0].partition(' ')[2] for scen in nested_endclasses for e in nested_endclasses[scen]])
     elif type(faults) ==str: raise Exception("Invalid faults option: "+faults)
     elif type(faults)==list:    faultlist =set(faults)
+    elif type(faults)==tuple:   
+        group_by=faults[0]; apps=faults[1]; group_dict={}
+        if group_by in ['fxnclassfault','fxnclass']: 
+            mdl=faults[2]
+            group_dict = {cl:mdl.fxns_of_class(cl) for cl in mdl.fxnclasses()}
+        elif group_by=='modetype':  group_dict=faults[2]
+        fault_scen_groups = {factor:{scen:apps[scen].get_scenid_groups(group_by, group_dict) for scen in scens} for factor, scens in factors.items()}
+        faultlist = {fsname:set() for dicts in fault_scen_groups.values() for group in dicts.values() for fsname in group}
     else:                       faultlist=faults
-    faultlist.discard('nominal'); faultlist.discard(' '); faultlist.discard('')
+    if type(faults)==tuple: faultlist.pop('nominal', 'nothing')
+    else:                   faultlist.discard('nominal'); faultlist.discard(' '); faultlist.discard('')
     if type(params)==str: params=[params]
     full_stats=[]
     for factor, scens in factors.items():
@@ -348,8 +363,16 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
         if give_ci: 
             factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(nominal_metrics, **kwargs)
             factor_stats = factor_stats + [factor_lb, factor_ub]
+        if type(faults)==tuple:
+            faultlist = {f:set() for f in faultlist}
+            for scen, groups in fault_scen_groups[factor].items():
+                for group, faultscens in groups.items():
+                    if not faultlist.get(group, False) and faultscens:  faultlist[group]=set(faultscens)
+                    else:                                               faultlist[group].update(faultscens)
+                faultlist.pop('nominal', 'nothing')
         for fault in faultlist:
-            if faults=='functions':     fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(' ')[0]]
+            if type(faults)==tuple:     fault_metrics=[metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if res_scen in faultlist[fault]]
+            elif faults=='functions':     fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(' ')[0]]
             else:                       fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(',')[0]]
             if len(fault_metrics)>0:    
                 factor_stats.append(sum(fault_metrics)/len(fault_metrics))
