@@ -125,12 +125,12 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
         if save_arg not in {'mdlhist', 'endclass', 'indiv'}: raise Exception("Invalid key in save_args: "+save_arg)
     
     if save_args.get('indiv', False) and indiv_id:
-        if 'mdlhist' in save_args:
-            newfilename = proc.create_indiv_filename(save_args['mdlhist']['filename'], indiv_id, splitchar="/")
-            proc.save_result(mdlhist, **{**save_args['mdlhist'], 'filename':newfilename}, result_id=result_id)
         if 'endclass' in save_args:
             newfilename = proc.create_indiv_filename(save_args['endclass']['filename'], indiv_id, splitchar="/")
             proc.save_result(endclass, **{**save_args['endclass'], 'filename':newfilename}, result_id=result_id)
+        if 'mdlhist' in save_args:
+            newfilename = proc.create_indiv_filename(save_args['mdlhist']['filename'], indiv_id, splitchar="/")
+            proc.save_result(mdlhist, **{**save_args['mdlhist'], 'filename':newfilename}, result_id=result_id)
     elif not save_args.get('indiv', False) and not indiv_id:
         if 'mdlhist' in save_args:     proc.save_result(mdlhist, **save_args['mdlhist'])
         if 'endclass' in save_args:     proc.save_result(endclass, **save_args['endclass'])
