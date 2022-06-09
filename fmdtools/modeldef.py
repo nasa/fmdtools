@@ -22,6 +22,7 @@ import warnings
 from ordered_set import OrderedSet
 from operator import itemgetter
 from collections.abc import Iterable
+from collections import Hashable
 from inspect import signature
 
 # MAJOR CLASSES
@@ -267,7 +268,7 @@ class Block(Common):
         for param in params:
             for attr, val in param.items():
                 setattr(self, attr, val)
-    def assoc_timers(self, timers):
+    def assoc_timers(self, *timers):
         """Associates timer objects with the given function/block"""
         if not getattr(self, 'timers', False): self.timers=set()
         self.timers.update(timers)
@@ -739,7 +740,7 @@ class FxnBlock(Block):
     tstep : float
         timestep of the model in the function (added/overridden by model definition)
     """
-    def __init__(self,name, flows, flownames=[], states={}, components={},timers={}, tstep=1.0, seed=None):
+    def __init__(self,name, flows, flownames=[], states={}, components={},timers=[], tstep=1.0, seed=None):
         """
         Instantiates the function superclass with the relevant parameters.
 
@@ -772,7 +773,7 @@ class FxnBlock(Block):
             self.faultmodes.update({components[cname].localname+f:vals for f, vals in components[cname].faultmodes.items()})
             self.compfaultmodes.update({components[cname].localname+modename:cname for modename in components[cname].faultmodes})
             setattr(self, cname, components[cname])
-        self.assoc_timers(timers)
+        self.assoc_timers(*timers)
         self.tstep=tstep
         self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
@@ -1874,7 +1875,8 @@ class NominalApproach():
         self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}, 'replicates':replicates}
         for xvals in fullspace:
             inputparams = {**{name:xvals[i] for i,name in enumerate(inputnames)}, **fixedkwargs}
-            if replicates>1:    self.ranges[rangeid]['levels'][xvals]=[]
+            level_key = tuple([x if isinstance(x,Hashable) else str(x) for x in xvals])
+            if replicates>1:    self.ranges[rangeid]['levels'][level_key]=[]
             for i in range(replicates):
                 np.random.seed(seeds[i])
                 self.num_scenarios+=1
@@ -1885,8 +1887,8 @@ class NominalApproach():
                                                         'params':params,'inputparams':inputparams,'modelparams':{'seed':mdlseeds[i]},\
                                                         'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
                 self.ranges[rangeid]['scenarios'].append(scenname)
-                if replicates>1:    self.ranges[rangeid]['levels'][xvals].append(scenname)
-                else:               self.ranges[rangeid]['levels'][xvals]=scenname
+                if replicates>1:    self.ranges[rangeid]['levels'][level_key].append(scenname)
+                else:               self.ranges[rangeid]['levels'][level_key]=scenname
     def update_factor_seeds(self, rangeid, inputparam, seeds='new'):
         """
         Changes/randomizes the seeds along a given factor in a range
