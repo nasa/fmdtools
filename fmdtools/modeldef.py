@@ -1818,6 +1818,7 @@ class NominalApproach():
         """
         inputranges = {param:self.ranges[rangeid]['inputranges'][param] for param in level_params}
         partialspace= self.range_to_space(inputranges)
+        partialspace = [tuple([a if isinstance(a, Hashable) else str(a) for a in p]) for p in partialspace]
         param_scens = {(p if len(p)>1 else p[0]):set() for p in partialspace}
         full_indices = list(self.ranges[rangeid]['inputranges'].keys())
         inds = [full_indices.index(param) for param in level_params]
