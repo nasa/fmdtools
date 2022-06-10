@@ -2297,23 +2297,26 @@ class SampleApproach():
                 jointphase_dict = {k:v for mode in jointmode for k,v in self.mode_phase_map[mode].items()}
                 for phase_combo in itertools.product(*jointphase_list):
                     intervals = [jointphase_dict[phase] for phase in phase_combo]
-                    overlap = find_overlap_n(intervals)
+                    overlap, intervals_times = find_overlap_n(intervals)
                     if overlap: 
                         phaseid = tuple(set(phase_combo))
                         if len(phaseid) == 1: 
                             phaseid = phaseid[0]
                             rates=[self.rates[fmode][phaseid] for fmode in jointmode]
                         else:
-                            rates = [self.rates[fmode][phase_combo[i]]* np.subtract(*overlap)/np.subtract(*self.mode_phase_map[fmode][phase_combo[i]]) for i,fmode in enumerate(jointmode)]
+                            rates = [self.rates[fmode][phase_combo[i]]* len(overlap)/intervals_times[i] for i,fmode in enumerate(jointmode)]
                         if not jointfaults.get('pcond', False): # if no input, assume independence
                             prob = np.prod(1-np.exp(-np.array(rates)))
                             self.rates[jointmode][phaseid] = -np.log(1.0-prob)
-                        elif type(jointfaults['pcond'])==float:
+                        elif type(jointfaults['pcond']) in [float, int]:
                             self.rates[jointmode][phaseid] = jointfaults['pcond']*max(rates)
                         elif type(jointfaults['pcond'])==list:
                             self.rates[jointmode][phaseid] = jointfaults['pcond'][j_ind]*max(rates)
-                        if len(overlap)>1:  self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(overlap[1]-overlap[0])
-                        else:               self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]
+                        else: raise Exception("Invalid pcond argument in jointfaults: "+str(jointfaults['pcond']))
+                        if len(overlap)>1:  
+                            self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(len(overlap)*self.tstep)
+                        else:
+                            self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]
                         self.mode_phase_map[jointmode][phaseid] = overlap 
             if not jointfaults.get('inclusive', True): 
                 for (fxnname, mode) in self._fxnmodes: 
@@ -2334,8 +2337,9 @@ class SampleApproach():
                     if type(times[0])!=list: times=[times]
                     possible_phasetimes=[]
                     for ts in times: 
-                        if ts[0]==ts[1]:    possible_phasetimes = possible_phasetimes + [ts[0]]
-                        else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[1], self.tstep))
+                        if len(ts)==1:      possible_phasetimes = ts
+                        elif len(ts)<2:     possible_phasetimes= ts
+                        else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[1]+self.tstep, self.tstep))
                     possible_phasetimes.sort()
                     possible_phasetimes=list(set(possible_phasetimes))
                     if len(possible_phasetimes)<=1: 
@@ -2610,12 +2614,16 @@ def find_overlap_n(intervals):
     """Finds the overlap between given intervals.
     Used to sample joint fault modes with different (potentially overlapping) phases """
     try:
-        upper_limits = [interval[1] for interval in intervals]
-        lower_limits = [interval[0] for interval in intervals]
-        if any(u < l for u in upper_limits for l in lower_limits): return []
-        if not upper_limits and not lower_limits: return []
-        orderedintervals = np.sort(upper_limits+lower_limits)
-        return [orderedintervals[len(intervals)-1],orderedintervals[len(intervals)]]
+        joined_times={}
+        intervals_times = []
+        for i, interval in enumerate(intervals):
+            possible_times = set()
+            possible_times.update(*[{*np.arange(i[0],i[1]+1)} for i in interval])
+            if not joined_times:    joined_times = possible_times
+            else:                   joined_times = joined_times.intersection(possible_times)
+            intervals_times.append(len(possible_times))
+        if not joined_times: return [], intervals_times
+        else:                   return [*np.sort([*joined_times])], intervals_times
     except IndexError:
         if all(intervals[0]==i for i in intervals): return intervals[0]
         else:                                       return 0
