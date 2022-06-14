@@ -2109,6 +2109,9 @@ class SampleApproach():
                     specifies whether the fault set includes all joint faults up to the given level, or only the given level
                     (e.g., True with 'all' means SampleApproach includes every combination of joint fault modes while
                            False with 'all' means SampleApproach only includes the joint fault mode with all faults)
+                - limit jointphases (optional) : int
+                    Limits the number of jointphases to sample (by randomly sampling them instead). Necessary when the
+                    number of faults is large
         sampparams : dict, optional
             Defines how specific modes in the model will be sampled over time. The default is {}. 
             Has structure: {(fxnmode,phase): sampparam}, where sampparam has structure:
@@ -2213,8 +2216,10 @@ class SampleApproach():
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components.items()}
         if type(jointfaults['faults'])==int or jointfaults['faults']=='all':
-            if jointfaults['faults']=='all': num_joint= len(self._fxnmodes)
-            else:                            num_joint=jointfaults['faults']
+            if jointfaults['faults']=='all': 
+                if not jointfaults.get('jointfuncs', False): num_joint = len({i[0] for i in self._fxnmodes})
+                else:                                        num_joint= len(self._fxnmodes)
+            else:                                            num_joint=jointfaults['faults']
             self.jointmodes=[]
             inclusive = jointfaults.get('inclusive', True)
             if inclusive:
@@ -2295,7 +2300,13 @@ class SampleApproach():
                 self.mode_phase_map.update({jointmode:dict()})
                 jointphase_list = [self.mode_phase_map[mode] for mode in jointmode]
                 jointphase_dict = {k:v for mode in jointmode for k,v in self.mode_phase_map[mode].items()}
-                for phase_combo in itertools.product(*jointphase_list):
+                phasecombos = [i for i in itertools.product(*jointphase_list)]
+                if 'limit jointphases' in jointfaults and jointfaults['limit jointphases']<len(phasecombos): 
+                    rng = np.random.default_rng()
+                    pc_inds = [i for i in range(len(phasecombos))]
+                    pc_choices = rng.choice(pc_inds, jointfaults['limit jointphases'], replace=False)
+                    phasecombos = [phasecombos[i] for i in pc_choices]
+                for phase_combo in phasecombos:
                     intervals = [jointphase_dict[phase] for phase in phase_combo]
                     overlap, intervals_times = find_overlap_n(intervals)
                     if overlap: 
@@ -2461,6 +2472,13 @@ class SampleApproach():
                         if self.scenids.get((fxnmode, phaseid)): self.scenids[fxnmode, phaseid] = self.scenids[fxnmode, phaseid] + [name]
                         else: self.scenids[fxnmode, phaseid] = [name]
         self.times.sort()
+    def reduce_scens_to_samp(self, samp_size=100,seed=None):
+        """Reduces the number of scenarios (in the scenlist) to a given sample size samp_size. Useful for
+        choosing a random subset of an approach which would otherwise have a large number of scenarios.
+        Note that many structures may not be preserved and some artefacts may be present."""
+        if samp_size<len(self.scenlist):
+            rng = np.random.default_rng(seed)
+            self.scenlist = rng.choice(self.scenlist, samp_size, replace=False)
     def prune_scenarios(self,endclasses,samptype='piecewise', threshold=0.1, sampparam={'samp':'evenspacing','numpts':1}):
         """
         Finds the best sample approach to approximate the full integral (given the approach was the full integral).
