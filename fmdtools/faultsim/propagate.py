@@ -582,7 +582,7 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     if protect or kwargs:
         mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
     if staged:
-        nomhist, c_mdl, t_end_nom = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=app.times, track_times=track_times, run_stochastic=run_stochastic)
+        nomhist, c_mdl, t_end_nom = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=copy.copy(app.times), track_times=track_times, run_stochastic=run_stochastic)
     else:
         nomhist, c_mdl, t_end_nom = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, track_times=track_times, run_stochastic=run_stochastic)
     nomresgraph = mdl.return_stategraph()
@@ -682,6 +682,7 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
             nomhist, _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
             if get_phases=='global':      phases={'global':[0,t_end]}
             else:
+                nomhist = cut_mdlhist(nomhist, t_end)
                 phases, modephases = proc.modephases(nomhist)
                 if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
                 elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
@@ -689,7 +690,7 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
         
         app = SampleApproach(mdl,**app_args)
         apps[scenname]=app
-        nested_endclasses[scenname], nested_mdlhists[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic)
+        nested_endclasses[scenname], nested_mdlhists[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic, **scen['properties'])
         save_helper(save_args, nested_endclasses[scenname], nested_mdlhists[scenname], indiv_id=scenname, result_id=scenname)
     save_helper(save_args, nested_endclasses, nested_mdlhists)
     if save_app:
@@ -840,7 +841,7 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     if staged:
-        timerange=np.arange(scen['properties']['time'], mdl.times[-1]+1, mdl.tstep)
+        timerange=np.arange(scen['properties']['time'], mdl.times[-1]+mdl.tstep, mdl.tstep)
         prevtimerange = np.arange(mdl.times[0], scen['properties']['time'], mdl.tstep)
         if track_times == "all":            
             histrange = timerange
@@ -854,12 +855,13 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
         if prevhist:    mdlhist = copy.deepcopy(prevhist)
         else:           mdlhist = init_mdlhist(mdl, histrange, track=track)
     else: 
-        timerange = np.arange(mdl.times[0], mdl.times[-1]+1, mdl.tstep)
+        timerange = np.arange(mdl.times[0], mdl.times[-1]+mdl.tstep, mdl.tstep)
         if track_times == "all":            histrange = timerange
         elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
         elif track_times[0]=='times':       histrange = track_times[0]
         shift = 0
         mdlhist = init_mdlhist(mdl, histrange, track=track)
+    
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes)
     flowstates=dict.fromkeys(mdl.staticflows)

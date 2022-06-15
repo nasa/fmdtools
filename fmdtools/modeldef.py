@@ -2061,7 +2061,8 @@ class SampleApproach():
     unit_factors : dict
         multiplication factors for converting some time units to others.
     """
-    def __init__(self, mdl, faults='all', phases='global', modephases={},join_modephases=False, jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
+    def __init__(self, mdl, faults='all', phases='global', modephases={},join_modephases=False, jointfaults={'faults':'None'}, 
+                 sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}, reduce_to=False):
         """
         Initializes the sample approach for a given model
 
@@ -2133,6 +2134,8 @@ class SampleApproach():
                     dict with structure {'nodes'[nodelist], 'weights':weightlist}
                     where the nodes in the nodelist range between -1 and 1
                     and the weights in the weightlist sum to 2.
+        reduce_to : int, optional
+            Size of random sample to reduce the number of scenarios to (if any). Default is False.
         """
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
         if phases=='global':                self.globalphases = mdl.phases; self.phases = {}; self.modephases = modephases
@@ -2148,6 +2151,7 @@ class SampleApproach():
         self.init_rates(mdl, jointfaults=jointfaults, modephases=modephases, join_modephases=join_modephases)
         self.create_sampletimes(mdl, sampparams, defaultsamp)
         self.create_scenarios()
+        if reduce_to: self.reduce_scens_to_samp(reduce_to)
     def init_modelist(self,mdl, faults, jointfaults={'faults':'None'}):
         """Initializes comprates, jointmodes internal list of modes"""
         self.comprates={}
@@ -2289,6 +2293,7 @@ class SampleApproach():
                 elif self._fxnmodes[fxnname, mode]['probtype']=='rate' and len(times)>1:      
                     dt = self.calc_intervaltime(times, mdl.tstep)
                     unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
+                    times=[times]
                 self.rates[fxnname, mode][key_phases, phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
                 self.rates_timeless[fxnname, mode][key_phases, phase] = overallrate*opp*dist
                 self.mode_phase_map[fxnname, mode][key_phases, phase] = times
@@ -2471,6 +2476,7 @@ class SampleApproach():
                         self.scenlist=self.scenlist+[scen]
                         if self.scenids.get((fxnmode, phaseid)): self.scenids[fxnmode, phaseid] = self.scenids[fxnmode, phaseid] + [name]
                         else: self.scenids[fxnmode, phaseid] = [name]
+        self.times = list(set(self.times))
         self.times.sort()
     def reduce_scens_to_samp(self, samp_size=100,seed=None):
         """Reduces the number of scenarios (in the scenlist) to a given sample size samp_size. Useful for
