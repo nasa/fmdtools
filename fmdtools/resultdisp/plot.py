@@ -966,7 +966,7 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
     if type(comparison_table.columns[0])==tuple:    has_bounds = True
     else:                                           has_bounds=False
     if faults=='all': 
-        if has_bounds: faults=list({f[0] for f in comparison_table})
+        if has_bounds: faults=[f[0] for f in comparison_table][0:-1:3]
         else:          faults=[*comparison_table.columns]
         faults.remove('nominal')
     columns = int(np.ceil(len(faults)/rows))
