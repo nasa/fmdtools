@@ -39,7 +39,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
              fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
              title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
              v_padding=None, h_padding=None, title_padding=0.0,
-             phases={}, modephases={}, label_phases=True,  **kwargs):
+             phases={}, modephases={}, label_phases=True, legend_title=None,  **kwargs):
     """
     Plot the behavior over time of the given function/flow values 
     over a set of scenarios, with ability to aggregate behaviors as needed.
@@ -120,6 +120,8 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     modephases : dict, optional
         dictionary that maps the phases to operational modes, if it is desired to track the progression
         through modes
+    legend_title : str, optional
+        title for the legend. Default is None
     **kwargs : kwargs
         keyword arguments to mpl.plot e.g. linestyle, color, etc. See 'aggregation' for specification.
         phases={}, modephases={}, label_phases=True,  **kwargs):
@@ -206,7 +208,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
         if type(time_slice)==int: ax.axvline(x=time_slice, color='k', label=time_slice_label)
         else:   
             for ts in time_slice: ax.axvline(x=ts, color='k', label=time_slice_label)
-    multiplot_legend_title(grouphists, axs, ax, legend_loc, title, v_padding, h_padding, title_padding)
+    multiplot_legend_title(grouphists, axs, ax, legend_loc, title, v_padding, h_padding, title_padding, legend_title)
     return fig, axs
 def indiv_mdlhists(mdlhist, fxnflows={}, cols=2, aggregation='individual', comp_groups={}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
@@ -307,7 +309,7 @@ def plot_err_lines(ax, times, lows, highs, **kwargs):
     """
     ax.plot(times, highs **kwargs)
     ax.plot(times, lows, **kwargs)
-def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_padding=None, h_padding=None, title_padding=0.0):
+def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_padding=None, h_padding=None, title_padding=0.0, legend_title=None):
     """ Helper function for multiplot legends and titles"""
     if len(groupmetrics)>1 and legend_loc!=False:
         ax.legend()
@@ -319,15 +321,15 @@ def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_
             ax_l.set_frame_on(False)
             ax_l.get_xaxis().set_visible(False)
             ax_l.get_yaxis().set_visible(False)
-            ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, loc='center')
-        else: ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8})
+            ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, loc='center', title=legend_title)
+        else: ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, title=legend_title)
     plt.subplots_adjust(hspace=v_padding, wspace=h_padding)
     if title: plt.suptitle(title, y=1.0+title_padding)
     
 
 def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metric_bins={}, legend_loc=-1, 
                 xlabels={}, ylabel='count', title='', indiv_kwargs={}, figsize='default', 
-                v_padding=0.4, h_padding=0.05, title_padding=0.1, **kwargs):
+                v_padding=0.4, h_padding=0.05, title_padding=0.1, legend_title=None, **kwargs):
     """
     Plots the histogram of given metric(s) separated by comparison groups over a set of scenarios
 
@@ -370,6 +372,8 @@ def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metr
         horizontal padding between subplots as a fraction of axis width
     title_padding : float
         padding for title as a fraction of figure height
+    legend_title : str, optional
+        title for the legend. Default is None
     **kwargs : kwargs
         keyword arguments to mpl.hist e.g. bins, etc
     """
@@ -401,7 +405,7 @@ def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metr
             x = [ec[plot_value] for ec in endclasses.values()]
             ax.hist(x, bins, label=group, **local_kwargs)
     
-    multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,v_padding, h_padding, title_padding)
+    multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,v_padding, h_padding, title_padding, legend_title)
     return fig, axs
 
 def metric_dist_from(mdlhists, times, fxnflowvals='all', **kwargs):
