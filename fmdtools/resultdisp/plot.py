@@ -36,7 +36,7 @@ from fmdtools.faultsim.propagate import cut_mdlhist
 
 def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp_groups={}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
-             fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
+             fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95, titles={},
              title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
              v_padding=None, h_padding=None, title_padding=0.0,
              phases={}, modephases={}, label_phases=True, legend_title=None,  **kwargs):
@@ -156,9 +156,12 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     if type(axs)==np.ndarray:   axs = axs.flatten()
     else:                       axs=[axs]
     
+    subplot_titles = {plot_value:' '.join(plot_value) for plot_value in plot_values}
+    subplot_titles.update(titles)
+    
     for i, plot_value in enumerate(plot_values):
         ax = axs[i]
-        ax.set_title(' '.join(plot_value))
+        ax.set_title(subplot_titles[plot_value])
         ax.grid()
         if i >= (rows-1)*cols and xlabel: ax.set_xlabel(xlabel)
         if ylabels.get(plot_value, False): ax.set_ylabel(ylabels[plot_value])
