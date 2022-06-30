@@ -19,12 +19,13 @@ import dill
 import networkx as nx
 import copy
 import warnings
+import sys
 from ordered_set import OrderedSet
 from operator import itemgetter
 from collections.abc import Iterable
 from collections import Hashable
 from inspect import signature
-
+import fmdtools.resultdisp.process as proc
 # MAJOR CLASSES
 
 class Common(object):
@@ -703,6 +704,32 @@ class Block(Common):
             for timername in self.timers:
                 getattr(self, timername).reset()
             self.updatefxn('reset', faults=['nom'], time=0)
+    def get_memory(self):
+        """ Gets the approximate memory usage of the block in bytes (not complete)"""
+        mem=0
+        mem+=sys.getsizeof(self.opermodes)
+        for rng in self.rngs.values():
+            mem+=sys.getsizeof(rng)
+        if hasattr(self, 'faultmodes'):
+            for fm in self.faultmodes.values():
+                mem+=sys.getsizeof(fm)
+        if hasattr(self, 'mode_state_dict'):
+            mem+=sys.getsizeof(self.mode_state_dict)
+        if hasattr(self, 'timers'):
+            for timer in self.timers:
+                mem+=sys.getsizeof(timer)
+        if hasattr(self, 'internal_flows'):
+            for flowname, flow in self.internal_flows.items():
+                mem+= flow.get_memory()
+        if hasattr(self, 'components'):
+            for name,comp in self.components.items():
+                mem+=comp.get_memory()
+        if hasattr(self, 'actions'):
+            for name,comp in self.actions.items():
+                mem+=comp.get_memory()
+        for state in self._initstates.values():
+            mem+=2*sys.getsizeof(state) # (*2 because both the initstate and the actual state should be counted)
+        return mem
     def return_states(self):
         """
         Returns states of the block at the current state. Used (iteratively) to record states over time.
@@ -1191,6 +1218,14 @@ class Flow(Common):
         for state in self._states:
             states[state]=getattr(self,state)
         return states
+    def get_memory(self):
+        """
+        Returns the approximate memory usage of the flow.
+        """
+        mem = 0
+        for state in self._states:
+            mem+=2*sys.getsizeof(getattr(self, state)) # (*2 to account for initstates)
+        return mem
     def copy(self):
         """
         Returns a copy of the flow object (used when copying the model)
@@ -1606,6 +1641,21 @@ class Model(object):
                     modeprops[fxnname][mode] = fxn.faultmodes.get(mode)
                     if mode not in fxn.faultmodes: warnings.warn("Mode "+mode+" not in faultmodes for fxn "+fxnname+" and may not be tracked.")
         return modes, modeprops
+    def get_memory(self):
+        """
+        Returns the approximate memory usage of the model, along with a profile of fxn/flow memory usage.
+        """
+        mem_profile={}
+        mem = 0
+        mem_profile['params'] = sys.getsizeof(proc.flatten_hist(self.params))
+        mem_profile['params'] += sys.getsizeof(self.modelparams)
+        mem_profile['params'] += sys.getsizeof(self.valparams)
+        for fxnname, fxn in self.fxns.items():
+            mem_profile[fxnname]=fxn.get_memory()
+        for flowname,flow in self.flows.items():
+            mem_profile[flowname]=flow.get_memory()
+        mem = np.sum([i for i in mem_profile.values()])
+        return mem, mem_profile
     def copy(self):
         """
         Copies the model at the current state.

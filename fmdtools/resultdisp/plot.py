@@ -1018,6 +1018,7 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
             else:               ax.set_xlabel(xlabel)
         if legend=='all': plt.legend()
         elif legend=='single' and n==1: plt.legend()
+        elif legend==n:                 plt.legend() 
     figure.tight_layout(pad=0.3)
     if title and len(faults)>1:               figure.suptitle(title)
     return figure

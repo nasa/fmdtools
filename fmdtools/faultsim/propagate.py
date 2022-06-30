@@ -36,6 +36,7 @@ import copy
 import fmdtools.resultdisp.process as proc
 import tqdm
 import dill
+import warnings
 from fmdtools.modeldef import SampleApproach
 
 ## FAULT PROPAGATION
@@ -182,7 +183,7 @@ def new_mdl_params(mdl,paramdict):
     valparams = update_params(mdl.valparams, **paramdict.get('valparams', {}))
     return params, modelparams, valparams
 
-def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, track_times="all", run_stochastic=False, save_args={}):
+def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, track_times="all", run_stochastic=False, max_mem=2e9, save_args={}):
     """
     Simulates a set of nominal scenarios through a model. Useful to understand
     the sets of parameters where the system will run nominally and/or lead to 
@@ -208,6 +209,8 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
+    max_mem : int
+        Max memory (warns the user when memory is above threshold)
     Returns
     -------
     nomapp_endclasses : Dict
@@ -218,8 +221,10 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
     check_overwrite(save_args)
     nomapp_mdlhists = dict.fromkeys(nomapp.scenarios)
     nomapp_endclasses = dict.fromkeys(nomapp.scenarios)
+    
     if pool:
-        inputs = [(mdl.__class__(*new_mdl_params(mdl,scen['properties'])), scen, track, track_times, run_stochastic, save_args, name) for name,scen in nomapp.scenarios.items()]
+        check_mdl_memory(mdl, nomapp.num_scenarios, max_mem=max_mem)
+        inputs = [(mdl.__class__(*new_mdl_params(mdl,scen['properties'])), scen, track, track_times, run_stochastic, save_args, name, nomapp.num_scenarios, max_mem ) for name,scen in nomapp.scenarios.items()]
         a=1
         result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         nomapp_endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
@@ -228,6 +233,7 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
             mdl = mdl.__class__(*new_mdl_params(mdl,scen['properties']))
             nomapp_mdlhists[scenname], _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
+            check_hist_memory(nomapp_mdlhists[scenname],nomapp.num_scenarios, max_mem=max_mem)
             _ = cut_mdlhist(nomapp_mdlhists[scenname], t_end)
             endfaults, endfaultprops = mdl.return_faultmodes()
             nomapp_endclasses[scenname]=mdl.find_classification(scen, {'nominal': nomapp_mdlhists[scenname], 'faulty':nomapp_mdlhists[scenname]})
@@ -238,6 +244,7 @@ def exec_nom_helper(arg):
     """Helper function for executing nominal scenarios"""
     mdlhist, _, t_end =prop_one_scen(arg[0], arg[1], track=arg[2], staged=False, track_times=arg[3], run_stochastic=arg[4])
     mdlhist = cut_mdlhist(mdlhist, t_end)
+    check_hist_memory(mdlhist,arg[7], max_mem=arg[8])
     endclass=arg[0].find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
     save_helper(arg[5], endclass, mdlhist, arg[6], arg[6])
     return endclass, mdlhist
@@ -435,7 +442,7 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
     save_helper(save_args, endclass, mdlhists)
     return endresult,resgraph, mdlhists
 
-def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, save_args={}, **kwargs):
+def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, save_args={}, max_mem=2e9, **kwargs):
     """
     Creates and propagates a list of failure scenarios in a model.
     
@@ -480,6 +487,8 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
         (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
         and indiv is an (optional) bool specifying whether to save results individually (in a folder)
         or as a monolythic file
+    max_mem : int
+        Max memory (warns the user when memory is above threshold)
     **kwargs: kwargs (params, modelparams, and/or valparams)
         passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
         to be simulated with the given parameters. Parameter dictionaries do not 
@@ -506,10 +515,11 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
     endfaults, endfaultprops = mdl.return_faultmodes()
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     mdl.reset()
-    
+    check_hist_memory(nomhist,len(scenlist), max_mem=max_mem)
     endclasses = {}
     mdlhists = {}
     if pool:
+        check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
         if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged, track_times, run_stochastic, save_args, str(i)) for i, scen in enumerate(scenlist)]
         else: inputs = [(mdl, scen, nomresgraph, nomhist, track, staged, track_times, run_stochastic, save_args, str(i)) for i, scen in enumerate(scenlist)]
         result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
@@ -525,7 +535,7 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
     save_helper(save_args, endclasses, mdlhists)
     return endclasses, mdlhists
 
-def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, save_args={}, **kwargs):
+def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, save_args={}, max_mem=2e9, **kwargs):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -567,6 +577,8 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
         (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
         and indiv is an (optional) bool specifying whether to save results individually (in a folder)
         or as a monolythic file
+    max_mem : int
+        Max memory (warns the user when memory is above threshold)
     **kwargs: kwargs (params, modelparams, and/or valparams)
         passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
         to be simulated with the given parameters. Parameter dictionaries do not 
@@ -591,9 +603,12 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     mdl.reset()
     
+    check_hist_memory(nomhist,len(app.scenlist), max_mem=max_mem)
+    
     endclasses, mdlhists = {}, {}
     scenlist = app.scenlist
     if pool:
+        check_mdl_memory(mdl, len(app.scenlist), max_mem=max_mem)
         if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomresgraph, nomhist, track, staged, track_times, run_stochastic, save_args, str(i)) for i, scen in enumerate(scenlist)]
         else: inputs = [(mdl, scen, nomresgraph, nomhist, track, staged, track_times, run_stochastic, save_args, str(i)) for i, scen in enumerate(scenlist)]
         result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
@@ -609,12 +624,26 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     save_helper(save_args, endclasses, mdlhists)
     return endclasses, mdlhists
 
+def check_hist_memory(mdlhist, nscens, max_mem=2e9):
+    """Checks if the memory will be exhausted given the size of the mdlhist and number of scenarios"""
+    mem_total, mem_profile = proc.get_hist_memory(mdlhist)
+    total_memory = int(mem_total) * int(nscens)
+    if total_memory > max_mem:
+        raise Exception("Mdlhist has size: "+str(mem_total)+" bytes. With "+str(nscens)+" scenarios, it is expected that this run will pass the user-defined max_mem="+str(max_mem)+\
+                        " byte limit by a factor of: "+str(total_memory/max_mem)+". To avoid, use the track= option to track less information in the mdlhist")
+def check_mdl_memory(mdl, nscens, max_mem=2e9):
+    mem_total, mem_profile = mdl.get_memory()
+    total_memory = int(mem_total) * int(nscens)
+    if total_memory > max_mem:
+        raise Exception("Model has size: "+str(mem_total)+" bytes. With "+str(nscens)+" scenarios, it is expected that this run will pass the user-defined max_mem="+str(max_mem)+\
+                        " byte limit by a factor of: "+str(total_memory/max_mem)+". To avoid, increase mem_total, reduce the size of the model or number of scenarios, or run outside a parallel pool")
+
 def check_overwrite(save_args):
     for arg, args in save_args.items():
         if arg!='indiv':
             if args.get('filename', False): proc.file_check(args['filename'], args.get('overwrite', False))
 
-def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, showprogress=True, pool=False, track_times="all",run_stochastic=False, save_args={}, **app_args):
+def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, showprogress=True, pool=False, track_times="all",run_stochastic=False, save_args={}, max_mem=2e9, **app_args):
     """
     Simulates a set of fault modes within a set of nominal scenarios defined by a nominal approach.
 
@@ -658,6 +687,8 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
         and indiv is an (optional) bool specifying whether to save results individually (in a folder)
         or as a monolythic file
         and filename.pkl is an optional file name to save the generated SampleApproaches to (if desired)
+    max_mem : int
+        Max memory (warns the user when memory is above threshold)
     **app_args : kwargs
         Keyword arguments for the SampleApproach. See modeldef.SampleApproach documentation.
 
@@ -678,8 +709,8 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
     save_app = save_args.pop("apps", False)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
         mdl = mdl.__class__(*new_mdl_params(mdl,scen['properties']))
+        nomhist, _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
         if get_phases:
-            nomhist, _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
             if get_phases=='global':      phases={'global':[0,t_end]}
             else:
                 nomhist = cut_mdlhist(nomhist, t_end)
@@ -690,6 +721,9 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
         
         app = SampleApproach(mdl,**app_args)
         apps[scenname]=app
+        
+        check_hist_memory(nomhist,len(app.scenlist)*nomapp.num_scenarios, max_mem=max_mem)
+        
         nested_endclasses[scenname], nested_mdlhists[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic, **scen['properties'])
         save_helper(save_args, nested_endclasses[scenname], nested_mdlhists[scenname], indiv_id=scenname, result_id=scenname)
     save_helper(save_args, nested_endclasses, nested_mdlhists)
