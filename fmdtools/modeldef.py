@@ -2630,7 +2630,8 @@ class SampleApproach():
     def get_id_weights(self):
         id_weights ={}
         for scens, ids in self.scenids.items():
-            weights = [*self.weights[scens[0]][scens[1]].values()]
+            num_phases = len([n for n,i in self.weights[scens[0]].items() if i])
+            weights = np.array([*self.weights[scens[0]][scens[1]].values()])/num_phases
             id_weights.update({scenid:weights[i] for i,scenid in enumerate(ids)})
         return id_weights
 

@@ -76,18 +76,12 @@ class PumpTests(unittest.TestCase, CommonTests):
         app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad':{'nodes':nodes,'weights':weights}})
         quad_util=exp_cost_quant(app_quad,mdl)
         self.assertAlmostEqual(full_util, quad_util)
-        
     def test_approach_parallelism(self):
         """Test whether the pump simulates the same when simulated using parallel or staged options"""
         app = SampleApproach(self.default_mdl)
-        from multiprocessing import Pool
-        endclasses, mdlhists = propagate.approach(self.default_mdl, app, showprogress=False,pool=False)
-        endclasses_staged, mdlhist_staged = propagate.approach(self.default_mdl, app, showprogress=False,pool=False, staged=True)
-        self.assertEqual([*endclasses.values()], [*endclasses_staged.values()])
-        endclasses_par, mdlhists_par = propagate.approach(self.default_mdl, app, showprogress=False,pool=Pool(4), staged=False)
-        self.assertEqual([*endclasses.values()], [*endclasses_par.values()])
-        endclasses_staged_par, mdlhists_staged_par = propagate.approach(self.default_mdl, app, showprogress=False,pool=Pool(4), staged=True)
-        self.assertEqual([*endclasses.values()], [*endclasses_staged_par.values()])
+        self.check_approach_parallelism(self.default_mdl, app)
+        app1 = SampleApproach(self.default_mdl, defaultsamp={'samp':'evenspacing','numpts':4})
+        self.check_approach_parallelism(self.default_mdl, app1)
     def test_approach_pruning(self):
         """Tests that sample approach pruning places points in the center of their
         respective intervals for linear resilience loss functions."""
@@ -210,5 +204,6 @@ def exp_cost_quant(approach, mdl):
 
 if __name__ == '__main__':
     unittest.main()
+
     
     

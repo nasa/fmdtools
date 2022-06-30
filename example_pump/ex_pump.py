@@ -211,7 +211,7 @@ class Pump(Model):
         Models take a dictionary of parameters as input defining any veriables and values to use in the model.
     """
     def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, \
-                 modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}, \
+                 modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}, \
                      valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
         """
         To sample the model, the timerange and operational phases need to be defined.
@@ -312,4 +312,17 @@ if __name__=="__main__":
     rd.graph.exec_order(mdl, gtype = 'normal')
     app = NominalApproach()
     app.add_seed_replicates('test', 10)
+    
+    faultapp = SampleApproach(mdl)
+    
+    endclasses, mdlhists  = propagate.approach(mdl, faultapp)
+    flat = rd.process.flatten_hist(mdlhists)
+    
+    endclasses, mdlhists_staged  = propagate.approach(mdl, faultapp, staged=True)
+    flat_staged = rd.process.flatten_hist(mdlhists_staged)
+    
+    [all(flat[k]==flat_staged[k]) for k in flat]
+    
+    
+    
     
