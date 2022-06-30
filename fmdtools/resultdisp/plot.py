@@ -156,7 +156,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     if type(axs)==np.ndarray:   axs = axs.flatten()
     else:                       axs=[axs]
     
-    subplot_titles = {plot_value:' '.join(plot_value) for plot_value in plot_values}
+    subplot_titles = {plot_value:': '.join(plot_value[1:]) for plot_value in plot_values}
     subplot_titles.update(titles)
     
     for i, plot_value in enumerate(plot_values):
