@@ -42,7 +42,7 @@ Also used for graph heatmaps, which use the results history to map results histo
 import copy
 import numpy as np
 import pandas as pd
-import os
+import sys,os
 from ordered_set import OrderedSet
 from fmdtools.faultsim.propagate import cut_mdlhist
 from scipy.stats import bootstrap
@@ -791,6 +791,37 @@ def create_indiv_filename(filename, indiv_id, splitchar='_'):
     filename_parts.insert(1,'.')
     filename_parts.insert(1,splitchar+indiv_id)   
     return "".join(filename_parts)
+
+def get_hist_memory(hist):
+    """
+    Determines the memory usage of a given history and profiles by 
+
+    Parameters
+    ----------
+    hist : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    mem_total : int
+        Total memory usage of the history (in bytes)
+    mem_profile : dict
+        Memory usage of each construct of the model history (in bytes)
+    """
+    fhist = flatten_hist(hist)
+    mem_total = 0
+    mem_profile = dict.fromkeys(fhist.keys())
+    for k,h in fhist.items():
+        if np.issubdtype(h.dtype, np.number) or np.issubdtype(h.dtype, np.flexible) or np.issubdtype(h.dtype, np.bool_):
+            mem=h.nbytes
+        else:
+            mem=0
+            for entry in h:
+                mem+=sys.getsizeof(entry)
+        mem_total+=mem
+        mem_profile[k]=mem
+    return mem_total, mem_profile
+        
         
 def flatten_hist(hist, newhist = False, prevname=(), to_include='all'):
     """
