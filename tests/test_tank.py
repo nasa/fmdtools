@@ -25,6 +25,12 @@ class TankTests(unittest.TestCase, CommonTests):
     def test_model_reset(self):
         mdl = Tank(); mdl2 = Tank()
         self.check_model_reset(mdl, mdl2, [5,10,15], max_time=20)
+    def test_approach_parallelism(self):
+        """Test whether the pump simulates the same when simulated using parallel or staged options"""
+        app = SampleApproach(self.mdl)
+        self.check_approach_parallelism(self.mdl, app)
+        app1 = SampleApproach(self.mdl, defaultsamp={'samp':'evenspacing','numpts':4})
+        self.check_approach_parallelism(self.mdl, app1)
     def test_comp_mode_inj(self):
         """ Tests that component modes injected in functions end up in their respective
         components."""
@@ -54,10 +60,10 @@ class TankTests(unittest.TestCase, CommonTests):
             self.check_save_load_onerun(self.mdl, "tank_mdlhist"+extension, "tank_endclass"+extension, 'nominal')
     def test_save_load_onefault(self):
         for extension in [".pkl",".csv",".json"]:
-            self.check_save_load_onerun(self.mdl, "tank_mdlhist"+extension, "tank_endclass"+extension, 'one_fault', faultscen=('Import_Water', 'stuck', 5))
+            self.check_save_load_onerun(self.mdl, "tank_mdlhist"+extension, "tank_endclass"+extension, 'one_fault', faultscen=('Import_Water', 'Stuck', 5))
     def test_save_load_multfault(self):
         for extension in [".pkl",".csv",".json"]:
-            faultscen = {5:{"Import_Water": ['stuck']},10:{"Store_Water":["Leak"]}}
+            faultscen = {5:{"Import_Water": ['Stuck']},10:{"Store_Water":["Leak"]}}
             self.check_save_load_onerun(self.mdl, "tank_mdlhist"+extension, "tank_endclass"+extension, 'mult_fault', faultscen =faultscen )
     def test_save_load_singlefaults(self):
         self.check_save_load_approach(self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", 'single_faults')

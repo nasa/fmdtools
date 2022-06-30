@@ -461,6 +461,13 @@ def simplefmea(endclasses, metrics=["rate", "cost", "expected cost"]):
     else: 
         raise Exception("invalid metrics option: "+str(metrics))
     return 
+def fullfmea(endclasses, summaries):
+    """Makes full fmea table (degraded functions/flows, all metrics in endclasses) of scenarios given endclasses dict and summaries dict (degraded functions, degraded flows)"""
+    degradedtable = pd.DataFrame(summaries)
+    simplefmea=pd.DataFrame(endclasses)
+    fulltable = pd.concat([degradedtable, simplefmea])
+    return fulltable.transpose()
+
 def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_metrics=[],
          mult_metrics={}, extra_classes={}, group_by='none', sort_by=False, mdl={}, mode_types={}, ascending=False):
     """
@@ -477,7 +484,7 @@ def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_
         metrics are summed over grouped scenarios.
     weight_metrics: list
         weighted metrics to query. The default is ['rate']. 
-        metrics are weighted according to the number in each phase and then summed
+        metrics are weighted according to the number in each phase and then averaged
     avg_metrics: list
         metrics to average and query. The default is ['cost']. 
         avg_metrics are averaged over groups, rather than a total.
@@ -566,9 +573,10 @@ def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_
     return table
         
     
-def phasefmea(endclasses, app, metrics=["rate", "expected cost"], weighted_metrics = ["cost"], sort_by=None, ascending=False):
+def phasefmea(endclasses, app, metrics=["rate", "expected cost"], weight_metrics = ["cost"], sort_by=None, ascending=False):
     """
-    Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
+    (LEGACY FUNCTION) Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
+    Use tabulate.fmea with option group_by='phase' instead.
 
     Parameters
     ----------
@@ -578,7 +586,7 @@ def phasefmea(endclasses, app, metrics=["rate", "expected cost"], weighted_metri
         sample approach used for the underlying probability model of the set of scenarios run
     metrics : list
         unweighted metrics to query. The default is ['rate', 'expected cost']
-    weighted_metrics: list
+    weight_metrics: list
         weighted metrics to query. The default is ['cost']. 
         Weights are used to calculate an average, rather than a total.
     sort_by : str
@@ -587,26 +595,17 @@ def phasefmea(endclasses, app, metrics=["rate", "expected cost"], weighted_metri
         whether to sort ascending. Default is False.
     Returns
     -------
-    table: dataframe
+    tab: dataframe
         table with metrics of each fault in each phase
     """
-    fmeadict = dict.fromkeys(app.scenids.keys())
-    for modephase, ids in app.scenids.items():
-        fmeadict[modephase]={}
-        for metric in metrics+weighted_metrics:
-            if metric in weighted_metrics:
-                metric_value = sum(np.array([endclasses[scenid][metric] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
-            else: metric_value = sum([endclasses[scenid][metric] for scenid in ids])
-            fmeadict[modephase][metric]= metric_value
-    if not sort_by: sort_by=metrics[0]
-    table=pd.DataFrame(fmeadict)
-    table=table.transpose() 
-    table=table.sort_values(sort_by, ascending=ascending)
-    return table
-def summfmea(endclasses, app, metrics=["rate", "expected cost"], weighted_metrics = ["cost"], sort_by=None, ascending=False):
+    tab =fmea(endclasses, app, group_by='phase', metrics=metrics, weight_metrics = weight_metrics, sort_by=sort_by, ascending=ascending)
+    return tab
+    
+def summfmea(endclasses, app, metrics=["rate", "expected cost"], weight_metrics = ["cost"], sort_by=None, ascending=False):
     """
-    Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
-
+    (LEGACY FUNCTION) Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
+    Use tabulate.fmea with group_by='fxnfault' instead.
+    
     Parameters
     ----------
     endclasses : dict
@@ -624,31 +623,9 @@ def summfmea(endclasses, app, metrics=["rate", "expected cost"], weighted_metric
         whether to sort ascending. Default is False
     Returns
     -------
-    table: dataframe
+    tab: dataframe
         table with metrics of each fault (over all phases)
     """
-    fmeadict = dict()
-    for modephase, ids in app.scenids.items():
-        if getattr(app, 'jointmodes', []):  index = str(modephase[0])
-        else:                               index = modephase[0]
-        if not fmeadict.get(modephase[0]): fmeadict[index]= {m:0.0 for m in metrics+weighted_metrics}
-        
-        for metric in metrics+weighted_metrics:
-            if metric in weighted_metrics:
-                metric_value = sum(np.array([endclasses[scenid][metric] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
-                fmeadict[index][metric] += metric_value/len([1.0 for (fxnmode,phase) in app.scenids if fxnmode==modephase[0]])
-            else: 
-                metric_value = sum([endclasses[scenid][metric] for scenid in ids])
-                fmeadict[index][metric] += metric_value
-    if not sort_by: sort_by=metrics[0]
-    table=pd.DataFrame(fmeadict)
-    table=table.transpose() 
-    table=table.sort_values(sort_by, ascending=ascending)
-    return table
-def fullfmea(endclasses, summaries):
-    """Makes full fmea table (degraded functions/flows, cost, rate, expected cost) of scenarios given endclasses dict (cost, rate, expected cost) and summaries dict (degraded functions, degraded flows)"""
-    degradedtable = pd.DataFrame(summaries)
-    simplefmea=pd.DataFrame(endclasses)
-    fulltable = pd.concat([degradedtable, simplefmea])
-    return fulltable.transpose()
+    tab = fmea(endclasses, app, group_by='fxnfault', metrics=metrics, weight_metrics=weight_metrics, sort_by=sort_by, ascending=ascending)
+    return tab
 

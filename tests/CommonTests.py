@@ -26,6 +26,28 @@ class CommonTests():
                     if t>copy_time: 
                         propagate.propagate(mdl_copy, scen, t,run_stochastic=run_stochastic)
                         self.check_same_model(mdl, mdl_copy)
+    def check_approach_parallelism(self, mdl, app):
+        """Test whether the model simulates the same when simulated using parallel or staged options"""
+        from multiprocessing import Pool
+        endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False,pool=False)
+        mdlhists_flat = proc.flatten_hist(mdlhists)
+        endclasses_staged, mdlhist_staged = propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)
+        self.assertEqual([*endclasses.values()], [*endclasses_staged.values()])
+        staged_flat = proc.flatten_hist(mdlhist_staged)
+        
+        endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=False)
+        self.assertEqual([*endclasses.values()], [*endclasses_par.values()])
+        par_flat = proc.flatten_hist(mdlhists_par)
+        
+        endclasses_staged_par, mdlhists_staged_par = propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=True)
+        self.assertEqual([*endclasses.values()], [*endclasses_staged_par.values()])
+        staged_par_flat = proc.flatten_hist(mdlhists_staged_par)
+        
+        for k in mdlhists_flat:
+            np.testing.assert_array_equal(mdlhists_flat[k],staged_flat[k])
+            np.testing.assert_array_equal(mdlhists_flat[k],par_flat[k])
+            np.testing.assert_array_equal(mdlhists_flat[k],staged_par_flat[k])
+        
     def check_model_reset(self, mdl, mdl_reset, inj_times, max_time=55, run_stochastic=False):
         """ Tests to see if model attributes reset with the reset() method such that
         reset models simulate the same as newly-created models. """
@@ -177,7 +199,7 @@ class CommonTests():
                                                             save_args={'mdlhist':{'filename':mfile},\
                                                                        'endclass':{'filename':ecfile}}, **kwargs)
         elif runtype=='nested_approach':
-            endclasses, mdlhists = propagate.nested_approach(mdl, app, showprogress=False, \
+            endclasses, mdlhists, apps = propagate.nested_approach(mdl, app, showprogress=False, \
                                                             save_args={'mdlhist':{'filename':mfile},\
                                                                        'endclass':{'filename':ecfile}}, **kwargs)
         elif runtype=='approach':
@@ -216,7 +238,7 @@ class CommonTests():
                                                                        'endclass':{'filename':ecfolder+"."+ext},\
                                                                        'indiv':True}, **kwargs)
         elif runtype=='nested_approach':
-            endclasses, mdlhists = propagate.nested_approach(mdl, app, showprogress=False, \
+            endclasses, mdlhists, apps = propagate.nested_approach(mdl, app, showprogress=False, \
                                                             save_args={'mdlhist':{'filename':mfolder+"."+ext},\
                                                                        'endclass':{'filename':ecfolder+"."+ext},\
                                                                        'indiv':True}, **kwargs)
