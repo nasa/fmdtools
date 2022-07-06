@@ -192,6 +192,14 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.check_save_load_approach_indiv(self.mdl,"pump_mdlhists", "pump_endclasses", "pkl", 'approach', app=app)
         self.check_save_load_approach_indiv(self.mdl,"pump_mdlhists", "pump_endclasses", "csv", 'approach', app=app)
         self.check_save_load_approach_indiv(self.mdl,"pump_mdlhists", "pump_endclasses", "json", 'approach', app=app)
+    def test_fmea_options(self):
+        app = SampleApproach(self.water_mdl, faults=[('MoveWater','mech_break')], phases=['on'],defaultsamp={'samp':'evenspacing','numpts':5})
+        endclasses, mdlhists = propagate.approach(self.water_mdl, app, showprogress=False)
+        self.check_same_fmea(app, endclasses, self.water_mdl)
+        
+        app2 = SampleApproach(self.mdl, defaultsamp={'samp':'evenspacing','numpts':2})
+        endclasses2, mdlhists2 = propagate.approach(self.mdl, app2, showprogress=False)
+        self.check_same_fmea(app2, endclasses2, self.mdl)
         
 def exp_cost_quant(approach, mdl):
     """ Calculates the expected cost of faults over a given sampling approach 
@@ -204,6 +212,10 @@ def exp_cost_quant(approach, mdl):
 
 if __name__ == '__main__':
     unittest.main()
+    #suite = unittest.TestSuite()
+    #suite.addTest(PumpTests("test_fmea_options"))
+    #runner = unittest.TextTestRunner()
+    #runner.run(suite)
 
     
     

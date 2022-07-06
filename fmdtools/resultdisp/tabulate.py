@@ -469,7 +469,7 @@ def fullfmea(endclasses, summaries):
     return fulltable.transpose()
 
 def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_metrics=[],
-         mult_metrics={}, extra_classes={}, group_by='none', sort_by=False, mdl={}, mode_types={}, ascending=False):
+         mult_metrics={}, extra_classes={}, group_by='none', sort_by=False, mdl={}, mode_types={}, ascending=False, empty_as=0.0):
     """
     Makes a user-definable fmea of the endclasses of a set of fault scenarios.
 
@@ -517,6 +517,8 @@ def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_
         Column value to sort the table by. The default is "expected cost".
     ascending : bool, optional
         Whether to sort in ascending order. The default is False.
+    empty_as : float/'nan'
+        How to calculate stats of empty variables (for avg_metrics). Default is 0.0.
 
     Returns
     -------
@@ -544,8 +546,12 @@ def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_
     endclasses.update(extra_classes)
     
     id_weights = app.get_id_weights()
+    id_weights['nominal']=1.0
     
     allmetrics = metrics+weight_metrics+avg_metrics+perc_metrics+[*mult_metrics.keys()]
+    
+    if group_by=='modetype':
+        a=1
     
     if not sort_by:
         if "expected cost" in mult_metrics: sort_by="expected_cost"
@@ -553,6 +559,7 @@ def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_
     
     fmeadict = {g:dict.fromkeys(allmetrics) for g in grouped_scens}
     for group, ids in grouped_scens.items():
+        b=1
         for metric in metrics:
             fmeadict[group][metric] = sum([endclasses[scenid][metric] for scenid in ids])
         for metric in weight_metrics:
@@ -560,7 +567,7 @@ def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_
         for metric in perc_metrics:
             fmeadict[group][metric] = percent({scenid:endclasses[scenid] for scenid in ids}, metric)
         for metric in avg_metrics:    
-            fmeadict[group][metric] = average({scenid:endclasses[scenid] for scenid in ids}, metric)
+            fmeadict[group][metric] = average({scenid:endclasses[scenid] for scenid in ids}, metric, empty_as=empty_as)
         for metric, to_mult in mult_metrics.items():
             if set(to_mult).intersection(weight_metrics):
                 fmeadict[group][metric] = sum([np.prod([endclasses[scenid][m] for m in to_mult])*id_weights[scenid] for scenid in ids])

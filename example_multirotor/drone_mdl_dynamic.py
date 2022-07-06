@@ -318,4 +318,9 @@ if __name__=="__main__":
     mdl_quad_comp = Drone()
     quad_comp_app = SampleApproach(mdl_quad_comp, faults=[('AffectDOF', 'mechbreak')],defaultsamp={'samp':'evenspacing','numpts':5})
     quad_comp_endclasses, quad_comp_mdlhists = fs.propagate.approach(mdl_quad_comp, quad_comp_app, staged=True)
+    quad_comp_endclasses_1, quad_comp_mdlhists_1 = fs.propagate.approach(mdl_quad_comp, quad_comp_app)
+    
+    cost_tests = [quad_comp_endclasses[ec]['expected cost']==quad_comp_endclasses_1[ec]['expected cost'] for ec in quad_comp_endclasses]
+    dist_tests = [all(quad_comp_mdlhists[ec]['flows']['Env1']['x']==quad_comp_mdlhists_1[ec]['flows']['Env1']['x']) for ec in quad_comp_mdlhists]
+    dist_tests2 = [all(quad_comp_mdlhists[ec]['flows']['Env1']['y']==quad_comp_mdlhists_1[ec]['flows']['Env1']['y']) for ec in quad_comp_mdlhists]
     

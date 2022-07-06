@@ -20,6 +20,7 @@ import networkx as nx
 import copy
 import warnings
 import sys
+from decimal import Decimal
 from ordered_set import OrderedSet
 from operator import itemgetter
 from collections.abc import Iterable
@@ -269,6 +270,23 @@ class Block(Common):
         for param in params:
             for attr, val in param.items():
                 setattr(self, attr, val)
+    def set_timestep(self, use_local=True, local_tstep=None, global_tstep=1.0):
+        """Sets the timestep of the function given the options use_local 
+        (which selects whether it uses local_timestep or global_timestep)"""
+        global_tstep=Decimal(str(global_tstep))
+        if use_local:
+            if local_tstep:             dt=Decimal(str(local_tstep)) 
+            elif hasattr(self, 'dt'):   dt=Decimal(str(self.dt)) 
+            else:                       dt=Decimal(str(global_tstep))
+            if dt < global_tstep:
+                if global_tstep%dt:
+                    raise Exception("Local timestep: "+str(self.dt)+" doesn't line up with global timestep: "+str(global_tstep))
+            else:
+                if dt%global_tstep:
+                    raise Exception("Local timestep: "+str(self.dt)+" doesn't line up with global timestep: "+str(global_tstep))
+            self.run_times = int(global_tstep/dt)
+        else:   dt=global_tstep; self.run_times=1
+        self.dt = float(dt)
     def assoc_timers(self, *timers):
         """Associates timer objects with the given function/block"""
         if not getattr(self, 'timers', False): self.timers=set()
@@ -694,7 +712,7 @@ class Block(Common):
             self.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
         self.rng = np.random.default_rng(self.seed)
         if hasattr(self, 'time'): self.time=0.0
-        if hasattr(self, 'tstep'): self.tstep=self.tstep
+        if hasattr(self, 'dt'): self.dt=self.dt
         if hasattr(self, 'internal_flows'):
             for flowname, flow in self.internal_flows.items():
                 flow.reset()
@@ -764,10 +782,10 @@ class FxnBlock(Block):
         component instantiations of the function (if any)
     timers : set
         names of timers to be used in the function (if any)
-    tstep : float
-        timestep of the model in the function (added/overridden by model definition)
+    dt : float
+        local timestep of the model in the function (overrides global timestep by default ('use_local':True in modelparameters))
     """
-    def __init__(self,name, flows, flownames=[], states={}, components={},timers=[], tstep=1.0, seed=None):
+    def __init__(self,name, flows, flownames=[], states={}, components={},timers=[], dt=None, seed=None):
         """
         Instantiates the function superclass with the relevant parameters.
 
@@ -801,7 +819,7 @@ class FxnBlock(Block):
             self.compfaultmodes.update({components[cname].localname+modename:cname for modename in components[cname].faultmodes})
             setattr(self, cname, components[cname])
         self.assoc_timers(*timers)
-        self.tstep=tstep
+        if dt: self.dt=dt
         self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
         super().__init__(states)
@@ -1012,7 +1030,8 @@ class FxnBlock(Block):
             copy.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
             copy.rngs[generator].__setstate__(self.rngs[generator].__getstate__())
         if hasattr(self, 'time'): copy.time=self.time
-        if hasattr(self, 'tstep'): copy.tstep=self.tstep
+        if hasattr(self, 'dt'): copy.dt=self.dt
+        if hasattr(self, 'run_times'): copy.run_times=self.run_times
         return copy
     def update_modestates(self):
         """Updates states of the model associated with a specific fault mode (see assoc_modes)."""
@@ -1043,10 +1062,10 @@ class FxnBlock(Block):
         while active_actions:
             new_active_actions=set(active_actions)
             for action in active_actions:
-                self.actions[action].updateact(time, run_stochastic, proptype=proptype, tstep=self.tstep)
+                self.actions[action].updateact(time, run_stochastic, proptype=proptype, dt=self.dt)
                 action_cond_edges = self.action_graph.out_edges(action, data=True)
                 for act_in, act_out, atts in action_cond_edges:
-                    if self.conditions[atts['name']]() and getattr(self.actions[action], 'duration',0.0)+self.tstep<=self.actions[action].t_loc:
+                    if self.conditions[atts['name']]() and getattr(self.actions[action], 'duration',0.0)+self.dt<=self.actions[action].t_loc:
                         self.actions[action].t_loc=0.0
                         new_active_actions.add(act_out)
                         new_active_actions.discard(act_in)
@@ -1096,7 +1115,12 @@ class FxnBlock(Block):
         if any(self.actions) and self.asg_proptype==proptype: self.prop_internal(faults, time, run_stochastic, proptype)
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
-        elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: self.dynamic_behavior(time)
+        elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: 
+            if self.run_times>=1:
+                for i in range(self.run_times):
+                    self.dynamic_behavior(time)
+            elif not Decimal(str(time))%Decimal(str(self.dt)):
+                self.dynamic_behavior(time)
         elif proptype=='reset':                                                             
             if hasattr(self,'static_behavior'):  self.static_behavior(time)
             if hasattr(self,'dynamic_behavior'): self.dynamic_behavior(time)
@@ -1159,7 +1183,7 @@ class Action(Block):
         for flow in self.flows.keys():
             setattr(self, flow, self.flows[flow])
         super().__init__({**states, 't_loc':0.0})
-    def updateact(self, time=0, run_stochastic=False, proptype='dynamic', tstep=1.0):
+    def updateact(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
         Updates the behaviors, faults, times, etc of the action 
 
@@ -1173,8 +1197,8 @@ class Action(Block):
         self.run_stochastic=run_stochastic
         if time>self.time and run_stochastic: self.update_stochastic_states()
         if proptype=='dynamic':
-            if self.time<time:  self.behavior(time); self.t_loc+=tstep
-        else:                   self.behavior(time); self.t_loc+=tstep
+            if self.time<time:  self.behavior(time); self.t_loc+=dt
+        else:                   self.behavior(time); self.t_loc+=dt
         self.time=time
         self.check_update_nominal_faults()
     def behavior(self, time):
@@ -1262,7 +1286,7 @@ class Model(object):
                 phases {'name':[start, end]} that the simulation progresses through
             times : array
                 array of times to sample (if desired) [starttime, sampletime1, sampletime2,... endtime]
-            tstep : float
+            dt : float
                 timestep used in the simulation. default is 1.0
             units : str
                 time-units. default is hours
@@ -1310,6 +1334,7 @@ class Model(object):
         self.times=modelparams.get('times',[1])
         self.tstep = modelparams.get('tstep', 1.0)
         self.units = modelparams.get('units', 'hr')
+        self.use_local = modelparams.get('use_local', True)
         self.use_end_condition = modelparams.get('use_end_condition', True)
         if modelparams.get('seed', False):  self.seed = modelparams['seed']
         else:
@@ -1394,7 +1419,7 @@ class Model(object):
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
             self.functionorder.update([name])
-            self.fxns[name].tstep=self.tstep
+            self.fxns[name].set_timestep(use_local=self.use_local, global_tstep=self.tstep)
     def set_functionorder(self,functionorder):
         """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
         if not self.functionorder.difference(functionorder): self.functionorder=OrderedSet(functionorder)
@@ -1676,7 +1701,7 @@ class Model(object):
             flows = copy.get_flows(flownames)
             if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows)
             else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams)
-            copy.fxns[fxnname].tstep=self.tstep
+            copy.fxns[fxnname].set_timestep(use_local=self.use_local, global_tstep=self.tstep)
         copy._fxninput=self._fxninput
         copy._fxnflows=self._fxnflows
         copy.is_copy=False
@@ -2678,6 +2703,7 @@ class SampleApproach():
         else: raise Exception("Invalid option for group_by: "+group_by)
         return grouped_scens
     def get_id_weights(self):
+        """Returns a dictionary with weights for each scenario with structure {scenid:weight}"""
         id_weights ={}
         for scens, ids in self.scenids.items():
             num_phases = len([n for n,i in self.weights[scens[0]].items() if i])

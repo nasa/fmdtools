@@ -508,9 +508,11 @@ def nan_to_x(metric, x=0.0):
 def expected(endclasses, metric):
     """Calculates the expected value of a given metric in endclasses using the rate variable in endclasses"""
     return sum([e[metric]*e['rate'] for k,e in endclasses.items() if not np.isnan(e[metric])])
-def average(endclasses, metric):
+def average(endclasses, metric, empty_as='nan'):
     """Calculates the average value of a given metric in endclasses"""
-    return np.mean([e[metric] for k,e in endclasses.items() if not np.isnan(e[metric])])
+    ecs = [e[metric] for k,e in endclasses.items() if not np.isnan(e[metric])]
+    if len(ecs)>0 or empty_as=='nan':   return np.mean(ecs)
+    else:                               return empty_as
 def percent(endclasses, metric):
     """Calculates the percentage of a given indicator variable being True in endclasses"""
     return sum([int(bool(e[metric])) for k,e in endclasses.items() if not np.isnan(e[metric])])/(len(endclasses)+1e-16)
@@ -821,8 +823,16 @@ def get_hist_memory(hist):
         mem_total+=mem
         mem_profile[k]=mem
     return mem_total, mem_profile
-        
-        
+
+def get_flat_hist_slice(flathist,t_ind=0):
+    """
+    Returns a dictionary of values from a given (flat) mdlhist at t_ind
+    """
+    slice_dict = dict.fromkeys(flathist)
+    for key, arr in flathist.items():
+        slice_dict[key]=flathist[key][t_ind]
+    return slice_dict
+
 def flatten_hist(hist, newhist = False, prevname=(), to_include='all'):
     """
     Recursively creates a flattenned history of the given nested model history

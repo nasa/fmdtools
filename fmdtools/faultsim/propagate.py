@@ -892,7 +892,7 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
         timerange = np.arange(mdl.times[0], mdl.times[-1]+mdl.tstep, mdl.tstep)
         if track_times == "all":            histrange = timerange
         elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
-        elif track_times[0]=='times':       histrange = track_times[0]
+        elif track_times[0]=='times':       histrange = track_times[1]
         shift = 0
         mdlhist = init_mdlhist(mdl, histrange, track=track)
     
