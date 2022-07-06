@@ -67,8 +67,8 @@ class GuideLiquid(FxnBlock):
             self.Watin.rate = self.Watout.rate     
     
 class StoreLiquid(FxnBlock):
-    def __init__(self,name,flows):
-        super().__init__(name,flows,['Watin','Watout', 'Sig'], {'level':10.0, 'net_flow': 0.0})
+    def __init__(self,name,flows, dt):
+        super().__init__(name,flows,['Watin','Watout', 'Sig'], {'level':10.0, 'net_flow': 0.0}, dt=dt)
         self.assoc_modes({'Leak':[1e-5,[1,0],0]}, key_phases_by='global')
     def static_behavior(self, time):
         if self.level >= 20.0:
@@ -88,7 +88,8 @@ class StoreLiquid(FxnBlock):
         if self.has_fault('Leak'):  self.net_flow = self.Watin.rate - self.Watout.rate - 1.0
         else:                       self.net_flow = self.Watin.rate - self.Watout.rate
     def dynamic_behavior(self,time):
-        self.level = self.level + self.net_flow
+        self.inc(level=self.net_flow*self.dt)
+        #self.level = self.level + self.net_flow*self.dt
         
 class HumanActions(FxnBlock):
     def __init__(self,name, flows, reacttime):
@@ -170,7 +171,7 @@ class Turn(Component):
         else:                                           return intended_turn
         
 class Tank(Model):
-    def __init__(self, params={'reacttime':2},\
+    def __init__(self, params={'reacttime':2, 'store_tstep':1.0},\
                  modelparams = {'phases':{'na':[0,1],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'},\
                  valparams = {'functions':{'Store_Water':'level'}}):
         super().__init__(params = params,modelparams=modelparams, valparams=valparams )
@@ -185,7 +186,7 @@ class Tank(Model):
         
         self.add_fxn('Import_Water', ['Wat_in_1', 'Valve1_Sig'], fclass = ImportLiquid)
         self.add_fxn('Guide_Water_In', ['Wat_in_1', 'Wat_in_2'], fclass = GuideLiquid)
-        self.add_fxn('Store_Water', ['Wat_in_2', 'Wat_out_1', 'Tank_Sig'], fclass = StoreLiquid)
+        self.add_fxn('Store_Water', ['Wat_in_2', 'Wat_out_1', 'Tank_Sig'], fclass = StoreLiquid, fparams=params['store_tstep'])
         self.add_fxn('Guide_Water_Out', ['Wat_out_1', 'Wat_out_2'], fclass =GuideLiquid)
         self.add_fxn('Export_Water', ['Wat_out_2', 'Valve2_Sig'], fclass =ExportLiquid)
         self.add_fxn('Human', ['Valve1_Sig', 'Tank_Sig', 'Valve2_Sig'], fclass =HumanActions, fparams = params['reacttime'])
@@ -208,20 +209,25 @@ if __name__ == '__main__':
     mdl = Tank()
     ## nominal run
     endresults, resgraph, mdlhist = propagate.nominal(mdl)
-    rd.plot.mdlhists(mdlhist)
+    rd.plot.mdlhists(mdlhist, fxnflowvals='Store_Water')
     rd.graph.show(resgraph)
     
     
     ## faulty run
     endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Human','NotVisible', time=2)
     
-    rd.plot.mdlhists(mdlhist, title='NotVisible', time_slice=2)
+    rd.plot.mdlhists(mdlhist, title='NotVisible', fxnflowvals='Store_Water', time_slice=2)
     rd.graph.show(resgraph,faultscen='NotVisible', time=2)
     
     endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Human','FalseReach', time=2, gtype='component')
     
-    rd.plot.mdlhists(mdlhist,title='FalseReach',time_slice=2)
+    rd.plot.mdlhists(mdlhist,title='FalseReach', fxnflowvals='Store_Water', time_slice=2)
     rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time=2)
+    
+    
+    mdl = Tank(params={'reacttime':2, 'store_tstep':3.0})
+    endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Store_Water','Leak', time=2)
+    rd.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='Store_Water', time_slice=2)
     
     ## run all faults - note: all faults get caught!
     endclasses, mdlhists = propagate.single_faults(mdl)

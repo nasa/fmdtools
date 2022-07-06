@@ -50,6 +50,25 @@ class TankTests(unittest.TestCase, CommonTests):
         for compname, comp, in mdl.fxns['Human'].components.items():
             self.assertNotEqual(mdl_copy.fxns['Human'].components[compname],comp)
             self.assertNotEqual(mdl_copy.fxns['Human'].components[compname].__hash__(),comp.__hash__())
+    def test_local_tstep(self):
+        """ Tests running the model with a different local timestep in the Store_Liquid function"""
+        mdl_global = Tank(modelparams = {'phases':{'na':[0,1],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min', 'use_local':False})
+        _, _, mdlhist_global = propagate.one_fault(mdl_global,'Store_Water','Leak', time=2)
+        mdlhist_global = rd.process.flatten_hist(mdlhist_global)
+        
+        mdl_loc_low = Tank(params={'reacttime':2, 'store_tstep':0.1})
+        _, _, mdlhist_loc_low = propagate.one_fault(mdl_loc_low,'Store_Water','Leak', time=2)
+        mdlhist_loc_low = rd.process.flatten_hist(mdlhist_loc_low)
+        
+        self.compare_results(mdlhist_global, mdlhist_loc_low)
+        
+        mdl_loc_high = Tank(params={'reacttime':2, 'store_tstep':3.0})
+        _, _, mdlhist_loc_high = propagate.one_fault(mdl_loc_high,'Store_Water','Leak', time=2)
+        mdlhist_loc_high = rd.process.flatten_hist(mdlhist_loc_high)
+        for i in [2,5,8,12]:
+            slice_global = rd.process.get_flat_hist_slice(mdlhist_global,t_ind=i)
+            slice_loc_high = rd.process.get_flat_hist_slice(mdlhist_loc_high ,t_ind=i)
+            self.compare_results(slice_global, slice_loc_high)
     def test_epc_math(self):
         """Spot check of epc math work in human error calculation"""
         mdl=Tank()
@@ -109,8 +128,14 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_save_load_approach_indiv(self.mdl,"tank_mdlhists", "tank_endclasses", "json", 'approach', app=app)
 
 if __name__ == '__main__':
-    unittest.main()
     
-    mdl = Tank()
-    scen = {'Human': 'NotDetected'}
-    propagate.propagate(mdl,scen,1)    
+    suite = unittest.TestSuite()
+    suite.addTest(TankTests("test_local_tstep"))
+    runner = unittest.TextTestRunner()
+    runner.run(suite)
+    
+    #unittest.main()
+    
+    #mdl = Tank()
+    #scen = {'Human': 'NotDetected'}
+    #propagate.propagate(mdl,scen,1)    

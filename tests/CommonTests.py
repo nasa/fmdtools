@@ -9,6 +9,7 @@ import shutil
 import numpy as np
 from fmdtools.faultsim import propagate
 from fmdtools.resultdisp import process as proc
+from fmdtools.resultdisp import tabulate as tabulate
 class CommonTests():
     def check_model_copy_same(self, mdl, mdl2, inj_times, copy_time, max_time=55, run_stochastic=False):
         """ Tests to see that two models have the same states and that a copied model
@@ -140,6 +141,14 @@ class CommonTests():
         self.check_same_file(endresult['classification'], ecfile)
 
         os.remove(mfile), os.remove(ecfile)
+    def check_same_fmea(self, app, endclasses, mdl):
+        """Tests to ensure results from the fmea are the same over all options"""
+        fmea = tabulate.fmea(endclasses,app, group_by='none', mdl=mdl, mode_types={'short'})
+        none_exp_cost = sum(fmea['expected cost'])
+        for group_by in ['none', 'phase', 'fxnfault', 'mode', 'modetype', 'functions', 'times', 'fxnclassfault','fxnclass']:
+            fmea = tabulate.fmea(endclasses,app, group_by=group_by, mdl=mdl, mode_types={'short'})
+            exp_cost = sum(fmea['expected cost'])
+            self.assertAlmostEqual(none_exp_cost,exp_cost)
     def check_same_file(self, result, resfile, check_link=False):
         """ Checks if the mdlhist/endclass result is the same as the result loaded from resfile """
         result_flattened = proc.flatten_hist(result)
