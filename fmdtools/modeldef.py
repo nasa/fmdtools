@@ -1331,6 +1331,7 @@ class Model(object):
         
         # model defaults to static representation if no timerange
         self.phases=modelparams.get('phases',{'na':[1]})
+        self.find_any_phase_overlap()
         self.times=modelparams.get('times',[1])
         self.tstep = modelparams.get('tstep', 1.0)
         self.units = modelparams.get('units', 'hr')
@@ -1349,6 +1350,14 @@ class Model(object):
         fxnstr = ''.join(['- '+fxnname+':'+str(fxn.return_states())+' '+str(getattr(fxn,'active_actions',''))+'\n' for fxnname,fxn in self.fxns.items()])
         flowstr = ''.join(['- '+flowname+':'+str(flow.status())+'\n' for flowname,flow in self.flows.items()])
         return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'functions: \n'+fxnstr+'flows: \n'+flowstr
+    def find_any_phase_overlap(self):
+        intervals = [*self.phases.values()]
+        int_low = np.sort([i[0] for i in intervals])
+        int_high = np.sort([i[1] for i in intervals])
+        for i, il in enumerate(int_low):
+            if i+1==len(int_low): break
+            if int_low[i+1]<=int_high[i]:
+                raise Exception("Global phases overlap (see mdlparams):"+str(self.phases)+" Ensure the max of each phase < min of each other phase")
     def add_flows(self, flownames, flowdict={}, flowtype='generic'):
         """
         Adds a set of flows with the same type and initial parameters
@@ -2711,6 +2720,8 @@ class SampleApproach():
             id_weights.update({scenid:weights[i] for i,scenid in enumerate(ids)})
         return id_weights
 
+
+
 def find_overlap_n(intervals):
     """Finds the overlap between given intervals.
     Used to sample joint fault modes with different (potentially overlapping) phases """
@@ -2719,11 +2730,11 @@ def find_overlap_n(intervals):
         intervals_times = []
         for i, interval in enumerate(intervals):
             possible_times = set()
-            possible_times.update(*[{*np.arange(i[0],i[1]+1)} for i in interval])
-            if not joined_times:    joined_times = possible_times
-            else:                   joined_times = joined_times.intersection(possible_times)
+            possible_times.update(*[{*np.arange(i[0],i[-1]+1)} for i in interval])
+            if i==0:    joined_times = possible_times
+            else:       joined_times = joined_times.intersection(possible_times)
             intervals_times.append(len(possible_times))
-        if not joined_times: return [], intervals_times
+        if not joined_times:    return [], intervals_times
         else:                   return [*np.sort([*joined_times])], intervals_times
     except IndexError:
         if all(intervals[0]==i for i in intervals): return intervals[0]
