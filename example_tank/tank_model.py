@@ -207,6 +207,7 @@ if __name__ == '__main__':
     from fmdtools.modeldef import SampleApproach
     
     mdl = Tank()
+    
     ## nominal run
     endresults, resgraph, mdlhist = propagate.nominal(mdl)
     rd.plot.mdlhists(mdlhist, fxnflowvals='Store_Water')
@@ -235,4 +236,9 @@ if __name__ == '__main__':
     app_full = SampleApproach(mdl)
     endclasses, mdlhists = propagate.approach(mdl, app_full)
     
+    mdl.fxns['Human'].dt=2.0
+    rd.graph.exec_order(mdl, renderer='graphviz')
+    rd.graph.exec_order(mdl, show_dyn_tstep=False)
+    rd.graph.exec_order(mdl, show_dyn_order=False)
+    rd.graph.exec_order(mdl, show_dyn_order=False, show_dyn_tstep=False)
              

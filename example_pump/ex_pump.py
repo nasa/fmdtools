@@ -158,6 +158,8 @@ class MoveWat(FxnBlock):
         """
             Here we use the timer to define a conditional fault that only occurs after a state is present after 10 seconds.
             We do that by incrementing the timer when the state is present.
+            Note that this is done with the internal timestep dt, which we can change locally (for the function) 
+            by passing dt=timestep in the super().__init__ method or globally by changing 'tstep' in modelparams
             When the timer exceeds the delay defined by the external variable, the fault is added.
         """
         if self.delay:
