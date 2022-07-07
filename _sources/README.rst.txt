@@ -32,7 +32,7 @@ fmdtools was developed with a number of unique features that differentiate it fr
   - Adding dynamic states and behaviors to the functions as well as a simulation times and operational phases in a dynamic propagation model to simulate the dynamic effects of faults simulated during different time-steps
   
   - Instantiating functions with component architectures to compare the expected resilience and behaviors of each
-  o
+
   - Defining stochastic behavioral and input parameters to simulate and analyze system resilience throughout the operational envelope
 
 - fmdtools provides convenience methods for quickly visualizing the results of fault simulations with commonly-used Python libraries to enable one to quickly assess:

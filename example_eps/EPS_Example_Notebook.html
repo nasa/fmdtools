@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EPS Example Notebook &mdash; fmdtools 1.1.0 documentation</title>
+  <title>EPS Example Notebook &mdash; fmdtools 1.2.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -514,7 +514,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>As with dynamic models, in static models we use <code class="docutils literal notranslate"><span class="pre">fp.run_one_fault</span></code> to see the effects of single faults. All setup is performed in the Model class definition</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span><span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;EE_to_ME&#39;</span><span class="p">,</span> <span class="s1">&#39;toohigh_torque&#39;</span><span class="p">)</span>
@@ -523,7 +523,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>In this case, however, the output in <code class="docutils literal notranslate"><span class="pre">mdlhists</span></code> will be a single-dimensional dictionary (not something we can plot very well)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
@@ -539,7 +539,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>As a result, it’s better to look at the results graph for a visualization of what went wrong. In this case <code class="docutils literal notranslate"><span class="pre">resgraph</span></code> better represents the fault propagation of the system than in a dynamic model, since there is only one time-step to represent (rather than a set)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
@@ -555,7 +555,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>We can run the set of single-fault scenarios on this model using <code class="docutils literal notranslate"><span class="pre">fmdtools.faultsim.propagate.single_faults</span></code>. For single-fault scenarios, one does not need to use a <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code>, since all faults are injected at a single time-step.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
@@ -567,7 +567,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 35/35 [00:00&lt;00:00, 353.50it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 35/35 [00:00&lt;00:00, 239.43it/s]
 </pre></div></div>
 </div>
 <p>Using <code class="docutils literal notranslate"><span class="pre">make_summarytable</span></code>, one can see the degradation effects of this fault on the flows:</p>
@@ -612,42 +612,42 @@ SCENARIOS COMPLETE: 100%|██████████████████�
     <tr>
       <th>Import_EE low_v, t=1</th>
       <td>[Import_EE]</td>
-      <td>[EE_1, EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, w...</td>
+      <td>[EE_1, EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, H...</td>
     </tr>
     <tr>
       <th>Import_EE high_v, t=1</th>
-      <td>[Import_EE, Supply_EE, Store_EE]</td>
-      <td>[EE_1, EE_2]</td>
+      <td>[Import_EE, Store_EE]</td>
+      <td>[EE_1, EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, H...</td>
     </tr>
     <tr>
       <th>Import_EE no_v, t=1</th>
       <td>[Import_EE]</td>
-      <td>[EE_1, EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, w...</td>
+      <td>[EE_1, EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, H...</td>
     </tr>
     <tr>
       <th>Supply_EE adverse_resist, t=1</th>
       <td>[Supply_EE]</td>
-      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, waste_H...</td>
+      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, HE, was...</td>
     </tr>
     <tr>
       <th>Supply_EE minor_overload, t=1</th>
       <td>[Supply_EE, Store_EE, Distribute_EE]</td>
-      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, waste_H...</td>
+      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, HE, was...</td>
     </tr>
     <tr>
       <th>Supply_EE major_overload, t=1</th>
       <td>[Supply_EE, Store_EE]</td>
-      <td>[EE_2, waste_HE_1]</td>
+      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, HE, was...</td>
     </tr>
     <tr>
       <th>Supply_EE short, t=1</th>
       <td>[Supply_EE, Store_EE, Distribute_EE]</td>
-      <td>[EE_1, EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, w...</td>
+      <td>[EE_1, EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, H...</td>
     </tr>
     <tr>
       <th>Supply_EE open_circuit, t=1</th>
       <td>[Supply_EE]</td>
-      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, waste_H...</td>
+      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, HE, was...</td>
     </tr>
     <tr>
       <th>Store_EE low_storage, t=1</th>
@@ -657,37 +657,37 @@ SCENARIOS COMPLETE: 100%|██████████████████�
     <tr>
       <th>Store_EE no_storage, t=1</th>
       <td>[Store_EE]</td>
-      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, waste_HE_M]</td>
+      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, HE, waste_HE_...</td>
     </tr>
     <tr>
       <th>Import_Signal partial_signal, t=1</th>
       <td>[Import_Signal]</td>
-      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, waste_H...</td>
+      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, HE, was...</td>
     </tr>
     <tr>
       <th>Import_Signal no_signal, t=1</th>
       <td>[Import_Signal]</td>
-      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, waste_H...</td>
+      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, HE, was...</td>
     </tr>
     <tr>
       <th>Distribute_EE adverse_resist, t=1</th>
       <td>[Distribute_EE]</td>
-      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, waste_H...</td>
+      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, HE, was...</td>
     </tr>
     <tr>
       <th>Distribute_EE poor_alloc, t=1</th>
       <td>[Distribute_EE]</td>
-      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, waste_H...</td>
+      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, HE, was...</td>
     </tr>
     <tr>
       <th>Distribute_EE short, t=1</th>
       <td>[Store_EE, Distribute_EE]</td>
-      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, waste_HE_M]</td>
+      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, HE, waste_HE_...</td>
     </tr>
     <tr>
       <th>Distribute_EE open_circuit, t=1</th>
       <td>[Distribute_EE]</td>
-      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, waste_H...</td>
+      <td>[EE_2, EE_3, EE_M, EE_O, EE_H, ME, OE, HE, was...</td>
     </tr>
     <tr>
       <th>EE_to_ME high_torque, t=1</th>
@@ -697,12 +697,12 @@ SCENARIOS COMPLETE: 100%|██████████████████�
     <tr>
       <th>EE_to_ME low_torque, t=1</th>
       <td>[Store_EE, Distribute_EE, EE_to_ME]</td>
-      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, waste_HE_M]</td>
+      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, HE, waste_HE_...</td>
     </tr>
     <tr>
       <th>EE_to_ME toohigh_torque, t=1</th>
       <td>[Store_EE, Distribute_EE, EE_to_ME]</td>
-      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, waste_HE_M]</td>
+      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, HE, waste_HE_...</td>
     </tr>
     <tr>
       <th>EE_to_ME open_circuit, t=1</th>
@@ -712,37 +712,37 @@ SCENARIOS COMPLETE: 100%|██████████████████�
     <tr>
       <th>EE_to_ME short, t=1</th>
       <td>[Store_EE, Distribute_EE, EE_to_ME]</td>
-      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, waste_HE_M]</td>
+      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, HE, waste_HE_...</td>
     </tr>
     <tr>
       <th>EE_to_OE optical_resist, t=1</th>
       <td>[EE_to_OE]</td>
-      <td>[EE_O, OE]</td>
+      <td>[EE_O, OE, waste_HE_O]</td>
     </tr>
     <tr>
       <th>EE_to_OE burnt_out, t=1</th>
       <td>[EE_to_OE]</td>
-      <td>[EE_O, OE]</td>
+      <td>[EE_O, OE, waste_HE_O]</td>
     </tr>
     <tr>
       <th>EE_to_HE low_heat, t=1</th>
       <td>[EE_to_HE]</td>
-      <td>[]</td>
+      <td>[HE]</td>
     </tr>
     <tr>
       <th>EE_to_HE high_heat, t=1</th>
       <td>[Supply_EE, Store_EE, EE_to_HE]</td>
-      <td>[EE_2, EE_3, EE_H]</td>
+      <td>[EE_2, EE_3, EE_H, HE]</td>
     </tr>
     <tr>
       <th>EE_to_HE toohigh_heat, t=1</th>
       <td>[Store_EE, Distribute_EE, EE_to_HE]</td>
-      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, waste_HE_M]</td>
+      <td>[EE_3, EE_M, EE_O, EE_H, ME, OE, HE, waste_HE_...</td>
     </tr>
     <tr>
       <th>EE_to_HE open_circuit, t=1</th>
       <td>[EE_to_HE]</td>
-      <td>[EE_H]</td>
+      <td>[EE_H, HE]</td>
     </tr>
     <tr>
       <th>Export_HE hot_sink, t=1</th>
@@ -829,212 +829,218 @@ SCENARIOS COMPLETE: 100%|██████████████████�
     <tr>
       <th>Import_EE low_v, t=1</th>
       <td>1.000000e-05</td>
-      <td>600.0</td>
-      <td>262.800</td>
+      <td>700.0</td>
+      <td>306.6000</td>
     </tr>
     <tr>
       <th>Import_EE high_v, t=1</th>
       <td>5.000000e-06</td>
-      <td>2300.0</td>
-      <td>503.700</td>
+      <td>3350.0</td>
+      <td>733.6500</td>
     </tr>
     <tr>
       <th>Import_EE no_v, t=1</th>
       <td>1.000000e-05</td>
-      <td>1200.0</td>
-      <td>525.600</td>
+      <td>1550.0</td>
+      <td>678.9000</td>
     </tr>
     <tr>
       <th>Supply_EE adverse_resist, t=1</th>
       <td>2.000000e-06</td>
-      <td>1300.0</td>
-      <td>113.880</td>
+      <td>1650.0</td>
+      <td>144.5400</td>
     </tr>
     <tr>
       <th>Supply_EE minor_overload, t=1</th>
       <td>1.000000e-05</td>
-      <td>4800.0</td>
-      <td>2102.400</td>
+      <td>5150.0</td>
+      <td>2255.7000</td>
     </tr>
     <tr>
       <th>Supply_EE major_overload, t=1</th>
       <td>3.000000e-06</td>
-      <td>2600.0</td>
-      <td>341.640</td>
+      <td>3650.0</td>
+      <td>479.6100</td>
     </tr>
     <tr>
       <th>Supply_EE short, t=1</th>
       <td>1.000000e-07</td>
-      <td>4800.0</td>
-      <td>21.024</td>
+      <td>5150.0</td>
+      <td>22.5570</td>
     </tr>
     <tr>
       <th>Supply_EE open_circuit, t=1</th>
       <td>5.000000e-08</td>
-      <td>1100.0</td>
-      <td>2.409</td>
+      <td>1450.0</td>
+      <td>3.1755</td>
     </tr>
     <tr>
       <th>Store_EE low_storage, t=1</th>
       <td>5.000000e-06</td>
       <td>2000.0</td>
-      <td>438.000</td>
+      <td>438.0000</td>
     </tr>
     <tr>
       <th>Store_EE no_storage, t=1</th>
       <td>5.000000e-06</td>
-      <td>2900.0</td>
-      <td>635.100</td>
+      <td>3250.0</td>
+      <td>711.7500</td>
     </tr>
     <tr>
       <th>Import_Signal partial_signal, t=1</th>
       <td>1.000000e-05</td>
-      <td>1650.0</td>
-      <td>722.700</td>
+      <td>2000.0</td>
+      <td>876.0000</td>
     </tr>
     <tr>
       <th>Import_Signal no_signal, t=1</th>
       <td>1.000000e-06</td>
-      <td>1650.0</td>
-      <td>72.270</td>
+      <td>2000.0</td>
+      <td>87.6000</td>
     </tr>
     <tr>
       <th>Distribute_EE adverse_resist, t=1</th>
       <td>1.000000e-05</td>
-      <td>2400.0</td>
-      <td>1051.200</td>
+      <td>2750.0</td>
+      <td>1204.5000</td>
     </tr>
     <tr>
       <th>Distribute_EE poor_alloc, t=1</th>
       <td>2.000000e-05</td>
-      <td>1400.0</td>
-      <td>1226.400</td>
+      <td>1750.0</td>
+      <td>1533.0000</td>
     </tr>
     <tr>
       <th>Distribute_EE short, t=1</th>
       <td>2.000000e-05</td>
-      <td>4400.0</td>
-      <td>3854.400</td>
+      <td>4750.0</td>
+      <td>4161.0000</td>
     </tr>
     <tr>
       <th>Distribute_EE open_circuit, t=1</th>
       <td>3.000000e-05</td>
-      <td>2400.0</td>
-      <td>3153.600</td>
+      <td>2750.0</td>
+      <td>3613.5000</td>
     </tr>
     <tr>
       <th>EE_to_ME high_torque, t=1</th>
       <td>1.000000e-04</td>
       <td>450.0</td>
-      <td>1971.000</td>
+      <td>1971.0000</td>
     </tr>
     <tr>
       <th>EE_to_ME low_torque, t=1</th>
       <td>1.000000e-04</td>
-      <td>4600.0</td>
-      <td>20148.000</td>
+      <td>4950.0</td>
+      <td>21681.0000</td>
     </tr>
     <tr>
       <th>EE_to_ME toohigh_torque, t=1</th>
       <td>5.000000e-05</td>
-      <td>4700.0</td>
-      <td>10293.000</td>
+      <td>5050.0</td>
+      <td>11059.5000</td>
     </tr>
     <tr>
       <th>EE_to_ME open_circuit, t=1</th>
       <td>5.000000e-05</td>
       <td>650.0</td>
-      <td>1423.500</td>
+      <td>1423.5000</td>
     </tr>
     <tr>
       <th>EE_to_ME short, t=1</th>
       <td>5.000000e-05</td>
-      <td>4600.0</td>
-      <td>10074.000</td>
+      <td>4950.0</td>
+      <td>10840.5000</td>
     </tr>
     <tr>
       <th>EE_to_OE optical_resist, t=1</th>
       <td>5.000000e-07</td>
       <td>520.0</td>
-      <td>11.388</td>
+      <td>11.3880</td>
     </tr>
     <tr>
       <th>EE_to_OE burnt_out, t=1</th>
       <td>2.000000e-06</td>
       <td>550.0</td>
-      <td>48.180</td>
+      <td>48.1800</td>
     </tr>
     <tr>
       <th>EE_to_HE low_heat, t=1</th>
       <td>2.000000e-06</td>
-      <td>200.0</td>
-      <td>17.520</td>
+      <td>550.0</td>
+      <td>48.1800</td>
     </tr>
     <tr>
       <th>EE_to_HE high_heat, t=1</th>
       <td>1.000000e-07</td>
-      <td>2400.0</td>
-      <td>10.512</td>
+      <td>2500.0</td>
+      <td>10.9500</td>
     </tr>
     <tr>
       <th>EE_to_HE toohigh_heat, t=1</th>
       <td>5.000000e-07</td>
-      <td>4600.0</td>
-      <td>100.740</td>
+      <td>5100.0</td>
+      <td>111.6900</td>
     </tr>
     <tr>
       <th>EE_to_HE open_circuit, t=1</th>
       <td>1.000000e-07</td>
-      <td>200.0</td>
-      <td>0.876</td>
+      <td>550.0</td>
+      <td>2.4090</td>
     </tr>
     <tr>
       <th>Export_HE hot_sink, t=1</th>
       <td>1.000000e-05</td>
       <td>600.0</td>
-      <td>262.800</td>
+      <td>262.8000</td>
     </tr>
     <tr>
       <th>Export_HE ineffective_sink, t=1</th>
       <td>5.000000e-06</td>
       <td>1500.0</td>
-      <td>328.500</td>
+      <td>328.5000</td>
     </tr>
     <tr>
       <th>Export_waste_H1 hot_sink, t=1</th>
       <td>1.000000e-05</td>
       <td>500.0</td>
-      <td>219.000</td>
+      <td>219.0000</td>
     </tr>
     <tr>
       <th>Export_waste_H1 ineffective_sink, t=1</th>
       <td>5.000000e-06</td>
       <td>1000.0</td>
-      <td>219.000</td>
+      <td>219.0000</td>
     </tr>
     <tr>
       <th>Export_waste_HO hot_sink, t=1</th>
       <td>1.000000e-05</td>
       <td>500.0</td>
-      <td>219.000</td>
+      <td>219.0000</td>
     </tr>
     <tr>
       <th>Export_waste_HO ineffective_sink, t=1</th>
       <td>5.000000e-06</td>
       <td>1000.0</td>
-      <td>219.000</td>
+      <td>219.0000</td>
     </tr>
     <tr>
       <th>Export_waste_HM hot_sink, t=1</th>
       <td>1.000000e-05</td>
       <td>500.0</td>
-      <td>219.000</td>
+      <td>219.0000</td>
     </tr>
     <tr>
       <th>Export_waste_HM ineffective_sink, t=1</th>
       <td>5.000000e-06</td>
       <td>1000.0</td>
-      <td>219.000</td>
+      <td>219.0000</td>
+    </tr>
+    <tr>
+      <th>nominal</th>
+      <td>1.000000e+00</td>
+      <td>0.0</td>
+      <td>0.0000</td>
     </tr>
   </tbody>
 </table>

@@ -158,11 +158,13 @@ class MoveWat(FxnBlock):
         """
             Here we use the timer to define a conditional fault that only occurs after a state is present after 10 seconds.
             We do that by incrementing the timer when the state is present.
+            Note that this is done with the internal timestep dt, which we can change locally (for the function) 
+            by passing dt=timestep in the super().__init__ method or globally by changing 'tstep' in modelparams
             When the timer exceeds the delay defined by the external variable, the fault is added.
         """
         if self.delay:
             if self.Watout.pressure>15.0:
-                if time>self.time:                  self.timer.inc(self.tstep)
+                if time>self.time:                  self.timer.inc(self.dt)
                 if self.timer.time>=self.delay:      self.add_fault('mech_break')
         else:
             if self.Watout.pressure>15.0: self.add_fault('mech_break')
@@ -211,7 +213,7 @@ class Pump(Model):
         Models take a dictionary of parameters as input defining any veriables and values to use in the model.
     """
     def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, \
-                 modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}, \
+                 modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}, \
                      valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
         """
         To sample the model, the timerange and operational phases need to be defined.
@@ -312,4 +314,17 @@ if __name__=="__main__":
     rd.graph.exec_order(mdl, gtype = 'normal')
     app = NominalApproach()
     app.add_seed_replicates('test', 10)
+    
+    faultapp = SampleApproach(mdl)
+    
+    endclasses, mdlhists  = propagate.approach(mdl, faultapp)
+    flat = rd.process.flatten_hist(mdlhists)
+    
+    endclasses, mdlhists_staged  = propagate.approach(mdl, faultapp, staged=True)
+    flat_staged = rd.process.flatten_hist(mdlhists_staged)
+    
+    [all(flat[k]==flat_staged[k]) for k in flat]
+    
+    
+    
     
