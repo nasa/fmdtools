@@ -70,6 +70,7 @@ class MoveWat_Tests(unittest.TestCase):
         self.Wat_1 = Water()
         self.Wat_2 = Water()
         self.Move_Wat = MoveWat('ImportWat', [self.EE_1, self.Sig_1, self.Wat_1, self.Wat_2], 10) #test with delay=10--can be tested w- others
+        self.Move_Wat.set_timestep(local_tstep=1.0)
     def test_initialization(self):
         """Tests that the connections, faults, etc instantiated in the initialization are correct"""
         self.assertIs(self.EE_1, self.Move_Wat.EEin)

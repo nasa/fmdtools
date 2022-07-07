@@ -172,7 +172,7 @@ class Turn(Component):
         
 class Tank(Model):
     def __init__(self, params={'reacttime':2, 'store_tstep':1.0},\
-                 modelparams = {'phases':{'na':[0,1],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'},\
+                 modelparams = {'phases':{'na':[0],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'},\
                  valparams = {'functions':{'Store_Water':'level'}}):
         super().__init__(params = params,modelparams=modelparams, valparams=valparams )
         
