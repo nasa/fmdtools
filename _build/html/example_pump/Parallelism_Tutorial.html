@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using Parallel Computing in fmdtools &mdash; fmdtools 1.1.0 documentation</title>
+  <title>Using Parallel Computing in fmdtools &mdash; fmdtools 1.2.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -677,7 +677,7 @@ set of faults over a set of model parameters)</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 17/17 [00:01&lt;00:00,  9.81it/s]
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 17/17 [00:01&lt;00:00,  8.55it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -783,33 +783,33 @@ SCENARIOS COMPLETE: 100%|██████████████████�
     </tr>
     <tr>
       <th>ImportWater no_wat, t=52</th>
-      <td>0.000017</td>
+      <td>0.000020</td>
       <td>1000.0</td>
-      <td>1666.666667</td>
+      <td>2000.000000</td>
     </tr>
     <tr>
       <th>ImportSignal no_sig, t=52</th>
-      <td>0.000001</td>
+      <td>0.000002</td>
       <td>10000.0</td>
-      <td>1428.571429</td>
+      <td>1714.285714</td>
     </tr>
     <tr>
       <th>MoveWater mech_break, t=52</th>
-      <td>0.000002</td>
+      <td>0.000003</td>
       <td>5000.0</td>
-      <td>1071.428571</td>
+      <td>1285.714286</td>
     </tr>
     <tr>
       <th>MoveWater short, t=52</th>
-      <td>0.000014</td>
+      <td>0.000017</td>
       <td>10000.0</td>
-      <td>14285.714286</td>
+      <td>17142.857143</td>
     </tr>
     <tr>
       <th>ExportWater block, t=52</th>
-      <td>0.000014</td>
+      <td>0.000017</td>
       <td>5000.0</td>
-      <td>7142.857143</td>
+      <td>8571.428571</td>
     </tr>
     <tr>
       <th>nominal</th>
@@ -836,7 +836,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 21/21 [00:01&lt;00:00, 12.06it/s]
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 21/21 [00:02&lt;00:00,  9.15it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -994,6 +994,12 @@ SCENARIOS COMPLETE: 100%|██████████████████�
       <td>5000.0</td>
       <td>280000.0</td>
     </tr>
+    <tr>
+      <th>nominal</th>
+      <td>1.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
   </tbody>
 </table>
 </div></div>
@@ -1016,8 +1022,8 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 21/21 [00:00&lt;00:00, 455.48it/s]
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 21/21 [00:00&lt;00:00, 226.33it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 21/21 [00:00&lt;00:00, 345.18it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 21/21 [00:00&lt;00:00, 164.45it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1175,6 +1181,12 @@ SCENARIOS COMPLETE: 100%|██████████████████�
       <td>0.0</td>
       <td>0.0</td>
     </tr>
+    <tr>
+      <th>nominal</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
   </tbody>
 </table>
 </div></div>
@@ -1196,8 +1208,8 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 485.43it/s]
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 202.92it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 355.22it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 163.90it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1351,7 +1363,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
@@ -1359,6 +1371,64 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 <span class="n">results</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;flows&#39;: {&#39;Wat_2&#39;: {&#39;area&#39;: 0.01}},
+  &#39;faults&#39;: {&#39;MoveWater&#39;: [&#39;mech_break&#39;], &#39;ExportWater&#39;: [&#39;block&#39;]},
+  &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+   &#39;cost&#39;: 20125.000000000007,
+   &#39;expected cost&#39;: 1106875.0000000005}},
+ {&#39;flows&#39;: {&#39;Wat_2&#39;: {&#39;area&#39;: 0.01}},
+  &#39;faults&#39;: {&#39;MoveWater&#39;: [&#39;mech_break&#39;], &#39;ExportWater&#39;: [&#39;block&#39;]},
+  &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+   &#39;cost&#39;: 20102.500000000007,
+   &#39;expected cost&#39;: 1105637.5000000005}},
+ {&#39;flows&#39;: {&#39;Wat_2&#39;: {&#39;area&#39;: 0.01}},
+  &#39;faults&#39;: {&#39;MoveWater&#39;: [&#39;mech_break&#39;], &#39;ExportWater&#39;: [&#39;block&#39;]},
+  &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+   &#39;cost&#39;: 20080.000000000007,
+   &#39;expected cost&#39;: 1104400.0000000005}},
+ {&#39;flows&#39;: {&#39;Wat_2&#39;: {&#39;area&#39;: 0.01}},
+  &#39;faults&#39;: {&#39;MoveWater&#39;: [&#39;mech_break&#39;], &#39;ExportWater&#39;: [&#39;block&#39;]},
+  &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+   &#39;cost&#39;: 20057.500000000007,
+   &#39;expected cost&#39;: 1103162.5000000005}},
+ {&#39;flows&#39;: {&#39;Wat_2&#39;: {&#39;area&#39;: 0.01}},
+  &#39;faults&#39;: {&#39;MoveWater&#39;: [&#39;mech_break&#39;], &#39;ExportWater&#39;: [&#39;block&#39;]},
+  &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+   &#39;cost&#39;: 20035.000000000007,
+   &#39;expected cost&#39;: 1101925.0000000005}},
+ {&#39;flows&#39;: {&#39;Wat_2&#39;: {&#39;area&#39;: 0.01}},
+  &#39;faults&#39;: {&#39;ExportWater&#39;: [&#39;block&#39;]},
+  &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+   &#39;cost&#39;: 15023.750000000005,
+   &#39;expected cost&#39;: 826306.2500000003}},
+ {&#39;flows&#39;: {&#39;Wat_2&#39;: {&#39;area&#39;: 0.01}},
+  &#39;faults&#39;: {&#39;ExportWater&#39;: [&#39;block&#39;]},
+  &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+   &#39;cost&#39;: 15023.750000000005,
+   &#39;expected cost&#39;: 826306.2500000003}},
+ {&#39;flows&#39;: {&#39;Wat_2&#39;: {&#39;area&#39;: 0.01}},
+  &#39;faults&#39;: {&#39;ExportWater&#39;: [&#39;block&#39;]},
+  &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+   &#39;cost&#39;: 15023.750000000005,
+   &#39;expected cost&#39;: 826306.2500000003}},
+ {&#39;flows&#39;: {&#39;Wat_2&#39;: {&#39;area&#39;: 0.01}},
+  &#39;faults&#39;: {&#39;ExportWater&#39;: [&#39;block&#39;]},
+  &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+   &#39;cost&#39;: 15023.750000000005,
+   &#39;expected cost&#39;: 826306.2500000003}},
+ {&#39;flows&#39;: {&#39;Wat_2&#39;: {&#39;area&#39;: 0.01}},
+  &#39;faults&#39;: {&#39;ExportWater&#39;: [&#39;block&#39;]},
+  &#39;classification&#39;: {&#39;rate&#39;: 0.00055,
+   &#39;cost&#39;: 15023.750000000005,
+   &#39;expected cost&#39;: 826306.2500000003}}]
+</pre></div></div>
 </div>
 <p>In this method, the model is run many times over a given fault with different delay parameters. It should be noted that this approach is not especially efficient, since the nominal scenario is simulated at each call of <code class="docutils literal notranslate"><span class="pre">propagate.one_fault()</span></code>. It is thus preferred to use the appropriate fault/parameter sampling approaches and propagate methods, since these methods only run the nominal simulation once for fault scenarios and can also use staged execution (copying the model at fault time for
 fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
@@ -1368,7 +1438,7 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 <p>Parallelism is often used in computation to speed up up a set of independent simulations. Conventionally, one might say it leads to a reduced computational cost of <span class="math notranslate nohighlight">\(t/n\)</span>, where t was the original time of the set of processes, and n is the number of cores.</p>
 <p>However, this computational performance increase is dependent on the implementation. In Python, there is some overhead from from communicating data structures in and out of parallel threads which can become a significant consideration when the data structures are large. Additionally, different Pools can execute more or less efficiently. Below these are each compared.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1377,7 +1447,7 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cores</span><span class="o">=</span><span class="mi">4</span>
@@ -1392,7 +1462,7 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">55</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">55</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">55</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">55</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">exectimes_baseline</span> <span class="o">=</span> <span class="n">exectimes</span>
 </pre></div>
@@ -1423,17 +1493,17 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 <h3>Comparison: No Histories<a class="headerlink" href="#Comparison:-No-Histories" title="Permalink to this headline"></a></h3>
 <p>In the below comparison, the same simulation approach is run, except without tracking a history of model states through the simulation.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">55</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">55</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">55</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">55</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1449,12 +1519,12 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x19d34b19130&gt;
+&lt;matplotlib.legend.Legend at 0x281a0d998b0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1471,27 +1541,18 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 <section id="Comparison:-Many-Faults">
 <h3>Comparison: Many Faults<a class="headerlink" href="#Comparison:-Many-Faults" title="Permalink to this headline"></a></h3>
 <p>In the below comparison, many faults are injected in the system to increase the number of scenarios (ostensibly making the case better for parallelism)</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">55</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">55</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">55</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">55</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\..\fmdtools\modeldef.py:1879: RuntimeWarning: invalid value encountered in double_scalars
-  if len(overlap)&gt;1:  self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(overlap[1]-overlap[0])
-</pre></div></div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1507,12 +1568,12 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\..\fmdtools\modeldef.py:1
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x19d34b13f70&gt;
+&lt;matplotlib.legend.Legend at 0x281a0e8fe20&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1529,17 +1590,17 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\..\fmdtools\modeldef.py:1
 <h3>Comparison: Long simulation<a class="headerlink" href="#Comparison:-Long-simulation" title="Permalink to this headline"></a></h3>
 <p>It may be of interest to simulate how the comparative performance changes for longer simulations. In this comparison, the simulation time is extended tenfold.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1555,12 +1616,12 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\..\fmdtools\modeldef.py:1
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x19d34cd40a0&gt;
+&lt;matplotlib.legend.Legend at 0x281a10d2f40&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1576,17 +1637,17 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\..\fmdtools\modeldef.py:1
 <h3>Comparison: Long Simulation No Tracking<a class="headerlink" href="#Comparison:-Long-Simulation-No-Tracking" title="Permalink to this headline"></a></h3>
 <p>Finally, it may be interesting to see how performance is affected in long simulations when there is no tracking. This is because in these simulations, there should be very little overhead from creating the respective data structures, even when there is a long simulation. This comparison is shown below.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1602,12 +1663,12 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\..\fmdtools\modeldef.py:1
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x19d34d0deb0&gt;
+&lt;matplotlib.legend.Legend at 0x281a2205b80&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1623,17 +1684,17 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\..\fmdtools\modeldef.py:1
 <h3>Comparison: Long Simulation Only Necessary Tracking<a class="headerlink" href="#Comparison:-Long-Simulation-Only-Necessary-Tracking" title="Permalink to this headline"></a></h3>
 <p>In practice, it can be necessary to track some states over time. Here we perform the same comparison using the ‘valstates’ option, which only tracks states which have been defined in the model to be necessary to track (using ‘valparams’)</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;valparams&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1649,12 +1710,12 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\..\fmdtools\modeldef.py:1
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x19d35fbc340&gt;
+&lt;matplotlib.legend.Legend at 0x281a21d27f0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1672,17 +1733,17 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\..\fmdtools\modeldef.py:1
 <h2>Comparison: Lower Tracking Time Resolution<a class="headerlink" href="#Comparison:-Lower-Tracking-Time-Resolution" title="Permalink to this headline"></a></h2>
 <p>Finally, the number of recorded timesteps can be lowered to lower computational costs while still returning all relevant variables.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">55</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">},</span> <span class="n">modelparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phases&#39;</span><span class="p">:{</span><span class="s1">&#39;start&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;on&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">],</span> <span class="s1">&#39;end&#39;</span><span class="p">:[</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">]},</span> <span class="s1">&#39;times&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="s1">&#39;tstep&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">track_times</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1698,12 +1759,12 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\..\fmdtools\modeldef.py:1
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x19d35fed670&gt;
+&lt;matplotlib.legend.Legend at 0x281a0d17b50&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1728,7 +1789,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 <p>While parallelism and staged execution are helpful and relatively easy-to-implement methods of computational cost reduction, it can be helpful (especially for more complex models) to see what aspects of the model are taking the most computational time.</p>
 <p>Python’s builtin <code class="docutils literal notranslate"><span class="pre">cProfile</span></code> package can ge used to see the relative computational times of different functions/processes.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span>
@@ -1736,7 +1797,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cProfile</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;propagate.nominal(mdl)&#39;</span><span class="p">)</span>
@@ -1748,28 +1809,30 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-         17261 function calls in 0.011 seconds
+         157325 function calls (157320 primitive calls) in 0.106 seconds
 
    Ordered by: standard name
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
         1    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(amin)
-      672    0.000    0.000    0.001    0.000 &lt;__array_function__ internals&gt;:2(can_cast)
+     8517    0.005    0.000    0.012    0.000 &lt;__array_function__ internals&gt;:2(can_cast)
        12    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(concatenate)
-       12    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(copyto)
-        1    0.000    0.000    0.011    0.011 &lt;string&gt;:1(&lt;module&gt;)
+       17    0.000    0.000    0.001    0.000 &lt;__array_function__ internals&gt;:2(copyto)
+        2    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(sort)
+        1    0.000    0.000    0.106    0.106 &lt;string&gt;:1(&lt;module&gt;)
+        2    0.000    0.000    0.000    0.000 _asarray.py:110(asanyarray)
        12    0.000    0.000    0.000    0.000 _asarray.py:23(asarray)
-      114    0.000    0.000    0.001    0.000 _collections_abc.py:706(__ior__)
+     1004    0.002    0.000    0.005    0.000 _collections_abc.py:706(__ior__)
        48    0.000    0.000    0.000    0.000 _collections_abc.py:779(items)
        48    0.000    0.000    0.000    0.000 _collections_abc.py:802(__init__)
-      108    0.000    0.000    0.000    0.000 _collections_abc.py:849(__iter__)
+      108    0.000    0.000    0.001    0.000 _collections_abc.py:849(__iter__)
        24    0.000    0.000    0.000    0.000 _ufunc_config.py:132(geterr)
        24    0.000    0.000    0.000    0.000 _ufunc_config.py:32(seterr)
        12    0.000    0.000    0.000    0.000 _ufunc_config.py:433(__enter__)
        12    0.000    0.000    0.000    0.000 _ufunc_config.py:438(__exit__)
        12    0.000    0.000    0.000    0.000 abc.py:117(__instancecheck__)
        12    0.000    0.000    0.000    0.000 contextlib.py:63(_recreate_cm)
-       12    0.000    0.000    0.000    0.000 contextlib.py:76(inner)
+       12    0.000    0.000    0.001    0.000 contextlib.py:76(inner)
        28    0.000    0.000    0.000    0.000 coreviews.py:268(__init__)
        12    0.000    0.000    0.000    0.000 coreviews.py:275(__iter__)
        24    0.000    0.000    0.000    0.000 coreviews.py:282(&lt;genexpr&gt;)
@@ -1787,21 +1850,25 @@ effect, it does not because the overhead is less to do with filling the underlyi
        42    0.000    0.000    0.000    0.000 coreviews.py:50(__iter__)
         4    0.000    0.000    0.000    0.000 coreviews.py:53(__getitem__)
        46    0.000    0.000    0.000    0.000 coreviews.py:81(__getitem__)
-       59    0.000    0.000    0.000    0.000 ex_pump.py:107(behavior)
-        1    0.000    0.000    0.000    0.000 ex_pump.py:114(__init__)
-       59    0.000    0.000    0.000    0.000 ex_pump.py:119(behavior)
-        1    0.000    0.000    0.000    0.000 ex_pump.py:125(__init__)
-       59    0.000    0.000    0.000    0.000 ex_pump.py:130(behavior)
-        1    0.000    0.000    0.000    0.000 ex_pump.py:144(__init__)
-       61    0.000    0.000    0.000    0.000 ex_pump.py:158(condfaults)
-       60    0.000    0.000    0.000    0.000 ex_pump.py:171(behavior)
-        2    0.000    0.000    0.000    0.000 ex_pump.py:199(__init__)
-        1    0.000    0.000    0.002    0.002 ex_pump.py:214(__init__)
-        1    0.000    0.000    0.000    0.000 ex_pump.py:259(find_classification)
-        1    0.000    0.000    0.000    0.000 ex_pump.py:49(__init__)
-       60    0.000    0.000    0.000    0.000 ex_pump.py:79(condfaults)
-       59    0.000    0.000    0.000    0.000 ex_pump.py:87(behavior)
-        1    0.000    0.000    0.000    0.000 ex_pump.py:99(__init__)
+        5    0.000    0.000    0.000    0.000 digraph.py:268(__init__)
+       16    0.000    0.000    0.000    0.000 enum.py:358(__call__)
+       16    0.000    0.000    0.000    0.000 enum.py:670(__new__)
+      504    0.000    0.000    0.001    0.000 ex_pump.py:106(behavior)
+        1    0.000    0.000    0.000    0.000 ex_pump.py:113(__init__)
+      504    0.000    0.000    0.001    0.000 ex_pump.py:118(behavior)
+        1    0.000    0.000    0.001    0.001 ex_pump.py:124(__init__)
+      504    0.001    0.000    0.001    0.000 ex_pump.py:129(behavior)
+        1    0.000    0.000    0.000    0.000 ex_pump.py:143(__init__)
+      506    0.000    0.000    0.000    0.000 ex_pump.py:157(condfaults)
+      505    0.002    0.000    0.003    0.000 ex_pump.py:170(behavior)
+        2    0.000    0.000    0.000    0.000 ex_pump.py:198(__init__)
+        1    0.000    0.000    0.005    0.005 ex_pump.py:213(__init__)
+      501    0.000    0.000    0.000    0.000 ex_pump.py:258(end_condition)
+        1    0.000    0.000    0.000    0.000 ex_pump.py:270(find_classification)
+        1    0.000    0.000    0.000    0.000 ex_pump.py:48(__init__)
+      505    0.000    0.000    0.000    0.000 ex_pump.py:78(condfaults)
+      504    0.001    0.000    0.002    0.000 ex_pump.py:86(behavior)
+        1    0.000    0.000    0.000    0.000 ex_pump.py:98(__init__)
        48    0.000    0.000    0.000    0.000 filters.py:20(no_filter)
         4    0.000    0.000    0.000    0.000 filters.py:51(__init__)
       156    0.000    0.000    0.000    0.000 filters.py:54(__call__)
@@ -1809,6 +1876,8 @@ effect, it does not because the overhead is less to do with filling the underlyi
         1    0.000    0.000    0.000    0.000 fromnumeric.py:2742(amin)
         1    0.000    0.000    0.000    0.000 fromnumeric.py:70(_wrapreduction)
         1    0.000    0.000    0.000    0.000 fromnumeric.py:71(&lt;dictcomp&gt;)
+        2    0.000    0.000    0.000    0.000 fromnumeric.py:840(_sort_dispatcher)
+        2    0.000    0.000    0.000    0.000 fromnumeric.py:844(sort)
         4    0.000    0.000    0.000    0.000 function.py:161(freeze)
         4    0.000    0.000    0.000    0.000 function.py:590(set_node_attributes)
         1    0.000    0.000    0.000    0.000 function.py:715(set_edge_attributes)
@@ -1825,7 +1894,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
         4    0.000    0.000    0.000    0.000 graph.py:1664(subgraph)
         4    0.000    0.000    0.000    0.000 graph.py:1863(nbunch_iter)
        12    0.000    0.000    0.000    0.000 graph.py:1909(bunch_iter)
-        8    0.000    0.000    0.000    0.000 graph.py:289(__init__)
+       13    0.000    0.000    0.000    0.000 graph.py:289(__init__)
        46    0.000    0.000    0.000    0.000 graph.py:338(adj)
         4    0.000    0.000    0.000    0.000 graph.py:416(__contains__)
        46    0.000    0.000    0.000    0.000 graph.py:452(__getitem__)
@@ -1833,138 +1902,180 @@ effect, it does not because the overhead is less to do with filling the underlyi
        29    0.000    0.000    0.000    0.000 graph.py:661(nodes)
         7    0.000    0.000    0.000    0.000 graph.py:895(add_edges_from)
         4    0.000    0.000    0.000    0.000 graphviews.py:75(subgraph_view)
+       15    0.000    0.000    0.000    0.000 inspect.py:159(isfunction)
+       15    0.000    0.000    0.000    0.000 inspect.py:1746(_signature_get_user_defined_method)
+        5    0.000    0.000    0.000    0.000 inspect.py:1838(_signature_bound_method)
+        5    0.000    0.000    0.000    0.000 inspect.py:1864(_signature_is_builtin)
+        5    0.000    0.000    0.000    0.000 inspect.py:1876(_signature_is_functionlike)
+        5    0.000    0.000    0.000    0.000 inspect.py:2150(_signature_from_function)
+     10/5    0.000    0.000    0.001    0.000 inspect.py:2244(_signature_from_callable)
+       16    0.000    0.000    0.000    0.000 inspect.py:2496(__init__)
+       27    0.000    0.000    0.000    0.000 inspect.py:2546(name)
+       11    0.000    0.000    0.000    0.000 inspect.py:2550(default)
+       21    0.000    0.000    0.000    0.000 inspect.py:2558(kind)
+       10    0.000    0.000    0.000    0.000 inspect.py:2779(__init__)
+       21    0.000    0.000    0.000    0.000 inspect.py:2828(&lt;genexpr&gt;)
+        5    0.000    0.000    0.001    0.000 inspect.py:2857(from_callable)
+        5    0.000    0.000    0.000    0.000 inspect.py:286(isbuiltin)
+       10    0.000    0.000    0.000    0.000 inspect.py:2863(parameters)
+        5    0.000    0.000    0.000    0.000 inspect.py:2871(replace)
+        5    0.000    0.000    0.001    0.000 inspect.py:3109(signature)
+       10    0.000    0.000    0.000    0.000 inspect.py:494(unwrap)
+       10    0.000    0.000    0.000    0.000 inspect.py:514(_is_wrapper)
+       10    0.000    0.000    0.000    0.000 inspect.py:73(isclass)
+        5    0.000    0.000    0.000    0.000 inspect.py:91(ismethoddescriptor)
         1    0.000    0.000    0.000    0.000 isolate.py:40(isolates)
         1    0.000    0.000    0.000    0.000 isolate.py:82(&lt;genexpr&gt;)
-        1    0.000    0.000    0.001    0.001 modeldef.py:1008(build_model)
-        1    0.000    0.000    0.000    0.000 modeldef.py:1023(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 modeldef.py:1024(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 modeldef.py:1026(&lt;listcomp&gt;)
-        1    0.000    0.000    0.001    0.001 modeldef.py:1027(construct_graph)
-        1    0.000    0.000    0.000    0.000 modeldef.py:1041(&lt;listcomp&gt;)
-        4    0.000    0.000    0.000    0.000 modeldef.py:1050(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 modeldef.py:1110(return_stategraph)
-        1    0.000    0.000    0.000    0.000 modeldef.py:1179(calc_repaircost)
-        1    0.000    0.000    0.000    0.000 modeldef.py:1201(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 modeldef.py:1204(return_faultmodes)
-       10    0.000    0.000    0.000    0.000 modeldef.py:1217(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 modeldef.py:1252(reset)
-        1    0.000    0.000    0.000    0.000 modeldef.py:1276(__init__)
-        1    0.000    0.000    0.000    0.000 modeldef.py:1300(reset)
-        5    0.000    0.000    0.000    0.000 modeldef.py:155(__init__)
-        5    0.000    0.000    0.000    0.000 modeldef.py:342(assoc_modes)
-      415    0.000    0.000    0.000    0.000 modeldef.py:465(has_fault)
-      301    0.000    0.000    0.000    0.000 modeldef.py:497(add_fault)
-        5    0.000    0.000    0.000    0.000 modeldef.py:553(reset)
-      882    0.001    0.000    0.001    0.000 modeldef.py:571(return_states)
-        5    0.000    0.000    0.000    0.000 modeldef.py:605(__init__)
-        5    0.000    0.000    0.000    0.000 modeldef.py:641(make_flowdict)
-      301    0.001    0.000    0.002    0.000 modeldef.py:721(updatefxn)
-        4    0.000    0.000    0.000    0.000 modeldef.py:790(__init__)
-        4    0.000    0.000    0.000    0.000 modeldef.py:811(reset)
-      712    0.000    0.000    0.001    0.000 modeldef.py:815(status)
-        1    0.000    0.000    0.000    0.000 modeldef.py:876(__init__)
-        4    0.000    0.000    0.000    0.000 modeldef.py:931(add_flow)
-        5    0.000    0.000    0.001    0.000 modeldef.py:951(add_fxn)
-        5    0.000    0.000    0.000    0.000 modeldef.py:985(get_flows)
-        5    0.000    0.000    0.000    0.000 modeldef.py:987(&lt;listcomp&gt;)
-       12    0.000    0.000    0.000    0.000 multiarray.py:1054(copyto)
+     2526    0.010    0.000    0.025    0.000 modeldef.py:1083(updatefxn)
+        4    0.000    0.000    0.000    0.000 modeldef.py:1212(__init__)
+        4    0.000    0.000    0.000    0.000 modeldef.py:1233(reset)
+     6052    0.004    0.000    0.006    0.000 modeldef.py:1237(status)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1306(__init__)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1353(find_any_phase_overlap)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1355(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1356(&lt;listcomp&gt;)
+        4    0.000    0.000    0.000    0.000 modeldef.py:1375(add_flow)
+        5    0.000    0.000    0.003    0.001 modeldef.py:1395(add_fxn)
+        5    0.000    0.000    0.000    0.000 modeldef.py:1436(get_flows)
+        5    0.000    0.000    0.000    0.000 modeldef.py:1438(&lt;listcomp&gt;)
+        1    0.000    0.000    0.002    0.002 modeldef.py:1459(build_model)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1474(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1475(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1477(&lt;listcomp&gt;)
+        1    0.000    0.000    0.002    0.002 modeldef.py:1478(construct_graph)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1492(&lt;listcomp&gt;)
+        4    0.000    0.000    0.000    0.000 modeldef.py:1501(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1561(return_stategraph)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1631(calc_repaircost)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1653(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 modeldef.py:1656(return_faultmodes)
+       10    0.000    0.000    0.000    0.000 modeldef.py:1669(&lt;listcomp&gt;)
+        5    0.000    0.000    0.000    0.000 modeldef.py:167(make_flowdict)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1720(reset)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1744(__init__)
+        1    0.000    0.000    0.000    0.000 modeldef.py:1769(reset)
+        5    0.000    0.000    0.001    0.000 modeldef.py:237(__init__)
+        5    0.000    0.000    0.000    0.000 modeldef.py:273(set_timestep)
+        5    0.000    0.000    0.000    0.000 modeldef.py:290(assoc_timers)
+        5    0.000    0.000    0.000    0.000 modeldef.py:448(assoc_modes)
+        7    0.000    0.000    0.000    0.000 modeldef.py:514(&lt;listcomp&gt;)
+     3530    0.003    0.000    0.004    0.000 modeldef.py:604(has_fault)
+     2526    0.001    0.000    0.002    0.000 modeldef.py:636(add_fault)
+        5    0.000    0.000    0.000    0.000 modeldef.py:704(reset)
+     7557    0.006    0.000    0.009    0.000 modeldef.py:751(return_states)
+     2526    0.002    0.000    0.003    0.000 modeldef.py:766(check_update_nominal_faults)
+        5    0.000    0.000    0.001    0.000 modeldef.py:788(__init__)
+       17    0.000    0.000    0.000    0.000 multiarray.py:1054(copyto)
        12    0.000    0.000    0.000    0.000 multiarray.py:143(concatenate)
-      672    0.000    0.000    0.000    0.000 multiarray.py:478(can_cast)
+     8517    0.001    0.000    0.001    0.000 multiarray.py:478(can_cast)
         5    0.000    0.000    0.000    0.000 multigraph.py:291(__init__)
         4    0.000    0.000    0.000    0.000 multigraph.py:403(add_edge)
         8    0.000    0.000    0.000    0.000 multigraph.py:686(has_edge)
         4    0.000    0.000    0.000    0.000 multigraph.py:742(edges)
         4    0.000    0.000    0.000    0.000 multigraph.py:915(is_multigraph)
         4    0.000    0.000    0.000    0.000 multigraph.py:919(is_directed)
-       12    0.000    0.000    0.000    0.000 numeric.py:288(full)
-       56    0.000    0.000    0.001    0.000 ordered_set.py:122(copy)
+       17    0.000    0.000    0.001    0.000 numeric.py:288(full)
+      501    0.000    0.000    0.004    0.000 ordered_set.py:122(copy)
        32    0.000    0.000    0.000    0.000 ordered_set.py:157(__contains__)
-      290    0.000    0.000    0.000    0.000 ordered_set.py:169(add)
+     2515    0.002    0.000    0.003    0.000 ordered_set.py:169(add)
         5    0.000    0.000    0.000    0.000 ordered_set.py:190(update)
-      224    0.000    0.000    0.000    0.000 ordered_set.py:287(__iter__)
-       56    0.000    0.000    0.000    0.000 ordered_set.py:336(union)
-      115    0.000    0.000    0.001    0.000 ordered_set.py:65(__init__)
-      280    0.000    0.000    0.000    0.000 ordered_set.py:71(__len__)
+     2004    0.001    0.000    0.001    0.000 ordered_set.py:287(__iter__)
+      501    0.001    0.000    0.004    0.000 ordered_set.py:336(union)
+     1005    0.001    0.000    0.006    0.000 ordered_set.py:65(__init__)
+     2505    0.001    0.000    0.001    0.000 ordered_set.py:71(__len__)
        12    0.000    0.000    0.000    0.000 projection.py:101(&lt;genexpr&gt;)
        10    0.000    0.000    0.000    0.000 projection.py:103(&lt;setcomp&gt;)
        13    0.000    0.000    0.000    0.000 projection.py:114(&lt;genexpr&gt;)
         2    0.000    0.000    0.000    0.000 projection.py:15(projected_graph)
-        1    0.000    0.000    0.000    0.000 propagate.py:1021(init_fxnhist)
-        5    0.000    0.000    0.000    0.000 propagate.py:1044(&lt;listcomp&gt;)
-        5    0.000    0.000    0.000    0.000 propagate.py:1047(&lt;dictcomp&gt;)
-        7    0.000    0.000    0.000    0.000 propagate.py:1047(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 propagate.py:111(new_mdl_params)
-        1    0.000    0.000    0.011    0.011 propagate.py:36(nominal)
-        1    0.000    0.000    0.000    0.000 propagate.py:629(construct_nomscen)
-        1    0.000    0.000    0.009    0.009 propagate.py:685(prop_one_scen)
-       56    0.000    0.000    0.005    0.000 propagate.py:775(propagate)
-       56    0.001    0.000    0.004    0.000 propagate.py:803(prop_time)
-       12    0.000    0.000    0.000    0.000 propagate.py:841(&lt;listcomp&gt;)
-       56    0.000    0.000    0.003    0.000 propagate.py:856(update_mdlhist)
-       56    0.001    0.000    0.002    0.000 propagate.py:880(update_flowhist)
-       56    0.000    0.000    0.001    0.000 propagate.py:903(update_fxnhist)
-        3    0.000    0.000    0.000    0.000 propagate.py:92(update_params)
-        1    0.000    0.000    0.000    0.000 propagate.py:930(cut_mdlhist)
-        1    0.000    0.000    0.000    0.000 propagate.py:960(init_mdlhist)
-        1    0.000    0.000    0.000    0.000 propagate.py:992(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 propagate.py:994(init_flowhist)
+      501    0.001    0.000    0.040    0.000 propagate.py:1012(update_mdlhist)
+      501    0.008    0.000    0.018    0.000 propagate.py:1036(update_flowhist)
+      501    0.004    0.000    0.021    0.000 propagate.py:1059(update_fxnhist)
+        1    0.000    0.000    0.000    0.000 propagate.py:107(save_helper)
+     2505    0.009    0.000    0.017    0.000 propagate.py:1081(update_blockhist)
+        1    0.000    0.000    0.000    0.000 propagate.py:1110(cut_mdlhist)
+        1    0.000    0.000    0.002    0.002 propagate.py:1157(init_mdlhist)
+        1    0.000    0.000    0.000    0.000 propagate.py:1189(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 propagate.py:1191(init_flowhist)
+        1    0.000    0.000    0.001    0.001 propagate.py:1218(init_fxnhist)
+        5    0.000    0.000    0.001    0.000 propagate.py:1249(init_blockhist)
+        5    0.000    0.000    0.000    0.000 propagate.py:1268(&lt;listcomp&gt;)
+        5    0.000    0.000    0.001    0.000 propagate.py:1271(&lt;dictcomp&gt;)
+        7    0.000    0.000    0.000    0.000 propagate.py:1271(&lt;listcomp&gt;)
+        3    0.000    0.000    0.000    0.000 propagate.py:141(update_params)
+        1    0.000    0.000    0.000    0.000 propagate.py:160(new_mdl_params)
+        1    0.000    0.000    0.106    0.106 propagate.py:44(nominal)
+        1    0.000    0.000    0.000    0.000 propagate.py:641(check_overwrite)
+        1    0.000    0.000    0.000    0.000 propagate.py:784(construct_nomscen)
+        1    0.003    0.003    0.100    0.100 propagate.py:840(prop_one_scen)
+      501    0.001    0.000    0.054    0.000 propagate.py:931(propagate)
+      501    0.008    0.000    0.049    0.000 propagate.py:959(prop_time)
+       12    0.000    0.000    0.000    0.000 propagate.py:997(&lt;listcomp&gt;)
         5    0.000    0.000    0.000    0.000 reportviews.py:1003(__init__)
         5    0.000    0.000    0.000    0.000 reportviews.py:1132(__iter__)
-        8    0.000    0.000    0.000    0.000 reportviews.py:1247(__len__)
-       16    0.000    0.000    0.000    0.000 reportviews.py:1248(&lt;genexpr&gt;)
-       24    0.000    0.000    0.000    0.000 reportviews.py:1250(__iter__)
+        8    0.000    0.000    0.001    0.000 reportviews.py:1247(__len__)
+       16    0.000    0.000    0.001    0.000 reportviews.py:1248(&lt;genexpr&gt;)
+       24    0.000    0.000    0.001    0.000 reportviews.py:1250(__iter__)
        29    0.000    0.000    0.000    0.000 reportviews.py:177(__init__)
        29    0.000    0.000    0.000    0.000 reportviews.py:187(__getitem__)
         1    0.000    0.000    0.000    0.000 reportviews.py:355(__init__)
         1    0.000    0.000    0.000    0.000 reportviews.py:362(__call__)
        10    0.000    0.000    0.000    0.000 reportviews.py:465(__iter__)
-        5    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x00007FFC5FBB3C60}
+        5    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x00007FFEFDDE3C60}
        12    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
-      420    0.000    0.000    0.000    0.000 {built-in method builtins.any}
-        1    0.000    0.000    0.011    0.011 {built-in method builtins.exec}
-     2203    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
-     1281    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
-       92    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
-      282    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
-     1021    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+     6061    0.001    0.000    0.001    0.000 {built-in method builtins.any}
+       15    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
+        1    0.000    0.000    0.106    0.106 {built-in method builtins.exec}
+    28336    0.004    0.000    0.004    0.000 {built-in method builtins.getattr}
+    10646    0.002    0.000    0.002    0.000 {built-in method builtins.hasattr}
+       10    0.000    0.000    0.000    0.000 {built-in method builtins.id}
+      633    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+     2062    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
+     7717    0.001    0.000    0.001    0.000 {built-in method builtins.len}
         5    0.000    0.000    0.000    0.000 {built-in method builtins.max}
-      180    0.000    0.000    0.000    0.000 {built-in method builtins.min}
-       33    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
-        9    0.000    0.000    0.000    0.000 {built-in method builtins.sum}
-       56    0.000    0.000    0.000    0.000 {built-in method from_iterable}
+     1515    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+       38    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+        9    0.000    0.000    0.001    0.000 {built-in method builtins.sum}
+      501    0.000    0.000    0.000    0.000 {built-in method from_iterable}
        14    0.000    0.000    0.000    0.000 {built-in method fromkeys}
         1    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
-       20    0.000    0.000    0.000    0.000 {built-in method numpy.array}
-      697    0.001    0.000    0.001    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
-       12    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
+       22    0.000    0.000    0.000    0.000 {built-in method numpy.array}
+     8549    0.007    0.000    0.007    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
+       17    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
        48    0.000    0.000    0.000    0.000 {built-in method numpy.geterrobj}
        24    0.000    0.000    0.000    0.000 {built-in method numpy.seterrobj}
-       12    0.000    0.000    0.000    0.000 {function SeedSequence.generate_state at 0x0000019D2E712B80}
+       10    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
+       12    0.001    0.000    0.001    0.000 {function SeedSequence.generate_state at 0x000002819A68D940}
         5    0.000    0.000    0.000    0.000 {method &#39;add&#39; of &#39;set&#39; objects}
-      298    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
-       65    0.000    0.000    0.000    0.000 {method &#39;clear&#39; of &#39;set&#39; objects}
+     2544    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
+      510    0.000    0.000    0.000    0.000 {method &#39;clear&#39; of &#39;set&#39; objects}
        54    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;dict&#39; objects}
-       60    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;list&#39; objects}
-      952    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
-      301    0.000    0.000    0.000    0.000 {method &#39;difference&#39; of &#39;set&#39; objects}
+      505    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;list&#39; objects}
+        2    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
+     8072    0.002    0.000    0.002    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
+     2526    0.001    0.000    0.001    0.000 {method &#39;difference&#39; of &#39;set&#39; objects}
         1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
-       48    0.000    0.000    0.000    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
+       72    0.000    0.000    0.000    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
         5    0.000    0.000    0.000    0.000 {method &#39;integers&#39; of &#39;numpy.random._generator.Generator&#39; objects}
-      415    0.000    0.000    0.000    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
-      546    0.000    0.000    0.000    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
-       85    0.000    0.000    0.000    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
+     3530    0.001    0.000    0.001    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
+       16    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
+     7067    0.001    0.000    0.001    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
+      530    0.000    0.000    0.000    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
+        5    0.000    0.000    0.000    0.000 {method &#39;keys&#39; of &#39;mappingproxy&#39; objects}
+        7    0.000    0.000    0.000    0.000 {method &#39;pop&#39; of &#39;list&#39; objects}
         1    0.000    0.000    0.000    0.000 {method &#39;reduce&#39; of &#39;numpy.ufunc&#39; objects}
-      130    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
-      313    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
-        2    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
-       12    0.000    0.000    0.001    0.000 {numpy.random._generator.default_rng}
+        2    0.000    0.000    0.000    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
+      140    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
+     2543    0.001    0.000    0.001    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
+        3    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
+        5    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
+       12    0.001    0.000    0.002    0.000 {numpy.random._generator.default_rng}
 
 
 </pre></div></div>
 </div>
 <p>This is difficult to vizualize, although there are methods to store and sort through this output if needed. The <code class="docutils literal notranslate"><span class="pre">pycallgraph</span></code> package (requires a graphviz installation) can give a more immediate and insightful picture of where the code bottlenecks are.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycallgraph2</span> <span class="kn">import</span> <span class="n">PyCallGraph</span>
@@ -1974,7 +2085,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">PyCallGraph</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">GraphvizOutput</span><span class="p">()):</span>
@@ -1983,7 +2094,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;pycallgraph.png&#39;</span><span class="p">)</span>
@@ -1991,7 +2102,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1999,15 +2110,10 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <p>As shown, running this model is not particularly computationally expensive. As a result, the majority of the computational expense is not actually because of the simulation itself, but because of the way the model is simulated: - 0.03 of 0.13 s (23%) is spent re-initalizing the model at first so that the model object can be re-used without worrying about it being modified by any previous executions - 0.026 of 0.13 s (20%) is spent recording the model history - 0.062 of 0.13 s (47%) is spent
-simulating the model This is mostly because the model itself is computationally inexpensive. However, it also shows how one might easily speed up simulation for optimization or large-n simulations–avoiding unnecessary re-initialization or tracking fewer model states. This can be done using the options for <code class="docutils literal notranslate"><span class="pre">track</span></code> (as mentioned above) and <code class="docutils literal notranslate"><span class="pre">protect</span></code>, which specifies whether the model used is re-instantiated for the simulation (True) or used directly (False).</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
+simulating the model</p>
+<p>This is mostly because the model itself is computationally inexpensive. However, this example shows how one might easily speed up simulation for optimization or large-n simulations–avoiding unnecessary re-initialization, tracking fewer model states, or speeding up model execution. This can be done in the following ways: - using the options for <code class="docutils literal notranslate"><span class="pre">track</span></code> (as mentioned above) to track fewer states (reducing time spent recording the history) - using <code class="docutils literal notranslate"><span class="pre">protect</span></code> options, which specifies whether the
+model used is re-instantiated for the simulation (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or used directly (<code class="docutils literal notranslate"><span class="pre">False</span></code>) - speeding up the model by using <code class="docutils literal notranslate"><span class="pre">dynamic_behavior()</span></code> methods instead of <code class="docutils literal notranslate"><span class="pre">static_behavior()</span></code> or <code class="docutils literal notranslate"><span class="pre">behavior()</span></code> methods (which can halve the simulation time at the expense of undirected propagation) - speeding up the model by using a longer global timestep (<code class="docutils literal notranslate"><span class="pre">'tstep'</span></code> in <code class="docutils literal notranslate"><span class="pre">modelparams</span></code>) or by speeding up paricularly expensive Function dynamic behaviors by setting (<code class="docutils literal notranslate"><span class="pre">dt=local_tstep</span></code>) in
+<code class="docutils literal notranslate"><span class="pre">super().__init__()</span></code></p>
 </section>
 </section>
 
