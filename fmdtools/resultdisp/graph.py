@@ -258,11 +258,8 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
             labels={node:node for node in g.nodes}
             nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, font_weight='bold')
         elif highlight:
-            faultnodes = highlight[0]
-            degradednodes = highlight[1]
+            faultnodes, degradednodes, faultlabels = highlight_to_labels(highlight, showfaultlabels)
             faultedges = highlight[2]
-            if showfaultlabels: faultlabels = {f:[str(i)] for i,f in enumerate(faultnodes)}
-            else:               faultlabels = {}
             faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge])]) for edge in faultedges}
             fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=scale, pos=pos,colors=colors, show=False, arrows=arrows)
         else:
@@ -291,10 +288,7 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
             nx.draw_networkx_labels(g, pos, labels=labels,font_size=font_size, font_weight='bold')
             if faultscen:   plt.title('Propagation of faults to '+faultscen+' at t='+str(time))
         elif highlight:
-            faultnodes = highlight[0]
-            degradednodes = highlight[1]
-            if showfaultlabels: faultlabels = {f:str(i) for i,f in enumerate(faultnodes)}
-            else:               faultlabels={}
+            faultnodes, degradednodes, faultlabels = highlight_to_labels(highlight, showfaultlabels)
             fig_axis = plot_bipgraph(g, labels, faultnodes, degradednodes, faultlabels,faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, functions = functions, flows=flows, show=False, seqgraph=seqgraph, seqlabels=seqlabels)
         else:                                      #plots graph with status information
             labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
@@ -309,6 +303,17 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
             fig_axis =plot_bipgraph(g,labels, faultnodes, degradednodes, faultlabels, faultscen, time, showfaultlabels=showfaultlabels, scale=scale, pos=pos, colors=colors, show=False, seqgraph=seqgraph)
     if filename:fig.savefig(filename=filename, format=filetype, bbox_inches = 'tight', pad_inches = 0)
     return fig, fig.axes[0]
+def highlight_to_labels(highlight, showfaultlabels):
+    """Creates labels dictionary given the highlight list"""
+    faultnodes = highlight[0]
+    degradednodes = highlight[1]
+    if showfaultlabels and type(faultnodes)==dict: 
+        faultlabels=faultnodes
+    elif showfaultlabels:
+        faultlabels= faultlabels = {f:str(i) for i,f in enumerate(faultnodes)}
+    else:               faultlabels={}
+    return faultnodes, degradednodes, faultlabels
+    
 def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filetype='png', showfaultlabels=True, highlight=[], colors=['lightgray','orange', 'red'], heatmap={}, cmap=plt.cm.coolwarm,arrows=False, seqgraph={}, seqlabels=False, **kwargs):
     """
     Translates an existing nx graph to a graphviz graph. Saves the graph output and dot file.
@@ -393,11 +398,10 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
         edges = g.edges
         #handles faults
         labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
-        faultlabels_form = {node:'\n\n '+str(fault) for node,fault in faultlabels.items() if fault!={'nom'}}
         #handles heatmap and highlight
         if highlight != []:
-            faultnodes = highlight[0]
-            degradednodes = highlight[1]
+            faultnodes, degradednodes, faultlabels = highlight_to_labels(highlight, showfaultlabels)
+        faultlabels_form = {node:'\n\n '+str(fault) for node,fault in faultlabels.items() if fault!={'nom'}}
         colors_dict = gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, functions=functions, flows=flows)
         if seqgraph:    dot = Digraph(comment="model network", graph_attr=kwargs)
         else:           dot = Graph(comment="model network", graph_attr=kwargs)
@@ -417,11 +421,8 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
             flows=list(g.get_edge_data(edge[0],edge[1]).keys())
             edgeflows[edge[0],edge[1]]=''.join(flow for flow in flows if flow not in ['name', 'arrow'])
         if highlight != []:
-            faultnodes = highlight[0]
-            degradednodes = highlight[1]
+            faultnodes, degradednodes, faultlabels = highlight_to_labels(highlight, showfaultlabels)
             faultedges = highlight[2]
-            if showfaultlabels: faultlabels = {f:str(i) for i,f in enumerate(faultnodes)}
-            else:               faultlabels = {}
             faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge])]) for edge in faultedges}
         else:
             labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
@@ -481,7 +482,7 @@ def show_pyvis(g, gtype='typegraph', filename="typegraph", width=1000, filt=True
     return n
 
 
-def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray', 'cyan','teal'], show_dyn_order=True, show_dyn_arrows=False, title="Execution Order", legend=True,  **kwargs):
+def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray', 'cyan','teal'], show_dyn_order=True, show_dyn_arrows=False, show_dyn_tstep=True, title="Execution Order", legend=True,  **kwargs):
     """
     Displays the execution order/types of the model, where the functions and flows in the
     static step are highlighted and the functions in the dynamic step are listed (with corresponding order)
@@ -505,6 +506,8 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
         The default is ['lightgray', 'cyan','teal'].
     show_dyn_order : bool, optional
         Whether to label the execution order for dynamic functions. The default is True.
+    show_dyn_tstep : bool, optional
+        Whether to label local timesteps of dynamic functions. The default is True.
     show_dyn_arrows:
         Whether to place arrows to denote the sequence between functions. The default is False.
     title : str, optional
@@ -517,19 +520,23 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
     tuple of form (figure, axis)
 
     """
-
-    if gtype =='normal': fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.dynamicfxns, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], colors=colors, showfaultlabels= show_dyn_order, **kwargs)
+    if show_dyn_order and show_dyn_tstep:   dyn_highlight = {fxn:str(i)+",dt="+str(mdl.fxns[fxn].dt) if mdl.fxns[fxn].dt!=mdl.tstep else str(i) for i,fxn in enumerate(mdl.dynamicfxns)}
+    elif show_dyn_tstep:                    dyn_highlight = {fxn:"dt="+str(mdl.fxns[fxn].dt) if mdl.fxns[fxn].dt!=mdl.tstep else '' for i,fxn in enumerate(mdl.dynamicfxns)}
+    elif show_dyn_order:                    dyn_highlight = {fxn:str(i) for i,fxn in enumerate(mdl.dynamicfxns)}
+    else:                                   dyn_highlight = list(mdl.dynamicfxns)
+    showfaultlabels = (show_dyn_order or show_dyn_tstep)
+    if gtype =='normal': fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[dyn_highlight, mdl.staticfxns,  mdl.graph.edges(mdl.staticfxns)], colors=colors, showfaultlabels= showfaultlabels, **kwargs)
     elif gtype=='bipartite':
         staticnodes = list(mdl.staticfxns) + list(set([n for node in mdl.staticfxns for n in mdl.bipartite.neighbors(node)]))
         dynamicnodes = list(mdl.dynamicfxns) #+ list(set().union(*[nx.node_connected_component(mdl.bipartite, node) for node in mdl.dynamicfxns]))
         if show_dyn_arrows:
             seqgraph = nx.DiGraph([(dynamicnodes[n], dynamicnodes[n+1]) for n in range(len(dynamicnodes)-1)])
         else: seqgraph=[]
-        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[dynamicnodes, staticnodes], colors=colors, showfaultlabels= show_dyn_order, seqgraph=seqgraph, **kwargs)
+        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[dyn_highlight, staticnodes], colors=colors, showfaultlabels= showfaultlabels, seqgraph=seqgraph, **kwargs)
     elif gtype=='actions':
-        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.actions, [],  []], colors=colors, showfaultlabels= show_dyn_order, arrows=show_dyn_arrows, **kwargs)
+        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.actions, [],  []], colors=colors, showfaultlabels= showfaultlabels, arrows=show_dyn_arrows, **kwargs)
     elif gtype in ['flows', 'combined']:
-        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.actions, [],  []], colors=colors, showfaultlabels= show_dyn_order,  **kwargs)
+        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.actions, [],  []], colors=colors, showfaultlabels= showfaultlabels,  **kwargs)
 
     if legend:
         if renderer=='graphviz': gv_execute_order_legend(colors)
