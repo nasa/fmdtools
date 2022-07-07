@@ -10,7 +10,7 @@ Uses methods:
     - :meth:`degfxns`:        Makes a table showing which functions are degraded over time (0 for degraded, 1 for nominal)
     - :meth:`deghist`:        Makes a table of all funcitons and flows that are degraded over time. If withstats=True, the total # of each type degraded is provided in the last columns
     - :meth:`heatmaps`:       Makes a table of a heatmap dictionary
-    - :meth:`costovertime`:   Makes a table of the total cost, rate, and expected cost of all faults over time
+    - :meth:`metricovertime`: Makes a table of the total metric, rate, and expected metric of all faults over time
     - :meth:`samptime`:       Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)
     - :meth:`summary:`        Makes a table of a summary dictionary from a given model run
     - :meth:`result`:         Makes a table of results (degraded functions/flows, cost, rate, expected cost) of a single run
@@ -121,28 +121,30 @@ def heatmaps(heatmaps):
     """Makes a table of a heatmap dictionary"""
     table = pd.DataFrame(heatmaps)
     return table.transpose()
-def costovertime(endclasses, app):
+def metricovertime(endclasses, app, metric='cost'):
     """
-    Makes a table of the total cost, rate, and expected cost of all faults over time
+    Makes a table of the total metric, rate, and expected metric of all faults over time
 
     Parameters
     ----------
     endclasses : dict
-        dict with rate,cost, and expected cost for each injected scenario
+        dict with rate, metric, and expected metric values for each injected scenario
     app : sampleapproach
         sample approach used to generate the list of scenarios
-
+    metric : str
+        metric from dict to tabulate over time. Default is 'cost'
     Returns
     -------
-    costovertime : dataframe
-        pandas dataframe with the total cost, rate, and expected cost for the set of scenarios
+    met_overtime : dataframe
+        pandas dataframe with the total metric, rate, and expected metric for the set of scenarios
     """
-    costovertime={'cost':{time:0.0 for time in app.times}, 'rate':{time:0.0 for time in app.times}, 'expected cost':{time:0.0 for time in app.times}}
+    expected_metric = "expected "+metric
+    met_overtime={metric:{time:0.0 for time in app.times}, 'rate':{time:0.0 for time in app.times}, expected_metric:{time:0.0 for time in app.times}}
     for scen in app.scenlist:
-        costovertime['cost'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['cost']
-        costovertime['rate'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['rate']
-        costovertime['expected cost'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['expected cost'] 
-    return pd.DataFrame.from_dict(costovertime)
+        met_overtime[metric][scen['properties']['time']]+=endclasses[scen['properties']['name']][metric]
+        met_overtime['rate'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['rate']
+        met_overtime[expected_metric][scen['properties']['time']]+=endclasses[scen['properties']['name']][expected_metric] 
+    return pd.DataFrame.from_dict(met_overtime)
 def samptime(sampletimes):
     """Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)"""
     table = pd.DataFrame()
@@ -153,7 +155,7 @@ def summary(summary):
     """Makes a table of a summary dictionary from a given model run"""
     return pd.DataFrame.from_dict(summary, orient = 'index')    
 def result(endresults, summary):
-    """Makes a table of results (degraded functions/flows, cost, rate, expected cost) of a single run"""
+    """Makes a table of results (degraded functions/flows, classification) of a single run"""
     table = pd.DataFrame(endresults['classification'], index=[0])
     table['degraded functions'] = [summary['degraded functions']]
     table['degraded flows'] = [summary['degraded flows']]
@@ -209,7 +211,7 @@ def nominal_stats(nomapp, nomapp_endclasses, metrics='all', inputparams='from_ra
     table = pd.DataFrame(table_values, columns=[*nomapp_endclasses], index=inputparams+metrics)
     return table
 
-def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid='default', nan_as=np.nan, percent=True, difference=True, give_ci=False, **kwargs):
+def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid='default', nan_as=np.nan, percent=True,  give_ci=False, **kwargs):
     """
     Compares a metric for a given set of model parameters/factors over set of nominal scenarios.
 
@@ -234,9 +236,6 @@ def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid
     percent : bool, optional
         Whether to compare metrics as bools (True - results in a comparison of percentages of indicator variables) 
         or as averages (False - results in a comparison of average values of real valued variables). The default is True.
-    difference : bool, optional
-        Whether to tabulate the difference of the metric from the nominal over each scenario (True),
-        or the value of the metric over all (False). The default is True.
     give_ci = bool:
         gives the bootstrap confidence interval for the given statistic using the given kwargs
         'combined' combines the values as a strings in the table (for display)
@@ -264,7 +263,7 @@ def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid
             endclass_fact = {scen:endclass for scen, endclass in endclasses.items() if scen in scens}
 
             if not percent: nominal_metrics = [nan_to_x(scen[metric], nan_as) for scen in endclass_fact.values()]
-            else:           nominal_metrics = [np.sign(nan_to_x(scen[metric], nan_as)) for scen in endclass_fact.values()]
+            else:           nominal_metrics = [np.sign(float(nan_to_x(scen[metric], nan_as))) for scen in endclass_fact.values()]
             factor_stats= factor_stats + [sum(nominal_metrics)/len(nominal_metrics)]
             if give_ci: 
                 factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(nominal_metrics, **kwargs)
@@ -301,6 +300,12 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
             --'functions' (modes for each function are grouped)
             --'mode type' (modes with the same name are grouped)
             -- or a set of specific modes/functions. The default is 'functions'.
+            -- or a tuple of form (group_by, apps, *arg), where
+                - group_by is an argument to SampleApproach.get_scenid_groups
+                - apps is a dictionary of approaches corresponding to the endclasses (from prop.nested_approach)
+                - arg is:
+                    - when using 'fxnclassfault' and 'fxnclass' options: a model
+                    - when using 'modetype' options: a dictionary grouping modes by type
     rangeid : str, optional
         Nominal Approach range to use for the test, if run over a single range.
         The default is 'default', which either:
@@ -335,8 +340,17 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
     elif faults=='mode type':   faultlist = set([e.partition(',')[0].partition(' ')[2] for scen in nested_endclasses for e in nested_endclasses[scen]])
     elif type(faults) ==str: raise Exception("Invalid faults option: "+faults)
     elif type(faults)==list:    faultlist =set(faults)
+    elif type(faults)==tuple:   
+        group_by=faults[0]; apps=faults[1]; group_dict={}
+        if group_by in ['fxnclassfault','fxnclass']: 
+            mdl=faults[2]
+            group_dict = {cl:mdl.fxns_of_class(cl) for cl in mdl.fxnclasses()}
+        elif group_by=='modetype':  group_dict=faults[2]
+        fault_scen_groups = {factor:{scen:apps[scen].get_scenid_groups(group_by, group_dict) for scen in scens} for factor, scens in factors.items()}
+        faultlist = {fsname:set() for dicts in fault_scen_groups.values() for group in dicts.values() for fsname in group}
     else:                       faultlist=faults
-    faultlist.discard('nominal'); faultlist.discard(' '); faultlist.discard('')
+    if type(faults)==tuple: faultlist.pop('nominal', 'nothing')
+    else:                   faultlist.discard('nominal'); faultlist.discard(' '); faultlist.discard('')
     if type(params)==str: params=[params]
     full_stats=[]
     for factor, scens in factors.items():
@@ -344,13 +358,21 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
         ec_metrics = overall_diff(endclass_fact, value, nan_as=nan_as, as_ind=percent, no_diff=not difference)
 
         if not percent: nominal_metrics = [nan_to_x(res_scens['nominal'][value], nan_as) for res_scens in endclass_fact.values()]
-        else:           nominal_metrics = [np.sign(float(nan_to_x(res_scens['nominal'][value]), nan_as)) for res_scens in endclass_fact.values()]
+        else:           nominal_metrics = [np.sign(float(nan_to_x(nan_to_x(res_scens['nominal'][value]), nan_as))) for res_scens in endclass_fact.values()]
         factor_stats=[sum(nominal_metrics)/len(nominal_metrics)]
         if give_ci: 
             factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(nominal_metrics, **kwargs)
             factor_stats = factor_stats + [factor_lb, factor_ub]
+        if type(faults)==tuple:
+            faultlist = {f:set() for f in faultlist}
+            for scen, groups in fault_scen_groups[factor].items():
+                for group, faultscens in groups.items():
+                    if not faultlist.get(group, False) and faultscens:  faultlist[group]=set(faultscens)
+                    else:                                               faultlist[group].update(faultscens)
+                faultlist.pop('nominal', 'nothing')
         for fault in faultlist:
-            if faults=='functions':     fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(' ')[0]]
+            if type(faults)==tuple:     fault_metrics=[metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if res_scen in faultlist[fault]]
+            elif faults=='functions':     fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(' ')[0]]
             else:                       fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(',')[0]]
             if len(fault_metrics)>0:    
                 factor_stats.append(sum(fault_metrics)/len(fault_metrics))
@@ -430,67 +452,187 @@ def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[],
     return table
 
 ##FMEA-like tables
-def simplefmea(endclasses):
-    """Makes a simple fmea (rate, cost, expected cost) of the endclasses of a list of fault scenarios run"""
+def simplefmea(endclasses, metrics=["rate", "cost", "expected cost"]):
+    """Makes a simple fmea (rate, classification) of the endclasses of a list of fault scenarios run"""
     table = pd.DataFrame(endclasses)
-    return table.transpose()
-def phasefmea(endclasses, app):
-    """
-    Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
-
-    Parameters
-    ----------
-    endclasses : dict
-        dict of endclasses of the simulation runs
-    app : sampleapproach
-        sample approach used for the underlying probability model of the set of scenarios run
-
-    Returns
-    -------
-    table: dataframe
-        table with cost, rate, and expected cost of each fault in each phase
-    """
-    fmeadict = dict.fromkeys(app.scenids.keys())
-    for modephase, ids in app.scenids.items():
-        rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
-        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
-        fmeadict[modephase] = {'rate':rate, 'cost':cost, 'expected cost': expcost}
-    table=pd.DataFrame(fmeadict)
-    return table.transpose()    
-def summfmea(endclasses, app):
-    """
-    Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
-
-    Parameters
-    ----------
-    endclasses : dict
-        dict of endclasses of the simulation runs
-    app : sampleapproach
-        sample approach used for the underlying probability model of the set of scenarios run
-
-    Returns
-    -------
-    table: dataframe
-        table with cost, rate, and expected cost of each fault (over all phases)
-    """
-    fmeadict = dict()
-    for modephase, ids in app.scenids.items():
-        rate= sum([endclasses[scenid]['rate'] for scenid in ids])
-        cost= sum(np.array([endclasses[scenid]['cost'] for scenid in ids])*np.array(list(app.weights[modephase[0]][modephase[1]].values())))
-        expcost= sum([endclasses[scenid]['expected cost'] for scenid in ids])
-        if getattr(app, 'jointmodes', []):  index = str(modephase[0])
-        else:                               index = modephase[0]
-        if not fmeadict.get(modephase[0]): fmeadict[index]= {'rate': 0.0, 'cost':0.0, 'expected cost':0.0}
-        fmeadict[index]['rate'] += rate
-        fmeadict[index]['cost'] += cost/len([1.0 for (fxnmode,phase) in app.scenids if fxnmode==modephase[0]])
-        fmeadict[index]['expected cost'] += expcost
-    table=pd.DataFrame(fmeadict)
-    return table.transpose()
+    table = table.transpose()
+    if metrics=='all':          return table
+    elif type(metrics)==list:   return table.loc[:, metrics]
+    else: 
+        raise Exception("invalid metrics option: "+str(metrics))
+    return 
 def fullfmea(endclasses, summaries):
-    """Makes full fmea table (degraded functions/flows, cost, rate, expected cost) of scenarios given endclasses dict (cost, rate, expected cost) and summaries dict (degraded functions, degraded flows)"""
+    """Makes full fmea table (degraded functions/flows, all metrics in endclasses) of scenarios given endclasses dict and summaries dict (degraded functions, degraded flows)"""
     degradedtable = pd.DataFrame(summaries)
     simplefmea=pd.DataFrame(endclasses)
     fulltable = pd.concat([degradedtable, simplefmea])
     return fulltable.transpose()
+
+def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_metrics=[],
+         mult_metrics={}, extra_classes={}, group_by='none', sort_by=False, mdl={}, mode_types={}, ascending=False, empty_as=0.0):
+    """
+    Makes a user-definable fmea of the endclasses of a set of fault scenarios.
+
+    Parameters
+    ----------
+    endclasses : dict
+        dict of endclasses of the simulation runs
+    app : sampleapproach
+        sample approach used for the underlying probability model of the set of scenarios run
+    metrics : list
+        generic unweighted metrics to query. The default is []. 'all' presents all metrics.
+        metrics are summed over grouped scenarios.
+    weight_metrics: list
+        weighted metrics to query. The default is ['rate']. 
+        metrics are weighted according to the number in each phase and then averaged
+    avg_metrics: list
+        metrics to average and query. The default is ['cost']. 
+        avg_metrics are averaged over groups, rather than a total.
+    perc_metrics : list, optional
+        metrics to treat as indicator variables to calculate a percentage. The default is [].
+        perc_metrics are treated as indicator variables and averaged over groups.
+    mult_metrics : dict, optional
+        mult_metrics are new metrics calculated by multiplying existing metrics 
+        (e.g., to calculate expectations or risk values like an expected cost or RPN)
+        The default is {"expected cost":['rate', 'cost']}.
+    extra_classes : dict, optional
+        An additional set of endclasses to include in the table (e.g., summaries from process.hists). 
+        The default is {}.
+    group_by : str, optional
+        Way of grouping fmea rows. The default is 'none'.
+        - 'none':           All scenarios are displayed individually
+        - 'phase':          All identical scenarios (fxn, mode) within a given phase are grouped 
+        - 'fxnfault':       All identical scenarios (fxn, mode) are grouped
+        - 'mode':           All scenarios with the same mode name are grouped
+        - 'modetype':      All scenarios with the same mode type, where mode types are strings in the mode name. Mode types must be given.
+        - 'functions':      All scenarios and modes from a given function are grouped.
+        - 'times':          All scenarios and modes at a given time are grouped
+        - 'fxnclassfault':  All scenarios (fxnclass, mode) from a given function class are grouped. A Model must be provided.
+        - 'fxnclass':       All scenarios from a given function class are grouped. A Model must be provided.
+    mode_types : set
+        Mode types to group by in 'mode type' option
+    mdl : Model
+        Model for use in 'fxnclassfault' and 'fxnclass' options
+    sort_by : str, optional
+        Column value to sort the table by. The default is "expected cost".
+    ascending : bool, optional
+        Whether to sort in ascending order. The default is False.
+    empty_as : float/'nan'
+        How to calculate stats of empty variables (for avg_metrics). Default is 0.0.
+
+    Returns
+    -------
+    fmea_table : DataFrame
+        pandas table with given metrics grouped as 
+    """
+    group_dict={}
+    if group_by in ['fxnclassfault','fxnclass']: 
+        if not mdl: raise Exception("No model mdl provided.")
+        group_dict = {cl:mdl.fxns_of_class(cl) for cl in mdl.fxnclasses()}
+    elif group_by=='modetype':
+        group_dict=mode_types
+    grouped_scens = app.get_scenid_groups(group_by, group_dict)
+    
+    if type(metrics)==str:          metrics=[metrics]
+    if type(weight_metrics)==str:   weight_metrics=[weight_metrics]
+    if type(perc_metrics)==str:     perc_metrics=[perc_metrics]
+    if type(avg_metrics)==str:      avg_metrics=[avg_metrics]
+    
+    if not metrics and not weight_metrics and not perc_metrics and not avg_metrics and not mult_metrics:
+        #default fmea is a cost-based table
+        weight_metrics=["rate"]; avg_metrics = ["cost"] 
+        mult_metrics={"expected cost":['rate', 'cost']}
+    
+    endclasses.update(extra_classes)
+    
+    id_weights = app.get_id_weights()
+    id_weights['nominal']=1.0
+    
+    allmetrics = metrics+weight_metrics+avg_metrics+perc_metrics+[*mult_metrics.keys()]
+    
+    if group_by=='modetype':
+        a=1
+    
+    if not sort_by:
+        if "expected cost" in mult_metrics: sort_by="expected_cost"
+        else:                               sort_by=allmetrics[-1]
+    
+    fmeadict = {g:dict.fromkeys(allmetrics) for g in grouped_scens}
+    for group, ids in grouped_scens.items():
+        b=1
+        for metric in metrics:
+            fmeadict[group][metric] = sum([endclasses[scenid][metric] for scenid in ids])
+        for metric in weight_metrics:
+            fmeadict[group][metric] = sum([endclasses[scenid][metric]*id_weights[scenid] for scenid in ids])
+        for metric in perc_metrics:
+            fmeadict[group][metric] = percent({scenid:endclasses[scenid] for scenid in ids}, metric)
+        for metric in avg_metrics:    
+            fmeadict[group][metric] = average({scenid:endclasses[scenid] for scenid in ids}, metric, empty_as=empty_as)
+        for metric, to_mult in mult_metrics.items():
+            if set(to_mult).intersection(weight_metrics):
+                fmeadict[group][metric] = sum([np.prod([endclasses[scenid][m] for m in to_mult])*id_weights[scenid] for scenid in ids])
+            else:
+                fmeadict[group][metric] = sum([np.prod([endclasses[scenid][m] for m in to_mult]) for scenid in ids])
+    table=pd.DataFrame(fmeadict)
+    table=table.transpose() 
+    if sort_by not in allmetrics: sort_by = allmetrics[0]
+    table=table.sort_values(sort_by, ascending=ascending)
+    return table
+        
+    
+def phasefmea(endclasses, app, metrics=["rate", "expected cost"], weight_metrics = ["cost"], sort_by=None, ascending=False):
+    """
+    (LEGACY FUNCTION) Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
+    Use tabulate.fmea with option group_by='phase' instead.
+
+    Parameters
+    ----------
+    endclasses : dict
+        dict of endclasses of the simulation runs
+    app : sampleapproach
+        sample approach used for the underlying probability model of the set of scenarios run
+    metrics : list
+        unweighted metrics to query. The default is ['rate', 'expected cost']
+    weight_metrics: list
+        weighted metrics to query. The default is ['cost']. 
+        Weights are used to calculate an average, rather than a total.
+    sort_by : str
+        metric to stort the table by. default is 'expected cost'
+    ascending : bool
+        whether to sort ascending. Default is False.
+    Returns
+    -------
+    tab: dataframe
+        table with metrics of each fault in each phase
+    """
+    tab =fmea(endclasses, app, group_by='phase', metrics=metrics, weight_metrics = weight_metrics, sort_by=sort_by, ascending=ascending)
+    return tab
+    
+def summfmea(endclasses, app, metrics=["rate", "expected cost"], weight_metrics = ["cost"], sort_by=None, ascending=False):
+    """
+    (LEGACY FUNCTION) Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
+    Use tabulate.fmea with group_by='fxnfault' instead.
+    
+    Parameters
+    ----------
+    endclasses : dict
+        dict of endclasses of the simulation runs
+    app : sampleapproach
+        sample approach used for the underlying probability model of the set of scenarios run
+    metrics : list
+        unweighted metrics to query. The default is ['rate', 'expected cost']
+    weighted_metrics: list
+        weighted metrics to query. The default is ['cost']. 
+        Weights are used to calculate an average, rather than a total.
+    sort_by : str
+        metric to stort the table by. default is 'expected cost'
+    ascending : bool
+        whether to sort ascending. Default is False
+    Returns
+    -------
+    tab: dataframe
+        table with metrics of each fault (over all phases)
+    """
+    tab = fmea(endclasses, app, group_by='fxnfault', metrics=metrics, weight_metrics=weight_metrics, sort_by=sort_by, ascending=ascending)
+    return tab
 

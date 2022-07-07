@@ -121,7 +121,7 @@ def instantiate_pools(cores):
 
 
 if __name__=='__main__':
-    mdl=Pump(params={'cost':{'repair'}, 'delay':10}, modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,500]}, 'times':[0,20, 500], 'tstep':1})
+    mdl=Pump(params={'cost':{'repair'}, 'delay':10}, modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,500]}, 'times':[0,20, 500], 'tstep':1})
     app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':3})
     
     cores = 4

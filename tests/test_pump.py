@@ -10,13 +10,14 @@ sys.path.insert(1, os.path.join('..'))
 from example_pump.ex_pump import Pump
 from fmdtools.faultsim import propagate
 import fmdtools.resultdisp as rd
-from fmdtools.modeldef import SampleApproach, check_pickleability
+from fmdtools.modeldef import SampleApproach, check_pickleability, NominalApproach
 from CommonTests import CommonTests
 import numpy as np
 
 class PumpTests(unittest.TestCase, CommonTests):
     def setUp(self):
         self.default_mdl = Pump()
+        self.mdl = Pump()
         self.water_mdl = Pump(params={'cost':{'water'}, 'delay':10, 'units':'hrs'})
     def test_dynamic_prop_values(self):
         """Test that given fault times result in the expected water/value loss"""
@@ -75,18 +76,12 @@ class PumpTests(unittest.TestCase, CommonTests):
         app_quad = SampleApproach(mdl, defaultsamp={'samp':'quadrature', 'quad':{'nodes':nodes,'weights':weights}})
         quad_util=exp_cost_quant(app_quad,mdl)
         self.assertAlmostEqual(full_util, quad_util)
-        
     def test_approach_parallelism(self):
         """Test whether the pump simulates the same when simulated using parallel or staged options"""
         app = SampleApproach(self.default_mdl)
-        from multiprocessing import Pool
-        endclasses, mdlhists = propagate.approach(self.default_mdl, app, showprogress=False,pool=False)
-        endclasses_staged, mdlhist_staged = propagate.approach(self.default_mdl, app, showprogress=False,pool=False, staged=True)
-        self.assertEqual([*endclasses.values()], [*endclasses_staged.values()])
-        endclasses_par, mdlhists_par = propagate.approach(self.default_mdl, app, showprogress=False,pool=Pool(4), staged=False)
-        self.assertEqual([*endclasses.values()], [*endclasses_par.values()])
-        endclasses_staged_par, mdlhists_staged_par = propagate.approach(self.default_mdl, app, showprogress=False,pool=Pool(4), staged=True)
-        self.assertEqual([*endclasses.values()], [*endclasses_staged_par.values()])
+        self.check_approach_parallelism(self.default_mdl, app)
+        app1 = SampleApproach(self.default_mdl, defaultsamp={'samp':'evenspacing','numpts':4})
+        self.check_approach_parallelism(self.default_mdl, app1)
     def test_approach_pruning(self):
         """Tests that sample approach pruning places points in the center of their
         respective intervals for linear resilience loss functions."""
@@ -100,6 +95,111 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_pickleability(self):
         unpickleable = check_pickleability(Pump(), verbose=False)
         self.assertTrue(unpickleable==[])
+    def test_one_run_pickle(self):
+        if os.path.exists("single_fault.pkl"): os.remove("single_fault.pkl")
+        
+        endresults, resgraph, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
+        mdlhist_flattened = rd.process.flatten_hist(mdlhist)
+        rd.process.save_result(mdlhist, "single_fault.pkl")
+        mdlhist_saved = rd.process.load_result("single_fault.pkl")
+        mdlhist_saved_flattened = rd.process.flatten_hist(mdlhist_saved)
+        
+        self.assertCountEqual([*mdlhist_flattened.keys()], [*mdlhist_saved_flattened.keys()])
+        
+        for hist_key in mdlhist_flattened: # test to see that all values of the arrays in the hist are the same
+            np.testing.assert_array_equal(mdlhist_flattened[hist_key],mdlhist_saved_flattened[hist_key])
+            
+        mdlhist_flattened['faulty', 'time'][0]=100
+        self.assertNotEqual(mdlhist_flattened['faulty', 'time'][0], mdlhist_saved_flattened['faulty', 'time'][0])
+        
+        os.remove("single_fault.pkl")
+        
+    def test_one_run_csv(self):
+        if os.path.exists("single_fault.csv"): os.remove("single_fault.csv")
+        endresults, resgraph, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
+        mdlhist_flattened = rd.process.flatten_hist(mdlhist)
+        
+        rd.process.save_result(mdlhist, "single_fault.csv")
+        mdlhist_saved = rd.process.load_result("single_fault.csv")
+        mdlhist_saved_flattened = rd.process.flatten_hist(mdlhist_saved)
+        
+        self.assertCountEqual([*mdlhist_flattened.keys()], [*mdlhist_saved_flattened.keys()])
+        for hist_key in mdlhist_flattened: # test to see that all values of the arrays in the hist are the same
+            np.testing.assert_array_equal(mdlhist_flattened[hist_key],mdlhist_saved_flattened[hist_key])
+        os.remove("single_fault.csv")
+    def test_one_run_json(self):
+        if os.path.exists("single_fault.json"): os.remove("single_fault.json")
+        endresults, resgraph, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
+        mdlhist_flattened = rd.process.flatten_hist(mdlhist)
+        
+        rd.process.save_result(mdlhist, "single_fault.json")
+        mdlhist_saved = rd.process.load_result("single_fault.json")
+        mdlhist_saved_flattened = rd.process.flatten_hist(mdlhist_saved)
+        
+        self.assertCountEqual([*mdlhist_flattened.keys()], [*mdlhist_saved_flattened.keys()])
+        for hist_key in mdlhist_flattened: # test to see that all values of the arrays in the hist are the same
+            np.testing.assert_array_equal(mdlhist_flattened[hist_key],mdlhist_saved_flattened[hist_key])
+        os.remove("single_fault.json")
+    def test_save_load_nominal(self):
+        for extension in [".pkl",".csv",".json"]:
+            self.check_save_load_onerun(self.mdl, "pump_mdlhist"+extension, "pump_endclass"+extension, 'nominal')
+    def test_save_load_onefault(self):
+        for extension in [".pkl",".csv",".json"]:
+            self.check_save_load_onerun(self.mdl, "pump_mdlhist"+extension, "pump_endclass"+extension, 'one_fault', faultscen=('ExportWater', 'block', 25))
+    def test_save_load_multfault(self):
+        for extension in [".pkl",".csv",".json"]:
+            faultscen = {10:{"ExportWater": ['block']},20:{"MoveWater":["short"]}}
+            self.check_save_load_onerun(self.mdl, "pump_mdlhist"+extension, "pump_endclass"+extension, 'mult_fault', faultscen =faultscen )
+    def test_save_load_singlefaults(self):
+        self.check_save_load_approach(self.mdl, "pump_mdlhists.pkl", "pump_endclasses.pkl", 'single_faults')
+        self.check_save_load_approach(self.mdl, "pump_mdlhists.csv", "pump_endclasses.csv", 'single_faults')
+        self.check_save_load_approach(self.mdl, "pump_mdlhists.json", "pump_endclasses.json", 'single_faults')
+    def test_save_load_singlefaults_indiv(self):
+        self.check_save_load_approach_indiv(self.mdl, "pump_mdlhists", "pump_endclasses", "pkl", 'single_faults')
+        self.check_save_load_approach_indiv(self.mdl, "pump_mdlhists", "pump_endclasses", "csv", 'single_faults')
+        self.check_save_load_approach_indiv(self.mdl, "pump_mdlhists", "pump_endclasses", "json", 'single_faults')
+    def test_save_load_nominalapproach(self):
+        app = NominalApproach()
+        app.add_seed_replicates("replicates", 10)
+        self.check_save_load_approach(self.mdl, "pump_mdlhists.pkl", "pump_endclasses.pkl", 'nominal_approach', app=app)
+        self.check_save_load_approach(self.mdl, "pump_mdlhists.csv", "pump_endclasses.csv", 'nominal_approach', app=app)
+        self.check_save_load_approach(self.mdl, "pump_mdlhists.json", "pump_endclasses.json", 'nominal_approach', app=app)
+    def test_save_load_nominalapproach_indiv(self):
+        app = NominalApproach()
+        app.add_seed_replicates("replicates", 10)
+        self.check_save_load_approach_indiv(self.mdl, "pump_mdlhists", "pump_endclasses", "pkl", 'nominal_approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl, "pump_mdlhists", "pump_endclasses", "csv", 'nominal_approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl, "pump_mdlhists", "pump_endclasses", "json", 'nominal_approach', app=app)
+    def test_save_load_nestedapproach(self):
+        app = NominalApproach()
+        app.add_seed_replicates("replicates", 10)
+        self.check_save_load_approach(self.mdl, "pump_mdlhists.pkl", "pump_endclasses.pkl", 'nested_approach', app=app)
+        self.check_save_load_approach(self.mdl, "pump_mdlhists.csv", "pump_endclasses.csv", 'nested_approach', app=app)
+        self.check_save_load_approach(self.mdl, "pump_mdlhists.json", "pump_endclasses.json", 'nested_approach', app=app)
+    def test_save_load_nestedapproach_indiv(self):
+        app = NominalApproach()
+        app.add_seed_replicates("replicates", 10)
+        self.check_save_load_approach_indiv(self.mdl, "pump_mdlhists", "pump_endclasses", "pkl", 'nested_approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl, "pump_mdlhists", "pump_endclasses", "csv", 'nested_approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl, "pump_mdlhists", "pump_endclasses", "json", 'nested_approach', app=app)
+    def test_save_load_approach(self):
+        app = SampleApproach(self.mdl)
+        self.check_save_load_approach(self.mdl,"pump_mdlhists.pkl", "pump_endclasses.pkl", 'approach', app=app)
+        self.check_save_load_approach(self.mdl,"pump_mdlhists.csv", "pump_endclasses.csv", 'approach', app=app)
+        self.check_save_load_approach(self.mdl,"pump_mdlhists.json", "pump_endclasses.json", 'approach', app=app)
+    def test_save_load_approach_indiv(self):
+        app = SampleApproach(self.mdl)
+        self.check_save_load_approach_indiv(self.mdl,"pump_mdlhists", "pump_endclasses", "pkl", 'approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl,"pump_mdlhists", "pump_endclasses", "csv", 'approach', app=app)
+        self.check_save_load_approach_indiv(self.mdl,"pump_mdlhists", "pump_endclasses", "json", 'approach', app=app)
+    def test_fmea_options(self):
+        app = SampleApproach(self.water_mdl, faults=[('MoveWater','mech_break')], phases=['on'],defaultsamp={'samp':'evenspacing','numpts':5})
+        endclasses, mdlhists = propagate.approach(self.water_mdl, app, showprogress=False)
+        self.check_same_fmea(app, endclasses, self.water_mdl)
+        
+        app2 = SampleApproach(self.mdl, defaultsamp={'samp':'evenspacing','numpts':2})
+        endclasses2, mdlhists2 = propagate.approach(self.mdl, app2, showprogress=False)
+        self.check_same_fmea(app2, endclasses2, self.mdl)
         
 def exp_cost_quant(approach, mdl):
     """ Calculates the expected cost of faults over a given sampling approach 
@@ -112,5 +212,10 @@ def exp_cost_quant(approach, mdl):
 
 if __name__ == '__main__':
     unittest.main()
+    #suite = unittest.TestSuite()
+    #suite.addTest(PumpTests("test_fmea_options"))
+    #runner = unittest.TextTestRunner()
+    #runner.run(suite)
+
     
     

@@ -12,20 +12,21 @@ Uses the following methods:
     - :func:`nominal_factor_comparison`:    gives a bar plot of nominal simulation statistics over given factors
     - :func:`resilience_factor_comparison`: gives a bar plot of fault simulation statistics over given factors
     - :func:`phases`:          plots the phases of operation that the model progresses through.
-    - :func:`samplecost`:      plots the costs for a single fault sampled by a SampleApproach over time with rates
-    - :func:`samplecosts`:     plots the costs for a set of faults sampled by a SampleApproach over time with rates on separate plots
-    - :func:`costovertime`:    plots the total cost/explected cost of a set of faults sampled by a SampleApproach over time
+    - :func:`samplemetric`:      plots a metric for a single fault sampled by a SampleApproach over time with rates
+    - :func:`samplemetrics`:     plots a metric for a set of faults sampled by a SampleApproach over time with rates on separate plots
+    - :func:`metricovertime`:    plots the total metric/explected metric of a set of faults sampled by a SampleApproach over time
 """
 #File Name: resultdisp/plot.py
 #Author: Daniel Hulse
 #Created: November 2019 (Refactored April 2020, Feb 2022)
 
 import matplotlib.pyplot as plt
+plt.rcParams['pdf.fonttype'] = 42 
 import copy
 import warnings
 import numpy as np
-from fmdtools.resultdisp.tabulate import costovertime as cost_table
-from fmdtools.resultdisp.process import bootstrap_confidence_interval
+from fmdtools.resultdisp.tabulate import metricovertime as metric_table
+from fmdtools.resultdisp.process import bootstrap_confidence_interval, flatten_hist
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
@@ -35,10 +36,10 @@ from fmdtools.faultsim.propagate import cut_mdlhist
 
 def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp_groups={}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
-             fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
+             fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95, titles={},
              title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
-             v_padding=None, h_padding=None, title_padding=None,
-             phases={}, modephases={}, label_phases=True,  **kwargs):
+             v_padding=None, h_padding=None, title_padding=0.0,
+             phases={}, modephases={}, label_phases=True, legend_title=None,  **kwargs):
     """
     Plot the behavior over time of the given function/flow values 
     over a set of scenarios, with ability to aggregate behaviors as needed.
@@ -119,6 +120,8 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     modephases : dict, optional
         dictionary that maps the phases to operational modes, if it is desired to track the progression
         through modes
+    legend_title : str, optional
+        title for the legend. Default is None
     **kwargs : kwargs
         keyword arguments to mpl.plot e.g. linestyle, color, etc. See 'aggregation' for specification.
         phases={}, modephases={}, label_phases=True,  **kwargs):
@@ -130,7 +133,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     for scen in mdlhists:
         mdlhists[scen] = cut_mdlhist(mdlhists[scen], max_ind)
     times = mdlhists[[*mdlhists.keys()][0]]['time']
-    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_plot=fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_include=fxnflowvals) for scen, mdlhist in mdlhists.items()}
     #Sort into comparison groups
     if not comp_groups: 
         if aggregation=='individual':   grouphists = flat_mdlhists
@@ -153,9 +156,12 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     if type(axs)==np.ndarray:   axs = axs.flatten()
     else:                       axs=[axs]
     
+    subplot_titles = {plot_value:': '.join(plot_value[1:]) for plot_value in plot_values}
+    subplot_titles.update(titles)
+    
     for i, plot_value in enumerate(plot_values):
         ax = axs[i]
-        ax.set_title(' '.join(plot_value))
+        ax.set_title(subplot_titles[plot_value])
         ax.grid()
         if i >= (rows-1)*cols and xlabel: ax.set_xlabel(xlabel)
         if ylabels.get(plot_value, False): ax.set_ylabel(ylabels[plot_value])
@@ -205,7 +211,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
         if type(time_slice)==int: ax.axvline(x=time_slice, color='k', label=time_slice_label)
         else:   
             for ts in time_slice: ax.axvline(x=ts, color='k', label=time_slice_label)
-    multiplot_legend_title(grouphists, axs, ax, legend_loc, title, v_padding, h_padding, title_padding)
+    multiplot_legend_title(grouphists, axs, ax, legend_loc, title, v_padding, h_padding, title_padding, legend_title)
     return fig, axs
 def indiv_mdlhists(mdlhist, fxnflows={}, cols=2, aggregation='individual', comp_groups={}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
@@ -306,43 +312,7 @@ def plot_err_lines(ax, times, lows, highs, **kwargs):
     """
     ax.plot(times, highs **kwargs)
     ax.plot(times, lows, **kwargs)
-def flatten_hist(hist, newhist = {}, prevname=(), to_plot='all'):
-    """
-    Recursively creates a flattenned history of the given nested model history
-
-    Parameters
-    ----------
-    hist : dict
-        Model history (e.g., from faultsim.propagate.nominal).
-    newhist : dict, optional
-        Flattened Model History (used when called recursively). The default is {}.
-    prevname : tuple, optional
-        Current key of the flattened history (used when called recursively). The default is ().
-    to_plot : str/list/dict, optional
-        What attributes to plot in the dict. The default is 'all'. Can be of form
-        - list e.g. ['att1', 'att2', 'att3'] to plot the given attributes
-        - dict e.g. fxnflowvals {'flow1':['att1', 'att2'], 'fxn1':'all', 'fxn2':['comp1':all, 'comp2':['att1']]}
-        - str e.g. 'att1' for attribute 1 or 'all' for all attributes
-    Returns
-    -------
-    newhist : dict
-        Flattened model history of form: {(fxnflow, ..., attname):array(att)}
-    """
-    for att, val in hist.items():
-        newname = prevname+tuple([att])
-        if type(val)==dict: 
-            if type(to_plot)==list and att in to_plot: new_to_plot = 'all'
-            elif type(to_plot)==dict and att in to_plot: new_to_plot = to_plot[att]
-            elif type(to_plot)==str and att== to_plot: new_to_plot = 'all'
-            elif to_plot =='all': new_to_plot='all'
-            elif att in ['functions', 'flows']: new_to_plot = to_plot
-            else: new_to_plot= False
-            if new_to_plot: flatten_hist(val, newhist, newname, new_to_plot)
-        elif to_plot=='all' or att in to_plot: 
-            if len(newname)==1: newhist[newname[0]] = val
-            else:               newhist[newname] = val
-    return newhist
-def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_padding=None, h_padding=None, title_padding=None):
+def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_padding=None, h_padding=None, title_padding=0.0, legend_title=None):
     """ Helper function for multiplot legends and titles"""
     if len(groupmetrics)>1 and legend_loc!=False:
         ax.legend()
@@ -354,15 +324,15 @@ def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_
             ax_l.set_frame_on(False)
             ax_l.get_xaxis().set_visible(False)
             ax_l.get_yaxis().set_visible(False)
-            ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, loc='center')
-        else: ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8})
+            ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, loc='center', title=legend_title)
+        else: ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, title=legend_title)
     plt.subplots_adjust(hspace=v_padding, wspace=h_padding)
-    if title: plt.suptitle(title)
+    if title: plt.suptitle(title, y=1.0+title_padding)
     
 
 def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metric_bins={}, legend_loc=-1, 
                 xlabels={}, ylabel='count', title='', indiv_kwargs={}, figsize='default', 
-                v_padding=0.4, h_padding=0.05, title_padding=0.1, **kwargs):
+                v_padding=0.4, h_padding=0.05, title_padding=0.1, legend_title=None, **kwargs):
     """
     Plots the histogram of given metric(s) separated by comparison groups over a set of scenarios
 
@@ -405,6 +375,8 @@ def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metr
         horizontal padding between subplots as a fraction of axis width
     title_padding : float
         padding for title as a fraction of figure height
+    legend_title : str, optional
+        title for the legend. Default is None
     **kwargs : kwargs
         keyword arguments to mpl.hist e.g. bins, etc
     """
@@ -436,7 +408,7 @@ def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metr
             x = [ec[plot_value] for ec in endclasses.values()]
             ax.hist(x, bins, label=group, **local_kwargs)
     
-    multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,v_padding, h_padding, title_padding)
+    multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,v_padding, h_padding, title_padding, legend_title)
     return fig, axs
 
 def metric_dist_from(mdlhists, times, fxnflowvals='all', **kwargs):
@@ -460,7 +432,7 @@ def metric_dist_from(mdlhists, times, fxnflowvals='all', **kwargs):
     **kwargs : kwargs
         keyword arguments to plot.metric_dist
     """
-    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_plot=fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_include=fxnflowvals) for scen, mdlhist in mdlhists.items()}
     if type(times) in [int, float]: times=[times]
     if len(times)==1 and kwargs.get('comp_groups', False):
         time_classes = {scen:{metric:val[times[0]] for metric, val in flat_hist.items()} for scen, flat_hist in flat_mdlhists.items()}
@@ -501,7 +473,7 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
     fig = plt.figure(figsize=figsize)
     
     data = [(x, scen['properties']['inputparams'][param1]) for x,scen in nomapp.scenarios.items()\
-            if (scen['properties']['inputparams'].get(param1,False))]
+            if (scen['properties']['inputparams'].get(param1,False)!=False)]
     names = [d[0] for d in data]
     classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
     all_classes = set(classifications)
@@ -558,7 +530,7 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
     fig = plt.figure(figsize=figsize)
     
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in nomapp.scenarios.items()\
-            if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False))]
+            if (scen['properties']['inputparams'].get(param1,False)!=False and scen['properties']['inputparams'].get(param2,False)!=False)]
     names = [d[0] for d in data]
     classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
     all_classes = set(classifications)
@@ -616,7 +588,7 @@ def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="No
     ax = fig.add_subplot(projection='3d')
     
     data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2], scen['properties']['inputparams'][param3]) for x,scen in nomapp.scenarios.items()\
-            if (scen['properties']['inputparams'].get(param1,False) and scen['properties']['inputparams'].get(param2,False)and scen['properties']['inputparams'].get(param3,False))]
+            if (scen['properties']['inputparams'].get(param1,False)!=False and scen['properties']['inputparams'].get(param2,False)!=False and scen['properties']['inputparams'].get(param3,False)!=False)]
     names = [d[0] for d in data]
     classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
     all_classes = set(classifications)
@@ -770,9 +742,9 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'b
     else:           return figs
              
 
-def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
+def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cost', ylims=None):
     """
-    Plots the sample cost and rate of a given fault over the injection times defined in the app sampleapproach
+    Plots the sample metric and rate of a given fault over the injection times defined in the app sampleapproach
     
     (note: not currently compatible with joint fault modes)
     
@@ -781,9 +753,11 @@ def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     app : sampleapproach
         Sample approach defining the underlying samples to take and probability model of the list of scenarios.
     endclasses : dict
-        A dict with the end classification of each fault (costs, etc)
+        A dict with the end classification of each fault (metrics, etc)
     fxnmode : tuple
         tuple (or tuple of tuples) with structure ('function name', 'mode name') defining the fault mode
+    metric : str
+        Metric to plot. The default is 'cost'
     samptype : str, optional
         The type of sample approach used:
             - 'std' for a single point for each interval
@@ -794,17 +768,27 @@ def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     associated_scens=[]
     for phasetup in app.mode_phase_map[fxnmode]:
         associated_scens = associated_scens + app.scenids.get((fxnmode, phasetup), [])
-    costs = np.array([endclasses[scen]['cost'] for scen in associated_scens])
-    times = np.array([time  for phase, timemodes in app.sampletimes.items() if timemodes for time in timemodes if fxnmode in timemodes.get(time)] )  
-    times = sorted(times)
-    rates = np.array(list(app.rates_timeless[fxnmode].values()))
-    
+    associated_scens = list(set(associated_scens))
+    costs = np.array([endclasses[scen][metric] for scen in associated_scens])
+    #times = np.array(list(set([time  for phase, timemodes in app.sampletimes.items() if timemodes for time in timemodes if fxnmode in timemodes.get(time)])))  
+    times = np.array([[a['properties']['time'] for a in app.scenlist if a['properties']['name']==scen][0] for scen in associated_scens])
+    timesort = np.argsort(times)
+    times = times[timesort]; costs=costs[timesort]
+    a=1
     tPlot, axes = plt.subplots(2, 1, sharey=False, gridspec_kw={'height_ratios': [3, 1]})
     
-    phasetimes_start =[times[0] for phase, times in app.mode_phase_map[fxnmode].items()]
-    phasetimes_end =[times[1] for phase, times in app.mode_phase_map[fxnmode].items()]
+    phasetimes_start=[]; phasetimes_end=[]; ratesvect=[]; phaselabels=[]
+    for phase, ptimes in app.mode_phase_map[fxnmode].items():
+        if type(ptimes[0])==list:
+            phasetimes_start+=[t[0] for t in ptimes]
+            phasetimes_end+=[t[1] for t in ptimes]
+            ratesvect += [app.rates_timeless[fxnmode][phase] for t in ptimes] *2
+            phaselabels+=[phase[1] for t in ptimes]
+        else: 
+            phasetimes_start.append(ptimes[0]); phasetimes_end.append(ptimes[1])
+            ratesvect = ratesvect + [app.rates_timeless[fxnmode][phase]]*2
+            phaselabels.append(phase[1])
     ratetimes =[]
-    ratesvect =[]
     phaselocs = []
     for (ind, phasetime) in enumerate(phasetimes_start):
         axes[0].axvline(phasetime, color="black")        
@@ -812,13 +796,16 @@ def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
 
         axes[1].axvline(phasetime, color="black") 
         ratetimes = ratetimes + [phasetimes_start[ind]] + [phasetimes_end[ind]]
-        ratesvect = ratesvect + [rates[ind]] + [rates[ind]]
+        
         #axes[1].text(middletime, 0.5*max(rates),  list(app.phases.keys())[ind], ha='center', backgroundcolor="white")
     #rate plots
     axes[1].set_xticks(phaselocs)
-    axes[1].set_xticklabels([phasetup[1] for phasetup in app.mode_phase_map[fxnmode]])
+    axes[1].set_xticklabels(phaselabels)
     
-    axes[1].plot(ratetimes, ratesvect)
+    sorty = np.argsort(phasetimes_start)
+    phasetimes_start=np.array(phasetimes_start)[sorty]; phasetimes_end=np.array(phasetimes_end)[sorty]
+    sortx = np.argsort(ratetimes)
+    axes[1].plot(np.array(ratetimes)[sortx], np.array(ratesvect)[sortx])
     axes[1].set_xlim(phasetimes_start[0], phasetimes_end[-1])
     axes[1].set_ylim(0, np.max(ratesvect)*1.2 )
     axes[1].set_ylabel("Rate")
@@ -826,23 +813,25 @@ def samplecost(app, endclasses, fxnmode, samptype='std', title=""):
     axes[1].grid()
     #cost plots
     axes[0].set_xlim(phasetimes_start[0], phasetimes_end[-1])
-    axes[0].set_ylim(0, 1.2*np.max(costs))
+    if not ylims:
+        ylims = [min(1.2*np.min(costs),-1e-5),max(1.2*np.max(costs),1e-5)]
+    axes[0].set_ylim(*ylims)
     if samptype=='fullint':
-        axes[0].plot(times, costs, label="cost")
+        axes[0].plot(times, costs, label=metric)
     else:
         if samptype=='quadrature' or samptype=='pruned piecewise-linear': 
             sizes =  1000*np.array([weight if weight !=1/len(timeweights) else 0.0 for (phasetype, phase), timeweights in app.weights[fxnmode].items() if timeweights for time, weight in timeweights.items() if time in times])
-            axes[0].scatter(times, costs,s=sizes, label="cost", alpha=0.5)
-        axes[0].stem(times, costs, label="cost", markerfmt=",", use_line_collection=True)
+            axes[0].scatter(times, costs,s=sizes, label=metric, alpha=0.5)
+        axes[0].stem(times, costs, label=metric, markerfmt=",", use_line_collection=True)
     
-    axes[0].set_ylabel("Cost")
+    axes[0].set_ylabel(metric)
     axes[0].grid()
     if title: axes[0].set_title(title)
-    elif type(fxnmode[0])==tuple: axes[0].set_title("Cost function of "+str(fxnmode)+" over time")
-    else:                       axes[0].set_title("Cost function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
+    elif type(fxnmode[0])==tuple: axes[0].set_title(metric+" function of "+str(fxnmode)+" over time")
+    else:                       axes[0].set_title(metric+" function of "+fxnmode[0]+": "+fxnmode[1]+" over time")
     #plt.subplot_adjust()
     plt.tight_layout()
-def samplecosts(app, endclasses, joint=False, title=""):
+def samplemetrics(app, endclasses, joint=False, title="", metric='cost'):
     """
     Plots the costs and rates of a set of faults injected over time according to the approach app
 
@@ -854,6 +843,10 @@ def samplecosts(app, endclasses, joint=False, title=""):
         A dict of results for each of the scenarios.
     joint : bool, optional
         Whether to include joint fault scenarios. The default is False.
+    title : str
+        Optional title.
+    metric : str
+        Metric to plot. The default is 'cost'
     """
     for fxnmode in app.list_modes(joint):
         if any([True for (fm, phase), val in app.sampparams.items() if val['samp']=='fullint' and fm==fxnmode]):
@@ -862,9 +855,9 @@ def samplecosts(app, endclasses, joint=False, title=""):
             st='quadrature'
         else: 
             st='std'
-        samplecost(app, endclasses, fxnmode, samptype=st, title="")
+        samplemetric(app, endclasses, fxnmode, samptype=st, title="", metric=metric)
 
-def costovertime(endclasses, app, costtype='expected cost'):
+def metricovertime(endclasses, app, metric='cost', metrictype='expected cost'):
     """
     Plots the total cost or total expected cost of faults over time.
 
@@ -874,15 +867,21 @@ def costovertime(endclasses, app, costtype='expected cost'):
         dict with rate,cost, and expected cost for each injected scenario (e.g. from run_approach())
     app : sampleapproach
         sample approach used to generate the list of scenarios
-    costtype : str, optional
-        type of cost to plot ('cost', 'expected cost' or 'rate'). The default is 'expected cost'.
+    metric : str
+        metric to plot ovre time. Default is 'cost'
+    metrictype : str, optional
+        type of cost to plot (e.g,'cost', 'expected cost' or 'rate'). The default is 'expected cost'.
+    Returns
+    -------
+    figure: matplotlib figure
     """
-    costovertime = cost_table(endclasses, app)
-    plt.plot(list(costovertime.index), costovertime[costtype])
-    plt.title('Total '+costtype+' of all faults over time.')
-    plt.ylabel(costtype)
+    costovertime = metric_table(endclasses, app, metric=metric)
+    plt.plot(list(costovertime.index), costovertime[metrictype])
+    plt.title('Total '+metrictype+' of all faults over time.')
+    plt.ylabel(metrictype)
     plt.xlabel("Time ("+str(app.units)+")")
     plt.grid()
+    return plt.gcf()
 
 def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', figsize=(6,4), title='', maxy='max', xlabel=True, error_bars=False):
     """
@@ -914,11 +913,11 @@ def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', fig
     figure = plt.figure(figsize=figsize)
     
     if type(comparison_table.columns[0])==tuple and '' in comparison_table.columns[0]: #bounded table
-        bar = np.array([comparison_table.loc[metric,col[0]][''] for col in comparison_table.columns if col[1]==''])
+        bar = np.array([comparison_table.at[metric,col] for col in comparison_table.columns if col[1]==''])
         labels= [str(i[0]) for i in comparison_table.columns if i[1]=='']
         if error_bars:
-            UB = np.array([comparison_table.loc[metric,col[0]]['UB'] for col in comparison_table.columns if col[1]=='UB'])
-            LB = np.array([comparison_table.loc[metric,col[0]]['LB'] for col in comparison_table.columns if col[1]=='LB'])
+            UB = np.array([comparison_table.at[metric,col] for col in comparison_table.columns if col[1]=='UB'])
+            LB = np.array([comparison_table.at[metric,col] for col in comparison_table.columns if col[1]=='LB'])
             yerr= [bar-LB, UB-bar]
             if maxy=='max': maxy = comparison_table.loc[metric].max()
         else: 
@@ -929,10 +928,8 @@ def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', fig
         if maxy=='max': maxy = max(bar)
     
     ax = figure.add_subplot(1,1,1)
-    
-    plt.grid(axis='y')
+    multibar_helper(ax,comparison_table.columns, maxy)
     ax.set_ylabel(ylabel)
-    ax.set_ylim(top=maxy)
     if title: plt.title(title)
     xs = np.array([ i for i in range(len(bar))])
     if yerr:    plt.bar(xs,bar, tick_label=labels, linewidth=4, yerr=yerr, error_kw={'elinewidth':3})
@@ -978,7 +975,7 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
     if type(comparison_table.columns[0])==tuple:    has_bounds = True
     else:                                           has_bounds=False
     if faults=='all': 
-        if has_bounds: faults=list({f[0] for f in comparison_table})
+        if has_bounds: faults=[f[0] for f in comparison_table][0:-1:3]
         else:          faults=[*comparison_table.columns]
         faults.remove('nominal')
     columns = int(np.ceil(len(faults)/rows))
@@ -989,7 +986,7 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
     for fault in faults:
         n+=1
         ax = figure.add_subplot(rows, columns, n, label=str(n))
-        ax.set_ylim(top=maxy)
+        multibar_helper(ax,comparison_table.index, maxy)
         xs = np.array([ i for i in range(len(comparison_table.index))])
         if has_bounds: 
             nominal_bars = [*comparison_table['nominal','']]
@@ -1016,7 +1013,6 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
             if type(faults)==dict:      plt.title(faults[fault])
             else:                       plt.title(fault)
         elif title:         plt.title(title)
-        plt.grid(axis='y')
         if not (n-1)%columns:    
             ax.set_ylabel(stat)
         else: 
@@ -1027,10 +1023,30 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
             else:               ax.set_xlabel(xlabel)
         if legend=='all': plt.legend()
         elif legend=='single' and n==1: plt.legend()
+        elif legend==n:                 plt.legend() 
     figure.tight_layout(pad=0.3)
     if title and len(faults)>1:               figure.suptitle(title)
     return figure
 
-
-
-
+def multibar_helper(ax, bar_index, maxy):
+    """Shared plotting helper for resilience_factor_comparison and nominal_factor_comparison.
+    Adds seperators to table groups (if any), limits the bounds of the plot, adds a grid, etc."""
+    ax.set_ylim(top=maxy)
+    plt.grid(axis='y')
+    if 'MultiIndex' in str(type(bar_index)):
+        if bar_index[0][1]=='': bar_index = [ind[0] for ind in bar_index][0:-1:3] # catches error bars
+        if len(bar_index[0])>2: # color top-level categories
+            first_inds = [i[0] for i in bar_index]
+            reverse_inds = [i[0] for i in bar_index]
+            reverse_inds.reverse()
+            first_vals = set(first_inds)
+            first_areas = {i:[first_inds.index(i), len(reverse_inds)-reverse_inds.index(i)] for i in first_vals}
+            for i, area in enumerate(first_areas.values()):
+                if i%2:
+                    ax.axvspan(area[0]-0.5, area[1]-0.5, color="ivory", zorder=-2)
+        if len(bar_index[0])>1: # put lines between mid-level categories
+            second_inds = { i[0:len(bar_index[0])-1]:pos for pos,i in enumerate(bar_index)}
+            second_inds = [*second_inds.values()]
+            for i in second_inds[:-1]:
+                ax.axvline(i+0.5, color='black')
+    ax.set_xlim(-0.5, len(bar_index)-0.5)

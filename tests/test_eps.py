@@ -12,8 +12,9 @@ from fmdtools.faultsim import propagate
 import fmdtools.resultdisp as rd
 from fmdtools.modeldef import SampleApproach, check_pickleability
 import numpy as np
+from CommonTests import CommonTests
 
-class epsTests(unittest.TestCase):
+class epsTests(unittest.TestCase, CommonTests):
     def setUp(self):
         self.mdl = EPS()
     def test_backward_fault_prop_1(self):
@@ -36,13 +37,13 @@ class epsTests(unittest.TestCase):
         mdl=self.mdl
         endclasses, reshists = propagate.single_faults(mdl, showprogress=False)
         actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])
-        self.assertEqual(len(endclasses), actual_num_faults)
+        self.assertEqual(len(endclasses), actual_num_faults+1)
         hist_len_is_1 = all([all([all([len(j)==1 for j in i.values()]) for i in f['flows'].values()]) for  f in reshists.values()])
         self.assertTrue(hist_len_is_1)                  # all histories have length 1
-        all_have_costs = all([e['cost'] for e in endclasses.values()])
+        all_have_costs = all([e['cost'] for name, e in endclasses.items() if name!='nominal'])
         self.assertTrue(all_have_costs)                 # all endresults have positive costs
         repcosts = np.sum([ np.sum([m['rcost'] for m in f.faultmodes.values()]) for f in mdl.fxns.values()])
-        total_simcosts = np.sum([e['cost'] for e in endclasses.values()])
+        total_simcosts = np.sum([e['cost'] for name, e in endclasses.items() if name!='nominal'])
         self.assertGreater(total_simcosts, repcosts)    # fault costs higher than if it was just repairs
     def test_fault_app(self):
         """ Tests that the expected number of scenarios are generated for a given approach """
@@ -54,6 +55,20 @@ class epsTests(unittest.TestCase):
     def test_pickleability(self):
         unpickleable = check_pickleability(self.mdl, verbose=False)
         self.assertTrue(unpickleable==[])
+    def test_save_load_nominal(self):
+        for extension in [".pkl",".csv",".json"]:
+            self.check_save_load_onerun(self.mdl, "eps_mdlhist"+extension, "eps_endclass"+extension, 'nominal')
+    def test_save_load_onefault(self):
+        for extension in [".pkl",".csv",".json"]:
+            self.check_save_load_onerun(self.mdl, "eps_mdlhist"+extension, "eps_endclass"+extension, 'one_fault', faultscen=('Store_EE', 'no_storage',0))
+    def test_save_load_multfault(self):
+        for extension in [".pkl",".csv",".json"]:
+            faultscen = {0:{'Store_EE':['no_storage'], 'Distribute_EE':'short'}}
+            self.check_save_load_onerun(self.mdl, "eps_mdlhist"+extension, "eps_endclass"+extension, 'mult_fault', faultscen =faultscen )
+    def test_save_load_singlefaults(self):
+        self.check_save_load_approach(self.mdl, "eps_mdlhists.pkl", "eps_endclasses.pkl", 'single_faults')
+        self.check_save_load_approach(self.mdl, "eps_mdlhists.csv", "eps_endclasses.csv", 'single_faults')
+        self.check_save_load_approach(self.mdl, "eps_mdlhists.json", "eps_endclasses.json", 'single_faults')
 if __name__ == '__main__':
     unittest.main()
     

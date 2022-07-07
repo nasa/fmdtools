@@ -142,9 +142,9 @@ class MoveWat(FxnBlock):
         if self.delay:
             if self.Watout.pressure>15.0:
                 if time>self.time:
-                    #increment timer: default is 1 second, if we use self.tstep, the time
+                    #increment timer: default is 1 second, if we use self.dt, the time
                     # will increment as desired even if we change model timestep
-                    self.timer.inc(self.tstep)  
+                    self.timer.inc(self.dt)  
                 if self.timer.time>self.delay:
                     self.add_fault('mech_break')
         else: 
@@ -190,7 +190,7 @@ class Water(Flow):
 # The model is also made an object to aid graph construction
 class Pump(Model):
     def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, \
-                 modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}, \
+                 modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}, \
                      valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
         super().__init__()
         
