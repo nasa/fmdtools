@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Defining Nominal Approaches in fmdtools &mdash; fmdtools 1.1.0 documentation</title>
+  <title>Defining Nominal Approaches in fmdtools &mdash; fmdtools 1.2.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -869,7 +869,7 @@ class NominalApproach(builtins.object)
  |  __init__(self)
  |      Instantiates NominalApproach (simulation params are defined using methods)
  |
- |  add_param_ranges(self, paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;, **kwargs)
+ |  add_param_ranges(self, paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;, set_args={}, **kwargs)
  |      Adds a set of scenarios to the approach.
  |
  |      Parameters
@@ -889,9 +889,11 @@ class NominalApproach(builtins.object)
  |              - &#39;independent&#39; creates separate random seeds for models and parameter generation
  |              - &#39;keep_model&#39; uses the seed provided in the model for all of the model
  |          When a list is provided, these seeds are are used (and shared). Must be of length replicates.
+ |      set_args : dict
+ |          Dictionary of lists of values for each param e.g., {&#39;param1&#39;:[value1, value2, value3]}
  |      **kwargs : specifies range for keyword args of paramfunc
  |          May be given as a fixed float/int/dict/str (k=value) defining a set value for the range (if not the default) or
- |          as a tuple k=(start, end, step)
+ |          as a tuple k=(start, end, step) for the range, or
  |
  |  add_param_replicates(self, paramfunc, rangeid, replicates, *args, ind_seeds=True, **kwargs)
  |      Adds a set of repeated scenarios to the approach. For use in (external) random scenario generation.
@@ -997,6 +999,20 @@ class NominalApproach(builtins.object)
  |      param_scens : dict
  |          The scenarios associated with each level of parameter (or joint parameters)
  |
+ |  range_to_space(self, inputranges)
+ |
+ |  update_factor_seeds(self, rangeid, inputparam, seeds=&#39;new&#39;)
+ |      Changes/randomizes the seeds along a given factor in a range
+ |
+ |      Parameters
+ |      ----------
+ |      rangeid : str
+ |          Name of the range being updated
+ |      inputparam : str
+ |          Name of the parameter to vary the seeds over
+ |      seeds : str/list, optional
+ |          List of seeds to update to. The default is &#39;new&#39;, which picks them randomly
+ |
  |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
  |
@@ -1026,7 +1042,7 @@ class NominalApproach(builtins.object)
 <div class="highlight"><pre>
 Help on method add_param_ranges in module fmdtools.modeldef:
 
-add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;, **kwargs) method of fmdtools.modeldef.NominalApproach instance
+add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;, set_args={}, **kwargs) method of fmdtools.modeldef.NominalApproach instance
     Adds a set of scenarios to the approach.
 
     Parameters
@@ -1046,9 +1062,11 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
             - &#39;independent&#39; creates separate random seeds for models and parameter generation
             - &#39;keep_model&#39; uses the seed provided in the model for all of the model
         When a list is provided, these seeds are are used (and shared). Must be of length replicates.
+    set_args : dict
+        Dictionary of lists of values for each param e.g., {&#39;param1&#39;:[value1, value2, value3]}
     **kwargs : specifies range for keyword args of paramfunc
         May be given as a fixed float/int/dict/str (k=value) defining a set value for the range (if not the default) or
-        as a tuple k=(start, end, step)
+        as a tuple k=(start, end, step) for the range, or
 
 </pre></div></div>
 </div>
@@ -1088,7 +1106,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.0, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1104,7 +1122,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.0, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1120,7 +1138,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.0, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1136,7 +1154,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.0, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1152,7 +1170,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 7.200000000000001,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.2, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1168,7 +1186,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 3.6000000000000005,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.2, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1184,7 +1202,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 2.4000000000000004,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.2, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1200,7 +1218,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 1.8000000000000003,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.2, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1216,7 +1234,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 14.400000000000002,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.4, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1232,7 +1250,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 7.200000000000001,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.4, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1248,7 +1266,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 4.800000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.4, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1264,7 +1282,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 3.6000000000000005,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.4, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1280,7 +1298,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 21.6,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.6000000000000001, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1296,7 +1314,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 10.8,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.6000000000000001, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1312,7 +1330,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 7.200000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.6000000000000001, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1328,7 +1346,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 5.4,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.6000000000000001, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1344,7 +1362,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 28.800000000000004,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.8, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1360,7 +1378,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 14.400000000000002,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.8, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1376,7 +1394,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 9.600000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.8, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1392,7 +1410,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 7.200000000000001,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 0.8, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1408,7 +1426,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 36.0,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.0, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1424,7 +1442,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 18.0,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.0, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1440,7 +1458,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 12.0,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.0, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1456,7 +1474,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 9.0,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.0, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1472,7 +1490,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 43.2,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.2000000000000002, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1488,7 +1506,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 21.6,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.2000000000000002, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1504,7 +1522,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 14.400000000000002,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.2000000000000002, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1520,7 +1538,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 10.8,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.2000000000000002, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1536,7 +1554,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 50.400000000000006,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.4000000000000001, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1552,7 +1570,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 25.200000000000003,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.4000000000000001, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1568,7 +1586,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 16.8,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.4000000000000001, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1584,7 +1602,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 12.600000000000001,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.4000000000000001, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1600,7 +1618,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 57.60000000000001,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.6, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1616,7 +1634,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 28.800000000000004,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.6, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1632,7 +1650,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 19.200000000000003,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.6, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1648,7 +1666,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 14.400000000000002,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.6, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1664,7 +1682,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 64.80000000000001,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.8, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1680,7 +1698,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 32.400000000000006,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.8, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1696,7 +1714,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 21.6,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.8, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1712,7 +1730,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 16.200000000000003,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 1.8, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1728,7 +1746,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 72.0,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.0, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1744,7 +1762,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 36.0,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.0, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1760,7 +1778,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 24.0,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.0, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1776,7 +1794,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 18.0,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.0, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1792,7 +1810,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 79.20000000000002,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.2, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1808,7 +1826,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 39.60000000000001,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.2, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1824,7 +1842,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 26.400000000000006,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.2, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1840,7 +1858,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 19.800000000000004,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.2, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1856,7 +1874,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 86.4,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.4000000000000004, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1872,7 +1890,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 43.2,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.4000000000000004, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1888,7 +1906,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 28.800000000000004,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.4000000000000004, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1904,7 +1922,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 21.6,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.4000000000000004, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1920,7 +1938,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 93.60000000000001,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.6, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1936,7 +1954,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 46.800000000000004,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.6, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1952,7 +1970,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 31.2,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.6, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1968,7 +1986,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 23.400000000000002,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.6, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -1984,7 +2002,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 100.80000000000001,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.8000000000000003, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2000,7 +2018,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 50.400000000000006,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.8000000000000003, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2016,7 +2034,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 33.6,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.8000000000000003, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2032,7 +2050,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 25.200000000000003,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 2.8000000000000003, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2048,7 +2066,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 108.0,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.0, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2064,7 +2082,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 54.0,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.0, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2080,7 +2098,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 36.0,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.0, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2096,7 +2114,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 27.0,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.0, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2112,7 +2130,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 115.20000000000002,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.2, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2128,7 +2146,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 57.60000000000001,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.2, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2144,7 +2162,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 38.400000000000006,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.2, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2160,7 +2178,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 28.800000000000004,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.2, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2176,7 +2194,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 122.40000000000002,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.4000000000000004, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2192,7 +2210,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 61.20000000000001,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.4000000000000004, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2208,7 +2226,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 40.800000000000004,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.4000000000000004, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2224,7 +2242,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 30.600000000000005,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.4000000000000004, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2240,7 +2258,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 129.60000000000002,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.6, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2256,7 +2274,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 64.80000000000001,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.6, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2272,7 +2290,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 43.2,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.6, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2288,7 +2306,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 32.400000000000006,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.6, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2304,7 +2322,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 136.8,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.8000000000000003, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2320,7 +2338,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 68.4,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.8000000000000003, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2336,7 +2354,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 45.6,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.8000000000000003, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2352,7 +2370,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 34.2,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 3.8000000000000003, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2368,7 +2386,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 144.0,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.0, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2384,7 +2402,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 72.0,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.0, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2400,7 +2418,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 48.0,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.0, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2416,7 +2434,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 36.0,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.0, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2432,7 +2450,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 151.20000000000002,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.2, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2448,7 +2466,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 75.60000000000001,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.2, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2464,7 +2482,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 50.400000000000006,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.2, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2480,7 +2498,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 37.800000000000004,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.2, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2496,7 +2514,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 158.40000000000003,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.4, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2512,7 +2530,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 79.20000000000002,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.4, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2528,7 +2546,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 52.80000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.4, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2544,7 +2562,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 39.60000000000001,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.4, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2560,7 +2578,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 165.60000000000002,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.6000000000000005, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2576,7 +2594,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 82.80000000000001,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.6000000000000005, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2592,7 +2610,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 55.2,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.6000000000000005, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2608,7 +2626,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 41.400000000000006,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.6000000000000005, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2624,7 +2642,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 172.8,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.800000000000001, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2640,7 +2658,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 86.4,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.800000000000001, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2656,7 +2674,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 57.60000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.800000000000001, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2672,7 +2690,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 43.2,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 4.800000000000001, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2688,7 +2706,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 180.0,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.0, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2704,7 +2722,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 90.0,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.0, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2720,7 +2738,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 59.99999999999999,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.0, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2736,7 +2754,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 45.0,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.0, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2752,7 +2770,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 187.20000000000002,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.2, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2768,7 +2786,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 93.60000000000001,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.2, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2784,7 +2802,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 62.4,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.2, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2800,7 +2818,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 46.800000000000004,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.2, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2816,7 +2834,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 194.4,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.4, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2832,7 +2850,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 97.2,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.4, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2848,7 +2866,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 64.80000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.4, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2864,7 +2882,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 48.6,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.4, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2880,7 +2898,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 201.60000000000002,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.6000000000000005, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2896,7 +2914,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 100.80000000000001,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.6000000000000005, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2912,7 +2930,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 67.2,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.6000000000000005, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2928,7 +2946,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 50.400000000000006,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.6000000000000005, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2944,7 +2962,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 208.8,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.800000000000001, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2960,7 +2978,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 104.4,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.800000000000001, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2976,7 +2994,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 69.60000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.800000000000001, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -2992,7 +3010,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 52.2,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 5.800000000000001, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3008,7 +3026,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 216.0,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.0, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3024,7 +3042,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 108.0,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.0, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3040,7 +3058,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 72.0,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.0, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3056,7 +3074,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 54.0,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.0, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3072,7 +3090,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 223.2,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.2, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3088,7 +3106,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 111.6,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.2, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3104,7 +3122,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 74.4,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.2, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3120,7 +3138,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 55.8,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.2, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3136,7 +3154,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 230.40000000000003,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.4, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3152,7 +3170,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 115.20000000000002,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.4, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3168,7 +3186,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 76.80000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.4, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3184,7 +3202,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 57.60000000000001,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.4, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3200,7 +3218,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 237.60000000000005,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.6000000000000005, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3216,7 +3234,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 118.80000000000003,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.6000000000000005, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3232,7 +3250,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 79.19999999999999,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.6000000000000005, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3248,7 +3266,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 59.40000000000001,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.6000000000000005, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3264,7 +3282,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 244.80000000000004,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.800000000000001, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3280,7 +3298,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 122.40000000000002,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.800000000000001, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3296,7 +3314,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 81.60000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.800000000000001, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3312,7 +3330,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 61.20000000000001,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 6.800000000000001, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3328,7 +3346,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 252.0,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.0, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3344,7 +3362,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 126.0,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.0, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3360,7 +3378,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 83.99999999999999,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.0, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3376,7 +3394,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 63.0,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.0, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3392,7 +3410,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 259.20000000000005,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.2, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3408,7 +3426,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 129.60000000000002,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.2, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3424,7 +3442,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 86.4,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.2, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3440,7 +3458,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 64.80000000000001,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.2, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3456,7 +3474,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 266.40000000000003,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.4, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3472,7 +3490,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 133.20000000000002,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.4, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3488,7 +3506,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 88.8,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.4, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3504,7 +3522,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 66.60000000000001,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.4, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3520,7 +3538,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 273.6,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.6000000000000005, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3536,7 +3554,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 136.8,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.6000000000000005, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3552,7 +3570,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 91.2,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.6000000000000005, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3568,7 +3586,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 68.4,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.6000000000000005, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3584,7 +3602,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 280.8,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.800000000000001, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3600,7 +3618,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 140.4,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.800000000000001, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3616,7 +3634,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 93.60000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.800000000000001, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3632,7 +3650,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 70.2,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 7.800000000000001, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3648,7 +3666,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 288.0,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.0, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3664,7 +3682,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 144.0,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.0, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3680,7 +3698,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 96.0,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.0, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3696,7 +3714,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 72.0,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.0, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3712,7 +3730,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 295.2000000000001,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.200000000000001, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3728,7 +3746,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 147.60000000000005,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.200000000000001, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3744,7 +3762,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 98.40000000000002,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.200000000000001, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3760,7 +3778,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 73.80000000000003,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.200000000000001, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3776,7 +3794,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 302.40000000000003,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.4, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3792,7 +3810,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 151.20000000000002,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.4, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3808,7 +3826,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 100.80000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.4, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3824,7 +3842,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 75.60000000000001,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.4, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3840,7 +3858,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 309.59999999999997,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.6, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3856,7 +3874,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 154.79999999999998,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.6, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3872,7 +3890,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 103.19999999999999,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.6, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3888,7 +3906,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 77.39999999999999,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.6, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3904,7 +3922,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 316.80000000000007,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.8, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3920,7 +3938,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 158.40000000000003,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.8, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3936,7 +3954,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 105.60000000000002,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.8, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3952,7 +3970,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 79.20000000000002,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 8.8, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3968,7 +3986,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 324.0,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.0, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -3984,7 +4002,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 162.0,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.0, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4000,7 +4018,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 108.0,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.0, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4016,7 +4034,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 81.0,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.0, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4032,7 +4050,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 331.20000000000005,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.200000000000001, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4048,7 +4066,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 165.60000000000002,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.200000000000001, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4064,7 +4082,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 110.4,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.200000000000001, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4080,7 +4098,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 82.80000000000001,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.200000000000001, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4096,7 +4114,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 338.4,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.4, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4112,7 +4130,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 169.2,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.4, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4128,7 +4146,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 112.79999999999998,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.4, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4144,7 +4162,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 84.6,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.4, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4160,7 +4178,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 345.6,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.600000000000001, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4176,7 +4194,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 172.8,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.600000000000001, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4192,7 +4210,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 115.20000000000002,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.600000000000001, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4208,7 +4226,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 86.4,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.600000000000001, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4224,7 +4242,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 352.80000000000007,
     &#39;end&#39;: [10, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.8, &#39;wavelength&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4240,7 +4258,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 176.40000000000003,
     &#39;end&#39;: [20, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.8, &#39;wavelength&#39;: 20},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4256,7 +4274,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 117.60000000000001,
     &#39;end&#39;: [30, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.8, &#39;wavelength&#39;: 30},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4272,7 +4290,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 88.20000000000002,
     &#39;end&#39;: [40, 0.0]},
    &#39;inputparams&#39;: {&#39;amp&#39;: 9.8, &#39;wavelength&#39;: 40},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 287347824},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 680866438},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;sine&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4288,7 +4306,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [5, 5]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 5, &#39;start&#39;: 0},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4304,7 +4322,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [10, 10]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 5, &#39;start&#39;: 5},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4320,7 +4338,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [15, 15]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 5, &#39;start&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4336,7 +4354,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [20, 20]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 5, &#39;start&#39;: 15},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4352,7 +4370,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [10, 10]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 10, &#39;start&#39;: 0},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4368,7 +4386,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [15, 15]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 10, &#39;start&#39;: 5},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4384,7 +4402,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [20, 20]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 10, &#39;start&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4400,7 +4418,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [25, 25]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 10, &#39;start&#39;: 15},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4416,7 +4434,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [15, 15]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 15, &#39;start&#39;: 0},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4432,7 +4450,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [20, 20]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 15, &#39;start&#39;: 5},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4448,7 +4466,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [25, 25]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 15, &#39;start&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4464,7 +4482,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [30, 30]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 15, &#39;start&#39;: 15},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4480,7 +4498,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [20, 20]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 20, &#39;start&#39;: 0},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4496,7 +4514,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [25, 25]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 20, &#39;start&#39;: 5},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4512,7 +4530,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [30, 30]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 20, &#39;start&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4528,7 +4546,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [35, 35]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 20, &#39;start&#39;: 15},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4544,7 +4562,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [25, 25]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 25, &#39;start&#39;: 0},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4560,7 +4578,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [30, 30]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 25, &#39;start&#39;: 5},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4576,7 +4594,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [35, 35]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 25, &#39;start&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4592,7 +4610,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [40, 40]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 25, &#39;start&#39;: 15},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4608,7 +4626,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [30, 30]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 30, &#39;start&#39;: 0},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4624,7 +4642,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [35, 35]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 30, &#39;start&#39;: 5},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4640,7 +4658,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [40, 40]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 30, &#39;start&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4656,7 +4674,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [45, 45]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 30, &#39;start&#39;: 15},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4672,7 +4690,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [35, 35]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 35, &#39;start&#39;: 0},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4688,7 +4706,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [40, 40]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 35, &#39;start&#39;: 5},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4704,7 +4722,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [45, 45]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 35, &#39;start&#39;: 10},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4720,7 +4738,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
     &#39;initangle&#39;: 0.0,
     &#39;end&#39;: [50, 50]},
    &#39;inputparams&#39;: {&#39;radius&#39;: 35, &#39;start&#39;: 15},
-   &#39;modelparams&#39;: {&#39;seed&#39;: 2893392315},
+   &#39;modelparams&#39;: {&#39;seed&#39;: 2743591965},
    &#39;paramfunc&#39;: &lt;function __main__.gen_params(linetype, **kwargs)&gt;,
    &#39;fixedargs&#39;: (&#39;turn&#39;,),
    &#39;fixedkwargs&#39;: {},
@@ -4743,7 +4761,7 @@ add_param_ranges(paramfunc, rangeid, *args, replicates=1, seeds=&#39;shared&#39;
 <div class="highlight"><pre>
 Help on function nominal_approach in module fmdtools.faultsim.propagate:
 
-nominal_approach(mdl, nomapp, track=&#39;all&#39;, showprogress=True, pool=False, track_times=&#39;all&#39;, run_stochastic=False)
+nominal_approach(mdl, nomapp, track=&#39;all&#39;, showprogress=True, pool=False, track_times=&#39;all&#39;, run_stochastic=False, max_mem=2000000000.0, save_args={})
     Simulates a set of nominal scenarios through a model. Useful to understand
     the sets of parameters where the system will run nominally and/or lead to
     a fault.
@@ -4768,6 +4786,8 @@ nominal_approach(mdl, nomapp, track=&#39;all&#39;, showprogress=True, pool=False
             (&#39;times&#39;, [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
+    max_mem : int
+        Max memory (warns the user when memory is above threshold)
     Returns
     -------
     nomapp_endclasses : Dict
@@ -4790,7 +4810,7 @@ nominal_approach(mdl, nomapp, track=&#39;all&#39;, showprogress=True, pool=False
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 228/228 [00:03&lt;00:00, 70.49it/s]
+SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 228/228 [00:03&lt;00:00, 65.79it/s]
 </pre></div></div>
 </div>
 <p>To speed up execution over large numbers of scenarios, multiprocessing can also be used to run the scenarios in parallel by passing an execution pool. This is not done here because it would require the model to be in a different file, and because the gains on a light-weight model like this are not significant.</p>
@@ -4904,7 +4924,7 @@ nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title=&#39;Nominal Op
 <div class="highlight"><pre>
 Help on function nominal_factor_comparison in module fmdtools.resultdisp.tabulate:
 
-nominal_factor_comparison(nomapp, endclasses, params, metrics=&#39;all&#39;, rangeid=&#39;default&#39;, nan_as=nan, percent=True, difference=True, give_ci=False, **kwargs)
+nominal_factor_comparison(nomapp, endclasses, params, metrics=&#39;all&#39;, rangeid=&#39;default&#39;, nan_as=nan, percent=True, give_ci=False, **kwargs)
     Compares a metric for a given set of model parameters/factors over set of nominal scenarios.
 
     Parameters
@@ -4928,9 +4948,6 @@ nominal_factor_comparison(nomapp, endclasses, params, metrics=&#39;all&#39;, ran
     percent : bool, optional
         Whether to compare metrics as bools (True - results in a comparison of percentages of indicator variables)
         or as averages (False - results in a comparison of average values of real valued variables). The default is True.
-    difference : bool, optional
-        Whether to tabulate the difference of the metric from the nominal over each scenario (True),
-        or the value of the metric over all (False). The default is True.
     give_ci = bool:
         gives the bootstrap confidence interval for the given statistic using the given kwargs
         &#39;combined&#39; combines the values as a strings in the table (for display)
@@ -5338,7 +5355,7 @@ assoc_probs(rangeid, prob_weight=1.0, **inputpdfs) method of fmdtools.modeldef.N
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 228/228 [00:03&lt;00:00, 70.53it/s]
+SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 228/228 [00:03&lt;00:00, 66.37it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -5442,7 +5459,7 @@ add_rand_params(paramfunc, rangeid, *fixedargs, prob_weight=1.0, replicates=1000
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 200/200 [00:02&lt;00:00, 69.22it/s]
+SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 200/200 [00:03&lt;00:00, 61.89it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -5506,8 +5523,8 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;nominal mission&#39;: 0.4500000000000003,
- &#39;incomplete mission&#39;: 0.5500000000000004}
+{&#39;incomplete mission&#39;: 0.5500000000000004,
+ &#39;nominal mission&#39;: 0.4500000000000003}
 </pre></div></div>
 </div>
 <p>Which is similar to (but not exactly the same as) the uniform approach. The error of Monte Carlo sampling approaches can be reduced by increasing the number of points, but these points increase computational costs.</p>
@@ -5532,7 +5549,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 <div class="highlight"><pre>
 Help on function nested_approach in module fmdtools.faultsim.propagate:
 
-nested_approach(mdl, nomapp, staged=False, track=&#39;all&#39;, get_phases=False, showprogress=True, pool=False, track_times=&#39;all&#39;, run_stochastic=False, **app_args)
+nested_approach(mdl, nomapp, staged=False, track=&#39;all&#39;, get_phases=False, showprogress=True, pool=False, track_times=&#39;all&#39;, run_stochastic=False, save_args={}, max_mem=2000000000.0, **app_args)
     Simulates a set of fault modes within a set of nominal scenarios defined by a nominal approach.
 
     Parameters
@@ -5567,6 +5584,16 @@ nested_approach(mdl, nomapp, staged=False, track=&#39;all&#39;, get_phases=False
             (&#39;times&#39;, [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+    save_args : dict (optional)
+        Dictionary specifying if/how to save results. Default is {}, which doesn&#39;t save anything
+        Has structure: {&#39;mdlhists&#39;:mdlhistargs, &#39;endclass&#39;:endclassargs, &#39;indiv&#39;:indiv, &#39;apps&#39;:&#39;filename.pkl&#39;},
+        where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
+        (i.e., {&#39;filename&#39;:&#39;filename.pkl&#39;, &#39;filetype&#39;:&#39;pickle&#39;, &#39;overwrite&#39;:True})
+        and indiv is an (optional) bool specifying whether to save results individually (in a folder)
+        or as a monolythic file
+        and filename.pkl is an optional file name to save the generated SampleApproaches to (if desired)
+    max_mem : int
+        Max memory (warns the user when memory is above threshold)
     **app_args : kwargs
         Keyword arguments for the SampleApproach. See modeldef.SampleApproach documentation.
 
@@ -5576,15 +5603,17 @@ nested_approach(mdl, nomapp, staged=False, track=&#39;all&#39;, get_phases=False
         A nested dictionary with the rate, cost, and expected cost of each scenario run with structure {&#39;nomscen1&#39;:endclasses, &#39;nomscen2&#39;:mdlhists}
     nested_mdlhists : dict
         A nested dictionary with the history of all model states for each scenario with structure {&#39;nomscen1&#39;:mdlhists, &#39;nomscen2&#39;:mdlhists}
+    apps : dict
+        A dictionary of the SampleApproaches generated corresponding to each nominal scenario with structure {&#39;nomscen1&#39;:app1}
 
 </pre></div></div>
 </div>
 <p>Here we use the nominal approach generated earlier with a default sampling approach to quantify resilience.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nested_endclasses</span><span class="p">,</span> <span class="n">nested_mdlhists</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nested_approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">nomapp</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nested_endclasses</span><span class="p">,</span> <span class="n">nested_mdlhists</span><span class="p">,</span> <span class="n">nested_apps</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nested_approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">nomapp</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -5593,12 +5622,12 @@ nested_approach(mdl, nomapp, staged=False, track=&#39;all&#39;, get_phases=False
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████| 228/228 [00:23&lt;00:00,  9.74it/s]
+NESTED SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████| 228/228 [00:27&lt;00:00,  8.20it/s]
 </pre></div></div>
 </div>
-<p>The resulting endclass/mdulhist dictionary is in turn nested within operational scenarios.</p>
+<p>The resulting endclass/mdlhist dictionary is in turn nested within operational scenarios.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nested_endclasses</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -5606,7 +5635,7 @@ NESTED SCENARIOS COMPLETE: 100%|████████████████
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -5615,7 +5644,7 @@ dict_keys([&#39;sine_1&#39;, &#39;sine_2&#39;, &#39;sine_3&#39;, &#39;sine_4&#39
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nested_endclasses</span><span class="p">[</span><span class="s1">&#39;sine_1&#39;</span><span class="p">][</span><span class="s1">&#39;nominal&#39;</span><span class="p">]</span>
@@ -5623,7 +5652,7 @@ dict_keys([&#39;sine_1&#39;, &#39;sine_2&#39;, &#39;sine_3&#39;, &#39;sine_4&#39
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -5638,7 +5667,7 @@ dict_keys([&#39;sine_1&#39;, &#39;sine_2&#39;, &#39;sine_3&#39;, &#39;sine_4&#39
 </div>
 <p>We can compare resilience to faults over the operational envelope using <code class="docutils literal notranslate"><span class="pre">rd.tabulate.resilience_factor_comparison</span></code>, which generates at table similar to <code class="docutils literal notranslate"><span class="pre">rd.tabulate.nominal_factor_comparison</span></code> except for a single metric with rows for each fault scenario.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">restab</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">resilience_factor_comparison</span><span class="p">(</span><span class="n">nomapp</span><span class="p">,</span> <span class="n">nested_endclasses</span><span class="p">,[</span><span class="s1">&#39;start&#39;</span><span class="p">],</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span> <span class="n">rangeid</span><span class="o">=</span><span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="n">percent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">difference</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -5646,7 +5675,7 @@ dict_keys([&#39;sine_1&#39;, &#39;sine_2&#39;, &#39;sine_3&#39;, &#39;sine_4&#39
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">restab</span>
@@ -5654,7 +5683,7 @@ dict_keys([&#39;sine_1&#39;, &#39;sine_2&#39;, &#39;sine_3&#39;, &#39;sine_4&#39
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -5712,7 +5741,7 @@ dict_keys([&#39;sine_1&#39;, &#39;sine_2&#39;, &#39;sine_3&#39;, &#39;sine_4&#39
 </div>
 <p>These factors can further be visualized using <code class="docutils literal notranslate"><span class="pre">rd.plot.resilience_factor_comparison</span></code>, which generates a set of bar graphs similar to <code class="docutils literal notranslate"><span class="pre">rd.plot.nominal_factor_comparison</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">resilience_factor_comparison</span><span class="p">)</span>
@@ -5763,7 +5792,7 @@ resilience_factor_comparison(comparison_table, faults=&#39;all&#39;, rows=1, sta
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">resilience_factor_comparison</span><span class="p">(</span><span class="n">restab</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;cost&#39;</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;curve start point&#39;</span><span class="p">)</span>
@@ -5783,10 +5812,10 @@ during its mission (when the line is long), leading to a cost from the incomplet
 faults in the corresponding times - passing appropriate Approach arguments to <code class="docutils literal notranslate"><span class="pre">propagate.nested_approach</span></code> (e.g., defaultsamp, etc)</p>
 <p>This has already been done in the Power faults, which we evaluate below. (note that they were not included above because they were listed to be injected in specific phases using the <code class="docutils literal notranslate"><span class="pre">key_phases_by</span></code> option in <code class="docutils literal notranslate"><span class="pre">assoc_modes()</span></code>).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nested_endclasses_power</span><span class="p">,</span> <span class="n">nested_mdlhists_power</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nested_approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">nomapp</span><span class="p">,</span> <span class="n">get_phases</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="s1">&#39;Power&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nested_endclasses_power</span><span class="p">,</span> <span class="n">nested_mdlhists_power</span><span class="p">,</span> <span class="n">nested_apps_power</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nested_approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">nomapp</span><span class="p">,</span> <span class="n">get_phases</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="s1">&#39;Power&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -5795,11 +5824,11 @@ faults in the corresponding times - passing appropriate Approach arguments to <c
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████| 228/228 [00:15&lt;00:00, 14.48it/s]
+NESTED SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████| 228/228 [00:14&lt;00:00, 16.05it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">restab_power</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">resilience_factor_comparison</span><span class="p">(</span><span class="n">nomapp</span><span class="p">,</span> <span class="n">nested_endclasses_power</span><span class="p">,[</span><span class="s1">&#39;start&#39;</span><span class="p">],</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span> <span class="n">rangeid</span><span class="o">=</span><span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="n">difference</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">percent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="s1">&#39;modes&#39;</span><span class="p">)</span>
@@ -5808,7 +5837,7 @@ NESTED SCENARIOS COMPLETE: 100%|████████████████
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -5831,8 +5860,8 @@ NESTED SCENARIOS COMPLETE: 100%|████████████████
     <tr style="text-align: right;">
       <th>(start,)</th>
       <th>nominal</th>
-      <th>Power open_circ</th>
       <th>Power no_charge</th>
+      <th>Power open_circ</th>
     </tr>
   </thead>
   <tbody>
@@ -5865,7 +5894,7 @@ NESTED SCENARIOS COMPLETE: 100%|████████████████
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">resilience_factor_comparison</span><span class="p">(</span><span class="n">restab_power</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;cost&#39;</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;curve start point&#39;</span><span class="p">,</span> <span class="n">stack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxy</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>

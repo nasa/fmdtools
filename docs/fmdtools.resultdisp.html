@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.resultdisp package &mdash; fmdtools 1.1.0 documentation</title>
+  <title>fmdtools.resultdisp package &mdash; fmdtools 1.2.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -344,7 +344,7 @@ NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;re
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.graph.exec_order">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.graph.</span></span><span class="sig-name descname"><span class="pre">exec_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'matplotlib'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bipartite'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['lightgray',</span> <span class="pre">'cyan',</span> <span class="pre">'teal']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_dyn_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_dyn_arrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Execution</span> <span class="pre">Order'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.graph.exec_order" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.graph.</span></span><span class="sig-name descname"><span class="pre">exec_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'matplotlib'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bipartite'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['lightgray',</span> <span class="pre">'cyan',</span> <span class="pre">'teal']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_dyn_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_dyn_arrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_dyn_tstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Execution</span> <span class="pre">Order'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.graph.exec_order" title="Permalink to this definition"></a></dt>
 <dd><p>Displays the execution order/types of the model, where the functions and flows in the
 static step are highlighted and the functions in the dynamic step are listed (with corresponding order)</p>
 <dl class="field-list simple">
@@ -362,6 +362,7 @@ NOTE: Not all gtypes and options are supported by all renderers. See show_&lt;re
 <li><p><strong>colors</strong> (<em>list</em><em>, </em><em>optional</em>) – Colors to use for unexecuted functions, static propagation steps, and dynamic functions.
 The default is [‘lightgray’, ‘cyan’,’teal’].</p></li>
 <li><p><strong>show_dyn_order</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to label the execution order for dynamic functions. The default is True.</p></li>
+<li><p><strong>show_dyn_tstep</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to label local timesteps of dynamic functions. The default is True.</p></li>
 <li><p><strong>show_dyn_arrows</strong> – Whether to place arrows to denote the sequence between functions. The default is False.</p></li>
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Title for the plot. The default is “Function Execution Order”.</p></li>
 <li><p><strong>legend</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to show a legend. The default is True.</p></li>
@@ -499,6 +500,12 @@ Default is: [‘lightgray’,’orange’, ‘red’]</p></li>
 <dt class="sig sig-object py" id="fmdtools.resultdisp.graph.gv_import_check">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.graph.</span></span><span class="sig-name descname"><span class="pre">gv_import_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.graph.gv_import_check" title="Permalink to this definition"></a></dt>
 <dd><p>Checks if graphviz is installed on the system before plotting.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.graph.highlight_to_labels">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.graph.</span></span><span class="sig-name descname"><span class="pre">highlight_to_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">highlight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showfaultlabels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.graph.highlight_to_labels" title="Permalink to this definition"></a></dt>
+<dd><p>Creates labels dictionary given the highlight list</p>
 </dd></dl>
 
 <dl class="py function">
@@ -860,27 +867,12 @@ Default is: [‘lightgray’,’orange’, ‘red’]</p></li>
 <li><p><a class="reference internal" href="#fmdtools.resultdisp.plot.nominal_factor_comparison" title="fmdtools.resultdisp.plot.nominal_factor_comparison"><code class="xref py py-func docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a>:    gives a bar plot of nominal simulation statistics over given factors</p></li>
 <li><p><a class="reference internal" href="#fmdtools.resultdisp.plot.resilience_factor_comparison" title="fmdtools.resultdisp.plot.resilience_factor_comparison"><code class="xref py py-func docutils literal notranslate"><span class="pre">resilience_factor_comparison()</span></code></a>: gives a bar plot of fault simulation statistics over given factors</p></li>
 <li><p><a class="reference internal" href="#fmdtools.resultdisp.plot.phases" title="fmdtools.resultdisp.plot.phases"><code class="xref py py-func docutils literal notranslate"><span class="pre">phases()</span></code></a>:          plots the phases of operation that the model progresses through.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.resultdisp.plot.samplecost" title="fmdtools.resultdisp.plot.samplecost"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplecost()</span></code></a>:      plots the costs for a single fault sampled by a SampleApproach over time with rates</p></li>
-<li><p><a class="reference internal" href="#fmdtools.resultdisp.plot.samplecosts" title="fmdtools.resultdisp.plot.samplecosts"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplecosts()</span></code></a>:     plots the costs for a set of faults sampled by a SampleApproach over time with rates on separate plots</p></li>
-<li><p><a class="reference internal" href="#fmdtools.resultdisp.plot.costovertime" title="fmdtools.resultdisp.plot.costovertime"><code class="xref py py-func docutils literal notranslate"><span class="pre">costovertime()</span></code></a>:    plots the total cost/explected cost of a set of faults sampled by a SampleApproach over time</p></li>
+<li><p><a class="reference internal" href="#fmdtools.resultdisp.plot.samplemetric" title="fmdtools.resultdisp.plot.samplemetric"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplemetric()</span></code></a>:      plots a metric for a single fault sampled by a SampleApproach over time with rates</p></li>
+<li><p><a class="reference internal" href="#fmdtools.resultdisp.plot.samplemetrics" title="fmdtools.resultdisp.plot.samplemetrics"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a>:     plots a metric for a set of faults sampled by a SampleApproach over time with rates on separate plots</p></li>
+<li><p><a class="reference internal" href="#fmdtools.resultdisp.plot.metricovertime" title="fmdtools.resultdisp.plot.metricovertime"><code class="xref py py-func docutils literal notranslate"><span class="pre">metricovertime()</span></code></a>:    plots the total metric/explected metric of a set of faults sampled by a SampleApproach over time</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.resultdisp.plot.costovertime">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">costovertime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">costtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'expected</span> <span class="pre">cost'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.costovertime" title="Permalink to this definition"></a></dt>
-<dd><p>Plots the total cost or total expected cost of faults over time.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>endclasses</strong> (<em>dict</em>) – dict with rate,cost, and expected cost for each injected scenario (e.g. from run_approach())</p></li>
-<li><p><strong>app</strong> (<em>sampleapproach</em>) – sample approach used to generate the list of scenarios</p></li>
-<li><p><strong>costtype</strong> (<em>str</em><em>, </em><em>optional</em>) – type of cost to plot (‘cost’, ‘expected cost’ or ‘rate’). The default is ‘expected cost’.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.plot.dyn_order">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">dyn_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotateticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Dynamic</span> <span class="pre">Run</span> <span class="pre">Order'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.dyn_order" title="Permalink to this definition"></a></dt>
@@ -902,31 +894,6 @@ given methods.</p>
 <li><p><strong>ax</strong> (<em>axis</em>) – Corresponding matplotlib axis</p></li>
 </ul>
 </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.resultdisp.plot.flatten_hist">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">flatten_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prevname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.flatten_hist" title="Permalink to this definition"></a></dt>
-<dd><p>Recursively creates a flattenned history of the given nested model history</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>hist</strong> (<em>dict</em>) – Model history (e.g., from faultsim.propagate.nominal).</p></li>
-<li><p><strong>newhist</strong> (<em>dict</em><em>, </em><em>optional</em>) – Flattened Model History (used when called recursively). The default is {}.</p></li>
-<li><p><strong>prevname</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Current key of the flattened history (used when called recursively). The default is ().</p></li>
-<li><p><strong>to_plot</strong> (<em>str/list/dict</em><em>, </em><em>optional</em>) – What attributes to plot in the dict. The default is ‘all’. Can be of form
-- list e.g. [‘att1’, ‘att2’, ‘att3’] to plot the given attributes
-- dict e.g. fxnflowvals {‘flow1’:[‘att1’, ‘att2’], ‘fxn1’:’all’, ‘fxn2’:[‘comp1’:all, ‘comp2’:[‘att1’]]}
-- str e.g. ‘att1’ for attribute 1 or ‘all’ for all attributes</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>newhist</strong> – Flattened model history of form: {(fxnflow, …, attname):array(att)}</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -963,7 +930,7 @@ The default is {}, which returns all.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.plot.mdlhists">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">mdlhists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdlhists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnflowvals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'individual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fill'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillalpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundlinestyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'--'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_slice</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_slice_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modephases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_phases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.mdlhists" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">mdlhists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdlhists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnflowvals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'individual'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fill'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillalpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundlinestyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'--'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_slice</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_slice_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modephases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_phases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.mdlhists" title="Permalink to this definition"></a></dt>
 <dd><p>Plot the behavior over time of the given function/flow values
 over a set of scenarios, with ability to aggregate behaviors as needed.</p>
 <dl class="field-list simple">
@@ -1041,6 +1008,7 @@ is from rd.process.mdlhist and of structure {‘fxnname’:’phase’:[start, e
 Default is {}.</p></li>
 <li><p><strong>modephases</strong> (<em>dict</em><em>, </em><em>optional</em>) – dictionary that maps the phases to operational modes, if it is desired to track the progression
 through modes</p></li>
+<li><p><strong>legend_title</strong> (<em>str</em><em>, </em><em>optional</em>) – title for the legend. Default is None</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – keyword arguments to mpl.plot e.g. linestyle, color, etc. See ‘aggregation’ for specification.
 phases={}, modephases={}, label_phases=True,  <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs):</p></li>
 </ul>
@@ -1056,7 +1024,7 @@ phases={}, modephases={}, label_phases=True,  <a href="#id1"><span class="proble
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.plot.metric_dist">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">metric_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'count'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.metric_dist" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">metric_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'count'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.metric_dist" title="Permalink to this definition"></a></dt>
 <dd><p>Plots the histogram of given metric(s) separated by comparison groups over a set of scenarios</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1086,6 +1054,7 @@ the global kwargs (or default behavior).</p></li>
 <li><p><strong>v_padding</strong> (<em>float</em>) – vertical padding between subplots as a fraction of axis height</p></li>
 <li><p><strong>h_padding</strong> (<em>float</em>) – horizontal padding between subplots as a fraction of axis width</p></li>
 <li><p><strong>title_padding</strong> (<em>float</em>) – padding for title as a fraction of figure height</p></li>
+<li><p><strong>legend_title</strong> (<em>str</em><em>, </em><em>optional</em>) – title for the legend. Default is None</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – keyword arguments to mpl.hist e.g. bins, etc</p></li>
 </ul>
 </dd>
@@ -1117,8 +1086,37 @@ If a legend is shown, group names are used as labels.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.plot.metricovertime">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">metricovertime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrictype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'expected</span> <span class="pre">cost'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.metricovertime" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the total cost or total expected cost of faults over time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endclasses</strong> (<em>dict</em>) – dict with rate,cost, and expected cost for each injected scenario (e.g. from run_approach())</p></li>
+<li><p><strong>app</strong> (<em>sampleapproach</em>) – sample approach used to generate the list of scenarios</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – metric to plot ovre time. Default is ‘cost’</p></li>
+<li><p><strong>metrictype</strong> (<em>str</em><em>, </em><em>optional</em>) – type of cost to plot (e.g,’cost’, ‘expected cost’ or ‘rate’). The default is ‘expected cost’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>figure</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.plot.multibar_helper">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">multibar_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.multibar_helper" title="Permalink to this definition"></a></dt>
+<dd><p>Shared plotting helper for resilience_factor_comparison and nominal_factor_comparison.
+Adds seperators to table groups (if any), limits the bounds of the plot, adds a grid, etc.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.plot.multiplot_legend_title">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">multiplot_legend_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groupmetrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.multiplot_legend_title" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">multiplot_legend_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groupmetrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.multiplot_legend_title" title="Permalink to this definition"></a></dt>
 <dd><p>Helper function for multiplot legends and titles</p>
 </dd></dl>
 
@@ -1323,16 +1321,17 @@ a dictionary {‘fault’:’title’} will associate the given fault with a tit
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.resultdisp.plot.samplecost">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">samplecost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samptype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'std'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.samplecost" title="Permalink to this definition"></a></dt>
-<dd><p>Plots the sample cost and rate of a given fault over the injection times defined in the app sampleapproach</p>
+<dt class="sig sig-object py" id="fmdtools.resultdisp.plot.samplemetric">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">samplemetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samptype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'std'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.samplemetric" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the sample metric and rate of a given fault over the injection times defined in the app sampleapproach</p>
 <p>(note: not currently compatible with joint fault modes)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>app</strong> (<em>sampleapproach</em>) – Sample approach defining the underlying samples to take and probability model of the list of scenarios.</p></li>
-<li><p><strong>endclasses</strong> (<em>dict</em>) – A dict with the end classification of each fault (costs, etc)</p></li>
+<li><p><strong>endclasses</strong> (<em>dict</em>) – A dict with the end classification of each fault (metrics, etc)</p></li>
 <li><p><strong>fxnmode</strong> (<em>tuple</em>) – tuple (or tuple of tuples) with structure (‘function name’, ‘mode name’) defining the fault mode</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – Metric to plot. The default is ‘cost’</p></li>
 <li><p><strong>samptype</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
 <dt>The type of sample approach used:</dt><dd><ul>
 <li><p>’std’ for a single point for each interval</p></li>
@@ -1349,8 +1348,8 @@ a dictionary {‘fault’:’title’} will associate the given fault with a tit
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.resultdisp.plot.samplecosts">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">samplecosts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.samplecosts" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.resultdisp.plot.samplemetrics">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.plot.</span></span><span class="sig-name descname"><span class="pre">samplemetrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cost'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.plot.samplemetrics" title="Permalink to this definition"></a></dt>
 <dd><p>Plots the costs and rates of a set of faults injected over time according to the approach app</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1358,6 +1357,8 @@ a dictionary {‘fault’:’title’} will associate the given fault with a tit
 <li><p><strong>app</strong> (<em>sampleapproach</em>) – The sample approach used to run the list of faults</p></li>
 <li><p><strong>endclasses</strong> (<em>dict</em>) – A dict of results for each of the scenarios.</p></li>
 <li><p><strong>joint</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include joint fault scenarios. The default is False.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Optional title.</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – Metric to plot. The default is ‘cost’</p></li>
 </ul>
 </dd>
 </dl>
@@ -1369,6 +1370,11 @@ a dictionary {‘fault’:’title’} will associate the given fault with a tit
 <p>Description: Processes model results for visualization</p>
 <dl class="simple">
 <dt>Uses methods:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.resultdisp.process.save_result" title="fmdtools.resultdisp.process.save_result"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_result()</span></code></a>:              Saves a given result variable (endclasses or mdlhists) to a file filename.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.resultdisp.process.load_result" title="fmdtools.resultdisp.process.load_result"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_result()</span></code></a>:              Loads a given (endclasses or mdlhists) results dictionary from a (pickle/csv/json) file.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.resultdisp.process.load_results" title="fmdtools.resultdisp.process.load_results"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_results()</span></code></a>:             Loads endclass/mdlhist results from a given folder</p></li>
+<li><p><a class="reference internal" href="#fmdtools.resultdisp.process.flatten_hist" title="fmdtools.resultdisp.process.flatten_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">flatten_hist()</span></code></a>:             Recursively creates a flattenned (single-level dictionary) history of the given nested model history</p></li>
+<li><p>:func:<a href="#id3"><span class="problematic" id="id4">`</span></a>renest_flattened_hist:     Re-nests a flattened history.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.resultdisp.process.hists" title="fmdtools.resultdisp.process.hists"><code class="xref py py-func docutils literal notranslate"><span class="pre">hists()</span></code></a>:                    Processes a model histories for each scenario into results histories by comparing the states over time in each scenario with the states in the nominal scenario.</p></li>
 <li><dl class="simple">
 <dt><a class="reference internal" href="#fmdtools.resultdisp.process.hist" title="fmdtools.resultdisp.process.hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">hist()</span></code></a>:                     Compares model history with the nominal model history over time to make a history of degradation.</dt><dd><ul>
@@ -1407,8 +1413,14 @@ a dictionary {‘fault’:’title’} will associate the given fault with a tit
 </dd>
 </dl>
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.auto_filetype">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">auto_filetype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.auto_filetype" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function that automatically determines the filetype (pickle, csv, or json) of a given filename</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.process.average">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.average" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nan'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.average" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the average value of a given metric in endclasses</p>
 </dd></dl>
 
@@ -1437,6 +1449,30 @@ a dictionary {‘fault’:’title’} will associate the given fault with a tit
 <dd class="field-odd"><p>statistic, lower bound, upper bound</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.clean_resultdict_keys">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">clean_resultdict_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resultdict_dirty</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.clean_resultdict_keys" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function for recreating results dictionary keys (tuples) from a dictionary loaded from a file (where keys are strings)
+(used in csv/json results)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>resultdict_dirty</strong> (<em>dict</em>) – Results dictionary where keys are strings</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>resultdict</strong> – Results dictionary where keys are tuples</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.create_indiv_filename">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">create_indiv_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splitchar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.create_indiv_filename" title="Permalink to this definition"></a></dt>
+<dd><p>Helper file that creates an individualized name for a file given the general filename and an individual id</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1511,6 +1547,37 @@ a dictionary {‘fault’:’title’} will associate the given fault with a tit
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.file_check">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">file_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.file_check" title="Permalink to this definition"></a></dt>
+<dd><p>Check if files exists and whether to overwrite the file</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.flatten_hist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">flatten_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prevname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_include</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.flatten_hist" title="Permalink to this definition"></a></dt>
+<dd><p>Recursively creates a flattenned history of the given nested model history</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hist</strong> (<em>dict</em>) – Model history (e.g., from faultsim.propagate.nominal).</p></li>
+<li><p><strong>newhist</strong> (<em>dict</em><em>, </em><em>optional</em>) – Flattened Model History (used when called recursively). The default is False.</p></li>
+<li><p><strong>prevname</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Current key of the flattened history (used when called recursively). The default is ().</p></li>
+<li><p><strong>to_include</strong> (<em>str/list/dict</em><em>, </em><em>optional</em>) – What attributes to include in the dict. The default is ‘all’. Can be of form
+- list e.g. [‘att1’, ‘att2’, ‘att3’] to include the given attributes
+- dict e.g. fxnflowvals {‘flow1’:[‘att1’, ‘att2’], ‘fxn1’:’all’, ‘fxn2’:[‘comp1’:all, ‘comp2’:[‘att1’]]}
+- str e.g. ‘att1’ for attribute 1 or ‘all’ for all attributes</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>newhist</strong> – Flattened model history of form: {(fxnflow, …, attname):array(att)}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.process.flowhist">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">flowhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">returndiff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.flowhist" title="Permalink to this definition"></a></dt>
 <dd><p>Compares the history of flow states in mdlhist over time.</p>
@@ -1536,6 +1603,30 @@ a dictionary {‘fault’:’title’} will associate the given fault with a tit
 <dt class="sig sig-object py" id="fmdtools.resultdisp.process.get_fault_hist">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">get_fault_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.get_fault_hist" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.get_flat_hist_slice">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">get_flat_hist_slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flathist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.get_flat_hist_slice" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a dictionary of values from a given (flat) mdlhist at t_ind</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.get_hist_memory">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">get_hist_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.get_hist_memory" title="Permalink to this definition"></a></dt>
+<dd><p>Determines the memory usage of a given history and profiles by</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>hist</strong> (<em>TYPE</em>) – DESCRIPTION.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>mem_total</strong> (<em>int</em>) – Total memory usage of the history (in bytes)</p></li>
+<li><p><strong>mem_profile</strong> (<em>dict</em>) – Memory usage of each construct of the model history (in bytes)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.process.get_status">
@@ -1641,6 +1732,53 @@ a dictionary {‘fault’:’title’} will associate the given fault with a tit
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.load_result">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">load_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renest_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.load_result" title="Permalink to this definition"></a></dt>
+<dd><p>Loads a given (endclasses or mdlhists) results dictionary from a (pickle/csv/json) file.
+e.g. a file saved using process.save_result or save_args in propagate functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the file.</p></li>
+<li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Use to specify a filetype for the file (if not included in the filename). The default is “”.</p></li>
+<li><p><strong>renest_dict</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to return . The default is True.</p></li>
+<li><p><strong>indiv</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the result is an individual file (e.g. in a folder of results for a given simulation).
+The default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>resultdict</strong> – Corresponding results dictionary from the file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.load_results">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">load_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renest_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.load_results" title="Permalink to this definition"></a></dt>
+<dd><p>Loads endclass/mdlhist results from a given folder
+(e.g., that have been saved from multi-scenario propagate methods with ‘indiv’:True)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<em>str</em>) – Name of the folder. Must be in the current directory</p></li>
+<li><p><strong>filetype</strong> (<em>str</em>) – Type of files in the folder (‘pickle’, ‘csv’, or ‘json’)</p></li>
+<li><p><strong>renest_dict</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to return result as a nested dict (as opposed to a flattenned dict).
+The default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>resultdict</strong> – endclasses/mdlhists result dictionary reconstructed by the files in the folder.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.process.modephases">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">modephases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.modephases" title="Permalink to this definition"></a></dt>
 <dd><p>Identifies the phases of operation for the system based on its modes.</p>
@@ -1669,6 +1807,17 @@ where each phase is defined by its corresponding mode in the modelhist
 <dt class="sig sig-object py" id="fmdtools.resultdisp.process.nan_to_x">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">nan_to_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.nan_to_x" title="Permalink to this definition"></a></dt>
 <dd><p>returns nan as zero if present, otherwise returns the number</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.nest_flattened_hist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">nest_flattened_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.nest_flattened_hist" title="Permalink to this definition"></a></dt>
+<dd><p>Re-nests a flattened history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>hists</strong> (<em>dict</em>) – Flattened Model history (e.g. from flatten_hist)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -1749,6 +1898,24 @@ where each phase is defined by its corresponding mode in the modelhist
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.process.save_result">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">save_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.save_result" title="Permalink to this definition"></a></dt>
+<dd><p>Saves a given result variable (endclasses or mdlhists) to a file filename.
+Files can be saved as pkl, csv, or json.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>dict</em>) – Results dictionary (endclasses or mdlhists)</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – File name for the file. Can be nested in a folder if desired.</p></li>
+<li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional specifier of file type (if not included in filename). The default is “”.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to overwrite existing files with this name. The default is False.</p></li>
+<li><p><strong>result_id</strong> (<em>str</em><em>, </em><em>optional</em>) – For individual results saving. Places an identifier for the result in the file. The default is ‘’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.process.state_probabilities">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.process.</span></span><span class="sig-name descname"><span class="pre">state_probabilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.process.state_probabilities" title="Permalink to this definition"></a></dt>
 <dd><p>Tabulates the probabilities of different states in endclasses.</p>
@@ -1821,7 +1988,7 @@ where each phase is defined by its corresponding mode in the modelhist
 <li><p><a class="reference internal" href="#fmdtools.resultdisp.tabulate.degfxns" title="fmdtools.resultdisp.tabulate.degfxns"><code class="xref py py-meth docutils literal notranslate"><span class="pre">degfxns()</span></code></a>:        Makes a table showing which functions are degraded over time (0 for degraded, 1 for nominal)</p></li>
 <li><p><a class="reference internal" href="#fmdtools.resultdisp.tabulate.deghist" title="fmdtools.resultdisp.tabulate.deghist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deghist()</span></code></a>:        Makes a table of all funcitons and flows that are degraded over time. If withstats=True, the total # of each type degraded is provided in the last columns</p></li>
 <li><p><a class="reference internal" href="#fmdtools.resultdisp.tabulate.heatmaps" title="fmdtools.resultdisp.tabulate.heatmaps"><code class="xref py py-meth docutils literal notranslate"><span class="pre">heatmaps()</span></code></a>:       Makes a table of a heatmap dictionary</p></li>
-<li><p><a class="reference internal" href="#fmdtools.resultdisp.tabulate.costovertime" title="fmdtools.resultdisp.tabulate.costovertime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">costovertime()</span></code></a>:   Makes a table of the total cost, rate, and expected cost of all faults over time</p></li>
+<li><p><a class="reference internal" href="#fmdtools.resultdisp.tabulate.metricovertime" title="fmdtools.resultdisp.tabulate.metricovertime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">metricovertime()</span></code></a>: Makes a table of the total metric, rate, and expected metric of all faults over time</p></li>
 <li><p><a class="reference internal" href="#fmdtools.resultdisp.tabulate.samptime" title="fmdtools.resultdisp.tabulate.samptime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">samptime()</span></code></a>:       Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)</p></li>
 <li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">summary:()</span></code>        Makes a table of a summary dictionary from a given model run</p></li>
 <li><p><a class="reference internal" href="#fmdtools.resultdisp.tabulate.result" title="fmdtools.resultdisp.tabulate.result"><code class="xref py py-meth docutils literal notranslate"><span class="pre">result()</span></code></a>:         Makes a table of results (degraded functions/flows, cost, rate, expected cost) of a single run</p></li>
@@ -1841,26 +2008,6 @@ where each phase is defined by its corresponding mode in the modelhist
 </ul>
 </dd>
 </dl>
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.costovertime">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">costovertime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.costovertime" title="Permalink to this definition"></a></dt>
-<dd><p>Makes a table of the total cost, rate, and expected cost of all faults over time</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>endclasses</strong> (<em>dict</em>) – dict with rate,cost, and expected cost for each injected scenario</p></li>
-<li><p><strong>app</strong> (<em>sampleapproach</em>) – sample approach used to generate the list of scenarios</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>costovertime</strong> – pandas dataframe with the total cost, rate, and expected cost for the set of scenarios</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dataframe</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.degflows">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">degflows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reshist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.degflows" title="Permalink to this definition"></a></dt>
@@ -1892,9 +2039,57 @@ where each phase is defined by its corresponding mode in the modelhist
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.fmea">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">fmea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perc_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mult_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.fmea" title="Permalink to this definition"></a></dt>
+<dd><p>Makes a user-definable fmea of the endclasses of a set of fault scenarios.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endclasses</strong> (<em>dict</em>) – dict of endclasses of the simulation runs</p></li>
+<li><p><strong>app</strong> (<em>sampleapproach</em>) – sample approach used for the underlying probability model of the set of scenarios run</p></li>
+<li><p><strong>metrics</strong> (<em>list</em>) – generic unweighted metrics to query. The default is []. ‘all’ presents all metrics.
+metrics are summed over grouped scenarios.</p></li>
+<li><p><strong>weight_metrics</strong> (<em>list</em>) – weighted metrics to query. The default is [‘rate’].
+metrics are weighted according to the number in each phase and then averaged</p></li>
+<li><p><strong>avg_metrics</strong> (<em>list</em>) – metrics to average and query. The default is [‘cost’].
+avg_metrics are averaged over groups, rather than a total.</p></li>
+<li><p><strong>perc_metrics</strong> (<em>list</em><em>, </em><em>optional</em>) – metrics to treat as indicator variables to calculate a percentage. The default is [].
+perc_metrics are treated as indicator variables and averaged over groups.</p></li>
+<li><p><strong>mult_metrics</strong> (<em>dict</em><em>, </em><em>optional</em>) – mult_metrics are new metrics calculated by multiplying existing metrics
+(e.g., to calculate expectations or risk values like an expected cost or RPN)
+The default is {“expected cost”:[‘rate’, ‘cost’]}.</p></li>
+<li><p><strong>extra_classes</strong> (<em>dict</em><em>, </em><em>optional</em>) – An additional set of endclasses to include in the table (e.g., summaries from process.hists).
+The default is {}.</p></li>
+<li><p><strong>group_by</strong> (<em>str</em><em>, </em><em>optional</em>) – Way of grouping fmea rows. The default is ‘none’.
+- ‘none’:           All scenarios are displayed individually
+- ‘phase’:          All identical scenarios (fxn, mode) within a given phase are grouped
+- ‘fxnfault’:       All identical scenarios (fxn, mode) are grouped
+- ‘mode’:           All scenarios with the same mode name are grouped
+- ‘modetype’:      All scenarios with the same mode type, where mode types are strings in the mode name. Mode types must be given.
+- ‘functions’:      All scenarios and modes from a given function are grouped.
+- ‘times’:          All scenarios and modes at a given time are grouped
+- ‘fxnclassfault’:  All scenarios (fxnclass, mode) from a given function class are grouped. A Model must be provided.
+- ‘fxnclass’:       All scenarios from a given function class are grouped. A Model must be provided.</p></li>
+<li><p><strong>mode_types</strong> (<em>set</em>) – Mode types to group by in ‘mode type’ option</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><em>Model</em></a>) – Model for use in ‘fxnclassfault’ and ‘fxnclass’ options</p></li>
+<li><p><strong>sort_by</strong> (<em>str</em><em>, </em><em>optional</em>) – Column value to sort the table by. The default is “expected cost”.</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to sort in ascending order. The default is False.</p></li>
+<li><p><strong>empty_as</strong> (<em>float/'nan'</em>) – How to calculate stats of empty variables (for avg_metrics). Default is 0.0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fmea_table</strong> – pandas table with given metrics grouped as</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.fullfmea">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">fullfmea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summaries</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.fullfmea" title="Permalink to this definition"></a></dt>
-<dd><p>Makes full fmea table (degraded functions/flows, cost, rate, expected cost) of scenarios given endclasses dict (cost, rate, expected cost) and summaries dict (degraded functions, degraded flows)</p>
+<dd><p>Makes full fmea table (degraded functions/flows, all metrics in endclasses) of scenarios given endclasses dict and summaries dict (degraded functions, degraded flows)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1918,6 +2113,27 @@ where each phase is defined by its corresponding mode in the modelhist
 <dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.maptab">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">maptab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.maptab" title="Permalink to this definition"></a></dt>
 <dd><p>Makes table of a generic map</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.metricovertime">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">metricovertime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cost'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.metricovertime" title="Permalink to this definition"></a></dt>
+<dd><p>Makes a table of the total metric, rate, and expected metric of all faults over time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endclasses</strong> (<em>dict</em>) – dict with rate, metric, and expected metric values for each injected scenario</p></li>
+<li><p><strong>app</strong> (<em>sampleapproach</em>) – sample approach used to generate the list of scenarios</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – metric from dict to tabulate over time. Default is ‘cost’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>met_overtime</strong> – pandas dataframe with the total metric, rate, and expected metric for the set of scenarios</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dataframe</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -1948,7 +2164,7 @@ where each phase is defined by its corresponding mode in the modelhist
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.nominal_factor_comparison">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">nominal_factor_comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nomapp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rangeid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">give_ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.nominal_factor_comparison" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">nominal_factor_comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nomapp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rangeid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">give_ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.nominal_factor_comparison" title="Permalink to this definition"></a></dt>
 <dd><p>Compares a metric for a given set of model parameters/factors over set of nominal scenarios.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1973,8 +2189,6 @@ The default is ‘default’, which either:</p>
 <li><p><strong>nan_as</strong> (<em>float</em><em>, </em><em>optional</em>) – Number to parse NaNs as (if present). The default is np.nan.</p></li>
 <li><p><strong>percent</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to compare metrics as bools (True - results in a comparison of percentages of indicator variables)
 or as averages (False - results in a comparison of average values of real valued variables). The default is True.</p></li>
-<li><p><strong>difference</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to tabulate the difference of the metric from the nominal over each scenario (True),
-or the value of the metric over all (False). The default is True.</p></li>
 <li><p><strong>bool</strong> (<em>give_ci =</em>) – gives the bootstrap confidence interval for the given statistic using the given kwargs
 ‘combined’ combines the values as a strings in the table (for display)</p></li>
 <li><p><strong>kwargs</strong> (<em>keyword arguments for bootstrap_confidence_interval</em><em> (</em><em>sample_size</em><em>, </em><em>num_samples</em><em>, </em><em>interval</em><em>, </em><em>seed</em><em>)</em>) – </p></li>
@@ -2020,17 +2234,23 @@ or the value of the metric over all (False). The default is True.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.phasefmea">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">phasefmea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.phasefmea" title="Permalink to this definition"></a></dt>
-<dd><p>Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">phasefmea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['rate',</span> <span class="pre">'expected</span> <span class="pre">cost']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['cost']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.phasefmea" title="Permalink to this definition"></a></dt>
+<dd><p>(LEGACY FUNCTION) Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
+Use tabulate.fmea with option group_by=’phase’ instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>endclasses</strong> (<em>dict</em>) – dict of endclasses of the simulation runs</p></li>
 <li><p><strong>app</strong> (<em>sampleapproach</em>) – sample approach used for the underlying probability model of the set of scenarios run</p></li>
+<li><p><strong>metrics</strong> (<em>list</em>) – unweighted metrics to query. The default is [‘rate’, ‘expected cost’]</p></li>
+<li><p><strong>weight_metrics</strong> (<em>list</em>) – weighted metrics to query. The default is [‘cost’].
+Weights are used to calculate an average, rather than a total.</p></li>
+<li><p><strong>sort_by</strong> (<em>str</em>) – metric to stort the table by. default is ‘expected cost’</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em>) – whether to sort ascending. Default is False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>table</strong> – table with cost, rate, and expected cost of each fault in each phase</p>
+<dd class="field-even"><p><strong>tab</strong> – table with metrics of each fault in each phase</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>dataframe</p>
@@ -2049,11 +2269,26 @@ or the value of the metric over all (False). The default is True.</p></li>
 <li><p><strong>nested_endclasses</strong> (<em>dict</em>) – dict of endclasses from propagate.nested_approach with structure: {scen_x:{fault:{metric1:x, metric2:x…}}}</p></li>
 <li><p><strong>params</strong> (<em>list/str</em>) – List of parameters (or parameter) to use for the factor levels in the comparison</p></li>
 <li><p><strong>value</strong> (<em>string</em>) – metric of the endclass (returned by mdl.find_classification) to use for the comparison.</p></li>
-<li><p><strong>faults</strong> (<em>str/list</em><em>, </em><em>optional</em>) – <dl class="simple">
+<li><p><strong>faults</strong> (<em>str/list</em><em>, </em><em>optional</em>) – <dl>
 <dt>Set of faults to run the comparison over</dt><dd><p>–‘modes’ (all fault modes),
 –‘functions’ (modes for each function are grouped)
 –‘mode type’ (modes with the same name are grouped)
-– or a set of specific modes/functions. The default is ‘functions’.</p>
+– or a set of specific modes/functions. The default is ‘functions’.
+– or a tuple of form (group_by, apps, <a href="#id5"><span class="problematic" id="id6">*</span></a>arg), where</p>
+<blockquote>
+<div><ul>
+<li><p>group_by is an argument to SampleApproach.get_scenid_groups</p></li>
+<li><p>apps is a dictionary of approaches corresponding to the endclasses (from prop.nested_approach)</p></li>
+<li><dl class="simple">
+<dt>arg is:</dt><dd><ul>
+<li><p>when using ‘fxnclassfault’ and ‘fxnclass’ options: a model</p></li>
+<li><p>when using ‘modetype’ options: a dictionary grouping modes by type</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
 </dd>
 </dl>
 </p></li>
@@ -2088,7 +2323,7 @@ or the value of the metric over all (False). The default is True.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.result">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endresults</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.result" title="Permalink to this definition"></a></dt>
-<dd><p>Makes a table of results (degraded functions/flows, cost, rate, expected cost) of a single run</p>
+<dd><p>Makes a table of results (degraded functions/flows, classification) of a single run</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2099,8 +2334,8 @@ or the value of the metric over all (False). The default is True.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.simplefmea">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">simplefmea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.simplefmea" title="Permalink to this definition"></a></dt>
-<dd><p>Makes a simple fmea (rate, cost, expected cost) of the endclasses of a list of fault scenarios run</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">simplefmea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['rate',</span> <span class="pre">'cost',</span> <span class="pre">'expected</span> <span class="pre">cost']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.simplefmea" title="Permalink to this definition"></a></dt>
+<dd><p>Makes a simple fmea (rate, classification) of the endclasses of a list of fault scenarios run</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2117,17 +2352,23 @@ or the value of the metric over all (False). The default is True.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.resultdisp.tabulate.summfmea">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">summfmea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.summfmea" title="Permalink to this definition"></a></dt>
-<dd><p>Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.resultdisp.tabulate.</span></span><span class="sig-name descname"><span class="pre">summfmea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['rate',</span> <span class="pre">'expected</span> <span class="pre">cost']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['cost']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.resultdisp.tabulate.summfmea" title="Permalink to this definition"></a></dt>
+<dd><p>(LEGACY FUNCTION) Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
+Use tabulate.fmea with group_by=’fxnfault’ instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>endclasses</strong> (<em>dict</em>) – dict of endclasses of the simulation runs</p></li>
 <li><p><strong>app</strong> (<em>sampleapproach</em>) – sample approach used for the underlying probability model of the set of scenarios run</p></li>
+<li><p><strong>metrics</strong> (<em>list</em>) – unweighted metrics to query. The default is [‘rate’, ‘expected cost’]</p></li>
+<li><p><strong>weighted_metrics</strong> (<em>list</em>) – weighted metrics to query. The default is [‘cost’].
+Weights are used to calculate an average, rather than a total.</p></li>
+<li><p><strong>sort_by</strong> (<em>str</em>) – metric to stort the table by. default is ‘expected cost’</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em>) – whether to sort ascending. Default is False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>table</strong> – table with cost, rate, and expected cost of each fault (over all phases)</p>
+<dd class="field-even"><p><strong>tab</strong> – table with metrics of each fault (over all phases)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>dataframe</p>
