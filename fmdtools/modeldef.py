@@ -16,14 +16,17 @@ Description: A module to define resilience models and simulations.
 import numpy as np
 import itertools
 import dill
-import pickle
 import networkx as nx
 import copy
 import warnings
+import sys
+from decimal import Decimal
 from ordered_set import OrderedSet
 from operator import itemgetter
 from collections.abc import Iterable
-
+from collections import Hashable
+from inspect import signature
+import fmdtools.resultdisp.process as proc
 # MAJOR CLASSES
 
 class Common(object):
@@ -267,6 +270,29 @@ class Block(Common):
         for param in params:
             for attr, val in param.items():
                 setattr(self, attr, val)
+    def set_timestep(self, use_local=True, local_tstep=None, global_tstep=1.0):
+        """Sets the timestep of the function given the options use_local 
+        (which selects whether it uses local_timestep or global_timestep)"""
+        global_tstep=Decimal(str(global_tstep))
+        if use_local:
+            if local_tstep:             dt=Decimal(str(local_tstep)) 
+            elif hasattr(self, 'dt'):   dt=Decimal(str(self.dt)) 
+            else:                       dt=Decimal(str(global_tstep))
+            if dt < global_tstep:
+                if global_tstep%dt:
+                    raise Exception("Local timestep: "+str(self.dt)+" doesn't line up with global timestep: "+str(global_tstep))
+            else:
+                if dt%global_tstep:
+                    raise Exception("Local timestep: "+str(self.dt)+" doesn't line up with global timestep: "+str(global_tstep))
+            self.run_times = int(global_tstep/dt)
+        else:   dt=global_tstep; self.run_times=1
+        self.dt = float(dt)
+    def assoc_timers(self, *timers):
+        """Associates timer objects with the given function/block"""
+        if not getattr(self, 'timers', False): self.timers=set()
+        self.timers.update(timers)
+        for timername in timers:
+            setattr(self, timername, Timer(timername))
     def assoc_rand_states(self, *states):
         """
         Associates multiple random states with the model
@@ -430,12 +456,15 @@ class Block(Common):
                 - set {'fault1', 'fault2', 'fault3'} (just the respective faults)
                 - dict {'fault1': faultattributes, 'fault2': faultattributes}, where faultattributes is:
                     - float: rate for the mode
-                    - [float, float]: rate and repair cost for the mode
-                    - float, oppvect, float]: rate, opportunity vector, and repair cost for the mode
-                    opportunity vector can be specified as:
-                        [float1, float2,...], a vector of relative likelihoods for each phase, or
-                        {opermode:float1, opermode:float1}, a dict of relative likelihoods for each phase/mode
-                        the phases/modes to key by are defined in "key_phases_by"
+                    - dict/set/str: opportunity vector for the mode specified as a dictionary/set/string
+                    - list: [rate, oppvect, rcost]
+                        - a list of arguments where the float arguments are specified in the order rate, rcost (if provided) and
+                            an oppvect opportunity vector is provided (anywhere) with the form:
+                                -list: [float1, float2,...], a vector of relative likelihoods for each phase, or
+                                -dict: {opermode:float1, opermode:float1}, a dict of relative likelihoods for each phase/mode
+                                -set: {opermode, opermode,...}, a set of applicable phases (assumed equally likely).
+                                the phases/modes to key by are defined in "key_phases_by"
+                                -str: 'all'/'modename', either specifying all operational modes/phases or a single operational mode/phase
         opermodes : list, optional
             List of operational modes
         initmode : str, optional
@@ -475,29 +504,30 @@ class Block(Common):
                 self.faultmodes[mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
                 self.faultmodes[mode]['probtype'] = probtype
                 self.faultmodes[mode]['units'] = units
-                if type(faultmodes) == set: # minimum information - here the faultmodes are only a set of labels
-                    self.faultmodes[mode]['dist'] =     1.0/len(faultmodes)
-                    self.faultmodes[mode]['oppvect'] =  [1.0]
-                    self.faultmodes[mode]['rcost'] =    0.0
-                elif type(faultmodes[mode]) == float: # dict of modes: dist, where dist is the distribution (or individual rate/probability)
-                    self.faultmodes[mode]['dist'] =     faultmodes[mode]
-                    self.faultmodes[mode]['oppvect'] =  [1.0]
-                    self.faultmodes[mode]['rcost'] =    0.0
-                elif len(faultmodes[mode]) == 3:   # three-arg mode definition: dist, oppvect, repair costs
-                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[mode]['oppvect'] =  faultmodes[mode][1]
-                    self.faultmodes[mode]['rcost'] =    faultmodes[mode][2]
-                    if key_phases_by =='none': raise Exception("How should the opportunity vector be keyed? Provide 'key_phases_by' option.")
-                elif len(faultmodes[mode]) == 2:  # dist, repair costs
-                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[mode]['oppvect'] =  [1.0]
-                    self.faultmodes[mode]['rcost'] =    faultmodes[mode][1]
-                elif len(faultmodes[mode]) == 1:  # dist only
-                    self.faultmodes[mode]['dist'] =     faultmodes[mode][0]
-                    self.faultmodes[mode]['oppvect'] =  [1.0]
-                    self.faultmodes[mode]['rcost'] =    0.0
-                else:
-                    raise Exception("Invalid mode definition")
+                if key_phases_by=='self': oppvect='all'
+                else:                     oppvect=[1.0]
+                dist=1.0/len(faultmodes); rcost=0.0
+                if type(faultmodes) in {set,str}:     a=1 # minimum information - here the faultmodes are only a set of labels
+                elif type(faultmodes[mode]) == float:   dist  =  faultmodes[mode] # dict of modes: dist, where dist is the distribution (or individual rate/probability)
+                elif type(faultmodes[mode]) == dict:    oppvect = faultmodes[mode] # provided oppvect in dict form
+                elif type(faultmodes[mode]) == list: # provided list with oppvect, dist, rcost (rcost always after dist)
+                    oppvect_loc = [i for i,e in enumerate(faultmodes[mode]) if type(e) in [dict, set, list, str]]
+                    if oppvect_loc: oppvect= faultmodes[mode].pop(oppvect_loc[0])
+                    for i,e in enumerate(faultmodes[mode]):  
+                        if i>=1:          rcost = e
+                        else:             dist = e
+                else:   raise Exception("Invalid mode definition")
+                if 'all' in oppvect or oppvect=='all': 
+                    if not opermodes:   oppvect = {'nom'}
+                    else:               oppvect = {*opermodes}
+                    if key_phases_by!='self': raise Exception("'all' option for oppvect only applies to key_phases_by='self'")
+                elif type(oppvect)==str:                    oppvect={oppvect}
+                if type(oppvect)==set:                      oppvect = {o:1.0 for o in oppvect}
+                if key_phases_by =='none' and oppvect!=[1.0]: 
+                    raise Exception("How should the opportunity vector be keyed? Provide 'key_phases_by' option.")                
+                self.faultmodes[mode]['dist'] =     dist
+                self.faultmodes[mode]['oppvect'] =  oppvect
+                self.faultmodes[mode]['rcost'] =    rcost
                 self.faultmodes[mode]['longname'] = longnames.get(mode,mode)
         if key_phases_by=='self':   self.key_phases_by = self.name
         else:                       self.key_phases_by = key_phases_by
@@ -665,6 +695,12 @@ class Block(Common):
     def get_flowtypes(self):
         """Returns the names of the flow types in the model"""
         return {obj.type for name, obj in self.flows.items()}
+    def update_stochastic_states(self):
+        """Updates the defined stochastic states defined to auto-update (see assoc_randstates)."""
+        for statename, generator in self.rngs.items():
+            if self._rng_params[statename][1]:
+                gen_method = getattr(generator, self._rng_params[statename][1])
+                setattr(self, statename, gen_method(*self._rng_params[statename][2]))
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used by default in 
         derived objects when resetting the model. Requires associated flows to be cleared first."""
@@ -676,7 +712,7 @@ class Block(Common):
             self.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
         self.rng = np.random.default_rng(self.seed)
         if hasattr(self, 'time'): self.time=0.0
-        if hasattr(self, 'tstep'): self.tstep=self.tstep
+        if hasattr(self, 'dt'): self.dt=self.dt
         if hasattr(self, 'internal_flows'):
             for flowname, flow in self.internal_flows.items():
                 flow.reset()
@@ -686,6 +722,32 @@ class Block(Common):
             for timername in self.timers:
                 getattr(self, timername).reset()
             self.updatefxn('reset', faults=['nom'], time=0)
+    def get_memory(self):
+        """ Gets the approximate memory usage of the block in bytes (not complete)"""
+        mem=0
+        mem+=sys.getsizeof(self.opermodes)
+        for rng in self.rngs.values():
+            mem+=sys.getsizeof(rng)
+        if hasattr(self, 'faultmodes'):
+            for fm in self.faultmodes.values():
+                mem+=sys.getsizeof(fm)
+        if hasattr(self, 'mode_state_dict'):
+            mem+=sys.getsizeof(self.mode_state_dict)
+        if hasattr(self, 'timers'):
+            for timer in self.timers:
+                mem+=sys.getsizeof(timer)
+        if hasattr(self, 'internal_flows'):
+            for flowname, flow in self.internal_flows.items():
+                mem+= flow.get_memory()
+        if hasattr(self, 'components'):
+            for name,comp in self.components.items():
+                mem+=comp.get_memory()
+        if hasattr(self, 'actions'):
+            for name,comp in self.actions.items():
+                mem+=comp.get_memory()
+        for state in self._initstates.values():
+            mem+=2*sys.getsizeof(state) # (*2 because both the initstate and the actual state should be counted)
+        return mem
     def return_states(self):
         """
         Returns states of the block at the current state. Used (iteratively) to record states over time.
@@ -720,10 +782,10 @@ class FxnBlock(Block):
         component instantiations of the function (if any)
     timers : set
         names of timers to be used in the function (if any)
-    tstep : float
-        timestep of the model in the function (added/overridden by model definition)
+    dt : float
+        local timestep of the model in the function (overrides global timestep by default ('use_local':True in modelparameters))
     """
-    def __init__(self,name, flows, flownames=[], states={}, components={},timers={}, tstep=1.0, seed=None):
+    def __init__(self,name, flows, flownames=[], states={}, components={},timers=[], dt=None, seed=None):
         """
         Instantiates the function superclass with the relevant parameters.
 
@@ -756,10 +818,8 @@ class FxnBlock(Block):
             self.faultmodes.update({components[cname].localname+f:vals for f, vals in components[cname].faultmodes.items()})
             self.compfaultmodes.update({components[cname].localname+modename:cname for modename in components[cname].faultmodes})
             setattr(self, cname, components[cname])
-        self.timers = timers
-        for timername in timers:
-            setattr(self, timername, Timer(timername))
-        self.tstep=tstep
+        self.assoc_timers(*timers)
+        if dt: self.dt=dt
         self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
         super().__init__(states)
@@ -893,7 +953,7 @@ class FxnBlock(Block):
         pos : dict
             Dictionary of node positions for actions/flows
         """
-        import matplotlib.pyplot as plt
+        import matplotlib.pyplot as plt; plt.rcParams['pdf.fonttype'] = 42 
         if gtype=='combined':      graph = nx.compose(self.flow_graph, self.action_graph)
         elif gtype=='flows':        graph = self.flow_graph
         elif gtype=='actions':   graph = self.action_graph
@@ -970,7 +1030,8 @@ class FxnBlock(Block):
             copy.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
             copy.rngs[generator].__setstate__(self.rngs[generator].__getstate__())
         if hasattr(self, 'time'): copy.time=self.time
-        if hasattr(self, 'tstep'): copy.tstep=self.tstep
+        if hasattr(self, 'dt'): copy.dt=self.dt
+        if hasattr(self, 'run_times'): copy.run_times=self.run_times
         return copy
     def update_modestates(self):
         """Updates states of the model associated with a specific fault mode (see assoc_modes)."""
@@ -981,12 +1042,6 @@ class FxnBlock(Block):
                     setattr(self, state, value)
                 num_update+=1
                 if num_update > 1: raise Exception("Exclusive fault mode scenarios present at the same time")
-    def update_stochastic_states(self):
-        """Updates the defined stochastic states defined to auto-update (see assoc_randstates)."""
-        for statename, generator in self.rngs.items():
-            if self._rng_params[statename][1]:
-                gen_method = getattr(generator, self._rng_params[statename][1])
-                setattr(self, statename, gen_method(*self._rng_params[statename][2]))
     def prop_internal(self, faults, time, run_stochastic, proptype):
         """
         Propagates behaviors through the internal Action Sequence Graph
@@ -1007,10 +1062,10 @@ class FxnBlock(Block):
         while active_actions:
             new_active_actions=set(active_actions)
             for action in active_actions:
-                self.actions[action].updateact(time, run_stochastic, proptype=proptype, tstep=self.tstep)
+                self.actions[action].updateact(time, run_stochastic, proptype=proptype, dt=self.dt)
                 action_cond_edges = self.action_graph.out_edges(action, data=True)
                 for act_in, act_out, atts in action_cond_edges:
-                    if self.conditions[atts['name']]() and getattr(self.actions[action], 'duration',0.0)+self.tstep<=self.actions[action].t_loc:
+                    if self.conditions[atts['name']]() and getattr(self.actions[action], 'duration',0.0)+self.dt<=self.actions[action].t_loc:
                         self.actions[action].t_loc=0.0
                         new_active_actions.add(act_out)
                         new_active_actions.discard(act_in)
@@ -1060,7 +1115,12 @@ class FxnBlock(Block):
         if any(self.actions) and self.asg_proptype==proptype: self.prop_internal(faults, time, run_stochastic, proptype)
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
-        elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: self.dynamic_behavior(time)
+        elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: 
+            if self.run_times>=1:
+                for i in range(self.run_times):
+                    self.dynamic_behavior(time)
+            elif not Decimal(str(time))%Decimal(str(self.dt)):
+                self.dynamic_behavior(time)
         elif proptype=='reset':                                                             
             if hasattr(self,'static_behavior'):  self.static_behavior(time)
             if hasattr(self,'dynamic_behavior'): self.dynamic_behavior(time)
@@ -1123,7 +1183,7 @@ class Action(Block):
         for flow in self.flows.keys():
             setattr(self, flow, self.flows[flow])
         super().__init__({**states, 't_loc':0.0})
-    def updateact(self, time=0, run_stochastic=False, proptype='dynamic', tstep=1.0):
+    def updateact(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
         Updates the behaviors, faults, times, etc of the action 
 
@@ -1137,8 +1197,8 @@ class Action(Block):
         self.run_stochastic=run_stochastic
         if time>self.time and run_stochastic: self.update_stochastic_states()
         if proptype=='dynamic':
-            if self.time<time:  self.behavior(time); self.t_loc+=tstep
-        else:                   self.behavior(time); self.t_loc+=tstep
+            if self.time<time:  self.behavior(time); self.t_loc+=dt
+        else:                   self.behavior(time); self.t_loc+=dt
         self.time=time
         self.check_update_nominal_faults()
     def behavior(self, time):
@@ -1182,6 +1242,14 @@ class Flow(Common):
         for state in self._states:
             states[state]=getattr(self,state)
         return states
+    def get_memory(self):
+        """
+        Returns the approximate memory usage of the flow.
+        """
+        mem = 0
+        for state in self._states:
+            mem+=2*sys.getsizeof(getattr(self, state)) # (*2 to account for initstates)
+        return mem
     def copy(self):
         """
         Returns a copy of the flow object (used when copying the model)
@@ -1218,7 +1286,7 @@ class Model(object):
                 phases {'name':[start, end]} that the simulation progresses through
             times : array
                 array of times to sample (if desired) [starttime, sampletime1, sampletime2,... endtime]
-            tstep : float
+            dt : float
                 timestep used in the simulation. default is 1.0
             units : str
                 time-units. default is hours
@@ -1263,9 +1331,11 @@ class Model(object):
         
         # model defaults to static representation if no timerange
         self.phases=modelparams.get('phases',{'na':[1]})
+        self.find_any_phase_overlap()
         self.times=modelparams.get('times',[1])
         self.tstep = modelparams.get('tstep', 1.0)
         self.units = modelparams.get('units', 'hr')
+        self.use_local = modelparams.get('use_local', True)
         self.use_end_condition = modelparams.get('use_end_condition', True)
         if modelparams.get('seed', False):  self.seed = modelparams['seed']
         else:
@@ -1280,6 +1350,14 @@ class Model(object):
         fxnstr = ''.join(['- '+fxnname+':'+str(fxn.return_states())+' '+str(getattr(fxn,'active_actions',''))+'\n' for fxnname,fxn in self.fxns.items()])
         flowstr = ''.join(['- '+flowname+':'+str(flow.status())+'\n' for flowname,flow in self.flows.items()])
         return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'functions: \n'+fxnstr+'flows: \n'+flowstr
+    def find_any_phase_overlap(self):
+        intervals = [*self.phases.values()]
+        int_low = np.sort([i[0] for i in intervals])
+        int_high = np.sort([i[1] if len(i)==2 else i[0] for i in intervals])
+        for i, il in enumerate(int_low):
+            if i+1==len(int_low): break
+            if int_low[i+1]<=int_high[i]:
+                raise Exception("Global phases overlap (see mdlparams):"+str(self.phases)+" Ensure the max of each phase < min of each other phase")
     def add_flows(self, flownames, flowdict={}, flowtype='generic'):
         """
         Adds a set of flows with the same type and initial parameters
@@ -1334,16 +1412,23 @@ class Model(object):
             self.fxns[name]=fclass.__new__(fclass)
             self.fxns[name].seed=self._rng.integers(np.iinfo(np.int32).max)
             flows=self.get_flows(flownames)
+            class_init_params = list(signature(fclass).parameters.keys())
+            if 'name'!=class_init_params[0]:
+                raise Exception('Invalid class specification for: '+str(fclass)+'. Make sure to include a name as the second argument of __init__.')
+            if len(class_init_params)<2 or 'flows'!=class_init_params[1]:
+                raise Exception('Invalid class specification for: '+str(fclass)+'. Make sure to include a name as the third argument of __init__.')
             if fparams=='None':
+                if len(class_init_params)>2: raise Exception("fparams required by class "+str(fclass)+" __init__ method but not passed. Found in: "+name)
                 self.fxns[name].__init__(name, flows)
                 self._fxninput[name]={'name':name,'flows': flownames, 'fparams': 'None'}
             else: 
+                if len(class_init_params)<=2: raise Exception("fparams given to class "+str(fclass)+" but __init__ has no params argument. Found in: "+name)
                 self.fxns[name].__init__(name, flows,fparams)
                 self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams}
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
             self.functionorder.update([name])
-            self.fxns[name].tstep=self.tstep
+            self.fxns[name].set_timestep(use_local=self.use_local, global_tstep=self.tstep)
     def set_functionorder(self,functionorder):
         """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
         if not self.functionorder.difference(functionorder): self.functionorder=OrderedSet(functionorder)
@@ -1590,6 +1675,21 @@ class Model(object):
                     modeprops[fxnname][mode] = fxn.faultmodes.get(mode)
                     if mode not in fxn.faultmodes: warnings.warn("Mode "+mode+" not in faultmodes for fxn "+fxnname+" and may not be tracked.")
         return modes, modeprops
+    def get_memory(self):
+        """
+        Returns the approximate memory usage of the model, along with a profile of fxn/flow memory usage.
+        """
+        mem_profile={}
+        mem = 0
+        mem_profile['params'] = sys.getsizeof(proc.flatten_hist(self.params))
+        mem_profile['params'] += sys.getsizeof(self.modelparams)
+        mem_profile['params'] += sys.getsizeof(self.valparams)
+        for fxnname, fxn in self.fxns.items():
+            mem_profile[fxnname]=fxn.get_memory()
+        for flowname,flow in self.flows.items():
+            mem_profile[flowname]=flow.get_memory()
+        mem = np.sum([i for i in mem_profile.values()])
+        return mem, mem_profile
     def copy(self):
         """
         Copies the model at the current state.
@@ -1610,7 +1710,7 @@ class Model(object):
             flows = copy.get_flows(flownames)
             if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows)
             else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams)
-            copy.fxns[fxnname].tstep=self.tstep
+            copy.fxns[fxnname].set_timestep(use_local=self.use_local, global_tstep=self.tstep)
         copy._fxninput=self._fxninput
         copy._fxnflows=self._fxnflows
         copy.is_copy=False
@@ -1801,12 +1901,9 @@ class NominalApproach():
             The scenarios associated with each level of parameter (or joint parameters)
         """
         inputranges = {param:self.ranges[rangeid]['inputranges'][param] for param in level_params}
-        if len(inputranges)>1:  
-            ranges = (np.arange(*arg) for k,arg in inputranges.items())
-            partialspace = [x for x in itertools.product(*ranges)]
-        else:
-            partialspace = [x for x in np.arange(*[*inputranges.values()][0])]
-        param_scens = {p:set() for p in partialspace}
+        partialspace= self.range_to_space(inputranges)
+        partialspace = [tuple([a if isinstance(a, Hashable) else str(a) for a in p]) for p in partialspace]
+        param_scens = {(p if len(p)>1 else p[0]):set() for p in partialspace}
         full_indices = list(self.ranges[rangeid]['inputranges'].keys())
         inds = [full_indices.index(param) for param in level_params]
         
@@ -1815,7 +1912,11 @@ class NominalApproach():
             if type(scenarios)==str: scenarios = [scenarios]
             param_scens[new_index].update(scenarios)
         return param_scens
-    def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds='shared', **kwargs):
+    def range_to_space(self,inputranges):
+        ranges = (np.arange(*arg) if type(arg)==tuple else tuple(arg) for k,arg in inputranges.items())
+        space = [x for x in itertools.product(*ranges)]
+        return space
+    def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds='shared',set_args={}, **kwargs):
         """
         Adds a set of scenarios to the approach.
 
@@ -1836,15 +1937,17 @@ class NominalApproach():
                 - 'independent' creates separate random seeds for models and parameter generation
                 - 'keep_model' uses the seed provided in the model for all of the model
             When a list is provided, these seeds are are used (and shared). Must be of length replicates.
+        set_args : dict
+            Dictionary of lists of values for each param e.g., {'param1':[value1, value2, value3]}
         **kwargs : specifies range for keyword args of paramfunc
             May be given as a fixed float/int/dict/str (k=value) defining a set value for the range (if not the default) or
-            as a tuple k=(start, end, step)
+            as a tuple k=(start, end, step) for the range, or
         """
         inputranges = {ind:rangespec for ind,rangespec in enumerate(args) if type(rangespec)==tuple}
-        fixedkwargs = {k:v for k,v in kwargs.items() if type(v)!=tuple}
+        fixedkwargs = {k:v for k,v in kwargs.items() if not type(v)==tuple}
         inputranges = {k:v for k,v in kwargs.items() if type(v)==tuple}
-        ranges = (np.arange(*arg) for k,arg in inputranges.items())
-        fullspace = [x for x in itertools.product(*ranges)]
+        inputranges.update(set_args)
+        fullspace = self.range_to_space(inputranges)
         inputnames = list(inputranges.keys())  
         
         if type(seeds)==list: 
@@ -1857,7 +1960,8 @@ class NominalApproach():
         self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}, 'replicates':replicates}
         for xvals in fullspace:
             inputparams = {**{name:xvals[i] for i,name in enumerate(inputnames)}, **fixedkwargs}
-            if replicates>1:    self.ranges[rangeid]['levels'][xvals]=[]
+            level_key = tuple([x if isinstance(x,Hashable) else str(x) for x in xvals])
+            if replicates>1:    self.ranges[rangeid]['levels'][level_key]=[]
             for i in range(replicates):
                 np.random.seed(seeds[i])
                 self.num_scenarios+=1
@@ -1868,8 +1972,33 @@ class NominalApproach():
                                                         'params':params,'inputparams':inputparams,'modelparams':{'seed':mdlseeds[i]},\
                                                         'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
                 self.ranges[rangeid]['scenarios'].append(scenname)
-                if replicates>1:    self.ranges[rangeid]['levels'][xvals].append(scenname)
-                else:               self.ranges[rangeid]['levels'][xvals]=scenname
+                if replicates>1:    self.ranges[rangeid]['levels'][level_key].append(scenname)
+                else:               self.ranges[rangeid]['levels'][level_key]=scenname
+    def update_factor_seeds(self, rangeid, inputparam, seeds='new'):
+        """
+        Changes/randomizes the seeds along a given factor in a range
+
+        Parameters
+        ----------
+        rangeid : str
+            Name of the range being updated
+        inputparam : str
+            Name of the parameter to vary the seeds over
+        seeds : str/list, optional
+            List of seeds to update to. The default is 'new', which picks them randomly
+        """
+        param_loc = [*self.ranges[rangeid]['inputranges'].keys()].index(inputparam)
+        levels = [i for i in range(*self.ranges[rangeid]['inputranges'][inputparam])]
+        if type(seeds) == list:
+            if len(seeds)!=levels: raise Exception("Seeds (len: "+str(len(seeds))+") should math number of levels for "+inputparam+': '+str(len(levels)))
+        elif seeds=="new":
+            seeds = np.random.SeedSequence.generate_state(np.random.SeedSequence(), len(levels))
+        else: raise Exception("Invalid option for seeds: "+str(seeds))
+        for i, level in enumerate(levels):
+            scens = [scen for lev, scen in self.ranges[rangeid]['levels'].items() if lev[param_loc]==level]
+            for scen in scens:
+                self.scenarios[scen]['properties']['modelparams']['seed'] = seeds[i]
+            
     def change_params(self, rangeid='all', **kwargs):
         """
         Changes a given parameter accross all scenarios. Modifies 'params' (rather than regenerating params from the paramfunc).
@@ -2016,7 +2145,8 @@ class SampleApproach():
     unit_factors : dict
         multiplication factors for converting some time units to others.
     """
-    def __init__(self, mdl, faults='all', phases='global', modephases={}, jointfaults={'faults':'None'}, sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}):
+    def __init__(self, mdl, faults='all', phases='global', modephases={},join_modephases=False, jointfaults={'faults':'None'}, 
+                 sampparams={}, defaultsamp={'samp':'evenspacing','numpts':1}, reduce_to=False):
         """
         Initializes the sample approach for a given model
 
@@ -2026,7 +2156,8 @@ class SampleApproach():
             Model to sample.
         faults : str/list/tuple, optional
             - The default is 'all', which gets all fault modes from the model.
-            - 'single-components' uses faults from a single component to represent faults form all components 
+            - 'single-components' uses faults from a single component to represent faults from all components 
+            - 'single-function' uses faults from a single function to represent faults from that type
             - passing the function name only includes modes from that function
             - List of faults of form [(fxn, mode)] to inject in the model.
             -Tuple arguments 
@@ -2049,6 +2180,8 @@ class SampleApproach():
             multiple phases associated with that mode. Has structure:
                 {'Function':{'mode':{'phase','phase1', 'phase2'...}}}
                 Phases and modephases can be gotten from process.modephases(mdlhist)
+        join_modephases: bool
+            Whether to join phases with the same modes defined in modephases. Default is False
         jointfaults : dict, optional
             Defines how the approach considers joint faults. The default is {'faults':'None'}. Has structure:
                 - faults : float    
@@ -2061,6 +2194,9 @@ class SampleApproach():
                     specifies whether the fault set includes all joint faults up to the given level, or only the given level
                     (e.g., True with 'all' means SampleApproach includes every combination of joint fault modes while
                            False with 'all' means SampleApproach only includes the joint fault mode with all faults)
+                - limit jointphases (optional) : int
+                    Limits the number of jointphases to sample (by randomly sampling them instead). Necessary when the
+                    number of faults is large
         sampparams : dict, optional
             Defines how specific modes in the model will be sampled over time. The default is {}. 
             Has structure: {(fxnmode,phase): sampparam}, where sampparam has structure:
@@ -2082,6 +2218,8 @@ class SampleApproach():
                     dict with structure {'nodes'[nodelist], 'weights':weightlist}
                     where the nodes in the nodelist range between -1 and 1
                     and the weights in the weightlist sum to 2.
+        reduce_to : int, optional
+            Size of random sample to reduce the number of scenarios to (if any). Default is False.
         """
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
         if phases=='global':                self.globalphases = mdl.phases; self.phases = {}; self.modephases = modephases
@@ -2094,9 +2232,10 @@ class SampleApproach():
         self.tstep = mdl.tstep
         self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)
-        self.init_rates(mdl, jointfaults=jointfaults, modephases=modephases)
+        self.init_rates(mdl, jointfaults=jointfaults, modephases=modephases, join_modephases=join_modephases)
         self.create_sampletimes(mdl, sampparams, defaultsamp)
         self.create_scenarios()
+        if reduce_to: self.reduce_scens_to_samp(reduce_to)
     def init_modelist(self,mdl, faults, jointfaults={'faults':'None'}):
         """Initializes comprates, jointmodes internal list of modes"""
         self.comprates={}
@@ -2144,8 +2283,12 @@ class SampleApproach():
             elif type(faults)==tuple:
                 if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==faults[1]]  
                 elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==f]  
-                elif faults[0]=='mode type':        faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if faults[1] in mode if (len(faults)<3 or not faults[2] in mode)]
-                elif faults[0]=='mode types':       faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if any([f in mode for f in faults[1]])]
+                elif faults[0]=='mode type':        
+                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if (faults[1] in mode and (len(faults)<3 or not faults[2] in mode))]
+                elif faults[0]=='mode types':       
+                    if type(faults[1])==str:    secondarg=(faults[1],)
+                    else:                       secondarg=faults[1]
+                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if any([f in mode for f in secondarg])]
                 elif faults[0]=='function class':   faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns_of_class(faults[1]).items() for mode in fxn.faultmodes]
                 elif faults[0]=='function classes': faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns_of_class(f).items() for mode in fxn.faultmodes]
                 else: raise Exception("Invalid option in tuple argument: "+str(faults[0]))
@@ -2161,8 +2304,10 @@ class SampleApproach():
                 self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components.items()}
         if type(jointfaults['faults'])==int or jointfaults['faults']=='all':
-            if jointfaults['faults']=='all': num_joint= len(self._fxnmodes)
-            else:                            num_joint=jointfaults['faults']
+            if jointfaults['faults']=='all': 
+                if not jointfaults.get('jointfuncs', False): num_joint = len({i[0] for i in self._fxnmodes})
+                else:                                        num_joint= len(self._fxnmodes)
+            else:                                            num_joint=jointfaults['faults']
             self.jointmodes=[]
             inclusive = jointfaults.get('inclusive', True)
             if inclusive:
@@ -2179,49 +2324,63 @@ class SampleApproach():
             else: raise Exception("Invalid option for jointfault['inclusive']")
         elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
         elif jointfaults['faults']!='None': raise Exception("Invalid jointfaults argument type: "+str(type(jointfaults['faults'])))
-    def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}):
+    def calc_intervaltime(self,times, tstep):
+        return float(times[1]-times[0])+tstep
+    def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}, join_modephases=False):
         """ Initializes rates, rates_timeless"""
         self.rates=dict.fromkeys(self._fxnmodes)
         self.rates_timeless=dict.fromkeys(self._fxnmodes)
         self.mode_phase_map=dict.fromkeys(self._fxnmodes)
         
         for (fxnname, mode) in self._fxnmodes:
-            key_phases = mdl.fxns[fxnname].key_phases_by
-            if key_phases=='global': fxnphases = self.globalphases
-            elif key_phases=='none': fxnphases = {'operating':[mdl.times[0], mdl.times[-1]]} 
-            else: fxnphases = self.phases.get(key_phases, self.globalphases)
-            fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))
             self.rates[fxnname, mode]=dict(); self.rates_timeless[fxnname, mode]=dict(); self.mode_phase_map[fxnname, mode] = dict()
             overallrate = self.fxnrates[fxnname]
+            dist = self._fxnmodes[fxnname, mode]['dist']
             if self.comprates[fxnname]:
                 for compname, component in mdl.fxns[fxnname].components.items():
                     if mode in component.faultmodes:
                         overallrate=self.comprates[fxnname][compname]
+            key_phases = mdl.fxns[fxnname].key_phases_by
             
-            if modephases and (key_phases not in ['global', 'none']):
-                modevect = self._fxnmodes[fxnname, mode]['oppvect']
-                oppvect = {phase:0 for phase in fxnphases}
-                oppvect.update({phase:modevect.get(mode, 0)/len(phases)  for mode,phases in modephases[key_phases].items() for phase in phases})
+            if modephases and join_modephases and (key_phases not in ['global', 'none']):
+                if type (self._fxnmodes[fxnname, mode]['oppvect'])==list:
+                    raise Exception("Poorly specified oppvect for fxn: "+fxnname+" mode: "+mode+"--provide a dict to use with modephases")
+                oppvect = {**{phase:0 for phase in modephases[fxnname]}, **self._fxnmodes[fxnname, mode]['oppvect']}
+                fxnphases = {m:[self.phases[fxnname][ph] for ph in m_phs] for m, m_phs in modephases[fxnname].items()}
             else:
-                a=1
-                if type(self._fxnmodes[fxnname, mode]['oppvect'])==dict: 
+                if key_phases=='global': fxnphases = self.globalphases
+                elif key_phases=='none': fxnphases = {'operating':[mdl.times[0], mdl.times[-1]]} 
+                else: fxnphases = self.phases.get(key_phases, self.globalphases)
+                fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))  
+                if modephases and (key_phases not in ['global', 'none']):
+                    modevect = self._fxnmodes[fxnname, mode]['oppvect']
                     oppvect = {phase:0 for phase in fxnphases}
-                    oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
+                    oppvect.update({phase:modevect.get(mode, 0)/len(phases)  for mode,phases in modephases[key_phases].items() for phase in phases})
                 else:
-                    oppvect = self._fxnmodes[fxnname, mode]['oppvect']
-                    if type(oppvect)==int or len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
-                    elif self.globalphases!=mdl.phases: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(mdl.phases)}
-                    elif len(oppvect)!=len(fxnphases): raise Exception("Invalid Opportunity vector: "+fxnname+". Invalid length.")
-                    else: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(fxnphases)}
+                    a=1
+                    if type(self._fxnmodes[fxnname, mode]['oppvect'])==dict: 
+                        oppvect = {phase:0 for phase in fxnphases}
+                        oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
+                    else:
+                        oppvect = self._fxnmodes[fxnname, mode]['oppvect']
+                        if type(oppvect)==int or len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
+                        elif self.globalphases!=mdl.phases: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(mdl.phases)}
+                        elif len(oppvect)!=len(fxnphases): raise Exception("Invalid Opportunity vector: "+fxnname+". Invalid length.")
+                        else: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(fxnphases)}
             for phase, times in fxnphases.items():
                 opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
-                dist = self._fxnmodes[fxnname, mode]['dist']
-                if self._fxnmodes[fxnname, mode]['probtype']=='rate' and len(times)>1:      
-                    dt = float(times[1]-times[0]) 
+                
+                if self._fxnmodes[fxnname, mode]['probtype']=='prob':   dt = mdl.tstep; unitfactor = 1
+                elif type(times[0])==list:
+                    dt = sum([self.calc_intervaltime(ts, mdl.tstep) for ts in times])
                     unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
-                elif self._fxnmodes[fxnname, mode]['probtype']=='prob' or len(times)>=1:    
-                    dt = 1
-                    unitfactor = 1
+                elif self._fxnmodes[fxnname, mode]['probtype']=='rate' and len(times)>1:      
+                    dt = self.calc_intervaltime(times, mdl.tstep)
+                    unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
+                    times=[times]
+                elif self._fxnmodes[fxnname, mode]['probtype']=='rate':  
+                    dt = mdl.tstep
+                    unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
                 self.rates[fxnname, mode][key_phases, phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
                 self.rates_timeless[fxnname, mode][key_phases, phase] = overallrate*opp*dist
                 self.mode_phase_map[fxnname, mode][key_phases, phase] = times
@@ -2233,25 +2392,34 @@ class SampleApproach():
                 self.mode_phase_map.update({jointmode:dict()})
                 jointphase_list = [self.mode_phase_map[mode] for mode in jointmode]
                 jointphase_dict = {k:v for mode in jointmode for k,v in self.mode_phase_map[mode].items()}
-                for phase_combo in itertools.product(*jointphase_list):
+                phasecombos = [i for i in itertools.product(*jointphase_list)]
+                if 'limit jointphases' in jointfaults and jointfaults['limit jointphases']<len(phasecombos): 
+                    rng = np.random.default_rng()
+                    pc_inds = [i for i in range(len(phasecombos))]
+                    pc_choices = rng.choice(pc_inds, jointfaults['limit jointphases'], replace=False)
+                    phasecombos = [phasecombos[i] for i in pc_choices]
+                for phase_combo in phasecombos:
                     intervals = [jointphase_dict[phase] for phase in phase_combo]
-                    overlap = find_overlap_n(intervals)
+                    overlap, intervals_times = find_overlap_n(intervals)
                     if overlap: 
                         phaseid = tuple(set(phase_combo))
                         if len(phaseid) == 1: 
                             phaseid = phaseid[0]
                             rates=[self.rates[fmode][phaseid] for fmode in jointmode]
                         else:
-                            rates = [self.rates[fmode][phase_combo[i]]* np.subtract(*overlap)/np.subtract(*self.mode_phase_map[fmode][phase_combo[i]]) for i,fmode in enumerate(jointmode)]
+                            rates = [self.rates[fmode][phase_combo[i]]* len(overlap)/intervals_times[i] for i,fmode in enumerate(jointmode)]
                         if not jointfaults.get('pcond', False): # if no input, assume independence
                             prob = np.prod(1-np.exp(-np.array(rates)))
                             self.rates[jointmode][phaseid] = -np.log(1.0-prob)
-                        elif type(jointfaults['pcond'])==float:
+                        elif type(jointfaults['pcond']) in [float, int]:
                             self.rates[jointmode][phaseid] = jointfaults['pcond']*max(rates)
                         elif type(jointfaults['pcond'])==list:
                             self.rates[jointmode][phaseid] = jointfaults['pcond'][j_ind]*max(rates)
-                        if len(overlap)>1:  self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(overlap[1]-overlap[0])
-                        else:               self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]
+                        else: raise Exception("Invalid pcond argument in jointfaults: "+str(jointfaults['pcond']))
+                        if len(overlap)>1:  
+                            self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(len(overlap)*self.tstep)
+                        else:
+                            self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]
                         self.mode_phase_map[jointmode][phaseid] = overlap 
             if not jointfaults.get('inclusive', True): 
                 for (fxnname, mode) in self._fxnmodes: 
@@ -2269,9 +2437,18 @@ class SampleApproach():
                     times = self.mode_phase_map[fxnmode][phaseid]
                     param = params.get((fxnmode,phaseid), default)
                     self.sampparams[fxnmode, phaseid] = param
-                    if len(times)<=1: self.add_phasetimes(fxnmode, phaseid, times)
+                    if type(times[0])!=list: times=[times]
+                    possible_phasetimes=[]
+                    for ts in times: 
+                        if len(ts)==1:      possible_phasetimes = ts
+                        elif len(ts)<2:     possible_phasetimes= ts
+                        else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[1]+self.tstep, self.tstep))
+                    possible_phasetimes.sort()
+                    possible_phasetimes=list(set(possible_phasetimes))
+                    if len(possible_phasetimes)<=1: 
+                        a=1
+                        self.add_phasetimes(fxnmode, phaseid, possible_phasetimes)
                     else:
-                        possible_phasetimes = list(np.arange(times[0], times[1], self.tstep))
                         if param['samp']=='likeliest':
                             weights=[]
                             if self.rates[fxnmode][phaseid] == max(list(self.rates[fxnmode].values())):
@@ -2386,7 +2563,15 @@ class SampleApproach():
                         self.scenlist=self.scenlist+[scen]
                         if self.scenids.get((fxnmode, phaseid)): self.scenids[fxnmode, phaseid] = self.scenids[fxnmode, phaseid] + [name]
                         else: self.scenids[fxnmode, phaseid] = [name]
+        self.times = list(set(self.times))
         self.times.sort()
+    def reduce_scens_to_samp(self, samp_size=100,seed=None):
+        """Reduces the number of scenarios (in the scenlist) to a given sample size samp_size. Useful for
+        choosing a random subset of an approach which would otherwise have a large number of scenarios.
+        Note that many structures may not be preserved and some artefacts may be present."""
+        if samp_size<len(self.scenlist):
+            rng = np.random.default_rng(seed)
+            self.scenlist = rng.choice(self.scenlist, samp_size, replace=False)
     def prune_scenarios(self,endclasses,samptype='piecewise', threshold=0.1, sampparam={'samp':'evenspacing','numpts':1}):
         """
         Finds the best sample approach to approximate the full integral (given the approach was the full integral).
@@ -2455,25 +2640,106 @@ class SampleApproach():
         self.sampparams={key:{'samp':'pruned '+samptype} for key in self.sampparams}
     def list_modes(self, joint=False):
         """ Returns a list of modes in the approach """
-        if joint:
+        if joint and hasattr(self, 'jointmodes'):
             return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()] + self.jointmodes
         else:
             return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
     def list_moderates(self):
         """ Returns the rates for each mode """
         return {(fxn, mode): sum(self.rates[fxn,mode].values()) for (fxn, mode) in self.rates.keys()}
+    def get_scenid_groups(self,group_by='phases', group_dict={}):
+        """
+        Returns a dict with different scenario ids grouped according to group_by. 
+        group_by: str, with options:
+        - 'none':           Returns {'scenid':'scenid'} for all scenarios
+        - 'phase':          Returns {(fxnmode, fxnphase):{scenids}}--identical scenarios within a given phase are grouped 
+        - 'fxnfault':       Returns {fxnmode:{scenids}} All identical scenarios (fxn, mode) are grouped
+        - 'mode':           Returns {mode:{scenids}}. All scenarios with the same mode name are grouped
+        - 'mode type':      Returns {modetype:scenids}. All scenarios with the same mode type (mode types must be given to the sampleapproach) are grouped
+        - 'functions':      Returns {function:scenids}. All scenarios and modes from a given function are grouped.
+        - 'times':          Returns {time:scenids}. All scenarios at a given time are grouped.
+        - 'fxnclassfault':  Returns {(fxnclass, mode):scenids}. All scenarios (fxnclass, mode) from a given function class are grouped.
+        - 'fxnclass':       Returns {fxnclass:scendis}. All scenarios from a given function class are grouped.
+        For 'fxnclass', 'fxnclassfault', and 'modetype', a group_dict dictionary must be provided that groups the function/mode classes/types.
+        -------------------
+        Returns:
+        - grouped_scens: dict
+              A dictionary of the scenario ids associated with the given group {group:scenids}  
+        """
+        if group_by in ['fxnclass', 'fxnclassfault', 'modetype'] and not group_dict:
+            raise Exception("group_dict must be provided to group by these")
+        if group_by=='none':         grouped_scens =   {s:[s] for v in self.scenids.values() for s in v}
+        elif group_by=='phase':      grouped_scens =   self.scenids
+        elif group_by=='fxnfault':   
+            grouped_scens = {m:set() for m in self.list_modes(True)}
+            for modephase, ids in self.scenids.items(): grouped_scens[modephase[0]].update(ids)
+        elif group_by=='mode':
+            grouped_scens = {m[1]:set() for m in self.list_modes(True)}
+            for modephase, ids in self.scenids.items(): grouped_scens[modephase[0][1]].update(ids)
+        elif group_by=='functions':
+            grouped_scens = {m[0]:set() for m in self.list_modes(True)}
+            for modephase, ids in self.scenids.items(): grouped_scens[modephase[0][0]].update(ids)
+        elif group_by=='times':
+            grouped_scens = {float(t):set() for t in set(self.times)}
+            for scen in self.scenlist: 
+                time = float(scen['properties']['time'])
+                grouped_scens[time].add(scen['properties']['name'])
+        elif group_by=='fxnclass':
+            fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
+            grouped_scens= {fxn_groups[fxnmode[0]]:set() for fxnmode in self.list_modes(True)}
+            grouped_scens['nominal']={'nominal'}
+            for modephase, ids in self.scenids.items(): 
+                fxn = modephase[0][0]
+                group = fxn_groups[fxn]
+                grouped_scens[group].update(ids)
+        elif group_by=='fxnclassfault':
+            fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
+            grouped_scens= {(fxn_groups[fxnmode[0]], fxnmode[1]):set() for fxnmode in self.list_modes(True)}
+            grouped_scens['nominal']={'nominal'}
+            for modephase, ids in self.scenids.items(): 
+                fxn, mode = modephase[0]
+                group = fxn_groups[fxn]
+                grouped_scens[group, mode].update(ids)
+        elif group_by=='modetype':
+            grouped_scens= {group:set() for group in group_dict}
+            grouped_scens['ungrouped'] =set()
+            for modephase, ids in self.scenids.items(): 
+                mode = modephase[0][1]
+                grouped=False
+                for group in grouped_scens:
+                    if group in mode: 
+                        grouped_scens[group].update(ids)
+                        grouped=True
+                        break
+                if not grouped: grouped_scens['ungrouped'].update(ids)    
+        else: raise Exception("Invalid option for group_by: "+group_by)
+        return grouped_scens
+    def get_id_weights(self):
+        """Returns a dictionary with weights for each scenario with structure {scenid:weight}"""
+        id_weights ={}
+        for scens, ids in self.scenids.items():
+            num_phases = len([n for n,i in self.weights[scens[0]].items() if i])
+            weights = np.array([*self.weights[scens[0]][scens[1]].values()])/num_phases
+            id_weights.update({scenid:weights[i] for i,scenid in enumerate(ids)})
+        return id_weights
+
 
 
 def find_overlap_n(intervals):
     """Finds the overlap between given intervals.
     Used to sample joint fault modes with different (potentially overlapping) phases """
     try:
-        upper_limits = [interval[1] for interval in intervals]
-        lower_limits = [interval[0] for interval in intervals]
-        if any(u < l for u in upper_limits for l in lower_limits): return []
-        if not upper_limits and not lower_limits: return []
-        orderedintervals = np.sort(upper_limits+lower_limits)
-        return [orderedintervals[len(intervals)-1],orderedintervals[len(intervals)]]
+        joined_times={}
+        intervals_times = []
+        for i, interval in enumerate(intervals):
+            if type(interval[0]) in [float, int]: interval=[interval]
+            possible_times = set()
+            possible_times.update(*[{*np.arange(i[0],i[-1]+1)} for i in interval])
+            if i==0:    joined_times = possible_times
+            else:       joined_times = joined_times.intersection(possible_times)
+            intervals_times.append(len(possible_times))
+        if not joined_times:    return [], intervals_times
+        else:                   return [*np.sort([*joined_times])], intervals_times
     except IndexError:
         if all(intervals[0]==i for i in intervals): return intervals[0]
         else:                                       return 0
