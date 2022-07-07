@@ -123,9 +123,9 @@ class ExportHE(FxnBlock):
         super().__init__(name,flows,['HE_in'])
         self.assoc_modes({'hot_sink':[1e-5,500], 'ineffective_sink':[0.5e-5,1000]})
     def behavior(self,time):
-        if self.has_fault('ineffective_sink'):  self.HE_in.effort=4.0
-        elif self.has_fault('hot_sink'):        self.HE_in.effort=2.0
-        else:                                   self.HE_in.effort=1.0
+        if self.has_fault('ineffective_sink'):  self.HE_in.rate=4.0
+        elif self.has_fault('hot_sink'):        self.HE_in.rate=2.0
+        else:                                   self.HE_in.rate=1.0
                  
         
 class ExportME(FxnBlock):
@@ -149,29 +149,29 @@ class EEtoME(FxnBlock):
                           'open_circuit':[5e-5,200], 'short':[5e-5,200]})
     def behavior(self, time):
         if self.has_fault('high_torque'):
-            self.HE_out.rate = self.EE_in.effort + 1.0
+            self.HE_out.effort = self.EE_in.effort + 1.0
             self.ME_out.effort = self.EE_in.effort + 1.0
             self.EE_in.rate =1.0/(self.ME_out.rate+0.001) -1.0
         elif self.has_fault('low_torque'):
-            self.HE_out.rate = self.EE_in.effort - 1.0
+            self.HE_out.effort = self.EE_in.effort - 1.0
             self.ME_out.effort = self.EE_in.effort - 1.0
             self.EE_in.rate =1.0/(self.ME_out.rate+0.001) -1.0
         elif self.has_fault('toohigh_torque'):
-            self.HE_out.rate = 4.0
+            self.HE_out.effort = 4.0
             self.ME_out.effort = 4.0
             self.EE_in.rate = 4.0
         elif self.has_fault('open_circuit'):
-            self.HE_out.rate = 0.0
+            self.HE_out.effort = 0.0
             self.ME_out.effort = 0.0
             self.ME_out.rate = 0.0
             self.EE_in.rate = 0.0
         elif self.has_fault('short'):
             self.EE_in.rate = self.EE_in.effort * 4.0
-            self.HE_out.rate = self.EE_in.effort 
+            self.HE_out.effort = self.EE_in.effort 
             self.ME_out.effort = 0.0
             self.ME_out.rate = 0.0
         else:
-            self.HE_out.rate = self.EE_in.effort
+            self.HE_out.effort = self.EE_in.effort
             self.ME_out.effort = self.EE_in.effort
             self.ME_out.rate =self.EE_in.effort
             self.EE_in.rate = self.EE_in.effort
@@ -290,6 +290,7 @@ if __name__ == '__main__':
 
     mdl= EPS()
     rd.graph.show(mdl.bipartite, gtype='bipartite')
+    endclasses, mdlhists = propagate.single_faults(mdl)
 
     endresults,resgraph, mdlhists = propagate.one_fault(mdl, 'EE_to_ME', 'toohigh_torque')
     rd.graph.show(resgraph)
@@ -306,7 +307,7 @@ if __name__ == '__main__':
     rd.graph.show(mdl.bipartite,gtype='bipartite', heatmap=degtimemap)
     rd.graph.show(resgraph,heatmap=degtimemap)
 
-    endclasses, mdlhists = propagate.single_faults(mdl)
+    
     
     
         

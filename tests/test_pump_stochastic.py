@@ -22,12 +22,12 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_run_safety(self):
         """ Tests that two models with the same seed will run the same and produce the same results"""
         for seed in [None, 1, 10, 209840]:
-            mdl = Pump(modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':seed})
+            mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':seed})
             seed0 = mdl.seed
             endresults_1, resgraph_1, mdlhist_1=propagate.nominal(mdl, run_stochastic=True)
             endclasses_1, mdlhists_1=propagate.single_faults(mdl, run_stochastic=True, showprogress=False)
             if seed==None: seed=mdl.seed
-            mdl2 = Pump(modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':seed})
+            mdl2 = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':seed})
             seed1 = mdl2.seed
             endresults_2, resgraph_2, mdlhist_2=propagate.nominal(mdl2, run_stochastic=True)
             endclasses_2, mdlhists_2=propagate.single_faults(mdl2, run_stochastic=True, showprogress=False)

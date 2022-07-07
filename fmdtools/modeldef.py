@@ -1353,7 +1353,7 @@ class Model(object):
     def find_any_phase_overlap(self):
         intervals = [*self.phases.values()]
         int_low = np.sort([i[0] for i in intervals])
-        int_high = np.sort([i[1] for i in intervals])
+        int_high = np.sort([i[1] if len(i)==2 else i[0] for i in intervals])
         for i, il in enumerate(int_low):
             if i+1==len(int_low): break
             if int_low[i+1]<=int_high[i]:
@@ -2370,7 +2370,7 @@ class SampleApproach():
             for phase, times in fxnphases.items():
                 opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
                 
-                if self._fxnmodes[fxnname, mode]['probtype']=='prob': dt = mdl.tstep; unitfactor = 1
+                if self._fxnmodes[fxnname, mode]['probtype']=='prob':   dt = mdl.tstep; unitfactor = 1
                 elif type(times[0])==list:
                     dt = sum([self.calc_intervaltime(ts, mdl.tstep) for ts in times])
                     unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
@@ -2378,6 +2378,9 @@ class SampleApproach():
                     dt = self.calc_intervaltime(times, mdl.tstep)
                     unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
                     times=[times]
+                elif self._fxnmodes[fxnname, mode]['probtype']=='rate':  
+                    dt = mdl.tstep
+                    unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
                 self.rates[fxnname, mode][key_phases, phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
                 self.rates_timeless[fxnname, mode][key_phases, phase] = overallrate*opp*dist
                 self.mode_phase_map[fxnname, mode][key_phases, phase] = times
@@ -2637,7 +2640,7 @@ class SampleApproach():
         self.sampparams={key:{'samp':'pruned '+samptype} for key in self.sampparams}
     def list_modes(self, joint=False):
         """ Returns a list of modes in the approach """
-        if joint:
+        if joint and hasattr(self, 'jointmodes'):
             return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()] + self.jointmodes
         else:
             return [(fxn, mode) for fxn, mode in self._fxnmodes.keys()]
@@ -2668,13 +2671,13 @@ class SampleApproach():
         if group_by=='none':         grouped_scens =   {s:[s] for v in self.scenids.values() for s in v}
         elif group_by=='phase':      grouped_scens =   self.scenids
         elif group_by=='fxnfault':   
-            grouped_scens = {m:set() for m in self.list_modes()}
+            grouped_scens = {m:set() for m in self.list_modes(True)}
             for modephase, ids in self.scenids.items(): grouped_scens[modephase[0]].update(ids)
         elif group_by=='mode':
-            grouped_scens = {m[1]:set() for m in self.list_modes()}
+            grouped_scens = {m[1]:set() for m in self.list_modes(True)}
             for modephase, ids in self.scenids.items(): grouped_scens[modephase[0][1]].update(ids)
         elif group_by=='functions':
-            grouped_scens = {m[0]:set() for m in self.list_modes()}
+            grouped_scens = {m[0]:set() for m in self.list_modes(True)}
             for modephase, ids in self.scenids.items(): grouped_scens[modephase[0][0]].update(ids)
         elif group_by=='times':
             grouped_scens = {float(t):set() for t in set(self.times)}
@@ -2683,7 +2686,7 @@ class SampleApproach():
                 grouped_scens[time].add(scen['properties']['name'])
         elif group_by=='fxnclass':
             fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
-            grouped_scens= {fxn_groups[fxnmode[0]]:set() for fxnmode in self.list_modes()}
+            grouped_scens= {fxn_groups[fxnmode[0]]:set() for fxnmode in self.list_modes(True)}
             grouped_scens['nominal']={'nominal'}
             for modephase, ids in self.scenids.items(): 
                 fxn = modephase[0][0]
@@ -2691,7 +2694,7 @@ class SampleApproach():
                 grouped_scens[group].update(ids)
         elif group_by=='fxnclassfault':
             fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
-            grouped_scens= {(fxn_groups[fxnmode[0]], fxnmode[1]):set() for fxnmode in self.list_modes()}
+            grouped_scens= {(fxn_groups[fxnmode[0]], fxnmode[1]):set() for fxnmode in self.list_modes(True)}
             grouped_scens['nominal']={'nominal'}
             for modephase, ids in self.scenids.items(): 
                 fxn, mode = modephase[0]
@@ -2729,6 +2732,7 @@ def find_overlap_n(intervals):
         joined_times={}
         intervals_times = []
         for i, interval in enumerate(intervals):
+            if type(interval[0]) in [float, int]: interval=[interval]
             possible_times = set()
             possible_times.update(*[{*np.arange(i[0],i[-1]+1)} for i in interval])
             if i==0:    joined_times = possible_times

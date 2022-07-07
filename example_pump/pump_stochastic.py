@@ -108,7 +108,7 @@ class MoveWat(FxnBlock):
     def condfaults(self, time):
         if self.delay:
             if self.Watout.pressure>15.0:
-                if time>self.time:                  self.timer.inc(self.tstep)
+                if time>self.time:                  self.timer.inc(self.dt)
                 if self.timer.time>self.delay:      self.add_fault('mech_break')
         else:
             if self.Watout.pressure>15.0: self.add_fault('mech_break')
@@ -139,7 +139,7 @@ class Water(Flow):
 ##DEFINE MODEL OBJECT
 class Pump(Model):
     def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, \
-                 modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':1}, \
+                 modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':1}, \
                      valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
         super().__init__(params=params, modelparams=modelparams, valparams=valparams)
         self.add_flow('EE_1', {'current':1.0, 'voltage':1.0})
@@ -191,7 +191,7 @@ if __name__=="__main__":
     app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
     app.add_param_replicates(paramfunc, 'delay_10', 100, (10))
     
-    mdl = Pump(modelparams = {'phases':{'start':[0,5], 'on':[5, 50], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':3})
+    mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':3})
 
     
     # endresults, resgraph, mdlhist=propagate.nominal(mdl)
@@ -208,7 +208,7 @@ if __name__=="__main__":
     app_comp = NominalApproach()
     app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
     app_comp.add_param_replicates(paramfunc, 'delay_10', 100, (10))
-    endclasses, mdlhists=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('ExportWater','block')], staged=True)
+    endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('ExportWater','block')], staged=True)
     
     comp_mdlhists = {scen:mdlhist['ExportWater block, t=27'] for scen,mdlhist in mdlhists.items()}
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}

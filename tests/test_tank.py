@@ -52,7 +52,7 @@ class TankTests(unittest.TestCase, CommonTests):
             self.assertNotEqual(mdl_copy.fxns['Human'].components[compname].__hash__(),comp.__hash__())
     def test_local_tstep(self):
         """ Tests running the model with a different local timestep in the Store_Liquid function"""
-        mdl_global = Tank(modelparams = {'phases':{'na':[0,1],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min', 'use_local':False})
+        mdl_global = Tank(modelparams = {'phases':{'na':[0],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min', 'use_local':False})
         _, _, mdlhist_global = propagate.one_fault(mdl_global,'Store_Water','Leak', time=2)
         mdlhist_global = rd.process.flatten_hist(mdlhist_global)
         
@@ -129,12 +129,12 @@ class TankTests(unittest.TestCase, CommonTests):
 
 if __name__ == '__main__':
     
-    suite = unittest.TestSuite()
-    suite.addTest(TankTests("test_local_tstep"))
-    runner = unittest.TextTestRunner()
-    runner.run(suite)
+    #suite = unittest.TestSuite()
+    #suite.addTest(TankTests("test_local_tstep"))
+    #runner = unittest.TextTestRunner()
+    #runner.run(suite)
     
-    #unittest.main()
+    unittest.main()
     
     #mdl = Tank()
     #scen = {'Human': 'NotDetected'}

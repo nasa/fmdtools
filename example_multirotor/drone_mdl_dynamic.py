@@ -233,7 +233,7 @@ class Direc(Flow):
         
 class Drone(Model):
     def __init__(self, params={'graph_pos':{}, 'bipartite_pos':{}},\
-            modelparams={'phases': {'ascend':[0,5],'forward':[5,95],'descend':[95, 100]}, 'times':[0,135],'units':'sec'}, valparams={}):
+            modelparams={'phases': {'ascend':[0,4],'forward':[5,94],'descend':[95, 100]}, 'times':[0,135],'units':'sec'}, valparams={}):
         super().__init__(params, modelparams, valparams)
         #add flows to the model
         self.add_flow('Force_ST', {'support':1.0})
