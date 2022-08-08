@@ -1049,13 +1049,13 @@ def update_flowhist(mdl, mdlhist, t_ind):
         atts=mdl.flows[flowname].status()
         for att, val in atts.items():
             if att in mdlhist['flows'][flowname]:
+                if not np.can_cast(type(val), type(mdlhist["flows"][flowname][att][t_ind])):
+                    raise Exception(str(flowname)+" att "+str(att)+" changed type: "+str(type(mdlhist["flows"][flowname][att][t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind))
                 try:
                     mdlhist["flows"][flowname][att][t_ind] = val
                 except:
                     print("Value too large to represent: "+att+"="+str(val))
                     raise
-                if not np.can_cast(type(val), type(mdlhist["flows"][flowname][att][t_ind])):
-                    raise Exception(str(flowname)+" att "+str(att)+" changed type: "+str(type(mdlhist["flows"][flowname][att][t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind))
 def update_fxnhist(mdl, mdlhist, t_ind):
     """ Updates the functions (faults, states, components, actions) in the model history at t_ind 
     
