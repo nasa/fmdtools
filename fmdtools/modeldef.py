@@ -2827,25 +2827,27 @@ def get_pdf_for_rand(x, randname, args):
     """
     if type(x) not in [np.ndarray, list]: x=[x]
     if randname=='integers':
-        if len(args)==1:        return [1/args[0] for x in x]
-        elif len(args)>=2:      return [1/(args[1]-args[0]) for x in x]
-    elif randname=='random':    return [1 for x in x]
+        if len(args)==1:        pd= [1/args[0] for x in x]
+        elif len(args)>=2:      pd= [1/(args[1]-args[0]) for x in x]
+    elif randname=='random':    pd= [1 for x in x]
     elif randname=='bytes':     raise Exception("Not able to calcualte pdf for bytes")
     elif randname=='choice':    
         if type(args[0])==int:  options = np.arange(args[0])
         else:                   options = args[0]
         if len(args)==4:        p = args[3]
-        else:                   p = [1/len(options) for i in len(options)]
-        return [p[options.index[i]]  for i in x]
+        else:                   p = [1/len(options) for i in options]
+        pd= [p[options.index(i)]  for i in x]
     elif randname in ['shuffle', 'permutation']:
-        return 1/np.math.factorial(len(args[0]))
+        pd= [1/np.math.factorial(len(args[0]))]
     elif randname=='permuted':
         if len(args)>1 and type(args[0])==np.ndarray:
-            return 1/np.math.factorial(args[0].shape(args[1]))
+            pd= [1/np.math.factorial(args[0].shape(args[1]))]
         else:
-            return 1/np.math.factorial(len(args[0]))
+            pd= [1/np.math.factorial(len(args[0]))]
     else:
-        return get_pdf_for_dist(x,randname,args)
+        pd = get_pdf_for_dist(x,randname,args)
+    if type(pd) not in [np.ndarray, list]: pd = [pd]
+    return pd
 
 def get_scipy_pdf_helper(x, randname, args,pmf=False):
     """
@@ -2868,6 +2870,8 @@ def get_scipy_pdf_helper(x, randname, args,pmf=False):
     prob: float/array of probability densities
 
     """
+    if randname=='dirichlet':
+        a=1
     if pmf:     return getattr(stats, randname).pmf(x, *args)
     else:       return getattr(stats, randname).pdf(x, *args)
 def get_pdf_for_dist(x, randname, args): # note: when python 3.10 releases, this should become match/case
@@ -2889,7 +2893,7 @@ def get_pdf_for_dist(x, randname, args): # note: when python 3.10 releases, this
     prob: float/array of probability densities
     
     """
-    if type(x) in [np.ndarray, list] and len(args)>0: args=args[:-1]
+    if type(x) in [np.ndarray, list] and len(x)>1 and len(args)>0: args=args[:-1]
     
     same_funcs = ['beta', 'dirichlet', 'f', 'gamma', 'laplace', 'logistic', 'multivariate_normal', 'pareto', 'uniform', 'wald']
     same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
