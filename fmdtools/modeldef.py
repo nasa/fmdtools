@@ -14,6 +14,7 @@ Description: A module to define resilience models and simulations.
 #Created: October 2019
 
 import numpy as np
+from scipy import stats
 import itertools
 import dill
 import networkx as nx
@@ -555,7 +556,7 @@ class Block(Common):
         else:                       self.add_fault(*default)
     def set_rand(self,statename,methodname, *args):
         """
-        Update the given random state with a given method and arguments
+        Update the given random state with a given method and arguments (if in run_stochastic mode)
 
         Parameters
         ----------
@@ -567,8 +568,26 @@ class Block(Common):
             arguments for the numpy method
         """
         if getattr(self, 'run_stochastic', True):
-            gen_method = getattr(self.rngs[statename], methodname)
-            setattr(self, statename, gen_method(*args))
+            self.set_rand_helper(statename, methodname, *args)
+    def set_rand_helper(self,statename,methodname,*args):
+        """
+        Update the given random state with a given method and arguments (helper function - use set_rand instead)
+
+        Parameters
+        ----------
+        statename : str
+            name of the random state defined in assoc_rand_state(s)
+        methodname : 
+            str name of the numpy method to call in the rng
+        *args : args
+            arguments for the numpy method
+        """
+        gen_method = getattr(self.rngs[statename], methodname)
+        setattr(self, statename, gen_method(*args))
+    def get_rand_dens(self,statename, methodname, *args):
+        prob_dens=0.0
+        
+        return prob_dens
     def to_default(self,*statenames):
         """ Resets (given or all by default) random states to their default values
         
@@ -699,8 +718,7 @@ class Block(Common):
         """Updates the defined stochastic states defined to auto-update (see assoc_randstates)."""
         for statename, generator in self.rngs.items():
             if self._rng_params[statename][1]:
-                gen_method = getattr(generator, self._rng_params[statename][1])
-                setattr(self, statename, gen_method(*self._rng_params[statename][2]))
+                self.set_rand_helper(statename, self._rng_params[statename][1], *self._rng_params[statename][2])
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used by default in 
         derived objects when resetting the model. Requires associated flows to be cleared first."""
@@ -2788,6 +2806,76 @@ def trunc(x, n=2.0, truncif='greater'):
     elif  truncif=='greater' and x<n:   y=n
     else:                               y=x
     return y
+
+
+# note - these only work for distributions - what about choices? integers? random? bytes? shuffle? permutation? permuted?
+
+def get_pdf_for_rand(x, randname, args):
+    if type(x) not in [np.ndarray, list]: x=[x]
+    if randname=='integers':
+        if len(args)==1:        return [1/args[0] for x in x]
+        elif len(args)>=2:      return [1/(args[1]-args[0]) for x in x]
+    elif randname=='random':    return [1 for x in x]
+    elif randname=='bytes':     raise Exception("Not able to calcualte pdf for bytes")
+    elif randname=='choice':    
+        if type(args[0])==int:  options = np.arange(args[0])
+        else:                   options = args[0]
+        if len(args)==4:        p = args[3]
+        else:                   p = [1/len(options) for i in len(options)]
+        return [p[options.index[i]]  for i in x]
+    elif randname in ['shuffle', 'permutation']:
+        return 1/np.math.factorial(len(args[0]))
+    elif randname=='permuted':
+        if len(args)>1 and type(args[0])==np.ndarray:
+            return 1/np.math.factorial(args[0].shape(args[1]))
+        else:
+            return 1/np.math.factorial(len(args[0]))
+    else:
+        return get_pdf_for_dist(x,randname,args)
+
+def get_scipy_pdf_helper(x, randname, args,pmf=False):
+    if pmf:     return getattr(stats, randname).pmf(x, *args)
+    else:       return getattr(stats, randname).pdf(x, *args)
+def get_pdf_for_dist(x, randname, args): # note: when python 3.10 releases, this should become match/case
+    if type(x) in [np.ndarray, list] and len(args)>0: args=args[:-1]
+    
+    same_funcs = ['beta', 'dirichlet', 'f', 'gamma', 'laplace', 'logistic', 'multivariate_normal', 'pareto', 'uniform', 'wald']
+    same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
+    different_funcs_pmf = {'binomial':'binom', 'geometric':'geom', 'logseries':'logser',\
+                           'multivariate_hypergeometric':'multivariate_hypergeom',\
+                           'negative_binomial':'nbinom'}
+    different_funcs = {'chisquare':'chi2', 'gumbel':'gumbel_r', 'noncentral_chisquare':'ncx2',\
+                       'noncentral_f':'ncf', 'normal':'norm', 'power':'powerlaw', 'standard_cauchy':'cauchy',\
+                       'standard_gamma':'gamma', 'standard_normal':'norm', 'weibull':'weibull_min'}
+    if randname in same_funcs:            
+        return get_scipy_pdf_helper(x,randname, args)
+    elif randname in same_funcs_pmf:
+        return get_scipy_pdf_helper(x, randname, args, pmf=True)
+    elif randname in ['exponential', 'rayleigh']:   
+        if len(args)==0:            return getattr(stats, randname).pdf(x)
+        elif len(args)==1:          return getattr(stats, randname).pdf(x, scale=args[0]) 
+        elif len(args)==2:          return getattr(stats, randname).pdf(x, loc=args[1], scale=args[0]) 
+        else: raise Exception("Too many arguments for "+randname+" distribution")
+    elif randname=='hypergeometric': 
+        n_pop = args[0]+args[1]
+        n_good = args[0]
+        n_sample = args[2]
+        return stats.hypergeom.pmf(x,n_pop, n_good, n_sample)
+    elif randname=='lognormal':
+        s=args[1]
+        scale=np.exp(args[0])
+        return stats.lognormal.pdf(x, s, scale=scale) 
+    elif randname=='standard_t': return stats.multivariate_t.pdf(x, df=args[0])
+    elif randname=='triangular':
+        left, mode, right = args[:3]
+        loc = left
+        scale = right-loc
+        c = (mode-loc)/scale
+        return stats.triang.pdf(x,c,loc,scale)
+    elif randname=='vonmises':
+        return stats.vonmises.pdf(x,args[1], args[0])
+    else: raise Exception("Invalid randname distribution: "+randname+". Ensure that it is a part of numpy.random/scipy.stats")
+
 
 def union(probs):
     """ Calculates the union of a list of probabilities [p_1, p_2, ... p_n] p = p_1 U p_2 U ... U p_n """
