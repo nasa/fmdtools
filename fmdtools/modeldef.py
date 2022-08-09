@@ -2807,10 +2807,24 @@ def trunc(x, n=2.0, truncif='greater'):
     else:                               y=x
     return y
 
-
-# note - these only work for distributions - what about choices? integers? random? bytes? shuffle? permutation? permuted?
-
 def get_pdf_for_rand(x, randname, args):
+    """
+    Gets the corresponding probability mass/density for  
+    for random sample x from 'randname' function in numpy.
+    
+    Parameters
+    ----------
+    x : int/float/array
+        samples to get probability mass/density of
+    randname : str
+        Name of numpy.random distribution
+    args : tuple
+        Arguments sent to numpy.random distribution
+
+    Returns
+    -------
+    prob: float/array of probability densities
+    """
     if type(x) not in [np.ndarray, list]: x=[x]
     if randname=='integers':
         if len(args)==1:        return [1/args[0] for x in x]
@@ -2834,9 +2848,47 @@ def get_pdf_for_rand(x, randname, args):
         return get_pdf_for_dist(x,randname,args)
 
 def get_scipy_pdf_helper(x, randname, args,pmf=False):
+    """
+    Gets probability mass/density for the outcome x from the distribution "randname" with arguments "args".
+    Used as a helper function in determining stochastic model state probability
+
+    Parameters
+    ----------
+    x : int/float/array
+        samples to get probability mass/density of
+    randname : str
+        Name of scipy.stats probability distribution
+    args : tuple
+        Arguments to send to scipy.stats.randname.pdf
+    pmf : Bool, optional
+        Whether the distribution uses a probability mass function instead of a pdf. The default is False.
+
+    Returns
+    -------
+    prob: float/array of probability densities
+
+    """
     if pmf:     return getattr(stats, randname).pmf(x, *args)
     else:       return getattr(stats, randname).pdf(x, *args)
 def get_pdf_for_dist(x, randname, args): # note: when python 3.10 releases, this should become match/case
+    """
+    Gets the corresponding probability mass/density (from scipy) for outcome x 
+    for probability distributions with name 'randname' in numpy.
+    
+    Parameters
+    ----------
+    x : int/float/array
+        samples to get probability mass/density of
+    randname : str
+        Name of numpy.random distribution
+    args : tuple
+        Arguments sent to numpy.random distribution
+
+    Returns
+    -------
+    prob: float/array of probability densities
+    
+    """
     if type(x) in [np.ndarray, list] and len(args)>0: args=args[:-1]
     
     same_funcs = ['beta', 'dirichlet', 'f', 'gamma', 'laplace', 'logistic', 'multivariate_normal', 'pareto', 'uniform', 'wald']
@@ -2851,6 +2903,10 @@ def get_pdf_for_dist(x, randname, args): # note: when python 3.10 releases, this
         return get_scipy_pdf_helper(x,randname, args)
     elif randname in same_funcs_pmf:
         return get_scipy_pdf_helper(x, randname, args, pmf=True)
+    elif randname in different_funcs:
+        return get_scipy_pdf_helper(x,different_funcs[randname], args)
+    elif randname in different_funcs_pmf:
+        return get_scipy_pdf_helper(x,different_funcs_pmf[randname], args, pmf=True)       
     elif randname in ['exponential', 'rayleigh']:   
         if len(args)==0:            return getattr(stats, randname).pdf(x)
         elif len(args)==1:          return getattr(stats, randname).pdf(x, scale=args[0]) 
