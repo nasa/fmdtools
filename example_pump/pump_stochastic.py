@@ -22,7 +22,7 @@ The flows are:
 """
 
 import sys, os
-sys.path.append(os.path.join('..'))
+sys.path.insert(0,os.path.join('..'))
 
 
 from fmdtools.modeldef import *
@@ -191,7 +191,7 @@ if __name__=="__main__":
     app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
     app.add_param_replicates(paramfunc, 'delay_10', 100, (10))
     
-    mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':3})
+    mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':4})
 
     
     # endresults, resgraph, mdlhist=propagate.nominal(mdl)
@@ -200,6 +200,23 @@ if __name__=="__main__":
     # endresults, resgraph, mdlhist=propagate.nominal(mdl,run_stochastic=True)
     # rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
     
+    for i in range(10):
+        propagate.propagate(mdl, {}, i, run_stochastic='track_pdf')
+        print(mdl.return_probdens())
+        for fxnname, fxn in mdl.fxns.items():
+            print(fxnname+': ')
+            print(fxn.return_probdens())
+            print(getattr(fxn,'pds', None))
+    
+    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic='track_pdf', modelparams={'seed':10})
+    
+    
+    mdlhist['faulty']['functions']['ImportEE']['probdens']
+    
+    rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
+    rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
+    
+    """
     endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, legend=False)
     
@@ -216,6 +233,7 @@ if __name__=="__main__":
     
     
     tab = rd.tabulate.resilience_factor_comparison(app_comp, endclasses, ['delay'], 'cost')
+    """
     # app = NominalApproach()
     # app.add_seed_replicates('test_seeds', 100)
     # endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)

@@ -583,11 +583,11 @@ class Block(Common):
             arguments for the numpy method
         """
         gen_method = getattr(self.rngs[statename], methodname)
-        setattr(self, statename, gen_method(*args))
-    def get_rand_dens(self,statename, methodname, *args):
-        prob_dens=0.0
-        
-        return prob_dens
+        newvalue = gen_method(*args)
+        setattr(self, statename, newvalue)
+        if self.run_stochastic == 'track_pdf':
+            value_pds = get_pdf_for_rand(newvalue, methodname, args)
+            self.pds.extend(value_pds)
     def to_default(self,*statenames):
         """ Resets (given or all by default) random states to their default values
         
@@ -716,6 +716,7 @@ class Block(Common):
         return {obj.type for name, obj in self.flows.items()}
     def update_stochastic_states(self):
         """Updates the defined stochastic states defined to auto-update (see assoc_randstates)."""
+        if self.run_stochastic == 'track_pdf': self.pds=[]
         for statename, generator in self.rngs.items():
             if self._rng_params[statename][1]:
                 self.set_rand_helper(statename, self._rng_params[statename][1], *self._rng_params[statename][2])
@@ -781,6 +782,17 @@ class Block(Common):
         for state in self._states:
             states[state]=getattr(self,state)
         return states, self.faults.copy()
+    def return_probdens(self):
+        state_pd = 1.0
+        if hasattr(self, 'components'): 
+            for compname, comp in self.components:
+                state_pd*=comp.return_probdens()
+        if hasattr(self, 'actions'):
+            for actionname, action in self.actions:
+                state_pd*=action.return_probdens()
+        if hasattr(self, 'pds'): state_pd= np.prod(self.pds)
+        else:                    state_pd= 1.0
+        return state_pd
     def check_update_nominal_faults(self):
         if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
         elif len(self.faults)==0:           self.faults.update(['nom'])
@@ -1148,6 +1160,7 @@ class FxnBlock(Block):
             for compname, comp in comp_actions.items():
                 self.faults.update({comp.localname+f for f in comp.faults if f!='nom'}) 
         self.time=time
+        if run_stochastic=='track_pdf' and self.rngs: self.probdens = self.return_probdens()
         self.check_update_nominal_faults()
         if self.exclusive_faultmodes==True and len(self.faults)>1: 
             raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.faults)+"\n Is the mode representation nonexclusive?")
@@ -1745,6 +1758,11 @@ class Model(object):
     def find_classification(self, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
         return {'rate':scen['properties'].get('rate', 0), 'cost': 1, 'expected cost': scen['properties'].get('rate',0)}
+    def return_probdens(self):
+        probdens=1.0
+        for fxn in self.fxns.values():
+            probdens *= getattr(fxn, 'probdens', 1.0)
+        return probdens
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) 
@@ -2846,7 +2864,8 @@ def get_pdf_for_rand(x, randname, args):
             pd= [1/np.math.factorial(len(args[0]))]
     else:
         pd = get_pdf_for_dist(x,randname,args)
-    if type(pd) not in [np.ndarray, list]: pd = [pd]
+    if type(pd)==list:              pd=np.array(pd)
+    elif type(pd) != np.ndarray:    pd=np.array([pd]) 
     return pd
 
 def get_scipy_pdf_helper(x, randname, args,pmf=False):
