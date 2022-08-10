@@ -19,6 +19,11 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     maxDiff=None
     def setUp(self):
         self.mdl = Pump()
+    def test_stochastic_pdf(self):
+        for i in range(10):
+            propagate.propagate(self.mdl, {}, i, run_stochastic='track_pdf')
+            
+            
     def test_run_safety(self):
         """ Tests that two models with the same seed will run the same and produce the same results"""
         for seed in [None, 1, 10, 209840]:

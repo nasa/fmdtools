@@ -67,6 +67,7 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True
             False - Thus, the model object that is returned can be modified and analyzed if needed
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
         Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs},
@@ -209,6 +210,7 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     max_mem : int
         Max memory (warns the user when memory is above threshold)
     Returns
@@ -283,6 +285,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
             False - Thus, the model object that is returned can be modified and analyzed if needed
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
         Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs},
@@ -382,7 +385,8 @@ def mult_fault(mdl, faultseq, track='all', rate=np.NaN, gtype='bipartite', track
             True (default) - re-instances the model so that multiple simulations can be run successively without causing problems
             False - Thus, the model object that is returned can be modified and analyzed if needed
     run_stochastic : bool
-        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+        Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
         Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
@@ -479,7 +483,8 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
             True (default) - re-instances the model (safe)
             False - model is not re-instantiated (unsafe--do not use model afterwards)
     run_stochastic : bool
-        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+        Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
         Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
@@ -569,7 +574,8 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
             True (default) - re-instances the model (safe)
             False - model is not re-instantiated (unsafe--do not use model afterwards)
     run_stochastic : bool
-        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+        Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
         Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
@@ -678,7 +684,8 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
             ('interval', n)--includes every nth time in the history
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     run_stochastic : bool
-        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+        Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
         Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv, 'apps':'filename.pkl'},
@@ -764,7 +771,8 @@ def exec_scen(mdl, scen, nomresgraph,nomhist, track='all', staged = True, track_
             ('interval', n)--includes every nth time in the history
             ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     run_stochastic : bool
-        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+        Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     save_args : dict
         Save dictionary to use in save_helper defining when/how to save the dictionary
     indiv_id : str
@@ -859,7 +867,8 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
     prevhist : dict, optional
         The previous results hist (for used in staged execution). The default is {}.
     run_stochastic : bool
-        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+        Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     Returns
     -------
     mdlhist : dict
@@ -887,14 +896,14 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
             histrange = track_times[1]
             shift=0
         if prevhist:    mdlhist = copy.deepcopy(prevhist)
-        else:           mdlhist = init_mdlhist(mdl, histrange, track=track)
+        else:           mdlhist = init_mdlhist(mdl, histrange, track=track, run_stochastic=run_stochastic)
     else: 
         timerange = np.arange(mdl.times[0], mdl.times[-1]+mdl.tstep, mdl.tstep)
         if track_times == "all":            histrange = timerange
         elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
         elif track_times[0]=='times':       histrange = track_times[1]
         shift = 0
-        mdlhist = init_mdlhist(mdl, histrange, track=track)
+        mdlhist = init_mdlhist(mdl, histrange, track=track, run_stochastic=run_stochastic)
     
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes)
@@ -941,7 +950,8 @@ def propagate(mdl, initfaults, time, flowstates={}, run_stochastic=False):
     time : float
         The current timestep.
     run_stochastic : bool
-        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+        Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     Returns
     -------
     flowstates : dict
@@ -969,7 +979,8 @@ def prop_time(mdl, time, initfaults, flowstates={}, run_stochastic=False):
     initfaults : dict
         Faults to inject during this propagation step.
     run_stochastic : bool
-        Whether to run stochastic behaviors or use default values for stochastic variables. Default is False.
+        Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
 
     Returns
     -------
@@ -1106,7 +1117,7 @@ def update_blockhist(blockname, block, blockhist, t_ind):
             blockhist[state][t_ind] = value
             if not np.can_cast(type(value), type(blockhist[state][t_ind])):
                 raise Exception(str(blockname)+" state "+str(state)+" changed type: "+str(type(blockhist[state][t_ind]))+" to "+str(type(value))+" at t_ind="+str(t_ind))
-    
+    if 'probdens' in blockhist: blockhist['probdens'][t_ind]=block.probdens
 def cut_mdlhist(mdlhist, ind):
     """Cuts unsimulated values from end of array
     
@@ -1154,7 +1165,7 @@ def cut_hist(hist, ind):
         else:                           newhist[attname] = vals[:ind+1]
     return newhist
 
-def init_mdlhist(mdl, timerange, track = 'all'):
+def init_mdlhist(mdl, timerange, track = 'all', run_stochastic=False):
     """
     Initializes the model history over a given timerange
 
@@ -1176,13 +1187,13 @@ def init_mdlhist(mdl, timerange, track = 'all'):
     """
     mdlhist={}
     if track == 'valparams':        track = mdl.valparams
-    if track=='functions':          mdlhist["functions"]=init_fxnhist(mdl, timerange, track='all') 
+    if track=='functions':          mdlhist["functions"]=init_fxnhist(mdl, timerange, track='all', run_stochastic=run_stochastic) 
     elif track=='flows':            mdlhist["flows"]=init_flowhist(mdl, timerange, track='all')
     elif track == 'all':                       
         mdlhist["flows"]=init_flowhist(mdl, timerange)
-        mdlhist["functions"]=init_fxnhist(mdl, timerange)
+        mdlhist["functions"]=init_fxnhist(mdl, timerange, run_stochastic=run_stochastic)
     elif type(track)==dict:
-        if 'functions' in track:    mdlhist["functions"]=init_fxnhist(mdl, timerange, track=track)
+        if 'functions' in track:    mdlhist["functions"]=init_fxnhist(mdl, timerange, track=track, run_stochastic=run_stochastic)
         if 'flows' in track:         mdlhist["flows"]=init_flowhist(mdl, timerange, track=track)
     else:
         if not track in ['none','None']: raise Exception("Invalid track option: "+str(track))
@@ -1215,7 +1226,7 @@ def init_flowhist(mdl, timerange, track='all'):
                 if track=='all' or track['flows'][flowname]=='all' or att in track['flows'][flowname]:
                     flowhist[flowname][att] = np.full([len(timerange)], val)
     return flowhist
-def init_fxnhist(mdl, timerange, track='all'):
+def init_fxnhist(mdl, timerange, track='all', run_stochastic=False):
     """Initializes the function state history fxnhist of the model mdl over the time range timerange
     
     Parameters
@@ -1236,7 +1247,7 @@ def init_fxnhist(mdl, timerange, track='all'):
     fxnhist = {}
     for fxnname, fxn in mdl.fxns.items():
         if track=='all' or fxnname in track['functions']:
-            fxnhist[fxnname] = init_blockhist(fxnname, fxn, timerange, track)
+            fxnhist[fxnname] = init_blockhist(fxnname, fxn, timerange, track, run_stochastic=run_stochastic)
             for comp_act in {*fxn.components, *fxn.actions}:
                 if track == 'all' or track['functions'][fxnname]=='all' or comp_act in track['functions'][fxnname]:
                     fxnhist[fxnname][comp_act]=init_blockhist(comp_act, getattr(fxn, comp_act), timerange, track='all')
@@ -1246,7 +1257,7 @@ def init_fxnhist(mdl, timerange, track='all'):
                     for att, val in flow.status().items():
                             fxnhist[fxnname][flowname][att] = np.full([len(timerange)], val)
     return fxnhist
-def init_blockhist(blockname, block, timerange, track='all'):
+def init_blockhist(blockname, block, timerange, track='all', run_stochastic=False):
     """ 
     Instantiates the block hist (faults, states) over the given timerange
     
@@ -1274,6 +1285,8 @@ def init_blockhist(blockname, block, timerange, track='all'):
         if track == 'all' or track['functions'][blockname]=='all' or state in track['functions'][blockname]:
             if state == 'mode': blockhist[state] = np.full([len(timerange)], value, dtype="U"+str(modelength))
             else:               blockhist[state] = np.full([len(timerange)], value)
+    if run_stochastic=='track_pdf' and block.rngs: 
+        blockhist['probdens'] = np.full([len(timerange)], block.return_probdens())
     return blockhist
 
 

@@ -42,6 +42,7 @@ class modeldef_Tests(unittest.TestCase, CommonTests):
             self.assertGreaterEqual(p_d[0], 0.0)    #note that some densities may be higher than this under some values, this is mainly a check 
             if randname in expected_values: # spot tests for common distributions
                 self.assertAlmostEqual(p_d[0], expected_values[randname], 3)
+            self.assertIsInstance(p_d, np.ndarray)
 
 
 if __name__ == '__main__':
