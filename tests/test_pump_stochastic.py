@@ -20,10 +20,13 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def setUp(self):
         self.mdl = Pump()
     def test_stochastic_pdf(self):
-        for i in range(10):
+        """Tests that (1) track_pdf option runs and (2) gives repeated probability density results under the same seed(s)"""
+        testvals = [6.32173873679189, 10.56678004828189, 37.27832255997974, 15.163623336729625,  0.10687727708471972, 5.313965836539551, 54.568223188266394, 33.79026902541023, 7.636851629723572]
+        for i in range(1,10):
+            self.mdl.update_seed(i)
             propagate.propagate(self.mdl, {}, i, run_stochastic='track_pdf')
-            
-            
+            pd = self.mdl.return_probdens()
+            self.assertAlmostEqual(pd, testvals[i-1])
     def test_run_safety(self):
         """ Tests that two models with the same seed will run the same and produce the same results"""
         for seed in [None, 1, 10, 209840]:
@@ -88,6 +91,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
 if __name__ == '__main__':
     #suite = unittest.TestSuite()
+    #suite.addTest(StochasticPumpTests("test_stochastic_pdf"))
     #suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
     #runner = unittest.TextTestRunner()
     #runner.run(suite)

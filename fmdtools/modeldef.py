@@ -253,16 +253,38 @@ class Block(Common):
         self.faults=set(['nom'])
         self.opermodes= getattr(self, 'opermodes', [])
         self.faultmodes= getattr(self, 'faultmodes', {})
-        self.rngs=getattr(self, 'rngs', {})
-        self._rng_params=getattr(self, '_rng_params', {})
-        if not getattr(self, 'seed', []): 
-            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]
-        self.rng=np.random.default_rng(self.seed)
+        self.update_seed()
         self.time=0.0
     def __repr__(self):
         if hasattr(self,'name'):
             return getattr(self, 'name', '')+' '+self.__class__.__name__+' '+getattr(self,'type', '')+': '+str(self.return_states())
         else: return 'New uninitialized '+self.__class__.__name__
+    def update_seed(self, seed=[]):
+        """
+        Updates/initializes seeds for the random states in the block and its actions/components.
+        (keeps seeds in sync)
+
+        Parameters
+        ----------
+        seed : int, optional
+            Random seed. The default is [].
+        """
+        self.rngs=getattr(self, 'rngs', {})
+        self._rng_params=getattr(self, '_rng_params', {})
+        if seed:    self.seed=seed
+        elif not getattr(self, 'seed', []): 
+            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]
+        self.rng=np.random.default_rng(self.seed)
+        for rng_name in self.rngs:
+            seed = self.rng.integers(np.iinfo(np.int32).max)
+            self.rngs[rng_name]=np.random.default_rng(seed)
+            self._rng_params[rng_name]=(*self._rng_params[rng_name][:3],seed)
+        if hasattr(self, 'components'):
+            for comp in self.components.values():
+                comp.update_seed(self.seed)
+        if hasattr(self, 'actions'):
+            for act in self.actions.values():
+                act.update_seed(self.seed)
     def add_params(self, *params):
         """Adds given dictionary(s) of parameters to the function/block.
         e.g. self.add_params({'x':1,'y':1}) results in a block where:
@@ -720,6 +742,7 @@ class Block(Common):
         for statename, generator in self.rngs.items():
             if self._rng_params[statename][1]:
                 self.set_rand_helper(statename, self._rng_params[statename][1], *self._rng_params[statename][2])
+        
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used by default in 
         derived objects when resetting the model. Requires associated flows to be cleared first."""
@@ -1359,7 +1382,6 @@ class Model(object):
         self.params=params
         self.valparams = valparams
         self.modelparams=modelparams
-        
         # model defaults to static representation if no timerange
         self.phases=modelparams.get('phases',{'na':[1]})
         self.find_any_phase_overlap()
@@ -1368,11 +1390,7 @@ class Model(object):
         self.units = modelparams.get('units', 'hr')
         self.use_local = modelparams.get('use_local', True)
         self.use_end_condition = modelparams.get('use_end_condition', True)
-        if modelparams.get('seed', False):  self.seed = modelparams['seed']
-        else:
-            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]                       
-            modelparams['seed']=self.seed
-        self._rng = np.random.default_rng(self.seed)
+        self.update_model_seed(modelparams.get('seed', False))
         
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
@@ -1389,6 +1407,25 @@ class Model(object):
             if i+1==len(int_low): break
             if int_low[i+1]<=int_high[i]:
                 raise Exception("Global phases overlap (see mdlparams):"+str(self.phases)+" Ensure the max of each phase < min of each other phase")
+    def update_model_seed(self, seed=[]):
+        """ Updates/Initializes the model seed params (helper function--use update_seed instead)""" 
+        if seed:  self.seed = seed
+        else:
+            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]                       
+        self.modelparams['seed']=self.seed
+        self._rng = np.random.default_rng(self.seed)
+    def update_seed(self,seed=[]):
+        """
+        Updates model seed and the seed in all functions. 
+
+        Parameters
+        ----------
+        seed : int, optional
+            Seed to use. The default is [], which uplls from np.random.SeedSequence
+        """
+        self.update_model_seed(seed)
+        for fxn in self.fxns:
+            self.fxns[fxn].update_seed(self.seed)
     def add_flows(self, flownames, flowdict={}, flowtype='generic'):
         """
         Adds a set of flows with the same type and initial parameters

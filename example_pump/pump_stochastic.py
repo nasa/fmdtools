@@ -200,21 +200,25 @@ if __name__=="__main__":
     # endresults, resgraph, mdlhist=propagate.nominal(mdl,run_stochastic=True)
     # rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
     
-    for i in range(10):
+    for i in range(1,10):
+        mdl.update_seed(i)
         propagate.propagate(mdl, {}, i, run_stochastic='track_pdf')
         print(mdl.return_probdens())
-        for fxnname, fxn in mdl.fxns.items():
-            print(fxnname+': ')
-            print(fxn.return_probdens())
-            print(getattr(fxn,'pds', None))
+        #print(mdl.seed)
+        
+        
+        #for fxnname, fxn in mdl.fxns.items():
+        #    print(fxnname+': ')
+        #    print(fxn.return_probdens())
+        #    print(getattr(fxn,'pds', None))
     
-    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic='track_pdf', modelparams={'seed':10})
+    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic='track_pdf', modelparams={'seed':50})
     
     
-    mdlhist['faulty']['functions']['ImportEE']['probdens']
+    #mdlhist['faulty']['functions']['ImportEE']['probdens']
     
-    rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
-    rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
+    #rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
+    #rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     
     """
     endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
