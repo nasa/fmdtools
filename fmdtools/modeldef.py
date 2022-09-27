@@ -285,6 +285,20 @@ class Block(Common):
         if hasattr(self, 'actions'):
             for act in self.actions.values():
                 act.update_seed(self.seed)
+    def get_rand_states(self, auto_update_only=False):
+        """Gets dict of random states from block and associated actions/components"""
+        if auto_update_only: rand_states = {state:vals for state,vals in self._rng_params.items() if vals[1]}
+        else: rand_states=self._rng_params
+        
+        if hasattr(self, 'components'):
+            for compname, comp in self.components.items():
+                if comp.get_rand_states(auto_update_only=auto_update_only): 
+                    rand_states[compname] = comp.get_rand_states(auto_update_only=auto_update_only)
+        if hasattr(self, 'actions'):
+            for actname, act in self.actions.items():
+                if act.get_rand_states(auto_update_only=auto_update_only): 
+                    rand_states[actname] = act.get_rand_states(auto_update_only=auto_update_only)
+        return rand_states
     def add_params(self, *params):
         """Adds given dictionary(s) of parameters to the function/block.
         e.g. self.add_params({'x':1,'y':1}) results in a block where:
@@ -1426,6 +1440,13 @@ class Model(object):
         self.update_model_seed(seed)
         for fxn in self.fxns:
             self.fxns[fxn].update_seed(self.seed)
+    def get_rand_states(self, auto_update_only=False):
+        """Gets dictionary of random states throughout the model functions"""
+        rand_states = {}
+        for fxnname, fxn in self.fxns.items():
+            if fxn.get_rand_states(auto_update_only=auto_update_only): 
+                rand_states[fxnname]= fxn.get_rand_states(auto_update_only=auto_update_only)
+        return rand_states
     def add_flows(self, flownames, flowdict={}, flowtype='generic'):
         """
         Adds a set of flows with the same type and initial parameters
@@ -2074,7 +2095,7 @@ class NominalApproach():
             
     def change_params(self, rangeid='all', **kwargs):
         """
-        Changes a given parameter accross all scenarios. Modifies 'params' (rather than regenerating params from the paramfunc).
+        Changes a given parameter across all scenarios. Modifies 'params' (rather than regenerating params from the paramfunc).
 
         Parameters
         ----------
