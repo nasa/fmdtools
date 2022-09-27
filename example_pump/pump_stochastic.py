@@ -212,12 +212,12 @@ if __name__=="__main__":
         #    print(fxn.return_probdens())
         #    print(getattr(fxn,'pds', None))
     
-    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic='track_pdf', modelparams={'seed':50})
+    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=False, modelparams={'seed':50})
     
     
     #mdlhist['faulty']['functions']['ImportEE']['probdens']
     
-    #rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
+    rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     #rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     
     """
