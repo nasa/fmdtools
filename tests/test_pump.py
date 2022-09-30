@@ -19,6 +19,13 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.default_mdl = Pump()
         self.mdl = Pump()
         self.water_mdl = Pump(params={'cost':{'water'}, 'delay':10, 'units':'hrs'})
+    def test_value_setting(self):
+        statenames = ['ImportEE.mode', 'Sig_1.power', 'MoveWater.eff']
+        newvalues = ['newmode', 20, 0.1]
+        self.check_var_setting(self.mdl, statenames, newvalues)
+    def test_value_setting_dict(self):
+        dict_to_check ={'ImportSignal.mode':'thismode', 'Wat_2.area':0.0}
+        self.check_var_setting_dict(self.mdl, dict_to_check)
     def test_dynamic_prop_values(self):
         """Test that given fault times result in the expected water/value loss"""
         faulttimes = [10,20,30]
@@ -211,11 +218,12 @@ def exp_cost_quant(approach, mdl):
     return util
 
 if __name__ == '__main__':
-    unittest.main()
-    #suite = unittest.TestSuite()
-    #suite.addTest(PumpTests("test_fmea_options"))
-    #runner = unittest.TextTestRunner()
-    #runner.run(suite)
+    #unittest.main()
+    suite = unittest.TestSuite()
+    suite.addTest(PumpTests("test_value_setting"))
+    suite.addTest(PumpTests("test_value_setting_dict"))
+    runner = unittest.TextTestRunner()
+    runner.run(suite)
 
     
     

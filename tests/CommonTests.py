@@ -11,6 +11,15 @@ from fmdtools.faultsim import propagate
 from fmdtools.resultdisp import process as proc
 from fmdtools.resultdisp import tabulate as tabulate
 class CommonTests():
+    def check_var_setting(self,mdl, statenames, newvalues):
+        """ Tests to see that given variable values are set to new values"""
+        mdl.set_vars(statenames, newvalues)
+        values_to_check = mdl.get_vars(*statenames)
+        np.testing.assert_array_equal(values_to_check, newvalues)
+    def check_var_setting_dict(self,mdl, new_val_dict):
+        mdl.set_vars(**new_val_dict)
+        values_to_check = mdl.get_vars(*new_val_dict)
+        np.testing.assert_array_equal(values_to_check, [*new_val_dict.values()])
     def check_model_copy_same(self, mdl, mdl2, inj_times, copy_time, max_time=55, run_stochastic=False):
         """ Tests to see that two models have the same states and that a copied model
         has the same states as the others given the same inputs"""

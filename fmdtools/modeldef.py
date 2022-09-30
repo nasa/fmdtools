@@ -1915,9 +1915,9 @@ class Model(object):
         for i, var in enumerate(variables):
             if type(var)==str: var=var.split(".")
             if var[0] in ['functions', 'fxns']: f=self.fxns[var[1]]; var=var[2:]
-            elif var[0]=='flows':               f=self.fxns[var[1]]; var=var[2:]
+            elif var[0]=='flows':               f=self.flows[var[1]]; var=var[2:]
             elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
-            elif var[0] in self.flows:          f=self.fxns[var[0]]; var=var[2:]
+            elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]
             else: raise Exception(var[0]+" not a function or flow")
             variable_values[i]=f.get_var(var)
         if len(variable_values)==1: return variable_values[0]
