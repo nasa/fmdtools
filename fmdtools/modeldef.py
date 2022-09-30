@@ -23,11 +23,12 @@ import warnings
 import sys
 from decimal import Decimal
 from ordered_set import OrderedSet
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from collections.abc import Iterable
 from collections import Hashable
 from inspect import signature
 import fmdtools.resultdisp.process as proc
+
 # MAJOR CLASSES
 
 class Common(object):
@@ -195,6 +196,47 @@ class Common(object):
             else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
         else:       raise Exception("Invalid flownames option in "+self.name)
         return flowdict
+    def set_var(self,var, val):
+        """
+        Sets variable of the object to a given value
+
+        Parameters
+        ----------
+        var : list/tuple of strings
+            list of nested attributes
+        val : attr
+            attribute to set the value to
+
+        Returns
+        -------
+        flowdict : dict
+            dict of flows indexed by flownames
+        """
+        if type(var)==str: var=var.split(".")
+        if not attrgetter(".".join(var))(self): raise Exception("Attibute does not exist: "+str(var))
+        
+        if len(var)==1: setattr(self, var[0], val)
+        else: 
+            if getattr(self, var[0]): 
+                subattr = getattr(self, var[0])
+                if hasattr(subattr, 'set_var'): subattr.set_var(var[1:], val)
+                else: raise Exception("Model sub-attribute "+str(subattr)+" does not inherit from Common")
+            else: raise Exception("Invalid variables :"+str(var))
+    def get_var(self, var):
+        """
+        Gets the variable value of the object
+
+        Parameters
+        ----------
+        var : str/list
+            list specifying the attribute (or sub-attribute of the object
+        Returns
+        -------
+        var_value: any
+            value of the variable
+        """
+        if type(var)==str: var=var.split(".")
+        return attrgetter(".".join(var))(self)
     def warn(self, *messages, stacklevel=2):
         """
         Prints warning message(s) when called.
@@ -1817,11 +1859,69 @@ class Model(object):
         """Placeholder for model find_classification methods (for running nominal models)"""
         return {'rate':scen['properties'].get('rate', 0), 'cost': 1, 'expected cost': scen['properties'].get('rate',0)}
     def return_probdens(self):
+        """Returns the probability desnity of the model distributions given a """
         probdens=1.0
         for fxn in self.fxns.values():
             probdens *= getattr(fxn, 'probdens', 1.0)
         return probdens
+    def set_vars(self, *args, **kwargs):
+        """
+        Sets variables in the model to set values (useful for optimization, etc.)
 
+        Parameters
+        ----------
+        varlist : list of lists/tuples
+            List of variables to set, with possible structures:
+                [['fxnname', 'att1'], ['fxnname2', 'comp1','att2'], ['flowname', 'att3']]
+                ['fxnname.att1', 'fxnname.comp1.att2', 'flowname.att3']
+        varvalues : list
+            List of values corresponding to varlist
+        kwargs : kwargs
+            attribute-value pairs. If provided, must be passed using ** syntax:
+            mdl.set_vars(**{'fxnname.varname':value})
+        """
+        if len(args)>0: 
+            varlist=args[0]; varvalues=args[1]
+            if type(varlist)==str:                      varlist = [varlist]
+            if type(varvalues) in [str, float, int]:    varvalues= [varvalues]
+            if len(varlist)!=len(varvalues): raise Exception("length of varlist and varvalues do not correspond: "+str(len(varlist))+", "+str(len(varvalues)))
+        else: varlist=[]; varvalues=[]
+        if kwargs: varlist = varlist+[*kwargs.keys()]; varvalues = varvalues + [*kwargs.values()]
+        for i,var in enumerate(varlist):
+            if type(var)==str: var=var.split(".")
+            if var[0] in ['functions', 'fxns']: f=self.fxns[var[1]]; var=var[2:]
+            elif var[0]=='flows':               f=self.flows[var[1]]; var=var[2:]
+            elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
+            elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]
+            else: raise Exception(var[0]+" not a function or flow")
+            f.set_var(var, varvalues[i])
+    def get_vars(self, *variables):
+        """
+        Gets variable values in the model.
+
+        Parameters
+        ----------
+        *variables : list/string
+            Variables to get from the model. Can be specifid as: 
+            a list ['fxnname2', 'comp1','att2'], or
+            a str 'fxnname.comp1.att2'
+
+        Returns
+        -------
+        variable_values: tuple 
+            Values of variables. Passes (non-tuple) single value if only one variable.
+        """
+        variable_values = [None]*len(variables)
+        for i, var in enumerate(variables):
+            if type(var)==str: var=var.split(".")
+            if var[0] in ['functions', 'fxns']: f=self.fxns[var[1]]; var=var[2:]
+            elif var[0]=='flows':               f=self.fxns[var[1]]; var=var[2:]
+            elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
+            elif var[0] in self.flows:          f=self.fxns[var[0]]; var=var[2:]
+            else: raise Exception(var[0]+" not a function or flow")
+            variable_values[i]=f.get_var(var)
+        if len(variable_values)==1: return variable_values[0]
+        else:                       return tuple(variable_values)
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) 
     Attributes
@@ -1923,6 +2023,16 @@ class NominalApproach():
         self.scenarios = {}
         self.num_scenarios = 0
         self.ranges = {}
+    def __repr__(self):
+        all_range_str=""
+        for r, rangedict in self.ranges.items():
+            rangestr = '\n-'+r+' ('+str(len(rangedict['scenarios']))+' scenarios)'
+            rangedict = {k:v for k,v in rangedict.items() if k not in {'scenarios', 'levels','num_pts'}}
+            if 'seeds' in rangedict: rangedict['seeds'] = len(rangedict['seeds'])
+            subrangestr = "\n----"+"\n----".join([k+': '+str(v) for k,v in rangedict.items()])
+            all_range_str=all_range_str+rangestr+subrangestr
+        #rangestr = "\n- "+"\n- ".join([k+": "+str(len(v['scenarios']))+' scenarios' for k,v in self.ranges.items()])
+        return "NominalApproach ("+str(self.num_scenarios)+" scenarios) with ranges:"+all_range_str
     def add_seed_replicates(self, rangeid, seeds):
         """
         Generates an approach with different seeds to use for the model's internal stochastic behaviors
@@ -1968,7 +2078,7 @@ class NominalApproach():
             if len(ind_seeds)!=replicates: raise Exception("list ind_seeds must be of length replicates")
             else:                   seeds=ind_seeds
         else:                       seeds = [None for i in range(replicates)]
-        self.ranges[rangeid] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : replicates}
+        self.ranges[rangeid] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : replicates, 'paramfunc':paramfunc}
         for i in range(replicates):
             self.num_scenarios+=1
             params = paramfunc(*args, **kwargs)
@@ -2051,7 +2161,7 @@ class NominalApproach():
         elif seedstr=='independent':  mdlseeds=np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)
         elif seedstr=='keep_model':   mdlseeds= [None for i in range(replicates)]
         
-        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}, 'replicates':replicates}
+        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}, 'replicates':replicates, 'paramfunc':paramfunc}
         for xvals in fullspace:
             inputparams = {**{name:xvals[i] for i,name in enumerate(inputnames)}, **fixedkwargs}
             level_key = tuple([x if isinstance(x,Hashable) else str(x) for x in xvals])
@@ -2323,6 +2433,7 @@ class SampleApproach():
             elif type(tuple(phases.values())[0][0]) in [int, float]:  self.globalphases = phases; self.phases ={}; self.modephases = modephases
             else:                                               self.globalphases = mdl.phases; self.phases = phases; self.modephases = modephases
         #elif type(phases)==set:    self.globalphases=mdl.phases; self.phases = {ph:mdl.phases[ph] for ph in phases}
+        self.mdltype = mdl.__class__.__name__
         self.tstep = mdl.tstep
         self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)
@@ -2330,6 +2441,16 @@ class SampleApproach():
         self.create_sampletimes(mdl, sampparams, defaultsamp)
         self.create_scenarios()
         if reduce_to: self.reduce_scens_to_samp(reduce_to)
+    def __repr__(self):
+        modes=list(self._fxnmodes)
+        if len(modes)>10:  modes=modes[0:10]+[["...more"]]
+        modestr = "\n -"+"\n -".join([": ".join(mode) for mode in list(modes)])
+        phases = {ph:tm[0] for fxnphases in self.mode_phase_map.values() for ph,tm in fxnphases.items()}
+        phasestr = "\n -"+"\n -".join([str(k)+": "+str(v) for k,v in phases.items()])
+        jointphasestr = "\n -"+str(self.num_joint)+" combinations, making: "+str(len(self.jointmodes))+' total'
+        return "SampleApproach for "+self.mdltype+" model with "+str(len(self._fxnmodes))+" modes: "+modestr+"\n"\
+            +str(self.num_joint)+" joint modes ("+str(len(self.jointmodes))+" combinations), \nin "+str(len(phases))+" phases: "+phasestr+\
+                " \nsampled at "+str(len(self.times))+" times: \n -"+str(self.times)+"\nresulting in "+str(len(self.scenlist))+" total fault scenarios."
     def init_modelist(self,mdl, faults, jointfaults={'faults':'None'}):
         """Initializes comprates, jointmodes internal list of modes"""
         self.comprates={}
@@ -2402,7 +2523,7 @@ class SampleApproach():
                 if not jointfaults.get('jointfuncs', False): num_joint = len({i[0] for i in self._fxnmodes})
                 else:                                        num_joint= len(self._fxnmodes)
             else:                                            num_joint=jointfaults['faults']
-            self.jointmodes=[]
+            self.jointmodes=[]; self.num_joint=num_joint
             inclusive = jointfaults.get('inclusive', True)
             if inclusive:
                 for numjoint in range(2, num_joint+1):
@@ -2416,8 +2537,9 @@ class SampleApproach():
                     jointmodes = [jm for jm in jointmodes if not any([jm[i-1][0] ==j[0] for i in range(1, len(jm)) for j in jm[i:]])]
                 self.jointmodes=jointmodes
             else: raise Exception("Invalid option for jointfault['inclusive']")
-        elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
+        elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']; self.num_joint='Custom'
         elif jointfaults['faults']!='None': raise Exception("Invalid jointfaults argument type: "+str(type(jointfaults['faults'])))
+        else: self.jointmodes=[]; self.num_joint='None'
     def calc_intervaltime(self,times, tstep):
         return float(times[1]-times[0])+tstep
     def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}, join_modephases=False):

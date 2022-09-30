@@ -192,6 +192,8 @@ if __name__=="__main__":
     app.add_param_replicates(paramfunc, 'delay_10', 100, (10))
     
     mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':4})
+    
+    mdl.set_vars([['EE_1','current']],[2])
 
     
     # endresults, resgraph, mdlhist=propagate.nominal(mdl)
