@@ -218,12 +218,12 @@ def exp_cost_quant(approach, mdl):
     return util
 
 if __name__ == '__main__':
-    #unittest.main()
-    suite = unittest.TestSuite()
-    suite.addTest(PumpTests("test_value_setting"))
-    suite.addTest(PumpTests("test_value_setting_dict"))
-    runner = unittest.TextTestRunner()
-    runner.run(suite)
+    unittest.main()
+    #suite = unittest.TestSuite()
+    #suite.addTest(PumpTests("test_value_setting"))
+    #suite.addTest(PumpTests("test_value_setting_dict"))
+    #runner = unittest.TextTestRunner()
+    #runner.run(suite)
 
     
     
