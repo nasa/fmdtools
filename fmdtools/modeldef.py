@@ -1452,8 +1452,14 @@ class Model(object):
         self._fxnflows=[]
         self._fxninput={}
     def __repr__(self):
-        fxnstr = ''.join(['- '+fxnname+':'+str(fxn.return_states())+' '+str(getattr(fxn,'active_actions',''))+'\n' for fxnname,fxn in self.fxns.items()])
-        flowstr = ''.join(['- '+flowname+':'+str(flow.status())+'\n' for flowname,flow in self.flows.items()])
+        fxnlist = ['- '+fxnname+':'+str(fxn.return_states())+' '+str(getattr(fxn,'active_actions',''))+'\n' for fxnname,fxn in self.fxns.items()]
+        fxnlist = [fstr[:115]+'...\n'if len(fstr)>120 else fstr for fstr in fxnlist]
+        if len(fxnlist)>15: fxnlist=fxnlist[:15]+["...("+str(len(fxnlist))+' total) \n']
+        fxnstr = ''.join(fxnlist)
+        flowlist = ['- '+flowname+':'+str(flow.status())+'\n' for flowname,flow in self.flows.items()]
+        flowlist = [fstr[:115]+'...\n'if len(fstr)>120 else fstr for fstr in flowlist]
+        if len(flowlist)>15:  flowlist=flowlist[:15]+["...("+str(len(flowlist))+' total) \n']
+        flowstr = ''.join(flowlist)
         return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'functions: \n'+fxnstr+'flows: \n'+flowstr
     def find_any_phase_overlap(self):
         intervals = [*self.phases.values()]
