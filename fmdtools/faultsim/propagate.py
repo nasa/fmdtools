@@ -155,6 +155,7 @@ def update_params(params, **kwargs):
     params : dict
         Updated parameter dictionary
     """
+    params = copy.deepcopy(params)
     for kwarg in kwargs: 
         if kwargs.get(kwarg, None)!=None: params[kwarg]=kwargs[kwarg]
     return params
@@ -226,8 +227,7 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
     
     if pool:
         check_mdl_memory(mdl, nomapp.num_scenarios, max_mem=max_mem)
-        inputs = [(mdl.__class__(*new_mdl_params(mdl,scen['properties'])), scen, track, track_times, run_stochastic, save_args, name, nomapp.num_scenarios, max_mem ) for name,scen in nomapp.scenarios.items()]
-        a=1
+        inputs = [(mdl, scen, track, track_times, run_stochastic, save_args, name, nomapp.num_scenarios, max_mem) for name, scen in nomapp.scenarios.items()]
         result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         nomapp_endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
         nomapp_mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
@@ -244,10 +244,11 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
     return nomapp_endclasses, nomapp_mdlhists
 def exec_nom_helper(arg):
     """Helper function for executing nominal scenarios"""
-    mdlhist, _, t_end =prop_one_scen(arg[0], arg[1], track=arg[2], staged=False, track_times=arg[3], run_stochastic=arg[4])
+    mdl = arg[0].__class__(*new_mdl_params(arg[0],arg[1]['properties']))
+    mdlhist, _, t_end =prop_one_scen(mdl, arg[1], track=arg[2], staged=False, track_times=arg[3], run_stochastic=arg[4])
     mdlhist = cut_mdlhist(mdlhist, t_end)
     check_hist_memory(mdlhist,arg[7], max_mem=arg[8])
-    endclass=arg[0].find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
+    endclass=mdl.find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
     save_helper(arg[5], endclass, mdlhist, arg[6], arg[6])
     return endclass, mdlhist
 
