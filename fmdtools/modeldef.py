@@ -213,7 +213,7 @@ class Common(object):
             dict of flows indexed by flownames
         """
         if type(var)==str: var=var.split(".")
-        if not attrgetter(".".join(var))(self): raise Exception("Attibute does not exist: "+str(var))
+        #if not attrgetter(".".join(var))(self): raise Exception("Attibute does not exist: "+str(var))
         
         if len(var)==1: setattr(self, var[0], val)
         else: 
@@ -1917,6 +1917,7 @@ class Model(object):
         variable_values: tuple 
             Values of variables. Passes (non-tuple) single value if only one variable.
         """
+        if type(variables)==str:                      variables = [variables]
         variable_values = [None]*len(variables)
         for i, var in enumerate(variables):
             if type(var)==str: var=var.split(".")
