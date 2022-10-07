@@ -132,8 +132,6 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
         if 'mdlhist' in save_args:     proc.save_result(mdlhist, **save_args['mdlhist'])
         if 'endclass' in save_args:     proc.save_result(endclass, **save_args['endclass'])
     
-
-
 def update_params(params, **kwargs):
     """
     Updates a dictionary with the given keyword arguments
@@ -154,6 +152,9 @@ def update_params(params, **kwargs):
     for kwarg in kwargs: 
         if kwargs.get(kwarg, None)!=None: params[kwarg]=kwargs[kwarg]
     return params
+
+def new_mdl(mdl, paramdict):
+    mdl = mdl.__class__(*new_mdl_params(mdl,paramdict))
 def new_mdl_params(mdl,paramdict):
     """
     Creates parameter inputs for a new model. Used for exploring parameter ranges and seeding models.
@@ -180,7 +181,7 @@ def new_mdl_params(mdl,paramdict):
     valparams = update_params(mdl.valparams, **paramdict.get('valparams', {}))
     return params, modelparams, valparams
 
-def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, track_times="all", run_stochastic=False, max_mem=2e9, save_args={}):
+def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, track_times="all", run_stochastic=False, max_mem=2e9, get_endclass=True, save_args={}):
     """
     Simulates a set of nominal scenarios through a model. Useful to understand
     the sets of parameters where the system will run nominally and/or lead to 
@@ -209,42 +210,43 @@ def nominal_approach(mdl,nomapp,track='all', showprogress=True, pool=False, trac
         Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     max_mem : int
         Max memory (warns the user when memory is above threshold)
+    get_endclass : bool
+        Whether to return endclasses from mdl.find_classification. Default is True.
+    save_args : dict
     Returns
     -------
-    nomapp_endclasses : Dict
+    n_endclasses : Dict
         Classifications of the set of scenarios, with structure {'scenname':classification}
-    nomapp_mdlhists : Dict
+    n_mdlhists : Dict
         Dictionary of model histories, with structure {'scenname':mdlhist}
     """
     check_overwrite(save_args)
-    nomapp_mdlhists = dict.fromkeys(nomapp.scenarios)
-    nomapp_endclasses = dict.fromkeys(nomapp.scenarios)
+    n_mdlhists = dict.fromkeys(nomapp.scenarios)
+    n_endclasses = dict.fromkeys(nomapp.scenarios)
     
     if pool:
         check_mdl_memory(mdl, nomapp.num_scenarios, max_mem=max_mem)
-        inputs = [(mdl, scen, track, track_times, run_stochastic, save_args, name, nomapp.num_scenarios, max_mem) for name, scen in nomapp.scenarios.items()]
+        inputs = [(mdl, scen, track, track_times, run_stochastic, save_args, name, nomapp.num_scenarios, max_mem, get_endclass) for name, scen in nomapp.scenarios.items()]
         result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
-        nomapp_endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
-        nomapp_mdlhists = { scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
+        n_endclasses = {scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
+        n_mdlhists = {scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
     else:
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
-            mdl = mdl.__class__(*new_mdl_params(mdl,scen['properties']))
-            nomapp_mdlhists[scenname], _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
-            check_hist_memory(nomapp_mdlhists[scenname],nomapp.num_scenarios, max_mem=max_mem)
-            _ = cut_mdlhist(nomapp_mdlhists[scenname], t_end)
-            endfaults, endfaultprops = mdl.return_faultmodes()
-            nomapp_endclasses[scenname]=mdl.find_classification(scen, {'nominal': nomapp_mdlhists[scenname], 'faulty':nomapp_mdlhists[scenname]})
-            save_helper(save_args, nomapp_endclasses[scenname], nomapp_mdlhists[scenname], scenname, scenname)
-    save_helper(save_args, nomapp_endclasses, nomapp_mdlhists)
-    return nomapp_endclasses, nomapp_mdlhists
-def exec_nom_helper(arg):
+            n_endclasses[scenname], n_mdlhists[scenname]= exec_nom_helper(mdl, scen, track, track_times, run_stochastic, save_args, scenname, nomapp.num_scenarios, max_mem, get_endclass)
+    save_helper(save_args, n_endclasses, n_mdlhists)
+    return n_endclasses, n_mdlhists
+def exec_nom_par(arg):
+    endclass, mdlhist = exec_nom_helper(*arg)
+    return endclass, mdlhist
+def exec_nom_helper(mdl, scen, track, track_times, run_stochastic, save_args, name, num_scens, max_mem, get_endclass):
     """Helper function for executing nominal scenarios"""
-    mdl = arg[0].__class__(*new_mdl_params(arg[0],arg[1]['properties']))
-    mdlhist, _, t_end =prop_one_scen(mdl, arg[1], track=arg[2], staged=False, track_times=arg[3], run_stochastic=arg[4])
+    mdl = new_mdl(mdl,scen['properties'])
+    mdlhist, _, t_end =prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
     mdlhist = cut_mdlhist(mdlhist, t_end)
-    check_hist_memory(mdlhist,arg[7], max_mem=arg[8])
-    endclass=mdl.find_classification(arg[1], {'nominal': mdlhist, 'faulty':mdlhist})
-    save_helper(arg[5], endclass, mdlhist, arg[6], arg[6])
+    check_hist_memory(mdlhist,num_scens, max_mem=max_mem)
+    if get_endclass:    endclass=mdl.find_classification(scen, {'nominal': mdlhist, 'faulty':mdlhist})
+    else:               endclass={}
+    save_helper(save_args, endclass, mdlhist, name, name)
     return endclass, mdlhist
 
 def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype = 'bipartite', track_times="all", protect=True, run_stochastic=False, get_endclass=True, save_args={}, **kwargs):
@@ -390,7 +392,7 @@ def mult_fault(mdl, faultseq, scen={}, track='all', staged=True, rate=np.NaN, gt
     faultmdlhist, _, t_end = prop_one_scen(mdl, scen, track=track, staged=staged, prevhist=nommdlhist, track_times=track_times, run_stochastic=run_stochastic)
     faultmdlhist = cut_mdlhist(faultmdlhist, t_end)
     nommdlhist = cut_mdlhist(nommdlhist, t_end_nom)
-    
+
     if nomresgraph: 
         faultresgraph = mdl.return_stategraph(gtype)
         resgraph = proc.resultsgraph(faultresgraph, nomresgraph, gtype=gtype) 
@@ -402,17 +404,17 @@ def mult_fault(mdl, faultseq, scen={}, track='all', staged=True, rate=np.NaN, gt
 def nominal_helper(mdl, time, track='all', staged=False, gtype = 'bipartite', track_times="all", protect=True, run_stochastic=False, save_args={}, **kwargs):
     check_overwrite(save_args)
     #run model nominally, get relevant results
-    if protect or kwargs:
-        mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
+    if protect or kwargs:   mdl = new_mdl(mdl,kwargs)
     nomscen=construct_nomscen(mdl)
-    if staged:
-        nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes=[time], track_times=track_times, run_stochastic=run_stochastic)
-        nomresgraph, endfaults, endfaultprops = endstate_processing(mdl, gtype)
-        newmdl = mdls[time]
-    else:
-        nommdlhist, _, t_end_nom = prop_one_scen(mdl, nomscen, track=track, staged=staged, track_times=track_times, run_stochastic=run_stochastic)
-        nomresgraph, endfaults, endfaultprops = endstate_processing(mdl, gtype)
-        newmdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+    if staged:  
+        if type(time) in [float, int]:  ctimes=[time]
+        else:                           ctimes=time
+    else:       ctimes=[]
+    nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes = ctimes, track_times=track_times, run_stochastic=run_stochastic)
+    nomresgraph, endfaults, endfaultprops = endstate_processing(mdl, gtype)
+    if staged and len(ctimes)==1:   newmdl = mdls[time]
+    elif staged:                    newmdl=mdls
+    else:       newmdl = new_mdl(mdl, {})
     return nomscen, newmdl, nommdlhist, t_end_nom, nomresgraph
 def endstate_processing(mdl, gtype):
     nomresgraph = mdl.return_stategraph(gtype)
@@ -420,7 +422,7 @@ def endstate_processing(mdl, gtype):
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     mdl.reset()
     return nomresgraph
-def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, save_args={}, max_mem=2e9, **kwargs):
+def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, get_endclass=True, save_args={}, max_mem=2e9, **kwargs):
     """
     Creates and propagates a list of failure scenarios in a model.
     
@@ -459,6 +461,8 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
         Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
+    get_endclass : bool
+        Whether to return endclasses from mdl.find_classification. Default is True.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
         Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
@@ -480,40 +484,36 @@ def single_faults(mdl, staged=False, track='all', pool=False, showprogress=True,
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    check_overwrite(save_args)
-    if protect or kwargs:
-        mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
-    scenlist=list_init_faults(mdl)
-    nomscen=construct_nomscen(mdl)
-    if staged:
-        nomhist, c_mdl, t_end_nom = prop_one_scen(mdl, nomscen, track=track, ctimes=mdl.times, track_times=track_times, run_stochastic=run_stochastic)
-    else:
-        nomhist, c_mdl, t_end_nom = prop_one_scen(mdl, nomscen, track=track, track_times=track_times, run_stochastic=run_stochastic)
-    endclass_nominal=mdl.find_classification(construct_nomscen(mdl), {'nominal': nomhist, 'faulty':nomhist})
-    endfaults, endfaultprops = mdl.return_faultmodes()
-    if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
-    mdl.reset()
+    nomscen, c_mdl, nomhist, t_end_nom, nomresgraph = nominal_helper(mdl, mdl.times, track=track, staged=staged, gtype=None, track_times=track_times, run_stochastic=run_stochastic, save_args=save_args, **kwargs)
+    
+    scenlist = list_init_faults(mdl)
+    endclasses, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, pool, max_mem, staged, nomscen, nomhist, t_end_nom, track, track_times, run_stochastic, save_args, showprogress, get_endclass)
+    return endclasses, mdlhists
+
+def scenlist_helper(mdl, scenlist, c_mdl, pool, max_mem, staged, nomscen, nomhist, t_end_nom, track, track_times, run_stochastic, save_args, showprogress, get_endclass):
     check_hist_memory(nomhist,len(scenlist), max_mem=max_mem)
     endclasses = {}
     mdlhists = {}
     if pool:
         check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
-        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomhist, track, staged, track_times, run_stochastic, save_args, str(i)) for i, scen in enumerate(scenlist)]
+        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomhist, track, staged, track_times, run_stochastic, save_args, get_endclass, str(i)) for i, scen in enumerate(scenlist)]
         else: inputs = [(mdl, scen,  nomhist, track, staged, track_times, run_stochastic, save_args, str(i)) for i, scen in enumerate(scenlist)]
         result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
         mdlhists = { scen['properties']['name']: result_list[i][1] for i, scen in enumerate(scenlist)}
     else:
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
-            if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']], t_end = exec_scen(c_mdl[scen['properties']['time']], scen,nomhist, track=track, staged=staged, track_times=track_times, run_stochastic=run_stochastic, save_args=save_args, indiv_id=str(i))
-            else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']], t_end = exec_scen(mdl, scen, nomhist, track=track, staged=staged, track_times = track_times, run_stochastic=run_stochastic, save_args=save_args, indiv_id=str(i))
+            name = scen['properties']['name']
+            if staged:  mdl = c_mdl[scen['properties']['time']]
+            else:       mdl=mdl
+            ec, mh, t_end = exec_scen(mdl, scen,nomhist, track=track, staged=staged, track_times=track_times, run_stochastic=run_stochastic, save_args=save_args, get_endclass=get_endclass, indiv_id=str(i))
+            endclasses[name],mdlhists[name] = ec, mh
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
-    endclasses['nominal'] = endclass_nominal
+    endclasses['nominal'] = mdl.find_classification(nomscen, {'nominal': nomhist, 'faulty':nomhist})
     save_helper(save_args, endclasses['nominal'], mdlhists['nominal'], indiv_id=str(len(endclasses)-1),result_id='nominal')
     save_helper(save_args, endclasses, mdlhists)
     return endclasses, mdlhists
-
-def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, save_args={}, max_mem=2e9, **kwargs):
+def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True, track_times="all", protect=True, run_stochastic=False, get_endclass=False, save_args={}, max_mem=2e9, **kwargs):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
@@ -549,6 +549,8 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
         Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
+    get_endclass : bool
+        Whether to return endclasses from mdl.find_classification. Default is True.
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
         Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
@@ -569,37 +571,9 @@ def approach(mdl, app, staged=False, track='all', pool=False, showprogress=True,
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    check_overwrite(save_args)
-    if protect or kwargs:
-        mdl = mdl.__class__(*new_mdl_params(mdl,kwargs))
-    if staged:
-        nomhist, c_mdl, t_end_nom = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, ctimes=copy.copy(app.times), track_times=track_times, run_stochastic=run_stochastic)
-    else:
-        nomhist, c_mdl, t_end_nom = prop_one_scen(mdl, app.create_nomscen(mdl), track=track, track_times=track_times, run_stochastic=run_stochastic)
-    endfaults, endfaultprops = mdl.return_faultmodes()
-    endclass_nominal=mdl.find_classification(construct_nomscen(mdl), {'nominal': nomhist, 'faulty':nomhist})
-    if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
-    mdl.reset()
-    
-    check_hist_memory(nomhist,len(app.scenlist), max_mem=max_mem)
-    
-    endclasses, mdlhists = {}, {}
+    nomscen, c_mdl, nomhist, t_end_nom, nomresgraph = nominal_helper(mdl, copy.copy(app.times), track=track, staged=staged, gtype=None, track_times=track_times, run_stochastic=run_stochastic, save_args=save_args, **kwargs)
     scenlist = app.scenlist
-    if pool:
-        check_mdl_memory(mdl, len(app.scenlist), max_mem=max_mem)
-        if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomhist, track, staged, track_times, run_stochastic, save_args, str(i)) for i, scen in enumerate(scenlist)]
-        else: inputs = [(mdl, scen,  nomhist, track, staged, track_times, run_stochastic, save_args, str(i)) for i, scen in enumerate(scenlist)]
-        result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
-        endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
-        mdlhists = { scen['properties']['name']: result_list[i][1]for i, scen in enumerate(scenlist)}
-    else:
-        for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
-            if staged: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']], t_end = exec_scen(c_mdl[scen['properties']['time']], scen, nomhist, track=track, staged=staged, track_times=track_times, run_stochastic=run_stochastic, save_args=save_args, indiv_id=str(i))
-            else: endclasses[scen['properties']['name']],mdlhists[scen['properties']['name']], t_end = exec_scen(mdl, scen, nomhist, track=track, staged=staged, track_times = track_times, run_stochastic=run_stochastic, save_args=save_args, indiv_id=str(i))
-    mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
-    endclasses['nominal'] = endclass_nominal
-    save_helper(save_args, endclasses['nominal'], mdlhists['nominal'], indiv_id=str(len(endclasses)-1),result_id='nominal')
-    save_helper(save_args, endclasses, mdlhists)
+    endclasses, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, pool, max_mem, staged, nomscen, nomhist, t_end_nom, track, track_times, run_stochastic, save_args, showprogress, get_endclass)
     return endclasses, mdlhists
 
 def check_hist_memory(mdlhist, nscens, max_mem=2e9):
@@ -687,7 +661,7 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
     apps = dict.fromkeys(nomapp.scenarios)
     save_app = save_args.pop("apps", False)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
-        mdl = mdl.__class__(*new_mdl_params(mdl,scen['properties']))
+        mdl = new_mdl(mdl,scen['properties'])
         nomhist, _, t_end = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
         if get_phases:
             if get_phases=='global':      phases={'global':[0,t_end]}
@@ -713,8 +687,8 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
 
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
-    return exec_scen(args[0], args[1], args[2], track=args[4], staged=args[5], track_times=args[6], run_stochastic=args[7], save_args=args[8], indiv_id=args[9])
-def exec_scen(mdl, scen,nomhist, track='all', staged = True, track_times="all", run_stochastic=False, save_args={}, indiv_id=''):
+    return exec_scen(args[0], args[1], args[2], track=args[4], staged=args[5], track_times=args[6], run_stochastic=args[7], save_args=args[8], get_endclass=args[9], indiv_id=args[10])
+def exec_scen(mdl, scen,nomhist, track='all', staged = True, track_times="all", run_stochastic=False, save_args={}, get_endclass=True, indiv_id=''):
     """ 
     Executes a scenario and generates results and classifications given a model and nominal model history
     
@@ -752,10 +726,11 @@ def exec_scen(mdl, scen,nomhist, track='all', staged = True, track_times="all", 
         mdl = mdl.copy()
         mdlhist, _, t_end =prop_one_scen(mdl, scen, track=track, staged=True, prevhist=nomhist, track_times=track_times, run_stochastic=run_stochastic)
     else:
-        mdl = mdl.__class__(params=mdl.params, modelparams = mdl.modelparams, valparams=mdl.valparams)
+        mdl = new_mdl(mdl, {})
         mdlhist, _, t_end =prop_one_scen(mdl, scen, track=track, track_times=track_times, run_stochastic=run_stochastic)
     cut_mdlhist(mdlhist, t_end)
-    endclass = mdl.find_classification(scen, {'nominal':nomhist, 'faulty':mdlhist})
+    if get_endclass: endclass = mdl.find_classification(scen, {'nominal':nomhist, 'faulty':mdlhist})
+    else:            endclass={}
     save_helper(save_args, endclass, mdlhist, indiv_id=indiv_id, result_id=str(scen['properties']['name']))
     return endclass, mdlhist, t_end
 
