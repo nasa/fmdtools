@@ -1709,7 +1709,8 @@ class Model(object):
         graph : networkx graph
             Graph representation of the system with the modes and states added as attributes.
         """
-        if gtype=='normal':
+        if  gtype==None: return None
+        elif gtype=='normal':
             graph=nx.projected_graph(self.bipartite, self.fxns)
         elif gtype=='bipartite':
             graph=self.bipartite.copy()
