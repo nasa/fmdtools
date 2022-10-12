@@ -88,9 +88,9 @@ def nominal(mdl, track='all', gtype='bipartite', track_times="all", protect=True
     mdlhist : Dict
         A dictionary with a history of modelstates
     """
-    scen, _, mdlhist, t_end, resgraph, nomresgraph = nominal_helper(mdl, None, track=track, staged=False, gtype = gtype, track_times=track_times, protect=protect, run_stochastic=run_stochastic, save_args=save_args, **kwargs)
+    scen, _, mdlhist, t_end, resgraph = nominal_helper(mdl, None, track=track, staged=False, gtype = gtype, track_times=track_times, protect=protect, run_stochastic=run_stochastic, save_args=save_args, **kwargs)
     mdlhist = cut_mdlhist(mdlhist, t_end)
-    endclass, mdlhists = post_fault_helper(mdl, scen, mdlhist, mdlhist, get_endclass, protect, save_args)
+    endclass, mdlhists = post_fault_helper(mdl, scen, mdlhist, get_endclass, protect, save_args)
     return endclass, resgraph, mdlhist
 def post_fault_helper(mdl, scen, mdlhist, get_endclass, protect, save_args, faulthist={}):
     if faulthist:   mdlhists = {'nominal': mdlhist, 'faulty':faulthist}
@@ -154,7 +154,7 @@ def update_params(params, **kwargs):
     return params
 
 def new_mdl(mdl, paramdict):
-    mdl = mdl.__class__(*new_mdl_params(mdl,paramdict))
+    return mdl.__class__(*new_mdl_params(mdl,paramdict))
 def new_mdl_params(mdl,paramdict):
     """
     Creates parameter inputs for a new model. Used for exploring parameter ranges and seeding models.
@@ -305,7 +305,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, track='all', staged=False, gtype 
         A dictionary of the states of the model of each fault scenario over time.
     """
     scen=construct_nomscen(mdl) #note: this is a shallow copy, so don't define it earlier
-    scen['faults'][fxnname]=faultmode
+    scen['sequence'][time]={'faults':{fxnname:faultmode}}
     scen['properties']['type']='single fault'
     scen['properties']['function']=fxnname
     scen['properties']['fault']=faultmode
@@ -380,10 +380,11 @@ def mult_fault(mdl, faultseq, scen={}, track='all', staged=True, rate=np.NaN, gt
 
     """
     time = min(faultseq)
-    nomscen, mdl, nommdlhist, t_end_nom, nomresgraph = nominal_helper(mdl, time, kwargs)
+    nomscen, mdl, nommdlhist, t_end_nom, nomresgraph = nominal_helper(mdl, time, track=track, staged=staged, gtype = gtype,\
+                                                                      track_times=track_times, protect=protect, run_stochastic=run_stochastic, save_args=save_args, **kwargs)
     if not scen:
         scen=nomscen.copy() #note: this is a shallow copy, so don't define it earlier
-        scen['faults']=list(faultseq.values())
+        scen['sequence']={t:{'faults':faultseq[t]} for t in faultseq}
         scen['properties']['type']='sequence'
         scen['properties']['sequence']=faultseq
         scen['properties']['rate']=rate # this rate is on a per-simulation basis
@@ -398,20 +399,21 @@ def mult_fault(mdl, faultseq, scen={}, track='all', staged=True, rate=np.NaN, gt
         resgraph = proc.resultsgraph(faultresgraph, nomresgraph, gtype=gtype) 
     else:           resgraph= None
 
-    endclass, mdlhists = post_fault_helper(mdl, scen, nommdlhist, faultmdlhist, get_endclass, protect, save_args)
+    endclass, mdlhists = post_fault_helper(mdl, scen, nommdlhist, get_endclass, protect, save_args, faulthist=faultmdlhist)
     return endclass,resgraph, mdlhists
 
 def nominal_helper(mdl, time, track='all', staged=False, gtype = 'bipartite', track_times="all", protect=True, run_stochastic=False, save_args={}, **kwargs):
     check_overwrite(save_args)
     #run model nominally, get relevant results
     if protect or kwargs:   mdl = new_mdl(mdl,kwargs)
+    
     nomscen=construct_nomscen(mdl)
     if staged:  
         if type(time) in [float, int]:  ctimes=[time]
         else:                           ctimes=time
     else:       ctimes=[]
     nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, track=track, staged=staged, ctimes = ctimes, track_times=track_times, run_stochastic=run_stochastic)
-    nomresgraph, endfaults, endfaultprops = endstate_processing(mdl, gtype)
+    nomresgraph = endstate_processing(mdl, gtype)
     if staged and len(ctimes)==1:   newmdl = mdls[time]
     elif staged:                    newmdl=mdls
     else:       newmdl = new_mdl(mdl, {})
@@ -497,7 +499,7 @@ def scenlist_helper(mdl, scenlist, c_mdl, pool, max_mem, staged, nomscen, nomhis
     if pool:
         check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
         if staged: inputs = [(c_mdl[scen['properties']['time']], scen, nomhist, track, staged, track_times, run_stochastic, save_args, get_endclass, str(i)) for i, scen in enumerate(scenlist)]
-        else: inputs = [(mdl, scen,  nomhist, track, staged, track_times, run_stochastic, save_args, str(i)) for i, scen in enumerate(scenlist)]
+        else: inputs = [(mdl, scen,  nomhist, track, staged, track_times, run_stochastic, save_args, get_endclass, str(i)) for i, scen in enumerate(scenlist)]
         result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         endclasses = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
         mdlhists = { scen['properties']['name']: result_list[i][1] for i, scen in enumerate(scenlist)}
@@ -687,8 +689,8 @@ def nested_approach(mdl, nomapp, staged=False, track='all', get_phases = False, 
 
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
-    return exec_scen(args[0], args[1], args[2], track=args[4], staged=args[5], track_times=args[6], run_stochastic=args[7], save_args=args[8], get_endclass=args[9], indiv_id=args[10])
-def exec_scen(mdl, scen,nomhist, track='all', staged = True, track_times="all", run_stochastic=False, save_args={}, get_endclass=True, indiv_id=''):
+    return exec_scen(args[0], args[1], args[2], track=args[3], staged=args[4], track_times=args[5], run_stochastic=args[6], save_args=args[7], get_endclass=args[8], indiv_id=args[9])
+def exec_scen(mdl, scen, nomhist, track='all', staged = True, track_times="all", run_stochastic=False, save_args={}, get_endclass=True, indiv_id=''):
     """ 
     Executes a scenario and generates results and classifications given a model and nominal model history
     
@@ -746,7 +748,7 @@ def construct_nomscen(mdl):
     -------
     nomscen : scen
     """
-    nomscen={'faults':{},'properties':{}}
+    nomscen={'sequence':{}, 'properties':{}}
     nomscen['properties']['time']=0.0
     nomscen['properties']['rate']=1.0
     nomscen['properties']['type']='nominal'
@@ -781,7 +783,7 @@ def list_init_faults(mdl):
             for mode in modes:
                 nomscen=construct_nomscen(mdl)
                 newscen=nomscen.copy()
-                newscen['faults'][fxnname]=mode
+                nomscen['sequence']={time:{'faults':{fxnname:mode}}}
                 if mdl.fxns[fxnname].faultmodes[mode]['probtype']=='rate':
                     rate=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[mode]['units'], mdl.units)*trange # this rate is on a per-simulation basis
                 elif mdl.fxns[fxnname].faultmodes[mode]['probtype']=='prob':
@@ -853,20 +855,15 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes)
     flowstates=dict.fromkeys(mdl.staticflows)
-    if type(scen['properties']['time'])==list:    singletime=False
-    else:                                         singletime=True
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
            if t in ctimes: c_mdl[t]=mdl.copy()
-           if singletime:
-               if t==scen['properties']['time']:    flowstates = propagate(mdl, scen['faults'], t, flowstates, run_stochastic=run_stochastic)
-               else:                                flowstates = propagate(mdl,{},t, flowstates, run_stochastic=run_stochastic)
-           else:
-               if t in scen['properties']['time']:
-                   ind = scen['properties']['time'].index(t)
-                   propagate(mdl, scen['faults'][ind], t, flowstates, run_stochastic=run_stochastic)
-               else: propagate(mdl,{},t, flowstates, run_stochastic=run_stochastic)
+           if t in scen['sequence']: 
+               fxnfaults = scen['sequence'][t].get('faults',{})
+               disturbances = scen['sequence'][t].get('disturbances', {})
+           else: fxnfaults, disturbances = {}, {}
+           flowstates = propagate(mdl, t, fxnfaults, disturbances, flowstates, run_stochastic=run_stochastic)
            if track_times=='all':   update_mdlhist(mdl, mdlhist, t_ind+shift, track=track)
            elif track_times[0]=='interval':
                if t_ind%track_times[1]: update_mdlhist(mdl, mdlhist, t_ind//track_times[1]+shift, track=track)
@@ -882,7 +879,7 @@ def prop_one_scen(mdl, scen, track='all', staged=False, ctimes=[], prevhist={}, 
     if None in c_mdl.values(): raise Exception("Approach times"+str(ctimes)+" go beyond simulation time "+str(t))
     return mdlhist, c_mdl, t_ind+shift
 
-def propagate(mdl, initfaults, time, flowstates={}, run_stochastic=False):
+def propagate(mdl, time, fxnfaults={}, disturbances={}, flowstates={}, run_stochastic=False):
     """
     Injects and propagates faults through the graph at one time-step
 
@@ -890,10 +887,12 @@ def propagate(mdl, initfaults, time, flowstates={}, run_stochastic=False):
     ----------
     mdl : model
         The model to propagate the fault in
-    initfaults : dict
-        The faults to inject in the model with structure {fxn:fault}
     time : float
         The current timestep.
+    fxnfaults : dict
+        Faults to inject during this propagation step. With structure {'function':['fault1', 'fault2'...]}
+    disturbances : 
+        Variables to change during this propagation step. With structure {'function.var1':value}
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
         Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
@@ -902,16 +901,19 @@ def propagate(mdl, initfaults, time, flowstates={}, run_stochastic=False):
     flowstates : dict
         States of the model at the current time-step.
     """
+    #Step 0: Update model states with disturbances
+    mdl.set_vars(**disturbances)
     #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
-    for fxnname in mdl.dynamicfxns.union(initfaults.keys()):
+    for fxnname in mdl.dynamicfxns.union(fxnfaults.keys()):
         fxn=mdl.fxns[fxnname]
-        faults = initfaults.get(fxnname, [])
-        if type(faults)==list: fxn.updatefxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
-        else:                  fxn.updatefxn('dynamic', faults=[faults], time=time, run_stochastic=run_stochastic)
+        faults = fxnfaults.get(fxnname, [])
+        if type(faults)!=list: faults=[faults]
+        fxn.updatefxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
+        
     #Step 2: Run Static Propagation Methods
-    flowstates = prop_time(mdl, time, initfaults, flowstates, run_stochastic=run_stochastic)
+    flowstates = prop_time(mdl, time, flowstates, run_stochastic=run_stochastic)
     return flowstates
-def prop_time(mdl, time, initfaults, flowstates={}, run_stochastic=False):
+def prop_time(mdl, time, flowstates={}, run_stochastic=False):
     """
     Propagates faults through model graph.
 
@@ -921,8 +923,6 @@ def prop_time(mdl, time, initfaults, flowstates={}, run_stochastic=False):
         Model to propagate faults in
     time : float
         Current time-step.
-    initfaults : dict
-        Faults to inject during this propagation step.
     run_stochastic : bool
         Whether to run stochastic behaviors or use default values. Default is False.
         Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
@@ -957,7 +957,7 @@ def prop_time(mdl, time, initfaults, flowstates={}, run_stochastic=False):
         n+=1
         if n>1000: #break if this is going for too long
             print("Undesired looping in function")
-            print(initfaults)
+            print(time)
             print(fxnname)
             print(activefxns)
             break

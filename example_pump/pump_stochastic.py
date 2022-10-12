@@ -204,7 +204,7 @@ if __name__=="__main__":
     
     for i in range(1,10):
         mdl.update_seed(i)
-        propagate.propagate(mdl, {}, i, run_stochastic='track_pdf')
+        propagate.propagate(mdl, i, run_stochastic='track_pdf')
         print(mdl.return_probdens())
         #print(mdl.seed)
         

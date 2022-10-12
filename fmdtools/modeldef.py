@@ -2057,7 +2057,7 @@ class NominalApproach():
         for i in range(len(seeds)):
             self.num_scenarios+=1
             scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname]={'faults':{},'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
+            self.scenarios[scenname]={'sequence':{},'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                                 'modelparams':{'seed':seeds[i]}, 'prob':1/len(seeds)}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def add_param_replicates(self,paramfunc, rangeid, replicates, *args, ind_seeds=True, **kwargs):
@@ -2091,7 +2091,7 @@ class NominalApproach():
             self.num_scenarios+=1
             params = paramfunc(*args, **kwargs)
             scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname]={'faults':{},\
+            self.scenarios[scenname]={'sequence':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                     'params':params,'inputparams':kwargs,'modelparams':{'seed':seeds[i]},\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/replicates}}
@@ -2179,7 +2179,7 @@ class NominalApproach():
                 self.num_scenarios+=1
                 params = paramfunc(*args, **inputparams)
                 scenname = rangeid+'_'+str(self.num_scenarios)
-                self.scenarios[scenname]={'faults':{},\
+                self.scenarios[scenname]={'sequence':{},\
                                           'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                         'params':params,'inputparams':inputparams,'modelparams':{'seed':mdlseeds[i]},\
                                                         'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
@@ -2302,7 +2302,7 @@ class NominalApproach():
             inputparams = {name: (ins() if callable(ins) else ins[0](*ins[1:])) for name, ins in randvars.items()}
             params = paramfunc(*fixedargs, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname]={'faults':{},\
+            self.scenarios[scenname]={'sequence':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                     'params':params,'inputparams':inputparams,'modelparams':{'seed':mdlseeds[i]},\
                                                     'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/replicates}}
@@ -2751,9 +2751,7 @@ class SampleApproach():
                 else:       self.weights[fxnmode][phaseid][time] = 1/len(phasetimes)
     def create_nomscen(self, mdl):
         """ Creates a nominal scenario """
-        nomscen={'faults':{},'properties':{}}
-        for fxnname in mdl.fxns:
-            nomscen['faults'][fxnname]='nom'
+        nomscen={'sequence':{},'properties':{}}
         nomscen['properties']['time']=0.0
         nomscen['properties']['type']='nominal'
         nomscen['properties']['name']='nominal'
@@ -2775,14 +2773,16 @@ class SampleApproach():
                             rate = self.rates[fxnmode][phaseid] * self.weights[fxnmode][phaseid][time]
                         if type(fxnmode[0])==str:
                             name = fxnmode[0]+' '+fxnmode[1]+', t='+str(time)
-                            scen={'faults':{fxnmode[0]:fxnmode[1]}, 'properties':{'type': 'single-fault', 'function': fxnmode[0],\
-                                  'fault': fxnmode[1], 'rate': rate, 'time': time, 'name': name}}
+                            scen={'sequence':{time:{'faults':{fxnmode[0]:fxnmode[1]}}},\
+                                  'properties':{'type': 'single-fault', 'function': fxnmode[0],\
+                                                'fault': fxnmode[1], 'rate': rate, 'time': time, 'name': name}}
                         else:
                             name = ' '.join([fm[0]+': '+fm[1]+',' for fm in fxnmode])+' t='+str(time)
                             faults = dict.fromkeys([fm[0] for fm in fxnmode])
                             for fault in faults:
                                 faults[fault] = [fm[1] for fm in fxnmode if fm[0]==fault]
-                            scen = {'faults':faults, 'properties':{'type': str(len(fxnmode))+'-joint-faults', 'functions':{fm[0] for fm in fxnmode}, \
+                            scen = {'sequence':{time:{'faults':faults}},\
+                                    'properties':{'type': str(len(fxnmode))+'-joint-faults', 'functions':{fm[0] for fm in fxnmode}, \
                                     'modes':{fm[1] for fm in fxnmode}, 'rate': rate, 'time': time, 'name': name}}
                         self.scenlist=self.scenlist+[scen]
                         if self.scenids.get((fxnmode, phaseid)): self.scenids[fxnmode, phaseid] = self.scenids[fxnmode, phaseid] + [name]
