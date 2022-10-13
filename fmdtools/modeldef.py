@@ -1301,7 +1301,7 @@ class Action(Block):
         ----------
         time : float, optional
             Model time. The default is 0.
-        run_stochastic : book
+        run_stochastic : bool
             Whether to run the simulation using stochastic or deterministic behavior
         """
         self.run_stochastic=run_stochastic
@@ -1446,7 +1446,7 @@ class Model(object):
         self.units = modelparams.get('units', 'hr')
         self.use_local = modelparams.get('use_local', True)
         self.use_end_condition = modelparams.get('use_end_condition', True)
-        self.update_model_seed(modelparams.get('seed', False))
+        self._update_model_seed(modelparams.get('seed', False))
         
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
@@ -1469,7 +1469,7 @@ class Model(object):
             if i+1==len(int_low): break
             if int_low[i+1]<=int_high[i]:
                 raise Exception("Global phases overlap (see mdlparams):"+str(self.phases)+" Ensure the max of each phase < min of each other phase")
-    def update_model_seed(self, seed=[]):
+    def _update_model_seed(self, seed=[]):
         """ Updates/Initializes the model seed params (helper function--use update_seed instead)""" 
         if seed:  self.seed = seed
         else:
@@ -1485,7 +1485,7 @@ class Model(object):
         seed : int, optional
             Seed to use. The default is [], which uplls from np.random.SeedSequence
         """
-        self.update_model_seed(seed)
+        self._update_model_seed(seed)
         for fxn in self.fxns:
             self.fxns[fxn].update_seed(self.seed)
     def get_rand_states(self, auto_update_only=False):
@@ -1895,13 +1895,15 @@ class Model(object):
         else: varlist=[]; varvalues=[]
         if kwargs: varlist = varlist+[*kwargs.keys()]; varvalues = varvalues + [*kwargs.values()]
         for i,var in enumerate(varlist):
-            if type(var)==str: var=var.split(".")
-            if var[0] in ['functions', 'fxns']: f=self.fxns[var[1]]; var=var[2:]
-            elif var[0]=='flows':               f=self.flows[var[1]]; var=var[2:]
-            elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
-            elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]
-            else: raise Exception(var[0]+" not a function or flow")
-            f.set_var(var, varvalues[i])
+            if var=='seed':  self.update_seed(seed=varvalues[i])
+            else:
+                if type(var)==str: var=var.split(".")             
+                if var[0] in ['functions', 'fxns']: f=self.fxns[var[1]]; var=var[2:]
+                elif var[0]=='flows':               f=self.flows[var[1]]; var=var[2:]
+                elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
+                elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]             
+                else: raise Exception(var[0]+" not a function, flow, or seed")
+                f.set_var(var, varvalues[i])
     def get_vars(self, *variables):
         """
         Gets variable values in the model.
