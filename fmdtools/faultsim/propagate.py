@@ -10,6 +10,12 @@ Main Methods:
     - :func:`approach`:             Injects and propagates faults in the model defined by a given sample approach.
     - :func:`nominal_approach`:     Simulates a model over a range of parameters defined by a nominal approach.
     - :func:`nested_approach`:      Injects and propagates faults in the model defined by a given sample approach over a range of parameters defined by a nominal approach. 
+    
+Shared Method Parameters:
+    - :data:`sim_kwargs`:           Simulation keyword arguments.
+    - :data:`run_kwargs`:           Run keyword arguments.
+    - :data:`mult_kwargs`:         Multi-scenario keyword arguments
+
 Private Methods:
     - :func:`list_init_faults()`:   Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
     - :func:`prop_one_scen()`:      Runs a fault scenario in the model over time
@@ -39,8 +45,109 @@ import dill
 import warnings
 from fmdtools.modeldef import SampleApproach
 
+##DEFAULT ARGUMENTS
+sim_kwargs= {'desired_result':'endclass',
+             'track': 'all',
+             'track_times':'all',
+             'staged':False,
+             'run_stochastic':False}
+"""
+Simulation keyword arguments.
+
+Parameters
+----------
+    desired_result: dict/str/list
+        Desired quantities to return in the first argument. 
+        Options are:
+            - 'endclass': a dict returned by find_classification (default)
+            - 'endfaults': a dict of returned fault modes and their propagation {'endfaults':faultdict, 'faultprops':faultpropdict}
+            - 'normal'/'bipartite'/'typegraph': a networkx graph of the model with fault modes superimposed
+            - 'fxnname.varname': variable values to get
+            - a list of the above arguments (for multiple at the end)
+            - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}
+    track : str, optional
+        Which model states to track over time
+        Options:
+            - 'functions'
+            - 'flows' 
+            - 'all'
+            - 'none'
+            - 'valparams' (model states specified in mdl.valparams), 
+            - or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        The default is 'all'.
+    track_times : str/tuple
+        Defines what times to include in the history. 
+        Options are:
+            - 'all'--all simulated times
+            - ('interval', n)--includes every nth time in the history
+            - ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
+    run_stochastic : bool
+        Whether to run stochastic behaviors or use default values. Default is False.
+        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
+    staged : bool, optional
+        Whether to inject the faults in a copy of the nominal model at the fault time (True) or 
+        instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
+"""
+def unpack_sim_kwargs(**kwargs):
+    """Unpacks :data:`sim_kwargs` parameters for :func:`prop_one_scen`"""
+    return (kwargs.get(k,v) for k,v in sim_kwargs.items())
+def pack_sim_kwargs(**kwargs):
+    """Creates :data:`sim_kwargs` for :func:`prop_one_scen`"""
+    return {k:kwargs.get(k,v) for k,v in sim_kwargs.items()}
+
+run_kwargs = {'save_args':{},
+              'new_params':{},
+              'protect':True}
+"""
+Run keyword arguments.
+
+Parameters
+----------
+    protect : bool
+        Whether or not to protect the model object via copying.
+        Options:
+            - True (default): re-instances the model so that multiple simulations can be run successively without causing problems
+            - False : Thus, the model object that is returned can be modified and analyzed if needed
+    save_args : dict (optional)
+        Dictionary specifying if/how to save results. Default is {}, which doesn't save anything.
+        Has structure: 
+            - {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
+            - where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
+            - (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
+            - and indiv is an (optional) bool specifying whether to save results individually (in a folder)
+            or as a monolythic file
+    new_params: dict (optional)
+        Parameter dictionary to be instantiated in the model prior to simulation. Has structure:
+            - {"params":params, "modelparams":modelparams, "valparams":valparams}
+        Parameter dictionaries do not need to be complete (if incomplete).
+"""
+def pack_run_kwargs(**kwargs):
+    """Creates subset of run kwargs for :func:`nom_helper` and :data:`run_kwarg`"""
+    return {k:kwargs.get(k,v) for k,v in run_kwargs.items()}
+mult_kwargs = {'max_mem':2e9,
+               'showprogress': True,
+               'pool': False}
+"""
+Multi-scenario keyword arguments.
+
+Parameters
+----------
+    pool : process pool, optional
+        Process Pool Object from multiprocessing or pathos packages. Pathos is recommended.
+        e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
+        or parallelpool = ProcessPool(nodes=n) for n cores (pathos)
+        If False, the set of scenarios is run serially. The default is False
+    showprogress: bool, optional
+        whether to show a progress bar during execution. default is true
+    max_mem : int
+        Max memory (warns the user when memory is above threshold)
+"""
+def unpack_mult_kwargs(**kwargs):
+    """Unpacks the mult kwarg parameters for the :func:`approach`"""
+    return (kwargs.get(k,v) for k,v in mult_kwargs.items())
+
 ## FAULT PROPAGATION
-def nominal(mdl, desired_result='endclass', track='all', track_times="all", protect=True, run_stochastic=False, save_args={}, new_params={}):
+def nominal(mdl, **kwargs):
     """
     Runs the model over time in the nominal scenario.
 
@@ -48,40 +155,12 @@ def nominal(mdl, desired_result='endclass', track='all', track_times="all", prot
     ----------
     mdl : Model
         Model of the system
-    desired_result : dict/str/list
-        Desired quantities to return in the first argument. Options are:
-            - 'endclass': a dict returned by find_classification
-            - 'endfaults': a dict of returned fault modes and their propagation {'endfaults':faultdict, 'faultprops':faultpropdict}
-            - 'normal'/'bipartite'/'typegraph': a networkx graph of the model with fault modes superimposed
-            - 'fxnname.varname': variable values to get
-            - a list of the above arguments (for multiple at the end)
-            - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}
-    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
-        Which model states to track over time, which can be given as 'functions', 'flows', 
-        'all', 'none', 'valparams' (model states specified in mdl.valparams),
-        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    track_times : str/tuple
-        Defines what times to include in the history. Options are:
-            'all'--all simulated times
-            ('interval', n)--includes every nth time in the history
-            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
-    protect : bool
-        Whether or not to protect the model object via copying
-            True (default) - re-instances the model so that multiple simulations can be run successively without causing problems
-            False - Thus, the model object that is returned can be modified and analyzed if needed
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
-    save_args : dict (optional)
-        Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs},
-        where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
-        (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True}) 
-    new_params: new_params (params, modelparams, and/or valparams)
-        passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
-        to be simulated with the given parameters. Parameter dictionaries do not 
-        need to be complete (if incomplete)
+    **kwargs : kwargs
+        Additional keyword arguments, may include:
+            - :data:`sim_kwargs` : kwargs
+                Simulation options for :func:`prop_one_scen
+            - :data:`run_kwargs` : kwargs
+                Run options for :func:`nom_helper` and others
     Returns
     -------
     result:
@@ -91,9 +170,9 @@ def nominal(mdl, desired_result='endclass', track='all', track_times="all", prot
     nomhist : Dict
         A dictionary with a history of modelstates
     """
-    result, mdlhist, _, mdl, t_end = nom_helper(mdl, None, protect=protect, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic, save_args=save_args, new_params=new_params, cut_hist=True)
-    if protect: mdl.reset()
-    save_helper(save_args, result, mdlhist)
+    result, mdlhist, _, mdl, t_end = nom_helper(mdl, None, cut_hist=True, **kwargs)
+    if kwargs.get('protect', False): mdl.reset()
+    save_helper(kwargs.get('save_args',{}), result, mdlhist)
     return result, mdlhist
 
 def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
@@ -127,7 +206,7 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
         if 'mdlhist' in save_args:     proc.save_result(mdlhist, **save_args['mdlhist'])
         if 'endclass' in save_args:     proc.save_result(endclass, **save_args['endclass'])
     
-def update_params(params, new_params={}):
+def update_params(params, **new_params):
     """
     Updates a dictionary with the given keyword arguments
 
@@ -176,7 +255,8 @@ def new_mdl_params(mdl,paramdict):
     valparams = update_params(mdl.valparams, **paramdict.get('valparams', {}))
     return params, modelparams, valparams
 
-def nominal_approach(mdl,nomapp, desired_result='endclass', track='all',track_times="all",  showprogress=True, pool=False,  run_stochastic=False, max_mem=2e9, save_args={}):
+
+def nominal_approach(mdl,nomapp, **kwargs):
     """
     Simulates a set of nominal scenarios through a model. Useful to understand
     the sets of parameters where the system will run nominally and/or lead to 
@@ -188,34 +268,16 @@ def nominal_approach(mdl,nomapp, desired_result='endclass', track='all',track_ti
         Model to simulate
     nomapp : NominalApproach
         Nominal Approach defining the nominal scenarios to run the system over.
-    desired_result : dict/str/list.
-        Desired quantities to return in the first argument. (default:'endclass') Options are:
-            - 'endclass': a dict returned by find_classification
-            - 'endfaults': a dict of returned fault modes and their propagation {'endfaults':faultdict, 'faultprops':faultpropdict}
-            - 'normal'/'bipartite'/'typegraph': a networkx graph of the model with fault modes superimposed
-            - 'fxnname.varname': variable values to get
-            - a list of the above arguments (for multiple at the end)
-            - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}
-    track : str, optional
-        States to track during simulation. The default is 'all'.
-    showprogress : bool, optional
-        Whether to display progress during simulation. The default is True.
-    pool : Pool, optional
-        Parallel pool (e.g. multiprocessing.Pool) to simulate with 
-        (if using parallelism). The default is False.
-    track_times : str/tuple
-        Defines what times to include in the history. Options are:
-            'all'--all simulated times
-            ('interval', n)--includes every nth time in the history
-            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
-    max_mem : int
-        Max memory (warns the user when memory is above threshold)
     get_endclass : bool
         Whether to return endclasses from mdl.find_classification. Default is True.
-    save_args : dict
+    **kwargs : kwargs
+        Additional keyword arguments, may include:
+            - :data:`sim_kwargs` : kwargs
+                Simulation options for :func:`prop_one_scen
+            - :data:`run_kwargs` : kwargs
+                Run options for :func:`nom_helper` and others
+            - :data:`mult_kwargs` : kwargs
+                Multi-scenario options for :func:`approach` and others
     Returns
     -------
     nomresults:
@@ -223,33 +285,38 @@ def nominal_approach(mdl,nomapp, desired_result='endclass', track='all',track_ti
     nomhists : Dict
         Dictionary of model histories, with structure {'scenname':mdlhist}
     """
-    check_overwrite(save_args)
-    n_mdlhists = dict.fromkeys(nomapp.scenarios)
-    n_result = dict.fromkeys(nomapp.scenarios)
-    
+    kwargs.update(pack_run_kwargs(**kwargs))
+    check_overwrite(kwargs['save_args'] )
+    kwargs['max_mem'], showprogress, pool = unpack_mult_kwargs(**kwargs)
+    kwargs['num_scens']=nomapp.num_scenarios
+    n_mdlhists, n_results = dict.fromkeys(nomapp.scenarios), dict.fromkeys(nomapp.scenarios)
     if pool:
-        check_mdl_memory(mdl, nomapp.num_scenarios, max_mem=max_mem)
-        inputs = [(mdl, scen, desired_result, track, track_times, run_stochastic, save_args, name, nomapp.num_scenarios, max_mem) for name, scen in nomapp.scenarios.items()]
-        result_list = list(tqdm.tqdm(pool.imap(exec_nom_helper, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
-        n_result = {scen['properties']['name']:result_list[i][0] for i, scen in enumerate(nomapp.scenarios.values())}
-        n_mdlhists = {scen['properties']['name']:result_list[i][1] for i, scen in enumerate(nomapp.scenarios.values())}
+        check_mdl_memory(mdl, nomapp.num_scenarios, max_mem=kwargs['max_mem'])
+        inputs = [(mdl, scen, name, kwargs) for name, scen in nomapp.scenarios.items()]
+        res_list = list(tqdm.tqdm(pool.imap(exec_nom_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
+        n_results, n_mdlhists = unpack_res_list([*nomapp.scenarios.values()], res_list)
     else:
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
-            n_result[scenname], n_mdlhists[scenname]= exec_nom_helper(mdl, scen, desired_result, track, track_times, run_stochastic, save_args, scenname, nomapp.num_scenarios, max_mem)
-    save_helper(save_args, n_result, n_mdlhists)
-    return n_result, n_mdlhists
+            n_results[scenname], n_mdlhists[scenname]= exec_nom_helper(mdl, scen, scenname, **kwargs)
+    save_helper(kwargs['save_args'] , n_results, n_mdlhists)
+    return n_results, n_mdlhists
+def unpack_res_list(scenlist, res_list):
+    results = { scen['properties']['name']: res_list[i][1] for i, scen in enumerate(scenlist)}
+    mdlhists = {scen['properties']['name']: res_list[i][1] for i, scen in enumerate(scenlist)}
+    return results, mdlhists
+
 def exec_nom_par(arg):
-    endclass, mdlhist = exec_nom_helper(*arg)
+    endclass, mdlhist = exec_nom_helper(arg[0], arg[1], arg[2], **arg[3])
     return endclass, mdlhist
-def exec_nom_helper(mdl, scen, desired_result, track, track_times, run_stochastic, save_args, name, num_scens, max_mem):
+def exec_nom_helper(mdl, scen, name, **kwargs):
     """Helper function for executing nominal scenarios"""
     mdl = new_mdl(mdl,scen['properties'])
-    result, mdlhist, _, t_end =prop_one_scen(mdl, scen, desired_result=desired_result, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
-    check_hist_memory(mdlhist,num_scens, max_mem=max_mem)
-    save_helper(save_args, result, mdlhist, name, name)
+    result, mdlhist, _, t_end =prop_one_scen(mdl, scen, **kwargs)
+    check_hist_memory(mdlhist,kwargs['num_scens'], max_mem=kwargs['max_mem'])
+    save_helper(kwargs['save_args'], result, mdlhist, name, name)
     return result, mdlhist
 
-def one_fault(mdl, fxnname, faultmode, time=1, desired_result='endclass', track='all', track_times="all", staged=False, protect=True, run_stochastic=False, save_args={}, new_params={}):
+def one_fault(mdl, fxnname, faultmode, time=1, **kwargs):
     """
     Runs one fault in the model at a specified time.
 
@@ -263,44 +330,12 @@ def one_fault(mdl, fxnname, faultmode, time=1, desired_result='endclass', track=
         Name of the faultmode
     time : float, optional
         Time to inject fault. Must be in the range of model times (i.e. in range(0, end, mdl.tstep)). The default is 0.
-    desired_result : dict/str/list.
-        Desired quantities to return in the first argument. (default:'endclass') Options are:
-            - 'endclass': a dict returned by find_classification
-            - 'endfaults': a dict of returned fault modes and their propagation {'endfaults':faultdict, 'faultprops':faultpropdict}
-            - 'normal'/'bipartite'/'typegraph': a networkx graph of the model with fault modes superimposed
-            - 'fxnname.varname': variable values to get
-            - a list of the above arguments (for multiple at the end)
-            - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}
-    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
-        Which model states to track over time, which can be given as 'functions', 'flows', 
-        'all', 'none', 'valparams' (model states specified in mdl.valparams),
-        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    track_times : str/tuple
-        Defines what times to include in the history. Options are:
-            'all'--all simulated times
-            ('interval', n)--includes every nth time in the history
-            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
-    staged : bool, optional
-        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). The default is False..
-    protect : bool
-        Whether or not to protect the model object via copying
-            True (default) - re-instances the model so that multiple simulations can be run successively without causing problems
-            False - Thus, the model object that is returned can be modified and analyzed if needed
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
-    get_endclass : bool
-        Whether to return endclasses from mdl.find_classification. Default is True.
-    save_args : dict (optional)
-        Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs},
-        where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
-        (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
-    new_params: new_params (params, modelparams, and/or valparams)
-        passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
-        to be simulated with the given parameters. Parameter dictionaries do not 
-        need to be complete (if incomplete)
+    **kwargs : kwargs
+        Additional keyword arguments, may include:
+            - :data:`sim_kwargs` : kwargs
+                Simulation options for :func:`prop_one_scen
+            - :data:`run_kwargs` : kwargs
+                Run options for :func:`nom_helper` and others
     Returns
     -------
     result:
@@ -323,11 +358,11 @@ def one_fault(mdl, fxnname, faultmode, time=1, desired_result='endclass', track=
     scen['properties']['time']=time
     faultseq = {time:{fxnname:faultmode}}
     
-    result, mdlhists = mult_fault(mdl, faultseq, scen=scen, desired_result=desired_result, track=track, track_times=track_times, staged=staged, protect=protect, run_stochastic=run_stochastic, save_args=save_args, new_params=new_params)
+    result, mdlhists = mult_fault(mdl, faultseq, scen=scen, **kwargs)
     
     return result, mdlhists
 
-def mult_fault(mdl, faultseq, scen={}, desired_result='endclass', track='all',track_times="all", staged=True, rate=np.NaN,  protect=True, run_stochastic=False, save_args={}, new_params={}):
+def mult_fault(mdl, faultseq, scen={}, rate=np.NaN, **kwargs):
     """
     Runs a sequence of faults in the model at given times.
 
@@ -339,44 +374,14 @@ def mult_fault(mdl, faultseq, scen={}, desired_result='endclass', track='all',tr
         Dict of times and modes defining the fault scenario {time:{fxns: [modes]},}
     scen : dict, optional
         Scenario dictionary (for external calls)
-    desired_result : dict/str/list.
-        Desired quantities to return in the first argument. (default:'endclass') Options are:
-            - 'endclass': a dict returned by find_classification
-            - 'endfaults': a dict of returned fault modes and their propagation {'endfaults':faultdict, 'faultprops':faultpropdict}
-            - 'normal'/'bipartite'/'typegraph': a networkx graph of the model with fault modes superimposed
-            - 'fxnname.varname': variable values to get
-            - a list of the above arguments (for multiple at the end)
-            - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}
-    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
-        Which model states to track over time, which can be given as 'functions', 'flows', 
-        'all', 'none', 'valparams' (model states specified in mdl.valparams),
-        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    track_times : str/tuple
-        Defines what times to include in the history. Options are:
-            'all'--all simulated times
-            ('interval', n)--includes every nth time in the history
-            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     rate : float, optional
         Input rate for the sequence (must be calculated elsewhere)
-    protect : bool
-        Whether or not to protect the model object via copying
-            True (default) - re-instances the model so that multiple simulations can be run successively without causing problems
-            False - Thus, the model object that is returned can be modified and analyzed if needed
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
-    save_args : dict (optional)
-        Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
-        where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
-        (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
-        and indiv is an (optional) bool specifying whether to save results individually (in a folder)
-        or as a monolythic file
-    new_params: new_params (params, modelparams, and/or valparams)
-        passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
-        to be simulated with the given parameters. Parameter dictionaries do not 
-        need to be complete (if incomplete)
+    **kwargs : kwargs
+        Additional keyword arguments, may include:
+            - :data:`sim_kwargs` : kwargs
+                Simulation options for :func:`prop_one_scen
+            - :data:`run_kwargs` : kwargs
+                Run options for :func:`nom_helper` and others
     Returns
     -------
     result:
@@ -385,8 +390,8 @@ def mult_fault(mdl, faultseq, scen={}, desired_result='endclass', track='all',tr
         A dictionary of the states of the model of each fault scenario over time with structure: {'nominal':nomhist, 'faulty':faulthist}
     """
     time = min(faultseq)
-    _ , nomhist, nomscen, mdl, t_end_nom = nom_helper(mdl, time, track=track, track_times=track_times, staged=staged,\
-                                                      protect=protect, run_stochastic=run_stochastic, save_args=save_args, new_params={})
+    sim_kwarg = pack_sim_kwargs(**kwargs)
+    nomresult , nomhist, nomscen, mdl, t_end_nom = nom_helper(mdl, time, **sim_kwarg)
     if not scen:
         scen=nomscen.copy() #note: this is a shallow copy, so don't define it earlier
         scen['sequence']={t:{'faults':faultseq[t]} for t in faultseq}
@@ -394,35 +399,94 @@ def mult_fault(mdl, faultseq, scen={}, desired_result='endclass', track='all',tr
         scen['properties']['sequence']=faultseq
         scen['properties']['rate']=rate # this rate is on a per-simulation basis
         scen['properties']['time']=list(faultseq.keys())
-    
-    result, faulthist, _, t_end = prop_one_scen(mdl, scen, desired_result = desired_result, track=track, track_times=track_times, staged=staged, prevhist=nomhist, run_stochastic=run_stochastic, nomhist=nomhist)
+    result, faulthist, _, t_end = prop_one_scen(mdl, scen, **sim_kwarg, nomhist=nomhist, nomresult=nomresult)
     nomhist = cut_mdlhist(nomhist, t_end_nom)
     mdlhists = {'nominal':nomhist, 'faulty':faulthist}
-    if protect: mdl.reset()
-    save_helper(save_args, result, mdlhists)
+    if kwargs.get('protect', False): mdl.reset()
+    save_helper(kwargs.get('save_args',{}), result, mdlhists)
     return result, mdlhists
 
-def nom_helper(mdl, time, staged=False,  protect=True, save_args={}, new_params={}, **kwargs):
+def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, **kwargs):
+    """
+    Helper function for initial run of nominal scenario.
+
+    Parameters
+    ----------
+    mdl : Model
+        Model of the system
+    time : float/list
+        Times to copy the nominal model from
+    **kwargs : kwargs
+        :data:`sim_kwargs` simulation options for :func:`prop_one_scen
+
+    Returns
+    -------
+    result : dict
+        results dict from nominal sim
+    nommdlhist : dict
+        result history from nominal sim
+    nomscen : dict
+        nominal scenario dict
+    newmdl : Model
+        Model from copy time(s) ctimes
+    t_end_nom : float
+        Nominal simulation end time
+    """
+    staged = kwargs.get('staged',False)
     check_overwrite(save_args)
     #run model nominally, get relevant results
     if protect or new_params:   mdl = new_mdl(mdl,new_params)
     nomscen=construct_nomscen(mdl)
     if staged:  
-        if type(time) in [float, int]:  ctimes=[time]
-        else:                           ctimes=time
-    else:       ctimes=[]
-    result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, staged=staged, ctimes = ctimes, **kwargs)
+        if type(ctimes) in [float, int]:ctimes=[ctimes]
+        else:                           ctimes=ctimes
+    else:                               ctimes=[]
+    result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)
     
     endfaults, endfaultprops = mdl.return_faultmodes()
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     
     mdl.reset()
-    if staged and len(ctimes)==1:   newmdl = mdls[time]
+    if staged and len(ctimes)==1:   newmdl = mdls[ctimes]
     elif staged:                    newmdl=mdls
     else:       newmdl = new_mdl(mdl, {})
     return result, nommdlhist, nomscen, newmdl, t_end_nom
 
-def single_faults(mdl, desired_result='endclass', track='all', track_times="all", staged=False, pool=False, showprogress=True,  protect=True, run_stochastic=False, save_args={}, max_mem=2e9, new_params={}):
+def approach(mdl, app,  **kwargs):
+    """
+    Injects and propagates faults in the model defined by a given sample approach
+
+    Parameters
+    ----------
+    mdl : model
+        The model to inject faults in.
+    app : sampleapproach
+        SampleApproach used to define the list of faults and sample time for the model.
+    **kwargs : kwargs
+        Additional keyword arguments, may include:
+            - :data:`sim_kwargs` : kwargs
+                Simulation options for :func:`prop_one_scen
+            - :data:`run_kwargs` : kwargs
+                Run options for :func:`nom_helper` and others
+            - :data:`mult_kwargs` : kwargs
+                Multi-scenario options for :func:`approach` and others
+    Returns
+    -------
+    endclasses : dict
+        A dictionary with the rate, cost, and expected cost of each scenario run with structure {scenname:{expected cost, cost, rate}}
+    mdlhists : dict
+        A dictionary with the history of all model states for each scenario (including the nominal)
+    """
+    kwargs.update(pack_run_kwargs(**kwargs))
+    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **kwargs)
+    scenlist = app.scenlist
+    results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, nomscen, **kwargs, nomhist=nomhist, nomresult=nomresult)
+    mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
+    results['nominal'] = nomresult
+    save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
+    return results, mdlhists
+
+def single_faults(mdl, **kwargs):
     """
     Creates and propagates a list of failure scenarios in a model.
     
@@ -435,56 +499,14 @@ def single_faults(mdl, desired_result='endclass', track='all', track_times="all"
     ----------
     mdl : model
         The model to inject faults in
-    desired_result : dict/str/list.
-        Desired quantities to return in the first argument. (default:'endclass') Options are:
-            - 'endclass': a dict returned by find_classification
-            - 'endfaults': a dict of returned fault modes and their propagation {'endfaults':faultdict, 'faultprops':faultpropdict}
-            - 'normal'/'bipartite'/'typegraph': a networkx graph of the model with fault modes superimposed
-            - 'fxnname.varname': variable values to get
-            - a list of the above arguments (for multiple at the end)
-            - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}
-    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
-        Which model states to track over time, which can be given as 'functions', 'flows', 
-        'all', 'none', 'valparams' (model states specified in mdl.valparams),
-        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    track_times : str/tuple
-        Defines what times to include in the history. Options are:
-            'all'--all simulated times
-            ('interval', n)--includes every nth time in the history
-            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
-    staged : bool, optional
-        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
-    pool : process pool, optional
-        Process Pool Object from multiprocessing or pathos packages. multiprocessing is recommended.
-        e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
-        or parallelpool = ProcessPool(nodes=n) for n cores (pathos)
-        If False, the set of scenarios is run serially. The default is False
-    showprogress: bool, optional
-        whether to show a progress bar during execution. default is true
-    protect : bool
-        Whether or not to protect the model object via copying
-            True (default) - re-instances the model (safe)
-            False - model is not re-instantiated (unsafe--do not use model afterwards)
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
-    get_endclass : bool
-        Whether to return endclasses from mdl.find_classification. Default is True.
-    save_args : dict (optional)
-        Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
-        where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
-        (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
-        and indiv is an (optional) bool specifying whether to save results individually (in a folder)
-        or as a monolythic file
-    max_mem : int
-        Max memory (warns the user when memory is above threshold)
-    new_params: new_params (params, modelparams, and/or valparams)
-        passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
-        to be simulated with the given parameters. Parameter dictionaries do not 
-        need to be complete (if incomplete)
-
+    **kwargs : kwargs
+        Additional keyword arguments, may include:
+            - :data:`sim_kwargs` : kwargs
+                Simulation options for :func:`prop_one_scen
+            - :data:`run_kwargs` : kwargs
+                Run options for :func:`nom_helper` and others
+            - :data:`mult_kwargs` : kwargs
+                Multi-scenario options for :func:`approach` and others
     Returns
     -------
     results:
@@ -492,111 +514,69 @@ def single_faults(mdl, desired_result='endclass', track='all', track_times="all"
     mdlhists : dict
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
-    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, mdl.times, track=track, staged=staged, track_times=track_times, run_stochastic=run_stochastic, save_args=save_args, new_params={})
+    kwargs.update(pack_run_kwargs(**kwargs))
+    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, mdl.times,**kwargs)
     
     scenlist = list_init_faults(mdl)
-    kwargs = {'nomhist':nomhist, 'track':track, 'trac_times':track_times, 'desired_result':desired_result, 'run_stochastic':run_stochastic, 'save_args':save_args}
-    results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, pool, max_mem, staged, showprogress, nomscen, **kwargs)
+    results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, nomscen, **kwargs, nomhist=nomhist, nomresult=nomresult)
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
     results['nominal'] = nomresult
-    save_helper(save_args, nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
+    save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     return results, mdlhists
 
-def scenlist_helper(mdl, scenlist, c_mdl, pool, max_mem, staged, showprogress, nomscen, **kwargs):
+def scenlist_helper(mdl, scenlist, c_mdl, nomscen, **kwargs):
     #nomhist, track, track_times, desired_result, run_stochastic, save_args
+    max_mem, showprogress, pool = unpack_mult_kwargs(**kwargs)
+    
     check_hist_memory(kwargs['nomhist'],len(scenlist), max_mem=max_mem)
     results = {}
     mdlhists = {}
+    sim_kwarg = pack_sim_kwargs(**kwargs)
     if pool:
         check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
-        if staged:  inputs = [(c_mdl[scen['properties']['time']], scen, [*kwargs.values()],  str(i)) for i, scen in enumerate(scenlist)]
-        else:       inputs = [(mdl, scen,  [*kwargs.values()], str(i)) for i, scen in enumerate(scenlist)]
-        result_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
-        results = { scen['properties']['name']:result_list[i][0] for i, scen in enumerate(scenlist)}
-        results = { scen['properties']['name']: result_list[i][1] for i, scen in enumerate(scenlist)}
+        if sim_kwarg['staged']:  
+            inputs = [(c_mdl[scen['properties']['time']], scen, sim_kwarg,  str(i)) for i, scen in enumerate(scenlist)]
+        else:       
+            inputs = [(mdl, scen,  sim_kwarg, str(i)) for i, scen in enumerate(scenlist)]
+        res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
+        results, mdlhists = unpack_res_list(scenlist, res_list)
     else:
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
             name = scen['properties']['name']
-            if staged:  mdl = c_mdl[scen['properties']['time']]
-            ec, mh, t_end = exec_scen(mdl, scen, indiv_id=str(i), **kwargs)
+            if sim_kwarg['staged']:  mdl = c_mdl[scen['properties']['time']]
+            ec, mh, t_end = exec_scen(mdl, scen, indiv_id=str(i), **sim_kwarg)
             results[name],mdlhists[name] = ec, mh
     save_helper(kwargs['save_args'], results, mdlhists)
     return results, mdlhists
-def approach(mdl, app, desired_result='endclass', track='all', track_times="all", staged=False, pool=False, showprogress=True,  protect=True, run_stochastic=False, save_args={}, max_mem=2e9, new_params={}):
-    """
-    Injects and propagates faults in the model defined by a given sample approach
-
-    Parameters
+def exec_scen_par(args):
+    """Helper function for executing the scenario in parallel"""
+    return exec_scen(args[0], args[1], **args[2], indiv_id=args[3])
+def exec_scen(mdl, scen, nomhist={}, save_args={}, indiv_id='', **kwargs):
+    """ 
+    Executes a scenario and generates results and classifications given a model and nominal model history
+    
+     Parameters
     ----------
     mdl : model
         The model to inject faults in.
-    app : sampleapproach
-        SampleApproach used to define the list of faults and sample time for the model.
-    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
-        Which model states to track over time, which can be given as 'functions', 'flows', 
-        'all', 'none', 'valparams' (model states specified in mdl.valparams),
-        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    desired_result : dict/str/list.
-        Desired quantities to return in the first argument. (default:'endclass') Options are:
-            - 'endclass': a dict returned by find_classification
-            - 'endfaults': a dict of returned fault modes and their propagation {'endfaults':faultdict, 'faultprops':faultpropdict}
-            - 'normal'/'bipartite'/'typegraph': a networkx graph of the model with fault modes superimposed
-            - 'fxnname.varname': variable values to get
-            - a list of the above arguments (for multiple at the end)
-            - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}
-    track_times : str/tuple
-        Defines what times to include in the history. Options are:
-            'all'--all simulated times
-            ('interval', n)--includes every nth time in the history
-            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
-    staged : bool, optional
-        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a 
-        new model for the fault (False). Setting to True roughly halves execution time. The default is False.
-    pool : process pool, optional
-        Process Pool Object from multiprocessing or pathos packages. Pathos is recommended.
-        e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
-        or parallelpool = ProcessPool(nodes=n) for n cores (pathos)
-        If False, the set of scenarios is run serially. The default is False
-    showprogress: bool, optional
-        whether to show a progress bar during execution. default is true
-    protect : bool
-        Whether or not to protect the model object via copying
-            True (default) - re-instances the model (safe)
-            False - model is not re-instantiated (unsafe--do not use model afterwards)
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
-    get_endclass : bool
-        Whether to return endclasses from mdl.find_classification. Default is True.
-    save_args : dict (optional)
-        Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
-        where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
-        (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
-        and indiv is an (optional) bool specifying whether to save results individually (in a folder)
-        or as a monolythic file
-    max_mem : int
-        Max memory (warns the user when memory is above threshold)
-    new_params: new_params (params, modelparams, and/or valparams)
-        passing parameter dictionaries (e.g., params, modelparams, valparams) instantiates the model
-        to be simulated with the given parameters. Parameter dictionaries do not 
-        need to be complete (if incomplete)
-    Returns
-    -------
-    endclasses : dict
-        A dictionary with the rate, cost, and expected cost of each scenario run with structure {scenname:{expected cost, cost, rate}}
-    mdlhists : dict
-        A dictionary with the history of all model states for each scenario (including the nominal)
+    scen : scenario
+        scenario used to define time and faults where the fault is to be injected
+    nomhist:
+        history of results in the nominal model run
+    save_args : dict
+        Save dictionary to use in save_helper defining when/how to save the dictionary
+    indiv_id : str
+        ID str to insert into the file name (if saving individually)
+    **kwargs : kwargs
+        Additional keyword arguments, may include:
+            - :data:`sim_kwargs` : kwargs
+                Simulation options for :func:`prop_one_scen
     """
-    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), track=track, staged=staged, track_times=track_times, run_stochastic=run_stochastic, save_args=save_args, new_params={})
-    scenlist = app.scenlist
-    kwargs = {'nomhist':nomhist, 'track':track, 'trac_times':track_times, 'desired_result':desired_result, 'run_stochastic':run_stochastic, 'save_args':save_args}
-    results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, pool, max_mem, staged, showprogress, nomscen, **kwargs)
-    mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
-    results['nominal'] = nomresult
-    save_helper(save_args, nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
-    return results, mdlhists
+    if kwargs.get('staged',False):  mdl = mdl.copy(); prevhist=nomhist
+    else:                           mdl = new_mdl(mdl, {}); prevhist={}
+    result, mdlhist, _, t_end,  =prop_one_scen(mdl, scen, **kwargs, prevhist=prevhist)
+    save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen['properties']['name']))
+    return result, mdlhist, t_end
 
 def check_hist_memory(mdlhist, nscens, max_mem=2e9):
     """Checks if the memory will be exhausted given the size of the mdlhist and number of scenarios"""
@@ -617,7 +597,7 @@ def check_overwrite(save_args):
         if arg!='indiv':
             if args.get('filename', False): proc.file_check(args['filename'], args.get('overwrite', False))
 
-def nested_approach(mdl, nomapp, desired_result={}, track='all',track_times="all", get_phases = False, showprogress=True, staged=False, pool=False, run_stochastic=False, save_args={}, max_mem=2e9, **app_args):
+def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     """
     Simulates a set of fault modes within a set of nominal scenarios defined by a nominal approach.
 
@@ -627,53 +607,21 @@ def nested_approach(mdl, nomapp, desired_result={}, track='all',track_times="all
         Model Object to use in the simulation.
     nomapp : NominalApproach
         NominalApproach defining the nominal situations the model will be run over
-    desired_result : dict/str/list.
-        Desired quantities to return in the first argument. (default:'endclass') Options are:
-            - 'endclass': a dict returned by find_classification
-            - 'endfaults': a dict of returned fault modes and their propagation {'endfaults':faultdict, 'faultprops':faultpropdict}
-            - 'normal'/'bipartite'/'typegraph': a networkx graph of the model with fault modes superimposed
-            - 'fxnname.varname': variable values to get
-            - a list of the above arguments (for multiple at the end)
-            - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}
-    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
-        Which model states to track over time, which can be given as 'functions', 'flows', 
-        'all', 'none', 'valparams' (model states specified in mdl.valparams),
-        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    track_times : str/tuple
-        Defines what times to include in the history. Options are:
-            'all'--all simulated times
-            ('interval', n)--includes every nth time in the history
-            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
     get_phases : Bool/List/Dict, optional
         Whether and how to use nominal simulation phases to set up the SampleApproach. The default is False.
         - If True, all phases from the nominal simulation are passed to SampleApproach()
         - If a list ['Fxn1', 'Fxn2' etc.], only the phases from the listed functions will be passed.
         - If a dict {'Fxn1':'phase1'}, only the phase 'phase1' in the function 'Fxn1' will be passed.
-    staged : bool, optional
-        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
-    pool : process pool, optional
-        Process Pool Object from multiprocessing or pathos packages. Pathos is recommended.
-        e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
-        or parallelpool = ProcessPool(nodes=n) for n cores (pathos)
-        If False, the set of scenarios is run serially. The default is False
-    showprogress: bool, optional
-        whether to show a progress bar during execution. default is true
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
-    save_args : dict (optional)
-        Dictionary specifying if/how to save results. Default is {}, which doesn't save anything
-        Has structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv, 'apps':'filename.pkl'},
-        where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
-        (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
-        and indiv is an (optional) bool specifying whether to save results individually (in a folder)
-        or as a monolythic file
-        and filename.pkl is an optional file name to save the generated SampleApproaches to (if desired)
-    max_mem : int
-        Max memory (warns the user when memory is above threshold)
-    **app_args : new_params
-        Keyword arguments for the SampleApproach. See modeldef.SampleApproach documentation.
+    **kwargs : kwargs
+        Additional keyword arguments, may include:
+            - :data:`sim_kwargs` : kwargs
+                Simulation options for :func:`prop_one_scen
+            - :data:`run_kwargs` : kwargs
+                Run options for :func:`nom_helper` and others
+            - :data:`mult_kwargs` : kwargs
+                Multi-scenario options for :func:`approach` and others
+            - **app_args : new_params
+                Keyword arguments for the SampleApproach. See modeldef.SampleApproach documentation.
 
     Returns
     -------
@@ -684,14 +632,20 @@ def nested_approach(mdl, nomapp, desired_result={}, track='all',track_times="all
     apps : dict
         A dictionary of the SampleApproaches generated corresponding to each nominal scenario with structure {'nomscen1':app1}
     """
+    save_args = kwargs.get('save_args', {})
     check_overwrite(save_args)
-    nested_mdlhists = dict.fromkeys(nomapp.scenarios)
-    nested_results = dict.fromkeys(nomapp.scenarios)
-    apps = dict.fromkeys(nomapp.scenarios)
     save_app = save_args.pop("apps", False)
+    max_mem, showprogress, pool = unpack_mult_kwargs(**kwargs)
+    sim_kwarg = pack_sim_kwargs(**kwargs)
+    run_kwargs = pack_run_kwargs(**kwargs)
+    app_args = {k:v for k,v in kwargs if k not in [*sim_kwarg,*run_kwargs, 'max_mem', 'showprogress', 'pool']}
+    
+    nest_mdlhists = dict.fromkeys(nomapp.scenarios)
+    nest_results = dict.fromkeys(nomapp.scenarios)
+    apps = dict.fromkeys(nomapp.scenarios)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
         mdl = new_mdl(mdl,scen['properties'])
-        _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, track=track, staged=False, track_times=track_times, run_stochastic=run_stochastic)
+        _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **sim_kwarg, staged=False)
         if get_phases:
             if get_phases=='global':      phases={'global':[0,t_end]}
             else:
@@ -699,64 +653,17 @@ def nested_approach(mdl, nomapp, desired_result={}, track='all',track_times="all
                 if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
                 elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
             app_args.update({'phases':phases})
-        
         app = SampleApproach(mdl,**app_args)
         apps[scenname]=app
-        
         check_hist_memory(nomhist,len(app.scenlist)*nomapp.num_scenarios, max_mem=max_mem)
         
-        nested_results[scenname], nested_mdlhists[scenname] = approach(mdl, app, staged=staged, track=track, pool=pool, showprogress=False, track_times=track_times, run_stochastic=run_stochastic, **scen['properties'])
-        save_helper(save_args, nested_results[scenname], nested_mdlhists[scenname], indiv_id=scenname, result_id=scenname)
-    save_helper(save_args, nested_results, nested_mdlhists)
+        nest_results[scenname], nest_mdlhists[scenname] = approach(mdl, app, pool=pool, showprogress=False, **sim_kwarg, **scen['properties'])
+        save_helper(save_args, nest_results[scenname], nest_mdlhists[scenname], indiv_id=scenname, result_id=scenname)
+    save_helper(save_args, nest_results, nest_mdlhists)
     if save_app:
         with open(save_app['filename'], 'wb') as file_handle:
             dill.dump(apps, file_handle)
-    return nested_results, nested_mdlhists, apps
-
-def exec_scen_par(args):
-    """Helper function for executing the scenario in parallel"""
-    return exec_scen(args[0], args[1], args[2], desired_result=args[3], track=args[4], track_times=args[5], staged=args[6], run_stochastic=args[7], save_args=args[8], indiv_id=args[9])
-def exec_scen(mdl, scen, nomhist, desired_result = {}, track='all',  track_times="all", staged = True, run_stochastic=False, save_args={},  indiv_id=''):
-    """ 
-    Executes a scenario and generates results and classifications given a model and nominal model history
-    
-     Parameters
-    ----------
-    mdl : model
-        The model to inject faults in.
-    scen : scenario
-        scenario used to define time and faults where the fault is to be injected
-    nomhist:
-        history of results in the nominal model run
-    desired_result:
-        dict defining desired result for the sim.
-    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
-        Which model states to track over time, which can be given as 'functions', 'flows', 
-        'all', 'none', 'valparams' (model states specified in mdl.valparams),
-        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    track_times : str/tuple
-        Defines what times to include in the history. Options are:
-            'all'--all simulated times
-            ('interval', n)--includes every nth time in the history
-            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
-    c_mdl:
-        the nominal model at the time to be executed in the scenarios (a dict keyed by times)
-    staged : bool, optional
-        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
-    save_args : dict
-        Save dictionary to use in save_helper defining when/how to save the dictionary
-    indiv_id : str
-        ID str to insert into the file name (if saving individually)
-    """
-    if staged:  mdl = mdl.copy(); prevhist=nomhist
-    else:       mdl = new_mdl(mdl, {}); prevhist={}
-    result, mdlhist, _, t_end,  =prop_one_scen(mdl, scen,desired_result=desired_result, track=track, track_times=track_times, run_stochastic=run_stochastic, prevhist=prevhist)
-    save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen['properties']['name']))
-    return result, mdlhist, t_end
+    return nest_results, nest_mdlhists, apps
 
 def construct_nomscen(mdl):
     """
@@ -814,7 +721,7 @@ def list_init_faults(mdl):
                 faultlist.append(newscen)
     return faultlist
 
-def prop_one_scen(mdl, scen, desired_result={}, track='all', track_times="all", staged=False, ctimes=[], prevhist={}, run_stochastic=False, nomhist={}, cut_hist=True):
+def prop_one_scen(mdl, scen, ctimes=[], prevhist={}, nomhist={}, nomresult={}, cut_hist=True, **kwargs):
     """
     Runs a fault scenario in the model over time
 
@@ -824,26 +731,6 @@ def prop_one_scen(mdl, scen, desired_result={}, track='all', track_times="all", 
         The model to inject faults in.
     scen : Dict
         The fault scenario to run. Has structure: {'faults':{fxn:fault}, 'properties':{rate, time, name, etc}}
-    desired_result : dict/str/list
-        Desired quantities to return in the first argument. Options are:
-            - 'endclass': a dict returned by find_classification
-            - 'endfaults': a dict of returned fault modes and their propagation {'endfaults':faultdict, 'faultprops':faultpropdict}
-            - 'normal'/'bipartite'/'typegraph': a networkx graph of the model with fault modes superimposed
-            - 'fxnname.varname': variable values to get
-            - a list of the above arguments (for multiple at the end)
-            - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}
-    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
-        Which model states to track over time, which can be given as 'functions', 'flows', 
-        'all', 'none', 'valparams' (model states specified in mdl.valparams),
-        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    track_times : str/tuple
-        Defines what times to include in the history. Options are:
-            'all'--all simulated times
-            ('interval', n)--includes every nth time in the history
-            ('times', [t1, ... tn])--only includes times defined in the vector [t1 ... tn]
-    staged : bool, optional
-        Whether to inject the fault in a copy of the nominal model at the fault time (True) or instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.
     ctimes : list, optional
         List of times to copy the model (for use in staged execution). The default is [].
     prevhist : dict, optional
@@ -852,9 +739,13 @@ def prop_one_scen(mdl, scen, desired_result={}, track='all', track_times="all", 
         Whether to run stochastic behaviors or use default values. Default is False.
         Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     nomhist : dict, optional
-        Model history dictionary from the nominal state, for use in find_classification. The default is {}.
+        Model history dictionary from the nominal state, for use in Model.find_classification. The default is {}.
+    nomresult : dict, optional
+        Nominal result dictionary (to compare with current if desired)
     cut_hist : bool
         Whether to cut the model history to a given size. The default is True
+    **kwargs : kwargs
+        simulation options, see :data:`sim_kwargs` 
     Returns
     -------
     result:
@@ -866,6 +757,7 @@ def prop_one_scen(mdl, scen, desired_result={}, track='all', track_times="all", 
     t_end: float
         Last sim time 
     """
+    desired_result, track, track_times, staged, run_stochastic = unpack_sim_kwargs(**kwargs)
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     if staged:
@@ -909,7 +801,7 @@ def prop_one_scen(mdl, scen, desired_result={}, track='all', track_times="all", 
                else: raise Exception("Invalid argument, track_times="+str(track_times))
                update_mdlhist(mdl, mdlhist, t_ind_rec, track=track)
            if type(desired_result)==dict and t in desired_result: 
-               result[t] = get_result(scen,mdl,desired_result[t], mdlhist,nomhist)
+               result[t] = get_result(scen,mdl,desired_result[t], mdlhist,nomhist, nomresult)
                desired_result.pop(t)
            if (mdl.use_end_condition and hasattr(mdl, 'end_condition')):
                if mdl.end_condition(t):
@@ -919,29 +811,33 @@ def prop_one_scen(mdl, scen, desired_result={}, track='all', track_times="all", 
             raise
             break
     if cut_hist: cut_mdlhist(mdlhist, t_ind)
-    result.update(get_result(scen,mdl,desired_result,mdlhist,nomhist))
+    result.update(get_result(scen,mdl,desired_result,mdlhist,nomhist, nomresult))
+    if len(result)==1: result = [*result.values()][0]
     if None in c_mdl.values(): raise Exception("Approach times"+str(ctimes)+" go beyond simulation time "+str(t))
     return  result, mdlhist, c_mdl, t_ind+shift
-def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}):
-    desired_result = copy.copy(desired_result)
-    if type(desired_result)==str:   desired_result = {desired_result:None}
-    elif type(desired_result)==list:desired_result = dict.fromkeys(desired_result)
+def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
+    desired_result = copy.deepcopy(desired_result)
+    if type(desired_result)==str:               desired_result = {desired_result:None}
+    elif type(desired_result) in [list, set]:   desired_result = dict.fromkeys(desired_result)
     result={}
+    if not nomhist: nomhist=mdlhist
     if 'endclass' in desired_result:   
         result['endclass'] = mdl.find_classification(scen, {'faulty':mdlhist, 'nominal':nomhist})
         desired_result.pop('endclass')
     if 'endfaults' in desired_result:  
         result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
         desired_result.pop('endfaults')
-    for gtype in ["normal","bipartite", "typegraph"]:
+    for gtype in ["normal","bipartite", "typegraph", "component"]:
         if gtype in desired_result:
-            result[gtype] = mdl.return_stategraph(gtype)
+            rgraph = mdl.return_stategraph(gtype)
+            if nomresult and type(nomresult)==dict:     result[gtype] = proc.resultsgraph(rgraph, nomresult[gtype], gtype)
+            elif nomresult:                             result[gtype] = proc.resultsgraph(rgraph, nomresult, gtype)
+            else:           result[gtype] = proc.resultsgraph(rgraph, rgraph, gtype)
             desired_result.pop(gtype)
     if desired_result:
         var_result = mdl.get_vars(*desired_result)
         for i, var in enumerate(desired_result):
             result[var]=var_result[i]
-    if len(result)==1: result = [*result.values()][0]
     return result
     
 
