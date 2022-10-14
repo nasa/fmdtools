@@ -142,9 +142,9 @@ Parameters
     max_mem : int
         Max memory (warns the user when memory is above threshold)
 """
-def unpack_mult_kwargs(**kwargs):
+def unpack_mult_kwargs(kwargs):
     """Unpacks the mult kwarg parameters for the :func:`approach`"""
-    return (kwargs.get(k,v) for k,v in mult_kwargs.items())
+    return (kwargs.pop(k,v) for k,v in mult_kwargs.items())
 
 ## FAULT PROPAGATION
 def nominal(mdl, **kwargs):
@@ -287,7 +287,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
     """
     kwargs.update(pack_run_kwargs(**kwargs))
     check_overwrite(kwargs['save_args'] )
-    kwargs['max_mem'], showprogress, pool = unpack_mult_kwargs(**kwargs)
+    kwargs['max_mem'], showprogress, pool = unpack_mult_kwargs(kwargs)
     kwargs['num_scens']=nomapp.num_scenarios
     n_mdlhists, n_results = dict.fromkeys(nomapp.scenarios), dict.fromkeys(nomapp.scenarios)
     if pool:
@@ -391,7 +391,8 @@ def mult_fault(mdl, faultseq, scen={}, rate=np.NaN, **kwargs):
     """
     time = min(faultseq)
     sim_kwarg = pack_sim_kwargs(**kwargs)
-    nomresult , nomhist, nomscen, mdl, t_end_nom = nom_helper(mdl, time, **sim_kwarg)
+    nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, time, **sim_kwarg)
+    mdl = [*mdls.values()][0]
     if not scen:
         scen=nomscen.copy() #note: this is a shallow copy, so don't define it earlier
         scen['sequence']={t:{'faults':faultseq[t]} for t in faultseq}
@@ -427,8 +428,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, **kwargs)
         result history from nominal sim
     nomscen : dict
         nominal scenario dict
-    newmdl : Model
-        Model from copy time(s) ctimes
+    mdls : list
+        Models from copy time(s) ctimes
     t_end_nom : float
         Nominal simulation end time
     """
@@ -447,10 +448,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, **kwargs)
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     
     mdl.reset()
-    if staged and len(ctimes)==1:   newmdl = mdls[ctimes]
-    elif staged:                    newmdl=mdls
-    else:       newmdl = new_mdl(mdl, {})
-    return result, nommdlhist, nomscen, newmdl, t_end_nom
+    if not staged:  mdls = {0:new_mdl(mdl, {})}
+    return result, nommdlhist, nomscen, mdls, t_end_nom
 
 def approach(mdl, app,  **kwargs):
     """
@@ -526,32 +525,31 @@ def single_faults(mdl, **kwargs):
 
 def scenlist_helper(mdl, scenlist, c_mdl, nomscen, **kwargs):
     #nomhist, track, track_times, desired_result, run_stochastic, save_args
-    max_mem, showprogress, pool = unpack_mult_kwargs(**kwargs)
-    
+    max_mem, showprogress, pool = unpack_mult_kwargs(kwargs)
+    staged = kwargs.get('staged',False)
     check_hist_memory(kwargs['nomhist'],len(scenlist), max_mem=max_mem)
     results = {}
     mdlhists = {}
-    sim_kwarg = pack_sim_kwargs(**kwargs)
     if pool:
         check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
-        if sim_kwarg['staged']:  
-            inputs = [(c_mdl[scen['properties']['time']], scen, sim_kwarg,  str(i)) for i, scen in enumerate(scenlist)]
+        if staged:  
+            inputs = [(c_mdl[scen['properties']['time']], scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
         else:       
-            inputs = [(mdl, scen,  sim_kwarg, str(i)) for i, scen in enumerate(scenlist)]
+            inputs = [(mdl, scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
         res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         results, mdlhists = unpack_res_list(scenlist, res_list)
     else:
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
             name = scen['properties']['name']
-            if sim_kwarg['staged']:  mdl = c_mdl[scen['properties']['time']]
-            ec, mh, t_end = exec_scen(mdl, scen, indiv_id=str(i), **sim_kwarg)
+            if staged:  mdl = c_mdl[scen['properties']['time']]
+            ec, mh, t_end = exec_scen(mdl, scen, indiv_id=str(i), **kwargs)
             results[name],mdlhists[name] = ec, mh
     save_helper(kwargs['save_args'], results, mdlhists)
     return results, mdlhists
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
     return exec_scen(args[0], args[1], **args[2], indiv_id=args[3])
-def exec_scen(mdl, scen, nomhist={}, save_args={}, indiv_id='', **kwargs):
+def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
     """ 
     Executes a scenario and generates results and classifications given a model and nominal model history
     
@@ -572,9 +570,9 @@ def exec_scen(mdl, scen, nomhist={}, save_args={}, indiv_id='', **kwargs):
             - :data:`sim_kwargs` : kwargs
                 Simulation options for :func:`prop_one_scen
     """
-    if kwargs.get('staged',False):  mdl = mdl.copy(); prevhist=nomhist
-    else:                           mdl = new_mdl(mdl, {}); prevhist={}
-    result, mdlhist, _, t_end,  =prop_one_scen(mdl, scen, **kwargs, prevhist=prevhist)
+    if kwargs.get('staged',False):  mdl = mdl.copy(); 
+    else:                           mdl = new_mdl(mdl, {})
+    result, mdlhist, _, t_end,  =prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen['properties']['name']))
     return result, mdlhist, t_end
 
@@ -635,7 +633,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     save_args = kwargs.get('save_args', {})
     check_overwrite(save_args)
     save_app = save_args.pop("apps", False)
-    max_mem, showprogress, pool = unpack_mult_kwargs(**kwargs)
+    max_mem, showprogress, pool = unpack_mult_kwargs(kwargs)
     sim_kwarg = pack_sim_kwargs(**kwargs)
     run_kwargs = pack_run_kwargs(**kwargs)
     app_args = {k:v for k,v in kwargs if k not in [*sim_kwarg,*run_kwargs, 'max_mem', 'showprogress', 'pool']}
@@ -721,7 +719,7 @@ def list_init_faults(mdl):
                 faultlist.append(newscen)
     return faultlist
 
-def prop_one_scen(mdl, scen, ctimes=[], prevhist={}, nomhist={}, nomresult={}, cut_hist=True, **kwargs):
+def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True, **kwargs):
     """
     Runs a fault scenario in the model over time
 
@@ -733,13 +731,9 @@ def prop_one_scen(mdl, scen, ctimes=[], prevhist={}, nomhist={}, nomresult={}, c
         The fault scenario to run. Has structure: {'faults':{fxn:fault}, 'properties':{rate, time, name, etc}}
     ctimes : list, optional
         List of times to copy the model (for use in staged execution). The default is [].
-    prevhist : dict, optional
-        The previous results hist (for used in staged execution). The default is {}.
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
     nomhist : dict, optional
-        Model history dictionary from the nominal state, for use in Model.find_classification. The default is {}.
+        Model history dictionary from the nominal state, for use in Model.find_classification 
+        and for initializing model history in staged execution option. The default is {}.
     nomresult : dict, optional
         Nominal result dictionary (to compare with current if desired)
     cut_hist : bool
@@ -772,7 +766,7 @@ def prop_one_scen(mdl, scen, ctimes=[], prevhist={}, nomhist={}, nomresult={}, c
         elif track_times[0]=='times':       
             histrange = track_times[1]
             shift=0
-        if prevhist:    mdlhist = copy.deepcopy(prevhist)
+        if nomhist:     mdlhist = copy.deepcopy(nomhist)
         else:           mdlhist = init_mdlhist(mdl, histrange, track=track, run_stochastic=run_stochastic)
     else: 
         timerange = np.arange(mdl.times[0], mdl.times[-1]+mdl.tstep, mdl.tstep)
@@ -810,7 +804,7 @@ def prop_one_scen(mdl, scen, ctimes=[], prevhist={}, nomhist={}, nomresult={}, c
             print("Error at t="+str(t)+' in scenario '+str(scen))
             raise
             break
-    if cut_hist: cut_mdlhist(mdlhist, t_ind)
+    if cut_hist: cut_mdlhist(mdlhist, t_ind+shift)
     result.update(get_result(scen,mdl,desired_result,mdlhist,nomhist, nomresult))
     if len(result)==1: result = [*result.values()][0]
     if None in c_mdl.values(): raise Exception("Approach times"+str(ctimes)+" go beyond simulation time "+str(t))
@@ -967,7 +961,10 @@ def update_flowhist(mdl, mdlhist, t_ind):
         atts=mdl.flows[flowname].status()
         for att, val in atts.items():
             if att in mdlhist['flows'][flowname]:
+                if t_ind >= len(mdlhist["flows"][flowname][att]):
+                    raise Exception("Time beyond range of model history--check staged execution and simulation time settings")
                 if not np.can_cast(type(val), type(mdlhist["flows"][flowname][att][t_ind])):
+                    a=1
                     raise Exception(str(flowname)+" att "+str(att)+" changed type: "+str(type(mdlhist["flows"][flowname][att][t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind))
                 try:
                     mdlhist["flows"][flowname][att][t_ind] = val

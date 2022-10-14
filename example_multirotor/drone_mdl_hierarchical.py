@@ -398,12 +398,12 @@ graph_pos = {'StoreEE': [-1.0787279392101061, -0.06903523859088145],
 if __name__=="__main__":
     
     hierarchical_model = Drone(params={'graph_pos':graph_pos, 'bipartite_pos':bipartite_pos,'arch':'quad'})
-    endresults, resgraph, mdlhist = fs.propagate.one_fault(hierarchical_model,'AffectDOF', 'RFmechbreak', time=50)
+    endclass, mdlhist = fs.propagate.one_fault(hierarchical_model,'AffectDOF', 'RFmechbreak', time=50)
     
     mdl = Drone(params={'graph_pos':graph_pos, 'bipartite_pos':bipartite_pos,'arch':'oct'})
     app = SampleApproach(mdl, faults=[('AffectDOF', 'RR2propstuck')])
     endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=False)
-    rd.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['AffectDOF RR2propstuck, t=49.0']})
+    rd.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['AffectDOF RR2propstuck, t=49.0']},fxnflowvals='Env1')
 
 
 

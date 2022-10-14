@@ -307,8 +307,9 @@ if __name__=="__main__":
     mdl = Pump()
 
     #rd.graph.exec_order(mdl)
+    endclass, mdlhist=propagate.one_fault(mdl, 'ImportEE','no_v', time=29,  staged=True)
+    endclass, mdlhist=propagate.one_fault(mdl, 'MoveWater', 'mech_break', time=0, staged=False)
     
-    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'MoveWater', 'mech_break', time=0, staged=False)
     reshist,diff1, summary = rd.process.hist(mdlhist)
     rd.graph.result_from(mdl, reshist, 50, gtype='normal')
     rd.graph.exec_order(mdl, gtype = 'normal')
@@ -316,6 +317,7 @@ if __name__=="__main__":
     app.add_seed_replicates('test', 10)
     
     faultapp = SampleApproach(mdl)
+    
     
     endclasses, mdlhists  = propagate.approach(mdl, faultapp)
     flat = rd.process.flatten_hist(mdlhists)

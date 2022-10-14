@@ -292,7 +292,7 @@ if __name__ == '__main__':
     rd.graph.show(mdl.bipartite, gtype='bipartite')
     endclasses, mdlhists = propagate.single_faults(mdl)
 
-    endresults,resgraph, mdlhists = propagate.one_fault(mdl, 'EE_to_ME', 'toohigh_torque')
+    resgraph, mdlhists = propagate.one_fault(mdl, 'EE_to_ME', 'toohigh_torque', desired_result="bipartite")
     rd.graph.show(resgraph)
 
 
