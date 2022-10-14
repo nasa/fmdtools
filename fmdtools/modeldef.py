@@ -2668,7 +2668,7 @@ class SampleApproach():
                     for ts in times: 
                         if len(ts)==1:      possible_phasetimes = ts
                         elif len(ts)<2:     possible_phasetimes= ts
-                        else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[1]+self.tstep, self.tstep))
+                        else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[-1]+self.tstep, self.tstep))
                     possible_phasetimes.sort()
                     possible_phasetimes=list(set(possible_phasetimes))
                     if len(possible_phasetimes)<=1: 
