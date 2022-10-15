@@ -186,14 +186,30 @@ def paramfunc(delay):
 
 if __name__=="__main__":
     import multiprocessing as mp
+
+    mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':4})
+    
+    mdl.set_vars([['EE_1','current']],[2])
+    
+    
+    app_comp = NominalApproach()
+    app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
+    app_comp.add_param_replicates(paramfunc, 'delay_10', 100, (10))
+    
+    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('ExportWater','block')], pool=mp.Pool(4))
+    
+    endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('ExportWater','block')], staged=True, pool=mp.Pool(4))
+    
+    comp_mdlhists = {scen:mdlhist['ExportWater block, t=27'] for scen,mdlhist in mdlhists.items()}
+    comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
+    fig = rd.plot.mdlhists(comp_mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
+    
     
     app = NominalApproach()
     app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
     app.add_param_replicates(paramfunc, 'delay_10', 100, (10))
     
-    mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':4})
-    
-    mdl.set_vars([['EE_1','current']],[2])
+
 
     
     # endresults, resgraph, mdlhist=propagate.nominal(mdl)

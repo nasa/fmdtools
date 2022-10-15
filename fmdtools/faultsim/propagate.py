@@ -301,7 +301,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
     save_helper(kwargs['save_args'] , n_results, n_mdlhists)
     return n_results, n_mdlhists
 def unpack_res_list(scenlist, res_list):
-    results = { scen['properties']['name']: res_list[i][1] for i, scen in enumerate(scenlist)}
+    results = { scen['properties']['name']: res_list[i][0] for i, scen in enumerate(scenlist)}
     mdlhists = {scen['properties']['name']: res_list[i][1] for i, scen in enumerate(scenlist)}
     return results, mdlhists
 
@@ -636,14 +636,14 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     max_mem, showprogress, pool = unpack_mult_kwargs(kwargs)
     sim_kwarg = pack_sim_kwargs(**kwargs)
     run_kwargs = pack_run_kwargs(**kwargs)
-    app_args = {k:v for k,v in kwargs if k not in [*sim_kwarg,*run_kwargs, 'max_mem', 'showprogress', 'pool']}
+    app_args = {k:v for k,v in kwargs.items() if k not in [*sim_kwarg,*run_kwargs, 'max_mem', 'showprogress', 'pool']}
     
     nest_mdlhists = dict.fromkeys(nomapp.scenarios)
     nest_results = dict.fromkeys(nomapp.scenarios)
     apps = dict.fromkeys(nomapp.scenarios)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
         mdl = new_mdl(mdl,scen['properties'])
-        _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **sim_kwarg, staged=False)
+        _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **{**sim_kwarg, 'staged':False})
         if get_phases:
             if get_phases=='global':      phases={'global':[0,t_end]}
             else:
@@ -710,7 +710,7 @@ def list_init_faults(mdl):
             for mode in modes:
                 nomscen=construct_nomscen(mdl)
                 newscen=nomscen.copy()
-                nomscen['sequence']={time:{'faults':{fxnname:mode}}}
+                newscen['sequence']={time:{'faults':{fxnname:mode}}}
                 if mdl.fxns[fxnname].faultmodes[mode]['probtype']=='rate':
                     rate=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[mode]['units'], mdl.units)*trange # this rate is on a per-simulation basis
                 elif mdl.fxns[fxnname].faultmodes[mode]['probtype']=='prob':
