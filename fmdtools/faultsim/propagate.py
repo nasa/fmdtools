@@ -805,7 +805,10 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
             raise
             break
     if cut_hist: cut_mdlhist(mdlhist, t_ind+shift)
-    result.update(get_result(scen,mdl,desired_result,mdlhist,nomhist, nomresult))
+    if type(desired_result)==dict and 'end' in desired_result: 
+        result['end'] = get_result(scen,mdl,desired_result['end'],mdlhist,nomhist, nomresult)
+    else:                       
+        result.update(get_result(scen,mdl,desired_result,mdlhist,nomhist, nomresult))
     if len(result)==1: result = [*result.values()][0]
     if None in c_mdl.values(): raise Exception("Approach times"+str(ctimes)+" go beyond simulation time "+str(t))
     return  result, mdlhist, c_mdl, t_ind+shift
@@ -816,7 +819,10 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     result={}
     if not nomhist: nomhist=mdlhist
     if 'endclass' in desired_result:   
-        result['endclass'] = mdl.find_classification(scen, {'faulty':mdlhist, 'nominal':nomhist})
+        endclass = mdl.find_classification(scen, {'faulty':mdlhist, 'nominal':nomhist})
+        if type(desired_result['endclass'])==dict: 
+            result['endclass'] = {k:v for k,v in endclass if k in desired_result['endclass']}
+        else: result['endclass']=endclass
         desired_result.pop('endclass')
     if 'endfaults' in desired_result:  
         result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
@@ -829,10 +835,20 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
             else:           result[gtype] = proc.resultsgraph(rgraph, rgraph, gtype)
             desired_result.pop(gtype)
     if desired_result:
-        var_result = mdl.get_vars(*desired_result)
-        for i, var in enumerate(desired_result):
-            result[var]=var_result[i]
+        if 'vars' in desired_result:
+            result['vars']={}
+            get_endclass_vars(mdl,desired_result['vars'], result['vars'])
+        else:                           
+            get_endclass_vars(mdl,desired_result, result)
     return result
+    
+def get_endclass_vars(mdl, desired_result, result):
+    
+    if type(desired_result)==str:   vars_to_get = [desired_result]
+    else:                           vars_to_get = desired_result
+    var_result = mdl.get_vars(*vars_to_get, trunc_tuple=False)
+    for i, var in enumerate(vars_to_get):
+        result[var]=var_result[i]
     
 
 def propagate(mdl, time, fxnfaults={}, disturbances={}, flowstates={}, run_stochastic=False):
