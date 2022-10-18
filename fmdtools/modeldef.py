@@ -1904,7 +1904,7 @@ class Model(object):
                 elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]             
                 else: raise Exception(var[0]+" not a function, flow, or seed")
                 f.set_var(var, varvalues[i])
-    def get_vars(self, *variables):
+    def get_vars(self, *variables, trunc_tuple=True):
         """
         Gets variable values in the model.
 
@@ -1930,8 +1930,8 @@ class Model(object):
             elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]
             else: raise Exception(var[0]+" not a function or flow")
             variable_values[i]=f.get_var(var)
-        if len(variable_values)==1: return variable_values[0]
-        else:                       return tuple(variable_values)
+        if len(variable_values)==1 and trunc_tuple: return variable_values[0]
+        else:                                       return tuple(variable_values)
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) 
     Attributes
