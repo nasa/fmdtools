@@ -343,6 +343,11 @@ def one_fault(mdl, fxnname, faultmode, time=1, **kwargs):
     mdlhists : dict
         A dictionary of the states of the model of each fault scenario over time with structure: {'nominal':nomhist, 'faulty':faulthist}
     """
+    faultseq = {time:{fxnname:faultmode}}
+    scen= create_single_fault_scen(mdl, fxnname, faultmode, time)
+    result, mdlhists = mult_fault(mdl, faultseq, scen=scen, **kwargs)
+    return result, mdlhists
+def create_single_fault_scen(mdl, fxnname, faultmode, time):
     scen=construct_nomscen(mdl) #note: this is a shallow copy, so don't define it earlier
     scen['sequence'][time]={'faults':{fxnname:faultmode}}
     scen['properties']['type']='single fault'
@@ -356,13 +361,9 @@ def one_fault(mdl, fxnname, faultmode, time=1, **kwargs):
         elif mdl.fxns[fxnname].faultmodes[faultmode].get('probtype','')=='prob':
             scen['properties']['rate'] = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[faultmode]['dist'] 
     scen['properties']['time']=time
-    faultseq = {time:{fxnname:faultmode}}
-    
-    result, mdlhists = mult_fault(mdl, faultseq, scen=scen, **kwargs)
-    
-    return result, mdlhists
+    return  scen
 
-def mult_fault(mdl, faultseq, scen={}, rate=np.NaN, **kwargs):
+def mult_fault(mdl, faultseq, disturbances, scen={}, rate=np.NaN, **kwargs):
     """
     Runs a sequence of faults in the model at given times.
 
@@ -372,6 +373,8 @@ def mult_fault(mdl, faultseq, scen={}, rate=np.NaN, **kwargs):
         The model to inject the fault in.
     faultseq : dict
         Dict of times and modes defining the fault scenario {time:{fxns: [modes]},}
+    disturbances : dict
+        Dict of times and modes defining the disturbances in the scenario {time:{fxns: [modes]},}
     scen : dict, optional
         Scenario dictionary (for external calls)
     rate : float, optional
@@ -393,21 +396,25 @@ def mult_fault(mdl, faultseq, scen={}, rate=np.NaN, **kwargs):
     sim_kwarg = pack_sim_kwargs(**kwargs)
     nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, time, **sim_kwarg)
     mdl = [*mdls.values()][0]
-    if not scen:
-        scen=nomscen.copy() #note: this is a shallow copy, so don't define it earlier
-        scen['sequence']={t:{'faults':faultseq[t]} for t in faultseq}
-        scen['properties']['type']='sequence'
-        scen['properties']['sequence']=faultseq
-        scen['properties']['rate']=rate # this rate is on a per-simulation basis
-        scen['properties']['time']=list(faultseq.keys())
+    if not scen: scen = create_faultseq_scen(mdl, faultseq, rate, disturbances)
     result, faulthist, _, t_end = prop_one_scen(mdl, scen, **sim_kwarg, nomhist=nomhist, nomresult=nomresult)
     nomhist = cut_mdlhist(nomhist, t_end_nom)
     mdlhists = {'nominal':nomhist, 'faulty':faulthist}
     if kwargs.get('protect', False): mdl.reset()
     save_helper(kwargs.get('save_args',{}), result, mdlhists)
     return result, mdlhists
+def create_faultseq_scen(mdl, rate, sequence={}, faultseq={}, disturbances={}):
+    scen=construct_nomscen(mdl) #note: this is a shallow copy, so don't define it earlier
+    times = {*faultseq, *disturbances}
+    if not sequence: scen['sequence']= {t:{'faults':faultseq.get(t, {}), 'disturbances': disturbances.get(t, {})} for t in times}
+    else:            scen['sequence']=sequence
+    scen['properties']['type']='sequence'
+    scen['properties']['sequence']=scen['sequence']
+    scen['properties']['rate']=rate # this rate is on a per-simulation basis
+    scen['properties']['time']=list(times)
+    return scen
 
-def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, **kwargs):
+def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, scen={}, **kwargs):
     """
     Helper function for initial run of nominal scenario.
 
@@ -437,7 +444,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, **kwargs)
     check_overwrite(save_args)
     #run model nominally, get relevant results
     if protect or new_params:   mdl = new_mdl(mdl,new_params)
-    nomscen=construct_nomscen(mdl)
+    if not scen:    nomscen=construct_nomscen(mdl)
+    else:           nomscen=create_faultseq_scen(mdl, scen, rate=1.0)
     if staged:  
         if type(ctimes) in [float, int]:ctimes=[ctimes]
         else:                           ctimes=ctimes
@@ -719,7 +727,7 @@ def list_init_faults(mdl):
                 faultlist.append(newscen)
     return faultlist
 
-def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True, **kwargs):
+def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, cut_hist=True, **kwargs):
     """
     Runs a fault scenario in the model over time
 
@@ -731,6 +739,8 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
         The fault scenario to run. Has structure: {'faults':{fxn:fault}, 'properties':{rate, time, name, etc}}
     ctimes : list, optional
         List of times to copy the model (for use in staged execution). The default is [].
+    nomhist : dict, optional
+        Model history dictionary from previous runs, for use in creating the new mdlhist.
     nomhist : dict, optional
         Model history dictionary from the nominal state, for use in Model.find_classification 
         and for initializing model history in staged execution option. The default is {}.
@@ -766,7 +776,8 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
         elif track_times[0]=='times':       
             histrange = track_times[1]
             shift=0
-        if nomhist:     mdlhist = copy.deepcopy(nomhist)
+        if prevhist:    mdlhist = copy.deepcopy(prevhist)
+        elif nomhist:   mdlhist = copy.deepcopy(nomhist)
         else:           mdlhist = init_mdlhist(mdl, histrange, track=track, run_stochastic=run_stochastic)
     else: 
         timerange = np.arange(mdl.times[0], mdl.times[-1]+mdl.tstep, mdl.tstep)
