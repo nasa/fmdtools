@@ -48,7 +48,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     ----------
     mdlhists : dict
         Aggregate model history with structure {'scen':mdlhist} (or single mdlhist)
-    fxnflowsvals : dict, optional
+    fxnflowvals : dict, optional
         dict of flow values to plot with structure {fxnflow:[vals], fxnflow:'val'/all, fxnflow:{'comp':[vals]}}. 
         The default is 'all', which returns all.
     cols : int, optional
