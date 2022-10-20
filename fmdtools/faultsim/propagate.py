@@ -487,7 +487,7 @@ def approach(mdl, app,  **kwargs):
     kwargs.update(pack_run_kwargs(**kwargs))
     nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **kwargs)
     scenlist = app.scenlist
-    results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, nomscen, **kwargs, nomhist=nomhist, nomresult=nomresult)
+    results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, **kwargs, nomhist=nomhist, nomresult=nomresult)
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
@@ -525,13 +525,13 @@ def single_faults(mdl, **kwargs):
     nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, mdl.times,**kwargs)
     
     scenlist = list_init_faults(mdl)
-    results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, nomscen, **kwargs, nomhist=nomhist, nomresult=nomresult)
+    results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, **kwargs, nomhist=nomhist, nomresult=nomresult)
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     return results, mdlhists
 
-def scenlist_helper(mdl, scenlist, c_mdl, nomscen, **kwargs):
+def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     #nomhist, track, track_times, desired_result, run_stochastic, save_args
     max_mem, showprogress, pool = unpack_mult_kwargs(kwargs)
     staged = kwargs.get('staged',False)
