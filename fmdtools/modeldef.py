@@ -1161,7 +1161,7 @@ class FxnBlock(Block):
             Faults to inject in the function. The default is ['nom'].
         time : float, optional
             Model time. The default is 0.
-        run_stochastic : book
+        run_stochastic : bool/str
             Whether to run the simulation using stochastic or deterministic behavior
         proptype : str
             Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
@@ -3038,9 +3038,9 @@ def get_pdf_for_rand(x, randname, args):
         if len(args)==1:        pd= [1/args[0] for x in x]
         elif len(args)>=2:      pd= [1/(args[1]-args[0]) for x in x]
     elif randname=='random':    pd= [1 for x in x]
-    elif randname=='bytes':     raise Exception("Not able to calcualte pdf for bytes")
+    elif randname=='bytes':     raise Exception("Not able to calculate pdf for bytes")
     elif randname=='choice':    
-        if type(args[0])==int:  options = np.arange(args[0])
+        if type(args[0])==int:  options = [*np.arange(args[0])]
         else:                   options = args[0]
         if len(args)==4:        p = args[3]
         else:                   p = [1/len(options) for i in options]
