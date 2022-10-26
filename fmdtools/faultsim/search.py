@@ -36,7 +36,7 @@ class Problem():
         current_iter : dict
             Dictionary of current values for variables/objectives/constraints/etc.
     """
-    def __init__(self, name, mdl, default_params={}, **kwargs):
+    def __init__(self, name, mdl, default_params={}, negative_form=True, **kwargs):
         """
         Instantiates the Problem object.
         
@@ -47,6 +47,8 @@ class Problem():
             Name for the problem
         mdl : Model
             Model to optimize
+        negative_form : bool
+            Whether constraints are negative when feasible (True) or positive when feasible (False)
         default_params : dict
             Default parameters for the model
         **kwargs : kwargs
@@ -60,6 +62,7 @@ class Problem():
         self.default_run_kwargs = {k:kwargs[k] if k in kwargs else v for k,v in prop.run_kwargs.items()}
         self.default_mult_kwargs = {k:kwargs[k] if k in kwargs else v for k,v in prop.mult_kwargs.items()}
         
+        self.negative_form =negative_form
         self.simulations={}
         self.variables=[]
         self.objectives=dict()
@@ -70,9 +73,12 @@ class Problem():
         self.current_iter={}
         self._sims={}
     def __repr__(self):
-        attrstr = "\n -"+"\n -".join([name+": "+str(getattr(self, name)) for name in ['variables', 'objectives', 'constraints','simulations', 'current_iter']])
-        str_repr = "Problem "+attrstr
-        return "Search Problem(s): "+str_repr
+        var_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(var[2]+" "+var[0]+" at t="+str(var[3])+": "+str(var[1]), self.current_iter.get('vars', [np.NaN for j in range(i+1)])[i]) for i,var in enumerate(self.variables))
+        con_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+get_pos_str(greater_to_factor(con[4][0])*n_to_factor(self.negative_form))+"("+str(con[0])+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+" -"+str(con[4][1])+")", self.current_iter.get('consts', {name:np.NaN})[name]) for name, con in self.constraints.items() if not con[0]=="set_const")
+        obj_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+con[4][0]+con[4][1]+"("+con[0]+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+")", self.current_iter.get('objs', {name:np.NaN})[name]) for name, con in self.objectives.items())
+        sim_str = "\n -"+"\n -".join(name+": "+sim[0]+" scen: "+str(sim[2].get('scen', "")) for name, sim in self.simulations.items() if sim[0] !="set_const")
+        str_repr = '{:<65}{:>20}'.format("Problem "+self.name, "current value")
+        return str_repr+"\n Variables"+var_str+"\n Objectives"+obj_str+"\n Constraints"+con_str+"\n Simulations"+sim_str
     def add_simulation(self, simname, simtype, *args, **kwargs):
         """
         Defines a simulation to be used with the model
@@ -160,7 +166,7 @@ class Problem():
         else:                                           label=arg[3]
         for simname in simnames:
             self._make_mapping(self.var_mapping, simname, label, vartype, arg[0],ind)
-    def add_objectives(self, simname, *args, objtype='endclass', t='end', obj_const='objectives', agg='sum', **kwargs):
+    def add_objectives(self, simname, *args, objtype='endclass', t='end', obj_const='objectives', agg=("-",'sum'), **kwargs):
         """
         Adds objective to the given problem.
         
@@ -178,10 +184,14 @@ class Problem():
             default type of objective: `vars`, `endclass`, or `external`. Default is 'endclass'
         t : int (optional)
             default time to get objective: 'end' or set time t
-        agg : str/tuple
+        agg : tuple
             Specifies the aggregation of the objective/constraint:
-            - for objectives: 'sum'/'difference'/'mult'/'max'/'min', specifying how to aggregate objectives over scenarios
-            - for constraints: ('less'/'greater', val) where value is the threshold value
+            - for objectives: ('+'/'-','sum'/'difference'/'mult'/'max'/'min'), specifying 
+            (1) whether the objective is:
+                    - "+": positive (for minimization of the variable if the algorithm minimizes)
+                    - "-": negative (for maximization of the variable if the algorithm minimizes)
+            (2) how to aggregate objectives over scenarios 
+            - for constraints: (less'/'greater', val) where value is the threshold value
         **kwargs : str=strs/tuples
             Named objectives with their corresponding arg values (see args)
             objectivename = variablename
@@ -192,7 +202,7 @@ class Problem():
         all_objs = {**unnamed_objs, **kwargs}
         for obj in all_objs:
             self._add_obj_const(simname, obj, all_objs[obj], objtype=objtype, t=t, agg=agg, obj_const=obj_const)
-    def _add_obj_const(self, simname, objname, arg, objtype='endclass', t='end',agg='sum', obj_const='objectives'):
+    def _add_obj_const(self, simname, objname, arg, objtype='endclass', t='end',agg=("-",'sum'), obj_const='objectives'):
         if simname not in self.simulations: raise Exception("Undefined simulation: "+simname)
         if type(arg)==str: arg=[arg, objtype, t, agg]
         arg = [*arg, *(None,None,None,None)][:4]
@@ -351,16 +361,14 @@ class Problem():
         for objname, var_to_get in obj_dict.items():
             if simname ==var_to_get[0]:
                 values = [result[var_to_get[3]][var_to_get[2]][var_to_get[1]] for result in results.values()]
-                if obj_const == 'objectives':           
-                    if self.objectives[objname][-1]== 'sum':    objs[objname] = np.sum(values)
-                    elif self.objectives[objname][-1]== 'prod': objs[objname] = np.prod(values)
-                    elif self.objectives[objname][-1]== 'max': objs[objname] = np.max(values)
-                    elif self.objectives[objname][-1]== 'min': objs[objname] = np.min(values)
-                    else: raise Exception("Unknown objective aggregation type")
+                if obj_const == 'objectives':    
+                    pos_fact = get_pos_negative(self.objectives[objname][-1][0])
+                    aggfunc = getattr(np, self.objectives[objname][-1][1])
+                    objs[objname] = pos_fact*aggfunc(values)
                 elif obj_const == 'constraints': 
-                    if var_to_get[4][0]=='less':        values = [value - var_to_get[4][1] for value in values]
-                    elif var_to_get[4][0]=='greater':   values = [value - var_to_get[4][1] for value in values]
-                    objs[objname]=np.min(values)
+                    values = [eval_con(value,var_to_get[4][1], var_to_get[4][0], self.negative_form) for value in values]
+                    if self.negative_form:  objs[objname]=np.min(values)
+                    else:                   objs[objname]=np.max(values)
                 else: raise Exception("Invalid type: "+obj_const)
         return objs
     def _get_obj_from_result(self, simname, result, obj_const):
@@ -370,14 +378,12 @@ class Problem():
             if simname ==var_to_get[0]:
                 if var_to_get[3] in result:     value = result[var_to_get[3]][var_to_get[2]][var_to_get[1]]
                 elif var_to_get[2] in result:   value = result[var_to_get[2]][var_to_get[1]]
-                if obj_const == 'objectives':           objs[objname] = value
-                elif obj_const == 'constraints': 
-                    if var_to_get[4][0]=='less':        objs[objname] = value - var_to_get[4][1]
-                    elif var_to_get[4][0]=='greater':   objs[objname] = var_to_get[4][1] - value
+                if obj_const == 'objectives':       objs[objname] = get_pos_negative(self.objectives[objname][-1][0])*value
+                elif obj_const == 'constraints':    objs[objname] = eval_con(value, var_to_get[4][1], var_to_get[4][0], self.negative_form)
         return objs
     def _get_set_const(self,x):
-        ubs = {"set_var_"+str(i)+"_ub":self.simulations['set_const'][2][i][1]-x[i] for i in self.simulations['set_const'][1]}
-        lbs = {"set_var_"+str(i)+"_lb":x[i]-self.simulations['set_const'][2][i][0] for i in self.simulations['set_const'][1]}
+        ubs = {"set_var_"+str(i)+"_ub": eval_con(x[i], self.simulations['set_const'][2][i][1], "less", self.negative_form) for i in self.simulations['set_const'][1]}
+        lbs = {"set_var_"+str(i)+"_lb": eval_con(x[i], self.simulations['set_const'][2][i][0], "greater", self.negative_form) for i in self.simulations['set_const'][1]}
         return {}, {**ubs, **lbs}
     def _prep_sim_type(self, simtype, simname):
         if simtype=='single': self._prep_single_sim(simname)
@@ -446,6 +452,40 @@ class Problem():
         fxnflowvals = proc.nest_flattened_hist({tuple(objname.split(".")):'all' for objname in all_to_plot})
         
         plot.mdlhists(self._sims[simname]['mdlhists'], fxnflowvals=fxnflowvals,time_slice=[*times.values()], time_slice_label=[*times.keys()])
+    def get_constraint_dict(self, include_set_consts=True):
+        constraint_dict = {}
+        for con in self.constraints:
+            if (not "set_var" in con) or include_set_consts:
+                if self.constraints[con][4][0] in ["greater", "less"]:  con_type="ineq"
+                else:                                                   con_type="eq"
+                constraint_dict[con]={"type":con_type, "fun":getattr(self, con)}
+        return constraint_dict
+    def get_constraint_list(self, include_set_consts=True):
+        return [*self.get_constraint_dict().values()]
+
+def eval_con(value, threshold, greater_less, negative_form):
+    g_factor = greater_to_factor(greater_less)
+    n_factor = n_to_factor(negative_form)
+    return g_factor*n_factor*(value-threshold)
+
+def greater_to_factor(greater_less):
+    if greater_less =="greater":    g_factor = 1
+    elif greater_less=="less":      g_factor = -1
+    else: raise Exception("Invalid option for greater_less: "+str(greater_less))
+    return g_factor
+def n_to_factor(n):
+    if n:          f_factor = -1
+    else:          f_factor = 1
+    return f_factor
+def get_pos_negative(pos_str):
+    if pos_str=="-":    pos_fact= -1
+    elif pos_str=="+":  pos_fact= +1
+    else: raise Exception("Invalid aggregation: "+pos_str)
+    return pos_fact
+def get_pos_str(factor):
+    if factor>=0:   pos_str = "+"
+    else:           pos_str = "-"
+    return pos_str
 
 class DynamicProblem():
     """ 
@@ -563,7 +603,7 @@ if __name__=="__main__":
     new_problem = Problem("new_problem", mdl, staged=True)
     new_problem.add_simulation("test_sim","single", scen={26:{"faults":{"ImportEE": "no_v"}}})
     new_problem.add_variables("test_sim", ("MoveWater.eff", [0,2]), t=10)
-    new_problem.add_objectives("test_sim", obj_1="MoveWater.total_flow", objtype='vars', t=25)
+    new_problem.add_objectives("test_sim", obj_1="MoveWater.total_flow", objtype='vars', t=25, agg=("+", "sum"))
     #new_problem.add_objectives("test_sim", obj_3="expected cost", objtype='endclass')
     new_problem.add_constraints("test_sim", con_1 = "Sig_1.power", objtype='vars', t=25, threshold = ('greater', 1.5))
     
