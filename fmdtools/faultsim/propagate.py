@@ -344,8 +344,9 @@ def one_fault(mdl, fxnname, faultmode, time=1, **kwargs):
         A dictionary of the states of the model of each fault scenario over time with structure: {'nominal':nomhist, 'faulty':faulthist}
     """
     faultseq = {time:{fxnname:faultmode}}
+    disturbances={}
     scen= create_single_fault_scen(mdl, fxnname, faultmode, time)
-    result, mdlhists = mult_fault(mdl, faultseq, scen=scen, **kwargs)
+    result, mdlhists = mult_fault(mdl, faultseq, disturbances, scen=scen, **kwargs)
     return result, mdlhists
 def create_single_fault_scen(mdl, fxnname, faultmode, time):
     scen=construct_nomscen(mdl) #note: this is a shallow copy, so don't define it earlier
