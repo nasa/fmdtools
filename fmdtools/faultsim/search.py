@@ -16,6 +16,7 @@ import copy
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp.process as proc
 import fmdtools.resultdisp.plot as plot
+import matplotlib.pyplot as plt
 import numpy as np
 import warnings
 
@@ -76,7 +77,7 @@ class Problem():
         var_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(var[2]+" "+var[0]+" at t="+str(var[3])+": "+str(var[1]), self.current_iter.get('vars', [np.NaN for j in range(i+1)])[i]) for i,var in enumerate(self.variables))
         con_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+get_pos_str(greater_to_factor(con[4][0])*n_to_factor(self.negative_form))+"("+str(con[0])+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+" -"+str(con[4][1])+")", self.current_iter.get('consts', {name:np.NaN})[name]) for name, con in self.constraints.items() if not con[0]=="set_const")
         obj_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+con[4][0]+con[4][1]+"("+con[0]+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+")", self.current_iter.get('objs', {name:np.NaN})[name]) for name, con in self.objectives.items())
-        sim_str = "\n -"+"\n -".join(name+": "+sim[0]+" scen: "+str(sim[2].get('scen', "")) for name, sim in self.simulations.items() if sim[0] !="set_const")
+        sim_str = "\n -"+"\n -".join(name+": "+sim[0]+" scen: "+str(sim[2].get('sequence', "")) for name, sim in self.simulations.items() if sim[0] !="set_const")
         str_repr = '{:<65}{:>20}'.format("Problem "+self.name, "current value")
         return str_repr+"\n Variables"+var_str+"\n Objectives"+obj_str+"\n Constraints"+con_str+"\n Simulations"+sim_str
     def add_simulation(self, simname, simtype, *args, **kwargs):
@@ -154,11 +155,11 @@ class Problem():
         
         ind = len(self.variables)-1
         
-        if arg[3]: 
+        if arg[3]!=None: 
             if 'set_const' not in self.simulations: self.simulations['set_const'] = ('set_const', [ind],[arg[1]])
             else:                                   
                 self.simulations['set_const'][1].append(ind)
-                self.simulations['set_const'][1].append(arg[1])
+                self.simulations['set_const'][2].append(arg[1])
             self._add_obj_const('set_const', 'set_var_'+str(ind)+'_lb', (ind, 'external', 'na', ('greater',arg[1][0])), obj_const="constraints")
             self._add_obj_const('set_const', 'set_var_'+str(ind)+'_ub', (ind, 'external', 'na', ('less',arg[1][1])), obj_const="constraints")
         
@@ -166,7 +167,7 @@ class Problem():
         else:                                           label=arg[3]
         for simname in simnames:
             self._make_mapping(self.var_mapping, simname, label, vartype, arg[0],ind)
-    def add_objectives(self, simname, *args, objtype='endclass', t='end', obj_const='objectives', agg=("-",'sum'), **kwargs):
+    def add_objectives(self, simname, *args, objtype='endclass', t='end', obj_const='objectives', agg=("+",'sum'), **kwargs):
         """
         Adds objective to the given problem.
         
@@ -265,18 +266,18 @@ class Problem():
         if 'start' in var_times:    var_time=0
         else:                       var_time = min(var_times) 
         obj_times = [v[3] for v in [*self.objectives.values(),*self.constraints.values()] if v[3]!='na']
-        if 'end' in obj_times:      obj_time=mdl.times[-1]
+        if 'end' in obj_times:      obj_time=self.mdl.times[-1]
         else:                       obj_time=max(obj_times)
         return var_time, obj_time
     def _prep_single_sim(self, simname, **kwargs):
         var_time, obj_time = self._get_var_obj_time(simname)
         mdl = prop.new_mdl(self.mdl, {'modelparams':{'times':self.mdl.times[:-1]+[obj_time]}})
         result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**self.simulations[simname][2], 'scen':{}})
-        if self.simulations[simname][2]['scen']:
+        if self.simulations[simname][2]['sequence']:
             mdl = prop.new_mdl(self.mdl, {'modelparams':{'times':self.mdl.times[:-1]+[obj_time]}})
-            scen=prop.create_faultseq_scen(mdl,  rate=1.0, sequence=self.simulations[simname][2]['scen'])
+            scen=prop.create_faultseq_scen(mdl,  rate=1.0, sequence=self.simulations[simname][2]['sequence'])
             kwargs = {**self.simulations[simname][2], 'desired_result':{}, 'staged':False}
-            kwargs.pop("scen")
+            kwargs.pop("sequence")
             _, prevhist, c_mdls, _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
         else: prevhist = nomhist
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhist':prevhist, 'obj_time': obj_time, 'mdl':mdl, 'c_mdls':c_mdls}
@@ -295,24 +296,27 @@ class Problem():
             mdl = prop.new_mdl(self.mdl, {'modelparams':{'times':self.mdl.times[:-1]+[obj_time]}})
             _, prevhists[scenname], c_mdls[scenname], _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhists':prevhists, 'obj_time': obj_time, 'mdl':mdl, 'c_mdls':c_mdls}
+    def _check_new_mdl(self,simname, var_time, mdl, x, c_mdl):
+        if var_time==0 or not self.simulations[simname][2]['staged']: # set model parameters that are a part of the sim
+            paramvars = self.var_mapping[simname].get('param',{'param':{}})
+            params = {param: x[ind] for param, ind in paramvars['param'].items()}
+            mdl = prop.new_mdl(mdl, {'params':params})
+        elif self.simulations[simname][2]['staged']:  mdl = c_mdl[var_time].copy()
+        return mdl
     def _run_single_sim(self, simname, x):
         sim = self._sims[simname]
         var_time, prevhist, nomhist, obj_time, mdl, c_mdl = sim['var_time'], sim['prevhist'], sim['nomhist'], sim['obj_time'], sim['mdl'], sim['c_mdls']
         
-        if var_time==0 or not self.simulations[simname][2]['staged']: # set model parameters that are a part of the sim
-            paramvars = self.var_mapping[simname].get('param',{})
-            params = {param: x[ind] for param, ind in paramvars}
-            mdl = prop.new_mdl(mdl, {'params':params})
-        elif self.simulations[simname][2]['staged']:  mdl = c_mdl[var_time].copy()
+        mdl = self._check_new_mdl(simname, var_time, mdl, x, c_mdl)
         # set model faults/disturbances as elements of scenario 
         ##NOTE: need to make sure scenarios don't overwrite each other
         scen=prop.construct_nomscen(mdl)
-        scen['sequence'] = self._update_sequence(self.simulations[simname][2]['scen'], simname, x)
+        scen['sequence'] = self._update_sequence(self.simulations[simname][2]['sequence'], simname, x)
         scen['properties']['time'] = var_time
         #propagate scenario, get results
         des_r=copy.deepcopy(self.obj_const_mapping[simname])
         kwargs = {**self.simulations[simname][2], "desired_result":des_r, "nomhist":nomhist, "prevhist":prevhist}
-        kwargs.pop("scen")
+        kwargs.pop("sequence")
         result, mdlhist, _, _ = prop.prop_one_scen(mdl, scen, **kwargs)
         self._sims[simname]['mdlhists'] = {"faulty":mdlhist, "nominal":nomhist}
         self._sims[simname]['result'] = result
@@ -323,6 +327,7 @@ class Problem():
     def _run_multi_sim(self, simname, x):
         sim = self._sims[simname]
         var_time, prevhists, nomhist, obj_time, mdl, c_mdls = sim['var_time'], sim['prevhists'], sim['nomhist'], sim['obj_time'], sim['mdl'], sim['c_mdls']
+        
         pool = self.simulations[simname][2]['pool']
         scenlist = self.simulations[simname][1][0]
         staged = self.simulations[simname][2]['staged']
@@ -335,9 +340,9 @@ class Problem():
             newscen['sequence']= self._update_sequence(newscen['sequence'], simname, x)
             new_scenlist.append(newscen)
         scenlist = new_scenlist
-        if pool:
-            if staged:  inputs = [(c_mdls[scen['properties']['name']][var_time], scen, {**kwargs, 'prevhist':prevhists[scen['properties']['name']]},  str(i)) for i, scen in enumerate(scenlist)]
-            else:       inputs = [(mdl, scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
+        if pool: 
+            if staged:  inputs = [(self._check_new_mdl(simname, var_time, mdl, x, c_mdls[scen['properties']['name']][var_time]), scen, {**kwargs, 'prevhist':prevhists[scen['properties']['name']]},  str(i)) for i, scen in enumerate(scenlist)]
+            else:       inputs = [(self._check_new_mdl(simname, var_time, mdl, x, mdl), scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
             res_list = list(pool.imap(prop.exec_scen_par, inputs))
             results, mh = prop.unpack_res_list(scenlist, res_list)
         else:
@@ -346,7 +351,7 @@ class Problem():
                 prevhist = prevhists[name]
                 kwargs['nomhist'] = nomhist
                 kwargs['desired_result'] = copy.deepcopy(self.obj_const_mapping[simname])
-                if staged:  mdl = c_mdls[name][var_time]
+                mdl = self._check_new_mdl(simname, var_time, mdl, x, c_mdls[name][var_time])
                 results[name], mh[name], t_end = prop.exec_scen(mdl, scen, indiv_id=str(i), **kwargs, prevhist=prevhist)
         objs = self._get_obj_from_results(simname, results, "objectives")
         consts = self._get_obj_from_results(simname, results, "constraints")
@@ -360,7 +365,7 @@ class Problem():
         obj_dict = getattr(self, obj_const)
         for objname, var_to_get in obj_dict.items():
             if simname ==var_to_get[0]:
-                values = [result[var_to_get[3]][var_to_get[2]][var_to_get[1]] for result in results.values()]
+                values = [result[var_to_get[3]][var_to_get[2]][var_to_get[1]] if var_to_get[3] in result else result[var_to_get[2]][var_to_get[1]] for result in results.values()]
                 if obj_const == 'objectives':    
                     pos_fact = get_pos_negative(self.objectives[objname][-1][0])
                     aggfunc = getattr(np, self.objectives[objname][-1][1])
@@ -387,6 +392,7 @@ class Problem():
         return {}, {**ubs, **lbs}
     def _prep_sim_type(self, simtype, simname):
         if simtype=='single': self._prep_single_sim(simname)
+        if simtype=='multi': self._prep_multi_sim(simname)
     def _run_sim_type(self, simtype, simname, x):
         if simtype=='set_const': return self._get_set_const(x)
         elif simtype=='single':  return self._run_single_sim(simname, x)
@@ -398,7 +404,7 @@ class Problem():
 
         Parameters
         ----------
-        x : list
+        x : list/array
             Variable values corresponding to self.variables
 
         Returns
@@ -409,11 +415,12 @@ class Problem():
             Dictionary of constraints and their values
 
         """
+        if type(x)==list: x=np.array(x)
         if not self.current_iter: 
             for simname in self.simulations:
                 self._prep_sim_type(self.simulations[simname][0], simname)
-            self.current_iter = {'vars':[], 'objs':dict(), 'consts':dict()}
-        if self.current_iter['vars']!=x:
+            self.current_iter = {'vars':np.array([np.nan]), 'objs':dict(), 'consts':dict()}
+        if any(self.current_iter['vars']!=x):
             self.current_iter['vars'] = x
             for simname in self.simulations:
                 objs, consts = self._run_sim_type(self.simulations[simname][0], simname, x)
@@ -424,15 +431,18 @@ class Problem():
         vals = {n:o[1] for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
         return vals
     def _get_plot_vars(self, simname, variables):
-        vals = {str(i):o[0] for i,o in enumerate(variables) if  o[2]=='vars'}
+        vals = {"x_"+str(i):o[0] for i,o in enumerate(variables) if  o[2]=='vars'}
         return vals
     def _get_plot_times(self, simname, obj_con_var):
-        vals = {n:o[3] for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
+        vals = {n:get_text_time(o[3], end=self.mdl.times[-1]) for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
         return vals
-    def _get_var_times(self, simname, variables):
-        vals = {"x_"+str(i):o[3] for i,o in enumerate(variables) if o[2]=='vars'}
+    def _get_var_times(self):
+        vals = {"x_"+str(i):get_text_time(o[3]) for i,o in enumerate(self.variables) if o[2]=='vars'}
         return vals
-    def plot_obj_const(self, simname):
+    def get_var_obj_con(self):
+        variables = {"x_"+str(i): self.current_iter['vars'][i] for i, var in enumerate(self.current_iter['vars'])}
+        return {**variables, **self.current_iter['objs'], **self.current_iter['consts']}
+    def plot_obj_const(self, simname, **kwargs):
         """
         Plots the objectives, variables, and constraints over time at the current variable value. Note that simulation tracking must be turned on.
         
@@ -440,18 +450,34 @@ class Problem():
         ----------
         simname : str
             Name of the simulation.
+        kwargs : kwargs
+            Keyword arguments for plot.mdlhists
         """
         objs_to_plot = self._get_plot_vals(simname, {**self.objectives, **self.constraints})
-        consts_to_plot = self._get_plot_vals(simname, self.constraints)
         vars_to_plot = self._get_plot_vars(simname, self.variables)
-        all_to_plot = [*objs_to_plot.values(), *vars_to_plot.values()]
+        all_to_plot = {**objs_to_plot, **vars_to_plot}
         
-        times = self._get_plot_times(simname, {**self.objectives, **self.constraints})
-        times.update(self._get_var_times(simname, self.variables))
+        fxnflowvals = proc.nest_flattened_hist({tuple(objname.split(".")):'all' for objname in all_to_plot.values()})
+            
+        if self.simulations[simname][0]=='multi':      f_times = {get_text_time(t)  for seq in self.simulations[simname][1][0] for t in seq['sequence'].keys()}
+        elif self.simulations[simname][0]=='single':   f_times = {get_text_time(t) for t in self.simulations[simname][2]['sequence'].keys()}
         
-        fxnflowvals = proc.nest_flattened_hist({tuple(objname.split(".")):'all' for objname in all_to_plot})
+        fig, axs = plot.mdlhists(self._sims[simname]['mdlhists'], fxnflowvals=fxnflowvals, time_slice=f_times, **kwargs)
         
-        plot.mdlhists(self._sims[simname]['mdlhists'], fxnflowvals=fxnflowvals,time_slice=[*times.values()], time_slice_label=[*times.keys()])
+        vars_ordered = [".".join(ax.get_title().split(": ")) for ax in axs]
+        rev_all_to_plot = {v:k for k,v in all_to_plot.items()}
+        objnames_ordered = [rev_all_to_plot[v] for v in vars_ordered if v in rev_all_to_plot]
+        
+        vartimes = self._get_var_times()
+        objcontimes = self._get_plot_times(simname, {**self.objectives, **self.constraints})
+        times = {**vartimes, **objcontimes}
+        current_vars = self.get_var_obj_con()
+        for i, val in enumerate(objnames_ordered):
+            #axs[i].vlines([times[val]], *axs[i].get_ylim())
+            axs[i].axvline([times[val]], color="grey", ls="--")
+            mid = np.mean(axs[i].get_ylim())
+            axs[i].text(times[val], mid, val+"="+'{0:.2f}'.format(current_vars[val]),horizontalalignment='center', bbox=dict(facecolor='white', alpha=0.5, edgecolor='white'))
+        return fig, axs
     def get_constraint_dict(self, include_set_consts=True):
         constraint_dict = {}
         for con in self.constraints:
@@ -486,7 +512,11 @@ def get_pos_str(factor):
     if factor>=0:   pos_str = "+"
     else:           pos_str = "-"
     return pos_str
-
+def get_text_time(time,start=0,end=0):
+    if time=='start':   t=start
+    elif time=='end':   t=end
+    else:               t=time
+    return t
 class DynamicProblem():
     """ 
     Interface for dynamic search of model states (e.g., AST)
@@ -595,40 +625,22 @@ if __name__=="__main__":
     
     from fmdtools.modeldef import SampleApproach
     import multiprocessing as mp
-    
+    from scipy.optimize import minimize
     
     from pump_stochastic import *
     
     mdl=Pump()
-    new_problem = Problem("new_problem", mdl, staged=True)
-    new_problem.add_simulation("test_sim","single", scen={26:{"faults":{"ImportEE": "no_v"}}})
-    new_problem.add_variables("test_sim", ("MoveWater.eff", [0,2]), t=10)
-    new_problem.add_objectives("test_sim", obj_1="MoveWater.total_flow", objtype='vars', t=25, agg=("+", "sum"))
-    #new_problem.add_objectives("test_sim", obj_3="expected cost", objtype='endclass')
-    new_problem.add_constraints("test_sim", con_1 = "Sig_1.power", objtype='vars', t=25, threshold = ('greater', 1.5))
-    
-    new_problem._prep_single_sim('test_sim')
-    new_problem._run_single_sim('test_sim', [1])
-    new_problem.obj_1([2])
-    
-    plot.mdlhists(new_problem._sims['test_sim']['mdlhists'], fxnflowvals={"MoveWater":'total_flow', "EE_1":{"voltage"}}, time_slice=[3, 10,25])
-    
-    app = SampleApproach(mdl)
-    
+    app = SampleApproach(mdl, faults="ExportWater", phases=["on"], defaultsamp={'samp':'evenspacing','numpts':4})
     multi_problem = Problem("multi_problem", mdl, staged=True) #, track='valparams')
     multi_problem.add_simulation("test_multi", "multi", app.scenlist)
-    multi_problem.add_variables("test_multi", ("MoveWater.eff", [0,2]), t=10)
-    multi_problem.add_objectives("test_multi", obj_1="MoveWater.total_flow", objtype='vars', t=29)
-    multi_problem.add_objectives("test_multi", obj_3="expected cost", objtype='endclass')
-    multi_problem.add_constraints("test_multi", con_1 = "Sig_1.power", objtype='vars', t=29, threshold = ('greater', 1.5))
-
-    multi_problem._prep_multi_sim('test_multi')
-    multi_problem._run_multi_sim('test_multi', [1])
-    multi_problem.obj_1([2])
+    multi_problem.add_variables("test_multi", ("delay", [0,15]), vartype='param')
+    multi_problem.add_variables("test_multi", ("MoveWater.eff", [0,15]), t=10)
+    multi_problem.add_objectives("test_multi", cost="expected cost", objtype='endclass')
     
-    multi_problem.plot_obj_const('test_multi')
+    multi_problem.cost([10,1])
     
-    plot.mdlhists(multi_problem._sims['test_multi']['mdlhists'], fxnflowvals={"MoveWater":['total_flow', 'eff'], "EE_1":{"voltage"}, "Wat_2":{"area"}}, time_slice=[2, 10, 27,29, 52], legend_loc=False)
+    
+    #plot.mdlhists(multi_problem._sims['test_multi']['mdlhists'], fxnflowvals={"MoveWater":['total_flow', 'eff'], "EE_1":{"voltage"}, "Wat_2":{"area"}}, time_slice=[2, 10, 27,29, 52], legend_loc=False)
     
     
     
