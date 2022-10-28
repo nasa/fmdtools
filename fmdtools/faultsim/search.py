@@ -3,15 +3,9 @@
 Description: Functions and Classes to enable optimization and search of fault model states and parameters.
 
 Classes:
-    - :class:`Problem`:         Creates an interface for model simulations for optimization methods
-    - :class:`DynamicProblem`:  Creates an interface for model simulations for dynamic optimization of a single sim
+    - :class:`ProblemInterface`:         Creates an interface for model simulations for optimization methods
+    - :class:`DynamicInterface`:  Creates an interface for model simulations for dynamic optimization of a single sim
 """
-
-
-import sys, os
-sys.path.insert(0,os.path.join('..','..'))
-sys.path.insert(1,os.path.join('..','..', "example_pump"))
-
 import copy
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp.process as proc
@@ -20,9 +14,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import warnings
 
-class Problem(): 
+class ProblemInterface(): 
     """
-    Interface for resilience optimization problems. 
+    Interfaces for resilience optimization problems. 
     
     Attributes
     ----------
@@ -488,6 +482,23 @@ class Problem():
         return constraint_dict
     def get_constraint_list(self, include_set_consts=True):
         return [*self.get_constraint_dict().values()]
+    def to_pymoo_problem(self):
+        from pymoo.core.problem import Problem
+        class Prob(Problem):
+            def __init__(self, problem_inter):
+                self.problem_inter = problem_inter
+                self.non_set_constraints = problem_iter.get_constraint_dict(include_set_consts=False)
+                super().__init__(n_var=len(problem_inter.variables),\
+                                 n_obj=len(problem_inter.objectives),\
+                                 n_con=len(self.non_set_constraints),\
+                                 xl=[i[1][0] for i in problem_inter.variables],\
+                                 xu=[i[1][1] for i in problem_inter.variables])
+            def _evaluate(self,x,out, *args, **kwargs):
+                objs, consts = self.problem_inter.x_to_obj_const(np.array([i[0] for i in x]))
+                out["F"] = np.column_stack([*objs.values()])
+                if self.non_set_constraints: out["G"] = np.column_stack([consts[c] for c in self.non_set_constraints])
+        problem_iter = self
+        return Prob(problem_iter)
 
 def eval_con(value, threshold, greater_less, negative_form):
     g_factor = greater_to_factor(greater_less)
@@ -517,7 +528,8 @@ def get_text_time(time,start=0,end=0):
     elif time=='end':   t=end
     else:               t=time
     return t
-class DynamicProblem():
+
+class DynamicInterface():
     """ 
     Interface for dynamic search of model states (e.g., AST)
     
@@ -616,31 +628,4 @@ class DynamicProblem():
         else:                                                       end = False
         if end: prop.cut_mdlhist(self.log, self.t_ind)
         return end
-        
-    
-    
-
-if __name__=="__main__":
-
-    
-    from fmdtools.modeldef import SampleApproach
-    import multiprocessing as mp
-    from scipy.optimize import minimize
-    
-    from pump_stochastic import *
-    
-    mdl=Pump()
-    app = SampleApproach(mdl, faults="ExportWater", phases=["on"], defaultsamp={'samp':'evenspacing','numpts':4})
-    multi_problem = Problem("multi_problem", mdl, staged=True) #, track='valparams')
-    multi_problem.add_simulation("test_multi", "multi", app.scenlist)
-    multi_problem.add_variables("test_multi", ("delay", [0,15]), vartype='param')
-    multi_problem.add_variables("test_multi", ("MoveWater.eff", [0,15]), t=10)
-    multi_problem.add_objectives("test_multi", cost="expected cost", objtype='endclass')
-    
-    multi_problem.cost([10,1])
-    
-    
-    #plot.mdlhists(multi_problem._sims['test_multi']['mdlhists'], fxnflowvals={"MoveWater":['total_flow', 'eff'], "EE_1":{"voltage"}, "Wat_2":{"area"}}, time_slice=[2, 10, 27,29, 52], legend_loc=False)
-    
-    
-    
+                
