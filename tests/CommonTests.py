@@ -29,12 +29,12 @@ class CommonTests():
                 for t in range(max_time):
                     if t==inj_time:   scen=faultscen
                     else:       scen={}
-                    propagate.propagate(mdl,scen,t,run_stochastic=run_stochastic)       
-                    propagate.propagate(mdl2,scen,t,run_stochastic=run_stochastic) 
+                    propagate.propagate(mdl,t,run_stochastic=run_stochastic, fxnfaults=scen)       
+                    propagate.propagate(mdl2,t,run_stochastic=run_stochastic, fxnfaults=scen) 
                     self.check_same_model(mdl, mdl2)
                     if t==copy_time: mdl_copy = mdl.copy()
                     if t>copy_time: 
-                        propagate.propagate(mdl_copy, scen, t,run_stochastic=run_stochastic)
+                        propagate.propagate(mdl_copy, t,run_stochastic=run_stochastic, fxnfaults=scen)
                         self.check_same_model(mdl, mdl_copy)
     def check_approach_parallelism(self, mdl, app):
         """Test whether the model simulates the same when simulated using parallel or staged options"""
@@ -68,12 +68,12 @@ class CommonTests():
                 for t in range(max_time):
                     if t==inj_time:     scen=faultscen
                     else:               scen={}
-                    propagate.propagate(mdl_reset,scen,t,run_stochastic=run_stochastic)       
+                    propagate.propagate(mdl_reset,t,run_stochastic=run_stochastic, fxnfaults=scen)       
                 mdl_reset.reset()
                 mdl = mdls.pop()
                 for t in range(max_time):
-                    propagate.propagate(mdl_reset,{},t,run_stochastic=run_stochastic)  
-                    propagate.propagate(mdl,{},t,run_stochastic=run_stochastic)  
+                    propagate.propagate(mdl_reset,t,run_stochastic=run_stochastic)  
+                    propagate.propagate(mdl,t,run_stochastic=run_stochastic)  
                     self.check_same_model(mdl, mdl_reset)
     def check_model_copy_different(self,mdl, inj_times, max_time=55, run_stochastic=False):
         """ Tests to see that a copied model has different states from the model
@@ -82,10 +82,10 @@ class CommonTests():
         for faultscen in faultscens:
             for inj_time in inj_times:
                 for t in range(max_time):
-                    propagate.propagate(mdl,{},t,run_stochastic=run_stochastic)       
+                    propagate.propagate(mdl,t,run_stochastic=run_stochastic)       
                     if t==inj_time: mdl_copy = mdl.copy()
                     if t>inj_time: 
-                        propagate.propagate(mdl_copy, faultscen, t)
+                        propagate.propagate(mdl_copy, t, fxnfaults=faultscen)
                         self.check_diff_model(mdl, mdl_copy)
     def check_same_model(self, mdl, mdl2):
         """Checks if models mdl and mdl2 have the same attributes"""
@@ -131,23 +131,22 @@ class CommonTests():
         if os.path.exists(ecfile):  os.remove(ecfile)
         check_link=False
         if runtype=='nominal':
-            endresult, resgraph, mdlhist=propagate.nominal(mdl, \
-                                                        save_args={'mdlhist':{'filename':mfile},\
+            endresult,  mdlhist=propagate.nominal(mdl,  save_args={'mdlhist':{'filename':mfile},\
                                                                    'endclass':{'filename':ecfile}})
             check_link=True
         elif runtype=='one_fault':
             fxnname, faultmode, faulttime = faultscen
-            endresult, resgraph, mdlhist=propagate.one_fault(mdl, fxnname, faultmode, faulttime,\
+            endresult, mdlhist=propagate.one_fault(mdl, fxnname, faultmode, faulttime,\
                                                         save_args={'mdlhist':{'filename':mfile},\
                                                                    'endclass':{'filename':ecfile}})
         elif runtype=='mult_fault':
-            endresult, resgraph, mdlhist=propagate.mult_fault(mdl, faultscen, \
+            endresult, mdlhist=propagate.mult_fault(mdl, faultscen, {}, \
                                                         save_args={'mdlhist':{'filename':mfile},\
                                                                    'endclass':{'filename':ecfile}})
         else: raise Exception("Invalid Run Type"+runtype)
         
         self.check_same_file(mdlhist,mfile, check_link=check_link)
-        self.check_same_file(endresult['classification'], ecfile)
+        self.check_same_file(endresult, ecfile)
 
         os.remove(mfile), os.remove(ecfile)
     def check_same_fmea(self, app, endclasses, mdl):

@@ -206,7 +206,7 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
         if 'mdlhist' in save_args:     proc.save_result(mdlhist, **save_args['mdlhist'])
         if 'endclass' in save_args:     proc.save_result(endclass, **save_args['endclass'])
     
-def update_params(params, **new_params):
+def update_params(params, new_params):
     """
     Updates a dictionary with the given keyword arguments
 
@@ -214,7 +214,7 @@ def update_params(params, **new_params):
     ----------
     params : dict
         Parameter dictionary
-    new_params : new_params
+    new_params : dict
         New arguments to add/update in the parameter dictionary
 
     Returns
@@ -223,6 +223,7 @@ def update_params(params, **new_params):
         Updated parameter dictionary
     """
     params = copy.deepcopy(params)
+    new_params = copy.deepcopy(new_params)
     for kwarg in new_params: 
         if new_params.get(kwarg, None)!=None: params[kwarg]=new_params[kwarg]
     return params
@@ -250,9 +251,9 @@ def new_mdl_params(mdl,paramdict):
     valparams : dict
         Updated valparam dictionary
     """
-    params = update_params(mdl.params, **paramdict.get('params', {}))
-    modelparams = update_params(mdl.modelparams, **paramdict.get('modelparams', {}))
-    valparams = update_params(mdl.valparams, **paramdict.get('valparams', {}))
+    params = update_params(mdl.params, paramdict.get('params', {}))
+    modelparams = update_params(mdl.modelparams, paramdict.get('modelparams', {}))
+    valparams = update_params(mdl.valparams, paramdict.get('valparams', {}))
     return params, modelparams, valparams
 
 
@@ -397,7 +398,7 @@ def mult_fault(mdl, faultseq, disturbances, scen={}, rate=np.NaN, **kwargs):
     sim_kwarg = pack_sim_kwargs(**kwargs)
     nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, time, **sim_kwarg)
     mdl = [*mdls.values()][0]
-    if not scen: scen = create_faultseq_scen(mdl, faultseq, rate, disturbances)
+    if not scen: scen = create_faultseq_scen(mdl, rate, faultseq=faultseq, disturbances=disturbances)
     result, faulthist, _, t_end = prop_one_scen(mdl, scen, **sim_kwarg, nomhist=nomhist, nomresult=nomresult)
     nomhist = cut_mdlhist(nomhist, t_end_nom)
     mdlhists = {'nominal':nomhist, 'faulty':faulthist}
@@ -492,6 +493,7 @@ def approach(mdl, app,  **kwargs):
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
+    save_helper(kwargs['save_args'], results, mdlhists)
     return results, mdlhists
 
 def single_faults(mdl, **kwargs):
@@ -530,6 +532,7 @@ def single_faults(mdl, **kwargs):
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
+    save_helper(kwargs['save_args'], results, mdlhists)
     return results, mdlhists
 
 def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
@@ -553,7 +556,6 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
             if staged:  mdl = c_mdl[scen['properties']['time']]
             ec, mh, t_end = exec_scen(mdl, scen, indiv_id=str(i), **kwargs)
             results[name],mdlhists[name] = ec, mh
-    save_helper(kwargs['save_args'], results, mdlhists)
     return results, mdlhists
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
