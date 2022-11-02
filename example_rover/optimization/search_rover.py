@@ -37,11 +37,11 @@ def line_dist_faster(ind):
     newmdl.fxns['Drive'].mode_state_dict['custom_fault']={'friction':ind[0],'drift':ind[1], 'transfer':ind[2]}
     
     scen = prop.construct_nomscen(newmdl)
-    scen['faults']['Drive']="custom_fault"
+    scen['sequence'] ={fault_time:{'faults':{'Drive':"custom_fault"}}}
     scen['properties']['function']="Drive"
     scen['properties']['fault']="custom_fault"
     scen['properties']['time']=fault_time
-    faultmdlhist, _, t_end = prop.prop_one_scen(newmdl, scen, staged=True, prevhist=mdlhist_nom, track='none')
+    res, faultmdlhist, _, t_end = prop.prop_one_scen(newmdl, scen, staged=True, prevhist=mdlhist_nom, track='none')
     
     dist = rvr.find_line_dist(newmdl.flows['Ground'].x,newmdl.flows['Ground'].y, mdlhist_nom['flows']['Ground']['linex'], mdlhist_nom['flows']['Ground']['liney'])
     enddist = np.sqrt((newmdl.params['end'][0] - newmdl.flows["Ground"].x)**2+(newmdl.params['end'][1] - newmdl.flows["Ground"].y)**2)
@@ -559,10 +559,10 @@ def plot_trajs(sol_dict, figsize=(4,12), v_padding=0.3):
 def visualizations(soln, method="EA", figsize=(4,4), ax=False, legend=True, xlim=[15,25], ylim=[0,10]):
 
     mdl_range = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':list(soln)})
-    _,_, mdlhists = prop.nominal(mdl_range)
+    _, mdlhists = prop.nominal(mdl_range)
     phases, modephases = rd.process.modephases(mdlhists)
     app_range = SampleApproach(mdl_range, faults='Drive', phases={'drive':phases['Avionics']['drive']})
-    endclasses_range, mdlhists_range = prop.approach(mdl_range, app_range, staged=True, showprogress=False)    
+    endclasses_range, mdlhists_range = prop.approach(mdl_range, app_range, staged=True, showprogress=False, modelparams={'use_end_condition':False})    
     fig = rvr.plot_trajectories(mdlhists_range, app=app_range, faultlabel='Faulty Scenarios', faultalpha=0.5,title="Trajectories-"+method,show_labels=False, figsize=figsize, ax=ax, legend=legend)
     if not ax:
         ax = plt.gca()
@@ -595,7 +595,7 @@ NUM_SUBPOP = 10 #number of subpopulation
 
 #nominal scenario info (for line_dist)
 mdl = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':{'custom_fault':{'friction':1.0,'drift':0.0, 'transfer':0.0}}})
-_,_, mdlhists_nom = prop.nominal(mdl)
+_, mdlhists_nom = prop.nominal(mdl)
 phases, modephases = rd.process.modephases(mdlhists_nom)
 app= SampleApproach(mdl, faults='Drive', phases={'drive':phases['Avionics']['drive']})
 fault_time = app.times[0]
@@ -603,7 +603,7 @@ end_time = phases['Avionics']['drive'][1]+25
 mdl.times[1]=end_time
 
 nomscen=prop.construct_nomscen(mdl)
-mdlhist_nom, mdls, t_end = prop.prop_one_scen(mdl, nomscen, ctimes=[fault_time], staged=False)
+result, mdlhist_nom, mdls, t_end = prop.prop_one_scen(mdl, nomscen, ctimes=[fault_time], staged=False)
 
 mdl_ft = mdls[fault_time]
 fault_loc = [mdl_ft.flows['Ground'].x,mdl_ft.flows['Ground'].y]

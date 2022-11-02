@@ -494,7 +494,7 @@ class ProblemInterface():
             
         for simname in simnames:
             sub_x = [self.current_iter['vars'][i] for i in self._sim_vars[simname]]
-            if any(x!=sub_x):
+            if len(x)!=len(sub_x) or any(x!=sub_x):
                 for ind, x_i in enumerate(self._sim_vars[simname]):
                     self.current_iter['vars'][x_i]= x[ind]
                 objs, consts = self._run_sim_type(self.simulations[simname][0], simname, self.current_iter['vars'])
