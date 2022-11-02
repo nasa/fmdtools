@@ -39,6 +39,7 @@ class Avionics(FxnBlock):
     def dynamic_behavior(self,time):
         if not self.in_mode('no_con'):
             if time == 5: self.set_mode('drive')
+            if time == 100: self.set_mode('standby')
 
         if self.in_mode('drive'):
             self.Pos_Signal.assign(self.Video, 'angle', 'linex', 'liney')
