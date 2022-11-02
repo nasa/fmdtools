@@ -64,13 +64,14 @@ class ProblemInterface():
         self.constraints=dict()
         self.var_mapping={}
         self.obj_const_mapping={}
+        self._sim_vars={}
         self.log={}
         self.current_iter={}
         self._sims={}
     def __repr__(self):
         var_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(var[2]+" "+str(var[0])+" at t="+str(var[3])+": "+str(var[1]), self.current_iter.get('vars', [np.NaN for j in range(i+1)])[i]) for i,var in enumerate(self.variables))
-        con_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+get_pos_str(greater_to_factor(con[4][0])*n_to_factor(self.negative_form))+"("+str(con[0])+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+" -"+str(con[4][1])+")", self.current_iter.get('consts', {name:np.NaN})[name]) for name, con in self.constraints.items() if not con[0]=="set_const")
-        obj_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+con[4][0]+con[4][1]+"("+con[0]+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+")", self.current_iter.get('objs', {name:np.NaN})[name]) for name, con in self.objectives.items())
+        con_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+get_pos_str(greater_to_factor(con[4][0])*n_to_factor(self.negative_form))+"("+str(con[0])+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+" -"+str(con[4][1])+")", self.current_iter.get('consts', {name:np.NaN}).get(name, np.NaN)) for name, con in self.constraints.items() if not con[0]=="set_const")
+        obj_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+con[4][0]+con[4][1]+"("+con[0]+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+")", self.current_iter.get('objs', {name:np.NaN}).get(name, np.NaN)) for name, con in self.objectives.items())
         sim_str = "\n -"+"\n -".join(name+": "+sim[0]+" scen: "+str(sim[2].get('sequence', "")) for name, sim in self.simulations.items() if sim[0] !="set_const")
         str_repr = '{:<65}{:>20}'.format("Problem "+self.name, "current value")
         return str_repr+"\n Variables"+var_str+"\n Objectives"+obj_str+"\n Constraints"+con_str+"\n Simulations"+sim_str
@@ -103,6 +104,9 @@ class ProblemInterface():
             
             include_nominal: bool
                 whether to include nominal scenario in multi simulation. default is True
+            upstream_sims: dict
+                Dictionary specifying connection with an upstream simulation. With structure:
+                    {'upstream_simname':{'params':{'ext_varname':'paramname'}}}, 'vars':{'ext_varname':'varname'}}
         """
         kwargs = {**self.default_run_kwargs,**self.default_sim_kwargs, **self.default_mult_kwargs, **kwargs}
         self.simulations[simname]=(simtype, args, kwargs)
@@ -151,6 +155,9 @@ class ProblemInterface():
         else:                               vartype=arg[2]
         
         ind = len(self.variables)-1
+        for simname in simnames:
+            if simname not in self._sim_vars:   self._sim_vars[simname]=[ind]
+            else:                               self._sim_vars[simname].append(ind)
         
         if arg[1]!=None: 
             if 'set_const' not in self.simulations: self.simulations['set_const'] = ('set_const', [ind],[arg[1]])
@@ -199,7 +206,14 @@ class ProblemInterface():
         unnamed_objs = {'f'+str(i+len(getattr(self,obj_const, {}))):j for i,j in enumerate(args)}
         all_objs = {**unnamed_objs, **kwargs}
         for obj in all_objs:
-            self._add_obj_const(simname, obj, all_objs[obj], objtype=objtype, t=t, agg=agg, obj_const=obj_const)
+            if self.simulations[simname][0]=='external':
+                self._add_obj_ext(simname, obj, obj_const)
+            else:
+                self._add_obj_const(simname, obj, all_objs[obj], objtype=objtype, t=t, agg=agg, obj_const=obj_const)
+    def _add_obj_ext(self,simname,objname, obj_const):
+        self._make_mapping(self.obj_const_mapping, simname, obj_const, [])
+        self.obj_const_mapping[simname][obj_const].append(objname)
+        self._assoc_obj_con(simname, objname, obj_const, ('', '', '', ["+", ""]))
     def _add_obj_const(self, simname, objname, arg, objtype='endclass', t='end',agg=("-",'sum'), obj_const='objectives'):
         if simname not in self.simulations: raise Exception("Undefined simulation: "+simname)
         if type(arg)==str: arg=[arg, objtype, t, agg]
@@ -209,18 +223,19 @@ class ProblemInterface():
         if not arg[2]:  arg[2]=t
         if not arg[3]:  arg[3]=agg
         if hasattr(self, objname): warnings.warn("Objective already defined: "+objname)
+        self._assoc_obj_con(simname, objname, obj_const, arg)
+        
+        vname, objtype, t, _ = arg
+        self._make_mapping(self.obj_const_mapping, simname, t,objtype,vname, exclusive_vars=False)
+    def _assoc_obj_con(self, simname, objname, obj_const, arg):
         def newobj(x):
-            return self.x_to_obj_const(x)[0][objname]
+            return self.x_to_obj_const(x, simname)[0][objname]
         def newconst(x):
-            return self.x_to_obj_const(x)[1][objname]
+            return self.x_to_obj_const(x, simname)[1][objname]
         if obj_const=='objectives':     objfunc = newobj
         elif obj_const=='constraints':  objfunc = newconst
         setattr(self, objname, objfunc)
         getattr(self, obj_const)[objname]=[simname,*arg]
-        
-        vname, objtype, t, _ = arg
-        self._make_mapping(self.obj_const_mapping, simname, t,objtype,vname, exclusive_vars=False)
-
     def _make_mapping(self, mapping, *args, exclusive_vars=True):
         if len(args)>2:
             if args[0] not in mapping:  mapping[args[0]]=self._make_nested_dict(*args[1:])
@@ -269,10 +284,10 @@ class ProblemInterface():
     def _prep_single_sim(self, simname, **kwargs):
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
-        mdl = new_nom_mdl(self.mdl, obj_time, kwar)
-        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}})
+        new_param = new_nom_params(self.mdl, obj_time, kwar)
+        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(self.mdl, [var_time], **{**kwar, 'scen':{}}, new_params=new_param)
         if kwar['sequence']:
-            mdl = new_nom_mdl(self.mdl, obj_time, kwar)
+            mdl = prop.new_mdl(self.mdl, new_param)
             scen=prop.create_faultseq_scen(mdl,  rate=1.0, sequence=kwar['sequence'])
             kwargs = {**kwar, 'desired_result':{}, 'staged':False}
             kwargs.pop("sequence")
@@ -282,37 +297,45 @@ class ProblemInterface():
     def _prep_multi_sim(self, simname, **kwargs):
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
-        mdl = new_nom_mdl(self.mdl, obj_time, kwargs)
-        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}})
+        new_param = new_nom_params(self.mdl, obj_time, kwar)
+        result, nomhist, nomscen, c_mdls_nom, t_end = prop.nom_helper(self.mdl, [var_time], **{**kwar, 'scen':{},'new_params':new_param})
         
         scenlist = self.simulations[simname][1][0]
         for scen in scenlist: scen['properties']['time']=var_time
         
         prevhists = dict(); c_mdls = dict()
         include_nominal = self.simulations[simname][2].get('include_nominal', True)
-        for scen in scenlist:
-            kwargs =  {**kwar.copy(), 'desired_result':{}, 'staged':False}
-            scenname=scen['properties']['name']
-            mdl = new_nom_mdl(self.mdl, obj_time, kwargs)
-            _, prevhists[scenname], c_mdls[scenname], _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
-        if include_nominal: 
+
+        ## only do copying below if var_time isn't 0?
+        if var_time>0:
+            for scen in scenlist:
+                kwargs =  {**kwar.copy(), 'desired_result':{}, 'staged':False}
+                scenname=scen['properties']['name']
+                mdl = prop.new_mdl(self.mdl, new_param)
+                _, prevhists[scenname], c_mdls[scenname], _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
+        else: 
+            c_mdls={scen['properties']['name']:{var_time:c_mdls_nom[var_time]} for scen in scenlist}
+            prevhists={scen['properties']['name']:nomhist for scen in scenlist}
+        if include_nominal and scenlist[-1]['properties']['name']!='nominal': 
             nomscen['properties']['name']='nominal'
             scenlist.append(nomscen)
             prevhists['nominal']=nomhist
-            c_mdls['nominal']={var_time:mdl}
-        self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhists':prevhists, 'obj_time': obj_time, 'mdl':mdl, 'c_mdls':c_mdls}
-    def _check_new_mdl(self,simname, var_time, mdl, x, staged=False):
+            c_mdls['nominal']=c_mdls_nom
+        self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhists':prevhists, 'obj_time': obj_time, 'mdl':c_mdls_nom[var_time], 'c_mdls':c_mdls}
+    def _check_new_mdl(self,simname, var_time, mdl, x, obj_time, staged=False, default_params={}):
         if var_time==0 or not staged: # set model parameters that are a part of the sim
             paramvars = self.var_mapping[simname].get('param',{'param':{}})
-            params = {param: x[ind] for param, ind in paramvars['param'].items()}
-            mdl = prop.new_mdl(mdl, {'params':params})
+            params=copy.deepcopy(default_params)
+            params.update({param: x[ind] for param, ind in paramvars['param'].items()})
+            modelparams= {**mdl.modelparams, 'times':[mdl.modelparams['times'][0], obj_time]}
+            mdl = prop.new_mdl(mdl, {'params':params, 'modelparams':modelparams})
         return mdl
     def _run_single_sim(self, simname, x):
         sim = self._sims[simname]
         var_time, prevhist, nomhist, obj_time, mdl, c_mdl = sim['var_time'], sim['prevhist'], sim['nomhist'], sim['obj_time'], sim['mdl'], sim['c_mdls']
         
-        if not self.simulations[simname][2]['staged']:  mdl = self._check_new_mdl(simname, var_time, mdl, x)
-        else:                                           mdl = c_mdl[var_time].copy()
+        if not self.simulations[simname][2]['staged']:  mdl = self._check_new_mdl(simname, var_time, mdl, x, obj_time)
+        else:                                           mdl = c_mdl[var_time].copy(); mdl.times[-1]=obj_time
         # set model faults/disturbances as elements of scenario 
         ##NOTE: need to make sure scenarios don't overwrite each other
         scen=prop.construct_nomscen(mdl)
@@ -322,6 +345,7 @@ class ProblemInterface():
         des_r=copy.deepcopy(self.obj_const_mapping[simname])
         kwargs = {**self.simulations[simname][2], "desired_result":des_r, "nomhist":nomhist, "prevhist":prevhist}
         kwargs.pop("sequence")
+        mdl.modelparams['times'][-1]=obj_time
         result, mdlhist, _, _ = prop.prop_one_scen(mdl, scen, **kwargs)
         self._sims[simname]['mdlhists'] = {"faulty":mdlhist, "nominal":nomhist}
         self._sims[simname]['result'] = result
@@ -336,10 +360,10 @@ class ProblemInterface():
         pool = self.simulations[simname][2]['pool']
         scenlist = self.simulations[simname][1][0]
         staged = self.simulations[simname][2]['staged']
-        mdl = self._check_new_mdl(simname, var_time, mdl, x, staged)
+        mdl = self._check_new_mdl(simname, var_time, mdl, x, obj_time, staged)
         
         kwargs = self.simulations[simname][2]
-        kwargs = {**kwargs, 'desired_result':copy.deepcopy(self.obj_const_mapping[simname]), "pool":True}
+        kwargs = {**kwargs, 'desired_result':copy.deepcopy(self.obj_const_mapping[simname]), "pool":False}
         results, objs, consts, mh = {}, {}, {}, {}
         new_scenlist = []
         for scen in scenlist:
@@ -348,8 +372,8 @@ class ProblemInterface():
             new_scenlist.append(newscen)
         scenlist = new_scenlist
         if pool: 
-            if staged:  inputs = [(self._check_new_mdl(simname, var_time, mdl, x, c_mdls[scen['properties']['name']][var_time]), scen, {**kwargs, 'prevhist':prevhists[scen['properties']['name']]},  str(i)) for i, scen in enumerate(scenlist)]
-            else:       inputs = [(self._check_new_mdl(simname, var_time, mdl, x, mdl), scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
+            if staged:  inputs = [(self._check_new_mdl(simname, var_time, c_mdls[scen['properties']['name']][var_time], x, obj_time), scen, {**kwargs, 'prevhist':prevhists[scen['properties']['name']]},  str(i)) for i, scen in enumerate(scenlist)]
+            else:       inputs = [(self._check_new_mdl(simname, var_time, mdl, x, obj_time), scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
             res_list = list(pool.imap(prop.exec_scen_par, inputs))
             results, mh = prop.unpack_res_list(scenlist, res_list)
         else:
@@ -363,6 +387,26 @@ class ProblemInterface():
         consts = self._get_obj_from_results(simname, results, "constraints")
         self._sims[simname]['mdlhists'] = mh
         return objs, consts
+    def _run_external_sim(self,simname,x):
+        #self.var_mapping[simname]
+        func = self.simulations[simname][1][0]
+        returns = func(x)
+        objs, consts = self._get_obj_con_res(simname, returns)
+        return objs, consts
+    def _get_obj_con_res(self,simname,returns):
+        objnames=self.obj_const_mapping[simname].get('objectives', {})
+        connames = self.obj_const_mapping[simname].get('constraints',{})
+        objs, cons = {}, {}
+        if type(returns)==tuple:
+            objs = {obj:returns[0][i] for i, obj in enumerate(objnames)}
+            cons = {con:returns[1][i] for i, con in enumerate(connames)}
+        elif type(returns) in [list, np.array]:
+            if objnames:    objs = {obj:returns[i] for i, obj in enumerate(objnames)}
+            elif connames:  cons = {con:returns[i] for i, con in enumerate(connames)}
+        else:
+            if objnames:    objs = {[*objnames][0]:returns}
+            elif connames:  cons = {[*connames][0]:returns}
+        return objs, cons
     def _update_sequence(self, existing_sequence, simname, x):
         new_sequence = {t:{k:{var: x[ind] for var,ind in v.items()} for k,v in v.items()} for t,v in self.var_mapping[simname].items() if type(t) in [int, float]}
         return {**existing_sequence, **new_sequence}
@@ -400,11 +444,21 @@ class ProblemInterface():
         if simtype=='single': self._prep_single_sim(simname)
         if simtype=='multi': self._prep_multi_sim(simname)
     def _run_sim_type(self, simtype, simname, x):
-        if simtype=='set_const': return self._get_set_const(x)
-        elif simtype=='single':  return self._run_single_sim(simname, x)
-        elif simtype=='multi':   return self._run_multi_sim(simname,x)
+        if simtype=='set_const':    return self._get_set_const(x)
+        elif simtype=='single':     return self._run_single_sim(simname, x)
+        elif simtype=='multi':      return self._run_multi_sim(simname,x)
+        elif simtype=='external':   return self._run_external_sim(simname, x)
         else: raise Exception("Invalid simulation type: "+simtype)
-    def x_to_obj_const(self, x):
+    def add_combined_objective(self, objname, *objnames, agg="sum"):
+        def comb_obj(*args):
+            objs =[]
+            for i, obj in enumerate(objnames):
+                func = getattr(self, obj)
+                objs.append(func(args[i]))
+            aggfunc = getattr(np, agg)
+            return aggfunc(objs)
+        setattr(self, objname, comb_obj)
+    def x_to_obj_const(self, x, simnames):
         """
         Calculates objectives and constraints for a given variable value
 
@@ -422,14 +476,28 @@ class ProblemInterface():
 
         """
         if type(x)==list: x=np.array(x)
-        if not self.current_iter: 
-            for simname in self.simulations:
+        if type(simnames)==str: simnames=[simnames]
+        if not self.current_iter: self.current_iter = {'vars':np.array([np.nan for i in range(len(self.variables))]), 'sims':set(), 'objs':{},'consts':{}}
+        for simname in simnames:
+            if 'upstream_sims' in self.simulations[simname][2]:
+                upstream_sims = self.simulations[simname][2]['upstream_sims']
+                oldparams = self.simulations[simname][2]['new_params']
+                newparams=copy.deepcopy(oldparams)
+                for up_name in upstream_sims:
+                    up_vars = {self.variables[i][0]:self.current_iter['vars'][i] for i in self._sim_vars[up_name] if self.current_iter['vars'][i]!=np.NaN}                
+                    newparams.update({k:up_vars[v] for k,v in upstream_sims[up_name]['params'].items() if v in up_vars and not np.isnan(up_vars[v])})
+                if any([k not in oldparams for k in newparams]) or any([newparams[k]!=oldparams[k] for k in oldparams]):
+                    self.update_sim_vars(simname, newparams=newparams)
+            if simname not in self.current_iter.get('sims', {}):
                 self._prep_sim_type(self.simulations[simname][0], simname)
-            self.current_iter = {'vars':np.array([np.nan]), 'objs':dict(), 'consts':dict()}
-        if any(self.current_iter['vars']!=x):
-            self.current_iter['vars'] = x
-            for simname in self.simulations:
-                objs, consts = self._run_sim_type(self.simulations[simname][0], simname, x)
+                self.current_iter['sims'].add(simname)
+            
+        for simname in simnames:
+            sub_x = [self.current_iter['vars'][i] for i in self._sim_vars[simname]]
+            if any(x!=sub_x):
+                for ind, x_i in enumerate(self._sim_vars[simname]):
+                    self.current_iter['vars'][x_i]= x[ind]
+                objs, consts = self._run_sim_type(self.simulations[simname][0], simname, self.current_iter['vars'])
                 self.current_iter['objs'].update(objs)
                 self.current_iter['consts'].update(consts)
         return self.current_iter['objs'], self.current_iter['consts']
@@ -512,9 +580,20 @@ class ProblemInterface():
                 if self.non_set_constraints: out["G"] = np.column_stack([consts[c] for c in self.non_set_constraints])
         problem_iter = self
         return Prob(problem_iter)
-    def clear(self):
+    def clear(self, simname='all'):
         """Clears the optimization variables/constraints/sim"""
-        self.current_iter = {}
+        if simname=='all': self.current_iter = {}
+        else:               
+            for objname, args in self.objectives.items():  
+                if args[0]==simname and 'objs' in self.current_iter: 
+                    self.current_iter['objs'][objname] = np.NaN
+            for conname, args in self.constraints.items(): 
+                if args[0]==simname and 'consts' in self.current_iter: 
+                    self.current_iter['consts'][conname] = np.NaN
+            for varind in self._sim_vars[simname]:
+                if 'vars' in self.current_iter:
+                    self.current_iter['vars'][varind] = np.NaN
+            if 'sims' in self.current_iter: self.current_iter['sims'].discard(simname)
     def update_sim_vars(self, simname, newparams={}, newvars={}, newsequence={}):
         """
         Update the simulation with new default variables/parameters
@@ -530,7 +609,7 @@ class ProblemInterface():
         newsequence : TYPE, optional
             New default sequence of faults/disturbances (updated accross all scenarios). The default is {}.
         """
-        self.clear()
+        self.clear(simname)
         self.simulations[simname][2]['new_params'].update(newparams)
         update_sequence(newsequence, {0:{'disturbances':newvars}})
         if self.simulations[simname][0]=='single':
@@ -551,8 +630,8 @@ class ProblemInterface():
         """
         self.simulations[simname][2].update(kwargs)
 
-def new_nom_mdl(mdl, obj_time, kwarg):
-    return prop.new_mdl(mdl, {'modelparams':{'times':mdl.times[:-1]+[obj_time]}, 'params':kwarg.get('new_params',{})})
+def new_nom_params(mdl, obj_time, kwarg):
+    return {'modelparams':{'times':mdl.times[:-1]+[obj_time]}, 'params':kwarg.get('new_params',{})}
 def update_sequence(sequence_to_update, new_sequence):
     for i in new_sequence:
         if i not in sequence_to_update:             sequence_to_update[i]=new_sequence[i]
