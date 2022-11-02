@@ -8,7 +8,7 @@ import unittest
 import sys, os
 sys.path.insert(1, os.path.join('..'))
 from example_tank.tank_model import Tank
-from example_tank.tank_opt import x_to_rcost
+from example_tank.tank_opt import x_to_rcost_leg, x_to_totcost_leg, x_to_descost
 from example_tank.tank_optimization_model import Tank as Tank2
 from fmdtools.faultsim.search import ProblemInterface
 from fmdtools.faultsim import propagate
@@ -39,30 +39,40 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_approach_parallelism(self.mdl, app1)
     def test_same_rcost(self):
         
-        kwarg_options = [dict(staged=True, pool=mp.Pool(4)),
-                         dict(staged=False, pool=mp.Pool(4)),
-                         dict(staged=True),
-                         dict(staged=False)] 
+        kwarg_options = [dict(staged=True),
+                         dict(staged=False),
+                         dict(staged=True, pool=mp.Pool(4)),
+                         dict(staged=False, pool=mp.Pool(4))] 
         mdl= Tank2()
         res_vars_i = {param:1 for param,v in mdl.params.items() if param not in ['capacity','turnup']}
         
         for kwarg in kwarg_options:
             prob = ProblemInterface("res_problem", mdl, **kwarg)
+            
+            prob.add_simulation("des_cost", "external", x_to_descost)
+            prob.add_objectives("des_cost", cd="cd")
+            prob.add_variables("des_cost",'capacity', 'turnup')
+            
             app = SampleApproach(mdl)
-            prob.add_simulation("res_sim", "multi", app.scenlist)
+            prob.add_simulation("res_sim", "multi", app.scenlist, upstream_sims = {"des_cost":{'params':{"capacity":"capacity", "turnup":"turnup"}}})
             res_vars = [(var, None) for var in res_vars_i.keys()]
             prob.add_variables("res_sim", *res_vars, vartype="param")
             prob.add_objectives("res_sim", cost="expected cost", objtype="endclass")
+            prob.add_combined_objective('tot_cost', 'cd', 'cost')
             for des_var in [[15, 0.5], [22, 0.1], [18,0]]:
                 rvar = [*res_vars_i.values()][:27]
                 lvar = [*res_vars_i.values()][27:]
-                
+                print(des_var)
+                prob.clear()
                 prob.update_sim_vars("res_sim", newparams={'capacity':des_var[0], 'turnup':des_var[1]})
                 inter_cost = prob.cost([*res_vars_i.values()])
-                func_cost = x_to_rcost(rvar, lvar, des_var)
-        
+                func_cost = x_to_rcost_leg(rvar, lvar, des_var)
                 self.assertAlmostEqual(inter_cost, func_cost)
-        
+                
+                inter_totcost=prob.tot_cost(des_var, [*res_vars_i.values()])
+                func_totcost=x_to_totcost_leg(des_var, rvar, lvar)
+                self.assertAlmostEqual(inter_totcost, func_totcost)
+                
     def test_comp_mode_inj(self):
         """ Tests that component modes injected in functions end up in their respective
         components."""

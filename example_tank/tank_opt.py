@@ -18,14 +18,12 @@ import fmdtools.resultdisp as rd
 from example_tank.tank_optimization_model import Tank
 from fmdtools.modeldef import SampleApproach
 import multiprocessing as mp
-
+from fmdtools.faultsim.search import ProblemInterface
 
 
 params={'capacity':20, # size of the tank (10 - 100)
         'turnup':0.0,  # amount the pump can be "turned up" (0 - 1)
         **{(a-1,b-1,c-1,ul):0 for a,b,c in np.ndindex((3,3,3)) for ul in ["u", "l"]}} #state-action pairs for resilience policy: what to given fault signals
-
-## Legacy objective functions (for verification)
 def x_to_descost(xdes, xres1=[], xres2=[]):
     pen = 0 #determining upper-level penalty
     if xdes[0]<10: pen+=1e5*(10-xdes[0])**2
@@ -33,7 +31,40 @@ def x_to_descost(xdes, xres1=[], xres2=[]):
     if xdes[1]<0: pen+=1e5*(xdes[1])**2
     if xdes[1]>1: pen+=1e5*(1-xdes[1])**2
     return (xdes[0]-10)*1000 + (xdes[0]-10)**2*1000   + xdes[1]**2*10000 + pen
-def x_to_rcost(xres1,xres2, xdes=[20,1], pool=False, staged=True):
+
+mdl= Tank()
+prob = ProblemInterface("res_problem", mdl, staged=True)
+app = SampleApproach(mdl)
+
+prob.add_simulation("des_cost", "external", x_to_descost)
+prob.add_objectives("des_cost", cd="cd")
+prob.add_variables("des_cost",'capacity', 'turnup')
+
+prob.add_simulation("res_sim", "multi", app.scenlist, upstream_sims = {"des_cost":{'params':{"capacity":"capacity", "turnup":"turnup"}}})
+res_vars_i = {param:1 for param,v in mdl.params.items() if param not in ['capacity','turnup']}
+res_vars = [(var, None) for var in res_vars_i.keys()]
+prob.add_variables("res_sim", *res_vars, vartype="param")
+prob.add_objectives("res_sim", cost="expected cost", objtype="endclass")
+prob.add_combined_objective('tot_cost', 'cd', 'cost')
+
+#prob.update_sim_vars("res_sim", newparams={'capacity':21,'turnup':0.5})
+xdes = [1,2]
+prob.cd(xdes)
+
+prob.cost([*res_vars_i.values()])
+
+prob.tot_cost(xdes, [*res_vars_i.values()])
+
+prob.update_sim_vars("res_sim", newparams={'capacity':10, 'turnup':0.5})
+inter_cost = prob.cost([*res_vars_i.values()])
+
+rvar = [*res_vars_i.values()][:27]
+lvar = [*res_vars_i.values()][27:]
+
+#leg_cost = x_to_totcost_leg(xdes, rvar, lvar)
+
+## Legacy objective functions (for verification)
+def x_to_rcost_leg(xres1,xres2, xdes=[20,1], pool=False, staged=True):
     fp =      {(a-1,b-1,c-1, "l"):xres1[i] for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))}
     fp.update({(a-1,b-1,c-1, "u"):xres2[i] for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))})
     mdl=Tank(params={'capacity':xdes[0],'turnup':xdes[1],**fp})
@@ -41,9 +72,9 @@ def x_to_rcost(xres1,xres2, xdes=[20,1], pool=False, staged=True):
     endclasses, mdlhists = propagate.approach(mdl, app, staged=staged, showprogress=False, pool=pool)
     rescost = rd.process.totalcost(endclasses)
     return rescost
-def x_to_totcost(xdes, xres1, xres2, pool=False):
+def x_to_totcost_leg(xdes, xres1, xres2, pool=False):
     do_cost = x_to_descost(xdes)
-    rescost = x_to_rcost(xres1, xres2, xdes=xdes, pool=pool)
+    rescost = x_to_rcost_leg(xres1, xres2, xdes=xdes, pool=pool)
     return do_cost + rescost
 
 def lower_level(xdes, args):
@@ -168,22 +199,22 @@ if __name__=="__main__":
     #result, args, bestfhist, bestxdhist = bilevel_opt(pool=pool)
     from fmdtools.faultsim.search import ProblemInterface
     
-    mdl= Tank()
-    prob = ProblemInterface("res_problem", mdl, staged=True)
-    app = SampleApproach(mdl)
-    prob.add_simulation("res_sim", "multi", app.scenlist)
-    res_vars_i = {param:1 for param,v in mdl.params.items() if param not in ['capacity','turnup']}
-    res_vars = [(var, None) for var in res_vars_i.keys()]
-    prob.add_variables("res_sim", *res_vars, vartype="param")
-    prob.add_objectives("res_sim", "expected cost", objtype="endclass")
+    # mdl= Tank()
+    # prob = ProblemInterface("res_problem", mdl, staged=True)
+    # app = SampleApproach(mdl)
+    # prob.add_simulation("res_sim", "multi", app.scenlist)
+    # res_vars_i = {param:1 for param,v in mdl.params.items() if param not in ['capacity','turnup']}
+    # res_vars = [(var, None) for var in res_vars_i.keys()]
+    # prob.add_variables("res_sim", *res_vars, vartype="param")
+    # prob.add_objectives("res_sim", "expected cost", objtype="endclass")
     
-    rvar = [*res_vars_i.values()][:27]
-    lvar = [*res_vars_i.values()][27:]
-    prob.f0([*res_vars_i.values()])
-    x_to_rcost(rvar, lvar)
+    # rvar = [*res_vars_i.values()][:27]
+    # lvar = [*res_vars_i.values()][27:]
+    # prob.f0([*res_vars_i.values()])
+    # x_to_rcost(rvar, lvar)
     
-    prob.update_sim_vars("res_sim", newparams={'capacity':21,'turnup':0.5})
+    # prob.update_sim_vars("res_sim", newparams={'capacity':21,'turnup':0.5})
 
-    prob.f0([*res_vars_i.values()])
+    # prob.f0([*res_vars_i.values()])
 
 
