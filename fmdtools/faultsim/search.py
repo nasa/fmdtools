@@ -348,7 +348,7 @@ class ProblemInterface():
         mdl.modelparams['times'][-1]=obj_time
         result, mdlhist, _, _ = prop.prop_one_scen(mdl, scen, **kwargs)
         self._sims[simname]['mdlhists'] = {"faulty":mdlhist, "nominal":nomhist}
-        self._sims[simname]['result'] = result
+        self._sims[simname]['results'] = result
         # log, return objectives, etc
         objs = self._get_obj_from_result(simname, result, "objectives")
         consts = self._get_obj_from_result(simname, result, "constraints")
@@ -386,6 +386,7 @@ class ProblemInterface():
         objs = self._get_obj_from_results(simname, results, "objectives")
         consts = self._get_obj_from_results(simname, results, "constraints")
         self._sims[simname]['mdlhists'] = mh
+        self._sims[simname]['results'] =results
         return objs, consts
     def _run_external_sim(self,simname,x):
         #self.var_mapping[simname]
@@ -562,21 +563,24 @@ class ProblemInterface():
         return constraint_dict
     def get_constraint_list(self, include_set_consts=True):
         return [*self.get_constraint_dict().values()]
-    def to_pymoo_problem(self):
+    def to_pymoo_problem(self, objectives='all'):
         """Creates and exports a pymoo Problem object for the interface"""
-        from pymoo.core.problem import Problem
-        class Prob(Problem):
+        from pymoo.core.problem import ElementwiseProblem
+        class Prob(ElementwiseProblem):
             def __init__(self, problem_inter):
                 self.problem_inter = problem_inter
+                if objectives=='all':       self.objectives = [*problem_inter.objectives.keys()]
+                elif type(objectives)==str: self.objectives=[objectives]
+                else:                       self.objectives=objectives
                 self.non_set_constraints = problem_iter.get_constraint_dict(include_set_consts=False)
                 super().__init__(n_var=len(problem_inter.variables),\
-                                 n_obj=len(problem_inter.objectives),\
+                                 n_obj=len(self.objectives),\
                                  n_con=len(self.non_set_constraints),\
                                  xl=[i[1][0] for i in problem_inter.variables],\
                                  xu=[i[1][1] for i in problem_inter.variables])
             def _evaluate(self,x,out, *args, **kwargs):
-                objs, consts = self.problem_inter.x_to_obj_const(np.array([i[0] for i in x]))
-                out["F"] = np.column_stack([*objs.values()])
+                objs, consts = self.problem_inter.x_to_obj_const(x, [k for k in self.problem_inter.simulations if k!='set_const'])
+                out["F"] = np.column_stack([objs[o] for o in self.objectives])
                 if self.non_set_constraints: out["G"] = np.column_stack([consts[c] for c in self.non_set_constraints])
         problem_iter = self
         return Prob(problem_iter)
