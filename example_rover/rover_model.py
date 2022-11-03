@@ -546,7 +546,26 @@ def gen_sample_params(mdlhists, t=1, scen=1):
 if __name__=="__main__":
     import multiprocessing as mp
     
+    from fmdtools.faultsim import search
+    
+    from pymoo.optimize import minimize
+    
+    from pymoo.algorithms.soo.nonconvex.pattern import PatternSearch
+    import numpy as np
+    mdl = Rover()
+    mdl.modelparams['use_end_condition']=False
+    track={'functions':{"Environment":"in_bound"},'flows':{"Ground":"all"}}
+    rover_prob = search.ProblemInterface("rover_problem", mdl, pool=mp.Pool(5), staged=True, track=track)
+    app_drive = SampleApproach(mdl, faults='Drive', phases={'global':[0,39]}, defaultsamp={'samp':'evenspacing','numpts':3})
+    rover_prob.add_simulation("drive_faults", "multi", app_drive.scenlist)
+    rover_prob.add_variables("drive_faults", ("cor_f", (-10,100)), ("cor_d", (-100, 100)), ("cor_t", (-10,100)), vartype="param")
+    rover_prob.add_objectives("drive_faults", end_dist="end_dist", tot_deviation="tot_deviation")
+    
     params = gen_params('turn')
+    
+    pymoo_prob = rover_prob.to_pymoo_problem(objectives="end_dist")
+    algorithm=PatternSearch(x0=np.array([0,0,0])) 
+    res = minimize(pymoo_prob, algorithm, verbose=True)
 
     #dot = rd.graph.show(mdl, gtype="bipartite", renderer='graphviz')
 
@@ -766,3 +785,4 @@ if __name__=="__main__":
     #figs = rd.plot.phases(phases, modephases, mdl)
     #figs = rd.plot.phases(phases, modephases, mdl, singleplot=False)
     """
+    
