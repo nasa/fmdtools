@@ -69,7 +69,7 @@ class ProblemInterface():
         self.current_iter={}
         self._sims={}
     def __repr__(self):
-        var_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(var[2]+" "+str(var[0])+" at t="+str(var[3])+": "+str(var[1]), self.current_iter.get('vars', [np.NaN for j in range(i+1)])[i]) for i,var in enumerate(self.variables))
+        var_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(str(var[2])+" "+str(var[0])+" at t="+str(var[3])+": "+str(var[1]), self.current_iter.get('vars', [np.NaN for j in range(i+1)])[i]) for i,var in enumerate(self.variables))
         con_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+get_pos_str(greater_to_factor(con[4][0])*n_to_factor(self.negative_form))+"("+str(con[0])+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+" -"+str(con[4][1])+")", self.current_iter.get('consts', {name:np.NaN}).get(name, np.NaN)) for name, con in self.constraints.items() if not con[0]=="set_const")
         obj_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+con[4][0]+con[4][1]+"("+con[0]+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+")", self.current_iter.get('objs', {name:np.NaN}).get(name, np.NaN)) for name, con in self.objectives.items())
         sim_str = "\n -"+"\n -".join(name+": "+sim[0]+" scen: "+str(sim[2].get('sequence', "")) for name, sim in self.simulations.items() if sim[0] !="set_const")
@@ -138,6 +138,7 @@ class ProblemInterface():
                 - `vars`: function/flow variables (set during the simulation)
                 - 'faults': fault scenario variables (set during the simulation)
                 - 'external': variables for external func
+                - paramfunc: generates params from variable in function paramfunc
         """
         if type(simnames)==str: simnames=[simnames]
         for arg in args:
@@ -147,7 +148,7 @@ class ProblemInterface():
         arg = [*arg, *(None, None, None, None)][0:4]
         if not arg[2]: arg[2]=vartype
         if not arg[3]: arg[3]=t
-        if arg[2] not in {'param', 'vars', 'faults', 'external'}:
+        if arg[2] not in {'param', 'vars', 'faults', 'external'} and not callable(arg[2]):
             raise Exception(arg[2]+" not a legal legal variable type (param, vars, faults, or external)")
         self.variables.append(arg)
         if arg[2] in ['var', 'vars']:       vartype='disturbances'
@@ -160,14 +161,18 @@ class ProblemInterface():
             else:                               self._sim_vars[simname].append(ind)
         
         if arg[1]!=None: 
-            if 'set_const' not in self.simulations: self.simulations['set_const'] = ('set_const', [ind],[arg[1]])
+            if 'set_const' not in self.simulations: 
+                self.simulations['set_const'] = ('set_const', [ind],[arg[1]])
+                self._sim_vars['set_const']=[ind]
             else:                                   
                 self.simulations['set_const'][1].append(ind)
                 self.simulations['set_const'][2].append(arg[1])
+                self._sim_vars['set_const'].append(ind)
             self._add_obj_const('set_const', 'set_var_'+str(ind)+'_lb', (ind, 'external', 'na', ('greater',arg[1][0])), obj_const="constraints")
             self._add_obj_const('set_const', 'set_var_'+str(ind)+'_ub', (ind, 'external', 'na', ('less',arg[1][1])), obj_const="constraints")
         
-        if vartype not in ['faults', 'disturbances']:   label=vartype
+        if callable(vartype):                           label="paramfunc"
+        elif vartype not in ['faults', 'disturbances']: label=vartype
         else:                                           label=arg[3]
         for simname in simnames:
             self._make_mapping(self.var_mapping, simname, label, vartype, arg[0],ind)
@@ -259,7 +264,7 @@ class ProblemInterface():
             identifier for the simulation
         *args : strs/tuples
             variables to use as constraints (auto-named to f1, f2...)
-            may take form: (variablename, objtype (optional), t (optional)) or variablename, where
+            may take form: (variablename, objtype (optional), t (optional), threshold) or variablename, where
             variablename is the name of the variable (from params, mdlparams) or index of the callable (for external)
             and objtype and t may override the default objtype and t (see below)
         objtype : str (optional)
@@ -285,14 +290,14 @@ class ProblemInterface():
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
         new_param = new_nom_params(self.mdl, obj_time, kwar)
-        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(self.mdl, [var_time], **{**kwar, 'scen':{}}, new_params=new_param)
-        if kwar['sequence']:
+        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(self.mdl, [var_time], **{**kwar, 'scen':{},'new_params':new_param})
+        if kwar.get('sequence', False):
             mdl = prop.new_mdl(self.mdl, new_param)
             scen=prop.create_faultseq_scen(mdl,  rate=1.0, sequence=kwar['sequence'])
             kwargs = {**kwar, 'desired_result':{}, 'staged':False}
             kwargs.pop("sequence")
             _, prevhist, c_mdls, _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
-        else: prevhist = nomhist
+        else: prevhist = nomhist; mdl=self.mdl
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhist':prevhist, 'obj_time': obj_time, 'mdl':mdl, 'c_mdls':c_mdls}
     def _prep_multi_sim(self, simname, **kwargs):
         var_time, obj_time = self._get_var_obj_time(simname)
@@ -327,6 +332,8 @@ class ProblemInterface():
             paramvars = self.var_mapping[simname].get('param',{'param':{}})
             params=copy.deepcopy(default_params)
             params.update({param: x[ind] for param, ind in paramvars['param'].items()})
+            for func, fvars in self.var_mapping[simname].get('paramfunc',{}).items():
+                params.update(func(*[x[ind] for ind in fvars.values()]))
             modelparams= {**mdl.modelparams, 'times':[mdl.modelparams['times'][0], obj_time]}
             mdl = prop.new_mdl(mdl, {'params':params, 'modelparams':modelparams})
         return mdl
@@ -334,7 +341,7 @@ class ProblemInterface():
         sim = self._sims[simname]
         var_time, prevhist, nomhist, obj_time, mdl, c_mdl = sim['var_time'], sim['prevhist'], sim['nomhist'], sim['obj_time'], sim['mdl'], sim['c_mdls']
         
-        if not self.simulations[simname][2]['staged']:  mdl = self._check_new_mdl(simname, var_time, mdl, x, obj_time)
+        if not self.simulations[simname][2]['staged']:  mdl = self._check_new_mdl(simname, var_time, mdl, x, obj_time, staged=self.simulations[simname][2]['staged'])
         else:                                           mdl = c_mdl[var_time].copy(); mdl.times[-1]=obj_time
         # set model faults/disturbances as elements of scenario 
         ##NOTE: need to make sure scenarios don't overwrite each other
@@ -383,8 +390,8 @@ class ProblemInterface():
                 kwargs['nomhist'] = nomhist
                 kwargs['desired_result'] = copy.deepcopy(self.obj_const_mapping[simname])
                 results[name], mh[name], t_end = prop.exec_scen(mdl, scen, indiv_id=str(i), **kwargs, prevhist=prevhist)
-        objs = self._get_obj_from_results(simname, results, "objectives")
-        consts = self._get_obj_from_results(simname, results, "constraints")
+        objs = self._get_obj_from_result(simname, results, "objectives")
+        consts = self._get_obj_from_result(simname, results, "constraints")
         self._sims[simname]['mdlhists'] = mh
         self._sims[simname]['results'] =results
         return objs, consts
@@ -411,31 +418,26 @@ class ProblemInterface():
     def _update_sequence(self, existing_sequence, simname, x):
         new_sequence = {t:{k:{var: x[ind] for var,ind in v.items()} for k,v in v.items()} for t,v in self.var_mapping[simname].items() if type(t) in [int, float]}
         return {**existing_sequence, **new_sequence}
-    def _get_obj_from_results(self,simname, results, obj_const):
-        objs={}
-        obj_dict = getattr(self, obj_const)
-        for objname, var_to_get in obj_dict.items():
-            if simname ==var_to_get[0]:
-                values = [result[var_to_get[3]][var_to_get[2]][var_to_get[1]] if var_to_get[3] in result else result[var_to_get[2]][var_to_get[1]] for result in results.values()]
-                if obj_const == 'objectives':    
-                    pos_fact = get_pos_negative(self.objectives[objname][-1][0])
-                    aggfunc = getattr(np, self.objectives[objname][-1][1])
-                    objs[objname] = pos_fact*aggfunc(values)
-                elif obj_const == 'constraints': 
-                    values = [eval_con(value,var_to_get[4][1], var_to_get[4][0], self.negative_form) for value in values]
-                    if self.negative_form:  objs[objname]=np.min(values)
-                    else:                   objs[objname]=np.max(values)
-                else: raise Exception("Invalid type: "+obj_const)
-        return objs
+    def _eval_mult_objs(self, objname, values):
+        pos_fact = get_pos_negative(self.objectives[objname][-1][0])
+        aggfunc = getattr(np, self.objectives[objname][-1][1])
+        return pos_fact*aggfunc(values)
+    def _eval_mult_cons(self, conname, values, thresholds):
+        values = [eval_con(value,thresholds[1], thresholds[0], self.negative_form) for value in values]
+        if self.negative_form:  return np.max(values)
+        else:                   return np.min(values)
     def _get_obj_from_result(self, simname, result, obj_const):
         objs={}
         obj_dict = getattr(self, obj_const)
         for objname, var_to_get in obj_dict.items():
             if simname ==var_to_get[0]:
-                if var_to_get[3] in result:     value = result[var_to_get[3]][var_to_get[2]][var_to_get[1]]
-                elif var_to_get[2] in result:   value = result[var_to_get[2]][var_to_get[1]]
-                if obj_const == 'objectives':       objs[objname] = get_pos_negative(self.objectives[objname][-1][0])*value
-                elif obj_const == 'constraints':    objs[objname] = eval_con(value, var_to_get[4][1], var_to_get[4][0], self.negative_form)
+                if var_to_get[3] in result:     values = [result[var_to_get[3]][var_to_get[2]][var_to_get[1]]]
+                elif var_to_get[3]=='all':      values = [r[var_to_get[2]][var_to_get[1]] for t,r in result.items() if t!='end']
+                elif var_to_get[2] in result:   values = [result[var_to_get[2]][var_to_get[1]]]
+                else: values = [r[var_to_get[3]][var_to_get[2]][var_to_get[1]] if var_to_get[3] in r else r[var_to_get[2]][var_to_get[1]] for r in result.values()]
+                if obj_const == 'objectives':       objs[objname] = self._eval_mult_objs(objname, values)
+                elif obj_const == 'constraints':    objs[objname] = self._eval_mult_cons(objname, values, var_to_get[4])
+                else: raise Exception("Invalid type: "+obj_const)
         return objs
     def _get_set_const(self,x):
         ubs = {"set_var_"+str(i)+"_ub": eval_con(x[i], self.simulations['set_const'][2][i][1], "less", self.negative_form) for i in self.simulations['set_const'][1]}
@@ -500,7 +502,10 @@ class ProblemInterface():
                     self.current_iter['vars'][x_i]= x[ind]
                 objs, consts = self._run_sim_type(self.simulations[simname][0], simname, self.current_iter['vars'])
                 self.current_iter['objs'].update(objs)
-                self.current_iter['consts'].update(consts)
+                self.current_iter['consts'].update(consts)  
+        if 'set_const' in self.simulations:
+            _, set_consts = self._run_sim_type(self.simulations['set_const'][0], 'set_const', self.current_iter['vars'])
+            self.current_iter['consts'].update(set_consts)
         return self.current_iter['objs'], self.current_iter['consts']
     def _get_plot_vals(self, simname, obj_con_var):
         vals = {n:o[1] for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
