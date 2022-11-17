@@ -2370,7 +2370,7 @@ class SampleApproach():
             Model to sample.
         faults : str/list/tuple, optional
             - The default is 'all', which gets all fault modes from the model.
-            - 'single-components' uses faults from a single component to represent faults from all components 
+            - 'single-component' uses faults from a single component to represent faults from all components 
             - 'single-function' uses faults from a single function to represent faults from that type
             - passing the function name only includes modes from that function
             - List of faults of form [(fxn, mode)] to inject in the model.
@@ -2381,6 +2381,7 @@ class SampleApproach():
                 - ('mode names', ('mode1', 'mode2')), gets all modes with the exact names defined in the tuple
                 - ('function class', 'Classname'), which gets all modes from a function with class 'Classname'
                 - ('function classes', ('Classname1', 'Classname2')), which gets all modes from a function with the names in the tuple
+                - ('single-component', ('fxnname2', 'fxnname2')), which specifies single-component modes in the given functions
         phases: dict or 'global' or list
             Local phases in the model to sample. 
                 Dict has structure: {'Function':{'phase':[starttime, endtime]}}
@@ -2473,9 +2474,15 @@ class SampleApproach():
                     else:               self._fxnmodes[fxnname, mode] = params
                 self.fxnrates[fxnname]=fxn.failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
-        elif faults=='single-component':
-            self.fxnrates=dict.fromkeys(mdl.fxns)
-            for fxnname, fxn in  mdl.fxns.items():
+        elif faults=='single-component' or faults[0]=='single-component':
+            if type(faults)==tuple: 
+                if faults[1]=='all':        fxns_to_sample = mdl.fxns
+                elif type(faults[1])==str:  fxns_to_sample = [faults[1]]
+                else:                       fxns_to_sample=faults[1]
+            else:                           fxns_to_sample = mdl.fxns
+            self.fxnrates=dict.fromkeys(fxns_to_sample)
+            for fxnname in fxns_to_sample:
+                fxn = mdl.fxns[fxnname]
                 if getattr(fxn, 'components', {}):
                     firstcomp = list(fxn.components)[0]
                     for mode, params in fxn.faultmodes.items():

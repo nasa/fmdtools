@@ -808,9 +808,12 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
                elif track_times[0]=='times':    t_ind_rec = track_times[1].index(t)
                else: raise Exception("Invalid argument, track_times="+str(track_times))
                update_mdlhist(mdl, mdlhist, t_ind_rec, track=track)
-           if type(desired_result)==dict and t in desired_result: 
-               result[t] = get_result(scen,mdl,desired_result[t], mdlhist,nomhist, nomresult)
-               desired_result.pop(t)
+           if type(desired_result)==dict: 
+               if "all" in desired_result: 
+                   result[t] = get_result(scen,mdl,desired_result['all'], mdlhist,nomhist, nomresult)
+               if t in desired_result:
+                   result[t] = get_result(scen,mdl,desired_result[t], mdlhist,nomhist, nomresult)
+                   desired_result.pop(t)
            if (mdl.use_end_condition and hasattr(mdl, 'end_condition')):
                if mdl.end_condition(t):
                    break
