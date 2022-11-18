@@ -656,12 +656,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
         mdl = new_mdl(mdl,scen['properties'])
         _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **{**sim_kwarg, 'staged':False})
         if get_phases:
-            if get_phases=='global':      phases={'global':[0,t_end]}
-            else:
-                phases, modephases = proc.modephases(nomhist)
-                if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
-                elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
-            app_args.update({'phases':phases})
+            app_args.update({'phases':phases_from_hist(get_phases, t_end, nomhist)})
         app = SampleApproach(mdl,**app_args)
         apps[scenname]=app
         check_hist_memory(nomhist,len(app.scenlist)*nomapp.num_scenarios, max_mem=max_mem)
@@ -673,6 +668,14 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
         with open(save_app['filename'], 'wb') as file_handle:
             dill.dump(apps, file_handle)
     return nest_results, nest_mdlhists, apps
+
+def phases_from_hist(get_phases, t_end, nomhist):
+    if get_phases=='global':      phases={'global':[0,t_end]}
+    else:
+        phases, modephases = proc.modephases(nomhist)
+        if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
+        elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
+    return phases
 
 def construct_nomscen(mdl):
     """

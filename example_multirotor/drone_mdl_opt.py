@@ -424,7 +424,11 @@ class Drone(Model):
         
         expcost=totcost*rate*1e5
         
-        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'repcost':repcost, 'landcost':landcost,'safecost':safecost,'viewed value': viewed_value, 'viewed':viewed, 'landloc':landloc,'body strikes':body_strikes, 'head strikes':head_strikes, 'property restrictions': property_restrictions, 'severities':classifications, 'unsafe flight time':faulttime}
+        return {'rate':rate, 'cost': totcost, 'expected cost': expcost, 'repcost':repcost, 
+                'landcost':landcost,'safecost':safecost,'viewed value': viewed_value, 'viewed':viewed, 
+                'landloc':landloc,'body strikes':body_strikes, 'head strikes':head_strikes, 
+                'property restrictions': property_restrictions, 'severities':classifications, 
+                'unsafe flight time':faulttime}
 
 ## BASE FUNCTIONS
 def find_landtime(mdlhist):
@@ -680,19 +684,35 @@ def plan_flight(elev):
 def x_to_dcost(xdes):
     descost = batcostdict[bats[int(xdes[0])]] + linecostdict[linarchs[int(xdes[1])]]
     return descost
+def xd_paramfunc(xdes):
+    return {'bat':bats[int(xdes[0])],'linearch':linarchs[int(xdes[1])]}
 
 opt_prob = ProblemInterface("drone_problem", def_mdl)
 opt_prob.add_simulation("dcost", "external", x_to_dcost)
 opt_prob.add_objectives("dcost", cd="cd")
 opt_prob.add_variables("dcost",('batteryarch',(0,3)),('linearch',(0,3)))
 
-opt_prob.add_simulation("ocost", "single", sequence={})
+opt_prob.add_simulation("ocost", "single", {}, 
+                        upstream_sims = {"dcost":{'paramfunc':xd_paramfunc}})
 opt_prob.add_objectives("ocost", co="expected cost")
 opt_prob.add_constraints("ocost", g_soc=("StoreEE.soc", "vars", "end",("greater", 20)),
-                                  g_max_height=("DOFs.elev", "vars", "all", ("less", 122)))
+                                  g_max_height=("DOFs.elev", "vars", "all", ("less", 122)),
+                                  g_faults=("repcost", "endclass", "end", ("less", 0.1)))
 opt_prob.add_variables("ocost", "height", vartype=plan_flight)
-opt_prob.co([10])
+#opt_prob.co([10])
 
+respols = ['continue', 'to_home', 'to_nearest', 'emland']
+def spec_respol(bat, line):
+    return {'respolicy':{'bat':respols[int(bat)],'line':respols[int(line)]}}
+
+app = SampleApproach(def_mdl,  phases={'forward'}, faults=('single-component', 'StoreEE'))
+opt_prob.add_simulation("rcost", "multi", app.scenlist)
+opt_prob.add_objectives("rcost", cr="expected cost")
+opt_prob.add_variables("rcost", "bat","line", vartype=spec_respol)
+
+opt_prob.cd([1,1])
+opt_prob.co([50])
+opt_prob.cr([1,1])
 #(variablename, objtype (optional), t (optional))
 
 def calc_oper(mdl):
