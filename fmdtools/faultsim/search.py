@@ -10,6 +10,7 @@ import copy
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp.process as proc
 import fmdtools.resultdisp.plot as plot
+from fmdtools.modeldef import SampleApproach
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
@@ -140,6 +141,7 @@ class ProblemInterface():
                 - 'external': variables for external func
                 - paramfunc: generates params from variable in function paramfunc
         """
+        self.clear()
         if type(simnames)==str: simnames=[simnames]
         for arg in args:
             self._add_var(simnames, arg,vartype=vartype, t=t)
@@ -346,12 +348,11 @@ class ProblemInterface():
         # set model faults/disturbances as elements of scenario 
         ##NOTE: need to make sure scenarios don't overwrite each other
         scen=prop.construct_nomscen(mdl)
-        scen['sequence'] = self._update_sequence(self.simulations[simname][2]['sequence'], simname, x)
+        scen['sequence'] = self._update_sequence(self.simulations[simname][1][0], simname, x)
         scen['properties']['time'] = var_time
         #propagate scenario, get results
         des_r=copy.deepcopy(self.obj_const_mapping[simname])
         kwargs = {**self.simulations[simname][2], "desired_result":des_r, "nomhist":nomhist, "prevhist":prevhist}
-        kwargs.pop("sequence")
         mdl.modelparams['times'][-1]=obj_time
         result, mdlhist, _, _ = prop.prop_one_scen(mdl, scen, **kwargs)
         self._sims[simname]['mdlhists'] = {"faulty":mdlhist, "nominal":nomhist}
@@ -478,34 +479,70 @@ class ProblemInterface():
             Dictionary of constraints and their values
 
         """
-        if type(x)==list: x=np.array(x)
+        #format/order simnames 
         if type(simnames)==str: simnames=[simnames]
-        if not self.current_iter: self.current_iter = {'vars':np.array([np.nan for i in range(len(self.variables))]), 'sims':set(), 'objs':{},'consts':{}}
+        if len(simnames)>1:
+            if 'set_const' in simnames:
+                simnames = [simname for simname in self.simulations.keys() if (simname in simnames) and (simname!='set_const')]+['set_const']
+            else:
+                simnames = [simname for simname in self.simulations.keys() if simname in simnames]
+        
+        if not self.current_iter: self.current_iter = {'vars':np.array([np.nan for i in range(len(self.variables))]), 'objs':{},'consts':{},
+                                                       'sims':set(), 'sims_to_update':set()}
+        #format x (which may be a subset of x) correctly
+        if type(x)==list: x=np.array(x)
+        if len(x)!=len(self.variables):
+            x_new = np.copy(self.current_iter['vars'])
+            for simname in simnames: 
+                for ind, x_i in enumerate(self._sim_vars[simname]):
+                    x_new[x_i]= x[ind]
+            x=x_new
+        #check sims to update
+        new_var_inds = np.where(x!=self.current_iter['vars'])
+        for simname, simvars in self._sim_vars.items():
+            if any([i in simvars for i in new_var_inds[0]]) or simname not in self.current_iter['sims']: 
+                self.current_iter['sims_to_update'].add(simname) 
+                
         for simname in simnames:
+            # update from upstream sims
             if 'upstream_sims' in self.simulations[simname][2]:
                 upstream_sims = self.simulations[simname][2]['upstream_sims']
                 oldparams = self.simulations[simname][2]['new_params']
                 newparams=copy.deepcopy(oldparams)
                 for up_name in upstream_sims:
-                    up_vars = {self.variables[i][0]:self.current_iter['vars'][i] for i in self._sim_vars[up_name] if self.current_iter['vars'][i]!=np.NaN}                
-                    newparams.update({k:up_vars[v] for k,v in upstream_sims[up_name]['params'].items() if v in up_vars and not np.isnan(up_vars[v])})
+                    if 'params' in upstream_sims[up_name]:
+                        up_vars = {self.variables[i][0]:x[i] for i in self._sim_vars[up_name] if x[i]!=np.NaN}  
+                        newparams.update({k:up_vars[v] for k,v in upstream_sims[up_name]['params'].items() if v in up_vars and not np.isnan(up_vars[v])})
+                    if 'paramfunc' in upstream_sims[up_name]:
+                        pvars = [x[i] for i in self._sim_vars[up_name]]
+                        newparams.update(upstream_sims[up_name]['paramfunc'](pvars))
+                    if 'pass_mdl' in upstream_sims[up_name]:
+                        newparams=copy.deepcopy(self._sims[up_name]['c_mdls'][0].params)
+                    if 'get_phases' in upstream_sims[up_name]:
+                        app_args = self.simulations[simname][2]['app_args']
+                        nomhist = self._sims[up_name]['mdlhists']['faulty']
+                        t_end = self._sims[up_name]['c_mdls'][0].times[-1]
+                        app_args.update({'phases':prop.phases_from_hist(upstream_sims[up_name]['regen_app']['get_phases'], t_end, nomhist)})
                 if any([k not in oldparams for k in newparams]) or any([newparams[k]!=oldparams[k] for k in oldparams]):
                     self.update_sim_vars(simname, newparams=newparams)
+                    self.current_iter['sims_to_update'].add(simname)
+            if 'app_args' in self.simulations[simname][2]:
+                app_args = self.simulations[simname][2]['app_args']
+                mdl = prop.new_mdl(self.mdl, {'params':self.simulations[simname][2]['new_params']})
+                self.simulations[simname][1] = SampleApproach(mdl, **app_args).scenlist
+            # prep sims
             if simname not in self.current_iter.get('sims', {}):
                 self._prep_sim_type(self.simulations[simname][0], simname)
                 self.current_iter['sims'].add(simname)
             
-        for simname in simnames:
-            sub_x = [self.current_iter['vars'][i] for i in self._sim_vars[simname]]
-            if len(x)!=len(sub_x) or any(x!=sub_x):
-                for ind, x_i in enumerate(self._sim_vars[simname]):
-                    self.current_iter['vars'][x_i]= x[ind]
-                objs, consts = self._run_sim_type(self.simulations[simname][0], simname, self.current_iter['vars'])
+            # run sims
+            if simname in self.current_iter['sims_to_update']:
+                objs, consts = self._run_sim_type(self.simulations[simname][0], simname, x)
                 self.current_iter['objs'].update(objs)
-                self.current_iter['consts'].update(consts)  
-        if 'set_const' in self.simulations:
-            _, set_consts = self._run_sim_type(self.simulations['set_const'][0], 'set_const', self.current_iter['vars'])
-            self.current_iter['consts'].update(set_consts)
+                self.current_iter['consts'].update(consts) 
+                self.current_iter['sims_to_update'].remove(simname)
+        # update x for iter
+        self.current_iter['vars'] = x
         return self.current_iter['objs'], self.current_iter['consts']
     def _get_plot_vals(self, simname, obj_con_var):
         vals = {n:o[1] for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
