@@ -521,7 +521,7 @@ def setup_opt(ccea=False, mc=False, formulation=1):
     return toolbox
 
 
-def plot_line_dist(sol_dict, figsize=(4,12), v_padding=0.2):
+def plot_line_dist(sol_dict, figsize=(4,12), v_padding=0.2, x_lab="line distance (m)", y_lab="count"):
     fig, axs = plt.subplots(len(sol_dict), figsize=figsize)
     k=0
     for alg, sol in sol_dict.items():
@@ -531,7 +531,9 @@ def plot_line_dist(sol_dict, figsize=(4,12), v_padding=0.2):
         axs[k].set_title(alg)
         axs[k].grid(axis="y")
         axs[k].set_ylim([0,10])
+        axs[k].set_ylabel(y_lab)
         if k!=len(axs)-1: axs[k].set_xticks([])
+        else: axs[k].set_xlabel(x_lab)
         k+=1
     rd.plot.multiplot_legend_title(sol_dict, axs, axs[k-1], v_padding=v_padding)
     return fig
@@ -552,6 +554,7 @@ def plot_trajs(sol_dict, figsize=(4,12), v_padding=0.3):
     for alg, sol in sol_dict.items():
         ax=axs[k]
         visualizations(sol, method=alg, ax=ax, legend=False)
+        if k!=len(axs)-1: ax.set_xlabel("")
         k=k+1
     rd.plot.multiplot_legend_title(sol_dict, axs, ax, v_padding=v_padding, legend_loc=2)
     return fig
@@ -561,8 +564,12 @@ def visualizations(soln, method="EA", figsize=(4,4), ax=False, legend=True, xlim
     mdl_range = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':list(soln)})
     _, mdlhists = prop.nominal(mdl_range)
     phases, modephases = rd.process.modephases(mdlhists)
+    end_time = phases['Avionics']['drive'][1]+25
+    mdl_range.times[1]=end_time
     app_range = SampleApproach(mdl_range, faults='Drive', phases={'drive':phases['Avionics']['drive']})
-    endclasses_range, mdlhists_range = prop.approach(mdl_range, app_range, staged=True, showprogress=False, modelparams={'use_end_condition':False})    
+    endclasses_range, mdlhists_range = prop.approach(mdl_range, app_range, staged=True, showprogress=False, 
+                                                     new_params={'params':rvr.gen_params('turn', start=5),
+                                                         'modelparams':{'use_end_condition':False, 'times':[0,end_time]}})    
     fig = rvr.plot_trajectories(mdlhists_range, app=app_range, faultlabel='Faulty Scenarios', faultalpha=0.5,title="Trajectories-"+method,show_labels=False, figsize=figsize, ax=ax, legend=legend)
     if not ax:
         ax = plt.gca()
@@ -612,9 +619,24 @@ fault_dist = np.sqrt((mdl.flows["Ground"].x - mdl_ft.flows["Ground"].x)**2+(mdl.
     
 if __name__=="__main__":
     
-    result_mc, sol_mc= montecarlo(ngen=10, weight=0.5, filename="")
-    result_ea, sol_ea= ea(ngen=10, weight=0.5, filename="")
-    result_ccea, sol_ccea, pop= ccea(ngen=10, weight=0.5, filename="")
+    weights = [0.0, 0.25, 0.5, 0.75, 1.0]
+    
+    weight_sols = {}; weight_results = {}
+    for i, w in enumerate(weights):
+        results = pd.read_csv("results/result2_weight_"+str(i)+".csv")
+        weight_sols["w="+str(w)] = eval(results["Best_Sol"].iloc[-1])
+    fig = plot_trajs(weight_sols, v_padding=0.35)
+    
+    
+    for i, w in enumerate(weights):
+        endpts = [line_dist_faster(i)[2] for i in weight_sols["w="+str(w)]]
+        endptx = [e[0] for e in endpts]
+        endpty = [e[1] for e in endpts]
+        plt.scatter(endptx, endpty)
+    
+    #result_mc, sol_mc= montecarlo(ngen=10, weight=0.5, filename="")
+    #result_ea, sol_ea= ea(ngen=10, weight=0.5, filename="")
+    #result_ccea, sol_ccea, pop= ccea(ngen=10, weight=0.5, filename="")
     
     #result_mc, sol_mc= montecarlo(ngen=10, weight=0.5, filename="", formulation=2)
     #result_ea, sol_ea= ea(ngen=10, weight=0.5, filename="", formulation=2)
@@ -635,7 +657,7 @@ if __name__=="__main__":
     
     #plot_line_dist({"Monte Carlo":sol_mc, "Evolutionary Algorithm":sol_ea, "Cooperative Coevolution":sol_ccea})
     #plot_hspaces({"Monte Carlo":sol_mc, "Evolutionary Algorithm":sol_ea, "Cooperative Coevolution":sol_ccea})
-    plot_trajs({"Monte Carlo":sol_mc, "Evolutionary Algorithm":sol_ea, "Cooperative Coevolution":sol_ccea}, figsize=(4,12))    
+    #plot_trajs({"Monte Carlo":sol_mc, "Evolutionary Algorithm":sol_ea, "Cooperative Coevolution":sol_ccea}, figsize=(4,12))    
     
     #checking results
     #evalTotDist(0.9, sol_ccea)
