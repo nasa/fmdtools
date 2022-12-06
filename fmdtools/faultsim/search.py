@@ -288,26 +288,26 @@ class ProblemInterface():
         if 'end' in obj_times:      obj_time=self.mdl.times[-1]
         else:                       obj_time=max(obj_times)
         return var_time, obj_time
-    def _prep_single_sim(self, simname, **kwargs):
+    def _prep_single_sim(self, simname, x):
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
-        new_param = new_nom_params(self.mdl, obj_time, kwar)
-        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(self.mdl, [var_time], **{**kwar, 'scen':{},'new_params':new_param})
+        mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_params = kwar['new_params'])
+        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}})
         if kwar.get('sequence', False):
-            mdl = prop.new_mdl(self.mdl, new_param)
-            scen=prop.create_faultseq_scen(mdl,  rate=1.0, sequence=kwar['sequence'])
+            mdl_s = prop.new_mdl(mdl)
+            scen=prop.create_faultseq_scen(mdl_s,  rate=1.0, sequence=kwar['sequence'])
             kwargs = {**kwar, 'desired_result':{}, 'staged':False}
             kwargs.pop("sequence")
             _, prevhist, c_mdls, _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
         else: prevhist = nomhist; mdl=self.mdl
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhist':prevhist, 'obj_time': obj_time, 'mdl':mdl, 'c_mdls':c_mdls}
-    def _prep_multi_sim(self, simname, **kwargs):
+    def _prep_multi_sim(self, simname, x):
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
-        new_param = new_nom_params(self.mdl, obj_time, kwar)
-        result, nomhist, nomscen, c_mdls_nom, t_end = prop.nom_helper(self.mdl, [var_time], **{**kwar, 'scen':{},'new_params':new_param})
+        mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_params = kwar['new_params'])
+        result, nomhist, nomscen, c_mdls_nom, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}})
         
-        scenlist = self.simulations[simname][1][0]
+        scenlist = copy.deepcopy(self.simulations[simname][1][0])
         for scen in scenlist: scen['properties']['time']=var_time
         
         prevhists = dict(); c_mdls = dict()
@@ -318,8 +318,8 @@ class ProblemInterface():
             for scen in scenlist:
                 kwargs =  {**kwar.copy(), 'desired_result':{}, 'staged':False}
                 scenname=scen['properties']['name']
-                mdl = prop.new_mdl(self.mdl, new_param)
-                _, prevhists[scenname], c_mdls[scenname], _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
+                mdl_i = prop.new_mdl(mdl)
+                _, prevhists[scenname], c_mdls[scenname], _  = prop.prop_one_scen(mdl_i, scen, ctimes = [var_time], **kwargs)
         else: 
             c_mdls={scen['properties']['name']:{var_time:c_mdls_nom[var_time]} for scen in scenlist}
             prevhists={scen['properties']['name']:nomhist for scen in scenlist}
@@ -444,9 +444,9 @@ class ProblemInterface():
         ubs = {"set_var_"+str(i)+"_ub": eval_con(x[i], self.simulations['set_const'][2][i][1], "less", self.negative_form) for i in self.simulations['set_const'][1]}
         lbs = {"set_var_"+str(i)+"_lb": eval_con(x[i], self.simulations['set_const'][2][i][0], "greater", self.negative_form) for i in self.simulations['set_const'][1]}
         return {}, {**ubs, **lbs}
-    def _prep_sim_type(self, simtype, simname):
-        if simtype=='single': self._prep_single_sim(simname)
-        if simtype=='multi': self._prep_multi_sim(simname)
+    def _prep_sim_type(self, simtype, simname, x):
+        if simtype=='single': self._prep_single_sim(simname, x)
+        if simtype=='multi': self._prep_multi_sim(simname, x)
     def _run_sim_type(self, simtype, simname, x):
         if simtype=='set_const':    return self._get_set_const(x)
         elif simtype=='single':     return self._run_single_sim(simname, x)
@@ -532,7 +532,7 @@ class ProblemInterface():
                 self.simulations[simname][1] = SampleApproach(mdl, **app_args).scenlist
             # prep sims
             if simname not in self.current_iter.get('sims', {}):
-                self._prep_sim_type(self.simulations[simname][0], simname)
+                self._prep_sim_type(self.simulations[simname][0], simname, x)
                 self.current_iter['sims'].add(simname)
             
             # run sims
@@ -676,8 +676,6 @@ class ProblemInterface():
         """
         self.simulations[simname][2].update(kwargs)
 
-def new_nom_params(mdl, obj_time, kwarg):
-    return {'modelparams':{'times':mdl.times[:-1]+[obj_time]}, 'params':kwarg.get('new_params',{})}
 def update_sequence(sequence_to_update, new_sequence):
     for i in new_sequence:
         if i not in sequence_to_update:             sequence_to_update[i]=new_sequence[i]
