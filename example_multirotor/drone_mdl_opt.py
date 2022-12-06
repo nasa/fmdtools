@@ -11,6 +11,7 @@ import numpy as np
 from fmdtools.modeldef import *
 from fmdtools.faultsim import propagate
 from fmdtools.faultsim.search import ProblemInterface
+import fmdtools.resultdisp as rd
 
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Patch
@@ -692,7 +693,7 @@ opt_prob.add_simulation("dcost", "external", x_to_dcost)
 opt_prob.add_objectives("dcost", cd="cd")
 opt_prob.add_variables("dcost",('batteryarch',(0,3)),('linearch',(0,3)))
 
-opt_prob.add_simulation("ocost", "single", {}, 
+opt_prob.add_simulation("ocost", "single", {}, staged=False,
                         upstream_sims = {"dcost":{'paramfunc':xd_paramfunc}})
 opt_prob.add_objectives("ocost", co="expected cost")
 opt_prob.add_constraints("ocost", g_soc=("StoreEE.soc", "vars", "end",("greater", 20)),
@@ -706,39 +707,45 @@ def spec_respol(bat, line):
     return {'respolicy':{'bat':respols[int(bat)],'line':respols[int(line)]}}
 
 app = SampleApproach(def_mdl,  phases={'forward'}, faults=('single-component', 'StoreEE'))
-opt_prob.add_simulation("rcost", "multi", app.scenlist)
+opt_prob.add_simulation("rcost", "multi", app.scenlist, include_nominal=False,\
+                        upstream_sims={'ocost':'pass_mdl'}, staged=False)
 opt_prob.add_objectives("rcost", cr="expected cost")
 opt_prob.add_variables("rcost", "bat","line", vartype=spec_respol)
 
 opt_prob.cd([1,1])
 opt_prob.co([50])
 opt_prob.cr([1,1])
+
+rd.plot.mdlhists(opt_prob._sims['rcost']['mdlhists']['StoreEE lowcharge, t=6.0'], fxnflowvals={'DOFs'}, time_slice=6)
+
 #(variablename, objtype (optional), t (optional))
+
 
 def calc_oper(mdl):
     endresults_nom, mdlhist =propagate.nominal(mdl)
-    opercost = endresults_nom['classification']['expected cost']
+    opercost = endresults_nom['expected cost']
     g_soc = 20 - mdlhist['functions']['StoreEE']['soc'][-1] 
-    g_faults = any(endresults_nom['faults'])
+    #g_faults = any(endresults_nom['faults'])
     g_max_height = sum([i for i in mdlhist['flows']['DOFs']['elev']-122 if i>0])
     
     landtime = find_landtime(mdlhist)
     mdl.params['landtime']=landtime
     mdl.phases['forward'][1] = landtime
-    mdl.phases['taxis'][0] = landtime
-    return opercost, g_soc, g_faults, g_max_height
+    mdl.phases['taxi'][0] = landtime+1
+    return opercost, g_soc, g_max_height
 def x_to_ocost(xdes, xoper, loc='rural'):
     fp = plan_flight(xoper[0], def_mdl)
     params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'continue','line':'continue'}, 'target':target,'safe':safe,'start':start, 'loc':loc, 'landtime':12}
     mdl = Drone(params=params)
     return calc_oper(mdl)
 
-def calc_res(mdl, fullcosts=False, faultmodes = 'all'):
-    app = SampleApproach(mdl, faults=('single-component', faultmodes), phases={'forward'})
-    endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
-    rescost = rd.process.totalcost(endclasses)
+def calc_res(mdl, fullcosts=False, faultmodes = 'all', include_nominal=True):
+    #app = SampleApproach(mdl, faults=('single-component', faultmodes), phases={'forward'})
+    endclasses, mdlhists = propagate.approach(mdl, app, staged=False)
+    rescost = rd.process.totalcost(endclasses)-(not include_nominal)*endclasses['nominal']['expected cost']
+    rd.plot.mdlhists(mdlhists['StoreEE lowcharge, t=6.0'], fxnflowvals={'DOFs'}, time_slice=6)
     return rescost
-def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'all'):
+def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'all', include_nominal=False):
     bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
     linarchs = ['quad', 'hex', 'oct']
     respols = ['continue', 'to_home', 'to_nearest', 'emland']
@@ -747,16 +754,18 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'al
     safe = [0, 50, 10, 10]
     start = [0.0,0.0, 10, 10]
     
-    sq = square(target[0:2],target[2],target[3])
-    fp = plan_flight(xoper[0], sq, start[0:2]+[0])
+    fp = plan_flight(xoper[0])
     
-    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 'target':target,'safe':safe,'start':start,'loc':loc, 'landtime':12 }
+    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 
+              'target':target,'safe':safe,'start':start,'loc':loc, **fp}
     mdl = Drone(params=params)
-    a,b,c,d = calc_oper(mdl) #used to form flight phases
-    return calc_res(mdl, fullcosts=fullcosts, faultmodes = faultmodes)
+    a,b,c = calc_oper(mdl) #used to form flight phases
+    return calc_res(mdl, fullcosts=fullcosts, faultmodes = faultmodes, include_nominal=include_nominal)
 
 if __name__=="__main__":
     import fmdtools.faultsim.propagate as prop
+    
+    x_to_rcost([1,1],[50],[1,1], faultmodes='StoreEE')
     
     mdl = Drone()
     ec, mdlhist = prop.nominal(mdl)

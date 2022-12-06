@@ -2569,10 +2569,10 @@ class SampleApproach():
             self.rates[fxnname, mode]=dict(); self.rates_timeless[fxnname, mode]=dict(); self.mode_phase_map[fxnname, mode] = dict()
             overallrate = self.fxnrates[fxnname]
             dist = self._fxnmodes[fxnname, mode]['dist']
-            if self.comprates[fxnname]:
-                for compname, component in mdl.fxns[fxnname].components.items():
-                    if mode in component.faultmodes:
-                        overallrate=self.comprates[fxnname][compname]
+            if self.comprates[fxnname] and mode in mdl.fxns[fxnname].compfaultmodes:
+                compname = mdl.fxns[fxnname].compfaultmodes[mode]
+                overallrate=self.comprates[fxnname][compname]
+                        
             key_phases = mdl.fxns[fxnname].key_phases_by
             
             if modephases and join_modephases and (key_phases not in ['global', 'none']):
