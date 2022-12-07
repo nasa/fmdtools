@@ -800,12 +800,12 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
+           if t in ctimes: c_mdl[t]=mdl.copy()
            if t in scen['sequence']: 
                fxnfaults = scen['sequence'][t].get('faults',{})
                disturbances = scen['sequence'][t].get('disturbances', {})
            else: fxnfaults, disturbances = {}, {}
            flowstates = propagate(mdl, t, fxnfaults, disturbances, flowstates, run_stochastic=run_stochastic)
-           if t in ctimes: c_mdl[t]=mdl.copy()
            if track_times:
                if track_times=='all':           t_ind_rec = t_ind+shift
                elif track_times[0]=='interval': t_ind_rec = t_ind//track_times[1]+shift
