@@ -12,6 +12,7 @@ from fmdtools.modeldef import *
 from fmdtools.faultsim import propagate
 from fmdtools.faultsim.search import ProblemInterface
 import fmdtools.resultdisp as rd
+import multiprocessing as mp
 
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Patch
@@ -53,7 +54,6 @@ class StoreEE(FxnBlock):
         #failrate for function w- component only applies to function modes
         self.failrate=1e-4
         self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],0],'lowcharge':[0.7,[0.6,0.2,0.2],0]})
-        b=1
     def condfaults(self, time):
         if self.soc<20:                     self.add_fault('lowcharge')
         elif self.has_fault('lowcharge'):   
@@ -75,8 +75,8 @@ class StoreEE(FxnBlock):
             e.sort()
             self.EEout.effort = e[-1]+e[-2]  
         self.soc=np.mean(list(soc.values()))
-        if self.any_faults():     self.HSig.hstate = 'faulty'
-        else:                   self.HSig.hstate = 'nominal'
+        if self.any_faults() and not self.has_fault("dummy"):   self.HSig.hstate = 'faulty'
+        else:                                                   self.HSig.hstate = 'nominal'
 
 class Battery(Component):
     def __init__(self, name, batparams):
@@ -94,7 +94,11 @@ class Battery(Component):
         if FS <1.0:             self.add_fault('break')
         if EEoutr>self.maxa:    self.add_fault('break')
         if self.soc<20:         self.add_fault('lowcharge')
-        if self.soc<1:          self.replace_fault('lowcharge','nocharge')
+        if self.soc<1:          
+            self.replace_fault('lowcharge','nocharge')
+            if time <10 and self.time<5:
+                a=1
+                #print(FS,EEoutr, 100*EEoutr*self.p*self.s*(time-self.time)/self.amt, self.amt, self.time, time)
         Et=1.0 #default
         if self.has_fault('short'):       Et=0.0
         elif self.has_fault('break'):     Et=0.0
@@ -280,25 +284,27 @@ class CtlDOF(FxnBlock):
 
 class PlanPath(FxnBlock):
     def __init__(self, name, flows, params):
-        super().__init__(name, flows,['EEin','Env','Dir','FS','Rsig'], states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'})
         self.nearest = params['safe'][0:2]+[0]
         self.goals = params['flightplan']
-        self.goal=self.goals[1]
+        super().__init__(name, flows,['EEin','Env','Dir','FS','Rsig'], 
+                         states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'})
+        self.add_flow('goal', {'x':self.goals[1][0],'y':self.goals[1][1],'z':self.goals[1][2]})
         self.failrate=1e-5
         self.assoc_modes({'noloc':[0.2, [0.6, 0.3, 0.1], 1000], 'degloc':[0.8, [0.6, 0.3, 0.1], 1000]})
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noloc')
     def behavior(self, t):
         loc = [self.Env.x, self.Env.y, self.Env.elev]
-        if self.pt <= max(self.goals):   self.goal = self.goals[self.pt]
-        dist = finddist(loc, self.goal)        
-        [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
+        if self.pt <= max(self.goals):   self.goal.assign(self.goals[self.pt], 'x','y','z')
+        
+        dist = finddist(loc, self.goal.get('x','y','z'))        
+        [self.dx,self.dy, self.dz] = vectdist(self.goal.get('x','y','z'),loc)
         
         if self.mode=='taxi' and t>5:           self.mode=='taxi'
         elif self.Rsig.mode == 'to_home': # add a to_nearest option
             self.pt = 0
-            self.goal =self.goals[self.pt]
-            [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
+            self.goal.assign(self.goals[self.pt], 'x','y','z')
+            [self.dx,self.dy, self.dz] = vectdist(self.goal.get('x','y','z'),loc)
         elif self.Rsig.mode == 'to_nearest':    self.mode = 'to_nearest'
         elif self.Rsig.mode== 'emland':         self.mode = 'land'
         elif self.Env.elev<1 and (self.pt>=max(self.goals) or self.mode=='land'):  self.mode = 'taxi'
@@ -306,8 +312,9 @@ class PlanPath(FxnBlock):
         elif dist<10 and {'move'}.issuperset({self.mode}):
             if self.pt < max(self.goals):   
                 self.pt+=1
-                self.goal = self.goals[self.pt]
+                self.goal.assign(self.goals[self.pt], 'x','y','z')
         elif dist>5 and not(self.mode=='descend'):          self.mode='move'
+        
         # nominal behaviors
         self.Dir.power=1.0
         if self.mode=='taxi':           self.Dir.power=0.0          
@@ -397,7 +404,7 @@ class Drone(Model):
         
         fhist=mdlhist['faulty']
         # to fix: need to find fault time more efficiently (maybe in the toolkit?)
-        faulttime = max([np.sum(fhist['functions'][f]['faults'][m]) for f,fh in fhist['functions'].items() for m in fh['faults']])
+        faulttime = np.sum(np.sum([fhist['functions'][f]['faults'][m] for f,fh in fhist['functions'].items() for m in fh['faults']],0)>0)
         
         Env=self.flows['DOFs']
         if  inrange(self.start_area, Env.x, Env.y):     landloc = 'nominal' # nominal landing
@@ -716,8 +723,8 @@ opt_prob.cd([1,1])
 opt_prob.co([50])
 opt_prob.cr([1,1])
 
-rd.plot.mdlhists(opt_prob._sims['rcost']['mdlhists']['StoreEE lowcharge, t=6.0'], fxnflowvals={'DOFs'}, time_slice=6)
-
+#rd.plot.mdlhists(opt_prob._sims['rcost']['mdlhists']['StoreEE lowcharge, t=6.0'], fxnflowvals={'DOFs'}, time_slice=6)
+rd.plot.mdlhists(opt_prob._sims['rcost']['mdlhists']['StoreEE lowcharge, t=6.0'], fxnflowvals={'StoreEE'}, time_slice=6)
 #(variablename, objtype (optional), t (optional))
 
 
@@ -739,13 +746,18 @@ def x_to_ocost(xdes, xoper, loc='rural'):
     mdl = Drone(params=params)
     return calc_oper(mdl)
 
-def calc_res(mdl, fullcosts=False, faultmodes = 'all', include_nominal=True):
+def calc_res(mdl, fullcosts=False, faultmodes = 'all', include_nominal=True, pool=False):
     #app = SampleApproach(mdl, faults=('single-component', faultmodes), phases={'forward'})
-    endclasses, mdlhists = propagate.approach(mdl, app, staged=False)
+    endclasses, mdlhists = propagate.approach(mdl, app, staged=True, pool=pool) #, staged=False)
     rescost = rd.process.totalcost(endclasses)-(not include_nominal)*endclasses['nominal']['expected cost']
-    rd.plot.mdlhists(mdlhists['StoreEE lowcharge, t=6.0'], fxnflowvals={'DOFs'}, time_slice=6)
+    #rd.plot.mdlhists({'faulty':mdlhists['StoreEE lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'DOFs'}, time_slice=6)
+    rd.plot.mdlhists({'faulty':mdlhists['StoreEE lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'StoreEE'}, time_slice=6)
+    #rd.plot.mdlhists({'faulty':mdlhists['StoreEE lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'Planpath'}, time_slice=6)
+    #rd.plot.mdlhists({'faulty':mdlhists['StoreEE lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'RSig_Traj', 'HSig_Bat','HSig_DOFs'})
+    #[ec['expected cost'] for ec in endclasses.values()]
+    #[ec['endclass']['expected cost'] for ec in opt_prob._sims['rcost']['results'].values()]
     return rescost
-def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'all', include_nominal=False):
+def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'all', include_nominal=False, pool=False):
     bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
     linarchs = ['quad', 'hex', 'oct']
     respols = ['continue', 'to_home', 'to_nearest', 'emland']
@@ -759,17 +771,16 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'al
     params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 
               'target':target,'safe':safe,'start':start,'loc':loc, **fp}
     mdl = Drone(params=params)
-    a,b,c = calc_oper(mdl) #used to form flight phases
-    return calc_res(mdl, fullcosts=fullcosts, faultmodes = faultmodes, include_nominal=include_nominal)
+    return calc_res(mdl, fullcosts=fullcosts, faultmodes = faultmodes, include_nominal=include_nominal, pool=pool)
 
 if __name__=="__main__":
     import fmdtools.faultsim.propagate as prop
     
     x_to_rcost([1,1],[50],[1,1], faultmodes='StoreEE')
     
-    mdl = Drone()
-    ec, mdlhist = prop.nominal(mdl)
+    #mdl = Drone()
+    #ec, mdlhist = prop.nominal(mdl)
 
-    app = SampleApproach(mdl,  phases={'forward'}, faults=('single-component', 'StoreEE'))
-    endclasses, mdlhists = prop.approach(mdl, app, staged=True)
+    #app = SampleApproach(mdl,  phases={'forward'}, faults=('single-component', 'StoreEE'))
+    #endclasses, mdlhists = prop.approach(mdl, app, staged=True)
 
