@@ -553,8 +553,9 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     else:
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
             name = scen['properties']['name']
-            if staged:  mdl = c_mdl[scen['properties']['time']]
-            ec, mh, t_end = exec_scen(mdl, scen, indiv_id=str(i), **kwargs)
+            if staged:  mdl_i = c_mdl[scen['properties']['time']]
+            else:       mdl_i = mdl
+            ec, mh, t_end = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
             results[name],mdlhists[name] = ec, mh
     return results, mdlhists
 def exec_scen_par(args):
@@ -799,12 +800,12 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
-           if t in ctimes: c_mdl[t]=mdl.copy()
            if t in scen['sequence']: 
                fxnfaults = scen['sequence'][t].get('faults',{})
                disturbances = scen['sequence'][t].get('disturbances', {})
            else: fxnfaults, disturbances = {}, {}
            flowstates = propagate(mdl, t, fxnfaults, disturbances, flowstates, run_stochastic=run_stochastic)
+           if t in ctimes: c_mdl[t]=mdl.copy()
            if track_times:
                if track_times=='all':           t_ind_rec = t_ind+shift
                elif track_times[0]=='interval': t_ind_rec = t_ind//track_times[1]+shift
@@ -895,6 +896,7 @@ def propagate(mdl, time, fxnfaults={}, disturbances={}, flowstates={}, run_stoch
     """
     #Step 0: Update model states with disturbances
     mdl.set_vars(**disturbances)
+    
     #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
     for fxnname in mdl.dynamicfxns.union(fxnfaults.keys()):
         fxn=mdl.fxns[fxnname]

@@ -55,11 +55,16 @@ class Common(object):
         Further arguments specify which values.
         e.g. self.EE1.assign(EE2, 'v', 'a') is the same as saying
             self.EE1.a = self.EE2.a; self.EE1.v = self.EE2.v
+        Can also be used to assign list values to a variable
+        e.g. self.Pos.assign([1,2,3],'x','y','z')
         """
-        if len(states)==0: states= obj._states
-        for state in states:
-            if state not in self._states: raise Exception(state+" not a property of "+self.name)
-            setattr(self, state, getattr(obj,state))
+        if type(obj)==list:
+            for i, state in enumerate(states):  setattr(self, state, obj[i])
+        else:
+            if len(states)==0: states= obj._states
+            for state in states:
+                if state not in self._states: raise Exception(state+" not a property of "+self.name)
+                setattr(self, state, getattr(obj,state))
     def get(self, *attnames, **kwargs):
         """Returns the given attribute names (strings). Mainly useful for reducing length
         of lines/adding clarity to assignment statements.
@@ -1097,7 +1102,7 @@ class FxnBlock(Block):
             elif type(flowdict) == dict:    self.internal_flows[flowname]=Flow(flowdict, flowname,flowtype)
             elif isinstance(flowdict, Flow):self.internal_flows[flowname] = flowdict
             else: raise Exception('Invalid flow. Must be dict or flow')
-        setattr(self, flowname, self.internal_flows[flowname])
+            setattr(self, flowname, self.internal_flows[flowname])
     def copy(self, newflows, *attr):
         """
         Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.
@@ -1127,6 +1132,12 @@ class FxnBlock(Block):
             for state in copy.actions[action]._initstates.keys():
                 setattr(copy.actions[action], state, getattr(self.actions[action], state))
             copy.actions[action].faults=self.actions[action].faults.copy()
+            copy.actions[action].time=self.actions[action].time
+        for component in self.components: 
+            for state in copy.components[component]._initstates.keys():
+                setattr(copy.components[component], state, getattr(self.components[component], state))
+            copy.components[component].faults=self.components[component].faults.copy()
+            copy.components[component].time=self.components[component].time
         setattr(copy, 'active_actions', getattr(self, 'active_actions', {}))
         for timername in self.timers:
             timer = getattr(self, timername)

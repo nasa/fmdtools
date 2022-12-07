@@ -390,7 +390,9 @@ class ProblemInterface():
                 prevhist = prevhists[name]
                 kwargs['nomhist'] = nomhist
                 kwargs['desired_result'] = copy.deepcopy(self.obj_const_mapping[simname])
-                results[name], mh[name], t_end = prop.exec_scen(mdl, scen, indiv_id=str(i), **kwargs, prevhist=prevhist)
+                if staged:  mdl_i = c_mdls[scen['properties']['name']][var_time]
+                else:       mdl_i = mdl
+                results[name], mh[name], t_end = prop.exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs, prevhist=prevhist)
         objs = self._get_obj_from_result(simname, results, "objectives")
         consts = self._get_obj_from_result(simname, results, "constraints")
         self._sims[simname]['mdlhists'] = mh
