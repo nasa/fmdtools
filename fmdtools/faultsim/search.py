@@ -377,6 +377,7 @@ class ProblemInterface():
         for scen in scenlist:
             newscen = copy.deepcopy(scen)
             newscen['sequence']= self._update_sequence(newscen['sequence'], simname, x)
+            newscen['properties']['time'] = var_time
             new_scenlist.append(newscen)
         scenlist = new_scenlist
         if pool: 

@@ -29,6 +29,10 @@ class Direc(Flow):
     def status(self):
         status={'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': self.power}
         return status.copy()
+    def copy(self):
+        c = super().copy()
+        c.traj=copy.copy(self.traj)
+        return c
 
 #Define functions
 class StoreEE(FxnBlock):
@@ -53,7 +57,7 @@ class StoreEE(FxnBlock):
         super().__init__(name, flows,['EEout', 'FS', 'HSig'], {'soc': 100.0}, components)
         #failrate for function w- component only applies to function modes
         self.failrate=1e-4
-        self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],0],'lowcharge':[0.7,[0.6,0.2,0.2],0]})
+        self.assoc_modes({'nocharge':[0.2,[0.6,0.2,0.2],0],'lowcharge':[0.7,[0.6,0.2,0.2],0],'dummy':[0.1,[0.6,0.2,0.2],0]})
     def condfaults(self, time):
         if self.soc<20:                     self.add_fault('lowcharge')
         elif self.has_fault('lowcharge'):   
@@ -96,15 +100,14 @@ class Battery(Component):
         if self.soc<20:         self.add_fault('lowcharge')
         if self.soc<1:          
             self.replace_fault('lowcharge','nocharge')
-            if time <10 and self.time<5:
-                a=1
-                #print(FS,EEoutr, 100*EEoutr*self.p*self.s*(time-self.time)/self.amt, self.amt, self.time, time)
         Et=1.0 #default
         if self.has_fault('short'):       Et=0.0
         elif self.has_fault('break'):     Et=0.0
         elif self.has_fault('degr'):      Et=0.5
         self.Et = Et*self.avail_eff
         Er_res=0.0
+        #if self.has_fault("lowcharge"):
+        #    print(time, self.time, self.soc)
         if time > self.time:
             self.soc=self.soc-100*EEoutr*self.p*self.s*(time-self.time)/self.amt
             self.time=time
@@ -297,6 +300,8 @@ class PlanPath(FxnBlock):
         loc = [self.Env.x, self.Env.y, self.Env.elev]
         if self.pt <= max(self.goals):   self.goal.assign(self.goals[self.pt], 'x','y','z')
         
+        pt = self.pt
+        
         dist = finddist(loc, self.goal.get('x','y','z'))        
         [self.dx,self.dy, self.dz] = vectdist(self.goal.get('x','y','z'),loc)
         
@@ -314,6 +319,9 @@ class PlanPath(FxnBlock):
                 self.pt+=1
                 self.goal.assign(self.goals[self.pt], 'x','y','z')
         elif dist>5 and not(self.mode=='descend'):          self.mode='move'
+        
+        if t>self.time and t>=6.0 and t<10 and pt==self.pt and pt==6:
+            print(t, pt)
         
         # nominal behaviors
         self.Dir.power=1.0
@@ -715,7 +723,7 @@ def spec_respol(bat, line):
 
 app = SampleApproach(def_mdl,  phases={'forward'}, faults=('single-component', 'StoreEE'))
 opt_prob.add_simulation("rcost", "multi", app.scenlist, include_nominal=False,\
-                        upstream_sims={'ocost':'pass_mdl'}, staged=False)
+                        upstream_sims={'ocost':'pass_mdl'}, staged=True)
 opt_prob.add_objectives("rcost", cr="expected cost")
 opt_prob.add_variables("rcost", "bat","line", vartype=spec_respol)
 
