@@ -50,21 +50,26 @@ class Common(object):
         for name, value in kwargs.items():
             if name not in self._states: raise Exception(name+" not a property of "+self.name)
             setattr(self, name, value)
-    def assign(self,obj,*states):
+    def assign(self,obj,*states, **statedict):
         """ Sets the same-named values of the current flow/function object to those of a given flow. 
         Further arguments specify which values.
         e.g. self.EE1.assign(EE2, 'v', 'a') is the same as saying
             self.EE1.a = self.EE2.a; self.EE1.v = self.EE2.v
         Can also be used to assign list values to a variable
         e.g. self.Pos.assign([1,2,3],'x','y','z')
+        Can also provide dict in case value names don't match
+        e.g. self.Pos_out.assign(self.Pos_in, x='dx',y='dy')
         """
-        if type(obj)==list:
+        if type(obj)==list or isinstance(obj, np.ndarray):
             for i, state in enumerate(states):  setattr(self, state, obj[i])
         else:
-            if len(states)==0: states= obj._states
-            for state in states:
-                if state not in self._states: raise Exception(state+" not a property of "+self.name)
-                setattr(self, state, getattr(obj,state))
+            if not statedict:
+                if len(states)==0:    statedict = {s:s for s in obj._states}
+                else:                 statedict = {s:s for s in states}
+            elif len(states)>0: raise Exception("Can only provide positional states or keyword states, not both")
+            for set_state, get_state in statedict.items():
+                if set_state not in self._states: raise Exception(set_state+" not a property of "+self.name)
+                setattr(self, set_state, getattr(obj,get_state))
     def get(self, *attnames, **kwargs):
         """Returns the given attribute names (strings). Mainly useful for reducing length
         of lines/adding clarity to assignment statements.
@@ -147,7 +152,7 @@ class Common(object):
             a += self.get(state)
         return a
     def sub(self,*states):
-        """Returns the addition of given attributes of the model construct
+        """Returns the subtraction of given attributes of the model construct
         e.g.,   a = self.div('x','y','z') is the same as
                 a = (self.x-self.y)-self.z
         """
