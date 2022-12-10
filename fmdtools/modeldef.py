@@ -2599,23 +2599,19 @@ class SampleApproach():
             else:
                 if key_phases=='global': fxnphases = self.globalphases
                 elif key_phases=='none': fxnphases = {'operating':[mdl.times[0], mdl.times[-1]]} 
-                else: fxnphases = self.phases.get(key_phases, self.globalphases)
+                else:                    fxnphases = self.phases.get(key_phases, self.globalphases)
                 fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))  
                 if modephases and (key_phases not in ['global', 'none']):
                     modevect = self._fxnmodes[fxnname, mode]['oppvect']
                     oppvect = {phase:0 for phase in fxnphases}
                     oppvect.update({phase:modevect.get(mode, 0)/len(phases)  for mode,phases in modephases[key_phases].items() for phase in phases})
                 else:
-                    a=1
+                    oppvect = {phase:0 for phase in fxnphases}
                     if type(self._fxnmodes[fxnname, mode]['oppvect'])==dict: 
-                        oppvect = {phase:0 for phase in fxnphases}
                         oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
                     else:
-                        oppvect = self._fxnmodes[fxnname, mode]['oppvect']
-                        if type(oppvect)==int or len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
-                        elif self.globalphases!=mdl.phases: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(mdl.phases)}
-                        elif len(oppvect)!=len(fxnphases): raise Exception("Invalid Opportunity vector: "+fxnname+". Invalid length.")
-                        else: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(fxnphases)}
+                        opplist = self._fxnmodes[fxnname, mode]['oppvect']
+                        oppvect.update({phase:opplist[i] for (i, phase) in enumerate(fxnphases)})
             for phase, times in fxnphases.items():
                 opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
                 

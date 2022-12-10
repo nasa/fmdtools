@@ -521,18 +521,18 @@ class ProblemInterface():
                         newparams.update(upstream_sims[up_name]['paramfunc'](pvars))
                     if 'pass_mdl' in upstream_sims[up_name]:
                         newparams=copy.deepcopy(self._sims[up_name]['c_mdls'][0].params)
-                    if 'get_phases' in upstream_sims[up_name]:
-                        app_args = self.simulations[simname][2]['app_args']
+                    if 'phases' in upstream_sims[up_name]:
                         nomhist = self._sims[up_name]['mdlhists']['faulty']
                         t_end = self._sims[up_name]['c_mdls'][0].times[-1]
-                        app_args.update({'phases':prop.phases_from_hist(upstream_sims[up_name]['regen_app']['get_phases'], t_end, nomhist)})
+                        newphases={'phases':prop.phases_from_hist(upstream_sims[up_name]['phases'], t_end, nomhist)}
                 if any([k not in oldparams for k in newparams]) or any([newparams[k]!=oldparams[k] for k in oldparams]):
                     self.update_sim_vars(simname, newparams=newparams)
                     self.current_iter['sims_to_update'].add(simname)
             if 'app_args' in self.simulations[simname][2]:
                 app_args = self.simulations[simname][2]['app_args']
+                if 'newphases' in locals(): app_args.update(newphases) 
                 mdl = prop.new_mdl(self.mdl, {'params':self.simulations[simname][2]['new_params']})
-                self.simulations[simname][1] = SampleApproach(mdl, **app_args).scenlist
+                self.simulations[simname] = self.simulations[simname][0], [SampleApproach(mdl, **app_args).scenlist], *self.simulations[simname][2:]
             # prep sims
             if simname not in self.current_iter.get('sims', {}):
                 self._prep_sim_type(self.simulations[simname][0], simname, x)
