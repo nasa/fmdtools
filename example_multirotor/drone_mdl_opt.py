@@ -18,6 +18,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
+
 #Define functions
 class StoreEE(FxnBlock):
     def __init__(self,  name, flows, params):
@@ -669,6 +670,9 @@ opt_prob.cd([2,2])
 opt_prob.co([50])
 opt_prob.cr([0,0])
 
+opt_prob.cd([0,0])
+opt_prob.cr([0,0])
+
 #opt_prob.cr([1,0])
 
 #rd.plot.mdlhists(opt_prob._sims['rcost']['mdlhists']['StoreEE lowcharge, t=7.0'], fxnflowvals={'DOFs'}, time_slice=6)
@@ -727,6 +731,8 @@ if __name__=="__main__":
     import fmdtools.faultsim.propagate as prop
     
     x_to_rcost([2,2],[50],[0,0], faultmodes='StoreEE')
+    x_to_rcost([0,0],[50],[0,0], faultmodes='StoreEE')
+    opt_prob.show_architecture()
     
     mdl = Drone()
     ec, mdlhist = prop.nominal(mdl)
@@ -734,6 +740,7 @@ if __name__=="__main__":
     rd.plot.phases(phases, modephases)
 
     app = SampleApproach(mdl,  phases={'forward'})
+    
     #endclasses, mdlhists = prop.approach(mdl, app, staged=True)
     #plot_faulttraj({'nominal':mdlhists['nominal'], 'faulty':mdlhists['StoreEE lowcharge, t=6.0']}, mdl.params, title='Fault response to RFpropbreak fault at t=20')
 
