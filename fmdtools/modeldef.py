@@ -1352,6 +1352,11 @@ class Flow(Common):
         self._states=list(states.keys())
         for state in self._states:
             setattr(self, state, states[state])
+        if type(self)!=Flow:
+            if type(self).reset == Flow.reset:      warnings.warn("Custom reset() Method Not Implemented--model protection between methods may not work")
+            if type(self).status == Flow.status:    warnings.warn("Custom status() Method Not Implemented--custom flow attributes may not be saved")
+            if type(self).get_memory == Flow.get_memory:    warnings.warn("Custom get_memory() method not implement--memory estimates may be innaccurate")
+            if type(self).copy == Flow.copy:        warnings.warn("Custom copy() method not implemented--Staged Execution may not copy custom model states")
     def __repr__(self):
         if hasattr(self,'name'):    
             return getattr(self, 'name')+' '+getattr(self, 'type')+' flow: '+str(self.status())

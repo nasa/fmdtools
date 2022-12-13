@@ -11,6 +11,7 @@ import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp.process as proc
 import fmdtools.resultdisp.plot as plot
 from fmdtools.modeldef import SampleApproach
+import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
@@ -58,6 +59,7 @@ class ProblemInterface():
         self.default_run_kwargs = {k:kwargs[k] if k in kwargs else v for k,v in prop.run_kwargs.items()}
         self.default_mult_kwargs = {k:kwargs[k] if k in kwargs else v for k,v in prop.mult_kwargs.items()}
         
+        self.sim_graph = nx.DiGraph()
         self.negative_form =negative_form
         self.simulations={}
         self.variables=[]
@@ -111,6 +113,9 @@ class ProblemInterface():
         """
         kwargs = {**self.default_run_kwargs,**self.default_sim_kwargs, **self.default_mult_kwargs, **kwargs}
         self.simulations[simname]=(simtype, args, kwargs)
+        self.sim_graph.add_node(simname)
+        for upsim in kwargs.get('upstream_sims', {}):
+            self.sim_graph.add_edge(upsim, simname, label=", ".join(kwargs['upstream_sims'][upsim].keys()))
     def add_variables(self, simnames, *args, vartype='vars', t=0): 
         """
         Adds variable of specified type ('params', 'vars', or 'faults') to a given problem. 
@@ -504,8 +509,14 @@ class ProblemInterface():
         new_var_inds = np.where(x!=self.current_iter['vars'])
         for simname, simvars in self._sim_vars.items():
             if any([i in simvars for i in new_var_inds[0]]) or simname not in self.current_iter['sims']: 
-                self.current_iter['sims_to_update'].add(simname) 
-                
+                if simname!='set_const': self.current_iter['sims_to_update'].update([*nx.traversal.bfs_tree(self.sim_graph, simname)]) # adds all downstream sims
+                else:                    self.current_iter['sims_to_update'].add(simname)
+        #add upstream sims to simnames (if not updated)
+        sims_to_run = set()
+        for simname in simnames:
+            if simname!="set_const": sims_to_run.update([s for s in nx.traversal.bfs_tree(self.sim_graph, simname, reverse=True) if s in self.current_iter['sims_to_update']])
+        simnames = [simname for simname in self.simulations if simname in sims_to_run]
+        
         for simname in simnames:
             # update from upstream sims
             if 'upstream_sims' in self.simulations[simname][2]:
@@ -528,11 +539,13 @@ class ProblemInterface():
                 if any([k not in oldparams for k in newparams]) or any([newparams[k]!=oldparams[k] for k in oldparams]):
                     self.update_sim_vars(simname, newparams=newparams)
                     self.current_iter['sims_to_update'].add(simname)
+                    self.current_iter['sims'].discard(simname)
             if 'app_args' in self.simulations[simname][2]:
                 app_args = self.simulations[simname][2]['app_args']
                 if 'newphases' in locals(): app_args.update(newphases) 
                 mdl = prop.new_mdl(self.mdl, {'params':self.simulations[simname][2]['new_params']})
                 self.simulations[simname] = self.simulations[simname][0], [SampleApproach(mdl, **app_args).scenlist], *self.simulations[simname][2:]
+                self.current_iter['sims'].discard(simname)
             # prep sims
             if simname not in self.current_iter.get('sims', {}):
                 self._prep_sim_type(self.simulations[simname][0], simname, x)
@@ -678,6 +691,13 @@ class ProblemInterface():
             kwargs for the simulation.
         """
         self.simulations[simname][2].update(kwargs)
+    def show_architecture(self):
+        fig = plt.figure()
+        edge_labels = nx.get_edge_attributes(self.sim_graph, "label")
+        pos=nx.planar_layout(self.sim_graph)
+        nx.draw(self.sim_graph, with_labels=True, pos=pos)
+        nx.draw_networkx_edge_labels(self.sim_graph, pos, edge_labels=nx.get_edge_attributes(self.sim_graph, "label"))
+        return fig
 
 def update_sequence(sequence_to_update, new_sequence):
     for i in new_sequence:
