@@ -209,6 +209,7 @@ class Line(Component):
         if self.has_fault('short'):                   self.put(Eti=0.0, Eto= np.inf)
         elif self.has_fault('openc'):                 self.put(Eti=0.0, Eto= 0.0)
         elif Ctlin.upward==0 and Ctlin.forward == 0:  self.put(Eto= 0.0)
+        else:                                         self.put(Eto= 1.0)
         if self.has_fault('ctlbreak'):                self.put(Ct=0.0)
         if self.has_fault('mechbreak'):               self.put(Mt=0.0)
         elif self.has_fault('mechfriction'):          self.put(Mt=0.5, Eti= 2.0) 
@@ -305,7 +306,7 @@ class Drone(Model):
         self.add_flow('HSig_DOFs', {'hstate':'nominal', 'config':1.0})
         self.add_flow('HSig_Bat', {'hstate':'nominal', 'config':1.0} )
         self.add_flow('RSig_Traj', {'mode':'continue'})
-        self.add_flow('EE_1', {'rate':1.0, 'effort':1.0})
+        self.add_flow('EE_1', {'rate':0.0, 'effort':1.0})
         self.add_flow('EEmot', {'rate':1.0, 'effort':1.0})
         self.add_flow('EEctl', {'rate':1.0, 'effort':1.0})
         self.add_flow('Ctl1', {'forward':0.0, 'upward':1.0})
@@ -360,7 +361,6 @@ class Drone(Model):
         viewed = env_viewed(mdlhist['faulty']['flows']['DOFs']['x'], mdlhist['faulty']['flows']['DOFs']['y'],mdlhist['faulty']['flows']['DOFs']['z'], self.target_area)
         viewed_value = sum([0.5+2*view for k,view in viewed.items() if view!='unviewed'])
         
-        fhist=mdlhist['faulty']
         # to fix: need to find fault time more efficiently (maybe in the toolkit?)
         reshist,_,_ = rd.process.hist(mdlhist)
         faulttime = np.sum(reshist['stats']['total faults']>0)
@@ -587,11 +587,7 @@ safety_categories = {'catastrophic':{'injuries':'multiple fatalities', 'safety m
 hazards = {'VH-1':'loss of control', 'VH-2':'fly-away / non-conformance', 'VH-3':'loss of communication', 'VH-4':'loss of navigation', 'VH-5':'unsuccessful landing',
            'VH-6':'unintentional flight termination', 'VH-7':'collision'}
 
-bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
-linarchs = ['quad', 'hex', 'oct']
 respols = ['continue', 'to_home', 'to_nearest', 'emland']
-batcostdict = {'monolithic':0, 'series-split':300, 'parallel-split':300, 'split-both':600}
-linecostdict = {'quad':0, 'hex':1000, 'oct':2000}
 
 target = [0, 150, 160, 160]
 safe = [0, 50, 10, 10]
@@ -634,6 +630,10 @@ def plan_flight(z):
     return {'flightplan': flightplan}
 
 ## Optimization Functions
+bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
+linarchs = ['quad', 'hex', 'oct']
+batcostdict = {'monolithic':0, 'series-split':300, 'parallel-split':300, 'split-both':600}
+linecostdict = {'quad':0, 'hex':1000, 'oct':2000}
 def x_to_dcost(xdes):
     descost = batcostdict[bats[int(xdes[0])]] + linecostdict[linarchs[int(xdes[1])]]
     return descost
@@ -652,7 +652,8 @@ opt_prob.add_constraints("ocost", g_soc=("StoreEE.soc", "vars", "end",("greater"
                                   g_max_height=("DOFs.z", "vars", "all", ("less", 122)),
                                   g_faults=("repcost", "endclass", "end", ("less", 0.1)))
 opt_prob.add_variables("ocost", "height", vartype=plan_flight)
-#opt_prob.co([10])
+opt_prob.cd([2,2])
+opt_prob.co([10])
 
 respols = ['continue', 'to_home', 'to_nearest', 'emland']
 def spec_respol(bat, line):
@@ -662,21 +663,14 @@ app = SampleApproach(def_mdl,  phases={'forward'}, faults=('single-component', '
 opt_prob.add_simulation("rcost", "multi", app.scenlist, include_nominal=False,\
                         upstream_sims={'ocost':{'phases':{'Planpath':'move'},'pass_mdl':[]}},\
                         app_args={'faults':('single-component', 'StoreEE')},\
-                        staged=False)
+                        staged=True)
 opt_prob.add_objectives("rcost", cr="expected cost")
 opt_prob.add_variables("rcost", "bat","line", vartype=spec_respol)
-
-opt_prob.cd([2,2])
-opt_prob.co([50])
-opt_prob.cr([0,0])
-
-opt_prob.cd([0,0])
-opt_prob.cr([0,0])
 
 #opt_prob.cr([1,0])
 
 #rd.plot.mdlhists(opt_prob._sims['rcost']['mdlhists']['StoreEE lowcharge, t=7.0'], fxnflowvals={'DOFs'}, time_slice=6)
-rd.plot.mdlhists(opt_prob._sims['rcost']['mdlhists']['StoreEE lowcharge, t=7.0'], fxnflowvals={'StoreEE'}, time_slice=6)
+#rd.plot.mdlhists(opt_prob._sims['rcost']['mdlhists']['StoreEE lowcharge, t=7.0'], fxnflowvals={'StoreEE'}, time_slice=6)
 #(variablename, objtype (optional), t (optional))
 
 
@@ -698,15 +692,15 @@ def x_to_ocost(xdes, xoper, loc='rural'):
 def calc_res(mdl, fullcosts=False, faultmodes = 'all', include_nominal=True, pool=False, phases={}, staged=True):
     #app = SampleApproach(mdl, faults=('single-component', faultmodes), phases={'forward'})
     app = SampleApproach(mdl, faults=('single-component', 'StoreEE'), phases={'move':phases['Planpath']['move']})
-    endclasses, mdlhists = propagate.approach(mdl, app, staged=staged, pool=pool) #, staged=False)
+    endclasses, mdlhists = propagate.approach(mdl, app, staged=staged, pool=pool, showprogress=False) #, staged=False)
     rescost = rd.process.totalcost(endclasses)-(not include_nominal)*endclasses['nominal']['expected cost']
     #rd.plot.mdlhists({'faulty':mdlhists['StoreEE lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'DOFs'}, time_slice=6)
-    rd.plot.mdlhists({'faulty':mdlhists['StoreEE lowcharge, t=7.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'StoreEE'}, time_slice=6)
+    #rd.plot.mdlhists({'faulty':mdlhists['StoreEE lowcharge, t=7.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'StoreEE'}, time_slice=6)
     #rd.plot.mdlhists({'faulty':mdlhists['StoreEE lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'Planpath'}, time_slice=6)
     #rd.plot.mdlhists({'faulty':mdlhists['StoreEE lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'RSig_Traj', 'HSig_Bat','HSig_DOFs'})
     #[ec['expected cost'] for ec in endclasses.values()]
     #[ec['endclass']['expected cost'] for ec in opt_prob._sims['rcost']['results'].values()]
-    plot_faulttraj({'nominal':mdlhists['nominal'], 'faulty':mdlhists['StoreEE lowcharge, t=7.0']}, mdl.params, title='Fault response to StoreEE lowcharge, t=6.0')
+    #plot_faulttraj({'nominal':mdlhists['nominal'], 'faulty':mdlhists['StoreEE lowcharge, t=7.0']}, mdl.params, title='Fault response to StoreEE lowcharge, t=6.0')
     #phases, modephases = rd.process.modephases(mdlhists['nominal'])
     #rd.plot.phases({p:ph for p,ph in phases.items() if p=='Planpath'}, modephases)
     return rescost
@@ -730,9 +724,27 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'al
 if __name__=="__main__":
     import fmdtools.faultsim.propagate as prop
     
+
+    #opt_prob.add_combined_objective("total_cost", 'cd', 'co', 'cr')
+    #opt_prob.total_cost([1,1],[100],[1,1])
+    #opt_prob.total_cost([1,1,100,1,1])
+    #opt_prob.time_sims([1,1,100,1,1])
+    
+    opt_prob.cr([2,2, 50, 0,0])
+    
     x_to_rcost([2,2],[50],[0,0], faultmodes='StoreEE')
     x_to_rcost([0,0],[50],[0,0], faultmodes='StoreEE')
     opt_prob.show_architecture()
+    
+    #opt_prob.update_sim_options("ocost", track={"functions":{"Planpath":"all"}, "flows":{"DOFs":"all"}})
+    #opt_prob.update_sim_options("rcost", log_iter_hist=True, pool=mp.Pool(4), track={"functions":{"StoreEE":"faults"}, "flows":{"DOFs":"all"}})
+    
+    #opt_prob.total_cost([1,1,120,1,1])
+    #opt_prob.total_cost([1,1,60,1,1])
+    
+    opt_prob.time_sims([1,1,100,1,1])
+    
+    opt_prob.iter_hist
     
     mdl = Drone()
     ec, mdlhist = prop.nominal(mdl)
