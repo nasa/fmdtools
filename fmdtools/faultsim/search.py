@@ -15,6 +15,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
+import time
 
 class ProblemInterface(): 
     """
@@ -33,7 +34,7 @@ class ProblemInterface():
         current_iter : dict
             Dictionary of current values for variables/objectives/constraints/etc.
     """
-    def __init__(self, name, mdl, default_params={}, negative_form=True, **kwargs):
+    def __init__(self, name, mdl, default_params={}, negative_form=True, log_iter_hist=False, **kwargs):
         """
         Instantiates the Problem object.
         
@@ -68,7 +69,7 @@ class ProblemInterface():
         self.var_mapping={}
         self.obj_const_mapping={}
         self._sim_vars={}
-        self.log={}
+        self.init_iter_hist(log_iter_hist)
         self.current_iter={}
         self._sims={}
     def __repr__(self):
@@ -78,6 +79,9 @@ class ProblemInterface():
         sim_str = "\n -"+"\n -".join(name+": "+sim[0]+" scen: "+str(sim[2].get('sequence', "")) for name, sim in self.simulations.items() if sim[0] !="set_const")
         str_repr = '{:<65}{:>20}'.format("Problem "+self.name, "current value")
         return str_repr+"\n Variables"+var_str+"\n Objectives"+obj_str+"\n Constraints"+con_str+"\n Simulations"+sim_str
+    def init_iter_hist(self, log_iter_hist=False):
+        self.log_iter_hist = log_iter_hist
+        self.iter_hist={"vars":[],**{k:[] for k in self.objectives}, **{k:[] for k in self.constraints}}
     def add_simulation(self, simname, simtype, *args, **kwargs):
         """
         Defines a simulation to be used with the model
@@ -146,8 +150,8 @@ class ProblemInterface():
                 - 'external': variables for external func
                 - paramfunc: generates params from variable in function paramfunc
         """
-        self.clear()
-        if type(simnames)==str: simnames=[simnames]
+        self.clear(clearvars=False)
+        simnames = self._names_to_list(simnames)
         for arg in args:
             self._add_var(simnames, arg,vartype=vartype, t=t)
     def _add_var(self, simnames, arg, vartype='vars', t=None):
@@ -183,6 +187,7 @@ class ProblemInterface():
         else:                                           label=arg[3]
         for simname in simnames:
             self._make_mapping(self.var_mapping, simname, label, vartype, arg[0],ind)
+        self.current_iter['vars']=[*self.current_iter.get('vars',[]), *[np.NaN for i in range(len(self.variables)-len(self.current_iter.get('vars',[])))]]
     def add_objectives(self, simname, *args, objtype='endclass', t='end', obj_const='objectives', agg=("+",'sum'), **kwargs):
         """
         Adds objective to the given problem.
@@ -239,6 +244,7 @@ class ProblemInterface():
         
         vname, objtype, t, _ = arg
         self._make_mapping(self.obj_const_mapping, simname, t,objtype,vname, exclusive_vars=False)
+        self.iter_hist[objname]=[]
     def _assoc_obj_con(self, simname, objname, obj_const, arg):
         def newobj(x):
             return self.x_to_obj_const(x, simname)[0][objname]
@@ -304,7 +310,7 @@ class ProblemInterface():
             kwargs = {**kwar, 'desired_result':{}, 'staged':False}
             kwargs.pop("sequence")
             _, prevhist, c_mdls, _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
-        else: prevhist = nomhist; mdl=self.mdl
+        else: prevhist = nomhist; mdl=mdl
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhist':prevhist, 'obj_time': obj_time, 'mdl':mdl, 'c_mdls':c_mdls}
     def _prep_multi_sim(self, simname, x):
         var_time, obj_time = self._get_var_obj_time(simname)
@@ -464,12 +470,53 @@ class ProblemInterface():
     def add_combined_objective(self, objname, *objnames, agg="sum"):
         def comb_obj(*args):
             objs =[]
+            if len(args)!=len(objnames): 
+                if len(args)==1:    args = [args[0] for obj in objnames]
+                else:               raise Exception("Invalid input vector: "+str(args)+"for objectives: "+str(objnames))
             for i, obj in enumerate(objnames):
                 func = getattr(self, obj)
                 objs.append(func(args[i]))
             aggfunc = getattr(np, agg)
             return aggfunc(objs)
         setattr(self, objname, comb_obj)
+    def update_current_iter(self, **kwargs):
+        if not hasattr(self, 'current_iter'): self.current_iter={}
+        blank_iter = {'vars':np.array([np.nan for i in range(len(self.variables))]), 'objs':{},'consts':{}, 'sims':set(), 'sims_to_update':set()}
+        for k, v in blank_iter.items():
+            if k not in self.current_iter: 
+                if k in kwargs: self.current_iter[k]=kwargs[k]
+                else:           self.current_iter[k]=blank_iter[k]
+    def time_sims(self, x, simnames="all", printtimes=True, with_prep=False):
+        """
+        Prints/returns the simulation time for the given simulations
+
+        Parameters
+        ----------
+        x : list
+            List of variables (must be for all sims)
+        simnames : list/str, optional
+            Simname/simnames to check. The default is "all".
+        printtimes : bool, optional
+            Whether to print times. The default is True.
+
+        Returns
+        -------
+        simtimes : dict
+            Dictionary of times for each sim
+        """
+        simtimes = {}
+        simnames = self._names_to_list(simnames)
+        if printtimes: print("Simulation Times:")
+        for simname in simnames:
+            if with_prep: self.current_iter['sims'].discard(simname)
+            self.current_iter['sims_to_update'].add(simname)
+            starttime = time.time()
+            self.x_to_obj_const(x,simname)
+            t_elapsed = time.time()-starttime
+            simtimes[simname]=t_elapsed
+            if printtimes: print(simname+": "+str(t_elapsed)+str(" s"))
+        if printtimes: print("total: "+str(sum(simtimes.values())))
+        return simtimes
     def x_to_obj_const(self, x, simnames):
         """
         Calculates objectives and constraints for a given variable value
@@ -488,15 +535,14 @@ class ProblemInterface():
 
         """
         #format/order simnames 
-        if type(simnames)==str: simnames=[simnames]
+        simnames = self._names_to_list(simnames)
         if len(simnames)>1:
             if 'set_const' in simnames:
                 simnames = [simname for simname in self.simulations.keys() if (simname in simnames) and (simname!='set_const')]+['set_const']
             else:
                 simnames = [simname for simname in self.simulations.keys() if simname in simnames]
         
-        if not self.current_iter: self.current_iter = {'vars':np.array([np.nan for i in range(len(self.variables))]), 'objs':{},'consts':{},
-                                                       'sims':set(), 'sims_to_update':set()}
+        self.update_current_iter()
         #format x (which may be a subset of x) correctly
         if type(x)==list: x=np.array(x)
         if len(x)!=len(self.variables):
@@ -559,6 +605,10 @@ class ProblemInterface():
                 self.current_iter['sims_to_update'].remove(simname)
         # update x for iter
         self.current_iter['vars'] = x
+        if self.log_iter_hist:
+            self.iter_hist['vars'].append(x)
+            for obj in {*self.objectives, *self.constraints}:
+                self.iter_hist[obj].append(self.current_iter['objs'].get(obj,np.NaN))
         return self.current_iter['objs'], self.current_iter['consts']
     def _get_plot_vals(self, simname, obj_con_var):
         vals = {n:o[1] for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
@@ -642,20 +692,27 @@ class ProblemInterface():
                 if self.non_set_constraints: out["G"] = np.column_stack([consts[c] for c in self.non_set_constraints])
         problem_iter = self
         return Prob(problem_iter)
-    def clear(self, simname='all'):
+    def clear(self, simnames='all', clearvars=True, clearhist=True):
         """Clears the optimization variables/constraints/sim"""
-        if simname=='all': self.current_iter = {}
-        else:               
-            for objname, args in self.objectives.items():  
-                if args[0]==simname and 'objs' in self.current_iter: 
-                    self.current_iter['objs'][objname] = np.NaN
-            for conname, args in self.constraints.items(): 
-                if args[0]==simname and 'consts' in self.current_iter: 
-                    self.current_iter['consts'][conname] = np.NaN
-            for varind in self._sim_vars[simname]:
-                if 'vars' in self.current_iter:
-                    self.current_iter['vars'][varind] = np.NaN
-            if 'sims' in self.current_iter: self.current_iter['sims'].discard(simname)
+        if simnames=='all' and clearvars: self.current_iter = {}
+        else:
+            simnames = self._names_to_list(simnames)
+            for simname in simnames:
+                for objname, args in self.objectives.items():  
+                    if args[0]==simname and 'objs' in self.current_iter: 
+                        self.current_iter['objs'][objname] = np.NaN
+                for conname, args in self.constraints.items(): 
+                    if args[0]==simname and 'consts' in self.current_iter: 
+                        self.current_iter['consts'][conname] = np.NaN
+                for varind in self._sim_vars.get(simname, {}):
+                    if 'vars' in self.current_iter and clearvars==True:
+                        self.current_iter['vars'][varind] = np.NaN
+                if 'sims' in self.current_iter: self.current_iter['sims'].discard(simname)
+        if clearhist: self.init_iter_hist(log_iter_hist=self.log_iter_hist)
+    def _names_to_list(self,simnames):
+        if simnames=='all':          simnames = [*self.simulations]
+        elif type(simnames)==str:    simnames=[simnames]
+        return simnames
     def update_sim_vars(self, simname, newparams={}, newvars={}, newsequence={}):
         """
         Update the simulation with new default variables/parameters
@@ -671,7 +728,7 @@ class ProblemInterface():
         newsequence : TYPE, optional
             New default sequence of faults/disturbances (updated accross all scenarios). The default is {}.
         """
-        self.clear(simname)
+        self.clear(simname, clearvars=False, clearhist=False)
         self.simulations[simname][2]['new_params'].update(newparams)
         update_sequence(newsequence, {0:{'disturbances':newvars}})
         if self.simulations[simname][0]=='single':
@@ -679,18 +736,27 @@ class ProblemInterface():
         elif self.simulations[simname][0]=='multi':
             for i,_ in enumerate(self.simulations[simname][1][0]):
                 update_sequence(self.simulations[simname][1][0][i], newsequence)
-    def update_sim_options(self, simname, **kwargs):
+    def update_sim_options(self, simnames, **kwargs):
         """
-        Update options for simulation kwargs. Useful for passing pools that can't be instantiated in a script.
+        Update options for simulation kwargs. Useful for changing simulation parameters, e.g.:
+            - passing pools that can't be instantiated in a script
+            - turning off unnecessary model histories for optimization
+            - turning on/off sim logs
 
         Parameters
         ----------
-        simname : str
-            Name of the simulation
+        simnames : list/str
+            Name(s) of the simulation (or "all")
+        log_iter_hist : bool
+            Whether to log the history of variables/objectives
         **kwargs : kwargs
             kwargs for the simulation.
         """
-        self.simulations[simname][2].update(kwargs)
+        if 'log_iter_hist' in kwargs: self.init_iter_hist(log_iter_hist=kwargs.pop('log_iter_hist'))
+        simnames = self._names_to_list(simnames)
+        for simname in simnames:
+            self.simulations[simname][2].update(kwargs)
+            self.clear(simname, clearvars=False)
     def show_architecture(self):
         fig = plt.figure()
         edge_labels = nx.get_edge_attributes(self.sim_graph, "label")
