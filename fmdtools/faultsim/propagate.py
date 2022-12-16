@@ -394,9 +394,8 @@ def mult_fault(mdl, faultseq, disturbances, scen={}, rate=np.NaN, **kwargs):
     mdlhists : dict
         A dictionary of the states of the model of each fault scenario over time with structure: {'nominal':nomhist, 'faulty':faulthist}
     """
-    time = min(faultseq)
     sim_kwarg = pack_sim_kwargs(**kwargs)
-    nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, time, **sim_kwarg)
+    nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, [min(faultseq)], **sim_kwarg, use_end_condition=False)
     mdl = [*mdls.values()][0]
     if not scen: scen = create_faultseq_scen(mdl, rate, faultseq=faultseq, disturbances=disturbances)
     result, faulthist, _, t_end = prop_one_scen(mdl, scen, **sim_kwarg, nomhist=nomhist, nomresult=nomresult)
@@ -416,7 +415,7 @@ def create_faultseq_scen(mdl, rate, sequence={}, faultseq={}, disturbances={}):
     scen['properties']['time']=list(times)
     return scen
 
-def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, scen={}, **kwargs):
+def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, scen={}, use_end_condition=None, **kwargs):
     """
     Helper function for initial run of nominal scenario.
 
@@ -452,6 +451,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, scen={}, 
         if type(ctimes) in [float, int]:ctimes=[ctimes]
         else:                           ctimes=ctimes
     else:                               ctimes=[]
+    if use_end_condition==True and hasattr(mdl, "end_condition"): mdl.use_end_condition=True
+    elif use_end_condition==False:                                mdl.use_end_condition=False
     result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)
     
     endfaults, endfaultprops = mdl.return_faultmodes()
@@ -1000,7 +1001,7 @@ def update_flowhist(mdl, mdlhist, t_ind):
         for att, val in atts.items():
             if att in mdlhist['flows'][flowname]:
                 if t_ind >= len(mdlhist["flows"][flowname][att]):
-                    raise Exception("Time beyond range of model history--check staged execution and simulation time settings")
+                    raise Exception("Time beyond range of model history--check staged execution and simulation time settings (end condition, mdl.times)")
                 if not np.can_cast(type(val), type(mdlhist["flows"][flowname][att][t_ind])):
                     a=1
                     raise Exception(str(flowname)+" att "+str(att)+" changed type: "+str(type(mdlhist["flows"][flowname][att][t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind))

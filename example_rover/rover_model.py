@@ -83,7 +83,7 @@ class Drive(FxnBlock):
             self.assoc_faultstates({'friction':np.linspace(1.0,20, 100), 'transfer':np.linspace(1.0,0.0, 100), 'drift':[0.0, np.linspace(-0.5,0.5, 100)]}, params['drive_modes'])
         elif type(params['drive_modes'])==list:
             self.assoc_faultstates({'friction':1.0, 'transfer':1.0, 'drift':0.0}, 'none')
-            manual_modes ={'s_'+str(i):{'friction':mode[0], 'drift':mode[1], 'transfer':mode[2]} for i,mode in enumerate(params['drive_modes'])}
+            manual_modes ={'s_'+str(i):{'friction':mode[0], 'transfer':mode[1], 'drift':mode[2]} for i,mode in enumerate(params['drive_modes'])}
             self.assoc_faultstate_modes(manual_modes=manual_modes)
         elif  'set' in params['drive_modes']:
             self.assoc_faultstates({'friction':{1.5,3.0,10.0}, 'transfer':{0.5,0.0}, 'drift':[0.0, {-0.2,0.2}]}, 'all')
