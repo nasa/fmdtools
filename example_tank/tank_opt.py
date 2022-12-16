@@ -50,7 +50,8 @@ prob.add_variables("des_cost",'capacity', 'turnup')
 
 ## Defining resilience simulation
 app = SampleApproach(mdl)
-prob.add_simulation("res_sim", "multi", app.scenlist, upstream_sims = {"des_cost":{'params':{"capacity":"capacity", "turnup":"turnup"}}})
+prob.add_simulation("res_sim", "multi", app.scenlist, include_nominal=True,
+                    upstream_sims = {"des_cost":{'params':{"capacity":"capacity", "turnup":"turnup"}}})
 res_vars_i = {param:1 for param,v in mdl.params.items() if param not in ['capacity','turnup']}
 res_vars = [(var, None) for var in res_vars_i.keys()]
 prob.add_variables("res_sim", *res_vars, vartype="param")

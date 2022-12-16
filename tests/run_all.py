@@ -5,6 +5,7 @@ Use this script to run all tests in the repository.
 import unittest
 import os, sys
 
+
 if __name__=="__main__":
 
     loader = unittest.TestLoader()

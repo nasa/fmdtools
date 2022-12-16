@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.join('..','..'))
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp as rd
 from fmdtools.modeldef import SampleApproach
+from fmdtools.faultsim.search import ProblemInterface
 import rover_model as rvr
 import tqdm
 
@@ -22,31 +23,30 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 ## OBJECTIVES: FORMULATION 1
-def line_dist(ind):
+def line_dist(ind, show_plot=False, print_time=False):
 #    """Takes all of the individuals in a species and returns each of their distances
 #    from the end line in an array"""
-    mdl = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':{'custom_fault':{'friction':ind[0],'drift':ind[1], 'transfer':ind[2]}}})
-    endresults,resgraph, reshist = prop.one_fault(mdl,'Drive','custom_fault', time=fault_time, staged=True, protect=False, track={'functions':{'Environment':'all'}, 'flows':{'Ground':'all'}})
-    dist = endresults['classification']['line_dist']
-    enddist = endresults['classification']['end_dist']
-    endpt = endresults['classification']['endpt']
+    starttime=time.time()
+    mdl = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':{'custom_fault':{'friction':ind[0],'transfer':ind[1], 'drift':ind[2]}}})
+    endresults, reshist = prop.one_fault(mdl,'Drive','custom_fault', time=fault_time, staged=True, protect=False, track={'functions':{'Environment':'all'}, 'flows':{'Ground':'all'}})
+    dist = endresults['line_dist']
+    enddist = endresults['end_dist']
+    endpt = endresults['endpt']
+    
+    if print_time: print("Standard Exec Time: "+str(time.time()-starttime))
+    if show_plot: rvr.plot_trajectories(reshist, faultlabel='Faulty Scenarios', faultalpha=1.0)
     return dist,enddist,  endpt
 
-def line_dist_faster(ind):
-    newmdl=mdl_ft.copy()
-    newmdl.fxns['Drive'].mode_state_dict['custom_fault']={'friction':ind[0],'drift':ind[1], 'transfer':ind[2]}
+def line_dist_faster(ind, show_plot=False, print_time=False):
+# Uses Probleminterface class to calculate the same properties as line_dist (end dist, line dist, endpt)
+    starttime=time.time()
+    dist = mode_search_prob.line_dist(ind)
+    end_dist = mode_search_prob.end_dist(ind)
+    endpt = [mode_search_prob.endx(ind),mode_search_prob.endy(ind)]
     
-    scen = prop.construct_nomscen(newmdl)
-    scen['sequence'] ={fault_time:{'faults':{'Drive':"custom_fault"}}}
-    scen['properties']['function']="Drive"
-    scen['properties']['fault']="custom_fault"
-    scen['properties']['time']=fault_time
-    res, faultmdlhist, _, t_end = prop.prop_one_scen(newmdl, scen, staged=True, prevhist=mdlhist_nom, track='none')
-    
-    dist = rvr.find_line_dist(newmdl.flows['Ground'].x,newmdl.flows['Ground'].y, mdlhist_nom['flows']['Ground']['linex'], mdlhist_nom['flows']['Ground']['liney'])
-    enddist = np.sqrt((newmdl.params['end'][0] - newmdl.flows["Ground"].x)**2+(newmdl.params['end'][1] - newmdl.flows["Ground"].y)**2)
-    endpt = [newmdl.flows["Ground"].x, newmdl.flows["Ground"].y]
-    return dist, enddist, endpt
+    if print_time:  print(str(print_time)+" Interface Exec Time: "+str(time.time()-starttime))
+    if show_plot:   rvr.plot_trajectories(mode_search_prob._sims["custom_fault"]["mdlhists"], faultlabel='Faulty Scenarios', faultalpha=1.0)
+    return dist,end_dist,  endpt
 
 """f_1 returns the sum of line_dist for all individuals in representatives (rover distances)
 f_2 returns the sum of distances between nearest neighbors in hazard space (hazard space distances)"""
@@ -600,39 +600,47 @@ MU_SPACE = DRIFT_RANGE*FRIC_RANGE*TRANSFER_RANGE
 SUBPOP_SIZE = 50 #number of individuals in a subpopulation
 NUM_SUBPOP = 10 #number of subpopulation
 
-#nominal scenario info (for line_dist)
+#nominal scenario info (used to find when to inject faults in nominal scenario)
 mdl = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':{'custom_fault':{'friction':1.0,'drift':0.0, 'transfer':0.0}}})
 _, mdlhists_nom = prop.nominal(mdl)
 phases, modephases = rd.process.modephases(mdlhists_nom)
 app= SampleApproach(mdl, faults='Drive', phases={'drive':phases['Avionics']['drive']})
 fault_time = app.times[0]
 end_time = phases['Avionics']['drive'][1]+25
-mdl.times[1]=end_time
+mdl.times[1]=end_time    
 
-nomscen=prop.construct_nomscen(mdl)
-result, mdlhist_nom, mdls, t_end = prop.prop_one_scen(mdl, nomscen, ctimes=[fault_time], staged=False)
+#defining optimization problem interface (for line_dist_faster)
+mode_search_prob = ProblemInterface("Mode Search", mdl, default_params=rvr.gen_params('turn', start=5))
+mode_search_prob.add_simulation("custom_fault", "single", staged=True,\
+                                track={"flows":{"Ground":"all"},"functions":{"Environment":"all"}})
+mode_search_prob.add_variables("custom_fault", "Drive.friction", "Drive.transfer", "Drive.drift", t=fault_time)
+mode_search_prob.add_objectives("custom_fault", line_dist="line_dist", end_dist="end_dist", endpt="endpt")
+mode_search_prob.add_objectives("custom_fault", endx="Ground.x", endy="Ground.y", objtype="vars")
 
-mdl_ft = mdls[fault_time]
-fault_loc = [mdl_ft.flows['Ground'].x,mdl_ft.flows['Ground'].y]
-fault_dist = np.sqrt((mdl.flows["Ground"].x - mdl_ft.flows["Ground"].x)**2+(mdl.flows["Ground"].y - mdl_ft.flows["Ground"].y)**2)
-#prevhist=nommdlhist
-    
+#a=time.time(); line_dist([1,1.1,1]); print(time.time()-a)
+#mode_search_prob.plot_obj_const("custom_fault")
+#self._sims["custom_fault"]["mdlhists"]["faulty"]["functions"]["Drive"]
 if __name__=="__main__":
+    
+    ##Testing fault results from line_dist_faster vs std fault sampling (time + )
+    line_dist([1.0,1.3,0.2], show_plot=True, print_time=True)
+    line_dist_faster([1.0,1.3,0.2], show_plot=True, print_time="Startup")
+    line_dist_faster([1.0,1.3,0.2001], show_plot=True, print_time="Post-startup")
     
     weights = [0.0, 0.25, 0.5, 0.75, 1.0]
     
-    weight_sols = {}; weight_results = {}
-    for i, w in enumerate(weights):
-        results = pd.read_csv("results/result2_weight_"+str(i)+".csv")
-        weight_sols["w="+str(w)] = eval(results["Best_Sol"].iloc[-1])
-    fig = plot_trajs(weight_sols, v_padding=0.35)
+    #weight_sols = {}; weight_results = {}
+    #for i, w in enumerate(weights):
+    #    results = pd.read_csv("results/result2_weight_"+str(i)+".csv")
+    #    weight_sols["w="+str(w)] = eval(results["Best_Sol"].iloc[-1])
+    #fig = plot_trajs(weight_sols, v_padding=0.35)
     
     
-    for i, w in enumerate(weights):
-        endpts = [line_dist_faster(i)[2] for i in weight_sols["w="+str(w)]]
-        endptx = [e[0] for e in endpts]
-        endpty = [e[1] for e in endpts]
-        plt.scatter(endptx, endpty)
+    #for i, w in enumerate(weights):
+    #    endpts = [line_dist_faster(i)[2] for i in weight_sols["w="+str(w)]]
+    #    endptx = [e[0] for e in endpts]
+    #    endpty = [e[1] for e in endpts]
+    #    plt.scatter(endptx, endpty)
     
     #result_mc, sol_mc= montecarlo(ngen=10, weight=0.5, filename="")
     #result_ea, sol_ea= ea(ngen=10, weight=0.5, filename="")

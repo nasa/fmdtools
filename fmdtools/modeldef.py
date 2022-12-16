@@ -1335,7 +1335,7 @@ class Flow(Common):
     """
     Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
     """
-    def __init__(self, states, name, ftype='generic'):
+    def __init__(self, states, name, ftype='generic', suppress_warnings=False):
         """
         Instances the flow with given states.
 
@@ -1352,7 +1352,7 @@ class Flow(Common):
         self._states=list(states.keys())
         for state in self._states:
             setattr(self, state, states[state])
-        if type(self)!=Flow:
+        if type(self)!=Flow and not suppress_warnings:
             if type(self).reset == Flow.reset:      warnings.warn("Custom reset() Method Not Implemented--model protection between methods may not work")
             if type(self).status == Flow.status:    warnings.warn("Custom status() Method Not Implemented--custom flow attributes may not be saved")
             if type(self).get_memory == Flow.get_memory:    warnings.warn("Custom get_memory() method not implement--memory estimates may be innaccurate")

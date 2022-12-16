@@ -303,9 +303,9 @@ class ProblemInterface():
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
         mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_params = kwar['new_params'])
-        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}})
+        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}}, use_end_condition=False)
         if kwar.get('sequence', False):
-            mdl_s = prop.new_mdl(mdl)
+            mdl_s = prop.new_mdl(mdl, {})
             scen=prop.create_faultseq_scen(mdl_s,  rate=1.0, sequence=kwar['sequence'])
             kwargs = {**kwar, 'desired_result':{}, 'staged':False}
             kwargs.pop("sequence")
@@ -316,7 +316,7 @@ class ProblemInterface():
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
         mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_params = kwar['new_params'])
-        result, nomhist, nomscen, c_mdls_nom, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}})
+        result, nomhist, nomscen, c_mdls_nom, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}}, use_end_condition=False)
         
         scenlist = copy.deepcopy(self.simulations[simname][1][0])
         for scen in scenlist: scen['properties']['time']=var_time
@@ -329,7 +329,7 @@ class ProblemInterface():
             for scen in scenlist:
                 kwargs =  {**kwar.copy(), 'desired_result':{}, 'staged':False}
                 scenname=scen['properties']['name']
-                mdl_i = prop.new_mdl(mdl)
+                mdl_i = prop.new_mdl(mdl, {})
                 _, prevhists[scenname], c_mdls[scenname], _  = prop.prop_one_scen(mdl_i, scen, ctimes = [var_time], **kwargs)
         else: 
             c_mdls={scen['properties']['name']:{var_time:c_mdls_nom[var_time]} for scen in scenlist}
@@ -339,6 +339,7 @@ class ProblemInterface():
             scenlist.append(nomscen)
             prevhists['nominal']=nomhist
             c_mdls['nominal']=c_mdls_nom
+        self.update_scenlist(simname, scenlist)
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhists':prevhists, 'obj_time': obj_time, 'mdl':c_mdls_nom[var_time], 'c_mdls':c_mdls}
     def _check_new_mdl(self,simname, var_time, mdl, x, obj_time, staged=False, default_params={}):
         if var_time==0 or not staged: # set model parameters that are a part of the sim
@@ -359,7 +360,7 @@ class ProblemInterface():
         # set model faults/disturbances as elements of scenario 
         ##NOTE: need to make sure scenarios don't overwrite each other
         scen=prop.construct_nomscen(mdl)
-        scen['sequence'] = self._update_sequence(self.simulations[simname][1][0], simname, x)
+        scen['sequence'] = self._update_sequence(self.simulations[simname][2].get('sequence',{}), simname, x)
         scen['properties']['time'] = var_time
         #propagate scenario, get results
         des_r=copy.deepcopy(self.obj_const_mapping[simname])
@@ -431,7 +432,7 @@ class ProblemInterface():
             elif connames:  cons = {[*connames][0]:returns}
         return objs, cons
     def _update_sequence(self, existing_sequence, simname, x):
-        new_sequence = {t:{k:{var: x[ind] for var,ind in v.items()} for k,v in v.items()} for t,v in self.var_mapping[simname].items() if type(t) in [int, float]}
+        new_sequence = {t:{k:{var: x[ind] for var,ind in v.items()} for k,v in v.items()} for t,v in self.var_mapping[simname].items() if isinstance(t, (int, float, np.number))}
         return {**existing_sequence, **new_sequence}
     def _eval_mult_objs(self, objname, values):
         pos_fact = get_pos_negative(self.objectives[objname][-1][0])
@@ -561,7 +562,7 @@ class ProblemInterface():
         sims_to_run = set()
         for simname in simnames:
             if simname!="set_const": sims_to_run.update([s for s in nx.traversal.bfs_tree(self.sim_graph, simname, reverse=True) if s in self.current_iter['sims_to_update']])
-        simnames = [simname for simname in self.simulations if simname in sims_to_run]
+        simnames = [simname for simname in self.simulations if simname in sims_to_run]+('set_const' in simnames)*['set_const']
         
         for simname in simnames:
             # update from upstream sims
@@ -590,6 +591,7 @@ class ProblemInterface():
                 app_args = self.simulations[simname][2]['app_args']
                 if 'newphases' in locals(): app_args.update(newphases) 
                 mdl = prop.new_mdl(self.mdl, {'params':self.simulations[simname][2]['new_params']})
+                self.update_scenlist(simname, SampleApproach(mdl, **app_args).scenlist)
                 self.simulations[simname] = self.simulations[simname][0], [SampleApproach(mdl, **app_args).scenlist], *self.simulations[simname][2:]
                 self.current_iter['sims'].discard(simname)
             # prep sims
@@ -610,14 +612,16 @@ class ProblemInterface():
             for obj in {*self.objectives, *self.constraints}:
                 self.iter_hist[obj].append(self.current_iter['objs'].get(obj,np.NaN))
         return self.current_iter['objs'], self.current_iter['consts']
+    def update_scenlist(self, simname, scenlist):
+        self.simulations[simname] = self.simulations[simname][0], [scenlist], *self.simulations[simname][2:]
     def _get_plot_vals(self, simname, obj_con_var):
         vals = {n:o[1] for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
         return vals
     def _get_plot_vars(self, simname, variables):
         vals = {"x_"+str(i):o[0] for i,o in enumerate(variables) if  o[2]=='vars'}
         return vals
-    def _get_plot_times(self, simname, obj_con_var):
-        vals = {n:get_text_time(o[3], end=self.mdl.times[-1]) for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
+    def _get_plot_times(self, simname, obj_con_var, endtime):
+        vals = {n:get_text_time(o[3], end=endtime) for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
         return vals
     def _get_var_times(self):
         vals = {"x_"+str(i):get_text_time(o[3]) for i,o in enumerate(self.variables) if o[2]=='vars'}
@@ -652,7 +656,7 @@ class ProblemInterface():
         objnames_ordered = [rev_all_to_plot[v] for v in vars_ordered if v in rev_all_to_plot]
         
         vartimes = self._get_var_times()
-        objcontimes = self._get_plot_times(simname, {**self.objectives, **self.constraints})
+        objcontimes = self._get_plot_times(simname, {**self.objectives, **self.constraints}, self._sims[simname]['mdlhists']['faulty']['time'][-1])
         times = {**vartimes, **objcontimes}
         current_vars = self.get_var_obj_con()
         for i, val in enumerate(objnames_ordered):
@@ -732,7 +736,7 @@ class ProblemInterface():
         self.simulations[simname][2]['new_params'].update(newparams)
         update_sequence(newsequence, {0:{'disturbances':newvars}})
         if self.simulations[simname][0]=='single':
-            update_sequence(self.simulations[simname][1][0], newsequence)
+            update_sequence(self.simulations[simname][2].get('sequence',{}), newsequence)
         elif self.simulations[simname][0]=='multi':
             for i,_ in enumerate(self.simulations[simname][1][0]):
                 update_sequence(self.simulations[simname][1][0][i], newsequence)

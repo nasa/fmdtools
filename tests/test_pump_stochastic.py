@@ -24,7 +24,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         testvals = [6.32173873679189, 10.56678004828189, 37.27832255997974, 15.163623336729625,  0.10687727708471972, 5.313965836539551, 54.568223188266394, 33.79026902541023, 7.636851629723572]
         for i in range(1,10):
             self.mdl.update_seed(i)
-            propagate.propagate(self.mdl, {}, i, run_stochastic='track_pdf')
+            propagate.propagate(self.mdl, i, run_stochastic='track_pdf')
             pd = self.mdl.return_probdens()
             self.assertAlmostEqual(pd, testvals[i-1])
     def test_run_safety(self):
@@ -32,12 +32,12 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         for seed in [None, 1, 10, 209840]:
             mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':seed})
             seed0 = mdl.seed
-            endresults_1, resgraph_1, mdlhist_1=propagate.nominal(mdl, run_stochastic=True)
+            endresults_1, mdlhist_1=propagate.nominal(mdl, run_stochastic=True)
             endclasses_1, mdlhists_1=propagate.single_faults(mdl, run_stochastic=True, showprogress=False)
             if seed==None: seed=mdl.seed
             mdl2 = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':seed})
             seed1 = mdl2.seed
-            endresults_2, resgraph_2, mdlhist_2=propagate.nominal(mdl2, run_stochastic=True)
+            endresults_2,  mdlhist_2=propagate.nominal(mdl2, run_stochastic=True)
             endclasses_2, mdlhists_2=propagate.single_faults(mdl2, run_stochastic=True, showprogress=False)
             seed2 = mdl.seed
             self.assertEqual(seed0, seed1,seed2)
