@@ -7,6 +7,7 @@ Created on Tue Jul 19 18:29:42 2022
 import sys, os
 
 sys.path.insert(0, os.path.join('..','..'))
+sys.path.insert(0, os.path.join('..'))
 
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp as rd
@@ -62,8 +63,8 @@ def f_2(sol):
         hspace_min=100
         for j in range(len(sol)):
             if i != j:
-                hspace_dist = math.sqrt(((sol[i][0]-sol[j][0])/DRIFT_RANGE)**2+((sol[i][1]-sol[j][1])/FRIC_RANGE)**2 
-                                                    +((sol[i][2]-sol[j][2])/TRANSFER_RANGE)**2)
+                hspace_dist = math.sqrt(((sol[i][0]-sol[j][0])/FRIC_RANGE)**2+((sol[i][1]-sol[j][1])/TRANSFER_RANGE)**2 
+                                                    +((sol[i][2]-sol[j][2])/DRIFT_RANGE)**2)
                 if hspace_dist < hspace_min: hspace_min = hspace_dist
                 #hspace_sum += math.sqrt(((pop[i][0]-pop[j][0])/DRIFT_RANGE)**2+((pop[i][1]-pop[j][1])/FRIC_RANGE)**2 
                 #                                    +((pop[i][2]-pop[j][2])/TRANSFER_RANGE)**2)
@@ -77,8 +78,8 @@ def f_12_mult(w,sol):
         hspace_min=100
         for j in range(len(sol)):
             if i != j:
-                hspace_dist = math.sqrt(((sol[i][0]-sol[j][0])/DRIFT_RANGE)**2+((sol[i][1]-sol[j][1])/FRIC_RANGE)**2 
-                                                    +((sol[i][2]-sol[j][2])/TRANSFER_RANGE)**2)
+                hspace_dist = math.sqrt(((sol[i][0]-sol[j][0])/FRIC_RANGE)**2+((sol[i][1]-sol[j][1])/TRANSFER_RANGE)**2 
+                                                    +((sol[i][2]-sol[j][2])/DRIFT_RANGE)**2)
                 if hspace_dist < hspace_min: hspace_min = hspace_dist
                 #hspace_sum += math.sqrt(((pop[i][0]-pop[j][0])/DRIFT_RANGE)**2+((pop[i][1]-pop[j][1])/FRIC_RANGE)**2 
                 #                                    +((pop[i][2]-pop[j][2])/TRANSFER_RANGE)**2)
@@ -109,20 +110,6 @@ def evalTotDist(w,individual):
     return w*norm_f1*f_1(individual)+(1-w)*norm_f2*f_2(individual)
 
 # OBJECTIVES: FORMULATION 2
-def end_dists(ind):
-    newmdl=mdl_ft.copy()
-    newmdl.fxns['Drive'].mode_state_dict['custom_fault']={'friction':ind[0],'drift':ind[1], 'transfer':ind[2]}
-    
-    scen = prop.construct_nomscen(newmdl)
-    scen['faults']['Drive']="custom_fault"
-    scen['properties']['function']="Drive"
-    scen['properties']['fault']="custom_fault"
-    scen['properties']['time']=fault_time
-    faultmdlhist, _, t_end = prop.prop_one_scen(newmdl, scen, staged=True, prevhist=mdlhist_nom, track='none')
-    
-    enddist = np.sqrt((mdl.flows["Ground"].x - newmdl.flows["Ground"].x)**2+(mdl.flows["Ground"].y - newmdl.flows["Ground"].y)**2)
-    endpt = [newmdl.flows["Ground"].x, newmdl.flows["Ground"].y]
-    return enddist, endpt
 def f_3(sol):
     """Calculates total distance from the end=point for the solutions"""
     return np.sum([ind.enddist for ind in sol])
@@ -158,9 +145,9 @@ def cxHealthStates(ind1,ind2):
 
 """mutation function"""
 def mutHealthStates(individual, sigma=0.25):
-    minv = [FRIC_LB, DRIFT_LB, TRANSFER_LB]
-    maxv= [FRIC_UB, DRIFT_UB, TRANSFER_UB]
-    rangev = [FRIC_RANGE, DRIFT_RANGE,TRANSFER_RANGE]
+    minv = [FRIC_LB, TRANSFER_LB, DRIFT_LB]
+    maxv= [FRIC_UB, TRANSFER_UB, DRIFT_UB]
+    rangev = [FRIC_RANGE,TRANSFER_RANGE, DRIFT_RANGE]
     if len(individual) > 0:
         for i,val in enumerate(individual):
             newval = random.gauss(val, sigma*rangev[i])
@@ -171,8 +158,8 @@ def mutHealthStates(individual, sigma=0.25):
             #    individual[i]= random.triangular(minv[i], maxv[i], val)
     else:
         individual.add(random.uniform(FRIC_LB,FRIC_UB),
-                       random.uniform(DRIFT_LB, DRIFT_UB),
-                       random.uniform(TRANSFER_LB, TRANSFER_UB))
+                       random.uniform(TRANSFER_LB, TRANSFER_UB),
+                       random.uniform(DRIFT_LB, DRIFT_UB))
     return individual
 
 def eval_pop_linedist(pop):
@@ -226,8 +213,8 @@ def plot_hspace(species, title="Faulty State-Space", filename="", ax=False):
     #ax = plt.axes(projection='3d')
     #set axes ranges
     ax.set_xlim(FRIC_LB,FRIC_UB)
-    ax.set_ylim(DRIFT_LB,DRIFT_UB)
-    ax.set_zlim(TRANSFER_LB,TRANSFER_UB)
+    ax.set_ylim(TRANSFER_LB,TRANSFER_UB)
+    ax.set_zlim(DRIFT_LB,DRIFT_UB)
     
     #labels
     ax.set_xlabel("Friction")
@@ -282,7 +269,7 @@ def plot_fitness(generation,rep_fitness):
     
     return figg.savefig('perform_random.pdf', format="pdf", bbox_inches = 'tight', pad_inches = 0.0)
 
-def montecarlo(extended=True, verbose=True, ngen=2, show_sol=True, weight=0.5, filename='rslt_random.csv', formulation=1):    
+def montecarlo(verbose=True, ngen=2, show_sol=True, weight=0.5, filename='rslt_random.csv', formulation=1):    
     start = time.time()
     toolbox = setup_opt(mc=True, formulation=formulation)
     g = 0 
@@ -331,7 +318,7 @@ def montecarlo(extended=True, verbose=True, ngen=2, show_sol=True, weight=0.5, f
 
     return rslt, soln
 
-def ea(extended=True, verbose=True, ngen = 5, show_space_during_opt=False, show_sol=True, weight=0.5, filename='rslt_ea.csv', formulation=1):    
+def ea(verbose=True, ngen = 5, show_space_during_opt=False, show_sol=True, weight=0.5, filename='rslt_ea.csv', formulation=1):    
     start = time.time()
     toolbox = setup_opt(formulation=formulation)
     #initialize counter for generations
@@ -403,7 +390,7 @@ def ea(extended=True, verbose=True, ngen = 5, show_space_during_opt=False, show_
     
     return rslt, sol
 
-def ccea(extended=True, verbose=True, ngen = 2,show_space_during_opt=False, show_sol=True, weight=0.5, filename='rslt_ccea.csv', formulation=1):    
+def ccea(verbose=True, ngen = 2,show_space_during_opt=False, show_sol=True, weight=0.5, filename='rslt_ccea.csv', formulation=1):    
     start = time.time()
     
     toolbox = setup_opt(ccea=True, formulation=formulation)
@@ -496,13 +483,13 @@ def setup_opt(ccea=False, mc=False, formulation=1):
     toolbox = base.Toolbox()
     
     toolbox.register('attr_fric', random.uniform, FRIC_LB,FRIC_UB)
-    toolbox.register('attr_drift', random.uniform, DRIFT_LB,DRIFT_UB)
     toolbox.register('attr_transfer', random.uniform, TRANSFER_LB, TRANSFER_UB)
+    toolbox.register('attr_drift', random.uniform, DRIFT_LB,DRIFT_UB)
     toolbox.register('point', tools.initCycle, creator.Point,
-                    (toolbox.attr_fric, toolbox.attr_drift, toolbox.attr_transfer), n=NCYCLES)
+                    (toolbox.attr_fric, toolbox.attr_transfer, toolbox.attr_drift), n=NCYCLES)
     if ccea:
         toolbox.register('individual', tools.initCycle, creator.Individual,
-                        (toolbox.attr_fric, toolbox.attr_drift, toolbox.attr_transfer), n=NCYCLES)
+                        (toolbox.attr_fric, toolbox.attr_transfer, toolbox.attr_drift), n=NCYCLES)
         toolbox.register('subpopulation', tools.initRepeat, list, toolbox.individual, SUBPOP_SIZE)
     elif mc:
         toolbox.register('individual', tools.initRepeat, creator.Individual, (toolbox.point), IND_SIZE)
@@ -548,12 +535,12 @@ def plot_hspaces(sol_dict, figsize=(4,12), v_padding=0.2):
     rd.plot.multiplot_legend_title(sol_dict, axs, ax, v_padding=v_padding)
     return fig
 
-def plot_trajs(sol_dict, figsize=(4,12), v_padding=0.3):
+def plot_trajs(sol_dict, figsize=(4,12), v_padding=0.3, xlim=[15,25], ylim=[0,10]):
     fig, axs = plt.subplots(len(sol_dict), figsize=figsize)
     k=0
     for alg, sol in sol_dict.items():
         ax=axs[k]
-        visualizations(sol, method=alg, ax=ax, legend=False)
+        visualizations(sol, method=alg, ax=ax, legend=False, xlim=xlim, ylim=ylim)
         if k!=len(axs)-1: ax.set_xlabel("")
         k=k+1
     rd.plot.multiplot_legend_title(sol_dict, axs, ax, v_padding=v_padding, legend_loc=2)
@@ -569,7 +556,7 @@ def visualizations(soln, method="EA", figsize=(4,4), ax=False, legend=True, xlim
     app_range = SampleApproach(mdl_range, faults='Drive', phases={'drive':phases['Avionics']['drive']})
     endclasses_range, mdlhists_range = prop.approach(mdl_range, app_range, staged=True, showprogress=False, 
                                                      new_params={'params':rvr.gen_params('turn', start=5),
-                                                         'modelparams':{'use_end_condition':False, 'times':[0,end_time]}})    
+                                                         'modelparams':{'times':[0,end_time]}})    
     fig = rvr.plot_trajectories(mdlhists_range, app=app_range, faultlabel='Faulty Scenarios', faultalpha=0.5,title="Trajectories-"+method,show_labels=False, figsize=figsize, ax=ax, legend=legend)
     if not ax:
         ax = plt.gca()
@@ -579,12 +566,12 @@ def visualizations(soln, method="EA", figsize=(4,4), ax=False, legend=True, xlim
 
 NCYCLES = 1
 """params for health states which are upper and lower bounds"""
-FRIC_LB = 1
+FRIC_LB = 0
 FRIC_UB = 20
-DRIFT_LB = -0.5
-DRIFT_UB = 0.5
 TRANSFER_LB = 0
 TRANSFER_UB = 1
+DRIFT_LB = -0.5
+DRIFT_UB = 0.5
 
 IND_SIZE = 10 #number of points in individual SPECIES_SIZE
 POP_SIZE = 50 #number of individuals in population NUM_SPECIES
@@ -601,7 +588,7 @@ SUBPOP_SIZE = 50 #number of individuals in a subpopulation
 NUM_SUBPOP = 10 #number of subpopulation
 
 #nominal scenario info (used to find when to inject faults in nominal scenario)
-mdl = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':{'custom_fault':{'friction':1.0,'drift':0.0, 'transfer':0.0}}})
+mdl = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':{'custom_fault':{'friction':0.0, 'transfer':0.0,'drift':0.0}}})
 _, mdlhists_nom = prop.nominal(mdl)
 phases, modephases = rd.process.modephases(mdlhists_nom)
 app= SampleApproach(mdl, faults='Drive', phases={'drive':phases['Avionics']['drive']})
@@ -629,18 +616,18 @@ if __name__=="__main__":
     
     weights = [0.0, 0.25, 0.5, 0.75, 1.0]
     
-    #weight_sols = {}; weight_results = {}
-    #for i, w in enumerate(weights):
-    #    results = pd.read_csv("results/result2_weight_"+str(i)+".csv")
-    #    weight_sols["w="+str(w)] = eval(results["Best_Sol"].iloc[-1])
-    #fig = plot_trajs(weight_sols, v_padding=0.35)
+    weight_sols = {}; weight_results = {}
+    for i, w in enumerate(weights):
+        results = pd.read_csv("results/result2_weight_"+str(i)+".csv")
+        weight_sols["w="+str(w)] = eval(results["Best_Sol"].iloc[-1])
+    fig = plot_trajs(weight_sols, v_padding=0.35)
     
-    
-    #for i, w in enumerate(weights):
-    #    endpts = [line_dist_faster(i)[2] for i in weight_sols["w="+str(w)]]
-    #    endptx = [e[0] for e in endpts]
-    #    endpty = [e[1] for e in endpts]
-    #    plt.scatter(endptx, endpty)
+    axs=fig.get_axes()
+    for i, w in enumerate(weights):
+        endpts = [line_dist_faster(i)[2] for i in weight_sols["w="+str(w)]]
+        endptx = [e[0] for e in endpts]
+        endpty = [e[1] for e in endpts]
+        axs[i].scatter(endptx, endpty)
     
     #result_mc, sol_mc= montecarlo(ngen=10, weight=0.5, filename="")
     #result_ea, sol_ea= ea(ngen=10, weight=0.5, filename="")

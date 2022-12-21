@@ -488,7 +488,7 @@ def approach(mdl, app,  **kwargs):
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
     kwargs.update(pack_run_kwargs(**kwargs))
-    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **kwargs)
+    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **kwargs, use_end_condition=False)
     scenlist = app.scenlist
     results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, **kwargs, nomhist=nomhist, nomresult=nomresult)
     mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
@@ -526,7 +526,7 @@ def single_faults(mdl, **kwargs):
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
     kwargs.update(pack_run_kwargs(**kwargs))
-    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, mdl.times,**kwargs)
+    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, mdl.times,**kwargs, use_end_condition=False)
     
     scenlist = list_init_faults(mdl)
     results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, **kwargs, nomhist=nomhist, nomresult=nomresult)

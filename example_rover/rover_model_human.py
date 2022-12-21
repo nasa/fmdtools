@@ -67,7 +67,7 @@ class Operations(FxnBlock):
 class Drive(FxnBlock):
     def __init__(self, name, flows, params):
         super().__init__(name, flows, flownames={"EE_15":"EE_in"})
-        base_f, base_d = params.get('friction', 0.0)+1.0, params.get('drift', 0.0)
+        base_f, base_d = params.get('friction', 0.0), params.get('drift', 0.0)
 
         self.assoc_faultstates({'friction':[base_f, {(base_f+0.5), 2*(base_f+0.5), 5*(base_f+0.5)}], 'drift':[base_d, {base_d+0.2, base_d-0.2}], 'transfer':[1.0,{0.0}]}, 'all')
 
