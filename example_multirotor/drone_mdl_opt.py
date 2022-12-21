@@ -311,7 +311,6 @@ class Drone(Model):
         self.add_flow('EEctl', {'rate':1.0, 'effort':1.0})
         self.add_flow('Ctl1', {'forward':0.0, 'upward':1.0})
         self.add_flow('DOFs', {'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0, 'x':0.0,'y':0.0,'z':0.0})
-        # custom flows
         self.add_flow('Des_traj', {'x':0.0, 'y':0.0, 'z':0.0, 'power': 1.0})
         #add functions to the model
         flows=['EEctl', 'Force_ST', 'HSig_DOFs', 'HSig_Bat', 'RSig_Traj']
