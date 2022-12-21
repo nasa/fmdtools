@@ -77,33 +77,33 @@ class Drive(FxnBlock):
         super().__init__(name, flows, flownames={"EE_15":"EE_in"})
 
         if params['drive_modes']=='degradation':
-            base_f, base_d = params.get('friction', 0.0)+1.0, params.get('drift', 0.0)
-            self.assoc_faultstates({'friction':[base_f, {(base_f+0.5), 2*(base_f+0.5), 5*(base_f+0.5)}], 'drift':[base_d, {base_d+0.2, base_d-0.2}], 'transfer':[1.0,{0.0}]}, 'all')
+            base_f, base_d = params.get('friction', 0.0), params.get('drift', 0.0)
+            self.assoc_faultstates({'friction':[base_f, {(base_f+0.5), 2*(base_f+0.5), 5*(base_f+0.5)}], 'transfer':[1.0,{0.0}], 'drift':[base_d, {base_d+0.2, base_d-0.2}]}, 'all')
         elif type(params['drive_modes'])==int:
-            self.assoc_faultstates({'friction':np.linspace(1.0,20, 100), 'transfer':np.linspace(1.0,0.0, 100), 'drift':[0.0, np.linspace(-0.5,0.5, 100)]}, params['drive_modes'])
+            self.assoc_faultstates({'friction':[0.0, np.linspace(0.0,20, 100)], 'transfer':np.linspace(1.0,0.0, 100), 'drift':[0.0, np.linspace(-0.5,0.5, 100)]}, params['drive_modes'])
         elif type(params['drive_modes'])==list:
-            self.assoc_faultstates({'friction':1.0, 'transfer':1.0, 'drift':0.0}, 'none')
+            self.assoc_faultstates({'friction':0.0, 'transfer':1.0, 'drift':0.0}, 'none')
             manual_modes ={'s_'+str(i):{'friction':mode[0], 'transfer':mode[1], 'drift':mode[2]} for i,mode in enumerate(params['drive_modes'])}
             self.assoc_faultstate_modes(manual_modes=manual_modes)
         elif  'set' in params['drive_modes']:
-            self.assoc_faultstates({'friction':{1.5,3.0,10.0}, 'transfer':{0.5,0.0}, 'drift':[0.0, {-0.2,0.2}]}, 'all')
+            self.assoc_faultstates({'friction':[0.0, {1.5,3.0,10.0}], 'transfer':{0.5,0.0}, 'drift':[0.0, {-0.2,0.2}]}, 'all')
             if 'manual' in params['drive_modes']:
                 self.assoc_faultstate_modes(manual_modes={'elec_open':{'transfer':0.0}, 'stuck':{'friction':10.0}, 'stuck_right':{'friction':3.0, 'drift':0.2},
                                                            'stuck_left':{'friction':3.0, 'drift':-0.2}})
         elif 'range' in params['drive_modes']:
             if 'all' in params['drive_modes']:
-                self.assoc_faultstates({'friction':np.linspace(1.0,20, 10), 'transfer':np.linspace(1.0,0.0, 10), 'drift':[0.0, np.linspace(-0.5,0.5, 10)]}, 'all')
+                self.assoc_faultstates({'friction':[0.0,np.linspace(0.0,20, 10)], 'transfer':np.linspace(1.0,0.0, 10), 'drift':[0.0, np.linspace(-0.5,0.5, 10)]}, 'all')
             else:
-                self.assoc_faultstates({'friction':np.linspace(1.0,20, 100), 'transfer':np.linspace(1.0,0.0, 100), 'drift':[0.0, np.linspace(-0.5,0.5, 100)]}, 1000)
+                self.assoc_faultstates({'friction':[0.0,np.linspace(0.0,20, 100)], 'transfer':np.linspace(1.0,0.0, 100), 'drift':[0.0, np.linspace(-0.5,0.5, 100)]}, 1000)
             if 'manual' in params['drive_modes']:
                 self.assoc_faultstate_modes(manual_modes={'elec_open':{'transfer':0.0}, 'stuck':{'friction':10.0}, 'stuck_right':{'friction':3.0, 'drift':0.2},
                                                            'stuck_left':{'friction':3.0, 'drift':-0.2}})
         elif params['drive_modes']=='manual':
-            self.assoc_faultstates({'friction':1.0, 'transfer':1.0, 'drift':0.0}, 'none')
+            self.assoc_faultstates({'friction':0.0, 'transfer':1.0, 'drift':0.0}, 'none')
             self.assoc_faultstate_modes(manual_modes={'elec_open':{'transfer':0.0}, 'stuck':{'friction':10.0}, 'stuck_right':{'friction':3.0, 'drift':0.2},
                                                        'stuck_left':{'friction':3.0, 'drift':-0.2}})
         elif  type(params['drive_modes'])==dict:
-            self.assoc_faultstates({'friction':1.0, 'transfer':1.0, 'drift':0.0}, 'none')
+            self.assoc_faultstates({'friction':0.0, 'transfer':1.0, 'drift':0.0}, 'none')
             self.assoc_faultstate_modes(manual_modes=params['drive_modes'])
         self.key_phases_by='global'
     def dynamic_behavior(self, time):
