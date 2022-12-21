@@ -14,7 +14,6 @@ import numpy as np
 import pandas as pd
 import fmdtools.faultsim as fs
 import fmdtools.resultdisp as rd
-import quadpy
 from IPython.display import HTML
 
 from fmdtools.modeldef import FxnBlock

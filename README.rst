@@ -8,7 +8,7 @@ The main impetus for the development of the fmdtools project was a lack existing
 
 1. Model definition constructs which enable systematic early specification of the high level structure and behaviors of a system with concise syntax (fmdtools.modeldef).
 
-2. Simulation methods which enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios over a wide range of model types (fmdtools.faultsim).
+2. Simulation methods which enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios and model types (fmdtools.faultsim).
 
 3. Analysis methods for quantifying resilience and summarizing and visualizing behaviors and properties of interest (fmdtools.resultdisp).
 
@@ -32,8 +32,10 @@ fmdtools was developed with a number of unique features that differentiate it fr
   - Adding dynamic states and behaviors to the functions as well as a simulation times and operational phases in a dynamic propagation model to simulate the dynamic effects of faults simulated during different time-steps
   
   - Instantiating functions with component architectures to compare the expected resilience and behaviors of each
-  o
+  
   - Defining stochastic behavioral and input parameters to simulate and analyze system resilience throughout the operational envelope
+  
+  - Using optimization methods to search the space of potential hazardous scenarios and find the optimal response parameters to mitigate these scenarios
 
 - fmdtools provides convenience methods for quickly visualizing the results of fault simulations with commonly-used Python libraries to enable one to quickly assess:
   
@@ -92,6 +94,7 @@ These packages are optional but recommended to enable specific fmdtools use-case
    quadpy 				#(for quadrature sampling)
    ffmpeg 				#(for animations)
    shapely				#(for multirotor model)
+   deap					#(for optimization of rover faults)
    pycallgraph2				#(for model profiling)
 
 These must be installed (e.g. using ``pip install packagename`` or ``conda install packagename``) them before running any of the codes in the repository. 
@@ -111,7 +114,7 @@ Contributors
 
 `Daniel Hulse <https://github.com/hulsed>`_ : Primary Author and point-of-contact
 
-`Lukman Irshad <https://ti.arc.nasa.gov/profile/irshad/>`_ : Action Sequence Graph
+`Lukman Irshad <https://ti.arc.nasa.gov/profile/irshad/>`_ : Action Sequence Graph, Degradation Models, Rover Model, etc
 
 `Hannah Walsh <https://github.com/walshh>`_ : Network Analysis Codes
 
