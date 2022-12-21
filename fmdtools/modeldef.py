@@ -2616,7 +2616,8 @@ class SampleApproach():
                         oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
                     else:
                         opplist = self._fxnmodes[fxnname, mode]['oppvect']
-                        oppvect.update({phase:opplist[i] for (i, phase) in enumerate(fxnphases)})
+                        if len(opplist)>1:  oppvect.update({phase:opplist[i] for (i, phase) in enumerate(fxnphases)})
+                        else:               oppvect.update({phase:opplist[0] for (i, phase) in enumerate(fxnphases)})
             for phase, times in fxnphases.items():
                 opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
                 
