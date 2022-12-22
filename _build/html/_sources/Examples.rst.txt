@@ -65,6 +65,27 @@ After completing the workshop, it can be helpful to run through the following no
   
   - Using :func:`fmdtools.resultdisp.plot.mdlhists()` to visualize the results of multiple stochastic simulations over time, and analyze quantities of interest using :func:`fmdtools.resultdisp.tabulate.nested_stats()`, :func:`fmdtools.resultdisp.tabulate.resilience_factor_comparison()`
 
+A number of more advanced techniques have been developed using the rover model in `example_rover`. `Rover Setup Notebook <example_rover/Rover Setup Notebook.ipynb>`_ , introduces this model, which is then used to:
+
+  - Showcase fmdtools human factors modelling capabilities (action sequence graphs, performance shaping factors, etc.) in `HFAC Analyses <example_rover/HFAC Analyses.ipynb>`_ and `IDETC_Human_Paper_Analysis <example_rover/IDETC_Human_Paper_Analysis.ipynb>`_
+  
+  - Show how degradation models can be used to sample resilience model parameters in `Degradation Modelling Notebook <example_rover/degradation_modelling/Degradation Modelling Notebook.ipynb>`_
+
+  - Show how fault scenarios can be exhaustively generated to augment hazard identification in `Rover Mode Notebook <example_rover/fault_sampling/Rover Mode Notebook.ipynb>`_
+  
+  - Show a method for searching the faulty state-space to find a unique set of hazardous scenarios in `Search Comparison <example_rover/optimization/Search Comparison.ipynb>`_ 
+  
+  - Demonstrate the optimization of parameters over a set of fault scenarios using :class:`ProblemInterface` in `Rover Response Optimization <example_rover/optimization/Rover Response Optimization.ipynb>`_ 
+
+The following notebooks showcase the optimization interfaces in :module:`fmdtools.faultsim.search`:
+
+  - `Optimization <example_pump/Optimization.ipynb>`_ shows some of the basics of working with the :class:`fmdtools.faultsim.search.ProblemInterface` class for optimization. 
+
+  - `AST Sampling <example_pump/AST_Sampling.ipynb>`_ shows how fmdtools models called from the AdaSress Julia package to leverage the adaptive stress testing methodology using the :class:`fmdtools.faultsim.search.DynamicInterface` class.
+ 
+  - `Multirotor Optimization <example_multirotor/Multirotor Optimization.ipynb>`_ shows how the design, operations, and contingency management of a system can be co-optimized with the :class:`fmdtools.faultsim.search.ProblemInterface` class. 
+  
+  - `Tank Optimization <example_tank/Tank Optimization.ipynb>`_ shows how design and contingency management of a system can be co-optimized with the :class:`fmdtools.faultsim.search.ProblemInterface` class, as well as external solvers.
 
 There are also two other example models which demonstrate specialized use-cases:
 
@@ -85,3 +106,14 @@ There are also two other example models which demonstrate specialized use-cases:
    example_pump/Stochastic_Modelling.ipynb
    example_tank/Tank_Analysis.ipynb
    example_eps/EPS_Example_Notebook.ipynb
+   example_rover/Rover Setup Notebook.ipynb
+   example_rover/HFAC Analyses.ipynb
+   example_rover/IDETC_Human_Paper_Analysis.ipynb
+   example_rover/degradation_modelling/Degradation Modelling Notebook.ipynb
+   example_rover/fault_sampling/Rover Mode Notebook.ipynb
+   example_rover/optimization/Rover Response Optimization.ipynb
+   example_pump/Optimization.ipynb
+   example_pump/AST_Sampling.ipynb
+   example_multirotor/Multirotor Optimization.ipynb
+   example_tank/Tank Optimization.ipynb
+

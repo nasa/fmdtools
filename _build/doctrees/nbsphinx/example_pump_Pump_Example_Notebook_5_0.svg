@@ -1,99 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="301pt" height="248pt" viewBox="0.00 0.00 300.65 247.65">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 243.65)">
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-243.65 296.65,-243.65 296.65,4 -4,4"/>
-<!-- ImportEE&#45;&#45;EE_1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="293pt" height="218pt" viewBox="0.00 0.00 293.00 218.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 214)">
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-214 289,-214 289,4 -4,4"/>
+<!-- ImportEE&#45;&#45;MoveWater -->
 <g id="edge1" class="edge">
-<title>ImportEE--EE_1</title>
-<path fill="none" stroke="black" d="M230.05,-203.55C224.45,-197.95 218.33,-191.83 212.91,-186.41"/>
+<title>ImportEE--MoveWater</title>
+<path fill="none" stroke="lightgray" d="M55.33,-173.8C72.33,-159.05 96.7,-137.92 113.7,-123.18"/>
+<text text-anchor="middle" x="106" y="-144.8" font-family="Times New Roman,serif" font-size="14.00">EE_1</text>
 </g>
-<!-- ImportWater&#45;&#45;Wat_1 -->
+<!-- ImportWater&#45;&#45;MoveWater -->
 <g id="edge2" class="edge">
-<title>ImportWater--Wat_1</title>
-<path fill="none" stroke="black" d="M62.59,-36.09C67.97,-41.47 73.82,-47.32 79.07,-52.57"/>
+<title>ImportWater--MoveWater</title>
+<path fill="none" stroke="lightgray" d="M133.5,-173.8C133.5,-159.05 133.5,-137.92 133.5,-123.18"/>
+<text text-anchor="middle" x="152.5" y="-144.8" font-family="Times New Roman,serif" font-size="14.00">Wat_1</text>
 </g>
-<!-- ImportSignal&#45;&#45;Sig_1 -->
+<!-- ImportSignal&#45;&#45;MoveWater -->
 <g id="edge3" class="edge">
-<title>ImportSignal--Sig_1</title>
-<path fill="none" stroke="black" d="M62.59,-203.55C68.19,-197.95 74.32,-191.83 79.74,-186.41"/>
+<title>ImportSignal--MoveWater</title>
+<path fill="none" stroke="lightgray" d="M218.85,-173.8C200.28,-159.05 173.68,-137.92 155.12,-123.18"/>
+<text text-anchor="middle" x="209" y="-144.8" font-family="Times New Roman,serif" font-size="14.00">Sig_1</text>
 </g>
-<!-- MoveWater&#45;&#45;EE_1 -->
+<!-- MoveWater&#45;&#45;ExportWater -->
 <g id="edge4" class="edge">
-<title>MoveWater--EE_1</title>
-<path fill="none" stroke="black" d="M164.42,-137.92C170.02,-143.52 176.14,-149.64 181.56,-155.06"/>
-</g>
-<!-- MoveWater&#45;&#45;Sig_1 -->
-<g id="edge5" class="edge">
-<title>MoveWater--Sig_1</title>
-<path fill="none" stroke="black" d="M128.23,-137.92C122.63,-143.52 116.51,-149.64 111.08,-155.06"/>
-</g>
-<!-- MoveWater&#45;&#45;Wat_1 -->
-<g id="edge6" class="edge">
-<title>MoveWater--Wat_1</title>
-<path fill="none" stroke="black" d="M128.23,-101.73C122.86,-96.36 117.01,-90.51 111.75,-85.25"/>
-</g>
-<!-- MoveWater&#45;&#45;Wat_2 -->
-<g id="edge7" class="edge">
-<title>MoveWater--Wat_2</title>
-<path fill="none" stroke="black" d="M164.42,-101.73C169.79,-96.36 175.64,-90.51 180.9,-85.25"/>
-</g>
-<!-- ExportWater&#45;&#45;Wat_2 -->
-<g id="edge8" class="edge">
-<title>ExportWater--Wat_2</title>
-<path fill="none" stroke="black" d="M230.05,-36.09C224.68,-41.47 218.83,-47.32 213.57,-52.57"/>
+<title>MoveWater--ExportWater</title>
+<path fill="none" stroke="lightgray" d="M133.5,-86.8C133.5,-72.05 133.5,-50.92 133.5,-36.18"/>
+<text text-anchor="middle" x="152.5" y="-57.8" font-family="Times New Roman,serif" font-size="14.00">Wat_2</text>
 </g>
 <!-- ImportEE -->
 <g id="node1" class="node">
 <title>ImportEE</title>
-<polygon fill="lightgray" stroke="black" points="283.65,-239.65 212.65,-239.65 212.65,-203.65 283.65,-203.65 283.65,-239.65"/>
-<text text-anchor="middle" x="248.15" y="-217.95" font-family="Times New Roman,serif" font-size="14.00">ImportEE</text>
+<polygon fill="lightgray" stroke="black" points="71,-210 0,-210 0,-174 71,-174 71,-210"/>
+<text text-anchor="middle" x="35.5" y="-188.3" font-family="Times New Roman,serif" font-size="14.00">ImportEE</text>
 </g>
 <!-- ImportWater -->
 <g id="node2" class="node">
 <title>ImportWater</title>
-<polygon fill="lightgray" stroke="black" points="89,-36 0,-36 0,0 89,0 89,-36"/>
-<text text-anchor="middle" x="44.5" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">ImportWater</text>
+<polygon fill="lightgray" stroke="black" points="178,-210 89,-210 89,-174 178,-174 178,-210"/>
+<text text-anchor="middle" x="133.5" y="-188.3" font-family="Times New Roman,serif" font-size="14.00">ImportWater</text>
 </g>
 <!-- ImportSignal -->
 <g id="node3" class="node">
 <title>ImportSignal</title>
-<polygon fill="lightgray" stroke="black" points="89,-239.65 0,-239.65 0,-203.65 89,-203.65 89,-239.65"/>
-<text text-anchor="middle" x="44.5" y="-217.95" font-family="Times New Roman,serif" font-size="14.00">ImportSignal</text>
+<polygon fill="lightgray" stroke="black" points="285,-210 196,-210 196,-174 285,-174 285,-210"/>
+<text text-anchor="middle" x="240.5" y="-188.3" font-family="Times New Roman,serif" font-size="14.00">ImportSignal</text>
 </g>
 <!-- MoveWater -->
 <g id="node4" class="node">
 <title>MoveWater</title>
-<polygon fill="lightgray" stroke="black" points="187.82,-137.82 104.82,-137.82 104.82,-101.82 187.82,-101.82 187.82,-137.82"/>
-<text text-anchor="middle" x="146.32" y="-116.12" font-family="Times New Roman,serif" font-size="14.00">MoveWater</text>
+<polygon fill="lightgray" stroke="black" points="175,-123 92,-123 92,-87 175,-87 175,-123"/>
+<text text-anchor="middle" x="133.5" y="-101.3" font-family="Times New Roman,serif" font-size="14.00">MoveWater</text>
 </g>
 <!-- ExportWater -->
 <g id="node5" class="node">
 <title>ExportWater</title>
-<polygon fill="lightgray" stroke="black" points="292.65,-36 203.65,-36 203.65,0 292.65,0 292.65,-36"/>
-<text text-anchor="middle" x="248.15" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">ExportWater</text>
-</g>
-<!-- EE_1 -->
-<g id="node6" class="node">
-<title>EE_1</title>
-<ellipse fill="lightgray" stroke="black" cx="197.24" cy="-170.74" rx="30.59" ry="18"/>
-<text text-anchor="middle" x="197.24" y="-167.04" font-family="Times New Roman,serif" font-size="14.00">EE_1</text>
-</g>
-<!-- Sig_1 -->
-<g id="node7" class="node">
-<title>Sig_1</title>
-<ellipse fill="lightgray" stroke="black" cx="95.41" cy="-170.74" rx="31.7" ry="18"/>
-<text text-anchor="middle" x="95.41" y="-167.04" font-family="Times New Roman,serif" font-size="14.00">Sig_1</text>
-</g>
-<!-- Wat_1 -->
-<g id="node8" class="node">
-<title>Wat_1</title>
-<ellipse fill="lightgray" stroke="black" cx="95.41" cy="-68.91" rx="35.19" ry="18"/>
-<text text-anchor="middle" x="95.41" y="-65.21" font-family="Times New Roman,serif" font-size="14.00">Wat_1</text>
-</g>
-<!-- Wat_2 -->
-<g id="node9" class="node">
-<title>Wat_2</title>
-<ellipse fill="lightgray" stroke="black" cx="197.24" cy="-68.91" rx="35.19" ry="18"/>
-<text text-anchor="middle" x="197.24" y="-65.21" font-family="Times New Roman,serif" font-size="14.00">Wat_2</text>
+<polygon fill="lightgray" stroke="black" points="178,-36 89,-36 89,0 178,0 178,-36"/>
+<text text-anchor="middle" x="133.5" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">ExportWater</text>
 </g>
 </g>
 </svg>
