@@ -1,131 +1,131 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="656pt" height="468pt" viewBox="0.00 0.00 655.94 468.00">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="651pt" height="468pt" viewBox="0.00 0.00 650.94 468.00">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(36 432)">
-<polygon fill="white" stroke="transparent" points="-36,36 -36,-432 619.94,-432 619.94,36 -36,36"/>
-<!-- Rover&#45;&gt;Control_Rover -->
-<g id="edge1" class="edge">
-<title>Rover-&gt;Control_Rover</title>
-<path fill="none" stroke="black" d="M276.22,-360.25C288.73,-329.32 315.56,-263 330.62,-225.77"/>
-<polygon fill="black" stroke="black" points="334.03,-226.67 334.53,-216.09 327.54,-224.05 334.03,-226.67"/>
-</g>
-<!-- Rover&#45;&gt;GenericFxn -->
-<g id="edge2" class="edge">
-<title>Rover-&gt;GenericFxn</title>
-<path fill="none" stroke="black" d="M286.55,-362.43C322.98,-331.4 408.48,-258.59 451.99,-221.53"/>
-<polygon fill="black" stroke="black" points="454.26,-224.19 459.61,-215.04 449.73,-218.86 454.26,-224.19"/>
-</g>
+<polygon fill="white" stroke="transparent" points="-36,36 -36,-432 614.94,-432 614.94,36 -36,36"/>
 <!-- Rover&#45;&gt;Move_Rover -->
-<g id="edge3" class="edge">
+<g id="edge1" class="edge">
 <title>Rover-&gt;Move_Rover</title>
 <path fill="none" stroke="black" d="M262.77,-360.25C250.43,-329.32 223.97,-263 209.12,-225.77"/>
 <polygon fill="black" stroke="black" points="212.22,-224.08 205.26,-216.09 205.72,-226.68 212.22,-224.08"/>
 </g>
+<!-- Rover&#45;&gt;Control_Rover -->
+<g id="edge2" class="edge">
+<title>Rover-&gt;Control_Rover</title>
+<path fill="none" stroke="black" d="M276.22,-360.25C288.73,-329.32 315.56,-263 330.62,-225.77"/>
+<polygon fill="black" stroke="black" points="334.03,-226.67 334.53,-216.09 327.54,-224.05 334.03,-226.67"/>
+</g>
 <!-- Rover&#45;&gt;Store_Energy -->
-<g id="edge4" class="edge">
+<g id="edge3" class="edge">
 <title>Rover-&gt;Store_Energy</title>
 <path fill="none" stroke="black" d="M252.34,-362.43C216,-331.48 130.84,-258.96 87.23,-221.81"/>
 <polygon fill="black" stroke="black" points="89.47,-219.12 79.59,-215.3 84.93,-224.45 89.47,-219.12"/>
 </g>
-<!-- Control_Rover&#45;&gt;Comms -->
-<g id="edge8" class="edge">
-<title>Control_Rover-&gt;Comms</title>
-<path fill="none" stroke="black" d="M352.73,-180.25C373.93,-148.82 419.76,-80.83 444.61,-43.97"/>
-<polygon fill="black" stroke="black" points="447.76,-45.56 450.45,-35.31 441.95,-41.65 447.76,-45.56"/>
+<!-- Rover&#45;&gt;GenericFxn -->
+<g id="edge4" class="edge">
+<title>Rover-&gt;GenericFxn</title>
+<path fill="none" stroke="black" d="M286.55,-362.43C322.98,-331.4 408.48,-258.59 451.99,-221.53"/>
+<polygon fill="black" stroke="black" points="454.26,-224.19 459.61,-215.04 449.73,-218.86 454.26,-224.19"/>
 </g>
-<!-- Control_Rover&#45;&gt;EE -->
-<g id="edge9" class="edge">
-<title>Control_Rover-&gt;EE</title>
-<path fill="none" stroke="black" d="M327.99,-180.25C302.37,-148.37 246.54,-78.86 217.24,-42.4"/>
-<polygon fill="black" stroke="black" points="219.73,-39.9 210.74,-34.3 214.27,-44.29 219.73,-39.9"/>
-</g>
-<!-- Control_Rover&#45;&gt;Video -->
+<!-- Move_Rover&#45;&gt;Force -->
 <g id="edge6" class="edge">
-<title>Control_Rover-&gt;Video</title>
-<path fill="none" stroke="black" d="M360.82,-180.57C399.09,-148.14 484.3,-75.91 526.62,-40.04"/>
-<polygon fill="black" stroke="black" points="529.12,-42.51 534.48,-33.38 524.59,-37.17 529.12,-42.51"/>
-</g>
-<!-- Control_Rover&#45;&gt;Control -->
-<g id="edge5" class="edge">
-<title>Control_Rover-&gt;Control</title>
-<path fill="none" stroke="black" d="M320.99,-180.89C280.07,-148.66 188.16,-76.27 142.39,-40.23"/>
-<polygon fill="black" stroke="black" points="144.43,-37.37 134.41,-33.94 140.1,-42.87 144.43,-37.37"/>
-</g>
-<!-- Control_Rover&#45;&gt;Force -->
-<g id="edge7" class="edge">
-<title>Control_Rover-&gt;Force</title>
-<path fill="none" stroke="black" d="M335.12,-179.93C323.56,-148.75 298.95,-82.4 285.22,-45.37"/>
-<polygon fill="black" stroke="black" points="288.42,-43.92 281.66,-35.76 281.85,-46.35 288.42,-43.92"/>
-</g>
-<!-- GenericFxn&#45;&gt;Comms -->
-<g id="edge12" class="edge">
-<title>GenericFxn-&gt;Comms</title>
-<path fill="none" stroke="black" d="M476.81,-179.93C473.86,-148.97 467.59,-83.3 464.04,-46.13"/>
-<polygon fill="black" stroke="black" points="467.5,-45.64 463.07,-36.02 460.54,-46.3 467.5,-45.64"/>
-</g>
-<!-- GenericFxn&#45;&gt;EE -->
-<g id="edge14" class="edge">
-<title>GenericFxn-&gt;EE</title>
-<path fill="none" stroke="black" d="M454.57,-181.82C402.83,-148.93 280.62,-71.24 225.84,-36.42"/>
-<polygon fill="black" stroke="black" points="227.66,-33.43 217.34,-31.01 223.9,-39.33 227.66,-33.43"/>
-</g>
-<!-- GenericFxn&#45;&gt;Video -->
-<g id="edge10" class="edge">
-<title>GenericFxn-&gt;Video</title>
-<path fill="none" stroke="black" d="M485.44,-179.93C498.23,-148.75 525.45,-82.4 540.63,-45.37"/>
-<polygon fill="black" stroke="black" points="544.02,-46.34 544.57,-35.76 537.54,-43.68 544.02,-46.34"/>
-</g>
-<!-- GenericFxn&#45;&gt;Ground -->
-<g id="edge13" class="edge">
-<title>GenericFxn-&gt;Ground</title>
-<path fill="none" stroke="black" d="M467.72,-180.25C447.64,-148.9 404.27,-81.18 380.62,-44.25"/>
-<polygon fill="black" stroke="black" points="383.4,-42.11 375.06,-35.57 377.5,-45.88 383.4,-42.11"/>
-</g>
-<!-- GenericFxn&#45;&gt;Force -->
-<g id="edge11" class="edge">
-<title>GenericFxn-&gt;Force</title>
-<path fill="none" stroke="black" d="M460.07,-180.89C423.38,-148.72 341.03,-76.51 299.86,-40.41"/>
-<polygon fill="black" stroke="black" points="302.02,-37.65 292.2,-33.69 297.41,-42.91 302.02,-37.65"/>
-</g>
-<!-- Move_Rover&#45;&gt;EE -->
-<g id="edge18" class="edge">
-<title>Move_Rover-&gt;EE</title>
+<title>Move_Rover-&gt;Force</title>
 <path fill="none" stroke="black" d="M198.44,-179.93C198.44,-148.97 198.44,-83.3 198.44,-46.13"/>
 <polygon fill="black" stroke="black" points="201.94,-46.02 198.44,-36.02 194.94,-46.02 201.94,-46.02"/>
 </g>
 <!-- Move_Rover&#45;&gt;Control -->
-<g id="edge15" class="edge">
+<g id="edge5" class="edge">
 <title>Move_Rover-&gt;Control</title>
-<path fill="none" stroke="black" d="M190.49,-179.93C175.89,-148.62 144.74,-81.83 127.52,-44.9"/>
-<polygon fill="black" stroke="black" points="130.66,-43.34 123.26,-35.76 124.31,-46.3 130.66,-43.34"/>
+<path fill="none" stroke="black" d="M189.91,-179.93C174.25,-148.62 140.86,-81.83 122.39,-44.9"/>
+<polygon fill="black" stroke="black" points="125.43,-43.13 117.82,-35.76 119.16,-46.27 125.43,-43.13"/>
+</g>
+<!-- Move_Rover&#45;&gt;EE -->
+<g id="edge7" class="edge">
+<title>Move_Rover-&gt;EE</title>
+<path fill="none" stroke="black" d="M205.83,-179.93C219.35,-148.67 248.17,-82.06 264.16,-45.09"/>
+<polygon fill="black" stroke="black" points="267.55,-46.07 268.31,-35.5 261.13,-43.29 267.55,-46.07"/>
 </g>
 <!-- Move_Rover&#45;&gt;Ground -->
-<g id="edge16" class="edge">
+<g id="edge8" class="edge">
 <title>Move_Rover-&gt;Ground</title>
-<path fill="none" stroke="black" d="M213.76,-180.57C243.31,-148.89 308.28,-79.23 342.44,-42.59"/>
-<polygon fill="black" stroke="black" points="345.38,-44.57 349.64,-34.87 340.26,-39.8 345.38,-44.57"/>
+<path fill="none" stroke="black" d="M213.3,-180.57C241.96,-148.89 304.97,-79.23 338.11,-42.59"/>
+<polygon fill="black" stroke="black" points="340.97,-44.64 345.09,-34.87 335.78,-39.94 340.97,-44.64"/>
 </g>
-<!-- Move_Rover&#45;&gt;Force -->
-<g id="edge17" class="edge">
-<title>Move_Rover-&gt;Force</title>
-<path fill="none" stroke="black" d="M205.83,-179.93C219.32,-148.75 248.02,-82.4 264.04,-45.37"/>
-<polygon fill="black" stroke="black" points="267.44,-46.32 268.2,-35.76 261.01,-43.54 267.44,-46.32"/>
+<!-- Control_Rover&#45;&gt;Comms -->
+<g id="edge9" class="edge">
+<title>Control_Rover-&gt;Comms</title>
+<path fill="none" stroke="black" d="M352.47,-179.93C372.84,-148.41 416.44,-80.92 440.2,-44.14"/>
+<polygon fill="black" stroke="black" points="443.3,-45.8 445.79,-35.5 437.42,-42 443.3,-45.8"/>
 </g>
-<!-- Store_Energy&#45;&gt;EE -->
-<g id="edge20" class="edge">
-<title>Store_Energy-&gt;EE</title>
-<path fill="none" stroke="black" d="M73.43,-180.25C98.15,-148.37 152.04,-78.86 180.31,-42.4"/>
-<polygon fill="black" stroke="black" points="183.22,-44.35 186.58,-34.3 177.69,-40.06 183.22,-44.35"/>
+<!-- Control_Rover&#45;&gt;Force -->
+<g id="edge13" class="edge">
+<title>Control_Rover-&gt;Force</title>
+<path fill="none" stroke="black" d="M327.99,-180.25C302.5,-148.53 247.1,-79.56 217.68,-42.95"/>
+<polygon fill="black" stroke="black" points="220.13,-40.41 211.14,-34.8 214.68,-44.79 220.13,-40.41"/>
 </g>
-<!-- Store_Energy&#45;&gt;Control -->
-<g id="edge19" class="edge">
-<title>Store_Energy-&gt;Control</title>
-<path fill="none" stroke="black" d="M65.72,-179.93C75.33,-148.83 95.75,-82.73 107.21,-45.65"/>
-<polygon fill="black" stroke="black" points="110.58,-46.6 110.19,-36.02 103.89,-44.54 110.58,-46.6"/>
+<!-- Control_Rover&#45;&gt;Control -->
+<g id="edge10" class="edge">
+<title>Control_Rover-&gt;Control</title>
+<path fill="none" stroke="black" d="M320.45,-180.89C278.34,-148.58 183.62,-75.91 136.76,-39.96"/>
+<polygon fill="black" stroke="black" points="138.65,-37 128.59,-33.69 134.39,-42.55 138.65,-37"/>
+</g>
+<!-- Control_Rover&#45;&gt;EE -->
+<g id="edge11" class="edge">
+<title>Control_Rover-&gt;EE</title>
+<path fill="none" stroke="black" d="M335.12,-179.93C323.56,-148.75 298.95,-82.4 285.22,-45.37"/>
+<polygon fill="black" stroke="black" points="288.42,-43.92 281.66,-35.76 281.85,-46.35 288.42,-43.92"/>
+</g>
+<!-- Control_Rover&#45;&gt;Video -->
+<g id="edge12" class="edge">
+<title>Control_Rover-&gt;Video</title>
+<path fill="none" stroke="black" d="M360.36,-180.57C397.63,-148.22 480.49,-76.27 521.9,-40.31"/>
+<polygon fill="black" stroke="black" points="524.35,-42.82 529.6,-33.62 519.76,-37.54 524.35,-42.82"/>
 </g>
 <!-- Store_Energy&#45;&gt;Force -->
-<g id="edge21" class="edge">
+<g id="edge15" class="edge">
 <title>Store_Energy-&gt;Force</title>
-<path fill="none" stroke="black" d="M79.9,-180.89C118.94,-148.57 206.78,-75.85 250.19,-39.91"/>
-<polygon fill="black" stroke="black" points="252.53,-42.52 258,-33.44 248.06,-37.12 252.53,-42.52"/>
+<path fill="none" stroke="black" d="M73.43,-180.25C98.03,-148.53 151.49,-79.56 179.88,-42.95"/>
+<polygon fill="black" stroke="black" points="182.83,-44.85 186.19,-34.8 177.3,-40.56 182.83,-44.85"/>
+</g>
+<!-- Store_Energy&#45;&gt;Control -->
+<g id="edge14" class="edge">
+<title>Store_Energy-&gt;Control</title>
+<path fill="none" stroke="black" d="M65.14,-179.93C73.67,-148.97 91.74,-83.3 101.98,-46.13"/>
+<polygon fill="black" stroke="black" points="105.48,-46.59 104.76,-36.02 98.73,-44.73 105.48,-46.59"/>
+</g>
+<!-- Store_Energy&#45;&gt;EE -->
+<g id="edge16" class="edge">
+<title>Store_Energy-&gt;EE</title>
+<path fill="none" stroke="black" d="M79.9,-180.89C119.25,-148.32 208.16,-74.7 251.2,-39.07"/>
+<polygon fill="black" stroke="black" points="253.7,-41.55 259.17,-32.48 249.23,-36.16 253.7,-41.55"/>
+</g>
+<!-- GenericFxn&#45;&gt;Comms -->
+<g id="edge17" class="edge">
+<title>GenericFxn-&gt;Comms</title>
+<path fill="none" stroke="black" d="M476.34,-179.93C472.51,-148.97 464.39,-83.3 459.8,-46.13"/>
+<polygon fill="black" stroke="black" points="463.25,-45.51 458.55,-36.02 456.3,-46.37 463.25,-45.51"/>
+</g>
+<!-- GenericFxn&#45;&gt;Force -->
+<g id="edge21" class="edge">
+<title>GenericFxn-&gt;Force</title>
+<path fill="none" stroke="black" d="M454.57,-181.82C403.46,-149.33 283.57,-73.12 227.86,-37.7"/>
+<polygon fill="black" stroke="black" points="229.49,-34.59 219.18,-32.18 225.74,-40.5 229.49,-34.59"/>
+</g>
+<!-- GenericFxn&#45;&gt;EE -->
+<g id="edge18" class="edge">
+<title>GenericFxn-&gt;EE</title>
+<path fill="none" stroke="black" d="M460.07,-180.89C423.01,-148.4 339.39,-75.07 298.64,-39.34"/>
+<polygon fill="black" stroke="black" points="300.91,-36.68 291.09,-32.71 296.3,-41.94 300.91,-36.68"/>
+</g>
+<!-- GenericFxn&#45;&gt;Ground -->
+<g id="edge19" class="edge">
+<title>GenericFxn-&gt;Ground</title>
+<path fill="none" stroke="black" d="M467.25,-180.25C446.23,-148.82 400.78,-80.83 376.14,-43.97"/>
+<polygon fill="black" stroke="black" points="378.82,-41.68 370.35,-35.31 373,-45.57 378.82,-41.68"/>
+</g>
+<!-- GenericFxn&#45;&gt;Video -->
+<g id="edge20" class="edge">
+<title>GenericFxn-&gt;Video</title>
+<path fill="none" stroke="black" d="M484.96,-179.93C496.88,-148.75 522.23,-82.4 536.37,-45.37"/>
+<polygon fill="black" stroke="black" points="539.74,-46.35 540.04,-35.76 533.21,-43.85 539.74,-46.35"/>
 </g>
 <!-- Rover -->
 <g id="node1" class="node">
@@ -133,65 +133,65 @@
 <ellipse fill="lightgrey" stroke="black" cx="269.44" cy="-378" rx="33.29" ry="18"/>
 <text text-anchor="middle" x="269.44" y="-374.3" font-family="Times New Roman,serif" font-size="14.00">Rover</text>
 </g>
-<!-- Control_Rover -->
-<g id="node2" class="node">
-<title>Control_Rover</title>
-<ellipse fill="lightgrey" stroke="black" cx="341.44" cy="-198" rx="65.79" ry="18"/>
-<text text-anchor="middle" x="341.44" y="-194.3" font-family="Times New Roman,serif" font-size="14.00">Control_Rover</text>
-</g>
-<!-- GenericFxn -->
-<g id="node3" class="node">
-<title>GenericFxn</title>
-<ellipse fill="lightgrey" stroke="black" cx="478.44" cy="-198" rx="53.09" ry="18"/>
-<text text-anchor="middle" x="478.44" y="-194.3" font-family="Times New Roman,serif" font-size="14.00">GenericFxn</text>
-</g>
 <!-- Move_Rover -->
-<g id="node4" class="node">
+<g id="node2" class="node">
 <title>Move_Rover</title>
 <ellipse fill="lightgrey" stroke="black" cx="198.44" cy="-198" rx="59.29" ry="18"/>
 <text text-anchor="middle" x="198.44" y="-194.3" font-family="Times New Roman,serif" font-size="14.00">Move_Rover</text>
 </g>
+<!-- Control_Rover -->
+<g id="node3" class="node">
+<title>Control_Rover</title>
+<ellipse fill="lightgrey" stroke="black" cx="341.44" cy="-198" rx="65.79" ry="18"/>
+<text text-anchor="middle" x="341.44" y="-194.3" font-family="Times New Roman,serif" font-size="14.00">Control_Rover</text>
+</g>
 <!-- Store_Energy -->
-<g id="node5" class="node">
+<g id="node4" class="node">
 <title>Store_Energy</title>
 <ellipse fill="lightgrey" stroke="black" cx="60.44" cy="-198" rx="60.39" ry="18"/>
 <text text-anchor="middle" x="60.44" y="-194.3" font-family="Times New Roman,serif" font-size="14.00">Store_Energy</text>
 </g>
+<!-- GenericFxn -->
+<g id="node5" class="node">
+<title>GenericFxn</title>
+<ellipse fill="lightgrey" stroke="black" cx="478.44" cy="-198" rx="53.09" ry="18"/>
+<text text-anchor="middle" x="478.44" y="-194.3" font-family="Times New Roman,serif" font-size="14.00">GenericFxn</text>
+</g>
 <!-- Comms -->
 <g id="node6" class="node">
 <title>Comms</title>
-<ellipse fill="lightgrey" stroke="black" cx="461.44" cy="-18" rx="39.79" ry="18"/>
-<text text-anchor="middle" x="461.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Comms</text>
+<ellipse fill="lightgrey" stroke="black" cx="456.44" cy="-18" rx="39.79" ry="18"/>
+<text text-anchor="middle" x="456.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Comms</text>
 </g>
-<!-- EE -->
+<!-- Force -->
 <g id="node7" class="node">
-<title>EE</title>
-<ellipse fill="lightgrey" stroke="black" cx="198.44" cy="-18" rx="27" ry="18"/>
-<text text-anchor="middle" x="198.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">EE</text>
-</g>
-<!-- Video -->
-<g id="node8" class="node">
-<title>Video</title>
-<ellipse fill="lightgrey" stroke="black" cx="551.44" cy="-18" rx="32.49" ry="18"/>
-<text text-anchor="middle" x="551.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Video</text>
+<title>Force</title>
+<ellipse fill="lightgrey" stroke="black" cx="198.44" cy="-18" rx="32.49" ry="18"/>
+<text text-anchor="middle" x="198.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Force</text>
 </g>
 <!-- Control -->
-<g id="node9" class="node">
+<g id="node8" class="node">
 <title>Control</title>
-<ellipse fill="lightgrey" stroke="black" cx="115.44" cy="-18" rx="38.19" ry="18"/>
-<text text-anchor="middle" x="115.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Control</text>
+<ellipse fill="lightgrey" stroke="black" cx="109.44" cy="-18" rx="38.19" ry="18"/>
+<text text-anchor="middle" x="109.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Control</text>
+</g>
+<!-- EE -->
+<g id="node9" class="node">
+<title>EE</title>
+<ellipse fill="lightgrey" stroke="black" cx="275.44" cy="-18" rx="27" ry="18"/>
+<text text-anchor="middle" x="275.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">EE</text>
 </g>
 <!-- Ground -->
 <g id="node10" class="node">
 <title>Ground</title>
-<ellipse fill="lightgrey" stroke="black" cx="364.44" cy="-18" rx="38.99" ry="18"/>
-<text text-anchor="middle" x="364.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Ground</text>
+<ellipse fill="lightgrey" stroke="black" cx="359.44" cy="-18" rx="38.99" ry="18"/>
+<text text-anchor="middle" x="359.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Ground</text>
 </g>
-<!-- Force -->
+<!-- Video -->
 <g id="node11" class="node">
-<title>Force</title>
-<ellipse fill="lightgrey" stroke="black" cx="275.44" cy="-18" rx="32.49" ry="18"/>
-<text text-anchor="middle" x="275.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Force</text>
+<title>Video</title>
+<ellipse fill="lightgrey" stroke="black" cx="546.44" cy="-18" rx="32.49" ry="18"/>
+<text text-anchor="middle" x="546.44" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Video</text>
 </g>
 </g>
 </svg>
