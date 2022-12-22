@@ -209,26 +209,27 @@ if __name__ == '__main__':
     mdl = Tank()
     
     ## nominal run
-    endresults, resgraph, mdlhist = propagate.nominal(mdl)
+    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])
     rd.plot.mdlhists(mdlhist, fxnflowvals='Store_Water')
-    rd.graph.show(resgraph)
+    rd.graph.show(endresults['bipartite'])
     
     
     ## faulty run
-    endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Human','NotVisible', time=2)
+    resgraph, mdlhist = propagate.one_fault(mdl,'Human','NotVisible', time=2, desired_result='bipartite')
     
     rd.plot.mdlhists(mdlhist, title='NotVisible', fxnflowvals='Store_Water', time_slice=2)
     rd.graph.show(resgraph,faultscen='NotVisible', time=2)
     
-    endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Human','FalseReach', time=2, gtype='component')
+    resgraph, mdlhist = propagate.one_fault(mdl,'Human','FalseReach', time=2, desired_result='component')
     
     rd.plot.mdlhists(mdlhist,title='FalseReach', fxnflowvals='Store_Water', time_slice=2)
     rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time=2)
     
     
     mdl = Tank(params={'reacttime':2, 'store_tstep':3.0})
-    endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Store_Water','Leak', time=2)
+    resgraph, mdlhist = propagate.one_fault(mdl,'Store_Water','Leak', time=2, desired_result='bipartite')
     rd.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='Store_Water', time_slice=2)
+    rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time='end')
     
     ## run all faults - note: all faults get caught!
     endclasses, mdlhists = propagate.single_faults(mdl)

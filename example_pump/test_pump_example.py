@@ -107,7 +107,7 @@ class Integration_Tests(unittest.TestCase):
         self.mdl=Pump()
     def test_nominal_results(self):
         """Tests the output of the model when integrated in the nominal scenario"""
-        endresults, resgraph, mdlhist=propagate.nominal(self.mdl, protect=False)
+        endresult, mdlhist=propagate.nominal(self.mdl, protect=False)
         modes, modeprops = self.mdl.return_faultmodes()
         self.assertFalse(modes) # does it have any fault modes in the nominal scenario?
         for t in range(1,self.mdl.times[-1]): # are the values of the function/flow states what we wanted?
@@ -125,9 +125,9 @@ class Integration_Tests(unittest.TestCase):
             self.assertEqual(mdlhist['functions']['MoveWater']['eff'][t], 1.0)
     def test_blockage_results(self):
         """Tests the output of the model when integrated in a faulty scenario"""
-        endresults, resgraph, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=10)
-        self.assertIn('MoveWater', endresults['faults'])
-        self.assertIn('ExportWater', endresults['faults'])
+        endfaults, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=10, desired_result='endfaults')
+        self.assertIn('MoveWater', endfaults['endfaults'])
+        self.assertIn('ExportWater', endfaults['endfaults'])
         for t in range(1,self.mdl.times[-1]): # are the values of the function/flow states what we wanted?
             if t<5 or t>=50:
                 self.assertEqual(mdlhist['faulty']['flows']['Sig_1']['power'][t], 0.0)
@@ -157,9 +157,9 @@ class Integration_Tests(unittest.TestCase):
             self.assertEqual(mdlhist['faulty']['flows']['EE_1']['voltage'][t], 500.0)
     def test_blockage_static(self):
         """Checks state of the model itself at a particular time-step. Useful when the model has states which are not recorded."""
-        for t in range(0, 10): propagate.propagate(self.mdl, {}, t)     #simulate time up until t=10
+        for t in range(0, 10): propagate.propagate(self.mdl, t)     #simulate time up until t=10
         
-        propagate.propagate(self.mdl, {'MoveWater': 'mech_break'}, 10)  #instantiate fault at time
+        propagate.propagate(self.mdl, 10, {'MoveWater': 'mech_break'})  #instantiate fault at time
         self.assertTrue(self.mdl.fxns['MoveWater'].has_fault('mech_break'))         #check model properties
         self.assertEqual(self.mdl.flows['EE_1'].current, 0.2)
         self.assertEqual(self.mdl.flows['Wat_1'].flowrate, 0.0)

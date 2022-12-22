@@ -15,7 +15,7 @@ Uses methods:
     - :func:`graphflows`:               Extracts non-nominal flows by comparing the a results graph with a nominal results graph.
     - :func:`resultsgraph`:         Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
     - :func:`resultsgraphs`:        Makes a dict history of results graphs given a dict history of the nominal and faulty graphs
-    - :func:`totalcost`:            Calculates the total host of a set of given end classifications
+    - :func:`totalcost`:            Calculates the total cost of a set of given end classifications
     - :func:`state_probabilities`:  Calculates the probabilities of given end-state classifications given an endclasses dictionary
     - :func:`bootstrap_confidence_interval`: Convenience wrapper for scipy.bootstrap. 
     - :func:`overall_diff`:         Calculates the difference between the nominal and fault scenarios for a set of nested endclasses
@@ -601,6 +601,10 @@ def file_check(filename, overwrite):
         else:                   
             print("File already exists: "+filename+", writing anyway...")
             os.remove(filename)
+    if "/" in filename:
+        last_split_index = filename.rfind("/")
+        foldername = filename[:last_split_index]
+        if not os.path.exists(foldername): os.makedirs(foldername)
 
 def save_result(variable, filename, filetype="", overwrite=False, result_id=''):
     """
@@ -622,11 +626,6 @@ def save_result(variable, filename, filetype="", overwrite=False, result_id=''):
     """
     import dill, json, csv
     file_check(filename, overwrite)
-    
-    if "/" in filename:
-        last_split_index = filename.rfind("/")
-        foldername = filename[:last_split_index]
-        if not os.path.exists(foldername): os.makedirs(foldername)
     
     filetype = auto_filetype(filename, filetype)
     if filetype=='pickle':

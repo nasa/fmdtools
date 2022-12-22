@@ -121,20 +121,20 @@ class CtlDOF(FxnBlock):
         elif self.has_fault('degctl'): self.Cs=0.5
         
         upthrottle=1.0
-        if self.Dir.traj[2]>1:     upthrottle=2.0
-        elif 0<self.Dir.traj[2]<=1:  upthrottle= self.Dir.traj[2] + 1.0
-        elif self.Dir.traj[2]==0:
+        if self.Dir.z>1:        upthrottle=2.0
+        elif 0<self.Dir.z<=1:   upthrottle= self.Dir.z + 1.0
+        elif self.Dir.z==0:
             damp=np.sign(self.vel)
             damp2=damp*min(1.0, np.power(self.vel, 2))
             upthrottle=1.0-0.2*damp2
-        elif -1<self.Dir.traj[2]<=0.0:
+        elif -1<self.Dir.z<=0.0:
             damp=min(1.0, np.power(self.vel+0.5, 2))
             upthrottle=0.75+0.25*damp
-        elif self.Dir.traj[2]<=-1.0:
+        elif self.Dir.z<=-1.0:
             damp=min(0.75, np.power(self.vel+5.0, 2))
             upthrottle=0.75+0.15*damp
             
-        if self.Dir.traj[0]==0 and self.Dir.traj[1]==0: forwardthrottle=0.0
+        if self.Dir.x==0 and self.Dir.y==0: forwardthrottle=0.0
         else: forwardthrottle=1.0
         
         self.Ctl.forward=self.EEin.effort*self.Cs*forwardthrottle*self.Dir.power
@@ -171,17 +171,15 @@ class PlanPath(FxnBlock):
         elif dist>5 and not(self.mode=='descend'):                       self.mode='move'
         # nominal behaviors
         self.Dir.power=1.0
-        if self.mode=='taxi':       self.Dir.power=0.0
-        elif self.mode=='hover':    self.Dir.assign([0,0,0])           
-        elif self.mode=='move':     self.Dir.assign(vectdir(self.goal, loc))     
-        elif self.mode=='descend':  self.Dir.assign([0,0,-0.5])
-        elif self.mode=='land':     self.Dir.assign([0,0,-0.1])
+        if self.mode=='taxi':           self.Dir.power=0.0
+        elif self.mode=='hover':        self.Dir.assign([0,0,0], "x","y","z")           
+        elif self.mode=='move':         self.Dir.assign(vectdir(self.goal, loc), "x","y","z")     
+        elif self.mode=='descend':      self.Dir.assign([0,0,-0.5], "x","y","z")
+        elif self.mode=='land':         self.Dir.assign([0,0,-0.1], "x","y","z")
         # faulty behaviors    
-        if self.has_fault('noloc'):     self.Dir.assign([0,0,0])
-        elif self.has_fault('degloc'):  self.Dir.assign([0,0,-1])
-        if self.EEin.effort<0.5:
-            self.Dir.power=0.0
-            self.Dir.assign([0,0,0])
+        if self.has_fault('noloc'):     self.Dir.assign([0,0,0], "x","y","z")
+        elif self.has_fault('degloc'):  self.Dir.assign([0,0,-1], "x","y","z")
+        if self.EEin.effort<0.5:        self.Dir.assign([0,0,0,0], "x","y","z", "power")
 
 class Trajectory(FxnBlock):
     def __init__(self, name, flows):
@@ -205,8 +203,8 @@ class Trajectory(FxnBlock):
                 self.DOF.planvel=0.0
             
             self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
-            self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.traj[0]
-            self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.traj[1]
+            self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.x
+            self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.y
 
 class ViewEnvironment(FxnBlock):
     def __init__(self, name, flows):
@@ -217,19 +215,6 @@ class ViewEnvironment(FxnBlock):
         area = square((self.Env.x, self.Env.y), 10, 10)
         for spot in self.viewingarea:
             if inrange(area, spot[0],spot[1]): self.viewingarea[spot]='viewed'
-
-class Direc(Flow):
-    def __init__(self):
-        self.traj=[0.0,0.0,0.0]
-        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1.0}, 'Trajectory')
-    def assign(self, traj):
-        self.x=traj[0]
-        self.y=traj[1]
-        self.z=traj[2]
-        self.traj=traj
-    def status(self):
-        status={'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': self.power}
-        return status.copy()
         
 class Drone(Model):
     def __init__(self, params={'graph_pos':{}, 'bipartite_pos':{}},\
@@ -246,8 +231,7 @@ class Drone(Model):
         self.add_flow('Ctl1', {'forward':0.0, 'upward':1.0})
         self.add_flow('DOFs', {'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0})
         self.add_flow('Env1', {'x':0.0,'y':0.0,'elev':0.0} )
-        # custom flows
-        self.add_flow('Dir1', Direc())
+        self.add_flow('Dir1', {"x":0.0, "y":0.0, "z":0.0, "power":0.0})
         #add functions to the model
         flows=['EEctl', 'Force_ST']
         self.add_fxn('StoreEE',['EE_1', 'Force_ST'], fclass=StoreEE)

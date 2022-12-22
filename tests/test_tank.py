@@ -8,16 +8,22 @@ import unittest
 import sys, os
 sys.path.insert(1, os.path.join('..'))
 from example_tank.tank_model import Tank
+from example_tank.tank_opt import x_to_rcost_leg, x_to_totcost_leg, x_to_descost
+from example_tank.tank_optimization_model import Tank as Tank2
+from fmdtools.faultsim.search import ProblemInterface
 from fmdtools.faultsim import propagate
 import fmdtools.resultdisp as rd
 from fmdtools.modeldef import SampleApproach, NominalApproach
 from CommonTests import CommonTests
 import numpy as np
+import multiprocessing as mp
+
 
 
 class TankTests(unittest.TestCase, CommonTests):
     def setUp(self):
         self.mdl = Tank()
+        self.optmdl = Tank2()
     def test_model_copy_same(self):
         self.check_model_copy_same(Tank(),Tank(), [5,10,15], 10, max_time=20)
     def test_model_copy_different(self):
@@ -31,6 +37,42 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_approach_parallelism(self.mdl, app)
         app1 = SampleApproach(self.mdl, defaultsamp={'samp':'evenspacing','numpts':4})
         self.check_approach_parallelism(self.mdl, app1)
+    def test_same_rcost(self):
+        
+        kwarg_options = [dict(staged=True),
+                         dict(staged=False),
+                         dict(staged=True, pool=mp.Pool(4)),
+                         dict(staged=False, pool=mp.Pool(4))] 
+        mdl= Tank2()
+        res_vars_i = {param:1 for param,v in mdl.params.items() if param not in ['capacity','turnup']}
+        
+        for kwarg in kwarg_options:
+            prob = ProblemInterface("res_problem", mdl, **kwarg)
+            
+            prob.add_simulation("des_cost", "external", x_to_descost)
+            prob.add_objectives("des_cost", cd="cd")
+            prob.add_variables("des_cost",'capacity', 'turnup')
+            
+            app = SampleApproach(mdl)
+            prob.add_simulation("res_sim", "multi", app.scenlist, include_nominal=True,
+                                upstream_sims = {"des_cost":{'params':{"capacity":"capacity", "turnup":"turnup"}}})
+            res_vars = [(var, None) for var in res_vars_i.keys()]
+            prob.add_variables("res_sim", *res_vars, vartype="param")
+            prob.add_objectives("res_sim", cost="expected cost", objtype="endclass")
+            prob.add_combined_objective('tot_cost', 'cd', 'cost')
+            for des_var in [[15, 0.5], [22, 0.1], [18,0]]:
+                rvar = [*res_vars_i.values()][:27]
+                lvar = [*res_vars_i.values()][27:]
+                prob.clear()
+                prob.update_sim_vars("res_sim", newparams={'capacity':des_var[0], 'turnup':des_var[1]})
+                inter_cost = prob.cost([*res_vars_i.values()])
+                func_cost = x_to_rcost_leg(rvar, lvar, des_var)
+                self.assertAlmostEqual(inter_cost, func_cost)
+                
+                inter_totcost=prob.tot_cost(des_var, [*res_vars_i.values()])
+                func_totcost=x_to_totcost_leg(des_var, rvar, lvar)
+                self.assertAlmostEqual(inter_totcost, func_totcost)
+                
     def test_comp_mode_inj(self):
         """ Tests that component modes injected in functions end up in their respective
         components."""
@@ -40,7 +82,7 @@ class TankTests(unittest.TestCase, CommonTests):
         for compmode in compmodes:
             mdl = Tank()
             scen = {'Human': compmode}
-            propagate.propagate(mdl,scen,1)
+            propagate.propagate(mdl,1, fxnfaults=scen)
             self.assertIn(compmode, mdl.fxns['Human'].faults)
             self.assertIn(compmode, mdl.fxns['Human'].components[compname[compmode]].faults)
     def test_different_components(self):
@@ -53,17 +95,17 @@ class TankTests(unittest.TestCase, CommonTests):
     def test_local_tstep(self):
         """ Tests running the model with a different local timestep in the Store_Liquid function"""
         mdl_global = Tank(modelparams = {'phases':{'na':[0],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min', 'use_local':False})
-        _, _, mdlhist_global = propagate.one_fault(mdl_global,'Store_Water','Leak', time=2)
+        _, mdlhist_global = propagate.one_fault(mdl_global,'Store_Water','Leak', time=2)
         mdlhist_global = rd.process.flatten_hist(mdlhist_global)
         
         mdl_loc_low = Tank(params={'reacttime':2, 'store_tstep':0.1})
-        _, _, mdlhist_loc_low = propagate.one_fault(mdl_loc_low,'Store_Water','Leak', time=2)
+        _, mdlhist_loc_low = propagate.one_fault(mdl_loc_low,'Store_Water','Leak', time=2)
         mdlhist_loc_low = rd.process.flatten_hist(mdlhist_loc_low)
         
         self.compare_results(mdlhist_global, mdlhist_loc_low)
         
         mdl_loc_high = Tank(params={'reacttime':2, 'store_tstep':3.0})
-        _, _, mdlhist_loc_high = propagate.one_fault(mdl_loc_high,'Store_Water','Leak', time=2)
+        _, mdlhist_loc_high = propagate.one_fault(mdl_loc_high,'Store_Water','Leak', time=2)
         mdlhist_loc_high = rd.process.flatten_hist(mdlhist_loc_high)
         for i in [2,5,8,12]:
             slice_global = rd.process.get_flat_hist_slice(mdlhist_global,t_ind=i)
@@ -134,7 +176,17 @@ if __name__ == '__main__':
     #runner = unittest.TextTestRunner()
     #runner.run(suite)
     
-    unittest.main()
+    #suite = unittest.TestSuite()
+    #suite.addTest(TankTests("test_save_load_approach"))
+    #runner = unittest.TextTestRunner()
+    #runner.run(suite)
+    
+    suite = unittest.TestSuite()
+    suite.addTest(TankTests("test_same_rcost"))
+    runner = unittest.TextTestRunner()
+    runner.run(suite)
+    
+    #unittest.main()
     
     #mdl = Tank()
     #scen = {'Human': 'NotDetected'}

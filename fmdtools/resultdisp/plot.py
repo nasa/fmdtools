@@ -48,7 +48,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     ----------
     mdlhists : dict
         Aggregate model history with structure {'scen':mdlhist} (or single mdlhist)
-    fxnflowsvals : dict, optional
+    fxnflowvals : dict, optional
         dict of flow values to plot with structure {fxnflow:[vals], fxnflow:'val'/all, fxnflow:{'comp':[vals]}}. 
         The default is 'all', which returns all.
     cols : int, optional
@@ -670,7 +670,7 @@ def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
         else:           fig.suptitle(title,fontweight='bold')
     return fig, ax
 
-def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'both'):
+def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'both', figsize = "default", v_padding=0.5, title_padding=-0.05):
     """
     Plots the phases of operation that the model progresses through.
 
@@ -681,7 +681,7 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'b
         of structure {'fxnname':'phase':[start, end]}
     modephases : dict, optional
         dictionary that maps the phases to operational modes, if it is desired to track the progression
-        through modes
+        through modes    
     mdl : Model, optional
         model, if it is desired to additionally plot the phases of the model with the function phases
     singleplot : bool, optional
@@ -689,6 +689,12 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'b
         The default is True.
     phase_ticks : 'std'/'phases'/'both'
         x-ticks to use (standard, at the edge of phases, or both). Default is 'both'
+    figsize : tuple (float,float)
+        x-y size for the figure. The default is 'default', which dymanically gives 2 for each row
+    v_padding : float
+        vertical padding between subplots as a fraction of axis height
+    title_padding : float
+        padding for title as a fraction of figure height
     Returns
     -------
     fig/figs : Figure or list of Figures
@@ -696,15 +702,17 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'b
 
     """
     if mdl: mdlphases["Model"] = mdl.phases
-    
     if singleplot:
         num_plots = len(mdlphases)
-        fig = plt.figure()
-    else: figs = []
+        if figsize=='default': figsize = (4, 2*num_plots)
+        fig = plt.figure(figsize=figsize)
+    else: 
+        if figsize=='default': figsize = (4, 4)
+        figs = []
     
     for i,(fxn, fxnphases) in enumerate(mdlphases.items()):
         if singleplot:  ax = plt.subplot(num_plots, 1,i+1, label=fxn)
-        else:           fig, ax = plt.subplots()
+        else:           fig, ax = plt.subplots(figsize=figsize)
         
         if modephases and modephases.get(fxn, False): 
             mode_nums = {ph:i for i,(k,v) in enumerate(modephases[fxn].items()) for ph in v}
@@ -735,9 +743,8 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'b
             plt.title("Progression of "+fxn+" through operational phases")
             figs.append(fig)
     if singleplot:
-        plt.suptitle("Progression of model through operational phases")
-        plt.tight_layout(pad=1)
-        plt.subplots_adjust(top=1-0.15-0.05/num_plots)
+        plt.suptitle("Progression of model through operational phases", y=1.0+title_padding)
+        plt.subplots_adjust(hspace=v_padding)
         return fig
     else:           return figs
              

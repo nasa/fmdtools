@@ -22,7 +22,7 @@ The flows are:
 """
 
 import sys, os
-sys.path.append(os.path.join('..'))
+sys.path.insert(0,os.path.join('..'))
 
 
 from fmdtools.modeldef import *
@@ -133,7 +133,7 @@ class Water(Flow):
                     'pressure':1.0, \
                     'area':1.0, \
                     'level':1.0}
-        super().__init__(attributes, 'Water',ftype='Water')
+        super().__init__(attributes, 'Water',ftype='Water', suppress_warnings=True)
         self.customattribute='hello'
 
 ##DEFINE MODEL OBJECT
@@ -186,12 +186,30 @@ def paramfunc(delay):
 
 if __name__=="__main__":
     import multiprocessing as mp
+
+    mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':4})
+    
+    mdl.set_vars([['EE_1','current']],[2])
+    
+    
+    app_comp = NominalApproach()
+    app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
+    app_comp.add_param_replicates(paramfunc, 'delay_10', 100, (10))
+    
+    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('ExportWater','block')], pool=mp.Pool(4))
+    
+    endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('ExportWater','block')], staged=True, pool=mp.Pool(4))
+    
+    comp_mdlhists = {scen:mdlhist['ExportWater block, t=27'] for scen,mdlhist in mdlhists.items()}
+    comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
+    fig = rd.plot.mdlhists(comp_mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
+    
     
     app = NominalApproach()
     app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
     app.add_param_replicates(paramfunc, 'delay_10', 100, (10))
     
-    mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':3})
+
 
     
     # endresults, resgraph, mdlhist=propagate.nominal(mdl)
@@ -200,6 +218,27 @@ if __name__=="__main__":
     # endresults, resgraph, mdlhist=propagate.nominal(mdl,run_stochastic=True)
     # rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
     
+    for i in range(1,10):
+        mdl.update_seed(i)
+        propagate.propagate(mdl, i, run_stochastic='track_pdf')
+        print(mdl.return_probdens())
+        #print(mdl.seed)
+        
+        
+        #for fxnname, fxn in mdl.fxns.items():
+        #    print(fxnname+': ')
+        #    print(fxn.return_probdens())
+        #    print(getattr(fxn,'pds', None))
+    
+    endresults,  mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=False, new_params={'modelparams':{'seed':50}})
+    
+    
+    #mdlhist['faulty']['functions']['ImportEE']['probdens']
+    
+    rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
+    #rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
+    
+    """
     endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, legend=False)
     
@@ -216,6 +255,7 @@ if __name__=="__main__":
     
     
     tab = rd.tabulate.resilience_factor_comparison(app_comp, endclasses, ['delay'], 'cost')
+    """
     # app = NominalApproach()
     # app.add_seed_replicates('test_seeds', 100)
     # endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)

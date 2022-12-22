@@ -289,14 +289,17 @@ if __name__ == '__main__':
     import fmdtools.resultdisp as rd
 
     mdl= EPS()
+    
+    resgraph, mdlhists = propagate.one_fault(mdl, 'Import_EE', 'high_v', desired_result="bipartite")
+    
     rd.graph.show(mdl.bipartite, gtype='bipartite')
-    endclasses, mdlhists = propagate.single_faults(mdl)
+    #endclasses, mdlhists = propagate.single_faults(mdl)
 
-    endresults,resgraph, mdlhists = propagate.one_fault(mdl, 'EE_to_ME', 'toohigh_torque')
+    #resgraph, mdlhists = propagate.one_fault(mdl, 'EE_to_ME', 'toohigh_torque', desired_result="bipartite")
     rd.graph.show(resgraph)
 
 
-    endclasses, mdlhists = propagate.single_faults(mdl)
+    #endclasses, mdlhists = propagate.single_faults(mdl)
     reshists, diffs, summary = rd.process.hists(mdlhists)
 
     sumtable = rd.tabulate.summary(summary)

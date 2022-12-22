@@ -156,7 +156,7 @@ def summary(summary):
     return pd.DataFrame.from_dict(summary, orient = 'index')    
 def result(endresults, summary):
     """Makes a table of results (degraded functions/flows, classification) of a single run"""
-    table = pd.DataFrame(endresults['classification'], index=[0])
+    table = pd.DataFrame(endresults['endclass'], index=[0])
     table['degraded functions'] = [summary['degraded functions']]
     table['degraded flows'] = [summary['degraded flows']]
     return table
