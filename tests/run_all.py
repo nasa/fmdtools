@@ -13,6 +13,8 @@ if __name__=="__main__":
     
     runner = unittest.TextTestRunner()
     runner.run(suite)
+    #runner.run(suite._tests[1])
+    #runner.run(suite._tests[5])
     
     # Run defined tests in the example repositories 
     loader = unittest.TestLoader()

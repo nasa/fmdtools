@@ -63,7 +63,6 @@ class TankTests(unittest.TestCase, CommonTests):
             for des_var in [[15, 0.5], [22, 0.1], [18,0]]:
                 rvar = [*res_vars_i.values()][:27]
                 lvar = [*res_vars_i.values()][27:]
-                print(des_var)
                 prob.clear()
                 prob.update_sim_vars("res_sim", newparams={'capacity':des_var[0], 'turnup':des_var[1]})
                 inter_cost = prob.cost([*res_vars_i.values()])

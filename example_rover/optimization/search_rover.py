@@ -13,7 +13,7 @@ import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp as rd
 from fmdtools.modeldef import SampleApproach
 from fmdtools.faultsim.search import ProblemInterface
-import rover_model as rvr
+import example_rover.rover_model as rvr
 import tqdm
 
 import numpy as np

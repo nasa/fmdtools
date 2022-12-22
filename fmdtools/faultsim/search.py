@@ -56,9 +56,9 @@ class ProblemInterface():
         self.mdl=mdl
         self.default_params=mdl.params
         
-        self.default_sim_kwargs = {k:kwargs[k] if k in kwargs else v for k,v in prop.sim_kwargs.items()}
-        self.default_run_kwargs = {k:kwargs[k] if k in kwargs else v for k,v in prop.run_kwargs.items()}
-        self.default_mult_kwargs = {k:kwargs[k] if k in kwargs else v for k,v in prop.mult_kwargs.items()}
+        self.default_sim_kwargs = {k:kwargs[k] if k in kwargs else copy.deepcopy(v) for k,v in prop.sim_kwargs.items()}
+        self.default_run_kwargs = {k:kwargs[k] if k in kwargs else copy.deepcopy(v) for k,v in prop.run_kwargs.items()}
+        self.default_mult_kwargs = {k:kwargs[k] if k in kwargs else copy.deepcopy(v) for k,v in prop.mult_kwargs.items()}
         
         self.sim_graph = nx.DiGraph()
         self.negative_form =negative_form

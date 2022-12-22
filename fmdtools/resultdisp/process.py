@@ -601,6 +601,10 @@ def file_check(filename, overwrite):
         else:                   
             print("File already exists: "+filename+", writing anyway...")
             os.remove(filename)
+    if "/" in filename:
+        last_split_index = filename.rfind("/")
+        foldername = filename[:last_split_index]
+        if not os.path.exists(foldername): os.makedirs(foldername)
 
 def save_result(variable, filename, filetype="", overwrite=False, result_id=''):
     """
@@ -622,11 +626,6 @@ def save_result(variable, filename, filetype="", overwrite=False, result_id=''):
     """
     import dill, json, csv
     file_check(filename, overwrite)
-    
-    if "/" in filename:
-        last_split_index = filename.rfind("/")
-        foldername = filename[:last_split_index]
-        if not os.path.exists(foldername): os.makedirs(foldername)
     
     filetype = auto_filetype(filename, filetype)
     if filetype=='pickle':
