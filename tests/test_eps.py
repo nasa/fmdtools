@@ -18,18 +18,18 @@ class epsTests(unittest.TestCase, CommonTests):
     def setUp(self):
         self.mdl = EPS()
     def test_backward_fault_prop_1(self):
-        """ Tests that defined fault cases that require reverse propagation propagatate
+        """ Tests that defined fault cases that require reverse propagation propagate
         backwards through the graph as expected - distributor short leads to empty battery
         """
-        endresults, resgraph, mdlhist = propagate.one_fault(self.mdl, 'Distribute_EE', 'short')
-        self.assertEqual(endresults['faults']['Store_EE'], ['no_storage'])
+        endresults, mdlhist = propagate.one_fault(self.mdl, 'Distribute_EE', 'short', desired_result="endfaults")
+        self.assertEqual(endresults["endfaults"]['Store_EE'], ['no_storage'])
     def test_backward_fault_prop_2(self):
-        """ Tests that defined fault cases that require reverse propagation propagatate
+        """ Tests that defined fault cases that require reverse propagation propagate
         backwards through the graph as expected - motor short leads to distributor short
         """
-        endresults, resgraph, mdlhist = propagate.one_fault(self.mdl, 'EE_to_ME', 'short')
-        self.assertEqual(endresults['faults']['Store_EE'], ['no_storage'])
-        self.assertEqual(endresults['faults']['Distribute_EE'], ['short'])
+        endresults, mdlhist = propagate.one_fault(self.mdl, 'EE_to_ME', 'short', desired_result="endfaults")
+        self.assertEqual(endresults["endfaults"]['Store_EE'], ['no_storage'])
+        self.assertEqual(endresults["endfaults"]['Distribute_EE'], ['short'])
     def test_all_faults(self):
         """ Some basic tests for propagating lists of faults in the model--
         that histories have length 1, endresults have >0 costs, and total costs are higher

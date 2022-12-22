@@ -14,6 +14,7 @@ Description: A module to define resilience models and simulations.
 #Created: October 2019
 
 import numpy as np
+from scipy import stats
 import itertools
 import dill
 import networkx as nx
@@ -22,11 +23,12 @@ import warnings
 import sys
 from decimal import Decimal
 from ordered_set import OrderedSet
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from collections.abc import Iterable
 from collections import Hashable
 from inspect import signature
 import fmdtools.resultdisp.process as proc
+
 # MAJOR CLASSES
 
 class Common(object):
@@ -48,16 +50,26 @@ class Common(object):
         for name, value in kwargs.items():
             if name not in self._states: raise Exception(name+" not a property of "+self.name)
             setattr(self, name, value)
-    def assign(self,obj,*states):
+    def assign(self,obj,*states, **statedict):
         """ Sets the same-named values of the current flow/function object to those of a given flow. 
         Further arguments specify which values.
         e.g. self.EE1.assign(EE2, 'v', 'a') is the same as saying
             self.EE1.a = self.EE2.a; self.EE1.v = self.EE2.v
+        Can also be used to assign list values to a variable
+        e.g. self.Pos.assign([1,2,3],'x','y','z')
+        Can also provide dict in case value names don't match
+        e.g. self.Pos_out.assign(self.Pos_in, x='dx',y='dy')
         """
-        if len(states)==0: states= obj._states
-        for state in states:
-            if state not in self._states: raise Exception(state+" not a property of "+self.name)
-            setattr(self, state, getattr(obj,state))
+        if type(obj)==list or isinstance(obj, np.ndarray):
+            for i, state in enumerate(states):  setattr(self, state, obj[i])
+        else:
+            if not statedict:
+                if len(states)==0:    statedict = {s:s for s in obj._states}
+                else:                 statedict = {s:s for s in states}
+            elif len(states)>0: raise Exception("Can only provide positional states or keyword states, not both")
+            for set_state, get_state in statedict.items():
+                if set_state not in self._states: raise Exception(set_state+" not a property of "+self.name)
+                setattr(self, set_state, getattr(obj,get_state))
     def get(self, *attnames, **kwargs):
         """Returns the given attribute names (strings). Mainly useful for reducing length
         of lines/adding clarity to assignment statements.
@@ -140,7 +152,7 @@ class Common(object):
             a += self.get(state)
         return a
     def sub(self,*states):
-        """Returns the addition of given attributes of the model construct
+        """Returns the subtraction of given attributes of the model construct
         e.g.,   a = self.div('x','y','z') is the same as
                 a = (self.x-self.y)-self.z
         """
@@ -194,6 +206,47 @@ class Common(object):
             else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
         else:       raise Exception("Invalid flownames option in "+self.name)
         return flowdict
+    def set_var(self,var, val):
+        """
+        Sets variable of the object to a given value
+
+        Parameters
+        ----------
+        var : list/tuple of strings
+            list of nested attributes
+        val : attr
+            attribute to set the value to
+
+        Returns
+        -------
+        flowdict : dict
+            dict of flows indexed by flownames
+        """
+        if type(var)==str: var=var.split(".")
+        #if not attrgetter(".".join(var))(self): raise Exception("Attibute does not exist: "+str(var))
+        
+        if len(var)==1: setattr(self, var[0], val)
+        else: 
+            if getattr(self, var[0]): 
+                subattr = getattr(self, var[0])
+                if hasattr(subattr, 'set_var'): subattr.set_var(var[1:], val)
+                else: raise Exception("Model sub-attribute "+str(subattr)+" does not inherit from Common")
+            else: raise Exception("Invalid variables :"+str(var))
+    def get_var(self, var):
+        """
+        Gets the variable value of the object
+
+        Parameters
+        ----------
+        var : str/list
+            list specifying the attribute (or sub-attribute of the object
+        Returns
+        -------
+        var_value: any
+            value of the variable
+        """
+        if type(var)==str: var=var.split(".")
+        return attrgetter(".".join(var))(self)
     def warn(self, *messages, stacklevel=2):
         """
         Prints warning message(s) when called.
@@ -252,16 +305,52 @@ class Block(Common):
         self.faults=set(['nom'])
         self.opermodes= getattr(self, 'opermodes', [])
         self.faultmodes= getattr(self, 'faultmodes', {})
-        self.rngs=getattr(self, 'rngs', {})
-        self._rng_params=getattr(self, '_rng_params', {})
-        if not getattr(self, 'seed', []): 
-            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]
-        self.rng=np.random.default_rng(self.seed)
+        self.update_seed()
         self.time=0.0
     def __repr__(self):
         if hasattr(self,'name'):
             return getattr(self, 'name', '')+' '+self.__class__.__name__+' '+getattr(self,'type', '')+': '+str(self.return_states())
         else: return 'New uninitialized '+self.__class__.__name__
+    def update_seed(self, seed=[]):
+        """
+        Updates/initializes seeds for the random states in the block and its actions/components.
+        (keeps seeds in sync)
+
+        Parameters
+        ----------
+        seed : int, optional
+            Random seed. The default is [].
+        """
+        self.rngs=getattr(self, 'rngs', {})
+        self._rng_params=getattr(self, '_rng_params', {})
+        if seed:    self.seed=seed
+        elif not getattr(self, 'seed', []): 
+            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]
+        self.rng=np.random.default_rng(self.seed)
+        for rng_name in self.rngs:
+            seed = self.rng.integers(np.iinfo(np.int32).max)
+            self.rngs[rng_name]=np.random.default_rng(seed)
+            self._rng_params[rng_name]=(*self._rng_params[rng_name][:3],seed)
+        if hasattr(self, 'components'):
+            for comp in self.components.values():
+                comp.update_seed(self.seed)
+        if hasattr(self, 'actions'):
+            for act in self.actions.values():
+                act.update_seed(self.seed)
+    def get_rand_states(self, auto_update_only=False):
+        """Gets dict of random states from block and associated actions/components"""
+        if auto_update_only: rand_states = {state:vals for state,vals in self._rng_params.items() if vals[1]}
+        else: rand_states=self._rng_params
+        
+        if hasattr(self, 'components'):
+            for compname, comp in self.components.items():
+                if comp.get_rand_states(auto_update_only=auto_update_only): 
+                    rand_states[compname] = comp.get_rand_states(auto_update_only=auto_update_only)
+        if hasattr(self, 'actions'):
+            for actname, act in self.actions.items():
+                if act.get_rand_states(auto_update_only=auto_update_only): 
+                    rand_states[actname] = act.get_rand_states(auto_update_only=auto_update_only)
+        return rand_states
     def add_params(self, *params):
         """Adds given dictionary(s) of parameters to the function/block.
         e.g. self.add_params({'x':1,'y':1}) results in a block where:
@@ -555,7 +644,7 @@ class Block(Common):
         else:                       self.add_fault(*default)
     def set_rand(self,statename,methodname, *args):
         """
-        Update the given random state with a given method and arguments
+        Update the given random state with a given method and arguments (if in run_stochastic mode)
 
         Parameters
         ----------
@@ -567,8 +656,26 @@ class Block(Common):
             arguments for the numpy method
         """
         if getattr(self, 'run_stochastic', True):
-            gen_method = getattr(self.rngs[statename], methodname)
-            setattr(self, statename, gen_method(*args))
+            self.set_rand_helper(statename, methodname, *args)
+    def set_rand_helper(self,statename,methodname,*args):
+        """
+        Update the given random state with a given method and arguments (helper function - use set_rand instead)
+
+        Parameters
+        ----------
+        statename : str
+            name of the random state defined in assoc_rand_state(s)
+        methodname : 
+            str name of the numpy method to call in the rng
+        *args : args
+            arguments for the numpy method
+        """
+        gen_method = getattr(self.rngs[statename], methodname)
+        newvalue = gen_method(*args)
+        setattr(self, statename, newvalue)
+        if self.run_stochastic == 'track_pdf':
+            value_pds = get_pdf_for_rand(newvalue, methodname, args)
+            self.pds.extend(value_pds)
     def to_default(self,*statenames):
         """ Resets (given or all by default) random states to their default values
         
@@ -697,10 +804,11 @@ class Block(Common):
         return {obj.type for name, obj in self.flows.items()}
     def update_stochastic_states(self):
         """Updates the defined stochastic states defined to auto-update (see assoc_randstates)."""
+        if self.run_stochastic == 'track_pdf': self.pds=[]
         for statename, generator in self.rngs.items():
             if self._rng_params[statename][1]:
-                gen_method = getattr(generator, self._rng_params[statename][1])
-                setattr(self, statename, gen_method(*self._rng_params[statename][2]))
+                self.set_rand_helper(statename, self._rng_params[statename][1], *self._rng_params[statename][2])
+        
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used by default in 
         derived objects when resetting the model. Requires associated flows to be cleared first."""
@@ -763,6 +871,17 @@ class Block(Common):
         for state in self._states:
             states[state]=getattr(self,state)
         return states, self.faults.copy()
+    def return_probdens(self):
+        state_pd = 1.0
+        if hasattr(self, 'components'): 
+            for compname, comp in self.components:
+                state_pd*=comp.return_probdens()
+        if hasattr(self, 'actions'):
+            for actionname, action in self.actions:
+                state_pd*=action.return_probdens()
+        if hasattr(self, 'pds'): state_pd= np.prod(self.pds)
+        else:                    state_pd= 1.0
+        return state_pd
     def check_update_nominal_faults(self):
         if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
         elif len(self.faults)==0:           self.faults.update(['nom'])
@@ -988,7 +1107,7 @@ class FxnBlock(Block):
             elif type(flowdict) == dict:    self.internal_flows[flowname]=Flow(flowdict, flowname,flowtype)
             elif isinstance(flowdict, Flow):self.internal_flows[flowname] = flowdict
             else: raise Exception('Invalid flow. Must be dict or flow')
-        setattr(self, flowname, self.internal_flows[flowname])
+            setattr(self, flowname, self.internal_flows[flowname])
     def copy(self, newflows, *attr):
         """
         Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.
@@ -1018,6 +1137,12 @@ class FxnBlock(Block):
             for state in copy.actions[action]._initstates.keys():
                 setattr(copy.actions[action], state, getattr(self.actions[action], state))
             copy.actions[action].faults=self.actions[action].faults.copy()
+            copy.actions[action].time=self.actions[action].time
+        for component in self.components: 
+            for state in copy.components[component]._initstates.keys():
+                setattr(copy.components[component], state, getattr(self.components[component], state))
+            copy.components[component].faults=self.components[component].faults.copy()
+            copy.components[component].time=self.components[component].time
         setattr(copy, 'active_actions', getattr(self, 'active_actions', {}))
         for timername in self.timers:
             timer = getattr(self, timername)
@@ -1052,7 +1177,7 @@ class FxnBlock(Block):
             Faults to inject in the function. The default is ['nom'].
         time : float, optional
             Model time. The default is 0.
-        run_stochastic : book
+        run_stochastic : bool/str
             Whether to run the simulation using stochastic or deterministic behavior
         proptype : str
             Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
@@ -1130,6 +1255,7 @@ class FxnBlock(Block):
             for compname, comp in comp_actions.items():
                 self.faults.update({comp.localname+f for f in comp.faults if f!='nom'}) 
         self.time=time
+        if run_stochastic=='track_pdf' and self.rngs: self.probdens = self.return_probdens()
         self.check_update_nominal_faults()
         if self.exclusive_faultmodes==True and len(self.faults)>1: 
             raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.faults)+"\n Is the mode representation nonexclusive?")
@@ -1191,7 +1317,7 @@ class Action(Block):
         ----------
         time : float, optional
             Model time. The default is 0.
-        run_stochastic : book
+        run_stochastic : bool
             Whether to run the simulation using stochastic or deterministic behavior
         """
         self.run_stochastic=run_stochastic
@@ -1209,7 +1335,7 @@ class Flow(Common):
     """
     Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
     """
-    def __init__(self, states, name, ftype='generic'):
+    def __init__(self, states, name, ftype='generic', suppress_warnings=False):
         """
         Instances the flow with given states.
 
@@ -1226,6 +1352,11 @@ class Flow(Common):
         self._states=list(states.keys())
         for state in self._states:
             setattr(self, state, states[state])
+        if type(self)!=Flow and not suppress_warnings:
+            if type(self).reset == Flow.reset:      warnings.warn("Custom reset() Method Not Implemented--model protection between methods may not work")
+            if type(self).status == Flow.status:    warnings.warn("Custom status() Method Not Implemented--custom flow attributes may not be saved")
+            if type(self).get_memory == Flow.get_memory:    warnings.warn("Custom get_memory() method not implement--memory estimates may be innaccurate")
+            if type(self).copy == Flow.copy:        warnings.warn("Custom copy() method not implemented--Staged Execution may not copy custom model states")
     def __repr__(self):
         if hasattr(self,'name'):    
             return getattr(self, 'name')+' '+getattr(self, 'type')+' flow: '+str(self.status())
@@ -1328,7 +1459,6 @@ class Model(object):
         self.params=params
         self.valparams = valparams
         self.modelparams=modelparams
-        
         # model defaults to static representation if no timerange
         self.phases=modelparams.get('phases',{'na':[1]})
         self.find_any_phase_overlap()
@@ -1337,18 +1467,20 @@ class Model(object):
         self.units = modelparams.get('units', 'hr')
         self.use_local = modelparams.get('use_local', True)
         self.use_end_condition = modelparams.get('use_end_condition', True)
-        if modelparams.get('seed', False):  self.seed = modelparams['seed']
-        else:
-            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]                       
-            modelparams['seed']=self.seed
-        self._rng = np.random.default_rng(self.seed)
+        self._update_model_seed(modelparams.get('seed', False))
         
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
     def __repr__(self):
-        fxnstr = ''.join(['- '+fxnname+':'+str(fxn.return_states())+' '+str(getattr(fxn,'active_actions',''))+'\n' for fxnname,fxn in self.fxns.items()])
-        flowstr = ''.join(['- '+flowname+':'+str(flow.status())+'\n' for flowname,flow in self.flows.items()])
+        fxnlist = ['- '+fxnname+':'+str(fxn.return_states())+' '+str(getattr(fxn,'active_actions',''))+'\n' for fxnname,fxn in self.fxns.items()]
+        fxnlist = [fstr[:115]+'...\n'if len(fstr)>120 else fstr for fstr in fxnlist]
+        if len(fxnlist)>15: fxnlist=fxnlist[:15]+["...("+str(len(fxnlist))+' total) \n']
+        fxnstr = ''.join(fxnlist)
+        flowlist = ['- '+flowname+':'+str(flow.status())+'\n' for flowname,flow in self.flows.items()]
+        flowlist = [fstr[:115]+'...\n'if len(fstr)>120 else fstr for fstr in flowlist]
+        if len(flowlist)>15:  flowlist=flowlist[:15]+["...("+str(len(flowlist))+' total) \n']
+        flowstr = ''.join(flowlist)
         return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'functions: \n'+fxnstr+'flows: \n'+flowstr
     def find_any_phase_overlap(self):
         intervals = [*self.phases.values()]
@@ -1358,6 +1490,32 @@ class Model(object):
             if i+1==len(int_low): break
             if int_low[i+1]<=int_high[i]:
                 raise Exception("Global phases overlap (see mdlparams):"+str(self.phases)+" Ensure the max of each phase < min of each other phase")
+    def _update_model_seed(self, seed=[]):
+        """ Updates/Initializes the model seed params (helper function--use update_seed instead)""" 
+        if seed:  self.seed = seed
+        else:
+            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]                       
+        self.modelparams['seed']=self.seed
+        self._rng = np.random.default_rng(self.seed)
+    def update_seed(self,seed=[]):
+        """
+        Updates model seed and the seed in all functions. 
+
+        Parameters
+        ----------
+        seed : int, optional
+            Seed to use. The default is [], which uplls from np.random.SeedSequence
+        """
+        self._update_model_seed(seed)
+        for fxn in self.fxns:
+            self.fxns[fxn].update_seed(self.seed)
+    def get_rand_states(self, auto_update_only=False):
+        """Gets dictionary of random states throughout the model functions"""
+        rand_states = {}
+        for fxnname, fxn in self.fxns.items():
+            if fxn.get_rand_states(auto_update_only=auto_update_only): 
+                rand_states[fxnname]= fxn.get_rand_states(auto_update_only=auto_update_only)
+        return rand_states
     def add_flows(self, flownames, flowdict={}, flowtype='generic'):
         """
         Adds a set of flows with the same type and initial parameters
@@ -1572,7 +1730,8 @@ class Model(object):
         graph : networkx graph
             Graph representation of the system with the modes and states added as attributes.
         """
-        if gtype=='normal':
+        if  gtype==None: return None
+        elif gtype=='normal':
             graph=nx.projected_graph(self.bipartite, self.fxns)
         elif gtype=='bipartite':
             graph=self.bipartite.copy()
@@ -1727,7 +1886,73 @@ class Model(object):
     def find_classification(self, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
         return {'rate':scen['properties'].get('rate', 0), 'cost': 1, 'expected cost': scen['properties'].get('rate',0)}
+    def return_probdens(self):
+        """Returns the probability desnity of the model distributions given a """
+        probdens=1.0
+        for fxn in self.fxns.values():
+            probdens *= getattr(fxn, 'probdens', 1.0)
+        return probdens
+    def set_vars(self, *args, **kwargs):
+        """
+        Sets variables in the model to set values (useful for optimization, etc.)
 
+        Parameters
+        ----------
+        varlist : list of lists/tuples
+            List of variables to set, with possible structures:
+                [['fxnname', 'att1'], ['fxnname2', 'comp1','att2'], ['flowname', 'att3']]
+                ['fxnname.att1', 'fxnname.comp1.att2', 'flowname.att3']
+        varvalues : list
+            List of values corresponding to varlist
+        kwargs : kwargs
+            attribute-value pairs. If provided, must be passed using ** syntax:
+            mdl.set_vars(**{'fxnname.varname':value})
+        """
+        if len(args)>0: 
+            varlist=args[0]; varvalues=args[1]
+            if type(varlist)==str:                      varlist = [varlist]
+            if type(varvalues) in [str, float, int]:    varvalues= [varvalues]
+            if len(varlist)!=len(varvalues): raise Exception("length of varlist and varvalues do not correspond: "+str(len(varlist))+", "+str(len(varvalues)))
+        else: varlist=[]; varvalues=[]
+        if kwargs: varlist = varlist+[*kwargs.keys()]; varvalues = varvalues + [*kwargs.values()]
+        for i,var in enumerate(varlist):
+            if var=='seed':  self.update_seed(seed=varvalues[i])
+            else:
+                if type(var)==str: var=var.split(".")             
+                if var[0] in ['functions', 'fxns']: f=self.fxns[var[1]]; var=var[2:]
+                elif var[0]=='flows':               f=self.flows[var[1]]; var=var[2:]
+                elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
+                elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]             
+                else: raise Exception(var[0]+" not a function, flow, or seed")
+                f.set_var(var, varvalues[i])
+    def get_vars(self, *variables, trunc_tuple=True):
+        """
+        Gets variable values in the model.
+
+        Parameters
+        ----------
+        *variables : list/string
+            Variables to get from the model. Can be specifid as: 
+            a list ['fxnname2', 'comp1','att2'], or
+            a str 'fxnname.comp1.att2'
+
+        Returns
+        -------
+        variable_values: tuple 
+            Values of variables. Passes (non-tuple) single value if only one variable.
+        """
+        if type(variables)==str:                      variables = [variables]
+        variable_values = [None]*len(variables)
+        for i, var in enumerate(variables):
+            if type(var)==str: var=var.split(".")
+            if var[0] in ['functions', 'fxns']: f=self.fxns[var[1]]; var=var[2:]
+            elif var[0]=='flows':               f=self.flows[var[1]]; var=var[2:]
+            elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
+            elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]
+            else: raise Exception(var[0]+" not a function or flow")
+            variable_values[i]=f.get_var(var)
+        if len(variable_values)==1 and trunc_tuple: return variable_values[0]
+        else:                                       return tuple(variable_values)
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) 
     Attributes
@@ -1829,6 +2054,16 @@ class NominalApproach():
         self.scenarios = {}
         self.num_scenarios = 0
         self.ranges = {}
+    def __repr__(self):
+        all_range_str=""
+        for r, rangedict in self.ranges.items():
+            rangestr = '\n-'+r+' ('+str(len(rangedict['scenarios']))+' scenarios)'
+            rangedict = {k:v for k,v in rangedict.items() if k not in {'scenarios', 'levels','num_pts'}}
+            if 'seeds' in rangedict: rangedict['seeds'] = len(rangedict['seeds'])
+            subrangestr = "\n----"+"\n----".join([k+': '+str(v) for k,v in rangedict.items()])
+            all_range_str=all_range_str+rangestr+subrangestr
+        #rangestr = "\n- "+"\n- ".join([k+": "+str(len(v['scenarios']))+' scenarios' for k,v in self.ranges.items()])
+        return "NominalApproach ("+str(self.num_scenarios)+" scenarios) with ranges:"+all_range_str
     def add_seed_replicates(self, rangeid, seeds):
         """
         Generates an approach with different seeds to use for the model's internal stochastic behaviors
@@ -1845,7 +2080,7 @@ class NominalApproach():
         for i in range(len(seeds)):
             self.num_scenarios+=1
             scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname]={'faults':{},'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
+            self.scenarios[scenname]={'sequence':{},'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                                 'modelparams':{'seed':seeds[i]}, 'prob':1/len(seeds)}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def add_param_replicates(self,paramfunc, rangeid, replicates, *args, ind_seeds=True, **kwargs):
@@ -1874,12 +2109,12 @@ class NominalApproach():
             if len(ind_seeds)!=replicates: raise Exception("list ind_seeds must be of length replicates")
             else:                   seeds=ind_seeds
         else:                       seeds = [None for i in range(replicates)]
-        self.ranges[rangeid] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : replicates}
+        self.ranges[rangeid] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : replicates, 'paramfunc':paramfunc}
         for i in range(replicates):
             self.num_scenarios+=1
             params = paramfunc(*args, **kwargs)
             scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname]={'faults':{},\
+            self.scenarios[scenname]={'sequence':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                     'params':params,'inputparams':kwargs,'modelparams':{'seed':seeds[i]},\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/replicates}}
@@ -1957,7 +2192,7 @@ class NominalApproach():
         elif seedstr=='independent':  mdlseeds=np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)
         elif seedstr=='keep_model':   mdlseeds= [None for i in range(replicates)]
         
-        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}, 'replicates':replicates}
+        self.ranges[rangeid] = {'fixedargs':args, 'fixedkwargs':fixedkwargs, 'inputranges':inputranges, 'scenarios':[], 'num_pts' : len(fullspace), 'levels':{}, 'replicates':replicates, 'paramfunc':paramfunc}
         for xvals in fullspace:
             inputparams = {**{name:xvals[i] for i,name in enumerate(inputnames)}, **fixedkwargs}
             level_key = tuple([x if isinstance(x,Hashable) else str(x) for x in xvals])
@@ -1967,7 +2202,7 @@ class NominalApproach():
                 self.num_scenarios+=1
                 params = paramfunc(*args, **inputparams)
                 scenname = rangeid+'_'+str(self.num_scenarios)
-                self.scenarios[scenname]={'faults':{},\
+                self.scenarios[scenname]={'sequence':{},\
                                           'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                         'params':params,'inputparams':inputparams,'modelparams':{'seed':mdlseeds[i]},\
                                                         'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
@@ -2001,7 +2236,7 @@ class NominalApproach():
             
     def change_params(self, rangeid='all', **kwargs):
         """
-        Changes a given parameter accross all scenarios. Modifies 'params' (rather than regenerating params from the paramfunc).
+        Changes a given parameter across all scenarios. Modifies 'params' (rather than regenerating params from the paramfunc).
 
         Parameters
         ----------
@@ -2090,7 +2325,7 @@ class NominalApproach():
             inputparams = {name: (ins() if callable(ins) else ins[0](*ins[1:])) for name, ins in randvars.items()}
             params = paramfunc(*fixedargs, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname]={'faults':{},\
+            self.scenarios[scenname]={'sequence':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
                                                     'params':params,'inputparams':inputparams,'modelparams':{'seed':mdlseeds[i]},\
                                                     'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/replicates}}
@@ -2156,7 +2391,7 @@ class SampleApproach():
             Model to sample.
         faults : str/list/tuple, optional
             - The default is 'all', which gets all fault modes from the model.
-            - 'single-components' uses faults from a single component to represent faults from all components 
+            - 'single-component' uses faults from a single component to represent faults from all components 
             - 'single-function' uses faults from a single function to represent faults from that type
             - passing the function name only includes modes from that function
             - List of faults of form [(fxn, mode)] to inject in the model.
@@ -2167,6 +2402,7 @@ class SampleApproach():
                 - ('mode names', ('mode1', 'mode2')), gets all modes with the exact names defined in the tuple
                 - ('function class', 'Classname'), which gets all modes from a function with class 'Classname'
                 - ('function classes', ('Classname1', 'Classname2')), which gets all modes from a function with the names in the tuple
+                - ('single-component', ('fxnname2', 'fxnname2')), which specifies single-component modes in the given functions
         phases: dict or 'global' or list
             Local phases in the model to sample. 
                 Dict has structure: {'Function':{'phase':[starttime, endtime]}}
@@ -2229,6 +2465,7 @@ class SampleApproach():
             elif type(tuple(phases.values())[0][0]) in [int, float]:  self.globalphases = phases; self.phases ={}; self.modephases = modephases
             else:                                               self.globalphases = mdl.phases; self.phases = phases; self.modephases = modephases
         #elif type(phases)==set:    self.globalphases=mdl.phases; self.phases = {ph:mdl.phases[ph] for ph in phases}
+        self.mdltype = mdl.__class__.__name__
         self.tstep = mdl.tstep
         self.units = mdl.units
         self.init_modelist(mdl,faults, jointfaults)
@@ -2236,6 +2473,16 @@ class SampleApproach():
         self.create_sampletimes(mdl, sampparams, defaultsamp)
         self.create_scenarios()
         if reduce_to: self.reduce_scens_to_samp(reduce_to)
+    def __repr__(self):
+        modes=list(self._fxnmodes)
+        if len(modes)>10:  modes=modes[0:10]+[["...more"]]
+        modestr = "\n -"+"\n -".join([": ".join(mode) for mode in list(modes)])
+        phases = {ph:tm[0] for fxnphases in self.mode_phase_map.values() for ph,tm in fxnphases.items()}
+        phasestr = "\n -"+"\n -".join([str(k)+": "+str(v) for k,v in phases.items()])
+        jointphasestr = "\n -"+str(self.num_joint)+" combinations, making: "+str(len(self.jointmodes))+' total'
+        return "SampleApproach for "+self.mdltype+" model with "+str(len(self._fxnmodes))+" modes: "+modestr+"\n"\
+            +str(self.num_joint)+" joint modes ("+str(len(self.jointmodes))+" combinations), \nin "+str(len(phases))+" phases: "+phasestr+\
+                " \nsampled at "+str(len(self.times))+" times: \n -"+str(self.times)+"\nresulting in "+str(len(self.scenlist))+" total fault scenarios."
     def init_modelist(self,mdl, faults, jointfaults={'faults':'None'}):
         """Initializes comprates, jointmodes internal list of modes"""
         self.comprates={}
@@ -2248,9 +2495,15 @@ class SampleApproach():
                     else:               self._fxnmodes[fxnname, mode] = params
                 self.fxnrates[fxnname]=fxn.failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
-        elif faults=='single-component':
-            self.fxnrates=dict.fromkeys(mdl.fxns)
-            for fxnname, fxn in  mdl.fxns.items():
+        elif faults=='single-component' or faults[0]=='single-component':
+            if type(faults)==tuple: 
+                if faults[1]=='all':        fxns_to_sample = mdl.fxns
+                elif type(faults[1])==str:  fxns_to_sample = [faults[1]]
+                else:                       fxns_to_sample=faults[1]
+            else:                           fxns_to_sample = mdl.fxns
+            self.fxnrates=dict.fromkeys(fxns_to_sample)
+            for fxnname in fxns_to_sample:
+                fxn = mdl.fxns[fxnname]
                 if getattr(fxn, 'components', {}):
                     firstcomp = list(fxn.components)[0]
                     for mode, params in fxn.faultmodes.items():
@@ -2308,7 +2561,7 @@ class SampleApproach():
                 if not jointfaults.get('jointfuncs', False): num_joint = len({i[0] for i in self._fxnmodes})
                 else:                                        num_joint= len(self._fxnmodes)
             else:                                            num_joint=jointfaults['faults']
-            self.jointmodes=[]
+            self.jointmodes=[]; self.num_joint=num_joint
             inclusive = jointfaults.get('inclusive', True)
             if inclusive:
                 for numjoint in range(2, num_joint+1):
@@ -2322,8 +2575,9 @@ class SampleApproach():
                     jointmodes = [jm for jm in jointmodes if not any([jm[i-1][0] ==j[0] for i in range(1, len(jm)) for j in jm[i:]])]
                 self.jointmodes=jointmodes
             else: raise Exception("Invalid option for jointfault['inclusive']")
-        elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']
+        elif type(jointfaults['faults'])==list: self.jointmodes = jointfaults['faults']; self.num_joint='Custom'
         elif jointfaults['faults']!='None': raise Exception("Invalid jointfaults argument type: "+str(type(jointfaults['faults'])))
+        else: self.jointmodes=[]; self.num_joint='None'
     def calc_intervaltime(self,times, tstep):
         return float(times[1]-times[0])+tstep
     def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}, join_modephases=False):
@@ -2336,10 +2590,10 @@ class SampleApproach():
             self.rates[fxnname, mode]=dict(); self.rates_timeless[fxnname, mode]=dict(); self.mode_phase_map[fxnname, mode] = dict()
             overallrate = self.fxnrates[fxnname]
             dist = self._fxnmodes[fxnname, mode]['dist']
-            if self.comprates[fxnname]:
-                for compname, component in mdl.fxns[fxnname].components.items():
-                    if mode in component.faultmodes:
-                        overallrate=self.comprates[fxnname][compname]
+            if self.comprates[fxnname] and mode in mdl.fxns[fxnname].compfaultmodes:
+                compname = mdl.fxns[fxnname].compfaultmodes[mode]
+                overallrate=self.comprates[fxnname][compname]
+                        
             key_phases = mdl.fxns[fxnname].key_phases_by
             
             if modephases and join_modephases and (key_phases not in ['global', 'none']):
@@ -2350,23 +2604,20 @@ class SampleApproach():
             else:
                 if key_phases=='global': fxnphases = self.globalphases
                 elif key_phases=='none': fxnphases = {'operating':[mdl.times[0], mdl.times[-1]]} 
-                else: fxnphases = self.phases.get(key_phases, self.globalphases)
+                else:                    fxnphases = self.phases.get(key_phases, self.globalphases)
                 fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))  
                 if modephases and (key_phases not in ['global', 'none']):
                     modevect = self._fxnmodes[fxnname, mode]['oppvect']
                     oppvect = {phase:0 for phase in fxnphases}
                     oppvect.update({phase:modevect.get(mode, 0)/len(phases)  for mode,phases in modephases[key_phases].items() for phase in phases})
                 else:
-                    a=1
+                    oppvect = {phase:0 for phase in fxnphases}
                     if type(self._fxnmodes[fxnname, mode]['oppvect'])==dict: 
-                        oppvect = {phase:0 for phase in fxnphases}
                         oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
                     else:
-                        oppvect = self._fxnmodes[fxnname, mode]['oppvect']
-                        if type(oppvect)==int or len(oppvect)==1: oppvect = {phase:1 for phase in fxnphases}
-                        elif self.globalphases!=mdl.phases: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(mdl.phases)}
-                        elif len(oppvect)!=len(fxnphases): raise Exception("Invalid Opportunity vector: "+fxnname+". Invalid length.")
-                        else: oppvect = {phase:oppvect[i] for (i, phase) in enumerate(fxnphases)}
+                        opplist = self._fxnmodes[fxnname, mode]['oppvect']
+                        if len(opplist)>1:  oppvect.update({phase:opplist[i] for (i, phase) in enumerate(fxnphases)})
+                        else:               oppvect.update({phase:opplist[0] for (i, phase) in enumerate(fxnphases)})
             for phase, times in fxnphases.items():
                 opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
                 
@@ -2442,7 +2693,7 @@ class SampleApproach():
                     for ts in times: 
                         if len(ts)==1:      possible_phasetimes = ts
                         elif len(ts)<2:     possible_phasetimes= ts
-                        else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[1]+self.tstep, self.tstep))
+                        else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[-1]+self.tstep, self.tstep))
                     possible_phasetimes.sort()
                     possible_phasetimes=list(set(possible_phasetimes))
                     if len(possible_phasetimes)<=1: 
@@ -2527,9 +2778,7 @@ class SampleApproach():
                 else:       self.weights[fxnmode][phaseid][time] = 1/len(phasetimes)
     def create_nomscen(self, mdl):
         """ Creates a nominal scenario """
-        nomscen={'faults':{},'properties':{}}
-        for fxnname in mdl.fxns:
-            nomscen['faults'][fxnname]='nom'
+        nomscen={'sequence':{},'properties':{}}
         nomscen['properties']['time']=0.0
         nomscen['properties']['type']='nominal'
         nomscen['properties']['name']='nominal'
@@ -2551,14 +2800,16 @@ class SampleApproach():
                             rate = self.rates[fxnmode][phaseid] * self.weights[fxnmode][phaseid][time]
                         if type(fxnmode[0])==str:
                             name = fxnmode[0]+' '+fxnmode[1]+', t='+str(time)
-                            scen={'faults':{fxnmode[0]:fxnmode[1]}, 'properties':{'type': 'single-fault', 'function': fxnmode[0],\
-                                  'fault': fxnmode[1], 'rate': rate, 'time': time, 'name': name}}
+                            scen={'sequence':{time:{'faults':{fxnmode[0]:fxnmode[1]}}},\
+                                  'properties':{'type': 'single-fault', 'function': fxnmode[0],\
+                                                'fault': fxnmode[1], 'rate': rate, 'time': time, 'name': name}}
                         else:
                             name = ' '.join([fm[0]+': '+fm[1]+',' for fm in fxnmode])+' t='+str(time)
                             faults = dict.fromkeys([fm[0] for fm in fxnmode])
                             for fault in faults:
                                 faults[fault] = [fm[1] for fm in fxnmode if fm[0]==fault]
-                            scen = {'faults':faults, 'properties':{'type': str(len(fxnmode))+'-joint-faults', 'functions':{fm[0] for fm in fxnmode}, \
+                            scen = {'sequence':{time:{'faults':faults}},\
+                                    'properties':{'type': str(len(fxnmode))+'-joint-faults', 'functions':{fm[0] for fm in fxnmode}, \
                                     'modes':{fm[1] for fm in fxnmode}, 'rate': rate, 'time': time, 'name': name}}
                         self.scenlist=self.scenlist+[scen]
                         if self.scenids.get((fxnmode, phaseid)): self.scenids[fxnmode, phaseid] = self.scenids[fxnmode, phaseid] + [name]
@@ -2788,6 +3039,137 @@ def trunc(x, n=2.0, truncif='greater'):
     elif  truncif=='greater' and x<n:   y=n
     else:                               y=x
     return y
+
+def get_pdf_for_rand(x, randname, args):
+    """
+    Gets the corresponding probability mass/density for  
+    for random sample x from 'randname' function in numpy.
+    
+    Parameters
+    ----------
+    x : int/float/array
+        samples to get probability mass/density of
+    randname : str
+        Name of numpy.random distribution
+    args : tuple
+        Arguments sent to numpy.random distribution
+
+    Returns
+    -------
+    prob: float/array of probability densities
+    """
+    if type(x) not in [np.ndarray, list]: x=[x]
+    if randname=='integers':
+        if len(args)==1:        pd= [1/args[0] for x in x]
+        elif len(args)>=2:      pd= [1/(args[1]-args[0]) for x in x]
+    elif randname=='random':    pd= [1 for x in x]
+    elif randname=='bytes':     raise Exception("Not able to calculate pdf for bytes")
+    elif randname=='choice':    
+        if type(args[0])==int:  options = [*np.arange(args[0])]
+        else:                   options = args[0]
+        if len(args)==4:        p = args[3]
+        else:                   p = [1/len(options) for i in options]
+        pd= [p[options.index(i)]  for i in x]
+    elif randname in ['shuffle', 'permutation']:
+        pd= [1/np.math.factorial(len(args[0]))]
+    elif randname=='permuted':
+        if len(args)>1 and type(args[0])==np.ndarray:
+            pd= [1/np.math.factorial(args[0].shape(args[1]))]
+        else:
+            pd= [1/np.math.factorial(len(args[0]))]
+    else:
+        pd = get_pdf_for_dist(x,randname,args)
+    if type(pd)==list:              pd=np.array(pd)
+    elif type(pd) != np.ndarray:    pd=np.array([pd]) 
+    return pd
+
+def get_scipy_pdf_helper(x, randname, args,pmf=False):
+    """
+    Gets probability mass/density for the outcome x from the distribution "randname" with arguments "args".
+    Used as a helper function in determining stochastic model state probability
+
+    Parameters
+    ----------
+    x : int/float/array
+        samples to get probability mass/density of
+    randname : str
+        Name of scipy.stats probability distribution
+    args : tuple
+        Arguments to send to scipy.stats.randname.pdf
+    pmf : Bool, optional
+        Whether the distribution uses a probability mass function instead of a pdf. The default is False.
+
+    Returns
+    -------
+    prob: float/array of probability densities
+
+    """
+    if randname=='dirichlet':
+        a=1
+    if pmf:     return getattr(stats, randname).pmf(x, *args)
+    else:       return getattr(stats, randname).pdf(x, *args)
+def get_pdf_for_dist(x, randname, args): # note: when python 3.10 releases, this should become match/case
+    """
+    Gets the corresponding probability mass/density (from scipy) for outcome x 
+    for probability distributions with name 'randname' in numpy.
+    
+    Parameters
+    ----------
+    x : int/float/array
+        samples to get probability mass/density of
+    randname : str
+        Name of numpy.random distribution
+    args : tuple
+        Arguments sent to numpy.random distribution
+
+    Returns
+    -------
+    prob: float/array of probability densities
+    
+    """
+    if type(x) in [np.ndarray, list] and len(x)>1 and len(args)>0: args=args[:-1]
+    
+    same_funcs = ['beta', 'dirichlet', 'f', 'gamma', 'laplace', 'logistic', 'multivariate_normal', 'pareto', 'uniform', 'wald']
+    same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
+    different_funcs_pmf = {'binomial':'binom', 'geometric':'geom', 'logseries':'logser',\
+                           'multivariate_hypergeometric':'multivariate_hypergeom',\
+                           'negative_binomial':'nbinom'}
+    different_funcs = {'chisquare':'chi2', 'gumbel':'gumbel_r', 'noncentral_chisquare':'ncx2',\
+                       'noncentral_f':'ncf', 'normal':'norm', 'power':'powerlaw', 'standard_cauchy':'cauchy',\
+                       'standard_gamma':'gamma', 'standard_normal':'norm', 'weibull':'weibull_min'}
+    if randname in same_funcs:            
+        return get_scipy_pdf_helper(x,randname, args)
+    elif randname in same_funcs_pmf:
+        return get_scipy_pdf_helper(x, randname, args, pmf=True)
+    elif randname in different_funcs:
+        return get_scipy_pdf_helper(x,different_funcs[randname], args)
+    elif randname in different_funcs_pmf:
+        return get_scipy_pdf_helper(x,different_funcs_pmf[randname], args, pmf=True)       
+    elif randname in ['exponential', 'rayleigh']:   
+        if len(args)==0:            return getattr(stats, randname).pdf(x)
+        elif len(args)==1:          return getattr(stats, randname).pdf(x, scale=args[0]) 
+        elif len(args)==2:          return getattr(stats, randname).pdf(x, loc=args[1], scale=args[0]) 
+        else: raise Exception("Too many arguments for "+randname+" distribution")
+    elif randname=='hypergeometric': 
+        n_pop = args[0]+args[1]
+        n_good = args[0]
+        n_sample = args[2]
+        return stats.hypergeom.pmf(x,n_pop, n_good, n_sample)
+    elif randname=='lognormal':
+        s=args[1]
+        scale=np.exp(args[0])
+        return stats.lognormal.pdf(x, s, scale=scale) 
+    elif randname=='standard_t': return stats.multivariate_t.pdf(x, df=args[0])
+    elif randname=='triangular':
+        left, mode, right = args[:3]
+        loc = left
+        scale = right-loc
+        c = (mode-loc)/scale
+        return stats.triang.pdf(x,c,loc,scale)
+    elif randname=='vonmises':
+        return stats.vonmises.pdf(x,args[1], args[0])
+    else: raise Exception("Invalid randname distribution: "+randname+". Ensure that it is a part of numpy.random/scipy.stats")
+
 
 def union(probs):
     """ Calculates the union of a list of probabilities [p_1, p_2, ... p_n] p = p_1 U p_2 U ... U p_n """

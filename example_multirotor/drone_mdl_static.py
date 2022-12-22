@@ -12,8 +12,8 @@ class StoreEE(FxnBlock):
         self.failrate=1e-5
         self.assoc_modes({'nocharge':[1,300]})
     def behavior(self, time):
-        if      self.has_fault('nocharge'):   self.EEout.effort=0.0
-        else: self.EEout.effort=1.0
+        if self.has_fault('nocharge'):  self.EEout.effort=0.0
+        else:                           self.EEout.effort=1.0
 class DistEE(FxnBlock):
     def __init__(self,name, flows):
         super().__init__(name,flows, ['EEin','EEmot','EEctl','ST'], {'EEtr':1.0, 'EEte':1.0})
@@ -106,11 +106,11 @@ class CtlDOF(FxnBlock):
         elif self.has_fault('degctl'): self.Cs=0.5
         
         upthrottle=1.0
-        if self.Dir.traj[2]>1:     upthrottle=2
-        elif -1<self.Dir.traj[2]<1:  upthrottle= 1 + self.Dir.traj[2]
-        elif self.Dir.traj[2]<=-1.0:   upthrottle = 0
+        if self.Dir.z>1:        upthrottle=2
+        elif -1<self.Dir.z<1:   upthrottle= 1 + self.Dir.z
+        elif self.Dir.z<=-1.0:  upthrottle = 0
             
-        if self.Dir.traj[0]==0 and self.Dir.traj[1]==0: forwardthrottle=0.0
+        if self.Dir.x==0 and self.Dir.y==0: forwardthrottle=0.0
         else: forwardthrottle=1.0
         
         self.Ctl.forward=self.EEin.effort*self.Cs*forwardthrottle*self.Dir.power
@@ -124,13 +124,12 @@ class PlanPath(FxnBlock):
     def condfaults(self, time):
         if self.FS.support<0.5: self.add_fault('noloc')
     def behavior(self, t):
-        self.Dir.assign([1,0,0])
+        self.Dir.assign([1.0,0.0,0.0], "x","y","z")
         # faulty behaviors    
-        if self.has_fault('noloc'):     self.Dir.assign([0,0,0])
-        elif self.has_fault('degloc'):  self.Dir.assign([0,0,-1])
+        if self.has_fault('noloc'):     self.Dir.assign([0,0,0], "x", "y", "z")
+        elif self.has_fault('degloc'):  self.Dir.assign([0,0,-1], "x", "y", "z")
         if self.EEin.effort<0.5:
-            self.Dir.power=0.0
-            self.Dir.assign([0,0,0])
+            self.Dir.assign([0.0,0.0,0.0,0.0],'x','y','z','power')  
 
 class Trajectory(FxnBlock):
     def __init__(self,name, flows):
@@ -154,19 +153,6 @@ class ViewEnvironment(FxnBlock):
         super().__init__(name, flows, ['Env'])
         self.failrate=1e-5
         self.assoc_modes({'poorview':[0.2, 10000]})
-
-class Direc(Flow):
-    def __init__(self):
-        self.traj=[0.0,0.0,0.0]
-        super().__init__({'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': 1.0}, 'Trajectory')
-    def assign(self, traj):
-        self.x=traj[0]
-        self.y=traj[1]
-        self.z=traj[2]
-        self.traj=traj
-    def status(self):
-        status={'x': self.traj[0], 'y': self.traj[1], 'z': self.traj[2], 'power': self.power}
-        return status.copy()
         
 class Drone(Model):
     def __init__(self, params={'graph_pos':{}, 'bipartite_pos':{}}, modelparams={}, valparams={}):
@@ -183,8 +169,7 @@ class Drone(Model):
         self.add_flow('Ctl1', {'forward':1.0, 'upward':1.0})
         self.add_flow('DOFs', {'vertvel':1.0, 'planvel':1.0, 'planpwr':1.0, 'uppwr':1.0})
         self.add_flow('Env1', {'x':0.0,'y':0.0,'elev':50.0} )
-        # custom flows
-        self.add_flow('Dir1', Direc())
+        self.add_flow('Dir1', {"x":1.0, "y":0.0, "z":0.0, "power":1.0})
         #add functions to the model
         self.add_fxn('StoreEE',['EE_1', 'Force_ST'], fclass=StoreEE)
         self.add_fxn('DistEE', ['EE_1','EEmot','EEctl', 'Force_ST'], fclass=DistEE)
@@ -207,4 +192,6 @@ class Drone(Model):
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
     
 if __name__=="__main__":
-    mdl = Drone()
+    from fmdtools.faultsim import propagate
+    static_mdl = Drone()
+    endclasses, mdlhists = propagate.single_faults(static_mdl)

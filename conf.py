@@ -22,7 +22,7 @@ project = 'fmdtools'
 author = 'Daniel Hulse, Sequoia Andrade, Hannah Walsh, Lukman Irshad'
 
 # The full version, including alpha/beta/rc tags
-release = '1.2.0'
+release = '1.3.0'
 
 
 # -- General configuration ---------------------------------------------------

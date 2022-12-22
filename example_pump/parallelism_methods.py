@@ -32,8 +32,8 @@ def one_delay_helper(delay):
     """This helper function is used by pool.map to generate output over the given 
     input delays"""
     mdl = Pump({'cost': {'repair', 'water'}, 'delay': delay, 'units': 'hrs'})
-    endresults,resgraph, mdlhists = propagate.one_fault(mdl, 'ExportWater', 'block')
-    return endresults
+    endclasses, mdlhists = propagate.one_fault(mdl, 'ExportWater', 'block')
+    return endclasses
 
 def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, track_times='all'):
     """
@@ -82,8 +82,8 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, tra
 
 def run_model():
     mdl = Pump()
-    endresults, resgraph, mdlhist=propagate.nominal(mdl)
-    return endresults
+    endclasses, mdlhist=propagate.nominal(mdl)
+    return endclasses
 
 def parallel_mc(iters=10):
     """run for performance evaluation of model with asyncronous execution"""
@@ -102,8 +102,8 @@ def parallel_mc2(iters=10):
 def one_fault_helper(args):
     """Helper function for parallel_mc3 to run in pool.map"""
     mdl = Pump()
-    endresults,resgraph, mdlhists = propagate.one_fault(mdl, args[0], args[1])
-    return endresults,resgraph, mdlhists
+    endclasses, mdlhists = propagate.one_fault(mdl, args[0], args[1])
+    return endclasses, mdlhists
 
 def parallel_mc3():
     """run for performance evaluation of model single fault simulation"""

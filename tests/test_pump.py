@@ -19,19 +19,26 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.default_mdl = Pump()
         self.mdl = Pump()
         self.water_mdl = Pump(params={'cost':{'water'}, 'delay':10, 'units':'hrs'})
+    def test_value_setting(self):
+        statenames = ['ImportEE.mode', 'Sig_1.power', 'MoveWater.eff']
+        newvalues = ['newmode', 20, 0.1]
+        self.check_var_setting(self.mdl, statenames, newvalues)
+    def test_value_setting_dict(self):
+        dict_to_check ={'ImportSignal.mode':'thismode', 'Wat_2.area':0.0}
+        self.check_var_setting_dict(self.mdl, dict_to_check)
     def test_dynamic_prop_values(self):
         """Test that given fault times result in the expected water/value loss"""
         faulttimes = [10,20,30]
         for faulttime in faulttimes:
-            endresults, resgraph, mdlhist = propagate.one_fault(self.water_mdl, "MoveWater", "mech_break", time=faulttime)
+            endresults, mdlhist = propagate.one_fault(self.water_mdl, "MoveWater", "mech_break", time=faulttime)
             expected_wcost = self.expected_water_cost(faulttime)
-            self.assertAlmostEqual(expected_wcost, endresults['classification']['cost'])
+            self.assertAlmostEqual(expected_wcost, endresults['cost'])
     def test_dynamic_prop_values_2(self):
         """Test that the delayed fault behavior occurs at the time specified"""
         delays = [0, 1, 5, 10]
         for delay in delays:
             mdl = Pump(params={'cost':{'water'}, 'delay':delay, 'units':'hrs'})
-            endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'ExportWater', 'block', time=25)
+            endresults, mdlhist = propagate.one_fault(mdl, 'ExportWater', 'block', time=25)
             has_fault_at_time = mdlhist['faulty']['functions']['MoveWater']['faults']['mech_break'][25+delay]
             self.assertEqual(has_fault_at_time, 1)
             has_fault_before_time = mdlhist['faulty']['functions']['MoveWater']['faults']['mech_break'][25+delay-1]
@@ -98,7 +105,7 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_one_run_pickle(self):
         if os.path.exists("single_fault.pkl"): os.remove("single_fault.pkl")
         
-        endresults, resgraph, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
+        endresults, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
         mdlhist_flattened = rd.process.flatten_hist(mdlhist)
         rd.process.save_result(mdlhist, "single_fault.pkl")
         mdlhist_saved = rd.process.load_result("single_fault.pkl")
@@ -116,7 +123,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         
     def test_one_run_csv(self):
         if os.path.exists("single_fault.csv"): os.remove("single_fault.csv")
-        endresults, resgraph, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
+        endresults, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
         mdlhist_flattened = rd.process.flatten_hist(mdlhist)
         
         rd.process.save_result(mdlhist, "single_fault.csv")
@@ -129,7 +136,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         os.remove("single_fault.csv")
     def test_one_run_json(self):
         if os.path.exists("single_fault.json"): os.remove("single_fault.json")
-        endresults, resgraph, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
+        endresults, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
         mdlhist_flattened = rd.process.flatten_hist(mdlhist)
         
         rd.process.save_result(mdlhist, "single_fault.json")
@@ -213,7 +220,8 @@ def exp_cost_quant(approach, mdl):
 if __name__ == '__main__':
     unittest.main()
     #suite = unittest.TestSuite()
-    #suite.addTest(PumpTests("test_fmea_options"))
+    #suite.addTest(PumpTests("test_value_setting"))
+    #suite.addTest(PumpTests("test_value_setting_dict"))
     #runner = unittest.TextTestRunner()
     #runner.run(suite)
 
