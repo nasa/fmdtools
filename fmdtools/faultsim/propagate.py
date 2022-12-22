@@ -610,7 +610,7 @@ def check_overwrite(save_args):
             filename = args['filename']
             if args.get('filename', False):  proc.file_check(filename, args.get('overwrite', False))
             if save_args.get('indiv', False):           
-                last_split_index = filename.rfind("/")
+                last_split_index = filename.rfind(".")
                 foldername = filename[:last_split_index]
                 if not os.path.exists(foldername): os.makedirs(foldername)
 
