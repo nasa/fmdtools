@@ -6,9 +6,8 @@ Created on Wed Dec 14 13:51:18 2022
 """
 import unittest
 import sys, os
-sys.path.insert(1, os.path.join('..'))
+sys.path.insert(0, os.path.join('..'))
 from example_multirotor.drone_mdl_opt import Drone, opt_prob, x_to_rcost, x_to_ocost
-from example_tank.tank_opt import x_to_rcost_leg, x_to_totcost_leg, x_to_descost
 from CommonTests import CommonTests
 import multiprocessing as mp
 

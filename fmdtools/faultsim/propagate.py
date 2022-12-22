@@ -43,6 +43,7 @@ import fmdtools.resultdisp.process as proc
 import tqdm
 import dill
 import warnings
+import sys,os
 from fmdtools.modeldef import SampleApproach
 
 ##DEFAULT ARGUMENTS
@@ -123,7 +124,7 @@ Parameters
 """
 def pack_run_kwargs(**kwargs):
     """Creates subset of run kwargs for :func:`nom_helper` and :data:`run_kwarg`"""
-    return {k:kwargs.get(k,v) for k,v in run_kwargs.items()}
+    return {k:copy.deepcopy(kwargs.get(k,v)) for k,v in run_kwargs.items()}
 mult_kwargs = {'max_mem':2e9,
                'showprogress': True,
                'pool': False}
@@ -606,7 +607,12 @@ def check_mdl_memory(mdl, nscens, max_mem=2e9):
 def check_overwrite(save_args):
     for arg, args in save_args.items():
         if arg!='indiv':
-            if args.get('filename', False): proc.file_check(args['filename'], args.get('overwrite', False))
+            filename = args['filename']
+            if args.get('filename', False):  proc.file_check(filename, args.get('overwrite', False))
+            if save_args.get('indiv', False):           
+                last_split_index = filename.rfind("/")
+                foldername = filename[:last_split_index]
+                if not os.path.exists(foldername): os.makedirs(foldername)
 
 def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     """
@@ -648,8 +654,8 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     save_app = save_args.pop("apps", False)
     max_mem, showprogress, pool = unpack_mult_kwargs(kwargs)
     sim_kwarg = pack_sim_kwargs(**kwargs)
-    run_kwargs = pack_run_kwargs(**kwargs)
-    app_args = {k:v for k,v in kwargs.items() if k not in [*sim_kwarg,*run_kwargs, 'max_mem', 'showprogress', 'pool']}
+    run_kwargs_nest = pack_run_kwargs(**kwargs)
+    app_args = {k:v for k,v in kwargs.items() if k not in [*sim_kwarg,*run_kwargs_nest, 'max_mem', 'showprogress', 'pool']}
     
     nest_mdlhists = dict.fromkeys(nomapp.scenarios)
     nest_results = dict.fromkeys(nomapp.scenarios)

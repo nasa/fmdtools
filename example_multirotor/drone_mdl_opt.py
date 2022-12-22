@@ -651,8 +651,8 @@ opt_prob.add_constraints("ocost", g_soc=("StoreEE.soc", "vars", "end",("greater"
                                   g_max_height=("DOFs.z", "vars", "all", ("less", 122)),
                                   g_faults=("repcost", "endclass", "end", ("less", 0.1)))
 opt_prob.add_variables("ocost", "height", vartype=plan_flight)
-opt_prob.cd([2,2])
-opt_prob.co([10])
+#opt_prob.cd([2,2])
+#opt_prob.co([10])
 
 respols = ['continue', 'to_home', 'to_nearest', 'emland']
 def spec_respol(bat, line):

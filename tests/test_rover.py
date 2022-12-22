@@ -6,7 +6,7 @@ Created on Thu Dec 15 15:26:19 2022
 """
 import unittest
 import sys, os
-sys.path.insert(1, os.path.join('..'))
+sys.path.insert(0, os.path.join('..'))
 from example_rover.optimization.search_rover import line_dist, line_dist_faster
 from CommonTests import CommonTests
 import multiprocessing as mp

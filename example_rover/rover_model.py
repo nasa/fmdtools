@@ -253,6 +253,8 @@ def turn_func(x,y, radius,start, buffer=0.1):
     elif x >= start:                return x, radius - np.sqrt(radius**2 - (x-start)**2)
     elif x < start:                 return x, 0
 def turn_angle_func(x, radius, start):
+    if list in {type(x), type(radius), type(start)}:
+        raise Exception("Invalid x,radius,start: "+str(x)+","+str(radius)+","+str(start))
     if   x >= start+radius: return 90.0
     elif x >= start:        return 90 - np.arccos(((x-start)/radius))*180/np.pi  #np.arctan((x-start)/(radius**2-(start-x)**2))*180/np.pi
     elif x<start:           return 0.0

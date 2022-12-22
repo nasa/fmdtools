@@ -92,6 +92,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 if __name__ == '__main__':
     #suite = unittest.TestSuite()
     #suite.addTest(StochasticPumpTests("test_stochastic_pdf"))
+    #suite.addTest(StochasticPumpTests("test_save_load_nominalapproach"))
     #suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
     #runner = unittest.TextTestRunner()
     #runner.run(suite)
