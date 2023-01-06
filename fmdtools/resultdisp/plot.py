@@ -328,8 +328,13 @@ def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_
         else: ax_l.legend(by_label.values(), by_label.keys(), prop={'size': 8}, title=legend_title)
     plt.subplots_adjust(hspace=v_padding, wspace=h_padding)
     if title: plt.suptitle(title, y=1.0+title_padding)
+def make_consolidated_legend(ax):
+    ax.legend()
+    handles, labels = ax.get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    ax.get_legend().remove()
+    ax.legend(by_label.values(), by_label.keys(), bbox_to_anchor=(1.05, 1), loc='upper left')
     
-
 def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metric_bins={}, legend_loc=-1, 
                 xlabels={}, ylabel='count', title='', indiv_kwargs={}, figsize='default', 
                 v_padding=0.4, h_padding=0.05, title_padding=0.1, legend_title=None, **kwargs):

@@ -858,18 +858,21 @@ def flatten_hist(hist, newhist = False, prevname=(), to_include='all'):
     for att, val in hist.items():
         newname = prevname+tuple([att])
         if type(val)==dict: 
-            if type(to_include)==list and att in to_include: new_to_include = 'all'
-            elif type(to_include)==set and att in to_include: new_to_include = 'all'
-            elif type(to_include)==dict and att in to_include: new_to_include = to_include[att]
-            elif type(to_include)==str and att== to_include: new_to_include = 'all'
-            elif to_include =='all': new_to_include='all'
-            elif att in ['functions', 'flows']: new_to_include = to_include
-            else: new_to_include= False
+            new_to_include = get_sub_include(att, to_include)
             if new_to_include: flatten_hist(val, newhist, newname, new_to_include)
         elif to_include=='all' or att in to_include: 
             if len(newname)==1: newhist[newname[0]] = val
             else:               newhist[newname] = val
     return newhist
+def get_sub_include(att, to_include):
+    if type(to_include)==list and att in to_include:        new_to_include = 'all'
+    elif type(to_include)==set and att in to_include:       new_to_include = 'all'
+    elif type(to_include)==dict and att in to_include:      new_to_include = to_include[att]
+    elif type(to_include)==str and att== to_include:        new_to_include = 'all'
+    elif to_include =='all': new_to_include='all'
+    elif att in ['functions', 'flows']:                     new_to_include = to_include
+    else:                                                   new_to_include= False
+    return new_to_include
 
 def nest_flattened_hist(hists, prefix = ()):
     """
