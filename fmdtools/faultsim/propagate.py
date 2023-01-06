@@ -1175,7 +1175,7 @@ def init_dicthist(start_dict, timerange, track="all", modelength=10):
     dicthist = {}
     for att, val in start_dict.items():
         if type(val)==dict: 
-            sub_track = proc.get_sub_include(att)
+            sub_track = proc.get_sub_include(att, track)
             if sub_track: dicthist[att]=init_dicthist(val, timerange, sub_track)
         elif track=="all" or att in track:
             if att=="mode":     dicthist[att]= np.full([len(timerange)], val, dtype="U"+str(modelength))
