@@ -1359,12 +1359,14 @@ class Flow(Common):
             if type(self).copy == Flow.copy:        warnings.warn("Custom copy() method not implemented--Staged Execution may not copy custom model states")
     def __repr__(self):
         if hasattr(self,'name'):    
-            return getattr(self, 'name')+' '+getattr(self, 'type')+' flow: '+str(self.status())
+            return getattr(self, 'name')+' '+getattr(self, 'type')+' flow: '+str({k:s for k,s in self.status().items() if k in self._states})
         else: return "Uninitialized Flow"
     def reset(self):
         """ Resets the flow to the initial state"""
         for state in self._initstates:
             setattr(self, state, self._initstates[state])
+    def return_states(self):
+        return self.status()
     def status(self):
         """
         Returns a dict with the current states of the flow.
@@ -1388,13 +1390,132 @@ class Flow(Common):
         states={}
         for state in self._states:
             states[state]=getattr(self,state)
-        if self.__class__==Flow:
+        if self.__class__ in [Flow, MultiFlow, CommsFlow]:
             copy = self.__class__(states, self.name, self.type)
         else:
             copy = self.__class__()
             for state in self._states:
                 setattr(copy, state, getattr(self,state))
         return copy
+#Specialized Flow types
+class MultiFlow(Flow):
+    def __init__(self, flowdict, name, ftype="MultiFlow", glob=[]):
+        self.locals=[]
+        super().__init__(flowdict, name, ftype=ftype, suppress_warnings=True)
+        if not glob: self.glob=self
+        else:        self.glob=glob
+    def __repr__(self):
+        rep_str = Flow.__repr__(self)
+        for l in self.locals:
+            rep_str=rep_str+"\n   "+self.get_view(l).__repr__()
+        return rep_str
+    def create_local(self, name, attrs = "all"):
+        if attrs == "all":      atts = self._initstates
+        elif type(attrs)==str:  attrs = [attrs]
+        if type(attrs)==list:   atts = {k:v for k,v in self._initstates.items() if k in attrs}
+        elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in self._initstates}
+        
+        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self)
+        else:                   newflow = self.__class__(atts, name, glob=self)
+        setattr(self, name, newflow)
+        self.locals.append(name)
+        return newflow
+    def get_local_name(self, fxnname):
+        if fxnname=="local":    return self.name
+        elif fxnname=="global": return "glob"
+        else:                   return fxnname
+    def get_view(self, view):
+        if view=="":            raise Exception("Must provide view")
+        elif view=="local":     fl_view = self
+        elif view=="global":    fl_view=self.glob
+        else:                   fl_view = getattr(self.glob, view)
+        return fl_view
+    def update(self, to_update="local", to_get="global", *states, **statedict):
+        up = self.get_view(to_update)
+        get = self.get_view(to_get)
+        up.assign(get, *states, **statedict)
+    def status(self):
+        stat = super().status()
+        for l in self.locals:
+            stat[l]=getattr(self, l).status()
+        return stat
+    def return_states(self):
+        states = super().status()
+        for l in self.locals:
+            states.update({l+"_"+k:v for k, v in getattr(self, l).status().items()})
+        return states
+    def copy(self, glob=[]):
+        states = super().status()
+        cop = self.__class__(states, self.name, self.type, glob=glob)
+        for loc in self.locals:
+            local = getattr(self, loc)
+            cop.create_local(local.name, attrs=local.status())
+        return cop
+        
+
+class CommsFlow(MultiFlow):
+    def __init__(self, flowdict, name, ftype="CommsFlow", glob=[]):
+        self.fxns = {}
+        super().__init__(flowdict, name, ftype="Comms", glob=glob)
+    def __repr__(self):
+        rep_str = Flow.__repr__(self)
+        if self.name==self.glob.name:   
+            for fname, func in self.fxns.items():
+                rep_str=rep_str+"\n   "+fname+": "+func["internal"].__repr__() #+"\n       out: "+func["out"].__repr__()+"\n       in: "+str(func["in"])
+        elif self.name in self.glob.fxns:
+            rep_str = rep_str+"\n       out: "+self.out().__repr__()+"\n       in: "+str(self.inbox())
+        return rep_str
+    def create_comms(self, fxnname, attrs="all", out_attrs="all"):
+        self.fxns[fxnname]={"internal": self.create_local(fxnname, attrs=attrs), 
+                            "out":      self.create_local(fxnname+"_out", attrs=out_attrs), 
+                            "in":{}}
+        return self.fxns[fxnname]["internal"]
+    def send(self, fxn_to, fxn_from="local", *states, **statedict):
+        fxn_from =self.get_local_name(fxn_from)
+        if fxn_to=="all":       fxns_to=[f for f in self.glob.fxns if f!=self.name]
+        elif type(fxn_to)==str: fxns_to = [self.get_local_name(fxn_to)]
+        else:                   fxns_to = fxn_to
+        f_from = self.get_view(fxn_from)
+        self.glob.fxns[fxn_from]["out"].assign(f_from, *states, **statedict)
+        for f_to in fxns_to:
+            self.glob.fxns[f_to]["in"][fxn_from]=[states, statedict]
+    def inbox(self, fxnname="local"):
+        fxnname = self.get_local_name(fxnname)
+        return self.glob.fxns[fxnname]["in"]
+    def clear_inbox(self, fxnname="local"):
+        fxnname = self.get_local_name(fxnname)
+        self.glob.fxns[fxnname]["in"].clear()
+    def out(self, fxnname="local"):
+        fxnname = self.get_local_name(fxnname)
+        return self.glob.fxns[fxnname]["out"]
+    def receive(self, fxn_to="local", fxn_from="all"): #need to add something for resolving errors
+        fxn_to = self.get_local_name(fxn_to)
+        if fxn_from=="all":         fxn_from = self.glob.fxns[fxn_to]["in"]
+        elif type(fxn_from)==str:   fxn_from = {fxn_from:self.glob.fxns[fxn_to]["in"][fxn_from] for i in range(1) if fxn_from in self.glob.fxns[fxn_to]["in"]}
+        elif type(fxn_from)==list:  fxn_from = {f:self.glob.fxns[fxn_to]["in"][f] for f in fxn_from if f in self.glob.fxns[fxn_to]["in"]}
+        
+        for f_from in list(fxn_from):
+            args = self.glob.fxns[fxn_to]["in"].pop(f_from)
+            self.glob.fxns[fxn_to]["internal"].assign(self.glob.fxns[f_from]["out"],  *args[0], **args[1])
+    def status(self):
+        stat = super().status()
+        for f in self.fxns:
+            stat[f+"_in"]=self.fxns[f]["in"]
+        return stat
+    def return_states(self):
+        states= super().return_states()
+        for f in self.fxns:
+            states.update({f+"_in":self.fxns[f]["in"]})
+        return states
+    def copy(self, glob=[]):
+        states = super().status()
+        cop = self.__class__({s:states[s] for s in self._initstates}, self.name, self.type, glob=glob)
+        for fxn in self.fxns:
+            cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status())
+            cop.fxns[fxn]["in"]=copy.deepcopy(self.fxns[fxn]["in"])
+        return cop
+            
+
 
 #Model superclass    
 class Model(object):
