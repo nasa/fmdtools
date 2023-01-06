@@ -24,8 +24,7 @@ import sys
 from decimal import Decimal
 from ordered_set import OrderedSet
 from operator import itemgetter, attrgetter
-from collections.abc import Iterable
-from typing import Hashable
+from collections.abc import Iterable, Hashable
 from inspect import signature
 import fmdtools.resultdisp.process as proc
 
