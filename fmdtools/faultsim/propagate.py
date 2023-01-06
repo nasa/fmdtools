@@ -942,16 +942,25 @@ def prop_time(mdl, time, flowstates={}, run_stochastic=False):
             flowstates[flowname]=mdl.flows[flowname].return_states()
     n=0
     while activefxns:
+        flows_to_check = {*mdl.staticflows}
         for fxnname in list(activefxns).copy():
             #Update functions with new values, check to see if new faults or states
             oldstates, oldfaults = mdl.fxns[fxnname].return_states()
             mdl.fxns[fxnname].updatefxn('static', time=time, run_stochastic=run_stochastic)
-            newstates, newfaults = mdl.fxns[fxnname].return_states() 
-            if oldstates != newstates or oldfaults != newfaults: nextfxns.update([fxnname])
-        #Check to see what flows have new values and add connected functions
-        for flowname in mdl.staticflows:
+            if mdl.fxns[fxnname].has_new_states(oldstates, oldfaults): nextfxns.update([fxnname])
+            
+            #Check to see what flows now have new values and add connected functions (done for each because of communications potential)
+            for flowname in mdl.fxns[fxnname].flows:
+                if flowname in flows_to_check:
+                    if flowstates[flowname]!=mdl.flows[flowname].return_states():
+                        nextfxns.update(set([n for n in mdl.bipartite.neighbors(flowname) if n in mdl.staticfxns]))
+                        flows_to_check.remove(flowname)
+        # check remaining flows that have not been checked already
+        for flowname in flows_to_check:
             if flowstates[flowname]!=mdl.flows[flowname].return_states():
                 nextfxns.update(set([n for n in mdl.bipartite.neighbors(flowname) if n in mdl.staticfxns]))
+        # update flowstates
+        for flowname in mdl.staticflows:
             flowstates[flowname]=mdl.flows[flowname].return_states()
         activefxns=nextfxns.copy()
         nextfxns.clear()
@@ -1204,11 +1213,11 @@ def init_fxnhist(mdl, timerange, track='all', run_stochastic=False):
         A dictionary history of each recorded function state over the given timerange.
     """
     fxnhist = {}
-    functions_track = proc.get_sub_include("flows", track)
+    functions_track = proc.get_sub_include("functions", track)
     for fxnname, fxn in mdl.fxns.items():
         fxn_track = proc.get_sub_include(fxnname, functions_track)
         if fxn_track:
-            fxnhist[fxnname] = init_blockhist(fxnname, fxn, timerange, track, run_stochastic=run_stochastic)
+            fxnhist[fxnname] = init_blockhist(fxnname, fxn, timerange, fxn_track, run_stochastic=run_stochastic)
             for comp_act in {*fxn.components, *fxn.actions}:
                 comp_track = proc.get_sub_include(comp_act, fxn_track)
                 if comp_track: fxnhist[fxnname][comp_act]=init_blockhist(comp_act, getattr(fxn, comp_act), timerange, track=comp_track)

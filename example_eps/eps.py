@@ -290,7 +290,7 @@ if __name__ == '__main__':
 
     mdl= EPS()
     
-    resgraph, mdlhists = propagate.one_fault(mdl, 'Import_EE', 'high_v', desired_result="bipartite")
+    resgraph, mdlhists = propagate.one_fault(mdl, 'Distribute_EE', 'short', desired_result="bipartite")
     
     rd.graph.show(mdl.bipartite, gtype='bipartite')
     #endclasses, mdlhists = propagate.single_faults(mdl)
