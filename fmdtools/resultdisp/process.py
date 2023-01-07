@@ -865,6 +865,7 @@ def flatten_hist(hist, newhist = False, prevname=(), to_include='all'):
             else:               newhist[newname] = val
     return newhist
 def get_sub_include(att, to_include):
+    """Determins what attributes of att to include based on the provided dict/str/list/set to_include"""
     if type(to_include)==list and att in to_include:        new_to_include = 'all'
     elif type(to_include)==set and att in to_include:       new_to_include = 'all'
     elif type(to_include)==dict and att in to_include:      new_to_include = to_include[att]

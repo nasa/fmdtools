@@ -1527,7 +1527,7 @@ class CommsFlow(MultiFlow):
         elif self.name in self.glob.fxns:
             rep_str = rep_str+"\n       out: "+self.out().__repr__()+"\n       in: "+str(self.inbox())
         return rep_str
-    def create_comms(self, name, attrs="all", out_attrs="all"):
+    def create_comms(self, name, attrs="all", out_attrs="all", **kwargs):
         """
         Creates an individual view of the CommsFlow (e.g., for a function), with an
         internal view, out view, in dict, and recieved set.
@@ -1546,10 +1546,11 @@ class CommsFlow(MultiFlow):
         CommsFlow
             A local view of the CommsFlow for the function
         """
-        self.fxns[name]={"internal": self.create_local(name, attrs=attrs), 
-                            "out":      self.create_local(name+"_out", attrs=out_attrs), 
-                            "in":{},
-                            "received":set()}
+        if name not in self.fxns:
+            self.fxns[name]={"internal":    self.create_local(name, attrs=attrs), 
+                                "out":      self.create_local(name+"_out", attrs=out_attrs), 
+                                "in":       kwargs.get("prev_in", {}),
+                                "received": kwargs.get("received", set())}
         return self.fxns[name]["internal"]
     def send(self, fxn_to, fxn_from="local", *states):
         """
@@ -1571,6 +1572,7 @@ class CommsFlow(MultiFlow):
         if fxn_to=="all":       fxns_to=[f for f in self.glob.fxns if f!=self.name]
         elif type(fxn_to)==str: fxns_to = [self.get_local_name(fxn_to)]
         else:                   fxns_to = fxn_to
+        #if not states: states=("all",)
         f_from = self.get_view(fxn_from)
         self.glob.fxns[fxn_from]["out"].assign(f_from, *states)
         for f_to in fxns_to:
@@ -1628,9 +1630,8 @@ class CommsFlow(MultiFlow):
         states = super().status()
         cop = self.__class__({s:states[s] for s in self._initstates}, self.name, self.type, glob=glob)
         for fxn in self.fxns:
-            cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status())
-            cop.fxns[fxn]["in"]=copy.deepcopy(self.fxns[fxn]["in"])
-            cop.fxns[fxn]["received"]=copy.deepcopy(self.fxns[fxn]["received"])
+            cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status(),
+                             prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]))
         return cop
             
 
