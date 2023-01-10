@@ -107,6 +107,7 @@ class ImportWater(FxnBlock):
         """ The behavior is that if the flow has a no_wat fault, the wate level goes to zero"""
         if self.has_fault('no_wat'): self.Watout.level=0.0
         else:                        self.Watout.level=1.0
+    
 
 class ExportWater(FxnBlock):
     """ Import Water is the pipe with water going into the pump """

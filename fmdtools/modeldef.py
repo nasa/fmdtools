@@ -950,6 +950,9 @@ class FxnBlock(Block):
         blockret = super().__repr__()
         if getattr(self, 'actions'): return blockret+', active: '+str(self.active_actions)
         else:                        return blockret
+    def find_classification(self, scen, fxnhist):
+        """Placeholder for local find_classification methods in functions"""
+        return {}
     def add_act(self, name, action, *flows, duration=0.0, **params):
         """
         Associate an Action with the Function Block for use in the Action Sequence Graph
@@ -2123,6 +2126,14 @@ class Model(object):
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
         self._rng=np.random.default_rng(self.seed)
+    def find_sub_classifications(self, scen, mdlhists):
+        """Enables the use of find_classification at the function level."""
+        subclass={}
+        for fxnname, fxn in self.fxns.items():
+            fhists = proc.create_fxnhist_view(mdlhists, fxnname)
+            sc = fxn.find_classification(scen, fhists)
+            if sc: subclass[fxnname] = sc
+        return subclass
     def find_classification(self, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
         return {'rate':scen['properties'].get('rate', 0), 'cost': 1, 'expected cost': scen['properties'].get('rate',0)}

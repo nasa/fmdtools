@@ -874,6 +874,17 @@ def get_sub_include(att, to_include):
     elif att in ['functions', 'flows']:                     new_to_include = to_include
     else:                                                   new_to_include= False
     return new_to_include
+def create_fxnhist_view(mdlhist, fxnname):
+    """Creates a view of a mdlhist (with nominal and faulty properties) local to a function,
+    with just the local states as well as connected flows"""
+    if 'time' in mdlhist:   mhist = {"nominal":mdlhist, "faulty":mdlhist}
+    else:                   mhist= mdlhist
+    f_nom = mhist['nominal']["functions"].get(fxnname)
+    f_fault = mhist['faulty']["functions"].get(fxnname)
+    fl_nom = mhist['nominal']["flows"]
+    fl_fault = mhist['nominal']["flows"]
+    return {'nominal':{**f_nom, **fl_nom}, 'faulty':{**f_fault, **fl_fault}}
+
 
 def nest_flattened_hist(hists, prefix = ()):
     """
