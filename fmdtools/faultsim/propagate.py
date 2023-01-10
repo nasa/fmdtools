@@ -1023,7 +1023,11 @@ def update_dicthist(current_dict, dicthist, t_ind):
                     raise Exception("Time beyond range of model history--check staged execution and simulation time settings (end condition, mdl.times)")
                 if not np.can_cast(type(current_dict[att]), type(hist[t_ind])):
                     raise Exception(str(att)+" changed type: "+type(hist[t_ind])+" to "+type(current_dict[att])+" at t_ind="+str(t_ind))
-                try:    hist[t_ind]=current_dict[att]
+                try:    
+                    if type(current_dict[att]) in [list, np.ndarray]:
+                        hist[t_ind]=copy.deepcopy(current_dict[att])
+                    else: 
+                        hist[t_ind]=current_dict[att]
                 except: 
                     print("Value too large to represent: "+att+"="+str(current_dict[att]))
                     raise
@@ -1191,7 +1195,6 @@ def init_dicthist(start_dict, timerange, track="all", modelength=10):
             else:
                 try:            dicthist[att] = np.full([len(timerange)], val)
                 except:         dicthist[att] = np.empty((len(timerange),), dtype=object)  
-            dicthist[att] = np.full([len(timerange)], val)
     return dicthist
     
 def init_fxnhist(mdl, timerange, track='all', run_stochastic=False):
