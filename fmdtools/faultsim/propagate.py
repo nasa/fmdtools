@@ -847,7 +847,9 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     result={}
     if not nomhist: nomhist=mdlhist
     if 'endclass' in desired_result:   
-        endclass = mdl.find_classification(scen, {'faulty':mdlhist, 'nominal':nomhist})
+        mdlhists={'faulty':mdlhist, 'nominal':nomhist}
+        endclass = mdl.find_classification(scen, mdlhists)
+        endclass.update(mdl.find_sub_classifications(scen, mdlhists))
         if type(desired_result['endclass'])==dict: 
             result['endclass'] = {k:v for k,v in endclass if k in desired_result['endclass']}
         else: result['endclass']=endclass
