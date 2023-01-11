@@ -17,9 +17,7 @@ from CommonTests import CommonTests
 class Mover(FxnBlock):
     def __init__(self, name, flows, params):
         self.set_atts(**params)
-        super().__init__(name,flows)
-        self.internal_info = self.Communications.create_comms(name)
-        self.loc = self.Location.create_local(name)
+        FxnBlock.__init__(self, name,flows, comms={"Communications":"internal_info"},local={"Location":"loc"})
     def dynamic_behavior(self, time):
         #move
         self.loc.inc(x=self.x_up, y=self.y_up)
@@ -39,8 +37,11 @@ class Mover(FxnBlock):
         return {"last_x": self.loc.x, "min_x": fxnhist["faulty"]["Location"][self.name]["x"]}
 class Mover2(Mover, FxnBlock):
     def __init__(self, name, flows, params):
+        """Same as mover 1, just with a non-standard initialiation for the local/comms flows"""
         self.set_atts(**params)
-        FxnBlock.__init__(self, name,flows, comms={"Communications":"internal_info"},local={"Location":"loc"})
+        super().__init__(name,flows)
+        self.internal_info = self.Communications.create_comms(name)
+        self.loc = self.Location.create_local(name)
 class TestModel(Model):
     def __init__(self, params={}, modelparams={'times':[0,10], 'tstep':1}, valparams={}):
         super().__init__(params=params, modelparams=modelparams, valparams=valparams)
