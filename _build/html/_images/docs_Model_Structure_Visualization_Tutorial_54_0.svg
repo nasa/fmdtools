@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="486pt" height="322pt" viewBox="0.00 0.00 485.52 321.77">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 317.77)">
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-317.77 481.52,-317.77 481.52,4 -4,4"/>
+<!-- Control_Rover&#45;&#45;Force -->
+<g id="edge5" class="edge">
+<title>Control_Rover--Force</title>
+<path fill="none" stroke="black" d="M259.7,-116.34C258.37,-126.44 256.73,-138.96 255.4,-149.08"/>
+</g>
+<!-- Control_Rover&#45;&#45;EE -->
+<g id="edge3" class="edge">
+<title>Control_Rover--EE</title>
+<path fill="none" stroke="black" d="M211.59,-80.52C180.1,-69.53 141.02,-55.88 116.34,-47.26"/>
+</g>
+<!-- Control_Rover&#45;&#45;Video -->
+<g id="edge1" class="edge">
+<title>Control_Rover--Video</title>
+<path fill="none" stroke="black" d="M250.85,-80.05C242.86,-67.18 232.18,-49.98 224.31,-37.31"/>
+</g>
+<!-- Control_Rover&#45;&#45;Control -->
+<g id="edge4" class="edge">
+<title>Control_Rover--Control</title>
+<path fill="none" stroke="black" d="M273.84,-79.96C282.49,-66.57 294.17,-48.47 302.68,-35.29"/>
+</g>
+<!-- Control_Rover&#45;&#45;Comms -->
+<g id="edge2" class="edge">
+<title>Control_Rover--Comms</title>
+<path fill="none" stroke="black" d="M308.84,-80.03C335.61,-69.65 368.43,-56.92 391.85,-47.84"/>
+</g>
+<!-- Store_Energy&#45;&#45;Force -->
+<g id="edge7" class="edge">
+<title>Store_Energy--Force</title>
+<path fill="none" stroke="black" d="M379.16,-163.92C349.24,-164.74 311.92,-165.77 285.65,-166.49"/>
+</g>
+<!-- Store_Energy&#45;&#45;EE -->
+<g id="edge6" class="edge">
+<title>Store_Energy--EE</title>
+<path fill="none" stroke="black" d="M379.26,-144.44C305.93,-117.46 170.81,-67.75 116.14,-47.64"/>
+</g>
+<!-- Store_Energy&#45;&#45;Control -->
+<g id="edge8" class="edge">
+<title>Store_Energy--Control</title>
+<path fill="none" stroke="black" d="M401.05,-127.94C377.73,-98.53 345.26,-57.6 327.24,-34.88"/>
+</g>
+<!-- Move_Rover&#45;&#45;Ground -->
+<g id="edge9" class="edge">
+<title>Move_Rover--Ground</title>
+<path fill="none" stroke="black" d="M359.42,-267.1C365.51,-271.71 371.48,-276.24 376.82,-280.29"/>
+</g>
+<!-- Move_Rover&#45;&#45;Force -->
+<g id="edge10" class="edge">
+<title>Move_Rover--Force</title>
+<path fill="none" stroke="black" d="M281.27,-197.66C276.64,-192.7 272.07,-187.81 268,-183.46"/>
+</g>
+<!-- Move_Rover&#45;&#45;EE -->
+<g id="edge11" class="edge">
+<title>Move_Rover--EE</title>
+<path fill="none" stroke="black" d="M274.21,-197.88C225.04,-154.91 143.43,-83.59 108.7,-53.24"/>
+</g>
+<!-- Move_Rover&#45;&#45;Control -->
+<g id="edge12" class="edge">
+<title>Move_Rover--Control</title>
+<path fill="none" stroke="black" d="M313.83,-197.56C313.83,-151.38 313.84,-71.72 313.84,-36.11"/>
+</g>
+<!-- View_Ground&#45;&#45;Ground -->
+<g id="edge13" class="edge">
+<title>View_Ground--Ground</title>
+<path fill="none" stroke="black" d="M207.19,-287.43C251.65,-289.38 316.83,-292.24 358.13,-294.05"/>
+</g>
+<!-- View_Ground&#45;&#45;Force -->
+<g id="edge16" class="edge">
+<title>View_Ground--Force</title>
+<path fill="none" stroke="black" d="M173.47,-267.15C191.6,-244.4 222.38,-205.78 239.86,-183.86"/>
+</g>
+<!-- View_Ground&#45;&#45;EE -->
+<g id="edge14" class="edge">
+<title>View_Ground--EE</title>
+<path fill="none" stroke="black" d="M154.08,-267.19C141.7,-221.5 109.35,-102.03 97.07,-56.67"/>
+</g>
+<!-- View_Ground&#45;&#45;Video -->
+<g id="edge15" class="edge">
+<title>View_Ground--Video</title>
+<path fill="none" stroke="black" d="M162.74,-267.09C172.75,-218.52 199.96,-86.43 209.92,-38.12"/>
+</g>
+<!-- Communicate_Externally&#45;&#45;Force -->
+<g id="edge19" class="edge">
+<title>Communicate_Externally--Force</title>
+<path fill="none" stroke="black" d="M156.03,-177.81C178.81,-175.36 202.46,-172.82 220.7,-170.86"/>
+</g>
+<!-- Communicate_Externally&#45;&#45;EE -->
+<g id="edge18" class="edge">
+<title>Communicate_Externally--EE</title>
+<path fill="none" stroke="black" d="M79.75,-168.13C82.48,-139.85 87.74,-85.44 90.48,-57.07"/>
+</g>
+<!-- Communicate_Externally&#45;&#45;Comms -->
+<g id="edge17" class="edge">
+<title>Communicate_Externally--Comms</title>
+<path fill="none" stroke="black" d="M119.52,-168.09C190.33,-137.21 332.68,-75.12 393.55,-48.57"/>
+</g>
+<!-- Control_Rover -->
+<g id="node1" class="node">
+<title>Control_Rover</title>
+<polygon fill="lightgray" stroke="black" points="312.59,-116.15 211.59,-116.15 211.59,-80.15 312.59,-80.15 312.59,-116.15"/>
+<text text-anchor="middle" x="262.09" y="-94.45" font-family="Times New Roman,serif" font-size="14.00">Control_Rover</text>
+</g>
+<!-- Store_Energy -->
+<g id="node2" class="node">
+<title>Store_Energy</title>
+<polygon fill="red" stroke="black" points="477.52,-197.06 379.52,-197.06 379.52,-128.06 477.52,-128.06 477.52,-197.06"/>
+<text text-anchor="middle" x="428.52" y="-181.86" font-family="Times New Roman,serif" font-size="14.00">Store_Energy </text>
+<text text-anchor="middle" x="428.52" y="-166.86" font-family="Times New Roman,serif" font-size="14.00"> </text>
+<text text-anchor="middle" x="428.52" y="-135.86" font-family="Times New Roman,serif" font-size="14.00"> {'no_charge'}</text>
+</g>
+<!-- Move_Rover -->
+<g id="node3" class="node">
+<title>Move_Rover</title>
+<polygon fill="red" stroke="black" points="361.32,-267.01 266.32,-267.01 266.32,-198.01 361.32,-198.01 361.32,-267.01"/>
+<text text-anchor="middle" x="313.82" y="-251.81" font-family="Times New Roman,serif" font-size="14.00">Move_Rover </text>
+<text text-anchor="middle" x="313.82" y="-236.81" font-family="Times New Roman,serif" font-size="14.00"> </text>
+<text text-anchor="middle" x="313.82" y="-205.81" font-family="Times New Roman,serif" font-size="14.00"> {'short'}</text>
+</g>
+<!-- View_Ground -->
+<g id="node4" class="node">
+<title>View_Ground</title>
+<polygon fill="lightgray" stroke="black" points="206.98,-303.32 110.98,-303.32 110.98,-267.32 206.98,-267.32 206.98,-303.32"/>
+<text text-anchor="middle" x="158.98" y="-281.62" font-family="Times New Roman,serif" font-size="14.00">View_Ground</text>
+</g>
+<!-- Communicate_Externally -->
+<g id="node5" class="node">
+<title>Communicate_Externally</title>
+<polygon fill="lightgray" stroke="black" points="156,-204.2 0,-204.2 0,-168.2 156,-168.2 156,-204.2"/>
+<text text-anchor="middle" x="78" y="-182.5" font-family="Times New Roman,serif" font-size="14.00">Communicate_Externally</text>
+</g>
+<!-- Ground -->
+<g id="node6" class="node">
+<title>Ground</title>
+<ellipse fill="orange" stroke="black" cx="397.22" cy="-295.77" rx="38.99" ry="18"/>
+<text text-anchor="middle" x="397.22" y="-292.07" font-family="Times New Roman,serif" font-size="14.00">Ground</text>
+</g>
+<!-- Force -->
+<g id="node7" class="node">
+<title>Force</title>
+<ellipse fill="lightgray" stroke="black" cx="252.99" cy="-167.39" rx="32.49" ry="18"/>
+<text text-anchor="middle" x="252.99" y="-163.69" font-family="Times New Roman,serif" font-size="14.00">Force</text>
+</g>
+<!-- EE -->
+<g id="node8" class="node">
+<title>EE</title>
+<ellipse fill="lightgray" stroke="black" cx="92.24" cy="-38.85" rx="27" ry="18"/>
+<text text-anchor="middle" x="92.24" y="-35.15" font-family="Times New Roman,serif" font-size="14.00">EE</text>
+</g>
+<!-- Video -->
+<g id="node9" class="node">
+<title>Video</title>
+<ellipse fill="lightgray" stroke="black" cx="213.63" cy="-20.11" rx="32.49" ry="18"/>
+<text text-anchor="middle" x="213.63" y="-16.41" font-family="Times New Roman,serif" font-size="14.00">Video</text>
+</g>
+<!-- Control -->
+<g id="node10" class="node">
+<title>Control</title>
+<ellipse fill="lightgray" stroke="black" cx="313.85" cy="-18" rx="38.19" ry="18"/>
+<text text-anchor="middle" x="313.85" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">Control</text>
+</g>
+<!-- Comms -->
+<g id="node11" class="node">
+<title>Comms</title>
+<ellipse fill="lightgray" stroke="black" cx="422.22" cy="-36.07" rx="39.79" ry="18"/>
+<text text-anchor="middle" x="422.22" y="-32.37" font-family="Times New Roman,serif" font-size="14.00">Comms</text>
+</g>
+</g>
+</svg>
