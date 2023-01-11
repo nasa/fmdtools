@@ -259,7 +259,309 @@ class Common(object):
             Where the warning points to. The default is 2 (points to the place in the model)
         """
         warnings.warn(' '.join(messages), stacklevel=stacklevel)
+
+class Flow(Common):
+    """
+    Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
+    """
+    def __init__(self, states, name, ftype='generic', suppress_warnings=False):
+        """
+        Instances the flow with given states.
+
+        Parameters
+        ----------
+        states : dict
+            states and their values to be associated with the flow
+        name : str
+            name of the flow
+        """
+        self.type=ftype
+        self.name=name
+        self._initstates=states.copy()
+        self._states=list(states.keys())
+        for state in self._states:
+            setattr(self, state, states[state])
+        if type(self)!=Flow and not suppress_warnings:
+            if type(self).reset == Flow.reset:      warnings.warn("Custom reset() Method Not Implemented--model protection between methods may not work")
+            if type(self).status == Flow.status:    warnings.warn("Custom status() Method Not Implemented--custom flow attributes may not be saved")
+            if type(self).get_memory == Flow.get_memory:    warnings.warn("Custom get_memory() method not implement--memory estimates may be innaccurate")
+            if type(self).copy == Flow.copy:        warnings.warn("Custom copy() method not implemented--Staged Execution may not copy custom model states")
+    def __repr__(self):
+        if hasattr(self,'name'):    
+            return getattr(self, 'name')+' '+getattr(self, 'type')+' flow: '+str({k:s for k,s in self.status().items() if k in self._states})
+        else: return "Uninitialized Flow"
+    def reset(self):
+        """ Resets the flow to the initial state"""
+        for state in self._initstates:
+            setattr(self, state, self._initstates[state])
+    def return_states(self):
+        return self.status()
+    def status(self):
+        """
+        Returns a dict with the current states of the flow.
+        """
+        states={}
+        for state in self._states:
+            states[state]=getattr(self,state)
+        return states
+    def get_memory(self):
+        """
+        Returns the approximate memory usage of the flow.
+        """
+        mem = 0
+        for state in self._states:
+            mem+=2*sys.getsizeof(getattr(self, state)) # (*2 to account for initstates)
+        return mem
+    def copy(self):
+        """
+        Returns a copy of the flow object (used when copying the model)
+        """
+        states={}
+        for state in self._states:
+            states[state]=getattr(self,state)
+        if self.__class__ in [Flow, MultiFlow, CommsFlow]:
+            copy = self.__class__(states, self.name, self.type)
+        else:
+            copy = self.__class__()
+            for state in self._states:
+                setattr(copy, state, getattr(self,state))
+        return copy
+#Specialized Flow types
+class MultiFlow(Flow):
+    """
+    The MultiFlow class extends the Flow class by adding local flows, which are
+    essentially copies of the main flow which live in functions. MultiFlows are
+    helpful in cases where each function has a different view of the same external
+    flow (e.g., perception, etc). Notably, this class adds the methods:
+        - create_local(), which can be used to add a local flow to a function/block
+        - get_view(), which can be used to look at other local views of the flow
+        - update(), which can be used to update one view of the flow from another
     
+    A MultiFlow can have any number of local views (listed by name in MultiFlow.locals)
+    as well as a single global view (which may represent the actual value)
+    """
+    def __init__(self, flowdict, name, ftype="MultiFlow", glob=[]):
+        self.locals=[]
+        super().__init__(flowdict, name, ftype=ftype, suppress_warnings=True)
+        if not glob: self.glob=self
+        else:        self.glob=glob
+    def __repr__(self):
+        rep_str = Flow.__repr__(self)
+        for l in self.locals:
+            rep_str=rep_str+"\n   "+self.get_view(l).__repr__()
+        return rep_str
+    def create_local(self, name, attrs = "all"):
+        """
+        Creates a local view of the Flow
+
+        Parameters
+        ----------
+        name : str
+            Name for the view (to retrieve at the Flow level)
+        attrs : dict/list/str, optional
+            Attributes to include in the local copy. The default is "all". Has options:
+                str: to use if only using a single attribute of the local flow
+                list: list of attributes to use in the local flow
+                dict: dict of attributes to use in the local flow and their initial values
+
+        Returns
+        -------
+        newflow : MultiFlow
+            Local view of the MultiFlow with its own individual values
+        """
+        if attrs == "all":      atts = self._initstates
+        elif type(attrs)==str:  attrs = [attrs]
+        if type(attrs)==list:   atts = {k:v for k,v in self._initstates.items() if k in attrs}
+        elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in self._initstates}
+        
+        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self)
+        else:                   newflow = self.__class__(atts, name, glob=self)
+        setattr(self, name, newflow)
+        self.locals.append(name)
+        return newflow
+    def get_local_name(self, name):
+        """Gets the name of the view corresponding to the given name (enables "local" or "global" options)"""
+        if name=="local":       return self.name
+        elif name=="global":    return "glob"
+        else:                   return name
+    def get_view(self, name):
+        """Gets the view of the MultiFlow corresponding to the given name"""
+        if name=="":            raise Exception("Must provide view")
+        elif name=="local":     view = self
+        elif name=="global":    view=self.glob
+        else:                   view = getattr(self.glob, name)
+        return view
+    def update(self, to_update="local", to_get="global", *states):
+        """
+        Updates a view of the MultiFlow to the values of another view.
+
+        Parameters
+        ----------
+        to_update : str, optional
+            Name of the view to update. The default is "local".
+        to_get : str, optional
+            Name of the view to update from. The default is "global".
+        *states : str
+            States to update (defaults to all states)
+        """
+        up = self.get_view(to_update)
+        get = self.get_view(to_get)
+        up.assign(get, *states)
+    def status(self):
+        stat = super().status()
+        for l in self.locals:
+            stat[l]=getattr(self, l).status()
+        return stat
+    def return_states(self):
+        states = super().status()
+        for l in self.locals:
+            states.update({l+"_"+k:v for k, v in getattr(self, l).status().items()})
+        return states
+    def reset(self):
+        super().reset()
+        for local in self.locals:
+            getattr(self, local).reset()
+    def copy(self, glob=[]):
+        states = super().status()
+        cop = self.__class__(states, self.name, self.type, glob=glob)
+        for loc in self.locals:
+            local = getattr(self, loc)
+            cop.create_local(local.name, attrs=local.status())
+        return cop
+
+class CommsFlow(MultiFlow):
+    """
+    A CommsFlow further extends the MultiFlow class to represent communications. 
+    It does this by giving each block's view of the flow (in CommsFlow.fxns) an "internal" and "out" copy, 
+    as well as an "in" (a dict of messages from other views) and "received" (a set of messages received)
+    To enable the sending/receiving of messages between functions, it further adds:
+        -create_comms, for instantiating local copies in functions
+        -send, for sending messages from one function to another
+        -receive, for receiving messages from other functions
+        - inbox, for seeing what messages may be received
+        - clear_inbox, for clearing the inbox to enable more messages to be received
+    """
+    def __init__(self, flowdict, name, ftype="CommsFlow", glob=[]):
+        self.fxns = {}
+        super().__init__(flowdict, name, ftype="Comms", glob=glob)
+    def __repr__(self):
+        rep_str = Flow.__repr__(self)
+        if self.name==self.glob.name:   
+            for fname, func in self.fxns.items():
+                rep_str=rep_str+"\n   "+fname+": "+func["internal"].__repr__() #+"\n       out: "+func["out"].__repr__()+"\n       in: "+str(func["in"])
+        elif self.name in self.glob.fxns:
+            rep_str = rep_str+"\n       out: "+self.out().__repr__()+"\n       in: "+str(self.inbox())+"\n       received: "+str(self.received())
+        return rep_str
+    def create_comms(self, name, attrs="all", out_attrs="all", **kwargs):
+        """
+        Creates an individual view of the CommsFlow (e.g., for a function), with an
+        internal view, out view, in dict, and recieved set.
+
+        Parameters
+        ----------
+        name : str
+            Name for the view (e.g., the name of the function)
+        attrs : list, optional
+            Attributes of the CommsFlow to copy. The default is "all".
+        out_attrs : list, optional
+            Attributes of the CommsFlow to copy for the out view.. The default is "all".
+
+        Returns
+        -------
+        CommsFlow
+            A local view of the CommsFlow for the function
+        """
+        if name not in self.fxns:
+            self.fxns[name]={"internal":    self.create_local(name, attrs=attrs), 
+                                "out":      self.create_local(name+"_out", attrs=out_attrs), 
+                                "in":       kwargs.get("prev_in", {}),
+                                "received": kwargs.get("received", set())}
+        return self.fxns[name]["internal"]
+    def send(self, fxn_to, fxn_from="local", *states):
+        """
+        Sends a function's (fxn_from) view for the CommsFlow to another function fxn_to 
+        by updating the function's out property and fxn_to's inbox list. Note that the
+        other function must call recieve on the other end for the message to be fully
+        received (update its internal view).
+
+        Parameters
+        ----------
+        fxn_to : str/list
+            Name/list of names of the functions to send to. The default is "all"
+        fxn_from : str, optional
+            Name of the function to send from. The default is "local".
+        *states : strs
+            Values to send from.
+        """
+        fxn_from =self.get_local_name(fxn_from)
+        if fxn_to=="all":       fxns_to=[f for f in self.glob.fxns if f!=self.name]
+        elif type(fxn_to)==str: fxns_to = [self.get_local_name(fxn_to)]
+        else:                   fxns_to = fxn_to
+        #if not states: states=("all",)
+        f_from = self.get_view(fxn_from)
+        self.glob.fxns[fxn_from]["out"].assign(f_from, *states)
+        for f_to in fxns_to:
+            if fxn_from not in self.glob.fxns[f_to]["received"]:
+                self.glob.fxns[f_to]["in"][fxn_from]=states
+    def inbox(self, fxnname="local"):
+        """ Provides a list of messages which have not been received by the function yet"""
+        fxnname = self.get_local_name(fxnname)
+        return self.glob.fxns[fxnname]["in"]
+    def received(self, fxnname="local"):
+        fxnname = self.get_local_name(fxnname)
+        return self.glob.fxns[fxnname]["received"]
+    def clear_inbox(self, fxnname="local"):
+        """ Clears the inbox of the function so it can recieve more messages"""
+        fxnname = self.get_local_name(fxnname)
+        self.glob.fxns[fxnname]["in"].clear()
+        self.glob.fxns[fxnname]["received"].clear()
+    def out(self, fxnname="local"):
+        """ Provies the view of the message that is being sent by the function"""
+        fxnname = self.get_local_name(fxnname)
+        return self.glob.fxns[fxnname]["out"]
+    def receive(self, fxn_to="local", fxn_from="all"): #need to add something for resolving errors
+        """ Updates the internal view of the flow from external functions 
+
+        Parameters
+        ----------
+        fxn_to : str
+            Name of the view to recieve the view. The default is "local"
+        fxn_from : str/list, optional
+            Name of the function to send from. The default is "all".
+        """
+        fxn_to = self.get_local_name(fxn_to)
+        if fxn_from=="all":         fxn_from = self.glob.fxns[fxn_to]["in"]
+        elif type(fxn_from)==str:   fxn_from = {fxn_from:self.glob.fxns[fxn_to]["in"][fxn_from] for i in range(1) if fxn_from in self.glob.fxns[fxn_to]["in"]}
+        elif type(fxn_from)==list:  fxn_from = {f:self.glob.fxns[fxn_to]["in"][f] for f in fxn_from if f in self.glob.fxns[fxn_to]["in"]}
+        
+        for f_from in list(fxn_from):
+            args = self.glob.fxns[fxn_to]["in"].pop(f_from)
+            self.glob.fxns[fxn_to]["internal"].assign(self.glob.fxns[f_from]["out"],  *args)
+            self.glob.fxns[fxn_to]["received"].add(f_from)
+    def status(self):
+        stat = super().status()
+        for f in self.fxns:
+            stat[f+"_in"]=self.fxns[f]["in"]
+            stat[f+"_in"]=self.fxns[f]["received"]
+        return stat
+    def return_states(self):
+        states= super().return_states()
+        for f in self.fxns:
+            states.update({f+"_in"+fo:args for fo, args in self.fxns[f]["in"].items()})
+        return states
+    def reset(self):
+        super().reset()
+        for fxn in self.fxns:
+            self.fxns[fxn]["in"] = {}
+            self.fxns[fxn]["received"] = set()
+    def copy(self, glob=[]):
+        states = super().status()
+        cop = self.__class__({s:states[s] for s in self._initstates}, self.name, self.type, glob=glob)
+        for fxn in self.fxns:
+            cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status(),
+                             prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]))
+        return cop
+
 class Block(Common):
     """ 
     Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
@@ -908,7 +1210,8 @@ class FxnBlock(Block):
     dt : float
         local timestep of the model in the function (overrides global timestep by default ('use_local':True in modelparameters))
     """
-    def __init__(self,name, flows, flownames=[], states={}, components={},timers=[], dt=None, seed=None):
+    def __init__(self,name, flows, flownames=[], local={}, comms={}, exclude_global={},
+                 states={}, components={},timers=[], dt=None, seed=None):
         """
         Instantiates the function superclass with the relevant parameters.
 
@@ -926,11 +1229,17 @@ class FxnBlock(Block):
             Component objects to associate with the function. The default is {}.
         timers : set, optional
             Set of names of timers to use in the function. The default is {}.
+        dt : float
+            Local timestep (if not inherited from model)
+        seed : int/hash
+            Random seed to use in model
         """
         self.type = 'function'
         self.name = name
         self.internal_flows=dict()
         self.flows=self.make_flowdict(flownames,flows)
+        self.add_local_to_flowdict(self.flows, local, "local")
+        self.add_local_to_flowdict(self.flows, comms, "comms")
         for flow in self.flows.keys():
             setattr(self, flow, self.flows[flow])
         self.components=components
@@ -953,6 +1262,35 @@ class FxnBlock(Block):
     def find_classification(self, scen, fxnhist):
         """Placeholder for local find_classification methods in functions"""
         return {}
+    def add_local_to_flowdict(self,flowdict, local, ftype):
+        """
+        Adds local flows to the flow dictionary during initialization
+
+        Parameters
+        ----------
+        flowdict : dict
+            Dictionary of flows {flowname:flow_object}
+        local : dict/list
+            Local flows to add. May be of forms: 
+                - {flowname:(localname, attrs)} (to only create local view of specific attributes)
+                - {flowname:localname}          (to create view with all attributes)
+                - [flowname1, flowname2...]     (to give overwrite the global flow with the local view of it)
+        ftype : str ('local'/'comms')
+            Switches whether the flow added is to be a local or comms flow
+        """
+        for l in local:
+            if ftype=='local':      gen_fl = flowdict[l].create_local
+            elif ftype=='comms':    gen_fl = flowdict[l].create_comms
+            if type(local)==dict and type(local[l]) in [list, tuple, set]:
+                loc_flow = gen_fl(self.name, local[l][1])
+                loc_name = local[l][0]
+            elif type(local)==dict:
+                loc_flow = gen_fl(self.name)
+                loc_name = local[l]
+            else:
+                loc_flow = gen_fl(self.name)
+                loc_name = l
+            flowdict[loc_name]=loc_flow
     def add_act(self, name, action, *flows, duration=0.0, **params):
         """
         Associate an Action with the Function Block for use in the Action Sequence Graph
@@ -1094,7 +1432,7 @@ class FxnBlock(Block):
         if gtype=='combined' or gtype=='conditions':
             nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=30, arrowstyle='->', node_shape='s', node_size=100)
         return plt.gcf()
-    def add_flow(self,flowname, flowdict={}, flowtype=''):
+    def add_flow(self,flowname, flowdict={}, flowtype='', fclass=Flow):
         """
         Adds a flow with given attributes to the Function Block
 
@@ -1102,18 +1440,18 @@ class FxnBlock(Block):
         ----------
         flowname : str
             Unique flow name to give the flow in the function
-        flowattributes : dict, Flow, set or empty set
-            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object.
+        flowdict : dict, Flow, set or empty set
+            Dictionary of flow attributes e.g. {'value':XX}, or an already instantiated Flow object.
             If a set of attribute names is provided, each will be given a value of 1
             If an empty set is given, it will be represented w- {flowname: 1}
+        flowtype : str, optional
+            Denotes type for class (e.g. 'energy,' 'material,', 'signal')
+        fclass : Class, optional
+            Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
+            Class must take flowname, flowdict, flowtype as input to __init__()
         """
         if not getattr(self, 'is_copy', False):
-            if not flowtype: flowtype = flowname
-            if not flowdict:                self.internal_flows[flowname]=Flow({flowname:1}, flowname, flowtype)
-            elif type(flowdict) == set:     self.internal_flows[flowname]=Flow({f:1 for f in flowdict}, flowname, flowtype)
-            elif type(flowdict) == dict:    self.internal_flows[flowname]=Flow(flowdict, flowname,flowtype)
-            elif isinstance(flowdict, Flow):self.internal_flows[flowname] = flowdict
-            else: raise Exception('Invalid flow. Must be dict or flow')
+            self.internal_flows[flowname] = init_flow(flowname,flowdict, flowtype, fclass)
             setattr(self, flowname, self.internal_flows[flowname])
     def copy(self, newflows, *attr):
         """
@@ -1338,306 +1676,6 @@ class Action(Block):
         """Placeholder behavior method for actions"""
         a=0
 
-class Flow(Common):
-    """
-    Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
-    """
-    def __init__(self, states, name, ftype='generic', suppress_warnings=False):
-        """
-        Instances the flow with given states.
-
-        Parameters
-        ----------
-        states : dict
-            states and their values to be associated with the flow
-        name : str
-            name of the flow
-        """
-        self.type=ftype
-        self.name=name
-        self._initstates=states.copy()
-        self._states=list(states.keys())
-        for state in self._states:
-            setattr(self, state, states[state])
-        if type(self)!=Flow and not suppress_warnings:
-            if type(self).reset == Flow.reset:      warnings.warn("Custom reset() Method Not Implemented--model protection between methods may not work")
-            if type(self).status == Flow.status:    warnings.warn("Custom status() Method Not Implemented--custom flow attributes may not be saved")
-            if type(self).get_memory == Flow.get_memory:    warnings.warn("Custom get_memory() method not implement--memory estimates may be innaccurate")
-            if type(self).copy == Flow.copy:        warnings.warn("Custom copy() method not implemented--Staged Execution may not copy custom model states")
-    def __repr__(self):
-        if hasattr(self,'name'):    
-            return getattr(self, 'name')+' '+getattr(self, 'type')+' flow: '+str({k:s for k,s in self.status().items() if k in self._states})
-        else: return "Uninitialized Flow"
-    def reset(self):
-        """ Resets the flow to the initial state"""
-        for state in self._initstates:
-            setattr(self, state, self._initstates[state])
-    def return_states(self):
-        return self.status()
-    def status(self):
-        """
-        Returns a dict with the current states of the flow.
-        """
-        states={}
-        for state in self._states:
-            states[state]=getattr(self,state)
-        return states
-    def get_memory(self):
-        """
-        Returns the approximate memory usage of the flow.
-        """
-        mem = 0
-        for state in self._states:
-            mem+=2*sys.getsizeof(getattr(self, state)) # (*2 to account for initstates)
-        return mem
-    def copy(self):
-        """
-        Returns a copy of the flow object (used when copying the model)
-        """
-        states={}
-        for state in self._states:
-            states[state]=getattr(self,state)
-        if self.__class__ in [Flow, MultiFlow, CommsFlow]:
-            copy = self.__class__(states, self.name, self.type)
-        else:
-            copy = self.__class__()
-            for state in self._states:
-                setattr(copy, state, getattr(self,state))
-        return copy
-#Specialized Flow types
-class MultiFlow(Flow):
-    """
-    The MultiFlow class extends the Flow class by adding local flows, which are
-    essentially copies of the main flow which live in functions. MultiFlows are
-    helpful in cases where each function has a different view of the same external
-    flow (e.g., perception, etc). Notably, this class adds the methods:
-        - create_local(), which can be used to add a local flow to a function/block
-        - get_view(), which can be used to look at other local views of the flow
-        - update(), which can be used to update one view of the flow from another
-    
-    A MultiFlow can have any number of local views (listed by name in MultiFlow.locals)
-    as well as a single global view (which may represent the actual value)
-    """
-    def __init__(self, flowdict, name, ftype="MultiFlow", glob=[]):
-        self.locals=[]
-        super().__init__(flowdict, name, ftype=ftype, suppress_warnings=True)
-        if not glob: self.glob=self
-        else:        self.glob=glob
-    def __repr__(self):
-        rep_str = Flow.__repr__(self)
-        for l in self.locals:
-            rep_str=rep_str+"\n   "+self.get_view(l).__repr__()
-        return rep_str
-    def create_local(self, name, attrs = "all"):
-        """
-        Creates a local view of the Flow
-
-        Parameters
-        ----------
-        name : str
-            Name for the view (to retrieve at the Flow level)
-        attrs : dict/list/str, optional
-            Attributes to include in the local copy. The default is "all". Has options:
-                str: to use if only using a single attribute of the local flow
-                list: list of attributes to use in the local flow
-                dict: dict of attributes to use in the local flow and their initial values
-
-        Returns
-        -------
-        newflow : MultiFlow
-            Local view of the MultiFlow with its own individual values
-        """
-        if attrs == "all":      atts = self._initstates
-        elif type(attrs)==str:  attrs = [attrs]
-        if type(attrs)==list:   atts = {k:v for k,v in self._initstates.items() if k in attrs}
-        elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in self._initstates}
-        
-        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self)
-        else:                   newflow = self.__class__(atts, name, glob=self)
-        setattr(self, name, newflow)
-        self.locals.append(name)
-        return newflow
-    def get_local_name(self, name):
-        """Gets the name of the view corresponding to the given name (enables "local" or "global" options)"""
-        if name=="local":       return self.name
-        elif name=="global":    return "glob"
-        else:                   return name
-    def get_view(self, name):
-        """Gets the view of the MultiFlow corresponding to the given name"""
-        if name=="":            raise Exception("Must provide view")
-        elif name=="local":     view = self
-        elif name=="global":    view=self.glob
-        else:                   view = getattr(self.glob, name)
-        return view
-    def update(self, to_update="local", to_get="global", *states):
-        """
-        Updates a view of the MultiFlow to the values of another view.
-
-        Parameters
-        ----------
-        to_update : str, optional
-            Name of the view to update. The default is "local".
-        to_get : str, optional
-            Name of the view to update from. The default is "global".
-        *states : str
-            States to update (defaults to all states)
-        """
-        up = self.get_view(to_update)
-        get = self.get_view(to_get)
-        up.assign(get, *states)
-    def status(self):
-        stat = super().status()
-        for l in self.locals:
-            stat[l]=getattr(self, l).status()
-        return stat
-    def return_states(self):
-        states = super().status()
-        for l in self.locals:
-            states.update({l+"_"+k:v for k, v in getattr(self, l).status().items()})
-        return states
-    def reset(self):
-        super().reset()
-        for local in self.locals:
-            getattr(self, local).reset()
-    def copy(self, glob=[]):
-        states = super().status()
-        cop = self.__class__(states, self.name, self.type, glob=glob)
-        for loc in self.locals:
-            local = getattr(self, loc)
-            cop.create_local(local.name, attrs=local.status())
-        return cop
-
-class CommsFlow(MultiFlow):
-    """
-    A CommsFlow further extends the MultiFlow class to represent communications. 
-    It does this by giving each block's view of the flow (in CommsFlow.fxns) an "internal" and "out" copy, 
-    as well as an "in" (a dict of messages from other views) and "received" (a set of messages received)
-    To enable the sending/receiving of messages between functions, it further adds:
-        -create_comms, for instantiating local copies in functions
-        -send, for sending messages from one function to another
-        -receive, for receiving messages from other functions
-        - inbox, for seeing what messages may be received
-        - clear_inbox, for clearing the inbox to enable more messages to be received
-    """
-    def __init__(self, flowdict, name, ftype="CommsFlow", glob=[]):
-        self.fxns = {}
-        super().__init__(flowdict, name, ftype="Comms", glob=glob)
-    def __repr__(self):
-        rep_str = Flow.__repr__(self)
-        if self.name==self.glob.name:   
-            for fname, func in self.fxns.items():
-                rep_str=rep_str+"\n   "+fname+": "+func["internal"].__repr__() #+"\n       out: "+func["out"].__repr__()+"\n       in: "+str(func["in"])
-        elif self.name in self.glob.fxns:
-            rep_str = rep_str+"\n       out: "+self.out().__repr__()+"\n       in: "+str(self.inbox())
-        return rep_str
-    def create_comms(self, name, attrs="all", out_attrs="all", **kwargs):
-        """
-        Creates an individual view of the CommsFlow (e.g., for a function), with an
-        internal view, out view, in dict, and recieved set.
-
-        Parameters
-        ----------
-        name : str
-            Name for the view (e.g., the name of the function)
-        attrs : list, optional
-            Attributes of the CommsFlow to copy. The default is "all".
-        out_attrs : list, optional
-            Attributes of the CommsFlow to copy for the out view.. The default is "all".
-
-        Returns
-        -------
-        CommsFlow
-            A local view of the CommsFlow for the function
-        """
-        if name not in self.fxns:
-            self.fxns[name]={"internal":    self.create_local(name, attrs=attrs), 
-                                "out":      self.create_local(name+"_out", attrs=out_attrs), 
-                                "in":       kwargs.get("prev_in", {}),
-                                "received": kwargs.get("received", set())}
-        return self.fxns[name]["internal"]
-    def send(self, fxn_to, fxn_from="local", *states):
-        """
-        Sends a function's (fxn_from) view for the CommsFlow to another function fxn_to 
-        by updating the function's out property and fxn_to's inbox list. Note that the
-        other function must call recieve on the other end for the message to be fully
-        received (update its internal view).
-
-        Parameters
-        ----------
-        fxn_to : str/list
-            Name/list of names of the functions to send to. The default is "all"
-        fxn_from : str, optional
-            Name of the function to send from. The default is "local".
-        *states : strs
-            Values to send from.
-        """
-        fxn_from =self.get_local_name(fxn_from)
-        if fxn_to=="all":       fxns_to=[f for f in self.glob.fxns if f!=self.name]
-        elif type(fxn_to)==str: fxns_to = [self.get_local_name(fxn_to)]
-        else:                   fxns_to = fxn_to
-        #if not states: states=("all",)
-        f_from = self.get_view(fxn_from)
-        self.glob.fxns[fxn_from]["out"].assign(f_from, *states)
-        for f_to in fxns_to:
-            if fxn_from not in self.glob.fxns[f_to]["received"]:
-                self.glob.fxns[f_to]["in"][fxn_from]=states
-    def inbox(self, fxnname="local"):
-        """ Provides a list of messages which have not been received by the function yet"""
-        fxnname = self.get_local_name(fxnname)
-        return self.glob.fxns[fxnname]["in"]
-    def clear_inbox(self, fxnname="local"):
-        """ Clears the inbox of the function so it can recieve more messages"""
-        fxnname = self.get_local_name(fxnname)
-        self.glob.fxns[fxnname]["in"].clear()
-        self.glob.fxns[fxnname]["received"].clear()
-    def out(self, fxnname="local"):
-        """ Provies the view of the message that is being sent by the function"""
-        fxnname = self.get_local_name(fxnname)
-        return self.glob.fxns[fxnname]["out"]
-    def receive(self, fxn_to="local", fxn_from="all"): #need to add something for resolving errors
-        """ Updates the internal view of the flow from external functions 
-
-        Parameters
-        ----------
-        fxn_to : str
-            Name of the view to recieve the view. The default is "local"
-        fxn_from : str/list, optional
-            Name of the function to send from. The default is "all".
-        """
-        fxn_to = self.get_local_name(fxn_to)
-        if fxn_from=="all":         fxn_from = self.glob.fxns[fxn_to]["in"]
-        elif type(fxn_from)==str:   fxn_from = {fxn_from:self.glob.fxns[fxn_to]["in"][fxn_from] for i in range(1) if fxn_from in self.glob.fxns[fxn_to]["in"]}
-        elif type(fxn_from)==list:  fxn_from = {f:self.glob.fxns[fxn_to]["in"][f] for f in fxn_from if f in self.glob.fxns[fxn_to]["in"]}
-        
-        for f_from in list(fxn_from):
-            args = self.glob.fxns[fxn_to]["in"].pop(f_from)
-            self.glob.fxns[fxn_to]["internal"].assign(self.glob.fxns[f_from]["out"],  *args)
-            self.glob.fxns[fxn_to]["received"].add(f_from)
-    def status(self):
-        stat = super().status()
-        for f in self.fxns:
-            stat[f+"_in"]=self.fxns[f]["in"]
-            stat[f+"_in"]=self.fxns[f]["received"]
-        return stat
-    def return_states(self):
-        states= super().return_states()
-        for f in self.fxns:
-            states.update({f+"_in"+fo:args for fo, args in self.fxns[f]["in"].items()})
-        return states
-    def reset(self):
-        super().reset()
-        for fxn in self.fxns:
-            self.fxns[fxn]["in"] = {}
-            self.fxns[fxn]["received"] = set()
-    def copy(self, glob=[]):
-        states = super().status()
-        cop = self.__class__({s:states[s] for s in self._initstates}, self.name, self.type, glob=glob)
-        for fxn in self.fxns:
-            cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status(),
-                             prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]))
-        return cop
-            
-
 
 #Model superclass    
 class Model(object):
@@ -1759,21 +1797,26 @@ class Model(object):
             if fxn.get_rand_states(auto_update_only=auto_update_only): 
                 rand_states[fxnname]= fxn.get_rand_states(auto_update_only=auto_update_only)
         return rand_states
-    def add_flows(self, flownames, flowdict={}, flowtype='generic'):
+    def add_flows(self, flownames, flowdict={}, flowtype='generic', fclass=Flow):
         """
         Adds a set of flows with the same type and initial parameters
 
         Parameters
         ----------
-        flowname : list
+        flownames : list
             Unique flow names to give the flows in the model
-        flowattributes : dict, Flow, set or empty set
-            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object.
+        flowdict : dict, Flow, set or empty set
+            Dictionary of flow attributes e.g. {'value':XX}, or an already instantiated Flow object.
             If a set of attribute names is provided, each will be given a value of 1
             If an empty set is given, it will be represented w- {flowname: 1}
+        flowtype : str, optional
+            Denotes type for class (e.g. 'energy,' 'material,', 'signal')
+        fclass : Class, optional
+            Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
+            Class must take flowname, flowdict, flowtype as input to __init__()
         """
-        for flowname in flownames: self.add_flow(flowname, flowdict, flowtype)
-    def add_flow(self,flowname, flowdict={}, flowtype=''):
+        for flowname in flownames: self.add_flow(flowname, flowdict, flowtype, fclass)
+    def add_flow(self,flowname, flowdict={}, flowtype='', fclass=Flow):
         """
         Adds a flow with given attributes to the model.
 
@@ -1781,18 +1824,19 @@ class Model(object):
         ----------
         flowname : str
             Unique flow name to give the flow in the model
-        flowattributes : dict, Flow, set or empty set
-            Dictionary of flow attributes e.g. {'value':XX}, or the Flow object.
+        flowdict : dict, Flow, set or empty set
+            Dictionary of flow attributes e.g. {'value':XX}, or an already instantiated Flow object.
             If a set of attribute names is provided, each will be given a value of 1
             If an empty set is given, it will be represented w- {flowname: 1}
+        flowtype : str, optional
+            Denotes type for class (e.g. 'energy,' 'material,', 'signal')
+        fclass : Class, optional
+            Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
+            Class must take flowname, flowdict, flowtype as input to __init__()
         """
         if not getattr(self, 'is_copy', False):
-            if not flowtype: flowtype = flowname
-            if not flowdict:                self.flows[flowname]=Flow({flowname:1}, flowname, flowtype)
-            elif type(flowdict) == set:     self.flows[flowname]=Flow({f:1 for f in flowdict}, flowname, flowtype)
-            elif type(flowdict) == dict:    self.flows[flowname]=Flow(flowdict, flowname,flowtype)
-            elif isinstance(flowdict, Flow):self.flows[flowname] = flowdict
-            else: raise Exception('Invalid flow. Must be dict or flow')
+            self.flows[flowname] = init_flow(flowname,flowdict, flowtype, fclass)
+            setattr(self, flowname, self.flows[flowname])
     def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None'):
         """
         Instantiates a given function in the model.
@@ -1830,6 +1874,7 @@ class Model(object):
                 self._fxnflows.append((name, flowname))
             self.functionorder.update([name])
             self.fxns[name].set_timestep(use_local=self.use_local, global_tstep=self.tstep)
+            setattr(self, name, self.fxns[name])
     def set_functionorder(self,functionorder):
         """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
         if not self.functionorder.difference(functionorder): self.functionorder=OrderedSet(functionorder)
@@ -2106,6 +2151,7 @@ class Model(object):
         copy.__init__(params=getattr(self, 'params', {}),modelparams=getattr(self, 'modelparams', {}),valparams=getattr(self, 'valparams', {}))
         for flowname, flow in self.flows.items():
             copy.flows[flowname]=flow.copy()
+            setattr(copy, flowname, copy.flows[flowname])
         for fxnname, fxn in self.fxns.items():
             flownames=self._fxninput[fxnname]['flows']
             fparams=self._fxninput[fxnname]['fparams']
@@ -2113,6 +2159,7 @@ class Model(object):
             if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows)
             else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams)
             copy.fxns[fxnname].set_timestep(use_local=self.use_local, global_tstep=self.tstep)
+            setattr(copy, fxnname, copy.fxns[fxnname])
         copy._fxninput=self._fxninput
         copy._fxnflows=self._fxnflows
         copy.is_copy=False
@@ -2204,6 +2251,15 @@ class Model(object):
             variable_values[i]=f.get_var(var)
         if len(variable_values)==1 and trunc_tuple: return variable_values[0]
         else:                                       return tuple(variable_values)
+def init_flow(flowname, flowdict={}, flowtype='', fclass=Flow):
+    if not flowtype:                flowtype = flowname
+    if not flowdict:                fl=fclass({flowname:1}, flowname, flowtype)
+    elif type(flowdict) == set:     fl=fclass({f:1 for f in flowdict}, flowname, flowtype)
+    elif type(flowdict) == dict:    fl=fclass(flowdict, flowname,flowtype)
+    elif isinstance(flowdict, Flow):fl=flowdict
+    else: raise Exception('Invalid flow. Must be dict or flow')
+    return fl
+
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) 
     Attributes
