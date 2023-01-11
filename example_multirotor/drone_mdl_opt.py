@@ -722,6 +722,7 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'al
 
 if __name__=="__main__":
     import fmdtools.faultsim.propagate as prop
+    import matplotlib.pyplot as plt
     
 
     #opt_prob.add_combined_objective("total_cost", 'cd', 'co', 'cr')
@@ -751,6 +752,7 @@ if __name__=="__main__":
     rd.plot.phases(phases, modephases)
 
     app = SampleApproach(mdl,  phases={'forward'})
+    plt.show()
     
     #endclasses, mdlhists = prop.approach(mdl, app, staged=True)
     #plot_faulttraj({'nominal':mdlhists['nominal'], 'faulty':mdlhists['StoreEE lowcharge, t=6.0']}, mdl.params, title='Fault response to RFpropbreak fault at t=20')
