@@ -1,5 +1,5 @@
 """
-Description: Processes model results for visualization
+Description: Processes model results for visualization and analysis
 
 Uses methods:
     - :func:`save_result`:              Saves a given result variable (endclasses or mdlhists) to a file filename. 
