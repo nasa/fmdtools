@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmdtools.faultsim &mdash; fmdtools 1.3.2 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fmdtools.resultdisp package" href="fmdtools.resultdisp.html" />
+    <link rel="prev" title="Module Reference" href="fmdtools.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#key-features">Key Features</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html#notices">Notices:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example_pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Tutorial_complete.html#2a.)-Simulate-nominal">2a.) Simulate nominal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Tutorial_complete.html#2b.)-Visualize-nominal-model">2b.) Visualize nominal model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Tutorial_complete.html#2b.)-Simulate-a-fault-mode">2b.) Simulate a fault mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Tutorial_complete.html#3b.)-Visualize-fault-model-states">3b.) Visualize fault model states</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Tutorial_complete.html#4a.)-Simulate-set-of-fault-modes">4a.) Simulate set of fault modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Tutorial_complete.html#4b.)-Visualize-set-of-fault-modes">4b.) Visualize set of fault modes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Tutorial_complete.html#5.)-Saving-Work">5.) Saving Work</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html">Defining and Visualizing fmdtools Model Structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Basics">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Model-Setup">Model Setup</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Graph-Visualization">Graph Visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Graph-Views">Graph Views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Run-Order">Run Order</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Behavior/Fault-Visualization">Behavior/Fault Visualization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Model_Structure_Visualization_Tutorial.html#Visualizing-time-slices">Visualizing time-slices</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Network-Model">Network Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Static-Model">Static Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_multirotor/Demonstration.html#Octocopter-Resilience">Octocopter Resilience</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_pump/Pump_Example_Notebook.html">Pump Example Notebook</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Pump_Example_Notebook.html#Initial-Model-Checks">Initial Model Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Pump_Example_Notebook.html#Tables">Tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Pump_Example_Notebook.html#Propagating-and-Viewing-Results-for-Individual-Faults">Propagating and Viewing Results for Individual Faults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Pump_Example_Notebook.html#Visualization-of-resilience-metrics">Visualization of resilience metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Pump_Example_Notebook.html#Running-a-List-of-Faults">Running a List of Faults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Pump_Example_Notebook.html#Running-a-Fault-Sampling-Approach">Running a Fault Sampling Approach</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Pump_Example_Notebook.html#Save/Load">Save/Load</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Approach_Use-Cases.html">Defining Fault Sampling Approaches in fmdtools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Approach_Use-Cases.html#Basics">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Approach_Use-Cases.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Approach_Use-Cases.html#Setting-up-an-approach">Setting up an approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Approach_Use-Cases.html#Propagating-Faults">Propagating Faults</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Approach_Use-Cases.html#Time-Sampling-Options">Time Sampling Options</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Approach_Use-Cases.html#Pruning">Pruning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html">Using Parallel Computing in fmdtools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Model-Checks">Model Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Using-Parallelism-in-Simulation">Using Parallelism in Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Performance-Comparison">Performance Comparison</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Comparison:-No-Histories">Comparison: No Histories</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Comparison:-Many-Faults">Comparison: Many Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Comparison:-Long-simulation">Comparison: Long simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Comparison:-Long-Simulation-No-Tracking">Comparison: Long Simulation No Tracking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Comparison:-Long-Simulation-Only-Necessary-Tracking">Comparison: Long Simulation Only Necessary Tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Comparison:-Lower-Tracking-Time-Resolution">Comparison: Lower Tracking Time Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Comparison-Conclusions:">Comparison Conclusions:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Parallelism_Tutorial.html#Further-Computational-Cost-Reduction-via-Profiling">Further Computational Cost Reduction via Profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Nominal_Approach_Use-Cases.html">Defining Nominal Approaches in fmdtools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Nominal_Approach_Use-Cases.html#Quantifying-probabilities">Quantifying probabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Nominal_Approach_Use-Cases.html#Random-input-generation">Random input generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Nominal_Approach_Use-Cases.html#Nested-Scenario-Sampling">Nested Scenario Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_rover/Rover%20Setup%20Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/Rover%20Setup%20Notebook.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/Rover%20Setup%20Notebook.html#Model-simulation">Model simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_rover/degradation_modelling/Degradation%20Modelling%20Notebook.html">Degradation Modelling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/degradation_modelling/Degradation%20Modelling%20Notebook.html#Drive-Degradation">Drive Degradation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/degradation_modelling/Degradation%20Modelling%20Notebook.html#Human-Degradation">Human Degradation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/degradation_modelling/Degradation%20Modelling%20Notebook.html#Combined-Degradation">Combined Degradation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_rover/fault_sampling/Rover%20Mode%20Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/fault_sampling/Rover%20Mode%20Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_rover/optimization/Rover%20Response%20Optimization.html">Rover Response Optimization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/optimization/Rover%20Response%20Optimization.html#Optimization">Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_rover/optimization/Rover%20Response%20Optimization.html#Rover-Optimization:">Rover Optimization:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_rover/optimization/Rover%20Response%20Optimization.html#Results-visualization">Results visualization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Optimization.html#ProblemInterface-Setup">ProblemInterface Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Optimization.html#Optimization:">Optimization:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/AST_Sampling.html#Python-setup:">Python setup:</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/AST_Sampling.html#AdaStress-Setup">AdaStress Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/AST_Sampling.html#MCTS">MCTS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_pump/AST_Sampling.html#Grey-Box-Methods">Grey Box Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/AST_Sampling.html#Pump">Pump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_pump/AST_Sampling.html#Simulator">Simulator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_multirotor/Multirotor%20Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Multirotor%20Optimization.html#Design-Model">Design Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Multirotor%20Optimization.html#Operational-Model">Operational Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Multirotor%20Optimization.html#Resilience-Model">Resilience Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Multirotor%20Optimization.html#Combined-Simulation/Optimization">Combined Simulation/Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_tank/Tank%20Optimization.html">Cooling Tank Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#Optimization">Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fmdtools.faultsim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.faultsim.networks">fmdtools.faultsim.networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fmdtools-faultsim-propagate">fmdtools.faultsim.propagate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.resultdisp.html">fmdtools.resultdisp package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.resultdisp.html#module-fmdtools.resultdisp.graph">fmdtools.resultdisp.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.resultdisp.html#module-fmdtools.resultdisp.plot">fmdtools.resultdisp.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.resultdisp.html#module-fmdtools.resultdisp.process">fmdtools.resultdisp.process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.resultdisp.html#module-fmdtools.resultdisp.tabulate">fmdtools.resultdisp.tabulate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.html#fmdtools-modeldef">fmdtools.modeldef</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="fmdtools.html">Module Reference</a> &raquo;</li>
+      <li>fmdtools.faultsim</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/docs/fmdtools.faultsim.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="fmdtools-faultsim">
+<h1>fmdtools.faultsim<a class="headerlink" href="#fmdtools-faultsim" title="Permalink to this headline"></a></h1>
+<p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.faultsim</span></code> package is used to simulate <a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.modeldef.Model</span></code></a> models. It consists of two modules:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#module-fmdtools.faultsim.networks" title="fmdtools.faultsim.networks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.faultsim.networks</span></code></a>, which conducts network assessment on a given model’s network (which does not require classes for function blocks or behaviors to be defined), and</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.faultsim.propagate" title="fmdtools.faultsim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.faultsim.propagate</span></code></a>, which simulates the user-defined behaviors of a model over set time(s).</p></li>
+</ul>
+</div></blockquote>
+<section id="module-fmdtools.faultsim.networks">
+<span id="fmdtools-faultsim-networks"></span><h2>fmdtools.faultsim.networks<a class="headerlink" href="#module-fmdtools.faultsim.networks" title="Permalink to this headline"></a></h2>
+<p>Description: Methods for high-level network simulation and analysis.</p>
+<dl class="simple">
+<dt>Main Methods:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.faultsim.networks.calc_aspl" title="fmdtools.faultsim.networks.calc_aspl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_aspl()</span></code></a>:              Computes average shortest path length of graph representation of model mdl.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.networks.calc_modularity" title="fmdtools.faultsim.networks.calc_modularity"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_modularity()</span></code></a>:        Computes graph modularity given a graph representation of model mdl.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.networks.find_bridging_nodes" title="fmdtools.faultsim.networks.find_bridging_nodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">find_bridging_nodes()</span></code></a>:    Determines bridging nodes in a graph representation of model mdl.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.networks.find_high_degree_nodes" title="fmdtools.faultsim.networks.find_high_degree_nodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">find_high_degree_nodes()</span></code></a>: Determines highest degree nodes, up to percentile p, in graph representation of model mdl.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.networks.calc_robustness_coefficient" title="fmdtools.faultsim.networks.calc_robustness_coefficient"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_robustness_coefficient()</span></code></a>:    Computes robustness coefficient of graph representation of model mdl.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.networks.sff_model" title="fmdtools.faultsim.networks.sff_model"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sff_model()</span></code></a>:                      Susceptible-Fixed-Failed Model Simulation</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.networks.degree_dist" title="fmdtools.faultsim.networks.degree_dist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">degree_dist()</span></code></a>:            Plots degree distribution of graph representation of model mdl.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.calc_aspl">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">calc_aspl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'parameter'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.calc_aspl" title="Permalink to this definition"></a></dt>
+<dd><p>Computes average shortest path length of graph representation of model mdl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em><em> or </em><em>graph</em>) – graph to run the analysis for. (will get from model if provided)</p></li>
+<li><p><strong>gtype</strong> (<em>str</em>) – type of graph representation of the model to show. default is ‘bipartite’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ASPL</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>average shortest path length</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.calc_modularity">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">calc_modularity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'parameter'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.calc_modularity" title="Permalink to this definition"></a></dt>
+<dd><p>Computes graph modularity given a graph representation of model mdl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em><em> or </em><em>graph</em>) – graph to run the analysis for. (will get from model if provided)</p></li>
+<li><p><strong>gtype</strong> (<em>str</em>) – type of graph representation of the model to show. default is ‘bipartite’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>modularity</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Modularity</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.calc_robustness_coefficient">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">calc_robustness_coefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bipartite'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.calc_robustness_coefficient" title="Permalink to this definition"></a></dt>
+<dd><p>Computes robustness coefficient of graph representation of model mdl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em><em> or </em><em>graph</em>) – graph to calculate robustness coefficent for. (will get from model if provided)</p></li>
+<li><p><strong>trials</strong> (<em>int</em>) – number of times to run robustness coefficient algorithm (result is averaged over all trials)</p></li>
+<li><p><strong>gtype</strong> (<em>str</em>) – type of graph representation of the model to show. default is ‘bipartite’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>RC</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>robustness coefficient</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.data_average">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">data_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.data_average" title="Permalink to this definition"></a></dt>
+<dd><p>Averages each column in data</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.data_error">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">data_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.data_error" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates error for each column in data</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.degree_dist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">degree_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bipartite'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.degree_dist" title="Permalink to this definition"></a></dt>
+<dd><p>Plots degree distribution of graph representation of model mdl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em><em> or </em><em>graph</em>) – graph to calculated degree distribution for. (will get from model if provided)</p></li>
+<li><p><strong>gtype</strong> (<em>str</em>) – type of graph representation of the model to show. default is ‘bipartite’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fig</strong> – plot of distribution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.find_bridging_nodes">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">find_bridging_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'off'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'parameter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.find_bridging_nodes" title="Permalink to this definition"></a></dt>
+<dd><p>Determines bridging nodes in a graph representation of model mdl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em><em> or </em><em>graph</em>) – graph to run the analysis for. (will get from model if provided)</p></li>
+<li><p><strong>plot</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – plots graph with high degree nodes visualized if set to ‘on’</p></li>
+<li><p><strong>gtype</strong> (<em>str</em>) – type of graph representation of the model to show. default is ‘bipartite’</p></li>
+<li><p><strong>pos</strong> (<em>dict</em><em>  (</em><em>optional</em><em>)</em>) – dict of node positions in the model (if desired)</p></li>
+<li><p><strong>scale</strong> (<em>int</em><em> (</em><em>optional</em><em>)</em>) – scale for the plot. Default is 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>bridgingNodes</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of bridging nodes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.find_high_degree_nodes">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">find_high_degree_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'off'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bipartite'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.find_high_degree_nodes" title="Permalink to this definition"></a></dt>
+<dd><p>Determines highest degree nodes, up to percentile p, in graph representation of model mdl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em><em> or </em><em>graph</em>) – graph to run the analysis for. (will get from model if provided)</p></li>
+<li><p><strong>p</strong> (<em>int</em><em> (</em><em>optional</em><em>)</em>) – percentile of degrees to return, between 0 and 100</p></li>
+<li><p><strong>plot</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – plots graph with high degree nodes visualized if set to ‘on’</p></li>
+<li><p><strong>gtype</strong> (<em>str</em>) – type of graph representation of the model to show. default is ‘bipartite’</p></li>
+<li><p><strong>pos</strong> (<em>dict</em><em>  (</em><em>optional</em><em>)</em>) – dict of node positions in the model (if desired)</p></li>
+<li><p><strong>scale</strong> (<em>int</em><em> (</em><em>optional</em><em>)</em>) – scale for the plot. Default is 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>highDegreeNodes</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of high degree nodes in format (node,degree)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.get_graph">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">get_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.get_graph" title="Permalink to this definition"></a></dt>
+<dd><p>gets the appropriate graph of type gtype from mdl</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.sff_model">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">sff_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'parameter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_trials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_bar_option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'off'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.sff_model" title="Permalink to this definition"></a></dt>
+<dd><p>susc-fix-fail model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em><em> or </em><em>graph</em>) – graph to run trials over (will get from model if provided)</p></li>
+<li><p><strong>endtime</strong> (<em>int</em>) – simulation end time</p></li>
+<li><p><strong>pi</strong> (<em>float</em>) – infection (failure spread) rate</p></li>
+<li><p><strong>pf</strong> (<em>float</em>) – recovery (fix) rate</p></li>
+<li><p><strong>num_trials</strong> (<em>int</em>) – number of times to run the epidemic model, default is 100</p></li>
+<li><p><strong>error_bar_option</strong> (<em>str</em>) – option for plotting error bars (first to third quartile), default is off</p></li>
+<li><p><strong>start_node</strong> (<em>str</em>) – start node to use in the trial. default is ‘random’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fig</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot of susc, fail, and fix nodes over time</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.networks.sff_one_trial">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.networks.</span></span><span class="sig-name descname"><span class="pre">sff_one_trial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_node_selected</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.networks.sff_one_trial" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates one trial of the sff model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_node_selected</strong> (<em>str</em>) – node to start the trial from</p></li>
+<li><p><strong>g</strong> (<em>networkx graph</em>) – graph to run the trial over</p></li>
+<li><p><strong>endtime</strong> (<em>int</em>) – simulation end time</p></li>
+<li><p><strong>pi</strong> (<em>float</em>) – infection (failure spread) rate</p></li>
+<li><p><strong>pf</strong> (<em>float</em>) – recovery (fix) rate</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="fmdtools-faultsim-propagate">
+<h2>fmdtools.faultsim.propagate<a class="headerlink" href="#fmdtools-faultsim-propagate" title="Permalink to this headline"></a></h2>
+<a class="reference internal image-reference" href="../_images/simulation_types.png"><img alt="../_images/simulation_types.png" src="../_images/simulation_types.png" style="width: 800px;" /></a>
+<p>The <a class="reference internal" href="#module-fmdtools.faultsim.propagate" title="fmdtools.faultsim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.faultsim.propagate</span></code></a> module is used to simulate the behaviors of a <a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.modeldef.Model</span></code></a> model with and without faults. As shown above, each of the methods (described below) fit a given simulation use-case for resilience assessment–single/multiple scenarios, in nominal/faulty scenarios, and at a single set or multiple sets of parameters.</p>
+<span class="target" id="module-fmdtools.faultsim.propagate"></span><p>Description: functions to propagate faults through a user-defined fault model</p>
+<dl class="simple">
+<dt>Main Methods:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.nominal" title="fmdtools.faultsim.propagate.nominal"><code class="xref py py-func docutils literal notranslate"><span class="pre">nominal()</span></code></a>:            Runs the model over time in the nominal scenario.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.one_fault" title="fmdtools.faultsim.propagate.one_fault"><code class="xref py py-func docutils literal notranslate"><span class="pre">one_fault()</span></code></a>:          Runs one fault in the model at a specified time.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.mult_fault" title="fmdtools.faultsim.propagate.mult_fault"><code class="xref py py-func docutils literal notranslate"><span class="pre">mult_fault()</span></code></a>:         Runs arbitrary scenario of fault modes at specified times</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.single_faults" title="fmdtools.faultsim.propagate.single_faults"><code class="xref py py-func docutils literal notranslate"><span class="pre">single_faults()</span></code></a>:       Creates and propagates a list of failure scenarios in a model over given model times</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.approach" title="fmdtools.faultsim.propagate.approach"><code class="xref py py-func docutils literal notranslate"><span class="pre">approach()</span></code></a>:             Injects and propagates faults in the model defined by a given sample approach.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.nominal_approach" title="fmdtools.faultsim.propagate.nominal_approach"><code class="xref py py-func docutils literal notranslate"><span class="pre">nominal_approach()</span></code></a>:     Simulates a model over a range of parameters defined by a nominal approach.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.nested_approach" title="fmdtools.faultsim.propagate.nested_approach"><code class="xref py py-func docutils literal notranslate"><span class="pre">nested_approach()</span></code></a>:      Injects and propagates faults in the model defined by a given sample approach over a range of parameters defined by a nominal approach.</p></li>
+</ul>
+</dd>
+<dt>Shared Method Parameters:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a>:           Simulation keyword arguments.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.run_kwargs" title="fmdtools.faultsim.propagate.run_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwargs</span></code></a>:           Run keyword arguments.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.mult_kwargs" title="fmdtools.faultsim.propagate.mult_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a>:         Multi-scenario keyword arguments</p></li>
+</ul>
+</dd>
+<dt>Private Methods:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.list_init_faults" title="fmdtools.faultsim.propagate.list_init_faults"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a>:   Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.prop_one_scen" title="fmdtools.faultsim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a>:      Runs a fault scenario in the model over time</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.propagate" title="fmdtools.faultsim.propagate.propagate"><code class="xref py py-func docutils literal notranslate"><span class="pre">propagate()</span></code></a>:          Injects and propagates faults through the graph at one time-step</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.prop_time" title="fmdtools.faultsim.propagate.prop_time"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_time()</span></code></a>:          Propagates faults through model graph.</p></li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.update_mdlhist" title="fmdtools.faultsim.propagate.update_mdlhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">update_mdlhist()</span></code></a>:     Updates the model history at a given time.</dt><dd><ul>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.update_flowhist" title="fmdtools.faultsim.propagate.update_flowhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">update_flowhist()</span></code></a>:Updates the flows in the model history at t_ind</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.update_fxnhist" title="fmdtools.faultsim.propagate.update_fxnhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">update_fxnhist()</span></code></a>: Updates the functions (faults and states) in the model history at t_ind</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.update_blockhist" title="fmdtools.faultsim.propagate.update_blockhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">update_blockhist()</span></code></a>:Updates the blocks in the model history at t_ind</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.init_mdlhist" title="fmdtools.faultsim.propagate.init_mdlhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_mdlhist()</span></code></a>:       Initializes the model history over a given timerange</dt><dd><ul>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.init_flowhist" title="fmdtools.faultsim.propagate.init_flowhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_flowhist()</span></code></a>:  Initializes the flow history flowhist of the model mdl over the time range timerange</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.init_fxnhist" title="fmdtools.faultsim.propagate.init_fxnhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_fxnhist()</span></code></a>:   Initializes the function state history fxnhist of the model mdl over the time range timerange</p></li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.init_blockhist" title="fmdtools.faultsim.propagate.init_blockhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_blockhist()</span></code></a>: Initializes the block state history fxnhist of the model mdl over the time range timerange</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.cut_mdlhist" title="fmdtools.faultsim.propagate.cut_mdlhist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cut_mdlhist()</span></code></a>:        Cuts a given model history only to the time simulated</dt><dd><ul>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.cut_hist" title="fmdtools.faultsim.propagate.cut_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cut_hist()</span></code></a>:       Recursively cuts the given individual (flow or function) history at ind.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><a class="reference internal" href="#fmdtools.faultsim.propagate.save_helper" title="fmdtools.faultsim.propagate.save_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_helper()</span></code></a>:        Helper function for inline results saving.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.approach">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">approach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.approach" title="Permalink to this definition"></a></dt>
+<dd><p>Injects and propagates faults in the model defined by a given sample approach</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – The model to inject faults in.</p></li>
+<li><p><strong>app</strong> (<em>sampleapproach</em>) – SampleApproach used to define the list of faults and sample time for the model.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <dl class="simple">
+<dt>Additional keyword arguments, may include:</dt><dd><ul>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Simulation options for :func:<a href="#id1"><span class="problematic" id="id2">`</span></a>prop_one_scen</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.run_kwargs" title="fmdtools.faultsim.propagate.run_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Run options for <a class="reference internal" href="#fmdtools.faultsim.propagate.nom_helper" title="fmdtools.faultsim.propagate.nom_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">nom_helper()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.mult_kwargs" title="fmdtools.faultsim.propagate.mult_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Multi-scenario options for <a class="reference internal" href="#fmdtools.faultsim.propagate.approach" title="fmdtools.faultsim.propagate.approach"><code class="xref py py-func docutils literal notranslate"><span class="pre">approach()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>endclasses</strong> (<em>dict</em>) – A dictionary with the rate, cost, and expected cost of each scenario run with structure {scenname:{expected cost, cost, rate}}</p></li>
+<li><p><strong>mdlhists</strong> (<em>dict</em>) – A dictionary with the history of all model states for each scenario (including the nominal)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.check_hist_memory">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">check_hist_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nscens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_mem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000000000.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.check_hist_memory" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if the memory will be exhausted given the size of the mdlhist and number of scenarios</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.check_mdl_memory">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">check_mdl_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nscens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_mem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000000000.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.check_mdl_memory" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.check_overwrite">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">check_overwrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.check_overwrite" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.construct_nomscen">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">construct_nomscen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.construct_nomscen" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><em>Model</em></a>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>nomscen</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scen</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.create_faultseq_scen">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">create_faultseq_scen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultseq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disturbances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.create_faultseq_scen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.create_single_fault_scen">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">create_single_fault_scen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.create_single_fault_scen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.cut_hist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">cut_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.cut_hist" title="Permalink to this definition"></a></dt>
+<dd><p>Recursively cuts the given individual (flow or function) history at ind.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hist</strong> (<em>dict</em>) – history to cut</p></li>
+<li><p><strong>ind</strong> (<em>int</em>) – index to cut the history at</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>newhist</strong> – Cut history</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.cut_mdlhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">cut_mdlhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.cut_mdlhist" title="Permalink to this definition"></a></dt>
+<dd><p>Cuts unsimulated values from end of array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdlhist</strong> (<em>dict</em>) – dictionary of model histories for functions/flows</p></li>
+<li><p><strong>ind</strong> (<em>int</em>) – index to cut the history at</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mdlhist</strong> – The model history until the given index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.eq_units">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">eq_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rateunit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeunit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.eq_units" title="Permalink to this definition"></a></dt>
+<dd><p>Provides conversion factor for from rateunit (str) to timeunit (str)
+Options for units are: ‘sec’, ‘min’, ‘hr’, ‘day’, ‘wk’, ‘month’, and ‘year’</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.exec_nom_helper">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">exec_nom_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.exec_nom_helper" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function for executing nominal scenarios</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.exec_nom_par">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">exec_nom_par</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.exec_nom_par" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.exec_scen">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">exec_scen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.exec_scen" title="Permalink to this definition"></a></dt>
+<dd><p>Executes a scenario and generates results and classifications given a model and nominal model history</p>
+<blockquote>
+<div><p>Parameters</p>
+</div></blockquote>
+<dl class="simple">
+<dt>mdl<span class="classifier">model</span></dt><dd><p>The model to inject faults in.</p>
+</dd>
+<dt>scen<span class="classifier">scenario</span></dt><dd><p>scenario used to define time and faults where the fault is to be injected</p>
+</dd>
+<dt>nomhist:</dt><dd><p>history of results in the nominal model run</p>
+</dd>
+<dt>save_args<span class="classifier">dict</span></dt><dd><p>Save dictionary to use in save_helper defining when/how to save the dictionary</p>
+</dd>
+<dt>indiv_id<span class="classifier">str</span></dt><dd><p>ID str to insert into the file name (if saving individually)</p>
+</dd>
+<dt><a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs<span class="classifier">kwargs</span></dt><dd><dl class="simple">
+<dt>Additional keyword arguments, may include:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Simulation options for :func:<a href="#id5"><span class="problematic" id="id6">`</span></a>prop_one_scen</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.exec_scen_par">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">exec_scen_par</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.exec_scen_par" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function for executing the scenario in parallel</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.get_endclass_vars">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">get_endclass_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.get_endclass_vars" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.get_result">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomresult</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.get_result" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.init_blockhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">init_blockhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">blockname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.init_blockhist" title="Permalink to this definition"></a></dt>
+<dd><p>Instantiates the block hist (faults, states) over the given timerange</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>blockname</strong> (<em>str</em>) – Name of the block</p></li>
+<li><p><strong>block</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Block" title="fmdtools.modeldef.Block"><em>Block</em></a>) – Object for the block</p></li>
+<li><p><strong>timerange</strong> (<em>array</em>) – Numpy array of times to initialize in the dictionary.</p></li>
+<li><p><strong>track</strong> (<em>'all'</em><em> or </em><em>dict</em><em>, </em><em>'none'</em><em>)</em><em>, </em><em>optional</em>) – Which model states to track over time, which can be given as ‘all’ or a
+dict of form {‘functions’:{‘fxn1’:’att1’}, ‘flows’:{‘flow1’:’att1’}}
+The default is ‘all’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.init_flowhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">init_flowhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.init_flowhist" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes the flow history flowhist of the model mdl over the time range timerange</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – the Model object</p></li>
+<li><p><strong>timerange</strong> (<em>array</em>) – Numpy array of times to initialize in the dictionary.</p></li>
+<li><p><strong>track</strong> (<em>'all'</em><em> or </em><em>dict</em><em>, </em><em>'none'</em><em>)</em><em>, </em><em>optional</em>) – Which model states to track over time, which can be given as ‘all’ or a
+dict of form {‘functions’:{‘fxn1’:’att1’}, ‘flows’:{‘flow1’:’att1’}}
+The default is ‘all’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>flowhist</strong> – A dictionary history of each recorded flow state over the given timerange.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.init_fxnhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">init_fxnhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.init_fxnhist" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes the function state history fxnhist of the model mdl over the time range timerange</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – the Model object</p></li>
+<li><p><strong>timerange</strong> (<em>array</em>) – Numpy array of times to initialize in the dictionary.</p></li>
+<li><p><strong>track</strong> (<em>'all'</em><em> or </em><em>dict</em><em>, </em><em>'none'</em><em>)</em><em>, </em><em>optional</em>) – Which model states to track over time, which can be given as ‘all’ or a
+dict of form {‘functions’:{‘fxn1’:’att1’}, ‘flows’:{‘flow1’:’att1’}}
+The default is ‘all’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fxnhist</strong> – A dictionary history of each recorded function state over the given timerange.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.init_mdlhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">init_mdlhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.init_mdlhist" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes the model history over a given timerange</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – the Model object</p></li>
+<li><p><strong>timerange</strong> (<em>array</em>) – Numpy array of times to initialize in the dictionary.</p></li>
+<li><p><strong>track</strong> (<em>str</em><em> (</em><em>'all'</em><em>, </em><em>'functions'</em><em>, </em><em>'flows'</em><em>, </em><em>'valparams'</em><em>, </em><em>dict</em><em>, </em><em>'none'</em><em>)</em><em>, </em><em>optional</em>) – Which model states to track over time, which can be given as ‘functions’, ‘flows’,
+‘all’, ‘none’, ‘valparams’ (model states specified in mdl.valparams),
+or a dict of form {‘functions’:{‘fxn1’:’att1’}, ‘flows’:{‘flow1’:’att1’}}
+The default is ‘all’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mdlhist</strong> – A dictionary history of each model state over the given timerange.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.list_init_faults">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">list_init_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.list_init_faults" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><em>Model</em></a>) – Model with list of times in mdl.times</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>faultlist</strong> – A list of fault scenarios, where a scenario is defined as: {faults:{functions:faultmodes}, properties:{(changes depending scenario type)} }</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.mult_fault">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">mult_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultseq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disturbances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.mult_fault" title="Permalink to this definition"></a></dt>
+<dd><p>Runs a sequence of faults in the model at given times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><em>Model</em></a>) – The model to inject the fault in.</p></li>
+<li><p><strong>faultseq</strong> (<em>dict</em>) – Dict of times and modes defining the fault scenario {time:{fxns: [modes]},}</p></li>
+<li><p><strong>disturbances</strong> (<em>dict</em>) – Dict of times and modes defining the disturbances in the scenario {time:{fxns: [modes]},}</p></li>
+<li><p><strong>scen</strong> (<em>dict</em><em>, </em><em>optional</em>) – Scenario dictionary (for external calls)</p></li>
+<li><p><strong>rate</strong> (<em>float</em><em>, </em><em>optional</em>) – Input rate for the sequence (must be calculated elsewhere)</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <dl class="simple">
+<dt>Additional keyword arguments, may include:</dt><dd><ul>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Simulation options for :func:<a href="#id7"><span class="problematic" id="id8">`</span></a>prop_one_scen</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.run_kwargs" title="fmdtools.faultsim.propagate.run_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Run options for <a class="reference internal" href="#fmdtools.faultsim.propagate.nom_helper" title="fmdtools.faultsim.propagate.nom_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">nom_helper()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>result</em> – dict of result corresponding to desired result {‘endclass’:endclasses, ‘endfaults’: endfaults, ‘varname’: var, t: {‘endclass’:endclasses…} …}</p></li>
+<li><p><strong>mdlhists</strong> (<em>dict</em>) – A dictionary of the states of the model of each fault scenario over time with structure: {‘nominal’:nomhist, ‘faulty’:faulthist}</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.mult_kwargs">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">mult_kwargs</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'max_mem':</span> <span class="pre">2000000000.0,</span> <span class="pre">'pool':</span> <span class="pre">False,</span> <span class="pre">'showprogress':</span> <span class="pre">True}</span></em><a class="headerlink" href="#fmdtools.faultsim.propagate.mult_kwargs" title="Permalink to this definition"></a></dt>
+<dd><p>Multi-scenario keyword arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pool</strong> (<em>process pool</em><em>, </em><em>optional</em>) – Process Pool Object from multiprocessing or pathos packages. Pathos is recommended.
+e.g. parallelpool = mp.pool(n) for n cores (multiprocessing)
+or parallelpool = ProcessPool(nodes=n) for n cores (pathos)
+If False, the set of scenarios is run serially. The default is False</p></li>
+<li><p><strong>showprogress</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to show a progress bar during execution. default is true</p></li>
+<li><p><strong>max_mem</strong> (<em>int</em>) – Max memory (warns the user when memory is above threshold)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.nested_approach">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">nested_approach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomapp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_phases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.nested_approach" title="Permalink to this definition"></a></dt>
+<dd><p>Simulates a set of fault modes within a set of nominal scenarios defined by a nominal approach.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><em>Model</em></a>) – Model Object to use in the simulation.</p></li>
+<li><p><strong>nomapp</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.NominalApproach" title="fmdtools.modeldef.NominalApproach"><em>NominalApproach</em></a>) – NominalApproach defining the nominal situations the model will be run over</p></li>
+<li><p><strong>get_phases</strong> (<em>Bool/List/Dict</em><em>, </em><em>optional</em>) – Whether and how to use nominal simulation phases to set up the SampleApproach. The default is False.
+- If True, all phases from the nominal simulation are passed to SampleApproach()
+- If a list [‘Fxn1’, ‘Fxn2’ etc.], only the phases from the listed functions will be passed.
+- If a dict {‘Fxn1’:’phase1’}, only the phase ‘phase1’ in the function ‘Fxn1’ will be passed.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <dl class="simple">
+<dt>Additional keyword arguments, may include:</dt><dd><ul>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Simulation options for :func:<a href="#id9"><span class="problematic" id="id10">`</span></a>prop_one_scen</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.run_kwargs" title="fmdtools.faultsim.propagate.run_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Run options for <a class="reference internal" href="#fmdtools.faultsim.propagate.nom_helper" title="fmdtools.faultsim.propagate.nom_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">nom_helper()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.mult_kwargs" title="fmdtools.faultsim.propagate.mult_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Multi-scenario options for <a class="reference internal" href="#fmdtools.faultsim.propagate.approach" title="fmdtools.faultsim.propagate.approach"><code class="xref py py-func docutils literal notranslate"><span class="pre">approach()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a href="#id11"><span class="problematic" id="id12">**</span></a>app_args<span class="classifier">new_params</span></dt><dd><p>Keyword arguments for the SampleApproach. See modeldef.SampleApproach documentation.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>nested_results</strong> (<em>dict</em>) – A nested dictionary with the desired results of each scenario run with structure {‘nomscen1’:results, ‘nomscen2’:results}</p></li>
+<li><p><strong>nested_mdlhists</strong> (<em>dict</em>) – A nested dictionary with the history of all model states for each scenario with structure {‘nomscen1’:mdlhists, ‘nomscen2’:mdlhists}</p></li>
+<li><p><strong>apps</strong> (<em>dict</em>) – A dictionary of the SampleApproaches generated corresponding to each nominal scenario with structure {‘nomscen1’:app1}</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.new_mdl">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">new_mdl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paramdict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.new_mdl" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.new_mdl_params">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">new_mdl_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paramdict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.new_mdl_params" title="Permalink to this definition"></a></dt>
+<dd><p>Creates parameter inputs for a new model. Used for exploring parameter ranges and seeding models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><em>Model</em></a>) – fmdtools simulation model</p></li>
+<li><p><strong>paramdict</strong> (<em>Dict</em>) – Dict of parameters to update with structure params/modelparams/valparams to update
+e.g. {‘params’:{‘param1’: 1.0}}</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>params</strong> (<em>dict</em>) – Updated param dictionary</p></li>
+<li><p><strong>modelparams</strong> (<em>dict</em>) – Updated modelparam dictionary</p></li>
+<li><p><strong>valparams</strong> (<em>dict</em>) – Updated valparam dictionary</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.nom_helper">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">nom_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctimes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_end_condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.nom_helper" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function for initial run of nominal scenario.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><em>Model</em></a>) – Model of the system</p></li>
+<li><p><strong>time</strong> (<em>float/list</em>) – Times to copy the nominal model from</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> simulation options for :func:<a href="#id13"><span class="problematic" id="id14">`</span></a>prop_one_scen</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>result</strong> (<em>dict</em>) – results dict from nominal sim</p></li>
+<li><p><strong>nommdlhist</strong> (<em>dict</em>) – result history from nominal sim</p></li>
+<li><p><strong>nomscen</strong> (<em>dict</em>) – nominal scenario dict</p></li>
+<li><p><strong>mdls</strong> (<em>list</em>) – Models from copy time(s) ctimes</p></li>
+<li><p><strong>t_end_nom</strong> (<em>float</em>) – Nominal simulation end time</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.nominal">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">nominal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.nominal" title="Permalink to this definition"></a></dt>
+<dd><p>Runs the model over time in the nominal scenario.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><em>Model</em></a>) – Model of the system</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <dl class="simple">
+<dt>Additional keyword arguments, may include:</dt><dd><ul>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Simulation options for :func:<a href="#id15"><span class="problematic" id="id16">`</span></a>prop_one_scen</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.run_kwargs" title="fmdtools.faultsim.propagate.run_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Run options for <a class="reference internal" href="#fmdtools.faultsim.propagate.nom_helper" title="fmdtools.faultsim.propagate.nom_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">nom_helper()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>result</em> – dict of result corresponding to desired result {‘endclass’:endclasses, ‘endfaults’: endfaults, ‘varname’: var, t: {‘endclass’:endclasses…} …}</p></li>
+<li><p><strong>resgraph</strong> (<em>MultiGraph</em>) – A networkx graph object with function faults and degraded flows as graph attributes</p></li>
+<li><p><strong>nomhist</strong> (<em>Dict</em>) – A dictionary with a history of modelstates</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.nominal_approach">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">nominal_approach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomapp</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.nominal_approach" title="Permalink to this definition"></a></dt>
+<dd><p>Simulates a set of nominal scenarios through a model. Useful to understand
+the sets of parameters where the system will run nominally and/or lead to
+a fault.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><em>Model</em></a>) – Model to simulate</p></li>
+<li><p><strong>nomapp</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.NominalApproach" title="fmdtools.modeldef.NominalApproach"><em>NominalApproach</em></a>) – Nominal Approach defining the nominal scenarios to run the system over.</p></li>
+<li><p><strong>get_endclass</strong> (<em>bool</em>) – Whether to return endclasses from mdl.find_classification. Default is True.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <dl class="simple">
+<dt>Additional keyword arguments, may include:</dt><dd><ul>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Simulation options for :func:<a href="#id17"><span class="problematic" id="id18">`</span></a>prop_one_scen</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.run_kwargs" title="fmdtools.faultsim.propagate.run_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Run options for <a class="reference internal" href="#fmdtools.faultsim.propagate.nom_helper" title="fmdtools.faultsim.propagate.nom_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">nom_helper()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.mult_kwargs" title="fmdtools.faultsim.propagate.mult_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Multi-scenario options for <a class="reference internal" href="#fmdtools.faultsim.propagate.approach" title="fmdtools.faultsim.propagate.approach"><code class="xref py py-func docutils literal notranslate"><span class="pre">approach()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>nomresults</em> – dict of result corresponding to desired result {‘scenname’:return}</p></li>
+<li><p><strong>nomhists</strong> (<em>Dict</em>) – Dictionary of model histories, with structure {‘scenname’:mdlhist}</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.one_fault">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">one_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.one_fault" title="Permalink to this definition"></a></dt>
+<dd><p>Runs one fault in the model at a specified time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Model" title="fmdtools.modeldef.Model"><em>Model</em></a>) – The model to inject the fault in.</p></li>
+<li><p><strong>fxnname</strong> (<em>str</em>) – Name of the function with the faultmode</p></li>
+<li><p><strong>faultmode</strong> (<em>str</em>) – Name of the faultmode</p></li>
+<li><p><strong>time</strong> (<em>float</em><em>, </em><em>optional</em>) – Time to inject fault. Must be in the range of model times (i.e. in range(0, end, mdl.tstep)). The default is 0.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <dl class="simple">
+<dt>Additional keyword arguments, may include:</dt><dd><ul>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Simulation options for :func:<a href="#id19"><span class="problematic" id="id20">`</span></a>prop_one_scen</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.run_kwargs" title="fmdtools.faultsim.propagate.run_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Run options for <a class="reference internal" href="#fmdtools.faultsim.propagate.nom_helper" title="fmdtools.faultsim.propagate.nom_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">nom_helper()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>result</em> – dict of result corresponding to desired result {‘endclass’:endclasses, ‘endfaults’: endfaults, ‘varname’: var, t: {‘endclass’:endclasses…} …}</p></li>
+<li><p><strong>mdlhists</strong> (<em>dict</em>) – A dictionary of the states of the model of each fault scenario over time with structure: {‘nominal’:nomhist, ‘faulty’:faulthist}</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.pack_run_kwargs">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">pack_run_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.pack_run_kwargs" title="Permalink to this definition"></a></dt>
+<dd><p>Creates subset of run kwargs for <a class="reference internal" href="#fmdtools.faultsim.propagate.nom_helper" title="fmdtools.faultsim.propagate.nom_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">nom_helper()</span></code></a> and <code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwarg</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.pack_sim_kwargs">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">pack_sim_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.pack_sim_kwargs" title="Permalink to this definition"></a></dt>
+<dd><p>Creates <a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> for <a class="reference internal" href="#fmdtools.faultsim.propagate.prop_one_scen" title="fmdtools.faultsim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.phases_from_hist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">phases_from_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">get_phases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.phases_from_hist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.prop_one_scen">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">prop_one_scen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctimes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomresult</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prevhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_hist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.prop_one_scen" title="Permalink to this definition"></a></dt>
+<dd><p>Runs a fault scenario in the model over time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – The model to inject faults in.</p></li>
+<li><p><strong>scen</strong> (<em>Dict</em>) – The fault scenario to run. Has structure: {‘faults’:{fxn:fault}, ‘properties’:{rate, time, name, etc}}</p></li>
+<li><p><strong>ctimes</strong> (<em>list</em><em>, </em><em>optional</em>) – List of times to copy the model (for use in staged execution). The default is [].</p></li>
+<li><p><strong>nomhist</strong> (<em>dict</em><em>, </em><em>optional</em>) – Model history dictionary from previous runs, for use in creating the new mdlhist.</p></li>
+<li><p><strong>nomhist</strong> – Model history dictionary from the nominal state, for use in Model.find_classification
+and for initializing model history in staged execution option. The default is {}.</p></li>
+<li><p><strong>nomresult</strong> (<em>dict</em><em>, </em><em>optional</em>) – Nominal result dictionary (to compare with current if desired)</p></li>
+<li><p><strong>cut_hist</strong> (<em>bool</em>) – Whether to cut the model history to a given size. The default is True</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – simulation options, see <a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>result</em> – dict of result corresponding to desired result {‘endclass’:endclasses, ‘endfaults’: endfaults, ‘varname’: var, t: {‘endclass’:endclasses…} …}</p></li>
+<li><p><strong>mdlhist</strong> (<em>dict</em>) – A dictionary with a history of modelstates.</p></li>
+<li><p><strong>c_mdl</strong> (<em>dict</em>) – A dictionary of models at each time given in ctimes with structure {time:model}</p></li>
+<li><p><strong>t_end</strong> (<em>float</em>) – Last sim time</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.prop_time">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">prop_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flowstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.prop_time" title="Permalink to this definition"></a></dt>
+<dd><p>Propagates faults through model graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – Model to propagate faults in</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Current time-step.</p></li>
+<li><p><strong>run_stochastic</strong> (<em>bool</em>) – Whether to run stochastic behaviors or use default values. Default is False.
+Can set as ‘track_pdf’ to calculate/track the probability densities of random states over time.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>flowstates</strong> – States of each flow in the model after propagation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.propagate">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnfaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disturbances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flowstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.propagate" title="Permalink to this definition"></a></dt>
+<dd><p>Injects and propagates faults through the graph at one time-step</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – The model to propagate the fault in</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – The current timestep.</p></li>
+<li><p><strong>fxnfaults</strong> (<em>dict</em>) – Faults to inject during this propagation step. With structure {‘function’:[‘fault1’, ‘fault2’…]}</p></li>
+<li><p><strong>disturbances</strong> – Variables to change during this propagation step. With structure {‘function.var1’:value}</p></li>
+<li><p><strong>run_stochastic</strong> (<em>bool</em>) – Whether to run stochastic behaviors or use default values. Default is False.
+Can set as ‘track_pdf’ to calculate/track the probability densities of random states over time.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>flowstates</strong> – States of the model at the current time-step.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.run_kwargs">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">run_kwargs</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'new_params':</span> <span class="pre">{},</span> <span class="pre">'protect':</span> <span class="pre">True,</span> <span class="pre">'save_args':</span> <span class="pre">{}}</span></em><a class="headerlink" href="#fmdtools.faultsim.propagate.run_kwargs" title="Permalink to this definition"></a></dt>
+<dd><p>Run keyword arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>protect</strong> (<em>bool</em>) – <p>Whether or not to protect the model object via copying.
+Options:</p>
+<blockquote>
+<div><ul>
+<li><p>True (default): re-instances the model so that multiple simulations can be run successively without causing problems</p></li>
+<li><p>False : Thus, the model object that is returned can be modified and analyzed if needed</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>save_args</strong> (<em>dict</em><em> (</em><em>optional</em><em>)</em>) – <p>Dictionary specifying if/how to save results. Default is {}, which doesn’t save anything.
+Has structure:</p>
+<blockquote>
+<div><ul>
+<li><p>{‘mdlhists’:mdlhistargs, ‘endclass’:endclassargs, ‘indiv’:indiv},</p></li>
+<li><p>where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result</p></li>
+<li><p>(i.e., {‘filename’:’filename.pkl’, ‘filetype’:’pickle’, ‘overwrite’:True})</p></li>
+<li><p>and indiv is an (optional) bool specifying whether to save results individually (in a folder)</p></li>
+</ul>
+<p>or as a monolythic file</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>new_params</strong> (<em>dict</em><em> (</em><em>optional</em><em>)</em>) – <dl class="simple">
+<dt>Parameter dictionary to be instantiated in the model prior to simulation. Has structure:</dt><dd><ul>
+<li><p>{“params”:params, “modelparams”:modelparams, “valparams”:valparams}</p></li>
+</ul>
+</dd>
+</dl>
+<p>Parameter dictionaries do not need to be complete (if incomplete).</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.save_helper">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">save_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.save_helper" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function for inline results saving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>save_args</strong> (<em>dict</em>) – Dict with structure: {‘mdlhists’:mdlhistargs, ‘endclass’:endclassargs, ‘indiv’:individual_saving},
+where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
+(i.e., {‘filename’:’filename.pkl’, ‘filetype’:’pickle’, ‘overwrite’:True})
+and individual_saving is a bool (True/False)</p></li>
+<li><p><strong>endclass</strong> (<em>dict</em>) – dict of end-state classifications (from simulation)</p></li>
+<li><p><strong>mdlhist</strong> (<em>dict</em>) – dict of model histories (from simulation)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.scenlist_helper">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">scenlist_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scenlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_mdl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.scenlist_helper" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.sim_kwargs">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">sim_kwargs</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'desired_result':</span> <span class="pre">'endclass',</span> <span class="pre">'run_stochastic':</span> <span class="pre">False,</span> <span class="pre">'staged':</span> <span class="pre">False,</span> <span class="pre">'track':</span> <span class="pre">'all',</span> <span class="pre">'track_times':</span> <span class="pre">'all'}</span></em><a class="headerlink" href="#fmdtools.faultsim.propagate.sim_kwargs" title="Permalink to this definition"></a></dt>
+<dd><p>Simulation keyword arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>desired_result</strong> (<em>dict/str/list</em>) – <p>Desired quantities to return in the first argument.
+Options are:</p>
+<blockquote>
+<div><ul>
+<li><p>’endclass’: a dict returned by find_classification (default)</p></li>
+<li><p>’endfaults’: a dict of returned fault modes and their propagation {‘endfaults’:faultdict, ‘faultprops’:faultpropdict}</p></li>
+<li><p>’normal’/’bipartite’/’typegraph’: a networkx graph of the model with fault modes superimposed</p></li>
+<li><p>’fxnname.varname’: variable values to get</p></li>
+<li><p>a list of the above arguments (for multiple at the end)</p></li>
+<li><p>a dict of lists (for multiple over time), e.g. {time:[varnames,… ‘endclass’]}</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>track</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Which model states to track over time
+Options:</p>
+<blockquote>
+<div><ul>
+<li><p>’functions’</p></li>
+<li><p>’flows’</p></li>
+<li><p>’all’</p></li>
+<li><p>’none’</p></li>
+<li><p>’valparams’ (model states specified in mdl.valparams),</p></li>
+<li><p>or a dict of form {‘functions’:{‘fxn1’:’att1’}, ‘flows’:{‘flow1’:’att1’}}</p></li>
+</ul>
+</div></blockquote>
+<p>The default is ‘all’.</p>
+</p></li>
+<li><p><strong>track_times</strong> (<em>str/tuple</em>) – <p>Defines what times to include in the history.
+Options are:</p>
+<blockquote>
+<div><ul>
+<li><p>’all’–all simulated times</p></li>
+<li><p>(‘interval’, n)–includes every nth time in the history</p></li>
+<li><p>(‘times’, [t1, … tn])–only includes times defined in the vector [t1 … tn]</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>run_stochastic</strong> (<em>bool</em>) – Whether to run stochastic behaviors or use default values. Default is False.
+Can set as ‘track_pdf’ to calculate/track the probability densities of random states over time.</p></li>
+<li><p><strong>staged</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to inject the faults in a copy of the nominal model at the fault time (True) or
+instantiate a new model for the fault (False). Setting to True roughly halves execution time. The default is False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.single_faults">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">single_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.single_faults" title="Permalink to this definition"></a></dt>
+<dd><p>Creates and propagates a list of failure scenarios in a model.</p>
+<dl>
+<dt>NOTE: When calling in a script using parallel=True, keep the script in the if statement:</dt><dd><dl class="simple">
+<dt>“if __name__==’main’:</dt><dd><p>endclasses, mdlhists = single_faults(mdl)”</p>
+</dd>
+</dl>
+<p>Otherwise, the method will keep spawning parallel processes. See multiprocessing documentation.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – The model to inject faults in</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <dl class="simple">
+<dt>Additional keyword arguments, may include:</dt><dd><ul>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Simulation options for :func:<a href="#id21"><span class="problematic" id="id22">`</span></a>prop_one_scen</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.run_kwargs" title="fmdtools.faultsim.propagate.run_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Run options for <a class="reference internal" href="#fmdtools.faultsim.propagate.nom_helper" title="fmdtools.faultsim.propagate.nom_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">nom_helper()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#fmdtools.faultsim.propagate.mult_kwargs" title="fmdtools.faultsim.propagate.mult_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a><span class="classifier">kwargs</span></dt><dd><p>Multi-scenario options for <a class="reference internal" href="#fmdtools.faultsim.propagate.approach" title="fmdtools.faultsim.propagate.approach"><code class="xref py py-func docutils literal notranslate"><span class="pre">approach()</span></code></a> and others</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>results</em> – dict of result corresponding to desired result {scenname:result}</p></li>
+<li><p><strong>mdlhists</strong> (<em>dict</em>) – A dictionary with the history of all model states for each scenario (including the nominal)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.unpack_mult_kwargs">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">unpack_mult_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.unpack_mult_kwargs" title="Permalink to this definition"></a></dt>
+<dd><p>Unpacks the mult kwarg parameters for the <a class="reference internal" href="#fmdtools.faultsim.propagate.approach" title="fmdtools.faultsim.propagate.approach"><code class="xref py py-func docutils literal notranslate"><span class="pre">approach()</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.unpack_res_list">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">unpack_res_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.unpack_res_list" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.unpack_sim_kwargs">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">unpack_sim_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.unpack_sim_kwargs" title="Permalink to this definition"></a></dt>
+<dd><p>Unpacks <a class="reference internal" href="#fmdtools.faultsim.propagate.sim_kwargs" title="fmdtools.faultsim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> parameters for <a class="reference internal" href="#fmdtools.faultsim.propagate.prop_one_scen" title="fmdtools.faultsim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.update_blockhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">update_blockhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">blockname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blockhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.update_blockhist" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the blocks (faults, states) in the model history at t_ind</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>blockname</strong> (<em>str</em>) – Name of the block</p></li>
+<li><p><strong>block</strong> (<a class="reference internal" href="fmdtools.html#fmdtools.modeldef.Block" title="fmdtools.modeldef.Block"><em>Block</em></a>) – Object for the block</p></li>
+<li><p><strong>blockhist</strong> (<em>dict</em>) – Dictionary history of the given block</p></li>
+<li><p><strong>t_ind</strong> (<em>int</em>) – index to update the history at</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.update_flowhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">update_flowhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.update_flowhist" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the flows in the model history at t_ind</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – the Model object</p></li>
+<li><p><strong>mdlhist</strong> (<em>dict</em>) – dictionary of model histories for functions/flows</p></li>
+<li><p><strong>t_ind</strong> (<em>int</em>) – index to update the history at</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.update_fxnhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">update_fxnhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.update_fxnhist" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the functions (faults, states, components, actions) in the model history at t_ind</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – the Model object</p></li>
+<li><p><strong>mdlhist</strong> (<em>dict</em>) – dictionary of model histories for functions/flows</p></li>
+<li><p><strong>t_ind</strong> (<em>int</em>) – index to update the history at</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.update_mdlhist">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">update_mdlhist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.update_mdlhist" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the model history at a given time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>model</em>) – Model at the timestep</p></li>
+<li><p><strong>mdlhist</strong> (<em>dict</em>) – History of model states (a dict with a vector of each state)</p></li>
+<li><p><strong>t_ind</strong> (<em>float</em>) – The time to update the model history at.</p></li>
+<li><p><strong>track</strong> (<em>str</em><em> (</em><em>'all'</em><em>, </em><em>'functions'</em><em>, </em><em>'flows'</em><em>, </em><em>'valparams'</em><em>, </em><em>dict</em><em>, </em><em>'none'</em><em>)</em><em>, </em><em>optional</em>) – Which model states to track over time, which can be given as ‘functions’, ‘flows’,
+‘all’, ‘none’, ‘valparams’ (model states specified in mdl.valparams),
+or a dict of form {‘functions’:{‘fxn1’:’att1’}, ‘flows’:{‘flow1’:’att1’}}
+The default is ‘all’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.faultsim.propagate.update_params">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.faultsim.propagate.</span></span><span class="sig-name descname"><span class="pre">update_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.faultsim.propagate.update_params" title="Permalink to this definition"></a></dt>
+<dd><p>Updates a dictionary with the given keyword arguments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>dict</em>) – Parameter dictionary</p></li>
+<li><p><strong>new_params</strong> (<em>dict</em>) – New arguments to add/update in the parameter dictionary</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params</strong> – Updated parameter dictionary</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fmdtools.html" class="btn btn-neutral float-left" title="Module Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fmdtools.resultdisp.html" class="btn btn-neutral float-right" title="fmdtools.resultdisp package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

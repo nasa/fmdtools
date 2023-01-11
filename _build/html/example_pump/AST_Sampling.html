@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmdtools-AdaStress integration &mdash; fmdtools 1.3.2 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Integrated Resilience Optimization Architectures" href="../example_multirotor/Multirotor%20Optimization.html" />
+    <link rel="prev" title="Optimization using the ProblemInterface class" href="Optimization.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#key-features">Key Features</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html#notices">Notices:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_complete.html">fmdtools Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#2a.)-Simulate-nominal">2a.) Simulate nominal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#2b.)-Visualize-nominal-model">2b.) Visualize nominal model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#2b.)-Simulate-a-fault-mode">2b.) Simulate a fault mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#3b.)-Visualize-fault-model-states">3b.) Visualize fault model states</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#4a.)-Simulate-set-of-fault-modes">4a.) Simulate set of fault modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#4b.)-Visualize-set-of-fault-modes">4b.) Visualize set of fault modes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorial_complete.html#5.)-Saving-Work">5.) Saving Work</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/Model_Structure_Visualization_Tutorial.html">Defining and Visualizing fmdtools Model Structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Model_Structure_Visualization_Tutorial.html#Basics">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Model_Structure_Visualization_Tutorial.html#Model-Setup">Model Setup</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../docs/Model_Structure_Visualization_Tutorial.html#Graph-Visualization">Graph Visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Model_Structure_Visualization_Tutorial.html#Graph-Views">Graph Views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Model_Structure_Visualization_Tutorial.html#Run-Order">Run Order</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Model_Structure_Visualization_Tutorial.html#Behavior/Fault-Visualization">Behavior/Fault Visualization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../docs/Model_Structure_Visualization_Tutorial.html#Visualizing-time-slices">Visualizing time-slices</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Network-Model">Network Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Static-Model">Static Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_multirotor/Demonstration.html#Octocopter-Resilience">Octocopter Resilience</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Pump_Example_Notebook.html">Pump Example Notebook</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Pump_Example_Notebook.html#Initial-Model-Checks">Initial Model Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pump_Example_Notebook.html#Tables">Tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pump_Example_Notebook.html#Propagating-and-Viewing-Results-for-Individual-Faults">Propagating and Viewing Results for Individual Faults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pump_Example_Notebook.html#Visualization-of-resilience-metrics">Visualization of resilience metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pump_Example_Notebook.html#Running-a-List-of-Faults">Running a List of Faults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Pump_Example_Notebook.html#Running-a-Fault-Sampling-Approach">Running a Fault Sampling Approach</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Pump_Example_Notebook.html#Save/Load">Save/Load</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/Approach_Use-Cases.html">Defining Fault Sampling Approaches in fmdtools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Approach_Use-Cases.html#Basics">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Approach_Use-Cases.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Approach_Use-Cases.html#Setting-up-an-approach">Setting up an approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Approach_Use-Cases.html#Propagating-Faults">Propagating Faults</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../docs/Approach_Use-Cases.html#Time-Sampling-Options">Time Sampling Options</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Approach_Use-Cases.html#Pruning">Pruning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Parallelism_Tutorial.html">Using Parallel Computing in fmdtools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Parallelism_Tutorial.html#Model-Checks">Model Checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Parallelism_Tutorial.html#Using-Parallelism-in-Simulation">Using Parallelism in Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Parallelism_Tutorial.html#Performance-Comparison">Performance Comparison</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Comparison:-No-Histories">Comparison: No Histories</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Comparison:-Many-Faults">Comparison: Many Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Comparison:-Long-simulation">Comparison: Long simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Comparison:-Long-Simulation-No-Tracking">Comparison: Long Simulation No Tracking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Comparison:-Long-Simulation-Only-Necessary-Tracking">Comparison: Long Simulation Only Necessary Tracking</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Parallelism_Tutorial.html#Comparison:-Lower-Tracking-Time-Resolution">Comparison: Lower Tracking Time Resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Parallelism_Tutorial.html#Comparison-Conclusions:">Comparison Conclusions:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Parallelism_Tutorial.html#Further-Computational-Cost-Reduction-via-Profiling">Further Computational Cost Reduction via Profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/Nominal_Approach_Use-Cases.html">Defining Nominal Approaches in fmdtools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Nominal_Approach_Use-Cases.html#Quantifying-probabilities">Quantifying probabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Nominal_Approach_Use-Cases.html#Random-input-generation">Random input generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Nominal_Approach_Use-Cases.html#Nested-Scenario-Sampling">Nested Scenario Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Stochastic_Modelling.html#Single-Scenario-Simulation">Single-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Stochastic_Modelling.html#Multi-Scenario-Simulation">Multi-Scenario Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Stochastic_Modelling.html#Nested-Fault-Simulation">Nested Fault Simulation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example_rover/Rover%20Setup%20Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/Rover%20Setup%20Notebook.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/Rover%20Setup%20Notebook.html#Model-simulation">Model simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_rover/degradation_modelling/Degradation%20Modelling%20Notebook.html">Degradation Modelling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/degradation_modelling/Degradation%20Modelling%20Notebook.html#Drive-Degradation">Drive Degradation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/degradation_modelling/Degradation%20Modelling%20Notebook.html#Human-Degradation">Human Degradation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/degradation_modelling/Degradation%20Modelling%20Notebook.html#Combined-Degradation">Combined Degradation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_rover/fault_sampling/Rover%20Mode%20Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/fault_sampling/Rover%20Mode%20Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_rover/optimization/Rover%20Response%20Optimization.html">Rover Response Optimization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_rover/optimization/Rover%20Response%20Optimization.html#Optimization">Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_rover/optimization/Rover%20Response%20Optimization.html#Rover-Optimization:">Rover Optimization:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_rover/optimization/Rover%20Response%20Optimization.html#Results-visualization">Results visualization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Optimization.html">Optimization using the ProblemInterface class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Optimization.html#ProblemInterface-Setup">ProblemInterface Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Optimization.html#Problem-interfaces">Problem interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Optimization.html#Optimization:">Optimization:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fmdtools-AdaStress integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Python-setup:">Python setup:</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#AdaStress-Setup">AdaStress Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MCTS">MCTS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Grey-Box-Methods">Grey Box Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Pump">Pump</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Simulator">Simulator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_multirotor/Multirotor%20Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Multirotor%20Optimization.html#Design-Model">Design Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Multirotor%20Optimization.html#Operational-Model">Operational Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Multirotor%20Optimization.html#Resilience-Model">Resilience Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../example_multirotor/Multirotor%20Optimization.html#Combined-Simulation/Optimization">Combined Simulation/Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../example_tank/Tank%20Optimization.html">Cooling Tank Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../example_tank/Tank%20Optimization.html#Optimization">Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/fmdtools.faultsim.html">fmdtools.faultsim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.faultsim.html#module-fmdtools.faultsim.networks">fmdtools.faultsim.networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.faultsim.html#fmdtools-faultsim-propagate">fmdtools.faultsim.propagate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/fmdtools.resultdisp.html">fmdtools.resultdisp package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.resultdisp.html#module-fmdtools.resultdisp.graph">fmdtools.resultdisp.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.resultdisp.html#module-fmdtools.resultdisp.plot">fmdtools.resultdisp.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.resultdisp.html#module-fmdtools.resultdisp.process">fmdtools.resultdisp.process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.resultdisp.html#module-fmdtools.resultdisp.tabulate">fmdtools.resultdisp.tabulate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/fmdtools.html#fmdtools-modeldef">fmdtools.modeldef</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../Examples.html">Examples</a> &raquo;</li>
+      <li>fmdtools-AdaStress integration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/example_pump/AST_Sampling.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="fmdtools-AdaStress-integration">
+<h1>fmdtools-AdaStress integration<a class="headerlink" href="#fmdtools-AdaStress-integration" title="Permalink to this headline"></a></h1>
+<p>This goal of this notebook is to illustrate running Adaptive Stress Testing on fmdtools model using the AdaStress package.</p>
+<p>For this setup to work, first install: - AdaStress (and related packages) in Julia - fmdtools (and related packages) in Python - PyCall in Julia - PyJulia in Python</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Plots</span>
+<span class="k">using</span> <span class="n">AdaStress</span>
+</pre></div>
+</div>
+</div>
+<section id="Python-setup:">
+<h2>Python setup:<a class="headerlink" href="#Python-setup:" title="Permalink to this headline"></a></h2>
+<p>First, we get the fmdtools model from its respective folder</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">PyCall</span>
+<span class="c">#ENV[&quot;MPLBACKEND&quot;]=&quot;qt5agg&quot;</span>
+<span class="k">using</span> <span class="n">PyPlot</span>
+<span class="sa">py</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">import sys, os</span>
+<span class="s">sys.path.insert(0,os.curdir)</span>
+<span class="s">sys.path.insert(1,os.path.join(&#39;..&#39;))</span>
+<span class="s">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="c">#pygui_start(:qt)</span>
+<span class="c">#PyCall.fixqtpath()</span>
+</pre></div>
+</div>
+</div>
+<p>Next, we get the module–in this case we will be using the stochastic pump model in <code class="docutils literal notranslate"><span class="pre">/example_pump/pump_stochastic</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">pump_module</span> <span class="o">=</span> <span class="n">pyimport</span><span class="p">(</span><span class="s">&quot;pump_stochastic&quot;</span><span class="p">)</span>
+<span class="n">pump_model</span> <span class="o">=</span> <span class="n">pump_module</span><span class="o">.</span><span class="n">Pump</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+PyObject Pump model at 0x1ae02e0
+functions:
+- ImportEE:({&#39;mode&#39;: &#39;nom&#39;, &#39;effstate&#39;: 1.0, &#39;grid_noise&#39;: 1.0}, {&#39;nom&#39;})
+- ImportWater:({&#39;mode&#39;: &#39;nom&#39;}, {&#39;nom&#39;})
+- ImportSignal:({&#39;mode&#39;: &#39;nom&#39;, &#39;sig_noise&#39;: 1.0}, {&#39;nom&#39;})
+- MoveWater:({&#39;total_flow&#39;: 0.0, &#39;mode&#39;: &#39;nom&#39;, &#39;eff&#39;: 1.0}, {&#39;nom&#39;})
+- ExportWater:({&#39;mode&#39;: &#39;nom&#39;}, {&#39;nom&#39;})
+flows:
+- EE_1:{&#39;current&#39;: 1.0, &#39;voltage&#39;: 1.0}
+- Sig_1:{&#39;power&#39;: 1.0}
+- Wat_1:{&#39;flowrate&#39;: 1.0, &#39;pressure&#39;: 1.0, &#39;area&#39;: 1.0, &#39;level&#39;: 1.0}
+- Wat_2:{&#39;flowrate&#39;: 1.0, &#39;pressure&#39;: 1.0, &#39;area&#39;: 1.0, &#39;level&#39;: 1.0}
+
+</pre></div></div>
+</div>
+<p>To get the propagation/analysis methods, we can further import the fmdtools packages…</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">prop</span> <span class="o">=</span> <span class="n">pyimport</span><span class="p">(</span><span class="s">&quot;faultsim.propagate&quot;</span><span class="p">)</span>
+<span class="n">rd</span> <span class="o">=</span> <span class="n">pyimport</span><span class="p">(</span><span class="s">&quot;resultdisp&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+PyObject &lt;module &#39;resultdisp&#39; from &#39;C:\\Users\\dhulse\\Documents\\GitHub\\fmdtools\\fmdtools\\resultdisp\\__init__.py&#39;&gt;
+</pre></div></div>
+</div>
+<p>Example simulation</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">endresult</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">pump_model</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="nb">true</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fxnflows</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="s">&quot;MoveWater&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;eff&quot;</span><span class="p">,</span><span class="s">&quot;total_flow&quot;</span><span class="p">],</span> <span class="s">&quot;Wat_2&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;flowrate&quot;</span><span class="p">,</span><span class="s">&quot;pressure&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dict{String, Vector{String}} with 2 entries:
+  &#34;MoveWater&#34; =&gt; [&#34;eff&#34;, &#34;total_flow&#34;]
+  &#34;Wat_2&#34;     =&gt; [&#34;flowrate&#34;, &#34;pressure&#34;]
+</pre></div></div>
+</div>
+<p>Visualizing metrics over time…</p>
+<p>NOTE: in order for <code class="docutils literal notranslate"><span class="pre">rd.plot.mdlhists</span></code> to work correctly, make sure to use the <code class="docutils literal notranslate"><span class="pre">Using</span> <span class="pre">PyCall</span></code> command at the beginning.</p>
+<p>fig, axs = rd.plot.mdlhists(mdlhist, fxnflowvals=fxnflows)</p>
+<section id="AdaStress-Setup">
+<h3>AdaStress Setup<a class="headerlink" href="#AdaStress-Setup" title="Permalink to this headline"></a></h3>
+<p>Interfacing AdaStress with fmdtools models is enabled by the <code class="docutils literal notranslate"><span class="pre">DynamicProblem</span></code> class in <code class="docutils literal notranslate"><span class="pre">faultsim.search</span></code> (though this can also be done manually). See below.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">search</span> <span class="o">=</span> <span class="n">pyimport</span><span class="p">(</span><span class="s">&quot;faultsim.search&quot;</span><span class="p">)</span>
+<span class="n">DynamicProblem</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">DynamicInterface</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+PyObject &lt;class &#39;faultsim.search.DynamicInterface&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">prob</span> <span class="o">=</span> <span class="n">DynamicProblem</span><span class="p">(</span><span class="n">pump_model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+PyObject &lt;faultsim.search.DynamicInterface object at 0x0000000068E40C70&gt;
+</pre></div></div>
+</div>
+<p>Defining the simulation is quite simple with the DynamicProblem class. Note the possible options from this class</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="o">?</span><span class="n">DynamicProblem</span><span class="o">.</span><span class="n">__init__</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+        Initializing the problem
+
+        Parameters
+        ----------
+        mdl : Model
+            Model defining the simulation.
+        paramdict : dict, optional
+            Parameters to run the model at. The default is {}.
+        t_max : float, optional
+            Maximum simulation time. The default is False.
+        track : str/dict, optional
+            Properties of the model to track over time. The default is &#34;all&#34;.
+        run_stochastic : bool/str, optional
+            Whether to run stochastic behaviors (True/False) and/or return pdf &#34;track_pdf&#34;. The default is &#34;track_pdf&#34;.
+        desired_result : list, optional
+            List of desired results to return at each update. The default is [].
+        use_end_condition : bool, optional
+            Whether to use model end-condition. The default is None.
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Base</span><span class="o">.</span><span class="nd">@kwdef</span> <span class="k">mutable struct</span> <span class="kt">PumpSim</span> <span class="o">&lt;:</span> <span class="kt">AdaStress</span><span class="o">.</span><span class="n">BlackBox</span>
+    <span class="n">sim</span><span class="o">::</span><span class="kt">PyObject</span> <span class="o">=</span> <span class="n">DynamicProblem</span><span class="p">(</span><span class="n">pump_model</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+PumpSim
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">initialize!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">PumpSim</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="n">DynamicProblem</span><span class="p">(</span><span class="n">pump_model</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+initialize! (generic function with 1 method)
+</pre></div></div>
+</div>
+<p>Updating is further enabled by DynamicProblem.update</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="o">?</span><span class="n">DynamicProblem</span><span class="o">.</span><span class="n">update</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+        Updates the model states at the simulation time and iterates time
+
+        Parameters
+        ----------
+        seed : seed, optional
+            Seed for the simulation. The default is {}.
+        faults : dict, optional
+            faults to inject in the model, with structure {fxn:[faults]}. The default is {}.
+        disturbances : dict, optional
+            Variables to change in the model, with structure {fxn.var:value}. The default is {}.
+
+        Returns
+        -------
+        returns : dict
+            dictionary of returns with values corresponding to desired_result
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">update!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">PumpSim</span><span class="p">)</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="mi">1_000_000_000</span><span class="p">)</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">log</span><span class="p">(</span><span class="n">returns</span><span class="p">[</span><span class="s">&quot;pdf&quot;</span><span class="p">])</span> <span class="c"># note: needs to return a probability from somewhere - needs to be a log pdf?</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+update! (generic function with 1 method)
+</pre></div></div>
+</div>
+<p>Model end-states can be interfaced with using <code class="docutils literal notranslate"><span class="pre">DynamicProblem.check_sim_end</span></code>, which additionally accomodates external conditions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">isterminal!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">PumpSim</span><span class="p">)</span>
+    <span class="n">has_faults</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s">&quot;MoveWater&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any_faults</span><span class="p">()</span> <span class="c"># our external condition</span>
+    <span class="n">terminal</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">check_sim_end</span><span class="p">(</span><span class="n">external_condition</span><span class="o">=</span><span class="n">has_faults</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">terminal</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+isterminal! (generic function with 1 method)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">isevent!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">PumpSim</span><span class="p">)</span>
+    <span class="n">faults</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s">&quot;MoveWater&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any_faults</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">faults</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+isevent! (generic function with 1 method)
+</pre></div></div>
+</div>
+<p>Finally, the below shows the full setup:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">AdaStress</span><span class="o">.</span><span class="n">reset!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">PumpSim</span><span class="p">)</span> <span class="o">=</span> <span class="n">initialize!</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+<span class="n">AdaStress</span><span class="o">.</span><span class="n">step!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">PumpSim</span><span class="p">)</span> <span class="o">=</span> <span class="n">update!</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+<span class="n">AdaStress</span><span class="o">.</span><span class="n">isterminal</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">PumpSim</span><span class="p">)</span> <span class="o">=</span> <span class="n">isterminal!</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+<span class="n">AdaStress</span><span class="o">.</span><span class="n">isevent</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">PumpSim</span><span class="p">)</span> <span class="o">=</span> <span class="n">isevent!</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>     <span class="c"># difficult: get pressure &gt; 15 ten times</span>
+<span class="c"># AdaStress.isevent(sim::PumpSim) = 15.0-sim.mdl.flows[&quot;Wat_1&quot;].pressure &lt;= 0 # - easy: just get pressure &gt; 15 (once!)</span>
+<span class="c">#AdaStress.distance(sim::PumpSim) = 15.0-sim.mdl.flows[&quot;Wat_1&quot;].pressure</span>
+<span class="n">AdaStress</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">PumpSim</span><span class="p">)</span> <span class="o">=</span> <span class="n">float</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">log</span><span class="p">[</span><span class="s">&quot;flows&quot;</span><span class="p">][</span><span class="s">&quot;Wat_1&quot;</span><span class="p">][</span><span class="s">&quot;pressure&quot;</span><span class="p">]</span><span class="o">.&lt;=</span><span class="mi">15</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Running-AdaStress-Methods">
+<h2>Running AdaStress Methods<a class="headerlink" href="#Running-AdaStress-Methods" title="Permalink to this headline"></a></h2>
+<p>Monte Carlo Search</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">mcs</span> <span class="o">=</span> <span class="n">AdaStress</span><span class="o">.</span><span class="n">Solvers</span><span class="o">.</span><span class="n">MCS</span><span class="p">(</span><span class="n">num_iterations</span><span class="o">=</span><span class="mi">10_00</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AdaStress.Solvers.MonteCarloSearch.MCS(1000, 10)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">mdp</span> <span class="o">=</span> <span class="n">AdaStress</span><span class="o">.</span><span class="n">ASTMDP</span><span class="p">(</span><span class="n">PumpSim</span><span class="p">())</span>
+<span class="n">mdp</span><span class="o">.</span><span class="n">reward</span><span class="o">.</span><span class="n">event_bonus</span> <span class="o">=</span> <span class="mf">200.0</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+200.0
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Random</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Random</span><span class="o">.</span><span class="n">seed!</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">mcs</span><span class="p">(()</span> <span class="o">-&gt;</span> <span class="n">mdp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-fg">Progress: 100%|█████████████████████████████████████████| Time: 0:01:48</span>mmm
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+DataStructures.PriorityQueue{Any, Any, Base.Order.ForwardOrdering} with 10 entries:
+  MCSResult(UInt32[0x533c9304, 0x88904ca3, 0x33c0db12, 0xd905012e, 0… =&gt; 121.165
+  MCSResult(UInt32[0xd47d4ad4, 0xa4a2a569, 0x5a54294c, 0x745fca30, 0… =&gt; 121.265
+  MCSResult(UInt32[0xaa008a74, 0x25e12b2b, 0xd0fc1988, 0xfd7b5ec0, 0… =&gt; 121.462
+  MCSResult(UInt32[0x939468f7, 0x4fd6ca1d, 0xc4ad4f55, 0x7596eb71, 0… =&gt; 122.885
+  MCSResult(UInt32[0x83aad7ca, 0x59cc490b, 0x522b0be1, 0x9c17b384, 0… =&gt; 122.94
+  MCSResult(UInt32[0x856cd12e, 0x900be46e, 0x9481cb6e, 0x326ee66b, 0… =&gt; 123.619
+  MCSResult(UInt32[0x679b5373, 0x7c7da679, 0x0551ccc1, 0x8f082a3c, 0… =&gt; 124.505
+  MCSResult(UInt32[0x345ef935, 0x6e2625e6, 0x4d37b4f4, 0xfb5aa2c9, 0… =&gt; 124.776
+  MCSResult(UInt32[0x3a4111cf, 0x2c47e3cd, 0xf0efd46f, 0x34283933, 0… =&gt; 125.586
+  MCSResult(UInt32[0x6a7aafcb, 0xafe1b494, 0x1e8c0ab1, 0xb72598df, 0… =&gt; 288.856
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">mdlhists</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">in</span> <span class="n">sol</span>
+    <span class="n">AdaStress</span><span class="o">.</span><span class="n">replay!</span><span class="p">(</span><span class="n">mdp</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+    <span class="n">mdlhists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdp</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">log</span>
+    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fxnflows2</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="s">&quot;MoveWater&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;eff&quot;</span><span class="p">,</span><span class="s">&quot;total_flow&quot;</span><span class="p">],</span> <span class="s">&quot;Wat_2&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;flowrate&quot;</span><span class="p">,</span><span class="s">&quot;pressure&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dict{String, Vector{String}} with 2 entries:
+  &#34;MoveWater&#34; =&gt; [&#34;eff&#34;, &#34;total_flow&#34;]
+  &#34;Wat_2&#34;     =&gt; [&#34;flowrate&#34;, &#34;pressure&#34;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="n">fxnflows2</span><span class="p">,</span> <span class="n">aggregation</span><span class="o">=</span><span class="s">&quot;percentile&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_AST_Sampling_36_0.png" src="../_images/example_pump_AST_Sampling_36_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: pressure&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: flowrate&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: total_flow&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: eff&#39;}, xlabel=&#39;time&#39;&gt;])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fxnflows</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="s">&quot;MoveWater&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;pressure&quot;</span><span class="p">,</span><span class="s">&quot;faults&quot;</span><span class="p">],</span> <span class="s">&quot;Wat_2&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;flowrate&quot;</span><span class="p">,</span><span class="s">&quot;pressure&quot;</span><span class="p">])</span>
+<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="n">fxnflows</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_AST_Sampling_37_0.png" src="../_images/example_pump_AST_Sampling_37_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: pressure&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: flowrate&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: faults: short&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: faults: mech_break&#39;}, xlabel=&#39;time&#39;&gt;])
+</pre></div></div>
+</div>
+</section>
+<section id="MCTS">
+<h2>MCTS<a class="headerlink" href="#MCTS" title="Permalink to this headline"></a></h2>
+<p>Monte Carlo Tree Search</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">mcts</span> <span class="o">=</span> <span class="n">AdaStress</span><span class="o">.</span><span class="n">Solvers</span><span class="o">.</span><span class="n">MCTS</span><span class="p">(</span><span class="n">num_iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AdaStress.Solvers.MonteCarloTreeSearch.MCTS(1000, 10, 1.0, 0.7, 1.0, nothing)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Random</span><span class="o">.</span><span class="n">seed!</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@time</span> <span class="n">sol</span> <span class="o">=</span> <span class="n">mcts</span><span class="p">(()</span> <span class="o">-&gt;</span> <span class="n">mdp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-fg">Progress: 100%|█████████████████████████████████████████| Time: 0:01:53</span>
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+113.442056 seconds (176.37 M allocations: 7.913 GiB, 2.99% gc time, 0.02% compilation time)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+DataStructures.PriorityQueue{Any, Any, Base.Order.ForwardOrdering} with 10 entries:
+  MCTSResult(UInt32[0xf2f16c22, 0xb7d2c17d, 0x17c321e0, 0x4522ee6c, … =&gt; 121.215
+  MCTSResult(UInt32[0x419dea2c, 0xa4a2a569, 0x5a54294c, 0x745fca30, … =&gt; 121.265
+  MCTSResult(UInt32[0xd52d4423, 0x9569dcd8, 0xdfb53527, 0xa3b2a596, … =&gt; 121.582
+  MCTSResult(UInt32[0x2d821bb3, 0xb3c414a5, 0x11bc16dd, 0x62fbf98c, … =&gt; 125.019
+  MCTSResult(UInt32[0x17d5e66c, 0x04b06d54, 0x7473de98, 0x03d1a98f, … =&gt; 125.603
+  MCTSResult(UInt32[0xba03b1cc, 0x4e5c1f6e, 0x64ac4a47, 0x236c618f, … =&gt; 128.108
+  MCTSResult(UInt32[0x08754edb, 0x411777bd, 0x5ad59a28, 0xfffb946f, … =&gt; 128.117
+  MCTSResult(UInt32[0x372f6504, 0xfb25b078, 0x9e695f15, 0xec1b0ce1, … =&gt; 129.095
+  MCTSResult(UInt32[0xf2f16c22, 0x727114cf, 0x4be07ea6, 0x1a3a9b8f, … =&gt; 130.084
+  MCTSResult(UInt32[0xfed17443, 0xb163078f, 0x3dacaf15, 0x12e2466f, … =&gt; 287.136
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">mdlhists2</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">in</span> <span class="n">sol</span>
+    <span class="n">AdaStress</span><span class="o">.</span><span class="n">replay!</span><span class="p">(</span><span class="n">mdp</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+    <span class="n">mdlhists2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdp</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">log</span>
+    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists2</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="n">fxnflows2</span><span class="p">,</span> <span class="n">aggregation</span><span class="o">=</span><span class="s">&quot;percentile&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_AST_Sampling_42_0.png" src="../_images/example_pump_AST_Sampling_42_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: pressure&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: flowrate&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: total_flow&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: eff&#39;}, xlabel=&#39;time&#39;&gt;])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fxnflows</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="s">&quot;MoveWater&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;pressure&quot;</span><span class="p">,</span><span class="s">&quot;faults&quot;</span><span class="p">],</span> <span class="s">&quot;Wat_2&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;flowrate&quot;</span><span class="p">,</span><span class="s">&quot;pressure&quot;</span><span class="p">])</span>
+<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists2</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="n">fxnflows</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_AST_Sampling_43_0.png" src="../_images/example_pump_AST_Sampling_43_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: pressure&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: flowrate&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: faults: short&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: faults: mech_break&#39;}, xlabel=&#39;time&#39;&gt;])
+</pre></div></div>
+</div>
+<p>As we can see, MCTS finds more breakage faults (8 instead of 3), as a result of being a more informed search method.</p>
+<section id="Grey-Box-Methods">
+<h3>Grey Box Methods<a class="headerlink" href="#Grey-Box-Methods" title="Permalink to this headline"></a></h3>
+<p>As opposed to black box methods, which share no information about the system state with the agent, grey box methods let the agent sample the random distributions and pass disturbances to the model directly, rather than just passing seeds.</p>
+<p>Implementation is based off of: <a class="reference external" href="https://github.com/NASA-SW-VnV/AdaStress.jl/blob/master/examples/walk2d/walk2d.ipynb">https://github.com/NASA-SW-VnV/AdaStress.jl/blob/master/examples/walk2d/walk2d.ipynb</a></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">AdaStress</span>
+<span class="k">import</span> <span class="n">AdaStress</span><span class="o">.</span><span class="n">GrayBox</span>
+<span class="k">using</span> <span class="n">Distributions</span>
+<span class="k">using</span> <span class="n">Random</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Pump">
+<h2>Pump<a class="headerlink" href="#Pump" title="Permalink to this headline"></a></h2>
+<p>To use the gray box method, we have to first define which variables in the model to sample/update. fmdtools models have two types of random states: - general random states, which are updated in the behavioral method (whose distributions thus cannot be accessed without looking at the code) - auto-updating random states, which are updated from a given distribution defined with auto_update=(dist,params). These distributions can be accessed directly from the model.</p>
+<p>Both can be queried in AdaStress, but using different methods. In general, however, using a Gray Box method means that <em>all</em> stochastic behavior (desired by the analysis) should be represented in AdaStress/Julia, since integration relies on running the model as deterministic.</p>
+<p>Below are the random states of the model:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">rand_states</span> <span class="o">=</span> <span class="n">pump_model</span><span class="o">.</span><span class="n">get_rand_states</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dict{Any, Any} with 3 entries:
+  &#34;ImportSignal&#34; =&gt; Dict{Any, Any}(&#34;sig_noise&#34;=&gt;(1.0, nothing, nothing, 9540584…
+  &#34;MoveWater&#34;    =&gt; Dict{Any, Any}(&#34;eff&#34;=&gt;(1.0, &#34;normal&#34;, (1.0, 0.2), 192379353…
+  &#34;ImportEE&#34;     =&gt; Dict{Any, Any}(&#34;effstate&#34;=&gt;(1.0, nothing, nothing, 56058474…
+</pre></div></div>
+</div>
+<p>As well as the auto-updating random states:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">rand_states</span> <span class="o">=</span> <span class="n">pump_model</span><span class="o">.</span><span class="n">get_rand_states</span><span class="p">(</span><span class="n">auto_update_only</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dict{Any, Any} with 1 entry:
+  &#34;MoveWater&#34; =&gt; Dict{Any, Any}(&#34;eff&#34;=&gt;(1.0, &#34;normal&#34;, (1.0, 0.2), 1923793530))
+</pre></div></div>
+</div>
+<p>Because of the different methods that julia/AdaStress uses to sample random distributions, these distributions need to be re-implemented in julia. In this example we do this for the eff parameter in MoveWater.</p>
+<p>Below we create a <code class="docutils literal notranslate"><span class="pre">Pump</span></code> struct, and define random disturbances which will affect the model.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="c">#define distributions for the model</span>
+<span class="c">#Base.@kwdef mutable struct Init_Rand_Params</span>
+<span class="c">#    eff::Distribution = Normal(1.0, 0.2)</span>
+<span class="c">#end</span>
+<span class="c">#Base.@kwdef mutable struct Pump</span>
+<span class="c">#    t::Float64=0.0</span>
+<span class="c">#    t_max::Float64=last(pump_model.times)</span>
+<span class="c">#    t_ind::Int=0</span>
+<span class="c">#    mdl::PyObject = pump_model</span>
+<span class="c">#end</span>
+<span class="c">#function initialize(pump::Pump, init::Init_Rand_Params)</span>
+<span class="c">#    pump.mdl = pump.mdl.__class__()</span>
+<span class="c">#    pump.mdl.fxns[&quot;MoveWater&quot;].eff = rand(init.eff)</span>
+<span class="c">#end</span>
+
+<span class="c">#function update(pump::Pump, eff::Float64)</span>
+<span class="c">#    pump.mdl.fxns[&quot;MoveWater&quot;].eff = eff</span>
+<span class="c">#end</span>
+</pre></div>
+</div>
+</div>
+<p>Disturbance and failure models</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="c">#Base.@kwdef mutable struct Disturbance</span>
+<span class="c">#    eff::Distribution = Normal(1.0, 0.2)</span>
+<span class="c">#end</span>
+</pre></div>
+</div>
+</div>
+<p>System under test: okay to remove, often refers to policy that we are trying to test within the system dynamics</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="c">#mutable struct SystemUnderTest</span>
+<span class="c">#    eff::Float64</span>
+<span class="c">#end</span>
+<span class="c">#update(pump::Pump, sut::SystemUnderTest) = update(pump, sut.eff)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Simulator">
+<h2>Simulator<a class="headerlink" href="#Simulator" title="Permalink to this headline"></a></h2>
+<p>The simulator is roughly the same as the simulation for the black box model except it has an <code class="docutils literal notranslate"><span class="pre">environment</span></code> which samples stochastic variables and then changes parameters in the model. Note that in this case <code class="docutils literal notranslate"><span class="pre">run_stochastic</span></code> is set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, since the variables are being sampled in AdaStress itself (rather than the model).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Base</span><span class="o">.</span><span class="nd">@kwdef</span> <span class="k">mutable struct</span> <span class="kt">Simulator</span> <span class="o">&lt;:</span> <span class="kt">AdaStress</span><span class="o">.</span><span class="n">GrayBox</span>
+    <span class="n">sim</span><span class="o">::</span><span class="kt">PyObject</span> <span class="o">=</span> <span class="n">DynamicProblem</span><span class="p">(</span><span class="n">pump_model</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">::</span><span class="kt">AdaStress</span><span class="o">.</span><span class="n">Environment</span> <span class="o">=</span> <span class="n">AdaStress</span><span class="o">.</span><span class="n">Environment</span><span class="p">()</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="n">initialize</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="ss">:eff</span><span class="p">]</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span> <span class="c">#creating</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">=</span><span class="n">DynamicProblem</span><span class="p">(</span><span class="n">pump_model</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="nb">false</span><span class="p">)</span>
+    <span class="k">return</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="n">update!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">,</span> <span class="n">value</span><span class="o">::</span><span class="kt">AdaStress</span><span class="o">.</span><span class="n">EnvironmentValue</span><span class="p">)</span>
+    <span class="c">#sim.mdl.set_values(&quot;MoveWater.eff&quot;, value[:eff])</span>
+    <span class="n">disturbances</span><span class="o">=</span><span class="kt">Dict</span><span class="p">(</span><span class="s">&quot;MoveWater.eff&quot;</span><span class="o">=&gt;</span><span class="n">value</span><span class="p">[</span><span class="ss">:eff</span><span class="p">])</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">disturbances</span><span class="o">=</span><span class="n">disturbances</span><span class="p">)</span>
+    <span class="k">return</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+update! (generic function with 2 methods)
+</pre></div></div>
+</div>
+<p>The isterminal and isevent functions will be the same as in the black box model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">isterminal!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">)</span>
+    <span class="n">has_faults</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s">&quot;MoveWater&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any_faults</span><span class="p">()</span> <span class="c"># our external condition</span>
+    <span class="n">terminal</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">check_sim_end</span><span class="p">(</span><span class="n">external_condition</span><span class="o">=</span><span class="n">has_faults</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">terminal</span>
+<span class="k">end</span>
+<span class="k">function</span> <span class="n">isevent!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">)</span>
+    <span class="n">faults</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s">&quot;MoveWater&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any_faults</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">faults</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+isevent! (generic function with 2 methods)
+</pre></div></div>
+</div>
+<p>The interface to adastress is set up below. Of note is the observation interface, which observes <code class="docutils literal notranslate"><span class="pre">eff</span></code> (which is also the action in this simple setup)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Interface</span><span class="o">.</span><span class="n">reset!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">)</span> <span class="o">=</span> <span class="n">initialize</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+<span class="n">Interface</span><span class="o">.</span><span class="n">environment</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">)</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">env</span>
+
+<span class="n">Interface</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">)</span> <span class="o">=</span> <span class="n">vcat</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s">&quot;Wat_2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pressure</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">t</span> <span class="o">/</span> <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">t_max</span><span class="p">)</span>
+
+<span class="n">Interface</span><span class="o">.</span><span class="n">step!</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">,</span> <span class="n">value</span><span class="o">::</span><span class="kt">AdaStress</span><span class="o">.</span><span class="n">EnvironmentValue</span><span class="p">)</span> <span class="o">=</span> <span class="n">update!</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+<span class="n">Interface</span><span class="o">.</span><span class="n">isterminal</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">)</span> <span class="o">=</span> <span class="n">isterminal!</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+<span class="n">Interface</span><span class="o">.</span><span class="n">isevent</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">)</span> <span class="o">=</span> <span class="n">isevent!</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+<span class="n">Interface</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">sim</span><span class="o">::</span><span class="kt">Simulator</span><span class="p">)</span> <span class="o">=</span> <span class="n">float</span><span class="p">(</span><span class="n">sum</span><span class="p">([(</span><span class="mi">16</span><span class="o">-</span><span class="n">max</span><span class="p">(</span><span class="n">min</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">16</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span><span class="o">^</span><span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">log</span><span class="p">[</span><span class="s">&quot;flows&quot;</span><span class="p">][</span><span class="s">&quot;Wat_1&quot;</span><span class="p">][</span><span class="s">&quot;pressure&quot;</span><span class="p">]]))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">mdp_env</span><span class="p">(;</span> <span class="n">kwargs</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">mdp</span> <span class="o">=</span> <span class="n">Interface</span><span class="o">.</span><span class="n">ASTMDP</span><span class="p">(</span><span class="n">Simulator</span><span class="p">(;</span> <span class="n">kwargs</span><span class="o">...</span><span class="p">))</span>
+    <span class="n">mdp</span><span class="o">.</span><span class="n">reward</span><span class="o">.</span><span class="n">event_bonus</span> <span class="o">=</span> <span class="mf">2000.0</span>
+    <span class="k">return</span> <span class="n">mdp</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+mdp_env (generic function with 1 method)
+</pre></div></div>
+</div>
+<p>Now using the gray box mdp solver:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">AdaStress</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="s">&quot;SoftActorCritic&quot;</span><span class="p">)</span>
+<span class="k">using</span> <span class="n">AdaStress</span><span class="o">.</span><span class="n">SoftActorCritic</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+┌ Info: Enabled submodule SoftActorCritic.
+└ @ AdaStress C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\utils.jl:123
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Random</span><span class="o">.</span><span class="n">seed!</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">sac</span> <span class="o">=</span> <span class="n">SAC</span><span class="p">(;</span>
+    <span class="n">obs_dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">act_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">gamma</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+    <span class="n">act_mins</span><span class="o">=-</span><span class="mi">1</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>    <span class="c">#number of standard deviations</span>
+    <span class="n">act_maxs</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">hidden_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">],</span>
+    <span class="n">num_q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">max_buffer_size</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">update_after</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">update_every</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">steps_per_epoch</span><span class="o">=</span><span class="mi">54</span><span class="p">,</span>
+    <span class="n">start_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">max_ep_len</span><span class="o">=</span><span class="mi">54</span><span class="p">,</span>
+    <span class="n">num_test_episodes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">displays</span><span class="o">=</span><span class="p">[(</span><span class="ss">:fails</span><span class="p">,</span> <span class="n">mdp</span> <span class="o">-&gt;</span> <span class="n">mdp</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s">&quot;MoveWater&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">has_fault</span><span class="p">(</span><span class="s">&quot;mech_break&quot;</span><span class="p">)</span> <span class="p">)],</span>
+    <span class="n">use_gpu</span><span class="o">=</span><span class="nb">false</span>
+<span class="p">)</span>
+
+<span class="n">SoftActorCritic</span><span class="o">.</span><span class="n">ProgressMeter</span><span class="o">.</span><span class="n">ijulia_behavior</span><span class="p">(</span><span class="ss">:clear</span><span class="p">)</span>
+<span class="n">ac</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">sac</span><span class="p">(</span><span class="n">mdp_env</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-fg">Progress: 100%|█████████████████████████████████████████| Time: 0:05:03</span>
+<span class="ansi-blue-fg">  epoch:  100</span>
+<span class="ansi-blue-fg">  score:  3368.1538</span>
+<span class="ansi-blue-fg">  stdev:  3.8171678</span>
+<span class="ansi-blue-fg">  fails:  1.0</span>
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(MLPActorCritic(SoftActorCritic.SquashedGaussianMLPActor(Chain(Dense(2, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu)), Dense(30, 1), Dense(30, 1), Float32[-1.0], Float32[10.0], Random._GLOBAL_RNG(), nothing, false), SoftActorCritic.MLPQFunction[SoftActorCritic.MLPQFunction(Chain(Dense(3, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu), Dense(30, 1))), SoftActorCritic.MLPQFunction(Chain(Dense(3, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu), Dense(30, 1)))]), Dict{String, Any}(&#34;score&#34; =&gt; Any[3639.3154f0, 3530.497f0, 3672.3123f0, 3822.8728f0, 3862.532f0, 3807.7275f0, 3723.1453f0, 3487.176f0, 3434.0913f0, 3402.7625f0  …  3368.7217f0, 3367.503f0, 3367.4807f0, 3365.4263f0, 3368.8118f0, 3368.653f0, 3370.3752f0, 3366.7698f0, 3368.8843f0, 3368.1538f0], &#34;stdev&#34; =&gt; Any[7.968369f0, 45.299828f0, 5.8645067f0, 8.091826f0, 10.341684f0, 11.02232f0, 12.91226f0, 14.24669f0, 11.250485f0, 8.590219f0  …  3.1053045f0, 3.1790936f0, 3.3331904f0, 4.5494237f0, 3.981168f0, 3.603496f0, 4.142967f0, 4.085335f0, 3.3034844f0, 3.8171678f0], &#34;fails&#34; =&gt; Any[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0  …  1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]))
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">PyPlot</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s">&quot;fails&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_AST_Sampling_69_0.png" src="../_images/example_pump_AST_Sampling_69_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1-element Vector{PyObject}:
+ PyObject &lt;matplotlib.lines.Line2D object at 0x0000000062E71220&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s">&quot;score&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_AST_Sampling_70_0.png" src="../_images/example_pump_AST_Sampling_70_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1-element Vector{PyObject}:
+ PyObject &lt;matplotlib.lines.Line2D object at 0x000000005B260280&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">ac</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+MLPActorCritic(SoftActorCritic.SquashedGaussianMLPActor(Chain(Dense(2, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu)), Dense(30, 1), Dense(30, 1), Float32[-1.0], Float32[10.0], Random._GLOBAL_RNG(), nothing, false), SoftActorCritic.MLPQFunction[SoftActorCritic.MLPQFunction(Chain(Dense(3, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu), Dense(30, 1))), SoftActorCritic.MLPQFunction(Chain(Dense(3, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu), Dense(30, 1)))])
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">mdlhists3</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">()</span>
+<span class="n">mdp</span> <span class="o">=</span> <span class="n">mdp_env</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">100</span>
+    <span class="n">a</span><span class="o">=</span> <span class="n">AdaStress</span><span class="o">.</span><span class="n">replay!</span><span class="p">(</span><span class="n">mdp</span><span class="p">,</span> <span class="n">ac</span><span class="p">)</span>
+    <span class="n">mdlhists3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdp</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">log</span>
+    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">=</span> <span class="n">AdaStress</span><span class="o">.</span><span class="n">replay!</span><span class="p">(</span><span class="n">mdp</span><span class="p">,</span> <span class="n">ac</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+true
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">info</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dict{String, Any} with 3 entries:
+  &#34;score&#34; =&gt; Any[3639.32, 3530.5, 3672.31, 3822.87, 3862.53, 3807.73, 3723.15, …
+  &#34;stdev&#34; =&gt; Any[7.96837, 45.2998, 5.86451, 8.09183, 10.3417, 11.0223, 12.9123,…
+  &#34;fails&#34; =&gt; Any[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0  …  1.0, 1.0,…
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fxnflows</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="s">&quot;MoveWater&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;eff&quot;</span><span class="p">,</span><span class="s">&quot;total_flow&quot;</span><span class="p">],</span> <span class="s">&quot;Wat_2&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;flowrate&quot;</span><span class="p">,</span><span class="s">&quot;pressure&quot;</span><span class="p">])</span>
+<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists3</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="n">fxnflows</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_AST_Sampling_75_0.png" src="../_images/example_pump_AST_Sampling_75_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: pressure&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: flowrate&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: total_flow&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: eff&#39;}, xlabel=&#39;time&#39;&gt;])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fxnflows</span> <span class="o">=</span> <span class="kt">Dict</span><span class="p">(</span><span class="s">&quot;MoveWater&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;pressure&quot;</span><span class="p">,</span><span class="s">&quot;faults&quot;</span><span class="p">],</span> <span class="s">&quot;Wat_2&quot;</span><span class="o">=&gt;</span><span class="p">[</span><span class="s">&quot;flowrate&quot;</span><span class="p">,</span><span class="s">&quot;pressure&quot;</span><span class="p">])</span>
+<span class="n">rd</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists3</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="n">fxnflows</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_pump_AST_Sampling_76_0.png" src="../_images/example_pump_AST_Sampling_76_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: pressure&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: flowrate&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: faults: short&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: faults: mech_break&#39;}, xlabel=&#39;time&#39;&gt;])
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Optimization.html" class="btn btn-neutral float-left" title="Optimization using the ProblemInterface class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../example_multirotor/Multirotor%20Optimization.html" class="btn btn-neutral float-right" title="Integrated Resilience Optimization Architectures" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
