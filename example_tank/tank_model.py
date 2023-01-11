@@ -208,6 +208,8 @@ if __name__ == '__main__':
     
     mdl = Tank()
     
+    endclass, mdlhist = propagate.one_fault(mdl,'Human','NotVisible', time=2)
+    
     ## nominal run
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])
     rd.plot.mdlhists(mdlhist, fxnflowvals='Store_Water')
