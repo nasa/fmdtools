@@ -16,7 +16,7 @@ Glossary
 		A simulation that defines system behavior. Models contain functions and flows, their graph connections, parameters related to the simulation configuration, as well as methods for classifying simulations. Models are specified using the :class:`fmdtools.modeldef.Model`: class.
 	
 	Behavior
-		How the states of a system unfold over time, including in the various :term:`mode` s it may encounter. Defined in :term:`Function` s, :term:`Component` s, and :term:`Action` s using :meth:`Block.behavior`, :meth:`Block.static_behavior`, :meth:`Block.dynamic_behavior`, and :meth:`Block.condfaults`
+		How the states of a system unfold over time, including in the various :term:`mode` s it may encounter. Defined in :term:`Function` s, :term:`Component` s, and :term:`Action` s using :meth:`fmdtools.modeldef.Block.behavior`, :meth:`fmdtools.modeldef.Block.static_behavior`, :meth:`fmdtools.modeldef.Block.dynamic_behavior`, and :meth:`fmdtools.modeldef.Block.condfaults`
 	
 	Graph
 		A view of :term:`fmdtools.modeldef.Model`/:term:`function` connections and/or relationships. Graphs may be "normal" (meaning each :term:`function` is a node and each :term:`flow` is an edge) or "bipartite" (meaning both functions and flows are nodes). Graphs in fmdtools leverage the networkx package. 
@@ -28,7 +28,7 @@ Glossary
 		The physical embodiment of a :term:`function` that encompasses multiple :term:`Component` s. 
 	
 	Mode
-		Discrete modifications of a :term:`behavior` specified as strings in :meth:`fmdtools.modeldef.FxnBlock.assoc_modes`. Often used to control if/else statements in a :meth:`fmdtools.modeldef.FxnBlock.behavior` method.
+		Discrete modifications of a :term:`behavior` specified as strings in :meth:`fmdtools.modeldef.Block.assoc_modes`. Often used to control if/else statements in a :meth:`fmdtools.modeldef.Block.behavior` method.
 	
 	Fault Mode
 		Undesired :term:`mode`, which leads to hazardous behavior. For example, a lamp may have "burn-out" and "flicker" modes
@@ -91,7 +91,7 @@ Glossary
 		A table outlining the risks of hazardous :term:` scenario` s in terms of their rate, severity, and expected risk. By default, the :mod:`fmdtools.resultdisp.tabulate` module produces cost-based FMEAS, with the metrics of interest being :term:`rate`, :term:`cost`, and :term:`expected cost`, however these functions can be tailored to the metrics of interest.
 	
 	Behavior Over Time
-		How a the states of a system unfold over time. Defined using :term:"behavior".
+		How a the states of a system unfold over time. Defined using :term:`behavior`.
 	
 	Model History
 		A history of model states over a set of timesteps. Returned in fmdtools as a nested dictionary from methods in :mod:`fmdtools.faultsim.propagate`.
