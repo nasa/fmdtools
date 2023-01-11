@@ -212,8 +212,8 @@ class Pump(Model):
 
         Models take a dictionary of parameters as input defining any veriables and values to use in the model.
     """
-    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, \
-                 modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1}, \
+    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10}, \
+                 modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1, 'units':'hr'}, \
                      valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
         """
         To sample the model, the timerange and operational phases need to be defined.
