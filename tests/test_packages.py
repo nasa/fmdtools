@@ -35,14 +35,20 @@ class Mover(FxnBlock):
         elif self.y_up==0.0:   
             self.internal_info.x=self.loc.x
             self.internal_info.send("all", "local", "x")
+    def find_classification(self, scen, fxnhist):
+        return {"last_x": self.loc.x, "min_x": fxnhist["faulty"]["Location"][self.name]["x"]}
+class Mover2(Mover, FxnBlock):
+    def __init__(self, name, flows, params):
+        self.set_atts(**params)
+        FxnBlock.__init__(self, name,flows, comms={"Communications":"internal_info"},local={"Location":"loc"})
 class TestModel(Model):
     def __init__(self, params={}, modelparams={'times':[0,10], 'tstep':1}, valparams={}):
         super().__init__(params=params, modelparams=modelparams, valparams=valparams)
         
-        self.add_flow("Communications", CommsFlow({"x":0.0, "y":1.0},"Communications"))
-        self.add_flow("Location", MultiFlow({"x":0.0, "y":0.0}, "Location"))
+        self.add_flow("Communications",{"x":0.0, "y":1.0}, fclass=CommsFlow)
+        self.add_flow("Location", {"x":0.0, "y":0.0}, fclass=MultiFlow)
         self.add_fxn("Mover_1", ["Communications", "Location"], fclass=Mover, fparams= {"x_up":0.0, "y_up":1.0})
-        self.add_fxn("Mover_2", ["Communications", "Location"], fclass=Mover, fparams= {"x_up":1.0, "y_up":0.0})
+        self.add_fxn("Mover_2", ["Communications", "Location"], fclass=Mover2, fparams= {"x_up":1.0, "y_up":0.0})
         
         self.build_model()
 
@@ -111,3 +117,5 @@ if __name__ == '__main__':
     mdl = TestModel()
     mdl.flows["Communications"].Mover_1.x=25
     mdl.flows["Communications"].Mover_1.send("Mover_2")
+    
+    endclass, mdlhist = propagate.nominal(mdl)
