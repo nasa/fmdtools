@@ -34,3 +34,4 @@ _static/
 _templates/
 LICENSE.bak
 *.pkl
+fmdtools.code-workspace
