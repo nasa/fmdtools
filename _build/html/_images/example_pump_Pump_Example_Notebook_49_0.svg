@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="199pt" height="146pt" viewBox="0.00 0.00 198.82 145.82">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 141.82)">
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-141.82 194.82,-141.82 194.82,4 -4,4"/>
+<!-- ImportEE&#45;&#45;MoveWater -->
+<g id="edge1" class="edge">
+<title>ImportEE--MoveWater</title>
+<path fill="none" stroke="black" d="M62.59,-101.73C67.39,-96.93 72.58,-91.74 77.38,-86.95"/>
+</g>
+<!-- ImportWater&#45;&#45;MoveWater -->
+<g id="edge2" class="edge">
+<title>ImportWater--MoveWater</title>
+<path fill="none" stroke="black" d="M62.59,-36.09C67.39,-40.89 72.58,-46.08 77.38,-50.88"/>
+</g>
+<!-- ImportSignal&#45;&#45;MoveWater -->
+<g id="edge3" class="edge">
+<title>ImportSignal--MoveWater</title>
+<path fill="none" stroke="black" d="M128.23,-36.09C123.43,-40.89 118.24,-46.08 113.45,-50.88"/>
+</g>
+<!-- MoveWater&#45;&#45;ExportWater -->
+<g id="edge4" class="edge">
+<title>MoveWater--ExportWater</title>
+<path fill="none" stroke="black" d="M113.5,-87C118.31,-91.81 123.49,-96.99 128.29,-101.79"/>
+</g>
+<!-- ImportEE -->
+<g id="node1" class="node">
+<title>ImportEE</title>
+<polygon fill="#3b4cc0" stroke="black" points="80,-137.82 9,-137.82 9,-101.82 80,-101.82 80,-137.82"/>
+<text text-anchor="middle" x="44.5" y="-116.12" font-family="Times New Roman,serif" font-size="14.00">ImportEE</text>
+</g>
+<!-- ImportWater -->
+<g id="node2" class="node">
+<title>ImportWater</title>
+<polygon fill="#3b4cc0" stroke="black" points="89,-36 0,-36 0,0 89,0 89,-36"/>
+<text text-anchor="middle" x="44.5" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">ImportWater</text>
+</g>
+<!-- ImportSignal -->
+<g id="node3" class="node">
+<title>ImportSignal</title>
+<polygon fill="#3b4cc0" stroke="black" points="190.82,-36 101.82,-36 101.82,0 190.82,0 190.82,-36"/>
+<text text-anchor="middle" x="146.32" y="-14.3" font-family="Times New Roman,serif" font-size="14.00">ImportSignal</text>
+</g>
+<!-- MoveWater -->
+<g id="node4" class="node">
+<title>MoveWater</title>
+<polygon fill="#b40426" stroke="black" points="136.91,-86.91 53.91,-86.91 53.91,-50.91 136.91,-50.91 136.91,-86.91"/>
+<text text-anchor="middle" x="95.41" y="-65.21" font-family="Times New Roman,serif" font-size="14.00">MoveWater</text>
+</g>
+<!-- ExportWater -->
+<g id="node5" class="node">
+<title>ExportWater</title>
+<polygon fill="#b40426" stroke="black" points="190.82,-137.82 101.82,-137.82 101.82,-101.82 190.82,-101.82 190.82,-137.82"/>
+<text text-anchor="middle" x="146.32" y="-116.12" font-family="Times New Roman,serif" font-size="14.00">ExportWater</text>
+</g>
+</g>
+</svg>
