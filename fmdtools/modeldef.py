@@ -442,7 +442,7 @@ class CommsFlow(MultiFlow):
     """
     def __init__(self, flowdict, name, ftype="CommsFlow", glob=[]):
         self.fxns = {}
-        super().__init__(flowdict, name, ftype="Comms", glob=glob)
+        super().__init__(flowdict, name, ftype=ftype, glob=glob)
     def __repr__(self):
         rep_str = Flow.__repr__(self)
         if self.name==self.glob.name:   
