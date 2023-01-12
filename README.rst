@@ -73,7 +73,7 @@ For development and use of this version (e.g., for tutorials and models), we rec
 
 ::
 
-   pip install /path/to/fmdtools 
+   pip install -e /path/to/fmdtools 
 
 A version of the fmdtools toolkit can also be installed directly from the `PyPI package repository <https://pypi.org/project/fmdtools/>`_ using ``pip install fmdtools``. 
 
