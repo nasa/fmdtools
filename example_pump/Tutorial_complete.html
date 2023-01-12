@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Tutorial &mdash; fmdtools 1.3.0 documentation</title>
+  <title>fmdtools Tutorial &mdash; fmdtools 1.3.2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -62,7 +62,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../Examples.html">Examples</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fmdtools Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#2.)-and-3.)-Simulate-and-visualize-the-results!">2.) and 3.) Simulate and visualize the results!</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#2a.)-Simulate-nominal">2a.) Simulate nominal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#2b.)-Visualize-nominal-model">2b.) Visualize nominal model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#2b.)-Simulate-a-fault-mode">2b.) Simulate a fault mode</a></li>
@@ -228,6 +228,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../docs/fmdtools.faultsim.html">fmdtools.faultsim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.faultsim.html#module-fmdtools.faultsim.networks">fmdtools.faultsim.networks</a></li>
@@ -552,16 +553,16 @@ div.rendered_html tbody tr:hover {
 </ul>
 <section id="1.)-Loading-the-environment-and-model">
 <h2>1.) Loading the environment and model<a class="headerlink" href="#1.)-Loading-the-environment-and-model" title="Permalink to this headline"></a></h2>
-<p>To load the <code class="docutils literal notranslate"><span class="pre">fmdtools</span></code> environment, we have to import it.</p>
-<p>Since we’re in a subfolder of the repository, we need to add the fmdtools folder to the system path. (This would be unnecessary if we installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code>)</p>
+<p>To load the <code class="docutils literal notranslate"><span class="pre">fmdtools</span></code> environment, we have to install and import it. This can be accomplished using <code class="docutils literal notranslate"><span class="pre">pip</span></code> for both the stable and development versions:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#First, import the fault propogation library as well as the model</span>
-<span class="c1">#since the package is in a parallel location to examples...</span>
-<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##Stable (PyPl) version</span>
+<span class="c1"># pip install fmdtools</span>
+
+<span class="c1">##Development version (downloaded from git)</span>
+<span class="c1"># pip install -e /path/to/fmdtools ##Note that /path/to/fmdtools is the path to the fmdtools repo</span>
 </pre></div>
 </div>
 </div>
@@ -576,27 +577,9 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmdtools</span>
-<span class="n">fmdtools</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;module &#39;fmdtools&#39; from &#39;C:\\Users\\dhulse\\Documents\\GitHub\\fmdtools\\example_pump\\..\\fmdtools\\__init__.py&#39;&gt;
-</pre></div></div>
-</div>
 <p>Now, import the Pump class defined in the ex_pump module.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ex_pump</span> <span class="kn">import</span> <span class="n">Pump</span>
@@ -605,7 +588,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>We can then use that to instantiate a model object. See:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
@@ -614,7 +597,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>To get started, it can be helpful to view some of the aspects of the model. Try <code class="docutils literal notranslate"><span class="pre">dir(mdl)</span></code>, <code class="docutils literal notranslate"><span class="pre">mdl.fxns</span></code>, <code class="docutils literal notranslate"><span class="pre">mdl.flows</span></code>, <code class="docutils literal notranslate"><span class="pre">mdl.graph</span></code>, etc.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span>
@@ -622,7 +605,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -634,9 +617,9 @@ div.rendered_html tbody tr:hover {
  &#39;ExportWater&#39;: ExportWater ExportWater function: ({&#39;mode&#39;: &#39;nom&#39;}, {&#39;nom&#39;})}
 </pre></div></div>
 </div>
-<p>We can also view the run order to see how the model will be simulated.</p>
+<p>We can also view the run order to see how the model will be simulated. More details on run order are provided in <a class="reference internal" href="../docs/Model_Structure_Visualization_Tutorial.html"><span class="doc">Model Structure Visualization Tutorial</span></a>, but in short static propagation functions simulate multiple times per time-step until the model converges, while dynamic propagation functions run once per timestep in a defined order.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">exec_order</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
@@ -647,12 +630,12 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_13_0.png" src="../_images/example_pump_Tutorial_complete_13_0.png" />
+<img alt="../_images/example_pump_Tutorial_complete_12_0.png" src="../_images/example_pump_Tutorial_complete_12_0.png" />
 </div>
 </div>
 <p>As shown, because all of the methods were defined as generic behaviors, they are each run in the static propagation step. No order is shown in the static step because the static propagation step iterates between model functions until the values have converged. Nevertheless, one can view the initial static order using:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">staticfxns</span>
@@ -660,7 +643,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -670,7 +653,7 @@ OrderedSet([&#39;ImportEE&#39;, &#39;ImportWater&#39;, &#39;ImportSignal&#39;, &
 </div>
 <p>and the dynamic step order (if there was one):</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">dynamicfxns</span>
@@ -678,7 +661,7 @@ OrderedSet([&#39;ImportEE&#39;, &#39;ImportWater&#39;, &#39;ImportSignal&#39;, &
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -686,9 +669,12 @@ OrderedSet([&#39;ImportEE&#39;, &#39;ImportWater&#39;, &#39;ImportSignal&#39;, &
 OrderedSet()
 </pre></div></div>
 </div>
-<p>We can also instantiate this model with different model parameters. By default, this model gets <code class="docutils literal notranslate"><span class="pre">params={'cost':{'repair',</span> <span class="pre">'water'},</span> <span class="pre">'delay':10,</span> <span class="pre">'units':'hrs'}</span></code> but we can pass any set of costs that is a subset of <code class="docutils literal notranslate"><span class="pre">{'repair',</span> <span class="pre">'water',</span> <span class="pre">'water_exp',</span> <span class="pre">'ee'}</span></code> and any int <code class="docutils literal notranslate"><span class="pre">delay</span></code> parameter.</p>
+<p>We can also instantiate this model with different parameters. There are three main parameter dictionaries: - params, which are design parameters of the model (e.g., initial values, situational parameters, etc). In this model, we use the values: <code class="docutils literal notranslate"><span class="pre">params={'cost':{'repair',</span> <span class="pre">'water'},</span> <span class="pre">'delay':10}</span></code>, specifying that we are tabulating costs (in find_classification) of repair and water loss. To change which costs are tabulated, we could also pass any set of costs in
+<code class="docutils literal notranslate"><span class="pre">{'repair',</span> <span class="pre">'water',</span> <span class="pre">'water_exp',</span> <span class="pre">'ee'}</span></code>. We also use the <code class="docutils literal notranslate"><span class="pre">delay</span></code> parameter, which specifies how long the pressure in the Pump may be elevated before there is a mechanical breakage (<code class="docutils literal notranslate"><span class="pre">mech_break</span></code>) fault. - modelparams, which specifies the simulation parameters of the model, including phases (used in sampleapproaches), times (the start and end-time of the simulation), the timestep, and the timestep units. The default in the model is:
+<code class="docutils literal notranslate"><span class="pre">modelparams</span> <span class="pre">=</span> <span class="pre">{'phases':{'start':[0,4],</span> <span class="pre">'on':[5,</span> <span class="pre">49],</span> <span class="pre">'end':[50,55]},</span> <span class="pre">'times':[0,20,</span> <span class="pre">55],</span> <span class="pre">'tstep':1,</span> <span class="pre">'units':'hrs'}</span></code> - valparams, which specifies which parameters are required to keep a history of for <code class="docutils literal notranslate"><span class="pre">find_classification</span></code>. These parameters are used less often, but can be useful for optimizing tracking options to reduce computational cost.</p>
+<p>Below we instantiate the model with non-default parameters:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl2</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;repair&#39;</span><span class="p">,</span> <span class="s1">&#39;water&#39;</span><span class="p">,</span> <span class="s1">&#39;ee&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span><span class="s1">&#39;hrs&#39;</span><span class="p">})</span>
@@ -696,26 +682,46 @@ OrderedSet()
 </div>
 </div>
 </section>
-<section id="2.)-and-3.)-Simulate-and-visualize-the-results!">
-<h2>2.) and 3.) Simulate and visualize the results!<a class="headerlink" href="#2.)-and-3.)-Simulate-and-visualize-the-results!" title="Permalink to this headline"></a></h2>
+<section id="2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">
+<h2>2.), 3.), and 4.) Simulate and visualize the results!<a class="headerlink" href="#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!" title="Permalink to this headline"></a></h2>
 <p>Now, we will use the methods in <code class="docutils literal notranslate"><span class="pre">propagate</span></code> and the visualization modules in <code class="docutils literal notranslate"><span class="pre">rd</span></code> to simulate the model and visualize the results.</p>
 <section id="2a.)-Simulate-nominal">
 <h3>2a.) Simulate nominal<a class="headerlink" href="#2a.)-Simulate-nominal" title="Permalink to this headline"></a></h3>
-<p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code> method.</p>
+<p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code> method, which returns: endresults, which is a result (or a dict of multiple results) specified by the <code class="docutils literal notranslate"><span class="pre">desired_result</span></code> option, e.g.: - ‘endclass’ (default), which provides the dict from <code class="docutils literal notranslate"><span class="pre">mdl.find_classification</span></code> - ‘normal’/‘bipartite’/‘typegraph’,‘component’, which provides a networkx graph view of the model with degraded faults and functions highlighted (e.g., for <code class="docutils literal notranslate"><span class="pre">rd.graph.show</span></code>) -
+‘fxnname.varname’/‘flowname.varname’: which gets the values of these variables at a the end - a list of the above arguments (to return a dict of multiple) - a dict of lists (for multiple over time), e.g. <code class="docutils literal notranslate"><span class="pre">{time:[varnames,...</span> <span class="pre">'endclass']}</span></code></p>
+<p>and mdlhist, which is a history of model states specified by the <code class="docutils literal notranslate"><span class="pre">track</span></code> option. Some of these options include: - functions’ - ‘flows’ - ‘all’ - ‘none’ - ‘valparams’ (model states specified in mdl.valparams), - or a dict of form: <code class="docutils literal notranslate"><span class="pre">{'functions':{'fxn1':'att1'},</span> <span class="pre">'flows':{'flow1':'att1'}}</span></code></p>
 <div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclass_nominal</span><span class="p">,</span> <span class="n">mdlhist_nominal</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="s2">&quot;endclass&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>What do the results look like? Explore results structures using the <code class="docutils literal notranslate"><span class="pre">desired_results</span></code> and <code class="docutils literal notranslate"><span class="pre">track</span></code> arguments.</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclass_nominal</span><span class="p">,</span> <span class="n">mdlhist_nominal</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclass_nominal</span>
 </pre></div>
 </div>
 </div>
-<p>What do the results look like? Explore results structures using the <code class="docutils literal notranslate"><span class="pre">desired_results</span></code> argument.</p>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;rate&#39;: 1.0, &#39;cost&#39;: 0.0, &#39;expected cost&#39;: 0.0}
+</pre></div></div>
+</div>
+<p>Note that an <code class="docutils literal notranslate"><span class="pre">endclass</span></code> dictionary can take arbitrary form based on what is produced in <code class="docutils literal notranslate"><span class="pre">find_classification</span></code>. Typically, we often return: - <code class="docutils literal notranslate"><span class="pre">rate</span></code>, which is the rate for the scenario calculated from the underlying fault probability model (defined in <code class="docutils literal notranslate"><span class="pre">FxnBlock.assoc_modes</span></code>), - <code class="docutils literal notranslate"><span class="pre">cost</span></code>, which is some cost calculated based on the consequences of the scenario - <code class="docutils literal notranslate"><span class="pre">expected</span> <span class="pre">cost</span></code>, which is the expected value of the cost of the scenario (i.e. <code class="docutils literal notranslate"><span class="pre">rate*cost</span></code>).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclass_nominal</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist_nominal</span>
 </pre></div>
 </div>
 </div>
@@ -725,7 +731,121 @@ OrderedSet()
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;rate&#39;: 1.0, &#39;cost&#39;: 0.0, &#39;expected cost&#39;: 0.0}
+{&#39;flows&#39;: {&#39;EE_1&#39;: {&#39;current&#39;: array([ 0.,  0.,  0.,  0.,  0., 10., 10., 10., 10., 10., 10., 10., 10.,
+          10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
+          10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
+          10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,  0.,  0.,
+           0.,  0.,  0.,  0.]),
+   &#39;voltage&#39;: array([500., 500., 500., 500., 500., 500., 500., 500., 500., 500., 500.,
+          500., 500., 500., 500., 500., 500., 500., 500., 500., 500., 500.,
+          500., 500., 500., 500., 500., 500., 500., 500., 500., 500., 500.,
+          500., 500., 500., 500., 500., 500., 500., 500., 500., 500., 500.,
+          500., 500., 500., 500., 500., 500., 500., 500., 500., 500., 500.,
+          500.])},
+  &#39;Sig_1&#39;: {&#39;power&#39;: array([0., 0., 0., 0., 0., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 0.,
+          0., 0., 0., 0., 0.])},
+  &#39;Wat_1&#39;: {&#39;flowrate&#39;: array([0. , 0. , 0. , 0. , 0. , 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3,
+          0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3,
+          0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3,
+          0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0. , 0. ,
+          0. , 0. , 0. , 0. ]),
+   &#39;pressure&#39;: array([ 0.,  0.,  0.,  0.,  0., 10., 10., 10., 10., 10., 10., 10., 10.,
+          10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
+          10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
+          10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,  0.,  0.,
+           0.,  0.,  0.,  0.]),
+   &#39;area&#39;: array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1.]),
+   &#39;level&#39;: array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1.])},
+  &#39;Wat_2&#39;: {&#39;flowrate&#39;: array([0. , 0. , 0. , 0. , 0. , 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3,
+          0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3,
+          0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3,
+          0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0. , 0. ,
+          0. , 0. , 0. , 0. ]),
+   &#39;pressure&#39;: array([ 0.,  0.,  0.,  0.,  0., 10., 10., 10., 10., 10., 10., 10., 10.,
+          10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
+          10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
+          10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,  0.,  0.,
+           0.,  0.,  0.,  0.]),
+   &#39;area&#39;: array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1.]),
+   &#39;level&#39;: array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1.])}},
+ &#39;functions&#39;: {&#39;ImportEE&#39;: {&#39;faults&#39;: {&#39;no_v&#39;: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+    &#39;inf_v&#39;: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])},
+   &#39;mode&#39;: array([&#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;], dtype=&#39;&lt;U5&#39;)},
+  &#39;ImportWater&#39;: {&#39;faults&#39;: {&#39;no_wat&#39;: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])},
+   &#39;mode&#39;: array([&#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;], dtype=&#39;&lt;U6&#39;)},
+  &#39;ImportSignal&#39;: {&#39;faults&#39;: {&#39;no_sig&#39;: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])},
+   &#39;mode&#39;: array([&#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;], dtype=&#39;&lt;U6&#39;)},
+  &#39;MoveWater&#39;: {&#39;faults&#39;: {&#39;mech_break&#39;: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+    &#39;short&#39;: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])},
+   &#39;eff&#39;: array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+          1., 1., 1., 1., 1.]),
+   &#39;mode&#39;: array([&#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;], dtype=&#39;&lt;U10&#39;)},
+  &#39;ExportWater&#39;: {&#39;faults&#39;: {&#39;block&#39;: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])},
+   &#39;mode&#39;: array([&#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
+          &#39;nom&#39;, &#39;nom&#39;], dtype=&#39;&lt;U5&#39;)}},
+ &#39;time&#39;: array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
+        17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+        34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+        51, 52, 53, 54, 55])}
 </pre></div></div>
 </div>
 </section>
@@ -744,7 +864,7 @@ OrderedSet()
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_26_0.png" src="../_images/example_pump_Tutorial_complete_26_0.png" />
+<img alt="../_images/example_pump_Tutorial_complete_27_0.png" src="../_images/example_pump_Tutorial_complete_27_0.png" />
 </div>
 </div>
 <p>We can also view the flow values of the model using ‘’rd.plot.mdlhists’’. It may be helpful to only view flows of interest.</p>
@@ -760,11 +880,11 @@ OrderedSet()
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_28_0.png" src="../_images/example_pump_Tutorial_complete_28_0.png" />
+<img alt="../_images/example_pump_Tutorial_complete_29_0.png" src="../_images/example_pump_Tutorial_complete_29_0.png" />
 </div>
 </div>
 <p>Note: for quick access to the syntax and options for these methods, type the <code class="docutils literal notranslate"><span class="pre">?method</span></code> or <code class="docutils literal notranslate"><span class="pre">help(method)</span></code> in the terminal. For example <code class="docutils literal notranslate"><span class="pre">?rd.plot.mdlhists</span></code></p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
@@ -772,10 +892,136 @@ OrderedSet()
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">Signature:</span>
+rd<span class="ansi-yellow-intense-fg ansi-bold">.</span>plot<span class="ansi-yellow-intense-fg ansi-bold">.</span>mdlhists<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    mdlhists<span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    fxnflowvals<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;all&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    cols<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    aggregation<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;individual&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    comp_groups<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    legend_loc<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">-</span><span class="ansi-cyan-intense-fg ansi-bold">1</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    xlabel<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;time&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    ylabels<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    max_ind<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;max&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    boundtype<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;fill&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    fillalpha<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">0.3</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    boundcolor<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;gray&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    boundlinestyle<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;--&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    ci<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">0.95</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    titles<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    title<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    indiv_kwargs<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    time_slice<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    time_slice_label<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    figsize<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;default&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    v_padding<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    h_padding<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    title_padding<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">0.0</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    phases<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    modephases<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    label_phases<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">True</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    legend_title<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span>    <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">
+</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-red-intense-fg ansi-bold">Docstring:</span>
+Plot the behavior over time of the given function/flow values
+over a set of scenarios, with ability to aggregate behaviors as needed.
+
+Parameters
+----------
+mdlhists : dict
+    Aggregate model history with structure {&#39;scen&#39;:mdlhist} (or single mdlhist)
+fxnflowvals : dict, optional
+    dict of flow values to plot with structure {fxnflow:[vals], fxnflow:&#39;val&#39;/all, fxnflow:{&#39;comp&#39;:[vals]}}.
+    The default is &#39;all&#39;, which returns all.
+cols : int, optional
+    columns to use in the figure. The default is 2.
+aggregation : str, optional
+    Way of aggregating the plot values. The default is &#39;individual&#39;
+    Note that only the `individual` option can be used for histories of non-numeric quantities
+    (e.g., modes, which are recorded as strings)
+    - &#39;individual&#39; plots each run individually.
+    - &#39;mean_std&#39; plots the mean values over the sim with standard deviation error bars
+    - &#39;mean_ci&#39;  plots the mean values over the sim with mean confidence interval error bars
+        - optional argument ci (float 0.0-1.0) specifies the confidence interval (Default:0.95)
+    - &#39;mean_bound&#39; plots the mean values over the sim with variable bound error bars
+    - &#39;percentile&#39; plots the percentile distribution of the sim over time (does not reject outliers)
+        - optional argument &#39;perc_range&#39; (int 0-100) specifies the percentile range of the inner bars (Default: 50)
+comp_groups : dict, optional
+    Dictionary for comparison groups (if more than one) with structure:
+        {&#39;group1&#39;:(&#39;scen1&#39;, &#39;scen2&#39;), &#39;group2&#39;:(&#39;scen3&#39;, &#39;scen4&#39;)} Default is {}
+        If a legend is shown, group names are used as labels.
+legend_loc : int, optional
+    Specifies the plot to place the legend on, if runs are bine compared. Default is -1 (the last plot)
+    To remove the legend, give a value of False
+xlabel : str, optional
+    Label for the x-axes. Default is &#39;time&#39;
+ylabels : dict, optional
+    Label for the y-axes with structure {(fxnflowname, value):&#39;label&#39;}
+max_ind : int, optional
+    index (usually correlates to time) cutoff for the simulation. Default is &#39;max&#39; which uses the first simulation termination time.
+boundtype : &#39;fill&#39; or &#39;line&#39;, optional
+    -&#39;fill&#39; plots the error bounds as a filled area
+        - optional fillalpha (float) changes the alpha of this area.
+    -&#39;line&#39; plots the error bounds as lines
+        - optional boundcolor (str) changes the color of the bounds (default &#39;gray&#39;)
+        - optional boundlinestyle (str) changes the style of the bound lines (default &#39;--&#39;)
+fillalpha : float
+    alpha value for fill in aggregated plots. Default is 0.3.
+boundcolor : str, optional
+    color to make the bounds in aggregated plots. Default is &#39;gray&#39;
+boundlinestyle : str, optional
+    linestyle to use for bounds in aggregated plots. Default is &#39;--&#39;
+ci : float, optional
+    Bootstrap confidence interval (0-1) to use in &#39;mean_ci&#39; bound argument. Default is 0.95.
+title : str, optional
+    overall title for the plot. Default is &#39;&#39;
+indiv_kwargs : dict, optional
+    dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where
+    where kwargs is an individual dict of keyword arguments for the
+    comparison group comp (or scenario, if not aggregated) which overrides
+    the global kwargs (or default behavior). If no comparison groups are given,
+    use &#39;default&#39; for a single history or &#39;nominal&#39;/&#39;faulty&#39; for a fault history
+    e.g. kwargs = {&#39;nominal&#39;:{color:&#39;green&#39;}} would make the nominal color green
+    Default is {}.
+time_slice : int/list, optional
+    overlays a bar or bars at the given index when the fault was injected (if any). Default is []
+time_slice_label : str, optional
+    label to use for the time slice bars in the legend. Default is None
+figsize : tuple (float,float)
+    x-y size for the figure. The default is &#39;default&#39;, which dymanically gives 3 for each column and 2 for each row
+v_padding : float
+    vertical padding between subplots as a fraction of axis height
+h_padding : float
+    horizontal padding between subplots as a fraction of axis width
+title_padding : float
+    padding for title as a fraction of figure height
+phases : dict, optional
+    Provide to overlay phases on the individual function histories, where phases
+    is from rd.process.mdlhist and of structure {&#39;fxnname&#39;:&#39;phase&#39;:[start, end]}.
+    Default is {}.
+modephases : dict, optional
+    dictionary that maps the phases to operational modes, if it is desired to track the progression
+    through modes
+legend_title : str, optional
+    title for the legend. Default is None
+**kwargs : kwargs
+    keyword arguments to mpl.plot e.g. linestyle, color, etc. See &#39;aggregation&#39; for specification.
+    phases={}, modephases={}, label_phases=True,  **kwargs):
+<span class="ansi-red-intense-fg ansi-bold">File:</span>      c:\users\dhulse\documents\github\fmdtools\fmdtools\resultdisp\plot.py
+<span class="ansi-red-intense-fg ansi-bold">Type:</span>      function
+</pre></div></div>
+</div>
 </section>
 <section id="2b.)-Simulate-a-fault-mode">
 <h3>2b.) Simulate a fault mode<a class="headerlink" href="#2b.)-Simulate-a-fault-mode" title="Permalink to this headline"></a></h3>
-<p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.one_fault</span></code> method. The set of possible faults is defined in the function definitions in <code class="docutils literal notranslate"><span class="pre">ex_pump.py</span></code>, and we can propagate a fault at any time in the operational interval (0-55 seconds).</p>
+<p>To simulate the model in a fault scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.one_fault</span></code> method. The set of possible faults is defined in the function definitions in <code class="docutils literal notranslate"><span class="pre">ex_pump.py</span></code>, and we can propagate a fault at any time in the operational interval (0-55 seconds).</p>
+<p>For example, below we simulate a short in the <code class="docutils literal notranslate"><span class="pre">MoveWater</span></code> function at time t=10:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
@@ -802,7 +1048,7 @@ OrderedSet()
 {&#39;endclass&#39;: {&#39;rate&#39;: 0.00055,
   &#39;cost&#39;: 29000.000000000007,
   &#39;expected cost&#39;: 1595000.0000000005},
- &#39;bipartite&#39;: &lt;networkx.classes.graph.Graph at 0x1992af6aa00&gt;}
+ &#39;bipartite&#39;: &lt;networkx.classes.graph.Graph at 0x16e5f5c2850&gt;}
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -838,7 +1084,7 @@ OrderedSet()
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_37_0.png" src="../_images/example_pump_Tutorial_complete_37_0.png" />
+<img alt="../_images/example_pump_Tutorial_complete_38_0.png" src="../_images/example_pump_Tutorial_complete_38_0.png" />
 </div>
 </div>
 <p>We can also view this result graph using ‘rd.graph.show’. In this case, it shows the state of the model at the final time-step of the model run. Thus, while the <code class="docutils literal notranslate"><span class="pre">EE_1</span></code> flow is shown in orange (because it is off-nominal), the Water flows are not, because they have the same state at the final time-step.</p>
@@ -854,7 +1100,7 @@ OrderedSet()
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_39_0.png" src="../_images/example_pump_Tutorial_complete_39_0.png" />
+<img alt="../_images/example_pump_Tutorial_complete_40_0.png" src="../_images/example_pump_Tutorial_complete_40_0.png" />
 </div>
 </div>
 <p>If we want to view the graph at another time-step, we can use ‘rd.process.hist’ and ‘rd.graph.result_from’ to first process the model states into results which can be visualized and then map that onto a graph view at a given time.</p>
@@ -878,7 +1124,7 @@ OrderedSet()
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/example_pump_Tutorial_complete_42_0.png" src="../_images/example_pump_Tutorial_complete_42_0.png" />
+<img alt="../_images/example_pump_Tutorial_complete_43_0.png" src="../_images/example_pump_Tutorial_complete_43_0.png" />
 </div>
 </div>
 </section>
@@ -906,7 +1152,7 @@ OrderedSet()
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 125.61it/s]
+SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 116.34it/s]
 </pre></div></div>
 </div>
 <p>It can be helpful to view what these results look like–a dictionary of faults injected at particular times with their respective results dictionaries.</p>
@@ -1325,9 +1571,9 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </section>
 <section id="5.)-Saving-Work">
 <h2>5.) Saving Work<a class="headerlink" href="#5.)-Saving-Work" title="Permalink to this headline"></a></h2>
-<p>In detailed simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. Results from fmdtools simulations (endclasses or mdlhists) can be saved as pickle, csv, or json files in this instance using either: - rd.process.save_result() or - passing a save_args dictionary to the respective propagate functions (e.g.,
-{‘endclass’:{‘filename’:‘file.pkl’,‘overwrite’:True})</p>
-<p>and then loaded using: - rd.process.load_result()</p>
+<p>In detailed simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. Results from fmdtools simulations (endclasses or mdlhists) can be saved as pickle, csv, or json files in this instance using either: - <code class="docutils literal notranslate"><span class="pre">rd.process.save_result()</span></code> or - passing a save_args dictionary to the respective propagate functions (e.g.,
+<code class="docutils literal notranslate"><span class="pre">{'endclass':{'filename':'file.pkl','overwrite':True}</span></code>)</p>
+<p>and then loaded using: - <code class="docutils literal notranslate"><span class="pre">rd.process.load_result()</span></code></p>
 <p>For example, for this variable:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
@@ -1435,75 +1681,59 @@ File already exists: tutorial_endclasses.csv, writing anyway...
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;MoveWater short, t=52&#39;: {&#39;cost&#39;: 10000.0,
-  &#39;rate&#39;: 1.7142857142857145e-05,
-  &#39;expected cost&#39;: 17142.857142857145},
- &#39;ImportSignal no_sig, t=2&#39;: {&#39;cost&#39;: 20125.000000000007,
-  &#39;rate&#39;: 2.1428571428571427e-06,
-  &#39;expected cost&#39;: 4312.500000000001},
- &#39;MoveWater short, t=27&#39;: {&#39;cost&#39;: 25175.0,
-  &#39;rate&#39;: 0.0001285714285714,
-  &#39;expected cost&#39;: 323678.5714285714},
- &#39;ImportWater no_wat, t=52&#39;: {&#39;cost&#39;: 1000.0,
-  &#39;rate&#39;: 2e-05,
-  &#39;expected cost&#39;: 2000.0},
- &#39;MoveWater mech_break, t=27&#39;: {&#39;cost&#39;: 10174.999999999998,
-  &#39;rate&#39;: 0.0002314285714285,
-  &#39;expected cost&#39;: 235478.5714285714},
- &#39;ImportSignal no_sig, t=52&#39;: {&#39;cost&#39;: 10000.0,
-  &#39;rate&#39;: 1.7142857142857145e-06,
-  &#39;expected cost&#39;: 1714.2857142857142},
+{&#39;ImportWater no_wat, t=2&#39;: {&#39;cost&#39;: 11125.000000000007,
+  &#39;expected cost&#39;: 18541.66666666668,
+  &#39;rate&#39;: 1.6666666666666667e-05},
  &#39;ExportWater block, t=52&#39;: {&#39;cost&#39;: 5000.0,
-  &#39;rate&#39;: 1.7142857142857145e-05,
-  &#39;expected cost&#39;: 8571.428571428572},
+  &#39;expected cost&#39;: 8571.428571428572,
+  &#39;rate&#39;: 1.7142857142857145e-05},
+ &#39;nominal&#39;: {&#39;cost&#39;: 0.0, &#39;expected cost&#39;: 0.0, &#39;rate&#39;: 1.0},
+ &#39;ImportWater no_wat, t=52&#39;: {&#39;cost&#39;: 1000.0,
+  &#39;expected cost&#39;: 2000.0,
+  &#39;rate&#39;: 2e-05},
  &#39;MoveWater mech_break, t=2&#39;: {&#39;cost&#39;: 15125.000000000007,
-  &#39;rate&#39;: 2.1428571428571427e-06,
-  &#39;expected cost&#39;: 3241.07142857143},
- &#39;nominal&#39;: {&#39;cost&#39;: 0.0, &#39;rate&#39;: 1.0, &#39;expected cost&#39;: 0.0},
- &#39;ExportWater block, t=2&#39;: {&#39;cost&#39;: 20102.500000000007,
-  &#39;rate&#39;: 2.1428571428571428e-05,
-  &#39;expected cost&#39;: 43076.78571428573},
- &#39;MoveWater short, t=2&#39;: {&#39;cost&#39;: 30125.000000000007,
-  &#39;rate&#39;: 2.1428571428571428e-05,
-  &#39;expected cost&#39;: 64553.57142857144},
- &#39;ExportWater block, t=27&#39;: {&#39;cost&#39;: 15152.5,
-  &#39;rate&#39;: 0.0001285714285714,
-  &#39;expected cost&#39;: 194817.8571428572},
- &#39;MoveWater mech_break, t=52&#39;: {&#39;cost&#39;: 5000.0,
-  &#39;rate&#39;: 2.571428571428572e-06,
-  &#39;expected cost&#39;: 1285.7142857142858},
- &#39;ImportWater no_wat, t=27&#39;: {&#39;cost&#39;: 6174.999999999998,
-  &#39;rate&#39;: 0.00015,
-  &#39;expected cost&#39;: 92624.99999999996},
- &#39;ImportWater no_wat, t=2&#39;: {&#39;cost&#39;: 11125.000000000007,
-  &#39;rate&#39;: 1.6666666666666667e-05,
-  &#39;expected cost&#39;: 18541.66666666668},
+  &#39;expected cost&#39;: 3241.07142857143,
+  &#39;rate&#39;: 2.1428571428571427e-06},
  &#39;ImportEE inf_v, t=27&#39;: {&#39;cost&#39;: 20175.0,
-  &#39;rate&#39;: 9.000000000000002e-05,
-  &#39;expected cost&#39;: 181575.00000000003},
- &#39;ImportSignal no_sig, t=27&#39;: {&#39;cost&#39;: 15174.999999999998,
-  &#39;rate&#39;: 1.2857142857142856e-05,
-  &#39;expected cost&#39;: 19510.714285714283},
+  &#39;expected cost&#39;: 181575.00000000003,
+  &#39;rate&#39;: 9.000000000000002e-05},
+ &#39;ImportSignal no_sig, t=2&#39;: {&#39;cost&#39;: 20125.000000000007,
+  &#39;expected cost&#39;: 4312.500000000001,
+  &#39;rate&#39;: 2.1428571428571427e-06},
+ &#39;ImportSignal no_sig, t=52&#39;: {&#39;cost&#39;: 10000.0,
+  &#39;expected cost&#39;: 1714.2857142857142,
+  &#39;rate&#39;: 1.7142857142857145e-06},
+ &#39;MoveWater mech_break, t=52&#39;: {&#39;cost&#39;: 5000.0,
+  &#39;expected cost&#39;: 1285.7142857142858,
+  &#39;rate&#39;: 2.571428571428572e-06},
+ &#39;MoveWater short, t=52&#39;: {&#39;cost&#39;: 10000.0,
+  &#39;expected cost&#39;: 17142.857142857145,
+  &#39;rate&#39;: 1.7142857142857145e-05},
+ &#39;MoveWater short, t=2&#39;: {&#39;cost&#39;: 30125.000000000007,
+  &#39;expected cost&#39;: 64553.57142857144,
+  &#39;rate&#39;: 2.1428571428571428e-05},
  &#39;ImportEE no_v, t=27&#39;: {&#39;cost&#39;: 15174.999999999998,
-  &#39;rate&#39;: 0.00036,
-  &#39;expected cost&#39;: 546300.0}}
+  &#39;expected cost&#39;: 546300.0,
+  &#39;rate&#39;: 0.00036},
+ &#39;ImportWater no_wat, t=27&#39;: {&#39;cost&#39;: 6174.999999999998,
+  &#39;expected cost&#39;: 92624.99999999996,
+  &#39;rate&#39;: 0.00015},
+ &#39;MoveWater mech_break, t=27&#39;: {&#39;cost&#39;: 10174.999999999998,
+  &#39;expected cost&#39;: 235478.5714285714,
+  &#39;rate&#39;: 0.0002314285714285},
+ &#39;ImportSignal no_sig, t=27&#39;: {&#39;cost&#39;: 15174.999999999998,
+  &#39;expected cost&#39;: 19510.714285714283,
+  &#39;rate&#39;: 1.2857142857142856e-05},
+ &#39;MoveWater short, t=27&#39;: {&#39;cost&#39;: 25175.0,
+  &#39;expected cost&#39;: 323678.5714285714,
+  &#39;rate&#39;: 0.0001285714285714},
+ &#39;ExportWater block, t=2&#39;: {&#39;cost&#39;: 20102.500000000007,
+  &#39;expected cost&#39;: 43076.78571428573,
+  &#39;rate&#39;: 2.1428571428571428e-05},
+ &#39;ExportWater block, t=27&#39;: {&#39;cost&#39;: 15152.5,
+  &#39;expected cost&#39;: 194817.8571428572,
+  &#39;rate&#39;: 0.0001285714285714}}
 </pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
 </div>
 </section>
 </section>

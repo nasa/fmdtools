@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Version 1.3.0. &mdash; fmdtools 1.3.0 documentation</title>
+  <title>fmdtools Version 1.3.2. &mdash; fmdtools 1.3.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/fmdtools_ico.ico"/>
@@ -59,7 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="example_pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="example_pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_pump/Tutorial_complete.html#2.)-and-3.)-Simulate-and-visualize-the-results!">2.) and 3.) Simulate and visualize the results!</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example_pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="example_pump/Tutorial_complete.html#2a.)-Simulate-nominal">2a.) Simulate nominal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="example_pump/Tutorial_complete.html#2b.)-Visualize-nominal-model">2b.) Visualize nominal model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="example_pump/Tutorial_complete.html#2b.)-Simulate-a-fault-mode">2b.) Simulate a fault mode</a></li>
@@ -225,6 +225,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.faultsim.html">fmdtools.faultsim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.faultsim.html#module-fmdtools.faultsim.networks">fmdtools.faultsim.networks</a></li>
@@ -257,7 +258,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>fmdtools Version 1.3.0.</li>
+      <li>fmdtools Version 1.3.2.</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -292,9 +293,10 @@
 }
 </style>
 <section id="fmdtools-version-release">
-<h1>fmdtools Version 1.3.0.<a class="headerlink" href="#fmdtools-version-release" title="Permalink to this headline"></a></h1>
+<h1>fmdtools Version 1.3.2.<a class="headerlink" href="#fmdtools-version-release" title="Permalink to this headline"></a></h1>
 <a class="reference internal image-reference" href="_images/logo_detailed.jpg"><img alt="fmdtools logo (detailed)" src="_images/logo_detailed.jpg" style="width: 800px;" /></a>
 <p><strong>fmdtools</strong> (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based <em>design environment</em> where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.</p>
+<p>For full reference and examples, please see the <a class="reference external" href="https://nasa.github.io/fmdtools/">documentation page</a>.</p>
 </section>
 <section id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h1>
@@ -345,6 +347,10 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nasa</span><span class="o">/</span><span class="n">fmdtools</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
+<p>For development and use of this version (e.g., for tutorials and models), we recommended then installing this package using <cite>pip</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">fmdtools</span>
+</pre></div>
+</div>
 <p>A version of the fmdtools toolkit can also be installed directly from the <a class="reference external" href="https://pypi.org/project/fmdtools/">PyPI package repository</a> using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fmdtools</span></code>.</p>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
@@ -361,12 +367,12 @@
 </div>
 <p>These packages are optional but recommended to enable specific fmdtools use-cases and to work with examples in the repository:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span>                     <span class="c1">#(for repository notebooks)</span>
-<span class="n">graphviz</span>                             <span class="c1">#(to plot using graphviz options)</span>
-<span class="n">pyvis</span>                                <span class="c1">#(for interactive html views of model graphs)</span>
-<span class="n">quadpy</span>                               <span class="c1">#(for quadrature sampling)</span>
-<span class="n">ffmpeg</span>                               <span class="c1">#(for animations)</span>
-<span class="n">shapely</span>                              <span class="c1">#(for multirotor model)</span>
-<span class="n">deap</span>                                 <span class="c1">#(for optimization of rover faults)</span>
+<span class="n">graphviz</span>                                     <span class="c1">#(to plot using graphviz options)</span>
+<span class="n">pyvis</span>                                        <span class="c1">#(for interactive html views of model graphs)</span>
+<span class="n">quadpy</span>                                       <span class="c1">#(for quadrature sampling)</span>
+<span class="n">ffmpeg</span>                                       <span class="c1">#(for animations)</span>
+<span class="n">shapely</span>                                      <span class="c1">#(for multirotor model)</span>
+<span class="n">deap</span>                                         <span class="c1">#(for optimization of rover faults)</span>
 <span class="n">pycallgraph2</span>                         <span class="c1">#(for model profiling)</span>
 </pre></div>
 </div>
@@ -386,6 +392,7 @@
 <p><a class="reference external" href="https://ti.arc.nasa.gov/profile/irshad/">Lukman Irshad</a> : Action Sequence Graph, Degradation Models, Rover Model, etc</p>
 <p><a class="reference external" href="https://github.com/walshh">Hannah Walsh</a> : Network Analysis Codes</p>
 <p><a class="reference external" href="https://ti.arc.nasa.gov/profile/andrade/">Sequoia Andrade</a> : Graph visualization graphviz options, Code review</p>
+<p><a class="reference external" href="https://github.com/teubert">Chris Teubert</a> : Feedback and code review.</p>
 </section>
 </section>
 <section id="notices">
@@ -456,6 +463,7 @@ SOFTWARE.
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.faultsim.html">fmdtools.faultsim</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.faultsim.html#module-fmdtools.faultsim.networks">fmdtools.faultsim.networks</a></li>

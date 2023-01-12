@@ -43,7 +43,7 @@ After completing the workshop, it can be helpful to run through the following no
   
 - `Using Parallel Computing in fmdtools <example_pump/Parallelism_Tutorial.ipynb>`_ covers how to reduce computational costs for computationally-expensive simulation use-cases (e.g., sampling large numbers of fault scenarios or running complex models with large numbers of timesteps). It covers:
 
-  - Using process pools as arguments to :module:`fmdtools.faultsim.propagate` methods to speed up simulation. A comparison of process pools from different external python packages are provided.
+  - Using process pools as arguments to :mod:`fmdtools.faultsim.propagate` methods to speed up simulation. A comparison of process pools from different external python packages are provided.
   
   - Different options for history tracking and staged execution which can reduce computational costs when desired.
   
@@ -53,9 +53,9 @@ After completing the workshop, it can be helpful to run through the following no
 
   - Setting up a nominal parameter sampling approach using :class:`fmdtools.modeldef.NominalApproach` and simulating it with :func:`fmdtools.faultsim.propagate.nominal_approach()` and :func:`fmdtools.faultsim.propagate.nested_approach()` methods for nominal and faulty simulations.
 
-  - Using analysis functions like :func:`fmdtools.resultdisp.tabulate.nominal_vals_1d()` and :func:`fmdtools.resuldisp.plot.nominal_factor_comparison()` to visualize quantities of interest for the simulation over a range of nominal parameters.
+  - Using analysis functions like :func:`fmdtools.resultdisp.tabulate.nominal_vals_1d()` and :func:`fmdtools.resultdisp.plot.nominal_factor_comparison()` to visualize quantities of interest for the simulation over a range of nominal parameters.
 
-  - Using analysis functions like :func:`fmdtools.resuldisp.tabulate.resilience_factor_comparison()` and :func:`fmdtools.resuldisp.plot.resilience_factor_comparison()` to visualize resilience metrics of the model to a set of fault modes over a range of nominal parameters.
+  - Using analysis functions like :func:`fmdtools.resultdisp.tabulate.resilience_factor_comparison()` and :func:`fmdtools.resultdisp.plot.resilience_factor_comparison()` to visualize resilience metrics of the model to a set of fault modes over a range of nominal parameters.
 
 - `Stochastic Modelling in fmdtools <example_pump/Stochastic_Modelling.ipynb>`_ , which covers defining and simulating stochastic models--models with random internal behaviors. This includees:
 
@@ -77,7 +77,7 @@ A number of more advanced techniques have been developed using the rover model i
   
   - Demonstrate the optimization of parameters over a set of fault scenarios using :class:`ProblemInterface` in `Rover Response Optimization <example_rover/optimization/Rover Response Optimization.ipynb>`_ 
 
-The following notebooks showcase the optimization interfaces in :module:`fmdtools.faultsim.search`:
+The following notebooks showcase the optimization interfaces in :mod:`fmdtools.faultsim.search`:
 
   - `Optimization <example_pump/Optimization.ipynb>`_ shows some of the basics of working with the :class:`fmdtools.faultsim.search.ProblemInterface` class for optimization. 
 
