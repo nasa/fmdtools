@@ -3,7 +3,7 @@
 Description: Functions and Classes to enable optimization and search of fault model states and parameters.
 
 Classes:
-    - :class:`ProblemInterface`:         Creates an interface for model simulations for optimization methods
+    - :class:`ProblemInterface`:  Creates an interface for model simulations for optimization methods
     - :class:`DynamicInterface`:  Creates an interface for model simulations for dynamic optimization of a single sim
 """
 import copy
