@@ -23,6 +23,7 @@ TABLE OF CONTENTS
  
  README
  Examples
+ Glossary
  docs/fmdtools
  
  :ref:`genindex`
