@@ -385,10 +385,11 @@ class MultiFlow(Flow):
         else:                   return name
     def get_view(self, name):
         """Gets the view of the MultiFlow corresponding to the given name"""
-        if name=="":            raise Exception("Must provide view")
-        elif name=="local":     view = self
-        elif name=="global":    view=self.glob
-        else:                   view = getattr(self.glob, name)
+        if name=="":                                raise Exception("Must provide view")
+        elif name=="local":                         view = self
+        elif name=="global":                        view=self.glob
+        elif name in getattr(self, 'locals',[]):    view = getattr(self, name)
+        else:                                       view = getattr(self.glob, name)
         return view
     def update(self, to_update="local", to_get="global", *states):
         """
@@ -450,8 +451,10 @@ class CommsFlow(MultiFlow):
                 rep_str=rep_str+"\n   "+fname+": "+func["internal"].__repr__() #+"\n       out: "+func["out"].__repr__()+"\n       in: "+str(func["in"])
         elif self.name in self.glob.fxns:
             rep_str = rep_str+"\n       out: "+self.out().__repr__()+"\n       in: "+str(self.inbox())+"\n       received: "+str(self.received())
+            for l in self.locals:
+                rep_str=rep_str+"\n       "+l+": "+getattr(self, l).__repr__()
         return rep_str
-    def create_comms(self, name, attrs="all", out_attrs="all", **kwargs):
+    def create_comms(self, name, attrs="all", out_attrs="all", ports=[], **kwargs):
         """
         Creates an individual view of the CommsFlow (e.g., for a function), with an
         internal view, out view, in dict, and recieved set.
@@ -464,6 +467,8 @@ class CommsFlow(MultiFlow):
             Attributes of the CommsFlow to copy. The default is "all".
         out_attrs : list, optional
             Attributes of the CommsFlow to copy for the out view.. The default is "all".
+        ports : list
+            Ports to send the information to/from (e.g., names of external functions/agents)
 
         Returns
         -------
@@ -471,11 +476,17 @@ class CommsFlow(MultiFlow):
             A local view of the CommsFlow for the function
         """
         if name not in self.fxns:
-            self.fxns[name]={"internal":    self.create_local(name, attrs=attrs), 
-                                "out":      self.create_local(name+"_out", attrs=out_attrs), 
+            ins = self.create_local(name, attrs=attrs)
+            outs = self.create_local(name+"_out", attrs=attrs)
+            for port in ports:
+                ins.create_local(port, attrs=attrs)
+                outs.create_local(port, attrs=attrs)
+            self.fxns[name]={"internal":    ins, 
+                                "out":      outs, 
                                 "in":       kwargs.get("prev_in", {}),
                                 "received": kwargs.get("received", set())}
         return self.fxns[name]["internal"]
+        
     def send(self, fxn_to, fxn_from="local", *states):
         """
         Sends a function's (fxn_from) view for the CommsFlow to another function fxn_to 
@@ -492,14 +503,19 @@ class CommsFlow(MultiFlow):
         *states : strs
             Values to send from.
         """
-        fxn_from =self.get_local_name(fxn_from)
+        fxn_from=self.get_local_name(fxn_from)
+        f_from = self.get_view(fxn_from)
+        
         if fxn_to=="all":       fxns_to=[f for f in self.glob.fxns if f!=self.name]
+        elif fxn_to=="ports":   fxns_to=[f for f in f_from.locals]
         elif type(fxn_to)==str: fxns_to = [self.get_local_name(fxn_to)]
         else:                   fxns_to = fxn_to
-        #if not states: states=("all",)
-        f_from = self.get_view(fxn_from)
-        self.glob.fxns[fxn_from]["out"].assign(f_from, *states)
+        
         for f_to in fxns_to:
+            port_internal = self.get_port(fxn_from, f_to, "internal")
+            port_out = self.get_port(fxn_from, f_to, "out")
+            port_out.assign(port_internal, *states)
+            
             if fxn_from not in self.glob.fxns[f_to]["received"]:
                 self.glob.fxns[f_to]["in"][fxn_from]=states
     def inbox(self, fxnname="local"):
@@ -518,24 +534,35 @@ class CommsFlow(MultiFlow):
         """ Provies the view of the message that is being sent by the function"""
         fxnname = self.get_local_name(fxnname)
         return self.glob.fxns[fxnname]["out"]
+    def get_port(self, fxnname, portname, box="internal"):
+        """Gets a port with name portname (if it exists), otherwise the default port is riven. 
+        The argument is 'internal' or 'out' for the internal state or outbox, respectively"""
+        port = self.glob.fxns[fxnname][box]
+        if portname in port.locals:
+            port = getattr(port, portname)
+        return port
     def receive(self, fxn_to="local", fxn_from="all"): #need to add something for resolving errors
         """ Updates the internal view of the flow from external functions 
 
         Parameters
         ----------
         fxn_to : str
-            Name of the view to recieve the view. The default is "local"
+            Name of the view to recieve the view. The default is "local".
         fxn_from : str/list, optional
             Name of the function to send from. The default is "all".
         """
         fxn_to = self.get_local_name(fxn_to)
+        f_to = self.get_view(fxn_to)
+        
         if fxn_from=="all":         fxn_from = self.glob.fxns[fxn_to]["in"]
+        elif fxn_to=="ports":       fxn_from=[f for f in fxn_to.locals]
         elif type(fxn_from)==str:   fxn_from = {fxn_from:self.glob.fxns[fxn_to]["in"][fxn_from] for i in range(1) if fxn_from in self.glob.fxns[fxn_to]["in"]}
         elif type(fxn_from)==list:  fxn_from = {f:self.glob.fxns[fxn_to]["in"][f] for f in fxn_from if f in self.glob.fxns[fxn_to]["in"]}
-        
         for f_from in list(fxn_from):
             args = self.glob.fxns[fxn_to]["in"].pop(f_from)
-            self.glob.fxns[fxn_to]["internal"].assign(self.glob.fxns[f_from]["out"],  *args)
+            port_from = self.get_port(f_from, fxn_to, "out")
+            port_to = self.get_port(fxn_to, f_from, "internal")
+            port_to.assign(port_from,  *args)
             self.glob.fxns[fxn_to]["received"].add(f_from)
     def status(self):
         stat = super().status()
@@ -558,7 +585,8 @@ class CommsFlow(MultiFlow):
         cop = self.__class__({s:states[s] for s in self._initstates}, self.name, self.type, glob=glob)
         for fxn in self.fxns:
             cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status(),
-                             prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]))
+                             prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]),
+                             ports = getattr(self.fxns[fxn], "locals", []))
         return cop
 
 class Block(Common):
