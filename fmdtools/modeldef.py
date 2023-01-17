@@ -2594,10 +2594,10 @@ class SampleApproach():
                 overallrate=self.comprates[fxnname][compname]
                         
             key_phases = mdl.fxns[fxnname].key_phases_by
+            if modephases and type(self._fxnmodes[fxnname, mode]['oppvect'])==list:
+                raise Exception("Poorly specified oppvect for fxn: "+fxnname+" mode: "+mode+"--provide a dict to use with modephases")
             
             if modephases and join_modephases and (key_phases not in ['global', 'none']):
-                if type (self._fxnmodes[fxnname, mode]['oppvect'])==list:
-                    raise Exception("Poorly specified oppvect for fxn: "+fxnname+" mode: "+mode+"--provide a dict to use with modephases")
                 oppvect = {**{phase:0 for phase in modephases[fxnname]}, **self._fxnmodes[fxnname, mode]['oppvect']}
                 fxnphases = {m:[self.phases[fxnname][ph] for ph in m_phs] for m, m_phs in modephases[fxnname].items()}
             else:
@@ -2693,8 +2693,8 @@ class SampleApproach():
                         if len(ts)==1:      possible_phasetimes = ts
                         elif len(ts)<2:     possible_phasetimes= ts
                         else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[-1]+self.tstep, self.tstep))
-                    possible_phasetimes.sort()
                     possible_phasetimes=list(set(possible_phasetimes))
+                    possible_phasetimes.sort()
                     if len(possible_phasetimes)<=1: 
                         a=1
                         self.add_phasetimes(fxnmode, phaseid, possible_phasetimes)
