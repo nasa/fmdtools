@@ -1029,7 +1029,7 @@ def update_dicthist(current_dict, dicthist, t_ind):
                 if t_ind >= len(hist):
                     raise Exception("Time beyond range of model history--check staged execution and simulation time settings (end condition, mdl.times)")
                 if not np.can_cast(type(current_dict[att]), type(hist[t_ind])):
-                    raise Exception(str(att)+" changed type: "+type(hist[t_ind])+" to "+type(current_dict[att])+" at t_ind="+str(t_ind))
+                    raise Exception(str(att)+" changed type: "+str(type(hist[t_ind]))+" to "+str(type(current_dict[att]))+" at t_ind="+str(t_ind))
                 try:    
                     if type(current_dict[att]) in [list, np.ndarray]:
                         hist[t_ind]=copy.deepcopy(current_dict[att])
