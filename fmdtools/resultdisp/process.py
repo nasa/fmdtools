@@ -234,6 +234,7 @@ def modephases(mdlhist):
     """
     modephases={}
     phases={}
+    times = mdlhist['time']
     for fxn in mdlhist["functions"].keys():
         modehist = mdlhist["functions"][fxn].get('mode', [])
         if len(modehist)!=0:    
@@ -247,7 +248,7 @@ def modephases(mdlhist):
                 modephases[fxn][mode] = set()
                 for i, ind in enumerate(modeinds):
                     if ind+1 not in modeinds:
-                        phases_unsorted [phaseid] =[startind, ind]
+                        phases_unsorted[phaseid] =[times[startind], times[ind]]
                         modephases[fxn][mode].add(phaseid)
                         if i!=len(modeinds)-1: 
                             startind = modeinds[i+1]
