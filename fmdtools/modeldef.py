@@ -113,6 +113,14 @@ class Common(object):
                 if sign*newval <= sign*value[1]:    setattr(self, name, newval)
                 else:                               setattr(self,name,value[1])
             else:                   setattr(self, name, getattr(self,name)+ value)
+    def roundto(self, **kwargs):
+        """
+        Rounds the given arguments to a given resolution.
+        e.g., self.Pos.roundto(x=0.1) will round Pos.x to the nearest 0.1.
+        """
+        for name, value in kwargs.items():
+            current = getattr(self,name)
+            setattr(self, name, round(current/value)*value)
     def limit(self,**kwargs):
         """Enforces limits on the value of a given property. Mainly useful for
         reducing length/adding clarity to increment statements.
@@ -2693,7 +2701,7 @@ class SampleApproach():
                         if len(ts)==1:      possible_phasetimes = ts
                         elif len(ts)<2:     possible_phasetimes= ts
                         else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[-1]+self.tstep, self.tstep))
-                    possible_phasetimes=list(set(possible_phasetimes))
+                    possible_phasetimes=list(set([np.round(t,4) for t in possible_phasetimes]))
                     possible_phasetimes.sort()
                     if len(possible_phasetimes)<=1: 
                         a=1
