@@ -795,8 +795,8 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
         elif track_times[0]=='times':       
             histrange = track_times[1]
             shift=0
-        if prevhist:    mdlhist = copy.deepcopy(prevhist)
-        elif nomhist:   mdlhist = copy.deepcopy(nomhist)
+        if prevhist:    mdlhist = proc.copy_hist(prevhist)
+        elif nomhist:   mdlhist = proc.copy_hist(nomhist)
         else:           mdlhist = init_mdlhist(mdl, histrange, track=track, run_stochastic=run_stochastic)
     else: 
         timerange = np.arange(mdl.times[0], mdl.times[-1]+mdl.tstep, mdl.tstep)
@@ -1072,7 +1072,7 @@ def update_blockhist(blockname, block, blockhist, t_ind):
             if not np.can_cast(type(value), type(blockhist[state][t_ind])):
                 raise Exception(str(blockname)+" state "+str(state)+" changed type: "+str(type(blockhist[state][t_ind]))+" to "+str(type(value))+" at t_ind="+str(t_ind))
     if 'probdens' in blockhist: blockhist['probdens'][t_ind]=block.probdens
-def cut_mdlhist(mdlhist, ind):
+def cut_mdlhist(mdlhist, ind, newcopy=False):
     """Cuts unsimulated values from end of array
     
     Parameters
@@ -1087,6 +1087,7 @@ def cut_mdlhist(mdlhist, ind):
     mdlhist : dict
         The model history until the given index.
     """
+    if newcopy: mdlhist = proc.copy_hist(mdlhist)
     if len(mdlhist['time'])>ind+1:
         mdlhist['time'] = mdlhist['time'][:ind+1]
         if 'flows' in mdlhist:
