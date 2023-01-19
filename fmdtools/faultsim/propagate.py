@@ -362,8 +362,10 @@ def create_single_fault_scen(mdl, fxnname, faultmode, time):
     else:
         if faultmode in fxn.compfaultmodes:
             fxn = fxn.components[fxn.compfaultmodes[faultmode]]
+            faultmode = faultmode[len(fxn.localname):]
         elif faultmode in fxn.actfaultmodes:
             fxn = fxn.actions[fxn.actfaultmodes[faultmode]]
+            faultmode = faultmode[len(fxn.localname):]
         if fxn.faultmodes[faultmode].get('probtype', '')=='rate':
             scen['properties']['rate']=fxn.failrate*fxn.faultmodes[faultmode]['dist']*eq_units(fxn.faultmodes[faultmode]['units'], mdl.units)*(mdl.times[-1]-mdl.times[0]) # this rate is on a per-simulation basis
         elif fxn.faultmodes[faultmode].get('probtype','')=='prob':
