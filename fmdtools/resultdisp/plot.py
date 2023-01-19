@@ -675,7 +675,7 @@ def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
         else:           fig.suptitle(title,fontweight='bold')
     return fig, ax
 
-def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'both', figsize = "default", v_padding=0.5, title_padding=-0.05):
+def phases(mdlphases, modephases=[], mdl=[], dt=1.0, singleplot = True, phase_ticks = 'both', figsize = "default", v_padding=0.5, title_padding=-0.05):
     """
     Plots the phases of operation that the model progresses through.
 
@@ -706,7 +706,7 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'b
         Matplotlib figures to edit/use.
 
     """
-    if mdl: mdlphases["Model"] = mdl.phases
+    if mdl: mdlphases["Model"] = mdl.phases; dt=mdl.tstep
     if singleplot:
         num_plots = len(mdlphases)
         if figsize=='default': figsize = (4, 2*num_plots)
@@ -726,7 +726,7 @@ def phases(mdlphases, modephases=[], mdl=[], singleplot = True, phase_ticks = 'b
             mode_nums = {ph:i for i,ph in enumerate(fxnphases)}
             ylabels = list(mode_nums.keys())
         
-        phaseboxes = [((v[0]-.5,mode_nums[k]-.4),(v[0]-.5,mode_nums[k]+.4),(v[1]+.5,mode_nums[k]+.4),(v[1]+.5,mode_nums[k]-.4)) for k,v in fxnphases.items()]
+        phaseboxes = [((v[0]-.5*dt,mode_nums[k]-.4),(v[0]-.5*dt,mode_nums[k]+.4),(v[1]+.5*dt,mode_nums[k]+.4),(v[1]+.5*dt,mode_nums[k]-.4)) for k,v in fxnphases.items()]
         color_options = list(mcolors.TABLEAU_COLORS.keys())[0:len(ylabels)]
         colors = [color_options[mode_nums[phase]] for phase in fxnphases]
         bars = PolyCollection(phaseboxes, facecolors=colors)
