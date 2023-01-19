@@ -7,7 +7,7 @@ required = ["scipy","tqdm","networkx","numpy","matplotlib","pandas","ordered-set
 
 setuptools.setup(
     name="fmdtools",
-    version="1.3.2",
+    version="1.3.3",
     author="Daniel Hulse",
     author_email="daniel.e.hulse@nasa.gov",
     description="System resilience modelling, simulation, and assessment in Python",
