@@ -113,6 +113,14 @@ class Common(object):
                 if sign*newval <= sign*value[1]:    setattr(self, name, newval)
                 else:                               setattr(self,name,value[1])
             else:                   setattr(self, name, getattr(self,name)+ value)
+    def roundto(self, **kwargs):
+        """
+        Rounds the given arguments to a given resolution.
+        e.g., self.Pos.roundto(x=0.1) will round Pos.x to the nearest 0.1.
+        """
+        for name, value in kwargs.items():
+            current = getattr(self,name)
+            setattr(self, name, round(current/value)*value)
     def limit(self,**kwargs):
         """Enforces limits on the value of a given property. Mainly useful for
         reducing length/adding clarity to increment statements.
@@ -229,6 +237,11 @@ class Common(object):
             if getattr(self, var[0]): 
                 subattr = getattr(self, var[0])
                 if hasattr(subattr, 'set_var'): subattr.set_var(var[1:], val)
+                elif type(subattr)==dict:  
+                    if var[1] not in subattr:
+                        subattr[eval(var[1])]=val
+                    else:                       
+                        subattr[var[1]]=val
                 else: raise Exception("Model sub-attribute "+str(subattr)+" does not inherit from Common")
             else: raise Exception("Invalid variables :"+str(var))
     def get_var(self, var):
@@ -2769,7 +2782,8 @@ class SampleApproach():
                     number of faults is large
         sampparams : dict, optional
             Defines how specific modes in the model will be sampled over time. The default is {}. 
-            Has structure: {(fxnmode,phase): sampparam}, where sampparam has structure:
+            Has structure: {key: sampparam}, where a key may be 'fxnmode','fxnname','mode', 'phase', or ('fxnmode','phase') 
+            and sampparam has structure:
                 - 'samp' : str ('quad', 'fullint', 'evenspacing','randtimes','symrandtimes')
                     sample strategy to use (quadrature, full integral, even spacing, random times, likeliest, or symmetric random times)
                 - 'numpts' : float
@@ -2929,10 +2943,10 @@ class SampleApproach():
                 overallrate=self.comprates[fxnname][compname]
                         
             key_phases = mdl.fxns[fxnname].key_phases_by
+            if modephases and type(self._fxnmodes[fxnname, mode]['oppvect'])==list:
+                raise Exception("Poorly specified oppvect for fxn: "+fxnname+" mode: "+mode+"--provide a dict to use with modephases")
             
             if modephases and join_modephases and (key_phases not in ['global', 'none']):
-                if type (self._fxnmodes[fxnname, mode]['oppvect'])==list:
-                    raise Exception("Poorly specified oppvect for fxn: "+fxnname+" mode: "+mode+"--provide a dict to use with modephases")
                 oppvect = {**{phase:0 for phase in modephases[fxnname]}, **self._fxnmodes[fxnname, mode]['oppvect']}
                 fxnphases = {m:[self.phases[fxnname][ph] for ph in m_phs] for m, m_phs in modephases[fxnname].items()}
             else:
@@ -3020,7 +3034,11 @@ class SampleApproach():
             for phaseid, rate in ratedict.items():
                 if rate > 0.0:
                     times = self.mode_phase_map[fxnmode][phaseid]
-                    param = params.get((fxnmode,phaseid), default)
+                    if phaseid in params:       param = params.get(phaseid, default)
+                    elif fxnmode in params:     param = params.get(fxnmode, default)
+                    elif fxnmode[0] in params:  param = params.get(fxnmode[0], default)
+                    elif fxnmode[1] in params:  param = params.get(fxnmode[1], default)
+                    else:                       param = params.get((fxnmode,phaseid), default)
                     self.sampparams[fxnmode, phaseid] = param
                     if type(times[0])!=list: times=[times]
                     possible_phasetimes=[]
@@ -3028,8 +3046,8 @@ class SampleApproach():
                         if len(ts)==1:      possible_phasetimes = ts
                         elif len(ts)<2:     possible_phasetimes= ts
                         else:               possible_phasetimes = possible_phasetimes + list(np.arange(ts[0], ts[-1]+self.tstep, self.tstep))
+                    possible_phasetimes=list(set([np.round(t,4) for t in possible_phasetimes]))
                     possible_phasetimes.sort()
-                    possible_phasetimes=list(set(possible_phasetimes))
                     if len(possible_phasetimes)<=1: 
                         a=1
                         self.add_phasetimes(fxnmode, phaseid, possible_phasetimes)
@@ -3075,11 +3093,11 @@ class SampleApproach():
             if param['numpts']+2 > len(possible_pts): pts = possible_pts
             else: pts= [int(round(np.quantile(possible_pts, p/(param['numpts']+1)))) for p in range(param['numpts']+2)][1:-1]
         elif param['samp']=='quadrature':
-            quantiles = param['quad']['nodes']/2 +0.5
+            quantiles = np.array(param['quad']['nodes'])/2 +0.5
             if len(quantiles) > len(possible_pts): pts = possible_pts
             else: 
                 pts= [int(round(np.quantile(possible_pts, q))) for q in quantiles]
-                weights=param['quad']['weights']/sum(param['quad']['weights'])
+                weights=np.array(param['quad']['weights'])/sum(param['quad']['weights'])
         elif param['samp']=='randtimes':
             if param['numpts']>=len(possible_pts): pts = possible_pts
             else: pts= [possible_pts.pop(np.random.randint(len(possible_pts))) for i in range(min(param['numpts'], len(possible_pts)))]

@@ -105,8 +105,16 @@ def typehist(mdl, reshist):
         typehist['functions'][fxnclass]['numfaults'] = np.sum([reshist['functions'][fxn]['numfaults'] for fxn in fxns], axis=0)
         typehist['functions'][fxnclass]['faults'] = {fxn:reshist['functions'][fxn]['numfaults'] for fxn in fxns}
     return typehist
-    
-def hist(mdlhist, nomhist={}, returndiff=True):
+
+def copy_hist(mdlhist):
+    """Creates a new independent copy of the current history dict"""
+    newhist ={}
+    for k, v in mdlhist.items():
+        if type(v)==dict:   newhist[k]=copy_hist(v)
+        else:               newhist[k]=np.copy(v)
+    return newhist
+     
+def hist(mdlhist, nomhist={}, returndiff=True, suppress_warning=False):
     """
     Compares model history with the nominal model history over time to make a history of degradation.
 
@@ -130,8 +138,8 @@ def hist(mdlhist, nomhist={}, returndiff=True):
     """
     if nomhist: mdlhist={'nominal':nomhist, 'faulty':mdlhist}
     if len(mdlhist['faulty']['time']) != len(mdlhist['nominal']['time']): 
-           print("Faulty and nominal scenarios have different simulation times--cutting comparison to shared range.")
-           mdlhist['nominal'] = cut_mdlhist(mdlhist['nominal'], len(mdlhist['faulty']['time'])-1)
+           if not suppress_warning: print("Faulty and nominal scenarios have different simulation times--cutting comparison to shared range.")
+           mdlhist['nominal'] = cut_mdlhist(mdlhist['nominal'], len(mdlhist['faulty']['time'])-1, newcopy=True)
            mdlhist['faulty'] = cut_mdlhist(mdlhist['faulty'], len(mdlhist['nominal']['time'])-1)
     reshist = {}
     reshist['time'] = mdlhist['nominal']['time']
@@ -234,6 +242,7 @@ def modephases(mdlhist):
     """
     modephases={}
     phases={}
+    times = mdlhist['time']
     for fxn in mdlhist["functions"].keys():
         modehist = mdlhist["functions"][fxn].get('mode', [])
         if len(modehist)!=0:    
@@ -247,7 +256,7 @@ def modephases(mdlhist):
                 modephases[fxn][mode] = set()
                 for i, ind in enumerate(modeinds):
                     if ind+1 not in modeinds:
-                        phases_unsorted [phaseid] =[startind, ind]
+                        phases_unsorted[phaseid] =[times[startind], times[ind]]
                         modephases[fxn][mode].add(phaseid)
                         if i!=len(modeinds)-1: 
                             startind = modeinds[i+1]

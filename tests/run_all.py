@@ -5,9 +5,9 @@ Use this script to run all tests in the repository.
 import unittest
 import os, sys
 
-
 if __name__=="__main__":
-
+    import time
+    t=time.time()
     loader = unittest.TestLoader()
     suite = loader.discover(os.getcwd())
     
@@ -22,4 +22,6 @@ if __name__=="__main__":
     
     runner = unittest.TextTestRunner()
     runner.run(suite)
+    t_end=time.time()-t
+    print(t_end)
 
