@@ -386,7 +386,7 @@ class MultiFlow(Flow):
         if type(attrs)==list:   atts = {k:v for k,v in self._initstates.items() if k in attrs}
         elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in self._initstates}
         
-        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self, ftype=self.type)
+        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self)
         else:                   newflow = self.__class__(atts, name, glob=self, ftype=self.type)
         setattr(self, name, newflow)
         self.locals.append(name)
@@ -497,7 +497,7 @@ class CommsFlow(MultiFlow):
             self.fxns[name]={"internal":    ins, 
                                 "out":      outs, 
                                 "in":       kwargs.get("prev_in", {}),
-                                "received": kwargs.get("received", set())}
+                                "received": kwargs.get("received", {})}
         return self.fxns[name]["internal"]
         
     def send(self, fxn_to, fxn_from="local", *states):
@@ -530,7 +530,8 @@ class CommsFlow(MultiFlow):
             port_out.assign(port_internal, *states)
             
             if fxn_from not in self.glob.fxns[f_to]["received"]:
-                self.glob.fxns[f_to]["in"][fxn_from]=states
+                newstates = tuple(set([*self.glob.fxns[f_to]["in"].get(fxn_from,()), *states]))
+                self.glob.fxns[f_to]["in"][fxn_from]=newstates
     def inbox(self, fxnname="local"):
         """ Provides a list of messages which have not been received by the function yet"""
         fxnname = self.get_local_name(fxnname)
@@ -579,7 +580,7 @@ class CommsFlow(MultiFlow):
             port_from = self.get_port(f_from, fxn_to, "out")
             port_to = self.get_port(fxn_to, f_from, "internal")
             port_to.assign(port_from,  *args)
-            self.glob.fxns[fxn_to]["received"].add(f_from)
+            self.glob.fxns[fxn_to]["received"][f_from]=args
     def status(self):
         stat = super().status()
         for f in self.fxns:
@@ -595,7 +596,7 @@ class CommsFlow(MultiFlow):
         super().reset()
         for fxn in self.fxns:
             self.fxns[fxn]["in"] = {}
-            self.fxns[fxn]["received"] = set()
+            self.fxns[fxn]["received"] = {}
     def copy(self, glob=[]):
         states = super().status()
         cop = self.__class__({s:states[s] for s in self._initstates}, self.name, self.type, glob=glob)
