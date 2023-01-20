@@ -1,4 +1,4 @@
-# Communications-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 Created on Tue Aug  9 12:44:01 2022
 
@@ -18,22 +18,18 @@ class Mover(FxnBlock):
     def __init__(self, name, flows, params):
         self.set_atts(**params)
         FxnBlock.__init__(self, name,flows, comms={"Communications":"internal_info"},local={"Location":"loc"})
-        self.internal_info.x = 20.0
-        self.internal_info.y = 20.0
-
     def dynamic_behavior(self, time):
         #move
         self.loc.inc(x=self.x_up, y=self.y_up)
         # the inbox should be cleared each timestep to allow new messages
-        
+        self.internal_info.clear_inbox()
+    def behavior(self, time):
         #recieve messages
         self.internal_info.receive()
-        self.internal_info.clear_inbox()
         #communicate
-        if self.internal_info.y == 20 and self.internal_info.x == 20: self.internal_info.send('all', 'local', 'x','y')
-        if self.x_up==0.0: 
+        if self.x_up==0.0:  
             self.internal_info.y=self.loc.y
-            self.internal_info.send("all", "local", 'y')
+            self.internal_info.send("all", "local", "y")
         elif self.y_up==0.0:   
             self.internal_info.x=self.loc.x
             self.internal_info.send("all", "local", "x")
@@ -50,21 +46,18 @@ class Coordinator(FxnBlock):
     def __init__(self, name, flows):
         FxnBlock.__init__(self, name,flows)
         self.coord_view= self.Communications.create_comms(name, ports=["Mover_1", "Mover_2"])
-        # self.coord_view.x = 20.0
-        # self.coord_view.y = 20.0
     def dynamic_behavior(self, time):
-        self.coord_view.receive()
         self.coord_view.clear_inbox()
+    def behavior(self, time):
+        self.coord_view.receive()
         self.coord_view.update("local", "Mover_1", "y")
         self.coord_view.update("local", "Mover_2", "x")
-        
 class TestModel(Model):
     def __init__(self, params={}, modelparams={'times':[0,10], 'tstep':1}, valparams={}):
         super().__init__(params=params, modelparams=modelparams, valparams=valparams)
         
         self.add_flow("Communications",{"x":0.0, "y":1.0}, fclass=CommsFlow)
         self.add_flow("Location", {"x":0.0, "y":0.0}, fclass=MultiFlow)
-
         self.add_fxn("Mover_1", ["Communications", "Location"], fclass=Mover, fparams= {"x_up":0.0, "y_up":1.0})
         self.add_fxn("Mover_2", ["Communications", "Location"], fclass=Mover2, fparams= {"x_up":1.0, "y_up":0.0})
         
@@ -142,7 +135,7 @@ class modeldef_Tests(unittest.TestCase, CommonTests):
 
 
 if __name__ == '__main__':
- #   unittest.main()
+    unittest.main()
     
     mdl = TestModel()
     mdl.flows["Communications"].Mover_1.x=25
