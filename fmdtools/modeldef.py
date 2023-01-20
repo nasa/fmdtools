@@ -386,8 +386,8 @@ class MultiFlow(Flow):
         if type(attrs)==list:   atts = {k:v for k,v in self._initstates.items() if k in attrs}
         elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in self._initstates}
         
-        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self)
-        else:                   newflow = self.__class__(atts, name, glob=self)
+        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self, ftype=self.type)
+        else:                   newflow = self.__class__(atts, name, glob=self, ftype=self.type)
         setattr(self, name, newflow)
         self.locals.append(name)
         return newflow
