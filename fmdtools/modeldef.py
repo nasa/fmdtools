@@ -470,7 +470,7 @@ class CommsFlow(MultiFlow):
     def create_comms(self, name, attrs="all", out_attrs="all", ports=[], **kwargs):
         """
         Creates an individual view of the CommsFlow (e.g., for a function), with an
-        internal view, out view, in dict, and recieved set.
+        internal view, out view, in dict, and received set.
 
         Parameters
         ----------
@@ -554,7 +554,7 @@ class CommsFlow(MultiFlow):
         if portname in port.locals:
             port = getattr(port, portname)
         return port
-    def receive(self, fxn_to="local", fxn_from="all"): #need to add something for resolving errors
+    def receive(self, fxn_to="local", fxn_from="all", remove_from_in=True): #need to add something for resolving errors
         """ Updates the internal view of the flow from external functions 
 
         Parameters
@@ -563,6 +563,8 @@ class CommsFlow(MultiFlow):
             Name of the view to recieve the view. The default is "local".
         fxn_from : str/list, optional
             Name of the function to send from. The default is "all".
+        remove_from_in : bool
+            Whether to remove the notification from the "inbox." The default is True
         """
         fxn_to = self.get_local_name(fxn_to)
         f_to = self.get_view(fxn_to)
@@ -572,7 +574,8 @@ class CommsFlow(MultiFlow):
         elif type(fxn_from)==str:   fxn_from = {fxn_from:self.glob.fxns[fxn_to]["in"][fxn_from] for i in range(1) if fxn_from in self.glob.fxns[fxn_to]["in"]}
         elif type(fxn_from)==list:  fxn_from = {f:self.glob.fxns[fxn_to]["in"][f] for f in fxn_from if f in self.glob.fxns[fxn_to]["in"]}
         for f_from in list(fxn_from):
-            args = self.glob.fxns[fxn_to]["in"].pop(f_from)
+            if remove_from_in:  args = self.glob.fxns[fxn_to]["in"].pop(f_from)
+            else:               args = self.glob.fxns[fxn_to]["in"][f_from]
             port_from = self.get_port(f_from, fxn_to, "out")
             port_to = self.get_port(fxn_to, f_from, "internal")
             port_to.assign(port_from,  *args)
