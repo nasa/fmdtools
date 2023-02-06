@@ -22,8 +22,9 @@ TABLE OF CONTENTS
  :glob:
  
  README
- Examples
- Glossary
+ docs/Development Guide
+ docs/Examples
+ docs/Glossary
  docs/fmdtools
  
  :ref:`genindex`
