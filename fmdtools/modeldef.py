@@ -276,7 +276,7 @@ class Flow(Common):
     """
     Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
     """
-    def __init__(self, states, name, ftype='generic', suppress_warnings=False):
+    def __init__(self, states, name, ftype='generic', suppress_warnings=False, params={}):
         """
         Instances the flow with given states.
 
@@ -289,6 +289,8 @@ class Flow(Common):
         """
         self.type=ftype
         self.name=name
+        self.params=params
+        self.set_atts(**params)
         self._initstates=states.copy()
         self._states=list(states.keys())
         for state in self._states:
@@ -332,7 +334,7 @@ class Flow(Common):
         for state in self._states:
             states[state]=getattr(self,state)
         if self.__class__ in [Flow, MultiFlow, CommsFlow]:
-            copy = self.__class__(states, self.name, self.type)
+            copy = self.__class__(states, self.name, self.type, params=self.params)
         else:
             copy = self.__class__()
             for state in self._states:
@@ -352,9 +354,9 @@ class MultiFlow(Flow):
     A MultiFlow can have any number of local views (listed by name in MultiFlow.locals)
     as well as a single global view (which may represent the actual value)
     """
-    def __init__(self, flowdict, name, ftype="MultiFlow", glob=[]):
+    def __init__(self, flowdict, name, ftype="MultiFlow", glob=[], params={}):
         self.locals=[]
-        super().__init__(flowdict, name, ftype=ftype, suppress_warnings=True)
+        super().__init__(flowdict, name, ftype=ftype, suppress_warnings=True, params=params)
         if not glob: self.glob=self
         else:        self.glob=glob
     def __repr__(self):
@@ -362,7 +364,7 @@ class MultiFlow(Flow):
         for l in self.locals:
             rep_str=rep_str+"\n   "+self.get_view(l).__repr__()
         return rep_str
-    def create_local(self, name, attrs = "all"):
+    def create_local(self, name, attrs = "all", params={}):
         """
         Creates a local view of the Flow
 
@@ -375,6 +377,8 @@ class MultiFlow(Flow):
                 str: to use if only using a single attribute of the local flow
                 list: list of attributes to use in the local flow
                 dict: dict of attributes to use in the local flow and their initial values
+        params : dict
+            Parameters to instantiate the local version with (if params used in the flow)
 
         Returns
         -------
@@ -386,8 +390,8 @@ class MultiFlow(Flow):
         if type(attrs)==list:   atts = {k:v for k,v in self._initstates.items() if k in attrs}
         elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in self._initstates}
         
-        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self)
-        else:                   newflow = self.__class__(atts, name, glob=self, ftype=self.type)
+        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self, params=params)
+        else:                   newflow = self.__class__(atts, name, glob=self, ftype=self.type, params=params)
         setattr(self, name, newflow)
         self.locals.append(name)
         return newflow
@@ -434,9 +438,9 @@ class MultiFlow(Flow):
         super().reset()
         for local in self.locals:
             getattr(self, local).reset()
-    def copy(self, glob=[]):
+    def copy(self, glob=[], params={}):
         states = super().status()
-        cop = self.__class__(states, self.name, self.type, glob=glob)
+        cop = self.__class__(states, self.name, self.type, glob=glob, params=params)
         for loc in self.locals:
             local = getattr(self, loc)
             cop.create_local(local.name, attrs=local.status())
@@ -454,9 +458,9 @@ class CommsFlow(MultiFlow):
         - inbox, for seeing what messages may be received
         - clear_inbox, for clearing the inbox to enable more messages to be received
     """
-    def __init__(self, flowdict, name, ftype="CommsFlow", glob=[]):
+    def __init__(self, flowdict, name, ftype="CommsFlow", glob=[], params={}):
         self.fxns = {}
-        super().__init__(flowdict, name, ftype=ftype, glob=glob)
+        super().__init__(flowdict, name, ftype=ftype, glob=glob, params=params)
     def __repr__(self):
         rep_str = Flow.__repr__(self)
         if self.name==self.glob.name:   
@@ -597,9 +601,9 @@ class CommsFlow(MultiFlow):
         for fxn in self.fxns:
             self.fxns[fxn]["in"] = {}
             self.fxns[fxn]["received"] = {}
-    def copy(self, glob=[]):
+    def copy(self, glob=[], params={}):
         states = super().status()
-        cop = self.__class__({s:states[s] for s in self._initstates}, self.name, self.type, glob=glob)
+        cop = self.__class__({s:states[s] for s in self._initstates}, self.name, self.type, glob=glob, params=params)
         for fxn in self.fxns:
             cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status(),
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]),
@@ -1476,7 +1480,7 @@ class FxnBlock(Block):
         if gtype=='combined' or gtype=='conditions':
             nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=30, arrowstyle='->', node_shape='s', node_size=100)
         return plt.gcf()
-    def add_flow(self,flowname, flowdict={}, flowtype='', fclass=Flow):
+    def add_flow(self,flowname, flowdict={}, flowtype='', fclass=Flow, params={}):
         """
         Adds a flow with given attributes to the Function Block
 
@@ -1493,6 +1497,8 @@ class FxnBlock(Block):
         fclass : Class, optional
             Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
             Class must take flowname, flowdict, flowtype as input to __init__()
+        params : dict, optional
+            Parameters to pass the flow. Default is {}
         """
         if not getattr(self, 'is_copy', False):
             self.internal_flows[flowname] = init_flow(flowname,flowdict, flowtype, fclass)
@@ -1841,7 +1847,7 @@ class Model(object):
             if fxn.get_rand_states(auto_update_only=auto_update_only): 
                 rand_states[fxnname]= fxn.get_rand_states(auto_update_only=auto_update_only)
         return rand_states
-    def add_flows(self, flownames, flowdict={}, flowtype='generic', fclass=Flow):
+    def add_flows(self, flownames, flowdict={}, flowtype='generic', fclass=Flow, params={}):
         """
         Adds a set of flows with the same type and initial parameters
 
@@ -1858,9 +1864,11 @@ class Model(object):
         fclass : Class, optional
             Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
             Class must take flowname, flowdict, flowtype as input to __init__()
+        params : dict, optional
+            Parameter dictionary to instantiate the flow with
         """
-        for flowname in flownames: self.add_flow(flowname, flowdict, flowtype, fclass)
-    def add_flow(self,flowname, flowdict={}, flowtype='', fclass=Flow):
+        for flowname in flownames: self.add_flow(flowname, flowdict, flowtype, fclass, params)
+    def add_flow(self,flowname, flowdict={}, flowtype='', fclass=Flow, params={}):
         """
         Adds a flow with given attributes to the model.
 
@@ -1877,9 +1885,11 @@ class Model(object):
         fclass : Class, optional
             Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
             Class must take flowname, flowdict, flowtype as input to __init__()
+        params : dict, optional
+            Parameter dictionary to instantiate the flow with
         """
         if not getattr(self, 'is_copy', False):
-            self.flows[flowname] = init_flow(flowname,flowdict, flowtype, fclass)
+            self.flows[flowname] = init_flow(flowname,flowdict, flowtype, fclass, params)
             setattr(self, flowname, self.flows[flowname])
     def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None'):
         """
@@ -2295,11 +2305,11 @@ class Model(object):
             variable_values[i]=f.get_var(var)
         if len(variable_values)==1 and trunc_tuple: return variable_values[0]
         else:                                       return tuple(variable_values)
-def init_flow(flowname, flowdict={}, flowtype='', fclass=Flow):
+def init_flow(flowname, flowdict={}, flowtype='', fclass=Flow, params={}):
     if not flowtype:                flowtype = flowname
-    if not flowdict:                fl=fclass({flowname:1}, flowname, flowtype)
+    if not flowdict:                fl=fclass({flowname:1}, flowname, flowtype, params=params)
     elif type(flowdict) == set:     fl=fclass({f:1 for f in flowdict}, flowname, flowtype)
-    elif type(flowdict) == dict:    fl=fclass(flowdict, flowname,flowtype)
+    elif type(flowdict) == dict:    fl=fclass(flowdict, flowname,flowtype, params=params)
     elif isinstance(flowdict, Flow):fl=flowdict
     else: raise Exception('Invalid flow. Must be dict or flow')
     return fl
