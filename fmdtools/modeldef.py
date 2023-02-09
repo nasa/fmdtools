@@ -414,16 +414,24 @@ class MultiFlow(Flow):
 
         Parameters
         ----------
-        to_update : str, optional
-            Name of the view to update. The default is "local".
+        to_update : str/list, optional
+            Name of the view to update. The default is "local". If "all", updates all locals (or ports for commsflows). 
+            If a list is provided, updates the list (in locals)
         to_get : str, optional
             Name of the view to update from. The default is "global".
         *states : str
             States to update (defaults to all states)
         """
-        up = self.get_view(to_update)
         get = self.get_view(to_get)
-        up.assign(get, *states)
+        if to_update=='all':            
+            if hasattr(self, 'fxns'):   updatelist = [*self.fxns]
+            else:                       updatelist = self.locals
+        elif type(to_update)==str:      updatelist = [to_update]
+        elif type(to_update)==list:     updatelist = to_update
+        else: raise Exception("Invalid to_update: "+str(to_update))
+        for to_up in updatelist:
+            up = self.get_view(to_update)
+            up.assign(get, *states)
     def status(self):
         stat = super().status()
         for l in self.locals:
@@ -572,10 +580,9 @@ class CommsFlow(MultiFlow):
             Whether to remove the notification from the "inbox." The default is True
         """
         fxn_to = self.get_local_name(fxn_to)
-        f_to = self.get_view(fxn_to)
         
         if fxn_from=="all":         fxn_from = self.glob.fxns[fxn_to]["in"]
-        elif fxn_to=="ports":       fxn_from=[f for f in fxn_to.locals]
+        elif fxn_from=="ports":     fxn_from=[f for f in fxn_to.locals]
         elif type(fxn_from)==str:   fxn_from = {fxn_from:self.glob.fxns[fxn_to]["in"][fxn_from] for i in range(1) if fxn_from in self.glob.fxns[fxn_to]["in"]}
         elif type(fxn_from)==list:  fxn_from = {f:self.glob.fxns[fxn_to]["in"][f] for f in fxn_from if f in self.glob.fxns[fxn_to]["in"]}
         for f_from in list(fxn_from):
