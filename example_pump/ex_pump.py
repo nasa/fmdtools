@@ -20,13 +20,14 @@ The flows are:
     - Water_out
     - Signal input (on/off)
 """
-import sys, os
-sys.path.insert(0, os.path.join('..'))
 
-
-from fmdtools.modeldef import *
+from fmdtools.modeldef.block import FxnBlock
+from fmdtools.modeldef.flow import Flow 
+from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.approach import SampleApproach, NominalApproach
 import fmdtools.resultdisp as rd
 import fmdtools.faultsim.propagate as propagate
+import numpy as np
 
 """
 DEFINE MODEL FUNCTIONS
@@ -205,6 +206,21 @@ class Water(Flow):
                     'level':1.0}
         super().__init__(attributes, 'Water',ftype='Water', suppress_warnings=True)
         self.customattribute='hello'
+
+## Functions for defining resilience metrics
+def reseting_accumulate(vec):
+    """ Accummulates vector for all positive output (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,0,1,2])"""
+    newvec = vec
+    val=0
+    for ind, i in enumerate(vec):
+        if i > 0: val = i + val
+        else:    val = 0
+        newvec[ind] = val
+    return newvec
+
+def accumulate(vec):
+    """ Accummulates vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])"""
+    return [sum(vec[:i+1]) for i in range(len(vec)) ]
 
 ##DEFINE MODEL OBJECT
 class Pump(Model):

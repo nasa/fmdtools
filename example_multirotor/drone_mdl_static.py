@@ -1,10 +1,7 @@
-import sys, os
-sys.path.insert(1,os.path.join(".."))
+import numpy as np
 
-from fmdtools.modeldef import FxnBlock
-from fmdtools.modeldef import Flow
-from fmdtools.modeldef import Model
-from fmdtools.modeldef import m2to1
+from fmdtools.modeldef.block import FxnBlock
+from fmdtools.modeldef.model import Model
 
 class StoreEE(FxnBlock):
     def __init__(self, name, flows):
@@ -147,6 +144,28 @@ class Trajectory(FxnBlock):
             self.x=0.0
         else:
             self.x=1.0
+
+def m2to1(x):
+    """
+    Multiplies a list of numbers which may take on the values infinity or zero. In deciding if num is inf or zero, the earlier values take precedence
+
+    Parameters
+    ----------
+    x : list 
+        numbers to multiply
+
+    Returns
+    -------
+    y : float
+        result of multiplication
+    """
+    if np.size(x)>2:    x=[x[0], m2to1(x[1:])]
+    if x[0]==np.inf:    y=np.inf
+    elif x[1]==np.inf:
+        if x[0]==0.0:   y=0.0
+        else:           y=np.inf
+    else:               y=x[0]*x[1]
+    return y
 
 class ViewEnvironment(FxnBlock):
     def __init__(self, name, flows):

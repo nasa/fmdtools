@@ -5,12 +5,14 @@ Author: Daniel Hulse
 Created: June 2019, revised Nov 2022
 Description: A fault model of a multi-rotor drone.
 """
-import sys, os
-sys.path.insert(1, os.path.join('..'))
 import numpy as np
-from fmdtools.modeldef import *
+from fmdtools.modeldef.block import FxnBlock, Component
+from fmdtools.modeldef.flow import Flow
+from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.approach import SampleApproach
 from fmdtools.faultsim import propagate
 from fmdtools.faultsim.search import ProblemInterface
+
 import fmdtools.resultdisp as rd
 import multiprocessing as mp
 
@@ -18,6 +20,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
+from drone_mdl_static import m2to1
 
 #Define functions
 class StoreEE(FxnBlock):

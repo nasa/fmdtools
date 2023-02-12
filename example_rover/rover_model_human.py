@@ -19,8 +19,9 @@ Flows:
     - EE
     - Camera
 """
-import sys, os
-sys.path.insert(0, os.path.join('..'))
+from fmdtools.modeldef.block import FxnBlock, Action
+from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.approach import SampleApproach, NominalApproach
 
 import random
 import scipy.stats as stats
@@ -29,7 +30,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp as rd
-from fmdtools.modeldef import *
+import itertools
 
 class Operations(FxnBlock):
     def __init__(self, name, flows, params):
@@ -938,7 +939,6 @@ def gen_long_deg_param_list (mdlhists, mdlhists_hum, t_total, total_scen):
 
 if __name__ == "__main__":
     import matplotlib.pyplot as pyplot
-    from rover_model import plot_trajectories
 
 
     mdl = Rover(params=gen_params('sine', amp=4))

@@ -21,7 +21,10 @@ The flows are:
     - Signal input (on/off)
 """
 
-from fmdtools.modeldef import *
+from fmdtools.modeldef.flow import Flow
+from fmdtools.modeldef.block import FxnBlock
+from fmdtools.modeldef.model import Model 
+from fmdtools.modeldef.approach import SampleApproach
 
 
 ##DEFINE MODEL FUNCTIONS
@@ -173,6 +176,21 @@ class MoveWat(FxnBlock):
 # Flows can be defined using Python classes that are instantiated as objects
 # Most flows are defined in the initialize() function, however custom flows can
 # also be defined here as needed
+
+## Functions for defining resilience metrics
+def reseting_accumulate(vec):
+    """ Accummulates vector for all positive output (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,0,1,2])"""
+    newvec = vec
+    val=0
+    for ind, i in enumerate(vec):
+        if i > 0: val = i + val
+        else:    val = 0
+        newvec[ind] = val
+    return newvec
+
+def accumulate(vec):
+    """ Accummulates vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])"""
+    return [sum(vec[:i+1]) for i in range(len(vec)) ]
     
 # Defining the class for the flow of Water
 # here the flow is given the custom attribute of 'hello'--further attributes

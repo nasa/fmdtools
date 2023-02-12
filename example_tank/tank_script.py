@@ -4,9 +4,6 @@ Created on Tue Mar 10 12:08:05 2020
 
 @author: Daniel Hulse
 """
-
-import sys
-sys.path.append('../')
 import numpy as np
 from scipy.optimize import minimize
 from scipy.optimize import differential_evolution
@@ -14,7 +11,7 @@ import time
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
 from tank_model import Tank
-from fmdtools.modeldef import SampleApproach
+from fmdtools.modeldef.approach import SampleApproach
 from tank_opt import *
 import matplotlib.pyplot as plt
 

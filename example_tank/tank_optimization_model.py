@@ -9,8 +9,8 @@ The functions of the system are:
 The Tank stores a set amount of water, the level of which is controlled by 
 inlet and outlet valves. 
 """
-
-from fmdtools.modeldef import Model, FxnBlock, Component
+from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.block import FxnBlock, Component
 import numpy as np
 
 class ImportLiquid(FxnBlock):

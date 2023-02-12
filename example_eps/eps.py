@@ -13,9 +13,8 @@ using solely the functions of the system.
 Further information about this system (data, more detailed models) is presented
 at: https://c3.nasa.gov/dashlink/projects/3/
 """
-import sys, os
-sys.path.insert(0, os.path.join('..'))
-from fmdtools.modeldef import FxnBlock, Model
+from fmdtools.modeldef.block import FxnBlock
+from fmdtools.modeldef.model import Model
 
 class ImportEE(FxnBlock):
     def __init__(self,name,flows):

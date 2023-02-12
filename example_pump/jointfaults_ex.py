@@ -6,10 +6,6 @@ This code tests some approaches to sampling joing fault scenarios
 
 @author: Daniel Hulse
 """
-
-import sys, os
-sys.path.insert(0, os.path.join('..'))
-
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp as rd
 from ex_pump import * #required to import entire module
