@@ -12,15 +12,11 @@ The use-cases shown are:
     -Testing a model
 """
 
-import sys, os
-sys.path.insert(0, os.path.join('..'))
-
-
-from fmdtools.modeldef import *
+from fmdtools.modeldef.flow import Flow
 import fmdtools.resultdisp as rd
 import fmdtools.faultsim.propagate as propagate
 
-from ex_pump import *
+from ex_pump import ImportEE, Water, MoveWat, Pump
 
 import unittest
 

@@ -44,7 +44,7 @@ import tqdm
 import dill
 import warnings
 import sys,os
-from fmdtools.modeldef import SampleApproach
+from fmdtools.modeldef.approach import SampleApproach
 
 ##DEFAULT ARGUMENTS
 sim_kwargs= {'desired_result':'endclass',

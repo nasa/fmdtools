@@ -10,7 +10,7 @@ import copy
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp.process as proc
 import fmdtools.resultdisp.plot as plot
-from fmdtools.modeldef import SampleApproach
+from fmdtools.modeldef.approach import SampleApproach
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np

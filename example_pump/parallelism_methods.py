@@ -5,11 +5,8 @@ Created on Fri Mar 26 12:23:14 2021
 @author: dhulse
 """
 
-import sys, os
-sys.path.insert(0, os.path.join('..'))
-
 from ex_pump import * 
-from fmdtools.modeldef import SampleApproach
+from fmdtools.modeldef.approach import SampleApproach
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
 

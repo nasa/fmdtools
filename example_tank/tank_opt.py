@@ -11,8 +11,6 @@ Author: Daniel Hulse
 - Original implementation at https://github.com/DesignEngrLab/resil_opt_examples
 - Refactored and incorporated into fmdtools 11/2/2022 to demonstrate/test ProblemInterface class.
 """
-import sys, os
-sys.path.insert(0, os.path.join('..'))
 import numpy as np
 import scipy as sp
 import time
@@ -23,7 +21,7 @@ from scipy.optimize import minimize
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
 from example_tank.tank_optimization_model import Tank
-from fmdtools.modeldef import SampleApproach
+from fmdtools.modeldef.approach import SampleApproach
 import multiprocessing as mp
 from fmdtools.faultsim.search import ProblemInterface
 

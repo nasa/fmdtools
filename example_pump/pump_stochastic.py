@@ -20,14 +20,15 @@ The flows are:
     - Water_out
     - Signal input (on/off)
 """
+from fmdtools.modeldef.block import FxnBlock
+from fmdtools.modeldef.flow import Flow
+from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.approach import NominalApproach 
 
-import sys, os
-sys.path.insert(0,os.path.join('..'))
-
-
-from fmdtools.modeldef import *
+from ex_pump import accumulate, reseting_accumulate
 import fmdtools.resultdisp as rd
 import fmdtools.faultsim.propagate as propagate
+import numpy as np
 
 """
 DEFINE MODEL FUNCTIONS

@@ -6,9 +6,6 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 
-import sys, os
-sys.path.insert(1, os.path.join('..'))
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -16,12 +13,11 @@ import fmdtools.faultsim as fs
 import fmdtools.resultdisp as rd
 from IPython.display import HTML
 
-from fmdtools.modeldef import FxnBlock
-from fmdtools.modeldef import Flow
-from fmdtools.modeldef import Model
-from fmdtools.modeldef import m2to1
-from fmdtools.modeldef import Component
-from fmdtools.modeldef import SampleApproach
+from fmdtools.modeldef.block import FxnBlock, Component
+from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.approach import SampleApproach
+
+from drone_mdl_static import m2to1
 
 class StoreEE(FxnBlock):
     def __init__(self, name, flows):

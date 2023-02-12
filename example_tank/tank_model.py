@@ -21,9 +21,8 @@ human errors during early design stage functional failure analysis. In ASME
 Information in Engineering Conference. American Society of Mechanical Engineers 
 Digital Collection.
 """
-import sys, os
-sys.path.insert(0, os.path.join('..'))
-from fmdtools.modeldef import Model, FxnBlock, Component
+from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.block import FxnBlock, Component
 
 
 class ImportLiquid(FxnBlock):

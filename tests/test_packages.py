@@ -5,11 +5,11 @@ Created on Tue Aug  9 12:44:01 2022
 @author: dhulse
 """
 import unittest
-import sys, os
-sys.path.insert(1, os.path.join('..'))
 from fmdtools.faultsim import propagate
 import fmdtools.resultdisp as rd
-from fmdtools.modeldef import *
+from fmdtools.modeldef.block import FxnBlock, get_pdf_for_rand
+from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.flow import CommsFlow, MultiFlow
 import numpy as np
 from CommonTests import CommonTests
 

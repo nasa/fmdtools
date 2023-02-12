@@ -19,14 +19,12 @@ Flows:
     - EE
     - Camera
 """
-
-import sys, os
-sys.path.insert(0, os.path.join('..'))
-
-
-from fmdtools.modeldef import *
+from fmdtools.modeldef.block import FxnBlock
+from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.approach import SampleApproach, NominalApproach
 import fmdtools.resultdisp as rd
 import fmdtools.faultsim.propagate as prop
+import itertools
 import numpy as np
 import matplotlib.pyplot as plt
 import multiprocessing as mp
