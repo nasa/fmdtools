@@ -58,7 +58,9 @@ class Flow(States):
         """
         states={}
         for state in self._states:
-            states[state]=getattr(self,state)
+            s = getattr(self,state)
+            if type(s) in [set, dict]: s=copy.deepcopy(s)
+            states[state]= s
         return states
     def get_memory(self):
         """
