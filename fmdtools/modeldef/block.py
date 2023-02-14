@@ -13,6 +13,7 @@ from decimal import Decimal
 import sys
 import itertools
 import networkx as nx
+import copy
 from scipy import stats
 
 from .common import States
@@ -627,7 +628,9 @@ class Block(States):
         """
         states={}
         for state in self._states:
-            states[state]=getattr(self,state)
+            s = getattr(self,state)
+            if type(s) in [set, dict]: s=copy.deepcopy(s)
+            states[state]= s
         return states, self.faults.copy()
     def has_new_states(self, prev_states, prev_faults):
         states, faults = self.return_states()
