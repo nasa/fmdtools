@@ -1201,7 +1201,8 @@ def init_dicthist(start_dict, timerange, track="all", modelength=10):
             sub_track = proc.get_sub_include(att, track)
             if sub_track: dicthist[att]=init_dicthist(val, timerange, sub_track)
         elif track=="all" or att in track:
-            if att=="mode":     dicthist[att]= np.full([len(timerange)], val, dtype="U"+str(modelength))
+            if att=="mode" or type(val)==str:     
+                dicthist[att]= np.full([len(timerange)], val, dtype="U"+str(modelength))
             else:
                 try:            dicthist[att] = np.full([len(timerange)], val)
                 except:         dicthist[att] = np.empty((len(timerange),), dtype=object)  

@@ -15,6 +15,7 @@ Uses the following methods:
     - :func:`samplemetric`:      plots a metric for a single fault sampled by a SampleApproach over time with rates
     - :func:`samplemetrics`:     plots a metric for a set of faults sampled by a SampleApproach over time with rates on separate plots
     - :func:`metricovertime`:    plots the total metric/explected metric of a set of faults sampled by a SampleApproach over time
+    - :func:`suite_for_plots`:   enables plots to be checked and turned on/off when testing using unittest
 """
 #File Name: resultdisp/plot.py
 #Author: Daniel Hulse
@@ -1062,3 +1063,39 @@ def multibar_helper(ax, bar_index, maxy):
             for i in second_inds[:-1]:
                 ax.axvline(i+0.5, color='black')
     ax.set_xlim(-0.5, len(bar_index)-0.5)
+
+def suite_for_plots(testclass, plottests=False):
+    """
+    Enables qualitative testing suite with or without plots in unittest. Plot tests
+    should have "plot" in the title of their method, this enables this function to
+    filter them out (or include them).
+
+    Parameters
+    ----------
+    testclass : unittest.TestCase
+        Test-case to create the suite for.
+    plottests : bool/list, optional
+        Whether to show the plot tests (True) or the non-plot tests (False). If a
+        list is provided, only tests provided in the list will be run.
+
+    Returns
+    -------
+    suite : unittest.TestSuite
+        Test Suite to run with unittest.TextTestRunner() using runner.run 
+        (e.g., runner = unittest.TextTestRunner();
+        runner.run(suite_for_plots(UnitTests, plottests=False)))
+    """
+    import unittest
+    suite = unittest.TestSuite()
+    if not plottests: 
+        tests = [func for func in dir(testclass) 
+                 if (func.startswith("test") and not('plot' in func))]
+    elif type(plottests)==list:
+        tests = [func for func in dir(testclass) 
+                 if (func.startswith("test") and func in plottests)]
+    else:
+        tests = [func for func in dir(testclass) 
+                 if (func.startswith("test") and 'plot' in func)]
+    for test in tests:
+        suite.addTest(testclass(test))
+    return suite
