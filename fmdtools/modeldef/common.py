@@ -9,6 +9,7 @@ from operator import attrgetter
 import warnings
 from collections.abc import Iterable
 import dill
+import copy
 
 class States(object):
     def set_atts(self, **kwargs):
@@ -20,16 +21,19 @@ class States(object):
         """
         for name, value in kwargs.items():
             setattr(self, name, value)
-    def put(self,**kwargs):
+    def put(self, as_copy=True, **kwargs):
         """Sets the given arguments to a given value. Mainly useful for 
         reducing length/adding clarity to assignment statements.
         e.g., self.EE.put(v=1, a=1) is the same as saying
               self.EE.v=1; self.EE.a=1
+        
+        as_copy: bool, set to True for dicts/sets to be copied rather than referenced
         """
         for name, value in kwargs.items():
             if name not in self._states: raise Exception(name+" not a property of "+self.name)
+            if as_copy: value=copy.copy(value)
             setattr(self, name, value)
-    def assign(self,obj,*states, **statedict):
+    def assign(self,obj,*states, as_copy=True, **statedict):
         """ Sets the same-named values of the current flow/function object to those of a given flow. 
         Further arguments specify which values.
         e.g. self.EE1.assign(EE2, 'v', 'a') is the same as saying
@@ -38,9 +42,13 @@ class States(object):
         e.g. self.Pos.assign([1,2,3],'x','y','z')
         Can also provide dict in case value names don't match
         e.g. self.Pos_out.assign(self.Pos_in, x='dx',y='dy')
+        as_copy: bool, set to True for dicts/sets to be copied rather than referenced
         """
         if type(obj)==list or isinstance(obj, np.ndarray):
-            for i, state in enumerate(states):  setattr(self, state, obj[i])
+            for i, state in enumerate(states):  
+                if as_copy: val=copy.copy(obj[i])
+                else:       val=obj[i]
+                setattr(self, state, val)
         else:
             if not statedict:
                 if len(states)==0:    statedict = {s:s for s in obj._states}
@@ -48,7 +56,9 @@ class States(object):
             elif len(states)>0: raise Exception("Can only provide positional states or keyword states, not both")
             for set_state, get_state in statedict.items():
                 if set_state not in self._states: raise Exception(set_state+" not a property of "+self.name)
-                setattr(self, set_state, getattr(obj,get_state))
+                val = getattr(obj,get_state)
+                if as_copy: val=copy.copy(val)
+                setattr(self, set_state, val)
     def get(self, *attnames, **kwargs):
         """Returns the given attribute names (strings). Mainly useful for reducing length
         of lines/adding clarity to assignment statements.

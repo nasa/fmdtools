@@ -175,7 +175,7 @@ class MultiFlow(Flow):
         else: raise Exception("Invalid to_update: "+str(to_update))
         for to_up in updatelist:
             up = self.get_view(to_update)
-            up.assign(get, *states)
+            up.assign(get, *states, as_copy=True)
     def status(self):
         stat = super().status()
         for l in self.locals:
@@ -283,7 +283,7 @@ class CommsFlow(MultiFlow):
         for f_to in fxns_to:
             port_internal = self.get_port(fxn_from, f_to, "internal")
             port_out = self.get_port(fxn_from, f_to, "out")
-            port_out.assign(port_internal, *states)
+            port_out.assign(port_internal, *states, as_copy=True)
             
             if fxn_from not in self.glob.fxns[f_to]["received"]:
                 newstates = tuple(set([*self.glob.fxns[f_to]["in"].get(fxn_from,()), *states]))
@@ -334,7 +334,7 @@ class CommsFlow(MultiFlow):
             else:               args = self.glob.fxns[fxn_to]["in"][f_from]
             port_from = self.get_port(f_from, fxn_to, "out")
             port_to = self.get_port(fxn_to, f_from, "internal")
-            port_to.assign(port_from,  *args)
+            port_to.assign(port_from,  *args, as_copy=True)
             self.glob.fxns[fxn_to]["received"][f_from]=args
     def status(self):
         stat = super().status()
