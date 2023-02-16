@@ -10,6 +10,7 @@ Description: A module to define flows used to conect functions in a model. Conta
 import warnings
 import copy
 import sys
+import networkx as nx
 
 from .common import States
 
@@ -197,6 +198,80 @@ class MultiFlow(Flow):
             local = getattr(self, loc)
             cop.create_local(local.name, attrs=local.status())
         return cop
+    def create_multigraph(self, include_glob=False,
+                               send_connections={"closest":"base"},
+                               include_states=False):
+        """
+        Creates a networkx graph corresponding to the MultiFlow.
+    
+        Parameters
+        ----------
+        include_glob : bool, optional
+            Whether to include the base flow (if used). The default is False.
+        send_connections : dict, optional
+            Tags to highlight as send/recieve connections between local views of the 
+            flow without explicit containment relationships.
+            
+            With structure {in_tag : out_tag}. The default is {}.
+        include_states:
+            whether to include states in the graph
+    
+        Returns
+        -------
+        g : nx.DiGraph
+            Networkx graph corresponding to the MultiFlow
+        """
+        g = nx.DiGraph()
+        if include_glob:
+            add_g_nested(g,self,self.name, include_states=include_states)
+        else:
+            for loc in self.locals:
+                local_flow = getattr(self, loc)
+                add_g_nested(g, local_flow, loc, include_states=include_states)
+                
+        for in_tag, out_tag in send_connections.items():
+            for in_node in g.nodes:
+                if in_tag in in_node or (in_tag=="base" and not(":" in in_node)):
+                    for out_node in g.nodes:
+                        if ((out_tag in out_node 
+                            or (out_tag=="base" and not(":" in out_node))) 
+                            and not((in_node, out_node) in g.edges)
+                            and in_node!=out_node):
+                            g.add_edge(in_node, out_node, label="sends")
+        return g
+
+def add_g_nested(g, multiflow, base_name, include_states=False):
+    """
+    Helper function for MultiFlow.create_multigraph. Iterates recursively
+    through multigraph locals to construct the containment tree.
+
+    Parameters
+    ----------
+    g : networkx.graph
+        Existing graph
+    multiflow : MultiFlow
+        Multiflow Structure
+    base_name : str
+        Name at the current level of recursion
+    include_states : bool, optional
+        Whether to include state attributes in the plot. The default is False.
+    """
+    g.add_node(base_name)
+    if include_states:
+        for state in multiflow._states:
+            g.add_node(base_name+": "+state)
+            g.add_edge(base_name, base_name+": "+state, label="contains")
+    for loc in multiflow.locals:
+        local_flow = getattr(multiflow, loc)
+        local_name = base_name+": "+loc
+        g.add_node(local_name)
+        g.add_edge(base_name, local_name, label="contains")
+        if local_flow.locals:
+            add_g_nested(g, local_flow, local_name)
+        if include_states:
+            for state in local_flow._states:
+                g.add_node(local_name+": "+state)
+                g.add_edge(local_name, local_name+": "+state, label="contains")
 
 class CommsFlow(MultiFlow):
     """
@@ -360,6 +435,44 @@ class CommsFlow(MultiFlow):
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]),
                              ports = getattr(self.fxns[fxn], "locals", []))
         return cop
+    def create_commsgraph(self, include_glob=False):
+        """
+        Creates a graph representation of the CommsFlow (assuming no additional locals)
+    
+        Parameters
+        ----------
+        include_glob : bool, optional
+            Whether to include the base (root) node. The default is False.
+    
+        Returns
+        -------
+        g : networkx.DiGraph
+            Graph of the commsflow connections.
+        """
+        g = nx.DiGraph()
+        g.add_nodes_from(self.fxns)
+        if include_glob:
+            g.add_node(self.name)
+        
+        for fxn, vals in self.fxns.items():
+            out_fxns = [i for i in vals['out'].locals]
+            ports = [fxn+": "+i for i in out_fxns]
+            g.add_nodes_from(ports)
+            for fxn_to, vals_to in self.fxns.items():
+                if include_glob: g.add_edge(self.name, fxn_to, label="contains")
+                if fxn_to in vals['out'].locals:
+                    g.add_node(fxn+": "+fxn_to)
+                    g.add_edge(fxn, fxn+": "+fxn_to, label="contains")
+                    if fxn in vals_to['out'].locals:
+                        g.add_edge(fxn_to+": "+fxn, fxn+": "+fxn_to, label="sends")
+                    else:
+                        g.add_edge(fxn_to+": out", fxn+": "+fxn_to, label="sends")
+                else:
+                    if fxn in vals_to['out'].locals:
+                        g.add_edge(fxn_to+": "+fxn, fxn+": out", label="sends")
+                    else:
+                        g.add_edge(fxn, fxn+": out", label="contains")
+        return g
 
 def init_flow(flowname, flowdict={}, flowtype='', fclass=Flow, params={}):
     """Factory method for flows. Enables one to instantiate different types of flows with given states/parameters
