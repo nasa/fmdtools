@@ -200,7 +200,8 @@ class MultiFlow(Flow):
         return cop
     def create_multigraph(self, include_glob=False,
                                send_connections={"closest":"base"},
-                               include_states=False):
+                               include_states=False,
+                               get_states=False):
         """
         Creates a networkx graph corresponding to the MultiFlow.
     
@@ -215,6 +216,8 @@ class MultiFlow(Flow):
             With structure {in_tag : out_tag}. The default is {}.
         include_states:
             whether to include states in the graph
+        get_states:
+            whether to attach state information as node attributes
     
         Returns
         -------
@@ -223,11 +226,11 @@ class MultiFlow(Flow):
         """
         g = nx.DiGraph()
         if include_glob:
-            add_g_nested(g,self,self.name, include_states=include_states)
+            add_g_nested(g,self,self.name, include_states=include_states, get_states=get_states)
         else:
             for loc in self.locals:
                 local_flow = getattr(self, loc)
-                add_g_nested(g, local_flow, loc, include_states=include_states)
+                add_g_nested(g, local_flow, loc, include_states=include_states, get_states=get_states)
                 
         for in_tag, out_tag in send_connections.items():
             for in_node in g.nodes:
@@ -239,8 +242,14 @@ class MultiFlow(Flow):
                             and in_node!=out_node):
                             g.add_edge(in_node, out_node, label="sends")
         return g
+    def return_stategraph(self, **kwargs):
+        g = self.create_multigraph(**kwargs)
+        flowstates=self.get_flowstates()
+        nx.set_node_attributes(g, flowstates, 'states')
+        return g
 
-def add_g_nested(g, multiflow, base_name, include_states=False):
+
+def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False):
     """
     Helper function for MultiFlow.create_multigraph. Iterates recursively
     through multigraph locals to construct the containment tree.
@@ -255,22 +264,28 @@ def add_g_nested(g, multiflow, base_name, include_states=False):
         Name at the current level of recursion
     include_states : bool, optional
         Whether to include state attributes in the plot. The default is False.
+    get_states : bool, optional
+        Whether to attach states as attributes to the graph. The default is False
     """
-    g.add_node(base_name)
+    g.add_node(base_name, label="multiflow")
+    if not get_states: kwargs={}
     if include_states:
         for state in multiflow._states:
-            g.add_node(base_name+": "+state)
+            if get_states:  kwargs={"states":getattr(multiflow, state)}
+            g.add_node(base_name+": "+state, label="state", **kwargs)
             g.add_edge(base_name, base_name+": "+state, label="contains")
     for loc in multiflow.locals:
         local_flow = getattr(multiflow, loc)
         local_name = base_name+": "+loc
-        g.add_node(local_name)
+        if get_states:  kwargs={"states":local_flow.return_states()}
+        g.add_node(local_name, label="multiflow", **kwargs)
         g.add_edge(base_name, local_name, label="contains")
         if local_flow.locals:
             add_g_nested(g, local_flow, local_name)
         if include_states:
             for state in local_flow._states:
-                g.add_node(local_name+": "+state)
+                if get_states:  kwargs={"states":getattr(multiflow, state)}
+                g.add_node(local_name+": "+state, label="multiflow", **kwargs)
                 g.add_edge(local_name, local_name+": "+state, label="contains")
 
 class CommsFlow(MultiFlow):
@@ -435,7 +450,7 @@ class CommsFlow(MultiFlow):
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]),
                              ports = getattr(self.fxns[fxn], "locals", []))
         return cop
-    def create_commsgraph(self, include_glob=False):
+    def create_commsgraph(self, include_glob=False, with_internal=True):
         """
         Creates a graph representation of the CommsFlow (assuming no additional locals)
     
@@ -443,6 +458,8 @@ class CommsFlow(MultiFlow):
         ----------
         include_glob : bool, optional
             Whether to include the base (root) node. The default is False.
+        with_internal: bool, optional
+            Whether to include the internal aspect of the commsflow in the commsflow.
     
         Returns
         -------
@@ -450,18 +467,25 @@ class CommsFlow(MultiFlow):
             Graph of the commsflow connections.
         """
         g = nx.DiGraph()
-        g.add_nodes_from(self.fxns)
+        g.add_nodes_from(self.fxns, label="commsflow")
         if include_glob:
-            g.add_node(self.name)
+            g.add_node(self.name, label="commsflow")
         
         for fxn, vals in self.fxns.items():
+            g.add_node(fxn+": out", label="multiflow")
             out_fxns = [i for i in vals['out'].locals]
             ports = [fxn+": "+i for i in out_fxns]
-            g.add_nodes_from(ports)
+            if with_internal:
+                g.add_node(fxn+": internal", label="multiflow")
+                g.add_edge(fxn, fxn+": internal", label="contains")
+                g.add_edge(fxn+": out", fxn+": internal", label="sends")
+                for port in ports:
+                    g.add_edge(port, fxn+": internal", label="sends")
+            g.add_nodes_from(ports, label="multiflow")
             for fxn_to, vals_to in self.fxns.items():
                 if include_glob: g.add_edge(self.name, fxn_to, label="contains")
                 if fxn_to in vals['out'].locals:
-                    g.add_node(fxn+": "+fxn_to)
+                    g.add_node(fxn+": "+fxn_to, label="multiflow")
                     g.add_edge(fxn, fxn+": "+fxn_to, label="contains")
                     if fxn in vals_to['out'].locals:
                         g.add_edge(fxn_to+": "+fxn, fxn+": "+fxn_to, label="sends")
@@ -472,6 +496,12 @@ class CommsFlow(MultiFlow):
                         g.add_edge(fxn_to+": "+fxn, fxn+": out", label="sends")
                     else:
                         g.add_edge(fxn, fxn+": out", label="contains")
+        return g
+    def return_stategraph(self, include_glob=False, with_internal=True):
+        g = self.create_commsgraph(include_glob=include_glob, with_internal=with_internal)
+        flowstates=self.return_states()
+        flowstates = {": ".join(f.split("_")):v for f,v in flowstates.items()}
+        nx.set_node_attributes(g, flowstates, 'states')
         return g
 
 def init_flow(flowname, flowdict={}, flowtype='', fclass=Flow, params={}):
