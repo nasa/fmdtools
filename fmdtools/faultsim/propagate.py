@@ -166,8 +166,6 @@ def nominal(mdl, **kwargs):
     -------
     result:
         dict of result corresponding to desired result {'endclass':endclasses, 'endfaults': endfaults, 'varname': var, t: {'endclass':endclasses...} ...}
-    resgraph : MultiGraph
-        A networkx graph object with function faults and degraded flows as graph attributes
     nomhist : Dict
         A dictionary with a history of modelstates
     """
@@ -830,8 +828,8 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
                if "all" in desired_result: 
                    result[t] = get_result(scen,mdl,desired_result['all'], mdlhist,nomhist, nomresult)
                if t in desired_result:
-                   result[t] = get_result(scen,mdl,desired_result[t], mdlhist,nomhist, nomresult)
-                   desired_result.pop(t)
+                   result[t] = get_result(scen,mdl,desired_result[t], mdlhist,nomhist, nomresult.get(t, {}))
+                   #desired_result.pop(t)
            if (mdl.use_end_condition and hasattr(mdl, 'end_condition')):
                if mdl.end_condition(t):
                    break
@@ -864,9 +862,14 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     if 'endfaults' in desired_result:  
         result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
         desired_result.pop('endfaults')
-    for gtype in ["normal","bipartite", "typegraph", "component"]:
+    for gtype in ["normal","bipartite", "typegraph", "component", *mdl.flows]:
         if gtype in desired_result:
-            rgraph = mdl.return_stategraph(gtype)
+            if gtype in ["normal","bipartite", "typegraph", "component"]:
+                rgraph = mdl.return_stategraph(gtype)
+            elif gtype in mdl.flows:
+                rgraph = mdl.flows[gtype].return_stategraph(desired_result[gtype])
+                gtype='bipartite'
+            
             if nomresult and type(nomresult)==dict:     result[gtype] = proc.resultsgraph(rgraph, nomresult[gtype], gtype)
             elif nomresult:                             result[gtype] = proc.resultsgraph(rgraph, nomresult, gtype)
             else:           result[gtype] = proc.resultsgraph(rgraph, rgraph, gtype)
@@ -880,9 +883,8 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     return result
     
 def get_endclass_vars(mdl, desired_result, result):
-    
     if type(desired_result)==str:   vars_to_get = [desired_result]
-    else:                           vars_to_get = desired_result
+    else:                           vars_to_get = [d for d in desired_result if type(d) not in [int,float]]
     var_result = mdl.get_vars(*vars_to_get, trunc_tuple=False)
     for i, var in enumerate(vars_to_get):
         result[var]=var_result[i]

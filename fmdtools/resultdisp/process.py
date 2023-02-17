@@ -161,10 +161,16 @@ def flowhist(mdlhist, returndiff=True):
         for att in mdlhist['nominal']['flows'][flowname]:
             faulty  = mdlhist['faulty']['flows'][flowname][att]
             nominal = mdlhist['nominal']['flows'][flowname][att]
-            flowshist[flowname][att] = 1* (faulty == nominal)
-            if returndiff: get_diff(faulty, nominal, att, diff[flowname])
-        summhist[flowname] = np.prod(np.array(list(flowshist[flowname].values())), axis = 0)
-        if 0 in summhist[flowname]: degflows+=[flowname]
+            try:
+                flowshist[flowname][att] = 1* (faulty == nominal)
+                if returndiff: get_diff(faulty, nominal, att, diff[flowname])
+            except: 
+                print("problem with flow: "+flowname+", att: "+att)
+                flowshist[flowname][att] = np.ones(len(mdlhist['nominal']['time']))
+        if flowshist[flowname]:
+            summhist[flowname] = np.prod(np.array(list(flowshist[flowname].values())), axis = 0)
+            if (not(type(summhist[flowname]) in [np.float64, np.int32]) and
+                   not(0 in summhist[flowname])): degflows+=[flowname]
     numdegflows = len(summhist) - np.sum(np.array(list(summhist.values())), axis=0)
     return flowshist, summhist, degflows, numdegflows, diff
 def fxnhist(mdlhist, returndiff=True):
@@ -180,20 +186,21 @@ def fxnhist(mdlhist, returndiff=True):
         fxnshist[fxnname] = {}
         diff[fxnname]={}
         for state in fhist:
-            if type(fhist[state])==dict:
-                fxnshist[fxnname][state] = {}
-                diff[fxnname][state]={}
-                for substate in fhist[state]:
-                    if substate!='faults':
-                        get_diff_fxnhist(mdlhist['faulty']['functions'][fxnname][state][substate], mdlhist['nominal']['functions'][fxnname][state][substate], \
-                                         diff[fxnname][state], fxnshist[fxnname][state], substate)
-                if {'faults', 't_loc','mode'}.intersection(fhist[state]):
-                    fxnshist[fxnname][state]['faults']= mdlhist['faulty']['functions'][fxnname][state].get('faults', np.zeros(len(mdlhist['faulty']['time'])))
-                    fxnshist[fxnname][state]['numfaults'] = get_fault_hist(fxnshist[fxnname][state]['faults'], fxnname)
-                fxnshist[fxnname][state]['status'] = get_status(len(mdlhist['faulty']['time']),fxnshist[fxnname][state])
-            else:
-                get_diff_fxnhist(mdlhist['faulty']['functions'][fxnname][state], mdlhist['nominal']['functions'][fxnname][state], \
-                                 diff[fxnname], fxnshist[fxnname], state)
+            if returndiff:
+                if type(fhist[state])==dict:
+                    fxnshist[fxnname][state] = {}
+                    diff[fxnname][state]={}
+                    for substate in fhist[state]:
+                        if substate!='faults':
+                            get_diff_fxnhist(mdlhist['faulty']['functions'][fxnname][state][substate], mdlhist['nominal']['functions'][fxnname][state][substate], \
+                                             diff[fxnname][state], fxnshist[fxnname][state], substate)
+                    if {'faults', 't_loc','mode'}.intersection(fhist[state]):
+                        fxnshist[fxnname][state]['faults']= mdlhist['faulty']['functions'][fxnname][state].get('faults', np.zeros(len(mdlhist['faulty']['time'])))
+                        fxnshist[fxnname][state]['numfaults'] = get_fault_hist(fxnshist[fxnname][state]['faults'], fxnname)
+                    fxnshist[fxnname][state]['status'] = get_status(len(mdlhist['faulty']['time']),fxnshist[fxnname][state])
+                else:
+                    get_diff_fxnhist(mdlhist['faulty']['functions'][fxnname][state], mdlhist['nominal']['functions'][fxnname][state], \
+                                     diff[fxnname], fxnshist[fxnname], state)
         fxnshist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname].get('faults', np.zeros(len(mdlhist['faulty']['time'])))
         fxnshist[fxnname]['numfaults'] = get_fault_hist(fxnshist[fxnname]['faults'], fxnname)
         fxnshist[fxnname]['status'] = get_status(len(mdlhist['faulty']['time']),fxnshist[fxnname])
@@ -334,7 +341,7 @@ def resultsgraph(g, nomg, gtype='bipartite'):
             rg.nodes[node]['status']=status
     elif gtype=='bipartite' or gtype=='component':
         for node in g.nodes:        
-            if g.nodes[node]['bipartite']==0 or g.nodes[node].get('iscomponent', False): #condition only checked for functions
+            if g.nodes[node].get('bipartite', 1)==0 or g.nodes[node].get('iscomponent', False): #condition only checked for functions
                 if g.nodes[node].get('modes', {'nom'}).difference(['nom']): status='Faulty'
                 elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
                 else: status='Nominal'

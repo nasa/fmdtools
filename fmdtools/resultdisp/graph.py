@@ -271,8 +271,8 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
             fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=scale, pos=pos,colors=colors, show=False, arrows=arrows)
     elif gtype in ['bipartite', 'component']:
         labels={node:node for node in g.nodes}
-        functions = [f for f, val in g.nodes.items() if val['bipartite']==0]
-        flows = [f for f, val in g.nodes.items() if val['bipartite']==1]
+        functions = [f for f, val in g.nodes.items() if val.get('bipartite', 1)==0]
+        flows = [f for f, val in g.nodes.items() if val.get('bipartite', 0)==1]
         nodesize=scale*700
         font_size=scale*6
         if heatmap:

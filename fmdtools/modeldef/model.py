@@ -354,8 +354,10 @@ class Model(object):
 
         Parameters
         ----------
-        gtype : str, optional
+        gtype : str/dict, optional
             Type of graph to return (normal, bipartite, component, or typegraph). The default is 'bipartite'.
+            dict: for function/flowgraphs, a dict with {flow:**kwargs} will return the graph view corresponding 
+            to that function/flow
 
         Returns
         -------
@@ -375,6 +377,7 @@ class Model(object):
                     graph.add_edges_from([(fxnname, comp) for comp in {**fxn.components, **fxn.actions}])
         elif gtype=='typegraph':
             graph=self.return_typegraph()
+            
         edgevals, fxnmodes, fxnstates, flowstates, compmodes, compstates, comptypes ={}, {}, {}, {}, {}, {}, {}
         if gtype=='normal': #set edge values for normal graph
             for edge in graph.edges:
