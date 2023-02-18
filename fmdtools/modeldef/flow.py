@@ -85,6 +85,8 @@ class Flow(States):
             for state in self._states:
                 setattr(copy, state, getattr(self,state))
         return copy
+    def get_typename(self):
+        return "Flow"
 #Specialized Flow types
 class MultiFlow(Flow):
     """
@@ -185,7 +187,7 @@ class MultiFlow(Flow):
     def return_states(self):
         states = super().status()
         for l in self.locals:
-            states.update({l+"_"+k:v for k, v in getattr(self, l).status().items()})
+            states.update({l+"."+k:v for k, v in getattr(self, l).status().items()})
         return states
     def reset(self):
         super().reset()
@@ -200,6 +202,7 @@ class MultiFlow(Flow):
         return cop
     def create_multigraph(self, include_glob=False,
                                send_connections={"closest":"base"},
+                               connections_as_tags=True,
                                include_states=False,
                                get_states=False):
         """
@@ -209,11 +212,12 @@ class MultiFlow(Flow):
         ----------
         include_glob : bool, optional
             Whether to include the base flow (if used). The default is False.
-        send_connections : dict, optional
-            Tags to highlight as send/recieve connections between local views of the 
+        send_connections : dict/list, optional
+            Tags/edges to create as send/recieve connections between local views of the 
             flow without explicit containment relationships.
             
             With structure {in_tag : out_tag}. The default is {}.
+            Or structure [(in_node : out_node)]
         include_states:
             whether to include states in the graph
         get_states:
@@ -231,23 +235,22 @@ class MultiFlow(Flow):
             for loc in self.locals:
                 local_flow = getattr(self, loc)
                 add_g_nested(g, local_flow, loc, include_states=include_states, get_states=get_states)
-                
-        for in_tag, out_tag in send_connections.items():
+        if type(send_connections)==dict:   send_iter = send_connections.items();    connections_as_tags=True
+        elif type(send_connections)==list: send_iter = send_connections;            connections_as_tags=False
+        
+        for in_tag, out_tag in send_iter:
             for in_node in g.nodes:
-                if in_tag in in_node or (in_tag=="base" and not(":" in in_node)):
+                if node_is_tagged(connections_as_tags, in_tag, in_node):
                     for out_node in g.nodes:
-                        if ((out_tag in out_node 
-                            or (out_tag=="base" and not(":" in out_node))) 
-                            and not((in_node, out_node) in g.edges)
-                            and in_node!=out_node):
+                        if (node_is_tagged(connections_as_tags, out_tag, out_node)
+                            and not((in_node, out_node) in g.edges) and in_node!=out_node):
                             g.add_edge(in_node, out_node, label="sends")
         return g
     def return_stategraph(self, **kwargs):
-        g = self.create_multigraph(**kwargs)
-        flowstates=self.get_flowstates()
-        nx.set_node_attributes(g, flowstates, 'states')
+        g = self.create_multigraph(**kwargs, get_states=True)
         return g
-
+def node_is_tagged(connections_as_tags, tag, node):
+    return (connections_as_tags and (tag in node or (tag=="base" and not(":" in node)))) or tag==node
 
 def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False):
     """
@@ -267,8 +270,9 @@ def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False
     get_states : bool, optional
         Whether to attach states as attributes to the graph. The default is False
     """
-    g.add_node(base_name, label="multiflow")
-    if not get_states: kwargs={}
+    if not get_states:  kwargs={}
+    else:               kwargs={"states":multiflow.return_states()}
+    g.add_node(base_name, label=multiflow.get_typename(), **kwargs)
     if include_states:
         for state in multiflow._states:
             if get_states:  kwargs={"states":getattr(multiflow, state)}
@@ -278,15 +282,18 @@ def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False
         local_flow = getattr(multiflow, loc)
         local_name = base_name+": "+loc
         if get_states:  kwargs={"states":local_flow.return_states()}
-        g.add_node(local_name, label="multiflow", **kwargs)
+        
+        g.add_node(local_name, label=local_flow.get_typename(), **kwargs)
         g.add_edge(base_name, local_name, label="contains")
         if local_flow.locals:
             add_g_nested(g, local_flow, local_name)
         if include_states:
             for state in local_flow._states:
                 if get_states:  kwargs={"states":getattr(multiflow, state)}
-                g.add_node(local_name+": "+state, label="multiflow", **kwargs)
+                g.add_node(local_name+": "+state, label="state", **kwargs)
                 g.add_edge(local_name, local_name+": "+state, label="contains")
+    def get_typename(self):
+        return "MultiFlow"
 
 class CommsFlow(MultiFlow):
     """
@@ -450,7 +457,7 @@ class CommsFlow(MultiFlow):
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]),
                              ports = getattr(self.fxns[fxn], "locals", []))
         return cop
-    def create_commsgraph(self, include_glob=False, with_internal=True):
+    def create_commsgraph(self, include_glob=False, ports_only=False, get_states=False):
         """
         Creates a graph representation of the CommsFlow (assuming no additional locals)
     
@@ -458,6 +465,8 @@ class CommsFlow(MultiFlow):
         ----------
         include_glob : bool, optional
             Whether to include the base (root) node. The default is False.
+        ports_only : bool, optional
+            Whether to only include the explicit port connections betwen flows. The default is False
         with_internal: bool, optional
             Whether to include the internal aspect of the commsflow in the commsflow.
     
@@ -466,43 +475,41 @@ class CommsFlow(MultiFlow):
         g : networkx.DiGraph
             Graph of the commsflow connections.
         """
-        g = nx.DiGraph()
-        g.add_nodes_from(self.fxns, label="commsflow")
-        if include_glob:
-            g.add_node(self.name, label="commsflow")
-        
-        for fxn, vals in self.fxns.items():
-            g.add_node(fxn+": out", label="multiflow")
-            out_fxns = [i for i in vals['out'].locals]
-            ports = [fxn+": "+i for i in out_fxns]
-            if with_internal:
-                g.add_node(fxn+": internal", label="multiflow")
-                g.add_edge(fxn, fxn+": internal", label="contains")
-                g.add_edge(fxn+": out", fxn+": internal", label="sends")
-                for port in ports:
-                    g.add_edge(port, fxn+": internal", label="sends")
-            g.add_nodes_from(ports, label="multiflow")
-            for fxn_to, vals_to in self.fxns.items():
-                if include_glob: g.add_edge(self.name, fxn_to, label="contains")
-                if fxn_to in vals['out'].locals:
-                    g.add_node(fxn+": "+fxn_to, label="multiflow")
-                    g.add_edge(fxn, fxn+": "+fxn_to, label="contains")
-                    if fxn in vals_to['out'].locals:
-                        g.add_edge(fxn_to+": "+fxn, fxn+": "+fxn_to, label="sends")
-                    else:
-                        g.add_edge(fxn_to+": out", fxn+": "+fxn_to, label="sends")
+        send_connections=[]
+        for f in self.fxns:
+            int_flow = getattr(self, f)
+            int_ports = int_flow.locals
+            out_flow = getattr(self, f+"_out")
+            out_ports = out_flow.locals
+            send_connections.append((f, f+"_out"))
+            for port in int_ports:
+                portname = f+": "+port
+                if port in out_ports:   send_connections.append((portname, f+"_out: "+port))
+                else:                   send_connections.append((portname, f+"_out"))
+            for f2 in self.fxns:
+                f2_int = getattr(self,f2)
+                if f2 in out_ports:
+                    for port in out_ports:
+                        portname = f+"_out: "+port
+                        if port in f2_int.locals:
+                            send_connections.append((portname, f2+": "+port))
+                        elif port==f2:
+                            send_connections.append((portname,f2))
                 else:
-                    if fxn in vals_to['out'].locals:
-                        g.add_edge(fxn_to+": "+fxn, fxn+": out", label="sends")
-                    else:
-                        g.add_edge(fxn, fxn+": out", label="contains")
+                    if f in f2_int.locals:
+                        send_connections.append((f+"_out", f2+": "+f))
+                    elif not(ports_only):
+                        send_connections.append((f+"_out", f2))
+                        
+        g = self.create_multigraph(include_glob=include_glob, 
+                                   send_connections=send_connections, 
+                                   get_states=get_states)
         return g
-    def return_stategraph(self, include_glob=False, with_internal=True):
-        g = self.create_commsgraph(include_glob=include_glob, with_internal=with_internal)
-        flowstates=self.return_states()
-        flowstates = {": ".join(f.split("_")):v for f,v in flowstates.items()}
-        nx.set_node_attributes(g, flowstates, 'states')
+    def return_stategraph(self, include_glob=False, ports_only=False):
+        g= self.create_commsgraph(get_states=True, include_glob=include_glob, ports_only=ports_only)
         return g
+    def get_typename(self):
+        return "CommsFlow"
 
 def init_flow(flowname, flowdict={}, flowtype='', fclass=Flow, params={}):
     """Factory method for flows. Enables one to instantiate different types of flows with given states/parameters

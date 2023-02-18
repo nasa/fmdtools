@@ -866,13 +866,14 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
         if gtype in desired_result:
             if gtype in ["normal","bipartite", "typegraph", "component"]:
                 rgraph = mdl.return_stategraph(gtype)
+                proctype=gtype
             elif gtype in mdl.flows:
-                rgraph = mdl.flows[gtype].return_stategraph(desired_result[gtype])
-                gtype='bipartite'
+                rgraph = mdl.flows[gtype].return_stategraph(**desired_result[gtype])
+                proctype="bipartite"
             
-            if nomresult and type(nomresult)==dict:     result[gtype] = proc.resultsgraph(rgraph, nomresult[gtype], gtype)
-            elif nomresult:                             result[gtype] = proc.resultsgraph(rgraph, nomresult, gtype)
-            else:           result[gtype] = proc.resultsgraph(rgraph, rgraph, gtype)
+            if nomresult and type(nomresult)==dict:     result[gtype] = proc.resultsgraph(rgraph, nomresult[gtype], proctype)
+            elif nomresult:                             result[gtype] = proc.resultsgraph(rgraph, nomresult, proctype)
+            else:           result[gtype] = proc.resultsgraph(rgraph, rgraph, proctype)
             desired_result.pop(gtype)
     if desired_result:
         if 'vars' in desired_result:
