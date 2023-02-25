@@ -520,8 +520,8 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
     tuple of form (figure, axis)
 
     """
-    if show_dyn_order and show_dyn_tstep:   dyn_highlight = {fxn:str(i)+",dt="+str(mdl.fxns[fxn].dt) if mdl.fxns[fxn].dt!=mdl.tstep else str(i) for i,fxn in enumerate(mdl.dynamicfxns)}
-    elif show_dyn_tstep:                    dyn_highlight = {fxn:"dt="+str(mdl.fxns[fxn].dt) if mdl.fxns[fxn].dt!=mdl.tstep else '' for i,fxn in enumerate(mdl.dynamicfxns)}
+    if show_dyn_order and show_dyn_tstep:   dyn_highlight = {fxn:str(i)+",dt="+str(mdl.fxns[fxn].dt) if mdl.fxns[fxn].dt!=mdl.modelparams.dt else str(i) for i,fxn in enumerate(mdl.dynamicfxns)}
+    elif show_dyn_tstep:                    dyn_highlight = {fxn:"dt="+str(mdl.fxns[fxn].dt) if mdl.fxns[fxn].dt!=mdl.modelparams.dt else '' for i,fxn in enumerate(mdl.dynamicfxns)}
     elif show_dyn_order:                    dyn_highlight = {fxn:str(i) for i,fxn in enumerate(mdl.dynamicfxns)}
     else:                                   dyn_highlight = list(mdl.dynamicfxns)
     showfaultlabels = (show_dyn_order or show_dyn_tstep)

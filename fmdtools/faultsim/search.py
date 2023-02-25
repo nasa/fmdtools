@@ -296,7 +296,7 @@ class ProblemInterface():
         if 'start' in var_times:    var_time=0
         else:                       var_time = min(var_times) 
         obj_times = [v[3] for v in [*self.objectives.values(),*self.constraints.values()] if v[3]!='na']
-        if 'end' in obj_times:      obj_time=self.mdl.times[-1]
+        if 'end' in obj_times:      obj_time=self.mdl.modelparams.times[-1]
         else:                       obj_time=max(obj_times)
         return var_time, obj_time
     def _prep_single_sim(self, simname, x):
@@ -348,15 +348,14 @@ class ProblemInterface():
             params.update({param: x[ind] for param, ind in paramvars['param'].items()})
             for func, fvars in self.var_mapping[simname].get('paramfunc',{}).items():
                 params.update(func(*[x[ind] for ind in fvars.values()]))
-            modelparams= {**mdl.modelparams, 'times':[mdl.modelparams['times'][0], obj_time]}
-            mdl = prop.new_mdl(mdl, {'params':params, 'modelparams':modelparams})
+            mdl = prop.new_mdl(mdl, {'params':params, 'modelparams':{'times':(0, obj_time)}})
         return mdl
     def _run_single_sim(self, simname, x):
         sim = self._sims[simname]
         var_time, prevhist, nomhist, obj_time, mdl, c_mdl = sim['var_time'], sim['prevhist'], sim['nomhist'], sim['obj_time'], sim['mdl'], sim['c_mdls']
         
         if not self.simulations[simname][2]['staged']:  mdl = self._check_new_mdl(simname, var_time, mdl, x, obj_time, staged=self.simulations[simname][2]['staged'])
-        else:                                           mdl = c_mdl[var_time].copy(); mdl.times[-1]=obj_time
+        else:                                           mdl = c_mdl[var_time].copy(); mdl.modelparams.times[-1]=obj_time
         # set model faults/disturbances as elements of scenario 
         ##NOTE: need to make sure scenarios don't overwrite each other
         scen=prop.construct_nomscen(mdl)
@@ -581,7 +580,7 @@ class ProblemInterface():
                         newparams=copy.deepcopy(self._sims[up_name]['c_mdls'][0].params)
                     if 'phases' in upstream_sims[up_name]:
                         nomhist = self._sims[up_name]['mdlhists']['faulty']
-                        t_end = self._sims[up_name]['c_mdls'][0].times[-1]
+                        t_end = self._sims[up_name]['c_mdls'][0].modelparams.times[-1]
                         newphases={'phases':prop.phases_from_hist(upstream_sims[up_name]['phases'], t_end, nomhist)}
                 if any([k not in oldparams for k in newparams]) or any([newparams[k]!=oldparams[k] for k in oldparams]):
                     self.update_sim_vars(simname, newparams=newparams)
@@ -845,7 +844,7 @@ class DynamicInterface():
         """
         self.t=0.0
         self.t_ind=0
-        if not t_max:   self.t_max=mdl.times[-1]
+        if not t_max:   self.t_max=mdl.modelparams.times[-1]
         else:           self.t_max = t_max
         if type(desired_result)==str:   self.desired_result=[desired_result]
         else:                           self.desired_result = desired_result

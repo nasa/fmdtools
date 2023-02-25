@@ -20,15 +20,10 @@ from scipy.optimize import minimize
 
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
-from example_tank.tank_optimization_model import Tank
+from example_tank.tank_optimization_model import Tank, TankParam, make_tankparam
 from fmdtools.modeldef.approach import SampleApproach
 import multiprocessing as mp
 from fmdtools.faultsim.search import ProblemInterface
-
-## Defining default parameters
-params={'capacity':20, # size of the tank (10 - 100)
-        'turnup':0.0,  # amount the pump can be "turned up" (0 - 1)
-        **{(a-1,b-1,c-1,ul):0 for a,b,c in np.ndindex((3,3,3)) for ul in ["u", "l"]}} #state-action pairs for resilience policy: what to given fault signals
 
 ## Defining problem
 mdl= Tank()
@@ -50,17 +45,20 @@ prob.add_variables("des_cost",'capacity', 'turnup')
 app = SampleApproach(mdl)
 prob.add_simulation("res_sim", "multi", app.scenlist, include_nominal=True,
                     upstream_sims = {"des_cost":{'params':{"capacity":"capacity", "turnup":"turnup"}}})
-res_vars_i = {param:1 for param,v in mdl.params.items() if param not in ['capacity','turnup']}
+
+res_vars_i = {(v[0],v[1],v[2],v[3]):1 for v in mdl.params.faultpolicy}
 res_vars = [(var, None) for var in res_vars_i.keys()]
-prob.add_variables("res_sim", *res_vars, vartype="param")
+[v[:4] for v in TankParam().faultpolicy]
+
+prob.add_variables("res_sim", *res_vars, vartype=make_tankparam)
 prob.add_objectives("res_sim", cost="expected cost", objtype="endclass")
 prob.add_combined_objective('tot_cost', 'cd', 'cost')
 
 ## Legacy objective functions (for verification)
 def x_to_rcost_leg(xres1,xres2, xdes=[20,1], pool=False, staged=True):
-    fp =      {(a-1,b-1,c-1, "l"):xres1[i] for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))}
-    fp.update({(a-1,b-1,c-1, "u"):xres2[i] for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))})
-    mdl=Tank(params={'capacity':xdes[0],'turnup':xdes[1],**fp})
+    fp1 =      {(a-1,b-1,c-1, "l", xres1[i]) for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))}
+    fp2 =      {(a-1,b-1,c-1, "u", xres1[i]) for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))}
+    mdl=Tank(params=TankParam(capacity=xdes[0],turnup=xdes[1],faultpolicy=(*fp1,*fp2)))
     app = SampleApproach(mdl)
     endclasses, mdlhists = propagate.approach(mdl, app, staged=staged, showprogress=False, pool=pool)
     rescost = rd.process.totalcost(endclasses)
@@ -210,8 +208,8 @@ if __name__=="__main__":
     lvar = [*res_vars_i.values()][27:]
     
     pool=mp.Pool(5)
-    result, args, fhist, thist, xdhist = alternating_opt(pool=pool)
-    result, args, bestfhist, bestxdhist = bilevel_opt(pool=pool)
+    result, args, fhist, thist, xdhist = alternating_opt()
+    result, args, bestfhist, bestxdhist = bilevel_opt()
     
     
     

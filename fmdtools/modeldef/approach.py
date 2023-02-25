@@ -387,8 +387,8 @@ class SampleApproach():
         phases: dict or 'global' or list
             Local phases in the model to sample. 
                 Dict has structure: {'Function':{'phase':[starttime, endtime]}}
-                List has structure: ['phase1', 'phase2'] where phases are phases in mdl.phases
-            Defaults to 'global',here only the phases defined in mdl.phases are used.
+                List has structure: ['phase1', 'phase2'] where phases are phases in mdl.modelparams.phases
+            Defaults to 'global',here only the phases defined in mdl.modelparams.phases are used.
             Phases and modephases can be gotten from process.modephases(mdlhist)
         modephases: dict
             Dictionary of modes associated with each phase. 
@@ -440,16 +440,18 @@ class SampleApproach():
             Size of random sample to reduce the number of scenarios to (if any). Default is False.
         """
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
-        if phases=='global':                self.globalphases = mdl.phases; self.phases = {}; self.modephases = modephases
-        elif type(phases) in [list, set]:   self.globalphases = {ph:mdl.phases[ph] for ph in phases}; self.phases={}; self.modephases = modephases
+        mdl_phases = {v[0]:[v[1], v[2]] for v in mdl.modelparams.phases}
+        
+        if phases=='global':                self.globalphases = mdl_phases; self.phases = {}; self.modephases = modephases
+        elif type(phases) in [list, set]:   self.globalphases = {ph:mdl_phases[ph] for ph in phases}; self.phases={}; self.modephases = modephases
         elif type(phases)==dict: 
-            if   type(tuple(phases.values())[0])==dict:         self.globalphases = mdl.phases; self.phases = phases; self.modephases = modephases
+            if   type(tuple(phases.values())[0])==dict:         self.globalphases = mdl_phases; self.phases = phases; self.modephases = modephases
             elif type(tuple(phases.values())[0][0]) in [int, float]:  self.globalphases = phases; self.phases ={}; self.modephases = modephases
-            else:                                               self.globalphases = mdl.phases; self.phases = phases; self.modephases = modephases
+            else:                                               self.globalphases = mdl_phases; self.phases = phases; self.modephases = modephases
         #elif type(phases)==set:    self.globalphases=mdl.phases; self.phases = {ph:mdl.phases[ph] for ph in phases}
         self.mdltype = mdl.__class__.__name__
-        self.tstep = mdl.tstep
-        self.units = mdl.units
+        self.tstep = mdl.modelparams.dt
+        self.units = mdl.modelparams.units
         self.init_modelist(mdl,faults, jointfaults)
         self.init_rates(mdl, jointfaults=jointfaults, modephases=modephases, join_modephases=join_modephases)
         self.create_sampletimes(mdl, sampparams, defaultsamp)
@@ -603,16 +605,16 @@ class SampleApproach():
             for phase, times in fxnphases.items():
                 opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
                 
-                if self._fxnmodes[fxnname, mode]['probtype']=='prob':   dt = mdl.tstep; unitfactor = 1
+                if self._fxnmodes[fxnname, mode]['probtype']=='prob':   dt = self.tstep; unitfactor = 1
                 elif type(times[0])==list:
-                    dt = sum([self.calc_intervaltime(ts, mdl.tstep) for ts in times])
+                    dt = sum([self.calc_intervaltime(ts, self.tstep) for ts in times])
                     unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
                 elif self._fxnmodes[fxnname, mode]['probtype']=='rate' and len(times)>1:      
-                    dt = self.calc_intervaltime(times, mdl.tstep)
+                    dt = self.calc_intervaltime(times, self.tstep)
                     unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
                     times=[times]
                 elif self._fxnmodes[fxnname, mode]['probtype']=='rate':  
-                    dt = mdl.tstep
+                    dt = self.tstep
                     unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
                 self.rates[fxnname, mode][key_phases, phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
                 self.rates_timeless[fxnname, mode][key_phases, phase] = overallrate*opp*dist

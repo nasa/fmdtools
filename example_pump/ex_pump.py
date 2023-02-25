@@ -23,8 +23,9 @@ The flows are:
 
 from fmdtools.modeldef.block import FxnBlock
 from fmdtools.modeldef.flow import Flow 
-from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.approach import SampleApproach, NominalApproach
+from fmdtools.modeldef.common import Parameter
 import fmdtools.resultdisp as rd
 import fmdtools.faultsim.propagate as propagate
 import numpy as np
@@ -222,6 +223,12 @@ def accumulate(vec):
     """ Accummulates vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])"""
     return [sum(vec[:i+1]) for i in range(len(vec)) ]
 
+class PumpParam(Parameter, readonly=True):
+    """PumpParam defines the parameters which the pump may be simulated over."""
+    cost: tuple = ("repair", "water")   # costs to tabulate in cost model (see find_classification)
+    delay: int = 10                     # delay to use in MoveWater function
+    delay_lim= (0, 100)                 # valid limits for delay
+
 ##DEFINE MODEL OBJECT
 class Pump(Model):
     """
@@ -229,14 +236,14 @@ class Pump(Model):
 
         Models take a dictionary of parameters as input defining any veriables and values to use in the model.
     """
-    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10}, \
-                 modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1, 'units':'hr'}, \
-                     valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
+    def __init__(self, params=PumpParam(), \
+                 modelparams = ModelParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr'), \
+                    valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
         """
         To sample the model, the timerange and operational phases need to be defined.
 
-        Here we dod that by setting self.phases as a dictionary of each phase and its start and ending
-        and self.times to the beginning and end time (and any times to sample in between in run_list()
+        Here we did that by setting phases as a tuple of each phase and its start and ending
+        and times to the beginning and end time (and any times to sample in between in run_list()
 
         self.tstep is the timestep to use in the model and must be an integer
 
@@ -270,7 +277,7 @@ class Pump(Model):
         self.add_fxn('ImportEE',['EE_1'],fclass=ImportEE)
         self.add_fxn('ImportWater',['Wat_1'],fclass=ImportWater)
         self.add_fxn('ImportSignal',['Sig_1'],fclass=ImportSig)
-        self.add_fxn('MoveWater', ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'],fclass=MoveWat, fparams = params['delay'])
+        self.add_fxn('MoveWater', ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'],fclass=MoveWat, fparams = params.delay)
         self.add_fxn('ExportWater', ['Wat_2'], fclass=ExportWater)
 
         self.build_model()
@@ -296,18 +303,18 @@ class Pump(Model):
                 - electrical and water costs depend on the lost water in the non-nominal case
         """
         #get fault costs and rates
-        if 'repair' in self.params['cost']: repcost= self.calc_repaircost()
+        if 'repair' in self.params.cost: repcost= self.calc_repaircost()
         else:                               repcost = 0.0
-        if 'water' in self.params['cost']:
+        if 'water' in self.params.cost:
             lostwat = sum(mdlhists['nominal']['flows']['Wat_2']['flowrate'] - mdlhists['faulty']['flows']['Wat_2']['flowrate'])
-            watcost = 750 * lostwat  * self.tstep
-        elif 'water_exp' in self.params['cost']:
+            watcost = 750 * lostwat  * self.modelparams.dt
+        elif 'water_exp' in self.params.cost:
             wat = mdlhists['nominal']['flows']['Wat_2']['flowrate'] - mdlhists['faulty']['flows']['Wat_2']['flowrate']
-            watcost =100 *  sum(np.array(accumulate(wat))**2) * self.tstep
+            watcost =100 *  sum(np.array(accumulate(wat))**2) * self.modelparams.dt
         else: watcost = 0.0
-        if 'ee' in self.params['cost']:
+        if 'ee' in self.params.cost:
             eespike = [spike for spike in mdlhists['faulty']['flows']['EE_1']['current'] - mdlhists['nominal']['flows']['EE_1']['current'] if spike >1.0]
-            if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.tstep
+            if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.modelparams.dt
             else: eecost =0.0
         else: eecost = 0.0
 

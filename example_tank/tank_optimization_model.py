@@ -9,7 +9,8 @@ The functions of the system are:
 The Tank stores a set amount of water, the level of which is controlled by 
 inlet and outlet valves. 
 """
-from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.common import Parameter
+from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.block import FxnBlock, Component
 import numpy as np
 
@@ -78,12 +79,25 @@ class ContingencyActions(FxnBlock):
             
             self.Input_Sig.action=self.faultpolicy[self.Input_Sig.indicator,self.Tank_Sig.indicator,self.Output_Sig.indicator][0]
             self.Output_Sig.action=self.faultpolicy[self.Input_Sig.indicator,self.Tank_Sig.indicator,self.Output_Sig.indicator][1]
-  
+class TankParam(Parameter, readonly=True):
+    """ """
+    capacity:       np.float64 = np.float64(20.0)
+    turnup:         np.float64 = np.float64(1.0)
+    faultpolicy:    tuple = tuple((a-1,b-1,c-1,ul, 0) for ul in ["l","u"] for a,b,c in np.ndindex((3,3,3)))
+    def get_faultpolicy(self):
+        fd = {(v[0], v[1], v[2], v[3]): v[4] for v in self.faultpolicy}
+        return {(a-1,b-1,c-1):(fd[a-1,b-1,c-1,"l"], fd[a-1,b-1,c-1,"u"]) for a,b,c in np.ndindex((3,3,3))}
+def make_tankparam(*args,**kwargs):
+    if args: 
+        fp = tuple((v[0], v[1], v[2], v[3], args[i]) for i,v in enumerate(TankParam.__defaults__[2]))
+        kwargs['faultpolicy']=fp
+    return kwargs
+
+
 class Tank(Model):
-    def __init__(self, params={'capacity':20,'turnup':1.0, **{(a-1,b-1,c-1,ul):0 for ul in ["l","u"] for a,b,c in np.ndindex((3,3,3))} },\
-                 modelparams = {'phases':{'na':[0],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'}, valparams={}):
+    def __init__(self, params=TankParam(),\
+                 modelparams = ModelParam(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min'), valparams={}):
         super().__init__(params, modelparams, valparams)
-        faultpolicy = {(a-1,b-1,c-1):(params[a-1,b-1,c-1,"l"], params[a-1,b-1,c-1,"u"]) for a,b,c in np.ndindex((3,3,3))}
         
         self.add_flow('Coolant_in', {'effort':1.0, 'rate':1.0})
         self.add_flow('Coolant_out', {'effort':1.0, 'rate':1.0})
@@ -91,16 +105,16 @@ class Tank(Model):
         self.add_flow('Tank_Sig', {'indicator':0.0, 'action':0.0})
         self.add_flow('Output_Sig', {'indicator':1.0, 'action':0.0})
         
-        self.add_fxn('Import_Coolant', ['Coolant_in', 'Input_Sig'], fclass = ImportLiquid, fparams = params['turnup'])
-        self.add_fxn('Store_Coolant', ['Coolant_in', 'Coolant_out', 'Tank_Sig'], fclass = StoreLiquid, fparams=params['capacity'])
-        self.add_fxn('Export_Coolant', ['Coolant_out', 'Output_Sig'], fclass =ExportLiquid, fparams = params['turnup'])
-        self.add_fxn('Contingency', ['Input_Sig', 'Tank_Sig', 'Output_Sig'], fclass =ContingencyActions, fparams = faultpolicy)
+        self.add_fxn('Import_Coolant', ['Coolant_in', 'Input_Sig'], fclass = ImportLiquid, fparams = params.turnup)
+        self.add_fxn('Store_Coolant', ['Coolant_in', 'Coolant_out', 'Tank_Sig'], fclass = StoreLiquid, fparams=params.capacity)
+        self.add_fxn('Export_Coolant', ['Coolant_out', 'Output_Sig'], fclass =ExportLiquid, fparams = params.turnup)
+        self.add_fxn('Contingency', ['Input_Sig', 'Tank_Sig', 'Output_Sig'], fclass =ContingencyActions, fparams = self.params.get_faultpolicy())
         
         self.build_model()
     def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high
         overfullcost, emptycost, buffercost = 0, 0, 0
-        sum(mdlhists['faulty']['functions']['Store_Coolant']['level']>=self.params['capacity'])*10000        #time the tank is overfull
+        sum(mdlhists['faulty']['functions']['Store_Coolant']['level']>=self.params.capacity)*10000        #time the tank is overfull
         if any(mdlhists['faulty']['functions']['Store_Coolant']['level']<=0):     emptycost = 1000000     #if the tank lacks any water
         buffercost = sum(mdlhists['faulty']['functions']['Store_Coolant']['coolingbuffer']<=0)*100000     #if the buffer is 'spent'
         mitigationcost = (sum(mdlhists['faulty']['flows']['Input_Sig']['action']!=0)+ sum(mdlhists['faulty']['flows']['Output_Sig']['action']!=0))*1000
@@ -112,7 +126,7 @@ class Tank(Model):
 if __name__=="__main__":
     import fmdtools.faultsim.propagate as propagate
     import fmdtools.resultdisp as rd
-    from fmdtools.modeldef import SampleApproach
+    from fmdtools.modeldef.approach import SampleApproach
     mdl=Tank()
     
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])
