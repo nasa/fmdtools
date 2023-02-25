@@ -32,8 +32,7 @@ class Flow(States):
         """
         self.type=ftype
         self.name=name
-        self.params=params
-        self.set_atts(**params)
+        self.p=params
         self._initstates=states.copy()
         self._states=list(states.keys())
         for state in self._states:
@@ -79,7 +78,7 @@ class Flow(States):
         for state in self._states:
             states[state]=getattr(self,state)
         if self.__class__ in [Flow, MultiFlow, CommsFlow]:
-            copy = self.__class__(states, self.name, self.type, params=self.params)
+            copy = self.__class__(states, self.name, self.type, params=self.p)
         else:
             copy = self.__class__()
             for state in self._states:

@@ -3,6 +3,7 @@
 Description: A module for defining Models, which are aggregations of Functions and Flows. Has Classes:
     
 - :class:`Model`:                       Superclass for defining simulation models.
+- :class:`ModelParam`:                  Class for defining model simulation parameters.
 - :func:`check_model_pickleability` :   Checks if a model is pickleable (and thus able to be parallelized)
 """
 import numpy as np
@@ -11,11 +12,48 @@ from inspect import signature
 import networkx as nx
 import warnings
 import sys
+from recordclass import asdict
 
 from .flow import Flow, init_flow
 from .block import GenericFxn
-from .common import check_pickleability
+from .common import check_pickleability, Parameter
 import fmdtools.resultdisp.process as proc
+
+
+
+class ModelParam(Parameter, readonly=True):
+    """
+    Class defining Model simulation parameters.
+    
+    Has fields:
+        phases : tuple
+            phases (('name', start, end)...) that the simulation progresses through
+        times : tuple
+            tuple of times to sample (if desired) (starttime, sampletime1, sampletime2,... endtime)
+        dt : float
+            timestep used in the simulation. default is 1.0
+        units : str
+            time-units. default is hours`
+        use_end_condition : bool
+            whether to use an end-condition method (defined by user-defined end_condition method) 
+            or defined end time to end the simulation. Default is False
+        seed : int
+            seed used for the internal random number generator. Default is 42.
+        use_local : bool
+            Whether to use locally-defined timesteps in functions (if any). Default is True.
+    """
+    phases :            tuple = (('na', 0, 100),)
+    times :             tuple = (0, 100)
+    dt :                float = 1.0
+    units :             str = "hr"
+    units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
+    use_end_condition : bool = False
+    seed :              int = 42
+    use_local :         bool = True
+    def __init__(self, **kwargs):
+        if ('times' in kwargs) and not('phases' in kwargs):
+            kwargs['phases']=(("na", 0, kwargs['times'][-1]),)
+        super().__init__(**kwargs)
 
 #Model superclass    
 class Model(object):
@@ -30,23 +68,10 @@ class Model(object):
         dictionary of flows objects in the model indexed by name
     fxns : dict
         dictionary of functions in the model indexed by name
-    params,modelparams,valparams : dict
+    params : dict
         dictionaries of (optional) parameters for a given instantiation of a model
-    modelparams : dict
-        dictionary of parameters for running a simulation. defines these parameters in the model:
-            phases : dict
-                phases {'name':[start, end]} that the simulation progresses through
-            times : array
-                array of times to sample (if desired) [starttime, sampletime1, sampletime2,... endtime]
-            dt : float
-                timestep used in the simulation. default is 1.0
-            units : str
-                time-units. default is hours
-            use_end_condition : bool
-                whether to use an end-condition method (defined by user-defined end_condition method) 
-                or defined end time to end the simulation 
-            seed : int
-                seed used for the internal random number generator
+    modelparams : ModelParam
+        Simulation Parameters.
     valparams : 
         dictionary of parameters for defining what simulation constructs to record for find_classification
     bipartite : networkx graph
@@ -55,7 +80,7 @@ class Model(object):
         multigraph view of functions and flows
     
     """
-    def __init__(self, params={},modelparams={}, valparams='all'):
+    def __init__(self, params={},modelparams=ModelParam(), valparams='all'):
         """
         Instantiates internal model attributes with predetermined:
         
@@ -63,13 +88,8 @@ class Model(object):
         ----------
         params : dict 
             design variables of the model
-        modelparams : dict 
-            dictionary of: 
-                       - global phases {'phase': [starttime, endtime]}
-                       - times [starttime, ..., endtime] (middle time used for sampling), 
-                       - timestep (float) to run the model with)
-                       - seed (int) - if present, sets a seed to run the random number generators from
-                       - use_end_condition (bool) - if True (default), uses end_condition() in the model to determine when the simulation ends.
+        modelparams : ModelParam
+            simulation parameters for the model.
         valparams dict or (`all`/`flows`/`fxns`)
             parameters to keep a history of in params needed for find_classification. default is 'all'
             dict option is of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
@@ -80,16 +100,8 @@ class Model(object):
         self.params=params
         self.valparams = valparams
         self.modelparams=modelparams
-        # model defaults to static representation if no timerange
-        self.phases=modelparams.get('phases',{'na':[1]})
         self.find_any_phase_overlap()
-        self.times=modelparams.get('times',[1])
-        self.tstep = modelparams.get('tstep', 1.0)
-        self.units = modelparams.get('units', 'hr')
-        self.use_local = modelparams.get('use_local', True)
-        self.use_end_condition = modelparams.get('use_end_condition', True)
-        self._update_model_seed(modelparams.get('seed', False))
-        
+        self.set_rng()
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
@@ -104,20 +116,25 @@ class Model(object):
         flowstr = ''.join(flowlist)
         return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'functions: \n'+fxnstr+'flows: \n'+flowstr
     def find_any_phase_overlap(self):
-        intervals = [*self.phases.values()]
+        phase_dict = {v[0]: [v[1], v[2]] for v in self.modelparams.phases}
+        intervals = [*phase_dict.values()]
         int_low = np.sort([i[0] for i in intervals])
         int_high = np.sort([i[1] if len(i)==2 else i[0] for i in intervals])
         for i, il in enumerate(int_low):
             if i+1==len(int_low): break
             if int_low[i+1]<=int_high[i]:
-                raise Exception("Global phases overlap (see mdlparams):"+str(self.phases)+" Ensure the max of each phase < min of each other phase")
+                raise Exception("Global phases overlap (see mdlparams):"+str(self.modelparams.phases)+" Ensure the max of each phase < min of each other phase")
     def _update_model_seed(self, seed=[]):
         """ Updates/Initializes the model seed params (helper function--use update_seed instead)""" 
-        if seed:  self.seed = seed
-        else:
-            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]                       
-        self.modelparams['seed']=self.seed
-        self._rng = np.random.default_rng(self.seed)
+        if not seed:
+            seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0] 
+        kwargs = asdict(self.modelparams)
+        kwargs['seed']=seed
+        self.modelparams = ModelParam(**kwargs)
+        self.set_rng()
+    def set_rng(self):
+        """Sets the Model internal rng self._rng from self.modelparams.seed."""
+        self._rng = np.random.default_rng(self.modelparams.seed)
     def update_seed(self,seed=[]):
         """
         Updates model seed and the seed in all functions. 
@@ -129,7 +146,7 @@ class Model(object):
         """
         self._update_model_seed(seed)
         for fxn in self.fxns:
-            self.fxns[fxn].update_seed(self.seed)
+            self.fxns[fxn].update_seed(self.modelparams.seed)
     def get_rand_states(self, auto_update_only=False):
         """Gets dictionary of random states throughout the model functions"""
         rand_states = {}
@@ -217,7 +234,7 @@ class Model(object):
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
             self.functionorder.update([name])
-            self.fxns[name].set_timestep(use_local=self.use_local, global_tstep=self.tstep)
+            self.fxns[name].set_timestep(use_local=self.modelparams.use_local, global_tstep=self.modelparams.dt)
             setattr(self, name, self.fxns[name])
     def set_functionorder(self,functionorder):
         """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
@@ -475,7 +492,7 @@ class Model(object):
         """
         mem_profile={}
         mem = 0
-        mem_profile['params'] = sys.getsizeof(proc.flatten_hist(self.params))
+        mem_profile['params'] = sys.getsizeof(self.params)
         mem_profile['params'] += sys.getsizeof(self.modelparams)
         mem_profile['params'] += sys.getsizeof(self.valparams)
         for fxnname, fxn in self.fxns.items():
@@ -505,7 +522,7 @@ class Model(object):
             flows = copy.get_flows(flownames)
             if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows)
             else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams)
-            copy.fxns[fxnname].set_timestep(use_local=self.use_local, global_tstep=self.tstep)
+            copy.fxns[fxnname].set_timestep(use_local=self.modelparams.use_local, global_tstep=self.modelparams.dt)
             setattr(copy, fxnname, copy.fxns[fxnname])
         copy._fxninput=self._fxninput
         copy._fxnflows=self._fxnflows
@@ -519,7 +536,7 @@ class Model(object):
             flow.reset()
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
-        self._rng=np.random.default_rng(self.seed)
+        self._rng=np.random.default_rng(self.modelparams.seed)
     def find_sub_classifications(self, scen, mdlhists):
         """Enables the use of find_classification at the function level."""
         subclass={}

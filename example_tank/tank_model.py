@@ -21,7 +21,8 @@ human errors during early design stage functional failure analysis. In ASME
 Information in Engineering Conference. American Society of Mechanical Engineers 
 Digital Collection.
 """
-from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.common import Parameter
+from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.block import FxnBlock, Component
 
 
@@ -168,10 +169,14 @@ class Turn(Component):
     def behavior(self,grasp, intended_turn):
         if self.has_fault('CannotTurn') or grasp == 0:  return 0
         else:                                           return intended_turn
-        
+    
+class TankParam(Parameter, readonly=True):
+    reacttime:      int = 2
+    store_tstep:    float = 1.0
+
 class Tank(Model):
-    def __init__(self, params={'reacttime':2, 'store_tstep':1.0},\
-                 modelparams = {'phases':{'na':[0],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min'},\
+    def __init__(self, params=TankParam(),\
+                 modelparams = ModelParam(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min'),\
                  valparams = {'functions':{'Store_Water':'level'}}):
         super().__init__(params = params,modelparams=modelparams, valparams=valparams )
         
@@ -185,10 +190,10 @@ class Tank(Model):
         
         self.add_fxn('Import_Water', ['Wat_in_1', 'Valve1_Sig'], fclass = ImportLiquid)
         self.add_fxn('Guide_Water_In', ['Wat_in_1', 'Wat_in_2'], fclass = GuideLiquid)
-        self.add_fxn('Store_Water', ['Wat_in_2', 'Wat_out_1', 'Tank_Sig'], fclass = StoreLiquid, fparams=params['store_tstep'])
+        self.add_fxn('Store_Water', ['Wat_in_2', 'Wat_out_1', 'Tank_Sig'], fclass = StoreLiquid, fparams=params.store_tstep)
         self.add_fxn('Guide_Water_Out', ['Wat_out_1', 'Wat_out_2'], fclass =GuideLiquid)
         self.add_fxn('Export_Water', ['Wat_out_2', 'Valve2_Sig'], fclass =ExportLiquid)
-        self.add_fxn('Human', ['Valve1_Sig', 'Tank_Sig', 'Valve2_Sig'], fclass =HumanActions, fparams = params['reacttime'])
+        self.add_fxn('Human', ['Valve1_Sig', 'Tank_Sig', 'Valve2_Sig'], fclass =HumanActions, fparams = params.reacttime)
         
         self.build_model()
     def find_classification(self, scen, mdlhists):
@@ -203,7 +208,7 @@ class Tank(Model):
 if __name__ == '__main__':
     import fmdtools.faultsim.propagate as propagate
     import fmdtools.resultdisp as rd
-    from fmdtools.modeldef import SampleApproach
+    from fmdtools.modeldef.approach import SampleApproach
     
     mdl = Tank()
     
@@ -227,7 +232,7 @@ if __name__ == '__main__':
     rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time=2)
     
     
-    mdl = Tank(params={'reacttime':2, 'store_tstep':3.0})
+    mdl = Tank(params=TankParam(reacttime=2, store_tstep=3.0))
     resgraph, mdlhist = propagate.one_fault(mdl,'Store_Water','Leak', time=2, desired_result='bipartite')
     rd.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='Store_Water', time_slice=2)
     rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time='end')

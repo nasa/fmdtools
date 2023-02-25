@@ -9,6 +9,7 @@ from ex_pump import *
 from fmdtools.modeldef.approach import SampleApproach
 import fmdtools.faultsim.propagate as propagate
 import fmdtools.resultdisp as rd
+from fmdtools.modeldef.model import ModelParam
 
 import time
 import pickle
@@ -114,17 +115,17 @@ def instantiate_pools(cores):
     """Used to instantiate multiprocessing pools for comparison"""
     from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
     from parallelism_methods import compare_pools
-    return  {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores)} #, 'Ray': RayPool(cores) }
+    return  {'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocessing':mp.Pool(cores), 'multiprocess':ms.Pool(cores)} #, 'Ray': RayPool(cores) }
 
 
 if __name__=='__main__':
-    mdl=Pump(params={'cost':{'repair'}, 'delay':10}, modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,500]}, 'times':[0,20, 500], 'tstep':1})
+    mdl=Pump(params=PumpParam(), modelparams = ModelParam(phases=(('start',0,4),('on',5, 49),('end',50,500)),times=(0,20, 500)))
     app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':3})
     
     cores = 4
     
     print("STAGED + SOME TRACKING")
-    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track={'flows':{'EE_1':'all', 'Wat_1':['pressure', 'flowrate']}})
+    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track={'flows':{'EE_1':'all', 'Wat_2':['pressure', 'flowrate']}})
     print("STAGED + FULL MODEL TRACKING")
     compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='all')
     print("STAGED + FLOW TRACKING")
