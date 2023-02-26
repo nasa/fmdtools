@@ -6,12 +6,15 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
+from fmdtools.modeldef.common import Parameter
 from fmdtools.modeldef.block import FxnBlock
-from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.approach import SampleApproach
 
 from drone_mdl_static import m2to1
 import fmdtools.faultsim as fs
+
+from drone_mdl_static import DistEE, EngageLand, HoldPayload
 
 class StoreEE(FxnBlock):
     def __init__(self, name, flows):
@@ -27,51 +30,7 @@ class StoreEE(FxnBlock):
         else: self.EEout.effort=1.0
         if time > self.time:
             self.soc=self.soc-self.EEout.effort*self.EEout.rate*(time-self.time)/2
-class DistEE(FxnBlock):
-    def __init__(self, name,flows):
-        super().__init__(name, flows, ['EEin','EEmot','EEctl','ST'], {'EEtr':1.0, 'EEte':1.0})
-        self.failrate=1e-5
-        self.assoc_modes({'short':[0.3,3000], 'degr':[0.5,1000], 'break':[0.2,2000]})
-    def condfaults(self, time):
-        if self.ST.support<0.5 or max(self.EEmot.rate,self.EEctl.rate)>2: 
-            self.add_fault('break')
-        if self.EEin.rate>2:
-            self.add_fault('short')
-    def behavior(self, time):
-        if self.has_fault('short'): 
-            self.EEte=0.0
-            self.EEre=10
-        elif self.has_fault('break'): 
-            self.EEte=0.0
-            self.EEre=0.0
-        elif self.has_fault('degr'): self.EEte=0.5
-        self.EEmot.effort=self.EEte*self.EEin.effort
-        self.EEctl.effort=self.EEte*self.EEin.effort
-        self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, 0.9*self.EEmot.rate+0.1*self.EEctl.rate])
-class EngageLand(FxnBlock):
-    def __init__(self, name,flows):
-        super().__init__(name, flows, ['forcein', 'forceout'])
-        self.failrate=1e-5
-        self.assoc_modes({'break':[0.2, 1000], 'deform':[0.8, 1000]})
-    def condfaults(self, time):
-        if abs(self.forcein.value)>=2.0:      self.add_fault('break')
-        elif abs(self.forcein.value)>1.5:    self.add_fault('deform')
-    def behavior(self, time):
-        self.forceout.value=self.forcein.value/2
-            
-class HoldPayload(FxnBlock):
-    def __init__(self, name,flows):
-        super().__init__(name, flows, ['FG', 'Lin', 'ST'])
-        self.failrate=1e-6
-        self.assoc_modes({'break':[0.2, 10000], 'deform':[0.8, 10000]})
-    def condfaults(self, time):
-        if abs(self.FG.value)>0.8:      self.add_fault('break')
-        elif abs(self.FG.value)>1.0:    self.add_fault('deform')
-    def behavior(self, time):
-        #need to transfer FG to FA & FS???
-        if self.has_fault('break'):     self.Lin.support, self.ST.support = 0,0
-        elif self.has_fault('deform'):  self.Lin.support, self.ST.support = 0.5,0.5
-        else:                           self.Lin.support, self.ST.support = 1.0,1.0
+
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
     def __init__(self, name, flows):     
         super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Force'], {'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0})
@@ -219,8 +178,8 @@ class ViewEnvironment(FxnBlock):
             if inrange(area, spot[0],spot[1]): self.viewingarea[spot]='viewed'
         
 class Drone(Model):
-    def __init__(self, params={'graph_pos':{}, 'bipartite_pos':{}},\
-            modelparams={'phases': {'ascend':[0,4],'forward':[5,94],'descend':[95, 100]}, 'times':[0,135],'units':'sec'}, valparams={}):
+    def __init__(self, params=Parameter(),\
+            modelparams=ModelParam(phases=(('ascend',0,4),('forward',5,94),('descend',95, 100)),times=(0,135),units='sec'), valparams={}):
         super().__init__(params, modelparams, valparams)
         #add flows to the model
         self.add_flow('Force_ST', {'support':1.0})
@@ -246,7 +205,7 @@ class Drone(Model):
         self.add_fxn('HoldPayload',['Force_LG', 'Force_Lin', 'Force_ST'], fclass=HoldPayload)
         self.add_fxn('ViewEnv', ['Env1'], fclass=ViewEnvironment)
         
-        self.build_model(graph_pos=params['graph_pos'], bipartite_pos=params['bipartite_pos'])
+        self.build_model()
     def find_classification(self,scen, mdlhists):
         if -5 >mdlhists['faulty']['flows']['Env1']['x'][-1] or 5<mdlhists['faulty']['flows']['Env1']['x'][-1]:
             lostcost=50000

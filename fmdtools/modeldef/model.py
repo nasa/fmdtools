@@ -50,10 +50,10 @@ class ModelParam(Parameter, readonly=True):
     use_end_condition : bool = False
     seed :              int = 42
     use_local :         bool = True
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         if ('times' in kwargs) and not('phases' in kwargs):
             kwargs['phases']=(("na", 0, kwargs['times'][-1]),)
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
 #Model superclass    
 class Model(object):

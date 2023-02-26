@@ -1,7 +1,8 @@
 import numpy as np
 
+from fmdtools.modeldef.common import Parameter
 from fmdtools.modeldef.block import FxnBlock
-from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.model import Model, ModelParam
 
 class StoreEE(FxnBlock):
     def __init__(self, name, flows):
@@ -31,7 +32,7 @@ class DistEE(FxnBlock):
         elif self.has_fault('degr'): self.EEte=0.5
         self.EEmot.effort=self.EEte*self.EEin.effort
         self.EEctl.effort=self.EEte*self.EEin.effort
-        self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, max(self.EEmot.rate,self.EEctl.rate)])
+        self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, 0.9*self.EEmot.rate+0.1*self.EEctl.rate])
 class EngageLand(FxnBlock):
     def __init__(self,name, flows):
         super().__init__(name,flows, ['forcein', 'forceout'])
@@ -174,7 +175,7 @@ class ViewEnvironment(FxnBlock):
         self.assoc_modes({'poorview':[0.2, 10000]})
         
 class Drone(Model):
-    def __init__(self, params={'graph_pos':{}, 'bipartite_pos':{}}, modelparams={}, valparams={}):
+    def __init__(self, params=Parameter(), modelparams=ModelParam(), valparams={}):
         super().__init__(params, modelparams, valparams)
         self.params=params
         #add flows to the model
@@ -200,7 +201,7 @@ class Drone(Model):
         self.add_fxn('HoldPayload',['Force_LG', 'Force_Lin', 'Force_ST'], fclass=HoldPayload)
         self.add_fxn('ViewEnv', ['Env1'], fclass=ViewEnvironment)
         
-        self.build_model(graph_pos=params['graph_pos'], bipartite_pos=params['bipartite_pos'])
+        self.build_model()
     def find_classification(self,scen, mdlhist):
         modes, modeprops = self.return_faultmodes()
         repcost=sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])
