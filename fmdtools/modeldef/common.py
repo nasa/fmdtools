@@ -11,6 +11,7 @@ from recordclass import dataobject, asdict
 from collections.abc import Iterable
 import dill
 import copy
+import inspect
 
 class States(object):
     def set_atts(self, **kwargs):
@@ -301,7 +302,7 @@ class Parameter(dataobject, readonly=True):
     This parameter can then be instantiated using:
         p = Param(x=1.0, y=0.0)
     """
-    def __init__(self, strict_immutability=True,**kwargs):
+    def __init__(self, *args, strict_immutability=True,**kwargs):
         """
         Initializes the parameter with given kwargs.
 
@@ -313,11 +314,18 @@ class Parameter(dataobject, readonly=True):
         **kwargs : kwargs
             Fields to set to non-default values.
         """
+        if not self.__doc__: 
+            raise Exception("Please provide docstring")
+            #self.__doc__=Parameter.__doc__
         for k, v in kwargs.items():
             self.check_lim(k,v)
-        super().__init__(**kwargs)
+        try:
+            super().__init__(*args, **kwargs)
+        except TypeError:
+            raise Exception("Invalid args/kwargs: "+str(args)+" , "+str(kwargs))
         if strict_immutability: self.check_immutable()
         self.check_type()
+        self.check_pickle()
     def check_lim(self, k, v):
         """
         Checks to ensure the value v for field k is within the defined limits
@@ -373,42 +381,23 @@ class Parameter(dataobject, readonly=True):
         for typed_field in self.__annotations__:
             attr_type = type(getattr(self, typed_field))
             true_type = self.__annotations__.get(typed_field, False)
-            if true_type and not attr_type==true_type:
+            if ((true_type and not attr_type==true_type) and
+                str(true_type).split("'")[1] not in str(attr_type)): # weaker, but enables use of np.str, np.float, etc
                 raise Exception(typed_field+" assigned incorrect type: "+str(attr_type)+" (should be "+str(true_type)+")")
     def copy_with_vals(self, **kwargs):
         """Creates a copy of itself with modified values given by kwargs"""
         return self.__class__(**{**asdict(self), **kwargs})
-        
-
-
-class Param(Parameter, readonly=True):
-    x:          float = 30.0
-    y:          float = 30.0
-    x_lim = (0.0,100.0)
-    y_set = (0.0,30.0,100.0)
-
-p = Param()
-
-import pickle
-
-e= pickle.dumps(p)
-p2=pickle.loads(e)
-
-dill.pickles(p)
-_p = dill.dumps(p)
-
-class Pt(dataobject):
-    x:  float=1.0
-    y:  float=2.0
-
-d = Pt()
-
-dill.pickles(d)
-_d = dill.dumps(d)
-dn = dill.loads(_d)
-
-
-#check_pickleability(p)
+    def check_pickle(self):
+        """Checks to make sure pickled object will get *args and **kwargs"""
+        signature = str(inspect.signature(self.__init__))
+        if not ('*args' in signature) and ('**kwargs' in signature):
+            raise Exception("*args and **kwargs not in __init__()--will not pickle.")
+    def get_true_field(self, fieldname, *args, **kwargs):
+        """Gets the value that will be set to fieldname given *args and **kwargs"""
+        if fieldname in kwargs:                         return kwargs[fieldname]
+        field_ind = self.__fields__.index(fieldname)
+        if args and len(args)>field_ind:                return args[field_ind]
+        else:                                           return self.__defaults__[field_ind]
 
 # def phases(times, names=[]):
 #     """ Creates named phases from a set of times defining the edges of the intervals """

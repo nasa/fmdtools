@@ -208,8 +208,8 @@ if __name__=="__main__":
     lvar = [*res_vars_i.values()][27:]
     
     pool=mp.Pool(5)
-    result, args, fhist, thist, xdhist = alternating_opt()
-    result, args, bestfhist, bestxdhist = bilevel_opt()
+    result, args, fhist, thist, xdhist = alternating_opt(pool=pool)
+    result, args, bestfhist, bestxdhist = bilevel_opt(pool=pool)
     
     
     

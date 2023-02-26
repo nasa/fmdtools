@@ -4,14 +4,10 @@ Created on Tue Jul 19 18:29:42 2022
 
 @author: igirshfe
 """
-import sys, os
-
-sys.path.insert(0, os.path.join('..','..'))
-sys.path.insert(0, os.path.join('..'))
 
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp as rd
-from fmdtools.modeldef import SampleApproach
+from fmdtools.modeldef.approach import SampleApproach
 from fmdtools.faultsim.search import ProblemInterface
 import example_rover.rover_model as rvr
 import tqdm
@@ -28,7 +24,7 @@ def line_dist(ind, show_plot=False, print_time=False):
 #    """Takes all of the individuals in a species and returns each of their distances
 #    from the end line in an array"""
     starttime=time.time()
-    mdl = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':{'custom_fault':{'friction':ind[0],'transfer':ind[1], 'drift':ind[2]}}})
+    mdl = rvr.Rover(params=rvr.RoverParam('turn', start=5.0), valparams={'drive_modes':{'custom_fault':{'friction':ind[0],'transfer':ind[1], 'drift':ind[2]}}})
     endresults, reshist = prop.one_fault(mdl,'Drive','custom_fault', time=fault_time, staged=True, protect=False, track={'functions':{'Environment':'all'}, 'flows':{'Ground':'all'}})
     dist = endresults['line_dist']
     enddist = endresults['end_dist']
@@ -548,15 +544,14 @@ def plot_trajs(sol_dict, figsize=(4,12), v_padding=0.3, xlim=[15,25], ylim=[0,10
 
 def visualizations(soln, method="EA", figsize=(4,4), ax=False, legend=True, xlim=[15,25], ylim=[0,10]):
 
-    mdl_range = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':list(soln)})
+    mdl_range = rvr.Rover(params=rvr.RoverParam(linetype='turn', start=5.0), valparams={'drive_modes':list(soln)})
     _, mdlhists = prop.nominal(mdl_range)
     phases, modephases = rd.process.modephases(mdlhists)
     end_time = phases['Avionics']['drive'][1]+25
-    mdl_range.times[1]=end_time
+    mdl_range.modelparams = mdl_range.modelparams.copy_with_vals(times=(0,end_time))
     app_range = SampleApproach(mdl_range, faults='Drive', phases={'drive':phases['Avionics']['drive']})
     endclasses_range, mdlhists_range = prop.approach(mdl_range, app_range, staged=True, showprogress=False, 
-                                                     new_params={'params':rvr.gen_params('turn', start=5),
-                                                         'modelparams':{'times':[0,end_time]}})    
+                                                     new_params={'modelparams':{'times':(0,end_time)}})    
     fig = rvr.plot_trajectories(mdlhists_range, app=app_range, faultlabel='Faulty Scenarios', faultalpha=0.5,title="Trajectories-"+method,show_labels=False, figsize=figsize, ax=ax, legend=legend)
     if not ax:
         ax = plt.gca()
@@ -588,16 +583,16 @@ SUBPOP_SIZE = 50 #number of individuals in a subpopulation
 NUM_SUBPOP = 10 #number of subpopulation
 
 #nominal scenario info (used to find when to inject faults in nominal scenario)
-mdl = rvr.Rover(params=rvr.gen_params('turn', start=5), valparams={'drive_modes':{'custom_fault':{'friction':0.0, 'transfer':0.0,'drift':0.0}}})
+mdl = rvr.Rover(params=rvr.RoverParam('turn', start=5.0), valparams={'drive_modes':{'custom_fault':{'friction':0.0, 'transfer':0.0,'drift':0.0}}})
 _, mdlhists_nom = prop.nominal(mdl)
 phases, modephases = rd.process.modephases(mdlhists_nom)
 app= SampleApproach(mdl, faults='Drive', phases={'drive':phases['Avionics']['drive']})
 fault_time = app.times[0]
 end_time = phases['Avionics']['drive'][1]+25
-mdl.times[1]=end_time    
+mdl =prop.new_mdl(mdl,{'modelparams':{'times':(0,end_time)}})   
 
 #defining optimization problem interface (for line_dist_faster)
-mode_search_prob = ProblemInterface("Mode Search", mdl, default_params=rvr.gen_params('turn', start=5))
+mode_search_prob = ProblemInterface("Mode Search", mdl, default_params=rvr.RoverParam('turn', start=5.0))
 mode_search_prob.add_simulation("custom_fault", "single", staged=True,\
                                 track={"flows":{"Ground":"all"},"functions":{"Environment":"all"}})
 mode_search_prob.add_variables("custom_fault", "Drive.friction", "Drive.transfer", "Drive.drift", t=fault_time)

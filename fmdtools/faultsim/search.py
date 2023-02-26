@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import warnings
 import time
+from recordclass import asdict
 
 class ProblemInterface(): 
     """
@@ -54,7 +55,7 @@ class ProblemInterface():
         """
         self.name=name
         self.mdl=mdl
-        self.default_params=mdl.params
+        self.default_params=asdict(mdl.params)
         
         self.default_sim_kwargs = {k:kwargs[k] if k in kwargs else copy.deepcopy(v) for k,v in prop.sim_kwargs.items()}
         self.default_run_kwargs = {k:kwargs[k] if k in kwargs else copy.deepcopy(v) for k,v in prop.run_kwargs.items()}
@@ -355,7 +356,9 @@ class ProblemInterface():
         var_time, prevhist, nomhist, obj_time, mdl, c_mdl = sim['var_time'], sim['prevhist'], sim['nomhist'], sim['obj_time'], sim['mdl'], sim['c_mdls']
         
         if not self.simulations[simname][2]['staged']:  mdl = self._check_new_mdl(simname, var_time, mdl, x, obj_time, staged=self.simulations[simname][2]['staged'])
-        else:                                           mdl = c_mdl[var_time].copy(); mdl.modelparams.times[-1]=obj_time
+        else:                                           
+            mdl = c_mdl[var_time].copy(); 
+            mdl.modelparams= mdl.modelparams.copy_with_vals(times=(0,obj_time))
         # set model faults/disturbances as elements of scenario 
         ##NOTE: need to make sure scenarios don't overwrite each other
         scen=prop.construct_nomscen(mdl)
@@ -364,7 +367,7 @@ class ProblemInterface():
         #propagate scenario, get results
         des_r=copy.deepcopy(self.obj_const_mapping[simname])
         kwargs = {**self.simulations[simname][2], "desired_result":des_r, "nomhist":nomhist, "prevhist":prevhist}
-        mdl.modelparams['times'][-1]=obj_time
+        mdl.modelparams=mdl.modelparams.copy_with_vals(times=(0,obj_time))
         result, mdlhist, _, _ = prop.prop_one_scen(mdl, scen, **kwargs)
         self._sims[simname]['mdlhists'] = {"faulty":mdlhist, "nominal":nomhist}
         self._sims[simname]['results'] = result
@@ -577,7 +580,7 @@ class ProblemInterface():
                         pvars = [x[i] for i in self._sim_vars[up_name]]
                         newparams.update(upstream_sims[up_name]['paramfunc'](pvars))
                     if 'pass_mdl' in upstream_sims[up_name]:
-                        newparams=copy.deepcopy(self._sims[up_name]['c_mdls'][0].params)
+                        newparams=copy.deepcopy(asdict(self._sims[up_name]['c_mdls'][0].params))
                     if 'phases' in upstream_sims[up_name]:
                         nomhist = self._sims[up_name]['mdlhists']['faulty']
                         t_end = self._sims[up_name]['c_mdls'][0].modelparams.times[-1]

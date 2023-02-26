@@ -6,9 +6,10 @@ Created: June 2019, revised Nov 2022
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
+from fmdtools.modeldef.common import Parameter
 from fmdtools.modeldef.block import FxnBlock, Component
 from fmdtools.modeldef.flow import Flow
-from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.approach import SampleApproach
 from fmdtools.faultsim import propagate
 from fmdtools.faultsim.search import ProblemInterface
@@ -142,8 +143,8 @@ class ManageHealth(FxnBlock):
         if self.Force_ST.support<0.5 or self.EEctl.effort>2.0: self.add_fault('lostfunction')
     def behavior(self, time):
         if self.has_fault('lostfunction'):      self.RSig_Traj.mode = 'continue'
-        elif  self.HSig_DOFs.hstate=='faulty':  self.RSig_Traj.mode = self.respolicy['line']
-        elif  self.HSig_Bat.hstate=='faulty':   self.RSig_Traj.mode = self.respolicy['bat']
+        elif  self.HSig_DOFs.hstate=='faulty':  self.RSig_Traj.mode = self.respolicy.line
+        elif  self.HSig_Bat.hstate=='faulty':   self.RSig_Traj.mode = self.respolicy.bat
         else:                                   self.RSig_Traj.mode = 'continue'
     
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
@@ -245,8 +246,8 @@ class CtlDOF(FxnBlock):
 
 class PlanPath(FxnBlock):
     def __init__(self, name, flows, params):
-        self.nearest = params['safe'][0:2]+[0]
-        self.goals = params['flightplan']
+        self.nearest = [*params.safe[0:2],0]
+        self.goals = {i: list(vals) for i, vals in enumerate(params.flightplan)}
         super().__init__(name, flows, states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'dist':0.0, 'pt':1})
         self.add_flow('goal', {'x':self.goals[1][0],'y':self.goals[1][1],'z':self.goals[1][2]})
         self.failrate=1e-5
@@ -292,16 +293,39 @@ def vectdist(f1, f2):
 def vectdir(f1, f2):
     return vectdist(f1,f2)/(finddist(f1,f2)+0.0001)
 
+class ResPolicy(Parameter, readonly=True):
+    bat :   str= 'to_home'
+    bat_set = ('to_nearest', 'to_home', 'emland', 'land', 'move', 'continue')
+    line:   str= 'emland'
+    line_set = ('to_nearest', 'to_home', 'emland', 'land', 'move', 'continue')
+
+class DroneParam(Parameter, readonly=True):
+    """Parameters for the Drone optimization model"""
+    bat:        str='monolithic'
+    bat_set=('monolithic', 'series-split', 'parallel-split', 'split-both')
+    linearch:   str='quad'
+    linearch_set = ('quad','hex','oct')
+    respolicy:  ResPolicy=ResPolicy()
+    flightplan: tuple = ((0,0,0),           #flies through a few points and back to the start location
+                         (0,0,100),
+                         (100,0,100),
+                         (100,100,100),
+                         (150, 150, 100),
+                         (0,0,100),
+                         (0,0,0))
+    start:      tuple = (0.0, 0.0, 10.0, 10.0)
+    target:     tuple = (0.0, 150.0, 160.0, 160.0)
+    safe:       tuple = (0.0, 50.0, 10.0, 10.0)
+
 class Drone(Model):
-    def __init__(self, params={'flightplan':{0:[0,0,0], 1:[0,0,100], 2:[100, 0,100], 3:[100, 100,100], 4:[150, 150,100], 5:[0,0,100], 6:[0,0,0]},'bat':'monolithic', 'linearch':'quad','respolicy':{'bat':'to_home','line':'emland'}, 
-                               'start': [0.0,0.0, 10, 10], 'target': [0, 150, 160, 160], 'safe': [0, 50, 10, 10]},
-                 modelparams={'phases': {'ascend':[0],'forward':[1,11],'taxi':[12, 20]},'times':[0,30],'units':'min'},
+    def __init__(self, params=DroneParam(), 
+                 modelparams=ModelParam(phases=(('ascend',0,0),('forward',1,11),('taxi',12, 20)),times=(0,30),units='min'),
                  valparams={'loc':'rural'}):
         super().__init__(params, modelparams, valparams)
         
-        self.start_area = square(self.params['start'][0:2],self.params['start'][2],self.params['start'][3] )
-        self.safe_area = square(self.params['safe'][0:2],self.params['safe'][2],self.params['safe'][3] )
-        self.target_area = square(self.params['target'][0:2],self.params['target'][2],self.params['target'][3] )
+        self.start_area = square(params.start[0:2],params.start[2],params.start[3] )
+        self.safe_area = square(params.safe[0:2],params.safe[2],params.safe[3] )
+        self.target_area = square(params.target[0:2],params.target[2],params.target[3] )
         
         #add flows to the model
         self.add_flow('Force_ST', {'support':1.0})
@@ -318,13 +342,13 @@ class Drone(Model):
         #add functions to the model
         flows=['EEctl', 'Force_ST', 'HSig_DOFs', 'HSig_Bat', 'RSig_Traj']
         # trajconfig: continue, to_home, to_nearest, emland
-        self.add_fxn('ManageHealth',flows,fclass = ManageHealth, fparams=params['respolicy'])
-        batweight = {'monolithic':0.4, 'series-split':0.5, 'parallel-split':0.5, 'split-both':0.6}[params['bat']]
-        archweight = {'quad':1.2, 'hex':1.6, 'oct':2.0}[params['linearch']]
-        archdrag = {'quad':0.95, 'hex':0.85, 'oct':0.75}[params['linearch']]
-        self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= {'bat': params['bat'], 'weight':(batweight+archweight)/2.2 , 'drag': archdrag })
+        self.add_fxn('ManageHealth',flows,fclass = ManageHealth, fparams=params.respolicy)
+        batweight = {'monolithic':0.4, 'series-split':0.5, 'parallel-split':0.5, 'split-both':0.6}[params.bat]
+        archweight = {'quad':1.2, 'hex':1.6, 'oct':2.0}[params.linearch]
+        archdrag = {'quad':0.95, 'hex':0.85, 'oct':0.75}[params.linearch]
+        self.add_fxn('StoreEE',['EE_1', 'Force_ST', 'HSig_Bat'],fclass = StoreEE, fparams= {'bat':params.bat, 'weight':(batweight+archweight)/2.2 , 'drag': archdrag })
         self.add_fxn('DistEE', ['EE_1','EEmot','EEctl', 'Force_ST'], fclass = DistEE)
-        self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Des_traj','Force_Lin', 'HSig_DOFs'], fclass=AffectDOF, fparams = params['linearch'])
+        self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Des_traj','Force_Lin', 'HSig_DOFs'], fclass=AffectDOF, fparams = params.linearch)
         self.add_fxn('CtlDOF',['EEctl', 'Des_traj', 'Ctl1', 'DOFs', 'Force_ST'], fclass = CtlDOF)
         self.add_fxn('Planpath', ['EEctl', 'DOFs','Des_traj', 'Force_ST', 'RSig_Traj'], fclass=PlanPath, fparams=params)
         self.add_fxn('HoldPayload',['DOFs', 'Force_Lin', 'Force_ST'], fclass = HoldPayload)
@@ -597,8 +621,8 @@ start = [0.0,0.0, 10, 10]
 def_mdl = Drone()
 
 def plan_flight(z):
-    sq = square(def_mdl.params['target'][0:2],def_mdl.params['target'][2],def_mdl.params['target'][3])
-    landing = def_mdl.params['start'][0:2]+[0]
+    sq = square(def_mdl.params.target[0:2],def_mdl.params.target[2],def_mdl.params.target[3])
+    landing = [*def_mdl.params.start[0:2], 0]
     
     flightplan = {0:landing, 1: landing[0:2]+[z]}
     
@@ -629,7 +653,7 @@ def plan_flight(z):
     
     flightplan.update(newplan)
     flightplan.update({max(flightplan)+1:flightplan[1], max(flightplan)+2:flightplan[0]})
-    return {'flightplan': flightplan}
+    return {'flightplan': tuple(tuple(v) for v in flightplan.values())}
 
 ## Optimization Functions
 bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
@@ -659,7 +683,7 @@ opt_prob.add_variables("ocost", "height", vartype=plan_flight)
 
 respols = ['continue', 'to_home', 'to_nearest', 'emland']
 def spec_respol(bat, line):
-    return {'respolicy':{'bat':respols[int(bat)],'line':respols[int(line)]}}
+    return {'respolicy': ResPolicy(bat=respols[int(bat)], line=respols[int(line)])}
 
 app = SampleApproach(def_mdl,  phases={'forward'}, faults=('single-component', 'StoreEE'))
 opt_prob.add_simulation("rcost", "multi", app.scenlist, include_nominal=False,\
@@ -687,7 +711,7 @@ def calc_oper(mdl):
     return opercost, g_soc, g_max_height, phases
 def x_to_ocost(xdes, xoper, loc='rural'):
     fp = plan_flight(xoper[0], def_mdl)
-    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'flightplan':fp, 'respolicy':{'bat':'continue','line':'continue'}, 'target':target,'safe':safe,'start':start, 'loc':loc}
+    params = DroneParam(bat=bats[xdes[0]], linearch=linarchs[xdes[1]], respolicy=ResPolicy(bat='continue', line='continue'))
     mdl = Drone(params=params)
     return calc_oper(mdl)
 
@@ -717,8 +741,8 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'al
     
     fp = plan_flight(xoper[0])
     
-    params = {'bat':bats[xdes[0]], 'linearch':linarchs[xdes[1]], 'respolicy':{'bat':respols[xres[0]],'line':respols[xres[1]]}, 
-              'target':target,'safe':safe,'start':start,'loc':loc, **fp}
+    
+    params = DroneParam(bat=bats[xdes[0]], linearch=linarchs[xdes[1]], respolicy=ResPolicy(bat=respols[xres[0]], line=respols[xres[1]]))
     mdl = Drone(params=params)
     if not phases: _,_,_, phases = calc_oper(mdl)
     return calc_res(mdl, fullcosts=fullcosts, faultmodes = faultmodes, include_nominal=include_nominal, pool=pool, phases=phases, staged=staged)

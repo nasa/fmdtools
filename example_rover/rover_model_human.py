@@ -20,7 +20,8 @@ Flows:
     - Camera
 """
 from fmdtools.modeldef.block import FxnBlock, Action
-from fmdtools.modeldef.model import Model
+from fmdtools.modeldef.model import Model, ModelParam
+from fmdtools.modeldef.common import Parameter
 from fmdtools.modeldef.approach import SampleApproach, NominalApproach
 
 import random
@@ -34,7 +35,7 @@ import itertools
 
 class Operations(FxnBlock):
     def __init__(self, name, flows, params):
-        self.add_params(params)
+        self.p=params
         super().__init__(name, flows, flownames={'Stimulus': 'Control'}, states={'t_comp':np.NaN})
         self.assoc_modes({'no_con': [1e-4, 200]}, ['drive', 'standby'], initmode='standby', exclusive=True)
 
@@ -49,7 +50,7 @@ class Operations(FxnBlock):
 
         if self.in_mode('drive'):
             self.Control.powerswitch = 1
-            if in_area(self.end[0], self.end[1], 2, self.Video.x, self.Video.y):
+            if in_area(self.p.end[0], self.p.end[1], 2, self.Video.x, self.Video.y):
                 self.set_mode('standby')
                 self.t_comp=time
             else:
@@ -68,7 +69,7 @@ class Operations(FxnBlock):
 class Drive(FxnBlock):
     def __init__(self, name, flows, params):
         super().__init__(name, flows, flownames={"EE_15":"EE_in"})
-        base_f, base_d = params.get('friction', 0.0), params.get('drift', 0.0)
+        base_f, base_d = params.friction, params.drift
 
         self.assoc_faultstates({'friction':[base_f, {(base_f+0.5), 2*(base_f+0.5), 5*(base_f+0.5)}], 'drift':[base_d, {base_d+0.2, base_d-0.2}], 'transfer':[1.0,{0.0}]}, 'all')
 
@@ -100,21 +101,21 @@ class DriveDegradation(FxnBlock):
 
 class PSFDegradationShort(FxnBlock):
     def __init__(self,name,flows, params):
-        self.add_params(params)
-        super().__init__(name, flows, states={'fatigue':2.0, 'stress': self.stress_param})
-        if self.stoch_fatigue: self.assoc_rand_state('fatigue_param', 2.0, auto_update = ['gamma', (2,1.9)])
+        self.p=params
+        super().__init__(name, flows, states={'fatigue':2.0, 'stress': self.p.stress_param})
+        if self.p.stoch_fatigue: self.assoc_rand_state('fatigue_param', 2.0, auto_update = ['gamma', (2,1.9)])
     def dynamic_behavior(self, time):
-        if self.stoch_fatigue: self.fatigue=int(self.fatigue_param)
-        self.stress = int(self.stress_param+(1+(1/self.experience))**self.time)
+        if self.p.stoch_fatigue: self.fatigue=int(self.fatigue_param)
+        self.stress = int(self.p.stress_param+(1+(1/self.p.experience))**self.time)
         self.limit(fatigue=(0,10),stress = (0,100))
 
 class PSFDegradationLong(FxnBlock):
     def __init__(self,name,flows, params):
         super().__init__(name, flows, states={'experience':1.0})
-        self.add_params(params)
+        self.p=params
     def dynamic_behavior(self, time):
         training_frequency = 3
-        self.experience= 10/(1+((10/self.experience_param)*np.exp(-1*(1/training_frequency)*self.time)))
+        self.experience= 10/(1+((10/self.p.experience_param)*np.exp(-1*(1/training_frequency)*self.time)))
 
 class GenerateVideo(FxnBlock):
     def __init__(self, name, flows):
@@ -331,15 +332,15 @@ class Comprehend(Action):
 
 
 class Project(Action):
-    def __init__(self, name, flows, **params):
-        self.add_params(params)
+    def __init__(self, name, flows, params):
+        self.p=params
         super().__init__(name, flows)
         self.assoc_modes({'failed_turn_right', 'failed_turn_left', 'failed_poweron', 'failed_poweroff', 'failed_noturn', 'failed_nopower', 'failed_noaction'},
                          ['nominal'], initmode='nominal', exclusive=False, name='proj_')
 
     def project_calc(self, time):
 
-        if in_area(self.end[0], self.end[1], 1, self.Video.x, self.Video.y):
+        if in_area(self.p.end[0], self.p.end[1], 1, self.Video.x, self.Video.y):
             self.ProjectOut.powerswitch = 0
         else:
             ycorrection = np.arctan((self.Video.y-self.Video.liney)/(
@@ -532,20 +533,20 @@ class Press(Action):
 
 class Environment(FxnBlock):
     def __init__(self, name, flows, params):
-        self.add_params(params)
+        self.p=params
         super().__init__(name, flows)
 
     def dynamic_behavior(self, t):
-        if self.linetype == 'sine':
+        if self.p.linetype == 'sine':
             self.Ground.angle = sin_angle_func(
-                self.Ground.x, self.amp, self.period)
+                self.Ground.x, self.p.amp, self.p.period)
             self.Ground.linex, self.Ground.liney = sin_func(
-                self.Ground.x, self.Ground.y, self.amp, self.period)
-        elif self.linetype == 'turn':
+                self.Ground.x, self.Ground.y, self.p.amp, self.p.period)
+        elif self.p.linetype == 'turn':
             self.Ground.angle = turn_angle_func(
-                self.Ground.x, self.radius, self.start)
+                self.Ground.x, self.p.radius, self.p.start)
             self.Ground.linex, self.Ground.liney = turn_func(
-                self.Ground.x, self.Ground.y, self.radius, self.start)
+                self.Ground.x, self.Ground.y, self.p.radius, self.p.start)
         self.Ground.lbx = self.Ground.linex + 1.5 * np.sin(self.Ground.angle*np.pi/180)
         self.Ground.lby = self.Ground.liney - 1.5 * np.cos(self.Ground.angle*np.pi/180)
         self.Ground.ubx = self.Ground.linex - 1.5 * np.sin(self.Ground.angle*np.pi/180)
@@ -556,7 +557,7 @@ def sin_func(x, y, amp, period):
 
 
 def sin_angle_func(x, amp, period):
-    return amp * period * np.cos(period*x)*180/np.pi
+    return float(amp * period * np.cos(period*x)*180/np.pi)
 
 
 def turn_func(x, y, radius, start):
@@ -582,31 +583,46 @@ def turn_angle_func(x, radius, start):
     elif x < start:
         return 0.0
 
+class DegParam(Parameter, readonly=True):
+    """Parameters for rover degradation"""
+    friction :          float = 0.0
+    drift :             float = 0.0
 
-def gen_params(linetype, **kwargs):
-    if linetype == 'sine':
-        amp = kwargs.pop('amp', 1.0)
-        wavelength = kwargs.pop('wavelength', 50)
-        period = 2*np.pi/wavelength
-        initangle = sin_angle_func(0.0, amp, period)
-        params = {'linetype': linetype, 'amp': amp, 'period': period,
-                      'initangle': initangle, 'end': [wavelength, 0]}
-    elif linetype == 'turn':
-        radius = kwargs.pop('radius', 20)
-        start = kwargs.pop('start', 20)
-        params = {'linetype': linetype, 'radius': radius, 'start': start,
-                      'initangle': 0.0, 'end': [radius+start, radius+start]}
-    params['degradation'] = {'friction': kwargs.pop('friction', 0.0), 'drift':kwargs.pop('drift', 0.0)}
-    params['fatigue'] = kwargs.pop('fatigue', 0.0)
-    params['stress'] = kwargs.pop('stress', 0.0)
-    params = {**params, **{'attention':10}, **kwargs}
-    return params
+class RoverParam(Parameter, readonly=True):
+    """Parameters for rover"""
+    period :            float = 1.0             #period of the curve (for sine linetype)
+    end :               tuple = (10.0, 10.0)    #end of the curve (requires instantiation)
+    initangle :         float = 0.0             #initial rover angle
+    linetype :          str = 'sine'            #line type (sine or turn)
+    linetype_set = ('sine', 'turn')
+    amp :               float = 1.0             #amplitude of sine wave (input for sine linetype)
+    wavelength :        float=50.0              #wavelength of sine wave (input for sine linetype)
+    radius :            float=20.0              #radius of turn (input for turn linetype)
+    start :             float=20.0              #start of turn (input for turn linetype)
+    fatigue :           float=0.0
+    stress :            float=0.0
+    attention :         float=10.0
+    degradation :       DegParam = DegParam()
+    def __init__(self, *args, **kwargs):
+        linetype=self.get_true_field('linetype', *args, **kwargs)
+        if linetype=='sine':
+            wavelength = self.get_true_field('wavelength', *args, **kwargs)
+            amp = self.get_true_field('amp', *args, **kwargs)
+            kwargs['period']=2*np.pi/wavelength
+            kwargs['initangle'] = sin_angle_func(0.0, amp, kwargs['period'])
+            kwargs['end']=(wavelength,0.0)
+        elif linetype=='turn':
+            radius = self.get_true_field('radius',*args,**kwargs)
+            start = self.get_true_field('start',*args,**kwargs)
+            kwargs['end']=(radius+start, radius+start)
+        super().__init__(*args, **kwargs)
+
 
 
 class Controller(FxnBlock):
     def __init__(self, name, flows,params):
-        self.add_params(params)
-        super().__init__(name, flows)
+        #self.add_params(params)
+        super().__init__(name, flows, states={'attention':params.attention})
         self.add_flow('Signal', {'S1': 'NoAction', 'S2': 'NoAction', 'rdiff': 0.0, 'LastState': 'Stop', 'LastPowerswitchState': False})
         self.add_flow('LocalPSF', {'WorkLoad':1})
         self.add_flow('SeeOut', {'O': True})
@@ -620,7 +636,7 @@ class Controller(FxnBlock):
         self.add_act('Look', Look, self.Signal, self.Video,self.Stimulus, self.SeeOut)
         self.add_act("Percieve",  Percieve, self.SeeOut, self.PercieveOut, self.GlobalPSF)
         self.add_act("Comprehend",  Comprehend, self.PercieveOut, self.ComprehendOut, self.GlobalPSF)
-        self.add_act("Project", Project, self.ComprehendOut,self.ProjectOut, self.Video, self.Signal, self.Stimulus, self.GlobalPSF, self.LocalPSF, **params)
+        self.add_act("Project", Project, self.ComprehendOut,self.ProjectOut, self.Video, self.Signal, self.Stimulus, self.GlobalPSF, self.LocalPSF, params=params)
         self.add_act("Decide", Decide, self.ProjectOut, self.Signal, self.DecideOut, self.GlobalPSF)
         self.add_act("Reach",  Reach, self.DecideOut, self.ReachOut)
         self.add_act("Press", Press, self.ReachOut, self.PressOut)
@@ -704,7 +720,7 @@ class Controller(FxnBlock):
         if self.has_fault('stuck_power'):
            self.ControllerSignal.power  = self.Signal.LastPowerswitchState
 
-        self.Signal.LastPowerswitchState = self.ControllerSignal.power
+        self.Signal.LastPowerswitchState = bool(self.ControllerSignal.power)
 
     def complete(self):
         return True
@@ -717,21 +733,20 @@ class Controller(FxnBlock):
 
 
 class Rover(Model):
-    def __init__(self, params=gen_params('turn'),
-                 modelparams={'times': [0, 80], 'tstep': 1, 'phases': {
-                     'start': [1, 30], 'end': [31, 80]}},
+    def __init__(self, params=RoverParam(),
+                 modelparams=ModelParam(times=(0, 80),phases=(('start',0, 30), ('end', 31, 80))),
                  valparams={'end_rad':1.0}):
         super().__init__(params, modelparams, valparams)
 
-        self.add_flow('GlobalPSF', {'fatigue': params['fatigue'], 'stress': params['stress'],'attention': params['attention']})
+        self.add_flow('GlobalPSF', {'fatigue': params.fatigue, 'stress': params.stress,'attention': params.attention})
         self.add_flow('Ground', {'x':0.0,'y':0.0,'liney':0.0,'linex':0.0, 'lbx':0.0, 'lby':-1.5,\
-                                 'ubx':0.0,'uby':1.5, 'vel':0.0, 'line':0.0, 'angle':params['initangle'], 'ang':-params['initangle']})
+                                 'ubx':0.0,'uby':1.5, 'vel':0.0, 'line':0.0, 'angle':params.initangle, 'ang':-params.initangle})
         # self.add_flow('Pos_Signal', {'x':0.0,'y':0.0,'liney':0.0,'linex':0.0, 'heading':0.0, 'vel':0.0, 'line':0, 'angle':0.0})
         #self.add_flow('Signal', {'S1': 'NoAction', 'S2': 'NoAction'})
         self.add_flow('EE_12', {'v': 0.0, 'a': 0.0})
         self.add_flow('EE_15', {'v': 0.0, 'a': 0.0})
         self.add_flow('Video', {'x': 0.0, 'y': 0.0, 'liney': 0.0, 'linex': 0.0, 'heading': 0.0,
-                      'vel': 0.0, 'line': 0.0, 'angle': params['initangle'], 'quality': 1})
+                      'vel': 0.0, 'line': 0.0, 'angle': params.initangle, 'quality': 1})
         # self.add_flow('Signal', {'rpower':0.0, 'lpower':0.0})
         self.add_flow('MotorControl', {'rpower': 0.0, 'lpower': 0.0})
         self.add_flow('Control', {'power': 0.0})
@@ -746,7 +761,7 @@ class Rover(Model):
         self.add_fxn("Operations", ['Video', "Stimulus"], fclass=Operations, fparams=params)
         self.add_fxn("Controller", ['Stimulus', 'GlobalPSF','Video', 'ControllerSignal'], Controller, fparams=params)
         self.add_fxn("Communications", ['Video', 'ControllerSignal', "MotorControl", 'Control', "EE_12"], Communications)
-        self.add_fxn("Drive", ["Ground", "EE_15","MotorControl"], fclass=Drive, fparams=params['degradation'])
+        self.add_fxn("Drive", ["Ground", "EE_15","MotorControl"], fclass=Drive, fparams=params.degradation)
         self.add_fxn("Environment", ['Ground'], Environment, fparams=params)
 
         pos_bip = {'Video': [1.0488760546884315, 0.6236350372168163],
@@ -771,33 +786,41 @@ class Rover(Model):
         modes, modeproperties = self.return_faultmodes()
         classification = str()
         at_finish=True
-        if not in_area(self.flows['Ground'].x,self.flows['Ground'].y,self.valparams['end_rad'],self.params['end'][0],self.params['end'][1]):
+        if not in_area(self.flows['Ground'].x,self.flows['Ground'].y,self.valparams['end_rad'],self.params.end[0],self.params.end[1]):
                                 classification = "incomplete mission"
                                 at_finish = False
         if any(modes):          classification = classification +' faulty'
         if not classification:  classification = 'nominal mission'
         #if (np.isnan(self.fxns['Operations'].t_comp) or self.fxns['Operations'].t_comp > 65): at_finish=False
         num_modes = len(modes)
-        end_dist = dist(self.flows['Ground'].x,self.flows['Ground'].y,self.params['end'][0],self.params['end'][1])
+        end_dist = dist(self.flows['Ground'].x,self.flows['Ground'].y,self.params.end[0],self.params.end[1])
 
         #tot_deviation = np.sum(np.sqrt((mdlhist['nominal']['flows']['Ground']['x']-mdlhist['faulty']['flows']['Ground']['x'])**2 + (mdlhist['nominal']['flows']['Ground']['y']-mdlhist['faulty']['flows']['Ground']['y'])**2))
         line_dist = find_line_dist(self.flows['Ground'].x,self.flows['Ground'].y, mdlhist['nominal']['flows']['Ground']['linex'], mdlhist['nominal']['flows']['Ground']['liney'])
 
         return {'rate':0,'cost':0, 'prob':scen['properties'].get('prob',1), 'expected cost':0,'at_finish':at_finish, 'line_dist':line_dist, 'num_modes':num_modes, 'end_dist':end_dist, 'faults':modes, 'classification':classification, 'x':self.flows['Ground'].x ,'y':self.flows['Ground'].y}
 class RoverDegradation(Model):
-    def __init__(self, params={}, modelparams={'times':[0,25], 'tstep':1, 'seed':101}, valparams={}):
+    def __init__(self, params={}, modelparams=ModelParam(times=(0,25), seed=101), valparams={}):
         super().__init__(params, modelparams, valparams)
         self.add_fxn("Drive", [], fclass= DriveDegradation)
         self.build_model(require_connections=False)
 
+class LongParams(Parameter, readonly=True):
+    experience_param:   np.float64=np.float64(1.0)
+    
 class HumanDegradationLong(Model):
-    def __init__(self, params={'experience_param': 1}, modelparams={'times':[0,100], 'tstep':1, 'seed':101}, valparams={}):
+    def __init__(self, params=LongParams(), modelparams=ModelParam(times=(0,100), seed=101), valparams={}):
         super().__init__(params, modelparams, valparams)
         self.add_fxn('Control', [], fclass = PSFDegradationLong, fparams=params)
         self.build_model(require_connections=False)
 
+class ShortParams(Parameter, readonly=True):
+    experience :    np.float64=np.float64(1.0)
+    stress_param :  np.float64=np.float64(0.0)
+    stoch_fatigue : bool=False
+
 class HumanDegradationShort(Model):
-    def __init__(self, params={'experience' : 1, 'stress_param': 0, 'stoch_fatigue':False}, modelparams={'times':[0,10], 'tstep':1, 'seed':101}, valparams={}):
+    def __init__(self, params=ShortParams(), modelparams=ModelParam(times=(0,10), seed=101), valparams={}):
         super().__init__(params, modelparams, valparams)
         self.add_fxn('Control', [], PSFDegradationShort, fparams=params)
         self.build_model(require_connections=False)
@@ -814,11 +837,11 @@ def gen_param_space():
     ranges = [x for x in itertools.product(
         np.arange(0, 10, 0.2), range(10, 50, 10))]
     for r in ranges:
-        params = gen_params('sine', amp=r[0], wavelength=r[1])
+        params = RoverParam(linetype='sine', amp=r[0], wavelength=r[1])
         paramspace.append(params)
     ranges = [x for x in itertools.product(range(5, 40, 5), range(0, 5, 20))]
     for r in ranges:
-        params = gen_params('turn', radius=r[0], start=r[1])
+        params = RoverParam(linetype='turn', radius=r[0], start=r[1])
         paramspace.append(params)
     return paramspace
 
@@ -834,8 +857,8 @@ def plot_map(mdl, mdlhist):
     y_rover = mdlhist['flows']['Ground']['y']
     plt.plot(x_rover, y_rover, label="Rover")
 
-    plt.scatter(mdl.params['end'][0], mdl.params['end']
-                [1], label="End Location")
+    plt.scatter(mdl.params.end[0], mdl.params.end[1],
+                label="End Location")
     plt.scatter(mdlhist['flows']['Ground']['x'][-1],
                 mdlhist['flows']['Ground']['y'][-1], label="Final Position")
 
@@ -849,11 +872,11 @@ def plot_map(mdl, mdlhist):
     plt.legend()
 
     fig = plt.figure()
-    if mdl.params['linetype'] == 'sine':
-        y_line = [sin_func(x, y_rover[i], mdl.params['amp'], mdl.params['period'])[
+    if mdl.params.linetype == 'sine':
+        y_line = [sin_func(x, y_rover[i], mdl.params.amp, mdl.params.period)[
             1] for i, x in enumerate(x_rover)]
-    elif mdl.params['linetype'] == 'turn':
-        y_line = [turn_func(x, y_rover[i], mdl.params['radius'], mdl.params['start'])[
+    elif mdl.params.linetype == 'turn':
+        y_line = [turn_func(x, y_rover[i], mdl.params.radius, mdl.params.start)[
             1] for i, x in enumerate(x_rover)]
 
     plt.plot(x_rover, y_rover-y_line)
@@ -878,29 +901,27 @@ def get_longhuman_params_from(mdlhist, t):
 def sample_human_params(mdlhists, t=1, scen=1):
     mdlhist = [*mdlhists.values()][scen]
     return get_human_params_from(mdlhist, t)
-def gen_sample_params_human(mdlhists, t=1, scen=1, turn='sine'):
+def gen_sample_params_human(mdlhists, t=1, scen=1, linetype='sine'):
     degparams = sample_human_params(mdlhists, t=t, scen=scen)
-    params = gen_params(turn, **degparams)
-    return params
+    return dict(linetype=linetype, **degparams)
 
 def sample_params(mdlhists, t=1, scen=1):
     mdlhist = [*mdlhists.values()][scen]
     return get_params_from(mdlhist, t)
-def gen_sample_params_comp(mdlhists, t=1, scen=1, turn='sine'):
+def gen_sample_params_comp(mdlhists, t=1, scen=1, linetype='sine'):
     degparams = sample_params(mdlhists, t=t, scen=scen)
-    params = gen_params(turn, **degparams)
-    return params
+    return dict(linetype=linetype, **degparams)
 
-def gen_human_params_combined(mdlhists_stress, app_stress, stress_id='nomapp', t_exp=1, t_stress=1, scen=1, turn='since'):
+def gen_human_params_combined(mdlhists_stress, app_stress, stress_id='nomapp', t_exp=1, t_stress=1, scen=1, linetype='sine'):
     scen_groups = app_stress.get_param_scens(stress_id, 't', 'scen')
     scen = scen_groups[t_exp, scen]
     if len(scen)>1: raise Exception("multiple scenarios for the given time and scen")
     scen = [*scen][0]
     mdlhist = mdlhists_stress[scen]
     human_params = get_human_params_from(mdlhist, t_stress)
-    return gen_params(turn, **human_params)
+    return dict(linetype=linetype, **human_params)
 
-def gen_sample_params_combined(mdlhists_comp, mdlhists_stress, app_stress, stress_id='nomapp', t_comp=1, t_exp=1, t_stress=1, scen=1, turn='sine'):
+def gen_sample_params_combined(mdlhists_comp, mdlhists_stress, app_stress, stress_id='nomapp', t_comp=1, t_exp=1, t_stress=1, scen=1, linetype='sine'):
     scen_groups = app_stress.get_param_scens(stress_id, 't', 'scen')
     stress_scen = scen_groups[t_exp, scen]
     if len(stress_scen)>1: raise Exception("multiple scenarios for the given time and scen")
@@ -908,14 +929,12 @@ def gen_sample_params_combined(mdlhists_comp, mdlhists_stress, app_stress, stres
     mdlhist_stress = mdlhists_stress[stress_scen]
     degparams = get_human_params_from(mdlhist_stress, t_stress)
     degparams.update(sample_params(mdlhists_comp, t=t_comp, scen=scen))
-    params = gen_params(turn, **degparams)
-    return params
-def gen_sample_params(mdlhists, long_deg_params, t=1, scen=1, turn='sine'):
+    return dict(linetype=linetype, **degparams)
+def gen_sample_params(mdlhists, long_deg_params, t=1, scen=1, linetype='sine'):
     degparams={}
     degparams.update(sample_human_params(mdlhists, t=t, scen=scen))
     degparams.update({'friction': long_deg_params[scen][0], 'drift': long_deg_params[scen][1], 'experience': long_deg_params[scen][2]})
-    params = gen_params(turn, **degparams)
-    return params
+    return dict(linetype=linetype, **degparams)
 
 def gen_long_degPSF_param(experience_param, scen=1):
     params = {'experience_param': experience_param[scen-1]}
@@ -941,7 +960,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as pyplot
 
 
-    mdl = Rover(params=gen_params('sine', amp=4))
+    mdl = Rover(params=RoverParam('sine', amp=4.0))
     endresults, mdlhist = prop.nominal(mdl)
     plot_map(mdl, mdlhist)
     rd.plot.mdlhists({'nominal':mdlhist}, fxnflowvals=['Power'])
@@ -969,7 +988,7 @@ if __name__ == "__main__":
     endclasses, mdlhists_hum_short_long = prop.nominal_approach(deg_mdl_hum_short, nomapp_short_long, run_stochastic=True)    
     
     behave_nomapp_hum = NominalApproach()
-    behave_nomapp_hum.add_param_ranges(gen_human_params_combined, 'behave_nomapp_hum', mdlhists_hum_short_long, nomapp_short_long, 'nomapp', t_stress=(1,11, 2), t_exp=(1,15,4), scen = (1,25, 1), turn='sine')
+    behave_nomapp_hum.add_param_ranges(gen_human_params_combined, 'behave_nomapp_hum', mdlhists_hum_short_long, nomapp_short_long, 'nomapp', t_stress=(1,11, 2), t_exp=(1,15,4), scen = (1,25, 1), linetype='sine')
     
     mdl=Rover()
     behave_endclasses_hum, behave_mdlhists_hum = prop.nominal_approach(mdl, behave_nomapp_hum, run_stochastic=True)   

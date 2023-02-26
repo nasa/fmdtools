@@ -29,7 +29,7 @@ def delay_test(delays =  [i for i in range(0,100,10)]):
 def one_delay_helper(delay):
     """This helper function is used by pool.map to generate output over the given 
     input delays"""
-    mdl = Pump({'cost': {'repair', 'water'}, 'delay': delay, 'units': 'hrs'})
+    mdl = Pump(params=PumpParam(delay=delay))
     endclasses, mdlhists = propagate.one_fault(mdl, 'ExportWater', 'block')
     return endclasses
 
@@ -64,14 +64,14 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, tra
     """
     exectimes = {}
     starttime = time.time()
-    endclasses, mdlhists = propagate.approach(mdl,app, pool=False, staged = staged, track=track, showprogress=False, track_times=track_times)
+    endclasses, mdlhists = propagate.approach(mdl,app, pool=False, staged = staged, track=track, showprogress=False, track_times=track_times, desired_result={})
     exectime_single = time.time() - starttime
     if verbose: print("single-thread exec time: "+str(exectime_single))
     exectimes['single'] = exectime_single
     
     for pool in pools:
         starttime = time.time()
-        endclasses, mdlhists = propagate.approach(mdl,app, pool=pools[pool], staged = staged, track=track, showprogress=False, track_times=track_times)
+        endclasses, mdlhists = propagate.approach(mdl,app, pool=pools[pool], staged = staged, track=track, showprogress=False, track_times=track_times, desired_result={})
         exectime_par = time.time() - starttime
         if verbose: print(pool+" exec time: "+str(exectime_par))
         exectimes[pool] = exectime_par
@@ -114,8 +114,7 @@ def parallel_mc3():
 def instantiate_pools(cores):
     """Used to instantiate multiprocessing pools for comparison"""
     from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
-    from parallelism_methods import compare_pools
-    return  {'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocessing':mp.Pool(cores), 'multiprocess':ms.Pool(cores)} #, 'Ray': RayPool(cores) }
+    return  {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores)} #, 'Ray': RayPool(cores) }
 
 
 if __name__=='__main__':
