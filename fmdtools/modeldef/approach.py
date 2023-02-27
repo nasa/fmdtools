@@ -474,10 +474,10 @@ class SampleApproach():
         if faults=='all':
             self.fxnrates=dict.fromkeys(mdl.fxns)
             for fxnname, fxn in  mdl.fxns.items():
-                for mode, params in fxn.faultmodes.items():
-                    if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
+                for mode, params in fxn.m.faultmodes.items():
+                    if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.m.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
                     else:               self._fxnmodes[fxnname, mode] = params
-                self.fxnrates[fxnname]=fxn.failrate
+                self.fxnrates[fxnname]=fxn.m.failrate
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
         elif faults=='single-component' or faults[0]=='single-component':
             if type(faults)==tuple: 
@@ -490,18 +490,18 @@ class SampleApproach():
                 fxn = mdl.fxns[fxnname]
                 if getattr(fxn, 'components', {}):
                     firstcomp = list(fxn.components)[0]
-                    for mode, params in fxn.faultmodes.items():
+                    for mode, params in fxn.m.faultmodes.items():
                         comp = fxn.compfaultmodes.get(mode, 'fxn')
                         if comp==firstcomp or comp=='fxn':
-                            if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
+                            if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.m.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
                             else:               self._fxnmodes[fxnname, mode] = params
-                    self.fxnrates[fxnname]=fxn.failrate
+                    self.fxnrates[fxnname]=fxn.m.failrate
                     self.comprates[fxnname] = {firstcomp: sum([comp.failrate for compname, comp in fxn.components.items()])}
                 else:
-                    for mode, params in fxn.faultmodes.items():
-                        if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
+                    for mode, params in fxn.m.faultmodes.items():
+                        if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.m.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
                         else:               self._fxnmodes[fxnname, mode] = params
-                    self.fxnrates[fxnname]=fxn.failrate
+                    self.fxnrates[fxnname]=fxn.m.failrate
                     self.comprates[fxnname] = {}
         elif faults=='single-function':
             fxnclasses = mdl.fxnclasses();
@@ -510,24 +510,24 @@ class SampleApproach():
             self.fxnrates=dict.fromkeys(fxns_to_use)
             for fxnname in fxns_to_use:
                 fxn = mdl.fxns[fxnname]
-                for mode, params in fxn.faultmodes.items():
-                    if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
+                for mode, params in fxn.m.faultmodes.items():
+                    if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.m.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
                     else:               self._fxnmodes[fxnname, mode] = params
-                self.fxnrates[fxnname]=fxn.failrate * fxns_to_use[fxnname]
+                self.fxnrates[fxnname]=fxn.m.failrate * fxns_to_use[fxnname]
                 self.comprates[fxnname] = {compname:comp.failrate for compname, comp in fxn.components.items()}
         else:
             if type(faults)==str:   faults = [(faults, mode) for mode in mdl.fxns[faults].faultmodes] #single-function modes
             elif type(faults)==tuple:
-                if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==faults[1]]  
-                elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if mode==f]  
+                if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.m.faultmodes if mode==faults[1]]  
+                elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.m.faultmodes if mode==f]  
                 elif faults[0]=='mode type':        
-                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if (faults[1] in mode and (len(faults)<3 or not faults[2] in mode))]
+                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.m.faultmodes if (faults[1] in mode and (len(faults)<3 or not faults[2] in mode))]
                 elif faults[0]=='mode types':       
                     if type(faults[1])==str:    secondarg=(faults[1],)
                     else:                       secondarg=faults[1]
-                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.faultmodes if any([f in mode for f in secondarg])]
-                elif faults[0]=='function class':   faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns_of_class(faults[1]).items() for mode in fxn.faultmodes]
-                elif faults[0]=='function classes': faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns_of_class(f).items() for mode in fxn.faultmodes]
+                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.m.faultmodes if any([f in mode for f in secondarg])]
+                elif faults[0]=='function class':   faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns_of_class(faults[1]).items() for mode in fxn.m.faultmodes]
+                elif faults[0]=='function classes': faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns_of_class(f).items() for mode in fxn.m.faultmodes]
                 else: raise Exception("Invalid option in tuple argument: "+str(faults[0]))
             elif type(faults)==list: 
                 if type(faults[0])!=tuple: raise Exception("Invalid list option: "+str(faults)+" , provide list of tuples") 
@@ -535,11 +535,11 @@ class SampleApproach():
             else: raise Exception("Invalid option for faults: "+str(faults)) 
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
             for fxnname, mode in faults: 
-                params = mdl.fxns[fxnname].faultmodes[mode]
+                params = mdl.fxns[fxnname].m.faultmodes[mode]
                 if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(faults),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
                 else:               self._fxnmodes[fxnname, mode] = params
-                self.fxnrates[fxnname]=mdl.fxns[fxnname].failrate
-                self.comprates[fxnname] = {compname:comp.failrate for compname, comp in mdl.fxns[fxnname].components.items()}
+                self.fxnrates[fxnname]=mdl.fxns[fxnname].m.failrate
+                self.comprates[fxnname] = {compname:comp.m.failrate for compname, comp in mdl.fxns[fxnname].components.items()}
         if type(jointfaults['faults'])==int or jointfaults['faults']=='all':
             if jointfaults['faults']=='all': 
                 if not jointfaults.get('jointfuncs', False): num_joint = len({i[0] for i in self._fxnmodes})
@@ -578,7 +578,7 @@ class SampleApproach():
                 compname = mdl.fxns[fxnname].compfaultmodes[mode]
                 overallrate=self.comprates[fxnname][compname]
                         
-            key_phases = mdl.fxns[fxnname].key_phases_by
+            key_phases = mdl.fxns[fxnname].m.key_phases_by
             if modephases and type(self._fxnmodes[fxnname, mode]['oppvect'])==list:
                 raise Exception("Poorly specified oppvect for fxn: "+fxnname+" mode: "+mode+"--provide a dict to use with modephases")
             

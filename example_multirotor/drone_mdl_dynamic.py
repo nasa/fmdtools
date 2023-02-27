@@ -6,166 +6,146 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.modeldef.common import Parameter
-from fmdtools.modeldef.block import FxnBlock
+from fmdtools.modeldef.common import Parameter, State
+from fmdtools.modeldef.block import FxnBlock, Mode
 from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.approach import SampleApproach
 
 from drone_mdl_static import m2to1
 import fmdtools.faultsim as fs
 
-from drone_mdl_static import DistEE, EngageLand, HoldPayload
+from drone_mdl_static import DistEE, EngageLand, HoldPayload, AffectDOF
 
-class StoreEE(FxnBlock):
-    def __init__(self, name, flows):
-        self.failrate=1e-5
-        super().__init__(name, flows, ['EEout', 'FS'], {'soc': 100.0})
-        self.assoc_modes({'nocharge':[1,300]})
+from drone_mdl_static import StoreEE as StaticStoreEE
+class StoreEE(StaticStoreEE):
     def condfaults(self,time):
-        if self.soc<1:
-            self.soc=0
-            self.add_fault('nocharge')
+        if self.s.soc<1:
+            self.s.soc=0
+            self.m.add_fault('nocharge')
     def behavior(self, time):
-        if      self.has_fault('nocharge'):   self.EEout.effort=0.0
-        else: self.EEout.effort=1.0
+        if self.m.has_fault('nocharge'):    self.EEout.s.effort=0.0
+        else:                               self.EEout.s.effort=1.0
         if time > self.time:
-            self.soc=self.soc-self.EEout.effort*self.EEout.rate*(time-self.time)/2
-
-class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
-    def __init__(self, name, flows):     
-        super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Force'], {'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0})
-        self.failrate=1e-5
-        self.assoc_modes({'short':[0.1, [0.33, 0.33, 0.33], 200],'openc':[0.1, [0.33, 0.33, 0.33], 200],\
-                          'ctlup':[0.2, [0.33, 0.33, 0.33], 500],'ctldn':[0.2, [0.33, 0.33, 0.33], 500],\
-                          'ctlbreak':[0.2, [0.33, 0.33, 0.33], 1000], 'mechbreak':[0.1, [0.33, 0.33, 0.33], 500],\
-                          'mechfriction':[0.05, [0.0, 0.5,0.5], 500],'propwarp':[0.01, [0.0, 0.5,0.5], 200],\
-                          'propstuck':[0.02, [0.0, 0.5,0.5], 200], 'propbreak':[0.03, [0.0, 0.5,0.5], 200]})
-    def behavior(self, time):
-        self.Eti=1.0
-        self.Eto=1.0
-        if self.has_fault('short'):
-            self.Eti=10
-            self.Eto=0.0
-        elif self.has_fault('openc'):
-            self.Eti=0.0
-            self.Eto=0.0
-        elif self.Ctlin.upward==0 and self.Ctlin.forward == 0:
-            self.Eti = 0.0
-        if self.has_fault('ctlbreak'): self.Ct=0.0
-        elif self.has_fault('ctldn'):  self.Ct=0.5
-        elif self.has_fault('ctlup'):  self.Ct=2.0
-        if self.has_fault('mechbreak'): self.Mt=0.0
-        elif self.has_fault('mechfriction'):
-            self.Mt=0.5
-            self.Eti=2.0
-        if self.has_fault('propstuck'):
-            self.Pt=0.0
-            self.Mt=0.0
-            self.Eti=4.0
-        elif self.has_fault('propbreak'): self.Pt=0.0
-        elif self.has_fault('propwarp'):  self.Pt=0.5
-        
-        self.EEin.rate=self.Eti
-
-        self.DOF.uppwr=self.Eto*self.Eti*self.Ctlin.upward*self.Ct*self.Mt*self.Pt
-        self.DOF.planpwr=self.Eto*self.Eti*self.Ctlin.forward*self.Ct*self.Mt*self.Pt    
-        
+            self.s.inc(soc=self.EEout.s.mul('rate', 'effort')*(time-self.time)/2)
+            
+from drone_mdl_static import CtlDOFMode
+class CtlDOFState(State):
+    Cs:     float = 1.0
+    vel:    float = 0.0     
 class CtlDOF(FxnBlock):
+    _init_s = CtlDOFState
+    _init_m = CtlDOFMode
     def __init__(self, name, flows):
-        super().__init__(name, flows, ['EEin','Dir','Ctl','DOFs','FS'], {'vel':0.0, 'Cs':1.0})
-        self.failrate=1e-5
-        self.assoc_modes({'noctl':[0.2, 10000], 'degctl':[0.8, 10000]})
+        super().__init__(name, flows, ['EEin','Dir','Ctl','DOFs','FS'])
     def condfaults(self, time):
-        if self.FS.support<0.5: self.add_fault('noctl')
+        if self.FS.s.support<0.5: self.m.add_fault('noctl')
     def behavior(self, time):
-        if self.has_fault('noctl'):    self.Cs=0.0
-        elif self.has_fault('degctl'): self.Cs=0.5
+        if self.m.has_fault('noctl'):    self.s.Cs=0.0
+        elif self.m.has_fault('degctl'): self.s.Cs=0.5
         
         upthrottle=1.0
-        if self.Dir.z>1:        upthrottle=2.0
-        elif 0<self.Dir.z<=1:   upthrottle= self.Dir.z + 1.0
-        elif self.Dir.z==0:
-            damp=np.sign(self.vel)
-            damp2=damp*min(1.0, np.power(self.vel, 2))
+        if self.Dir.s.z>1:      upthrottle=2.0
+        elif 0<self.Dir.s.z<=1: upthrottle= self.Dir.s.z + 1.0
+        elif self.Dir.s.z==0:
+            damp=np.sign(self.s.vel)
+            damp2=damp*min(1.0, np.power(self.s.vel, 2))
             upthrottle=1.0-0.2*damp2
-        elif -1<self.Dir.z<=0.0:
-            damp=min(1.0, np.power(self.vel+0.5, 2))
+        elif -1<self.Dir.s.z<=0.0:
+            damp=min(1.0, np.power(self.s.vel+0.5, 2))
             upthrottle=0.75+0.25*damp
-        elif self.Dir.z<=-1.0:
-            damp=min(0.75, np.power(self.vel+5.0, 2))
+        elif self.Dir.s.z<=-1.0:
+            damp=min(0.75, np.power(self.s.vel+5.0, 2))
             upthrottle=0.75+0.15*damp
             
-        if self.Dir.x==0 and self.Dir.y==0: forwardthrottle=0.0
+        if self.Dir.s.x==0 and self.Dir.s.y==0: forwardthrottle=0.0
         else: forwardthrottle=1.0
         
-        self.Ctl.forward=self.EEin.effort*self.Cs*forwardthrottle*self.Dir.power
-        self.Ctl.upward=self.EEin.effort*self.Cs*self.Dir.power*upthrottle
+        self.Ctl.s.forward=self.EEin.s.effort*self.s.Cs*forwardthrottle*self.Dir.s.power
+        self.Ctl.s.upward=self.EEin.s.effort*self.s.Cs*self.Dir.s.power*upthrottle
+
+class PlanPathMode(Mode):
+    failrate=1e-5
+    faultparams = {'noloc': (0.2, 10000),
+                   'degloc':(0.8, 10000)}
+    opermodes = ('taxi', 'hover', 'move', 'descend', 'land')
+    mode: int = 'taxi'
+class PlanPathStates(State):
+    """ """
+    dx:     float=0.0
+    dy:     float=0.0
+    dz:     float=0.0
+    pt:     int=0
+    goal:   tuple=(0.0,0.0,50.0)
+class PlanPathParams(Parameter):
+    goals = ((0.0,      0.0,    50.0),
+             (100.0,    0.0,    50.0),
+             (100.0,    100.0,  50.0),
+             (150.0,    150.0,  50.0),
+             (0.0,      0.0,    50.0),
+             (0.0,      0.0,    0.0)) 
 
 class PlanPath(FxnBlock):
+    _init_m = PlanPathMode
+    _init_s = PlanPathStates
+    _init_p = PlanPathParams
     def __init__(self, name, flows):
-        super().__init__(name, flows, ['EEin','Env','Dir','FS'], states={'dx':0.0, 'dy':0.0, 'dz':0.0, 'pt':1, 'mode':'taxi'},timers={'pause'})
-        
-        self.goals = {1:[0,0,50], 2:[100, 0, 50], 3:[100, 100, 50], 4:[150, 150, 50], 5:[0,0,50], 6:[0,0,0]}
-        self.goal = self.goals[1]
-        self.failrate=1e-5
-        self.assoc_modes({'noloc':[0.2, [0.6, 0.3, 0.1], 10000], 'degloc':[0.8, [0.6, 0.3, 0.1], 10000]})
+        super().__init__(name, flows, ['EEin','Env','Dir','FS'], timers={'pause'})
     def condfaults(self, time):
-        if self.FS.support<0.5: self.add_fault('noloc')
+        if self.FS.s.support<0.5: self.m.add_fault('noloc')
     def behavior(self, t):
-        self.goal = self.goals[self.pt]
-        loc = [self.Env.x, self.Env.y, self.Env.elev]
-        dist = finddist(loc, self.goal)        
-        [self.dx,self.dy, self.dz] = vectdist(self.goal,loc)
+        self.s.goal = self.p.goals[self.s.pt]
+        loc =self.Env.s.get('x','y','z')
+        dist = finddist(loc, self.s.goal) 
+        self.s.assign(vectdist(self.s.goal,loc), 'dz', 'dy', 'dz')
         
-        if self.mode=='taxi' and t>5: self.mode=='taxi'
-        elif dist<5 and {'move', 'hover'}.issuperset({self.mode}):
-            self.mode='hover'
+        if self.m.mode=='taxi' and t>5: self.m.mode='taxi'
+        elif dist<5 and self.m.in_mode({'move', 'hover'}):
+            self.m.mode='hover'
             if t>self.time:
                 self.pause.inc(1)
                 if self.pause.t() > 2:
-                    self.pt=self.pt+1
-                    self.goal = self.goals[self.pt]
+                    self.s.inc(pt=1)
+                    self.s.goal = self.s.goals[self.pt]
                     self.pause.reset()
-        elif self.Env.elev<1 and self.pt==6: self.mode = 'taxi'
-        elif dist<5 and self.pt==6:         self.mode = 'land'
-        elif self.pt==6 and {'move', 'hover'}.issuperset({self.mode}): self.mode = 'descend'
-        elif dist>5 and not(self.mode=='descend'):                       self.mode='move'
+        elif self.Env.s.z<1 and self.s.pt==6:                       self.m.mode = 'taxi'
+        elif dist<5 and self.s.pt==6:                               self.m.mode = 'land'
+        elif self.s.pt==6 and self.m.in_mode({'move', 'hover'}):    self.m.mode = 'descend'
+        elif dist>5 and not(self.m.mode=='descend'):                self.m.mode = 'move'
         # nominal behaviors
-        self.Dir.power=1.0
-        if self.mode=='taxi':           self.Dir.power=0.0
-        elif self.mode=='hover':        self.Dir.assign([0,0,0], "x","y","z")           
-        elif self.mode=='move':         self.Dir.assign(vectdir(self.goal, loc), "x","y","z")     
-        elif self.mode=='descend':      self.Dir.assign([0,0,-0.5], "x","y","z")
-        elif self.mode=='land':         self.Dir.assign([0,0,-0.1], "x","y","z")
+        self.Dir.s.power=1.0
+        if self.m.mode=='taxi':           self.Dir.s.power=0.0
+        elif self.m.mode=='hover':        self.Dir.s.assign([0,0,0], "x","y","z")           
+        elif self.m.mode=='move':         self.Dir.s.assign(vectdir(self.s.goal, loc), "x","y","z")     
+        elif self.m.mode=='descend':      self.Dir.s.assign([0,0,-0.5], "x","y","z")
+        elif self.m.mode=='land':         self.Dir.s.assign([0,0,-0.1], "x","y","z")
         # faulty behaviors    
-        if self.has_fault('noloc'):     self.Dir.assign([0,0,0], "x","y","z")
-        elif self.has_fault('degloc'):  self.Dir.assign([0,0,-1], "x","y","z")
-        if self.EEin.effort<0.5:        self.Dir.assign([0,0,0,0], "x","y","z", "power")
+        if self.m.has_fault('noloc'):     self.Dir.s.assign([0,0,0], "x","y","z")
+        elif self.m.has_fault('degloc'):  self.Dir.s.assign([0,0,-1], "x","y","z")
+        if self.EEin.s.effort<0.5:        self.Dir.s.assign([0,0,0,0], "x","y","z", "power")
 
 class Trajectory(FxnBlock):
     def __init__(self, name, flows):
         super().__init__(name, flows, ['Env','DOF', 'Dir', 'Force_GR'])
-        #self.assoc_modes({'crash':[0, 100000], 'lost':[0.0, 50000]})
-    def behavior(self, time):
-        if time>self.time:            
-            if self.Env.elev<=0.0:  
-                self.Force_GR.value=min(-0.5, (self.DOF.vertvel-self.DOF.planvel)/7.5)
-                acc=10*self.DOF.uppwr
-            else:                   
-                self.Force_GR.value=0.0
-                acc=10*(self.DOF.uppwr-1.0) 
-            
-            sign=np.sign(self.DOF.vertvel)
-            damp=(-0.02*sign*np.power(self.DOF.vertvel, 2)-0.1*self.DOF.vertvel)
-            self.DOF.vertvel=self.DOF.vertvel+(acc+damp)
-            self.DOF.planvel=10.0*self.DOF.planpwr            
-            if self.Env.elev<=0.0:  
-                self.DOF.vertvel=max(0,self.DOF.vertvel)
-                self.DOF.planvel=0.0
-            
-            self.Env.elev=max(0.0, self.Env.elev+self.DOF.vertvel)
-            self.Env.x=self.Env.x+self.DOF.planvel*self.Dir.x
-            self.Env.y=self.Env.y+self.DOF.planvel*self.Dir.y
+    def dynamic_behavior(self, time):            
+        if self.Env.s.z<=0.0:  
+            self.Force_GR.s.support=min(-0.5, (self.DOF.s.vertvel-self.DOF.s.planvel)/7.5)
+            acc=10*self.DOF.s.uppwr
+        else:                   
+            self.Force_GR.s.support=0.0
+            acc=10*(self.DOF.s.uppwr-1.0) 
+        
+        sign=np.sign(self.DOF.s.vertvel)
+        damp=(-0.02*sign*np.power(self.DOF.s.vertvel, 2)-0.1*self.DOF.s.vertvel)
+        self.DOF.s.vertvel=self.DOF.s.vertvel+(acc+damp)
+        self.DOF.s.planvel=10.0*self.DOF.s.planpwr            
+        if self.Env.s.z<=0.0:  
+            self.DOF.s.vertvel=max(0,self.DOF.s.vertvel)
+            self.DOF.s.planvel=0.0
+        
+        self.Env.s.inc(x=self.DOF.s.planvel*self.Dir.s.x,
+                       y=self.DOF.s.planvel*self.Dir.s.y,
+                       z=self.DOF.s.vertvel)
+        self.Env.s.limit(z=(0.0,np.inf))
 
 class ViewEnvironment(FxnBlock):
     def __init__(self, name, flows):
@@ -173,26 +153,27 @@ class ViewEnvironment(FxnBlock):
         sq=square([0,150], 160, 160)
         self.viewingarea = {(x,y):'unviewed' for x in range(int(sq[0][0]),int(sq[1][0])+10,10) for y in range(int(sq[0][1]),int(sq[2][1])+10,10)}
     def behavior(self, time):
-        area = square((self.Env.x, self.Env.y), 10, 10)
+        area = square((self.Env.s.x, self.Env.s.y), 10, 10)
         for spot in self.viewingarea:
             if inrange(area, spot[0],spot[1]): self.viewingarea[spot]='viewed'
-        
+
+from drone_mdl_static import Force, EE, Control, DOFs, Env, Dir
 class Drone(Model):
     def __init__(self, params=Parameter(),\
             modelparams=ModelParam(phases=(('ascend',0,4),('forward',5,94),('descend',95, 100)),times=(0,135),units='sec'), valparams={}):
         super().__init__(params, modelparams, valparams)
         #add flows to the model
-        self.add_flow('Force_ST', {'support':1.0})
-        self.add_flow('Force_Lin', {'support':1.0})
-        self.add_flow('Force_GR' , {'value':0.0})
-        self.add_flow('Force_LG', {'value':0.0})
-        self.add_flow('EE_1', {'rate':1.0, 'effort':1.0})
-        self.add_flow('EEmot', {'rate':1.0, 'effort':1.0})
-        self.add_flow('EEctl', {'rate':1.0, 'effort':1.0})
-        self.add_flow('Ctl1', {'forward':0.0, 'upward':1.0})
-        self.add_flow('DOFs', {'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0})
-        self.add_flow('Env1', {'x':0.0,'y':0.0,'elev':0.0} )
-        self.add_flow('Dir1', {"x":0.0, "y":0.0, "z":0.0, "power":0.0})
+        self.add_flow('Force_ST',   Force)
+        self.add_flow('Force_Lin',  Force)
+        self.add_flow('Force_GR' ,  Force)
+        self.add_flow('Force_LG',   Force)
+        self.add_flow('EE_1',       EE)
+        self.add_flow('EEmot',      EE)
+        self.add_flow('EEctl',      EE)
+        self.add_flow('Ctl1',       Control)
+        self.add_flow('DOFs',       DOFs)
+        self.add_flow('Env1',       Env, s={'z':0.0} )
+        self.add_flow('Dir1',       Dir)
         #add functions to the model
         flows=['EEctl', 'Force_ST']
         self.add_fxn('StoreEE',['EE_1', 'Force_ST'], fclass=StoreEE)
@@ -211,12 +192,12 @@ class Drone(Model):
             lostcost=50000
         elif -5 >mdlhists['faulty']['flows']['Env1']['y'][-1] or 5<mdlhists['faulty']['flows']['Env1']['y'][-1]:
             lostcost=50000
-        elif mdlhists['faulty']['flows']['Env1']['elev'][-1] >5:
+        elif mdlhists['faulty']['flows']['Env1']['z'][-1] >5:
             lostcost=50000
         else:
             lostcost=0
         
-        if any(abs(mdlhists['faulty']['flows']['Force_GR']['value'])>2.0):
+        if any(abs(mdlhists['faulty']['flows']['Force_GR']['support'])>2.0):
             crashcost = 100000
         else:
             crashcost = 0
@@ -248,7 +229,7 @@ def finddist(p1, p2):
     return np.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2+(p1[2]-p2[2])**2)
 
 def calcdist(p1, p2):
-    return np.sqrt((p1[0]-p2.x)**2+(p1[1]-p2.y)**2+(p1[2]-p2.elev)**2)
+    return np.sqrt((p1[0]-p2.x)**2+(p1[1]-p2.y)**2+(p1[2]-p2.z)**2)
 
 def vectdist(p1, p2):
     return [p1[0]-p2[0],p1[1]-p2[1],p1[2]-p2[2]]

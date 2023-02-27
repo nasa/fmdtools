@@ -18,32 +18,8 @@ from fmdtools.modeldef.block import FxnBlock, Component
 from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.approach import SampleApproach
 
-from drone_mdl_static import m2to1, EngageLand, HoldPayload
+from drone_mdl_static import m2to1, EngageLand, HoldPayload, DistEE
 from drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, Trajectory, ViewEnvironment
-
-
-class DistEE(FxnBlock):
-    def __init__(self, name,flows):
-        super().__init__(name, flows, ['EEin','EEmot','EEctl','ST'], {'EEtr':1.0, 'EEte':1.0})
-        self.failrate=1e-5
-        self.assoc_modes({'short':[0.3,[0.33, 0.33, 0.33],3000], 'degr':[0.5,[0.33, 0.33, 0.33],1000],\
-                          'break':[0.2,[0.33, 0.33, 0.33],2000]})
-    def condfaults(self, time):
-        if self.ST.support<0.5 or max(self.EEmot.rate,self.EEctl.rate)>2: 
-            self.add_fault('break')
-        if self.EEin.rate>2:
-            self.add_fault('short')
-    def behavior(self, time):
-        if self.has_fault('short'): 
-            self.EEte=0.0
-            self.EEre=10
-        elif self.has_fault('break'): 
-            self.EEte=0.0
-            self.EEre=0.0
-        elif self.has_fault('degr'): self.EEte=0.5
-        self.EEmot.effort=self.EEte*self.EEin.effort
-        self.EEctl.effort=self.EEte*self.EEin.effort
-        self.EEin.rate=m2to1([ self.EEin.effort, self.EEtr, 0.9*self.EEmot.rate+0.1*self.EEctl.rate])
             
 
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs

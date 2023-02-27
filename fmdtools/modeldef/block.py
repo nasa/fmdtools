@@ -15,22 +15,239 @@ import itertools
 import networkx as nx
 import copy
 from scipy import stats
+from recordclass import dataobject, asdict
 
-from .common import States
+from .common import State, Parameter
 from .flow import init_flow, Flow
 
-class Block(States):
+class Fault(dataobject, readonly=True, mapping=True):
+    dist:       float = 1.0
+    oppvect:    dict = {"operating":1.0}
+    rcost:      float = 0.0
+    probtype:   str = 'rate'
+    units:      str = 'hr'
+
+class Mode(dataobject, readonly=False):
+    """
+    faults : set
+        Set of faults present (or not) at any given time
+    mode : str
+        Name of the current mode. the default is 'nominal'
+    opermodes : tuple
+        Names of non-faulty operational modes.
+    failrate : float
+        Overall failure rate for the block. The default is 1.0.
+    faultmodes : dict 
+            Dictionary/Set of faultmodes, which can have the forms:
+                - set {'fault1', 'fault2', 'fault3'} (just the respective faults)
+                - dict {'fault1': faultattributes, 'fault2': faultattributes}, where faultattributes is:
+                    - float: rate for the mode
+                    - dict/set/str: opportunity vector for the mode specified as a dictionary/set/string
+                    - tuple: (rate, oppvect, rcost) or (rate, rcost)
+                        - a list of arguments where the float arguments are specified in the order rate, rcost (if provided) and
+                            an oppvect opportunity vector is provided (anywhere) with the form:
+                                -list: [float1, float2,...], a vector of relative likelihoods for each phase, or
+                                -dict: {opermode:float1, opermode:float1}, a dict of relative likelihoods for each phase/mode
+                                -set: {opermode, opermode,...}, a set of applicable phases (assumed equally likely).
+                                the phases/modes to key by are defined in "key_phases_by"
+                                -str: 'all'/'modename', either specifying all operational modes/phases or a single operational mode/phase
+    probtype : str, optional
+        Type of probability in the probability model, a per-time 'rate' or per-run 'prob'. 
+        The default is 'rate'
+    units : str, optional
+        Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr' 
+    exclusive : True/False
+        Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present). 
+    key_phases_by : 'self'/'none'/'global'/'fxnname'
+        Phases to key the faultmodes by (using local, global, or an external function's modes'). Default is 'global'
+    longnames : dict
+        Longer names for the faults (if desired). {faultname: longname}
+    """
+    mode:       str = 'nominal'
+    faults:     set = set()
+    opermodes = ('nominal',)
+    failrate = 1.0
+    faultparams = {}
+    faultmodes = {}
+    probtype = 'rate'
+    units = 'hr'
+    units_set = ('sec','min','hr','day')
+    exclusive = False
+    key_phases_by = 'global'
+    longnames = {}
+    def __init__(self, *args, **kwargs):
+        kwargs = {'mode':'nominal', 'faults':set(), **kwargs}
+        super().__init__(*args, **kwargs)
+        self.init_faultmodes()
+    def init_faultmodes(self):
+        if self.key_phases_by=='self':   
+            self.key_phases_by = self.name
+        if self.key_phases_by=='self':  oppvect='all'
+        else:                           oppvect=[1.0]
+        default_kwargs={'dist':1.0/max(len(self.faultparams),1),
+                        'probtype': self.probtype,
+                        'units': self.units,
+                        'oppvect': oppvect}
+        for mode in self.faultparams:
+            if type(self.faultparams) == tuple:   
+                kwargs={**default_kwargs}
+            elif type(self.faultparams[mode]) == float:   # dict of modes: dist, where dist is the distribution (or individual rate/probability)
+                kwargs={**{**default_kwargs,'dist':self.faultparams[mode]}}
+            elif type(self.faultparams[mode]) == dict:   
+                kwargs = {**{**default_kwargs,'dist':self.faultparams[mode], **self.faultparams[mode]}}
+            elif type(self.faultparams[mode]) == tuple: # provided list with oppvect, dist, rcost (rcost always after dist)
+                if len(self.faultparams[mode])==2:
+                    kwargs = {['dist', 'rcost'][i]:val for i,val in enumerate(self.faultparams[mode])}
+                else:
+                    kwargs = {['dist', 'oppvect', 'rcost'][i]:val for i,val in enumerate(self.faultparams[mode])}
+                kwargs = {**{**default_kwargs,'dist':self.faultparams[mode], **kwargs}}
+            else:   
+                raise Exception("Invalid mode definition in "+str(self.__class__)+", "+mode+" modeparams values should be float/dict/tuple")
+            
+            if kwargs['oppvect']=='all': 
+                kwargs['oppvect'] = {*self.opermodes}
+            if type(kwargs['oppvect'])==set:            
+                kwargs['oppvect'] = {o:1.0 for o in kwargs['oppvect']}
+            self.faultmodes[mode] = Fault(**kwargs)
+    def set_mode(self, mode):
+        """Sets a mode in the block
+        
+        Parameters
+        ----------
+        mode : str
+            name of the mode to enter.
+        """
+        if self.exclusive:
+            if self.any_faults():           raise Exception("Cannot set mode from fault state without removing faults.")
+            elif  mode in self.faultmodes:  self.to_fault(mode)
+            else:                           self.mode=mode
+        else:                               self.mode = mode
+    def in_mode(self,*modes):
+        """Checks if the system is in a given operational mode
+        
+        Parameters
+        ----------
+        *modes : strs
+            names of the mode to check
+        """
+        return self.mode in modes                    
+    def has_fault(self,*faults): 
+        """Check if the block has fault (a str)
+        
+        Parameters
+        ----------
+        *faults : strs
+            names of the fault to check.
+        """
+        return any(self.faults.intersection(set(faults)))
+    def no_fault(self,fault): 
+        """Check if the block does not have fault (a str)
+        
+        Parameters
+        ----------
+        fault : str
+            name of the fault to check.
+        """
+        return not(any(self.faults.intersection(set([fault]))))
+    def any_faults(self):
+        """check if the block has any fault modes"""
+        return any(self.faults)
+    def to_fault(self,fault): 
+        """Moves from the current fault mode to a new fault mode
+        
+        Parameters
+        ----------
+        fault : str
+            name of the fault mode to switch to
+        """
+        self.faults.clear()
+        self.faults.add(fault)
+        if self.exclusive: self.mode = fault
+    def add_fault(self,*faults): 
+        """Adds fault (a str) to the block
+        
+        Parameters
+        ----------
+        *fault : str(s)
+            name(s) of the fault to add to the black
+        """
+        self.faults.update(faults)
+        if self.exclusive: 
+            if len(faults)>1:   raise Exception("Multiple fault modes added to function with exclusive fault representation")
+            elif len(faults)==0: self.mode = 'nominal'
+    def replace_fault(self, fault_to_replace,fault_to_add): 
+        """Replaces fault_to_replace with fault_to_add in the set of faults
+        
+        Parameters
+        ----------
+        fault_to_replace : str
+            name of the fault to replace
+        fault_to_add : str
+            name of the fault to add in its place
+        """
+        self.faults.add(fault_to_add)
+        self.faults.remove(fault_to_replace)
+        if self.exclusive: self.mode = fault_to_add
+    def remove_fault(self, fault_to_remove, opermode=False, warnmessage=False):
+        """Removes fault in the set of faults and returns to given operational mode
+        
+        Parameters
+        ----------
+        fault_to_replace : str
+            name of the fault to remove
+        opermode : str (optional)
+            operational mode to return to when the fault mode is removed
+        warnmessage : str/False
+            Warning to give when performing operation. Default is False (no warning)
+        """
+        self.faults.discard(fault_to_remove)
+        if opermode:    self.mode = opermode
+        if self.exclusive and not(opermode):
+            raise Exception("Unclear which operational mode to enter with fault removed")
+        if warnmessage: self.warn(warnmessage,"Fault mode `"+fault_to_remove+"' removed.", stacklevel=3)
+    def remove_any_faults(self, opermode=False, warnmessage=False):
+        """Resets fault mode to nominal and returns to the given operational mode
+        
+        Parameters
+        ----------
+        opermode : str (optional)
+            operational mode to return to when the fault mode is removed
+        warnmessage : str/False
+            Warning to give when performing operation. Default is False (no warning)
+        """
+        self.faults.clear()
+        if opermode:    self.mode = opermode
+        else:           self.mode = self.__defaults__[self.__fields__.index('mode')]
+        if self.exclusive and not(opermode):
+            raise Exception("Unclear which operational mode to enter with fault removed")
+        if warnmessage: self.warn(warnmessage, "All faults removed.")
+    def mirror(self, mode_to_mirror):
+        self.mode = mode_to_mirror.mode
+        self.faults.clear()
+        self.faults.update(mode_to_mirror.faults)
+    
+    
+
+class Block():
+    __slots__ = ['p', '_args_p', 's', '_args_s', '__dict__']
+    _init_p = Parameter
+    _init_s = State
+    _init_m = Mode
     """ 
     Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
     
     Attributes
     ----------
+    s : State
+        Internal State of the block. Instanced from _init_s.
+    p : Parameter
+        Internal Parameter for the block. Instanced from _init_p
     failrate : float
         Failure rate for the block
     time : float
         internal time of the function
     faults : set
-        faults currently present in the block. If the function is nominal, set is {'nom'}
+        faults currently present in the block. If the function is nominal, set is {}
     faultmodes : dict
         faults possible to inject in the block and their properties. Has structure:
             - faultname :
@@ -46,24 +263,25 @@ class Block(States):
     mode : string
         current mode of block operation
     """
-    def __init__(self, states={}):
+    def __init__(self, s={}, p={}, m={}):
         """
         Instance superclass. Called by FxnBlock and Component classes.
 
         Parameters
         ----------
-        states : dict, optional
-            Internal states (variables, essentially) of the block. The default is {}.
+        s : dict, optional
+            Initial state values for the states s in the block. The default is {}.
+        p : dict, optional
+            Overriding parameter values for the parameters p in the block. The default is {}.
         """
-        self._states=list(states.keys())
-        self._initstates=states.copy()
-        self.failrate = getattr(self, 'failrate', 1.0)
+        self._args_s = s
+        self._args_p = p
+        self.p=self._init_p(**p)
+        self.s=self._init_s(**s)
+        self.m=self._init_m(**m)
+        
+        # TODO : create class for modes (ideally with checking)
         self.localname=''
-        for state in states.keys():
-            setattr(self, state,states[state])
-        self.faults=set(['nom'])
-        self.opermodes= getattr(self, 'opermodes', [])
-        self.faultmodes= getattr(self, 'faultmodes', {})
         self.update_seed()
         self.time=0.0
     def __repr__(self):
@@ -267,7 +485,7 @@ class Block(States):
             for mode,atts in manual_modes.items():
                 if type(atts)==list:
                     self.mode_state_dict.update({mode:atts[0]})
-                    if not getattr(self, 'exclusive_faultmodes', False): print("Changing fault mode exclusivity to True")
+                    if not getattr(self, 'exclusive', False): print("Changing fault mode exclusivity to True")
                     self.assoc_modes(faultmodes={mode:atts[1]}, initmode=getattr(self,'mode', 'nom'), probtype=probtype, proptype=probtype, exclusive=True, key_phases_by=key_phases_by)
                 elif  type(atts)==dict:
                     self.mode_state_dict.update({mode:atts})
@@ -293,95 +511,9 @@ class Block(States):
         elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
         else: raise Exception("Invalid type for EPCs: "+str(type(EPCs)))
         self.failrate = gtp*EPC_f
-    def assoc_modes(self, faultmodes={}, opermodes=[],initmode='nom', name='', probtype='rate', units='hr', exclusive=False, key_phases_by='global', longnames={}):
-        """
-        Associates fault and operational modes with the block when called in the function or component.
-
-        Parameters
-        ----------
-        faultmodes : dict, optional
-            Dictionary/Set of faultmodes with structure, which can have the forms:
-                - set {'fault1', 'fault2', 'fault3'} (just the respective faults)
-                - dict {'fault1': faultattributes, 'fault2': faultattributes}, where faultattributes is:
-                    - float: rate for the mode
-                    - dict/set/str: opportunity vector for the mode specified as a dictionary/set/string
-                    - list: [rate, oppvect, rcost]
-                        - a list of arguments where the float arguments are specified in the order rate, rcost (if provided) and
-                            an oppvect opportunity vector is provided (anywhere) with the form:
-                                -list: [float1, float2,...], a vector of relative likelihoods for each phase, or
-                                -dict: {opermode:float1, opermode:float1}, a dict of relative likelihoods for each phase/mode
-                                -set: {opermode, opermode,...}, a set of applicable phases (assumed equally likely).
-                                the phases/modes to key by are defined in "key_phases_by"
-                                -str: 'all'/'modename', either specifying all operational modes/phases or a single operational mode/phase
-        opermodes : list, optional
-            List of operational modes
-        initmode : str, optional
-            Initial operational mode. Default is 'nom'
-        name : str, optional
-            (for components/actions only) Name of the component. The default is ''.
-        probtype : str, optional
-            Type of probability in the probability model, a per-time 'rate' or per-run 'prob'. 
-            The default is 'rate'
-        units : str, optional
-            Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr' 
-        exclusive : True/False
-            Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present). 
-        key_phases_by : 'self'/'none'/'global'/'fxnname'
-            Phases to key the faultmodes by (using local, global, or an external function's modes'). Default is 'global'
-        longnames : dict
-            Longer names for the faults (if desired). {faultname: longname}
-        """
-        if opermodes:
-            self.opermodes = opermodes
-            if initmode in self.opermodes:
-                self._states.append('mode')
-                self._initstates['mode'] = initmode
-                self.mode = initmode
-            else: raise Exception("Initial mode "+initmode+" not in defined modes for "+self.name)
-        else: 
-            self._states.append('mode')
-            self._initstates['mode'] = initmode
-            self.mode = initmode
-        self.exclusive_faultmodes = exclusive
-        self.localname = name
-        if not getattr(self, 'is_copy', False): #saves time by using the same fault mode dictionary from previous
-            if not getattr(self, 'faultmodes', []): 
-                if name: self.faultmodes=dict()
-                else:    self.faultmodes=dict.fromkeys(faultmodes)
-            for mode in faultmodes:
-                self.faultmodes[mode]=dict.fromkeys(('dist', 'oppvect', 'rcost', 'probtype', 'units'))
-                self.faultmodes[mode]['probtype'] = probtype
-                self.faultmodes[mode]['units'] = units
-                if key_phases_by=='self': oppvect='all'
-                else:                     oppvect=[1.0]
-                dist=1.0/len(faultmodes); rcost=0.0
-                if type(faultmodes) in {set,str}:     a=1 # minimum information - here the faultmodes are only a set of labels
-                elif type(faultmodes[mode]) == float:   dist  =  faultmodes[mode] # dict of modes: dist, where dist is the distribution (or individual rate/probability)
-                elif type(faultmodes[mode]) == dict:    oppvect = faultmodes[mode] # provided oppvect in dict form
-                elif type(faultmodes[mode]) == list: # provided list with oppvect, dist, rcost (rcost always after dist)
-                    oppvect_loc = [i for i,e in enumerate(faultmodes[mode]) if type(e) in [dict, set, list, str]]
-                    if oppvect_loc: oppvect= faultmodes[mode].pop(oppvect_loc[0])
-                    for i,e in enumerate(faultmodes[mode]):  
-                        if i>=1:          rcost = e
-                        else:             dist = e
-                else:   raise Exception("Invalid mode definition")
-                if 'all' in oppvect or oppvect=='all': 
-                    if not opermodes:   oppvect = {'nom'}
-                    else:               oppvect = {*opermodes}
-                    if key_phases_by!='self': raise Exception("'all' option for oppvect only applies to key_phases_by='self'")
-                elif type(oppvect)==str:                    oppvect={oppvect}
-                if type(oppvect)==set:                      oppvect = {o:1.0 for o in oppvect}
-                if key_phases_by =='none' and oppvect!=[1.0]: 
-                    raise Exception("How should the opportunity vector be keyed? Provide 'key_phases_by' option.")                
-                self.faultmodes[mode]['dist'] =     dist
-                self.faultmodes[mode]['oppvect'] =  oppvect
-                self.faultmodes[mode]['rcost'] =    rcost
-                self.faultmodes[mode]['longname'] = longnames.get(mode,mode)
-        if key_phases_by=='self':   self.key_phases_by = self.name
-        else:                       self.key_phases_by = key_phases_by
     def choose_rand_fault(self, faults, default='first', combinations=1):
         """
-        Randomly chooses a fault or combination of faults to insert in the function. 
+        Randomly chooses a fault or combination of faults to insert in fxn.m. 
 
         Parameters
         ----------
@@ -397,10 +529,10 @@ class Block(States):
         """
         if getattr(self, 'run_stochastic', True):
             faults = [list(x) for x in itertools.combinations(faults, combinations)]
-            self.add_fault(*self.rng.choice(faults))
-        elif default=='first':      self.add_fault(faults[0])
-        elif type(default)==str:    self.add_fault(default)
-        else:                       self.add_fault(*default)
+            self.m.add_fault(*self.rng.choice(faults))
+        elif default=='first':      self.m.add_fault(faults[0])
+        elif type(default)==str:    self.m.add_fault(default)
+        else:                       self.m.add_fault(*default)
     def set_rand(self,statename,methodname, *args):
         """
         Update the given random state with a given method and arguments (if in run_stochastic mode)
@@ -445,119 +577,6 @@ class Block(States):
         """
         if not statenames: statenames=list(self._rng_params.keys())
         for statename in statenames: setattr(self, statename, self._rng_params[statename][0])
-    def set_mode(self, mode):
-        """Sets a mode in the block
-        
-        Parameters
-        ----------
-        mode : str
-            name of the mode to enter.
-        """
-        if self.exclusive_faultmodes:
-            if self.any_faults():           raise Exception("Cannot set mode from fault state without removing faults.")
-            elif  mode in self.faultmodes:  self.to_fault(mode)
-            else:                           self.mode=mode
-        else:                               self.mode = mode
-    def in_mode(self,*modes):
-        """Checks if the system is in a given operational mode
-        
-        Parameters
-        ----------
-        *modes : strs
-            names of the mode to check
-        """
-        return self.mode in modes                    
-    def has_fault(self,*faults): 
-        """Check if the block has fault (a str)
-        
-        Parameters
-        ----------
-        *faults : strs
-            names of the fault to check.
-        """
-        return any(self.faults.intersection(set(faults)))
-    def no_fault(self,fault): 
-        """Check if the block does not have fault (a str)
-        
-        Parameters
-        ----------
-        fault : str
-            name of the fault to check.
-        """
-        return not(any(self.faults.intersection(set([fault]))))
-    def any_faults(self):
-        """check if the block has any fault modes"""
-        return any(self.faults.difference({'nom'}))
-    def to_fault(self,fault): 
-        """Moves from the current fault mode to a new fault mode
-        
-        Parameters
-        ----------
-        fault : str
-            name of the fault mode to switch to
-        """
-        self.faults.clear()
-        self.faults.add(fault)
-        if self.exclusive_faultmodes: self.mode = fault
-    def add_fault(self,*faults): 
-        """Adds fault (a str) to the block
-        
-        Parameters
-        ----------
-        *fault : str(s)
-            name(s) of the fault to add to the black
-        """
-        self.faults.update(faults)
-        if self.exclusive_faultmodes: 
-            if len(faults)>1:   raise Exception("Multiple fault modes added to function with exclusive fault representation")
-            elif len(faults)==1 and list(faults)[0]!='nom': self.mode =faults[0]
-    def replace_fault(self, fault_to_replace,fault_to_add): 
-        """Replaces fault_to_replace with fault_to_add in the set of faults
-        
-        Parameters
-        ----------
-        fault_to_replace : str
-            name of the fault to replace
-        fault_to_add : str
-            name of the fault to add in its place
-        """
-        self.faults.add(fault_to_add)
-        self.faults.remove(fault_to_replace)
-        if self.exclusive_faultmodes: self.mode = fault_to_add
-    def remove_fault(self, fault_to_remove, opermode=False, warnmessage=False):
-        """Removes fault in the set of faults and returns to given operational mode
-        
-        Parameters
-        ----------
-        fault_to_replace : str
-            name of the fault to remove
-        opermode : str (optional)
-            operational mode to return to when the fault mode is removed
-        warnmessage : str/False
-            Warning to give when performing operation. Default is False (no warning)
-        """
-        self.faults.discard(fault_to_remove)
-        if len(self.faults) == 0: self.faults.add('nom')
-        if opermode:    self.mode = opermode
-        if self.exclusive_faultmodes and not(opermode):
-            raise Exception("Unclear which operational mode to enter with fault removed")
-        if warnmessage: self.warn(warnmessage,"Fault mode `"+fault_to_remove+"' removed.", stacklevel=3)
-    def remove_any_faults(self, opermode=False, warnmessage=False):
-        """Resets fault mode to nominal and returns to the given operational mode
-        
-        Parameters
-        ----------
-        opermode : str (optional)
-            operational mode to return to when the fault mode is removed
-        warnmessage : str/False
-            Warning to give when performing operation. Default is False (no warning)
-        """
-        self.faults.clear()
-        self.faults.add('nom')
-        if opermode:    self.mode = opermode
-        if self.exclusive_faultmodes and not(opermode):
-            raise Exception("Unclear which operational mode to enter with fault removed")
-        if warnmessage: self.warn(warnmessage, "All faults removed.")
     def get_flowtypes(self):
         """Returns the names of the flow types in the model"""
         return {obj.type for name, obj in self.flows.items()}
@@ -571,10 +590,8 @@ class Block(States):
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used by default in 
         derived objects when resetting the model. Requires associated flows to be cleared first."""
-        self.faults.clear()
-        self.faults.add('nom')
-        for state in self._initstates.keys():
-            setattr(self, state,self._initstates[state])
+        self.m.remove_any_faults()
+        self.s=self._init_s(**self._args_s)
         for generator in self.rngs:
             self.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
         self.rng = np.random.default_rng(self.seed)
@@ -588,15 +605,15 @@ class Block(States):
                 component.reset()
             for timername in self.timers:
                 getattr(self, timername).reset()
-            self.updatefxn('reset', faults=['nom'], time=0)
+            self.updatefxn('reset', faults=[], time=0)
     def get_memory(self):
         """ Gets the approximate memory usage of the block in bytes (not complete)"""
         mem=0
         mem+=sys.getsizeof(self.opermodes)
         for rng in self.rngs.values():
             mem+=sys.getsizeof(rng)
-        if hasattr(self, 'faultmodes'):
-            for fm in self.faultmodes.values():
+        if hasattr(self, 'm'):
+            for fm in self.m.faultmodes.values():
                 mem+=sys.getsizeof(fm)
         if hasattr(self, 'mode_state_dict'):
             mem+=sys.getsizeof(self.mode_state_dict)
@@ -612,7 +629,7 @@ class Block(States):
         if hasattr(self, 'actions'):
             for name,comp in self.actions.items():
                 mem+=comp.get_memory()
-        for state in self._initstates.values():
+        for state in asdict(self.s):
             mem+=2*sys.getsizeof(state) # (*2 because both the initstate and the actual state should be counted)
         return mem
     def return_states(self):
@@ -627,11 +644,10 @@ class Block(States):
             Faults present in the block
         """
         states={}
-        for state in self._states:
-            s = getattr(self,state)
-            if type(s) in [set, dict]: s=copy.deepcopy(s)
-            states[state]= s
-        return states, self.faults.copy()
+        for state, val in asdict(self.s).items():
+            if type(val) in [set, dict]: val=copy.deepcopy(val)
+            states[state]= val
+        return states, self.m.faults.copy()
     def has_new_states(self, prev_states, prev_faults):
         states, faults = self.return_states()
         if prev_states!=states or prev_faults!=faults:  return True
@@ -647,9 +663,36 @@ class Block(States):
         if hasattr(self, 'pds'): state_pd= np.prod(self.pds)
         else:                    state_pd= 1.0
         return state_pd
-    def check_update_nominal_faults(self):
-        if self.faults.difference({'nom'}): self.faults.difference_update({'nom'})
-        elif len(self.faults)==0:           self.faults.update(['nom'])
+    def make_flowdict(self,flownames,flows):
+        """
+        Puts a list of flows with a list of flow names in a dictionary.
+
+        Parameters
+        ----------
+        flownames : list or dict or empty
+            names of flows corresponding to flows
+            using {externalname: internalname}
+        flows : list
+            flows
+
+        Returns
+        -------
+        flowdict : dict
+            dict of flows indexed by flownames
+        """
+        flowdict = {}
+        if not(flownames) or type(flownames)==dict:
+            flowdict = {f.name:f for f in flows}
+            if flownames:
+                for externalname, internalname in flownames.items():
+                    flowdict[internalname] = flowdict.pop(externalname)
+        elif type(flownames)==list:
+            if len(flownames)==len(flows):
+                for ind, flowname in enumerate(flownames):
+                    flowdict[flowname]=flows[ind]
+            else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
+        else:       raise Exception("Invalid flownames option in "+self.name)
+        return flowdict
 
 #Function superclass 
 class FxnBlock(Block):
@@ -669,7 +712,7 @@ class FxnBlock(Block):
     dt : float
         local timestep of the model in the function (overrides global timestep by default ('use_local':True in modelparameters))
     """
-    def __init__(self,name, flows, flownames=[], states={}, components={},timers=[],
+    def __init__(self,name, flows, flownames=[], p={}, s={}, components={},timers=[],
                  local={}, comms={}, dt=None, seed=None):
         """
         Instantiates the function superclass with the relevant parameters.
@@ -682,8 +725,10 @@ class FxnBlock(Block):
             Names of flows  to use in the function, if private flow names are needed (e.g. functions with in/out relationships).
             Either provided as a list (in the same order as the flows) of all flow names corresponding to those flows
             Or as a dict of form {External Flowname: Internal Flowname}
-        states : dict, optional
-            Internal states to associate with the function. The default is {}.
+        p : dict, optional
+            Internal parameters to override from defaults. The default is {}.
+        s : dict, optional
+            Internal states to override from defaults. The default is {}.
         components : dict, optional
             Component objects to associate with the function. The default is {}.
         timers : set, optional
@@ -712,9 +757,8 @@ class FxnBlock(Block):
         for flow in self.flows.keys():
             setattr(self, flow, self.flows[flow])
         self.components=components
-        if not getattr(self, 'faultmodes', []): self.faultmodes={}
         self.compfaultmodes= dict()
-        self.exclusive_faultmodes = False
+        self.exclusive = False
         for cname in components:
             self.faultmodes.update({components[cname].localname+f:vals for f, vals in components[cname].faultmodes.items()})
             self.compfaultmodes.update({components[cname].localname+modename:cname for modename in components[cname].faultmodes})
@@ -723,7 +767,7 @@ class FxnBlock(Block):
         if dt: self.dt=dt
         self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
-        super().__init__(states)
+        super().__init__(p=p, s=s)
     def __repr__(self):
         blockret = super().__repr__()
         if getattr(self, 'actions'): return blockret+', active: '+str(self.active_actions)
@@ -840,22 +884,22 @@ class FxnBlock(Block):
         if self.state_rep=='finite-state' and len(initial_action)>1: raise Exception("Cannot have more than one initial action with finite-state representation")
         
         if self.mode_rep=='replace':
-            if not self.exclusive_faultmodes:           raise Exception("Cannot use mode_rep='replace' option without an exclusive_faultmodes representation (set in assoc_modes)")
+            if not self.exclusive:           raise Exception("Cannot use mode_rep='replace' option without an exclusive representation (set in assoc_modes)")
             elif not self.state_rep=='finite-state':    raise Exception("Cannot use mode_rep='replace' option without using state_rep=`finite-state`")
             elif self.opermodes:                        raise Exception("Cannot use mode_rep='replace' option simultaneously with defined operational modes in assoc_modes()")
-            if len(self.faultmodes)>0:                  raise Exception("Cannot use mode_rep='replace option while having Function-level fault modes (define at Action level)")
+            if len(self.m.faultmodes)>0:                raise Exception("Cannot use mode_rep='replace option while having Function-level fault modes (define at Action level)")
             else:
                 self.opermodes = [*self.actions.keys()]
                 self.mode=initial_action[0]
         elif self.mode_rep=='independent':
-            if self.exclusive_faultmodes:               raise Exception("Cannot use mode_rep='independent option' without a non-exclusive fault mode representation (set in assoc_modes)")
+            if self.exclusive:               raise Exception("Cannot use mode_rep='independent option' without a non-exclusive fault mode representation (set in assoc_modes)")
         for aname, action in self.actions.items():
-            modes_to_add = {action.localname+f:val for f,val in action.faultmodes.items()}
-            self.faultmodes.update(modes_to_add)
+            modes_to_add = {action.localname+f:val for f,val in action.m.faultmodes.items()}
+            self.m.faultmodes.update(modes_to_add)
             fmode_intersect = set(modes_to_add).intersection(self.actfaultmodes)
             if any(fmode_intersect):
                 raise Exception("Action "+aname+" overwrites existing fault modes: "+str(fmode_intersect)+". Rename the faults (or use name option in assoc_modes)")
-            self.actfaultmodes.update({action.localname+modename:aname for modename in action.faultmodes})
+            self.actfaultmodes.update({action.localname+modename:aname for modename in action.m.faultmodes})
         self.asg_pos=asg_pos
         
     def set_active_actions(self, actions):
@@ -940,21 +984,18 @@ class FxnBlock(Block):
         copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         copy.is_copy=True
         copy.__init__(self.name, newflows, *attr)
-        copy.faults = self.faults.copy()
-        if hasattr(self, 'faultmodes'):         copy.faultmodes = self.faultmodes
+        copy.m.mirror(self.m)
         if hasattr(self, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
         for flowname, flow in self.internal_flows.items():
             copy.internal_flows[flowname] = flow.copy()
             setattr(copy, flowname, copy.internal_flows[flowname])
         for action in self.actions: 
-            for state in copy.actions[action]._initstates.keys():
-                setattr(copy.actions[action], state, getattr(self.actions[action], state))
-            copy.actions[action].faults=self.actions[action].faults.copy()
+            copy.action.s = copy.action._init_s(**asdict(action.s))
+            copy.actions[action].m.mirror(self.actions[action].m)
             copy.actions[action].time=self.actions[action].time
         for component in self.components: 
-            for state in copy.components[component]._initstates.keys():
-                setattr(copy.components[component], state, getattr(self.components[component], state))
-            copy.components[component].faults=self.components[component].faults.copy()
+            copy.component.s = copy.component._init_s(**asdict(component.s))
+            copy.components[component].m.mirror(self.components[component].m)
             copy.components[component].time=self.components[component].time
         setattr(copy, 'active_actions', getattr(self, 'active_actions', {}))
         for timername in self.timers:
@@ -962,8 +1003,7 @@ class FxnBlock(Block):
             copytimer = getattr(copy, timername)
             copytimer.set_timer(timer.time, tstep=timer.tstep)
             copytimer.mode=timer.mode
-        for state in self._initstates.keys():
-            setattr(copy, state, getattr(self, state))
+        copy.s = copy._init_s(**asdict(self.s))
         for generator in self.rngs:
             copy.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
             copy.rngs[generator].__setstate__(self.rngs[generator].__getstate__())
@@ -987,7 +1027,7 @@ class FxnBlock(Block):
         Parameters
         ----------
         faults : list, optional
-            Faults to inject in the function. The default is ['nom'].
+            Faults to inject in the function. The default is [].
         time : float, optional
             Model time. The default is 0.
         run_stochastic : bool/str
@@ -1027,14 +1067,14 @@ class FxnBlock(Block):
         proptype : str
             Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
         faults : list, optional
-            Faults to inject in the function. The default is ['nom'].
+            Faults to inject in the function. The default is [].
         time : float, optional
             Model time. The default is 0.
         run_stochastic : book
             Whether to run the simulation using stochastic or deterministic behavior
         """
         self.run_stochastic=run_stochastic
-        self.add_fault(*faults)  #if there is a fault, it is instantiated in the function
+        self.m.add_fault(*faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
         if time>self.time and run_stochastic: self.update_stochastic_states()
@@ -1046,10 +1086,10 @@ class FxnBlock(Block):
             for fault in self.faults:
                 if fault in self.compfaultmodes:
                     component = self.components[self.compfaultmodes[fault]]
-                    component.add_fault(fault[len(component.localname):])
+                    component.m.add_fault(fault[len(component.localname):])
                 if fault in self.actfaultmodes:
                     action = self.actions[self.actfaultmodes[fault]]
-                    action.add_fault(fault[len(action.localname):])
+                    action.m.add_fault(fault[len(action.localname):])
         if any(self.actions) and self.asg_proptype==proptype: self.prop_internal(faults, time, run_stochastic, proptype)
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
@@ -1069,9 +1109,8 @@ class FxnBlock(Block):
                 self.faults.update({comp.localname+f for f in comp.faults if f!='nom'}) 
         self.time=time
         if run_stochastic=='track_pdf' and self.rngs: self.probdens = self.return_probdens()
-        self.check_update_nominal_faults()
-        if self.exclusive_faultmodes==True and len(self.faults)>1: 
-            raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.faults)+"\n Is the mode representation nonexclusive?")
+        if (self.m.exclusive==True and len(self.m.faults)>1): 
+            raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.m.faults)+"\n Is the mode representation nonexclusive?")
         return
 class GenericFxn(FxnBlock):
     """Generic function block. For use when the user has not yet defined a class for the
@@ -1083,7 +1122,7 @@ class Component(Block):
     """
     Superclass for components (most attributes and methods inherited from Block superclass)
     """
-    def __init__(self,name, states={}):
+    def __init__(self,name, s={}, p={}):
         """
         Inherit the component class
 
@@ -1091,12 +1130,14 @@ class Component(Block):
         ----------
         name : str
             Unique name ID for the component
-        states : dict, optional
+        s : dict, optional
             States to use in the component. The default is {}.
+        p : dict, optional
+            Parameters to use in the component. The default is {}.
         """
         self.type = 'component'
         self.name = name
-        super().__init__(states)
+        super().__init__(p=p, s=s)
     def behavior(self,time):
         """ Placeholder for component behavior methods. Enables one to include components
         without yet having a defined behavior for them."""
@@ -1105,7 +1146,7 @@ class Action(Block):
     """
     Superclass for actions (most attributes and methods inherited from Block superclass)
     """
-    def __init__(self,name, flows, flownames=[], states={}):
+    def __init__(self,name, flows, flownames=[], s={}, p={}):
         """
         Inherit the Block class
 
@@ -1113,15 +1154,18 @@ class Action(Block):
         ----------
         name : str
             Unique name ID for the action
-        states : dict, optional
+        s : dict, optional
             States to use in the action. The default is {}.
+        p : dict, optional
+            Parameters to use in the component. The default is {}.
         """
         self.type = 'action'
         self.name = name
         self.flows=self.make_flowdict(flownames,flows)
         for flow in self.flows.keys():
             setattr(self, flow, self.flows[flow])
-        super().__init__({**states, 't_loc':0.0})
+        self.t_loc=0.0 # local time find a place for this?
+        super().__init__(p=p, s=s)
     def updateact(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
         Updates the behaviors, faults, times, etc of the action 
@@ -1139,7 +1183,6 @@ class Action(Block):
             if self.time<time:  self.behavior(time); self.t_loc+=dt
         else:                   self.behavior(time); self.t_loc+=dt
         self.time=time
-        self.check_update_nominal_faults()
     def behavior(self, time):
         """Placeholder behavior method for actions"""
         a=0

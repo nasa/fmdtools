@@ -175,7 +175,7 @@ class Model(object):
             Parameter dictionary to instantiate the flow with
         """
         for flowname in flownames: self.add_flow(flowname, flowdict, flowtype, fclass, params)
-    def add_flow(self,flowname, flowdict={}, flowtype='', fclass=Flow, params={}):
+    def add_flow(self,flowname, fclass=Flow, p={}, s={}, flowtype=''):
         """
         Adds a flow with given attributes to the model.
 
@@ -183,21 +183,19 @@ class Model(object):
         ----------
         flowname : str
             Unique flow name to give the flow in the model
-        flowdict : dict, Flow, set or empty set
-            Dictionary of flow attributes e.g. {'value':XX}, or an already instantiated Flow object.
-            If a set of attribute names is provided, each will be given a value of 1
-            If an empty set is given, it will be represented w- {flowname: 1}
-        flowtype : str, optional
-            Denotes type for class (e.g. 'energy,' 'material,', 'signal')
         fclass : Class, optional
             Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
             Class must take flowname, flowdict, flowtype as input to __init__()
-        params : dict, optional
+            May alternatively provide already-instanced object.
+        p : dict, optional
             Parameter dictionary to instantiate the flow with
+        s : dict, optional
+            State dictionary to overwrite Flow default state values with
+        flowtype : str, optional
+            Denotes type for class (e.g. 'energy,' 'material,', 'signal')
         """
         if not getattr(self, 'is_copy', False):
-            self.flows[flowname] = init_flow(flowname,flowdict, flowtype, fclass, params)
-            setattr(self, flowname, self.flows[flowname])
+            self.flows[flowname] = init_flow(flowname,fclass, p=p, s=s, flowtype=flowtype)
     def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None'):
         """
         Instantiates a given function in the model.
@@ -235,7 +233,6 @@ class Model(object):
                 self._fxnflows.append((name, flowname))
             self.functionorder.update([name])
             self.fxns[name].set_timestep(use_local=self.modelparams.use_local, global_tstep=self.modelparams.dt)
-            setattr(self, name, self.fxns[name])
     def set_functionorder(self,functionorder):
         """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
         if not self.functionorder.difference(functionorder): self.functionorder=OrderedSet(functionorder)
@@ -477,14 +474,14 @@ class Model(object):
         """
         modes, modeprops = {}, {}
         for fxnname, fxn in self.fxns.items():
-            ms = [m for m in fxn.faults.copy() if m!='nom']
+            ms = [m for m in fxn.m.faults.copy() if m!='nom']
             if ms: 
                 modeprops[fxnname] = {}
                 modes[fxnname] = ms
             for mode in ms:
                 if mode!='nom': 
-                    modeprops[fxnname][mode] = fxn.faultmodes.get(mode)
-                    if mode not in fxn.faultmodes: warnings.warn("Mode "+mode+" not in faultmodes for fxn "+fxnname+" and may not be tracked.")
+                    modeprops[fxnname][mode] = fxn.m.faultmodes.get(mode)
+                    if mode not in fxn.m.faultmodes: warnings.warn("Mode "+mode+" not in faultmodes for fxn "+fxnname+" and may not be tracked.")
         return modes, modeprops
     def get_memory(self):
         """

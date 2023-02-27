@@ -7,13 +7,21 @@ Description: A module to define base data structures for simulation. Contains:
 import numpy as np
 from operator import attrgetter
 import warnings
-from recordclass import dataobject, asdict
+from recordclass import dataobject, asdict, recordclass
 from collections.abc import Iterable
 import dill
 import copy
-import inspect
+import inspect    
 
-class States(object):
+
+#def container(name="Container", **kwargs):
+#    """Simple factory method for creating a container for states, modes, components, etc"""
+#    return recordclass(name, tuple([(k,type(v)) for k, v in kwargs.items()]), tuple([v for v in kwargs.values()]), mapping=True)
+
+class State(dataobject, mapping=True):
+    """ """
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args, **kwargs)
     def set_atts(self, **kwargs):
         """Sets the given arguments to a given value. Mainly useful for 
         reducing length/adding clarity to assignment statements in __init__ methods
@@ -32,7 +40,7 @@ class States(object):
         as_copy: bool, set to True for dicts/sets to be copied rather than referenced
         """
         for name, value in kwargs.items():
-            if name not in self._states: raise Exception(name+" not a property of "+self.name)
+            if name not in self.__fields__: raise Exception(name+" not a property of "+self.name)
             if as_copy: value=copy.copy(value)
             setattr(self, name, value)
     def assign(self,obj,*states, as_copy=True, **statedict):
@@ -53,11 +61,11 @@ class States(object):
                 setattr(self, state, val)
         else:
             if not statedict:
-                if len(states)==0:    statedict = {s:s for s in obj._states}
+                if len(states)==0:    statedict = {s:s for s in obj.__fields__}
                 else:                 statedict = {s:s for s in states}
             elif len(states)>0: raise Exception("Can only provide positional states or keyword states, not both")
             for set_state, get_state in statedict.items():
-                if set_state not in self._states: raise Exception(set_state+" not a property of "+self.name)
+                if set_state not in self.__fields__: raise Exception(set_state+" not a property of "+self.name)
                 val = getattr(obj,get_state)
                 if as_copy: val=copy.copy(val)
                 setattr(self, set_state, val)
@@ -76,7 +84,7 @@ class States(object):
         elif kwargs.get('as_array', True):      return np.array(states)
         else:                                   return states
     def values(self):
-        return self.gett(*self._states)
+        return self.gett(*self.__fields__)
     def gett(self, *attnames):
         """Alternative to self.get that returns the given constructs as a tuple instead
         of as an array. Useful when a numpy array would translate the underlying data types
@@ -97,7 +105,7 @@ class States(object):
         e.g. self.Pos.inc(x=(1,10)) will increment x by 1 until it reaches 10
         """
         for name, value in kwargs.items():
-            if name not in self._states: raise Exception(name+" not a property of "+self.name)
+            if name not in self.__fields__: raise Exception(name+" not a property of "+self.name)
             if type(value)==tuple:  
                 current = getattr(self,name)
                 sign = np.sign(value[0])
@@ -121,7 +129,7 @@ class States(object):
             self.EE.v = min(12, max(0,self.EE.v))
         """
         for name, value in kwargs.items():
-            if name not in self._states: raise Exception(name+" not a property of "+self.name)
+            if name not in self.__fields__: raise Exception(name+" not a property of "+self.name)
             setattr(self, name, min(value[1], max(value[0], getattr(self,name))))
     def mul(self,*states):
         """Returns the multiplication of given attributes of the model construct.
@@ -175,36 +183,6 @@ class States(object):
         test = values!=self.get(*states)
         if is_iter(test):   return any(test)
         else:               return test
-    def make_flowdict(self,flownames,flows):
-        """
-        Puts a list of flows with a list of flow names in a dictionary.
-
-        Parameters
-        ----------
-        flownames : list or dict or empty
-            names of flows corresponding to flows
-            using {externalname: internalname}
-        flows : list
-            flows
-
-        Returns
-        -------
-        flowdict : dict
-            dict of flows indexed by flownames
-        """
-        flowdict = {}
-        if not(flownames) or type(flownames)==dict:
-            flowdict = {f.name:f for f in flows}
-            if flownames:
-                for externalname, internalname in flownames.items():
-                    flowdict[internalname] = flowdict.pop(externalname)
-        elif type(flownames)==list:
-            if len(flownames)==len(flows):
-                for ind, flowname in enumerate(flownames):
-                    flowdict[flowname]=flows[ind]
-            else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
-        else:       raise Exception("Invalid flownames option in "+self.name)
-        return flowdict
     def set_var(self,var, val):
         """
         Sets variable of the object to a given value
