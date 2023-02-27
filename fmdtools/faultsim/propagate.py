@@ -357,8 +357,9 @@ def create_single_fault_scen(mdl, fxnname, faultmode, time):
     scen['properties']['function']=fxnname
     scen['properties']['fault']=faultmode
     fxn = mdl.fxns[fxnname]
-    if not fxn.faultmodes.get(faultmode, False) or fxn.faultmodes[faultmode]=='synth': 
-        scen['properties']['rate'] = 1/len(fxn.faultmodes)
+    fm= fxn.m
+    if not fm.faultmodes.get(faultmode, False) or fm.faultmodes[faultmode]=='synth': 
+        scen['properties']['rate'] = 1/len(fm.faultmodes)
     else:
         if faultmode in fxn.compfaultmodes:
             fxn = fxn.components[fxn.compfaultmodes[faultmode]]
@@ -366,11 +367,10 @@ def create_single_fault_scen(mdl, fxnname, faultmode, time):
         elif faultmode in fxn.actfaultmodes:
             fxn = fxn.actions[fxn.actfaultmodes[faultmode]]
             faultmode = faultmode[len(fxn.localname):]
-        if fxn.faultmodes[faultmode].get('probtype', '')=='rate':
-            
-            scen['properties']['rate']=fxn.failrate*fxn.faultmodes[faultmode]['dist']*eq_units(fxn.faultmodes[faultmode]['units'], mdl.modelparams.units)*(mdl.modelparams.times[-1]-mdl.modelparams.times[0]) # this rate is on a per-simulation basis
-        elif fxn.faultmodes[faultmode].get('probtype','')=='prob':
-            scen['properties']['rate'] = fxn.failrate*fxn.faultmodes[faultmode]['dist'] 
+        if fm.faultmodes[faultmode].probtype=='rate':
+            scen['properties']['rate']=fm.failrate*fm.faultmodes[faultmode]['dist']*eq_units(fm.faultmodes[faultmode]['units'], mdl.modelparams.units)*(mdl.modelparams.times[-1]-mdl.modelparams.times[0]) # this rate is on a per-simulation basis
+        elif fm.faultmodes[faultmode].get('probtype','')=='prob':
+            scen['properties']['rate'] = fm.failrate*fm.faultmodes[faultmode]['dist'] 
     scen['properties']['time']=time
     return  scen
 
@@ -736,15 +736,15 @@ def list_init_faults(mdl):
     trange = mdl.modelparams.times[-1]-mdl.modelparams.times[0] + 1.0
     for time in mdl.modelparams.times:
         for fxnname, fxn in mdl.fxns.items():
-            modes=fxn.faultmodes
-            for mode in modes:
+            fm=fxn.m
+            for mode in fm.faultmodes:
                 nomscen=construct_nomscen(mdl)
                 newscen=nomscen.copy()
                 newscen['sequence']={time:{'faults':{fxnname:mode}}}
-                if mdl.fxns[fxnname].faultmodes[mode]['probtype']=='rate':
-                    rate=mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']*eq_units(mdl.fxns[fxnname].faultmodes[mode]['units'], mdl.modelparams.units)*trange # this rate is on a per-simulation basis
-                elif mdl.fxns[fxnname].faultmodes[mode]['probtype']=='prob':
-                    rate = mdl.fxns[fxnname].failrate*mdl.fxns[fxnname].faultmodes[mode]['dist']
+                if fm.faultmodes[mode]['probtype']=='rate':
+                    rate=fm.failrate*fm.faultmodes[mode]['dist']*eq_units(fm.faultmodes[mode]['units'], mdl.modelparams.units)*trange # this rate is on a per-simulation basis
+                elif fm.faultmodes[mode]['probtype']=='prob':
+                    rate = fm.failrate*fm.faultmodes[mode]['dist']
                 newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
                 faultlist.append(newscen)
     return faultlist
@@ -1264,11 +1264,11 @@ def init_blockhist(blockname, block, timerange, track='all', run_stochastic=Fals
     """
     states, faults = block.return_states()
     blockhist={}
-    modelength = max([0]+[len(modename) for modename in block.opermodes+list(block.faultmodes.keys())])
+    modelength = max([0]+[len(modename) for modename in block.m.opermodes+tuple(block.m.faultmodes.keys())])
     if track == 'all' or 'faults' in track:
-        if block.faultmodes:
-            if block.exclusive_faultmodes == False:   blockhist["faults"] = {faultmode:np.array([0 for i in timerange]) for faultmode in block.faultmodes} 
-            elif block.exclusive_faultmodes == True:  blockhist["faults"]=np.full([len(timerange)], list(faults)[0], dtype="U"+str(modelength))
+        if block.m.faultmodes:
+            if block.m.exclusive == False:   blockhist["faults"] = {faultmode:np.array([0 for i in timerange]) for faultmode in block.m.faultmodes} 
+            elif block.m.exclusive == True:  blockhist["faults"]=np.full([len(timerange)], list(faults)[0], dtype="U"+str(modelength))
     blockhist.update(init_dicthist(states, timerange, track=track, modelength=modelength))               
     if run_stochastic=='track_pdf' and block.rngs: 
         blockhist['probdens'] = np.full([len(timerange)], block.return_probdens())

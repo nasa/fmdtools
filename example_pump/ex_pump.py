@@ -21,11 +21,11 @@ The flows are:
     - Signal input (on/off)
 """
 
-from fmdtools.modeldef.block import FxnBlock
+from fmdtools.modeldef.block import FxnBlock, Mode
 from fmdtools.modeldef.flow import Flow 
 from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.approach import SampleApproach, NominalApproach
-from fmdtools.modeldef.common import Parameter
+from fmdtools.modeldef.common import Parameter, State
 import fmdtools.resultdisp as rd
 import fmdtools.faultsim.propagate as propagate
 import numpy as np
@@ -35,7 +35,26 @@ DEFINE MODEL FUNCTIONS
 Functions are defined using Python classes that are instantiated as objects
 """
 
+class ImportEEMode(Mode):
+    """
+    A probability model for faults is associated with each function:
+        - self.failrate = X sets the failure rate for the function (to be distributed over all modes
+        - self.assoc_modes(modes) creates a probability model for each mode, where modes is:
+            - {modename: [%of failures, [% at each phase in mdl.phases], repaircosts]
+    These failure rates will then be used to generate a list of scenarios for fp.run_list() and SampleApproach()
+    
+    Note that these rates are given in occurences/hr by default. To change the units, use the option units='sec'/'min'/'hr'/'day' etc
+    """
+    failrate = 1e-5
+    faultparams = {'no_v':(0.80,[0,1,0], 10000), 
+                  'inf_v':(0.20, [0,1,0], 5000)}
+
+class ImportEEState(State):
+    effstate : float = 1.0
+
 class ImportEE(FxnBlock):
+    _init_m = ImportEEMode
+    _init_s = ImportEEState
     """
     Import EE is the line of electricity going into the pump
     We define it here as a subclass of the FxnBlock superclass (imported from modeldef.py)
@@ -64,19 +83,6 @@ class ImportEE(FxnBlock):
             - flows, an ordered dictionary of those flows in the same order as flownames
         e.g. ['EEout'] {'EE_1':vals} means the EE_1 flow will be called self.EEout in this function
         """
-
-        """
-        Finally, a probability model for faults is associated with each function:
-            - self.failrate = X sets the failure rate for the function (to be distributed over all modes
-            - self.assoc_modes(modes) creates a probability model for each mode, where modes is:
-                - {modename: [%of failures, [% at each phase in mdl.phases], repaircosts]
-        These failure rates will then be used to generate a list of scenarios for fp.run_list() and SampleApproach()
-        
-        Note that these rates are given in occurences/hr by default. To change the units, use the option units='sec'/'min'/'hr'/'day' etc
-        """
-        self.failrate=1e-5
-        self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[0.20, [0,1,0], 5000]}, key_phases_by='global')
-
     def condfaults(self,time):
         """
         condfaults() changes the state of the system if there is a change in state in a flow
@@ -84,64 +90,83 @@ class ImportEE(FxnBlock):
         During fault propagation condfaults() executes before behavior()
         In this example,  if the current is too high, the line becomes an open circuit (e.g. due to a fuse or line burnout)
         """
-        if self.EEout.current>15.0: self.add_fault('no_v')
+        if self.EEout.s.current>15.0: self.m.add_fault('no_v')
     def behavior(self,time):
         """
         behavior() defines the behavior of the function in terms of
         how the system behaves normally and under faults.
         """
-        if self.has_fault('no_v'): self.effstate=0.0 #an open circuit means no voltage is exported
-        elif self.has_fault('inf_v'): self.effstate=100.0 #a voltage spike means voltage is much higher
-        else: self.effstate=1.0 #normally, voltage is 500 V
-        self.EEout.voltage=self.effstate * 500
+        if self.m.has_fault('no_v'):    self.s.effstate=0.0 #an open circuit means no voltage is exported
+        elif self.m.has_fault('inf_v'): self.s.effstate=100.0 #a voltage spike means voltage is much higher
+        else:                           self.s.effstate=1.0 #normally, voltage is 500 V
+        self.EEout.s.voltage=self.s.effstate * 500
 
+class ImportWaterMode(Mode):
+    failrate=1e-5
+    faultparams = {'no_wat':(1.0, [1,1,1], 1000)}
+    key_phases_by='global'
 class ImportWater(FxnBlock):
+    _init_m = ImportWaterMode
     """ Import Water is the pipe with water going into the pump """
     def __init__(self,name,flows):
         """Here the only flows are the water flowing out"""
         super().__init__(name,flows, flownames=['Watout'])
-        self.failrate=1e-5
-        self.assoc_modes({'no_wat':[1.0, [1,1,1], 1000]}, key_phases_by='global')
         """
         in this function, no conditional faults are modelled, so it doesn't need to be included
         """
     def behavior(self,time):
         """ The behavior is that if the flow has a no_wat fault, the wate level goes to zero"""
-        if self.has_fault('no_wat'): self.Watout.level=0.0
-        else:                        self.Watout.level=1.0
-    
+        if self.m.has_fault('no_wat'):  self.Watout.s.level=0.0
+        else:                           self.Watout.s.level=1.0
 
+class ExportWaterMode(Mode):
+    failrate=1e-5
+    faultparams = {'block':(1.0, [1.5, 1.0, 1.0], 5000)}
+    key_phases_by='global'
+    
 class ExportWater(FxnBlock):
     """ Import Water is the pipe with water going into the pump """
     def __init__(self,name,flows):
         #flows going into/out of the function need to be made properties of the function
         super().__init__(name, flows, flownames=['Watin'])
-        self.failrate=1e-5
-        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 5000]}, key_phases_by='global')
     def behavior(self,time):
         """ Here a blockage changes the area the output water flows through """
-        if self.has_fault('block'): self.Watin.area=0.01
+        if self.m.has_fault('block'): self.Watin.s.area=0.01
 
+class ImportSigMode(Mode):
+    failrate=1e-6
+    faultparams = {'no_sig':(1.0, [1.5, 1.0, 1.0], 10000)}
+    key_phases_by='global'
 class ImportSig(FxnBlock):
+    _init_m = ImportSigMode
     """ Import Signal is the on/off switch """
     def __init__(self,name,flows):
         """ Here the main flow is the signal"""
         super().__init__(name,flows, flownames=['Sigout'])
-        self.failrate=1e-6
-        self.assoc_modes({'no_sig':[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by='global')
     def behavior(self, time):
         """ This function has time-dependent behavior.
         To have different operational modes depending on the time, use if/else statements on the time variable, which is the system time.
 
         In this case, the power turns on at t=5 and turns back off at t=50.
         """
-        if self.has_fault('no_sig'): self.Sigout.power=0.0 #an open circuit means no voltage is exported
+        if self.m.has_fault('no_sig'): self.Sigout.power=0.0 #an open circuit means no voltage is exported
         else:
-            if time<5:      self.Sigout.power=0.0
-            elif time<50:   self.Sigout.power=1.0
-            else:           self.Sigout.power=0.0
+            if time<5:      self.Sigout.s.power=0.0
+            elif time<50:   self.Sigout.s.power=1.0
+            else:           self.Sigout.s.power=0.0
 
+class MoveWatStates(State):
+    eff:    float = 1.0 #effectiveness state
+class MoveWatParams(Parameter, readonly=True):
+    delay:  int = 1 #delay parameter
+class MoveWatMode(Mode):
+    failrate=1e-5
+    faultparams = {'mech_break':(0.6, [0.1, 1.2, 0.1], 5000), 'short':(1.0, [1.5, 1.0, 1.0], 10000)}
+    key_phases_by ='global'
 class MoveWat(FxnBlock):
+    _init_s = MoveWatStates
+    _init_p = MoveWatParams
+    _init_m = MoveWatMode
     """  Move Water is the pump itself. While one could decompose this further, one function is used for simplicity """
     def __init__(self,name, flows, delay):
         """ In this function, more states are initialized than flows:
@@ -152,11 +177,7 @@ class MoveWat(FxnBlock):
             We also have a parameter `delay` which we use to change a design variable in the function
         """
         flownames=['EEin', 'Sigin', 'Watin', 'Watout']
-        states={'eff':1.0} #effectiveness state
-        self.delay=delay #delay parameter
-        super().__init__(name,flows,flownames=flownames,states=states, timers={'timer'})
-        self.failrate=1e-5
-        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by='global')
+        super().__init__(name,flows,flownames=flownames, timers={'timer'}, p={'delay':delay})
     def condfaults(self, time):
         """
             Here we use the timer to define a conditional fault that only occurs after a state is present after 10 seconds.
@@ -165,48 +186,57 @@ class MoveWat(FxnBlock):
             by passing dt=timestep in the super().__init__ method or globally by changing 'tstep' in modelparams
             When the timer exceeds the delay defined by the external variable, the fault is added.
         """
-        if self.delay:
-            if self.Watout.pressure>15.0:
+        if self.p.delay:
+            if self.Watout.s.pressure>15.0:
                 if time>self.time:                  self.timer.inc(self.dt)
-                if self.timer.time>=self.delay:      self.add_fault('mech_break')
+                if self.timer.time>=self.p.delay:   self.add_fault('mech_break')
         else:
             if self.Watout.pressure>15.0: self.add_fault('mech_break')
 
     def behavior(self, time):
         """ here we can define how the function will behave with different faults """
-        if self.has_fault('short'):
-            self.EEin.current=500*10/5000*self.Sigin.power*self.EEin.voltage
-            self.eff=0.0
-        elif self.has_fault('mech_break'):
-            self.EEin.current=0.2*10/5000*self.Sigin.power*self.EEin.voltage
-            self.eff=0.0
+        if self.m.has_fault('short'):
+            self.EEin.s.current=500*10/5000*self.Sigin.s.power*self.EEin.s.voltage
+            self.s.eff=0.0
+        elif self.m.has_fault('mech_break'):
+            self.EEin.s.current=0.2*10/5000*self.Sigin.s.power*self.EEin.s.voltage
+            self.s.eff=0.0
         else:
-            self.EEin.current=10/5000*self.Sigin.power*self.EEin.voltage*min(13.0, self.Watout.pressure)
-            self.eff=1.0
+            self.EEin.s.current=10/5000*self.Sigin.s.power*self.EEin.s.voltage*min(13.0, self.Watout.s.pressure)
+            self.s.eff=1.0
 
-        self.Watout.pressure = 10/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level/self.Watout.area
-        self.Watout.flowrate = 0.3/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level*self.Watout.area
+        self.Watout.s.pressure = 10/500 * self.Sigin.s.power*self.s.eff*min(1000, self.EEin.s.voltage)*self.Watin.s.level/self.Watout.s.area
+        self.Watout.s.flowrate = 0.3/500 * self.Sigin.s.power*self.s.eff*min(1000, self.EEin.s.voltage)*self.Watin.s.level*self.Watout.s.area
 
-        self.Watin.pressure=self.Watout.pressure
-        self.Watin.flowrate=self.Watout.flowrate
+        self.Watin.s.pressure=self.Watout.s.pressure
+        self.Watin.s.flowrate=self.Watout.s.flowrate
 
 """
-DEFINING CUSTOM MODEL FLOWS
+DEFINING MODEL FLOWS
 Flows can be defined using Python classes that are instantiated as objects
 Most flows are defined in the initialize() function, however custom flows can be defined as their own objects
 """
+class WaterStates(State):
+    """States for Water Flows"""
+    flowrate :  float = 1.0
+    pressure :  float = 1.0
+    area :      float = 1.0
+    level :     float = 1.0
 class Water(Flow):
-    """
-    Defining the class for the flow of Water using the Flow superclass
-    here the flow is given the custom attribute of 'hello'--further attributes and methods could be given here if desired.
-    """
-    def __init__(self):
-        attributes={'flowrate':1.0, \
-                    'pressure':1.0, \
-                    'area':1.0, \
-                    'level':1.0}
-        super().__init__(attributes, 'Water',ftype='Water', suppress_warnings=True)
-        self.customattribute='hello'
+    _init_s=WaterStates
+
+class EEStates(State):
+    """States for EE flows"""
+    current :   float = 1.0
+    voltage  :    float = 1.0
+class Electricity(Flow):
+    _init_s=EEStates
+
+class SignalStates(State):
+    """States of Signal Flows"""
+    power :     float = 1.0
+class Signal(Flow):
+    _init_s=SignalStates
 
 ## Functions for defining resilience metrics
 def reseting_accumulate(vec):
@@ -260,11 +290,10 @@ class Pump(Model):
         and either:   a dict with the initial flow attributes, OR
                       a flow object defined in the model file
         """
-        self.add_flow('EE_1', {'current':1.0, 'voltage':1.0})
-        self.add_flow('Sig_1',  {'power':1.0})
-        # custom flows which we defined earlier can be added also:
-        self.add_flow('Wat_1', Water())
-        self.add_flow('Wat_2', Water())
+        self.add_flow('EE_1',   Electricity)
+        self.add_flow('Sig_1',  Signal)
+        self.add_flow('Wat_1',  Water('Wat_1'))
+        self.add_flow('Wat_2',  Water('Wat_1'))
 
         """
         Functions are added to the model using the addfxn() method, which needs:
@@ -274,11 +303,11 @@ class Pump(Model):
                -the *order* of which corresponds to those in the function definition
                -the *name* of which corresponds to the name defined above for the flow
         """
-        self.add_fxn('ImportEE',['EE_1'],fclass=ImportEE)
-        self.add_fxn('ImportWater',['Wat_1'],fclass=ImportWater)
-        self.add_fxn('ImportSignal',['Sig_1'],fclass=ImportSig)
+        self.add_fxn('ImportEE',['EE_1'],       fclass=ImportEE)
+        self.add_fxn('ImportWater',['Wat_1'],   fclass=ImportWater)
+        self.add_fxn('ImportSignal',['Sig_1'],  fclass=ImportSig)
         self.add_fxn('MoveWater', ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'],fclass=MoveWat, fparams = params.delay)
-        self.add_fxn('ExportWater', ['Wat_2'], fclass=ExportWater)
+        self.add_fxn('ExportWater', ['Wat_2'],  fclass=ExportWater)
 
         self.build_model()
     def end_condition(self,time):
@@ -335,13 +364,13 @@ if __name__=="__main__":
     endclass, mdlhist=propagate.one_fault(mdl, 'MoveWater', 'mech_break', time=0, staged=False)
     
     reshist,diff1, summary = rd.process.hist(mdlhist)
+    rd.graph.result_from(mdl, reshist, 40, gtype='normal')
     rd.graph.result_from(mdl, reshist, 50, gtype='normal')
     rd.graph.exec_order(mdl, gtype = 'normal')
     app = NominalApproach()
     app.add_seed_replicates('test', 10)
     
     faultapp = SampleApproach(mdl)
-    
     
     endclasses, mdlhists  = propagate.approach(mdl, faultapp)
     flat = rd.process.flatten_hist(mdlhists)

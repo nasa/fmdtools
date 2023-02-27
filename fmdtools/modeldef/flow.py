@@ -11,15 +11,19 @@ import warnings
 import copy
 import sys
 import networkx as nx
+from recordclass import asdict
 
-from .common import States
+from .common import Parameter, State
 
 
-class Flow(States):
+class Flow(object):
+    __slots__ = ['p', '_args_p', 's', '_args_s', '__dict__']
+    _init_p = Parameter
+    _init_s = State
     """
     Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
     """
-    def __init__(self, states, name, ftype='generic', suppress_warnings=False, params={}):
+    def __init__(self, name, s={}, p={}, ftype='generic', suppress_warnings=False):
         """
         Instances the flow with given states.
 
@@ -32,36 +36,30 @@ class Flow(States):
         """
         self.type=ftype
         self.name=name
-        self.p=params
-        self._initstates=states.copy()
-        self._states=list(states.keys())
-        for state in self._states:
-            setattr(self, state, states[state])
-        if type(self)!=Flow and not suppress_warnings:
-            if type(self).reset == Flow.reset:      warnings.warn("Custom reset() Method Not Implemented--model protection between methods may not work")
-            if type(self).status == Flow.status:    warnings.warn("Custom status() Method Not Implemented--custom flow attributes may not be saved")
-            if type(self).get_memory == Flow.get_memory:    warnings.warn("Custom get_memory() method not implement--memory estimates may be innaccurate")
-            if type(self).copy == Flow.copy:        warnings.warn("Custom copy() method not implemented--Staged Execution may not copy custom model states")
+        self._args_s = s
+        self._args_p = p
+        self.p=self._init_p(**p)
+        self.s=self._init_s(**s)
+        # TODO : add to module for safety-checking. Alternatively, run these checks prior to use
+        #if type(self)!=Flow and not suppress_warnings:
+        #    if type(self).reset == Flow.reset:      warnings.warn("Custom reset() Method Not Implemented--model protection between methods may not work")
+        #    if type(self).status == Flow.status:    warnings.warn("Custom status() Method Not Implemented--custom flow attributes may not be saved")
+        #    if type(self).get_memory == Flow.get_memory:    warnings.warn("Custom get_memory() method not implement--memory estimates may be innaccurate")
+        #    if type(self).copy == Flow.copy:        warnings.warn("Custom copy() method not implemented--Staged Execution may not copy custom model states")
     def __repr__(self):
         if hasattr(self,'name'):    
-            return getattr(self, 'name')+' '+getattr(self, 'type')+' flow: '+str({k:s for k,s in self.status().items() if k in self._states})
+            return getattr(self, 'name')+' '+getattr(self, 'type')+' flow: '+self.s.__repr__()
         else: return "Uninitialized Flow"
     def reset(self):
         """ Resets the flow to the initial state"""
-        for state in self._initstates:
-            setattr(self, state, self._initstates[state])
+        self.s=self._init_s(**self._args_s)
     def return_states(self):
         return self.status()
     def status(self):
         """
         Returns a dict with the current states of the flow.
         """
-        states={}
-        for state in self._states:
-            s = getattr(self,state)
-            if type(s) in [set, dict]: s=copy.deepcopy(s)
-            states[state]= s
-        return states
+        return asdict(self.s)
     def get_memory(self):
         """
         Returns the approximate memory usage of the flow.
@@ -74,15 +72,7 @@ class Flow(States):
         """
         Returns a copy of the flow object (used when copying the model)
         """
-        states={}
-        for state in self._states:
-            states[state]=getattr(self,state)
-        if self.__class__ in [Flow, MultiFlow, CommsFlow]:
-            copy = self.__class__(states, self.name, self.type, params=self.p)
-        else:
-            copy = self.__class__()
-            for state in self._states:
-                setattr(copy, state, getattr(self,state))
+        copy = self.__class__(self.name, p=asdict(self.p), s=asdict(self.s), ftype=self.type)
         return copy
     def get_typename(self):
         return "Flow"
@@ -110,7 +100,7 @@ class MultiFlow(Flow):
         for l in self.locals:
             rep_str=rep_str+"\n   "+self.get_view(l).__repr__()
         return rep_str
-    def create_local(self, name, attrs = "all", params={}):
+    def create_local(self, name, attrs = "all", p={}):
         """
         Creates a local view of the Flow
 
@@ -123,7 +113,7 @@ class MultiFlow(Flow):
                 str: to use if only using a single attribute of the local flow
                 list: list of attributes to use in the local flow
                 dict: dict of attributes to use in the local flow and their initial values
-        params : dict
+        p : dict
             Parameters to instantiate the local version with (if params used in the flow)
 
         Returns
@@ -131,13 +121,14 @@ class MultiFlow(Flow):
         newflow : MultiFlow
             Local view of the MultiFlow with its own individual values
         """
-        if attrs == "all":      atts = self._initstates
+        default_states = asdict(self._init_s(**self._args_s))
+        if attrs == "all":      atts = default_states
         elif type(attrs)==str:  attrs = [attrs]
-        if type(attrs)==list:   atts = {k:v for k,v in self._initstates.items() if k in attrs}
-        elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in self._initstates}
+        if type(attrs)==list:   atts = {k:v for k,v in default_states if k in attrs}
+        elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in default_states}
         
-        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self, params=params)
-        else:                   newflow = self.__class__(atts, name, glob=self, ftype=self.type, params=params)
+        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self, p=p)
+        else:                   newflow = self.__class__(atts, name, glob=self, ftype=self.type, p=p)
         setattr(self, name, newflow)
         self.locals.append(name)
         return newflow
@@ -448,9 +439,9 @@ class CommsFlow(MultiFlow):
         for fxn in self.fxns:
             self.fxns[fxn]["in"] = {}
             self.fxns[fxn]["received"] = {}
-    def copy(self, glob=[], params={}):
+    def copy(self, glob=[], p={}):
         states = super().status()
-        cop = self.__class__({s:states[s] for s in self._initstates}, self.name, self.type, glob=glob, params=params)
+        cop = self.__class__(self.name, self.type, glob=glob, p=p, s=states)
         for fxn in self.fxns:
             cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status(),
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]),
@@ -510,29 +501,27 @@ class CommsFlow(MultiFlow):
     def get_typename(self):
         return "CommsFlow"
 
-def init_flow(flowname, flowdict={}, flowtype='', fclass=Flow, params={}):
+def init_flow(flowname, fclass=Flow, p={}, s={}, flowtype=''):
     """Factory method for flows. Enables one to instantiate different types of flows with given states/parameters
-    or even pass an already-constructured flow class.
+    or  pass an already-constructured flow class.
 
     Parameters
     ----------
     flowname : str
         Name to give the flow object
-    flowdict : dict/flow()
-        Dict of values to give the flow {'attr':value}. Otherwise, an existing flow object to pass.
+    fclass : Flow/MultiFlow/Comms/CustomFlow
+        Flow class to instantiate OR already-instanced object to pass
+    p : dict
+        Parameter values to override from defaults.
+    p : dict
+        State values to override from defaults.
     flowtype : str
         Flow type identifier to give the flows (e.g., "energy", "material", "signal")
-    fclass : Flow/MultiFlow/Comms/CustomFlow
-        Flow class to instantiate
-    params : dict
-        Parameters to instantiate in the flow. Mostly used in custom flow classes.
+        If not give, will be gotten from the flow type.
     """
     if not flowtype:                flowtype = flowname
-    if not flowdict:                fl=fclass({flowname:1}, flowname, flowtype, params=params)
-    elif type(flowdict) == set:     fl=fclass({f:1 for f in flowdict}, flowname, flowtype)
-    elif type(flowdict) == dict:    fl=fclass(flowdict, flowname,flowtype, params=params)
-    elif isinstance(flowdict, Flow):fl=flowdict
-    else: raise Exception('Invalid flow. Must be dict or flow')
+    if not callable(fclass):        fl = fclass
+    else:                           fl = fclass(flowname, p=p, s=s, ftype=flowtype)
     return fl
 
 
