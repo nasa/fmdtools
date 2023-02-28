@@ -21,6 +21,9 @@ from .common import State, Parameter
 from .flow import init_flow, Flow
 
 class Fault(dataobject, readonly=True, mapping=True):
+    """
+    Stores Default Attributes for for modes to use in Mode.faultmodes
+    """
     dist:       float = 1.0
     oppvect:    dict = {"operating":1.0}
     rcost:      float = 0.0
@@ -63,12 +66,12 @@ class Mode(dataobject, readonly=False):
     longnames : dict
         Longer names for the faults (if desired). {faultname: longname}
     """
-    mode:       str = 'nominal'
-    faults:     set = set()
+    mode:           str = 'nominal'
+    faults:         set = set()
+    faultmodes:     dict = {}
+    faultparams = {}
     opermodes = ('nominal',)
     failrate = 1.0
-    faultparams = {}
-    faultmodes = {}
     probtype = 'rate'
     units = 'hr'
     units_set = ('sec','min','hr','day')
@@ -76,6 +79,7 @@ class Mode(dataobject, readonly=False):
     key_phases_by = 'global'
     longnames = {}
     def __init__(self, *args, **kwargs):
+        kwargs['faultmodes'] = kwargs.get('faultmodes', dict())
         kwargs = {'mode':'nominal', 'faults':set(), **kwargs}
         super().__init__(*args, **kwargs)
         self.init_faultmodes()
@@ -263,7 +267,7 @@ class Block():
     mode : string
         current mode of block operation
     """
-    def __init__(self, s={}, p={}, m={}):
+    def __init__(self, name, s={}, p={}, m={}):
         """
         Instance superclass. Called by FxnBlock and Component classes.
 
@@ -281,7 +285,7 @@ class Block():
         self.m=self._init_m(**m)
         
         # TODO : create class for modes (ideally with checking)
-        self.localname=''
+        self.name=name
         self.update_seed()
         self.time=0.0
     def __repr__(self):
@@ -308,9 +312,7 @@ class Block():
             seed = self.rng.integers(np.iinfo(np.int32).max)
             self.rngs[rng_name]=np.random.default_rng(seed)
             self._rng_params[rng_name]=(*self._rng_params[rng_name][:3],seed)
-        if hasattr(self, 'components'):
-            for comp in self.components.values():
-                comp.update_seed(self.seed)
+        if hasattr(self, 'c'): self.c.update_seed(self.seed)
         if hasattr(self, 'actions'):
             for act in self.actions.values():
                 act.update_seed(self.seed)
@@ -318,11 +320,7 @@ class Block():
         """Gets dict of random states from block and associated actions/components"""
         if auto_update_only: rand_states = {state:vals for state,vals in self._rng_params.items() if vals[1]}
         else: rand_states=self._rng_params
-        
-        if hasattr(self, 'components'):
-            for compname, comp in self.components.items():
-                if comp.get_rand_states(auto_update_only=auto_update_only): 
-                    rand_states[compname] = comp.get_rand_states(auto_update_only=auto_update_only)
+        if hasattr(self, 'c'): rand_states.update(self.c.get_rand_states(auto_update_only=auto_update_only))
         if hasattr(self, 'actions'):
             for actname, act in self.actions.items():
                 if act.get_rand_states(auto_update_only=auto_update_only): 
@@ -601,8 +599,7 @@ class Block():
             for flowname, flow in self.internal_flows.items():
                 flow.reset()
         if self.type=='function':
-            for name, component in self.components.items():
-                component.reset()
+            if hasattr(self, 'c'): self.c.reset()
             for timername in self.timers:
                 getattr(self, timername).reset()
             self.updatefxn('reset', faults=[], time=0)
@@ -624,7 +621,7 @@ class Block():
             for flowname, flow in self.internal_flows.items():
                 mem+= flow.get_memory()
         if hasattr(self, 'components'):
-            for name,comp in self.components.items():
+            for name,comp in self.c.components.items():
                 mem+=comp.get_memory()
         if hasattr(self, 'actions'):
             for name,comp in self.actions.items():
@@ -655,10 +652,10 @@ class Block():
     def return_probdens(self):
         state_pd = 1.0
         if hasattr(self, 'components'): 
-            for compname, comp in self.components:
+            for compname, comp in self.c.components:
                 state_pd*=comp.return_probdens()
         if hasattr(self, 'actions'):
-            for actionname, action in self.actions:
+            for actionname, action in self.a.actions:
                 state_pd*=action.return_probdens()
         if hasattr(self, 'pds'): state_pd= np.prod(self.pds)
         else:                    state_pd= 1.0
@@ -712,7 +709,7 @@ class FxnBlock(Block):
     dt : float
         local timestep of the model in the function (overrides global timestep by default ('use_local':True in modelparameters))
     """
-    def __init__(self,name, flows, flownames=[], p={}, s={}, components={},timers=[],
+    def __init__(self,name, flows, flownames=[], p={}, s={}, c={},timers=[],
                  local={}, comms={}, dt=None, seed=None):
         """
         Instantiates the function superclass with the relevant parameters.
@@ -729,6 +726,9 @@ class FxnBlock(Block):
             Internal parameters to override from defaults. The default is {}.
         s : dict, optional
             Internal states to override from defaults. The default is {}.
+        c : dict, optional
+            Internal CompArch fields/arguments override from defaults. The default is {}.
+            FxnBlock must have an _init_c property.
         components : dict, optional
             Component objects to associate with the function. The default is {}.
         timers : set, optional
@@ -749,25 +749,26 @@ class FxnBlock(Block):
             Random seed to use in model
         """
         self.type = 'function'
-        self.name = name
         self.internal_flows=dict()
         self.flows=self.make_flowdict(flownames,flows)
         self.add_local_to_flowdict(self.flows, local, "local")
         self.add_local_to_flowdict(self.flows, comms, "comms")
         for flow in self.flows.keys():
             setattr(self, flow, self.flows[flow])
-        self.components=components
-        self.compfaultmodes= dict()
-        self.exclusive = False
-        for cname in components:
-            self.faultmodes.update({components[cname].localname+f:vals for f, vals in components[cname].faultmodes.items()})
-            self.compfaultmodes.update({components[cname].localname+modename:cname for modename in components[cname].faultmodes})
-            setattr(self, cname, components[cname])
         self.assoc_timers(*timers)
         if dt: self.dt=dt
         self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
-        super().__init__(p=p, s=s)
+        super().__init__(name, p=p, s=s)
+        
+        if hasattr(self, '_init_c'):    
+            self.c=self._init_c(**c)
+            self._args_c=c
+            for cname in self.c.components:
+                self.m.faultmodes.update({self.c.components[cname].name+f:vals 
+                                          for f, vals in self.c.components[cname].m.faultmodes.items()})
+        elif c: raise Exception("c argument provided: "+str(c)+"without associating a CompArch to _init_c")
+        
     def __repr__(self):
         blockret = super().__repr__()
         if getattr(self, 'actions'): return blockret+', active: '+str(self.active_actions)
@@ -894,12 +895,12 @@ class FxnBlock(Block):
         elif self.mode_rep=='independent':
             if self.exclusive:               raise Exception("Cannot use mode_rep='independent option' without a non-exclusive fault mode representation (set in assoc_modes)")
         for aname, action in self.actions.items():
-            modes_to_add = {action.localname+f:val for f,val in action.m.faultmodes.items()}
+            modes_to_add = {action.name+f:val for f,val in action.m.faultmodes.items()}
             self.m.faultmodes.update(modes_to_add)
             fmode_intersect = set(modes_to_add).intersection(self.actfaultmodes)
             if any(fmode_intersect):
                 raise Exception("Action "+aname+" overwrites existing fault modes: "+str(fmode_intersect)+". Rename the faults (or use name option in assoc_modes)")
-            self.actfaultmodes.update({action.localname+modename:aname for modename in action.m.faultmodes})
+            self.actfaultmodes.update({action.name+modename:aname for modename in action.m.faultmodes})
         self.asg_pos=asg_pos
         
     def set_active_actions(self, actions):
@@ -993,11 +994,8 @@ class FxnBlock(Block):
             copy.action.s = copy.action._init_s(**asdict(action.s))
             copy.actions[action].m.mirror(self.actions[action].m)
             copy.actions[action].time=self.actions[action].time
-        for component in self.components: 
-            copy.component.s = copy.component._init_s(**asdict(component.s))
-            copy.components[component].m.mirror(self.components[component].m)
-            copy.components[component].time=self.components[component].time
         setattr(copy, 'active_actions', getattr(self, 'active_actions', {}))
+        if hasattr(self, 'c'): copy.c = self.c.copy_with_arg(**self._c_arg)
         for timername in self.timers:
             timer = getattr(self, timername)
             copytimer = getattr(copy, timername)
@@ -1078,18 +1076,16 @@ class FxnBlock(Block):
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
         if time>self.time and run_stochastic: self.update_stochastic_states()
-        comp_actions = {**self.components, **self.actions} 
+        comps = getattr(self, 'c', {'components':{}})['components']
+        comp_actions = {**comps, **self.actions} 
         if getattr(self, 'per_timestep', False): 
             self.set_active_actions(self.initial_action)
             for action in self.active_actions: self.actions[action].t_loc=0.0
         if comp_actions:     # propogate faults from function level to component level
-            for fault in self.faults:
-                if fault in self.compfaultmodes:
-                    component = self.components[self.compfaultmodes[fault]]
-                    component.m.add_fault(fault[len(component.localname):])
+            for fault in self.m.faults:
                 if fault in self.actfaultmodes:
                     action = self.actions[self.actfaultmodes[fault]]
-                    action.m.add_fault(fault[len(action.localname):])
+                    action.m.add_fault(fault[len(action.name):])
         if any(self.actions) and self.asg_proptype==proptype: self.prop_internal(faults, time, run_stochastic, proptype)
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
@@ -1102,11 +1098,11 @@ class FxnBlock(Block):
         elif proptype=='reset':                                                             
             if hasattr(self,'static_behavior'):  self.static_behavior(time)
             if hasattr(self,'dynamic_behavior'): self.dynamic_behavior(time)
-        if comp_actions:     # propogate faults from component level to function level
-            self.faults.difference_update(self.compfaultmodes)
-            self.faults.difference_update(self.actfaultmodes)
-            for compname, comp in comp_actions.items():
-                self.faults.update({comp.localname+f for f in comp.faults if f!='nom'}) 
+        if self.actions:     # propogate faults from component level to function level
+            self.m.faults.difference_update(self.actfaultmodes)
+        if comps:
+            self.m.faults.difference_update(self.c.faultmodes)
+            self.m.faults.update(self.c.get_comp_faults())
         self.time=time
         if run_stochastic=='track_pdf' and self.rngs: self.probdens = self.return_probdens()
         if (self.m.exclusive==True and len(self.m.faults)>1): 
@@ -1117,7 +1113,58 @@ class GenericFxn(FxnBlock):
     given (to be implemented) function block. Acts as a placeholder that enables simulation."""
     def __init__(self, name, flows):
         super().__init__(name, flows)
-  
+
+class CompArch(dataobject, mapping=True):
+    """Container for holding component architectures"""
+    archtype:       str = 'default'
+    components:     dict = dict()
+    faultmodes:     dict = dict()
+    def make_components(self, CompClass, *args, **kwargs):
+        """
+        Adds components to the component architecture.
+
+        Parameters
+        ----------
+        CompClass : Component
+            Component to add
+        *args : strs
+            Names for the components to instantiate in the architecture
+        **kwargs : kwargs
+            keyword arguments to send CompClass, of form {'name':kwarg}
+        """
+        components = {}
+        faultmodes = {}
+        for arg in args:
+            components[arg]=CompClass(arg, **kwargs.get(arg, {}))
+            faultmodes.update({components[arg].name+modename:arg 
+                               for modename in components[arg].m.faultmodes})
+        return components, faultmodes
+    def copy_with_arg(self, **kwargs):
+        cop = self.__class__(**kwargs)
+        for component in self.components: 
+            cop.component.s = cop.component._init_s(**asdict(component.s))
+            cop.components[component].m.mirror(self.components[component].m)
+            cop.components[component].time=self.components[component].time
+        return cop
+    def inject_fault_in_component(self, fault):
+        if fault in self.faultmodes:
+            component = self.components[self.faultmodes[fault]]
+            component.m.add_fault(fault[len(component.name):])
+    def update_seed(self, seed):
+        for comp in self.components.values():
+            comp.update_seed(self.seed)
+    def get_rand_states(self, auto_update_only=False):
+        rand_states={}
+        for compname, comp in self.components.items():
+            if comp.get_rand_states(auto_update_only=auto_update_only): 
+                rand_states[compname] = comp.get_rand_states(auto_update_only=auto_update_only)
+        return rand_states
+    def get_comp_faults(self):
+        return {comp.name+f for comp in self.components.values() for f in comp.m.faults }
+    def reset(self):
+        for name, component in self.components.items():
+            component.reset()
+    
 class Component(Block):
     """
     Superclass for components (most attributes and methods inherited from Block superclass)
@@ -1136,8 +1183,7 @@ class Component(Block):
             Parameters to use in the component. The default is {}.
         """
         self.type = 'component'
-        self.name = name
-        super().__init__(p=p, s=s)
+        super().__init__(name, p=p, s=s)
     def behavior(self,time):
         """ Placeholder for component behavior methods. Enables one to include components
         without yet having a defined behavior for them."""

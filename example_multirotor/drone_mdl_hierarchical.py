@@ -13,93 +13,99 @@ import fmdtools.faultsim as fs
 import fmdtools.resultdisp as rd
 from IPython.display import HTML
 
-from fmdtools.modeldef.common import Parameter
-from fmdtools.modeldef.block import FxnBlock, Component
+from fmdtools.modeldef.common import Parameter, State
+from fmdtools.modeldef.block import FxnBlock, Component, CompArch
 from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.approach import SampleApproach
 
 from drone_mdl_static import m2to1, EngageLand, HoldPayload, DistEE
 from drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, Trajectory, ViewEnvironment
             
+class OverallAffectDOFState(State):
+    LRstab:     float=0.0
+    FRstab:     float=0.0
+
+class AffectDOFArch(CompArch):
+    archtype: str='quad'
+    upward = dict()
+    forward = dict()
+    LR_dict = dict()
+    FR_dict = dict()
+    def __init__(self, *args, **kwargs):
+        if self.archtype=="quad":
+            kwargs['components'], kwargs['faultmodes'] = self.make_components(Line,'LF', 'LR','RF','RR')
+            self.upward.update({'RF':1,'LF':1,'LR':1,'RR':1})
+            self.forward.update({'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5})
+            self.LR_dict.update({'L':{'LF', 'LR'}, 'R':{'RF','RR'}})
+            self.FR_dict.update({'F':{'LF', 'RF'}, 'R':{'LR', 'RR'}})
+        elif self.archtype=="oct":
+            kwargs['components'], kwargs['faultmodes'] = self.make_components(Line,'LF', 'RF','LF2', 'RF2', 'LR', 'RR','LR2', 'RR2')
+            self.upward.update({'RF':1,'LF':1,'LR':1,'RR':1,'RF2':1,'LF2':1,'LR2':1,'RR2':1})
+            self.forward.update({'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5,'RF2':0.5,'LF2':0.5,'LR2':-0.5,'RR2':-0.5})
+            self.LR_dict.update({'L':{'LF', 'LR','LF2', 'LR2'}, 'R':{'RF','RR','RF2','RR2'}})
+            self.FR_dict.update({'F':{'LF', 'RF','LF2', 'RF2'}, 'R':{'LR', 'RR','LR2', 'RR2'}})
+        super().__init__(*args, **kwargs)
 
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
+    _init_s = OverallAffectDOFState
+    _init_c = AffectDOFArch
     def __init__(self, name, flows, archtype):     
-        self.archtype=archtype
-        if archtype=='quad':
-            components={'RF':Line('RF'), 'LF':Line('LF'), 'LR':Line('LR'), 'RR':Line('RR')}
-            self.upward={'RF':1,'LF':1,'LR':1,'RR':1}
-            self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5}
-            self.LR_dict = {'L':{'LF', 'LR'}, 'R':{'RF','RR'}}
-            self.FR_dict = {'F':{'LF', 'RF'}, 'R':{'LR', 'RR'}}
-        elif archtype=='oct':
-            components={'RF':Line('RF'), 'LF':Line('LF'), 'LR':Line('LR'), 'RR':Line('RR'),'RF2':Line('RF2'), 'LF2':Line('LF2'), 'LR2':Line('LR2'), 'RR2':Line('RR2')}
-            self.upward={'RF':1,'LF':1,'LR':1,'RR':1,'RF2':1,'LF2':1,'LR2':1,'RR2':1}
-            self.forward={'RF':0.5,'LF':0.5,'LR':-0.5,'RR':-0.5,'RF2':0.5,'LF2':0.5,'LR2':-0.5,'RR2':-0.5}
-            self.LR_dict = {'L':{'LF', 'LR','LF2', 'LR2'}, 'R':{'RF','RR','RF2','RR2'}}
-            self.FR_dict = {'F':{'LF', 'RF','LF2', 'RF2'}, 'R':{'LR', 'RR','LR2', 'RR2'}}
-        super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Force'], {'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0}, components)
-        self.assoc_modes()
+        super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Force'], c={'archtype':archtype})
     def behavior(self, time):
         Air,EEin={},{}
         #injects faults into lines
-        for linname,lin in self.components.items():
-            cmds={'up':self.upward[linname], 'for':self.forward[linname]}
-            lin.behavior(self.EEin.effort, self.Ctlin, cmds, self.Force.support) 
-            Air[lin.name]=lin.Airout
-            EEin[lin.name]=lin.EE_in
+        for linname,lin in self.c.components.items():
+            cmds={'up':self.c.upward[linname], 'for':self.c.forward[linname]}
+            Air[lin.name] ,EEin[lin.name] = lin.behavior(self.EEin.s.effort, self.Ctlin, cmds, self.Force.s.support) 
         
-        if any(value>=10 for value in EEin.values()):       self.EEin.rate=10
-        elif any(value!=0.0 for value in EEin.values()):    self.EEin.rate=sum(EEin.values())/len(EEin) #should it really be max?
-        else:                                               self.EEin.rate=0.0
+        if any(value>=10 for value in EEin.values()):       self.EEin.s.rate=10
+        elif any(value!=0.0 for value in EEin.values()):    self.EEin.s.rate=sum(EEin.values())/len(EEin) #should it really be max?
+        else:                                               self.EEin.s.rate=0.0
         
-        self.LRstab = (sum([Air[comp] for comp in self.LR_dict['L']])-sum([Air[comp] for comp in self.LR_dict['R']]))/len(Air)
-        self.FRstab = (sum([Air[comp] for comp in self.FR_dict['R']])-sum([Air[comp] for comp in self.FR_dict['F']]))/len(Air)
+        self.s.LRstab = (sum([Air[comp] for comp in self.c.LR_dict['L']])-sum([Air[comp] for comp in self.c.LR_dict['R']]))/len(Air)
+        self.s.FRstab = (sum([Air[comp] for comp in self.c.FR_dict['R']])-sum([Air[comp] for comp in self.c.FR_dict['F']]))/len(Air)
         
-        if abs(self.LRstab) >=0.4 or abs(self.FRstab)>=0.75:
-            self.DOF.uppwr=0
-            self.DOF.planpwr=0
+        if abs(self.s.LRstab) >=0.4 or abs(self.s.FRstab)>=0.75:
+            self.DOF.s.uppwr=0.0
+            self.DOF.s.planpwr=0.0
         else:
             Airs=list(Air.values())
-            self.DOF.uppwr=np.mean(Airs)
-            self.DOF.planpwr=-2*self.FRstab
+            self.DOF.s.uppwr=np.mean(Airs)
+            self.DOF.s.planpwr=-2*self.s.FRstab
 
+from drone_mdl_static import AffectDOFMode, AffectDOFState
 class Line(Component):
-    def __init__(self, name):
-        super().__init__(name,{'Eto': 1.0, 'Eti':1.0, 'Ct':1.0, 'Mt':1.0, 'Pt':1.0})
-        self.failrate=1e-5
-        self.assoc_modes({'short':[0.1, [0.33, 0.33, 0.33], 200],'openc':[0.1, [0.33, 0.33, 0.33], 200],\
-                          'ctlup':[0.2, [0.33, 0.33, 0.33], 500],'ctldn':[0.2, [0.33, 0.33, 0.33], 500],\
-                          'ctlbreak':[0.2, [0.33, 0.33, 0.33], 1000], 'mechbreak':[0.1, [0.33, 0.33, 0.33], 500],\
-                          'mechfriction':[0.05, [0.0, 0.5,0.5], 500],'propwarp':[0.01, [0.0, 0.5,0.5], 200],\
-                          'propstuck':[0.02, [0.0, 0.5,0.5], 200], 'propbreak':[0.03, [0.0, 0.5,0.5], 200]},name=name)
-
+    _init_s = AffectDOFState
+    _init_m = AffectDOFMode
     def behavior(self, EEin, Ctlin, cmds, Force):
-        if Force<=0.0:   self.add_fault('mechbreak','propbreak')
-        elif Force<=0.5: self.add_fault('mechfriction')
+        if Force<=0.0:   self.m.add_fault('mechbreak','propbreak')
+        elif Force<=0.5: self.m.add_fault('mechfriction')
             
-        if self.has_fault('short'):                   self.put(Eti=0.0, Eto= np.inf)
-        elif self.has_fault('openc'):                 self.put(Eti=0.0, Eto= 0.0)
-        elif Ctlin.upward==0 and Ctlin.forward == 0:  self.put(Eto= 0.0)
-        else:                                         self.put(Eto= 1.0)
+        if self.m.has_fault('short'):                   self.s.put(Eti=0.0, Eto= np.inf)
+        elif self.m.has_fault('openc'):                 self.s.put(Eti=0.0, Eto= 0.0)
+        elif Ctlin.s.upward==0 and Ctlin.s.forward == 0:self.s.put(Eto= 0.0)
+        else:                                           self.s.put(Eto= 1.0)
         
-        if self.has_fault('ctlbreak'):                self.put(Ct=0.0)
-        elif self.has_fault('ctldn'):                 self.put(Ct=0.5)
-        elif self.has_fault('ctlup'):                 self.put(Ct=2.0)
+        if self.m.has_fault('ctlbreak'):                self.s.put(Ct=0.0)
+        elif self.m.has_fault('ctldn'):                 self.s.put(Ct=0.5)
+        elif self.m.has_fault('ctlup'):                 self.s.put(Ct=2.0)
         
-        if self.has_fault('mechbreak'):               self.put(Mt=0.0)
-        elif self.has_fault('mechfriction'):          self.put(Mt=0.5, Eti= 2.0) 
+        if self.m.has_fault('mechbreak'):               self.s.put(Mt=0.0)
+        elif self.m.has_fault('mechfriction'):          self.s.put(Mt=0.5, Eti= 2.0) 
         
-        if self.has_fault('propstuck'):               self.put(Pt=0.0, Mt=0.0, Eti= 4.0) 
-        elif self.has_fault('propbreak'):             self.put(Pt=0.0)
-        elif self.has_fault('propwarp'):              self.put(Pt=0.5)
+        if self.m.has_fault('propstuck'):               self.s.put(Pt=0.0, Mt=0.0, Eti= 4.0) 
+        elif self.m.has_fault('propbreak'):             self.s.put(Pt=0.0)
+        elif self.m.has_fault('propwarp'):              self.s.put(Pt=0.5)
         
-        self.Airout=m2to1([EEin,self.Eti,Ctlin.upward*cmds['up']+Ctlin.forward*cmds['for'],self.Ct,self.Mt,self.Pt])
-        self.EE_in=m2to1([EEin,self.Eto])   
+        Airout=m2to1([EEin,self.s.Eti,Ctlin.s.upward*cmds['up']+Ctlin.s.forward*cmds['for'],self.s.Ct,self.s.Mt,self.s.Pt])
+        EE_in=m2to1([EEin,self.s.Eto])   
+        return Airout, EE_in
 
 class DroneParam(Parameter, readonly=True):
     arch:   str='quad'
     arch_set = ('quad', 'oct', 'hex')
-        
+
+from drone_mdl_static import Force, EE, Control, DOFs, Env, Dir
 class Drone(Model):
     def __init__(self, params=DroneParam(),\
             modelparams=ModelParam(phases=(('ascend',0,4),('forward',5,94),('descend',95, 100)),times=(0,135),units='sec'), 
@@ -108,17 +114,17 @@ class Drone(Model):
         super().__init__(params, modelparams, valparams)
                                      
         #add flows to the model
-        self.add_flow('Force_ST', {'support':1.0})
-        self.add_flow('Force_Lin', {'support':1.0})
-        self.add_flow('Force_GR' , {'value':0.0})
-        self.add_flow('Force_LG', {'value':0.0})
-        self.add_flow('EE_1', {'rate':1.0, 'effort':1.0})
-        self.add_flow('EEmot', {'rate':1.0, 'effort':1.0})
-        self.add_flow('EEctl', {'rate':1.0, 'effort':1.0})
-        self.add_flow('Ctl1', {'forward':0.0, 'upward':1.0})
-        self.add_flow('DOFs', {'vertvel':0.0, 'planvel':0.0, 'planpwr':0.0, 'uppwr':0.0})
-        self.add_flow('Env1', {'x':0.0,'y':0.0,'elev':0.0} )
-        self.add_flow('Dir1', {"x":0.0, "y":0.0, "z":0.0, "power":0.0})
+        self.add_flow('Force_ST',   Force)
+        self.add_flow('Force_Lin',  Force)
+        self.add_flow('Force_GR' ,  Force)
+        self.add_flow('Force_LG',   Force)
+        self.add_flow('EE_1',       EE)
+        self.add_flow('EEmot',      EE)
+        self.add_flow('EEctl',      EE)
+        self.add_flow('Ctl1',       Control)
+        self.add_flow('DOFs',       DOFs)
+        self.add_flow('Env1',       Env, s={'z':0.0} )
+        self.add_flow('Dir1',       Dir)
         #add functions to the model
         flows=['EEctl', 'Force_ST']
         self.add_fxn('StoreEE',['EE_1', 'Force_ST'], fclass=StoreEE)
@@ -168,12 +174,12 @@ class Drone(Model):
             lostcost=50000
         elif -5 >mdlhists['faulty']['flows']['Env1']['y'][-1] or 5<mdlhists['faulty']['flows']['Env1']['y'][-1]:
             lostcost=50000
-        elif mdlhists['faulty']['flows']['Env1']['elev'][-1] >5:
+        elif mdlhists['faulty']['flows']['Env1']['z'][-1] >5:
             lostcost=50000
         else:
             lostcost=0
         
-        if any(abs(mdlhists['faulty']['flows']['Force_GR']['value'])>2.0):
+        if any(abs(mdlhists['faulty']['flows']['Force_GR']['support'])>2.0):
             crashcost = 100000
         else:
             crashcost = 0
@@ -183,33 +189,6 @@ class Drone(Model):
         rate=scen['properties']['rate']
         expcost=totcost*rate*1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
-def square(center,xw,yw):
-    square=[[center[0]-xw/2,center[1]-yw/2],\
-            [center[0]+xw/2,center[1]-yw/2], \
-            [center[0]+xw/2,center[1]+yw/2],\
-            [center[0]-xw/2,center[1]+yw/2]]
-    return square
-#checks to see if a point with x-y coordinates is in the area a
-from shapely.geometry import Point
-from shapely.geometry.polygon import Polygon
-def inrange(area, x, y):
-    point=Point(x,y)
-    polygon=Polygon(area)
-    return polygon.contains(point)
-
-def finddist(p1, p2):
-    return np.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2+(p1[2]-p2[2])**2)
-
-def calcdist(p1, p2):
-    return np.sqrt((p1[0]-p2.x)**2+(p1[1]-p2.y)**2+(p1[2]-p2.elev)**2)
-
-def vectdist(p1, p2):
-    return [p1[0]-p2[0],p1[1]-p2[1],p1[2]-p2[2]]
-
-def vectdir(p1, p2):
-    return vectdist(p1,p2)/finddist(p1,p2)
-
-
 
 if __name__=="__main__":
     
