@@ -361,12 +361,12 @@ def create_single_fault_scen(mdl, fxnname, faultmode, time):
     if not fm.faultmodes.get(faultmode, False) or fm.faultmodes[faultmode]=='synth': 
         scen['properties']['rate'] = 1/len(fm.faultmodes)
     else:
-        if faultmode in fxn.compfaultmodes:
-            fxn = fxn.components[fxn.compfaultmodes[faultmode]]
-            faultmode = faultmode[len(fxn.localname):]
-        elif faultmode in fxn.actfaultmodes:
-            fxn = fxn.actions[fxn.actfaultmodes[faultmode]]
-            faultmode = faultmode[len(fxn.localname):]
+        #if hasattr(fxn, 'c') and faultmode in fxn.c.faultmodes:
+        #    fxn = fxn.c.components[fxn.c.faultmodes[faultmode]]
+        #    faultmode = faultmode[len(fxn.name):]
+        #elif faultmode in fxn.actfaultmodes:
+        #    fxn = fxn.actions[fxn.actfaultmodes[faultmode]]
+        #    faultmode = faultmode[len(fxn.name):]
         if fm.faultmodes[faultmode].probtype=='rate':
             scen['properties']['rate']=fm.failrate*fm.faultmodes[faultmode]['dist']*eq_units(fm.faultmodes[faultmode]['units'], mdl.modelparams.units)*(mdl.modelparams.times[-1]-mdl.modelparams.times[0]) # this rate is on a per-simulation basis
         elif fm.faultmodes[faultmode].get('probtype','')=='prob':
@@ -1061,7 +1061,10 @@ def update_fxnhist(mdl, mdlhist, t_ind):
     for fxnname in mdlhist["functions"]:
         fxn=mdl.fxns[fxnname]
         update_blockhist(fxnname, fxn, mdlhist['functions'][fxnname], t_ind)
-        for comp_act in {*fxn.components, *fxn.actions}:
+        for compname, comp in getattr(fxn, 'c', {'components':{}})['components'].items():
+            if compname in mdlhist['functions'][fxnname]:
+                update_blockhist(compname, comp, mdlhist['functions'][fxnname][compname], t_ind)
+        for comp_act in fxn.actions:
             if comp_act in mdlhist['functions'][fxnname]:
                 update_blockhist(comp_act, getattr(fxn, comp_act), mdlhist['functions'][fxnname][comp_act], t_ind)
         for flowname, flow in fxn.internal_flows.items():
@@ -1238,9 +1241,15 @@ def init_fxnhist(mdl, timerange, track='all', run_stochastic=False):
         fxn_track = proc.get_sub_include(fxnname, functions_track)
         if fxn_track:
             fxnhist[fxnname] = init_blockhist(fxnname, fxn, timerange, fxn_track, run_stochastic=run_stochastic)
-            for comp_act in {*fxn.components, *fxn.actions}:
+            for compname, comp in getattr(fxn, 'c', {'components':{}})['components'].items():
+                comp_track = proc.get_sub_include(compname, fxn_track)
+                if comp_track: 
+                    fxnhist[fxnname][compname]=init_blockhist(compname, comp, timerange, track=comp_track)
+                    
+            for comp_act in fxn.actions:
                 comp_track = proc.get_sub_include(comp_act, fxn_track)
-                if comp_track: fxnhist[fxnname][comp_act]=init_blockhist(comp_act, getattr(fxn, comp_act), timerange, track=comp_track)
+                if comp_track: 
+                    fxnhist[fxnname][comp_act]=init_blockhist(comp_act, getattr(fxn, comp_act), timerange, track=comp_track)
             for flowname, flow in fxn.internal_flows.items():
                 flow_track = proc.get_sub_include(flow, fxn_track)
                 if flow_track: fxnhist[fxnname][flowname] = init_dicthist(flow.status(), timerange, flow_track)
