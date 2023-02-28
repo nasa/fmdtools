@@ -24,14 +24,16 @@ from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.common import Parameter
 from fmdtools.modeldef.approach import SampleApproach, NominalApproach
 
-import random
-import scipy.stats as stats
-import multiprocessing as mp
+
 import matplotlib.pyplot as plt
 import numpy as np
 import fmdtools.faultsim.propagate as prop
 import fmdtools.resultdisp as rd
 import itertools
+
+from rover_model import translate_angle, turn_func, sin_func, sin_angle_func, in_area, dist, find_line_dist, gen_param_space
+from rover_model import Environment, Power
+from rover_model import DegParam
 
 class Operations(FxnBlock):
     def __init__(self, name, flows, params):
@@ -64,8 +66,7 @@ class Operations(FxnBlock):
             self.Control.rdiff = 0
 
 # Check about mech_loss
-
-
+## Drive - inherit most parts from Drive (but not faults)
 class Drive(FxnBlock):
     def __init__(self, name, flows, params):
         super().__init__(name, flows, flownames={"EE_15":"EE_in"})
@@ -87,17 +88,6 @@ class Drive(FxnBlock):
             self.Ground.ang = translate_angle(self.Ground.ang)
             self.Ground.inc(x = np.cos(np.pi/180 *self.Ground.ang) * self.Ground.vel, \
                             y = np.sin(np.pi/180 *self.Ground.ang) * self.Ground.vel)
-class DriveDegradation(FxnBlock):
-    def __init__(self,name,flows):
-        super().__init__(name, flows, states={'wear':0.0, 'corrosion':0.0, 'friction':0.0, 'drift':0.0})
-        self.assoc_rand_state('corrode_rate', 0.01, auto_update = ['pareto', (50,)])
-        self.assoc_rand_state('wear_rate', 0.02, auto_update = ['pareto', (25,)])
-        self.assoc_rand_state('yaw_load', 0.01, auto_update = ['uniform', (-0.01, 0.01)])
-    def dynamic_behavior(self, time):
-        self.inc(corrosion=self.corrode_rate, wear=self.wear_rate)
-        self.inc(drift = self.yaw_load/1000 + (np.sign(self.drift)==np.sign(self.yaw_load))*self.yaw_load)
-        self.friction = np.sqrt(self.corrosion**2+self.wear**2)
-        self.limit(drift=(-1,1), corrosion=(0,1), wear=(0,1))
 
 class PSFDegradationShort(FxnBlock):
     def __init__(self,name,flows, params):
@@ -150,48 +140,6 @@ class GenerateVideo(FxnBlock):
             self.Video.assign(self.Ground, 'x', 'y', 'vel', 'line')
             self.Video.heading = self.Ground.ang
 
-
-def in_area(x, y, rad, xc, yc):
-    dist = np.sqrt((x-xc)**2+(y-yc)**2)
-    return not dist > rad
-
-
-class Power(FxnBlock):
-    def __init__(self, name, flows):
-        super().__init__(name, flows, states={"charge": 100.0, 'power': 0.0})
-        self.assoc_modes({"no_charge": [1e-5, {'standby': 1.0}, 100], "short": [1e-5, {'supply': 1.0}, 100], }, [
-                         "supply", "charge", "standby", "off"], initmode="off", exclusive=True, key_phases_by='self')
-
-    def static_behavior(self, time):
-        if self.in_mode("off"):
-            self.EE_12.put(v=12)
-            self.EE_15.put(v=0, a=0)
-            if self.Control.power == 1:
-                self.set_mode("supply")
-        elif self.in_mode("supply"):
-            if self.charge > 0:
-                self.EE_12.v = 12
-                self.EE_15.v = 15
-            else:
-                self.set_mode("no_charge")
-            if self.Control.power == 0:
-                self.set_mode("off")
-        elif self.in_mode("short"):
-            self.EE_12.v = 12
-            self.EE_15.v = 15
-        elif self.in_mode("no_charge"):
-            self.EE_12.v = 0
-            self.EE_15.v = 0
-        if self.in_mode("charge"):
-            self.power = - 1
-            if self.charge == 100:
-                self.set_mode("off")
-        else:
-            self.power = 1+self.EE_12.mul('v', 'a')+self.EE_15.mul('v', 'a')
-
-    def dynamic_behavior(self, time):
-        self.inc(charge=- self.power/100)
-        self.limit(charge=(0, 100))
 
 class Communications(FxnBlock):
     def __init__(self, name, flows):
@@ -530,64 +478,6 @@ class Press(Action):
             return False
         else:                return True
 
-
-class Environment(FxnBlock):
-    def __init__(self, name, flows, params):
-        self.p=params
-        super().__init__(name, flows)
-
-    def dynamic_behavior(self, t):
-        if self.p.linetype == 'sine':
-            self.Ground.angle = sin_angle_func(
-                self.Ground.x, self.p.amp, self.p.period)
-            self.Ground.linex, self.Ground.liney = sin_func(
-                self.Ground.x, self.Ground.y, self.p.amp, self.p.period)
-        elif self.p.linetype == 'turn':
-            self.Ground.angle = turn_angle_func(
-                self.Ground.x, self.p.radius, self.p.start)
-            self.Ground.linex, self.Ground.liney = turn_func(
-                self.Ground.x, self.Ground.y, self.p.radius, self.p.start)
-        self.Ground.lbx = self.Ground.linex + 1.5 * np.sin(self.Ground.angle*np.pi/180)
-        self.Ground.lby = self.Ground.liney - 1.5 * np.cos(self.Ground.angle*np.pi/180)
-        self.Ground.ubx = self.Ground.linex - 1.5 * np.sin(self.Ground.angle*np.pi/180)
-        self.Ground.uby = self.Ground.liney + 1.5 * np.cos(self.Ground.angle*np.pi/180)
-
-def sin_func(x, y, amp, period):
-    return x, amp * np.sin(period*x)
-
-
-def sin_angle_func(x, amp, period):
-    return float(amp * period * np.cos(period*x)*180/np.pi)
-
-
-def turn_func(x, y, radius, start):
-    if x >= start+radius:
-        return start+radius, y
-    elif y >= radius:
-        return start+radius, y
-    elif x >= start:
-        return x, radius - np.sqrt(radius**2 - (x-start)**2)
-    elif x < start:
-        return x, 0
-def translate_angle(angle):
-    if angle <-180:      angle = angle % 180
-    elif angle > 180:   angle = angle % -180
-    return angle
-
-def turn_angle_func(x, radius, start):
-    if x >= start+radius:
-        return 90.0
-    elif x >= start:
-        # np.arctan((x-start)/(radius**2-(start-x)**2))*180/np.pi
-        return 90 - np.arccos(((x-start)/radius))*180/np.pi
-    elif x < start:
-        return 0.0
-
-class DegParam(Parameter, readonly=True):
-    """Parameters for rover degradation"""
-    friction :          float = 0.0
-    drift :             float = 0.0
-
 class RoverParam(Parameter, readonly=True):
     """Parameters for rover"""
     period :            float = 1.0             #period of the curve (for sine linetype)
@@ -799,11 +689,6 @@ class Rover(Model):
         line_dist = find_line_dist(self.flows['Ground'].x,self.flows['Ground'].y, mdlhist['nominal']['flows']['Ground']['linex'], mdlhist['nominal']['flows']['Ground']['liney'])
 
         return {'rate':0,'cost':0, 'prob':scen['properties'].get('prob',1), 'expected cost':0,'at_finish':at_finish, 'line_dist':line_dist, 'num_modes':num_modes, 'end_dist':end_dist, 'faults':modes, 'classification':classification, 'x':self.flows['Ground'].x ,'y':self.flows['Ground'].y}
-class RoverDegradation(Model):
-    def __init__(self, params={}, modelparams=ModelParam(times=(0,25), seed=101), valparams={}):
-        super().__init__(params, modelparams, valparams)
-        self.add_fxn("Drive", [], fclass= DriveDegradation)
-        self.build_model(require_connections=False)
 
 class LongParams(Parameter, readonly=True):
     experience_param:   np.float64=np.float64(1.0)
@@ -824,26 +709,6 @@ class HumanDegradationShort(Model):
         super().__init__(params, modelparams, valparams)
         self.add_fxn('Control', [], PSFDegradationShort, fparams=params)
         self.build_model(require_connections=False)
-
-
-
-def find_line_dist(x, y , linex, liney):
-    return np.min(np.sqrt((linex-x)**2 + (liney-y)**2))
-def dist(x,y,xc,yc):
-    return np.sqrt((x-xc)**2+(y-yc)**2)
-
-def gen_param_space():
-    paramspace = []
-    ranges = [x for x in itertools.product(
-        np.arange(0, 10, 0.2), range(10, 50, 10))]
-    for r in ranges:
-        params = RoverParam(linetype='sine', amp=r[0], wavelength=r[1])
-        paramspace.append(params)
-    ranges = [x for x in itertools.product(range(5, 40, 5), range(0, 5, 20))]
-    for r in ranges:
-        params = RoverParam(linetype='turn', radius=r[0], start=r[1])
-        paramspace.append(params)
-    return paramspace
 
 
 def plot_map(mdl, mdlhist):
@@ -884,20 +749,15 @@ def plot_map(mdl, mdlhist):
     plt.ylabel("y-error (meters)")
     plt.title("Rover Centerline Error")
 
-def get_params_from(mdlhist, t=1):
-    friction = mdlhist['functions']['Drive']['friction'][t]
-    drift = mdlhist['functions']['Drive']['drift'][t]
-    return {'friction':friction, 'drift':drift}
+from rover_model import get_params_from, sample_params
 
 def get_human_params_from(mdlhist, t=1):
     fatigue = mdlhist['functions']['Control']['fatigue'][t]
     stress = mdlhist['functions']['Control']['stress'][t]
     return {'fatigue' :fatigue, 'stress': stress}
-
 def get_longhuman_params_from(mdlhist, t):
     experience = mdlhist['functions']['Control']['experience'][t]
     return experience
-
 def sample_human_params(mdlhists, t=1, scen=1):
     mdlhist = [*mdlhists.values()][scen]
     return get_human_params_from(mdlhist, t)
@@ -905,9 +765,6 @@ def gen_sample_params_human(mdlhists, t=1, scen=1, linetype='sine'):
     degparams = sample_human_params(mdlhists, t=t, scen=scen)
     return dict(linetype=linetype, **degparams)
 
-def sample_params(mdlhists, t=1, scen=1):
-    mdlhist = [*mdlhists.values()][scen]
-    return get_params_from(mdlhist, t)
 def gen_sample_params_comp(mdlhists, t=1, scen=1, linetype='sine'):
     degparams = sample_params(mdlhists, t=t, scen=scen)
     return dict(linetype=linetype, **degparams)
@@ -935,7 +792,6 @@ def gen_sample_params(mdlhists, long_deg_params, t=1, scen=1, linetype='sine'):
     degparams.update(sample_human_params(mdlhists, t=t, scen=scen))
     degparams.update({'friction': long_deg_params[scen][0], 'drift': long_deg_params[scen][1], 'experience': long_deg_params[scen][2]})
     return dict(linetype=linetype, **degparams)
-
 def gen_long_degPSF_param(experience_param, scen=1):
     params = {'experience_param': experience_param[scen-1]}
     return params

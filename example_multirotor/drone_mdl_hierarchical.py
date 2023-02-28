@@ -49,8 +49,8 @@ class AffectDOFArch(CompArch):
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
     _init_s = OverallAffectDOFState
     _init_c = AffectDOFArch
-    def __init__(self, name, flows, archtype):     
-        super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Force'], c={'archtype':archtype})
+    def __init__(self, name, flows, params={}, **kwargs):     
+        super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Force'], **kwargs)
     def behavior(self, time):
         Air,EEin={},{}
         #injects faults into lines
@@ -129,7 +129,7 @@ class Drone(Model):
         flows=['EEctl', 'Force_ST']
         self.add_fxn('StoreEE',['EE_1', 'Force_ST'], fclass=StoreEE)
         self.add_fxn('DistEE', ['EE_1','EEmot','EEctl', 'Force_ST'], fclass=DistEE)
-        self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Force_Lin'], fclass=AffectDOF, fparams=params.arch)
+        self.add_fxn('AffectDOF',['EEmot','Ctl1','DOFs','Force_Lin'], fclass=AffectDOF, fkwargs={'c':{'archtype':params.arch}})
         self.add_fxn('CtlDOF', ['EEctl', 'Dir1', 'Ctl1', 'DOFs', 'Force_ST'], fclass=CtlDOF)
         self.add_fxn('Planpath', ['EEctl', 'Env1','Dir1', 'Force_ST'], fclass=PlanPath)
         self.add_fxn('Trajectory', ['Env1','DOFs','Dir1', 'Force_GR'], fclass=Trajectory)
