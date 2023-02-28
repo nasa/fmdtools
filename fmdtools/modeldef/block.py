@@ -14,10 +14,9 @@ import sys
 import itertools
 import networkx as nx
 import copy
-from scipy import stats
 from recordclass import dataobject, asdict
 
-from .common import State, Parameter
+from .common import State, Parameter, Rand
 from .flow import init_flow, Flow
 
 class Fault(dataobject, readonly=True, mapping=True):
@@ -233,10 +232,11 @@ class Mode(dataobject, readonly=False):
     
 
 class Block():
-    __slots__ = ['p', '_args_p', 's', '_args_s', '__dict__']
+    __slots__ = ['p', '_args_p', 's', '_args_s','m', 'args_m', 'r', 'args_r', '__dict__']
     _init_p = Parameter
     _init_s = State
     _init_m = Mode
+    _init_r = Rand
     """ 
     Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
     
@@ -246,28 +246,12 @@ class Block():
         Internal State of the block. Instanced from _init_s.
     p : Parameter
         Internal Parameter for the block. Instanced from _init_p
-    failrate : float
-        Failure rate for the block
+    r : Rand
+        Internal Rand for the block. Instanced from _init_r
     time : float
         internal time of the function
-    faults : set
-        faults currently present in the block. If the function is nominal, set is {}
-    faultmodes : dict
-        faults possible to inject in the block and their properties. Has structure:
-            - faultname :
-                - dist : (float of % failures due to this fualt)
-                - oppvect : (list of relative probabilities of the fault occuring in each phase)
-                - rcost : cost of repairing the fault
-    opermodes : list
-        possible modes for the block to enter
-    rngs : dict
-        dictionary of random number generators for random states
-    seed : int
-        seed sequence for internal random number generator
-    mode : string
-        current mode of block operation
     """
-    def __init__(self, name, s={}, p={}, m={}):
+    def __init__(self, name, s={}, p={}, m={}, r={}):
         """
         Instance superclass. Called by FxnBlock and Component classes.
 
@@ -280,13 +264,17 @@ class Block():
         """
         self._args_s = s
         self._args_p = p
+        self._args_m = m
+        self._args_r = r
         self.p=self._init_p(**p)
         self.s=self._init_s(**s)
         self.m=self._init_m(**m)
+        self.r=self._init_r(**r)
+        
+        self.update_seed()
         
         # TODO : create class for modes (ideally with checking)
         self.name=name
-        self.update_seed()
         self.time=0.0
     def __repr__(self):
         if hasattr(self,'name'):
@@ -294,7 +282,7 @@ class Block():
         else: return 'New uninitialized '+self.__class__.__name__
     def update_seed(self, seed=[]):
         """
-        Updates/initializes seeds for the random states in the block and its actions/components.
+        Updates seed and propogates update to contained actions/components.
         (keeps seeds in sync)
 
         Parameters
@@ -302,24 +290,15 @@ class Block():
         seed : int, optional
             Random seed. The default is [].
         """
-        self.rngs=getattr(self, 'rngs', {})
-        self._rng_params=getattr(self, '_rng_params', {})
-        if seed:    self.seed=seed
-        elif not getattr(self, 'seed', []): 
-            self.seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0]
-        self.rng=np.random.default_rng(self.seed)
-        for rng_name in self.rngs:
-            seed = self.rng.integers(np.iinfo(np.int32).max)
-            self.rngs[rng_name]=np.random.default_rng(seed)
-            self._rng_params[rng_name]=(*self._rng_params[rng_name][:3],seed)
+        if seed: self.r.seed=seed
+        
         if hasattr(self, 'c'): self.c.update_seed(self.seed)
         if hasattr(self, 'actions'):
             for act in self.actions.values():
                 act.update_seed(self.seed)
     def get_rand_states(self, auto_update_only=False):
         """Gets dict of random states from block and associated actions/components"""
-        if auto_update_only: rand_states = {state:vals for state,vals in self._rng_params.items() if vals[1]}
-        else: rand_states=self._rng_params
+        rand_states = self.r.get_rand_states(auto_update_only)
         if hasattr(self, 'c'): rand_states.update(self.c.get_rand_states(auto_update_only=auto_update_only))
         if hasattr(self, 'actions'):
             for actname, act in self.actions.items():
@@ -357,56 +336,6 @@ class Block():
         self.timers.update(timers)
         for timername in timers:
             setattr(self, timername, Timer(timername))
-    def assoc_rand_states(self, *states):
-        """
-        Associates multiple random states with the model
-
-        Parameters
-        ----------
-        *states : tuple
-            can give any number of tuples for each of the states. 
-            The tuple is of the form (name, default), where:
-                name : str
-                    name for the parameter to use in the model behavior.
-                default : int/float/str/etc
-                    Default value for the parameter 
-        """
-        if type(states[0])==tuple:
-            for state in states:
-                self.assoc_rand_state(*state)
-        else: self.assoc_rand_state(*states)
-    def assoc_rand_state(self,name,default, seed=None, auto_update=[]):
-        """
-        Associate a stochastic state with the Block. Enables the simulation of stochastic behavior over time.
-
-        Parameters
-        ----------
-        name : str
-            name for the parameter to use in the model behavior.
-        default : int/float/str/etc
-            Default value for the parameter for the parameter
-        seed : int
-            seed for the random state generator to use. Defaults to None.
-        auto_update : list, optional
-            If given, updates the state with the given numpy method at each time-step.
-            List is made up of two arguments:
-            - generator_method : str
-                Name of the numpy random method to use. 
-                see: https://numpy.org/doc/stable/reference/random/generator.html
-            - generator_params : tuple
-                Parameter inputs for the numpy generator function
-        """
-        if not auto_update: generator_method, generator_params= None,None
-        else:               generator_method, generator_params = auto_update
-        if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
-        self._states.append(name)
-        self._initstates[name]=default
-        setattr(self, name,default)
-        if not seed: seed = self.rng.integers(np.iinfo(np.int32).max)
-        if not hasattr(self,'rngs'):         self.rngs={name:np.random.default_rng(seed)} 
-        else:                                 self.rngs[name]=np.random.default_rng(seed)
-        if not hasattr(self,'_rng_params'):   self._rng_params={name:(default, generator_method, generator_params,seed)} 
-        else:                                 self._rng_params[name]=(default, generator_method, generator_params,seed)
     def assoc_faultstates(self, fstates, mode_app='single-state', probtype='prob', units='hr'):
         """
         Adds health state attributes to the model (and a mode approach if desired). 
@@ -525,74 +454,21 @@ class Block():
             Number of combinations of faults to elaborate and select from. 
             The default is 1, which just chooses single fault modes.
         """
-        if getattr(self, 'run_stochastic', True):
+        if getattr(self.r, 'run_stochastic', True):
             faults = [list(x) for x in itertools.combinations(faults, combinations)]
-            self.m.add_fault(*self.rng.choice(faults))
+            self.m.add_fault(*self.r.rng.choice(faults))
         elif default=='first':      self.m.add_fault(faults[0])
         elif type(default)==str:    self.m.add_fault(default)
         else:                       self.m.add_fault(*default)
-    def set_rand(self,statename,methodname, *args):
-        """
-        Update the given random state with a given method and arguments (if in run_stochastic mode)
-
-        Parameters
-        ----------
-        statename : str
-            name of the random state defined in assoc_rand_state(s)
-        methodname : 
-            str name of the numpy method to call in the rng
-        *args : args
-            arguments for the numpy method
-        """
-        if getattr(self, 'run_stochastic', True):
-            self.set_rand_helper(statename, methodname, *args)
-    def set_rand_helper(self,statename,methodname,*args):
-        """
-        Update the given random state with a given method and arguments (helper function - use set_rand instead)
-
-        Parameters
-        ----------
-        statename : str
-            name of the random state defined in assoc_rand_state(s)
-        methodname : 
-            str name of the numpy method to call in the rng
-        *args : args
-            arguments for the numpy method
-        """
-        gen_method = getattr(self.rngs[statename], methodname)
-        newvalue = gen_method(*args)
-        setattr(self, statename, newvalue)
-        if self.run_stochastic == 'track_pdf':
-            value_pds = get_pdf_for_rand(newvalue, methodname, args)
-            self.pds.extend(value_pds)
-    def to_default(self,*statenames):
-        """ Resets (given or all by default) random states to their default values
-        
-        Parameters
-        ----------
-        *statenames : str, str, str...
-            names of the random state defined in assoc_rand_state(s)
-        """
-        if not statenames: statenames=list(self._rng_params.keys())
-        for statename in statenames: setattr(self, statename, self._rng_params[statename][0])
     def get_flowtypes(self):
         """Returns the names of the flow types in the model"""
         return {obj.type for name, obj in self.flows.items()}
-    def update_stochastic_states(self):
-        """Updates the defined stochastic states defined to auto-update (see assoc_randstates)."""
-        if self.run_stochastic == 'track_pdf': self.pds=[]
-        for statename, generator in self.rngs.items():
-            if self._rng_params[statename][1]:
-                self.set_rand_helper(statename, self._rng_params[statename][1], *self._rng_params[statename][2])
-        
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used by default in 
         derived objects when resetting the model. Requires associated flows to be cleared first."""
         self.m.remove_any_faults()
         self.s=self._init_s(**self._args_s)
-        for generator in self.rngs:
-            self.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
-        self.rng = np.random.default_rng(self.seed)
+        self.r=self._init_r(**self._args_r)
         if hasattr(self, 'time'): self.time=0.0
         if hasattr(self, 'dt'): self.dt=self.dt
         if hasattr(self, 'internal_flows'):
@@ -650,15 +526,13 @@ class Block():
         if prev_states!=states or prev_faults!=faults:  return True
         else:                                           return False
     def return_probdens(self):
-        state_pd = 1.0
+        state_pd = self.r.return_probdens()
         if hasattr(self, 'components'): 
             for compname, comp in self.c.components:
                 state_pd*=comp.return_probdens()
         if hasattr(self, 'actions'):
             for actionname, action in self.a.actions:
                 state_pd*=action.return_probdens()
-        if hasattr(self, 'pds'): state_pd= np.prod(self.pds)
-        else:                    state_pd= 1.0
         return state_pd
     def make_flowdict(self,flownames,flows):
         """
@@ -709,7 +583,7 @@ class FxnBlock(Block):
     dt : float
         local timestep of the model in the function (overrides global timestep by default ('use_local':True in modelparameters))
     """
-    def __init__(self,name, flows, flownames=[], p={}, s={}, c={},timers=[],
+    def __init__(self,name, flows, flownames=[], p={}, s={}, c={}, r={}, timers=[],
                  local={}, comms={}, dt=None, seed=None):
         """
         Instantiates the function superclass with the relevant parameters.
@@ -759,7 +633,7 @@ class FxnBlock(Block):
         if dt: self.dt=dt
         self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
-        super().__init__(name, p=p, s=s)
+        super().__init__(name, p=p, s=s, r=r)
         
         if hasattr(self, '_init_c'):    
             self.c=self._init_c(**c)
@@ -1001,10 +875,8 @@ class FxnBlock(Block):
             copytimer = getattr(copy, timername)
             copytimer.set_timer(timer.time, tstep=timer.tstep)
             copytimer.mode=timer.mode
-        copy.s = copy._init_s(**asdict(self.s))
-        for generator in self.rngs:
-            copy.rngs[generator]=np.random.default_rng(self._rng_params[generator][-1])
-            copy.rngs[generator].__setstate__(self.rngs[generator].__getstate__())
+        copy.s.assign(self.s)
+        copy.r.assign(self.r)
         if hasattr(self, 'time'): copy.time=self.time
         if hasattr(self, 'dt'): copy.dt=self.dt
         if hasattr(self, 'run_times'): copy.run_times=self.run_times
@@ -1071,11 +943,11 @@ class FxnBlock(Block):
         run_stochastic : book
             Whether to run the simulation using stochastic or deterministic behavior
         """
-        self.run_stochastic=run_stochastic
+        self.r.run_stochastic=run_stochastic
         self.m.add_fault(*faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
-        if time>self.time and run_stochastic: self.update_stochastic_states()
+        if time>self.time: self.r.update_stochastic_states()
         comps = getattr(self, 'c', {'components':{}})['components']
         comp_actions = {**comps, **self.actions} 
         if getattr(self, 'per_timestep', False): 
@@ -1152,7 +1024,7 @@ class CompArch(dataobject, mapping=True):
             component.m.add_fault(fault[len(component.name):])
     def update_seed(self, seed):
         for comp in self.components.values():
-            comp.update_seed(self.seed)
+            comp.update_seed(seed)
     def get_rand_states(self, auto_update_only=False):
         rand_states={}
         for compname, comp in self.components.items():
@@ -1223,8 +1095,7 @@ class Action(Block):
         run_stochastic : bool
             Whether to run the simulation using stochastic or deterministic behavior
         """
-        self.run_stochastic=run_stochastic
-        if time>self.time and run_stochastic: self.update_stochastic_states()
+        if time>self.time : self.r.update_stochastic_states()
         if proptype=='dynamic':
             if self.time<time:  self.behavior(time); self.t_loc+=dt
         else:                   self.behavior(time); self.t_loc+=dt
@@ -1314,134 +1185,5 @@ class Timer():
         return self.mode=='set'
 
 
-def get_pdf_for_rand(x, randname, args):
-    """
-    Gets the corresponding probability mass/density for  
-    for random sample x from 'randname' function in numpy.
-    
-    Parameters
-    ----------
-    x : int/float/array
-        samples to get probability mass/density of
-    randname : str
-        Name of numpy.random distribution
-    args : tuple
-        Arguments sent to numpy.random distribution
-
-    Returns
-    -------
-    prob: float/array of probability densities
-    """
-    if type(x) not in [np.ndarray, list]: x=[x]
-    if randname=='integers':
-        if len(args)==1:        pd= [1/args[0] for x in x]
-        elif len(args)>=2:      pd= [1/(args[1]-args[0]) for x in x]
-    elif randname=='random':    pd= [1 for x in x]
-    elif randname=='bytes':     raise Exception("Not able to calculate pdf for bytes")
-    elif randname=='choice':    
-        if type(args[0])==int:  options = [*np.arange(args[0])]
-        else:                   options = args[0]
-        if len(args)==4:        p = args[3]
-        else:                   p = [1/len(options) for i in options]
-        pd= [p[options.index(i)]  for i in x]
-    elif randname in ['shuffle', 'permutation']:
-        pd= [1/np.math.factorial(len(args[0]))]
-    elif randname=='permuted':
-        if len(args)>1 and type(args[0])==np.ndarray:
-            pd= [1/np.math.factorial(args[0].shape(args[1]))]
-        else:
-            pd= [1/np.math.factorial(len(args[0]))]
-    else:
-        pd = get_pdf_for_dist(x,randname,args)
-    if type(pd)==list:              pd=np.array(pd)
-    elif type(pd) != np.ndarray:    pd=np.array([pd]) 
-    return pd
-
-def get_scipy_pdf_helper(x, randname, args,pmf=False):
-    """
-    Gets probability mass/density for the outcome x from the distribution "randname" with arguments "args".
-    Used as a helper function in determining stochastic model state probability
-
-    Parameters
-    ----------
-    x : int/float/array
-        samples to get probability mass/density of
-    randname : str
-        Name of scipy.stats probability distribution
-    args : tuple
-        Arguments to send to scipy.stats.randname.pdf
-    pmf : Bool, optional
-        Whether the distribution uses a probability mass function instead of a pdf. The default is False.
-
-    Returns
-    -------
-    prob: float/array of probability densities
-
-    """
-    if randname=='dirichlet':
-        a=1
-    if pmf:     return getattr(stats, randname).pmf(x, *args)
-    else:       return getattr(stats, randname).pdf(x, *args)
-def get_pdf_for_dist(x, randname, args): # note: when python 3.10 releases, this should become match/case
-    """
-    Gets the corresponding probability mass/density (from scipy) for outcome x 
-    for probability distributions with name 'randname' in numpy.
-    
-    Parameters
-    ----------
-    x : int/float/array
-        samples to get probability mass/density of
-    randname : str
-        Name of numpy.random distribution
-    args : tuple
-        Arguments sent to numpy.random distribution
-
-    Returns
-    -------
-    prob: float/array of probability densities
-    
-    """
-    if type(x) in [np.ndarray, list] and len(x)>1 and len(args)>0: args=args[:-1]
-    
-    same_funcs = ['beta', 'dirichlet', 'f', 'gamma', 'laplace', 'logistic', 'multivariate_normal', 'pareto', 'uniform', 'wald']
-    same_funcs_pmf = ['multinomial', 'poisson', 'zipf']
-    different_funcs_pmf = {'binomial':'binom', 'geometric':'geom', 'logseries':'logser',\
-                           'multivariate_hypergeometric':'multivariate_hypergeom',\
-                           'negative_binomial':'nbinom'}
-    different_funcs = {'chisquare':'chi2', 'gumbel':'gumbel_r', 'noncentral_chisquare':'ncx2',\
-                       'noncentral_f':'ncf', 'normal':'norm', 'power':'powerlaw', 'standard_cauchy':'cauchy',\
-                       'standard_gamma':'gamma', 'standard_normal':'norm', 'weibull':'weibull_min'}
-    if randname in same_funcs:            
-        return get_scipy_pdf_helper(x,randname, args)
-    elif randname in same_funcs_pmf:
-        return get_scipy_pdf_helper(x, randname, args, pmf=True)
-    elif randname in different_funcs:
-        return get_scipy_pdf_helper(x,different_funcs[randname], args)
-    elif randname in different_funcs_pmf:
-        return get_scipy_pdf_helper(x,different_funcs_pmf[randname], args, pmf=True)       
-    elif randname in ['exponential', 'rayleigh']:   
-        if len(args)==0:            return getattr(stats, randname).pdf(x)
-        elif len(args)==1:          return getattr(stats, randname).pdf(x, scale=args[0]) 
-        elif len(args)==2:          return getattr(stats, randname).pdf(x, loc=args[1], scale=args[0]) 
-        else: raise Exception("Too many arguments for "+randname+" distribution")
-    elif randname=='hypergeometric': 
-        n_pop = args[0]+args[1]
-        n_good = args[0]
-        n_sample = args[2]
-        return stats.hypergeom.pmf(x,n_pop, n_good, n_sample)
-    elif randname=='lognormal':
-        s=args[1]
-        scale=np.exp(args[0])
-        return stats.lognormal.pdf(x, s, scale=scale) 
-    elif randname=='standard_t': return stats.multivariate_t.pdf(x, df=args[0])
-    elif randname=='triangular':
-        left, mode, right = args[:3]
-        loc = left
-        scale = right-loc
-        c = (mode-loc)/scale
-        return stats.triang.pdf(x,c,loc,scale)
-    elif randname=='vonmises':
-        return stats.vonmises.pdf(x,args[1], args[0])
-    else: raise Exception("Invalid randname distribution: "+randname+". Ensure that it is a part of numpy.random/scipy.stats")
 
 

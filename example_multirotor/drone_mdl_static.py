@@ -13,7 +13,7 @@ class StoreEEState(State):
 class StoreEE(FxnBlock):
     _init_s = StoreEEState
     _init_m = StoreEEMode
-    def __init__(self, name, flows):
+    def __init__(self, name, flows, params={},**kwargs):
         super().__init__(name, flows, ['EEout', 'FS'])
     def behavior(self, time):
         if self.m.has_fault('nocharge'):    self.EEout.s.effort=0.0
@@ -29,7 +29,7 @@ class DistEEState(State):
 class DistEE(FxnBlock):
     _init_s = DistEEState
     _init_m = DistEEMode
-    def __init__(self,name, flows):
+    def __init__(self,name, flows, params={},**kwargs):
         super().__init__(name,flows, ['EEin','EEmot','EEctl','ST'])
     def condfaults(self, time):
         if self.ST.s.support<0.5 or max(self.EEmot.s.rate,self.EEctl.s.rate)>2: 
@@ -54,7 +54,7 @@ class EngageLandMode(Mode):
                    'deform':(0.8, 1000)}
 class EngageLand(FxnBlock):
     _init_m=EngageLandMode
-    def __init__(self,name, flows):
+    def __init__(self,name, flows, params={},**kwargs):
         super().__init__(name,flows, ['forcein', 'forceout'])
     def condfaults(self, time):
         if abs(self.forcein.s.support)>=2.0:     self.m.add_fault('break')
@@ -68,7 +68,7 @@ class HoldPayloadMode(Mode):
                    'deform':(0.8, 10000)}
 class HoldPayload(FxnBlock):
     _init_m = HoldPayloadMode
-    def __init__(self,name, flows):
+    def __init__(self,name, flows, params={},**kwargs):
         super().__init__(name,flows, ['FG', 'Lin', 'ST'])
     def condfaults(self, time):
         if abs(self.FG.s.support)>0.8:      self.m.add_fault('break')
@@ -100,7 +100,7 @@ class AffectDOFMode(Mode):
 class AffectDOF(FxnBlock): #EEmot,Ctl1,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
     _init_s = AffectDOFState
     _init_m = AffectDOFMode
-    def __init__(self,name, flows):     
+    def __init__(self,name, flows, params={},**kwargs):     
         super().__init__(name, flows, ['EEin', 'Ctlin','DOF','Force'])
     def behavior(self, time):
         self.s.put(Eti=1.0, Eto=1.0)
@@ -129,7 +129,7 @@ class CtlDOFMode(Mode):
 class CtlDOF(FxnBlock):
     _init_s = CtlDOFState
     _init_m = CtlDOFMode
-    def __init__(self,name,flows):
+    def __init__(self,name,flows, params={},**kwargs):
         super().__init__(name,flows, ['EEin','Dir','Ctl','DOFs','FS'])
     def condfaults(self, time):
         if self.FS.s.support<0.5: self.m.add_fault('noctl')
@@ -154,7 +154,7 @@ class PlanPathMode(Mode):
                    'degloc':(0.8, 10000)}
 class PlanPath(FxnBlock):
     _init_m = PlanPathMode
-    def __init__(self,name, flows):
+    def __init__(self,name, flows, params={},**kwargs):
         super().__init__(name, flows, ['EEin','Env','Dir','FS'])
     def condfaults(self, time):
         if self.FS.s.support<0.5: self.m.add_fault('noloc')
@@ -171,7 +171,7 @@ class TrajectoryMode(Mode):
                   'lost':(0.0, 50000)}
 class Trajectory(FxnBlock):
     _init_m = TrajectoryMode
-    def __init__(self,name, flows):
+    def __init__(self,name, flows, params={},**kwargs):
         super().__init__(name, flows, ['Env','DOF', 'Dir', 'Force_GR'])
     def behavior(self, time):
         self.DOF.vertvel = max(min(-2+2*self.DOF.uppwr, 2), -2)
@@ -213,7 +213,7 @@ class ViewModes(Mode):
     faultparams = {'poorview':(0.2, 10000)}
 class ViewEnvironment(FxnBlock):
     _init_m = ViewModes
-    def __init__(self, name, flows):
+    def __init__(self, name, flows, params={},**kwargs):
         super().__init__(name, flows, ['Env'])
 
 class EEState(State):
@@ -259,7 +259,6 @@ class Dir(Flow):
 class Drone(Model):
     def __init__(self, params=Parameter(), modelparams=ModelParam(), valparams={}):
         super().__init__(params, modelparams, valparams)
-        self.params=params
         #add flows to the model
         self.add_flow('Force_ST',   Force)
         self.add_flow('Force_Lin',  Force)

@@ -196,7 +196,7 @@ class Model(object):
         """
         if not getattr(self, 'is_copy', False):
             self.flows[flowname] = init_flow(flowname,fclass, p=p, s=s, flowtype=flowtype)
-    def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None'):
+    def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None', fkwargs = {}):
         """
         Instantiates a given function in the model.
 
@@ -208,27 +208,16 @@ class Model(object):
             List of flows to associate with the function.
         fclass : Class
             Class to instantiate the function as.
-        fparams : arbitrary float, dict, list, etc.
+        fparams : dict.
             Other parameters to send to the __init__ method of the function class
+        fkwargs : dict
+            Parameters to send to __init__ method of the FxnBlock superclass
         """
-        
         if not getattr(self, 'is_copy', False):
-            self.fxns[name]=fclass.__new__(fclass)
-            self.fxns[name].seed=self._rng.integers(np.iinfo(np.int32).max)
             flows=self.get_flows(flownames)
-            class_init_params = list(signature(fclass).parameters.keys())
-            if 'name'!=class_init_params[0]:
-                raise Exception('Invalid class specification for: '+str(fclass)+'. Make sure to include a name as the second argument of __init__.')
-            if len(class_init_params)<2 or 'flows'!=class_init_params[1]:
-                raise Exception('Invalid class specification for: '+str(fclass)+'. Make sure to include a name as the third argument of __init__.')
-            if fparams=='None':
-                if len(class_init_params)>2: raise Exception("fparams required by class "+str(fclass)+" __init__ method but not passed. Found in: "+name)
-                self.fxns[name].__init__(name, flows)
-                self._fxninput[name]={'name':name,'flows': flownames, 'fparams': 'None'}
-            else: 
-                if len(class_init_params)<=2: raise Exception("fparams given to class "+str(fclass)+" but __init__ has no params argument. Found in: "+name)
-                self.fxns[name].__init__(name, flows,fparams)
-                self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams}
+            fkwargs = {**{'r':{"seed":self.modelparams.seed}}, **fkwargs}
+            self.fxns[name] = fclass(name, flows, params=fparams, **fkwargs)
+            self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams, 'kwargs': fkwargs}
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
             self.functionorder.update([name])

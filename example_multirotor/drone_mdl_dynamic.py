@@ -35,7 +35,7 @@ class CtlDOFState(State):
 class CtlDOF(FxnBlock):
     _init_s = CtlDOFState
     _init_m = CtlDOFMode
-    def __init__(self, name, flows):
+    def __init__(self, name, flows, params={}, **kwargs):
         super().__init__(name, flows, ['EEin','Dir','Ctl','DOFs','FS'])
     def condfaults(self, time):
         if self.FS.s.support<0.5: self.m.add_fault('noctl')
@@ -88,7 +88,7 @@ class PlanPath(FxnBlock):
     _init_m = PlanPathMode
     _init_s = PlanPathStates
     _init_p = PlanPathParams
-    def __init__(self, name, flows):
+    def __init__(self, name, flows, params={}, **kwargs):
         super().__init__(name, flows, ['EEin','Env','Dir','FS'], timers={'pause'})
     def condfaults(self, time):
         if self.FS.s.support<0.5: self.m.add_fault('noloc')
@@ -124,7 +124,7 @@ class PlanPath(FxnBlock):
         if self.EEin.s.effort<0.5:        self.Dir.s.assign([0,0,0,0], "x","y","z", "power")
 
 class Trajectory(FxnBlock):
-    def __init__(self, name, flows):
+    def __init__(self, name, flows, params={}, **kwargs):
         super().__init__(name, flows, ['Env','DOF', 'Dir', 'Force_GR'])
     def dynamic_behavior(self, time):            
         if self.Env.s.z<=0.0:  
@@ -148,12 +148,13 @@ class Trajectory(FxnBlock):
         self.Env.s.limit(z=(0.0,np.inf))
 
 class ViewEnvironment(FxnBlock):
-    def __init__(self, name, flows):
+    def __init__(self, name, flows, params={}, **kwargs):
         super().__init__(name, flows, ['Env'])
         sq=square([0,150], 160, 160)
         self.viewingarea = {(x,y):'unviewed' for x in range(int(sq[0][0]),int(sq[1][0])+10,10) for y in range(int(sq[0][1]),int(sq[2][1])+10,10)}
-    def behavior(self, time):
+    def dynamic_behavior(self, time):
         area = square((self.Env.s.x, self.Env.s.y), 10, 10)
+        # TODO: This is *the* major bottleneck in the model. Ideally we should try to speed it up
         for spot in self.viewingarea:
             if inrange(area, spot[0],spot[1]): self.viewingarea[spot]='viewed'
 

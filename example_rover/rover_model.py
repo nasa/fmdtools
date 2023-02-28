@@ -119,18 +119,6 @@ class Drive(FxnBlock):
             self.Ground.ang = translate_angle(self.Ground.ang)
             self.Ground.inc(x = np.cos(np.pi/180 *self.Ground.ang) * self.Ground.vel, \
                             y = np.sin(np.pi/180 *self.Ground.ang) * self.Ground.vel)
-class DriveDegradation(FxnBlock):
-    def __init__(self,name,flows):
-        super().__init__(name, flows, states={'wear':0.0, 'corrosion':0.0, 'friction':0.0, 'drift':0.0})
-        self.assoc_rand_state('corrode_rate', 0.01, auto_update = ['pareto', (50,)])
-        self.assoc_rand_state('wear_rate', 0.02, auto_update = ['pareto', (25,)])
-        self.assoc_rand_state('yaw_load', 0.01, auto_update = ['uniform', (-0.1, 0.1)])
-    def dynamic_behavior(self, time):
-        self.inc(corrosion=self.corrode_rate, wear=self.wear_rate)
-        self.inc(drift = self.yaw_load/1000 + (np.sign(self.drift)==np.sign(self.yaw_load))*self.yaw_load)
-        self.friction = np.sqrt(self.corrosion**2+self.wear**2)
-        self.limit(drift=(-1,1), corrosion=(0,1), wear=(0,1))
-
 
 class Perception(FxnBlock):
     def __init__(self, name, flows):
@@ -246,7 +234,6 @@ def in_bounds(x,y,lx,ly,ux,uy, tol=0.001):
         if l_slope-tol <= pt_slope <= u_slope+tol:  return True
         else:                                       return False
     else:                                           return False
-
 def turn_func(x,y, radius,start, buffer=0.1):
     if   x >= start+radius-buffer:  return start+radius, y
     elif y >= radius:               return start+radius, y
@@ -299,11 +286,7 @@ class RoverParam(Parameter, readonly=True):
             kwargs['end']=(radius+start, radius+start)
         super().__init__(*args, **kwargs)
 
-class RoverDegradation(Model):
-    def __init__(self, params=Parameter(), modelparams=ModelParam(times=(0,100), seed=101), valparams={}):
-        super().__init__(params, modelparams, valparams)
-        self.add_fxn("Drive", [], fclass= DriveDegradation)
-        self.build_model(require_connections=False)
+
 def gen_model_params(x, scen):
     params = {'drive_modes':{'custom_fault':{'friction':x[scen][0][0],'drift':x[scen][0][1], 'transfer':x[scen][0][2]}}}
     return params
@@ -597,14 +580,7 @@ if __name__=="__main__":
     endclasses_id, mdlhists_id = prop.approach(mdl_id, app_id, pool=mp.Pool(4))
 
 
-    #nominal
-    deg_mdl = RoverDegradation()
-    endresults,  mdlhist = prop.nominal(deg_mdl)
-    rd.plot.mdlhists(mdlhist)
-    #stochastic
-    deg_mdl = RoverDegradation()
-    endresults,  mdlhist = prop.nominal(deg_mdl, run_stochastic=True)
-    rd.plot.mdlhists(mdlhist)
+
 
     #stochastic over replicates
     nomapp = NominalApproach()
