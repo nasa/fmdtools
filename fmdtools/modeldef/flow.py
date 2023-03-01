@@ -65,8 +65,8 @@ class Flow(object):
         Returns the approximate memory usage of the flow.
         """
         mem = 0
-        for state in self._states:
-            mem+=2*sys.getsizeof(getattr(self, state)) # (*2 to account for initstates)
+        for state in self.s.__fields__:
+            mem+=2*sys.getsizeof(getattr(self.s, state)) # (*2 to account for initstates)
         return mem
     def copy(self):
         """

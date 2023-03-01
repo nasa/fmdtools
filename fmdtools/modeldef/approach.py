@@ -522,7 +522,7 @@ class SampleApproach():
                 else:
                     self.comprates[fxnname] = {}
         else:
-            if type(faults)==str:   faults = [(faults, mode) for mode in mdl.fxns[faults].faultmodes] #single-function modes
+            if type(faults)==str:   faults = [(faults, mode) for mode in mdl.fxns[faults].m.faultmodes] #single-function modes
             elif type(faults)==tuple:
                 if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.m.faultmodes if mode==faults[1]]  
                 elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.m.faultmodes if mode==f]  
@@ -588,6 +588,7 @@ class SampleApproach():
                 overallrate=self.comprates[fxnname][compname]
                         
             key_phases = mdl.fxns[fxnname].m.key_phases_by
+            if key_phases == 'self': key_phases = fxnname
             if modephases and type(self._fxnmodes[fxnname, mode]['oppvect'])==list:
                 raise Exception("Poorly specified oppvect for fxn: "+fxnname+" mode: "+mode+"--provide a dict to use with modephases")
             

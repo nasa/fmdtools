@@ -7,9 +7,13 @@ Created on Tue Feb 28 11:53:00 2023
 from fmdtools.modeldef.common import Parameter, State, Rand
 from fmdtools.modeldef.block import FxnBlock
 from fmdtools.modeldef.model import Model, ModelParam
+from fmdtools.modeldef.approach import NominalApproach
 import numpy as np
 from fmdtools.faultsim import propagate as prop
 import fmdtools.resultdisp as rd
+import matplotlib.pyplot as plt
+from rover_model import Rover, plot_trajectories, DegParam
+
 
 class DriveDegradationStates(State):
     wear:       float = 0.0
@@ -44,7 +48,28 @@ class RoverDegradation(Model):
         super().__init__(params, modelparams, valparams)
         self.add_fxn("Drive", [], fclass= DriveDegradation)
         self.build_model(require_connections=False)
-        
+
+def get_params_from(mdlhist, t=1):
+    friction = mdlhist['functions']['Drive']['friction'][t]
+    drift = mdlhist['functions']['Drive']['drift'][t]
+    return {'friction':friction, 'drift':drift}
+def get_paramdist_from(mdlhists, t):
+    friction=[]
+    drift=[]
+    for rep in mdlhists:
+        fdict = get_params_from(mdlhists[rep], t)
+        friction.append(fdict['friction'])
+        drift.append(fdict['drift'])
+    return {'friction':friction, 'drift':drift}
+
+def sample_params(mdlhists, t=1, scen=1):
+    mdlhist = [*mdlhists.values()][scen]
+    return get_params_from(mdlhist, t)
+
+def gen_sample_params(mdlhists, t=1, scen=1):
+    degparams = sample_params(mdlhists, t=t, scen=scen)
+    return {'linetype':'turn', 'degradation':DegParam(**degparams)}
+
 if __name__=="__main__":
     #nominal
     deg_mdl = RoverDegradation()
@@ -55,4 +80,37 @@ if __name__=="__main__":
     endresults,  mdlhist = prop.nominal(deg_mdl, run_stochastic=True)
     rd.plot.mdlhists(mdlhist)
     
+    #stochastic over replicates
+    nomapp = NominalApproach()
+    nomapp.add_seed_replicates('test', 100)
+    endclasses, mdlhists = prop.nominal_approach(deg_mdl, nomapp, run_stochastic=True, desired_result='endclass')
+    rd.plot.mdlhists(mdlhists, fxnflowvals={'Drive':['wear', 'corrosion', 'friction', 'drift']}, aggregation='mean_std')
+    
+    #individual slice
+    rd.plot.metric_dist_from(mdlhists, [1,10,20], fxnflowvals={'Drive':['wear', 'corrosion', 'friction', 'drift']})
+    
+    
+    #question -- how do we sample this:
+    #   - all replicates?
+    #   - random sample of them?
+    #   - what about times?
+    #   - what if we get a complementary sample of times and etc?
+    #   - if states in one replicate are the same as a different at the next, can we only sample one?
+
+    behave_nomapp = NominalApproach()
+    behave_nomapp.add_param_ranges(gen_sample_params, 'behave_nomapp', mdlhists, t=(1,100, 10), scen = (1,100,5))
+
+    mdl=Rover()
+    behave_endclasses, behave_mdlhists = prop.nominal_approach(mdl, behave_nomapp)
+    f = plt.figure()
+    f = plot_trajectories(behave_mdlhists)
+    rd.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, 't', 'scen')
+
+    comp_groups = {'group_1': [*behave_endclasses][:100],'group_2': [*behave_endclasses][100:]}
+
+    rd.plot.metric_dist(behave_endclasses, metrics=['line_dist', 'end_dist', 'x', 'y'], comp_groups=comp_groups, alpha=0.5, bins=10, metric_bins={'x':20})
+
+    rd.plot.metric_dist_from(behave_mdlhists, times= [0, 10, 20], fxnflowvals = {'Ground':['x', 'y', 'linex', 'ang']}, alpha=0.5, bins=10)
+
+    rd.plot.metric_dist_from(behave_mdlhists, times= 30, fxnflowvals = {'Ground':['x', 'y', 'linex', 'ang']}, comp_groups=comp_groups, alpha=0.5, bins=10)
     

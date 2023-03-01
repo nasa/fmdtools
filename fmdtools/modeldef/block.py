@@ -68,6 +68,7 @@ class Mode(dataobject, readonly=False):
     mode:           str = 'nominal'
     faults:         set = set()
     faultmodes:     dict = {}
+    mode_state_dict: dict={}
     faultparams = {}
     opermodes = ('nominal',)
     failrate = 1.0
@@ -79,12 +80,14 @@ class Mode(dataobject, readonly=False):
     longnames = {}
     def __init__(self, *args, **kwargs):
         kwargs['faultmodes'] = kwargs.get('faultmodes', dict())
-        kwargs = {'mode':'nominal', 'faults':set(), **kwargs}
+        default_mode = self.__defaults__[self.__fields__.index('mode')]
+        if not default_mode: default_mode='nominal'
+        kwargs = {'mode':default_mode,
+                  'faults':set(), 
+                  'mode_state_dict':dict(), **kwargs}
         super().__init__(*args, **kwargs)
         self.init_faultmodes()
     def init_faultmodes(self):
-        if self.key_phases_by=='self':   
-            self.key_phases_by = self.name
         if self.key_phases_by=='self':  oppvect='all'
         else:                           oppvect=[1.0]
         default_kwargs={'dist':1.0/max(len(self.faultparams),1),
@@ -112,6 +115,54 @@ class Mode(dataobject, readonly=False):
             if type(kwargs['oppvect'])==set:            
                 kwargs['oppvect'] = {o:1.0 for o in kwargs['oppvect']}
             self.faultmodes[mode] = Fault(**kwargs)
+    def assoc_faultstates(self, franges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='global'):
+        """
+        Associates modes with given faultstates.
+
+        Parameters
+        ----------
+        franges : dict, optional
+            Dictionary of form {'state':{val1, val2...}) of ranges for each health state (if used to generate modes). The default is {}.
+        mode_app : str
+            type of modes to elaborate from the given health states.
+        manual_modes : dict, optional
+            Dictionary/Set of faultmodes with structure, which has the form:
+                - dict {'fault1': [atts], 'fault2': atts}, where atts may be of form:
+                    - states: {state1: val1, state2, val2}    
+                    - [states, faultattributes], where faultattributes is the same as in assoc_modes
+        probtype : str, optional
+            Type of probability in the probability model, a per-time 'rate' or per-run 'prob'. 
+            The default is 'rate'
+        units : str, optional
+            Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr' 
+        """
+        nom_fstates = {state: self.s.__defaults__[self.s.__fields__.index(state)] for state in franges}
+        if mode_app=='none': a=0
+        elif mode_app=='single-state':
+            for state in franges:
+                modes = {state+'_'+str(value):'synth' for value in franges[state]}
+                modestates = {state+'_'+str(value): {state:value} for value in franges[state]}
+                self.faultmodes.update(modes)
+                self.mode_state_dict.update(modestates)
+        elif mode_app =='all' or type(mode_app)==int:
+            for state in franges: franges[state].add(nom_fstates[state])
+            nomvals = tuple([*nom_fstates.values()])
+            statecombos = [i for i in itertools.product(*franges.values()) if i!=nomvals]
+            if type(mode_app)==int and len(statecombos)>0: 
+                sample = self.rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
+                statecombos = [statecombos[i] for i in sample]
+            self.faultmodes.update({'hmode_'+str(i):'synth' for i in range(len(statecombos))}) 
+            self.mode_state_dict.update({'hmode_'+str(i): {list(franges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
+        else: raise Exception("Invalid mode elaboration approach")
+
+        for mode,atts in manual_modes.items():
+            if type(atts)==list:
+                self.mode_state_dict.update({mode:atts[0]})
+                if not getattr(self, 'exclusive', False): print("Changing fault mode exclusivity to True")
+                self.assoc_modes(faultmodes={mode:atts[1]}, initmode=getattr(self,'mode', 'nom'), probtype=probtype, proptype=probtype, exclusive=True, key_phases_by=key_phases_by)
+            elif  type(atts)==dict:
+                self.mode_state_dict.update({mode:atts})
+                self.faultmodes.update({mode:'synth'})
     def set_mode(self, mode):
         """Sets a mode in the block
         
@@ -177,7 +228,8 @@ class Mode(dataobject, readonly=False):
         self.faults.update(faults)
         if self.exclusive: 
             if len(faults)>1:   raise Exception("Multiple fault modes added to function with exclusive fault representation")
-            elif len(faults)==0: self.mode = 'nominal'
+            elif len(faults)==0 and self.mode in self.faultmodes: 
+                raise Exception("No faults but mode is still in faultmode "+self.mode)
     def replace_fault(self, fault_to_replace,fault_to_add): 
         """Replaces fault_to_replace with fault_to_add in the set of faults
         
@@ -221,8 +273,8 @@ class Mode(dataobject, readonly=False):
         self.faults.clear()
         if opermode:    self.mode = opermode
         else:           self.mode = self.__defaults__[self.__fields__.index('mode')]
-        if self.exclusive and not(opermode):
-            raise Exception("Unclear which operational mode to enter with fault removed")
+        if self.exclusive and not(self.mode):
+            raise Exception("Unclear which operational mode to enter with fault removed--no default or opermode specified")
         if warnmessage: self.warn(warnmessage, "All faults removed.")
     def mirror(self, mode_to_mirror):
         self.mode = mode_to_mirror.mode
@@ -336,92 +388,6 @@ class Block():
         self.timers.update(timers)
         for timername in timers:
             setattr(self, timername, Timer(timername))
-    def assoc_faultstates(self, fstates, mode_app='single-state', probtype='prob', units='hr'):
-        """
-        Adds health state attributes to the model (and a mode approach if desired). 
-        
-        Parameters
-        ----------
-        fstates : Dict
-            Health states to incorporate in the model and their respective values. 
-            e.g., {'state':[1,{0,2,-1}]}, {'state':{0,2,-1}}
-        mode_app : str
-            type of modes to elaborate from the given health states.
-        """
-        if not hasattr(self,'_states'): raise Exception("Call __init__ method for function first")
-        franges = dict.fromkeys(fstates.keys())
-        nom_fstates = {}
-        for state in fstates:
-            self._states.append(state)
-            if type(fstates[state]) in [set, np.ndarray]:               
-                nom_fstates[state] = 1.0
-                franges[state]=set(fstates[state])
-            elif  type(fstates[state])==list:           
-                nom_fstates[state] = fstates[state][0]
-                franges[state]=set(fstates[state][1]) 
-            elif type(fstates[state]) in [float, int]:  
-                nom_fstates[state] = fstates[state]
-                franges[state]={}
-            else: raise Exception("Invalid input option for health state")
-            setattr(self, state, nom_fstates[state])
-            self._initstates.update(nom_fstates)
-        self.assoc_faultstate_modes(franges=franges, mode_app=mode_app, probtype=probtype, units=units)
-    def assoc_faultstate_modes(self, franges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='global'):
-        """
-        Associates modes with given faultstates.
-
-        Parameters
-        ----------
-        franges : dict, optional
-            Dictionary of form {'state':{val1, val2...}) of ranges for each health state (if used to generate modes). The default is {}.
-        mode_app : str
-            type of modes to elaborate from the given health states.
-        manual_modes : dict, optional
-            Dictionary/Set of faultmodes with structure, which has the form:
-                - dict {'fault1': [atts], 'fault2': atts}, where atts may be of form:
-                    - states: {state1: val1, state2, val2}    
-                    - [states, faultattributes], where faultattributes is the same as in assoc_modes
-        probtype : str, optional
-            Type of probability in the probability model, a per-time 'rate' or per-run 'prob'. 
-            The default is 'rate'
-        units : str, optional
-            Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr' 
-        """
-        if not getattr(self, 'is_copy', False):
-            if not getattr(self, 'faultmodes', []): self.faultmodes = dict()
-            if not getattr(self, 'mode_state_dict', False): self.mode_state_dict = {}
-            nom_fstates = {state: self._initstates[state] for state in franges}
-            if mode_app=='none': a=0
-            elif mode_app=='single-state':
-                for state in franges:
-                    modes = {state+'_'+str(value):'synth' for value in franges[state]}
-                    modestates = {state+'_'+str(value): {state:value} for value in franges[state]}
-                    self.faultmodes.update(modes)
-                    self.mode_state_dict.update(modestates)
-            elif mode_app =='all' or type(mode_app)==int:
-                for state in franges: franges[state].add(nom_fstates[state])
-                nomvals = tuple([*nom_fstates.values()])
-                statecombos = [i for i in itertools.product(*franges.values()) if i!=nomvals]
-                if type(mode_app)==int and len(statecombos)>0: 
-                    sample = self.rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
-                    statecombos = [statecombos[i] for i in sample]
-                self.faultmodes.update({'hmode_'+str(i):'synth' for i in range(len(statecombos))}) 
-                self.mode_state_dict.update({'hmode_'+str(i): {list(franges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
-            else: raise Exception("Invalid mode elaboration approach")
-            num_synth_modes = len(self.mode_state_dict)
-            for mode,atts in manual_modes.items():
-                if type(atts)==list:
-                    self.mode_state_dict.update({mode:atts[0]})
-                    if not getattr(self, 'exclusive', False): print("Changing fault mode exclusivity to True")
-                    self.assoc_modes(faultmodes={mode:atts[1]}, initmode=getattr(self,'mode', 'nom'), probtype=probtype, proptype=probtype, exclusive=True, key_phases_by=key_phases_by)
-                elif  type(atts)==dict:
-                    self.mode_state_dict.update({mode:atts})
-                    self.faultmodes.update({mode:'synth'})
-                    num_synth_modes+=1
-        if not hasattr(self,'key_phases_by'): self.key_phases_by=key_phases_by
-        elif getattr(self, 'key_phases_by', '')!=key_phases_by: 
-            print("Changing key_phases_by to "+key_phases_by)
-            self.key_phases_by=key_phases_by
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
@@ -482,9 +448,9 @@ class Block():
     def get_memory(self):
         """ Gets the approximate memory usage of the block in bytes (not complete)"""
         mem=0
-        mem+=sys.getsizeof(self.opermodes)
-        for rng in self.rngs.values():
-            mem+=sys.getsizeof(rng)
+        mem+=sys.getsizeof(self.m.opermodes)
+        if hasattr(self, 'r'):
+            mem+=sys.getsizeof(self.r)
         if hasattr(self, 'm'):
             for fm in self.m.faultmodes.values():
                 mem+=sys.getsizeof(fm)
@@ -520,6 +486,7 @@ class Block():
         for state, val in asdict(self.s).items():
             if type(val) in [set, dict]: val=copy.deepcopy(val)
             states[state]= val
+        states['mode']=self.m.mode
         return states, self.m.faults.copy()
     def has_new_states(self, prev_states, prev_faults):
         states, faults = self.return_states()
@@ -583,7 +550,7 @@ class FxnBlock(Block):
     dt : float
         local timestep of the model in the function (overrides global timestep by default ('use_local':True in modelparameters))
     """
-    def __init__(self,name, flows, flownames=[], p={}, s={}, c={}, r={}, timers=[],
+    def __init__(self,name, flows, flownames=[], p={}, s={}, c={}, r={}, m={}, timers=[],
                  local={}, comms={}, dt=None, seed=None):
         """
         Instantiates the function superclass with the relevant parameters.
@@ -633,7 +600,7 @@ class FxnBlock(Block):
         if dt: self.dt=dt
         self.actions={}; self.conditions={}; self.condition_edges={}; self.actfaultmodes = {}
         self.action_graph = nx.DiGraph(); self.flow_graph = nx.Graph()
-        super().__init__(name, p=p, s=s, r=r)
+        super().__init__(name, p=p, s=s, r=r, m=m)
         
         if hasattr(self, '_init_c'):    
             self.c=self._init_c(**c)
@@ -840,7 +807,7 @@ class FxnBlock(Block):
         if not getattr(self, 'is_copy', False):
             self.internal_flows[flowname] = init_flow(flowname,flowdict, flowtype, fclass)
             setattr(self, flowname, self.internal_flows[flowname])
-    def copy(self, newflows, *attr):
+    def copy(self, newflows, *attr, **kwargs):
         """
         Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.
 
@@ -858,7 +825,7 @@ class FxnBlock(Block):
         """
         copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         copy.is_copy=True
-        copy.__init__(self.name, newflows, *attr)
+        copy.__init__(self.name, newflows, *attr, **kwargs)
         copy.m.mirror(self.m)
         if hasattr(self, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
         for flowname, flow in self.internal_flows.items():
