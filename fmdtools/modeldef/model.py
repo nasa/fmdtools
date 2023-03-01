@@ -196,7 +196,7 @@ class Model(object):
         """
         if not getattr(self, 'is_copy', False):
             self.flows[flowname] = init_flow(flowname,fclass, p=p, s=s, flowtype=flowtype)
-    def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None', fkwargs = {}):
+    def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None', **fkwargs):
         """
         Instantiates a given function in the model.
 
@@ -505,9 +505,10 @@ class Model(object):
         for fxnname, fxn in self.fxns.items():
             flownames=self._fxninput[fxnname]['flows']
             fparams=self._fxninput[fxnname]['fparams']
+            kwargs = self._fxninput[fxnname]['kwargs']
             flows = copy.get_flows(flownames)
-            if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows)
-            else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams)
+            if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows, **kwargs)
+            else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams, **kwargs)
             copy.fxns[fxnname].set_timestep(use_local=self.modelparams.use_local, global_tstep=self.modelparams.dt)
             setattr(copy, fxnname, copy.fxns[fxnname])
         copy._fxninput=self._fxninput

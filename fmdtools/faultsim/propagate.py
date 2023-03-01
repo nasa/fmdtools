@@ -1092,7 +1092,7 @@ def update_blockhist(blockname, block, blockhist, t_ind):
                 if fault in faults: blockhist["faults"][fault][t_ind] = 1
         else:
             if len(faults) > 1: raise Exception("More than one fault present in "+blockname+"\n at t= "+str(t_ind)+"\n faults: "+str(faults)+"\n Is the mode representation nonexclusive?")
-            else:               blockhist["faults"][t_ind]=faults.pop()
+            else:               blockhist["faults"][t_ind]=[*faults, ''][0]
     update_dicthist(states,blockhist,t_ind)
     if 'probdens' in blockhist: blockhist['probdens'][t_ind]=block.probdens
 def cut_mdlhist(mdlhist, ind, newcopy=False):
@@ -1277,7 +1277,7 @@ def init_blockhist(blockname, block, timerange, track='all', run_stochastic=Fals
     if track == 'all' or 'faults' in track:
         if block.m.faultmodes:
             if block.m.exclusive == False:   blockhist["faults"] = {faultmode:np.array([0 for i in timerange]) for faultmode in block.m.faultmodes} 
-            elif block.m.exclusive == True:  blockhist["faults"]=np.full([len(timerange)], list(faults)[0], dtype="U"+str(modelength))
+            elif block.m.exclusive == True:  blockhist["faults"]=np.full([len(timerange)], list(block.m.faultmodes.keys())[0], dtype="U"+str(modelength))
     blockhist.update(init_dicthist(states, timerange, track=track, modelength=modelength))               
     if run_stochastic=='track_pdf' and block.rngs: 
         blockhist['probdens'] = np.full([len(timerange)], block.return_probdens())
