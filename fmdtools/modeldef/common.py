@@ -19,10 +19,21 @@ from scipy import stats
 #    """Simple factory method for creating a container for states, modes, components, etc"""
 #    return recordclass(name, tuple([(k,type(v)) for k, v in kwargs.items()]), tuple([v for v in kwargs.values()]), mapping=True)
 
+def get_true_fields(dataobject, *args,  force_kwargs = False, **kwargs):
+    """
+    Resolves the args to pass to a dataobject given certain defaults, *args and **kwargs
+    
+    NOTE: must be used for pickling, since pickle passes arguments as *args and not **kwargs.
+    """
+    true_args = list(dataobject.__defaults__)
+    for i, n in enumerate(dataobject.__fields__):
+        if force_kwargs:    true_args[i]=kwargs[n]
+        if i<len(args):     true_args[i]=args[i]
+        elif n in kwargs:   true_args[i]=kwargs[n]
+    return true_args
+
 class State(dataobject, mapping=True):
     """ """
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args, **kwargs)
     def set_atts(self, **kwargs):
         """Sets the given arguments to a given value. Mainly useful for 
         reducing length/adding clarity to assignment statements in __init__ methods
@@ -379,19 +390,18 @@ class Parameter(dataobject, readonly=True):
         if args and len(args)>field_ind:                return args[field_ind]
         else:                                           return self.__defaults__[field_ind]
 
+
 class Rand(dataobject, mapping=True):
-    def_kwargs = dict(seed=42, run_stochastic=False)
     rng:            np.random.default_rng
     probs:          list = list()
     seed:           int =   42
     run_stochastic: bool=False
-    def __init__(self, *args, **kwargs):
-        overall_kwargs = {**self.def_kwargs,**{'probs':list()}, **kwargs}
-        overall_kwargs['rng'] = np.random.default_rng(overall_kwargs['seed'])
+    def __init__(self, *args, seed=42, run_stochastic=False, probs = list(), s_kwargs={}):
+        args = get_true_fields(self, *args, seed=seed, run_stochastic=run_stochastic, probs=probs)
+        super().__init__(*args)
+        self.rng = np.random.default_rng(self.seed)
         if 's' in self.__fields__:
-            s_kwargs = {k:v for k,v in kwargs.items() if k in self.__annotations__['s'].__fields__}
-            overall_kwargs['s'] = self.__annotations__['s'](**s_kwargs)
-        super().__init__(*args, **overall_kwargs)
+            self.s.set_atts(**s_kwargs)
     def get_rand_states(self, auto_update_only=False):
         rand_states = asdict(self.s)
         if auto_update_only:

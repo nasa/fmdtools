@@ -16,7 +16,7 @@ import networkx as nx
 import copy
 from recordclass import dataobject, asdict
 
-from .common import State, Parameter, Rand
+from .common import State, Parameter, Rand, get_true_fields
 from .flow import init_flow, Flow
 
 class Fault(dataobject, readonly=True, mapping=True):
@@ -65,10 +65,10 @@ class Mode(dataobject, readonly=False):
     longnames : dict
         Longer names for the faults (if desired). {faultname: longname}
     """
-    mode:           str = 'nominal'
-    faults:         set = set()
-    faultmodes:     dict = {}
-    mode_state_dict: dict={}
+    mode:               str = 'nominal'
+    faults:             set = set()
+    faultmodes:         dict = {}
+    mode_state_dict:    dict={}
     faultparams = {}
     opermodes = ('nominal',)
     failrate = 1.0
@@ -78,14 +78,11 @@ class Mode(dataobject, readonly=False):
     exclusive = False
     key_phases_by = 'global'
     longnames = {}
-    def __init__(self, *args, **kwargs):
-        kwargs['faultmodes'] = kwargs.get('faultmodes', dict())
-        default_mode = self.__defaults__[self.__fields__.index('mode')]
-        if not default_mode: default_mode='nominal'
-        kwargs = {'mode':default_mode,
-                  'faults':set(), 
-                  'mode_state_dict':dict(), **kwargs}
-        super().__init__(*args, **kwargs)
+    def __init__(self, *args, mode='nominal', faults=set(), faultmodes=dict(), mode_state_dict=dict(), s_kwargs={}):
+        args = get_true_fields(self, *args, mode=mode, faults=set(faults), faultmodes=dict(faultmodes), mode_state_dict=dict(mode_state_dict))
+        super().__init__(*args)
+        if 's' in self.__fields__:
+            self.s.set_atts(**s_kwargs)
         self.init_faultmodes()
     def init_faultmodes(self):
         if self.key_phases_by=='self':  oppvect='all'
@@ -115,7 +112,7 @@ class Mode(dataobject, readonly=False):
             if type(kwargs['oppvect'])==set:            
                 kwargs['oppvect'] = {o:1.0 for o in kwargs['oppvect']}
             self.faultmodes[mode] = Fault(**kwargs)
-    def assoc_faultstates(self, franges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='global'):
+    def assoc_faultstates(self, franges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='global', seed=42):
         """
         Associates modes with given faultstates.
 
@@ -149,7 +146,8 @@ class Mode(dataobject, readonly=False):
             nomvals = tuple([*nom_fstates.values()])
             statecombos = [i for i in itertools.product(*franges.values()) if i!=nomvals]
             if type(mode_app)==int and len(statecombos)>0: 
-                sample = self.rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
+                rng = np.random.default_rng(seed)
+                sample = rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
                 statecombos = [statecombos[i] for i in sample]
             self.faultmodes.update({'hmode_'+str(i):'synth' for i in range(len(statecombos))}) 
             self.mode_state_dict.update({'hmode_'+str(i): {list(franges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
@@ -943,7 +941,7 @@ class FxnBlock(Block):
             self.m.faults.difference_update(self.c.faultmodes)
             self.m.faults.update(self.c.get_comp_faults())
         self.time=time
-        if run_stochastic=='track_pdf' and self.rngs: self.probdens = self.return_probdens()
+        if run_stochastic=='track_pdf': self.probdens = self.r.return_probdens()
         if (self.m.exclusive==True and len(self.m.faults)>1): 
             raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.m.faults)+"\n Is the mode representation nonexclusive?")
         return

@@ -470,7 +470,8 @@ class Model(object):
             for mode in ms:
                 if mode!='nom': 
                     modeprops[fxnname][mode] = fxn.m.faultmodes.get(mode)
-                    if mode not in fxn.m.faultmodes: warnings.warn("Mode "+mode+" not in faultmodes for fxn "+fxnname+" and may not be tracked.")
+                    if mode not in fxn.m.faultmodes: 
+                        warnings.warn("Mode "+mode+" not in faultmodes for fxn "+fxnname+" and may not be tracked.")
         return modes, modeprops
     def get_memory(self):
         """
