@@ -197,50 +197,49 @@ def translate_angle(angle):
     elif angle > 180:   angle = angle % -180
     return angle
 
+
 class DriveMode(Mode):
-    s:  FaultStates=FaultStates()
+    """ """
+    s:          FaultStates=FaultStates()
+    mode_args : tuple = tuple()
     faultparams = dict()
     key_phases_by='global'
-    def __init__(self, *args, **kwargs):
-        super_kwargs = {k:v for k,v in kwargs.items() if k in self.__fields__}
-        super().__init__(*args, **super_kwargs)
-        #TODO: Make synthetic modes a callable so we don't have to do this?
-        # ideally, this shouldn't have to be generated multiple times.
-        if kwargs['drive_modes']=='degradation':
-            base_f, base_d = self.p.friction, self.p.drift
-            self.assoc_faultstates({'friction':[base_f, {(base_f+0.5), 2*(base_f+0.5), 5*(base_f+0.5)}], 
-                                    'transfer':[1.0,{0.0}], 
-                                    'drift':[base_d, {base_d+0.2, base_d-0.2}]}, 'all')
-        elif type(kwargs['drive_modes'])==int:
-            self.assoc_faultstates({'friction':[0.0, np.linspace(0.0,20, 100)], 
-                                    'transfer':np.linspace(1.0,0.0, 100), 
-                                    'drift':[0.0, np.linspace(-0.5,0.5, 100)]}, kwargs['drive_modes'])
-        elif type(kwargs['drive_modes'])==list:
+    def __init__(self, *args, mode_args=tuple(), **kwargs):
+        super().__init__(*args, **kwargs)
+        self.mode_args=mode_args
+        if self.mode_args=='degradation':
+            self.assoc_faultstates({'friction':{(self.s.friction+0.5), 2*(self.s.friction+0.5), 5*(self.s.friction+0.5)}, 
+                                    'transfer':{0.0}, 
+                                    'drift':{self.s.drift+0.2, self.s.drift-0.2}}, 'all')
+        elif type(self.mode_args)==int:
+            self.assoc_faultstates({'friction':{*np.linspace(0.0,20, 100)}, 
+                                    'transfer':{*np.linspace(1.0,0.0, 100)}, 
+                                    'drift': {*np.linspace(-0.5,0.5, 100)}}, self.mode_args)
+        elif type(self.mode_args)==list:
             self.assoc_faultstates(manual_modes={'s_'+str(i):{'friction':mode[0], 
                                                               'transfer':mode[1], 
-                                                              'drift':mode[2]} for i,mode in enumerate(kwargs['drive_modes'])})
-        elif  type(kwargs['drive_modes'])==dict:
-            self.assoc_faultstates(manual_modes=kwargs['drive_modes'])
+                                                              'drift':mode[2]} for i,mode in enumerate(self.mode_args)})
+        elif  type(self.mode_args)==dict:
+            self.assoc_faultstates(manual_modes=self.mode_args)
         else:
-            if 'manual' in kwargs['drive_modes']:
+            if 'manual' in self.mode_args:
                 self.assoc_faultstates(manual_modes={'elec_open':{'transfer':0.0}, 
                                                      'stuck':{'friction':10.0}, 
                                                      'stuck_right':{'friction':3.0, 'drift':0.2},
                                                      'stuck_left':{'friction':3.0, 'drift':-0.2}})
-            if  'set' in kwargs['drive_modes']:
+            if  'set' in self.mode_args:
                 self.assoc_faultstates({'friction':{1.5,3.0,10.0}, 
                                         'transfer':{0.5,0.0}, 
                                         'drift':{-0.2,0.2}}, 'all')
-            if 'range' in kwargs['drive_modes']:
+            if 'range' in self.mode_args:
                 if 'all' in kwargs['drive_modes']:
-                    self.assoc_faultstates({'friction':[0.0,np.linspace(0.0,20, 10)], 
+                    self.assoc_faultstates({'friction':np.linspace(0.0,20, 10), 
                                             'transfer':np.linspace(1.0,0.0, 10), 
-                                            'drift':[0.0, np.linspace(-0.5,0.5, 10)]}, 'all')
+                                            'drift':   np.linspace(-0.5,0.5, 10)}, 'all')
                 else:
-                    self.assoc_faultstates({'friction':[0.0,np.linspace(0.0,20, 100)], 
+                    self.assoc_faultstates({'friction':np.linspace(0.0,20, 100), 
                                             'transfer':np.linspace(1.0,0.0, 100), 
-                                            'drift':[0.0, np.linspace(-0.5,0.5, 100)]}, 1000)
-        
+                                            'drift':   np.linspace(-0.5,0.5, 100)}, 1000)
 
 class Drive(FxnBlock):
     _init_p = DegParam
@@ -451,7 +450,7 @@ class Rover(Model):
         self.add_fxn("Perception", ["Ground", "EE_12", "Video"], Perception)
         self.add_fxn("Avionics",["Video","Comms", "EE_5",'Pos_Signal',"Ground", "AvionicsControl", "Faultstates"], fclass=Avionics, p=asdict(params))
         self.add_fxn("Override", ["OverrideComms", "EE_5", 'MotorControl','AvionicsControl'], Override)
-        self.add_fxn("Drive", ["Ground","EE_15","EE_5", "MotorControl", "Faultstates"], fclass = Drive, m=valparams, p=asdict(params.degradation))
+        self.add_fxn("Drive", ["Ground","EE_15","EE_5", "MotorControl", "Faultstates"], fclass = Drive, m={'mode_args': valparams['drive_modes']}, p=asdict(params.degradation))
         self.add_fxn("Environment", ['Ground'], Environment, p=asdict(params))
 
         pos_bip = {'Power': [-0.684772948203272, -0.2551613615446115],
@@ -701,7 +700,8 @@ if __name__=="__main__":
 
     mdl = Rover(params, valparams={'drive_modes':'manual'})
     endresults,  mdlhist = prop.one_fault(mdl, 'Drive','elec_open', time=1, staged=False)
-
+    
+    mdl = Rover(params, valparams={'drive_modes':100})
     endresults,  mdlhist = prop.one_fault(mdl, 'Drive','hmode_34', time=1, staged=False)
     
     
