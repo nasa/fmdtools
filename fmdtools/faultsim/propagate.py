@@ -1064,10 +1064,10 @@ def update_fxnhist(mdl, mdlhist, t_ind):
         for compname, comp in getattr(fxn, 'c', {'components':{}})['components'].items():
             if compname in mdlhist['functions'][fxnname]:
                 update_blockhist(compname, comp, mdlhist['functions'][fxnname][compname], t_ind)
-        for comp_act in fxn.actions:
-            if comp_act in mdlhist['functions'][fxnname]:
-                update_blockhist(comp_act, getattr(fxn, comp_act), mdlhist['functions'][fxnname][comp_act], t_ind)
-        for flowname, flow in fxn.internal_flows.items():
+        for actname, act in getattr(fxn, 'a', {'actions':{}})['actions'].items():
+            if actname in mdlhist['functions'][fxnname]:
+                update_blockhist(actname, act, mdlhist['functions'][fxnname][actname], t_ind)
+        for flowname, flow in getattr(fxn, 'a', {'flows':{}})['flows'].items():
             if flowname in mdlhist['functions'][fxnname]:
                 update_dicthist(flow.status(), mdlhist['functions'][fxnname][flowname], t_ind)
 def update_blockhist(blockname, block, blockhist, t_ind):
@@ -1245,12 +1245,11 @@ def init_fxnhist(mdl, timerange, track='all', run_stochastic=False):
                 comp_track = proc.get_sub_include(compname, fxn_track)
                 if comp_track: 
                     fxnhist[fxnname][compname]=init_blockhist(compname, comp, timerange, track=comp_track)
-                    
-            for comp_act in fxn.actions:
-                comp_track = proc.get_sub_include(comp_act, fxn_track)
+            for compname, comp in getattr(fxn, 'a', {'actions':{}})['actions'].items():
+                comp_track = proc.get_sub_include(compname, fxn_track)
                 if comp_track: 
-                    fxnhist[fxnname][comp_act]=init_blockhist(comp_act, getattr(fxn, comp_act), timerange, track=comp_track)
-            for flowname, flow in fxn.internal_flows.items():
+                    fxnhist[fxnname][compname]=init_blockhist(compname, comp, timerange, track=comp_track)
+            for flowname, flow in getattr(fxn, 'a', {'flows':{}})['flows'].items():
                 flow_track = proc.get_sub_include(flow, fxn_track)
                 if flow_track: fxnhist[fxnname][flowname] = init_dicthist(flow.status(), timerange, flow_track)
     return fxnhist
