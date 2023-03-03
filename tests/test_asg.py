@@ -4,6 +4,8 @@ Created on Wed Mar  1 20:47:04 2023
 
 @author: dhulse
 """
+import unittest
+
 from fmdtools.modeldef.common import State
 from fmdtools.modeldef.block import FxnBlock, Action, Mode, ASG
 from fmdtools.modeldef.model import Model
@@ -17,9 +19,6 @@ class OutcomeStates(State):
 class Outcome(Flow):
     _init_s = OutcomeStates
     
-class ActionMode(Mode):
-    faultparams=('failed',)
-
 class HazardState(State):
     present:    bool=False
     percieved:  bool=False
@@ -27,6 +26,9 @@ class HazardState(State):
 class Hazard(Flow):
     _init_s = HazardState
 
+
+class ActionMode(Mode):
+    faultparams=('failed',)
 class Perceive(Action):
     _init_m = ActionMode
     def __init__(self, name, *flows):
