@@ -829,6 +829,13 @@ class ASG(dataobject, mapping=True):
         proptype : str
             Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
         """
+        if not self.per_timestep: 
+            self.set_active_actions(self.initial_action)
+            for action in self.active_actions: self.actions[action].t_loc=0.0
+        for fault in faults:
+            if fault in self.faultmodes:
+                action = self.actions[self.faultmodes[fault]]
+                action.m.add_fault(fault[len(action.name):])
         if proptype==self.proptype:
             active_actions = self.active_actions
             num_prop = 0
@@ -854,6 +861,7 @@ class ASG(dataobject, mapping=True):
             self.active_actions = active_actions
     def get_faults(self):
         return {act.name+f for act in self.actions.values() for f in act.m.faults}
+
 
 #Function superclass 
 class FxnBlock(Block):
@@ -1034,17 +1042,8 @@ class FxnBlock(Block):
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
         if time>self.time: self.r.update_stochastic_states()
         comps = getattr(self, 'c', {'components':{}})['components']
-        actions = getattr(self, 'a', {'actionss':{}})['actions']
-        comp_actions = {**comps, **actions} 
-        if getattr(self, 'per_timestep', False): 
-            self.set_active_actions(self.initial_action)
-            for action in self.active_actions: self.actions[action].t_loc=0.0
-        if comp_actions:     # propogate faults from function level to component level
-            for fault in self.m.faults:
-                if fault in self.actfaultmodes:
-                    action = self.actions[self.actfaultmodes[fault]]
-                    action.m.add_fault(fault[len(action.name):])
-        if hasattr(self, 'a'): self.a.prop_internal(faults, time, run_stochastic, proptype, self.dt)
+        actions = getattr(self, 'a', {'actions':{}})['actions'] 
+        if hasattr(self, 'a'): self.a.prop_internal(self.m.faults, time, run_stochastic, proptype, self.dt)
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
         elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: 
