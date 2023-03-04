@@ -216,7 +216,7 @@ class Model(object):
         if not getattr(self, 'is_copy', False):
             flows=self.get_flows(flownames)
             fkwargs = {**{'r':{"seed":self.modelparams.seed}}, **fkwargs}
-            self.fxns[name] = fclass(name, flows, params=fparams, **fkwargs)
+            self.fxns[name] = fclass(name, flows=flows, params=fparams, **fkwargs)
             self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams, 'kwargs': fkwargs}
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
@@ -228,7 +228,7 @@ class Model(object):
         else:                                       raise Exception("Invalid list: "+str(functionorder)+" should have elements: "+str(self.functionorder))
     def get_flows(self,flownames):
         """ Returns a list of the model flow objects """
-        return [self.flows[flowname] for flowname in flownames]
+        return {flowname:self.flows[flowname] for flowname in flownames}
     def fxns_of_class(self, ftype):
         """Returns dict of functionname:functionobjects corresponding to the given class name ftype"""
         return {fxn:obj for fxn, obj in self.fxns.items() if obj.__class__.__name__==ftype}
@@ -264,8 +264,12 @@ class Model(object):
         """
         if not getattr(self, 'is_copy', False):
             if functionorder: self.set_functionorder(functionorder)
-            self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False) or getattr(fxn, 'asg_proptype','na')=='static'])
-            self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() if getattr(fxn, 'dynamic_behavior', False) or getattr(fxn, 'asg_proptype','na')=='dynamic'])
+            self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
+                                          if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False) 
+                                          or (hasattr(fxn, 'a') and getattr(fxn.a, 'proptype','')=='static')])
+            self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
+                                           if getattr(fxn, 'dynamic_behavior', False) 
+                                           or (hasattr(fxn, 'a') and getattr(fxn.a, 'proptype','')=='dynamic')])
             self.construct_graph(graph_pos, bipartite_pos, require_connections=require_connections)
             self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.bipartite.neighbors(flow)])]
     def construct_graph(self, graph_pos={}, bipartite_pos={}, require_connections=True):

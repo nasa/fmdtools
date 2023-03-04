@@ -17,7 +17,7 @@ from .common import Parameter, State
 
 
 class Flow(object):
-    __slots__ = ['p', '_args_p', 's', '_args_s', '__dict__']
+    __slots__ = ['p', '_args_p', 's', '_args_s']
     _init_p = Parameter
     _init_s = State
     """
@@ -90,6 +90,7 @@ class MultiFlow(Flow):
     A MultiFlow can have any number of local views (listed by name in MultiFlow.locals)
     as well as a single global view (which may represent the actual value)
     """
+    slots= ['__dict__']
     def __init__(self, flowdict, name, ftype="MultiFlow", glob=[], params={}):
         self.locals=[]
         super().__init__(flowdict, name, ftype=ftype, suppress_warnings=True, params=params)
@@ -297,6 +298,7 @@ class CommsFlow(MultiFlow):
         - inbox, for seeing what messages may be received
         - clear_inbox, for clearing the inbox to enable more messages to be received
     """
+    slots= ['__dict__']
     def __init__(self, flowdict, name, ftype="CommsFlow", glob=[], params={}):
         self.fxns = {}
         super().__init__(flowdict, name, ftype=ftype, glob=glob, params=params)
