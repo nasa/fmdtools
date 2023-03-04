@@ -14,6 +14,7 @@ import sys
 import itertools
 import networkx as nx
 import copy
+import inspect
 from recordclass import dataobject, asdict
 
 from .common import State, Parameter, Rand, get_true_fields, Timer
@@ -84,6 +85,22 @@ class Mode(dataobject, readonly=False):
         if 's' in self.__fields__:
             self.s.set_atts(**s_kwargs)
         self.init_faultmodes()
+    def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
+        """
+        Calculates self.failrate based on a human error probability model.
+
+        Parameters
+        ----------
+        gtp : float
+            Generic Task Probability. (from HEART)
+        EPCs : Dict or list
+            Error producing conditions (and respective factors) for a given task (from HEART). Used in format:
+            Dict {'name':[EPC factor, Effect proportion]} or list [[EPC factor, Effect proportion],[[EPC factor, Effect proportion]]]
+        """
+        if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
+        elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
+        else: raise Exception("Invalid type for EPCs: "+str(type(EPCs)))
+        self.failrate = gtp*EPC_f
     def init_faultmodes(self):
         if self.key_phases_by=='self':  oppvect='all'
         else:                           oppvect=[1.0]
@@ -228,6 +245,7 @@ class Mode(dataobject, readonly=False):
             if len(faults)>1:   raise Exception("Multiple fault modes added to function with exclusive fault representation")
             elif len(faults)==0 and self.mode in self.faultmodes: 
                 raise Exception("No faults but mode is still in faultmode "+self.mode)
+            else: self.mode=faults[0]
     def replace_fault(self, fault_to_replace,fault_to_add): 
         """Replaces fault_to_replace with fault_to_add in the set of faults
         
@@ -279,12 +297,60 @@ class Mode(dataobject, readonly=False):
         self.faults.clear()
         self.faults.update(mode_to_mirror.faults)
 
+def assoc_flows(obj, flows={}):
+    """
+    Associates flows with with the given object (Block, ASG, etc.) 
+    
+    Flows must be defined with the _init_ class variable pointing to the class
+    to initialize (e.g., _init_flowname = FlowClass).
+    
+    Parameters
+    ----------
+    obj: object (Block, ASG)
+        block requiring the flows
+    
+    flows : dict, optional
+        If flows is provided AND it contains a flowname corresponding to the
+        function's flowname, it will be used instead (so that it can act as a 
+        connection to the rest of the model)
+    """
+    for init_att in dir(obj):
+        if init_att.startswith("_init_"):
+            att = getattr(obj, init_att)
+            attname = init_att[6:]
+            if inspect.isclass(att) and issubclass(att, Flow) and not(attname in obj.flows):
+                if attname in flows:    obj.flows[attname]=flows[attname]
+                else:                   obj.flows[attname]=att(attname)
+                if not isinstance(obj, dataobject):
+                    setattr(obj, attname, obj.flows[attname])
+def inject_faults_internal(obj, faults):
+    """
+    Injects faults in the CompArch/ASG object obj.
+
+    Parameters
+    ----------
+    obj : TYPE
+        DESCRIPTION.
+    faults : TYPE
+        DESCRIPTION.
+    """
+    if isinstance(obj, ASG):        compdict = obj.actions
+    elif isinstance(obj, CompArch): compdict=obj.components
+    else: raise Exception("Invalid object type: "+type(obj)+" should be ASG or CompArch") 
+
+    for fault in faults:
+        if fault in obj.faultmodes:
+            comp = compdict[obj.faultmodes[fault]]
+            comp.m.add_fault(fault[len(comp.name)+1:])
+
+
 class Block():
-    __slots__ = ['p', '_args_p', 's', '_args_s','m', 'args_m', 'r', 'args_r', '__dict__']
+    __slots__ = ['p', '_args_p', 's', '_args_s','m', '_args_m', 'r', '_args_r', '__dict__']
     _init_p = Parameter
     _init_s = State
     _init_m = Mode
     _init_r = Rand
+    flows = dict()
     """ 
     Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
     
@@ -299,7 +365,7 @@ class Block():
     time : float
         internal time of the function
     """
-    def __init__(self, name, s={}, p={}, m={}, r={}):
+    def __init__(self, name, flows={}, s={}, p={}, m={}, r={}):
         """
         Instance superclass. Called by FxnBlock and Component classes.
 
@@ -310,6 +376,9 @@ class Block():
         p : dict, optional
             Overriding parameter values for the parameters p in the block. The default is {}.
         """
+        self.flows = dict()
+        assoc_flows(self, flows=flows)
+        
         self._args_s = s
         self._args_p = p
         self._args_m = m
@@ -318,7 +387,6 @@ class Block():
         self.s=self._init_s(**s)
         self.m=self._init_m(**m)
         self.r=self._init_r(**r)
-        
         self.update_seed()
         
         # TODO : create class for modes (ideally with checking)
@@ -384,22 +452,6 @@ class Block():
         self.timers.update(timers)
         for timername in timers:
             setattr(self, timername, Timer(timername))
-    def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
-        """
-        Calculates self.failrate based on a human error probability model.
-
-        Parameters
-        ----------
-        gtp : float
-            Generic Task Probability. (from HEART)
-        EPCs : Dict or list
-            Error producing conditions (and respective factors) for a given task (from HEART). Used in format:
-            Dict {'name':[EPC factor, Effect proportion]} or list [[EPC factor, Effect proportion],[[EPC factor, Effect proportion]]]
-        """
-        if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
-        elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
-        else: raise Exception("Invalid type for EPCs: "+str(type(EPCs)))
-        self.failrate = gtp*EPC_f
     def choose_rand_fault(self, faults, default='first', combinations=1):
         """
         Randomly chooses a fault or combination of faults to insert in fxn.m. 
@@ -479,9 +531,10 @@ class Block():
             Faults present in the block
         """
         states={}
-        for state, val in asdict(self.s).items():
-            if type(val) in [set, dict]: val=copy.deepcopy(val)
-            states[state]= val
+        if hasattr(self, 's'):
+            for state, val in asdict(self.s).items():
+                if type(val) in [set, dict]: val=copy.deepcopy(val)
+                states[state]= val
         states['mode']=self.m.mode
         return states, self.m.faults.copy()
     def has_new_states(self, prev_states, prev_faults):
@@ -497,36 +550,6 @@ class Block():
             for actionname, action in self.a.actions:
                 state_pd*=action.return_probdens()
         return state_pd
-    def make_flowdict(self,flownames,flows):
-        """
-        Puts a list of flows with a list of flow names in a dictionary.
-
-        Parameters
-        ----------
-        flownames : list or dict or empty
-            names of flows corresponding to flows
-            using {externalname: internalname}
-        flows : list
-            flows
-
-        Returns
-        -------
-        flowdict : dict
-            dict of flows indexed by flownames
-        """
-        flowdict = {}
-        if not(flownames) or type(flownames)==dict:
-            flowdict = {f.name:f for f in flows}
-            if flownames:
-                for externalname, internalname in flownames.items():
-                    flowdict[internalname] = flowdict.pop(externalname)
-        elif type(flownames)==list:
-            if len(flownames)==len(flows):
-                for ind, flowname in enumerate(flownames):
-                    flowdict[flowname]=flows[ind]
-            else:   raise Exception("flownames "+str(flownames)+"\n don't match flows "+str(flows)+"\n in: "+self.name)
-        else:       raise Exception("Invalid flownames option in "+self.name)
-        return flowdict
 
 ## COMPONENT/COMPONENT ARCHITECTURES
 class Component(Block):
@@ -574,7 +597,7 @@ class CompArch(dataobject, mapping=True):
         faultmodes = {}
         for arg in args:
             components[arg]=CompClass(arg, **kwargs.get(arg, {}))
-            faultmodes.update({components[arg].name+modename:arg 
+            faultmodes.update({components[arg].name+'_'+modename:arg 
                                for modename in components[arg].m.faultmodes})
         return components, faultmodes
     def copy_with_arg(self, **kwargs):
@@ -608,7 +631,7 @@ class Action(Block):
     """
     Superclass for actions (most attributes and methods inherited from Block superclass)
     """
-    def __init__(self,name, flows, flownames=[], s={}, p={}):
+    def __init__(self,name, flows={}, s={}, p={}):
         """
         Inherit the Block class
 
@@ -623,11 +646,8 @@ class Action(Block):
         """
         self.type = 'action'
         self.name = name
-        self.flows=self.make_flowdict(flownames,flows)
-        for flow in self.flows.keys():
-            setattr(self, flow, self.flows[flow])
         self.t_loc=0.0 # local time find a place for this?
-        super().__init__(name, p=p, s=s)
+        super().__init__(name, flows=flows, p=p, s=s)
     def updateact(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
         Updates the behaviors, faults, times, etc of the action 
@@ -671,8 +691,6 @@ class ASG(dataobject, mapping=True):
             - 'manual' means that the propagation is performed manually (defined in a behavior method)
     per_timestep : bool
         Defines whether the action sequence graph is reset to the initial state each time-step (True) or stays in the current action (False). Default is False
-    asg_pos : dict, optional
-        Positions of the nodes of the action/flow graph {node: [x,y]}. Default is {}
     """
     actions:            dict = {}
     action_graph:       nx.DiGraph = nx.DiGraph()
@@ -681,18 +699,21 @@ class ASG(dataobject, mapping=True):
     faultmodes:         dict = {}
     flows:              dict = {}
     active_actions:     set = {}
+    pos:                dict = {}
     initial_action="auto" 
     state_rep="finite-state" 
     max_action_prop="until_false" 
     proptype='dynamic' 
     per_timestep=False
-    def __init__(self):
-        self.actions={}
+    def __init__(self, *args, flows={}, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.actions={} #TODO: remove restatement of defaults when fixed in recordclass
         self.action_graph= nx.DiGraph()
         self.flow_graph=nx.Graph()
         self.conditions={}
         self.faultmodes= {}
         self.flows = {}
+        assoc_flows(self, flows=flows)
         self.active_actions = set()
     def build(self): #TODO: implement as post-__init__??
         if self.initial_action=='auto': 
@@ -703,9 +724,11 @@ class ASG(dataobject, mapping=True):
         self.set_active_actions(initial_action)
         if self.state_rep=='finite-state' and len(self.active_actions)>1: 
             raise Exception("Cannot have more than one initial action with finite-state representation")
+        if not self.pos: self.pos = nx.planar_layout(nx.compose(self.flow_graph, self.action_graph))
     def add_flow(self,flowname, fclass=Flow, p={}, s={}, flowtype=''):
         """
-        Adds a flow with given attributes to the model.
+        Adds a flow with given attributes to ASG. Used to enable a flexible
+        internal flow architecture in the ASG.
 
         Parameters
         ----------
@@ -739,21 +762,21 @@ class ASG(dataobject, mapping=True):
         **params : any
             parameters to instantiate the Action with. 
         """
-        flows = [self.flows[fl] for fl in flownames]
-        action = actclass(name, *flows, **params)
+        flows = {fl:self.flows[fl] for fl in flownames}
+        action = actclass(name, flows=flows, **params)
         self.actions[name] = action
         self.actions[name].duration=duration
         self.action_graph.add_node(name)
         self.flow_graph.add_node(name, bipartite=0)
         for flow in flows:
-            self.flow_graph.add_node(flow.name, bipartite=1)
-            self.flow_graph.add_edge(name,flow.name)
+            self.flow_graph.add_node(flow, bipartite=1)
+            self.flow_graph.add_edge(name,flow)
             
-        modes_to_add = {action.name+f:val for f,val in action.m.faultmodes.items()}
+        modes_to_add = {action.name+'_'+f:val for f,val in action.m.faultmodes.items()}
         fmode_intersect = set(modes_to_add).intersection(self.faultmodes)
         if any(fmode_intersect):
             raise Exception("Action "+name+" overwrites existing fault modes: "+str(fmode_intersect)+". Rename the faults")
-        self.faultmodes.update({action.name+modename:name for modename in action.m.faultmodes})
+        self.faultmodes.update({action.name+'_'+modename:name for modename in action.m.faultmodes})
     def cond_pass(self):
         return True
     def add_cond(self, start_action, end_action, name='auto',condition='pass'):
@@ -801,11 +824,11 @@ class ASG(dataobject, mapping=True):
             Dictionary of node positions for actions/flows
         """
         import matplotlib.pyplot as plt; plt.rcParams['pdf.fonttype'] = 42 
+        fig = plt.figure()
         if gtype=='combined':       graph = nx.compose(self.flow_graph, self.action_graph)
         elif gtype=='flows':        graph = self.flow_graph
         elif gtype=='actions':      graph = self.action_graph
-        if not pos: 
-            pos=getattr(self, 'pos', nx.planar_layout(graph))
+        if not pos: pos = self.pos
         nx.draw(graph, pos=pos, with_labels=True, node_color='grey')
         nx.draw_networkx_nodes(self.action_graph, pos=pos, node_shape='s', node_color='skyblue')
         nx.draw_networkx_nodes(self.action_graph, nodelist=self.active_actions, pos=pos, node_shape='s', node_color='green')
@@ -813,15 +836,13 @@ class ASG(dataobject, mapping=True):
         if with_cond_labels: nx.draw_networkx_edge_labels(graph, pos, edge_labels)
         if gtype=='combined' or gtype=='conditions':
             nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=30, arrowstyle='->', node_shape='s', node_size=100)
-        return plt.gcf()
-    def prop_internal(self, faults, time, run_stochastic, proptype, dt):
+        return fig
+    def prop_internal(self, time, run_stochastic, proptype, dt):
         """
         Propagates behaviors through the internal Action Sequence Graph
 
         Parameters
         ----------
-        faults : list, optional
-            Faults to inject in the function. The default is [].
         time : float, optional
             Model time. The default is 0.
         run_stochastic : bool/str
@@ -832,10 +853,6 @@ class ASG(dataobject, mapping=True):
         if not self.per_timestep: 
             self.set_active_actions(self.initial_action)
             for action in self.active_actions: self.actions[action].t_loc=0.0
-        for fault in faults:
-            if fault in self.faultmodes:
-                action = self.actions[self.faultmodes[fault]]
-                action.m.add_fault(fault[len(action.name):])
         if proptype==self.proptype:
             active_actions = self.active_actions
             num_prop = 0
@@ -881,15 +898,15 @@ class FxnBlock(Block):
     dt : float
         local timestep of the model in the function (overrides global timestep by default ('use_local':True in modelparameters))
     """
-    def __init__(self,name, flows, flownames=[], p={}, s={}, c={}, a={}, r={}, m={}, timers=[],
-                 local={}, comms={}, dt=None, seed=None):
+    def __init__(self,name, flows={}, params={}, p=dict(), s=dict(), c=dict(), a=dict(), r=dict(), m=dict(), timers=[],
+                 local=dict(), comms=dict(), dt=1.0, seed=None):
         """
         Instantiates the function superclass with the relevant parameters.
 
         Parameters
         ----------
         flows :list
-            Flow objects to (in order correspoinding to flownames) associate with the function
+            Flow objects to associate with the function (from outside the FnxBlock)
         flownames : list/dict, optional
             Names of flows  to use in the function, if private flow names are needed (e.g. functions with in/out relationships).
             Either provided as a list (in the same order as the flows) of all flow names corresponding to those flows
@@ -901,8 +918,6 @@ class FxnBlock(Block):
         c : dict, optional
             Internal CompArch fields/arguments override from defaults. The default is {}.
             FxnBlock must have an _init_c property.
-        components : dict, optional
-            Component objects to associate with the function. The default is {}.
         timers : set, optional
             Set of names of timers to use in the function. The default is {}.
         local : dict/list
@@ -921,25 +936,23 @@ class FxnBlock(Block):
             Random seed to use in model
         """
         self.type = 'function'
-        self.internal_flows=dict()
-        self.flows=self.make_flowdict(flownames,flows)
-        self.add_local_to_flowdict(self.flows, local, "local")
-        self.add_local_to_flowdict(self.flows, comms, "comms")
-        for flow in self.flows.keys():
-            setattr(self, flow, self.flows[flow])
         self.assoc_timers(*timers)
         if dt: self.dt=dt
         
-        super().__init__(name, p=p, s=s, r=r, m=m)
+        super().__init__(name, flows=flows, p=p, s=s, r=r, m=m)
         for at in ['c', 'a']:
             at_arg = eval(at)
-            if hasattr(self, '_init_'+at):
-                setattr(self, at,  getattr(self, '_init_'+at)(**at_arg))
+            at_init = getattr(self, '_init_'+at, False)
+            if at_init:
+                at_flows = dict()
+                for flowname, flow in self.flows.items():
+                    if hasattr(at_init, '_init_'+flowname): at_flows[flowname]=flow
+                setattr(self, at,  getattr(self, '_init_'+at)(flows=at_flows, **at_arg))
                 setattr(self, '_args_'+at,  at_arg)
                 if at=='c':     compacts = self.c.components
                 elif at=='a':   compacts = self.a.actions
                 for ca in compacts.values():
-                    self.m.faultmodes.update({ca.name+f:vals for f, vals in ca.m.faultmodes.items()})
+                    self.m.faultmodes.update({ca.name+"_"+f:vals for f, vals in ca.m.faultmodes.items()})
             elif at_arg: 
                 raise Exception(at+" argument provided: "+str(at_arg)+"without associating a CompArch/ASG to _init_"+at)
     def add_local_to_flowdict(self,flowdict, local, ftype):
@@ -1038,14 +1051,17 @@ class FxnBlock(Block):
         """
         self.r.run_stochastic=run_stochastic
         self.m.add_fault(*faults)  #if there is a fault, it is instantiated in the function
-        if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
+        if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if time>self.time: self.r.update_stochastic_states()
-        comps = getattr(self, 'c', {'components':{}})['components']
-        actions = getattr(self, 'a', {'actions':{}})['actions'] 
-        if hasattr(self, 'a'): self.a.prop_internal(self.m.faults, time, run_stochastic, proptype, self.dt)
+        if hasattr(self, 'c'):    
+            inject_faults_internal(self.c, faults)
+        if hasattr(self, 'a'): 
+            inject_faults_internal(self.a, faults)
+            self.a.prop_internal(time, run_stochastic, proptype, self.dt)
+        
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
-        if proptype=='static' and hasattr(self,'static_behavior'):                          self.static_behavior(time)
+        if proptype=='static' and hasattr(self,'static_behavior'): self.static_behavior(time)
         elif proptype=='dynamic' and hasattr(self,'dynamic_behavior') and time > self.time: 
             if self.run_times>=1:
                 for i in range(self.run_times):
@@ -1055,9 +1071,12 @@ class FxnBlock(Block):
         elif proptype=='reset':                                                             
             if hasattr(self,'static_behavior'):  self.static_behavior(time)
             if hasattr(self,'dynamic_behavior'): self.dynamic_behavior(time)
+        
+        actions = getattr(self, 'a', {'actions':{}})['actions']
         if actions:     # propagate faults from component level to function level
             self.m.faults.difference_update(self.a.faultmodes)
             self.m.faults.update(self.a.get_faults())
+        comps = getattr(self, 'c', {'components':{}})['components']
         if comps:
             self.m.faults.difference_update(self.c.faultmodes)
             self.m.faults.update(self.c.get_comp_faults())

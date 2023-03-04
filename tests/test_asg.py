@@ -28,81 +28,118 @@ class Hazard(Flow):
 
 
 class ActionMode(Mode):
-    faultparams=('failed',)
+    faultparams=('failed','unable')
+    exclusive=True
 class Perceive(Action):
     _init_m = ActionMode
-    def __init__(self, name, *flows):
-        super().__init__(name, flows)
+    _init_hazard = Hazard
+    _init_outcome = Outcome
     def behavior(self,time):
-        if not self.m.in_mode('failed'): 
-            self.Hazard.s.percieved = self.Hazard.s.present
-            self.Outcome.s.num_perceptions+=self.Hazard.s.percieved
+        if not self.m.in_mode('failed', 'unable'): 
+            self.hazard.s.percieved = self.hazard.s.present
+            self.outcome.s.num_perceptions+=self.hazard.s.percieved
         else:
-            self.Hazard.s.percieved = False
-            self.remove_fault('failed', 'nom')
+            self.hazard.s.percieved = False
+            self.m.remove_fault('failed', 'nom')
     def percieved(self):
-        return self.Hazard.s.percieved
+        return self.hazard.s.percieved
 class Act(Action):
     _init_m = ActionMode
-    def __init__(self, name, *flows):
-        super().__init__(name,flows)
+    _init_hazard = Hazard
+    _init_outcome = Outcome
     def behavior(self,time):
-        if not self.m.in_mode('failed'): 
-            self.Outcome.s.num_actions+=1
-            self.Hazard.s.mitigated=True
+        if not self.m.in_mode('failed', 'unable'): 
+            self.outcome.s.num_actions+=1
+            self.hazard.s.mitigated=True
         elif self.m.in_mode('failed'): 
-            self.Hazard.s.mitigated=False
-            self.remove_fault('failed', 'nom')
-        else: self.Hazard.s.mitigated=False
+            self.hazard.s.mitigated=False
+            self.m.remove_fault('failed', 'nom')
+        else: self.hazard.s.mitigated=False
     def acted(self):
         return not self.m.in_mode('failed')
 class Done(Action):
-    def __init__(self, name, *flows):
-        super().__init__(name,flows)
+    _init_hazard = Hazard
     def behavior(self,time):
-        if not self.Hazard.s.present: self.Hazard.s.mitigated=False
+        if not self.hazard.s.present: self.hazard.s.mitigated=False
     def ready(self):
-        return not self.Hazard.s.present
+        return not self.hazard.s.present
 
 class Human(ASG):
-    initial_action="Perceive"
+    initial_action="perceive"
+    _init_hazard = Hazard    # flows from external fxn/model should be defined as a part of the class definition                
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.add_flow("Outcome", fclass=Outcome)
-        self.add_flow("Hazard", fclass=Hazard)
+        self.add_flow("outcome",    fclass=Outcome) #flows can be added in the ASG for custom flow architectures.  
         
-        self.add_act("Perceive", Perceive, "Outcome", "Hazard")
-        self.add_act("Act", Act, "Outcome", "Hazard")
-        self.add_act("Done", Done, "Outcome", "Hazard")
+        self.add_act("perceive",    Perceive,   "outcome", "hazard")
+        self.add_act("act",         Act,        "outcome", "hazard")
+        self.add_act("done",        Done,       "outcome", "hazard")
         
-        self.add_cond("Perceive","Act", "Percieved",    self.actions['Perceive'].percieved)
-        self.add_cond("Act","Done", "Acted",            self.actions['Act'].acted)
-        self.add_cond("Done", "Perceive", "Ready",      self.actions['Done'].ready)
+        self.add_cond("perceive",   "act",      "percieved",    self.actions['perceive'].percieved)
+        self.add_cond("act",        "done",     "acted",        self.actions['act'].acted)
+        self.add_cond("done",       "perceive", "ready",        self.actions['done'].ready)
         self.build()
         
 h = Human()
 
-p = Perceive("a", Outcome("Outcome"))
+p = Perceive("a", {"outcome":Outcome("outcome")})
 
 class DetectHazard(FxnBlock):
-    _init_a = Human
-    def __init__(self,name, flows, *args, **kwargs):
-        super().__init__(name, flows, *args, **kwargs)
+    _init_a =           Human
+    _init_hazard=       Hazard
 
 
-ex_fxn = DetectHazard('DetectHazard', [])
-ex_fxn.set_timestep(local_tstep=1.0)
+#ex_fxn = DetectHazard('detect_hazard', [])
 
-ex_fxn.a.flows['Hazard']
+#ex_fxn.set_timestep(local_tstep=1.0)
 
-fig = ex_fxn.a.show()
+#ex_fxn.a.flows['hazard']
 
-ex_fxn.a.flows['Hazard'].s.present=True
-ex_fxn.updatefxn('dynamic', time= 1)
-fig = ex_fxn.a.show()
-ex_fxn.a.flows['Hazard'].s.present=False
-ex_fxn.updatefxn('dynamic', time= 2)
-fig = ex_fxn.a.show()
+#fig = ex_fxn.a.show()
+
+#ex_fxn.a.flows['hazard'].s.present=True
+#ex_fxn.updatefxn('dynamic', time= 1)
+#fig = ex_fxn.a.show()
+#ex_fxn.a.flows['hazard'].s.present=False
+#ex_fxn.updatefxn('dynamic', time= 2)
+#fig = ex_fxn.a.show()
 
 
+class ProduceHazard(FxnBlock):
+    _init_hazard = Hazard
+    def dynamic_behavior(self,time):
+        if not time%4: self.hazard.s.present=True
+        else:          self.hazard.s.present=False
+class PassStates(State):
+    hazards_mitigated:  int=0
+    hazards_propagated: int=0
+class PassHazard(FxnBlock):
+    _init_s = PassStates
+    _init_hazard = Hazard
+    def dynamic_behavior(self,time):
+        if self.hazard.s.present and self.hazard.s.mitigated:       self.s.hazards_mitigated+=1
+        elif self.hazard.s.present and not self.hazard.s.mitigated: self.s.hazards_propagated+=1
+
+from fmdtools.modeldef.common import Parameter
+from fmdtools.modeldef.model import ModelParam
+class HazardModel(Model):
+    def __init__(self, params=Parameter(), modelparams=ModelParam(times=(0,60), dt=1.0), valparams={}):
+        super().__init__(params,modelparams,valparams)
+        
+        self.add_flow("hazard", Hazard)
+        
+        self.add_fxn("produce_hazard", ['hazard'],  ProduceHazard)
+        self.add_fxn("detect_hazard",['hazard'], DetectHazard)
+        self.add_fxn("pass_hazard", ['hazard'], PassHazard)
+        self.build_model()
+
+mdl = HazardModel()
+#endstate,  mdlhist = prop.nominal(mdl)
+
+resgraph_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard','perceive_failed', time=4, desired_result='bipartite')
+
+reshist, diff, summary = rd.process.hist(mdlhist_fault)
+
+reshist['functions']['detect_hazard']['perceive']['faults'][4]
+fig = rd.graph.result_from(mdl.fxns['detect_hazard'], reshist, 4, gtype='combined')
 

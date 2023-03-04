@@ -129,7 +129,7 @@ def set_pos(g, gtype='bipartite', **kwargs):
         g, pos = get_graph_pos(mdl,kwargs.get('pos',{}), gtype)
     elif getattr(g,'type', '')=='function':
         fxn=g
-        g,gtype, kwargs['pos'], kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(fxn, kwargs.get('pos',{}),gtype, kwargs.get('arrows', False))
+        g,gtype, kwargs['pos'], kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(fxn.a, kwargs.get('pos',{}),gtype, kwargs.get('arrows', False))
     plt.ion()
     p = GraphInteractor(g, gtype, **kwargs)
     if 'inline' in get_backend():
@@ -236,7 +236,7 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
         g, pos = get_graph_pos(mdl,pos, gtype)
     elif getattr(g,'type', '')=='function':
         fxn=g
-        g,gtype, pos, seqgraph, arrows = get_asg_pos(fxn,pos, gtype, arrows)
+        g,gtype, pos, seqgraph, arrows = get_asg_pos(fxn.a,pos, gtype, arrows)
     elif isinstance(g, nx.classes.graph.Graph): a=1
     else: raise Exception("Invalid object type: "+str(type(g))+" use a model, function, or networkx graph instead")
     pos=get_pos_robust(g, gtype,pos)
@@ -386,7 +386,7 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
         g, pos = get_graph_pos(mdl,kwargs.pop('pos',[]), gtype)
     elif getattr(g,'type', '')=='function':
         fxn=g
-        g,gtype, pos, seqgraph, arrows = get_asg_pos(fxn,kwargs.pop('pos',[]), gtype, arrows)
+        g,gtype, pos, seqgraph, arrows = get_asg_pos(fxn.a,kwargs.pop('pos',[]), gtype, arrows)
         a=1
     elif isinstance(g, nx.classes.graph.Graph):
         a=1
@@ -614,7 +614,7 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
     if getattr(mdl,'type', '')=='model':
         g, pos = get_graph_pos(mdl,kwargs.pop('pos',[]), gtype)
     elif getattr(mdl,'type', '')=='function':
-        g,_, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(mdl,kwargs.pop('pos',[]), gtype, kwargs.get('arrows',False))
+        g,_, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(mdl.a,kwargs.pop('pos',[]), gtype, kwargs.get('arrows',False))
     else: raise Exception("Invalid object type: "+str(type(mdl))+" use a model or function instead")
     if renderer=='matplotlib':
         fig  = plt.figure(figsize=kwargs.pop('figsize', (6,4)))
@@ -677,7 +677,7 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
     """
     if getattr(mdl,'type', '')=='model':    g, pos = get_graph_pos(mdl,kwargs.pop('pos',[]), gtype)
     elif getattr(mdl,'type', '')=='function':
-        g,_, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(mdl,kwargs.pop('pos',[]), gtype, kwargs.get('arrows',False))
+        g,_, pos, kwargs['seqgraph'], kwargs['arrows'] = get_asg_pos(mdl.a,kwargs.pop('pos',[]), gtype, kwargs.get('arrows',False))
     else: raise Exception("Invalid object type: "+str(type(mdl))+" use a model or function instead")
     if times=='all':    t_inds= [i for i in range(0,len(reshist['time']))]
     else:               t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
@@ -738,7 +738,7 @@ def animation_from(mdl, reshist, times='all', faultscen=[], gtype='bipartite',fi
         dict of node positions (if re-using positions). The default is [].
     """
     if getattr(mdl,'type', '')=='model':      g, pos = get_graph_pos(mdl,kwargs.pop('pos',[]), gtype)
-    elif getattr(mdl,'type', '')=='function': g,_, pos, seqgraph, arrows = get_asg_pos(mdl,kwargs.pop('pos',[]), gtype, kwargs.get('arrows',False))
+    elif getattr(mdl,'type', '')=='function': g,_, pos, seqgraph, arrows = get_asg_pos(mdl.a,kwargs.pop('pos',[]), gtype, kwargs.get('arrows',False))
     else: raise Exception("Invalid object type: "+str(type(mdl))+" use a model or function instead")
     if times=='all':    t_inds= [i for i in range(0,len(reshist['time']))]
     else:   t_inds= [ np.where(reshist['time']==time)[0][0] for time in times]
@@ -783,21 +783,21 @@ def get_pos_robust(g, gtype='bipartite', pos={}):
             try: pos=nx.planar_layout(g)
             except: pos=nx.spectral_layout(g)
     return pos
-def get_asg_pos(fxn, pos, gtype, arrows):
+def get_asg_pos(asg, pos, gtype, arrows):
     """Helper function for getting the right graph/positions from a function."""
-    if not pos: pos=fxn.asg_pos
+    if not pos: pos=asg.pos
     if gtype=='actions':
         gtype='normal'
-        g= fxn.action_graph; seqgraph={}; arrows=True
-        if not pos: pos = getattr(fxn, 'action_graph_pos', {})
+        g= asg.action_graph; seqgraph={}; arrows=True
+        if not pos: pos = getattr(asg, 'action_graph_pos', {})
     elif gtype=='flows':
         gtype='bipartite'
-        g= fxn.flow_graph; seqgraph={}
-        if not pos: pos = getattr(fxn, 'flow_graph_pos', {})
+        g= asg.flow_graph; seqgraph={}
+        if not pos: pos = getattr(asg, 'flow_graph_pos', {})
     elif gtype=='combined':
         gtype='bipartite'
-        g= fxn.flow_graph; seqgraph=fxn.action_graph
-        if not pos: pos = getattr(fxn, 'flow_graph_pos', {})
+        g= asg.flow_graph; seqgraph=asg.action_graph
+        if not pos: pos = getattr(asg, 'flow_graph_pos', {})
     else: raise Exception("Graph type "+gtype+" not valid")
     pos = get_pos_robust(g, gtype, pos)
     return g,gtype, pos, seqgraph, arrows
@@ -908,7 +908,7 @@ def get_asg_plotlabels(g, fxn, reshist, t_ind):
     labels={node:node for node in g.nodes}
     fxnname=fxn.name
     rhist = reshist['functions'][fxnname]
-    actions = fxn.actions
+    actions = fxn.a.actions
 
     faultfxns = []
     degfxns = []
@@ -922,10 +922,10 @@ def get_asg_plotlabels(g, fxn, reshist, t_ind):
             faultfxns+=[action]
             if type(rhist[action]['faults']) == dict:
                 faultlabels[action] = {fault for fault, occ in rhist[action]['faults'].items() if occ[t_ind]}
-            else: faultlabels[action] = rhist['faults'][t_ind]
+            else: faultlabels[action] = rhist[action]['faults'][t_ind]
         if not rhist['status'][t_ind]:
             degfxns+=[action]
-    flows = [flow for flow in {**fxn.flows, **fxn.internal_flows} if flow in g]
+    flows = [flow for flow in {**fxn.flows, **fxn.a.flows} if flow in g]
     for flow in flows:
         if flow in rhist and any([v[t_ind]!=1 for v in rhist[flow].values()]):
             degflows+=[flow]
@@ -1022,7 +1022,7 @@ def update_flowgraphplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabe
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
     degnodes = degfxns + degflows
-    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = fxn.actions, flows = [f for f in {**fxn.flows, **fxn.internal_flows} if f in g], seqgraph=seqgraph, seqlabels=seqlabels, **kwargs)
+    plot_bipgraph(g, labels, faultfxns, degnodes, faultlabels, faultscen, time, showfaultlabels, scale, pos, show, colors=colors, functions = fxn.a.actions, flows = [f for f in {**fxn.flows, **fxn.a.flows} if f in g], seqgraph=seqgraph, seqlabels=seqlabels, **kwargs)
 ###GRAPHVIZ HELPER FUNCTIONS
 ############################
 def gv_import_check():
@@ -1115,7 +1115,7 @@ def update_gv_actplot(t_ind,fxn, reshist, g, pos, faultscen=[], showfaultlabels=
     kwargs["pad"] = kwargs.get("pad", "0.5")
     kwargs["ranksep"] = kwargs.get("ranksep", "2")
     time = reshist['time'][t_ind]
-    functions = [*fxn.actions]; flows = [f for f in {**fxn.flows, **fxn.internal_flows}]
+    functions = [*fxn.a.actions]; flows = [f for f in {**fxn.flows, **fxn.a.flows}]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
     colors_dict = gv_colors(g, 'normal', colors, heatmap,cmap, faultfxns, degfxns, faultedges=faultedges, edgeflows=edgeflows, functions=functions, flows=flows)
     faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
@@ -1130,7 +1130,7 @@ def update_gv_flowgraphplot(t_ind,fxn, reshist, g, faultscen=[], showfaultlabels
     kwargs["ranksep"] = kwargs.get("ranksep", "2")
     time = reshist['time'][t_ind]
     labels, faultfxns, degfxns, degflows, faultlabels, faultedges, faultedgeflows, edgeflows = get_asg_plotlabels(g, fxn, reshist, t_ind)
-    functions =  [*fxn.actions]; flows = [f for f in {**fxn.flows, **fxn.internal_flows}]
+    functions =  [*fxn.a.actions]; flows = [f for f in {**fxn.flows, **fxn.a.flows}]
     degnodes = degfxns + degflows
     colors_dict = gv_colors(g, 'bipartite', colors, heatmap,cmap, faultfxns, degnodes, faultedges=faultedges, edgeflows=edgeflows, functions=functions, flows=flows)
     faultlabels_form = {node:''.join(['\n\n ',''.join(f+' ' for f in fault if f!='nom')]) for node,fault in faultlabels.items() if fault!={'nom'}}
