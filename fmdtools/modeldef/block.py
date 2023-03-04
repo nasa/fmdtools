@@ -314,6 +314,8 @@ def assoc_flows(obj, flows={}):
         function's flowname, it will be used instead (so that it can act as a 
         connection to the rest of the model)
     """
+    if hasattr(obj, 'flownames'):
+        flows = {obj.flownames.get(fn, fn): flow for fn, flow in flows.items()}
     for init_att in dir(obj):
         if init_att.startswith("_init_"):
             att = getattr(obj, init_att)
@@ -1005,13 +1007,14 @@ class FxnBlock(Block):
         copy.__init__(self.name, newflows, *attr, **kwargs)
         copy.m.mirror(self.m)
         if hasattr(self, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
-        for flowname, flow in self.internal_flows.items():
-            copy.internal_flows[flowname] = flow.copy()
-            setattr(copy, flowname, copy.internal_flows[flowname])
-        for action in self.actions: 
-            copy.action.s = copy.action._init_s(**asdict(action.s))
-            copy.actions[action].m.mirror(self.actions[action].m)
-            copy.actions[action].time=self.actions[action].time
+        # TODO: figure out copying for ASGs
+        #for flowname, flow in self.internal_flows.items():
+        #    copy.internal_flows[flowname] = flow.copy()
+        #    setattr(copy, flowname, copy.internal_flows[flowname])
+        #for action in self.actions: 
+        #    copy.action.s = copy.action._init_s(**asdict(action.s))
+        #    copy.actions[action].m.mirror(self.actions[action].m)
+        #    copy.actions[action].time=self.actions[action].time
         setattr(copy, 'active_actions', getattr(self, 'active_actions', {}))
         if hasattr(self, 'c'): copy.c = self.c.copy_with_arg(**self._c_arg)
         for timername in self.timers:
