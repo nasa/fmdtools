@@ -97,7 +97,6 @@ class ImportEEMode(Mode):
     failrate = 1e-5
     faultparams = {'no_v':(0.80,[0,1,0], 10000), 
                   'inf_v':(0.20, [0,1,0], 5000)}
-
 class ImportEEState(State):
     effstate : float = 1.0
 
@@ -223,7 +222,7 @@ class MoveWat(FxnBlock):
                 if time>self.time:                  self.timer.inc(self.dt)
                 if self.timer.time>=self.p.delay:   self.m.add_fault('mech_break')
         else:
-            if self.wat_out.pressure>15.0: self.m.add_fault('mech_break')
+            if self.wat_out.pressure>15.0:          self.m.add_fault('mech_break')
 
     def behavior(self, time):
         """ here we can define how the function will behave with different faults """
@@ -236,11 +235,12 @@ class MoveWat(FxnBlock):
         else:
             self.ee_in.s.current=10/5000*self.sig_in.s.power*self.ee_in.s.voltage*min(13.0, self.wat_out.s.pressure)
             self.s.eff=1.0
+        
+        velocity = self.sig_in.s.power*self.s.eff*min(1000, self.ee_in.s.voltage)*self.wat_in.s.level
+        self.wat_out.s.pressure = 10/500 * velocity/self.wat_out.s.area
+        self.wat_out.s.flowrate = 0.3/500 * velocity*self.wat_out.s.area
 
-        self.wat_out.s.pressure = 10/500 * self.sig_in.s.power*self.s.eff*min(1000, self.ee_in.s.voltage)*self.wat_in.s.level/self.wat_out.s.area
-        self.wat_out.s.flowrate = 0.3/500 * self.sig_in.s.power*self.s.eff*min(1000, self.ee_in.s.voltage)*self.wat_in.s.level*self.wat_out.s.area
-
-        self.wat_in.s.assign(self.wat_out.s)
+        self.wat_in.s.assign(self.wat_out.s, 'pressure', 'flowrate')
 
 
 ##DEFINE MODEL OBJECT
@@ -344,6 +344,7 @@ if __name__=="__main__":
     mdl = Pump()
 
     #rd.graph.exec_order(mdl)
+    endclass, mdlhist=propagate.one_fault(mdl, 'import_water','no_wat', time=29,  staged=True)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_ee','no_v', time=29,  staged=True)
     endclass, mdlhist=propagate.one_fault(mdl, 'move_water', 'mech_break', time=0, staged=False)
     

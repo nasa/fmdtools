@@ -595,13 +595,12 @@ class CompArch(dataobject, mapping=True):
         **kwargs : kwargs
             keyword arguments to send CompClass, of form {'name':kwarg}
         """
-        components = {}
-        faultmodes = {}
+        if self.components is None: self.components=dict()
+        if self.faultmodes is None: self.faultmodes=dict()
         for arg in args:
-            components[arg]=CompClass(arg, **kwargs.get(arg, {}))
-            faultmodes.update({components[arg].name+'_'+modename:arg 
-                               for modename in components[arg].m.faultmodes})
-        return components, faultmodes
+            self.components[arg]=CompClass(arg, **kwargs.get(arg, {}))
+            self.faultmodes.update({self.components[arg].name+'_'+modename:arg 
+                               for modename in self.components[arg].m.faultmodes})
     def copy_with_arg(self, **kwargs):
         cop = self.__class__(**kwargs)
         for component in self.components: 
@@ -1004,7 +1003,7 @@ class FxnBlock(Block):
         """
         copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         copy.is_copy=True
-        copy.__init__(self.name, newflows, *attr, **kwargs)
+        copy.__init__(self.name, flows=newflows, **kwargs)
         copy.m.mirror(self.m)
         if hasattr(self, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
         # TODO: figure out copying for ASGs
