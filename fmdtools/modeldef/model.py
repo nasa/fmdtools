@@ -216,7 +216,13 @@ class Model(object):
         if not getattr(self, 'is_copy', False):
             flows=self.get_flows(flownames)
             fkwargs = {**{'r':{"seed":self.modelparams.seed}}, **fkwargs}
-            self.fxns[name] = fclass(name, flows=flows, params=fparams, **fkwargs)
+            try:
+                self.fxns[name] = fclass(name, flows=flows, params=fparams, **fkwargs)
+            except TypeError as e:
+                raise TypeError("For class "+str(fclass)+", make sure to include the arguments "
+                                "(name, flows=flows, params=fparams, **fkwargs) in __init__"
+                                ", provide the kwargs as kwargs (and not a dict), and make sure " 
+                                "the structure for the kwargs are initialized (e.g., x has a corresponding _init_x)") from e
             self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams, 'kwargs': fkwargs}
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
@@ -475,7 +481,7 @@ class Model(object):
                 if mode!='nom': 
                     modeprops[fxnname][mode] = fxn.m.faultmodes.get(mode)
                     if mode not in fxn.m.faultmodes: 
-                        warnings.warn("Mode "+mode+" not in faultmodes for fxn "+fxnname+" and may not be tracked.")
+                        raise Exception("Mode "+mode+" not in m.faultmodes for fxn "+fxnname+" and may not be tracked.")
         return modes, modeprops
     def get_memory(self):
         """

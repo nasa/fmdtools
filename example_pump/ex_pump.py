@@ -83,7 +83,6 @@ class PumpParam(Parameter, readonly=True):
 DEFINE MODEL FUNCTIONS
 Functions are defined using Python classes that are instantiated as objects
 """
-
 class ImportEEMode(Mode):
     """
     A probability model for faults is associated with each function:
@@ -200,7 +199,7 @@ class MoveWat(FxnBlock):
     _init_wat_in = Water 
     _init_wat_out = Water
     flownames = {"ee_1":"ee_in", "sig_1":"sig_in", "wat_1":"wat_in", "wat_2":"wat_out"}
-    def __init__(self,name, flows, params = 0.0, **kwargs):
+    def __init__(self,name, flows, params = 0, **kwargs):
         """ In this function, more states are initialized than flows:
             - states (internal variables to be given to the function)
                 states are given as {'name':initval}
@@ -222,7 +221,7 @@ class MoveWat(FxnBlock):
                 if time>self.time:                  self.timer.inc(self.dt)
                 if self.timer.time>=self.p.delay:   self.m.add_fault('mech_break')
         else:
-            if self.wat_out.pressure>15.0:          self.m.add_fault('mech_break')
+            if self.wat_out.s.pressure>15.0:        self.m.add_fault('mech_break')
 
     def behavior(self, time):
         """ here we can define how the function will behave with different faults """

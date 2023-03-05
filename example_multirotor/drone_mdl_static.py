@@ -155,7 +155,7 @@ class AffectDOF(FxnBlock): #ee_mot,ctl,dofs,force_lin HSig_dofs, RSig_dofs
     _init_ctl_in = Control
     _init_dofs = DOFs
     _init_force = Force
-    flownames = {'ee_lin':'ee_in', 'ctl':'ctl_in','force_st':'force'}
+    flownames = {'ee_mot':'ee_in', 'ctl':'ctl_in','force_lin':'force'}
     def behavior(self, time):
         self.s.put(e_ti=1.0, e_to=1.0)
         if self.m.has_fault('short'):           self.s.put(e_ti=10, e_to=0.0)
@@ -200,8 +200,8 @@ class CtlDOF(FxnBlock):
         elif -1<self.dir.s.z<1:   upthrottle= 1 + self.dir.s.z
         elif self.dir.s.z<=-1.0:  upthrottle = 0
             
-        if self.dir.s.same(0.0, 0.0, 'x', 'y'): forwardthrottle=0.0
-        else:                                   forwardthrottle=1.0
+        if self.dir.s.same([0.0, 0.0], 'x', 'y'):   forwardthrottle=0.0
+        else:                                       forwardthrottle=1.0
         
         power = self.ee_in.s.effort*self.s.cs*self.dir.s.power
         self.ctl.s.put(forward=power*forwardthrottle, upward=power*upthrottle)
@@ -276,8 +276,7 @@ class ViewModes(Mode):
     faultparams = {'poorview':(0.2, 10000)}
 class ViewEnvironment(FxnBlock):
     _init_m = ViewModes
-    def __init__(self, name, flows, params={},**kwargs):
-        super().__init__(name, flows, ['Env'])
+    _init_env = Env
         
 class Drone(Model):
     def __init__(self, params=Parameter(), modelparams=ModelParam(), valparams={}):

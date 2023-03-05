@@ -14,7 +14,7 @@ Functions:
 
 Flows:
     - Communications
-    - Ground
+    - ground
     - Force
     - EE
     - Camera
@@ -32,6 +32,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import multiprocessing as mp
 
+## MODEL FLOWS
 class DegParam(Parameter, readonly=True):
     """Parameters for rover degradation"""
     friction :          float = 0.0
@@ -112,8 +113,7 @@ class FaultStates(State):
 class Fault(Flow):
     _init_s = FaultStates
 
-
-
+# MODEL PARAMETERS
 class RoverParam(Parameter, readonly=True):
     """Parameters for rover"""
     period :            float = 1.0             #period of the curve (for sine linetype)
@@ -149,7 +149,7 @@ class RoverParam(Parameter, readonly=True):
             kwargs['end']=(radius+start, radius+start)
         super().__init__(*args, **kwargs)
 
-
+# MODEL FUNCTIONS
 class AvionicsMode(Mode):
     faultparams={'no_con':(1e-4, 200),
                  'crash':(1e-4,200)}
@@ -158,45 +158,48 @@ class AvionicsMode(Mode):
 class Avionics(FxnBlock):
     _init_m = AvionicsMode
     _init_p = RoverParam
-    def __init__(self,name, flows, params = {}, **kwargs):
-        super().__init__(name, flows, flownames={'AvionicsControl':'Control'},**kwargs)
+    _init_video = Video 
+    _init_pos_signal = Pos_Signal
+    _init_ground = Ground 
+    _init_control = Control
+    _init_faultstates = Fault
+    flownames={'avionics_control':'control'}
     def dynamic_behavior(self,time):
         if not self.m.in_mode('no_con'):
             if time == 5:   self.m.set_mode('drive')
             if time == 100: self.m.set_mode('standby')
 
         if self.m.in_mode('drive'):
-            self.Pos_Signal.s.assign(self.Video.s, 'angle', 'linex', 'liney')
-            self.Pos_Signal.s.heading = self.Ground.s.ang
-            self.Pos_Signal.s.assign(self.Ground.s, 'x', 'y', 'vel')
+            self.pos_signal.s.assign(self.video.s, 'angle', 'linex', 'liney')
+            self.pos_signal.s.heading = self.ground.s.ang
+            self.pos_signal.s.assign(self.ground.s, 'x', 'y', 'vel')
 
-            if in_area(*self.p.end,1,*self.Pos_Signal.s.get('x','y')):  self.m.set_mode('finished')
-            elif self.Video.s.quality==0:                               self.m.set_mode('em_off')
+            if in_area(*self.p.end,1,*self.pos_signal.s.get('x','y')):  self.m.set_mode('finished')
+            elif self.video.s.quality==0:                               self.m.set_mode('em_off')
             elif not self.faultstates_in_bounds():                      self.m.set_mode('em_off')
             else:
-                ycorrection= np.arctan((self.Pos_Signal.s.y-self.Pos_Signal.s.liney)/(self.Pos_Signal.s.vel*np.cos(np.pi/180 * self.Pos_Signal.s.heading)+0.001))
-                xcorrection= np.arctan((self.Pos_Signal.s.x-self.Pos_Signal.s.linex)/(self.Pos_Signal.s.vel*np.sin(np.pi/180 * self.Pos_Signal.s.heading)+0.001))
-                turn_fault_correction = self.p.cor_d*self.Faultstates.s.drift
-                if self.Video.s.quality==0.5: 
-                    ang_diff = np.arctan((self.Pos_Signal.s.y - self.p.end[1])/(self.Pos_Signal.s.x - self.p.end[0])) - self.Pos_Signal.s.heading + turn_fault_correction
+                ycorrection= np.arctan((self.pos_signal.s.y-self.pos_signal.s.liney)/(self.pos_signal.s.vel*np.cos(np.pi/180 * self.pos_signal.s.heading)+0.001))
+                xcorrection= np.arctan((self.pos_signal.s.x-self.pos_signal.s.linex)/(self.pos_signal.s.vel*np.sin(np.pi/180 * self.pos_signal.s.heading)+0.001))
+                turn_fault_correction = self.p.cor_d*self.faultstates.s.drift
+                if self.video.s.quality==0.5: 
+                    ang_diff = np.arctan((self.pos_signal.s.y - self.p.end[1])/(self.pos_signal.s.x - self.p.end[0])) - self.pos_signal.s.heading + turn_fault_correction
                 else:                       
-                    ang_diff = (self.Pos_Signal.s.angle - self.Pos_Signal.s.heading + turn_fault_correction -5.5*(xcorrection+ycorrection))
+                    ang_diff = (self.pos_signal.s.angle - self.pos_signal.s.heading + turn_fault_correction -5.5*(xcorrection+ycorrection))
                 rdiff = (translate_angle(ang_diff)/180)
-                vel_fault_correction = 1 + self.p.cor_f*(self.Faultstates.s.friction) + self.p.cor_t*(self.Faultstates.s.transfer-1)
+                vel_fault_correction = 1 + self.p.cor_f*(self.faultstates.s.friction) + self.p.cor_t*(self.faultstates.s.transfer-1)
                 vel_adj = max(0.2, 1- 0.9*abs(rdiff*20)) *vel_fault_correction
-                self.Control.s.put(rpower = vel_adj*(1+(rdiff)), lpower = vel_adj*(1-(rdiff)))
-                self.Control.s.limit(rpower=(-1,2), lpower=(-1,2))
-        if self.m.in_mode('standby','em_off','finished'):   self.Control.s.put(rpower = 0, lpower = 0)
+                self.control.s.put(rpower = vel_adj*(1+(rdiff)), lpower = vel_adj*(1-(rdiff)))
+                self.control.s.limit(rpower=(-1,2), lpower=(-1,2))
+        if self.m.in_mode('standby','em_off','finished'):   self.control.s.put(rpower = 0, lpower = 0)
     def faultstates_in_bounds(self):
-        return (self.p.lb_f <= self.Faultstates.s.friction <= self.p.ub_f and \
-                self.p.lb_d <=self.Faultstates.s.drift <= self.p.ub_d and \
-                    self.p.lb_t<=self.Faultstates.s.transfer <= self.p.ub_t)
+        return (self.p.lb_f <= self.faultstates.s.friction <= self.p.ub_f and \
+                self.p.lb_d <=self.faultstates.s.drift <= self.p.ub_d and \
+                    self.p.lb_t<=self.faultstates.s.transfer <= self.p.ub_t)
 
 def translate_angle(angle):
     if angle <-180:      angle = angle % 180
     elif angle > 180:   angle = angle % -180
     return angle
-
 
 class DriveMode(Mode):
     """ """
@@ -244,47 +247,52 @@ class DriveMode(Mode):
 class Drive(FxnBlock):
     _init_p = DegParam
     _init_m = DriveMode
-    def __init__(self,name, flows, params={}, **kwargs):
-        super().__init__(name, flows, flownames={"EE_15":"EE_in"}, **kwargs)
+    _init_faultstates = Fault
+    _init_ground = Ground 
+    _init_motor_control=Control
+    _init_ee_in = EE 
+    _init_faultstates = Fault
+    flownames = {'ee_15':'ee_in'}
     def dynamic_behavior(self, time):
-        self.Faultstates.s.assign(self.m.s, 'friction', 'transfer', 'drift')
-        rpower = self.m.s.transfer*self.EE_in.s.v*self.MotorControl.s.rpower/15 + self.m.s.drift
-        lpower = self.m.s.transfer*self.EE_in.s.v*self.MotorControl.s.lpower/15 - self.m.s.drift
-        if self.m.has_fault("elec_open"):   self.EE_in.s.a = 0
-        else:                               self.EE_in.s.a = (1.0+self.m.s.friction)*(lpower + rpower)/12
+        self.faultstates.s.assign(self.m.s, 'friction', 'transfer', 'drift')
+        rpower = self.m.s.transfer*self.ee_in.s.v*self.motor_control.s.rpower/15 + self.m.s.drift
+        lpower = self.m.s.transfer*self.ee_in.s.v*self.motor_control.s.lpower/15 - self.m.s.drift
+        if self.m.has_fault("elec_open"):   self.ee_in.s.a = 0
+        else:                               self.ee_in.s.a = (1.0+self.m.s.friction)*(lpower + rpower)/12
         if (lpower + rpower) >100: self.add_fault("elec_open")
         else:
-            self.Ground.s.vel= (rpower + lpower)/(1.0+self.m.s.friction)
-            self.Ground.s.inc(ang = 180/np.pi*np.arctan((rpower-lpower)/(rpower+lpower +0.001)))
-            self.Ground.s.ang = translate_angle(self.Ground.s.ang)
-            self.Ground.s.inc(x = np.cos(np.pi/180 *self.Ground.s.ang) * self.Ground.s.vel, \
-                            y = np.sin(np.pi/180 *self.Ground.s.ang) * self.Ground.s.vel)
+            self.ground.s.vel= (rpower + lpower)/(1.0+self.m.s.friction)
+            self.ground.s.inc(ang = 180/np.pi*np.arctan((rpower-lpower)/(rpower+lpower +0.001)))
+            self.ground.s.ang = translate_angle(self.ground.s.ang)
+            self.ground.s.inc(x = np.cos(np.pi/180 *self.ground.s.ang) * self.ground.s.vel, \
+                            y = np.sin(np.pi/180 *self.ground.s.ang) * self.ground.s.vel)
 
 class PerceptionMode(Mode):
     faultparams = ('bad_feed',)
     opermodes = ('off', 'feed')
     mode:   str='off'
     exclusive = True
-
 class Perception(FxnBlock):
     rad=1
     _init_m = PerceptionMode
-    def __init__(self, name, flows, params={}, **kwargs):
-        super().__init__(name, flows, flownames={'EE_12':'EE'})
+    _init_ground = Ground
+    _init_ee = EE
+    _init_video = Video
+    flownames={'ee_12':'EE'}
     def dynamic_behavior(self,time):
         if self.m.in_mode('off'):
-            self.EE.s.a=0
-            self.Video.s.put(linex = 0, liney = 0, angle = 0, quality = 0)
-            if self.EE.s.v == 12: self.m.set_mode("feed")
+            self.ee.s.a=0
+            self.video.s.put(linex = 0, liney = 0, angle = 0, quality = 0)
+            if self.ee.s.v == 12: self.m.set_mode("feed")
         elif self.m.in_mode("feed"):
-            if self.EE.s.v > 8:
-                if in_area(self.Ground.s.linex, self.Ground.s.liney, self.rad, self.Ground.s.x, self.Ground.s.y):
-                    self.Video.s.assign(self.Ground.s, 'linex','liney', 'angle')
-                    self.Video.s.quality = 1
+            if self.ee.s.v > 8:
+                if in_area(*self.ground.s.get('linex','liney'), self.rad, *self.ground.s.get('x','y')):
+                    self.video.s.assign(self.ground.s, 'linex','liney', 'angle')
+                    self.video.s.quality = 1
                 else:
-                    self.Video.quality=0
-            elif self.EE.s.v == 0: self.m.set_mode("off")
-        elif self.m.has_fault('bad_feed'): self.Video.quality = 0.5
+                    self.video.quality=0
+            elif self.ee.s.v == 0: self.m.set_mode("off")
+        elif self.m.has_fault('bad_feed'): self.video.quality = 0.5
 
 def in_area(x,y,rad,xc,yc):
     dist = np.sqrt((x-xc)**2+(y-yc)**2)
@@ -305,38 +313,40 @@ class PowerMode(Mode):
 class Power(FxnBlock):
     _init_s = PowerState
     _init_m = PowerMode
-    def __init__(self, name, flows, params={}, **kwargs):
-        super().__init__(name,flows, **kwargs)
+    _init_ee_15 = EE
+    _init_ee_5 = EE
+    _init_ee_12 = EE
+    _init_switch = Switch
     def static_behavior(self,time):       
         if self.m.in_mode("off"):
-            self.EE_5.s.put(v=0, a=0) 
-            self.EE_12.s.put(v=0,a=0)
-            self.EE_15.s.put(v=0,a=0)
-            if self.Switch.s.power==1:   
+            self.ee_5.s.put(v=0, a=0) 
+            self.ee_12.s.put(v=0,a=0)
+            self.ee_15.s.put(v=0,a=0)
+            if self.switch.s.power==1:   
                 self.m.set_mode("supply")
         elif self.m.in_mode("supply"):
             if self.s.charge > 0:         
-                self.EE_5.s.v = 5
-                self.EE_12.s.v = 12 
-                self.EE_15.s.v = 15
+                self.ee_5.s.v = 5
+                self.ee_12.s.v = 12 
+                self.ee_15.s.v = 15
             else:                           
                 self.m.set_mode("no_charge")
-            if self.Switch.s.power==0:   
+            if self.switch.s.power==0:   
                 self.m.set_mode("off")
         elif self.m.in_mode("short"):
-                self.EE_5.s.v = 5
-                self.EE_12.s.v = 12 
-                self.EE_15.s.v = 15
+                self.ee_5.s.v = 5
+                self.ee_12.s.v = 12 
+                self.ee_15.s.v = 15
         elif self.m.in_mode("no_charge"): 
-            self.EE_5.s.v = 0 
-            self.EE_12.s.v = 0; 
-            self.EE_15.s.v = 0;
+            self.ee_5.s.v = 0 
+            self.ee_12.s.v = 0; 
+            self.ee_15.s.v = 0;
         if self.m.in_mode("charge"):
             self.s.power = - 1
             if self.s.charge==100:
                 self.m.set_mode("off")
         else:
-            self.s.power=1.0+self.EE_12.s.mul('v','a')+self.EE_5.s.mul('v','a')+self.EE_15.s.mul('v','a')
+            self.s.power=1.0+self.ee_12.s.mul('v','a')+self.ee_5.s.mul('v','a')+self.ee_15.s.mul('v','a')
     def dynamic_behavior(self,time):
         self.s.inc(charge = - self.s.power/100)
         self.s.limit(charge=(0,100))
@@ -346,53 +356,57 @@ class OverrideMode(Mode):
     mode:   str = 'off'
 class Override(FxnBlock):
     _init_m = OverrideMode
-    def __init__(self,name,flows, params={}, **kwargs):
-        super().__init__(name,flows, flownames={'EE_5':'EE'})
+    _init_override_comms = OverrideComms
+    _init_ee = EE 
+    _init_motor_control = Control 
+    _init_avionics_control = Control
+    flownames={'ee_5':'ee'}
     def dynamic_behavior(self,time):
         if self.m.in_mode('off'):
-            self.EE.s.a=0
-            if self.EE.s.v==5: self.m.set_mode('standby')
+            self.ee.s.a=0
+            if self.ee.s.v==5: self.m.set_mode('standby')
         elif self.m.in_mode('standby'):
-            self.MotorControl.s.assign(self.AvionicsControl.s, 'rpower','lpower')
-            if self.OverrideComms =='active' and self.EE.s.v>4: self.m.set_mode('override')
+            self.motor_control.s.assign(self.avionics_control.s, 'rpower','lpower')
+            if self.override_comms =='active' and self.EE.s.v>4: self.m.set_mode('override')
         elif self.m.in_mode('override'):
-            self.MotorControl.s.assign(self.OverrideComms.s, 'rpower', 'lpower')
+            self.motor_control.s.assign(self.override_comms.s, 'rpower', 'lpower')
 
 class Communications(FxnBlock):
-    def __init__(self, name, flows, params={}, **kwargs):
-        super().__init__(name,flows, **kwargs)
+    _init_ee_12 = EE 
+    _init_comms = Comms 
+    _init_pos_signal = Pos_Signal
     def dynamic_behavior(self,time):
-        if self.EE_12.s.v == 12:
-            self.EE_12.s.a=1
-            self.Comms.s.assign(self.Pos_Signal.s, 'x', 'y', 'vel', 'heading')
-        else:   self.Comms.s.put(x=0, y=0, vel=0, heading=0)
+        if self.ee_12.s.v == 12:
+            self.ee_12.s.a=1
+            self.comms.s.assign(self.pos_signal.s, 'x', 'y', 'vel', 'heading')
+        else:   self.comms.s.put(x=0, y=0, vel=0, heading=0)
 
 class Operator(FxnBlock):
-    def __init__(self, name, flows, params={}, **kwargs):
-        super().__init__(name,flows, **kwargs)
+    _init_switch = Switch
     def dynamic_behavior(self, t):
-        if t==1:    self.Switch.s.power=1
-        elif t==200: self.Switch.s.power=0
+        if t==1:    self.switch.s.power=1
+        elif t==200: self.switch.s.power=0
 
 class EnvStates(State):
     in_bound: int=1
 class Environment(FxnBlock):
     _init_s = EnvStates
     _init_p = RoverParam
+    _init_ground = Ground
     def __init__(self, name, flows, params={}, **kwargs):
         super().__init__(name,flows, **kwargs)
     def dynamic_behavior(self, t):
         if self.p.linetype=='sine':
-            self.Ground.s.angle = sin_angle_func(self.Ground.s.x, self.p.amp, self.p.period)
-            self.Ground.s.linex,self.Ground.s.liney = sin_func(self.Ground.s.x,self.Ground.s.y, self.p.amp, self.p.period)
+            self.ground.s.angle = sin_angle_func(self.ground.s.x, self.p.amp, self.p.period)
+            self.ground.s.linex,self.ground.s.liney = sin_func(self.ground.s.x,self.ground.s.y, self.p.amp, self.p.period)
         elif self.p.linetype=='turn':
-            self.Ground.s.angle = turn_angle_func(self.Ground.s.x, self.p.radius, self.p.start)
-            self.Ground.s.linex, self.Ground.s.liney = turn_func(self.Ground.s.x, self.Ground.s.y, self.p.radius, self.p.start)
-        self.Ground.s.lbx = self.Ground.s.linex + 1.5 * np.sin(self.Ground.s.angle*np.pi/180)
-        self.Ground.s.lby = self.Ground.s.liney - 1.5 * np.cos(self.Ground.s.angle*np.pi/180)
-        self.Ground.s.ubx = self.Ground.s.linex - 1.5 * np.sin(self.Ground.s.angle*np.pi/180)
-        self.Ground.s.uby = self.Ground.s.liney + 1.5 * np.cos(self.Ground.s.angle*np.pi/180)
-        self.in_bound = int(in_bounds(self.Ground.s.x, self.Ground.s.y, self.Ground.s.lbx, self.Ground.s.lby, self.Ground.s.ubx, self.Ground.s.uby))
+            self.ground.s.angle = turn_angle_func(self.ground.s.x, self.p.radius, self.p.start)
+            self.ground.s.linex, self.ground.s.liney = turn_func(self.ground.s.x, self.ground.s.y, self.p.radius, self.p.start)
+        self.ground.s.lbx = self.ground.s.linex + 1.5 * np.sin(self.ground.s.angle*np.pi/180)
+        self.ground.s.lby = self.ground.s.liney - 1.5 * np.cos(self.ground.s.angle*np.pi/180)
+        self.ground.s.ubx = self.ground.s.linex - 1.5 * np.sin(self.ground.s.angle*np.pi/180)
+        self.ground.s.uby = self.ground.s.liney + 1.5 * np.cos(self.ground.s.angle*np.pi/180)
+        self.in_bound = int(in_bounds(self.ground.s.x, self.ground.s.y, self.ground.s.lbx, self.ground.s.lby, self.ground.s.ubx, self.ground.s.uby))
 def sin_func(x,y, amp, period):
     return x, amp * np.sin(period*x)
 def sin_angle_func(x, amp, period):
@@ -419,8 +433,6 @@ def turn_angle_func(x, radius, start):
     elif x<start:           return 0.0
 
 
-
-
 def gen_model_params(x, scen):
     params = {'drive_modes':{'custom_fault':{'friction':x[scen][0][0],'drift':x[scen][0][1], 'transfer':x[scen][0][2]}}}
     return params
@@ -430,55 +442,59 @@ class Rover(Model):
                      valparams={'drive_modes':'set'}):
         super().__init__(params, modelparams, valparams)
 
-        self.add_flow('Ground',             Ground, s={'angle':params.initangle})
-        self.add_flow('Pos_Signal',         Pos_Signal)
-        self.add_flow('EE_12',              EE)
-        self.add_flow('EE_5',               EE)
-        self.add_flow('EE_15',              EE)
-        self.add_flow('Video',              Video)
-        self.add_flow('AvionicsControl',    Control)
-        self.add_flow('MotorControl',       Control)
-        self.add_flow('Switch',             Switch)
-        self.add_flow('Comms',              Comms)
-        self.add_flow('OverrideComms',      OverrideComms)
-        self.add_flow('Faultstates',        Fault)
+        self.add_flow('ground',             Ground, s={'angle':params.initangle})
+        self.add_flow('pos_signal',         Pos_Signal)
+        self.add_flow('ee_12',              EE)
+        self.add_flow('ee_5',               EE)
+        self.add_flow('ee_15',              EE)
+        self.add_flow('video',              Video)
+        self.add_flow('avionics_control',   Control)
+        self.add_flow('motor_control',      Control)
+        self.add_flow('switch',             Switch)
+        self.add_flow('comms',              Comms)
+        self.add_flow('override_comms',     OverrideComms)
+        self.add_flow('faultstates',        Fault)
         #self.add_flow('Example_Disconnect')
 
-        self.add_fxn("Power", ["EE_15","EE_5",'EE_12', "Switch"], Power)
-        self.add_fxn("Operator", ["Comms", "OverrideComms", "Pos_Signal", "Switch"], Operator)
-        self.add_fxn("Communications", ["Comms", "EE_12", 'Pos_Signal'], Communications)
-        self.add_fxn("Perception", ["Ground", "EE_12", "Video"], Perception)
-        self.add_fxn("Avionics",["Video","Comms", "EE_5",'Pos_Signal',"Ground", "AvionicsControl", "Faultstates"], fclass=Avionics, p=asdict(params))
-        self.add_fxn("Override", ["OverrideComms", "EE_5", 'MotorControl','AvionicsControl'], Override)
-        self.add_fxn("Drive", ["Ground","EE_15","EE_5", "MotorControl", "Faultstates"], fclass = Drive, m={'mode_args': valparams['drive_modes']}, p=asdict(params.degradation))
-        self.add_fxn("Environment", ['Ground'], Environment, p=asdict(params))
+        self.add_fxn("power",           ["ee_15","ee_5",'ee_12', "switch"],                 Power)
+        self.add_fxn("operator",        ["comms", "override_comms", "pos_signal", "switch"],Operator)
+        self.add_fxn("communications",  ["comms", "ee_12", 'pos_signal'],                   Communications)
+        self.add_fxn("perception",      ["ground", "ee_12", "video"],                       Perception)
+        self.add_fxn("avionics",        ["video","comms", "ee_5",'pos_signal',"ground", 
+                                         "avionics_control", "faultstates"],                Avionics, p=asdict(params))
+        self.add_fxn("override",        ["override_comms", "ee_5", 
+                                         'motor_control','avionics_control'],               Override)
+        self.add_fxn("drive",           ["ground","ee_15","ee_5", "motor_control", 
+                                         "faultstates"],                                    Drive, 
+                     m={'mode_args': valparams['drive_modes']}, p=asdict(params.degradation))
+        self.add_fxn("environment",     ['ground'],                                         Environment, p=asdict(params))
 
-        pos_bip = {'Power': [-0.684772948203272, -0.2551613615446115],
-                 'Operator': [-0.798933011500376, 0.565156755693186],
-                 'Communications': [-0.5566050878414673, 0.14159180700630447],
-                 'Perception': [0.996672509613648, 0.2507215448302319],
-                 'Avionics': [0.28027473355741117, 0.47255264233968597],
-                 'Override': [0.28987624783062627, -0.17144760874154652],
-                 'Drive': [0.6671719569482308, -0.571646956655247],
-                 'Environment': [1.1329643169383754, -0.6375225566564033],
-                 'Ground': [1.108432946123935, -0.3228541151507237],
-                 'Pos_Signal': [-0.256557435572734, 0.5411037985681082],
-                 'Faultstates': [0.75997843863482324, -0.04522869632581994],
-                 'EE_12': [-0.3676879520509888, -0.04754907961317867],
-                 'EE_5': [-0.2181352416728437, -0.2015320865756482],
-                 'EE_15': [-0.5352906801304353, -0.5288715575154177],
-                 'Video': [0.6726175830840695, 0.396008366729458],
-                 'AvionicsControl': [0.45997843863482324, 0.04522869632581994],
-                 'MotorControl': [0.6350063940085445, -0.3013633829278297],
-                 'Switch': [-0.9857988678463686, 0.07960895587242012],
-                 'Comms': [-0.642370284813957, 0.35285736707043763],
-                 'OverrideComms': [-0.14607433032593392, 0.2981956996230818]}
+        pos_bip = {'power': [-0.684772948203272, -0.2551613615446115],
+                 'operator': [-0.798933011500376, 0.565156755693186],
+                 'communications': [-0.5566050878414673, 0.14159180700630447],
+                 'perception': [0.996672509613648, 0.2507215448302319],
+                 'avionics': [0.28027473355741117, 0.47255264233968597],
+                 'override': [0.28987624783062627, -0.17144760874154652],
+                 'drive': [0.6671719569482308, -0.571646956655247],
+                 'environment': [1.1329643169383754, -0.6375225566564033],
+                 'ground': [1.108432946123935, -0.3228541151507237],
+                 'pos_signal': [-0.256557435572734, 0.5411037985681082],
+                 'faultstates': [0.75997843863482324, -0.04522869632581994],
+                 'ee_12': [-0.3676879520509888, -0.04754907961317867],
+                 'ee_5': [-0.2181352416728437, -0.2015320865756482],
+                 'ee_15': [-0.5352906801304353, -0.5288715575154177],
+                 'video': [0.6726175830840695, 0.396008366729458],
+                 'avionics_control': [0.45997843863482324, 0.04522869632581994],
+                 'motor_control': [0.6350063940085445, -0.3013633829278297],
+                 'switch': [-0.9857988678463686, 0.07960895587242012],
+                 'comms': [-0.642370284813957, 0.35285736707043763],
+                 'override_comms': [-0.14607433032593392, 0.2981956996230818]}
 
         self.build_model(bipartite_pos = pos_bip)
     def end_condition(self, time):
-        if (in_area(self.flows['Ground'].x,self.flows['Ground'].y,1,self.params['end'][0],self.params['end'][1]) or \
-            (time > 5 and self.fxns['Avionics'].m.in_mode('standby')) or \
-                self.fxns['Avionics'].m.in_mode('em_off', 'finished')):
+        if (in_area(self.flows['ground'].x,self.flows['ground'].y,1,self.params['end'][0],self.params['end'][1]) or \
+            (time > 5 and self.fxns['avionics'].m.in_mode('standby')) or \
+                self.fxns['avionics'].m.in_mode('em_off', 'finished')):
             return True
         else:
             return False
@@ -486,22 +502,26 @@ class Rover(Model):
         modes, modeproperties = self.return_faultmodes()
         classification = str()
         at_finish=True
-        if not in_area(self.flows['Ground'].s.x,self.flows['Ground'].s.y,2,self.params.end[0],self.params.end[1]):
+        if not in_area(self.flows['ground'].s.x,self.flows['ground'].s.y,2,self.params.end[0],self.params.end[1]):
                                 classification = "incomplete mission"
                                 at_finish = False
         if any(modes):          classification = classification +' faulty'
         if not classification:  classification = 'nominal mission'
         num_modes = len(modes)
-        end_dist = dist(self.flows['Ground'].s.x,self.flows['Ground'].s.y,self.params.end[0],self.params.end[1])
-        endpt=[self.flows['Ground'].s.x,self.flows['Ground'].s.y]
+        end_dist = dist(self.flows['ground'].s.x,self.flows['ground'].s.y,self.params.end[0],self.params.end[1])
+        endpt=[self.flows['ground'].s.x,self.flows['ground'].s.y]
 
-        f_t= min(len(mdlhist['faulty']['flows']['Ground']['x']),len(mdlhist['nominal']['flows']['Ground']['y']))
+        f_t= min(len(mdlhist['faulty']['flows']['ground']['x']),len(mdlhist['nominal']['flows']['ground']['y']))
 
-        tot_deviation = np.sum(np.sqrt((mdlhist['nominal']['flows']['Ground']['x'][:f_t]-mdlhist['faulty']['flows']['Ground']['x'][:f_t])**2 + (mdlhist['nominal']['flows']['Ground']['y'][:f_t]-mdlhist['faulty']['flows']['Ground']['y'][:f_t])**2))
-        in_bound = all(mdlhist['faulty']['functions']['Environment']['in_bound'])
-        line_dist = find_line_dist(self.flows['Ground'].s.x,self.flows['Ground'].s.y, mdlhist['nominal']['flows']['Ground']['linex'], mdlhist['nominal']['flows']['Ground']['liney'])
+        tot_deviation = np.sum(np.sqrt((mdlhist['nominal']['flows']['ground']['x'][:f_t]-mdlhist['faulty']['flows']['ground']['x'][:f_t])**2 + (mdlhist['nominal']['flows']['ground']['y'][:f_t]-mdlhist['faulty']['flows']['ground']['y'][:f_t])**2))
+        in_bound = all(mdlhist['faulty']['functions']['environment']['in_bound'])
+        line_dist = find_line_dist(self.flows['ground'].s.x,self.flows['ground'].s.y, mdlhist['nominal']['flows']['ground']['linex'], mdlhist['nominal']['flows']['ground']['liney'])
 
-        return {'rate':0,'cost':0, 'prob':scen['properties'].get('prob',1), 'expected cost':0, 'in_bound':in_bound, 'at_finish':at_finish, 'line_dist':line_dist, 'num_modes':num_modes, 'end_dist':end_dist, 'tot_deviation':tot_deviation, 'faults':modes, 'classification':classification, 'endpt':endpt}
+        return {'rate':0,'cost':0, 'prob':scen['properties'].get('prob',1), 
+                'expected cost':0, 'in_bound':in_bound, 'at_finish':at_finish, 
+                'line_dist':line_dist, 'num_modes':num_modes, 'end_dist':end_dist, 
+                'tot_deviation':tot_deviation, 'faults':modes, 'classification':classification, 
+                'endpt':endpt}
 
 import fmdtools.resultdisp as rd
 
@@ -527,17 +547,17 @@ def plot_course(hist, label=True, ax=False):
     if label==True: nom_lab="Nominal"; bound_lab="Bounds"; center_lab="Center-line"
     else:           nom_lab='_nolegend_'; bound_lab='_nolegend_'; center_lab='_nolegend_'
 
-    ax.plot(hist['flows']['Ground']['x'],hist['flows']['Ground']['y'], color='blue')
-    ax.scatter(hist['flows']['Ground']['x'][-1],hist['flows']['Ground']['y'][-1], color='blue', marker='*', label=nom_lab)
+    ax.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='blue')
+    ax.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='blue', marker='*', label=nom_lab)
 
-    x_ground = hist['flows']['Ground']['lbx']
-    y_ground = hist['flows']['Ground']['lby']
+    x_ground = hist['flows']['ground']['lbx']
+    y_ground = hist['flows']['ground']['lby']
     ax.plot(x_ground,y_ground, label=bound_lab, color='grey')
-    x_ground = hist['flows']['Ground']['ubx']
-    y_ground = hist['flows']['Ground']['uby']
+    x_ground = hist['flows']['ground']['ubx']
+    y_ground = hist['flows']['ground']['uby']
     ax.plot(x_ground,y_ground, label=bound_lab, color='grey')
-    x_ground = hist['flows']['Ground']['x']
-    y_ground = hist['flows']['Ground']['liney']
+    x_ground = hist['flows']['ground']['x']
+    y_ground = hist['flows']['ground']['liney']
     ax.plot(x_ground,y_ground, label=center_lab, color='grey', linestyle='--')
 
 def plot_trajectories(mdlhists, nomhist=[],  app= [], faultlabel='Faulty', faultalpha=0.1, range_hist={}, rangealpha=0.1, setalpha=0.3, show_labels=True, title="Fault Trajectories", textoffset=2.0,mode_trunc=5,mode_trunc_end=5, xlim=None, ylim=None, figsize=(4,4), ax=False, legend=True):
@@ -548,24 +568,24 @@ def plot_trajectories(mdlhists, nomhist=[],  app= [], faultlabel='Faulty', fault
     else: fig=ax.get_figure()
     for mode, hist in range_hist.items():
         if mode[6:11]=='hmode':
-            ax.plot(hist['flows']['Ground']['x'],hist['flows']['Ground']['y'], color='yellow', alpha=rangealpha)
-            ax.scatter(hist['flows']['Ground']['x'][-1],hist['flows']['Ground']['y'][-1], color='yellow', alpha=rangealpha, marker='o', label='Range')
+            ax.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='yellow', alpha=rangealpha)
+            ax.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='yellow', alpha=rangealpha, marker='o', label='Range')
     for mode, hist in mdlhists.items():
         if mode=='nominal':
             plot_course(hist, ax=ax)
             in_mdlhists=True
         elif mode[6:11]=='hmode':
-            ax.plot(hist['flows']['Ground']['x'],hist['flows']['Ground']['y'], color='orange', alpha=setalpha)
-            ax.scatter(hist['flows']['Ground']['x'][-1],hist['flows']['Ground']['y'][-1], color='orange', alpha=setalpha, marker='o', label='Set')
+            ax.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='orange', alpha=setalpha)
+            ax.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='orange', alpha=setalpha, marker='o', label='Set')
         else:
-            ax.plot(hist['flows']['Ground']['x'],hist['flows']['Ground']['y'], color='red', alpha=faultalpha)
-            ax.scatter(hist['flows']['Ground']['x'][-1],hist['flows']['Ground']['y'][-1], color='red', alpha=faultalpha, marker='*', label=faultlabel)
+            ax.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='red', alpha=faultalpha)
+            ax.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='red', alpha=faultalpha, marker='*', label=faultlabel)
             if show_labels:
                 label = mode[mode_trunc:]
                 label = label[:-mode_trunc_end]
                 randang = np.pi*np.random.rand()
-                ax.annotate(label, xy=(hist['flows']['Ground']['x'][-1],hist['flows']['Ground']['y'][-1]), fontsize=8, xytext=(textoffset*np.sin(randang), textoffset*np.cos(randang)), textcoords='offset points')
-    if app: ax.scatter(hist['flows']['Ground']['x'][int(app.times[0])-1],hist['flows']['Ground']['y'][int(app.times[0])-1], color='black', marker='X', s=5, label='fault time')
+                ax.annotate(label, xy=(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1]), fontsize=8, xytext=(textoffset*np.sin(randang), textoffset*np.cos(randang)), textcoords='offset points')
+    if app: ax.scatter(hist['flows']['ground']['x'][int(app.times[0])-1],hist['flows']['ground']['y'][int(app.times[0])-1], color='black', marker='X', s=5, label='fault time')
     if not in_mdlhists and nomhist: plot_course(nomhist, ax=ax)
     if xlim: ax.set_xlim(*xlim)
     if ylim: ax.set_ylim(*ylim)
@@ -581,14 +601,14 @@ def plot_trajectories(mdlhists, nomhist=[],  app= [], faultlabel='Faulty', fault
 
 def compare_trajectories(mdlhist1, mdlhist2, mdlhist1_name='fault trajectories', mdlhist2_name='comparison trajectories', faulttimes = [], nomhist=[]):
     for mode, hist in mdlhist1.items():
-        plt.plot(hist['flows']['Ground']['x'],hist['flows']['Ground']['y'], color='grey', alpha=0.2, zorder=1)
-        plt.scatter(hist['flows']['Ground']['x'][-1],hist['flows']['Ground']['y'][-1], color='grey', alpha=0.3, marker='o', label=mdlhist1_name, zorder=2)
+        plt.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='grey', alpha=0.2, zorder=1)
+        plt.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='grey', alpha=0.3, marker='o', label=mdlhist1_name, zorder=2)
     for mode, hist in mdlhist2.items():
-        plt.plot(hist['flows']['Ground']['x'],hist['flows']['Ground']['y'], color='tab:orange', alpha=0.2, zorder=1)
-        plt.scatter(hist['flows']['Ground']['x'][-1],hist['flows']['Ground']['y'][-1], color='tab:orange', alpha=0.3, marker='o', label=mdlhist2_name, zorder=2)
+        plt.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='tab:orange', alpha=0.2, zorder=1)
+        plt.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='tab:orange', alpha=0.3, marker='o', label=mdlhist2_name, zorder=2)
     if faulttimes:
-        xfaults = [x for ind, x in enumerate(nomhist['flows']['Ground']['x']) if ind+1<len(nomhist['time']) and nomhist['time'][ind+1] in faulttimes]
-        yfaults = [y for ind, y in enumerate(nomhist['flows']['Ground']['y']) if ind+1<len(nomhist['time']) and nomhist['time'][ind+1] in faulttimes]
+        xfaults = [x for ind, x in enumerate(nomhist['flows']['ground']['x']) if ind+1<len(nomhist['time']) and nomhist['time'][ind+1] in faulttimes]
+        yfaults = [y for ind, y in enumerate(nomhist['flows']['ground']['y']) if ind+1<len(nomhist['time']) and nomhist['time'][ind+1] in faulttimes]
         plt.scatter(xfaults, yfaults, marker = 'x', color='black',  label='fault times', zorder=3)
     if nomhist: plot_course(nomhist)
     handles, labels = plt.gca().get_legend_handles_labels()
@@ -618,8 +638,8 @@ def plot_map(mdl, mdlhist):
 
 def plot_centerline_err(mdl, mdlhist):
     fig = plt.figure()
-    x_rover = mdlhist['flows']['Ground']['x']
-    y_rover = mdlhist['flows']['Ground']['y']
+    x_rover = mdlhist['flows']['ground']['x']
+    y_rover = mdlhist['flows']['ground']['y']
     if mdl.params['linetype']=='sine':
         y_line = [sin_func(x,y_rover[i], mdl.params['amp'], mdl.params['period'])[1] for i,x in enumerate(x_rover)]
     elif mdl.params['linetype']=='turn':
@@ -630,26 +650,26 @@ def plot_centerline_err(mdl, mdlhist):
     plt.ylabel("y-error (meters)")
     plt.title("Rover Centerline Error")
 
-class_tree = {'Rover': [-0.07367185100835244, 0.6410710936138487],
- 'Drive': [0.23684893559545173, 0.36072825626681254],
- 'Environment': [-0.5104502883293205, 0.38994116849132504],
- 'Avionics': [-0.20614969706316938, 0.3834687620416293],
- 'Override': [0.03237968031217919, 0.3759790214222677],
- 'Perception': [-0.8350044759810874, 0.40176785861898856],
- 'Power': [0.4699926035926743, 0.35927158639441575],
- 'Operator': [0.6783281961222181, 0.4006550001329594],
- 'Communications': [1.0406903861169736, 0.37725113274488953],
- 'MotorControl': [0.02456213706952065, -0.17456190594455168],
- 'EE_5': [0.20244547912639976, 0.06448327387605401],
- 'OverrideComms': [0.1966879650681026, -0.4239713648342337],
- 'EE_15': [0.3596916288553037, 0.1191691659491266],
- 'Comms': [0.7930664677006409, 0.2234018617977897],
- 'Ground': [-0.5636731555210449, -0.024506034628188678],
- 'AvionicsControl': [-0.22848556112602958, -0.0821525471741435],
- 'Pos_Signal': [0.4189018653841845, -0.27023016168716785],
- 'Control': [0.6801636335956871, 0.08587826440540502],
- 'Video': [-0.6095250803472407, -0.32199506812858303],
- 'EE_12': [0.6762136362997685, -0.26803553393104507]}
+class_tree = {'rover': [-0.07367185100835244, 0.6410710936138487],
+ 'drive': [0.23684893559545173, 0.36072825626681254],
+ 'environment': [-0.5104502883293205, 0.38994116849132504],
+ 'avionics': [-0.20614969706316938, 0.3834687620416293],
+ 'override': [0.03237968031217919, 0.3759790214222677],
+ 'perception': [-0.8350044759810874, 0.40176785861898856],
+ 'power': [0.4699926035926743, 0.35927158639441575],
+ 'operator': [0.6783281961222181, 0.4006550001329594],
+ 'communications': [1.0406903861169736, 0.37725113274488953],
+ 'motor_control': [0.02456213706952065, -0.17456190594455168],
+ 'ee_5': [0.20244547912639976, 0.06448327387605401],
+ 'override_comms': [0.1966879650681026, -0.4239713648342337],
+ 'ee_15': [0.3596916288553037, 0.1191691659491266],
+ 'comms': [0.7930664677006409, 0.2234018617977897],
+ 'ground': [-0.5636731555210449, -0.024506034628188678],
+ 'avionics_control': [-0.22848556112602958, -0.0821525471741435],
+ 'pos_signal': [0.4189018653841845, -0.27023016168716785],
+ 'control': [0.6801636335956871, 0.08587826440540502],
+ 'video': [-0.6095250803472407, -0.32199506812858303],
+ 'ee_12': [0.6762136362997685, -0.26803553393104507]}
 
 
 if __name__=="__main__":
@@ -662,9 +682,9 @@ if __name__=="__main__":
     from pymoo.algorithms.soo.nonconvex.pattern import PatternSearch
     import numpy as np
     mdl = Rover(modelparams=ModelParam(times=(0, 100), phases=(('start',0, 30), ('end', 31, 60)), use_end_condition=False))
-    track={'functions':{"Environment":"in_bound"},'flows':{"Ground":"all"}}
+    track={'functions':{"Environment":"in_bound"},'flows':{"ground":"all"}}
     rover_prob = search.ProblemInterface("rover_problem", mdl, pool=mp.Pool(5), staged=True, track=track)
-    app_drive = SampleApproach(mdl, faults='Drive', phases={'global':[0,39]}, defaultsamp={'samp':'evenspacing','numpts':3})
+    app_drive = SampleApproach(mdl, faults='drive', phases={'global':[0,39]}, defaultsamp={'samp':'evenspacing','numpts':3})
     rover_prob.add_simulation("drive_faults", "multi", app_drive.scenlist)
     rover_prob.add_variables("drive_faults", ("cor_f", (-10,100)), ("cor_d", (-100, 100)), ("cor_t", (-10,100)), vartype='param')
     rover_prob.add_objectives("drive_faults", end_dist="end_dist", tot_deviation="tot_deviation")
@@ -685,24 +705,24 @@ if __name__=="__main__":
     plot_map(mdl, mdlhist)
 
     mdl_id = Rover(valparams={'drive_modes':'set'})
-    app_id = SampleApproach(mdl_id, faults='Drive', phases={'drive':phases['Avionics']['drive']}, defaultsamp={'samp':'evenspacing', 'numpts':3})
+    app_id = SampleApproach(mdl_id, faults='drive', phases={'drive':phases['avionics']['drive']}, defaultsamp={'samp':'evenspacing', 'numpts':3})
     endclasses_id, mdlhists_id = prop.approach(mdl_id, app_id)  #pool=mp.Pool(4))
 
-    #behave_endclasses_nested, behave_mdlhists_nested = prop.nested_approach(mdl, behave_nomapp, pool=mp.Pool(5), faults='Drive')
+    #behave_endclasses_nested, behave_mdlhists_nested = prop.nested_approach(mdl, behave_nomapp, pool=mp.Pool(5), faults='drive')
 
     #res_comp = rd.tabulate.resilience_factor_comparison(behave_nomapp, behave_endclasses_nested, ['t'], 'at_finish', percent=False)
     #fig = rd.plot.resilience_factor_comparison(res_comp, stack=True)
 
-    #endresults,  mdlhist = prop.one_fault(mdl, 'Drive','hmode_34', time=1, staged=False)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Drive':['friction','drift']})
+    #endresults,  mdlhist = prop.one_fault(mdl, 'drive','hmode_34', time=1, staged=False)
+    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
 
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Drive':['friction','drift', 'transfer']})
+    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift', 'transfer']})
 
     mdl = Rover(params, valparams={'drive_modes':'manual'})
-    endresults,  mdlhist = prop.one_fault(mdl, 'Drive','elec_open', time=1, staged=False)
+    endresults,  mdlhist = prop.one_fault(mdl, 'drive','elec_open', time=1, staged=False)
     
     mdl = Rover(params, valparams={'drive_modes':100})
-    endresults,  mdlhist = prop.one_fault(mdl, 'Drive','hmode_34', time=1, staged=False)
+    endresults,  mdlhist = prop.one_fault(mdl, 'drive','hmode_34', time=1, staged=False)
     
     
     x = [1.0,0.0,1.0]
@@ -710,12 +730,12 @@ if __name__=="__main__":
 
     _, mdlhist = prop.nominal(mdl)
 
-    endresults, reshist = prop.one_fault(mdl,'Drive','custom_fault', time=15, staged=True)
+    endresults, reshist = prop.one_fault(mdl,'drive','custom_fault', time=15, staged=True)
     
     
     line_dist = endresults['line_dist']
-    end_loc = (reshist['faulty']['flows']['Ground']['x'][-1],reshist['faulty']['flows']['Ground']['y'][-1])
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Drive':['friction','drift']})
+    end_loc = (reshist['faulty']['flows']['ground']['x'][-1],reshist['faulty']['flows']['ground']['y'][-1])
+    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
 
    # app = NominalApproach()
    # app.add_param_ranges(gen_model_params, 'app', x, scen = (0,len(scen)-1,1))
@@ -737,25 +757,25 @@ if __name__=="__main__":
     plot_map(mdl, mdlhist)
 
     mdl_id = Rover(valparams={'drive_modes':'else'})
-    app_id = SampleApproach(mdl_id, faults='Drive', phases={'drive':phases['Avionics']['drive']})
+    app_id = SampleApproach(mdl_id, faults='drive', phases={'drive':phases['avionics']['drive']})
     endclasses_id, mdlhists_id = prop.approach(mdl_id, app_id, staged=True)
 
 
     params = gen_params('sine',cor_d=-180, cor_f=1)
     mdl_thing = Rover(params=params)
-    _,_, reshist = prop.one_fault(mdl,'Drive','stuck_right', time=15, staged=True)
+    _,_, reshist = prop.one_fault(mdl,'drive','stuck_right', time=15, staged=True)
     plt.figure()
     f = plot_trajectories({'nominal':mdlhist}, reshist,  faultalpha=0.6)
 
-    rd.plot.mdlhistvals(reshist, time=15, fxnflowvals={'Drive':['friction','drift', 'transfer'], 'Power':'all'})
+    rd.plot.mdlhistvals(reshist, time=15, fxnflowvals={'drive':['friction','drift', 'transfer'], 'power':'all'})
 
-    app_opt = SampleApproach(mdl, faults='Drive', phases={'drive':phases['Avionics']['drive']}, defaultsamp={'samp':'evenspacing','numpts':4})
+    app_opt = SampleApproach(mdl, faults='drive', phases={'drive':phases['avionics']['drive']}, defaultsamp={'samp':'evenspacing','numpts':4})
 
-    #endresults,  mdlhist = prop.one_fault(mdl, 'Drive','elec_open', time=1, staged=False)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Drive':['friction','drift', 'transfer']})
+    #endresults,  mdlhist = prop.one_fault(mdl, 'drive','elec_open', time=1, staged=False)
+    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift', 'transfer']})
 
-    #endresults,  mdlhist = prop.one_fault(mdl, 'Drive','hmode_34', time=1, staged=False)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Drive':['friction','drift']})
+    #endresults,  mdlhist = prop.one_fault(mdl, 'drive','hmode_34', time=1, staged=False)
+    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
 
 
     x = [100,0,2,0,2,-2,0,0,0]
@@ -765,7 +785,7 @@ if __name__=="__main__":
 
     _,_, nomhist = prop.nominal(mdl_0)
     phases, modephases = rd.process.modephases(nomhist)
-    app_0 = SampleApproach(mdl, faults='Drive', phases={'drive':phases['Avionics']['drive']}, defaultsamp={'samp':'evenspacing','numpts':4})
+    app_0 = SampleApproach(mdl, faults='drive', phases={'drive':phases['avionics']['drive']}, defaultsamp={'samp':'evenspacing','numpts':4})
     endclasses_0, mdlhists_0 = prop.approach(mdl_0, app_0, staged=True)
     plt.figure()
     f = plot_trajectories(mdlhists_0, app=app_0,  faultalpha=0.6)
@@ -788,17 +808,17 @@ if __name__=="__main__":
 
     plot_map(mdl, mdlhist)
 
-    #endresults,  mdlhist = prop.one_fault(mdl, 'Drive','elec_open', staged=True, time=13, gtype='typegraph')
-    endresults,  mdlhist_feed = prop.one_fault(mdl, 'Perception', 'bad_feed', staged=True, time=7, gtype='typegraph')
+    #endresults,  mdlhist = prop.one_fault(mdl, 'drive','elec_open', staged=True, time=13, gtype='typegraph')
+    endresults,  mdlhist_feed = prop.one_fault(mdl, 'perception', 'bad_feed', staged=True, time=7, gtype='typegraph')
     plot_trajectories(mdlhist_feed, mdlhist, faultalpha=1.0)
 
 
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Power':['charge','power']}, time=7, phases=phases, modephases=modephases)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Ground':['x','y', 'angle','vel', 'liney', 'ang']}, time=7, phases=phases)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Pos_Signal':['x','y', 'angle','vel', 'heading']}, time=7, phases=phases)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MotorControl':['rpower','lpower']}, time=7, phases=phases)
-    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Avionics':['mode']}, time = 13, phases=phases, modephases=modephases)
-    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Perception':['mode']}, time = 13, phases=phases, modephases=modephases)
+    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'power':['charge','power']}, time=7, phases=phases, modephases=modephases)
+    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'ground':['x','y', 'angle','vel', 'liney', 'ang']}, time=7, phases=phases)
+    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'pos_signal':['x','y', 'angle','vel', 'heading']}, time=7, phases=phases)
+    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'motor_control':['rpower','lpower']}, time=7, phases=phases)
+    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'avionics':['mode']}, time = 13, phases=phases, modephases=modephases)
+    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'perception':['mode']}, time = 13, phases=phases, modephases=modephases)
     #rd.plot.mdlhistvals(mdlhist, fxnflowvals={}, time = 7, phases=phases, modephases=modephases)
     app = NominalApproach()
     app.add_param_ranges(gen_params,'sine', 'sine', amp=(0, 10, 0.2), wavelength=(10,50,10))
@@ -809,8 +829,8 @@ if __name__=="__main__":
 #    rd.graph.plot_bipgraph(classgraph, {node:node for node in classgraph.nodes},[],[],{}, pos=pos)
     rd.graph.show( gtype='typegraph', scale=0.7)
 
-    #endresults,  mdlhist = prop.one_fault(mdl, 'Drive','elec_open', staged=True, time=13, gtype='bipartite')
-    endresults,  mdlhist = prop.one_fault(mdl, 'Perception', 'bad_feed', staged=True, time=13, gtype='bipartite')
+    #endresults,  mdlhist = prop.one_fault(mdl, 'drive','elec_open', staged=True, time=13, gtype='bipartite')
+    endresults,  mdlhist = prop.one_fault(mdl, 'perception', 'bad_feed', staged=True, time=13, gtype='bipartite')
     rd.graph.show( gtype='bipartite', scale=0.7)
 
     reshist, _, _ = rd.process.hist(mdlhist)
