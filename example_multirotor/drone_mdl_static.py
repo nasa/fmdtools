@@ -85,14 +85,9 @@ class DistEE(FxnBlock):
         if self.ee_in.s.rate>2:
             self.m.add_fault('short')
     def behavior(self, time):
-        if self.m.has_fault('short'): 
-            self.s.ee_tr=0.0
-            self.s.ee_te=10.0
-        elif self.m.has_fault('break'): 
-            self.s.ee_tr=0.0
-            self.s.ee_te=0.0
-        elif self.m.has_fault('degr'): 
-            self.s.ee_te=0.5
+        if self.m.has_fault('short'):       self.s.put(ee_tr=0.0, ee_te=10.0)
+        elif self.m.has_fault('break'):     self.s.put(ee_tr=0.0, ee_te=0.0)
+        elif self.m.has_fault('degr'):      self.s.put(ee_te=0.5)
         self.ee_mot.s.effort=self.s.ee_te*self.ee_in.s.effort
         self.ee_ctl.s.effort=self.s.ee_te*self.ee_in.s.effort
         self.ee_in.s.rate=m2to1([self.ee_in.s.effort, self.s.ee_tr, 0.9*self.ee_mot.s.rate+0.1*self.ee_ctl.s.rate])
@@ -192,8 +187,9 @@ class CtlDOF(FxnBlock):
     def condfaults(self, time):
         if self.fs.s.support<0.5: self.m.add_fault('noctl')
     def behavior(self, time):
-        if self.m.has_fault('noctl'):    self.s.cs=0.0
-        elif self.m.has_fault('degctl'): self.s.cs=0.5
+        if self.m.has_fault('noctl'):       self.s.cs=0.0
+        elif self.m.has_fault('degctl'):    self.s.cs=0.5
+        else:                               self.s.cs=1.0
         
         upthrottle=1.0
         if self.dir.s.z>1:        upthrottle=2

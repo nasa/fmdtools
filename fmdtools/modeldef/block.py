@@ -18,7 +18,7 @@ import inspect
 import warnings
 from recordclass import dataobject, asdict
 
-from .common import State, Parameter, Rand, get_true_fields, Timer
+from .common import State, Parameter, Rand, get_true_fields,get_true_field, Timer
 from .flow import init_flow, Flow
 
 class Fault(dataobject, readonly=True, mapping=True):
@@ -298,6 +298,10 @@ class Mode(dataobject, readonly=False):
         self.mode = mode_to_mirror.mode
         self.faults.clear()
         self.faults.update(mode_to_mirror.faults)
+    def get_true_field(self, fieldname, *args, **kwargs):
+        return get_true_field(self, fieldname, *args, **kwargs)
+    def get_true_fields(self, *args, **kwargs):
+        return get_true_field(self, *args, **kwargs)
 
 def assoc_flows(obj, flows={}):
     """
@@ -630,6 +634,10 @@ class CompArch(dataobject, mapping=True):
     def reset(self):
         for name, component in self.components.items():
             component.reset()
+    def get_true_field(self, fieldname, *args, **kwargs):
+        return get_true_field(self, fieldname, *args, **kwargs)
+    def get_true_fields(self, *args, **kwargs):
+        return get_true_field(self, *args, **kwargs)
     
 ## Actions/ASGs
 class Action(Block):
