@@ -31,6 +31,12 @@ def get_true_fields(dataobject, *args,  force_kwargs = False, **kwargs):
         if i<len(args):     true_args[i]=args[i]
         elif n in kwargs:   true_args[i]=kwargs[n]
     return true_args
+def get_true_field(dataobject, fieldname, *args, **kwargs):
+    """Gets the value that will be set to fieldname given *args and **kwargs"""
+    if fieldname in kwargs:                         return kwargs[fieldname]
+    field_ind = dataobject.__fields__.index(fieldname)
+    if args and len(args)>field_ind:                return args[field_ind]
+    else:                                           return dataobject.__defaults__[field_ind]
 
 class State(dataobject, mapping=True):
     """ """
@@ -384,12 +390,9 @@ class Parameter(dataobject, readonly=True):
         if not ('*args' in signature) and ('**kwargs' in signature):
             raise Exception("*args and **kwargs not in __init__()--will not pickle.")
     def get_true_field(self, fieldname, *args, **kwargs):
-        """Gets the value that will be set to fieldname given *args and **kwargs"""
-        if fieldname in kwargs:                         return kwargs[fieldname]
-        field_ind = self.__fields__.index(fieldname)
-        if args and len(args)>field_ind:                return args[field_ind]
-        else:                                           return self.__defaults__[field_ind]
-
+        return get_true_field(self, fieldname, *args, **kwargs)
+    def get_true_fields(self, *args, **kwargs):
+        return get_true_field(self, *args, **kwargs)
 
 class Rand(dataobject, mapping=True):
     rng:            np.random.default_rng
@@ -445,6 +448,10 @@ class Rand(dataobject, mapping=True):
         if hasattr(self,'s'):
             self.s.assign(other_rand.s)
         self.rng.__setstate__(other_rand.rng.__getstate__())
+    def get_true_field(self, fieldname, *args, **kwargs):
+        return get_true_field(self, fieldname, *args, **kwargs)
+    def get_true_fields(self, *args, **kwargs):
+        return get_true_field(self, *args, **kwargs)
 
 def get_pdf_for_rand(x, randname, args):
     """

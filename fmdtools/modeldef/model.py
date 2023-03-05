@@ -219,10 +219,7 @@ class Model(object):
             try:
                 self.fxns[name] = fclass(name, flows=flows, params=fparams, **fkwargs)
             except TypeError as e:
-                raise TypeError("For class "+str(fclass)+", make sure to include the arguments "
-                                "(name, flows=flows, params=fparams, **fkwargs) in __init__"
-                                ", provide the kwargs as kwargs (and not a dict), and make sure " 
-                                "the structure for the kwargs are initialized (e.g., x has a corresponding _init_x)") from e
+                raise TypeError("Poorly specified class "+str(fclass)+" (or poor arguments) ") from e
             self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams, 'kwargs': fkwargs}
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
