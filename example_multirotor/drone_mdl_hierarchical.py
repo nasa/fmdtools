@@ -24,24 +24,24 @@ from drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, Trajectory, ViewEnviron
             
 class OverallAffectDOFState(State):
     lrstab:     float=0.0
-    FRstab:     float=0.0
+    frstab:     float=0.0
 
 class AffectDOFArch(CompArch):
     archtype:   str='quad'
     upward:     dict= dict()
     forward:    dict=dict()
     lr_dict:    dict=dict()
-    FR_dict:    dict=dict()
+    fr_dict:    dict=dict()
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.archtype=="quad":
-            kwargs['components'], kwargs['faultmodes'] = self.make_components(Line,'lf', 'lr','rf','rr')
+            self.make_components(Line,'lf', 'lr','rf','rr')
             self.upward.update({'rf':1,'lf':1,'lr':1,'rr':1})
             self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5})
             self.lr_dict.update({'l':{'lf', 'lr'}, 'r':{'rf','rr'}})
             self.fr_dict.update({'f':{'lf', 'rf'}, 'r':{'lr', 'rr'}})
         elif self.archtype=="oct":
-            kwargs['components'], kwargs['faultmodes'] = self.make_components(Line,'lf', 'rf','lf2', 'rf2', 'lr', 'rr','lr2', 'rr2')
+            self.make_components(Line,'lf', 'rf','lf2', 'rf2', 'lr', 'rr','lr2', 'rr2')
             self.upward.update({'rf':1,'lf':1,'lr':1,'rr':1,'rf2':1,'lf2':1,'lr2':1,'rr2':1})
             self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5,'rf2':0.5,'lf2':0.5,'lr2':-0.5,'rr2':-0.5})
             self.lr_dict.update({'L':{'lf', 'lr','lf2', 'lr2'}, 'R':{'rf','rr','rf2','rr2'}})
@@ -54,7 +54,7 @@ class AffectDOF(FxnBlock): #EEmot,ctl,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
     _init_ctl_in = Control
     _init_dofs = DOFs
     _init_force = Force
-    flownames = {'ee_lin':'ee_in', 'ctl':'ctl_in','force_st':'force'}
+    flownames = {'ee_mot':'ee_in', 'ctl':'ctl_in','force_lin':'force'}
     def behavior(self, time):
         air, ee_in={},{}
         #injects faults into lines
@@ -66,42 +66,42 @@ class AffectDOF(FxnBlock): #EEmot,ctl,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         elif any(value!=0.0 for value in ee_in.values()):   self.ee_in.s.rate=sum(ee_in.values())/len(ee_in) #should it really be max?
         else:                                               self.ee_in.s.rate=0.0
         
-        self.s.lrstab = (sum([air[comp] for comp in self.c.lr_dict['L']])-sum([air[comp] for comp in self.c.lr_dict['R']]))/len(air)
-        self.s.FRstab = (sum([air[comp] for comp in self.c.FR_dict['R']])-sum([air[comp] for comp in self.c.fr_dict['F']]))/len(air)
+        self.s.lrstab = (sum([air[comp] for comp in self.c.lr_dict['l']])-sum([air[comp] for comp in self.c.lr_dict['r']]))/len(air)
+        self.s.frstab = (sum([air[comp] for comp in self.c.fr_dict['r']])-sum([air[comp] for comp in self.c.fr_dict['f']]))/len(air)
         
-        if abs(self.s.lrstab) >=0.4 or abs(self.s.FRstab)>=0.75:
+        if abs(self.s.lrstab) >=0.4 or abs(self.s.frstab)>=0.75:
             self.dofs.s.put(uppwr=0.0, planpwr=0.0)
         else:
             airs=list(air.values())
             self.dofs.s.uppwr=np.mean(airs)
-            self.dofs.s.planpwr=-2*self.s.FRstab
+            self.dofs.s.planpwr=-2*self.s.frstab
 
 from drone_mdl_static import AffectDOFMode, AffectDOFState
 class Line(Component):
     _init_s = AffectDOFState
     _init_m = AffectDOFMode
-    def behavior(self, EEin, Ctlin, cmds, Force):
+    def behavior(self, EEin, ctlin, cmds, Force):
         if Force<=0.0:   self.m.add_fault('mechbreak','propbreak')
         elif Force<=0.5: self.m.add_fault('mechfriction')
             
-        if self.m.has_fault('short'):                   self.s.put(Eti=0.0, Eto= np.inf)
-        elif self.m.has_fault('openc'):                 self.s.put(Eti=0.0, Eto= 0.0)
-        elif Ctlin.s.upward==0 and Ctlin.s.forward == 0:self.s.put(Eto= 0.0)
-        else:                                           self.s.put(Eto= 1.0)
+        if self.m.has_fault('short'):                   self.s.put(e_ti=0.0, e_to= np.inf)
+        elif self.m.has_fault('openc'):                 self.s.put(e_ti=0.0, e_to= 0.0)
+        elif ctlin.s.upward==0 and ctlin.s.forward == 0:self.s.put(e_to= 0.0)
+        else:                                           self.s.put(e_to= 1.0)
         
-        if self.m.has_fault('ctlbreak'):                self.s.put(Ct=0.0)
-        elif self.m.has_fault('ctldn'):                 self.s.put(Ct=0.5)
-        elif self.m.has_fault('ctlup'):                 self.s.put(Ct=2.0)
+        if self.m.has_fault('ctlbreak'):                self.s.put(ct=0.0)
+        elif self.m.has_fault('ctldn'):                 self.s.put(ct=0.5)
+        elif self.m.has_fault('ctlup'):                 self.s.put(ct=2.0)
         
-        if self.m.has_fault('mechbreak'):               self.s.put(Mt=0.0)
-        elif self.m.has_fault('mechfriction'):          self.s.put(Mt=0.5, Eti= 2.0) 
+        if self.m.has_fault('mechbreak'):               self.s.put(mt=0.0)
+        elif self.m.has_fault('mechfriction'):          self.s.put(mt=0.5, e_ti= 2.0) 
         
-        if self.m.has_fault('propstuck'):               self.s.put(Pt=0.0, Mt=0.0, Eti= 4.0) 
-        elif self.m.has_fault('propbreak'):             self.s.put(Pt=0.0)
-        elif self.m.has_fault('propwarp'):              self.s.put(Pt=0.5)
+        if self.m.has_fault('propstuck'):               self.s.put(pt=0.0, mt=0.0, e_ti= 4.0) 
+        elif self.m.has_fault('propbreak'):             self.s.put(pt=0.0)
+        elif self.m.has_fault('propwarp'):              self.s.put(pt=0.5)
         
-        Airout=m2to1([EEin,self.s.Eti,Ctlin.s.upward*cmds['up']+Ctlin.s.forward*cmds['for'],self.s.Ct,self.s.Mt,self.s.Pt])
-        EE_in=m2to1([EEin,self.s.Eto])   
+        Airout=m2to1([EEin,self.s.e_ti,ctlin.s.upward*cmds['up']+ctlin.s.forward*cmds['for'],self.s.ct,self.s.mt,self.s.pt])
+        EE_in=m2to1([EEin,self.s.e_to])   
         return Airout, EE_in
 
 class DroneParam(Parameter, readonly=True):
@@ -122,15 +122,15 @@ class Drone(Model):
         self.add_flow('ee_1',       EE)
         self.add_flow('ee_mot',     EE)
         self.add_flow('ee_ctl',     EE)
-        self.add_flow('ctl',       Control)
+        self.add_flow('ctl',        Control)
         self.add_flow('dofs',       DOFs)
-        self.add_flow('env',        Env)
+        self.add_flow('env',        Env, s={'z':0.0})
         self.add_flow('dir',        Dir)
         #add functions to the model
         self.add_fxn('store_ee',    ['ee_1', 'force_st'],                           fclass=StoreEE)
         self.add_fxn('dist_ee',     ['ee_1','ee_mot','ee_ctl', 'force_st'],         fclass=DistEE)
-        self.add_fxn('affect_dof',  ['ee_mot','ctl','dofs','force_lin'],           fclass=AffectDOF, fkwargs={'c':{'archtype':params.arch}})
-        self.add_fxn('ctl_dof',     ['ee_ctl', 'dir', 'ctl', 'dofs', 'force_st'],  fclass=CtlDOF)
+        self.add_fxn('affect_dof',  ['ee_mot','ctl','dofs','force_lin'],            fclass=AffectDOF, c={'archtype':params.arch})
+        self.add_fxn('ctl_dof',     ['ee_ctl', 'dir', 'ctl', 'dofs', 'force_st'],   fclass=CtlDOF)
         self.add_fxn('plan_path',   ['ee_ctl', 'env','dir', 'force_st'],            fclass=PlanPath)
         self.add_fxn('trajectory',  ['env','dofs','dir', 'force_gr'],               fclass=Trajectory)
         self.add_fxn('engage_land', ['force_gr', 'force_lg'],                       fclass=EngageLand)
@@ -179,7 +179,7 @@ class Drone(Model):
         else:
             lostcost=0
         
-        if any(abs(mdlhists['faulty']['flows']['Force_GR']['support'])>2.0):
+        if any(abs(mdlhists['faulty']['flows']['force_gr']['support'])>2.0):
             crashcost = 100000
         else:
             crashcost = 0
@@ -193,12 +193,12 @@ class Drone(Model):
 if __name__=="__main__":
     
     hierarchical_model = Drone(params=DroneParam(arch='quad'))
-    endclass, mdlhist = fs.propagate.one_fault(hierarchical_model,'affect_dof', 'rfmechbreak', time=50)
+    endclass, mdlhist = fs.propagate.one_fault(hierarchical_model,'affect_dof', 'rf_mechbreak', time=50)
     
     mdl = Drone(params=DroneParam(arch='oct'))
-    app = SampleApproach(mdl, faults=[('affect_dof', 'rr2propstuck')])
+    app = SampleApproach(mdl, faults=[('affect_dof', 'rr2_propstuck')])
     endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=False)
-    rd.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['affect_dof rr2propstuck, t=49.0']},fxnflowvals='env')
+    rd.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['affect_dof rr2_propstuck, t=49.0']},fxnflowvals='env')
 
 
 

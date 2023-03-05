@@ -15,6 +15,7 @@ import itertools
 import networkx as nx
 import copy
 import inspect
+import warnings
 from recordclass import dataobject, asdict
 
 from .common import State, Parameter, Rand, get_true_fields, Timer
@@ -244,8 +245,9 @@ class Mode(dataobject, readonly=False):
         if self.exclusive: 
             if len(faults)>1:   raise Exception("Multiple fault modes added to function with exclusive fault representation")
             elif len(faults)==0 and self.mode in self.faultmodes: 
-                raise Exception("No faults but mode is still in faultmode "+self.mode)
-            else: self.mode=faults[0]
+                raise Exception("In "+str(self.__class__)+"--no faults but mode is still in faultmode "+self.mode)
+            elif faults: 
+                self.mode=faults[0]
     def replace_fault(self, fault_to_replace,fault_to_add): 
         """Replaces fault_to_replace with fault_to_add in the set of faults
         
@@ -321,10 +323,12 @@ def assoc_flows(obj, flows={}):
             att = getattr(obj, init_att)
             attname = init_att[6:]
             if inspect.isclass(att) and issubclass(att, Flow) and not(attname in obj.flows):
-                if attname in flows:    obj.flows[attname]=flows[attname]
+                if attname in flows:    obj.flows[attname]=flows.pop(attname)
                 else:                   obj.flows[attname]=att(attname)
                 if not isinstance(obj, dataobject):
                     setattr(obj, attname, obj.flows[attname])
+    if flows:
+        warnings.warn("these flows sent from model "+str([*flows.keys()])+" not added to class "+str(obj.__class__))
 def inject_faults_internal(obj, faults):
     """
     Injects faults in the CompArch/ASG object obj.
@@ -611,7 +615,7 @@ class CompArch(dataobject, mapping=True):
     def inject_fault_in_component(self, fault):
         if fault in self.faultmodes:
             component = self.components[self.faultmodes[fault]]
-            component.m.add_fault(fault[len(component.name):])
+            component.m.add_fault(fault[len(component.name):]+1)
     def update_seed(self, seed):
         for comp in self.components.values():
             comp.update_seed(seed)
@@ -622,7 +626,7 @@ class CompArch(dataobject, mapping=True):
                 rand_states[compname] = comp.get_rand_states(auto_update_only=auto_update_only)
         return rand_states
     def get_faults(self):
-        return {comp.name+f for comp in self.components.values() for f in comp.m.faults}
+        return {comp.name+'_'+f for comp in self.components.values() for f in comp.m.faults}
     def reset(self):
         for name, component in self.components.items():
             component.reset()
@@ -948,7 +952,11 @@ class FxnBlock(Block):
                 at_flows = dict()
                 for flowname, flow in self.flows.items():
                     if hasattr(at_init, '_init_'+flowname): at_flows[flowname]=flow
-                setattr(self, at,  getattr(self, '_init_'+at)(flows=at_flows, **at_arg))
+                try:
+                    if at_flows:    setattr(self, at,  at_init(flows=at_flows, **at_arg))
+                    else:           setattr(self, at,  at_init(**at_arg))
+                except TypeError as e:
+                    raise TypeError("Poor specification for : "+str(at_init)+" with kwargs: "+str(at_arg)) from e
                 setattr(self, '_args_'+at,  at_arg)
                 if at=='c':     compacts = self.c.components
                 elif at=='a':   compacts = self.a.actions
@@ -1081,7 +1089,7 @@ class FxnBlock(Block):
         comps = getattr(self, 'c', {'components':{}})['components']
         if comps:
             self.m.faults.difference_update(self.c.faultmodes)
-            self.m.faults.update(self.c.get_comp_faults())
+            self.m.faults.update(self.c.get_faults())
         self.time=time
         if run_stochastic=='track_pdf': self.probdens = self.r.return_probdens()
         if (self.m.exclusive==True and len(self.m.faults)>1): 
