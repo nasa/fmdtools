@@ -52,7 +52,7 @@ class State(dataobject, mapping=True):
         as_copy: bool, set to True for dicts/sets to be copied rather than referenced
         """
         for name, value in kwargs.items():
-            if name not in self.__fields__: raise Exception(name+" not a property of "+self.name)
+            if name not in self.__fields__: raise Exception(name+" not a property of "+str(self.__class__))
             if as_copy: value=copy.copy(value)
             setattr(self, name, value)
     def assign(self,obj,*states, as_copy=True, **statedict):
