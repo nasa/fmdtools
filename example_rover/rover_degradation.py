@@ -46,7 +46,7 @@ class DriveDegradation(FxnBlock):
 class RoverDegradation(Model):
     def __init__(self, params=Parameter(), modelparams=ModelParam(times=(0,100), seed=102), valparams={}):
         super().__init__(params, modelparams, valparams)
-        self.add_fxn("Drive", [], fclass= DriveDegradation)
+        self.add_fxn("Drive", DriveDegradation)
         self.build_model(require_connections=False)
 
 def get_params_from(mdlhist, t=1):
@@ -110,7 +110,7 @@ if __name__=="__main__":
 
     rd.plot.metric_dist(behave_endclasses, metrics=['line_dist', 'end_dist', 'x', 'y'], comp_groups=comp_groups, alpha=0.5, bins=10, metric_bins={'x':20})
 
-    rd.plot.metric_dist_from(behave_mdlhists, times= [0, 10, 20], fxnflowvals = {'Ground':['x', 'y', 'linex', 'ang']}, alpha=0.5, bins=10)
+    rd.plot.metric_dist_from(behave_mdlhists, times= [0, 10, 20], fxnflowvals = {'ground':['x', 'y', 'linex', 'ang']}, alpha=0.5, bins=10)
 
-    rd.plot.metric_dist_from(behave_mdlhists, times= 30, fxnflowvals = {'Ground':['x', 'y', 'linex', 'ang']}, comp_groups=comp_groups, alpha=0.5, bins=10)
+    rd.plot.metric_dist_from(behave_mdlhists, times= 30, fxnflowvals = {'ground':['x', 'y', 'linex', 'ang']}, comp_groups=comp_groups, alpha=0.5, bins=10)
     

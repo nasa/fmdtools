@@ -21,185 +21,244 @@ human errors during early design stage functional failure analysis. In ASME
 Information in Engineering Conference. American Society of Mechanical Engineers 
 Digital Collection.
 """
-from fmdtools.modeldef.common import Parameter
+from fmdtools.modeldef.common import Parameter, State
+from fmdtools.modeldef.flow import Flow
 from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.block import FxnBlock, Component
+from fmdtools.modeldef.block import FxnBlock, Action, Mode, ASG
 
+class WatState(State):
+    effort: float=1.0
+    rate:   float=1.0
+class Water(Flow):
+    _init_s=WatState
 
+class SigState(State):
+    indicator:  int=1
+    action:     int=0
+class Signal(Flow):
+    _init_s = SigState
+
+class TransportLiquidState(State):
+    amt_open: int=1
+class TransportLiquidMode(Mode):
+    faultparams={'stuck':(1e-5,[1,0],0)}
+    units='hr'
+    key_phases_by='global'
 class ImportLiquid(FxnBlock):
-    def __init__(self,name,flows):
-        super().__init__(name,flows,['Watout', 'Sig'],{'open':1})
-        self.assoc_modes({'Stuck':[1e-5,[1,0],0]}, units='hr', key_phases_by='global') # need to add human-induced?
+    _init_s = TransportLiquidState
+    _init_m = TransportLiquidMode
+    _init_sig = Signal
+    _init_watout = Water
+    flownames = {'wat_in_1':'watout', 'valve1_sig':'sig'}
     def static_behavior(self,time):
-        if not self.has_fault('Stuck'):
-            if   self.Sig.action>=2:    self.open=2
-            elif self.Sig.action==1:      self.open = 1
-            elif self.Sig.action==-1:   self.open = 0
-        self.Watout.effort=self.open
-        self.Sig.indicator = self.open
-        
+        if not self.m.has_fault('Stuck'):
+            if   self.sig.s.action>=2:    self.s.amt_open=2
+            elif self.sig.s.action==1:    self.s.amt_open = 1
+            elif self.sig.s.action==-1:   self.s.amt_open = 0
+        self.watout.s.effort=self.s.amt_open
+        self.sig.s.indicator = self.s.amt_open
 
 class ExportLiquid(FxnBlock):
-    def __init__(self,name, flows):
-        super().__init__(name,flows,['Watin', 'Sig'],{'open':1})
-        self.assoc_modes({'Stuck':[1e-5,[1,0],0]}, key_phases_by='global') # need to add human-induced?
+    _init_s = TransportLiquidState 
+    _init_m = TransportLiquidMode
+    _init_sig = Signal
+    _init_watin = Water
+    flownames = {'wat_out_2':'watin', 'valve2_sig':'sig'}
     def static_behavior(self,time):
-        if not self.has_fault('Stuck'):
-            if self.Sig.action==1:      self.open = 1
-            elif self.Sig.action==-1:   self.open = 0
-        self.Watin.rate=self.open*self.Watin.effort
-        self.Sig.indicator = self.open
-    
-    
+        if not self.m.has_fault('Stuck'):
+            if self.sig.s.action>=1:      self.s.open = 1
+            elif self.sig.s.action==-1:   self.s.open = 0
+        self.watin.s.rate=self.s.amt_open*self.watin.s.effort
+        self.sig.s.indicator = self.s.amt_open
+
+class GuideLiquidMode(Mode):
+    faultparams = {'Leak':(1e-5,[1,0],0), 
+                   'Clogged':(1e-5,[1,0],0)}
+    key_phases_by='global'
 class GuideLiquid(FxnBlock):
-    def __init__(self,name,flows):
-        super().__init__(name,flows,['Watin','Watout'])
-        self.assoc_modes({'Leak':[1e-5,[1,0],0], 'Clogged':[1e-5,[1,0],0]}, key_phases_by='global')
+    _init_watin=Water
+    _init_watout=Water 
     def static_behavior(self,time):
-        if self.has_fault('Clogged'):
-            self.Watin.rate=0.0
-            self.Watout.effort=0.0
-        elif self.has_fault('Leak'):
-            self.Watout.effort = self.Watin.effort - 1.0
-            self.Watin.rate = self.Watout.rate - 1.0
+        if self.m.has_fault('Clogged'):
+            self.watin.s.put(rate=0.0,effort=0.0)
+        elif self.m.has_fault('Leak'):
+            self.watout.s.effort = self.watin.s.effort - 1.0
+            self.watin.s.rate = self.watout.s.rate - 1.0
         else:
-            self.Watout.effort = self.Watin.effort
-            self.Watin.rate = self.Watout.rate     
-    
+            self.watout.s.assign(self.watin.s)
+class GuideLiquidIn(GuideLiquid):
+    flownames = {'wat_in_1':'watin', 'wat_in_2':'watout'}
+class GuideLiquidOut(GuideLiquid):
+    flownames = {'wat_out_1':'watin', 'wat_out_2':'watout'}
+
+class StoreLiquidState(State):
+    level:      float=10.0
+    net_flow:   float=0.0
+class StoreLiquidMode(Mode):
+    faultparams={'leak':(1e-5,[1,0],0)}
+    key_phases_by='global'
 class StoreLiquid(FxnBlock):
-    def __init__(self,name,flows, dt):
-        super().__init__(name,flows,['Watin','Watout', 'Sig'], {'level':10.0, 'net_flow': 0.0}, dt=dt)
-        self.assoc_modes({'Leak':[1e-5,[1,0],0]}, key_phases_by='global')
+    _init_s = StoreLiquidState
+    _init_m = StoreLiquidMode
+    _init_watin = Water
+    _init_watout = Water
+    _init_sig = Signal
+    flownames = {'wat_in_2':'watin', 'wat_out_1':'watout', 'tank_sig':'sig'}
     def static_behavior(self, time):
-        if self.level >= 20.0:
-            self.Watin.rate = 0.0 * self.Watin.effort
-            self.Watout.effort = 2.0 * self.Watin.effort
-            self.level = 20.0
-        elif self.level <=0.0:
-            self.Watout.effort = 0.0
-            self.Watin.rate = self.Watin.effort
-        else:
-            self.Watin.rate = self.Watin.effort
-            self.Watout.effort = 1.0
-        if self.level > 12:      self.Sig.indicator = -1
-        elif self.level < 8:    self.Sig.indicator = 1
-        else:                   self.Sig.indicator = 0
+        if self.s.level >= 20.0:
+            self.watin.s.rate = 0.0 * self.watin.s.effort
+            self.watout.s.effort = 2.0 * self.watin.s.effort
+            self.s.level = 20.0
+        elif self.s.level <=0.0:
+            self.watout.s.effort = 0.0
+            self.watin.s.rate = self.watin.s.effort
+        else: 
+            self.watin.s.put(rate=self.watin.s.effort, effort = 1.0)
+        if self.s.level > 12:   self.sig.s.indicator = -1
+        elif self.s.level < 8:  self.sig.s.indicator = 1
+        else:                   self.sig.s.indicator = 0
         
-        if self.has_fault('Leak'):  self.net_flow = self.Watin.rate - self.Watout.rate - 1.0
-        else:                       self.net_flow = self.Watin.rate - self.Watout.rate
+        if self.m.has_fault('leak'):    
+            self.s.net_flow = self.watin.s.rate - self.watout.s.rate - 1.0
+        else:                           
+            self.s.net_flow = self.watin.s.rate - self.watout.s.rate
     def dynamic_behavior(self,time):
-        self.inc(level=self.net_flow*self.dt)
-        #self.level = self.level + self.net_flow*self.dt
+        self.s.inc(level=self.s.net_flow*self.dt)
+        self.s.limit(level=(0.0, 25))
+        #self.s.level = self.s.level + self.s.net_flow*self.dt
+
+class HumanParam(Parameter):
+    reacttime: int=1
+class HumanASG(ASG):
+    reacttime:  float=0.0
+    _init_tank_sig = Signal
+    _init_valve1_sig = Signal 
+    _init_valve2_sig = Signal
+    _init_detect_sig = Signal
+    initial_action = "look"
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_act('look',  Look)
+        self.add_act('detect',Detect, 'detect_sig','tank_sig','valve1_sig', duration=self.reacttime)
+        self.add_act('reach', Reach)
+        self.add_act('grasp', Grasp)
+        self.add_act('turn',  Turn, 'detect_sig','valve1_sig', 'valve2_sig', duration=1.0)
         
-class HumanActions(FxnBlock):
-    def __init__(self,name, flows, reacttime):
-        actions = {'look':Look('look'),'detect':Detect('detect'),\
-                   'reach':Reach('reach'), 'grasp':Grasp('grasp'),\
-                   'turn':Turn('turn')}
-        super().__init__(name, flows,['Valve_Sig','Tank_Sig', 'OtherValve_Sig'], components=actions,timers={'t1'})
-        self.assoc_modes({'FalseDetection_low':[1e-4,[1,1],0],'FalseDetection_high':[1e-4,[1,1],0]}, probtype='rate', key_phases_by='global')
-        self.reacttime=reacttime
-    def dynamic_behavior(self,time):        
-        if self.t1.time == 0:
-            self.looked = self.look.behavior()
-            self.detected = self.detect.behavior(self.looked,self.Tank_Sig.indicator)
-            if self.detected or self.has_fault('FalseDetection_low') or self.has_fault('FalseDetection_high'): 
-                self.t1.inc(1)
-        elif self.t1.time < self.reacttime: self.t1.inc(1)
-        elif self.t1.time >= self.reacttime:
-            
-            if self.Tank_Sig.indicator == 1 or self.has_fault('FalseDetection_low'):
-                if self.Valve_Sig.indicator >= 1:   intended_turn = 2
-                elif self.Valve_Sig.indicator == 0: intended_turn = 1
-            elif self.Tank_Sig.indicator == -1 or self.has_fault('FalseDetection_high'):
-                if self.Valve_Sig.indicator >= 2:   intended_turn = 1
-                else:                               intended_turn = -1
-            else: intended_turn = 0
-            
-            self.reached = self.reach.behavior()
-            self.grasped = self.grasp.behavior()
-            self.turned  = self.turn.behavior(self.grasp, intended_turn)
-            if self.reached[0]:
-                self.Valve_Sig.action = self.turned
-            if self.reached[1]:
-                self.OtherValve_Sig.action = self.turned
-            self.t1.reset()
-            self.remove_fault('FalseDetection_low')
-            self.remove_fault('FalseDetection_high')
-            
-class Look(Component):
-    def __init__(self, name):
-        super().__init__(name)
-        self.add_he_rate(0.02, EPCs=[[4,0.1],[4,0.6],[1.1,0.9]]) #using lists as inputs leaves the EPCs unlabeled
-        self.assoc_modes({'NotVisible':[1,[1,0],0]}, probtype='prob', key_phases_by='global')
-    def behavior(self):
-        if self.has_fault('NotVisible'):    return 0
-        else:                               return 1
-class Detect(Component):
-    def __init__(self,name):
-        super().__init__(name)
-        self.add_he_rate(0.03, EPCs={2:[11,0.1],10:[10,0.2],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0.6]})
-        self.assoc_modes({'NotDetected':[1,[1,0],0]}, probtype='prob', key_phases_by='global') # add failed detection, etc modes
-    def behavior(self, look, signal):
-        if self.has_fault('NotDetected'):   detect = 0
-        else:                               detect = look * signal
-        return detect
-class Reach(Component):
-    def __init__(self,name):
-        super().__init__(name)
-        self.add_he_rate(0.09, EPCs={2:[11,0.1],10:[10,0.0],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0]})
-        self.assoc_modes({'FalseReach':[0.5,[1,0],0], 'CannotReach':[0.5,[1,0],0]}, probtype='prob', key_phases_by='global')
-    def behavior(self):
-        if self.has_fault('CannotReach'):   return 0,0
-        elif self.has_fault('FalseReach'):  return 0,1
-        else:                               return 1,0
-class Grasp(Component):
-    def __init__(self,name):
-        super().__init__(name)
-        self.add_he_rate(0.02) #in the case with no EPCs, we can just leave it out
-        self.assoc_modes({'CannotGrasp':[1,[1,0],0]}, probtype='prob', key_phases_by='global')
-    def behavior(self):
-        if self.has_fault('CannotGrasp'):   return 0
-        else:                               return 1
-class Turn(Component):
-    def __init__(self,name):
-        super().__init__(name)
-        self.add_he_rate(0.009, EPCs={2:[11,0.4],10:[10,0.2],13:[4,0],14:[4,0],17:[3,0.6],34:[1.1,0]})
-        self.assoc_modes({'CannotTurn':[1,[1,0],0]}, probtype='prob', key_phases_by='global')
-    def behavior(self,grasp, intended_turn):
-        if self.has_fault('CannotTurn') or grasp == 0:  return 0
-        else:                                           return intended_turn
+        self.add_cond('look', 'detect', 'looked',    condition=self.actions['look'].looked)
+        self.add_cond('detect', 'reach', 'detected', condition=self.actions['detect'].detected)
+        self.add_cond('reach', 'grasp', 'reached',   condition=self.actions['reach'].reached)
+        self.add_cond('grasp', 'turn', 'grasped',    condition=self.actions['grasp'].grasped)
+        self.add_cond('turn', 'look', 'done',        condition=self.actions['turn'].turned)
+class HumanActions(FxnBlock): 
+    _init_p = HumanParam
+    _init_a = HumanASG
+    _init_valve1_sig = Signal
+    _init_tank_sig = Signal
+    _init_valve2_sig = Signal
+
+class LookMode(Mode):
+    faultparams={'not_visible':(1,[1,0],0)}
+    proptype='prob'
+    he_args=(0.02, [[4,0.1],[4,0.6],[1.1,0.9]]) #using lists as inputs leaves the EPCs unlabeled
+class Look(Action):
+    _init_m=LookMode
+    def looked(self):
+        return not self.m.has_fault('not_visible')
+
+class DetectMode(Mode):
+    faultparams = {'not_detected':(1,[1,0],0),
+                   'false_high':(1,[1,1],0),
+                   'false_low': (1,[1,1],0)}
+    probtype='prob'
+    he_args = (0.03, {2:[11,0.1],10:[10,0.2],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0.6]})
+class Detect(Action):
+    _init_m = DetectMode
+    _init_detect_sig = Signal
+    _init_tank_sig = Signal
+    _init_valve1_sig = Signal
+    def behavior(self, time):
+        if self.m.has_fault('not_detected'):    self.detect_sig.s.put(indicator = 0, action=0)
+        elif self.m.has_fault('false_high'):    self.detect_sig.s.put(indicator = 1, action=-1)
+        elif self.m.has_fault('false_low'):     self.detect_sig.s.put(indicator = -1, action=2)
+        else:                                   
+            self.detect_sig.s.indicator = self.tank_sig.s.indicator
+            if self.detect_sig.s.indicator >= 1: 
+                self.detect_sig.s.action=2
+            elif self.detect_sig.s.indicator <= -1:
+                self.detect_sig.s.action=-1
+            else:
+                self.detect_sig.s.action=1
+    def detected(self):
+        return self.detect_sig.s.indicator
+
+class ReachMode(Mode):
+    faultparams = {'unable':(0.5,[1,0],0)}
+    probtype='prob'
+    he_args = (0.09, {2:[11,0.1],10:[10,0.0],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0]})
+class Reach(Action):
+    _init_m = ReachMode
+    def reached(self):
+        return not self.m.has_fault('unable')
+
+class GraspMode(Mode):
+    faultparams = {'cannot':(1,[1,0],0)}
+    probtype = 'prob'
+    failrate=0.02
+class Grasp(Action):
+    _init_m = GraspMode
+    def grasped(self):
+        return not self.m.has_fault('cannot')
+
+class TurnMode(Mode):
+    faultparams = {'cannot':(1,[1,0],0), 'wrong_valve':(0.5,[1,0],0)}
+    probtype = 'prob'
+    he_args = (0.009, {2:[11,0.4],10:[10,0.2],13:[4,0],14:[4,0],17:[3,0.6],34:[1.1,0]})
+class Turn(Action):
+    _init_m = TurnMode
+    _init_detect_sig = Signal
+    _init_valve1_sig = Signal
+    _init_valve2_sig = Signal
+    def behavior(self, time):
+        if self.m.has_fault('cannot'):  turned =  0
+        else:                           turned = 1
+        if turned and self.m.has_fault('wrong_valve'):
+            self.valve2_sig.s.assign(self.detect_sig.s, 'action')
+        elif turned:
+            self.valve1_sig.s.assign(self.detect_sig.s, 'action')
+    def turned(self):
+        return not self.m.has_fault('cannot')
     
 class TankParam(Parameter, readonly=True):
     reacttime:      int = 2
     store_tstep:    float = 1.0
 
+default_modelparam = ModelParam(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min')
 class Tank(Model):
     def __init__(self, params=TankParam(),\
-                 modelparams = ModelParam(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min'),\
+                 modelparams = default_modelparam,\
                  valparams = {'functions':{'Store_Water':'level'}}):
         super().__init__(params = params,modelparams=modelparams, valparams=valparams )
         
-        self.add_flow('Wat_in_1', {'effort':1.0, 'rate':1.0})
-        self.add_flow('Wat_in_2', {'effort':1.0, 'rate':1.0})
-        self.add_flow('Wat_out_1', {'effort':1.0, 'rate':1.0})
-        self.add_flow('Wat_out_2',{'effort':1.0, 'rate':1.0})
-        self.add_flow('Valve1_Sig', {'indicator':1, 'action':0})
-        self.add_flow('Tank_Sig', {'indicator':0, 'action':0})
-        self.add_flow('Valve2_Sig', {'indicator':1, 'action':0})
+        self.add_flow('wat_in_1',  Water)
+        self.add_flow('wat_in_2',  Water)
+        self.add_flow('wat_out_1', Water)
+        self.add_flow('wat_out_2', Water)
+        self.add_flow('valve1_sig',Signal, s={'indicator':1, 'action':0})
+        self.add_flow('tank_sig',  Signal, s={'indicator':0, 'action':0})
+        self.add_flow('valve2_sig',Signal, s={'indicator':1, 'action':0})
         
-        self.add_fxn('Import_Water', ['Wat_in_1', 'Valve1_Sig'], fclass = ImportLiquid)
-        self.add_fxn('Guide_Water_In', ['Wat_in_1', 'Wat_in_2'], fclass = GuideLiquid)
-        self.add_fxn('Store_Water', ['Wat_in_2', 'Wat_out_1', 'Tank_Sig'], fclass = StoreLiquid, fparams=params.store_tstep)
-        self.add_fxn('Guide_Water_Out', ['Wat_out_1', 'Wat_out_2'], fclass =GuideLiquid)
-        self.add_fxn('Export_Water', ['Wat_out_2', 'Valve2_Sig'], fclass =ExportLiquid)
-        self.add_fxn('Human', ['Valve1_Sig', 'Tank_Sig', 'Valve2_Sig'], fclass =HumanActions, fparams = params.reacttime)
+        self.add_fxn('import_water',    ImportLiquid,  'wat_in_1', 'valve1_sig')
+        self.add_fxn('guide_water_in',  GuideLiquidIn, 'wat_in_1', 'wat_in_2')
+        self.add_fxn('store_water',     StoreLiquid,   'wat_in_2', 'wat_out_1', 'tank_sig')
+        self.add_fxn('guide_water_out', GuideLiquidOut,'wat_out_1','wat_out_2')
+        self.add_fxn('export_water',    ExportLiquid,  'wat_out_2','valve2_sig')
+        self.add_fxn('human',           HumanActions,  'valve1_sig','tank_sig', 'valve2_sig', a={'reacttime':params.reacttime})
         
         self.build_model()
     def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high
-        if any(mdlhists['faulty']['functions']['Store_Water']['level']>=20):    totcost = 1000000
-        elif any(mdlhists['faulty']['functions']['Store_Water']['level']<=0):   totcost = 1000000
+        if any(mdlhists['faulty']['functions']['store_water']['level']>=20):    totcost = 1000000
+        elif any(mdlhists['faulty']['functions']['store_water']['level']<=0):   totcost = 1000000
         else:                                                                   totcost = 0
         rate=scen['properties'].get('rate',0.0)
         life=1e5
@@ -212,30 +271,35 @@ if __name__ == '__main__':
     
     mdl = Tank()
     
-    endclass, mdlhist = propagate.one_fault(mdl,'Human','NotVisible', time=2)
+    endclass, mdlhist = propagate.one_fault(mdl,'human','look_not_visible', time=2)
     
     ## nominal run
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])
-    rd.plot.mdlhists(mdlhist, fxnflowvals='Store_Water')
+    rd.plot.mdlhists(mdlhist, fxnflowvals='store_water')
     rd.graph.show(endresults['bipartite'])
     
     
     ## faulty run
-    resgraph, mdlhist = propagate.one_fault(mdl,'Human','NotVisible', time=2, desired_result='bipartite')
-    
-    rd.plot.mdlhists(mdlhist, title='NotVisible', fxnflowvals='Store_Water', time_slice=2)
-    rd.graph.show(resgraph,faultscen='NotVisible', time=2)
-    
-    resgraph, mdlhist = propagate.one_fault(mdl,'Human','FalseReach', time=2, desired_result='component')
-    
-    rd.plot.mdlhists(mdlhist,title='FalseReach', fxnflowvals='Store_Water', time_slice=2)
-    rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time=2)
+    resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='bipartite')
+    rd.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='store_water', time_slice=2)
+    rd.graph.show(resgraph,faultscen='leak response', time='end')
     
     
-    mdl = Tank(params=TankParam(reacttime=2, store_tstep=3.0))
-    resgraph, mdlhist = propagate.one_fault(mdl,'Store_Water','Leak', time=2, desired_result='bipartite')
-    rd.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='Store_Water', time_slice=2)
-    rd.graph.show(resgraph,gtype='component',faultscen='FalseReach', time='end')
+    resgraph, mdlhist = propagate.one_fault(mdl,'human','detect_false_high', time=2, desired_result='bipartite')
+    
+    rd.plot.mdlhists(mdlhist, title='detect_false_high', fxnflowvals='store_water', time_slice=2)
+    rd.graph.show(resgraph,faultscen='detect_false_high', time=2)
+    
+    resgraph, mdlhist = propagate.one_fault(mdl,'human','turn_wrong_valve', time=2, desired_result='bipartite')
+    
+    rd.plot.mdlhists(mdlhist,title='turn_wrong_valve', fxnflowvals='store_water', time_slice=2)
+    rd.graph.show(resgraph,faultscen='turn_wrong_valve', time=2)
+    
+    
+    mdl = Tank(params=TankParam(reacttime=2), modelparams = default_modelparam.copy_with_vals(dt=3.0))
+    resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='bipartite')
+    rd.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='store_water', time_slice=2)
+    rd.graph.show(resgraph,faultscen='turn_wrong_valve', time='end')
     
     ## run all faults - note: all faults get caught!
     endclasses, mdlhists = propagate.single_faults(mdl)
@@ -243,9 +307,12 @@ if __name__ == '__main__':
     app_full = SampleApproach(mdl)
     endclasses, mdlhists = propagate.approach(mdl, app_full)
     
-    mdl.fxns['Human'].dt=2.0
+    mdl.fxns['human'].dt=2.0
     rd.graph.exec_order(mdl, renderer='graphviz')
     rd.graph.exec_order(mdl, show_dyn_tstep=False)
     rd.graph.exec_order(mdl, show_dyn_order=False)
     rd.graph.exec_order(mdl, show_dyn_order=False, show_dyn_tstep=False)
+    
+    a = HumanASG("hi")
+    a.show()
              

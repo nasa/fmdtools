@@ -73,7 +73,7 @@ class Human(ASG):
         
         self.add_act("perceive",    Perceive,   "outcome", "hazard")
         self.add_act("act",         Act,        "outcome", "hazard")
-        self.add_act("done",        Done,       "outcome", "hazard")
+        self.add_act("done",        Done,       "hazard")
         
         self.add_cond("perceive",   "act",      "percieved",    self.actions['perceive'].percieved)
         self.add_cond("act",        "done",     "acted",        self.actions['act'].acted)
@@ -128,9 +128,9 @@ class HazardModel(Model):
         
         self.add_flow("hazard", Hazard)
         
-        self.add_fxn("produce_hazard", ['hazard'],  ProduceHazard)
-        self.add_fxn("detect_hazard",['hazard'], DetectHazard)
-        self.add_fxn("pass_hazard", ['hazard'], PassHazard)
+        self.add_fxn("produce_hazard", ProduceHazard, 'hazard')
+        self.add_fxn("detect_hazard",  DetectHazard,  'hazard')
+        self.add_fxn("pass_hazard",    PassHazard,    'hazard')
         self.build_model()
 
 mdl = HazardModel()

@@ -278,7 +278,7 @@ class Perception(FxnBlock):
     _init_ground = Ground
     _init_ee = EE
     _init_video = Video
-    flownames={'ee_12':'EE'}
+    flownames={'ee_12':'ee'}
     def dynamic_behavior(self,time):
         if self.m.in_mode('off'):
             self.ee.s.a=0
@@ -456,18 +456,16 @@ class Rover(Model):
         self.add_flow('faultstates',        Fault)
         #self.add_flow('Example_Disconnect')
 
-        self.add_fxn("power",           ["ee_15","ee_5",'ee_12', "switch"],                 Power)
-        self.add_fxn("operator",        ["comms", "override_comms", "pos_signal", "switch"],Operator)
-        self.add_fxn("communications",  ["comms", "ee_12", 'pos_signal'],                   Communications)
-        self.add_fxn("perception",      ["ground", "ee_12", "video"],                       Perception)
-        self.add_fxn("avionics",        ["video","comms", "ee_5",'pos_signal',"ground", 
-                                         "avionics_control", "faultstates"],                Avionics, p=asdict(params))
-        self.add_fxn("override",        ["override_comms", "ee_5", 
-                                         'motor_control','avionics_control'],               Override)
-        self.add_fxn("drive",           ["ground","ee_15","ee_5", "motor_control", 
-                                         "faultstates"],                                    Drive, 
-                     m={'mode_args': valparams['drive_modes']}, p=asdict(params.degradation))
-        self.add_fxn("environment",     ['ground'],                                         Environment, p=asdict(params))
+        self.add_fxn("power",           Power,          "ee_15","ee_5",'ee_12', "switch")
+        self.add_fxn("operator",        Operator,       "switch")
+        self.add_fxn("communications",  Communications, "comms", "ee_12", 'pos_signal')
+        self.add_fxn("perception",      Perception,     "ground", "ee_12", "video")
+        self.add_fxn("avionics",        Avionics,       "video",'pos_signal',"ground","avionics_control", "faultstates",
+                     p=asdict(params))
+        self.add_fxn("override",        Override,       "override_comms", "ee_5", 'motor_control','avionics_control')
+        self.add_fxn("drive",           Drive,          "ground","ee_15", "motor_control", "faultstates",
+                     m={'mode_args': valparams['drive_modes']},     p=asdict(params.degradation))
+        self.add_fxn("environment",     Environment,    'ground',   p=asdict(params))
 
         pos_bip = {'power': [-0.684772948203272, -0.2551613615446115],
                  'operator': [-0.798933011500376, 0.565156755693186],

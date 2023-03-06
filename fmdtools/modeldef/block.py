@@ -72,6 +72,7 @@ class Mode(dataobject, readonly=False):
     faultmodes:         dict = {}
     mode_state_dict:    dict={}
     faultparams = {}
+    he_args = tuple()
     opermodes = ('nominal',)
     failrate = 1.0
     probtype = 'rate'
@@ -81,6 +82,8 @@ class Mode(dataobject, readonly=False):
     key_phases_by = 'global'
     longnames = {}
     def __init__(self, *args, s_kwargs={}, **kwargs):
+        if self.he_args:
+            kwargs['failrate']=self.add_he_rate(*self.he_args)
         args = get_true_fields(self, *args, **kwargs)
         super().__init__(*args)
         if not self.mode:            self.mode='nominal'
@@ -90,6 +93,7 @@ class Mode(dataobject, readonly=False):
         
         if 's' in self.__fields__:
             self.s.set_atts(**s_kwargs)
+        
         self.init_faultmodes()
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
@@ -106,7 +110,7 @@ class Mode(dataobject, readonly=False):
         if type(EPCs)==dict:    EPC_f = np.prod([((epc-1)*x+1) for _, [epc,x] in EPCs.items()])
         elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
         else: raise Exception("Invalid type for EPCs: "+str(type(EPCs)))
-        self.failrate = gtp*EPC_f
+        return gtp*EPC_f
     def init_faultmodes(self):
         if self.key_phases_by=='self':  oppvect='all'
         else:                           oppvect=[1.0]
@@ -404,7 +408,6 @@ class Block():
         self.r=self._init_r(**r)
         self.update_seed()
         
-        # TODO : create class for modes (ideally with checking)
         self.name=name
         self.time=0.0
     def __repr__(self):
@@ -786,7 +789,7 @@ class ASG(dataobject, mapping=True):
             parameters to instantiate the Action with. 
         """
         flows = {fl:self.flows[fl] for fl in flownames}
-        action = actclass(name, flows=flows, **params)
+        action = actclass(name, flows={**flows}, **params)
         self.actions[name] = action
         self.actions[name].duration=duration
         self.action_graph.add_node(name)
@@ -851,7 +854,8 @@ class ASG(dataobject, mapping=True):
         if gtype=='combined':       graph = nx.compose(self.flow_graph, self.action_graph)
         elif gtype=='flows':        graph = self.flow_graph
         elif gtype=='actions':      graph = self.action_graph
-        if not pos: pos = self.pos
+        if not pos and self.pos: pos = self.pos
+        else:                    pos=nx.planar_layout(nx.compose(self.flow_graph, self.action_graph))
         nx.draw(graph, pos=pos, with_labels=True, node_color='grey')
         nx.draw_networkx_nodes(self.action_graph, pos=pos, node_shape='s', node_color='skyblue')
         nx.draw_networkx_nodes(self.action_graph, nodelist=self.active_actions, pos=pos, node_shape='s', node_color='green')
@@ -885,7 +889,11 @@ class ASG(dataobject, mapping=True):
                     self.actions[action].updateact(time, run_stochastic, proptype=proptype, )
                     action_cond_edges = self.action_graph.out_edges(action, data=True)
                     for act_in, act_out, atts in action_cond_edges:
-                        if self.conditions[atts['name']]() and getattr(self.actions[action], 'duration',0.0)+dt<=self.actions[action].t_loc:
+                        try:
+                            cond = self.conditions[atts['name']]()
+                        except TypeError as e:
+                            raise TypeError("Poorly specified condition "+str(atts['name'])+": ") from e
+                        if  cond and getattr(self.actions[action], 'duration',0.0)+dt<=self.actions[action].t_loc:
                             self.actions[action].t_loc=0.0
                             new_active_actions.add(act_out)
                             new_active_actions.discard(act_in)
@@ -1094,7 +1102,10 @@ class FxnBlock(Block):
             inject_faults_internal(self.c, faults)
         if hasattr(self, 'a'): 
             inject_faults_internal(self.a, faults)
-            self.a.prop_internal(time, run_stochastic, proptype, self.dt)
+            try:
+                self.a.prop_internal(time, run_stochastic, proptype, self.dt)
+            except TypeError as e:
+                raise Exception("Poorly specified ASG: "+str(self.a.__class__)) from e
         
         if proptype=='static' and hasattr(self,'behavior'):        self.behavior(time)     #generic behavioral methods are run at all steps
         if proptype=='static' and hasattr(self,'static_behavior'): self.static_behavior(time)
