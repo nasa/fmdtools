@@ -28,7 +28,6 @@ class OverallAffectDOFState(State):
 
 class AffectDOFArch(CompArch):
     archtype:   str='quad'
-    upward:     dict= dict()
     forward:    dict=dict()
     lr_dict:    dict=dict()
     fr_dict:    dict=dict()
@@ -36,16 +35,19 @@ class AffectDOFArch(CompArch):
         super().__init__(*args, **kwargs)
         if self.archtype=="quad":
             self.make_components(Line,'lf', 'lr','rf','rr')
-            self.upward.update({'rf':1,'lf':1,'lr':1,'rr':1})
             self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5})
             self.lr_dict.update({'l':{'lf', 'lr'}, 'r':{'rf','rr'}})
             self.fr_dict.update({'f':{'lf', 'rf'}, 'r':{'lr', 'rr'}})
+        elif self.archtype=="hex":
+            self.make_components(Line,'rf', 'lf','lr','rr', 'r', 'f')
+            self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5, 'r':-0.75, 'f':0.75})
+            self.lr_dict.update({'l':{'lf', 'lr'}, 'r':{'rf','rr'}})
+            self.fr_dict.update({'f':{'lf', 'rf', 'f'}, 'r':{'lr', 'rr', 'r'}})
         elif self.archtype=="oct":
             self.make_components(Line,'lf', 'rf','lf2', 'rf2', 'lr', 'rr','lr2', 'rr2')
-            self.upward.update({'rf':1,'lf':1,'lr':1,'rr':1,'rf2':1,'lf2':1,'lr2':1,'rr2':1})
             self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5,'rf2':0.5,'lf2':0.5,'lr2':-0.5,'rr2':-0.5})
-            self.lr_dict.update({'L':{'lf', 'lr','lf2', 'lr2'}, 'R':{'rf','rr','rf2','rr2'}})
-            self.fr_dict.update({'F':{'lf', 'rf','lf2', 'rf2'}, 'R':{'lr', 'rr','lr2', 'rr2'}})
+            self.lr_dict.update({'l':{'lf', 'lr','lf2', 'lr2'}, 'r':{'rf','rr','rf2','rr2'}})
+            self.fr_dict.update({'f':{'lf', 'rf','lf2', 'rf2'}, 'r':{'lr', 'rr','lr2', 'rr2'}})
 
 class AffectDOF(FxnBlock): #EEmot,ctl,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
     _init_s = OverallAffectDOFState
@@ -59,8 +61,7 @@ class AffectDOF(FxnBlock): #EEmot,ctl,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
         air, ee_in={},{}
         #injects faults into lines
         for linname,lin in self.c.components.items():
-            cmds={'up':self.c.upward[linname], 'for':self.c.forward[linname]}
-            air[lin.name], ee_in[lin.name] = lin.behavior(self.ee_in.s.effort, self.ctl_in, cmds, self.force.s.support) 
+            air[lin.name], ee_in[lin.name] = lin.behavior(self.ee_in.s.effort, self.ctl_in, self.c.forward[linname], self.force.s.support) 
         
         if any(value>=10 for value in ee_in.values()):      self.ee_in.s.rate=10
         elif any(value!=0.0 for value in ee_in.values()):   self.ee_in.s.rate=sum(ee_in.values())/len(ee_in) #should it really be max?
@@ -80,9 +81,9 @@ from drone_mdl_static import AffectDOFMode, AffectDOFState
 class Line(Component):
     _init_s = AffectDOFState
     _init_m = AffectDOFMode
-    def behavior(self, EEin, ctlin, cmds, Force):
-        if Force<=0.0:   self.m.add_fault('mechbreak','propbreak')
-        elif Force<=0.5: self.m.add_fault('mechfriction')
+    def behavior(self,ee_in, ctlin, f_fact, force):
+        if force<=0.0:   self.m.add_fault('mechbreak','propbreak')
+        elif force<=0.5: self.m.add_fault('mechfriction')
             
         if self.m.has_fault('short'):                   self.s.put(e_ti=0.0, e_to= np.inf)
         elif self.m.has_fault('openc'):                 self.s.put(e_ti=0.0, e_to= 0.0)
@@ -100,9 +101,9 @@ class Line(Component):
         elif self.m.has_fault('propbreak'):             self.s.put(pt=0.0)
         elif self.m.has_fault('propwarp'):              self.s.put(pt=0.5)
         
-        Airout=m2to1([EEin,self.s.e_ti,ctlin.s.upward*cmds['up']+ctlin.s.forward*cmds['for'],self.s.ct,self.s.mt,self.s.pt])
-        EE_in=m2to1([EEin,self.s.e_to])   
-        return Airout, EE_in
+        airout=m2to1([ee_in,self.s.e_ti,ctlin.s.upward+ctlin.s.forward*f_fact,self.s.ct,self.s.mt,self.s.pt])
+        ee_in=m2to1([ee_in,self.s.e_to])   
+        return airout, ee_in
 
 class DroneParam(Parameter, readonly=True):
     arch:   str='quad'

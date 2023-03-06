@@ -927,7 +927,10 @@ def propagate(mdl, time, fxnfaults={}, disturbances={}, flowstates={}, run_stoch
         fxn.updatefxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
         
     #Step 2: Run Static Propagation Methods
-    flowstates = prop_time(mdl, time, flowstates, run_stochastic=run_stochastic)
+    try:
+        flowstates = prop_time(mdl, time, flowstates, run_stochastic=run_stochastic)
+    except Exception as e:
+        raise Exception("Error in static propagation at time t="+str(time)) 
     return flowstates
 def prop_time(mdl, time, flowstates={}, run_stochastic=False):
     """

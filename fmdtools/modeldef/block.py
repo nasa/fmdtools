@@ -80,9 +80,14 @@ class Mode(dataobject, readonly=False):
     exclusive = False
     key_phases_by = 'global'
     longnames = {}
-    def __init__(self, *args, mode='nominal', faults=set(), faultmodes=dict(), mode_state_dict=dict(), s_kwargs={}):
-        args = get_true_fields(self, *args, mode=mode, faults=set(faults), faultmodes=dict(faultmodes), mode_state_dict=dict(mode_state_dict))
+    def __init__(self, *args, s_kwargs={}, **kwargs):
+        args = get_true_fields(self, *args, **kwargs)
         super().__init__(*args)
+        if not self.mode:            self.mode='nominal'
+        if not self.faults:          self.faults=set()
+        if not self.faultmodes:      self.faultmodes=dict()
+        if not self.mode_state_dict: self.mode_state_dict=dict()
+        
         if 's' in self.__fields__:
             self.s.set_atts(**s_kwargs)
         self.init_faultmodes()
@@ -292,7 +297,7 @@ class Mode(dataobject, readonly=False):
         if opermode:    self.mode = opermode
         else:           self.mode = self.__defaults__[self.__fields__.index('mode')]
         if self.exclusive and not(self.mode):
-            raise Exception("Unclear which operational mode to enter with fault removed--no default or opermode specified")
+            raise Exception("In "+str(self.__class__)+": Unclear which operational mode to enter with fault removed--no default or opermode specified")
         if warnmessage: self.warn(warnmessage, "All faults removed.")
     def mirror(self, mode_to_mirror):
         self.mode = mode_to_mirror.mode
@@ -301,7 +306,7 @@ class Mode(dataobject, readonly=False):
     def get_true_field(self, fieldname, *args, **kwargs):
         return get_true_field(self, fieldname, *args, **kwargs)
     def get_true_fields(self, *args, **kwargs):
-        return get_true_field(self, *args, **kwargs)
+        return get_true_fields(self, *args, **kwargs)
 
 def assoc_flows(obj, flows={}):
     """
@@ -601,20 +606,25 @@ class CompArch(dataobject, mapping=True):
         *args : strs
             Names for the components to instantiate in the architecture
         **kwargs : kwargs
-            keyword arguments to send CompClass, of form {'name':kwarg}
+            keyword arguments to send CompClass, of form {'name':kwarg}.
+            unless all have the same kwargs
         """
         if self.components is None: self.components=dict()
         if self.faultmodes is None: self.faultmodes=dict()
+        
         for arg in args:
-            self.components[arg]=CompClass(arg, **kwargs.get(arg, {}))
+            if arg in kwargs:   kwargs_comp = kwargs[arg]
+            else:               kwargs_comp = kwargs
+            self.components[arg]=CompClass(arg, **kwargs_comp)
             self.faultmodes.update({self.components[arg].name+'_'+modename:arg 
                                for modename in self.components[arg].m.faultmodes})
     def copy_with_arg(self, **kwargs):
         cop = self.__class__(**kwargs)
-        for component in self.components: 
-            cop.component.s = cop.component._init_s(**asdict(component.s))
-            cop.components[component].m.mirror(self.components[component].m)
-            cop.components[component].time=self.components[component].time
+        for compname, component in self.components.items(): #TODO: needs to cover all attributes, copy should a part of Block 
+            cop_comp = cop.components[compname]
+            cop_comp.s = cop_comp._init_s(**asdict(component.s))
+            cop_comp.m.mirror(component.m)
+            cop_comp.time=component.time
         return cop
     def inject_fault_in_component(self, fault):
         if fault in self.faultmodes:
@@ -637,7 +647,7 @@ class CompArch(dataobject, mapping=True):
     def get_true_field(self, fieldname, *args, **kwargs):
         return get_true_field(self, fieldname, *args, **kwargs)
     def get_true_fields(self, *args, **kwargs):
-        return get_true_field(self, *args, **kwargs)
+        return get_true_fields(self, *args, **kwargs)
     
 ## Actions/ASGs
 class Action(Block):
@@ -895,6 +905,7 @@ class ASG(dataobject, mapping=True):
 
 #Function superclass 
 class FxnBlock(Block):
+    slots = ["c", "_c_arg", "a", "_a_arg"]
     """
     Superclass for functions.
     
@@ -957,6 +968,7 @@ class FxnBlock(Block):
             at_arg = eval(at)
             at_init = getattr(self, '_init_'+at, False)
             if at_init:
+                setattr(self, '_'+at+'_arg', at_arg)
                 at_flows = dict()
                 for flowname, flow in self.flows.items():
                     if hasattr(at_init, '_init_'+flowname): at_flows[flowname]=flow
@@ -964,7 +976,10 @@ class FxnBlock(Block):
                     if at_flows:    setattr(self, at,  at_init(flows=at_flows, **at_arg))
                     else:           setattr(self, at,  at_init(**at_arg))
                 except TypeError as e:
-                    raise TypeError("Poor specification for : "+str(at_init)+" with kwargs: "+str(at_arg)) from e
+                    invalid_args = [a for a in at_arg if a not in at_init.__fields__]
+                    if invalid_args: argstr = ", Invalid args: "+', '.join(invalid_args)
+                    else:            argstr=''
+                    raise TypeError("Poor specification for : "+str(at_init)+" with kwargs: "+str(at_arg)+argstr) from e
                 setattr(self, '_args_'+at,  at_arg)
                 if at=='c':     compacts = self.c.components
                 elif at=='a':   compacts = self.a.actions
@@ -1019,7 +1034,10 @@ class FxnBlock(Block):
         """
         copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         copy.is_copy=True
-        copy.__init__(self.name, flows=newflows, **kwargs)
+        try:
+            copy.__init__(self.name, flows=newflows, **kwargs)
+        except TypeError as e:
+            raise Exception("Poor specification of "+str(self.__class__))  from e
         copy.m.mirror(self.m)
         if hasattr(self, 'mode_state_dict'):    copy.mode_state_dict = self.mode_state_dict
         # TODO: figure out copying for ASGs
@@ -1068,7 +1086,7 @@ class FxnBlock(Block):
             Whether to run the simulation using stochastic or deterministic behavior
         """
         self.r.run_stochastic=run_stochastic
-        self.m.add_fault(*faults)  #if there is a fault, it is instantiated in the function
+        if faults: self.m.add_fault(*faults)  #if there is a fault, it is instantiated in the function
         if hasattr(self, 'mode_state_dict') and any(faults): self.update_modestates()
         if hasattr(self, 'condfaults'):    self.condfaults(time)    #conditional faults and behavior are then run
         if time>self.time: self.r.update_stochastic_states()
