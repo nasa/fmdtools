@@ -397,15 +397,20 @@ class Block():
         """
         self.flows = dict()
         assoc_flows(self, flows=flows)
-        
-        self._args_s = s
-        self._args_p = p
-        self._args_m = m
-        self._args_r = r
-        self.p=self._init_p(**p)
-        self.s=self._init_s(**s)
-        self.m=self._init_m(**m)
-        self.r=self._init_r(**r)
+        for at in ['s','p','m','r']:
+            at_arg = eval(at)
+            if type(at_arg)!=dict: at_arg = asdict(at_arg)
+            setattr(self, '_args_'+at, at_arg)
+            init_at = getattr(self, '_init_'+at)
+            setattr(self, at, init_at(**at_arg))
+        #self._args_s = s
+        #self._args_p = p
+        #self._args_m = m
+        #self._args_r = r
+        #self.p=self._init_p(**p)
+        #self.s=self._init_s(**s)
+        #self.m=self._init_m(**m)
+        #self.r=self._init_r(**r)
         self.update_seed()
         
         self.name=name

@@ -154,7 +154,7 @@ class Model(object):
             if fxn.get_rand_states(auto_update_only=auto_update_only): 
                 rand_states[fxnname]= fxn.get_rand_states(auto_update_only=auto_update_only)
         return rand_states
-    def add_flows(self, flownames, flowdict={}, flowtype='generic', fclass=Flow, params={}):
+    def add_flows(self, flownames, fclass=Flow, p={}, s={}, flowtype='generic'):
         """
         Adds a set of flows with the same type and initial parameters
 
@@ -162,20 +162,19 @@ class Model(object):
         ----------
         flownames : list
             Unique flow names to give the flows in the model
-        flowdict : dict, Flow, set or empty set
-            Dictionary of flow attributes e.g. {'value':XX}, or an already instantiated Flow object.
-            If a set of attribute names is provided, each will be given a value of 1
-            If an empty set is given, it will be represented w- {flowname: 1}
-        flowtype : str, optional
-            Denotes type for class (e.g. 'energy,' 'material,', 'signal')
         fclass : Class, optional
             Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
             Class must take flowname, flowdict, flowtype as input to __init__()
-        params : dict, optional
+            May alternatively provide already-instanced object.
+        p : dict, optional
             Parameter dictionary to instantiate the flow with
+        s : dict, optional
+            State dictionary to overwrite Flow default state values with
+        flowtype : str, optional
+            Denotes type for class (e.g. 'energy,' 'material,', 'signal')
         """
-        for flowname in flownames: self.add_flow(flowname, flowdict, flowtype, fclass, params)
-    def add_flow(self,flowname, fclass=Flow, p={}, s={}, flowtype=''):
+        for flowname in flownames: self.add_flow(flowname, fclass, p=p, s=s, flowtype=flowtype)
+    def add_flow(self,flowname, fclass=Flow, p={}, s={}, flowtype='generic'):
         """
         Adds a flow with given attributes to the model.
 
