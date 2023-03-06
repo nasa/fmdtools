@@ -19,6 +19,51 @@ from scipy import stats
 #    """Simple factory method for creating a container for states, modes, components, etc"""
 #    return recordclass(name, tuple([(k,type(v)) for k, v in kwargs.items()]), tuple([v for v in kwargs.values()]), mapping=True)
 
+def get_var(obj, var):
+    """
+    Gets the variable value of the object
+
+    Parameters
+    ----------
+    var : str/list
+        list specifying the attribute (or sub-attribute of the object
+    Returns
+    -------
+    var_value: any
+        value of the variable
+    """
+    if type(var)==str: var=var.split(".")
+    if len(var)==1:
+        if type(obj)==dict: return obj[var[0]]
+        else:               return getattr(obj, var[0])
+    else:
+        if type(obj)==dict: return get_var(obj[var[0]], var[1:])
+        else:               return get_var(getattr(obj, var[0]), var[1:])
+def set_var(obj, var, val):
+    """
+    Sets variable of the object to a given value
+
+    Parameters
+    ----------
+    var : list/tuple of strings
+        list of nested attributes
+    val : attr
+        attribute to set the value to
+
+    Returns
+    -------
+    flowdict : dict
+        dict of flows indexed by flownames
+    """
+    if type(var)==str: var=var.split(".")
+    #if not attrgetter(".".join(var))(self): raise Exception("Attibute does not exist: "+str(var))
+    
+    if len(var)==1: 
+        if type(obj)==dict: obj[var[0]]=val 
+        else:               setattr(obj, var[0], val) 
+    else: 
+        if type(obj)==dict: set_var(obj[var[0]], var[1:],val)
+        else:               set_var(getattr(obj, var[0]), var[1:], val)
 def get_true_fields(dataobject, *args,  force_kwargs = False, **kwargs):
     """
     Resolves the args to pass to a dataobject given certain defaults, *args and **kwargs
@@ -123,7 +168,7 @@ class State(dataobject, mapping=True):
         e.g. self.Pos.inc(x=(1,10)) will increment x by 1 until it reaches 10
         """
         for name, value in kwargs.items():
-            if name not in self.__fields__: raise Exception(name+" not a property of "+self.name)
+            if name not in self.__fields__: raise Exception(name+" not a property of "+str(self.__class__))
             if type(value)==tuple:  
                 current = getattr(self,name)
                 sign = np.sign(value[0])
@@ -147,7 +192,7 @@ class State(dataobject, mapping=True):
             self.EE.v = min(12, max(0,self.EE.v))
         """
         for name, value in kwargs.items():
-            if name not in self.__fields__: raise Exception(name+" not a property of "+self.name)
+            if name not in self.__fields__: raise Exception(name+" not a property of "+str(self.__class__))
             setattr(self, name, min(value[1], max(value[0], getattr(self,name))))
     def mul(self,*states):
         """Returns the multiplication of given attributes of the model construct.
@@ -201,52 +246,6 @@ class State(dataobject, mapping=True):
         test = values!=self.get(*states)
         if is_iter(test):   return any(test)
         else:               return test
-    def set_var(self,var, val):
-        """
-        Sets variable of the object to a given value
-
-        Parameters
-        ----------
-        var : list/tuple of strings
-            list of nested attributes
-        val : attr
-            attribute to set the value to
-
-        Returns
-        -------
-        flowdict : dict
-            dict of flows indexed by flownames
-        """
-        if type(var)==str: var=var.split(".")
-        #if not attrgetter(".".join(var))(self): raise Exception("Attibute does not exist: "+str(var))
-        
-        if len(var)==1: setattr(self, var[0], val)
-        else: 
-            if getattr(self, var[0]): 
-                subattr = getattr(self, var[0])
-                if hasattr(subattr, 'set_var'): subattr.set_var(var[1:], val)
-                elif type(subattr)==dict:  
-                    if var[1] not in subattr:
-                        subattr[eval(var[1])]=val
-                    else:                       
-                        subattr[var[1]]=val
-                else: raise Exception("Model sub-attribute "+str(subattr)+" does not inherit from Common")
-            else: raise Exception("Invalid variables :"+str(var))
-    def get_var(self, var):
-        """
-        Gets the variable value of the object
-
-        Parameters
-        ----------
-        var : str/list
-            list specifying the attribute (or sub-attribute of the object
-        Returns
-        -------
-        var_value: any
-            value of the variable
-        """
-        if type(var)==str: var=var.split(".")
-        return attrgetter(".".join(var))(self)
     def warn(self, *messages, stacklevel=2):
         """
         Prints warning message(s) when called.
@@ -319,7 +318,7 @@ class Parameter(dataobject, readonly=True):
         try:
             super().__init__(*args, **kwargs)
         except TypeError:
-            raise Exception("Invalid args/kwargs: "+str(args)+" , "+str(kwargs))
+            raise Exception("Invalid args/kwargs: "+str(args)+" , "+str(kwargs)+" in "+str(self.__class__))
         if strict_immutability: self.check_immutable()
         self.check_type()
         self.check_pickle()
@@ -392,7 +391,7 @@ class Parameter(dataobject, readonly=True):
     def get_true_field(self, fieldname, *args, **kwargs):
         return get_true_field(self, fieldname, *args, **kwargs)
     def get_true_fields(self, *args, **kwargs):
-        return get_true_field(self, *args, **kwargs)
+        return get_true_fields(self, *args, **kwargs)
 
 class Rand(dataobject, mapping=True):
     rng:            np.random.default_rng
@@ -451,7 +450,7 @@ class Rand(dataobject, mapping=True):
     def get_true_field(self, fieldname, *args, **kwargs):
         return get_true_field(self, fieldname, *args, **kwargs)
     def get_true_fields(self, *args, **kwargs):
-        return get_true_field(self, *args, **kwargs)
+        return get_true_fields(self, *args, **kwargs)
 
 def get_pdf_for_rand(x, randname, args):
     """

@@ -16,7 +16,7 @@ from recordclass import asdict
 
 from .flow import Flow, init_flow
 from .block import GenericFxn
-from .common import check_pickleability, Parameter
+from .common import check_pickleability, Parameter, get_var
 import fmdtools.resultdisp.process as proc
 
 
@@ -515,8 +515,10 @@ class Model(object):
             fparams=self._fxninput[fxnname]['fparams']
             kwargs = self._fxninput[fxnname]['kwargs']
             flows = copy.get_flows(flownames)
-            if fparams=='None':     copy.fxns[fxnname]=fxn.copy(flows, **kwargs)
-            else:                   copy.fxns[fxnname]=fxn.copy(flows, fparams, **kwargs)
+            if fparams=='None':     
+                copy.fxns[fxnname]=fxn.copy(flows, **kwargs)
+            else:                   
+                copy.fxns[fxnname]=fxn.copy(flows, fparams, **kwargs)
             copy.fxns[fxnname].set_timestep(use_local=self.modelparams.use_local, global_tstep=self.modelparams.dt)
             setattr(copy, fxnname, copy.fxns[fxnname])
         copy._fxninput=self._fxninput
@@ -608,7 +610,7 @@ class Model(object):
             elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
             elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]
             else: raise Exception(var[0]+" not a function or flow")
-            variable_values[i]=f.get_var(var)
+            variable_values[i]=get_var(f, var)
         if len(variable_values)==1 and trunc_tuple: return variable_values[0]
         else:                                       return tuple(variable_values)
 
