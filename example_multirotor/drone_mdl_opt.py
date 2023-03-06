@@ -433,15 +433,15 @@ class Drone(Model):
         #add functions to the model
         
         flows=['ee_ctl', 'force_st', 'hsig_dofs', 'hsig_bat', 'rsig_traj']
-        self.add_fxn('manage_health',flows, ManageHealth, p=asdict(params.respolicy))
+        self.add_fxn('manage_health', ManageHealth, *flows, p=asdict(params.respolicy))
         
         store_ee_p = {'archtype':params.bat, 'weight':(params.batweight+params.archweight)/2.2 , 'drag': params.archdrag }
-        self.add_fxn('store_ee',    ['ee_1', 'force_st', 'hsig_bat'],                            StoreEE, c=store_ee_p)
-        self.add_fxn('dist_ee',     ['ee_1','ee_mot','ee_ctl', 'force_st'],                      DistEE)
-        self.add_fxn('affect_dof',  ['ee_mot','ctl','dofs','des_traj','force_lin', 'hsig_dofs'], AffectDOF, c={'archtype':params.linearch})
-        self.add_fxn('ctl_dof',     ['ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st'],           CtlDOF)
-        self.add_fxn('plan_path',   ['ee_ctl', 'dofs','des_traj', 'force_st', 'rsig_traj'],      PlanPath, p=asdict(params))
-        self.add_fxn('hold_payload',['dofs', 'force_lin', 'force_st'],                           HoldPayload)
+        self.add_fxn('store_ee',    StoreEE, 'ee_1', 'force_st', 'hsig_bat', c=store_ee_p)
+        self.add_fxn('dist_ee',     DistEE,   'ee_1','ee_mot','ee_ctl', 'force_st')
+        self.add_fxn('affect_dof',  AffectDOF,'ee_mot','ctl','dofs','des_traj','force_lin', 'hsig_dofs',  c={'archtype':params.linearch})
+        self.add_fxn('ctl_dof',     CtlDOF,   'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
+        self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs','des_traj', 'force_st', 'rsig_traj', p=asdict(params))
+        self.add_fxn('hold_payload',HoldPayload, 'dofs', 'force_lin', 'force_st')
         
         pos = {'manage_health': [0.23793980988102348, 1.0551602632416588],
                'store_ee': [-0.9665780995752296, -0.4931538151692423],

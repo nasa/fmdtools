@@ -358,8 +358,8 @@ def create_single_fault_scen(mdl, fxnname, faultmode, time):
     scen['properties']['fault']=faultmode
     fxn = mdl.fxns[fxnname]
     fm= fxn.m
-    if not fm.faultmodes.get(faultmode, False) or fm.faultmodes[faultmode]=='synth': 
-        scen['properties']['rate'] = 1/len(fm.faultmodes)
+    if not fm.faultmodes.get(faultmode, False): 
+        raise Exception("faultmode "+faultmode+" not in "+str(fm.__class__)+" for "+fxnname)
     else:
         #if hasattr(fxn, 'c') and faultmode in fxn.c.faultmodes:
         #    fxn = fxn.c.components[fxn.c.faultmodes[faultmode]]
@@ -369,7 +369,7 @@ def create_single_fault_scen(mdl, fxnname, faultmode, time):
         #    faultmode = faultmode[len(fxn.name):]
         if fm.faultmodes[faultmode].probtype=='rate':
             scen['properties']['rate']=fm.failrate*fm.faultmodes[faultmode]['dist']*eq_units(fm.faultmodes[faultmode]['units'], mdl.modelparams.units)*(mdl.modelparams.times[-1]-mdl.modelparams.times[0]) # this rate is on a per-simulation basis
-        elif fm.faultmodes[faultmode].get('probtype','')=='prob':
+        elif fm.faultmodes[faultmode].probtype=='prob':
             scen['properties']['rate'] = fm.failrate*fm.faultmodes[faultmode]['dist'] 
     scen['properties']['time']=time
     return  scen

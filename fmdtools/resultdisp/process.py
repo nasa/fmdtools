@@ -850,7 +850,7 @@ def get_flat_hist_slice(flathist,t_ind=0):
 
 def flatten_hist(hist, newhist = False, prevname=(), to_include='all'):
     """
-    Recursively creates a flattenned history of the given nested model history
+    Recursively creates a flattened history of the given nested model history
 
     Parameters
     ----------
@@ -870,6 +870,7 @@ def flatten_hist(hist, newhist = False, prevname=(), to_include='all'):
     newhist : dict
         Flattened model history of form: {(fxnflow, ..., attname):array(att)}
     """
+    #TODO: Add some error handling for when the attributes in "to_include" aren't actually in hist
     if newhist==False: newhist = dict()
     for att, val in hist.items():
         newname = prevname+tuple([att])

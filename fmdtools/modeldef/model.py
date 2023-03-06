@@ -196,7 +196,7 @@ class Model(object):
         """
         if not getattr(self, 'is_copy', False):
             self.flows[flowname] = init_flow(flowname,fclass, p=p, s=s, flowtype=flowtype)
-    def add_fxn(self,name, flownames, fclass=GenericFxn, fparams='None', **fkwargs):
+    def add_fxn(self,name, fclass, *flownames, fparams='None', **fkwargs):
         """
         Instantiates a given function in the model.
 
@@ -204,10 +204,11 @@ class Model(object):
         ----------
         name : str
             Name to give the function.
+        fclass : Class
+            Class to instantiate the function as. If no class has been developed,
+            the user can send the block.GenericFxn class.
         flownames : list
             List of flows to associate with the function.
-        fclass : Class
-            Class to instantiate the function as.
         fparams : dict.
             Other parameters to send to the __init__ method of the function class
         fkwargs : dict

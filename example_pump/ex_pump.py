@@ -286,11 +286,11 @@ class Pump(Model):
                -the *order* of which corresponds to those in the function definition
                -the *name* of which corresponds to the name defined above for the flow
         """
-        self.add_fxn('import_ee',['ee_1'],       fclass=ImportEE)
-        self.add_fxn('import_water',['wat_1'],   fclass=ImportWater)
-        self.add_fxn('import_signal',['sig_1'],  fclass=ImportSig)
-        self.add_fxn('move_water', ['ee_1', 'sig_1', 'wat_1', 'wat_2'],fclass=MoveWat, fparams = params.delay)
-        self.add_fxn('export_water', ['wat_2'],  fclass=ExportWater)
+        self.add_fxn('import_ee',    ImportEE,      'ee_1')
+        self.add_fxn('import_water', ImportWater,   'wat_1')
+        self.add_fxn('import_signal',ImportSig,     'sig_1')
+        self.add_fxn('move_water',   MoveWat,       'ee_1', 'sig_1', 'wat_1', 'wat_2', fparams = params.delay)
+        self.add_fxn('export_water', ExportWater,   'wat_2')
 
         self.build_model()
     def end_condition(self,time):

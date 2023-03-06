@@ -379,7 +379,7 @@ class Parameter(dataobject, readonly=True):
             true_type = self.__annotations__.get(typed_field, False)
             if ((true_type and not attr_type==true_type) and
                 str(true_type).split("'")[1] not in str(attr_type)): # weaker, but enables use of np.str, np.float, etc
-                raise Exception(typed_field+" assigned incorrect type: "+str(attr_type)+" (should be "+str(true_type)+")")
+                raise Exception(typed_field+" in "+str(self.__class__)+" assigned incorrect type: "+str(attr_type)+" (should be "+str(true_type)+")")
     def copy_with_vals(self, **kwargs):
         """Creates a copy of itself with modified values given by kwargs"""
         return self.__class__(**{**asdict(self), **kwargs})

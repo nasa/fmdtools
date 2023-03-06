@@ -128,15 +128,15 @@ class Drone(Model):
         self.add_flow('env',        Env, s={'z':0.0})
         self.add_flow('dir',        Dir)
         #add functions to the model
-        self.add_fxn('store_ee',    ['ee_1', 'force_st'],                           fclass=StoreEE)
-        self.add_fxn('dist_ee',     ['ee_1','ee_mot','ee_ctl', 'force_st'],         fclass=DistEE)
-        self.add_fxn('affect_dof',  ['ee_mot','ctl','dofs','force_lin'],            fclass=AffectDOF, c={'archtype':params.arch})
-        self.add_fxn('ctl_dof',     ['ee_ctl', 'dir', 'ctl', 'dofs', 'force_st'],   fclass=CtlDOF)
-        self.add_fxn('plan_path',   ['ee_ctl', 'env','dir', 'force_st'],            fclass=PlanPath)
-        self.add_fxn('trajectory',  ['env','dofs','dir', 'force_gr'],               fclass=Trajectory)
-        self.add_fxn('engage_land', ['force_gr', 'force_lg'],                       fclass=EngageLand)
-        self.add_fxn('hold_payload',['force_lg', 'force_lin', 'force_st'],          fclass=HoldPayload)
-        self.add_fxn('view_env',    ['env'],                                        fclass=ViewEnvironment)
+        self.add_fxn('store_ee',    StoreEE,    'ee_1', 'force_st')
+        self.add_fxn('dist_ee',     DistEE,     'ee_1','ee_mot','ee_ctl', 'force_st')
+        self.add_fxn('affect_dof',  AffectDOF,  'ee_mot','ctl','dofs','force_lin', c={'archtype':params.arch})
+        self.add_fxn('ctl_dof',     CtlDOF,     'ee_ctl', 'dir', 'ctl', 'dofs', 'force_st')
+        self.add_fxn('plan_path',   PlanPath,   'ee_ctl', 'env','dir', 'force_st')
+        self.add_fxn('trajectory',  Trajectory, 'env','dofs','dir', 'force_gr')
+        self.add_fxn('engage_land', EngageLand, 'force_gr', 'force_lg')
+        self.add_fxn('hold_payload',HoldPayload,'force_lg', 'force_lin', 'force_st')
+        self.add_fxn('view_env',    ViewEnvironment, 'env')
         
         bipartite_pos = {'store_ee': [-1.067135163123663, 0.32466987344741055],
          'dist_ee': [-0.617149602161968, 0.3165981670924663],
