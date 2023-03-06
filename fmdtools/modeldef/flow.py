@@ -91,9 +91,9 @@ class MultiFlow(Flow):
     as well as a single global view (which may represent the actual value)
     """
     slots= ['__dict__']
-    def __init__(self, flowdict, name, ftype="MultiFlow", glob=[], params={}):
+    def __init__(self, name, ftype="MultiFlow", glob=[], s={}, p={}):
         self.locals=[]
-        super().__init__(flowdict, name, ftype=ftype, suppress_warnings=True, params=params)
+        super().__init__(name, ftype=ftype, suppress_warnings=True, s={}, p={})
         if not glob: self.glob=self
         else:        self.glob=glob
     def __repr__(self):
@@ -101,7 +101,7 @@ class MultiFlow(Flow):
         for l in self.locals:
             rep_str=rep_str+"\n   "+self.get_view(l).__repr__()
         return rep_str
-    def create_local(self, name, attrs = "all", p={}):
+    def create_local(self, name, attrs = "all", p={}, s={}):
         """
         Creates a local view of the Flow
 
@@ -122,14 +122,16 @@ class MultiFlow(Flow):
         newflow : MultiFlow
             Local view of the MultiFlow with its own individual values
         """
-        default_states = asdict(self._init_s(**self._args_s))
-        if attrs == "all":      atts = default_states
-        elif type(attrs)==str:  attrs = [attrs]
-        if type(attrs)==list:   atts = {k:v for k,v in default_states if k in attrs}
-        elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in default_states}
+        #TODO: Need a way of having local flows that are subsets of the global
+        # I think this would be done by passing a different class with a subset of attributes
         
-        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self, p=p)
-        else:                   newflow = self.__class__(atts, name, glob=self, ftype=self.type, p=p)
+        #if attrs == "all":      atts = default_states
+        #elif type(attrs)==str:  attrs = [attrs]
+        #if type(attrs)==list:   atts = {k:v for k,v in default_states if k in attrs}
+        #elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in default_states}
+        
+        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self, p=p, s=s)
+        else:                   newflow = self.__class__(name, glob=self, ftype=self.type, p=p, s=s)
         setattr(self, name, newflow)
         self.locals.append(name)
         return newflow
@@ -169,7 +171,7 @@ class MultiFlow(Flow):
         else: raise Exception("Invalid to_update: "+str(to_update))
         for to_up in updatelist:
             up = self.get_view(to_update)
-            up.assign(get, *states, as_copy=True)
+            up.s.assign(get.s, *states, as_copy=True)
     def status(self):
         stat = super().status()
         for l in self.locals:
@@ -299,9 +301,9 @@ class CommsFlow(MultiFlow):
         - clear_inbox, for clearing the inbox to enable more messages to be received
     """
     slots= ['__dict__']
-    def __init__(self, flowdict, name, ftype="CommsFlow", glob=[], params={}):
+    def __init__(self, name, ftype="CommsFlow", glob=[], p={}, s={}):
         self.fxns = {}
-        super().__init__(flowdict, name, ftype=ftype, glob=glob, params=params)
+        super().__init__(name, ftype=ftype, glob=glob, p=p, s=s)
     def __repr__(self):
         rep_str = Flow.__repr__(self)
         if self.name==self.glob.name:   
@@ -312,7 +314,7 @@ class CommsFlow(MultiFlow):
             for l in self.locals:
                 rep_str=rep_str+"\n       "+l+": "+getattr(self, l).__repr__()
         return rep_str
-    def create_comms(self, name, attrs="all", out_attrs="all", ports=[], **kwargs):
+    def create_comms(self, name, ports=[], **kwargs):
         """
         Creates an individual view of the CommsFlow (e.g., for a function), with an
         internal view, out view, in dict, and received set.
@@ -321,10 +323,6 @@ class CommsFlow(MultiFlow):
         ----------
         name : str
             Name for the view (e.g., the name of the function)
-        attrs : list, optional
-            Attributes of the CommsFlow to copy. The default is "all".
-        out_attrs : list, optional
-            Attributes of the CommsFlow to copy for the out view.. The default is "all".
         ports : list
             Ports to send the information to/from (e.g., names of external functions/agents)
 
@@ -334,11 +332,11 @@ class CommsFlow(MultiFlow):
             A local view of the CommsFlow for the function
         """
         if name not in self.fxns:
-            ins = self.create_local(name, attrs=attrs)
-            outs = self.create_local(name+"_out", attrs=attrs)
+            ins = self.create_local(name)
+            outs = self.create_local(name+"_out")
             for port in ports:
-                ins.create_local(port, attrs=attrs)
-                outs.create_local(port, attrs=attrs)
+                ins.create_local(port)
+                outs.create_local(port)
             self.fxns[name]={"internal":    ins, 
                                 "out":      outs, 
                                 "in":       kwargs.get("prev_in", {}),
@@ -372,7 +370,7 @@ class CommsFlow(MultiFlow):
         for f_to in fxns_to:
             port_internal = self.get_port(fxn_from, f_to, "internal")
             port_out = self.get_port(fxn_from, f_to, "out")
-            port_out.assign(port_internal, *states, as_copy=True)
+            port_out.s.assign(port_internal.s, *states, as_copy=True)
             
             if fxn_from not in self.glob.fxns[f_to]["received"]:
                 newstates = tuple(set([*self.glob.fxns[f_to]["in"].get(fxn_from,()), *states]))
@@ -423,7 +421,7 @@ class CommsFlow(MultiFlow):
             else:               args = self.glob.fxns[fxn_to]["in"][f_from]
             port_from = self.get_port(f_from, fxn_to, "out")
             port_to = self.get_port(fxn_to, f_from, "internal")
-            port_to.assign(port_from,  *args, as_copy=True)
+            port_to.s.assign(port_from.s,  *args, as_copy=True)
             self.glob.fxns[fxn_to]["received"][f_from]=args
     def status(self):
         stat = super().status()
