@@ -287,7 +287,7 @@ class AffectDOF(FxnBlock): #ee_mot,ctl,dofs,force_lin hsig_dofs, RSig_dofs
         if abs(self.s.lrstab) >=0.25 or abs(self.s.frstab)>=0.75:   
             self.dofs.s.put(uppwr=0.0, planpwr=0.0)
         else:                                                   
-            self.dofs.s.put(uppwr=2*np.mean(list(air.values())), planpwr=self.ctl.s.forward)
+            self.dofs.s.put(uppwr=np.mean(list(air.values())), planpwr=self.ctl.s.forward)
         
         if self.m.any_faults(): self.hsig_dofs.s.hstate='faulty'
         else:                   self.hsig_dofs.s.hstate='nominal'
@@ -612,7 +612,7 @@ def plot_faulttraj(mdlhist, params, title='Fault response to RFpropbreak fault a
         ax2.plot([loc[0]],[loc[1]],[loc[2]], marker='o', markersize=10, color='red', alpha=0.5)
     
     ax2.set_title(title)
-    ax2.legend(['Nominal Flightpath','Faulty Flighpath'], loc=4)
+    ax2.legend(['Nominal Flightpath','Faulty Flightpath'], loc=4)
     return fig2, ax2
     
 def plot_xy(mdlhist, endresults, mdl, title='', legend=False):
@@ -841,6 +841,7 @@ if __name__=="__main__":
     rd.plot.phases(phases, modephases)
     
     mdl = Drone()
+    app = SampleApproach(mdl,  phases={'forward'})
     endclasses, mdlhists = prop.approach(mdl, app, staged=True)
     plot_faulttraj({'nominal':mdlhists['nominal'], 'faulty':mdlhists['store_ee lowcharge, t=6.0']}, mdl.params, title='Fault response to RFpropbreak fault at t=20')
 
@@ -849,10 +850,10 @@ if __name__=="__main__":
     #opt_prob.total_cost([1,1,100,1,1])
     #opt_prob.time_sims([1,1,100,1,1])
     
-    opt_prob.cr([2,2, 50, 0,0])
+    opt_prob.cr([2,2, 100, 0,0])
     
-    x_to_rcost([2,2],[50],[0,0], faultmodes='store_ee')
-    x_to_rcost([0,0],[50],[0,0], faultmodes='store_ee')
+    x_to_rcost([2,2],[100],[0,0], faultmodes='store_ee')
+    x_to_rcost([0,0],[100],[0,0], faultmodes='store_ee')
     opt_prob.show_architecture()
     
     #opt_prob.update_sim_options("ocost", track={"functions":{"plan_path":"all"}, "flows":{"dofs":"all"}})
@@ -867,7 +868,7 @@ if __name__=="__main__":
     
     
 
-    app = SampleApproach(mdl,  phases={'forward'})
+    
     plt.show()
     
     
