@@ -499,7 +499,7 @@ class Block():
         else:                       self.m.add_fault(*default)
     def get_flowtypes(self):
         """Returns the names of the flow types in the model"""
-        return {obj.type for name, obj in self.flows.items()}
+        return {obj.__class__.__name__ for name, obj in self.flows.items()}
     def reset(self):            #reset requires flows to be cleared first
         """ Resets the block to the initial state with no faults. Used by default in 
         derived objects when resetting the model. Requires associated flows to be cleared first."""
