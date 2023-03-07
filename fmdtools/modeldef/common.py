@@ -117,7 +117,7 @@ class State(dataobject, mapping=True):
         e.g. self.Pos_out.assign(self.Pos_in, x='dx',y='dy')
         as_copy: bool, set to True for dicts/sets to be copied rather than referenced
         """
-        if type(obj)==list or isinstance(obj, np.ndarray):
+        if type(obj) in [list, tuple] or isinstance(obj, np.ndarray):
             for i, state in enumerate(states):  
                 if as_copy: val=copy.copy(obj[i])
                 else:       val=obj[i]

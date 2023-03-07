@@ -36,6 +36,8 @@ class Flow(object):
         """
         self.type=ftype
         self.name=name
+        if not type(s)==dict: s=asdict(s)
+        if not type(p)==dict: p=asdict(p)
         self._args_s = s
         self._args_p = p
         self.p=self._init_p(**p)
@@ -93,7 +95,7 @@ class MultiFlow(Flow):
     slots= ['__dict__']
     def __init__(self, name, ftype="MultiFlow", glob=[], s={}, p={}):
         self.locals=[]
-        super().__init__(name, ftype=ftype, suppress_warnings=True, s={}, p={})
+        super().__init__(name, ftype=ftype, suppress_warnings=True, s=s, p=p)
         if not glob: self.glob=self
         else:        self.glob=glob
     def __repr__(self):
