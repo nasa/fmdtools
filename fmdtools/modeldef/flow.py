@@ -23,7 +23,7 @@ class Flow(object):
     """
     Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
     """
-    def __init__(self, name, s={}, p={}, ftype='generic', suppress_warnings=False):
+    def __init__(self, name, s={}, p={}, suppress_warnings=False):
         """
         Instances the flow with given states.
 
@@ -34,7 +34,6 @@ class Flow(object):
         name : str
             name of the flow
         """
-        self.type=ftype
         self.name=name
         if not type(s)==dict: s=asdict(s)
         if not type(p)==dict: p=asdict(p)
@@ -74,7 +73,7 @@ class Flow(object):
         """
         Returns a copy of the flow object (used when copying the model)
         """
-        copy = self.__class__(self.name, p=asdict(self.p), s=asdict(self.s), ftype=self.type)
+        copy = self.__class__(self.name, p=asdict(self.p), s=asdict(self.s))
         return copy
     def get_typename(self):
         return "Flow"
@@ -93,9 +92,9 @@ class MultiFlow(Flow):
     as well as a single global view (which may represent the actual value)
     """
     slots= ['__dict__']
-    def __init__(self, name, ftype="MultiFlow", glob=[], s={}, p={}):
+    def __init__(self, name, glob=[], s={}, p={}):
         self.locals=[]
-        super().__init__(name, ftype=ftype, suppress_warnings=True, s=s, p=p)
+        super().__init__(name, suppress_warnings=True, s=s, p=p)
         if not glob: self.glob=self
         else:        self.glob=glob
     def __repr__(self):
@@ -133,7 +132,7 @@ class MultiFlow(Flow):
         #elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in default_states}
         
         if hasattr(self, name): newflow = getattr(self, name).copy(glob=self, p=p, s=s)
-        else:                   newflow = self.__class__(name, glob=self, ftype=self.type, p=p, s=s)
+        else:                   newflow = self.__class__(name, glob=self, p=p, s=s)
         setattr(self, name, newflow)
         self.locals.append(name)
         return newflow
@@ -303,9 +302,9 @@ class CommsFlow(MultiFlow):
         - clear_inbox, for clearing the inbox to enable more messages to be received
     """
     slots= ['__dict__']
-    def __init__(self, name, ftype="CommsFlow", glob=[], p={}, s={}):
+    def __init__(self, name, glob=[], p={}, s={}):
         self.fxns = {}
-        super().__init__(name, ftype=ftype, glob=glob, p=p, s=s)
+        super().__init__(name, glob=glob, p=p, s=s)
     def __repr__(self):
         rep_str = Flow.__repr__(self)
         if self.name==self.glob.name:   
@@ -503,7 +502,7 @@ class CommsFlow(MultiFlow):
     def get_typename(self):
         return "CommsFlow"
 
-def init_flow(flowname, fclass=Flow, p={}, s={}, flowtype=''):
+def init_flow(flowname, fclass=Flow, p={}, s={}):
     """Factory method for flows. Enables one to instantiate different types of flows with given states/parameters
     or  pass an already-constructured flow class.
 
@@ -517,13 +516,9 @@ def init_flow(flowname, fclass=Flow, p={}, s={}, flowtype=''):
         Parameter values to override from defaults.
     p : dict
         State values to override from defaults.
-    flowtype : str
-        Flow type identifier to give the flows (e.g., "energy", "material", "signal")
-        If not give, will be gotten from the flow type.
     """
-    if not flowtype:                flowtype = flowname
     if not callable(fclass):        fl = fclass
-    else:                           fl = fclass(flowname, p=p, s=s, ftype=flowtype)
+    else:                           fl = fclass(flowname, p=p, s=s)
     return fl
 
 

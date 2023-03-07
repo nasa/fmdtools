@@ -154,7 +154,7 @@ class Model(object):
             if fxn.get_rand_states(auto_update_only=auto_update_only): 
                 rand_states[fxnname]= fxn.get_rand_states(auto_update_only=auto_update_only)
         return rand_states
-    def add_flows(self, flownames, fclass=Flow, p={}, s={}, flowtype='generic'):
+    def add_flows(self, flownames, fclass=Flow, p={}, s={}):
         """
         Adds a set of flows with the same type and initial parameters
 
@@ -164,17 +164,15 @@ class Model(object):
             Unique flow names to give the flows in the model
         fclass : Class, optional
             Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
-            Class must take flowname, flowdict, flowtype as input to __init__()
+            Class must take flowname, p, s as input to __init__()
             May alternatively provide already-instanced object.
         p : dict, optional
             Parameter dictionary to instantiate the flow with
         s : dict, optional
             State dictionary to overwrite Flow default state values with
-        flowtype : str, optional
-            Denotes type for class (e.g. 'energy,' 'material,', 'signal')
         """
-        for flowname in flownames: self.add_flow(flowname, fclass, p=p, s=s, flowtype=flowtype)
-    def add_flow(self,flowname, fclass=Flow, p={}, s={}, flowtype='generic'):
+        for flowname in flownames: self.add_flow(flowname, fclass, p=p, s=s)
+    def add_flow(self,flowname, fclass=Flow, p={}, s={}):
         """
         Adds a flow with given attributes to the model.
 
@@ -184,17 +182,15 @@ class Model(object):
             Unique flow name to give the flow in the model
         fclass : Class, optional
             Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
-            Class must take flowname, flowdict, flowtype as input to __init__()
+            Class must take flowname, p, s as input to __init__()
             May alternatively provide already-instanced object.
         p : dict, optional
             Parameter dictionary to instantiate the flow with
         s : dict, optional
             State dictionary to overwrite Flow default state values with
-        flowtype : str, optional
-            Denotes type for class (e.g. 'energy,' 'material,', 'signal')
         """
         if not getattr(self, 'is_copy', False):
-            self.flows[flowname] = init_flow(flowname,fclass, p=p, s=s, flowtype=flowtype)
+            self.flows[flowname] = init_flow(flowname,fclass, p=p, s=s)
     def add_fxn(self,name, fclass, *flownames, fparams='None', **fkwargs):
         """
         Instantiates a given function in the model.
@@ -240,10 +236,10 @@ class Model(object):
         return {obj.__class__.__name__ for fxn, obj in self.fxns.items()}
     def flowtypes(self):
         """Returns the set of flow types used in the model"""
-        return {obj.type for fxn, obj in self.flows.items()}
+        return {obj.__class__.__name__ for f, obj in self.flows.items()}
     def flows_of_type(self, ftype):
         """Returns the set of flows for each flow type"""
-        return {flow for flow, obj in self.flows.items() if obj.type==ftype}
+        return {flow for flow, obj in self.flows.items() if obj.__class__.__name__==ftype}
     def flowtypes_for_fxnclasses(self):
         """Returns the flows required by each function class in the model (as a dict)"""
         class_relationship = dict()
