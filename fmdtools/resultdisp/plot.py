@@ -676,7 +676,8 @@ def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
         else:           fig.suptitle(title,fontweight='bold')
     return fig, ax
 
-def phases(mdlphases, modephases=[], mdl=[], dt=1.0, singleplot = True, phase_ticks = 'both', figsize = "default", v_padding=0.5, title_padding=-0.05):
+def phases(mdlphases, modephases=[], mdl=[], dt=1.0, singleplot = True, phase_ticks = 'both', 
+           figsize = "default", v_padding=0.5, title_padding=-0.05, title="Progression of model through operational phases"):
     """
     Plots the phases of operation that the model progresses through.
 
@@ -746,10 +747,10 @@ def phases(mdlphases, modephases=[], mdl=[], dt=1.0, singleplot = True, phase_ti
         if singleplot:
             plt.title(fxn)
         else:
-            plt.title("Progression of "+fxn+" through operational phases")
+            plt.title(title)
             figs.append(fig)
     if singleplot:
-        plt.suptitle("Progression of model through operational phases", y=1.0+title_padding)
+        plt.suptitle(title, y=1.0+title_padding)
         plt.subplots_adjust(hspace=v_padding)
         return fig
     else:           return figs
