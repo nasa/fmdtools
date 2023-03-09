@@ -49,7 +49,7 @@ class Flow(object):
         #    if type(self).copy == Flow.copy:        warnings.warn("Custom copy() method not implemented--Staged Execution may not copy custom model states")
     def __repr__(self):
         if hasattr(self,'name'):    
-            return getattr(self, 'name')+' '+getattr(self, 'type')+' flow: '+self.s.__repr__()
+            return getattr(self, 'name')+' '+self.__class__.__name__+' flow: '+self.s.__repr__()
         else: return "Uninitialized Flow"
     def reset(self):
         """ Resets the flow to the initial state"""
@@ -244,7 +244,7 @@ class MultiFlow(Flow):
         g = self.create_multigraph(**kwargs, get_states=True)
         return g
 def node_is_tagged(connections_as_tags, tag, node):
-    return (connections_as_tags and (tag in node or (tag=="base" and not(":" in node)))) or tag==node
+    return (connections_as_tags and (tag in node or (tag=="base" and not("_" in node)))) or tag==node
 
 def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False):
     """
@@ -270,11 +270,11 @@ def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False
     if include_states:
         for state in multiflow.s.__fields__:
             if get_states:  kwargs={"states":getattr(multiflow.s, state)}
-            g.add_node(base_name+": "+state, label="state", **kwargs)
-            g.add_edge(base_name, base_name+": "+state, label="contains")
+            g.add_node(base_name+"_"+state, label="state", **kwargs)
+            g.add_edge(base_name, base_name+"_"+state, label="contains")
     for loc in multiflow.locals:
         local_flow = getattr(multiflow, loc)
-        local_name = base_name+": "+loc
+        local_name = base_name+"_"+loc
         if get_states:  kwargs={"states":local_flow.return_states()}
         
         g.add_node(local_name, label=local_flow.get_typename(), **kwargs)
@@ -284,8 +284,8 @@ def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False
         if include_states:
             for state in local_flow.s.__fields__:
                 if get_states:  kwargs={"states":getattr(multiflow.s, state)}
-                g.add_node(local_name+": "+state, label="state", **kwargs)
-                g.add_edge(local_name, local_name+": "+state, label="contains")
+                g.add_node(local_name+"_"+state, label="state", **kwargs)
+                g.add_edge(local_name, local_name+"_"+state, label="contains")
     def get_typename(self):
         return "MultiFlow"
 
@@ -474,8 +474,8 @@ class CommsFlow(MultiFlow):
             out_ports = out_flow.locals
             send_connections.append((f, f+"_out"))
             for port in int_ports:
-                portname = f+": "+port
-                if port in out_ports:   send_connections.append((portname, f+"_out: "+port))
+                portname = f+"_"+port
+                if port in out_ports:   send_connections.append((portname, f+"_out_"+port))
                 else:                   send_connections.append((portname, f+"_out"))
             for f2 in self.fxns:
                 f2_int = getattr(self,f2)
@@ -488,7 +488,7 @@ class CommsFlow(MultiFlow):
                             send_connections.append((portname,f2))
                 else:
                     if f in f2_int.locals:
-                        send_connections.append((f+"_out", f2+": "+f))
+                        send_connections.append((f+"_out", f2+"_"+f))
                     elif not(ports_only):
                         send_connections.append((f+"_out", f2))
                         
