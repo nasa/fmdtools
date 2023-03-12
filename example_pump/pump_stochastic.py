@@ -20,6 +20,7 @@ The flows are:
     - Water_out
     - Signal input (on/off)
 """
+from fmdtools.modeldef.common import Rand, State
 from fmdtools.modeldef.block import FxnBlock
 from fmdtools.modeldef.flow import Flow
 from fmdtools.modeldef.model import Model
@@ -34,142 +35,105 @@ import numpy as np
 DEFINE MODEL FUNCTIONS
 Functions are defined using Python classes that are instantiated as objects
 """
+from ex_pump import ImportWater, ExportWater
+from ex_pump import ImportEE as DetImportEE
 
-class ImportEE(FxnBlock):
-    def __init__(self,name, flows):
-        super().__init__(name,flows, flownames = ['EEout'])
-        self.failrate=1e-5
-        self.assoc_modes({'no_v':[0.80,[0,1,0], 10000], 'inf_v':[0.20, [0,1,0], 5000]}, key_phases_by='global')
-        self.assoc_rand_states(('effstate', 1.0), ('grid_noise',1.0))
+class ImportEERandState(State):
+    effstate:   float=1.0
+    grid_noise: float=1.0
+class ImportEERand(Rand):
+    s= ImportEERandState()
+    run_stochastic:     bool=True
+class ImportEE(DetImportEE):
+    _init_r = ImportEERand
     def condfaults(self,time):
-        if self.EEout.current>15.0: self.add_fault('no_v')
+        if self.ee_out.s.current>20.0: self.m.add_fault('no_v')
     def behavior(self,time):
-        if self.has_fault('no_v'):      self.effstate=0.0 #an open circuit means no voltage is exported
-        elif self.has_fault('inf_v'):   self.effstate=100.0 #a voltage spike means voltage is much higher
+        if self.m.has_fault('no_v'):      self.r.s.effstate=0.0 #an open circuit means no voltage is exported
+        elif self.m.has_fault('inf_v'):   self.r.s.effstate=100.0 #a voltage spike means voltage is much higher
         else:                           
-            if time>self.time: self.set_rand('effstate','triangular',0.9,1,1.1)
-        if time>self.time:
-            self.set_rand('grid_noise','normal',1, 0.1*(2+np.sin(np.pi/2*time)))
-        
-        self.EEout.voltage= self.grid_noise*self.effstate * 500
+            if time>self.t.time: self.r.set_rand('effstate','triangular',0.9,1,1.1)
+        if time>self.t.time:
+            self.r.set_rand('grid_noise','normal',1, 0.1*(2+np.sin(np.pi/2*time)))
+        self.ee_out.s.voltage= self.r.s.grid_noise*self.r.s.effstate * 500
 
-class ImportWater(FxnBlock):
-    """ Import Water is the pipe with water going into the pump """
-    def __init__(self,name,flows):
-        """Here the only flows are the water flowing out"""
-        super().__init__(name,flows, flownames=['Watout'])
-        self.failrate=1e-5
-        self.assoc_modes({'no_wat':[1.0, [1,1,1], 1000]}, key_phases_by='global')
-        """
-        in this function, no conditional faults are modelled, so it doesn't need to be included
-        """
-    def behavior(self,time):
-        """ The behavior is that if the flow has a no_wat fault, the wate level goes to zero"""
-        if self.has_fault('no_wat'): self.Watout.level=0.0
-        else:                        self.Watout.level=1.0
 
-class ExportWater(FxnBlock):
-    """ Import Water is the pipe with water going into the pump """
-    def __init__(self,name,flows):
-        #flows going into/out of the function need to be made properties of the function
-        super().__init__(name, flows, flownames=['Watin'])
-        self.failrate=1e-5
-        self.assoc_modes({'block':[1.0, [1.5, 1.0, 1.0], 5000]}, key_phases_by='global')
-    def behavior(self,time):
-        """ Here a blockage changes the area the output water flows through """
-        if self.has_fault('block'): self.Watin.area=0.01
-
-class ImportSig(FxnBlock):
-    """ Import Signal is the on/off switch """
-    def __init__(self,name,flows):
-        """ Here the main flow is the signal"""
-        super().__init__(name,flows, flownames=['Sigout'])
-        self.failrate=1e-6
-        self.assoc_modes({'no_sig':[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by='global')
-        self.assoc_rand_state('sig_noise',1.0)
+from ex_pump import ImportSig as DetImportSig
+class ImportSigRandState(State):
+    sig_noise : float = 1.0
+class ImportSigRand(Rand):
+    s=ImportSigRandState()
+    run_stochastic:     bool=True
+class ImportSig(DetImportSig):
+    _init_r=ImportSigRand
     def behavior(self, time):
-        if self.has_fault('no_sig'): self.Sigout.power=0.0 #an open circuit means no voltage is exported
+        if self.m.has_fault('no_sig'): 
+            self.sig_out.power=0.0 #an open circuit means no voltage is exported
         else:
-            if time<5:      self.Sigout.power=0.0;self.to_default('sig_noise')
+            if time<5:      
+                self.sig_out.power=0.0
+                self.r.to_default('sig_noise')
             elif time<50: 
-                if not time%5:  self.set_rand('sig_noise', 'choice', [1.0, 0.9, 1.1])
-                self.Sigout.power=1.0*self.sig_noise
-            else:           self.Sigout.power=0.0; self.to_default()
+                if not time%5:  
+                    self.r.set_rand('sig_noise', 'choice', [1.0, 0.9, 1.1])
+                self.sig_out.power=1.0*self.r.s.sig_noise
+            else:           
+                self.sig_out.power=0.0; 
+                self.r.to_default()
 
-class MoveWat(FxnBlock):
-    """  Move Water is the pump itself. While one could decompose this further, one function is used for simplicity """
-    def __init__(self,name, flows, delay):
-        flownames=['EEin', 'Sigin', 'Watin', 'Watout']
-        states={'total_flow':0.0} #effectiveness state
-        self.delay=delay #delay parameter
-        super().__init__(name,flows,flownames=flownames,states=states, timers={'timer'})
-        self.failrate=1e-5
-        self.assoc_modes({'mech_break':[0.6, [0.1, 1.2, 0.1], 5000], 'short':[1.0, [1.5, 1.0, 1.0], 10000]}, key_phases_by='global')
-        self.assoc_rand_state("eff",1.0,auto_update=['normal', (1.0, 0.2)])
-    def condfaults(self, time):
-        if self.delay:
-            if self.Watout.pressure>15.0:
-                if time>self.time:                  self.timer.inc(self.dt)
-                if self.timer.time>self.delay:      self.add_fault('mech_break')
-        else:
-            if self.Watout.pressure>15.0: self.add_fault('mech_break')
-
+from ex_pump import MoveWat as DetMoveWat
+class MoveWatRandState(State):
+    eff: float=1.0
+    eff_update = ('normal', (1.0, 0.2))
+class MoveWatRand(Rand):
+    s=MoveWatRandState()
+    run_stochastic: bool=True
+class MoveWat(DetMoveWat):
+    _init_r=MoveWatRand
     def behavior(self, time):
-        """ here we can define how the function will behave with different faults """
-        if self.has_fault('mech_break'):
-            self.Watout.pressure = 0.0
-            self.Watout.flowrate = 0.0
-        else:
-            self.Watout.pressure = 10/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level/self.Watout.area
-            self.Watout.flowrate = 0.3/500 * self.Sigin.power*self.eff*min(1000, self.EEin.voltage)*self.Watin.level*self.Watout.area
+        self.s.eff=self.r.s.eff
+        super().behavior(time)
 
-        self.Watin.pressure=self.Watout.pressure
-        self.Watin.flowrate=self.Watout.flowrate
-        if time>self.time: self.total_flow+=self.Watout.flowrate
-
-
-class Water(Flow):
-    def __init__(self):
-        attributes={'flowrate':1.0, \
-                    'pressure':1.0, \
-                    'area':1.0, \
-                    'level':1.0}
-        super().__init__(attributes, 'Water',ftype='Water', suppress_warnings=True)
-        self.customattribute='hello'
-
-##DEFINE MODEL OBJECT
+from ex_pump import PumpParam, Electricity, Water, Signal
+from fmdtools.modeldef.model import ModelParam
 class Pump(Model):
-    def __init__(self, params={'cost':{'repair', 'water'}, 'delay':10, 'units':'hrs'}, \
-                 modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':1}, \
-                     valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
-        super().__init__(params=params, modelparams=modelparams, valparams=valparams)
-        self.add_flow('EE_1', {'current':1.0, 'voltage':1.0})
-        self.add_flow('Sig_1',  {'power':1.0})
-        # custom flows which we defined earlier can be added also:
-        self.add_flow('Wat_1', Water())
-        self.add_flow('Wat_2', Water())
+    def __init__(self, params=PumpParam(), \
+                 modelparams = ModelParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr'), \
+                    valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
 
-        self.add_fxn('ImportEE',['EE_1'],fclass=ImportEE)
-        self.add_fxn('ImportWater',['Wat_1'],fclass=ImportWater)
-        self.add_fxn('ImportSignal',['Sig_1'],fclass=ImportSig)
-        self.add_fxn('MoveWater', ['EE_1', 'Sig_1', 'Wat_1', 'Wat_2'],fclass=MoveWat, fparams = params['delay'])
-        self.add_fxn('ExportWater', ['Wat_2'], fclass=ExportWater)
+        super().__init__(params=params, modelparams=modelparams, valparams=valparams)
+
+        self.add_flow('ee_1',   Electricity)
+        self.add_flow('sig_1',  Signal)
+        self.add_flow('wat_1',  Water('Wat_1'))
+        self.add_flow('wat_2',  Water('Wat_1'))
+
+        self.add_fxn('import_ee',    ImportEE,      'ee_1')
+        self.add_fxn('import_water', ImportWater,   'wat_1')
+        self.add_fxn('import_signal',ImportSig,     'sig_1')
+        self.add_fxn('move_water',   MoveWat,       'ee_1', 'sig_1', 'wat_1', 'wat_2', p = {'delay':params.delay})
+        self.add_fxn('export_water', ExportWater,   'wat_2')
 
         self.build_model()
+    def end_condition(self,time):
+
+        if time>self.times[-1]: return True
+        else:                   return False
     def find_classification(self,scen, mdlhists):
+
         #get fault costs and rates
-        if 'repair' in self.params['cost']: repcost= self.calc_repaircost()
+        if 'repair' in self.params.cost: repcost= self.calc_repaircost()
         else:                               repcost = 0.0
-        if 'water' in self.params['cost']:
-            lostwat = sum(mdlhists['nominal']['flows']['Wat_2']['flowrate'] - mdlhists['faulty']['flows']['Wat_2']['flowrate'])
-            watcost = 750 * lostwat  * self.tstep
-        elif 'water_exp' in self.params['cost']:
-            wat = mdlhists['nominal']['flows']['Wat_2']['flowrate'] - mdlhists['faulty']['flows']['Wat_2']['flowrate']
-            watcost =100 *  sum(np.array(accumulate(wat))**2) * self.tstep
+        if 'water' in self.params.cost:
+            lostwat = sum(mdlhists['nominal']['flows']['wat_2']['flowrate'] - mdlhists['faulty']['flows']['wat_2']['flowrate'])
+            watcost = 750 * lostwat  * self.modelparams.dt
+        elif 'water_exp' in self.params.cost:
+            wat = mdlhists['nominal']['flows']['wat_2']['flowrate'] - mdlhists['faulty']['flows']['wat_2']['flowrate']
+            watcost =100 *  sum(np.array(accumulate(wat))**2) * self.modelparams.dt
         else: watcost = 0.0
-        if 'ee' in self.params['cost']:
-            eespike = [spike for spike in mdlhists['faulty']['flows']['EE_1']['current'] - mdlhists['nominal']['flows']['EE_1']['current'] if spike >1.0]
-            if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.tstep
+        if 'ee' in self.params.cost:
+            eespike = [spike for spike in mdlhists['faulty']['flows']['ee_1']['current'] - mdlhists['nominal']['flows']['ee_1']['current'] if spike >1.0]
+            if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.modelparams.dt
             else: eecost =0.0
         else: eecost = 0.0
 
@@ -188,22 +152,24 @@ def paramfunc(delay):
 if __name__=="__main__":
     import multiprocessing as mp
 
-    mdl = Pump(modelparams = {'phases':{'start':[0,4], 'on':[5, 49], 'end':[50,55]}, 'times':[0,20, 55], 'tstep':1,'seed':4})
+
+    rp = ModelParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr', seed=5)
+    mdl = Pump(modelparams = rp)
     
-    mdl.set_vars([['EE_1','current']],[2])
+    mdl.set_vars([['ee_1','current']],[2])
     
     
     app_comp = NominalApproach()
     app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
     app_comp.add_param_replicates(paramfunc, 'delay_10', 100, (10))
     
-    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('ExportWater','block')], pool=mp.Pool(4))
+    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], pool=mp.Pool(4))
     
-    endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('ExportWater','block')], staged=True, pool=mp.Pool(4))
+    endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True, pool=mp.Pool(4))
     
-    comp_mdlhists = {scen:mdlhist['ExportWater block, t=27'] for scen,mdlhist in mdlhists.items()}
+    comp_mdlhists = {scen:mdlhist['export_water block, t=27.0'] for scen,mdlhist in mdlhists.items()}
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
-    fig = rd.plot.mdlhists(comp_mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
+    fig = rd.plot.mdlhists(comp_mdlhists, {'move_water':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
     
     
     app = NominalApproach()
@@ -231,12 +197,12 @@ if __name__=="__main__":
         #    print(fxn.return_probdens())
         #    print(getattr(fxn,'pds', None))
     
-    endresults,  mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=False, new_params={'modelparams':{'seed':50}})
+    endresults,  mdlhist=propagate.one_fault(mdl, 'export_water','block', time=20, staged=False, run_stochastic=False, new_params={'modelparams':{'seed':50}})
     
     
     #mdlhist['faulty']['functions']['ImportEE']['probdens']
     
-    rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
+    rd.plot.mdlhists(mdlhist, fxnflowvals={'import_water'})
     #rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     
     """

@@ -85,7 +85,8 @@ class GuideLiquid(FxnBlock):
             self.watout.s.effort = self.watin.s.effort - 1.0
             self.watin.s.rate = self.watout.s.rate - 1.0
         else:
-            self.watout.s.assign(self.watin.s)
+            self.watout.s.effort = self.watin.s.effort
+            self.watin.s.rate = self.watout.s.rate
 class GuideLiquidIn(GuideLiquid):
     flownames = {'wat_in_1':'watin', 'wat_in_2':'watout'}
 class GuideLiquidOut(GuideLiquid):
@@ -123,7 +124,7 @@ class StoreLiquid(FxnBlock):
         else:                           
             self.s.net_flow = self.watin.s.rate - self.watout.s.rate
     def dynamic_behavior(self,time):
-        self.s.inc(level=self.s.net_flow*self.dt)
+        self.s.inc(level=self.s.net_flow*self.t.dt)
         self.s.limit(level=(0.0, 25))
         #self.s.level = self.s.level + self.s.net_flow*self.dt
 

@@ -46,6 +46,7 @@ import warnings
 import sys,os
 from fmdtools.modeldef.approach import SampleApproach
 from fmdtools.modeldef.model import ModelParam
+from fmdtools.modeldef.block import Block
 from recordclass import asdict
 
 ##DEFAULT ARGUMENTS
@@ -820,7 +821,10 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
                fxnfaults = scen['sequence'][t].get('faults',{})
                disturbances = scen['sequence'][t].get('disturbances', {})
            else: fxnfaults, disturbances = {}, {}
-           flowstates = propagate(mdl, t, fxnfaults, disturbances, flowstates, run_stochastic=run_stochastic)
+           try:
+               flowstates = propagate(mdl, t, fxnfaults, disturbances, flowstates, run_stochastic=run_stochastic)
+           except Exception as e:
+               raise Exception("Error in scenario "+str(scen)) from e
            if track_times:
                if track_times=='all':           t_ind_rec = t_ind+shift
                elif track_times[0]=='interval': t_ind_rec = t_ind//track_times[1]+shift
@@ -984,11 +988,8 @@ def prop_time(mdl, time, flowstates={}, run_stochastic=False):
         nextfxns.clear()
         n+=1
         if n>1000: #break if this is going for too long
-            print("Undesired looping in function")
-            print(time)
-            print(fxnname)
-            print(activefxns)
-            break
+            raise Exception("Undesired looping between functions in static propagation step",
+                            "at t="+str(time)+", these functions remain active:"+str(activefxns))
     return flowstates
 
 #update_mdlhist
@@ -1087,7 +1088,7 @@ def update_blockhist(blockname, block, blockhist, t_ind):
     t_ind : int
         index to update the history at
     """
-    if block.type not in ['function', 'component', 'action', 'block']: raise Exception(blockname+" is not a block. Is it being overwritten?")
+    if not isinstance(block, Block): raise Exception(blockname+" is not a block. Is it being overwritten?")
     states, faults = block.return_states()
     if 'faults' in blockhist:
         if type(blockhist["faults"]) == dict:

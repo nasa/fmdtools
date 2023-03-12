@@ -25,7 +25,7 @@ from fmdtools.modeldef.block import FxnBlock, Mode
 from fmdtools.modeldef.flow import Flow 
 from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.approach import SampleApproach, NominalApproach
-from fmdtools.modeldef.common import Parameter, State
+from fmdtools.modeldef.common import Parameter, State, Time
 import fmdtools.resultdisp as rd
 import fmdtools.faultsim.propagate as propagate
 import numpy as np
@@ -181,6 +181,8 @@ class ImportSig(FxnBlock):
             elif time<50:   self.sig_out.s.power=1.0
             else:           self.sig_out.s.power=0.0
 
+class MoveWatTime(Time):
+    timernames = ('pressure_limit',)
 class MoveWatStates(State):
     eff:    float = 1.0 #effectiveness state
 class MoveWatParams(Parameter, readonly=True):
@@ -194,12 +196,13 @@ class MoveWat(FxnBlock):
     _init_s = MoveWatStates
     _init_p = MoveWatParams
     _init_m = MoveWatMode
+    _init_t = MoveWatTime
     _init_ee_in = Electricity
     _init_sig_in = Signal
     _init_wat_in = Water 
     _init_wat_out = Water
     flownames = {"ee_1":"ee_in", "sig_1":"sig_in", "wat_1":"wat_in", "wat_2":"wat_out"}
-    def __init__(self,name, flows, params = 0, **kwargs):
+    def __init__(self,name, flows,  **kwargs):
         """ In this function, more states are initialized than flows:
             - states (internal variables to be given to the function)
                 states are given as {'name':initval}
@@ -207,7 +210,7 @@ class MoveWat(FxnBlock):
 
             We also have a parameter `delay` which we use to change a design variable in the function
         """
-        super().__init__(name,flows=flows, timers={'timer'}, p={'delay':params}, **kwargs)
+        super().__init__(name,flows=flows, **kwargs)
     def condfaults(self, time):
         """
             Here we use the timer to define a conditional fault that only occurs after a state is present after 10 seconds.
@@ -218,8 +221,10 @@ class MoveWat(FxnBlock):
         """
         if self.p.delay:
             if self.wat_out.s.pressure>15.0:
-                if time>self.time:                  self.timer.inc(self.dt)
-                if self.timer.time>=self.p.delay:   self.m.add_fault('mech_break')
+                if time>self.t.time: 
+                    self.t.pressure_limit.inc(self.t.dt)
+                if self.t.pressure_limit.time>=self.p.delay:   
+                    self.m.add_fault('mech_break')
         else:
             if self.wat_out.s.pressure>15.0:        self.m.add_fault('mech_break')
 
@@ -289,7 +294,7 @@ class Pump(Model):
         self.add_fxn('import_ee',    ImportEE,      'ee_1')
         self.add_fxn('import_water', ImportWater,   'wat_1')
         self.add_fxn('import_signal',ImportSig,     'sig_1')
-        self.add_fxn('move_water',   MoveWat,       'ee_1', 'sig_1', 'wat_1', 'wat_2', fparams = params.delay)
+        self.add_fxn('move_water',   MoveWat,       'ee_1', 'sig_1', 'wat_1', 'wat_2', p = {'delay':params.delay})
         self.add_fxn('export_water', ExportWater,   'wat_2')
 
         self.build_model()

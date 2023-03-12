@@ -16,7 +16,7 @@ from recordclass import asdict
 
 from .flow import Flow, init_flow
 from .block import GenericFxn
-from .common import check_pickleability, Parameter, get_var
+from .common import check_pickleability, Parameter, get_var, set_var
 import fmdtools.resultdisp.process as proc
 
 
@@ -211,7 +211,7 @@ class Model(object):
         """
         if not getattr(self, 'is_copy', False):
             flows=self.get_flows(flownames)
-            fkwargs = {**{'r':{"seed":self.modelparams.seed}}, **fkwargs}
+            fkwargs = {**{'r':{"seed":self.modelparams.seed}}, **{'t':{'dt': self.modelparams.dt}}, **fkwargs}
             try:
                 self.fxns[name] = fclass(name, flows=flows, params=fparams, **fkwargs)
             except TypeError as e:
@@ -220,7 +220,6 @@ class Model(object):
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
             self.functionorder.update([name])
-            self.fxns[name].set_timestep(use_local=self.modelparams.use_local, global_tstep=self.modelparams.dt)
     def set_functionorder(self,functionorder):
         """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
         if not self.functionorder.difference(functionorder): self.functionorder=OrderedSet(functionorder)
@@ -515,7 +514,6 @@ class Model(object):
                 copy.fxns[fxnname]=fxn.copy(flows, **kwargs)
             else:                   
                 copy.fxns[fxnname]=fxn.copy(flows, fparams, **kwargs)
-            copy.fxns[fxnname].set_timestep(use_local=self.modelparams.use_local, global_tstep=self.modelparams.dt)
             setattr(copy, fxnname, copy.fxns[fxnname])
         copy._fxninput=self._fxninput
         copy._fxnflows=self._fxnflows
@@ -580,7 +578,7 @@ class Model(object):
                 elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
                 elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]             
                 else: raise Exception(var[0]+" not a function, flow, or seed")
-                f.set_var(var, varvalues[i])
+                set_var(f, var, varvalues[i])
     def get_vars(self, *variables, trunc_tuple=True):
         """
         Gets variable values in the model.

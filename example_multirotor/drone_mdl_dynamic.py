@@ -6,7 +6,7 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.modeldef.common import Parameter, State
+from fmdtools.modeldef.common import Parameter, State, Time
 from fmdtools.modeldef.block import FxnBlock, Mode
 from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.approach import SampleApproach
@@ -26,8 +26,8 @@ class StoreEE(StaticstoreEE):
     def behavior(self, time):
         if self.m.has_fault('nocharge'):    self.ee_out.s.effort=0.0
         else:                               self.ee_out.s.effort=1.0
-        if time > self.time:
-            self.s.inc(soc=self.ee_out.s.mul('rate', 'effort')*(time-self.time)/2)
+        if time > self.t.time:
+            self.s.inc(soc=self.ee_out.s.mul('rate', 'effort')*(time-self.t.time)/2)
             
 from drone_mdl_static import CtlDOFMode
 class CtlDOFState(State):
@@ -88,8 +88,10 @@ class PlanPathParams(Parameter):
              (150.0,    150.0,  50.0),
              (0.0,      0.0,    50.0),
              (0.0,      0.0,    0.0)) 
-
+class PlanPathTime(Time):
+    timernames = ('pause',)
 class PlanPath(FxnBlock):
+    _init_t = PlanPathTime
     _init_m = PlanPathMode
     _init_s = PlanPathStates
     _init_p = PlanPathParams
@@ -98,8 +100,6 @@ class PlanPath(FxnBlock):
     _init_dir = Dir 
     _init_fs = Force
     flownames = {'ee_ctl':'ee_in', 'force_st': 'fs'}
-    def __init__(self, name, **kwargs):
-        super().__init__(name, timers={'pause'}, **kwargs)
     def condfaults(self, time):
         if self.fs.s.support<0.5: self.m.add_fault('noloc')
     def behavior(self, t):
@@ -111,12 +111,12 @@ class PlanPath(FxnBlock):
         if self.m.mode=='taxi' and t>5: self.m.mode='taxi'
         elif dist<5 and self.m.in_mode({'move', 'hover'}):
             self.m.mode='hover'
-            if t>self.time:
-                self.pause.inc(1)
-                if self.pause.t() > 2:
+            if t>self.t.time:
+                self.t.pause.inc(1)
+                if self.t.pause.t() > 2:
                     self.s.inc(pt=1)
                     self.s.goal = self.s.goals[self.pt]
-                    self.pause.reset()
+                    self.t.pause.reset()
         elif self.env.s.z<1 and self.s.pt==6:                       self.m.mode = 'taxi'
         elif dist<5 and self.s.pt==6:                               self.m.mode = 'land'
         elif self.s.pt==6 and self.m.in_mode({'move', 'hover'}):    self.m.mode = 'descend'
