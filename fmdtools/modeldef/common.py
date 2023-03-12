@@ -13,6 +13,7 @@ import dill
 import copy
 import inspect   
 from scipy import stats 
+from decimal import Decimal
 
 
 #def container(name="Container", **kwargs):
@@ -193,7 +194,10 @@ class State(dataobject, mapping=True):
         """
         for name, value in kwargs.items():
             if name not in self.__fields__: raise Exception(name+" not a property of "+str(self.__class__))
-            setattr(self, name, min(value[1], max(value[0], getattr(self,name))))
+            try:
+                setattr(self, name, min(value[1], max(value[0], getattr(self,name))))
+            except ValueError as e:
+                raise Exception("Invalid state values for "+name+": "+str(getattr(self,name))) from e
     def mul(self,*states):
         """Returns the multiplication of given attributes of the model construct.
         e.g.,   a = self.mul('x','y','z') is the same as
@@ -409,7 +413,7 @@ class Rand(dataobject, mapping=True):
         if auto_update_only:
             rand_states = {state:vals for state,vals in  rand_states if hasattr(self.s, state+"_update")}
         return rand_states
-    def set_rand(self,statename,methodname, args):
+    def set_rand(self,statename,methodname, *args):
         """
         Update the given random state with a given method and arguments (if in run_stochastic mode)
 
@@ -425,32 +429,45 @@ class Rand(dataobject, mapping=True):
         if getattr(self, 'run_stochastic', True):
             gen_method = getattr(self.rng, methodname)
             newvalue = gen_method(*args)
+            if isinstance(newvalue, np.ndarray) and type(self.s[statename]) not in [list, np.array]:
+                raise Exception("Random method for "+statename+" in "+str(self.__class__),
+                                " returned array when it should be a float/int--check args")
+                newvalue = newvalue[0]
             setattr(self.s, statename, newvalue)
             if self.run_stochastic == 'track_pdf':
                 value_pds = get_pdf_for_rand(newvalue, methodname, args)
-                self.pds.extend(value_pds)
+                self.probs.append(value_pds)
     def return_probdens(self):
-        if self.pds: state_pd= np.prod(self.pds)
-        else:        state_pd= 1.0
+        if self.probs:  state_pd= np.prod(self.probs)
+        else:           state_pd= 1.0
         return state_pd
     def update_stochastic_states(self):
         """Updates the defined stochastic states defined to auto-update."""
         if hasattr(self,'s'):
-            if self.run_stochastic == 'track_pdf': self.pds.clear()
+            if self.run_stochastic == 'track_pdf': self.probs.clear()
             for state in self.s.__fields__:
                 if hasattr(self.s, state+"_update"):
-                    self.set_rand(state, *getattr(self.s, state+'_update'))
+                    self.set_rand(state, getattr(self.s, state+'_update')[0],
+                                  *getattr(self.s, state+'_update')[1])
     def reset(self):
+        self.probs.clear()
         self.s.reset()
         self.rng = np.random.default_rng(self.seed)
     def assign(self, other_rand):
         if hasattr(self,'s'):
             self.s.assign(other_rand.s)
+        self.seed = other_rand.seed
         self.rng.__setstate__(other_rand.rng.__getstate__())
+        self.probs = copy.copy(other_rand.probs)
     def get_true_field(self, fieldname, *args, **kwargs):
         return get_true_field(self, fieldname, *args, **kwargs)
     def get_true_fields(self, *args, **kwargs):
         return get_true_fields(self, *args, **kwargs)
+    def to_default(self, *statenames):
+        """Resets given random states to their default values"""
+        for statename in statenames:
+            default = self.s.__defaults__[self.s.__fields__.index(statename)]
+            self.s[statename] = default
 
 def get_pdf_for_rand(x, randname, args):
     """
@@ -660,6 +677,68 @@ class Timer():
     def is_set(self):
         """Whether the timer is set (before time increments)"""
         return self.mode=='set'
+    def copy(self):
+        cop = self.__class__(self.name)
+        cop.time=self.time
+        cop.mode=self.mode
+        cop.dt = self.dt
+        return cop
+
+class Time(dataobject):
+    time:       float=0.0
+    dt:         float=1.0
+    t_ind:      int=0
+    t_loc:      float=0.0
+    run_times:  int=1
+    timers:     dict = {}
+    use_local:  bool=True
+    timernames = ()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for timername in self.timernames:
+            self.timers[timername]=Timer(timername)
+        self.set_timestep()
+    def __getattr__(self, item):
+        try: 
+            return super().__getattribute__(item)
+        except:
+            return self.timers[item]
+    def set_timestep(self):
+        """Sets the timestep of the function given the option use_local 
+        (which selects whether it uses local_timestep or global_timestep)"""
+        global_tstep = Decimal(str(self.dt))
+        local_tstep = Decimal(str(self.__defaults__[self.__fields__.index('dt')]))
+        if self.use_local:
+            dt=local_tstep
+            if dt < global_tstep:
+                if global_tstep%dt:
+                    raise Exception("Local timestep: "+str(dt)+" doesn't line up with global timestep: "+str(global_tstep))
+            else:
+                if dt%global_tstep:
+                    raise Exception("Local timestep: "+str(dt)+" doesn't line up with global timestep: "+str(global_tstep))
+            self.run_times = int(global_tstep/dt)
+        else:   
+            dt=global_tstep
+            self.run_times=1
+        self.dt = float(dt)
+        for timer in self.timers.values():
+            timer.dt=-self.dt
+    def reset(self):
+        self.time=0.0
+        self.t_ind=0
+        self.t_loc=0.0
+        for timer in self.timers.values():
+            timer.reset()
+    def copy(self, *args, **t_args):
+        cop = self.__class__(*args, **t_args)
+        for timer in self.timers:
+            cop.timers[timer] = self.timers[timer].copy()
+        cop.run_times=self.run_times
+        cop.t_ind=self.t_ind
+        cop.t_loc=self.t_loc
+        cop.dt=self.dt
+        return cop
+        
 
 # def phases(times, names=[]):
 #     """ Creates named phases from a set of times defining the edges of the intervals """

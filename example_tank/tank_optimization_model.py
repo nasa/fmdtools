@@ -75,7 +75,7 @@ class ContingencyActions(FxnBlock):
         #self.assoc_modes({'FalseDetection_low':[1e-4,[1,1],0],'FalseDetection_high':[1e-4,[1,1],0]}, probtype='rate')
         self.faultpolicy=faultpolicy
     def behavior(self,time):        
-        if time > self.time:
+        if time > self.t.time:
             
             self.Input_Sig.action=self.faultpolicy[self.Input_Sig.indicator,self.Tank_Sig.indicator,self.Output_Sig.indicator][0]
             self.Output_Sig.action=self.faultpolicy[self.Input_Sig.indicator,self.Tank_Sig.indicator,self.Output_Sig.indicator][1]

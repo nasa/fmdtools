@@ -132,9 +132,9 @@ class Battery(Component):
         elif self.m.has_fault('degr'):      self.s.e_t=0.5*self.p.avail_eff
         else:                               self.s.e_t=self.p.avail_eff
         
-        if time > self.time:
-            self.s.inc(soc=-100*ee_outr*self.p.parallel*self.p.series*(time-self.time)/self.p.amt)
-            self.time=time
+        if time > self.t.time:
+            self.s.inc(soc=-100*ee_outr*self.p.parallel*self.p.series*(time-self.t.time)/self.p.amt)
+            self.t.time=time
         if self.s.soc<20:         self.m.add_fault('lowcharge')
         if self.s.soc<1:          
             self.m.replace_fault('lowcharge','nocharge')

@@ -189,7 +189,7 @@ class MultiFlow(Flow):
             getattr(self, local).reset()
     def copy(self, glob=[], params={}):
         states = super().status()
-        cop = self.__class__(states, self.name, self.type, glob=glob, params=params)
+        cop = self.__class__(states, self.name, glob=glob, params=params)
         for loc in self.locals:
             local = getattr(self, loc)
             cop.create_local(local.name, attrs=local.status())
@@ -442,7 +442,7 @@ class CommsFlow(MultiFlow):
             self.fxns[fxn]["received"] = {}
     def copy(self, glob=[], p={}):
         states = super().status()
-        cop = self.__class__(self.name, self.type, glob=glob, p=p, s=states)
+        cop = self.__class__(self.name, glob=glob, p=p, s=states)
         for fxn in self.fxns:
             cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status(),
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]),
