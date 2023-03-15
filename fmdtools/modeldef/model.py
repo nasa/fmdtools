@@ -15,11 +15,9 @@ import sys
 from recordclass import asdict
 
 from .flow import Flow, init_flow
-from .block import GenericFxn
-from .common import check_pickleability, Parameter, get_var, set_var
-import fmdtools.resultdisp.process as proc
-
-
+from .common import check_pickleability, get_var, set_var
+from .parameter import Parameter
+from fmdtools.faultsim.result import History, get_sub_include
 
 class ModelParam(Parameter, readonly=True):
     """
@@ -528,15 +526,6 @@ class Model(object):
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
         self._rng=np.random.default_rng(self.modelparams.seed)
-    def find_sub_classifications(self, scen, mdlhists):
-        """Enables the use of find_classification at the function level."""
-        subclass={}
-        for fxnname, fxn in self.fxns.items():
-            if hasattr(fxn, "find_classification"):
-                fhists = proc.create_fxnhist_view(mdlhists, fxnname)
-                sc = fxn.find_classification(scen, fhists)
-                if sc: subclass[fxnname] = sc
-        return subclass
     def find_classification(self, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
         return {'rate':scen['properties'].get('rate', 0), 'cost': 1, 'expected cost': scen['properties'].get('rate',0)}
@@ -607,6 +596,17 @@ class Model(object):
             variable_values[i]=get_var(f, var)
         if len(variable_values)==1 and trunc_tuple: return variable_values[0]
         else:                                       return tuple(variable_values)
+    def create_hist(self, timerange, track):
+        hist = History()
+        for fxnname, fxn in self.fxns.items():
+            fxn_track = get_sub_include(fxnname, track)
+            if fxn_track:
+                hist[fxnname] = fxn.create_hist(timerange, track)
+        for flowname, flow in self.flows.items():
+            flow_track = get_sub_include(flowname, track)
+            if flow_track:
+                hist[flowname] = flow.create_hist(timerange, track)
+        return hist
 
 def check_model_pickleability(model):
     """ Checks to see which attributes of a model object will pickle, providing more detail about functions/flows"""

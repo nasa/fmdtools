@@ -25,7 +25,9 @@ from fmdtools.modeldef.block import FxnBlock, Mode
 from fmdtools.modeldef.flow import Flow 
 from fmdtools.modeldef.model import Model, ModelParam
 from fmdtools.modeldef.approach import SampleApproach, NominalApproach
-from fmdtools.modeldef.common import Parameter, State, Time
+from fmdtools.modeldef.parameter import Parameter
+from fmdtools.modeldef.state import State 
+from fmdtools.modeldef.time import Time
 import fmdtools.resultdisp as rd
 import fmdtools.faultsim.propagate as propagate
 import numpy as np
@@ -346,7 +348,9 @@ class Pump(Model):
 
 if __name__=="__main__":
     mdl = Pump()
-
+    
+    newhist = mdl.create_hist(range(10), "all")
+    
     #rd.graph.exec_order(mdl)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_water','no_wat', time=29,  staged=True)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_ee','no_v', time=29,  staged=True)
