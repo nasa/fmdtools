@@ -13,7 +13,9 @@ import sys
 import networkx as nx
 from recordclass import asdict
 
-from .common import Parameter, State
+from .parameter import Parameter
+from .state import State
+from fmdtools.faultsim.result import History, get_sub_include
 
 
 class Flow(object):
@@ -77,6 +79,13 @@ class Flow(object):
         return copy
     def get_typename(self):
         return "Flow"
+    def create_hist(self, timerange, track):
+        flow_track = get_sub_include(self.name, track)
+        if flow_track:
+            h = self.s.create_hist(timerange, flow_track)
+        else: 
+            h = History()
+        return h
 #Specialized Flow types
 class MultiFlow(Flow):
     """
