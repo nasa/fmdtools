@@ -169,7 +169,9 @@ class Result(UserDict):
         str_rep = ""
         for k, val in self.items():
             if isinstance(val, np.ndarray) or isinstance(val, list):
+                if type(k)==tuple: k = str(k)
                 val_rep = ind*"--"+k+": "
+                if len(val_rep)>40: val_rep = val_rep[:20]
                 form = '{:>'+str(40-len(val_rep))+'}'
                 vv = form.format("array("+str(len(val))+")")
                 str_rep = str_rep+val_rep+vv+'\n'
@@ -216,13 +218,14 @@ class Result(UserDict):
         newhist : dict
             Flattened model history of form: {(fxnflow, ..., attname):array(att)}
         """
-        if not newhist: newhist = self.__class__()
+        if newhist is False: 
+            newhist = self.__class__()
         #TODO: Add some error handling for when the attributes in "to_include" aren't actually in hist
         for att, val in self.items():
             newname = prevname+tuple([att])
             if isinstance(val, Result): 
                 new_to_include = get_sub_include(att, to_include)
-                if new_to_include: val.flatten_hist(newhist, newname, new_to_include)
+                if new_to_include: val.flatten(newhist, newname, new_to_include)
             elif to_include=='all' or att in to_include: 
                 if len(newname)==1: newhist[newname[0]] = val
                 else:               newhist[newname] = val
@@ -330,7 +333,6 @@ def get_sub_include(att, to_include):
     elif type(to_include)==dict and att in to_include:      new_to_include = to_include[att]
     elif type(to_include)==str and att== to_include:        new_to_include = 'all'
     elif to_include =='all': new_to_include='all'
-    elif att in ['functions', 'flows']:                     new_to_include = to_include
     else:                                                   new_to_include= False
     return new_to_include
 
@@ -339,7 +341,7 @@ def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<
     if sub_track and hasattr(val, 'create_hist'): return val.create_hist(val, timerange, sub_track)
     elif sub_track and isinstance(val, dict):     return init_dicthist(val, timerange, sub_track)
     elif sub_track:
-        if not timerange:                         return [val]
+        if timerange is None:                     return [val]
         elif dtype:                               return np.empty([len(timerange)], dtype=dtype)
         elif type(val)==str:                      return np.empty([len(timerange)], dtype=str_size)
         else:
@@ -366,17 +368,17 @@ class History(Result):
         return hist
     def copy(self):
         """Creates a new independent copy of the current history dict"""
-        newhist =History
+        newhist =History()
         for k, v in self.items():
             if isinstance(v, History):  newhist[k]=v.copy()
             else:                       newhist[k]=np.copy(v)
         return newhist
-    def update(self, obj, t_ind):
+    def log(self, obj, t_ind):
         for att, hist in self.items():
             try:    val=obj[att]
             except: val=getattr(obj, att)
             
-            if type(hist)==History:             hist.update(val, t_ind)
+            if type(hist)==History:             hist.log(val, t_ind)
             else:
                 if not is_known_immutable(val): val=copy.deepcopy(val)
                 if type(hist)==list:              hist.append(val)
@@ -389,13 +391,17 @@ class History(Result):
                         hist[t_ind]=val
                     except Exception as e:
                         raise Exception("Value too large to represent: "+att+"="+str(val)) from e
-    def cut(self, ind, newcopy=False):
+    def cut(self, end_ind=None, start_ind=None, newcopy=False):
         """Cuts the history to a given index"""
-        if newcopy: hist = self.copy_hist()
+        if newcopy: hist = self.copy()
         else:       hist = self
         for name, att in hist.items():
-            if isinstance(att, History): hist[name]=hist[name].cut(ind, newcopy=False)
-            else:                        hist[name]=att[:ind+1]  
+            if isinstance(att, History): hist[name]=hist[name].cut(end_ind, start_ind, newcopy=False)
+            else:       
+                if end_ind is None:     hist[name]=att[start_ind:]  
+                elif start_ind is None: hist[name]=att[:end_ind+1]  
+                else:                   hist[name]=att[start_ind:end_ind+1] 
+                    
         return hist 
     def get_slice(self,t_ind=0):
         """

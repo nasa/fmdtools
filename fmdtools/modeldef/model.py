@@ -17,7 +17,7 @@ from recordclass import asdict
 from .flow import Flow, init_flow
 from .common import check_pickleability, get_var, set_var
 from .parameter import Parameter
-from fmdtools.faultsim.result import History, get_sub_include
+from fmdtools.faultsim.result import History, get_sub_include, init_hist_iter
 
 class ModelParam(Parameter, readonly=True):
     """
@@ -92,7 +92,8 @@ class Model(object):
             parameters to keep a history of in params needed for find_classification. default is 'all'
             dict option is of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
         """
-        self.type='model'
+        self.time=0.0
+        self.is_copy=False
         self.flows={}
         self.fxns={}
         self.params=params
@@ -113,6 +114,10 @@ class Model(object):
         if len(flowlist)>15:  flowlist=flowlist[:15]+["...("+str(len(flowlist))+' total) \n']
         flowstr = ''.join(flowlist)
         return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'functions: \n'+fxnstr+'flows: \n'+flowstr
+    def __getattr__(self, name):
+        if name in self.fxns:    return self.fxns[name]
+        elif name in self.flows: return self.flows[name]
+        else:                    return super().__getattribute__(name)
     def find_any_phase_overlap(self):
         phase_dict = {v[0]: [v[1], v[2]] for v in self.modelparams.phases}
         intervals = [*phase_dict.values()]
@@ -518,6 +523,15 @@ class Model(object):
         copy.is_copy=False
         copy.build_model(functionorder = self.functionorder, graph_pos=self.graph_pos, bipartite_pos=self.bipartite_pos)
         copy.is_copy=True
+        if hasattr(self, 'h'): 
+            copy.h = History()
+            for fname, fxn in copy.fxns.items():
+                if hasattr(fxn, 'h'):
+                    copy.h[fname]=fxn.h
+            for fname, flow in copy.flows.items():
+                if hasattr(flow, 'h'):
+                    copy.h[fname]=flow.h
+            copy.h['time'] = np.copy(self.h.time)
         return copy
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
@@ -597,16 +611,19 @@ class Model(object):
         if len(variable_values)==1 and trunc_tuple: return variable_values[0]
         else:                                       return tuple(variable_values)
     def create_hist(self, timerange, track):
-        hist = History()
-        for fxnname, fxn in self.fxns.items():
-            fxn_track = get_sub_include(fxnname, track)
-            if fxn_track:
-                hist[fxnname] = fxn.create_hist(timerange, track)
-        for flowname, flow in self.flows.items():
-            flow_track = get_sub_include(flowname, track)
-            if flow_track:
-                hist[flowname] = flow.create_hist(timerange, track)
-        return hist
+        if not hasattr(self, 'h'):
+            hist = History()
+            for fxnname, fxn in self.fxns.items():
+                fxn_track = get_sub_include(fxnname, track)
+                if fxn_track:
+                    hist[fxnname] = fxn.create_hist(timerange, fxn_track)
+            for flowname, flow in self.flows.items():
+                flow_track = get_sub_include(flowname, track)
+                if flow_track:
+                    hist[flowname] = flow.create_hist(timerange, flow_track)
+            hist['time'] = init_hist_iter('time', self.time, timerange=timerange, track='all', dtype=float)
+            self.h = hist
+        return self.h
 
 def check_model_pickleability(model):
     """ Checks to see which attributes of a model object will pickle, providing more detail about functions/flows"""

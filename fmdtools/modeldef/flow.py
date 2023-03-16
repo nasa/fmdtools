@@ -19,7 +19,7 @@ from fmdtools.faultsim.result import History, get_sub_include
 
 
 class Flow(object):
-    __slots__ = ['p', '_args_p', 's', '_args_s']
+    __slots__ = ['p', '_args_p', 's', '_args_s', 'h']
     _init_p = Parameter
     _init_s = State
     """
@@ -75,17 +75,25 @@ class Flow(object):
         """
         Returns a copy of the flow object (used when copying the model)
         """
-        copy = self.__class__(self.name, p=asdict(self.p), s=asdict(self.s))
-        return copy
+        cop = self.__class__(self.name, p=asdict(self.p), s=asdict(self.s))
+        if hasattr(self, 'h'): cop.h =self.h.copy()
+        return cop
     def get_typename(self):
         return "Flow"
     def create_hist(self, timerange, track):
-        flow_track = get_sub_include(self.name, track)
-        if flow_track:
-            h = self.s.create_hist(timerange, flow_track)
-        else: 
-            h = History()
-        return h
+        if hasattr(self, 'h'): return self.h
+        else:
+            flow_track = get_sub_include('s', track)
+            if flow_track:
+                h=History()
+                h['s'] = self.s.create_hist(timerange, flow_track)
+            else: 
+                h = History()
+            self.h = h
+            return h
+    def log_hist(self, t_ind):
+        if hasattr(self, 'h'):
+            self.h['s'].log(self.s, t_ind)
 #Specialized Flow types
 class MultiFlow(Flow):
     """

@@ -325,14 +325,14 @@ class Pump(Model):
         if 'repair' in self.params.cost: repcost= self.calc_repaircost()
         else:                               repcost = 0.0
         if 'water' in self.params.cost:
-            lostwat = sum(mdlhists['nominal']['flows']['wat_2']['flowrate'] - mdlhists['faulty']['flows']['wat_2']['flowrate'])
+            lostwat = sum(mdlhists['nominal'].wat_2.s.flowrate- mdlhists['faulty'].wat_2.s.flowrate)
             watcost = 750 * lostwat  * self.modelparams.dt
         elif 'water_exp' in self.params.cost:
-            wat = mdlhists['nominal']['flows']['wat_2']['flowrate'] - mdlhists['faulty']['flows']['wat_2']['flowrate']
+            wat = mdlhists['nominal'].wat_2.s.flowrate - mdlhists['faulty'].wat_2.s.flowrate
             watcost =100 *  sum(np.array(accumulate(wat))**2) * self.modelparams.dt
         else: watcost = 0.0
         if 'ee' in self.params.cost:
-            eespike = [spike for spike in mdlhists['faulty']['flows']['ee_1']['current'] - mdlhists['nominal']['flows']['ee_1']['current'] if spike >1.0]
+            eespike = [spike for spike in mdlhists['faulty'].ee_1.s.current - mdlhists['nominal'].ee_1.s.current if spike >1.0]
             if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.modelparams.dt
             else: eecost =0.0
         else: eecost = 0.0
@@ -349,27 +349,36 @@ class Pump(Model):
 if __name__=="__main__":
     mdl = Pump()
     
-    newhist = mdl.create_hist(range(10), "all")
+    newhist = mdl.create_hist(range(10), {'ee_1':'all',"wat_1":'s'})
+    mdl = Pump()
+    newhist2 = mdl.create_hist(range(10), {'ee_1':'all',"wat_1":{'s':'flowrate'}})
+    mdl = Pump()
+    newhist3 = mdl.create_hist(range(10), "all")
+    mdl.flows['ee_1'].s
+    
+    mdl = Pump()
+    newhist4 = mdl.create_hist(range(10), {'move_water':['s', 't']})
+    mdl.flows['ee_1'].s
     
     #rd.graph.exec_order(mdl)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_water','no_wat', time=29,  staged=True)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_ee','no_v', time=29,  staged=True)
     endclass, mdlhist=propagate.one_fault(mdl, 'move_water', 'mech_break', time=0, staged=False)
     
-    reshist,diff1, summary = rd.process.hist(mdlhist)
-    rd.graph.result_from(mdl, reshist, 40, gtype='normal')
-    rd.graph.result_from(mdl, reshist, 50, gtype='normal')
-    rd.graph.exec_order(mdl, gtype = 'normal')
+    #reshist,diff1, summary = rd.process.hist(mdlhist)
+    #rd.graph.result_from(mdl, reshist, 40, gtype='normal')
+    #rd.graph.result_from(mdl, reshist, 50, gtype='normal')
+    #rd.graph.exec_order(mdl, gtype = 'normal')
     app = NominalApproach()
     app.add_seed_replicates('test', 10)
     
     faultapp = SampleApproach(mdl)
     
     endclasses, mdlhists  = propagate.approach(mdl, faultapp)
-    flat = rd.process.flatten_hist(mdlhists)
+    flat = mdlhists.flatten()
     
     endclasses, mdlhists_staged  = propagate.approach(mdl, faultapp, staged=True)
-    flat_staged = rd.process.flatten_hist(mdlhists_staged)
+    flat_staged = mdlhists_staged.flatten()
     
     [all(flat[k]==flat_staged[k]) for k in flat]
     

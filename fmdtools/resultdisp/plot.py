@@ -32,7 +32,6 @@ from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
 from mpl_toolkits.mplot3d import Axes3D
-from fmdtools.faultsim.propagate import cut_mdlhist
 
 
 def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp_groups={}, 
@@ -132,9 +131,9 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     if max_ind=='max': max_ind = np.min([len(mdlhists[scen]['time']) for scen in mdlhists])-1
     inds = [i for i in range(len(mdlhists[[*mdlhists.keys()][0]]['time']))]
     for scen in mdlhists:
-        mdlhists[scen] = cut_mdlhist(mdlhists[scen], max_ind)
+        mdlhists[scen] = mdlhists[scen].cut(max_ind)
     times = mdlhists[[*mdlhists.keys()][0]]['time']
-    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_include=fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    flat_mdlhists = {scen:mdlhist.flatten() for scen, mdlhist in mdlhists.items()}
     #Sort into comparison groups
     if not comp_groups: 
         if aggregation=='individual':   grouphists = flat_mdlhists

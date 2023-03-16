@@ -79,7 +79,7 @@ def inject_faults_internal(obj, faults):
 
 
 class Block():
-    __slots__ = ['p', '_args_p', 's', '_args_s','m', '_args_m', 'r', '_args_r', 't', '_args_t', '__dict__']
+    __slots__ = ['p', '_args_p', 's', '_args_s','m', '_args_m', 'r', '_args_r', 't', '_args_t', 'h', '__dict__']
     hist_atts = ['s', 'm', 'r', 't']
     _init_p = Parameter
     _init_s = State
@@ -194,6 +194,7 @@ class Block():
         cop.t=self.t.copy(**self._args_t)
         cop.s.assign(self.s)
         cop.r.assign(self.r)
+        if hasattr(self, 'h'): cop.h =self.h.copy()
         return cop
     def get_memory(self):
         """ Gets the approximate memory usage of the block in bytes (not complete)"""
@@ -268,14 +269,20 @@ class Block():
         fxnhist : dict
             A dictionary history of each recorded block property over the given timehist
         """
-        hist = History()
-        block_track = get_sub_include(self.name, track)
-        if block_track:
-            for at in self.hist_atts:
-                attr = getattr(self, at, False)
-                if attr:
-                    hist[at] = attr.create_hist(timerange, block_track)
-        return hist
+        if not hasattr(self, 'h'):
+            if track:
+                hist = History()
+                for at in self.hist_atts:
+                    at_track = get_sub_include(at, track)
+                    attr = getattr(self, at, False)
+                    if attr:
+                        hist[at] = attr.create_hist(timerange, at_track)
+                self.h=hist
+            else: self.h=None
+        return self.h
+    def log_hist(self, t_ind):
+        if hasattr(self, 'h'):
+            self.h.log(self, t_ind)
             
 
 ## COMPONENT/COMPONENT ARCHITECTURES

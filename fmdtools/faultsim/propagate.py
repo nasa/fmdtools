@@ -47,6 +47,7 @@ import sys,os
 from fmdtools.modeldef.approach import SampleApproach
 from fmdtools.modeldef.model import ModelParam
 from fmdtools.modeldef.block import Block
+from .result import Result, History
 from recordclass import asdict
 
 ##DEFAULT ARGUMENTS
@@ -292,7 +293,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
     check_overwrite(kwargs['save_args'] )
     kwargs['max_mem'], showprogress, pool = unpack_mult_kwargs(kwargs)
     kwargs['num_scens']=nomapp.num_scenarios
-    n_mdlhists, n_results = dict.fromkeys(nomapp.scenarios), dict.fromkeys(nomapp.scenarios)
+    n_mdlhists, n_results = History.fromkeys(nomapp.scenarios), Result.fromkeys(nomapp.scenarios)
     if pool:
         check_mdl_memory(mdl, nomapp.num_scenarios, max_mem=kwargs['max_mem'])
         inputs = [(mdl, scen, name, kwargs) for name, scen in nomapp.scenarios.items()]
@@ -304,8 +305,10 @@ def nominal_approach(mdl,nomapp, **kwargs):
     save_helper(kwargs['save_args'] , n_results, n_mdlhists)
     return n_results, n_mdlhists
 def unpack_res_list(scenlist, res_list):
-    results = { scen['properties']['name']: res_list[i][0] for i, scen in enumerate(scenlist)}
-    mdlhists = {scen['properties']['name']: res_list[i][1] for i, scen in enumerate(scenlist)}
+    results= Result()
+    mdlhists = History()
+    results.data = { scen['properties']['name']: res_list[i][0] for i, scen in enumerate(scenlist)}
+    mdlhists.data = {scen['properties']['name']: res_list[i][1] for i, scen in enumerate(scenlist)}
     return results, mdlhists
 
 def exec_nom_par(arg):
@@ -409,8 +412,8 @@ def mult_fault(mdl, faultseq, disturbances, scen={}, rate=np.NaN, **kwargs):
     mdl = [*mdls.values()][0]
     if not scen: scen = create_faultseq_scen(mdl, rate, faultseq=faultseq, disturbances=disturbances)
     result, faulthist, _, t_end = prop_one_scen(mdl, scen, **sim_kwarg, nomhist=nomhist, nomresult=nomresult)
-    nomhist = cut_mdlhist(nomhist, t_end_nom)
-    mdlhists = {'nominal':nomhist, 'faulty':faulthist}
+    nomhist.cut(t_end_nom)
+    mdlhists = History(nominal=nomhist, faulty=faulthist)
     if kwargs.get('protect', False): mdl.reset()
     save_helper(kwargs.get('save_args',{}), result, mdlhists)
     return result, mdlhists
@@ -501,7 +504,8 @@ def approach(mdl, app,  **kwargs):
     nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **kwargs, use_end_condition=False)
     scenlist = app.scenlist
     results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, **kwargs, nomhist=nomhist, nomresult=nomresult)
-    mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
+    nomhist.cut(t_end_nom)
+    mdlhists['nominal'] = nomhist 
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     save_helper(kwargs['save_args'], results, mdlhists)
@@ -540,7 +544,8 @@ def single_faults(mdl, **kwargs):
     
     scenlist = list_init_faults(mdl)
     results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, **kwargs, nomhist=nomhist, nomresult=nomresult)
-    mdlhists['nominal'] = cut_mdlhist(nomhist, t_end_nom)
+    nomhist.cut(t_end_nom)
+    mdlhists['nominal'] = nomhist
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     save_helper(kwargs['save_args'], results, mdlhists)
@@ -550,9 +555,10 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     #nomhist, track, track_times, desired_result, run_stochastic, save_args
     max_mem, showprogress, pool = unpack_mult_kwargs(kwargs)
     staged = kwargs.get('staged',False)
-    check_hist_memory(kwargs['nomhist'],len(scenlist), max_mem=max_mem)
-    results = {}
-    mdlhists = {}
+    mem, mem_profile = kwargs['nomhist'].get_memory()
+    if mem*len(scenlist)>max_mem: raise Exception("Model history will be too large: "+str(mem)+" > "+str(max_mem))
+    results = Result()
+    mdlhists = History()
     if pool:
         check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
         if staged:  
@@ -666,8 +672,8 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     run_kwargs_nest = pack_run_kwargs(**kwargs)
     app_args = {k:v for k,v in kwargs.items() if k not in [*sim_kwarg,*run_kwargs_nest, 'max_mem', 'showprogress', 'pool']}
     
-    nest_mdlhists = dict.fromkeys(nomapp.scenarios)
-    nest_results = dict.fromkeys(nomapp.scenarios)
+    nest_mdlhists = History.fromkeys(nomapp.scenarios)
+    nest_results = Result.fromkeys(nomapp.scenarios)
     apps = dict.fromkeys(nomapp.scenarios)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
         mdl = new_mdl(mdl,scen['properties'])
@@ -790,26 +796,19 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
     if staged:
         timerange=np.arange(scen['properties']['time'], mdl.modelparams.times[-1]+mdl.modelparams.dt, mdl.modelparams.dt)
         prevtimerange = np.arange(mdl.modelparams.times[0], scen['properties']['time'], mdl.modelparams.dt)
-        if track_times == "all":            
-            histrange = timerange
-            shift = len(prevtimerange)
-        elif track_times[0]=='interval':    
-            histrange = timerange[0:len(timerange):track_times[1]]
-            shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
-        elif track_times[0]=='times':       
-            histrange = track_times[1]
-            shift=0
-        if prevhist:    mdlhist = proc.copy_hist(prevhist)
-        elif nomhist:   mdlhist = proc.copy_hist(nomhist)
-        else:           mdlhist = init_mdlhist(mdl, histrange, track=track, run_stochastic=run_stochastic)
+        if track_times == "all":            shift = len(prevtimerange)
+        elif track_times[0]=='interval':    shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
+        elif track_times[0]=='times':       shift=0
     else: 
-        timerange = np.arange(mdl.modelparams.times[0], mdl.modelparams.times[-1]+mdl.modelparams.dt, mdl.modelparams.dt)
-        if track_times == "all":            histrange = timerange
-        elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
-        elif track_times[0]=='times':       histrange = track_times[1]
+        timerange=np.arange(mdl.modelparams.times[0], mdl.modelparams.times[-1]+mdl.modelparams.dt, mdl.modelparams.dt)
         shift = 0
-        mdlhist = init_mdlhist(mdl, histrange, track=track, run_stochastic=run_stochastic)
     
+    if track_times == "all":            histrange = timerange
+    elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
+    elif track_times[0]=='times':       histrange = track_times[1]
+    
+    
+    mdlhist = mdl.create_hist(histrange, track) 
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes); result={}
     flowstates=dict.fromkeys(mdl.staticflows)
@@ -830,7 +829,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
                elif track_times[0]=='interval': t_ind_rec = t_ind//track_times[1]+shift
                elif track_times[0]=='times':    t_ind_rec = track_times[1].index(t)
                else: raise Exception("Invalid argument, track_times="+str(track_times))
-               update_mdlhist(mdl, mdlhist, t_ind_rec, track=track)
+               mdlhist.log(mdl, t_ind_rec)
            if type(desired_result)==dict: 
                if "all" in desired_result: 
                    result[t] = get_result(scen,mdl,desired_result['all'], mdlhist,nomhist, nomresult)
@@ -844,7 +843,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
             print("Error at t="+str(t)+' in scenario '+str(scen))
             raise
             break
-    if cut_hist: cut_mdlhist(mdlhist, t_ind+shift)
+    if cut_hist: mdlhist.cut(t_ind+shift)
     if type(desired_result)==dict and 'end' in desired_result: 
         result['end'] = get_result(scen,mdl,desired_result['end'],mdlhist,nomhist, nomresult)
     else:                       
@@ -858,10 +857,11 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     elif type(desired_result) in [list, set]:   desired_result = dict.fromkeys(desired_result)
     result={}
     if not nomhist: nomhist=mdlhist
+    elif len(nomhist['time'])!=len(mdlhist['time']):
+        nomhist = nomhist.cut(start_ind=len(nomhist['time'])-len(mdlhist['time']), newcopy=True)
     if 'endclass' in desired_result:   
         mdlhists={'faulty':mdlhist, 'nominal':nomhist}
         endclass = mdl.find_classification(scen, mdlhists)
-        endclass.update(mdl.find_sub_classifications(scen, mdlhists))
         if type(desired_result['endclass'])==dict: 
             result['endclass'] = {k:v for k,v in endclass if k in desired_result['endclass']}
         else: result['endclass']=endclass
@@ -990,301 +990,7 @@ def prop_time(mdl, time, flowstates={}, run_stochastic=False):
         if n>1000: #break if this is going for too long
             raise Exception("Undesired looping between functions in static propagation step",
                             "at t="+str(time)+", these functions remain active:"+str(activefxns))
+    mdl.time=time
     return flowstates
-
-#update_mdlhist
-# find a way to make faster (e.g. by automatically getting values by reference)
-def update_mdlhist(mdl, mdlhist, t_ind, track = 'all'):
-    """
-    Updates the model history at a given time.
-
-    Parameters
-    ----------
-    mdl : model
-        Model at the timestep
-    mdlhist : dict
-        History of model states (a dict with a vector of each state)
-    t_ind : float
-        The time to update the model history at.
-    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
-        Which model states to track over time, which can be given as 'functions', 'flows', 
-        'all', 'none', 'valparams' (model states specified in mdl.valparams),
-        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    """
-    if track == 'valparams':  track = mdl.valparams
-    if  'flows' in track:     update_flowhist(mdl, mdlhist, t_ind)
-    if 'functions' in track:  update_fxnhist(mdl, mdlhist, t_ind)
-    if track == 'all':      
-        update_flowhist(mdl, mdlhist, t_ind)
-        update_fxnhist(mdl, mdlhist, t_ind)
-def update_flowhist(mdl, mdlhist, t_ind):
-    """ Updates the flows in the model history at t_ind 
-    
-    Parameters
-    ----------
-    mdl : model
-        the Model object
-    mdlhist : dict
-        dictionary of model histories for functions/flows
-    t_ind : int
-        index to update the history at
-    """
-    for flowname in mdlhist["flows"]:
-        atts=mdl.flows[flowname].status()
-        update_dicthist(atts, mdlhist["flows"][flowname], t_ind)
-def update_dicthist(current_dict, dicthist, t_ind):
-    for att, hist in dicthist.items():
-        if att in current_dict:
-            if type(hist)==dict:    update_dicthist(current_dict[att], hist, t_ind)
-            else:
-                if t_ind >= len(hist):
-                    raise Exception("Time beyond range of model history--check staged execution and simulation time settings (end condition, mdl.modelparams.times)")
-                if not np.can_cast(type(current_dict[att]), type(hist[t_ind])):
-                    raise Exception(str(att)+" changed type: "+str(type(hist[t_ind]))+" to "+str(type(current_dict[att]))+" at t_ind="+str(t_ind))
-                try:    
-                    if type(current_dict[att]) in [list, np.ndarray]:
-                        hist[t_ind]=copy.deepcopy(current_dict[att])
-                    else: 
-                        hist[t_ind]=current_dict[att]
-                except: 
-                    print("Value too large to represent: "+att+"="+str(current_dict[att]))
-                    raise
-def update_fxnhist(mdl, mdlhist, t_ind):
-    """ Updates the functions (faults, states, components, actions) in the model history at t_ind 
-    
-    Parameters
-    ----------
-    mdl : model
-        the Model object
-    mdlhist : dict
-        dictionary of model histories for functions/flows
-    t_ind : int
-        index to update the history at
-    """
-    for fxnname in mdlhist["functions"]:
-        fxn=mdl.fxns[fxnname]
-        update_blockhist(fxnname, fxn, mdlhist['functions'][fxnname], t_ind)
-        for compname, comp in getattr(fxn, 'c', {'components':{}})['components'].items():
-            if compname in mdlhist['functions'][fxnname]:
-                update_blockhist(compname, comp, mdlhist['functions'][fxnname][compname], t_ind)
-        for actname, act in getattr(fxn, 'a', {'actions':{}})['actions'].items():
-            if actname in mdlhist['functions'][fxnname]:
-                update_blockhist(actname, act, mdlhist['functions'][fxnname][actname], t_ind)
-        for flowname, flow in getattr(fxn, 'a', {'flows':{}})['flows'].items():
-            if flowname in mdlhist['functions'][fxnname]:
-                update_dicthist(flow.status(), mdlhist['functions'][fxnname][flowname], t_ind)
-def update_blockhist(blockname, block, blockhist, t_ind):
-    """ Updates the blocks (faults, states) in the model history at t_ind 
-    
-    Parameters
-    ----------
-    blockname : str
-        Name of the block 
-    block : Block
-        Object for the block
-    blockhist : dict
-        Dictionary history of the given block
-    t_ind : int
-        index to update the history at
-    """
-    if not isinstance(block, Block): raise Exception(blockname+" is not a block. Is it being overwritten?")
-    states, faults = block.return_states()
-    if 'faults' in blockhist:
-        if type(blockhist["faults"]) == dict:
-            for fault in blockhist["faults"]:
-                if fault in faults: blockhist["faults"][fault][t_ind] = 1
-        else:
-            if len(faults) > 1: raise Exception("More than one fault present in "+blockname+"\n at t= "+str(t_ind)+"\n faults: "+str(faults)+"\n Is the mode representation nonexclusive?")
-            else:               blockhist["faults"][t_ind]=[*faults, ''][0]
-    update_dicthist(states,blockhist,t_ind)
-    if 'probdens' in blockhist: blockhist['probdens'][t_ind]=block.probdens
-def cut_mdlhist(mdlhist, ind, newcopy=False):
-    """Cuts unsimulated values from end of array
-    
-    Parameters
-    ----------
-    mdlhist : dict
-        dictionary of model histories for functions/flows
-    ind : int
-        index to cut the history at
-        
-    Returns
-    -------
-    mdlhist : dict
-        The model history until the given index.
-    """
-    if newcopy: mdlhist = proc.copy_hist(mdlhist)
-    if len(mdlhist['time'])>ind+1:
-        mdlhist['time'] = mdlhist['time'][:ind+1]
-        if 'flows' in mdlhist:
-            for flowname, atts in mdlhist['flows'].items():
-                mdlhist['flows'][flowname] = cut_hist(atts, ind)
-        if 'functions' in mdlhist:
-            for fxnname, atts in mdlhist['functions'].items():
-                mdlhist['functions'][fxnname] = cut_hist(atts, ind)
-    return mdlhist 
-def cut_hist(hist, ind):
-    """
-    Recursively cuts the given individual (flow or function) history at ind.
-
-    Parameters
-    ----------
-    hist : dict
-        history to cut
-    ind : int
-        index to cut the history at
-
-    Returns
-    -------
-    newhist : dict
-        Cut history
-    """
-    newhist = {}
-    for attname, vals in hist.items():
-        if type(vals)==dict:            newhist[attname] = cut_hist(vals, ind)
-        elif type(vals)==np.ndarray:    newhist[attname] = vals[:ind+1]
-        else:                           newhist[attname] = vals[:ind+1]
-    return newhist
-
-def init_mdlhist(mdl, timerange, track = 'all', run_stochastic=False):
-    """
-    Initializes the model history over a given timerange
-
-    Parameters
-    ----------
-    mdl : model
-        the Model object
-    timerange : array
-        Numpy array of times to initialize in the dictionary.
-    track : str ('all', 'functions', 'flows', 'valparams', dict, 'none'), optional
-        Which model states to track over time, which can be given as 'functions', 'flows', 
-        'all', 'none', 'valparams' (model states specified in mdl.valparams),
-        or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    Returns
-    -------
-    mdlhist : dict
-        A dictionary history of each model state over the given timerange.
-    """
-    mdlhist={}
-    if track == 'valparams':        track = mdl.valparams
-    if track=='functions':          mdlhist["functions"]=init_fxnhist(mdl, timerange, track='all', run_stochastic=run_stochastic) 
-    elif track=='flows':            mdlhist["flows"]=init_flowhist(mdl, timerange, track='all')
-    elif track == 'all':                       
-        mdlhist["flows"]=init_flowhist(mdl, timerange)
-        mdlhist["functions"]=init_fxnhist(mdl, timerange, run_stochastic=run_stochastic)
-    elif type(track)==dict:
-        if 'functions' in track:    mdlhist["functions"]=init_fxnhist(mdl, timerange, track=track, run_stochastic=run_stochastic)
-        if 'flows' in track:         mdlhist["flows"]=init_flowhist(mdl, timerange, track=track)
-    else:
-        if not track in ['none','None']: raise Exception("Invalid track option: "+str(track))
-    mdlhist["time"]=np.array([i for i in timerange])
-    return mdlhist
-def init_flowhist(mdl, timerange, track='all'):
-    """ Initializes the flow history flowhist of the model mdl over the time range timerange
-    
-    Parameters
-    ----------
-    mdl : model
-        the Model object
-    timerange : array
-        Numpy array of times to initialize in the dictionary.
-    track : 'all' or dict, 'none'), optional
-        Which model states to track over time, which can be given as 'all' or a 
-        dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    Returns
-    -------
-    flowhist : dict
-        A dictionary history of each recorded flow state over the given timerange.
-    """
-    flowhist={}
-    flows_track = proc.get_sub_include("flows", track)
-    for flowname, flow in mdl.flows.items():
-        flow_track = proc.get_sub_include(flowname, flows_track)
-        if flow_track:
-            atts=flow.status()
-            flowhist[flowname] = init_dicthist(atts, timerange, flow_track)
-    return flowhist
-def init_dicthist(start_dict, timerange, track="all", modelength=10):
-    dicthist = {}
-    for att, val in start_dict.items():
-        if type(val)==dict: 
-            sub_track = proc.get_sub_include(att, track)
-            if sub_track: dicthist[att]=init_dicthist(val, timerange, sub_track)
-        elif track=="all" or att in track:
-            if att=="mode" or type(val)==str:     
-                dicthist[att]= np.full([len(timerange)], val, dtype="U"+str(modelength))
-            else:
-                try:            dicthist[att] = np.full([len(timerange)], val)
-                except:         dicthist[att] = np.empty((len(timerange),), dtype=object)  
-    return dicthist
-    
-def init_fxnhist(mdl, timerange, track='all', run_stochastic=False):
-    """Initializes the function state history fxnhist of the model mdl over the time range timerange
-    
-    Parameters
-    ----------
-    mdl : model
-        the Model object
-    timerange : array
-        Numpy array of times to initialize in the dictionary.
-    track : 'all' or dict, 'none'), optional
-        Which model states to track over time, which can be given as 'all' or a 
-        dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    Returns
-    -------
-    fxnhist : dict
-        A dictionary history of each recorded function state over the given timerange.
-    """
-    fxnhist = {}
-    functions_track = proc.get_sub_include("functions", track)
-    for fxnname, fxn in mdl.fxns.items():
-        fxn_track = proc.get_sub_include(fxnname, functions_track)
-        if fxn_track:
-            fxnhist[fxnname] = init_blockhist(fxnname, fxn, timerange, fxn_track, run_stochastic=run_stochastic)
-            for compname, comp in getattr(fxn, 'c', {'components':{}})['components'].items():
-                comp_track = proc.get_sub_include(compname, fxn_track)
-                if comp_track: 
-                    fxnhist[fxnname][compname]=init_blockhist(compname, comp, timerange, track=comp_track)
-            for compname, comp in getattr(fxn, 'a', {'actions':{}})['actions'].items():
-                comp_track = proc.get_sub_include(compname, fxn_track)
-                if comp_track: 
-                    fxnhist[fxnname][compname]=init_blockhist(compname, comp, timerange, track=comp_track)
-            for flowname, flow in getattr(fxn, 'a', {'flows':{}})['flows'].items():
-                flow_track = proc.get_sub_include(flow, fxn_track)
-                if flow_track: fxnhist[fxnname][flowname] = init_dicthist(flow.status(), timerange, flow_track)
-    return fxnhist
-def init_blockhist(blockname, block, timerange, track='all', run_stochastic=False):
-    """ 
-    Instantiates the block hist (faults, states) over the given timerange
-    
-    Parameters
-    ----------
-    blockname : str
-        Name of the block 
-    block : Block
-        Object for the block
-    timerange : array
-        Numpy array of times to initialize in the dictionary.
-    track : 'all' or dict, 'none'), optional
-        Which model states to track over time, which can be given as 'all' or a 
-        dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    """
-    states, faults = block.return_states()
-    blockhist={}
-    modelength = max([0]+[len(modename) for modename in block.m.opermodes+tuple(block.m.faultmodes.keys())])
-    if track == 'all' or 'faults' in track:
-        if block.m.faultmodes:
-            if block.m.exclusive == False:   blockhist["faults"] = {faultmode:np.array([0 for i in timerange]) for faultmode in block.m.faultmodes} 
-            elif block.m.exclusive == True:  blockhist["faults"]=np.full([len(timerange)], list(block.m.faultmodes.keys())[0], dtype="U"+str(modelength))
-    blockhist.update(init_dicthist(states, timerange, track=track, modelength=modelength))               
-    if run_stochastic=='track_pdf' and block.rngs: 
-        blockhist['probdens'] = np.full([len(timerange)], block.return_probdens())
-    return blockhist
-
 
     
