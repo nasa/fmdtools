@@ -39,7 +39,6 @@ import numpy as np
 import pandas as pd
 import os
 from ordered_set import OrderedSet
-from fmdtools.faultsim.propagate import cut_mdlhist
 from scipy.stats import bootstrap
 
 def hists(mdlhists, returndiff=True):
@@ -108,7 +107,8 @@ def copy_hist(mdlhist):
         if type(v)==dict:   newhist[k]=copy_hist(v)
         else:               newhist[k]=np.copy(v)
     return newhist
-     
+    
+#TODO: adapt to new version
 def hist(mdlhist, nomhist={}, returndiff=True, suppress_warning=False):
     """
     Compares model history with the nominal model history over time to make a history of degradation.
@@ -134,8 +134,8 @@ def hist(mdlhist, nomhist={}, returndiff=True, suppress_warning=False):
     if nomhist: mdlhist={'nominal':nomhist, 'faulty':mdlhist}
     if len(mdlhist['faulty']['time']) != len(mdlhist['nominal']['time']): 
            if not suppress_warning: print("Faulty and nominal scenarios have different simulation times--cutting comparison to shared range.")
-           mdlhist['nominal'] = cut_mdlhist(mdlhist['nominal'], len(mdlhist['faulty']['time'])-1, newcopy=True)
-           mdlhist['faulty'] = cut_mdlhist(mdlhist['faulty'], len(mdlhist['nominal']['time'])-1)
+           mdlhist['nominal'] = mdlhist['nominal'].cut(len(mdlhist['faulty']['time'])-1, newcopy=True)
+           mdlhist['faulty'] = mdlhist['faulty'].cut(len(mdlhist['nominal']['time'])-1)
     reshist = {}
     reshist['time'] = mdlhist['nominal']['time']
     reshist['flowvals'], reshist['flows'], degflows, numdegflows, flowdiff = flowhist(mdlhist, returndiff=returndiff)

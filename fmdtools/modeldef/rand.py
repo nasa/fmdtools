@@ -11,7 +11,7 @@ import numpy as np
 from .common import get_true_fields, get_true_field
 import copy
 
-from fmdtools.faultsim.result import init_hist_iter
+from fmdtools.faultsim.result import init_hist_iter, History
 
 class Rand(dataobject, mapping=True):
     rng:            np.random.default_rng
@@ -85,9 +85,10 @@ class Rand(dataobject, mapping=True):
             default = self.s.__defaults__[self.s.__fields__.index(statename)]
             self.s[statename] = default
     def create_hist(self, timerange, track):
+        h = History()
         if self.run_stochastic=='track_pdf': 
-            return init_hist_iter('probdens', block.return_probdens(), timerange=timerange, track='all')
-        else: return None
+            h['probdens'] = init_hist_iter('probdens', self.return_probdens(), timerange=timerange, track='all')
+        return h
 
 def get_pdf_for_rand(x, randname, args):
     """
