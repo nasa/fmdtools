@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Mar 14 20:24:59 2023
-
-@author: dhulse
+Description: A module for defining time-based properties for use in blocks. Has Classes:
+    
+- :class:`Timer`: Class defining timers
+- :class:`Time`: Class containing all time-related Block constructs (e.g., timers).
 """
 from decimal import Decimal
 from recordclass import dataobject
@@ -99,6 +100,28 @@ class Timer():
         return h
 
 class Time(dataobject):
+    """
+    Class for defining all time-based aspects of a Block (e.g., time, timestep, timers). 
+    
+    Attributes
+    ----------
+    time : float
+        real time for the model
+    dt : float
+        timestep size
+    t_ind : int
+        index of the given time
+    t_loc : float
+        local time (e.g., for actions with durations)
+    run_times : int
+        number of times to run the behavior if running at a different timestep than global
+    timers : dict
+        dictionary of instantiated timers
+    use_local : bool
+        Whether to use the local timetep (vs global timestep)
+    timernames: tuple
+        Names of timers to instantiate.
+    """
     time:       float=0.0
     dt:         float=1.0
     t_ind:      int=0
@@ -114,10 +137,8 @@ class Time(dataobject):
             self.timers[timername]=Timer(timername)
         self.set_timestep()
     def __getattr__(self, item):
-        try: 
-            return super().__getattribute__(item)
-        except:
-            return self.timers[item]
+        if item in self.timers: return self.timers[item]
+        else:                   return super().__getattribute__(item)
     def set_timestep(self):
         """Sets the timestep of the function given the option use_local 
         (which selects whether it uses local_timestep or global_timestep)"""
@@ -139,12 +160,14 @@ class Time(dataobject):
         for timer in self.timers.values():
             timer.dt=-self.dt
     def reset(self):
+        """Resets time to the initial state"""
         self.time=0.0
         self.t_ind=0
         self.t_loc=0.0
         for timer in self.timers.values():
             timer.reset()
     def copy(self, *args, **t_args):
+        """ Copies the timer"""
         cop = self.__class__(*args, **t_args)
         for timer in self.timers:
             cop.timers[timer] = self.timers[timer].copy()
@@ -154,6 +177,22 @@ class Time(dataobject):
         cop.dt=self.dt
         return cop
     def create_hist(self, timerange, track):
+        """
+        Creates a History corresponding to Time
+
+        Parameters
+        ----------
+        timerange : iterable, optional
+            Time-range to initialize the history over. The default is None.
+        track : list/str/dict, optional
+            argument specifying attributes for :func:`get_sub_include'. The default is None.
+                DESCRIPTION. The default is None.
+
+        Returns
+        -------
+        hist : History
+            History of time/timer attribues specified in track.
+        """
         hist = History()
         hist['time'] = init_hist_iter('time', self.time, timerange=timerange, track=track, dtype=float)
         for tname, timer in self.timers.items():

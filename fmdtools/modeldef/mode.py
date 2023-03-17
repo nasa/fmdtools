@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Mar 14 20:19:54 2023
+Description: Module for helping define Modes (faulty and otherwise).
 
-@author: dhulse
+Has classes:
+- :class:`Fault`: Class for defining fault parameters
+- :Mode:`Mode`: Class for defining the mode property (and associated probability model) held in Blocks. 
 """
 from recordclass import dataobject
 import numpy as np
@@ -22,16 +24,27 @@ class Fault(dataobject, readonly=True, mapping=True):
 
 class Mode(dataobject, readonly=False):
     """
-    faults : set
-        Set of faults present (or not) at any given time
-    mode : str
-        Name of the current mode. the default is 'nominal'
+    Description: Class for defining the mode property (and associated probability model) held in Blocks. 
+    
+    Mode is meant to be inherited in order to define the specific faults related to a given Block.
+    
+    e.g., 
+    class ExampleMode(Mode):
+        faultmodes = {"high_heat", "low_heat"}
+        mode = "start"
+    Will create a Mode structure where m.mode = 'start' that can enter the given
+    fault modes 'high_heat' and 'low_heat'.
+    
+    Mode has the following fields which can be modified to define the underlying 
+    representation and probability model:
+    -------------
+        
     opermodes : tuple
         Names of non-faulty operational modes.
     failrate : float
         Overall failure rate for the block. The default is 1.0.
-    faultmodes : dict 
-            Dictionary/Set of faultmodes, which can have the forms:
+    faultparams : dict 
+            Dictionary/Set of arguments defining faultmodes, which can have the forms:
                 - set {'fault1', 'fault2', 'fault3'} (just the respective faults)
                 - dict {'fault1': faultattributes, 'fault2': faultattributes}, where faultattributes is:
                     - float: rate for the mode
@@ -55,6 +68,28 @@ class Mode(dataobject, readonly=False):
         Phases to key the faultmodes by (using local, global, or an external function's modes'). Default is 'global'
     longnames : dict
         Longer names for the faults (if desired). {faultname: longname}
+    faults : set
+        Set of faults present (or not) at any given time
+    mode : str
+        Name of the current mode. the default is 'nominal'
+    he_args : tuple
+        Arguments for add_he_rate defining a human error probability model.
+        
+    
+    These properties can then be used in simulation
+    ------------
+    faults : set
+        Set of faults present (or not) at any given time
+    mode : str
+        Name of the current mode. the default is 'nominal'
+    mode_state_dict: dict
+        Maps modes to states. Assigned by assoc_faultstates
+        
+    
+    While these properties are used for determining scenario information 
+    ------------
+    faultmodes : dict 
+            Dictionary of :class:`Fault` defining possible fault modes and their properties   
     """
     mode:               str = 'nominal'
     faults:             set = set()
@@ -101,6 +136,9 @@ class Mode(dataobject, readonly=False):
         else: raise Exception("Invalid type for EPCs: "+str(type(EPCs)))
         return gtp*EPC_f
     def init_faultmodes(self):
+        """
+        Initializes the self.faultmodes dictionary from the parameters of the Mode
+        """
         if self.key_phases_by=='self':  oppvect='all'
         else:                           oppvect=[1.0]
         default_kwargs={'dist':1.0/max(len(self.faultparams),1),

@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Mar 14 20:32:10 2023
+Description: A module defining how simulation results (histories) structured and processed. Has classes:
 
-@author: dhulse
+- :class:`Result`:  Class for defining result dictionaries (nested dictionaries of metric(s))
+- :class:`History`: Class for defining simulation histories (nested dictionaries of arrays or lists)
+
+And functions:
+- :func:`load`:             Loads a given file to a Result/History
+- :func:`load_folder`:      Loads a given folder to a Result/History
 """
 
 from collections import UserDict
@@ -87,8 +92,8 @@ def load(filename, filetype="", renest_dict=True, indiv=False):
 
     Returns
     -------
-    resultdict : dict
-        Corresponding results dictionary from the file.
+    result : Result
+        Corresponding result/hist object with data loaded from the file.
     """
     import dill, json, csv, pandas
     if not os.path.exists(filename): raise Exception("File does not exist: "+filename)
@@ -154,6 +159,7 @@ def load_folder(folder, filetype, renest_dict=True):
     return files_toread
     
 def get_dict_attr(dict_in, des_class, *attr):
+    """Gets attributes *attr from a given dict dict_in of class des_class"""
     if len(attr)==1:    return dict_in[attr[0]]
     else:               return get_dict_attr(des_class(dict_in[attr[0]]), *attr[1:])
 def fromdict(resultclass, inputdict):
@@ -165,6 +171,24 @@ def fromdict(resultclass, inputdict):
         return newhist
 
 class Result(UserDict):
+    """
+    Result is a special type of dictionary that makes it convenient to store, access,
+    and load results form a model/simulation. 
+    
+    As a dictionary, it supports dict-based item assignement (e.g. r['x']=10) but
+    also enables convenient access via __getattr__, e.g.:
+        r[x] = 10
+        r.x
+        > 10
+    
+    It also can return a flattened version of its nested sturcture via Result.flatten(), e.g.
+        r = Result(y=Result(z=1))
+        rf = r.flatten()
+        r[('y','z')]
+        > 1
+    
+    It also enables saving and loading to files via r.save(), r.load(), and r.load_folder()
+    """
     def __repr__(self, ind=0):
         str_rep = ""
         for k, val in self.items():
@@ -192,9 +216,11 @@ class Result(UserDict):
     def fromdict(inputdict):
         return fromdict(Result, inputdict)
     def load(filename, filetype="", renest_dict=True, indiv=False):
+        """Loads as Result using :func:`load'"""
         inputdict = load(filename, filetype="", renest_dict=True, indiv=False)
         return fromdict(Result, inputdict)
     def load_folder(folder, filetype, renest_dict=True):
+        """Loads as History using :func:`load_folder'"""
         files_toread = load_folder(folder, filetype, renest_dict=True)
         result = Result()
         for filename in files_toread:
@@ -233,11 +259,6 @@ class Result(UserDict):
     def nest(self):
         """
         Re-nests a flattened result   
-
-        Parameters
-        ----------
-        hists : dict
-            Flattened Model history (e.g. from flatten)
         """
         newhist = self.__class__()
         key_options = set([h[0] for h in self.keys()])
@@ -337,6 +358,34 @@ def get_sub_include(att, to_include):
     return new_to_include
 
 def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
+    """
+    Initializes the history for a given attribute att with value val. Enables
+    the recursive definition of a history as a nested structure.
+    
+    If a timerange is given, the base fields are initializes as fixed-length numpy
+    arrays corresponding to the data type of the field. Otherwise, an emty list 
+    is initialized.
+
+    Parameters
+    ----------
+    att : str
+        Name of the attribute.
+    val : dict/field
+        dict to be initialized as a History or field to be initialized as a list or numpy array
+    timerange : iterable, optional
+        Time-range to initialize the history over. The default is None.
+    track : list/str/dict, optional
+        argument specifying attributes for :func:`get_sub_include'. The default is None.
+    dtype : str, optional
+        Datatype to initialze the array as (if given). The default is None.
+    str_size : str, optional
+        Data type for strings. The default is '<U20'.
+    
+    Returns
+    ---------
+    Hist : History, List, or np.array
+        Initialized history structure corresponding to the attribute
+    """
     sub_track = get_sub_include(att, track)
     if sub_track and hasattr(val, 'create_hist'): return val.create_hist(val, timerange, sub_track)
     elif sub_track and isinstance(val, dict):     return init_dicthist(val, timerange, sub_track)
@@ -347,7 +396,24 @@ def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<
         else:
             try:                                  return np.full(len(timerange), val)
             except:                               return np.empty((len(timerange),), dtype=object)
-def init_dicthist(start_dict, timerange, track="all", modelength=10):
+def init_dicthist(start_dict, timerange, track="all"):
+    """
+    Initializes histories for dictionary attributes (if any)
+
+    Parameters
+    ----------
+    start_dict : dict
+        Dictionary to initialize.
+    timerange : iterable
+        Timerange to initalize the hist over
+    track : TYPE, optional
+        DESCRIPTION. The default is "all".
+    Returns
+    -------
+    Hist : History
+        Initialized history structure corresponding to the attribute
+
+    """
     hist = History()
     for att, val in start_dict.items():
         hist[att]=init_hist_iter(att,val, timerange, track)
@@ -355,12 +421,21 @@ def init_dicthist(start_dict, timerange, track="all", modelength=10):
 
 
 class History(Result):
+    """ 
+    History is a special time of :class:'Result' specifically for keeping simulation
+    histories (e.g., a log of states over time).
+    
+    It can be updated over time t using h.log(obj, t), where obj is an object with
+    (nested) attributes that match the keys of the (nested) dictionary.
+    """
     def fromdict(inputdict):
         return fromdict(History, inputdict)
     def load(filename, filetype="", renest_dict=True, indiv=False):
-        inputdict = load(filename, filetype="", renest_dict=True, indiv=False)
+        """Loads as History using :func:`load'"""
+        inputdict = load(filename, filetype=filetype, renest_dict=renest_dict, indiv=indiv)
         return fromdict(History, inputdict)
     def load_folder(folder, filetype, renest_dict=True):
+        """Loads as History using :func:`load_folder'"""
         files_toread = load_folder
         hist = History()
         for filename in files_toread:
@@ -374,6 +449,16 @@ class History(Result):
             else:                       newhist[k]=np.copy(v)
         return newhist
     def log(self, obj, t_ind):
+        """
+        Updates the history from obj at the time t_ind
+
+        Parameters
+        ----------
+        obj : Model/Function/State...
+            Object to log
+        t_ind : int
+            Time-index of the log.
+        """
         for att, hist in self.items():
             try:    val=obj[att]
             except: val=getattr(obj, att)

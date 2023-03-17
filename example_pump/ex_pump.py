@@ -381,6 +381,7 @@ if __name__=="__main__":
     flat_staged = mdlhists_staged.flatten()
     
     [all(flat[k]==flat_staged[k]) for k in flat]
+    all([all(flat[k]==flat_staged[k]) for k in flat])
     
     
     

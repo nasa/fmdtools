@@ -5,8 +5,9 @@ Description: A module to define Functions, Components, Actions, and other classe
 - :class:`Block`:       Superclass for Functions, Components, Actions, etc.
 - :class:`FxnBlock`:    Class for defining model Functions
 - :class:`Component`:   Class for defining Components (which have behaviors and live in a function)
-- :class:`Component`:   Class for defining Actions (which have behaviors and live in a function, but have updateact method)
-- :class:`Timer`:       Class for counting/incrementing time
+- :class:`Action`:      Class for defining Actions (which have behaviors and live in a function, but have updateact method)
+- :class:`CompArch`:    Class for defining Component Architectures, or sets of components to be contained by a FxnBlock
+- :class:`ASG`:         Class for defining Action Sequence Graphs, or sets of actions with specific relationships.
 """
 import numpy as np
 from decimal import Decimal
@@ -94,12 +95,22 @@ class Block():
     
     Attributes
     ----------
-    s : State
-        Internal State of the block. Instanced from _init_s.
     p : Parameter
         Internal Parameter for the block. Instanced from _init_p
+    s : State
+        Internal State of the block. Instanced from _init_s.
+    m : Mode
+        Internal Mode for the block. Instanced from _init_m
     r : Rand
         Internal Rand for the block. Instanced from _init_r
+    t : Time
+        Internal Time for the block. Instanced from _init_t
+    name : str
+        Block name
+    flows : dict
+        Dictionary of flows included in the Block (if any are added via _init_flowname)
+    is_copy : bool
+        Marker for whether the object is a copy.
     """
     def __init__(self, name, flows={}, s={}, p={}, m={}, r={}, t={}):
         """
@@ -107,10 +118,26 @@ class Block():
 
         Parameters
         ----------
-        s : dict, optional
-            Initial state values for the states s in the block. The default is {}.
+        name : str
+            Name for the Block instance.
+        flows :dict
+            Flow objects passed from the model level to use instead of instantiating locally.
         p : dict, optional
-            Overriding parameter values for the parameters p in the block. The default is {}.
+            Internal parameters to override from defaults. The default is {}.
+        s : dict, optional
+            Internal states to override from defaults. The default is {}.
+        c : dict, optional
+            Internal CompArch fields/arguments override from defaults. The default is {}.
+            FxnBlock must have an _init_c property.
+        a : dict, optional
+            Internal ASG fields/arguments override from defaults. The default is {}.
+            FxnBlock must have an _init_a property.
+        r : dict, optional
+            Internal Rand fields/arguments override from defaults. The default is {}.
+        r : dict, optional
+            Internal Mode fields/arguments override from defaults. The default is {}.
+        t : dict, optional
+            Internal Time fields/arguments to override from defaults. The defautl is {}
         """
         self.name=name
         self.flows = dict()
@@ -245,16 +272,18 @@ class Block():
         if prev_states!=states or prev_faults!=faults:  return True
         else:                                           return False
     def return_probdens(self):
+        """Gets the probability density associated with a Block and its components/actions (if any)"""
         state_pd = self.r.return_probdens()
-        if hasattr(self, 'components'): 
+        if hasattr(self, 'c'): 
             for compname, comp in self.c.components:
                 state_pd*=comp.return_probdens()
-        if hasattr(self, 'actions'):
+        if hasattr(self, 'a'):
             for actionname, action in self.a.actions:
                 state_pd*=action.return_probdens()
         return state_pd
     def create_hist(self, timerange, track='all'):
-        """Initializes the function state history fxnhist of the model mdl over the time range timerange
+        """Initializes the function state history fxnhist of the model mdl over the time range timerange.
+        A pointer to the history is then stored at self.h.
         
         Parameters
         ----------
@@ -281,6 +310,14 @@ class Block():
             else: self.h=None
         return self.h
     def log_hist(self, t_ind):
+        """
+        Logs the history local to the block (and its attributes) by updating self.h
+
+        Parameters
+        ----------
+        t_ind : int
+            time-index of the history.
+        """
         if hasattr(self, 'h'):
             self.h.log(self, t_ind)
             
@@ -343,6 +380,14 @@ class CompArch(dataobject, mapping=True):
             cop_comp.t = component.t.copy()
         return cop
     def inject_fault_in_component(self, fault):
+        """
+        Injects the fault fault in the component architecture.
+
+        Parameters
+        ----------
+        fault : str
+            Function-level name of the fault.
+        """
         if fault in self.faultmodes:
             component = self.components[self.faultmodes[fault]]
             component.m.add_fault(fault[len(component.name):]+1)
@@ -365,6 +410,21 @@ class CompArch(dataobject, mapping=True):
     def get_true_fields(self, *args, **kwargs):
         return get_true_fields(self, *args, **kwargs)
     def create_hist(self, timerange, track):
+        """
+        Creates a history corresponding to CompArch attributes.
+
+        Parameters
+        ----------
+        timerange : iterable, optional
+            Time-range to initialize the history over. The default is None.
+        track : list/str/dict, optional
+            argument specifying attributes for :func:`get_sub_include'. The default is None.
+
+        Returns
+        -------
+        h : History
+            History corresponding to the CompArch
+        """
         h = History()
         for c, comp in self.components.items():
             comp_track = get_sub_include(c, track)
@@ -640,6 +700,21 @@ class ASG(dataobject, mapping=True):
         cop.active_actions = copy.deepcopy(self.active_actions)
         return cop
     def create_hist(self, timerange, track):
+        """
+        Creates a history corresponding to ASG attributes.
+
+        Parameters
+        ----------
+        timerange : iterable, optional
+            Time-range to initialize the history over. The default is None.
+        track : list/str/dict, optional
+            argument specifying attributes for :func:`get_sub_include'. The default is None.
+
+        Returns
+        -------
+        h : History
+            History corresponding to the ASG.
+        """
         h = History()
         for c, comp in self.components.items():
             comp_track = get_sub_include(c, track)
@@ -652,34 +727,18 @@ class FxnBlock(Block):
     slots = ["c", "_c_arg", "a", "_a_arg"]
     hist_atts = ["c", "a"]+Block.hist_atts
     """
-    Superclass for functions.
-    
-    Attributes (specific to FxnBlock--see Block glass for more)
-    ----------
-    type : str
-        labels the function as a function (may not be necessary) Default is 'function'
-    flows : dict
-        flows associated with the function. structured {flow:{value:XX}}
-    components : dict
-        component instantiations of the function (if any)
-    timers : set
-        names of timers to be used in the function (if any)
-    dt : float
-        local timestep of the model in the function (overrides global timestep by default ('use_local':True in modelparameters))
+    Superclass class for functions which is a special type of Block\
+    with c and a attributes for CompArch and ASGs, as well as a defined method for propagation
     """
     def __init__(self,name, flows={}, params={}, p=dict(), s=dict(), c=dict(), a=dict(), r=dict(), m=dict(), t=dict(),
-                 local=dict(), comms=dict(), dt=1.0):
+                 local=dict(), comms=dict()):
         """
         Instantiates the function superclass with the relevant parameters.
 
         Parameters
         ----------
-        flows :list
-            Flow objects to associate with the function (from outside the FnxBlock)
-        flownames : list/dict, optional
-            Names of flows  to use in the function, if private flow names are needed (e.g. functions with in/out relationships).
-            Either provided as a list (in the same order as the flows) of all flow names corresponding to those flows
-            Or as a dict of form {External Flowname: Internal Flowname}
+        flows :dict
+            Flow objects passed from the model level to use instead of instantiating locally.
         p : dict, optional
             Internal parameters to override from defaults. The default is {}.
         s : dict, optional
@@ -687,6 +746,13 @@ class FxnBlock(Block):
         c : dict, optional
             Internal CompArch fields/arguments override from defaults. The default is {}.
             FxnBlock must have an _init_c property.
+        a : dict, optional
+            Internal ASG fields/arguments override from defaults. The default is {}.
+            FxnBlock must have an _init_a property.
+        r : dict, optional
+            Internal Rand fields/arguments override from defaults. The default is {}.
+        r : dict, optional
+            Internal Mode fields/arguments override from defaults. The default is {}.
         t : dict, optional
             Internal Time fields/arguments to override from defaults. The defautl is {}
         local : dict/list
@@ -699,10 +765,6 @@ class FxnBlock(Block):
                 - {flowname:(localname, attrs)} (to only create local view of specific attributes)
                 - {flowname:localname}          (to create view with all attributes)
                 - [flowname1, flowname2...]     (to give overwrite the global flow with the local view of it)
-        dt : float
-            Local timestep (if not inherited from model)
-        seed : int/hash
-            Random seed to use in model
         """        
         super().__init__(name, flows=flows, p=p, s=s, r=r, m=m, t=t)
         
