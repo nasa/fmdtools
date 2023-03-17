@@ -20,9 +20,8 @@ The flows are:
     - Water_out
     - Signal input (on/off)
 """
-from fmdtools.define.common import Rand, State
-from fmdtools.define.block import FxnBlock
-from fmdtools.define.flow import Flow
+from fmdtools.define.rand import Rand
+from fmdtools.define.state import State
 from fmdtools.define.model import Model
 from fmdtools.sim.approach import NominalApproach 
 
@@ -95,8 +94,9 @@ class MoveWat(DetMoveWat):
         super().behavior(time)
 
 from ex_pump import PumpParam, Electricity, Water, Signal
+from ex_pump import Pump as DetPump
 from fmdtools.define.model import ModelParam
-class Pump(Model):
+class Pump(DetPump):
     def __init__(self, params=PumpParam(), \
                  modelparams = ModelParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr'), \
                     valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
@@ -115,36 +115,6 @@ class Pump(Model):
         self.add_fxn('export_water', ExportWater,   'wat_2')
 
         self.build_model()
-    def end_condition(self,time):
-
-        if time>self.times[-1]: return True
-        else:                   return False
-    def find_classification(self,scen, mdlhists):
-
-        #get fault costs and rates
-        if 'repair' in self.params.cost: repcost= self.calc_repaircost()
-        else:                               repcost = 0.0
-        if 'water' in self.params.cost:
-            lostwat = sum(mdlhists['nominal']['flows']['wat_2']['flowrate'] - mdlhists['faulty']['flows']['wat_2']['flowrate'])
-            watcost = 750 * lostwat  * self.modelparams.dt
-        elif 'water_exp' in self.params.cost:
-            wat = mdlhists['nominal']['flows']['wat_2']['flowrate'] - mdlhists['faulty']['flows']['wat_2']['flowrate']
-            watcost =100 *  sum(np.array(accumulate(wat))**2) * self.modelparams.dt
-        else: watcost = 0.0
-        if 'ee' in self.params.cost:
-            eespike = [spike for spike in mdlhists['faulty']['flows']['ee_1']['current'] - mdlhists['nominal']['flows']['ee_1']['current'] if spike >1.0]
-            if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.modelparams.dt
-            else: eecost =0.0
-        else: eecost = 0.0
-
-        totcost = repcost + watcost + eecost
-
-        if scen['properties']['type']=='nominal':   rate=1.0
-        else:                                       rate=scen['properties']['rate']
-
-        life=1e5
-        expcost=rate*life*totcost
-        return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
 
 def paramfunc(delay):
     return {'delay':delay}
@@ -163,9 +133,9 @@ if __name__=="__main__":
     app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
     app_comp.add_param_replicates(paramfunc, 'delay_10', 100, (10))
     
-    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], pool=mp.Pool(4))
+    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')]) #pool=mp.Pool(4)
     
-    endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True, pool=mp.Pool(4))
+    endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True) #pool=mp.Pool(4)
     
     comp_mdlhists = {scen:mdlhist['export_water block, t=27.0'] for scen,mdlhist in mdlhists.items()}
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
