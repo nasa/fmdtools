@@ -5,7 +5,7 @@ Description: A module to define Functions, Components, Actions, and other classe
 - :class:`Block`:       Superclass for Functions, Components, Actions, etc.
 - :class:`FxnBlock`:    Class for defining model Functions
 - :class:`Component`:   Class for defining Components (which have behaviors and live in a function)
-- :class:`Action`:      Class for defining Actions (which have behaviors and live in a function, but have updateact method)
+- :class:`Action`:      Class for defining Actions (which have behaviors and live in a function, but have __call__ method for updating)
 - :class:`CompArch`:    Class for defining Component Architectures, or sets of components to be contained by a FxnBlock
 - :class:`ASG`:         Class for defining Action Sequence Graphs, or sets of actions with specific relationships.
 """
@@ -452,7 +452,7 @@ class Action(Block):
         """
         self.name = name
         super().__init__(name, flows=flows,**kwargs)
-    def updateact(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
+    def __call__(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
         Updates the behaviors, faults, times, etc of the action 
 
@@ -642,7 +642,7 @@ class ASG(dataobject, mapping=True):
         if gtype=='combined' or gtype=='conditions':
             nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=30, arrowstyle='->', node_shape='s', node_size=100)
         return fig
-    def prop_internal(self, time, run_stochastic, proptype, dt):
+    def __call__(self, time, run_stochastic, proptype, dt):
         """
         Propagates behaviors through the internal Action Sequence Graph
 
@@ -654,6 +654,8 @@ class ASG(dataobject, mapping=True):
             Whether to run the simulation using stochastic or deterministic behavior
         proptype : str
             Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
+        dt : float
+            Timestep to propagate over.
         """
         if not self.per_timestep: 
             self.set_active_actions(self.initial_action)
@@ -664,7 +666,7 @@ class ASG(dataobject, mapping=True):
             while active_actions:
                 new_active_actions=set(active_actions)
                 for action in active_actions:
-                    self.actions[action].updateact(time, run_stochastic, proptype=proptype, )
+                    self.actions[action](time, run_stochastic, proptype=proptype, )
                     action_cond_edges = self.action_graph.out_edges(action, data=True)
                     for act_in, act_out, atts in action_cond_edges:
                         try:
@@ -840,7 +842,7 @@ class FxnBlock(Block):
         if hasattr(self, 'c'): cop.c = self.c.copy_with_arg(**self._c_arg)
         if hasattr(self, 'a'): cop.a = self.a.copy_with_arg(flows = cop.flows, **self._a_arg)
         return cop
-    def updatefxn(self,proptype, faults=[], time=0, run_stochastic=False):
+    def __call__(self,proptype, faults=[], time=0, run_stochastic=False):
         """
         Updates the state of the function at a given time and injects faults.
 
@@ -865,7 +867,7 @@ class FxnBlock(Block):
         if hasattr(self, 'a'): 
             inject_faults_internal(self.a, faults)
             try:
-                self.a.prop_internal(time, run_stochastic, proptype, self.t.dt)
+                self.a(time, run_stochastic, proptype, self.t.dt)
             except TypeError as e:
                 raise Exception("Poorly specified ASG: "+str(self.a.__class__)) from e
         
@@ -897,7 +899,7 @@ class FxnBlock(Block):
     def reset(self):
         super().reset()
         if hasattr(self, 'c'): self.c.reset()
-        self.updatefxn('reset', faults=[], time=0)
+        self('reset', faults=[], time=0)
 class GenericFxn(FxnBlock):
     """Generic function block. For use when the user has not yet defined a class for the
     given (to be implemented) function block. Acts as a placeholder that enables simulation."""

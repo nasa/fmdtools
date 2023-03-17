@@ -92,7 +92,6 @@ class Model(object):
             parameters to keep a history of in params needed for find_classification. default is 'all'
             dict option is of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
         """
-        self.time=0.0
         self.is_copy=False
         self.flows={}
         self.fxns={}
@@ -104,6 +103,7 @@ class Model(object):
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
+        self._flowstates={}
     def __repr__(self):
         fxnlist = ['- '+fxnname+':'+str(fxn.return_states())+' '+str(getattr(fxn,'active_actions',''))+'\n' for fxnname,fxn in self.fxns.items()]
         fxnlist = [fstr[:115]+'...\n'if len(fstr)>120 else fstr for fstr in fxnlist]
@@ -621,10 +621,86 @@ class Model(object):
                 flow_track = get_sub_include(flowname, track)
                 if flow_track:
                     hist[flowname] = flow.create_hist(timerange, flow_track)
-            hist['time'] = init_hist_iter('time', self.time, timerange=timerange, track='all', dtype=float)
             self.h = hist
         return self.h
+    def propagate(self, time, fxnfaults={}, disturbances={}, run_stochastic=False):
+        """
+        Injects and propagates faults through the graph at one time-step
 
+        Parameters
+        ----------
+        time : float
+            The current timestep.
+        fxnfaults : dict
+            Faults to inject during this propagation step. With structure {'function':['fault1', 'fault2'...]}
+        disturbances : 
+            Variables to change during this propagation step. With structure {'function.var1':value}
+        run_stochastic : bool
+            Whether to run stochastic behaviors or use default values. Default is False.
+            Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
+        """
+        #Step 0: Update model states with disturbances
+        self.set_vars(**disturbances)
+        
+        #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
+        for fxnname in self.dynamicfxns.union(fxnfaults.keys()):
+            fxn=self.fxns[fxnname]
+            faults = fxnfaults.get(fxnname, [])
+            if type(faults)!=list: faults=[faults]
+            fxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
+            
+        #Step 2: Run Static Propagation Methods
+        try:
+            self.prop_static(time, run_stochastic=run_stochastic)
+        except Exception as e:
+            raise Exception("Error in static propagation at time t="+str(time)) 
+    def prop_static(self, time, run_stochastic=False):
+        """
+        Propagates behaviors through model graph (static propagation step)
+
+        Parameters
+        ----------
+        time : float
+            Current time-step.
+        run_stochastic : bool
+            Whether to run stochastic behaviors or use default values. Default is False.
+            Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
+        """
+        #set up history of flows to see if any has changed
+        activefxns=self.staticfxns.copy()
+        nextfxns=set()
+        if not self._flowstates: 
+            self._flowstates=dict.fromkeys(self.staticflows)
+            for flowname in self.staticflows:
+                self._flowstates[flowname]=self.flows[flowname].return_states()
+        n=0
+        while activefxns:
+            flows_to_check = {*self.staticflows}
+            for fxnname in list(activefxns).copy():
+                #Update functions with new values, check to see if new faults or states
+                oldstates, oldfaults = self.fxns[fxnname].return_states()
+                self.fxns[fxnname]('static', time=time, run_stochastic=run_stochastic)
+                if self.fxns[fxnname].has_new_states(oldstates, oldfaults): nextfxns.update([fxnname])
+                
+                #Check to see what flows now have new values and add connected functions (done for each because of communications potential)
+                for flowname in self.fxns[fxnname].flows:
+                    if flowname in flows_to_check:
+                        if self._flowstates[flowname]!=self.flows[flowname].return_states():
+                            nextfxns.update(set([n for n in self.bipartite.neighbors(flowname) if n in self.staticfxns]))
+                            flows_to_check.remove(flowname)
+            # check remaining flows that have not been checked already
+            for flowname in flows_to_check:
+                if self._flowstates[flowname]!=self.flows[flowname].return_states():
+                    nextfxns.update(set([n for n in self.bipartite.neighbors(flowname) if n in self.staticfxns]))
+            # update flowstates
+            for flowname in self.staticflows:
+                self._flowstates[flowname]=self.flows[flowname].return_states()
+            activefxns=nextfxns.copy()
+            nextfxns.clear()
+            n+=1
+            if n>1000: #break if this is going for too long
+                raise Exception("Undesired looping between functions in static propagation step",
+                                "at t="+str(time)+", these functions remain active:"+str(activefxns))
 def check_model_pickleability(model):
     """ Checks to see which attributes of a model object will pickle, providing more detail about functions/flows"""
     unpickleable = check_pickleability(model)

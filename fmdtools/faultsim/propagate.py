@@ -21,16 +21,6 @@ Private Methods:
     - :func:`prop_one_scen()`:      Runs a fault scenario in the model over time
     - :func:`propagate()`:          Injects and propagates faults through the graph at one time-step
     - :func:`prop_time()`:          Propagates faults through model graph.
-    - :func:`update_mdlhist()`:     Updates the model history at a given time.
-        - :func:`update_flowhist()`:Updates the flows in the model history at t_ind
-        - :func:`update_fxnhist()`: Updates the functions (faults and states) in the model history at t_ind
-        - :func:`update_blockhist()`:Updates the blocks in the model history at t_ind
-    - :func:`init_mdlhist()`:       Initializes the model history over a given timerange
-        - :func:`init_flowhist()`:  Initializes the flow history flowhist of the model mdl over the time range timerange
-        - :func:`init_fxnhist()`:   Initializes the function state history fxnhist of the model mdl over the time range timerange
-        - :func:`init_blockhist()`: Initializes the block state history fxnhist of the model mdl over the time range timerange
-    - :func:`cut_mdlhist()`:        Cuts a given model history only to the time simulated
-        - :func:`cut_hist()`:       Recursively cuts the given individual (flow or function) history at ind.
     - :func:`save_helper()`:        Helper function for inline results saving.
 """
 #File name: propagate.py
@@ -807,11 +797,10 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
     elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
     elif track_times[0]=='times':       histrange = track_times[1]
     
-    
-    mdlhist = mdl.create_hist(histrange, track) 
+    mdlhist = mdl.create_hist(histrange, track)
+    mdlhist.init_time(timerange[0], histrange)
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes); result={}
-    flowstates=dict.fromkeys(mdl.staticflows)
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
@@ -821,7 +810,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
                disturbances = scen['sequence'][t].get('disturbances', {})
            else: fxnfaults, disturbances = {}, {}
            try:
-               flowstates = propagate(mdl, t, fxnfaults, disturbances, flowstates, run_stochastic=run_stochastic)
+               mdl.propagate(t, fxnfaults, disturbances, run_stochastic=run_stochastic)
            except Exception as e:
                raise Exception("Error in scenario "+str(scen)) from e
            if track_times:
@@ -829,7 +818,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
                elif track_times[0]=='interval': t_ind_rec = t_ind//track_times[1]+shift
                elif track_times[0]=='times':    t_ind_rec = track_times[1].index(t)
                else: raise Exception("Invalid argument, track_times="+str(track_times))
-               mdlhist.log(mdl, t_ind_rec)
+               mdlhist.log(mdl, t_ind_rec, time=t)
            if type(desired_result)==dict: 
                if "all" in desired_result: 
                    result[t] = get_result(scen,mdl,desired_result['all'], mdlhist,nomhist, nomresult)
@@ -895,102 +884,8 @@ def get_endclass_vars(mdl, desired_result, result):
     else:                           vars_to_get = [d for d in desired_result if type(d) not in [int,float]]
     var_result = mdl.get_vars(*vars_to_get, trunc_tuple=False)
     for i, var in enumerate(vars_to_get):
-        result[var]=var_result[i]
-    
+        result[var]=var_result[i]   
 
-def propagate(mdl, time, fxnfaults={}, disturbances={}, flowstates={}, run_stochastic=False):
-    """
-    Injects and propagates faults through the graph at one time-step
 
-    Parameters
-    ----------
-    mdl : model
-        The model to propagate the fault in
-    time : float
-        The current timestep.
-    fxnfaults : dict
-        Faults to inject during this propagation step. With structure {'function':['fault1', 'fault2'...]}
-    disturbances : 
-        Variables to change during this propagation step. With structure {'function.var1':value}
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
-    Returns
-    -------
-    flowstates : dict
-        States of the model at the current time-step.
-    """
-    #Step 0: Update model states with disturbances
-    mdl.set_vars(**disturbances)
-    
-    #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
-    for fxnname in mdl.dynamicfxns.union(fxnfaults.keys()):
-        fxn=mdl.fxns[fxnname]
-        faults = fxnfaults.get(fxnname, [])
-        if type(faults)!=list: faults=[faults]
-        fxn.updatefxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
-        
-    #Step 2: Run Static Propagation Methods
-    try:
-        flowstates = prop_time(mdl, time, flowstates, run_stochastic=run_stochastic)
-    except Exception as e:
-        raise Exception("Error in static propagation at time t="+str(time)) 
-    return flowstates
-def prop_time(mdl, time, flowstates={}, run_stochastic=False):
-    """
-    Propagates faults through model graph.
-
-    Parameters
-    ----------
-    mdl : model
-        Model to propagate faults in
-    time : float
-        Current time-step.
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
-
-    Returns
-    -------
-    flowstates : dict
-        States of each flow in the model after propagation
-    """
-    #set up history of flows to see if any has changed
-    activefxns=mdl.staticfxns.copy()
-    nextfxns=set()
-    if not flowstates: 
-        flowstates=dict.fromkeys(mdl.staticflows)
-        for flowname in mdl.staticflows:
-            flowstates[flowname]=mdl.flows[flowname].return_states()
-    n=0
-    while activefxns:
-        flows_to_check = {*mdl.staticflows}
-        for fxnname in list(activefxns).copy():
-            #Update functions with new values, check to see if new faults or states
-            oldstates, oldfaults = mdl.fxns[fxnname].return_states()
-            mdl.fxns[fxnname].updatefxn('static', time=time, run_stochastic=run_stochastic)
-            if mdl.fxns[fxnname].has_new_states(oldstates, oldfaults): nextfxns.update([fxnname])
-            
-            #Check to see what flows now have new values and add connected functions (done for each because of communications potential)
-            for flowname in mdl.fxns[fxnname].flows:
-                if flowname in flows_to_check:
-                    if flowstates[flowname]!=mdl.flows[flowname].return_states():
-                        nextfxns.update(set([n for n in mdl.bipartite.neighbors(flowname) if n in mdl.staticfxns]))
-                        flows_to_check.remove(flowname)
-        # check remaining flows that have not been checked already
-        for flowname in flows_to_check:
-            if flowstates[flowname]!=mdl.flows[flowname].return_states():
-                nextfxns.update(set([n for n in mdl.bipartite.neighbors(flowname) if n in mdl.staticfxns]))
-        # update flowstates
-        for flowname in mdl.staticflows:
-            flowstates[flowname]=mdl.flows[flowname].return_states()
-        activefxns=nextfxns.copy()
-        nextfxns.clear()
-        n+=1
-        if n>1000: #break if this is going for too long
-            raise Exception("Undesired looping between functions in static propagation step",
-                            "at t="+str(time)+", these functions remain active:"+str(activefxns))
-    mdl.time=time
-    return flowstates
 
     
