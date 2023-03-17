@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Mar 14 20:27:08 2023
-
-@author: dhulse
+Description: A module for defining Parameters, which are (generic) containers for system attributes that do not change
+    
+- :class:`Parameter`: Superclass for Parameters
 """
 
 import inspect
@@ -10,7 +10,7 @@ from recordclass import dataobject, asdict
 import warnings
 import numpy as np
 
-from .common import get_true_fields
+from .common import get_true_fields, get_true_field
 
 class Parameter(dataobject, readonly=True):
     """

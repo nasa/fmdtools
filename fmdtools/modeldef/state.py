@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Mar 14 20:22:28 2023
-
-@author: dhulse
+Description: A module for defining States, which are (generic) containers for system attributes that change over time.
+    
+- :class:`State`: Superclass for Model States.
 """
 from recordclass import dataobject, asdict
 import numpy as np
@@ -12,7 +12,31 @@ import warnings
 from fmdtools.faultsim.result import History, init_hist_iter
 
 class State(dataobject, mapping=True):
-    """ """
+    """
+    Class for working with model states, which are variables in the model which 
+    change over time. This class inherits from dataobject for low memory footprint
+    and has a number of methods for making attribute assignment/copying easier.
+    
+    State is meant to be extended in the model definition object to add the corresponding
+    field related to a simulation, e.g.,
+    
+    class Point(State):
+        x : float=1.0
+        y : float=1.0
+    
+    Creates a class point with fields x and y which are tagged as floats with default values of 1.0.
+    
+    Instancing State gives normal read/write access, e.g., one can do:
+    
+    p = Point()
+    p.x
+    > 1.0
+    
+    or 
+    p = Point(x=10.0)
+    p.x
+    > 10.0
+    """
     def set_atts(self, **kwargs):
         """Sets the given arguments to a given value. Mainly useful for 
         reducing length/adding clarity to assignment statements in __init__ methods
@@ -190,6 +214,22 @@ class State(dataobject, mapping=True):
         """
         warnings.warn(' '.join(messages), stacklevel=stacklevel)
     def create_hist(self, timerange=None, track=None):
+        """
+        Creates a History corresponding to State
+
+        Parameters
+        ----------
+        timerange : iterable, optional
+            Time-range to initialize the history over. The default is None.
+        track : list/str/dict, optional
+            argument specifying attributes for :func:`get_sub_include'. The default is None.
+                DESCRIPTION. The default is None.
+
+        Returns
+        -------
+        hist : History
+            History of fields specified in track.
+        """
         hist = History()
         for att in self.__fields__:
             val = getattr(self, att)

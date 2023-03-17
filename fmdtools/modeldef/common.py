@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module to define base data structures for simulation. Contains:
-    
-- :class:`States`:      Class operations for states (inherited by FxnClass, Flow, etc)
+Description: A module for methods used commonly in model definition constructs.
 """
 from collections.abc import Iterable
 import dill

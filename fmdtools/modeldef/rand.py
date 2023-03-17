@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Mar 14 20:18:06 2023
-
-@author: dhulse
+Description: A module for defining randon properties for use in blocks. Has Classes:
+    
+- :class:`Rand`: Superclass for Block random properties.
 """
 
 from scipy import stats 
@@ -14,6 +14,29 @@ import copy
 from fmdtools.faultsim.result import init_hist_iter, History
 
 class Rand(dataobject, mapping=True):
+    """
+    Class for defining and interacting with random states of the model. 
+    
+    Attributes
+    ----------
+    rng : np.random.default_rng
+        random number generator
+    probs : list
+        probability of the given states
+    seed : int
+        state for the random number generator
+    
+    Rand is meant to be extended in model definition with random states, e.g.:
+        
+    class RandState(State):
+        noise: float=1.0
+    class ExampleRand(Rand):
+        s= RandState()
+        run_stochastic:     bool=True
+        
+    Which enables the use of set_rand, update_stochastic_states, etc for updating
+    these states with methods called from the rng.
+    """
     rng:            np.random.default_rng
     probs:          list = list()
     seed:           int =   42
@@ -66,6 +89,7 @@ class Rand(dataobject, mapping=True):
                     self.set_rand(state, getattr(self.s, state+'_update')[0],
                                   *getattr(self.s, state+'_update')[1])
     def reset(self):
+        """Resets Rand to the initial state."""
         self.probs.clear()
         self.s.reset()
         self.rng = np.random.default_rng(self.seed)
@@ -85,6 +109,22 @@ class Rand(dataobject, mapping=True):
             default = self.s.__defaults__[self.s.__fields__.index(statename)]
             self.s[statename] = default
     def create_hist(self, timerange, track):
+        """
+        Creates a History corresponding to Rand
+
+        Parameters
+        ----------
+        timerange : iterable, optional
+            Time-range to initialize the history over. The default is None.
+        track : list/str/dict, optional
+            argument specifying attributes for :func:`get_sub_include'. The default is None.
+                DESCRIPTION. The default is None.
+
+        Returns
+        -------
+        hist : History
+            History of fields specified in track.
+        """
         h = History()
         if self.run_stochastic=='track_pdf': 
             h['probdens'] = init_hist_iter('probdens', self.return_probdens(), timerange=timerange, track='all')
