@@ -212,7 +212,10 @@ class Result(UserDict):
         return self.data.items()
     def __getattr__(self, argstr):
         args = argstr.split(".")
-        return get_dict_attr(self.data, self.__class__, *args)
+        try:
+            return get_dict_attr(self.data, self.__class__, *args)
+        except:
+            raise AttributeError("Not in dict")
     def fromdict(inputdict):
         return fromdict(Result, inputdict)
     def load(filename, filetype="", renest_dict=True, indiv=False):
@@ -448,7 +451,21 @@ class History(Result):
             if isinstance(v, History):  newhist[k]=v.copy()
             else:                       newhist[k]=np.copy(v)
         return newhist
-    def log(self, obj, t_ind):
+    def init_time(self,time, timerange):
+        """
+        Adds time to the history. Used at the top level of the history after 
+        initialization to log timesteps.
+
+        Parameters
+        ----------
+        time : float
+            time to initialize the initial time at.
+        timerange : iterable
+            Timerange to initialize the history over.
+        """
+        if not hasattr(self, 'time'):
+            self['time'] = init_hist_iter('time', time, timerange=timerange, track='all', dtype=float)
+    def log(self, obj, t_ind, time=None):
         """
         Updates the history from obj at the time t_ind
 
@@ -458,10 +475,15 @@ class History(Result):
             Object to log
         t_ind : int
             Time-index of the log.
+        time : float
+            Real time for the history (if initialized). Used at the top level of the history.
         """
         for att, hist in self.items():
-            try:    val=obj[att]
-            except: val=getattr(obj, att)
+            if att=='time' and time is not None:
+                val=time
+            else:
+                try:    val=obj[att]
+                except: val=getattr(obj, att)
             
             if type(hist)==History:             hist.log(val, t_ind)
             else:
