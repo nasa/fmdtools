@@ -18,12 +18,12 @@ import itertools
 import random
 from scipy.optimize import minimize
 
-import fmdtools.faultsim.propagate as propagate
-import fmdtools.resultdisp as rd
+import fmdtools.sim.propagate as propagate
+import fmdtools.analyze as rd
 from example_tank.tank_optimization_model import Tank, TankParam, make_tankparam
-from fmdtools.modeldef.approach import SampleApproach
+from fmdtools.define.approach import SampleApproach
 import multiprocessing as mp
-from fmdtools.faultsim.search import ProblemInterface
+from fmdtools.sim.search import ProblemInterface
 
 ## Defining problem
 mdl= Tank()
@@ -213,7 +213,7 @@ if __name__=="__main__":
     
     
     
-    #from fmdtools.faultsim.search import ProblemInterface
+    #from fmdtools.sim.search import ProblemInterface
     
     # mdl= Tank()
     # prob = ProblemInterface("res_problem", mdl, staged=True)

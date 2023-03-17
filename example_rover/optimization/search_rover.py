@@ -5,10 +5,10 @@ Created on Tue Jul 19 18:29:42 2022
 @author: igirshfe
 """
 
-import fmdtools.faultsim.propagate as prop
-import fmdtools.resultdisp as rd
-from fmdtools.modeldef.approach import SampleApproach
-from fmdtools.faultsim.search import ProblemInterface
+import fmdtools.sim.propagate as prop
+import fmdtools.analyze as rd
+from fmdtools.define.approach import SampleApproach
+from fmdtools.sim.search import ProblemInterface
 import example_rover.rover_model as rvr
 import tqdm
 

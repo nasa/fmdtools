@@ -8,9 +8,9 @@ import unittest
 import sys, os
 sys.path.insert(1, os.path.join('..'))
 from example_pump.ex_pump import Pump
-from fmdtools.faultsim import propagate
-import fmdtools.resultdisp as rd
-from fmdtools.modeldef import SampleApproach, check_pickleability, NominalApproach
+from fmdtools.sim import propagate
+import fmdtools.analyze as rd
+from fmdtools.define import SampleApproach, check_pickleability, NominalApproach
 from CommonTests import CommonTests
 import numpy as np
 

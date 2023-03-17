@@ -6,15 +6,15 @@ Created: June 2019, revised Nov 2022
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.modeldef.common import Parameter, State
-from fmdtools.modeldef.block import FxnBlock, Component, CompArch, Mode
-from fmdtools.modeldef.flow import Flow
-from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.approach import SampleApproach
-from fmdtools.faultsim import propagate
-from fmdtools.faultsim.search import ProblemInterface
+from fmdtools.define.common import Parameter, State
+from fmdtools.define.block import FxnBlock, Component, CompArch, Mode
+from fmdtools.define.flow import Flow
+from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.approach import SampleApproach
+from fmdtools.sim import propagate
+from fmdtools.sim.search import ProblemInterface
 
-import fmdtools.resultdisp as rd
+import fmdtools.analyze as rd
 import multiprocessing as mp
 
 from mpl_toolkits.mplot3d import Axes3D
@@ -832,7 +832,7 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'al
     return calc_res(mdl, fullcosts=fullcosts, faultmodes = faultmodes, include_nominal=include_nominal, pool=pool, phases=phases, staged=staged)
 
 if __name__=="__main__":
-    import fmdtools.faultsim.propagate as prop
+    import fmdtools.sim.propagate as prop
     import matplotlib.pyplot as plt
     
     mdl = Drone()

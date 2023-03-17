@@ -26,7 +26,7 @@ from .common import get_true_fields,get_true_field
 from .time import Time
 from .mode import Mode
 from .flow import init_flow, Flow
-from fmdtools.faultsim.result import History, get_sub_include, init_hist_iter
+from fmdtools.sim.result import History, get_sub_include, init_hist_iter
 
 def assoc_flows(obj, flows={}):
     """

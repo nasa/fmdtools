@@ -30,7 +30,7 @@ Also used for graph heatmaps, which use the results history to map results histo
     - :func:`faults_heatmap`:       Makes a heatmap dictionary of the average resulting faults over all scenarios
     - :func:`exp_faults_heatmap`:    Makes a heatmap dictionary of the expected resulting faults over all scenarios
 """
-#File Name: resultdisp/process.py
+#File Name: analyze/process.py
 #Author: Daniel Hulse
 #Created: November 2019 (Refactored April 2020)
 

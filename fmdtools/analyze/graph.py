@@ -12,7 +12,7 @@ Public user-facing methods:
 Private class:
     - :class:`GraphInteractor`:             Used to set nodes in set_pos
 """
-#File Name: resultdisp/graph.py
+#File Name: analyze/graph.py
 #Contributors: Daniel Hulse and Sequoia Andrade
 #Created: November 2019
 #Refactored: April 2020
@@ -107,7 +107,7 @@ class GraphInteractor:
 
 def set_pos(g, gtype='bipartite', **kwargs):
     """
-    Sets the position of nodes for plots in resultdisp.graph using a graphical tool.
+    Sets the position of nodes for plots in analyze.graph using a graphical tool.
     Note: make sure matplotlib is set to plot in an external window (e.g using '%matplotlib qt)
 
     Parameters
@@ -122,7 +122,7 @@ def set_pos(g, gtype='bipartite', **kwargs):
     Returns
     -------
     p : GraphIterator
-        Graph Iterator (in resultdisp.Graph)
+        Graph Iterator (in analyze.Graph)
     """
     if getattr(g,'type', '')=='model':
         mdl=g

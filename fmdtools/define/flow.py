@@ -15,7 +15,7 @@ from recordclass import asdict
 
 from .parameter import Parameter
 from .state import State
-from fmdtools.faultsim.result import History, get_sub_include
+from fmdtools.sim.result import History, get_sub_include
 
 
 class Flow(object):

@@ -5,11 +5,11 @@ Created on Tue Aug  9 12:44:01 2022
 @author: dhulse
 """
 import unittest
-from fmdtools.faultsim import propagate
-import fmdtools.resultdisp as rd
-from fmdtools.modeldef.block import FxnBlock, get_pdf_for_rand
-from fmdtools.modeldef.model import Model
-from fmdtools.modeldef.flow import CommsFlow, MultiFlow
+from fmdtools.sim import propagate
+import fmdtools.analyze as rd
+from fmdtools.define.block import FxnBlock, get_pdf_for_rand
+from fmdtools.define.model import Model
+from fmdtools.define.flow import CommsFlow, MultiFlow
 import numpy as np
 from CommonTests import CommonTests
 
@@ -65,7 +65,7 @@ class TestModel(Model):
         
         self.build_model()
 
-class modeldef_Tests(unittest.TestCase, CommonTests):
+class define_Tests(unittest.TestCase, CommonTests):
     def test_pdf_translation_options(self):
         """
         Test for getting the probability of a pdf using get_pdf_for_rand. 

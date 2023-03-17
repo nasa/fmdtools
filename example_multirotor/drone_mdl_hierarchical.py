@@ -9,14 +9,14 @@ Description: A fault model of a multi-rotor drone.
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import fmdtools.faultsim as fs
-import fmdtools.resultdisp as rd
+import fmdtools.sim as fs
+import fmdtools.analyze as rd
 from IPython.display import HTML
 
-from fmdtools.modeldef.common import Parameter, State
-from fmdtools.modeldef.block import FxnBlock, Component, CompArch
-from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.approach import SampleApproach
+from fmdtools.define.common import Parameter, State
+from fmdtools.define.block import FxnBlock, Component, CompArch
+from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.approach import SampleApproach
 
 from drone_mdl_static import m2to1, EngageLand, HoldPayload, DistEE
 from drone_mdl_static import Force, EE, Control, DOFs, Env, Dir

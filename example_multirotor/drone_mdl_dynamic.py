@@ -6,13 +6,13 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.modeldef.common import Parameter, State, Time
-from fmdtools.modeldef.block import FxnBlock, Mode
-from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.approach import SampleApproach
+from fmdtools.define.common import Parameter, State, Time
+from fmdtools.define.block import FxnBlock, Mode
+from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.approach import SampleApproach
 
 from drone_mdl_static import m2to1
-import fmdtools.faultsim as fs
+import fmdtools.sim as fs
 
 from drone_mdl_static import DistEE, EngageLand, HoldPayload, AffectDOF
 from drone_mdl_static import StoreEE as StaticstoreEE

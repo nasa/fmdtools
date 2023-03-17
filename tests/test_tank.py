@@ -10,10 +10,10 @@ sys.path.insert(1, os.path.join('..'))
 from example_tank.tank_model import Tank
 from example_tank.tank_opt import x_to_rcost_leg, x_to_totcost_leg, x_to_descost
 from example_tank.tank_optimization_model import Tank as Tank2
-from fmdtools.faultsim.search import ProblemInterface
-from fmdtools.faultsim import propagate
-import fmdtools.resultdisp as rd
-from fmdtools.modeldef import SampleApproach, NominalApproach
+from fmdtools.sim.search import ProblemInterface
+from fmdtools.sim import propagate
+import fmdtools.analyze as rd
+from fmdtools.define import SampleApproach, NominalApproach
 from CommonTests import CommonTests
 import numpy as np
 import multiprocessing as mp

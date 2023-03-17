@@ -12,9 +12,9 @@ The use-cases shown are:
     -Testing a model
 """
 
-from fmdtools.modeldef.flow import Flow
-import fmdtools.resultdisp as rd
-import fmdtools.faultsim.propagate as propagate
+from fmdtools.define.flow import Flow
+import fmdtools.analyze as rd
+import fmdtools.sim.propagate as propagate
 
 from ex_pump import ImportEE, Water, MoveWat, Pump
 

@@ -21,17 +21,17 @@ The flows are:
     - Signal input (on/off)
 """
 
-from fmdtools.modeldef.flow import Flow
-from fmdtools.modeldef.block import FxnBlock
-from fmdtools.modeldef.model import Model 
-from fmdtools.modeldef.approach import SampleApproach
+from fmdtools.define.flow import Flow
+from fmdtools.define.block import FxnBlock
+from fmdtools.define.model import Model 
+from fmdtools.define.approach import SampleApproach
 
 
 ##DEFINE MODEL FUNCTIONS
 # Functions are defined using Python classes that are instantiated as objects
 
 # Import EE is the line of electricity going into the pump
-# We define it here as a subclass of the FxnBlock superclass (imported from modeldef.py)
+# We define it here as a subclass of the FxnBlock superclass (imported from define.py)
 #the FxnBlock superclass, which adds the common aspects of the function objects:
 # - flows added to .flow
 # - faults set to nominal

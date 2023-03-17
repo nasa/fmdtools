@@ -19,16 +19,16 @@ Flows:
     - EE
     - Camera
 """
-from fmdtools.modeldef.block import FxnBlock, Action
-from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.common import Parameter
-from fmdtools.modeldef.approach import SampleApproach, NominalApproach
+from fmdtools.define.block import FxnBlock, Action
+from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.common import Parameter
+from fmdtools.define.approach import SampleApproach, NominalApproach
 
 
 import matplotlib.pyplot as plt
 import numpy as np
-import fmdtools.faultsim.propagate as prop
-import fmdtools.resultdisp as rd
+import fmdtools.sim.propagate as prop
+import fmdtools.analyze as rd
 import itertools
 
 from rover_model import translate_angle, turn_func, sin_func, sin_angle_func, in_area, dist, find_line_dist, gen_param_space

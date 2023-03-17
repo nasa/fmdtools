@@ -20,15 +20,15 @@ The flows are:
     - Water_out
     - Signal input (on/off)
 """
-from fmdtools.modeldef.common import Rand, State
-from fmdtools.modeldef.block import FxnBlock
-from fmdtools.modeldef.flow import Flow
-from fmdtools.modeldef.model import Model
-from fmdtools.modeldef.approach import NominalApproach 
+from fmdtools.define.common import Rand, State
+from fmdtools.define.block import FxnBlock
+from fmdtools.define.flow import Flow
+from fmdtools.define.model import Model
+from fmdtools.define.approach import NominalApproach 
 
 from ex_pump import accumulate, reseting_accumulate
-import fmdtools.resultdisp as rd
-import fmdtools.faultsim.propagate as propagate
+import fmdtools.analyze as rd
+import fmdtools.sim.propagate as propagate
 import numpy as np
 
 """
@@ -95,7 +95,7 @@ class MoveWat(DetMoveWat):
         super().behavior(time)
 
 from ex_pump import PumpParam, Electricity, Water, Signal
-from fmdtools.modeldef.model import ModelParam
+from fmdtools.define.model import ModelParam
 class Pump(Model):
     def __init__(self, params=PumpParam(), \
                  modelparams = ModelParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr'), \

@@ -1,6 +1,6 @@
 
-import fmdtools.faultsim as faultsim
-import fmdtools.modeldef as modeldef
-import fmdtools.resultdisp as resultdisp
+import fmdtools.sim as sim
+import fmdtools.define as define
+import fmdtools.analyze as analyze
 
-__all__ = ['resultdisp', 'faultsim', 'modeldef']
+__all__ = ['analyze', 'sim', 'define']

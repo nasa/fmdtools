@@ -4,13 +4,13 @@ Created on Tue Feb 28 11:53:00 2023
 
 @author: dhulse
 """
-from fmdtools.modeldef.common import Parameter, State, Rand
-from fmdtools.modeldef.block import FxnBlock
-from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.approach import NominalApproach
+from fmdtools.define.common import Parameter, State, Rand
+from fmdtools.define.block import FxnBlock
+from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.approach import NominalApproach
 import numpy as np
-from fmdtools.faultsim import propagate as prop
-import fmdtools.resultdisp as rd
+from fmdtools.sim import propagate as prop
+import fmdtools.analyze as rd
 import matplotlib.pyplot as plt
 from rover_model import Rover, plot_trajectories, DegParam
 

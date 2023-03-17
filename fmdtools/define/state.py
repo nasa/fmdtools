@@ -9,7 +9,7 @@ import numpy as np
 from .common import get_true_fields, is_iter
 import copy
 import warnings
-from fmdtools.faultsim.result import History, init_hist_iter
+from fmdtools.sim.result import History, init_hist_iter
 
 class State(dataobject, mapping=True):
     """

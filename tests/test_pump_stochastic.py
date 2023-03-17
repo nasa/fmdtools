@@ -8,9 +8,9 @@ import unittest
 import sys, os
 sys.path.insert(1, os.path.join('..'))
 from example_pump.pump_stochastic import Pump
-from fmdtools.faultsim import propagate
-import fmdtools.resultdisp as rd
-from fmdtools.modeldef import SampleApproach, NominalApproach
+from fmdtools.sim import propagate
+import fmdtools.analyze as rd
+from fmdtools.define import SampleApproach, NominalApproach
 from CommonTests import CommonTests
 import numpy as np
 import multiprocessing as mp

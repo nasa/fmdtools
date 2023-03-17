@@ -7,10 +7,10 @@ Classes:
     - :class:`DynamicInterface`:  Creates an interface for model simulations for dynamic optimization of a single sim
 """
 import copy
-import fmdtools.faultsim.propagate as prop
-import fmdtools.resultdisp.process as proc
-import fmdtools.resultdisp.plot as plot
-from fmdtools.modeldef.approach import SampleApproach
+import fmdtools.sim.propagate as prop
+import fmdtools.analyze.process as proc
+import fmdtools.analyze.plot as plot
+from fmdtools.define.approach import SampleApproach
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
