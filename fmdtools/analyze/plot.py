@@ -115,7 +115,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
         padding for title as a fraction of figure height
     phases : dict, optional
         Provide to overlay phases on the individual function histories, where phases
-        is from rd.process.mdlhist and of structure {'fxnname':'phase':[start, end]}. 
+        is from an.process.mdlhist and of structure {'fxnname':'phase':[start, end]}. 
         Default is {}.
     modephases : dict, optional
         dictionary that maps the phases to operational modes, if it is desired to track the progression
@@ -219,7 +219,7 @@ def indiv_mdlhists(mdlhist, fxnflows={}, cols=2, aggregation='individual', comp_
              title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
              phases={}, modephases={}, label_phases=True,  **kwargs):
     """
-    Successively calls rd.plot.mdlhists to plot a number of seperate plots. Each
+    Successively calls an.plot.mdlhists to plot a number of seperate plots. Each
     function or flow is given its own plot.
 
     Parameters
@@ -230,7 +230,7 @@ def indiv_mdlhists(mdlhist, fxnflows={}, cols=2, aggregation='individual', comp_
         dict of flow values to plot with structure {fxnflow:[vals], fxnflow:'val'/all, fxnflow:{'comp':[vals]}}.
         Each mdlhist is given an individual plot.
         The default is {}, which returns all.
-    **kwargs : see kwargs for rd.plot.mdlhists
+    **kwargs : see kwargs for an.plot.mdlhists
     Returns
     -------
     figs : list
@@ -683,7 +683,7 @@ def phases(mdlphases, modephases=[], mdl=[], dt=1.0, singleplot = True, phase_ti
     Parameters
     ----------
     mdlphases : dict
-        phases that the functions of the model progresses through (e.g. from rd.process.mdlhist)
+        phases that the functions of the model progresses through (e.g. from an.process.mdlhist)
         of structure {'fxnname':'phase':[start, end]}
     modephases : dict, optional
         dictionary that maps the phases to operational modes, if it is desired to track the progression

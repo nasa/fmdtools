@@ -19,9 +19,9 @@ import random
 from scipy.optimize import minimize
 
 import fmdtools.sim.propagate as propagate
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 from example_tank.tank_optimization_model import Tank, TankParam, make_tankparam
-from fmdtools.define.approach import SampleApproach
+from fmdtools.sim.approach import SampleApproach
 import multiprocessing as mp
 from fmdtools.sim.search import ProblemInterface
 
@@ -61,7 +61,7 @@ def x_to_rcost_leg(xres1,xres2, xdes=[20,1], pool=False, staged=True):
     mdl=Tank(params=TankParam(capacity=xdes[0],turnup=xdes[1],faultpolicy=(*fp1,*fp2)))
     app = SampleApproach(mdl)
     endclasses, mdlhists = propagate.approach(mdl, app, staged=staged, showprogress=False, pool=pool)
-    rescost = rd.process.totalcost(endclasses)
+    rescost = an.process.totalcost(endclasses)
     return rescost
 def x_to_totcost_leg(xdes, xres1, xres2, pool=False):
     do_cost = x_to_descost(xdes)
@@ -183,7 +183,7 @@ def time_rcost_leg():
     mdl=Tank()
     app = SampleApproach(mdl)
     endclasses, mdlhists = propagate.approach(mdl, app, staged=True)
-    rescost = rd.process.totalcost(endclasses)
+    rescost = an.process.totalcost(endclasses)
     return time.time() - starttime
 def time_rcost():
     st = time.time()

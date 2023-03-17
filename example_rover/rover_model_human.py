@@ -22,13 +22,13 @@ Flows:
 from fmdtools.define.block import FxnBlock, Action
 from fmdtools.define.model import Model, ModelParam
 from fmdtools.define.common import Parameter
-from fmdtools.define.approach import SampleApproach, NominalApproach
+from fmdtools.sim.approach import SampleApproach, NominalApproach
 
 
 import matplotlib.pyplot as plt
 import numpy as np
 import fmdtools.sim.propagate as prop
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 import itertools
 
 from rover_model import translate_angle, turn_func, sin_func, sin_angle_func, in_area, dist, find_line_dist, gen_param_space
@@ -819,13 +819,13 @@ if __name__ == "__main__":
     mdl = Rover(params=RoverParam('sine', amp=4.0))
     endresults, mdlhist = prop.nominal(mdl)
     plot_map(mdl, mdlhist)
-    rd.plot.mdlhists({'nominal':mdlhist}, fxnflowvals=['Power'])
-    rd.plot.mdlhists({'nominal':mdlhist}, fxnflowvals={'Ground'})
+    an.plot.mdlhists({'nominal':mdlhist}, fxnflowvals=['Power'])
+    an.plot.mdlhists({'nominal':mdlhist}, fxnflowvals={'Ground'})
     
     deg_mdl_hum_short = HumanDegradationShort()
     deg_mdl_hum_long = HumanDegradationLong()
     endresults, mdlhist_hum_long = prop.nominal(deg_mdl_hum_long)
-    fig,ax = rd.plot.mdlhists(mdlhist_hum_long)
+    fig,ax = an.plot.mdlhists(mdlhist_hum_long)
     
     nomapp_hum_long = NominalApproach()
     experience_param = np.random.default_rng(seed=101).gamma(1,1.9,101)
@@ -849,10 +849,10 @@ if __name__ == "__main__":
     mdl=Rover()
     behave_endclasses_hum, behave_mdlhists_hum = prop.nominal_approach(mdl, behave_nomapp_hum, run_stochastic=True)   
     
-    nom_comp_hum = rd.tabulate.nominal_factor_comparison(behave_nomapp_hum, behave_endclasses_hum, ['t_exp','t_stress'], ['at_finish'], percent=False, give_ci=True, return_anyway=True)
+    nom_comp_hum = an.tabulate.nominal_factor_comparison(behave_nomapp_hum, behave_endclasses_hum, ['t_exp','t_stress'], ['at_finish'], percent=False, give_ci=True, return_anyway=True)
     nom_comp_hum
     
-    fig = rd.plot.nominal_factor_comparison(nom_comp_hum, 'at_finish', maxy=1.1, xlabel='single-day time (hours)', figsize=(10,6), title="", error_bars=True)
+    fig = an.plot.nominal_factor_comparison(nom_comp_hum, 'at_finish', maxy=1.1, xlabel='single-day time (hours)', figsize=(10,6), title="", error_bars=True)
     
     
     scendict = behave_nomapp_hum.get_param_scens('behave_nomapp_hum', 't_exp','t_stress')
@@ -884,7 +884,7 @@ if __name__ == "__main__":
     #long term human degradation
     deg_mdl_hum_long = HumanDegradationLong()
     endresults,  mdlhist_hum_long = prop.nominal(deg_mdl_hum_long)
-    rd.plot.mdlhists(mdlhist_hum_long)
+    an.plot.mdlhists(mdlhist_hum_long)
 
   #  params_hum_long = get_longhuman_params_from(mdlhist_hum_long)
 
@@ -893,32 +893,32 @@ if __name__ == "__main__":
     nomapp.add_param_ranges(gen_long_degPSF_param, 'nomapp', experience_param, scen = (1,101,1))
     #nomapp.add_seed_replicates('test', 100)
     endclasses, mdlhists_hum_long = prop.nominal_approach(deg_mdl_hum_long, nomapp, run_stochastic=True)
-    rd.plot.mdlhists(mdlhists_hum_long, aggregation='mean_std')
+    an.plot.mdlhists(mdlhists_hum_long, aggregation='mean_std')
 
     #nominal
     deg_mdl = RoverDegradation()
     endresults,  mdlhist = prop.nominal(deg_mdl)
-    rd.plot.mdlhists(mdlhist)
+    an.plot.mdlhists(mdlhist)
     #nominal
     deg_mdl_hum_short = HumanDegradationShort()
     endresults,  mdlhist_hum_short = prop.nominal(deg_mdl_hum_short)
-    rd.plot.mdlhists(mdlhist_hum_short)
+    an.plot.mdlhists(mdlhist_hum_short)
 
 
     #stochastic
     deg_mdl = RoverDegradation()
     endresults,  mdlhist = prop.nominal(deg_mdl, run_stochastic=True)
-    rd.plot.mdlhists(mdlhist)
+    an.plot.mdlhists(mdlhist)
     #stochastic
     deg_mdl_hum_short = HumanDegradationShort()
     endresults,  mdlhist_hum_short = prop.nominal(deg_mdl_hum_short, run_stochastic=True)
-    rd.plot.mdlhists(mdlhist_hum_short)
+    an.plot.mdlhists(mdlhist_hum_short)
 
     #stochastic over replicates
     nomapp = NominalApproach()
     nomapp.add_seed_replicates('test', 100)
     endclasses, mdlhists = prop.nominal_approach(deg_mdl, nomapp, run_stochastic=True)
-    rd.plot.mdlhists(mdlhists, aggregation='mean_std')
+    an.plot.mdlhists(mdlhists, aggregation='mean_std')
 
     #stochastic over replicates
     nomapp = NominalApproach()
@@ -926,7 +926,7 @@ if __name__ == "__main__":
     #nomapp.add_param_ranges(gen_short_degPSF_param, 'nomapp', mdlhists_hum_long, stress_param, scen = (0,100,1), t= (1,101,20) )
     #nomapp.add_seed_replicates('test', 100)
     endclasses, mdlhists_hum_short = prop.nominal_approach(deg_mdl_hum_short, nomapp, run_stochastic=True)
-    rd.plot.mdlhists(mdlhists_hum_short, aggregation='mean_std')
+    an.plot.mdlhists(mdlhists_hum_short, aggregation='mean_std')
     #individual slice
     # params = get_params_from(mdlhist, 10)
 
@@ -959,7 +959,7 @@ if __name__ == "__main__":
     mdl = Rover()
     behave_endclasses_hum, behave_mdlhists_hum = prop.nominal_approach(mdl, behave_nomapp_hum, run_stochastic=True)
     f = plot_trajectories(behave_mdlhists_hum)
-    rd.plot.nominal_vals_2d(behave_nomapp_hum, behave_endclasses_hum, 't', 'scen')
+    an.plot.nominal_vals_2d(behave_nomapp_hum, behave_endclasses_hum, 't', 'scen')
 
 
     #behave_nomapp = NominalApproach()
@@ -969,7 +969,7 @@ if __name__ == "__main__":
     #behave_endclasses, behave_mdlhists = prop.nominal_approach(mdl, behave_nomapp)
     #f = plt.figure()
     #f = plot_trajectories(behave_mdlhists)
-    #rd.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, 't', 'scen')
+    #an.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, 't', 'scen')
     """
 
 
@@ -977,9 +977,9 @@ if __name__ == "__main__":
     mdl = Rover(params=gen_params('turn', amp=4))
     #mdl = Rover(params=gen_params('turn'))
 
-    dot = rd.graph.show(mdl, gtype="bipartite")  # , renderer='graphviz')
+    dot = an.graph.show(mdl, gtype="bipartite")  # , renderer='graphviz')
     endresults,  mdlhist1 = prop.nominal(mdl)
-    phases, modephases = rd.process.modephases(mdlhist1)
+    phases, modephases = an.process.modephases(mdlhist1)
 
     endresults,  mdlhist2 = prop.one_fault(mdl, 'Controller', 'perc_failed_S1', time=5)
 
@@ -988,87 +988,87 @@ if __name__ == "__main__":
     endresults,  mdlhist = prop.one_fault(mdl, 'Power', 'short', time=2)
     #endresults,  mdlhist = prop.mult_fault(mdl, {20:{'Drive': ['mech_loss','elec_open']}})
 
-    #rd.plot.mdlhists(mdlhist, time_slice=20, fxnflowvals={'Drive':'faults'},
+    #an.plot.mdlhists(mdlhist, time_slice=20, fxnflowvals={'Drive':'faults'},
     #                 phases=phases, modephases=modephases)
-    rd.plot.mdlhists(mdlhist, time_slice=2, fxnflowvals={'GlobalPSF':'all', 'Ground':['x','y'],'Controller':'Look', 'Power':'power'},
+    an.plot.mdlhists(mdlhist, time_slice=2, fxnflowvals={'GlobalPSF':'all', 'Ground':['x','y'],'Controller':'Look', 'Power':'power'},
                      phases=phases, modephases=modephases)
-    rd.plot.mdlhists(mdlhist1, time_slice=2, fxnflowvals={'Power':'power'},
+    an.plot.mdlhists(mdlhist1, time_slice=2, fxnflowvals={'Power':'power'},
                      phases=phases, modephases=modephases)
-    rd.plot.mdlhistvals(mdlhist1, time=2, fxnflowvals={'Power':'power'},
-                     phases=phases, modephases=modephases)
-
-    rd.plot.mdlhistvals(mdlhist, time=2, fxnflowvals={'GlobalPSF':'all', 'Ground':['x','y'],'Controller':'Look', 'Power':'power'},
+    an.plot.mdlhistvals(mdlhist1, time=2, fxnflowvals={'Power':'power'},
                      phases=phases, modephases=modephases)
 
-    rd.plot.indiv_mdlhists(mdlhist,fxnflows={'GlobalPSF':'all', 'Ground':['x','y'],'Controller':'Look', 'Power':'power'},
+    an.plot.mdlhistvals(mdlhist, time=2, fxnflowvals={'GlobalPSF':'all', 'Ground':['x','y'],'Controller':'Look', 'Power':'power'},
                      phases=phases, modephases=modephases)
-    rd.plot.mdlhist(mdlhist,fxnflows={'GlobalPSF':'all', 'Ground':['x','y'],'Controller':'Look', 'Power':'power'},
+
+    an.plot.indiv_mdlhists(mdlhist,fxnflows={'GlobalPSF':'all', 'Ground':['x','y'],'Controller':'Look', 'Power':'power'},
+                     phases=phases, modephases=modephases)
+    an.plot.mdlhist(mdlhist,fxnflows={'GlobalPSF':'all', 'Ground':['x','y'],'Controller':'Look', 'Power':'power'},
                      phases=phases, modephases=modephases)
     """
     """
     mdl = Rover(params=gen_params('turn', amp=4))
     act_pos={'Percieve':[0.5,0.5]}
 
-    pos = rd.graph.set_pos(mdl.fxns['Controller'].flow_graph, pos=act_pos)
+    pos = an.graph.set_pos(mdl.fxns['Controller'].flow_graph, pos=act_pos)
 
-    rd.graph.exec_order(mdl, show_dyn_arrows=True)
-    rd.graph.exec_order(mdl.fxns['Controller'], show_dyn_arrows=True, gtype='actions')
-    rd.graph.exec_order(mdl.fxns['Controller'], show_dyn_arrows=True, gtype='combined')
-    rd.graph.exec_order(mdl.fxns['Controller'], show_dyn_arrows=True, gtype='flows')
+    an.graph.exec_order(mdl, show_dyn_arrows=True)
+    an.graph.exec_order(mdl.fxns['Controller'], show_dyn_arrows=True, gtype='actions')
+    an.graph.exec_order(mdl.fxns['Controller'], show_dyn_arrows=True, gtype='combined')
+    an.graph.exec_order(mdl.fxns['Controller'], show_dyn_arrows=True, gtype='flows')
     """
     """
     PROTOTYPE CODE FOR DISPLAYING ACTION GRAPHS
 
     #reshist
     endresults,  mdlhist2 = prop.one_fault(mdl, 'Operations', 'no_con', time=2)
-    reshist, diff, summary = rd.process.hist(mdlhist2)
-    restab = rd.tabulate.hist(reshist)
+    reshist, diff, summary = an.process.hist(mdlhist2)
+    restab = an.tabulate.hist(reshist)
     # overall - bip
-    rd.graph.result_from(mdl, reshist, 1)
-    rd.graph.result_from(mdl, reshist, 2)
-    rd.graph.result_from(mdl, reshist, 5)
+    an.graph.result_from(mdl, reshist, 1)
+    an.graph.result_from(mdl, reshist, 2)
+    an.graph.result_from(mdl, reshist, 5)
     # function
 
     #matplotlib
-    rd.graph.get_asg_plotlabels(mdl.fxns['Controller'].flow_graph, mdl.fxns['Controller'],  reshist, 1)
-    rd.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='actions')
-    rd.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='flows')
-    rd.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='flows')
-    rd.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='combined', showfaultlabels=False, pos=act_pos)
-    rd.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='combined', pos=act_pos, scale=0.5)
+    an.graph.get_asg_plotlabels(mdl.fxns['Controller'].flow_graph, mdl.fxns['Controller'],  reshist, 1)
+    an.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='actions')
+    an.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='flows')
+    an.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='flows')
+    an.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='combined', showfaultlabels=False, pos=act_pos)
+    an.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='combined', pos=act_pos, scale=0.5)
     #graphviz
-    rd.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='actions', renderer='graphviz')
-    rd.graph.result_from(mdl.fxns['Controller'], reshist, 10, gtype='flows', renderer='graphviz')
-    rd.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='flows', renderer='graphviz')
-    rd.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='combined', showfaultlabels=False, pos=act_pos, renderer='graphviz')
-    rd.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='combined', pos=act_pos, renderer='graphviz')
+    an.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='actions', renderer='graphviz')
+    an.graph.result_from(mdl.fxns['Controller'], reshist, 10, gtype='flows', renderer='graphviz')
+    an.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='flows', renderer='graphviz')
+    an.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='combined', showfaultlabels=False, pos=act_pos, renderer='graphviz')
+    an.graph.result_from(mdl.fxns['Controller'], reshist, 1, gtype='combined', pos=act_pos, renderer='graphviz')
 
-    rd.graph.animation_from(mdl.fxns['Controller'], reshist, gtype='actions', renderer='netgraph')
+    an.graph.animation_from(mdl.fxns['Controller'], reshist, gtype='actions', renderer='netgraph')
 
     #matplotlib
-    rd.graph.show(mdl.fxns['Controller'].action_graph, gtype='normal', pos=act_pos, scale=0.4, arrows=True)
-    rd.graph.show(mdl.fxns['Controller'].flow_graph, pos=act_pos, highlight=[[*mdl.fxns['Controller'].actions],[],[]],seqgraph=mdl.fxns['Controller'].action_graph)
+    an.graph.show(mdl.fxns['Controller'].action_graph, gtype='normal', pos=act_pos, scale=0.4, arrows=True)
+    an.graph.show(mdl.fxns['Controller'].flow_graph, pos=act_pos, highlight=[[*mdl.fxns['Controller'].actions],[],[]],seqgraph=mdl.fxns['Controller'].action_graph)
     #netgraph
-    rd.graph.show(mdl.fxns['Controller'].action_graph, gtype='normal', renderer='netgraph', pos=act_pos, scale=0.3, arrows=True)
-    _,_, gra = rd.graph.show(mdl.fxns['Controller'].flow_graph, pos=act_pos, scale=0.6, renderer='netgraph', highlight=[[*mdl.fxns['Controller'].actions],[],[]],seqgraph=mdl.fxns['Controller'].action_graph)
-    _,_, gra = rd.graph.show(mdl.fxns['Controller'].flow_graph, pos=act_pos, scale=0.6, renderer='netgraph', highlight=[[*mdl.fxns['Controller'].actions],[],[]],seqgraph=mdl.fxns['Controller'].action_graph, seqlabels=True)
+    an.graph.show(mdl.fxns['Controller'].action_graph, gtype='normal', renderer='netgraph', pos=act_pos, scale=0.3, arrows=True)
+    _,_, gra = an.graph.show(mdl.fxns['Controller'].flow_graph, pos=act_pos, scale=0.6, renderer='netgraph', highlight=[[*mdl.fxns['Controller'].actions],[],[]],seqgraph=mdl.fxns['Controller'].action_graph)
+    _,_, gra = an.graph.show(mdl.fxns['Controller'].flow_graph, pos=act_pos, scale=0.6, renderer='netgraph', highlight=[[*mdl.fxns['Controller'].actions],[],[]],seqgraph=mdl.fxns['Controller'].action_graph, seqlabels=True)
     #graphviz
-    dot = rd.graph.show(mdl.fxns['Controller'].action_graph, gtype='normal', renderer='graphviz', arrows=True)
-    dot_bip = rd.graph.show(mdl.fxns['Controller'].flow_graph, gtype='bipartite', renderer='graphviz', arrows=True,seqgraph=mdl.fxns['Controller'].action_graph, seqlabels=True)
+    dot = an.graph.show(mdl.fxns['Controller'].action_graph, gtype='normal', renderer='graphviz', arrows=True)
+    dot_bip = an.graph.show(mdl.fxns['Controller'].flow_graph, gtype='bipartite', renderer='graphviz', arrows=True,seqgraph=mdl.fxns['Controller'].action_graph, seqlabels=True)
 
     #matplotlib
-    rd.graph.show(mdl.fxns['Controller'], gtype='actions', scale=0.6)
-    rd.graph.show(mdl.fxns['Controller'], gtype='flows', scale=0.6)
-    rd.graph.show(mdl.fxns['Controller'], gtype='combined', scale=0.6)
+    an.graph.show(mdl.fxns['Controller'], gtype='actions', scale=0.6)
+    an.graph.show(mdl.fxns['Controller'], gtype='flows', scale=0.6)
+    an.graph.show(mdl.fxns['Controller'], gtype='combined', scale=0.6)
 
 
     #graphviz
-    dot_act = rd.graph.show(mdl.fxns['Controller'], gtype='actions', renderer='graphviz')
-    dot_flows = rd.graph.show(mdl.fxns['Controller'], gtype='flows',  renderer='graphviz')
-    dot_comb = rd.graph.show(mdl.fxns['Controller'], gtype='combined', renderer='graphviz')
+    dot_act = an.graph.show(mdl.fxns['Controller'], gtype='actions', renderer='graphviz')
+    dot_flows = an.graph.show(mdl.fxns['Controller'], gtype='flows',  renderer='graphviz')
+    dot_comb = an.graph.show(mdl.fxns['Controller'], gtype='combined', renderer='graphviz')
 
     #component
-    rd.graph.show(mdl, gtype='component', scale=0.6)
+    an.graph.show(mdl, gtype='component', scale=0.6)
     """
 
 
@@ -1080,12 +1080,12 @@ if __name__ == "__main__":
     #graphviz
 
     #netgraph.InteractiveGraph(mdl.fxns['Controller'].flow_graph, node_positions=act_pos)
-    #rd.plot.mdlhists(mdlhist)
+    #an.plot.mdlhists(mdlhist)
     # , colors='gray',linestyles='dashed' - for phases
     #  ls='--', color='b' - for nominal
     # for
 
-    #rd.plot.mdlhistvals(mdlhist, time=15, fxnflowvals={'GlobalPSF':'all', 'Controller':'all', 'Ground':['x','y']})
+    #an.plot.mdlhistvals(mdlhist, time=15, fxnflowvals={'GlobalPSF':'all', 'Controller':'all', 'Ground':['x','y']})
 
 
     #endresults,  mdlhist = prop.one_fault(mdl, 'Controller','failed_turn_right', time=10)
@@ -1106,33 +1106,33 @@ if __name__ == "__main__":
     # #fig = plot_trajectories(mdlhists, app=app, faultlabel='Faulty Scenarios', title='', mode_trunc=len('Controller'), mode_trunc_end=4, show_labels=False)
 
 
-    # reshists, diffs, summaries = rd.process.hists(mdlhists)
-    # rd.tabulate.fullfmea(endclasses, summaries)
-    # rd.tabulate.fullfmea(endclasses, summaries)['degraded flows']
+    # reshists, diffs, summaries = an.process.hists(mdlhists)
+    # an.tabulate.fullfmea(endclasses, summaries)
+    # an.tabulate.fullfmea(endclasses, summaries)['degraded flows']
 
 
     #mdl.flows['Stimulus'].powerswitch=1
     #mdl.fxns['Controller'].updatefxn('dynamic', time=2)
     #mdl.fxns['Controller'].updatefxn('dynamic', time=3)
 #     classgraph = mdl.return_typegraph()
-#     pos = rd.graph.set_pos(classgraph, gtype='typegraph')
-#     rd.graph.show(classgraph, gtype='typegraph', pos=pos) #, pos=class_tree)
+#     pos = an.graph.set_pos(classgraph, gtype='typegraph')
+#     an.graph.show(classgraph, gtype='typegraph', pos=pos) #, pos=class_tree)
 
-#     rd.graph.exec_order(mdl, gtype='normal')
-#     rd.graph.exec_order(mdl, gtype='bipartite', renderer='graphviz')
+#     an.graph.exec_order(mdl, gtype='normal')
+#     an.graph.exec_order(mdl, gtype='bipartite', renderer='graphviz')
 
-#     rd.plot.dyn_order(mdl)
-#     phases, modephases = rd.process.modephases(mdlhist)
-#     rd.plot.phases(phases, modephases)
+#     an.plot.dyn_order(mdl)
+#     phases, modephases = an.process.modephases(mdlhist)
+#     an.plot.phases(phases, modephases)
 #     plot_map(mdl, mdlhist)
 
 #     endresults,  mdlhist = prop.one_fault(mdl, 'Drive','elec_open', staged=True, time=13, gtype='typegraph')
 
-#     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Power':['charge','power']}, time=13, phases=phases, modephases=modephases)
+#     an.plot.mdlhistvals(mdlhist, fxnflowvals={'Power':['charge','power']}, time=13, phases=phases, modephases=modephases)
 
-#     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Ground':['x','y', 'angle','vel', 'liney', 'ang']}, time=13, phases=phases)
-#     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'Pos_Signal':['x','y', 'angle','vel', 'heading']}, time=13, phases=phases)
-#     rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MotorControl':['rpower','lpower']}, time=13, phases=phases)
+#     an.plot.mdlhistvals(mdlhist, fxnflowvals={'Ground':['x','y', 'angle','vel', 'liney', 'ang']}, time=13, phases=phases)
+#     an.plot.mdlhistvals(mdlhist, fxnflowvals={'Pos_Signal':['x','y', 'angle','vel', 'heading']}, time=13, phases=phases)
+#     an.plot.mdlhistvals(mdlhist, fxnflowvals={'MotorControl':['rpower','lpower']}, time=13, phases=phases)
 
 #     app = NominalApproach()
 #     app.add_param_ranges(gen_params,'sine', 'sine', amp=(0, 10, 0.2), wavelength=(10,50,10))
@@ -1140,19 +1140,19 @@ if __name__ == "__main__":
 #     #app.add_param_ranges(gen_params,'turn', radius=(5,40,5), start=(0, 20,5))
 
 #     #labels, faultfxns, degnodes, faultlabels
-# #    rd.graph.plot_bipgraph(classgraph, {node:node for node in classgraph.nodes},[],[],{}, pos=pos)
+# #    an.graph.plot_bipgraph(classgraph, {node:node for node in classgraph.nodes},[],[],{}, pos=pos)
 
 
-#     rd.graph.show( gtype='typegraph', scale=0.7)
+#     an.graph.show( gtype='typegraph', scale=0.7)
 
 #     endresults,  mdlhist = prop.one_fault(mdl, 'Drive','elec_open', staged=True, time=13, gtype='bipartite')
-#     rd.graph.show( gtype='bipartite', scale=0.7)
+#     an.graph.show( gtype='bipartite', scale=0.7)
 
-#     reshist, _, _ = rd.process.hist(mdlhist)
-#     typehist = rd.process.typehist(mdl, reshist)
-#     rd.graph.results_from(mdl, reshist, [10,15,20])
-#     rd.graph.results_from(mdl, typehist, [10,15,20], gtype='typegraph') #), gtype='typegraph')
-#     rd.graph.result_from(mdl, reshist, 10, gtype='bipartite', renderer='graphviz')
+#     reshist, _, _ = an.process.hist(mdlhist)
+#     typehist = an.process.typehist(mdl, reshist)
+#     an.graph.results_from(mdl, reshist, [10,15,20])
+#     an.graph.results_from(mdl, typehist, [10,15,20], gtype='typegraph') #), gtype='typegraph')
+#     an.graph.result_from(mdl, reshist, 10, gtype='bipartite', renderer='graphviz')
 
     # test_actgraph = Controller("guy", {})
     # plt.figure()
@@ -1171,16 +1171,16 @@ if __name__ == "__main__":
     # test_actgraph.active_actions
     #endclasses, mdlhists= prop.nominal_approach(mdl, app, pool = mp.Pool(5))
 
-    #state_probabilities = rd.process.state_probabilities(endclasses)
+    #state_probabilities = an.process.state_probabilities(endclasses)
 
-    #fig = rd.plot.nominal_vals_1d(app, endclasses, 'amp')
-    #fig = rd.plot.nominal_vals_1d(app, endclasses, 'radius')
+    #fig = an.plot.nominal_vals_1d(app, endclasses, 'amp')
+    #fig = an.plot.nominal_vals_1d(app, endclasses, 'radius')
 
     #app = NominalApproach()
     #app.add_param_ranges(gen_params,'sine','sine', amp=(0, 10, 0.2), wavelength=(10,50,10), dummy=(1,10,1))
 
     #endclasses, mdlhists= prop.nominal_approach(mdl, app, pool = mp.Pool(5))
-    #fig = rd.plot.nominal_vals_3d(app, endclasses, 'amp', 'wavelength', 'dummy')
+    #fig = an.plot.nominal_vals_3d(app, endclasses, 'amp', 'wavelength', 'dummy')
     #app = SampleApproach(mdl, phases = phases, modephases = modephases)
 
     #endclasses, mdlhist = prop.approach(mdl, app)
@@ -1189,10 +1189,10 @@ if __name__ == "__main__":
 
     #endclasses, mdlhist = prop.approach(mdl, app_joint)
 
-    #tab = rd.tabulate.phasefmea(endclasses, app_joint)
-    #rd.plot.samplecosts(app_joint, endclasses)
+    #tab = an.tabulate.phasefmea(endclasses, app_joint)
+    #an.plot.samplecosts(app_joint, endclasses)
 
-    # rd.plot.phases(phases)
+    # an.plot.phases(phases)
 
-    #figs = rd.plot.phases(phases, modephases, mdl)
-    #figs = rd.plot.phases(phases, modephases, mdl, singleplot=False)
+    #figs = an.plot.phases(phases, modephases, mdl)
+    #figs = an.plot.phases(phases, modephases, mdl, singleplot=False)

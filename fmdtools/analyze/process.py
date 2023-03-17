@@ -78,7 +78,7 @@ def typehist(mdl, reshist):
     mdl : Model
         Model used in the simulation
     reshist : Dict
-        Results history from rd.process.hist(mdlhist)
+        Results history from an.process.hist(mdlhist)
 
     Returns
     -------

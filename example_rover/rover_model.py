@@ -24,8 +24,8 @@ from fmdtools.define.common import Parameter, State
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.model import Model, ModelParam
 from fmdtools.define.flow import Flow
-from fmdtools.define.approach import SampleApproach, NominalApproach
-import fmdtools.analyze as rd
+from fmdtools.sim.approach import SampleApproach, NominalApproach
+import fmdtools.analyze as an
 import fmdtools.sim.propagate as prop
 import itertools
 import numpy as np
@@ -521,7 +521,7 @@ class Rover(Model):
                 'tot_deviation':tot_deviation, 'faults':modes, 'classification':classification, 
                 'endpt':endpt}
 
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 
 def find_line_dist(x, y , linex, liney):
     return np.min(np.sqrt((linex-x)**2 + (liney-y)**2))
@@ -693,13 +693,13 @@ if __name__=="__main__":
     algorithm=PatternSearch(x0=np.array([0.0,0.0,0.0])) 
     #res = minimize(pymoo_prob, algorithm, verbose=True)
 
-    #dot = rd.graph.show(mdl, gtype="bipartite", renderer='graphviz')
+    #dot = an.graph.show(mdl, gtype="bipartite", renderer='graphviz')
 
     mdl = Rover(params)
 
     #mdl = Rover(params)
     endresults,  mdlhist = prop.nominal(mdl)
-    phases, modephases = rd.process.modephases(mdlhist)
+    phases, modephases = an.process.modephases(mdlhist)
     plot_map(mdl, mdlhist)
 
     mdl_id = Rover(valparams={'drive_modes':'set'})
@@ -708,13 +708,13 @@ if __name__=="__main__":
 
     #behave_endclasses_nested, behave_mdlhists_nested = prop.nested_approach(mdl, behave_nomapp, pool=mp.Pool(5), faults='drive')
 
-    #res_comp = rd.tabulate.resilience_factor_comparison(behave_nomapp, behave_endclasses_nested, ['t'], 'at_finish', percent=False)
-    #fig = rd.plot.resilience_factor_comparison(res_comp, stack=True)
+    #res_comp = an.tabulate.resilience_factor_comparison(behave_nomapp, behave_endclasses_nested, ['t'], 'at_finish', percent=False)
+    #fig = an.plot.resilience_factor_comparison(res_comp, stack=True)
 
     #endresults,  mdlhist = prop.one_fault(mdl, 'drive','hmode_34', time=1, staged=False)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
+    #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
 
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift', 'transfer']})
+    #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift', 'transfer']})
 
     mdl = Rover(params, valparams={'drive_modes':'manual'})
     endresults,  mdlhist = prop.one_fault(mdl, 'drive','elec_open', time=1, staged=False)
@@ -733,7 +733,7 @@ if __name__=="__main__":
     
     line_dist = endresults['line_dist']
     end_loc = (reshist['faulty']['flows']['ground']['x'][-1],reshist['faulty']['flows']['ground']['y'][-1])
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
+    #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
 
    # app = NominalApproach()
    # app.add_param_ranges(gen_model_params, 'app', x, scen = (0,len(scen)-1,1))
@@ -742,16 +742,16 @@ if __name__=="__main__":
     #plot_trajectories(mdlhist, app=app, faultlabel='Faulty Scenarios')
 
 
-    #fig, ax =rd.graph.show(mdl, gtype='bipartite')
+    #fig, ax =an.graph.show(mdl, gtype='bipartite')
     #fig.savefig('bipartite_rover.pdf', format="pdf", bbox_inches = 'tight', pad_inches = 0.0)
 
     """
     mdl = Rover(params=gen_params('turn'))
-    #dot = rd.graph.show(mdl, gtype="bipartite", renderer='graphviz')
+    #dot = an.graph.show(mdl, gtype="bipartite", renderer='graphviz')
     #params = gen_params('sine')
     #mdl = Rover(params)
     endresults,  mdlhist = prop.nominal(mdl)
-    phases, modephases = rd.process.modephases(mdlhist)
+    phases, modephases = an.process.modephases(mdlhist)
     plot_map(mdl, mdlhist)
 
     mdl_id = Rover(valparams={'drive_modes':'else'})
@@ -765,15 +765,15 @@ if __name__=="__main__":
     plt.figure()
     f = plot_trajectories({'nominal':mdlhist}, reshist,  faultalpha=0.6)
 
-    rd.plot.mdlhistvals(reshist, time=15, fxnflowvals={'drive':['friction','drift', 'transfer'], 'power':'all'})
+    an.plot.mdlhistvals(reshist, time=15, fxnflowvals={'drive':['friction','drift', 'transfer'], 'power':'all'})
 
     app_opt = SampleApproach(mdl, faults='drive', phases={'drive':phases['avionics']['drive']}, defaultsamp={'samp':'evenspacing','numpts':4})
 
     #endresults,  mdlhist = prop.one_fault(mdl, 'drive','elec_open', time=1, staged=False)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift', 'transfer']})
+    #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift', 'transfer']})
 
     #endresults,  mdlhist = prop.one_fault(mdl, 'drive','hmode_34', time=1, staged=False)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
+    #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
 
 
     x = [100,0,2,0,2,-2,0,0,0]
@@ -782,7 +782,7 @@ if __name__=="__main__":
 
 
     _,_, nomhist = prop.nominal(mdl_0)
-    phases, modephases = rd.process.modephases(nomhist)
+    phases, modephases = an.process.modephases(nomhist)
     app_0 = SampleApproach(mdl, faults='drive', phases={'drive':phases['avionics']['drive']}, defaultsamp={'samp':'evenspacing','numpts':4})
     endclasses_0, mdlhists_0 = prop.approach(mdl_0, app_0, staged=True)
     plt.figure()
@@ -797,12 +797,12 @@ if __name__=="__main__":
     #compare_trajectories(mdlhists_0, mdlhists_1, mdlhist1_name='fault trajectories', mdlhist2_name='comparison trajectories', faulttimes = app.times, nomhist=nomhist)
 
 
-    #rd.graph.show(  scale=0.7)
+    #an.graph.show(  scale=0.7)
 
-    #summhist,_,_ = rd.process.hist(mdlhist)
-    #rd.graph.results_from(mdl, summhist, [10,15,20])
-    #rd.plot.mdlhistvals(mdlhist, legend=False)
-    #rd.plot.mdlhistvals(mdlhist)
+    #summhist,_,_ = an.process.hist(mdlhist)
+    #an.graph.results_from(mdl, summhist, [10,15,20])
+    #an.plot.mdlhistvals(mdlhist, legend=False)
+    #an.plot.mdlhistvals(mdlhist)
 
     plot_map(mdl, mdlhist)
 
@@ -811,44 +811,44 @@ if __name__=="__main__":
     plot_trajectories(mdlhist_feed, mdlhist, faultalpha=1.0)
 
 
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'power':['charge','power']}, time=7, phases=phases, modephases=modephases)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'ground':['x','y', 'angle','vel', 'liney', 'ang']}, time=7, phases=phases)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'pos_signal':['x','y', 'angle','vel', 'heading']}, time=7, phases=phases)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={'motor_control':['rpower','lpower']}, time=7, phases=phases)
-    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'avionics':['mode']}, time = 13, phases=phases, modephases=modephases)
-    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'perception':['mode']}, time = 13, phases=phases, modephases=modephases)
-    #rd.plot.mdlhistvals(mdlhist, fxnflowvals={}, time = 7, phases=phases, modephases=modephases)
+    #an.plot.mdlhistvals(mdlhist, fxnflowvals={'power':['charge','power']}, time=7, phases=phases, modephases=modephases)
+    #an.plot.mdlhistvals(mdlhist, fxnflowvals={'ground':['x','y', 'angle','vel', 'liney', 'ang']}, time=7, phases=phases)
+    #an.plot.mdlhistvals(mdlhist, fxnflowvals={'pos_signal':['x','y', 'angle','vel', 'heading']}, time=7, phases=phases)
+    #an.plot.mdlhistvals(mdlhist, fxnflowvals={'motor_control':['rpower','lpower']}, time=7, phases=phases)
+    an.plot.mdlhistvals(mdlhist, fxnflowvals={'avionics':['mode']}, time = 13, phases=phases, modephases=modephases)
+    an.plot.mdlhistvals(mdlhist, fxnflowvals={'perception':['mode']}, time = 13, phases=phases, modephases=modephases)
+    #an.plot.mdlhistvals(mdlhist, fxnflowvals={}, time = 7, phases=phases, modephases=modephases)
     app = NominalApproach()
     app.add_param_ranges(gen_params,'sine', 'sine', amp=(0, 10, 0.2), wavelength=(10,50,10))
     app.assoc_probs('sine', amp=(stats.uniform.pdf, {'loc':0,'scale':10}), wavelength=(stats.uniform.pdf,{'loc':10, 'scale':40}))
     #app.add_param_ranges(gen_params,'turn', radius=(5,40,5), start=(0, 20,5))
 
     #labels, faultfxns, degnodes, faultlabels
-#    rd.graph.plot_bipgraph(classgraph, {node:node for node in classgraph.nodes},[],[],{}, pos=pos)
-    rd.graph.show( gtype='typegraph', scale=0.7)
+#    an.graph.plot_bipgraph(classgraph, {node:node for node in classgraph.nodes},[],[],{}, pos=pos)
+    an.graph.show( gtype='typegraph', scale=0.7)
 
     #endresults,  mdlhist = prop.one_fault(mdl, 'drive','elec_open', staged=True, time=13, gtype='bipartite')
     endresults,  mdlhist = prop.one_fault(mdl, 'perception', 'bad_feed', staged=True, time=13, gtype='bipartite')
-    rd.graph.show( gtype='bipartite', scale=0.7)
+    an.graph.show( gtype='bipartite', scale=0.7)
 
-    reshist, _, _ = rd.process.hist(mdlhist)
-    typehist = rd.process.typehist(mdl, reshist)
-    rd.graph.results_from(mdl, reshist, [10,15,20])
-    rd.graph.results_from(mdl, typehist, [10,15,20], gtype='typegraph') #), gtype='typegraph')
-    rd.graph.result_from(mdl, reshist, 10, gtype='bipartite', renderer='graphviz')
+    reshist, _, _ = an.process.hist(mdlhist)
+    typehist = an.process.typehist(mdl, reshist)
+    an.graph.results_from(mdl, reshist, [10,15,20])
+    an.graph.results_from(mdl, typehist, [10,15,20], gtype='typegraph') #), gtype='typegraph')
+    an.graph.result_from(mdl, reshist, 10, gtype='bipartite', renderer='graphviz')
 
     #endclasses, mdlhists= prop.nominal_approach(mdl, app, pool = mp.Pool(5))
 
-    #state_probabilities = rd.process.state_probabilities(endclasses)
+    #state_probabilities = an.process.state_probabilities(endclasses)
 
-    #fig = rd.plot.nominal_vals_1d(app, endclasses, 'amp')
-    #fig = rd.plot.nominal_vals_1d(app, endclasses, 'radius')
+    #fig = an.plot.nominal_vals_1d(app, endclasses, 'amp')
+    #fig = an.plot.nominal_vals_1d(app, endclasses, 'radius')
 
     #app = NominalApproach()
     #app.add_param_ranges(gen_params,'sine','sine', amp=(0, 10, 0.2), wavelength=(10,50,10), dummy=(1,10,1))
 
     #endclasses, mdlhists= prop.nominal_approach(mdl, app, pool = mp.Pool(5))
-    #fig = rd.plot.nominal_vals_3d(app, endclasses, 'amp', 'wavelength', 'dummy')
+    #fig = an.plot.nominal_vals_3d(app, endclasses, 'amp', 'wavelength', 'dummy')
     #app = SampleApproach(mdl, phases = phases, modephases = modephases)
 
     #endclasses, mdlhist = prop.approach(mdl, app)
@@ -858,12 +858,12 @@ if __name__=="__main__":
     #endclasses, mdlhist = prop.approach(mdl, app_joint)
 
 
-    #tab = rd.tabulate.phasefmea(endclasses, app_joint)
-    #rd.plot.samplecosts(app_joint, endclasses)
+    #tab = an.tabulate.phasefmea(endclasses, app_joint)
+    #an.plot.samplecosts(app_joint, endclasses)
 
-    #rd.plot.phases(phases)
+    #an.plot.phases(phases)
 
-    #figs = rd.plot.phases(phases, modephases, mdl)
-    #figs = rd.plot.phases(phases, modephases, mdl, singleplot=False)
+    #figs = an.plot.phases(phases, modephases, mdl)
+    #figs = an.plot.phases(phases, modephases, mdl, singleplot=False)
     """
     

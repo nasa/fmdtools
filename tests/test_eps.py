@@ -9,7 +9,7 @@ import sys, os
 sys.path.insert(1, os.path.join('..'))
 from example_eps.eps import EPS
 from fmdtools.sim import propagate
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 from fmdtools.define import SampleApproach, check_pickleability
 import numpy as np
 from CommonTests import CommonTests

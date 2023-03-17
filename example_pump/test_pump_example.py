@@ -13,7 +13,7 @@ The use-cases shown are:
 """
 
 from fmdtools.define.flow import Flow
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 import fmdtools.sim.propagate as propagate
 
 from ex_pump import ImportEE, Water, MoveWat, Pump

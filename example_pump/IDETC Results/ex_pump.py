@@ -24,7 +24,7 @@ The flows are:
 from fmdtools.define.flow import Flow
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model 
-from fmdtools.define.approach import SampleApproach
+from fmdtools.sim.approach import SampleApproach
 
 
 ##DEFINE MODEL FUNCTIONS

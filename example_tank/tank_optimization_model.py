@@ -125,19 +125,19 @@ class Tank(Model):
 
 if __name__=="__main__":
     import fmdtools.sim.propagate as propagate
-    import fmdtools.analyze as rd
-    from fmdtools.define.approach import SampleApproach
+    import fmdtools.analyze as an
+    from fmdtools.sim.approach import SampleApproach
     mdl=Tank()
     
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])
-    rd.plot.mdlhists(mdlhist, fxnflowvals='Store_Coolant')
+    an.plot.mdlhists(mdlhist, fxnflowvals='Store_Coolant')
 
     
     ## faulty run
     resgraph, mdlhist = propagate.one_fault(mdl,'Export_Coolant','Blockage', time=2, desired_result='bipartite')
     
-    rd.plot.mdlhists(mdlhist, title='NotVisible', fxnflowvals='Store_Coolant', time_slice=2)
-    rd.graph.show(resgraph,faultscen='NotVisible', time=2)
+    an.plot.mdlhists(mdlhist, title='NotVisible', fxnflowvals='Store_Coolant', time_slice=2)
+    an.graph.show(resgraph,faultscen='NotVisible', time=2)
     
         
         

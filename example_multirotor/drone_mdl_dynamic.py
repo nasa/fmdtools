@@ -9,7 +9,7 @@ import numpy as np
 from fmdtools.define.common import Parameter, State, Time
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.model import Model, ModelParam
-from fmdtools.define.approach import SampleApproach
+from fmdtools.sim.approach import SampleApproach
 
 from drone_mdl_static import m2to1
 import fmdtools.sim as fs

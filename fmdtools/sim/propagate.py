@@ -34,7 +34,7 @@ import tqdm
 import dill
 import warnings
 import sys,os
-from fmdtools.define.approach import SampleApproach
+from fmdtools.sim.approach import SampleApproach
 from fmdtools.define.model import ModelParam
 from fmdtools.define.block import Block
 from .result import Result, History
@@ -107,7 +107,7 @@ Parameters
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything.
         Has structure: 
             - {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
-            - where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
+            - where mdlhistargs and endclassargs are dictionaries of arguments to an.process.save_result
             - (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
             - and indiv is an (optional) bool specifying whether to save results individually (in a folder)
             or as a monolythic file
@@ -176,7 +176,7 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
     ----------
     save_args : dict
         Dict with structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':individual_saving},
-        where mdlhistargs and endclassargs are dictionaries of arguments to rd.process.save_result
+        where mdlhistargs and endclassargs are dictionaries of arguments to an.process.save_result
         (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
         and individual_saving is a bool (True/False) 
     endclass : dict

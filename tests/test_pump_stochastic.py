@@ -9,7 +9,7 @@ import sys, os
 sys.path.insert(1, os.path.join('..'))
 from example_pump.pump_stochastic import Pump
 from fmdtools.sim import propagate
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 from fmdtools.define import SampleApproach, NominalApproach
 from CommonTests import CommonTests
 import numpy as np

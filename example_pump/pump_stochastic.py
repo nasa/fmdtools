@@ -24,10 +24,10 @@ from fmdtools.define.common import Rand, State
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model
-from fmdtools.define.approach import NominalApproach 
+from fmdtools.sim.approach import NominalApproach 
 
 from ex_pump import accumulate, reseting_accumulate
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 import fmdtools.sim.propagate as propagate
 import numpy as np
 
@@ -169,7 +169,7 @@ if __name__=="__main__":
     
     comp_mdlhists = {scen:mdlhist['export_water block, t=27.0'] for scen,mdlhist in mdlhists.items()}
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
-    fig = rd.plot.mdlhists(comp_mdlhists, {'move_water':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
+    fig = an.plot.mdlhists(comp_mdlhists, {'move_water':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
     
     
     app = NominalApproach()
@@ -180,10 +180,10 @@ if __name__=="__main__":
 
     
     # endresults, resgraph, mdlhist=propagate.nominal(mdl)
-    # rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate','pressure']})
+    # an.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate','pressure']})
     
     # endresults, resgraph, mdlhist=propagate.nominal(mdl,run_stochastic=True)
-    # rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
+    # an.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
     
     for i in range(1,10):
         mdl.update_seed(i)
@@ -202,14 +202,14 @@ if __name__=="__main__":
     
     #mdlhist['faulty']['functions']['ImportEE']['probdens']
     
-    rd.plot.mdlhists(mdlhist, fxnflowvals={'import_water'})
-    #rd.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
+    an.plot.mdlhists(mdlhist, fxnflowvals={'import_water'})
+    #an.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     
     """
     endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
-    rd.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, legend=False)
+    an.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, legend=False)
     
-    rd.plot.mdlhists(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
+    an.plot.mdlhists(mdlhist, fxnflowvals={'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']})
     
     app_comp = NominalApproach()
     app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
@@ -218,34 +218,34 @@ if __name__=="__main__":
     
     comp_mdlhists = {scen:mdlhist['ExportWater block, t=27'] for scen,mdlhist in mdlhists.items()}
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
-    fig = rd.plot.mdlhists(comp_mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
+    fig = an.plot.mdlhists(comp_mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
     
     
-    tab = rd.tabulate.resilience_factor_comparison(app_comp, endclasses, ['delay'], 'cost')
+    tab = an.tabulate.resilience_factor_comparison(app_comp, endclasses, ['delay'], 'cost')
     """
     # app = NominalApproach()
     # app.add_seed_replicates('test_seeds', 100)
     # endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
-    # rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']},\
+    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']},\
     #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, color='blue', alpha=0.1, legend_loc=False)
-    # rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_std',\
+    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_std',\
     #                               ylabels={('Wat_2', 'flowrate'):'liters/s'})
-    # rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_bound',\
+    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_bound',\
     #                               ylabels={('Wat_2', 'flowrate'):'liters/s'})
-    # rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='percentile',\
+    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='percentile',\
     #                           ylabels={('Wat_2', 'flowrate'):'liters/s'})     
     
-    # rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_ci',\
+    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_ci',\
     #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, time_slice=[3,5,7])
         
-    # rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_ci',\
+    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, aggregation='mean_ci',\
     #                  comp_groups={'test_1':[*mdlhists.keys()][:50], 'test_2':[*mdlhists.keys()][50:]},\
     #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, time_slice=[3,5,7])
-    # rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure'], 'ImportEE':['effstate', 'grid_noise'], 'EE_1':['voltage','current'], 'Sig_1':['power']},\
+    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure'], 'ImportEE':['effstate', 'grid_noise'], 'EE_1':['voltage','current'], 'Sig_1':['power']},\
     #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, cols=2, color='blue', alpha=0.1, legend_loc=False)
-    # rd.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure'], 'ImportEE':['effstate', 'grid_noise'], 'EE_1':['voltage','current'], 'Sig_1':['power']}, aggregation='percentile',\
+    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure'], 'ImportEE':['effstate', 'grid_noise'], 'EE_1':['voltage','current'], 'Sig_1':['power']}, aggregation='percentile',\
     #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, cols=2, color='blue', alpha=0.1, legend_loc=False)
-    #rd.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
+    #an.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
     
     
     
