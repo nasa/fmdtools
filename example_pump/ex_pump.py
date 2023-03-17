@@ -24,11 +24,11 @@ The flows are:
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.flow import Flow 
 from fmdtools.define.model import Model, ModelParam
-from fmdtools.define.approach import SampleApproach, NominalApproach
+from fmdtools.sim.approach import SampleApproach, NominalApproach
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State 
 from fmdtools.define.time import Time
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 import fmdtools.sim.propagate as propagate
 import numpy as np
 
@@ -360,15 +360,15 @@ if __name__=="__main__":
     newhist4 = mdl.create_hist(range(10), {'move_water':['s', 't']})
     mdl.flows['ee_1'].s
     
-    #rd.graph.exec_order(mdl)
+    #an.graph.exec_order(mdl)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_water','no_wat', time=29,  staged=True)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_ee','no_v', time=29,  staged=True)
     endclass, mdlhist=propagate.one_fault(mdl, 'move_water', 'mech_break', time=0, staged=False)
     
-    #reshist,diff1, summary = rd.process.hist(mdlhist)
-    #rd.graph.result_from(mdl, reshist, 40, gtype='normal')
-    #rd.graph.result_from(mdl, reshist, 50, gtype='normal')
-    #rd.graph.exec_order(mdl, gtype = 'normal')
+    #reshist,diff1, summary = an.process.hist(mdlhist)
+    #an.graph.result_from(mdl, reshist, 40, gtype='normal')
+    #an.graph.result_from(mdl, reshist, 50, gtype='normal')
+    #an.graph.exec_order(mdl, gtype = 'normal')
     app = NominalApproach()
     app.add_seed_replicates('test', 10)
     

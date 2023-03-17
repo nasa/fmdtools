@@ -6,8 +6,8 @@ Created on Tue Jul 19 18:29:42 2022
 """
 
 import fmdtools.sim.propagate as prop
-import fmdtools.analyze as rd
-from fmdtools.define.approach import SampleApproach
+import fmdtools.analyze as an
+from fmdtools.sim.approach import SampleApproach
 from fmdtools.sim.search import ProblemInterface
 import example_rover.rover_model as rvr
 import tqdm
@@ -518,7 +518,7 @@ def plot_line_dist(sol_dict, figsize=(4,12), v_padding=0.2, x_lab="line distance
         if k!=len(axs)-1: axs[k].set_xticks([])
         else: axs[k].set_xlabel(x_lab)
         k+=1
-    rd.plot.multiplot_legend_title(sol_dict, axs, axs[k-1], v_padding=v_padding)
+    an.plot.multiplot_legend_title(sol_dict, axs, axs[k-1], v_padding=v_padding)
     return fig
 
 def plot_hspaces(sol_dict, figsize=(4,12), v_padding=0.2):
@@ -528,7 +528,7 @@ def plot_hspaces(sol_dict, figsize=(4,12), v_padding=0.2):
         plot_hspace([sol], title=alg, ax=axs[k])
         k+=1
     ax =plt.gca()
-    rd.plot.multiplot_legend_title(sol_dict, axs, ax, v_padding=v_padding)
+    an.plot.multiplot_legend_title(sol_dict, axs, ax, v_padding=v_padding)
     return fig
 
 def plot_trajs(sol_dict, figsize=(4,12), v_padding=0.3, xlim=[15,25], ylim=[0,10]):
@@ -539,14 +539,14 @@ def plot_trajs(sol_dict, figsize=(4,12), v_padding=0.3, xlim=[15,25], ylim=[0,10
         visualizations(sol, method=alg, ax=ax, legend=False, xlim=xlim, ylim=ylim)
         if k!=len(axs)-1: ax.set_xlabel("")
         k=k+1
-    rd.plot.multiplot_legend_title(sol_dict, axs, ax, v_padding=v_padding, legend_loc=2)
+    an.plot.multiplot_legend_title(sol_dict, axs, ax, v_padding=v_padding, legend_loc=2)
     return fig
 
 def visualizations(soln, method="EA", figsize=(4,4), ax=False, legend=True, xlim=[15,25], ylim=[0,10]):
 
     mdl_range = rvr.Rover(params=rvr.RoverParam(linetype='turn', start=5.0), valparams={'drive_modes':list(soln)})
     _, mdlhists = prop.nominal(mdl_range)
-    phases, modephases = rd.process.modephases(mdlhists)
+    phases, modephases = an.process.modephases(mdlhists)
     end_time = phases['Avionics']['drive'][1]+25
     mdl_range.modelparams = mdl_range.modelparams.copy_with_vals(times=(0,end_time))
     app_range = SampleApproach(mdl_range, faults='Drive', phases={'drive':phases['Avionics']['drive']})
@@ -585,7 +585,7 @@ NUM_SUBPOP = 10 #number of subpopulation
 #nominal scenario info (used to find when to inject faults in nominal scenario)
 mdl = rvr.Rover(params=rvr.RoverParam('turn', start=5.0), valparams={'drive_modes':{'custom_fault':{'friction':0.0, 'transfer':0.0,'drift':0.0}}})
 _, mdlhists_nom = prop.nominal(mdl)
-phases, modephases = rd.process.modephases(mdlhists_nom)
+phases, modephases = an.process.modephases(mdlhists_nom)
 app= SampleApproach(mdl, faults='Drive', phases={'drive':phases['Avionics']['drive']})
 fault_time = app.times[0]
 end_time = phases['Avionics']['drive'][1]+25

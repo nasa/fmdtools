@@ -7,10 +7,10 @@ Created on Tue Feb 28 11:53:00 2023
 from fmdtools.define.common import Parameter, State, Rand
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model, ModelParam
-from fmdtools.define.approach import NominalApproach
+from fmdtools.sim.approach import NominalApproach
 import numpy as np
 from fmdtools.sim import propagate as prop
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 import matplotlib.pyplot as plt
 from rover_model import Rover, plot_trajectories, DegParam
 
@@ -74,20 +74,20 @@ if __name__=="__main__":
     #nominal
     deg_mdl = RoverDegradation()
     endresults,  mdlhist = prop.nominal(deg_mdl)
-    rd.plot.mdlhists(mdlhist)
+    an.plot.mdlhists(mdlhist)
     #stochastic
     deg_mdl = RoverDegradation()
     endresults,  mdlhist = prop.nominal(deg_mdl, run_stochastic=True)
-    rd.plot.mdlhists(mdlhist)
+    an.plot.mdlhists(mdlhist)
     
     #stochastic over replicates
     nomapp = NominalApproach()
     nomapp.add_seed_replicates('test', 100)
     endclasses, mdlhists = prop.nominal_approach(deg_mdl, nomapp, run_stochastic=True, desired_result='endclass')
-    rd.plot.mdlhists(mdlhists, fxnflowvals={'Drive':['wear', 'corrosion', 'friction', 'drift']}, aggregation='mean_std')
+    an.plot.mdlhists(mdlhists, fxnflowvals={'Drive':['wear', 'corrosion', 'friction', 'drift']}, aggregation='mean_std')
     
     #individual slice
-    rd.plot.metric_dist_from(mdlhists, [1,10,20], fxnflowvals={'Drive':['wear', 'corrosion', 'friction', 'drift']})
+    an.plot.metric_dist_from(mdlhists, [1,10,20], fxnflowvals={'Drive':['wear', 'corrosion', 'friction', 'drift']})
     
     
     #question -- how do we sample this:
@@ -104,13 +104,13 @@ if __name__=="__main__":
     behave_endclasses, behave_mdlhists = prop.nominal_approach(mdl, behave_nomapp)
     f = plt.figure()
     f = plot_trajectories(behave_mdlhists)
-    rd.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, 't', 'scen')
+    an.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, 't', 'scen')
 
     comp_groups = {'group_1': [*behave_endclasses][:100],'group_2': [*behave_endclasses][100:]}
 
-    rd.plot.metric_dist(behave_endclasses, metrics=['line_dist', 'end_dist', 'x', 'y'], comp_groups=comp_groups, alpha=0.5, bins=10, metric_bins={'x':20})
+    an.plot.metric_dist(behave_endclasses, metrics=['line_dist', 'end_dist', 'x', 'y'], comp_groups=comp_groups, alpha=0.5, bins=10, metric_bins={'x':20})
 
-    rd.plot.metric_dist_from(behave_mdlhists, times= [0, 10, 20], fxnflowvals = {'ground':['x', 'y', 'linex', 'ang']}, alpha=0.5, bins=10)
+    an.plot.metric_dist_from(behave_mdlhists, times= [0, 10, 20], fxnflowvals = {'ground':['x', 'y', 'linex', 'ang']}, alpha=0.5, bins=10)
 
-    rd.plot.metric_dist_from(behave_mdlhists, times= 30, fxnflowvals = {'ground':['x', 'y', 'linex', 'ang']}, comp_groups=comp_groups, alpha=0.5, bins=10)
+    an.plot.metric_dist_from(behave_mdlhists, times= 30, fxnflowvals = {'ground':['x', 'y', 'linex', 'ang']}, comp_groups=comp_groups, alpha=0.5, bins=10)
     

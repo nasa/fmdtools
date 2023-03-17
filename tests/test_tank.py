@@ -12,7 +12,7 @@ from example_tank.tank_opt import x_to_rcost_leg, x_to_totcost_leg, x_to_descost
 from example_tank.tank_optimization_model import Tank as Tank2
 from fmdtools.sim.search import ProblemInterface
 from fmdtools.sim import propagate
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 from fmdtools.define import SampleApproach, NominalApproach
 from CommonTests import CommonTests
 import numpy as np
@@ -96,20 +96,20 @@ class TankTests(unittest.TestCase, CommonTests):
         """ Tests running the model with a different local timestep in the Store_Liquid function"""
         mdl_global = Tank(modelparams = {'phases':{'na':[0],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min', 'use_local':False})
         _, mdlhist_global = propagate.one_fault(mdl_global,'Store_Water','Leak', time=2)
-        mdlhist_global = rd.process.flatten_hist(mdlhist_global)
+        mdlhist_global = an.process.flatten_hist(mdlhist_global)
         
         mdl_loc_low = Tank(params={'reacttime':2, 'store_tstep':0.1})
         _, mdlhist_loc_low = propagate.one_fault(mdl_loc_low,'Store_Water','Leak', time=2)
-        mdlhist_loc_low = rd.process.flatten_hist(mdlhist_loc_low)
+        mdlhist_loc_low = an.process.flatten_hist(mdlhist_loc_low)
         
         self.compare_results(mdlhist_global, mdlhist_loc_low)
         
         mdl_loc_high = Tank(params={'reacttime':2, 'store_tstep':3.0})
         _, mdlhist_loc_high = propagate.one_fault(mdl_loc_high,'Store_Water','Leak', time=2)
-        mdlhist_loc_high = rd.process.flatten_hist(mdlhist_loc_high)
+        mdlhist_loc_high = an.process.flatten_hist(mdlhist_loc_high)
         for i in [2,5,8,12]:
-            slice_global = rd.process.get_flat_hist_slice(mdlhist_global,t_ind=i)
-            slice_loc_high = rd.process.get_flat_hist_slice(mdlhist_loc_high ,t_ind=i)
+            slice_global = an.process.get_flat_hist_slice(mdlhist_global,t_ind=i)
+            slice_loc_high = an.process.get_flat_hist_slice(mdlhist_loc_high ,t_ind=i)
             self.compare_results(slice_global, slice_loc_high)
     def test_epc_math(self):
         """Spot check of epc math work in human error calculation"""

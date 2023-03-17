@@ -10,7 +10,7 @@ import copy
 import fmdtools.sim.propagate as prop
 import fmdtools.analyze.process as proc
 import fmdtools.analyze.plot as plot
-from fmdtools.define.approach import SampleApproach
+from fmdtools.sim.approach import SampleApproach
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np

@@ -336,29 +336,29 @@ def discrep(value):
     
 if __name__ == '__main__':
     import fmdtools.sim.propagate as propagate
-    import fmdtools.analyze as rd
+    import fmdtools.analyze as an
 
     mdl= EPS()
     
     resgraph, mdlhists = propagate.one_fault(mdl, 'distribute_ee', 'short', desired_result="bipartite")
     
-    rd.graph.show(mdl.bipartite, gtype='bipartite')
+    an.graph.show(mdl.bipartite, gtype='bipartite')
     #endclasses, mdlhists = propagate.single_faults(mdl)
 
     #resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', desired_result="bipartite")
-    rd.graph.show(resgraph)
+    an.graph.show(resgraph)
 
 
     #endclasses, mdlhists = propagate.single_faults(mdl)
-    reshists, diffs, summary = rd.process.hists(mdlhists)
+    reshists, diffs, summary = an.process.hists(mdlhists)
 
-    sumtable = rd.tabulate.summary(summary)
+    sumtable = an.tabulate.summary(summary)
 
 
-    degtimemap = rd.process.avg_degtime_heatmap(reshists)
+    degtimemap = an.process.avg_degtime_heatmap(reshists)
 
-    rd.graph.show(mdl.bipartite,gtype='bipartite', heatmap=degtimemap)
-    rd.graph.show(resgraph,heatmap=degtimemap)
+    an.graph.show(mdl.bipartite,gtype='bipartite', heatmap=degtimemap)
+    an.graph.show(resgraph,heatmap=degtimemap)
 
     
     

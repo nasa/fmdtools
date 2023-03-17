@@ -7,7 +7,7 @@ This code tests some approaches to sampling joing fault scenarios
 @author: Daniel Hulse
 """
 import fmdtools.sim.propagate as prop
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 from ex_pump import * #required to import entire module
 
 mdl = Pump()
@@ -24,14 +24,14 @@ app_jf5 = SampleApproach(mdl, jointfaults={'faults':5})
 app_list = SampleApproach(mdl, jointfaults={'faults':[(('ImportEE', 'inf_v'),('ImportWater', 'no_wat'))], 'pcond':0.1})
 
 endclasses, mdlhists = prop.approach(mdl, app_jf5)
-fmea = rd.tabulate.phasefmea(endclasses, app_jf5).sort_values('expected cost', ascending=False)
+fmea = an.tabulate.phasefmea(endclasses, app_jf5).sort_values('expected cost', ascending=False)
 
-fmea_small = rd.tabulate.summfmea(endclasses, app_jf5).sort_values('expected cost', ascending=False)
+fmea_small = an.tabulate.summfmea(endclasses, app_jf5).sort_values('expected cost', ascending=False)
 
 endclasses, mdlhists = prop.approach(mdl, app_jf2)
 
 #rp.plot_samplecosts(app_jf2, endclasses, joint=True)
-reshists, diffs, summaries = rd.process.hists(mdlhists)
+reshists, diffs, summaries = an.process.hists(mdlhists)
 
 mdlhist = {'nominal': mdlhists['nominal'], 'faulty':mdlhists['ImportEE: no_v, ImportWater: no_wat, MoveWater: mech_break, t=27']}
-rd.plot.mdlhist(mdlhist, fault='IE:no_v, IW: no_w, MW: m_b', time=27)
+an.plot.mdlhist(mdlhist, fault='IE:no_v, IW: no_w, MW: m_b', time=27)

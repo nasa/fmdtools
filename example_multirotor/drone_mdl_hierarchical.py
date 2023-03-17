@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import fmdtools.sim as fs
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 from IPython.display import HTML
 
 from fmdtools.define.common import Parameter, State
 from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.define.model import Model, ModelParam
-from fmdtools.define.approach import SampleApproach
+from fmdtools.sim.approach import SampleApproach
 
 from drone_mdl_static import m2to1, EngageLand, HoldPayload, DistEE
 from drone_mdl_static import Force, EE, Control, DOFs, Env, Dir
@@ -35,17 +35,17 @@ class AffectDOFArch(CompArch):
         super().__init__(*args, **kwargs)
         if self.archtype=="quad":
             self.make_components(Line,'lf', 'lr','rf','rr')
-            self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5})
+            self.forwaan.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5})
             self.lr_dict.update({'l':{'lf', 'lr'}, 'r':{'rf','rr'}})
             self.fr_dict.update({'f':{'lf', 'rf'}, 'r':{'lr', 'rr'}})
         elif self.archtype=="hex":
             self.make_components(Line,'rf', 'lf','lr','rr', 'r', 'f')
-            self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5, 'r':-0.75, 'f':0.75})
+            self.forwaan.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5, 'r':-0.75, 'f':0.75})
             self.lr_dict.update({'l':{'lf', 'lr'}, 'r':{'rf','rr'}})
             self.fr_dict.update({'f':{'lf', 'rf', 'f'}, 'r':{'lr', 'rr', 'r'}})
         elif self.archtype=="oct":
             self.make_components(Line,'lf', 'rf','lf2', 'rf2', 'lr', 'rr','lr2', 'rr2')
-            self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5,'rf2':0.5,'lf2':0.5,'lr2':-0.5,'rr2':-0.5})
+            self.forwaan.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5,'rf2':0.5,'lf2':0.5,'lr2':-0.5,'rr2':-0.5})
             self.lr_dict.update({'l':{'lf', 'lr','lf2', 'lr2'}, 'r':{'rf','rr','rf2','rr2'}})
             self.fr_dict.update({'f':{'lf', 'rf','lf2', 'rf2'}, 'r':{'lr', 'rr','lr2', 'rr2'}})
 
@@ -199,7 +199,7 @@ if __name__=="__main__":
     mdl = Drone(params=DroneParam(arch='oct'))
     app = SampleApproach(mdl, faults=[('affect_dof', 'rr2_propstuck')])
     endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=False)
-    rd.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['affect_dof rr2_propstuck, t=49.0']},fxnflowvals='env')
+    an.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['affect_dof rr2_propstuck, t=49.0']},fxnflowvals='env')
 
 
 

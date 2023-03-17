@@ -9,9 +9,9 @@ from scipy.optimize import minimize
 from scipy.optimize import differential_evolution
 import time
 import fmdtools.sim.propagate as propagate
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 from tank_model import Tank
-from fmdtools.define.approach import SampleApproach
+from fmdtools.sim.approach import SampleApproach
 from tank_opt import *
 import matplotlib.pyplot as plt
 
@@ -23,8 +23,8 @@ import matplotlib.pyplot as plt
 
 #endresults, resgraph, mdlhist = propagate.nominal(mdl)
 
-#rd.plot.mdlhistvals(mdlhist)
-#rd.graph.show(resgraph)
+#an.plot.mdlhistvals(mdlhist)
+#an.graph.show(resgraph)
 
 EA(popsize=30, iters=30, mutations=10, crossovers=3, numselect=15, verbose='iters')
 
@@ -35,9 +35,9 @@ EA(popsize=30, iters=30, mutations=10, crossovers=3, numselect=15, verbose='iter
 
 #endresults, resgraph, mdlhist = propagate.one_fault(mdl,'Import_Water','Leak', time=3)
 
-#rd.plot.mdlhistvals(mdlhist, fault='Leak', time=3, fxnflowvals={'Store_Water':['level', 'net_flow', 'coolingbuffer'], 'Tank_Sig':['indicator'], 'Valve1_Sig':['action']}, legend=False)
-#rd.graph.show(resgraph,faultscen='Leak', time=3)
-#rd.plot.mdlhistvals(mdlhist, time=3)
+#an.plot.mdlhistvals(mdlhist, fault='Leak', time=3, fxnflowvals={'Store_Water':['level', 'net_flow', 'coolingbuffer'], 'Tank_Sig':['indicator'], 'Valve1_Sig':['action']}, legend=False)
+#an.graph.show(resgraph,faultscen='Leak', time=3)
+#an.plot.mdlhistvals(mdlhist, time=3)
 
 #result = minimize(x_to_descost, [1000, 0.5], method='trust-constr', bounds =((10, 100),(0,1)))
 

@@ -9,7 +9,7 @@ import sys, os
 sys.path.insert(1, os.path.join('..'))
 from example_pump.ex_pump import Pump
 from fmdtools.sim import propagate
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 from fmdtools.define import SampleApproach, check_pickleability, NominalApproach
 from CommonTests import CommonTests
 import numpy as np
@@ -106,10 +106,10 @@ class PumpTests(unittest.TestCase, CommonTests):
         if os.path.exists("single_fault.pkl"): os.remove("single_fault.pkl")
         
         endresults, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
-        mdlhist_flattened = rd.process.flatten_hist(mdlhist)
-        rd.process.save_result(mdlhist, "single_fault.pkl")
-        mdlhist_saved = rd.process.load_result("single_fault.pkl")
-        mdlhist_saved_flattened = rd.process.flatten_hist(mdlhist_saved)
+        mdlhist_flattened = an.process.flatten_hist(mdlhist)
+        an.process.save_result(mdlhist, "single_fault.pkl")
+        mdlhist_saved = an.process.load_result("single_fault.pkl")
+        mdlhist_saved_flattened = an.process.flatten_hist(mdlhist_saved)
         
         self.assertCountEqual([*mdlhist_flattened.keys()], [*mdlhist_saved_flattened.keys()])
         
@@ -124,11 +124,11 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_one_run_csv(self):
         if os.path.exists("single_fault.csv"): os.remove("single_fault.csv")
         endresults, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
-        mdlhist_flattened = rd.process.flatten_hist(mdlhist)
+        mdlhist_flattened = an.process.flatten_hist(mdlhist)
         
-        rd.process.save_result(mdlhist, "single_fault.csv")
-        mdlhist_saved = rd.process.load_result("single_fault.csv")
-        mdlhist_saved_flattened = rd.process.flatten_hist(mdlhist_saved)
+        an.process.save_result(mdlhist, "single_fault.csv")
+        mdlhist_saved = an.process.load_result("single_fault.csv")
+        mdlhist_saved_flattened = an.process.flatten_hist(mdlhist_saved)
         
         self.assertCountEqual([*mdlhist_flattened.keys()], [*mdlhist_saved_flattened.keys()])
         for hist_key in mdlhist_flattened: # test to see that all values of the arrays in the hist are the same
@@ -137,11 +137,11 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_one_run_json(self):
         if os.path.exists("single_fault.json"): os.remove("single_fault.json")
         endresults, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
-        mdlhist_flattened = rd.process.flatten_hist(mdlhist)
+        mdlhist_flattened = an.process.flatten_hist(mdlhist)
         
-        rd.process.save_result(mdlhist, "single_fault.json")
-        mdlhist_saved = rd.process.load_result("single_fault.json")
-        mdlhist_saved_flattened = rd.process.flatten_hist(mdlhist_saved)
+        an.process.save_result(mdlhist, "single_fault.json")
+        mdlhist_saved = an.process.load_result("single_fault.json")
+        mdlhist_saved_flattened = an.process.flatten_hist(mdlhist_saved)
         
         self.assertCountEqual([*mdlhist_flattened.keys()], [*mdlhist_saved_flattened.keys()])
         for hist_key in mdlhist_flattened: # test to see that all values of the arrays in the hist are the same
@@ -212,8 +212,8 @@ def exp_cost_quant(approach, mdl):
     """ Calculates the expected cost of faults over a given sampling approach 
     on the given model"""
     endclasses, mdlhists = propagate.approach(mdl, approach, showprogress=False)
-    reshists, diffs, summaries = rd.process.hists(mdlhists)
-    fmea = rd.tabulate.summfmea(endclasses, approach)
+    reshists, diffs, summaries = an.process.hists(mdlhists)
+    fmea = an.tabulate.summfmea(endclasses, approach)
     util=sum(fmea['expected cost'])
     return util
 

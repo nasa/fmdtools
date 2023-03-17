@@ -6,9 +6,9 @@ Created on Fri Mar 26 12:23:14 2021
 """
 
 from ex_pump import * 
-from fmdtools.define.approach import SampleApproach
+from fmdtools.sim.approach import SampleApproach
 import fmdtools.sim.propagate as propagate
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 from fmdtools.define.model import ModelParam
 
 import time

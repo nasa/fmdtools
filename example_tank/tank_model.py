@@ -267,8 +267,8 @@ class Tank(Model):
 
 if __name__ == '__main__':
     import fmdtools.sim.propagate as propagate
-    import fmdtools.analyze as rd
-    from fmdtools.define.approach import SampleApproach
+    import fmdtools.analyze as an
+    from fmdtools.sim.approach import SampleApproach
     
     mdl = Tank()
     
@@ -276,31 +276,31 @@ if __name__ == '__main__':
     
     ## nominal run
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])
-    rd.plot.mdlhists(mdlhist, fxnflowvals='store_water')
-    rd.graph.show(endresults['bipartite'])
+    an.plot.mdlhists(mdlhist, fxnflowvals='store_water')
+    an.graph.show(endresults['bipartite'])
     
     
     ## faulty run
     resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='bipartite')
-    rd.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='store_water', time_slice=2)
-    rd.graph.show(resgraph,faultscen='leak response', time='end')
+    an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='store_water', time_slice=2)
+    an.graph.show(resgraph,faultscen='leak response', time='end')
     
     
     resgraph, mdlhist = propagate.one_fault(mdl,'human','detect_false_high', time=2, desired_result='bipartite')
     
-    rd.plot.mdlhists(mdlhist, title='detect_false_high', fxnflowvals='store_water', time_slice=2)
-    rd.graph.show(resgraph,faultscen='detect_false_high', time=2)
+    an.plot.mdlhists(mdlhist, title='detect_false_high', fxnflowvals='store_water', time_slice=2)
+    an.graph.show(resgraph,faultscen='detect_false_high', time=2)
     
     resgraph, mdlhist = propagate.one_fault(mdl,'human','turn_wrong_valve', time=2, desired_result='bipartite')
     
-    rd.plot.mdlhists(mdlhist,title='turn_wrong_valve', fxnflowvals='store_water', time_slice=2)
-    rd.graph.show(resgraph,faultscen='turn_wrong_valve', time=2)
+    an.plot.mdlhists(mdlhist,title='turn_wrong_valve', fxnflowvals='store_water', time_slice=2)
+    an.graph.show(resgraph,faultscen='turn_wrong_valve', time=2)
     
     
     mdl = Tank(params=TankParam(reacttime=2), modelparams = default_modelparam.copy_with_vals(dt=3.0))
     resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='bipartite')
-    rd.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='store_water', time_slice=2)
-    rd.graph.show(resgraph,faultscen='turn_wrong_valve', time='end')
+    an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='store_water', time_slice=2)
+    an.graph.show(resgraph,faultscen='turn_wrong_valve', time='end')
     
     ## run all faults - note: all faults get caught!
     endclasses, mdlhists = propagate.single_faults(mdl)
@@ -309,10 +309,10 @@ if __name__ == '__main__':
     endclasses, mdlhists = propagate.approach(mdl, app_full)
     
     mdl.fxns['human'].dt=2.0
-    rd.graph.exec_order(mdl, renderer='graphviz')
-    rd.graph.exec_order(mdl, show_dyn_tstep=False)
-    rd.graph.exec_order(mdl, show_dyn_order=False)
-    rd.graph.exec_order(mdl, show_dyn_order=False, show_dyn_tstep=False)
+    an.graph.exec_order(mdl, renderer='graphviz')
+    an.graph.exec_order(mdl, show_dyn_tstep=False)
+    an.graph.exec_order(mdl, show_dyn_order=False)
+    an.graph.exec_order(mdl, show_dyn_order=False, show_dyn_tstep=False)
     
     a = HumanASG("hi")
     a.show()

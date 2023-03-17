@@ -6,7 +6,7 @@ Created on Tue Aug  9 12:44:01 2022
 """
 import unittest
 from fmdtools.sim import propagate
-import fmdtools.analyze as rd
+import fmdtools.analyze as an
 from fmdtools.define.block import FxnBlock, get_pdf_for_rand
 from fmdtools.define.model import Model
 from fmdtools.define.flow import CommsFlow, MultiFlow
