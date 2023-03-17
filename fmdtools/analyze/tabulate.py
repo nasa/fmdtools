@@ -26,13 +26,13 @@ Also used for FMEA-like tables:
     - :meth:`summfmea`:            Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
     - :meth:`fullfmea`:            Makes full fmea table (degraded functions/flows, cost, rate, expected cost) of scenarios given endclasses dict (cost, rate, expected cost) and summaries dict (degraded functions, degraded flows)
 """
-#File Name: resultdisp/tabulate.py
+#File Name: analyze/tabulate.py
 #Author: Daniel Hulse
 #Created: November 2019 (Refactored April 2020)
 
 import pandas as pd
 import numpy as np
-from fmdtools.resultdisp.process import expected, average, percent, rate, overall_diff, nan_to_x, bootstrap_confidence_interval
+from fmdtools.analyze.process import expected, average, percent, rate, overall_diff, nan_to_x, bootstrap_confidence_interval
 
 #makehisttable
 # put history in a tabular format

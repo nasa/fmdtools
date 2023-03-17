@@ -7,9 +7,9 @@ Created on Tue Dec 21 09:52:57 2021
 import os
 import shutil
 import numpy as np
-from fmdtools.faultsim import propagate
-from fmdtools.resultdisp import process as proc
-from fmdtools.resultdisp import tabulate as tabulate
+from fmdtools.sim import propagate
+from fmdtools.analyze import process as proc
+from fmdtools.analyze import tabulate as tabulate
 class CommonTests():
     def check_var_setting(self,mdl, statenames, newvalues):
         """ Tests to see that given variable values are set to new values"""

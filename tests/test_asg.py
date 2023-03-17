@@ -6,12 +6,12 @@ Created on Wed Mar  1 20:47:04 2023
 """
 import unittest
 
-from fmdtools.modeldef.common import State
-from fmdtools.modeldef.block import FxnBlock, Action, Mode, ASG
-from fmdtools.modeldef.model import Model
-from fmdtools.modeldef.flow import Flow
-import fmdtools.resultdisp as rd
-import fmdtools.faultsim.propagate as prop
+from fmdtools.define.common import State
+from fmdtools.define.block import FxnBlock, Action, Mode, ASG
+from fmdtools.define.model import Model
+from fmdtools.define.flow import Flow
+import fmdtools.analyze as rd
+import fmdtools.sim.propagate as prop
 
 class OutcomeStates(State):
     num_perceptions: int=0
@@ -120,8 +120,8 @@ class PassHazard(FxnBlock):
         if self.hazard.s.present and self.hazard.s.mitigated:       self.s.hazards_mitigated+=1
         elif self.hazard.s.present and not self.hazard.s.mitigated: self.s.hazards_propagated+=1
 
-from fmdtools.modeldef.common import Parameter
-from fmdtools.modeldef.model import ModelParam
+from fmdtools.define.common import Parameter
+from fmdtools.define.model import ModelParam
 class HazardModel(Model):
     def __init__(self, params=Parameter(), modelparams=ModelParam(times=(0,60), dt=1.0), valparams={}):
         super().__init__(params,modelparams,valparams)

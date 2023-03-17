@@ -23,7 +23,7 @@ from networkx.algorithms.community import greedy_modularity_communities
 from networkx.algorithms.community import greedy_modularity_communities
 import matplotlib.pyplot as plt
 import math
-from fmdtools.resultdisp.graph import plot_normgraph, plot_bipgraph
+from fmdtools.analyze.graph import plot_normgraph, plot_bipgraph
 
 # Network Metric Quantification
 def calc_aspl(mdl, gtype='parameter'):

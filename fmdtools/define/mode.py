@@ -10,7 +10,7 @@ from recordclass import dataobject
 import numpy as np
 import itertools
 from .common import get_true_fields, get_true_field
-from fmdtools.faultsim.result import History, init_hist_iter
+from fmdtools.sim.result import History, init_hist_iter
 
 class Fault(dataobject, readonly=True, mapping=True):
     """

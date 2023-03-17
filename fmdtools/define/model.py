@@ -17,7 +17,7 @@ from recordclass import asdict
 from .flow import Flow, init_flow
 from .common import check_pickleability, get_var, set_var
 from .parameter import Parameter
-from fmdtools.faultsim.result import History, get_sub_include, init_hist_iter
+from fmdtools.sim.result import History, get_sub_include, init_hist_iter
 
 class ModelParam(Parameter, readonly=True):
     """

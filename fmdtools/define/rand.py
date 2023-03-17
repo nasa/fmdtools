@@ -11,7 +11,7 @@ import numpy as np
 from .common import get_true_fields, get_true_field
 import copy
 
-from fmdtools.faultsim.result import init_hist_iter, History
+from fmdtools.sim.result import init_hist_iter, History
 
 class Rand(dataobject, mapping=True):
     """

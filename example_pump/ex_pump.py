@@ -21,15 +21,15 @@ The flows are:
     - Signal input (on/off)
 """
 
-from fmdtools.modeldef.block import FxnBlock, Mode
-from fmdtools.modeldef.flow import Flow 
-from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.approach import SampleApproach, NominalApproach
-from fmdtools.modeldef.parameter import Parameter
-from fmdtools.modeldef.state import State 
-from fmdtools.modeldef.time import Time
-import fmdtools.resultdisp as rd
-import fmdtools.faultsim.propagate as propagate
+from fmdtools.define.block import FxnBlock, Mode
+from fmdtools.define.flow import Flow 
+from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.approach import SampleApproach, NominalApproach
+from fmdtools.define.parameter import Parameter
+from fmdtools.define.state import State 
+from fmdtools.define.time import Time
+import fmdtools.analyze as rd
+import fmdtools.sim.propagate as propagate
 import numpy as np
 
 """
@@ -108,7 +108,7 @@ class ImportEE(FxnBlock):
     flownames = {"ee_1":"ee_out"}
     """
     Import EE is the line of electricity going into the pump
-    We define it here as a subclass of the FxnBlock superclass (imported from modeldef.py)
+    We define it here as a subclass of the FxnBlock superclass (imported from define.py)
     the FxnBlock superclass, which adds the common aspects of the function objects:
      - flows added to .flow
      - faults set to nominal

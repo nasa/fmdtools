@@ -29,14 +29,14 @@ Private Methods:
 
 import numpy as np
 import copy
-import fmdtools.resultdisp.process as proc
+import fmdtools.analyze.process as proc
 import tqdm
 import dill
 import warnings
 import sys,os
-from fmdtools.modeldef.approach import SampleApproach
-from fmdtools.modeldef.model import ModelParam
-from fmdtools.modeldef.block import Block
+from fmdtools.define.approach import SampleApproach
+from fmdtools.define.model import ModelParam
+from fmdtools.define.block import Block
 from .result import Result, History
 from recordclass import asdict
 
@@ -643,7 +643,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
             - :data:`mult_kwargs` : kwargs
                 Multi-scenario options for :func:`approach` and others
             - **app_args : new_params
-                Keyword arguments for the SampleApproach. See modeldef.SampleApproach documentation.
+                Keyword arguments for the SampleApproach. See define.SampleApproach documentation.
 
     Returns
     -------

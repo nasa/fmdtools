@@ -17,7 +17,7 @@ Uses the following methods:
     - :func:`metricovertime`:    plots the total metric/explected metric of a set of faults sampled by a SampleApproach over time
     - :func:`suite_for_plots`:   enables plots to be checked and turned on/off when testing using unittest
 """
-#File Name: resultdisp/plot.py
+#File Name: analyze/plot.py
 #Author: Daniel Hulse
 #Created: November 2019 (Refactored April 2020, Feb 2022)
 
@@ -26,8 +26,8 @@ plt.rcParams['pdf.fonttype'] = 42
 import copy
 import warnings
 import numpy as np
-from fmdtools.resultdisp.tabulate import metricovertime as metric_table
-from fmdtools.resultdisp.process import bootstrap_confidence_interval
+from fmdtools.analyze.tabulate import metricovertime as metric_table
+from fmdtools.analyze.process import bootstrap_confidence_interval
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
@@ -248,16 +248,16 @@ def indiv_mdlhists(mdlhist, fxnflows={}, cols=2, aggregation='individual', comp_
     return figs
 def mdlhist(mdlhist, fault='', time=0, fxnflows={},cols=2, returnfigs=False, legend=-1, timelabel='Time', units={}, phases={}, modephases={}, label_phases=True):
     """
-    Deprecated legacy plotting function. Use resultdisp.plot.indiv_mdlhists instead.
+    Deprecated legacy plotting function. Use analyze.plot.indiv_mdlhists instead.
     """
-    warnings.warn("Deprecated function. Use resultdisp.plot.indiv_mdlhists instead.")
+    warnings.warn("Deprecated function. Use analyze.plot.indiv_mdlhists instead.")
     figs = indiv_mdlhists(mdlhist, fxnflows, cols, title=fault, time_slice=time, legend_loc=legend, xlabel=timelabel, ylabels=units, phases=phases, modephases=modephases, label_phases=label_phases)
     if returnfigs: return figs
 def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals='all', cols=2, returnfig=True, legend=-1, timelabel="time", units={}, phases={}, modephases={}, label_phases=True):
     """
-    Deprecated legacy plotting function. Use resultdisp.plot.mdlhists instead.
+    Deprecated legacy plotting function. Use analyze.plot.mdlhists instead.
     """
-    warnings.warn("Deprecated function. Use resultdisp.plot.mdlhists instead.")
+    warnings.warn("Deprecated function. Use analyze.plot.mdlhists instead.")
     fig = mdlhists(mdlhist, fxnflowvals, cols, title=fault, time_slice=time, legend_loc=legend, xlabel=timelabel, ylabels=units, phases=phases, modephases=modephases, label_phases=label_phases)
     if returnfig: return fig
 def plot_line_and_err(ax, times, line, lows, highs, boundtype, boundcolor='gray', boundlinestyle='--', fillalpha=0.3, **kwargs):

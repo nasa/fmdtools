@@ -13,10 +13,10 @@ using solely the functions of the system.
 Further information about this system (data, more detailed models) is presented
 at: https://c3.nasa.gov/dashlink/projects/3/
 """
-from fmdtools.modeldef.block import FxnBlock, Mode
-from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.common import Parameter, State
-from fmdtools.modeldef.flow import Flow
+from fmdtools.define.block import FxnBlock, Mode
+from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.common import Parameter, State
+from fmdtools.define.flow import Flow
 
 class GenericState(State):
     rate:   float = 1.0
@@ -335,8 +335,8 @@ def discrep(value):
     else:                   return 4 
     
 if __name__ == '__main__':
-    import fmdtools.faultsim.propagate as propagate
-    import fmdtools.resultdisp as rd
+    import fmdtools.sim.propagate as propagate
+    import fmdtools.analyze as rd
 
     mdl= EPS()
     

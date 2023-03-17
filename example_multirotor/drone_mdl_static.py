@@ -1,9 +1,9 @@
 import numpy as np
 
-from fmdtools.modeldef.common import Parameter, State
-from fmdtools.modeldef.block import FxnBlock, Mode
-from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.flow import Flow
+from fmdtools.define.common import Parameter, State
+from fmdtools.define.block import FxnBlock, Mode
+from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.flow import Flow
 
 
 ## MODEL FLOWS
@@ -311,6 +311,6 @@ class Drone(Model):
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
     
 if __name__=="__main__":
-    from fmdtools.faultsim import propagate
+    from fmdtools.sim import propagate
     static_mdl = Drone()
     endclasses, mdlhists = propagate.single_faults(static_mdl)

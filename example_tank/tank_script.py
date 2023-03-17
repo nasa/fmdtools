@@ -8,10 +8,10 @@ import numpy as np
 from scipy.optimize import minimize
 from scipy.optimize import differential_evolution
 import time
-import fmdtools.faultsim.propagate as propagate
-import fmdtools.resultdisp as rd
+import fmdtools.sim.propagate as propagate
+import fmdtools.analyze as rd
 from tank_model import Tank
-from fmdtools.modeldef.approach import SampleApproach
+from fmdtools.define.approach import SampleApproach
 from tank_opt import *
 import matplotlib.pyplot as plt
 

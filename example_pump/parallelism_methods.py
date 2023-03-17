@@ -6,10 +6,10 @@ Created on Fri Mar 26 12:23:14 2021
 """
 
 from ex_pump import * 
-from fmdtools.modeldef.approach import SampleApproach
-import fmdtools.faultsim.propagate as propagate
-import fmdtools.resultdisp as rd
-from fmdtools.modeldef.model import ModelParam
+from fmdtools.define.approach import SampleApproach
+import fmdtools.sim.propagate as propagate
+import fmdtools.analyze as rd
+from fmdtools.define.model import ModelParam
 
 import time
 import pickle

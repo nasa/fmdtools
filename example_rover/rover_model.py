@@ -20,13 +20,13 @@ Flows:
     - Camera
 """
 from recordclass import asdict
-from fmdtools.modeldef.common import Parameter, State
-from fmdtools.modeldef.block import FxnBlock, Mode
-from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.flow import Flow
-from fmdtools.modeldef.approach import SampleApproach, NominalApproach
-import fmdtools.resultdisp as rd
-import fmdtools.faultsim.propagate as prop
+from fmdtools.define.common import Parameter, State
+from fmdtools.define.block import FxnBlock, Mode
+from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.flow import Flow
+from fmdtools.define.approach import SampleApproach, NominalApproach
+import fmdtools.analyze as rd
+import fmdtools.sim.propagate as prop
 import itertools
 import numpy as np
 import matplotlib.pyplot as plt
@@ -521,7 +521,7 @@ class Rover(Model):
                 'tot_deviation':tot_deviation, 'faults':modes, 'classification':classification, 
                 'endpt':endpt}
 
-import fmdtools.resultdisp as rd
+import fmdtools.analyze as rd
 
 def find_line_dist(x, y , linex, liney):
     return np.min(np.sqrt((linex-x)**2 + (liney-y)**2))
@@ -673,7 +673,7 @@ class_tree = {'rover': [-0.07367185100835244, 0.6410710936138487],
 if __name__=="__main__":
     import multiprocessing as mp
     
-    from fmdtools.faultsim import search
+    from fmdtools.sim import search
     
     from pymoo.optimize import minimize
     

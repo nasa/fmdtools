@@ -7,7 +7,7 @@ Description: A module for defining time-based properties for use in blocks. Has 
 """
 from decimal import Decimal
 from recordclass import dataobject
-from fmdtools.faultsim.result import History, init_hist_iter, get_sub_include
+from fmdtools.sim.result import History, init_hist_iter, get_sub_include
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) 

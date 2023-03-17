@@ -9,9 +9,9 @@ The functions of the system are:
 The Tank stores a set amount of water, the level of which is controlled by 
 inlet and outlet valves. 
 """
-from fmdtools.modeldef.common import Parameter
-from fmdtools.modeldef.model import Model, ModelParam
-from fmdtools.modeldef.block import FxnBlock, Component
+from fmdtools.define.common import Parameter
+from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.block import FxnBlock, Component
 import numpy as np
 
 class ImportLiquid(FxnBlock):
@@ -124,9 +124,9 @@ class Tank(Model):
         return {'rate':rate, 'cost': totcost, 'expected cost': rate*life*totcost}
 
 if __name__=="__main__":
-    import fmdtools.faultsim.propagate as propagate
-    import fmdtools.resultdisp as rd
-    from fmdtools.modeldef.approach import SampleApproach
+    import fmdtools.sim.propagate as propagate
+    import fmdtools.analyze as rd
+    from fmdtools.define.approach import SampleApproach
     mdl=Tank()
     
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])

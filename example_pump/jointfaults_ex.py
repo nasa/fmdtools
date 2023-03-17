@@ -6,8 +6,8 @@ This code tests some approaches to sampling joing fault scenarios
 
 @author: Daniel Hulse
 """
-import fmdtools.faultsim.propagate as prop
-import fmdtools.resultdisp as rd
+import fmdtools.sim.propagate as prop
+import fmdtools.analyze as rd
 from ex_pump import * #required to import entire module
 
 mdl = Pump()
