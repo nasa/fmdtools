@@ -597,7 +597,7 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
 
 def check_hist_memory(mdlhist, nscens, max_mem=2e9):
     """Checks if the memory will be exhausted given the size of the mdlhist and number of scenarios"""
-    mem_total, mem_profile = proc.get_hist_memory(mdlhist)
+    mem_total, mem_profile = mdlhist.get_memory()
     total_memory = int(mem_total) * int(nscens)
     if total_memory > max_mem:
         raise Exception("Mdlhist has size: "+str(mem_total)+" bytes. With "+str(nscens)+" scenarios, it is expected that this run will pass the user-defined max_mem="+str(max_mem)+\
