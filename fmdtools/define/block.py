@@ -79,17 +79,14 @@ def inject_faults_internal(obj, faults):
             comp.m.add_fault(fault[len(comp.name)+1:])
 
 
-class Block():
-    __slots__ = ['p', '_args_p', 's', '_args_s','m', '_args_m', 'r', '_args_r', 't', '_args_t', 'h', '__dict__']
+class Block(object):
+    __slots__ = ['p', '_args_p', 's', '_args_s','m', '_args_m', 'r', '_args_r', 't', '_args_t', 'h', 'flows', 'name' ,'is_copy']
     hist_atts = ['s', 'm', 'r', 't']
     _init_p = Parameter
     _init_s = State
     _init_m = Mode
     _init_r = Rand
     _init_t = Time
-    name='block'
-    flows = dict()
-    is_copy = False
     """ 
     Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
     
@@ -140,6 +137,7 @@ class Block():
             Internal Time fields/arguments to override from defaults. The defautl is {}
         """
         self.name=name
+        self.is_copy = False
         self.flows = dict()
         assoc_flows(self, flows=flows)
         for at in ['s','p','m','r', 't']:
@@ -726,7 +724,7 @@ class ASG(dataobject, mapping=True):
         return h
 #Function superclass 
 class FxnBlock(Block):
-    slots = ["c", "_c_arg", "a", "_a_arg"]
+    __slots__ = ["c", "_c_arg", "a", "_a_arg"]
     hist_atts = ["c", "a"]+Block.hist_atts
     """
     Superclass class for functions which is a special type of Block\
@@ -753,7 +751,7 @@ class FxnBlock(Block):
             FxnBlock must have an _init_a property.
         r : dict, optional
             Internal Rand fields/arguments override from defaults. The default is {}.
-        r : dict, optional
+        m : dict, optional
             Internal Mode fields/arguments override from defaults. The default is {}.
         t : dict, optional
             Internal Time fields/arguments to override from defaults. The defautl is {}
@@ -892,7 +890,7 @@ class FxnBlock(Block):
             self.m.faults.difference_update(self.c.faultmodes)
             self.m.faults.update(self.c.get_faults())
         self.t.time=time
-        if run_stochastic=='track_pdf': self.probdens = self.r.return_probdens()
+        if run_stochastic=='track_pdf': self.r.probdens = self.r.return_probdens()
         if (self.m.exclusive==True and len(self.m.faults)>1): 
             raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.m.faults)+"\n Is the mode representation nonexclusive?")
         return

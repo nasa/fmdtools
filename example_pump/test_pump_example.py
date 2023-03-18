@@ -153,9 +153,9 @@ class Integration_Tests(unittest.TestCase):
             self.assertEqual(mdlhist['faulty']['flows']['EE_1']['voltage'][t], 500.0)
     def test_blockage_static(self):
         """Checks state of the model itself at a particular time-step. Useful when the model has states which are not recorded."""
-        for t in range(0, 10): propagate.propagate(self.mdl, t)     #simulate time up until t=10
+        for t in range(0, 10): self.mdl.propagate(t)     #simulate time up until t=10
         
-        propagate.propagate(self.mdl, 10, {'MoveWater': 'mech_break'})  #instantiate fault at time
+        self.mdl.propagate(10, {'MoveWater': 'mech_break'})  #instantiate fault at time
         self.assertTrue(self.mdl.fxns['MoveWater'].has_fault('mech_break'))         #check model properties
         self.assertEqual(self.mdl.flows['EE_1'].current, 0.2)
         self.assertEqual(self.mdl.flows['Wat_1'].flowrate, 0.0)

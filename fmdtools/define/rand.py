@@ -11,7 +11,7 @@ import numpy as np
 from .common import get_true_fields, get_true_field
 import copy
 
-from fmdtools.sim.result import init_hist_iter, History
+from fmdtools.sim.result import init_hist_iter, History, get_sub_include
 
 class Rand(dataobject, mapping=True):
     """
@@ -39,6 +39,7 @@ class Rand(dataobject, mapping=True):
     """
     rng:            np.random.default_rng
     probs:          list = list()
+    probdens:       float = 1.0
     seed:           int =   42
     run_stochastic: bool=False
     def __init__(self, *args, seed=42, run_stochastic=False, probs = list(), s_kwargs={}):
@@ -128,6 +129,8 @@ class Rand(dataobject, mapping=True):
         h = History()
         if self.run_stochastic=='track_pdf': 
             h['probdens'] = init_hist_iter('probdens', self.return_probdens(), timerange=timerange, track='all')
+        if hasattr(self,'s'):
+            h['s'] = init_hist_iter('s', self.s, timerange=timerange, track=track)
         return h
 
 def get_pdf_for_rand(x, randname, args):

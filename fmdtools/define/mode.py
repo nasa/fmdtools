@@ -352,9 +352,11 @@ class Mode(dataobject, readonly=False):
         return get_true_fields(self, *args, **kwargs)
     def create_hist(self, timerange, track):
         h = History()
-        if self.exclusive:   
-            h.data = {faultmode: init_hist_iter(faultmode, False, timerange, track, dtype=bool)
+        if not self.exclusive:  
+            fh = History()
+            fh.data = {faultmode: init_hist_iter(faultmode, False, timerange, track, dtype=bool)
                       for faultmode in self.faultmodes} 
+            h['faults']=fh
         modelength = max([len(fm) for fm in self.faultmodes]+[len(m) for m in self.opermodes])
         str_size = '<U'+str(modelength)
         h['mode'] = init_hist_iter('mode', self.mode, timerange, track, str_size=str_size)

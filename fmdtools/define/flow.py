@@ -19,13 +19,13 @@ from fmdtools.sim.result import History, get_sub_include
 
 
 class Flow(object):
-    __slots__ = ['p', '_args_p', 's', '_args_s', 'h']
+    __slots__ = ['p', '_args_p', 's', '_args_s', 'h', 'name' ,'is_copy']
     _init_p = Parameter
     _init_s = State
     """
     Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
     """
-    def __init__(self, name, s={}, p={}, suppress_warnings=False):
+    def __init__(self, name, s={}, p={}):
         """
         Instances the flow with given states.
 

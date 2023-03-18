@@ -82,7 +82,7 @@ class TankTests(unittest.TestCase, CommonTests):
         for compmode in compmodes:
             mdl = Tank()
             scen = {'Human': compmode}
-            propagate.propagate(mdl,1, fxnfaults=scen)
+            mdl.propagate(1, fxnfaults=scen)
             self.assertIn(compmode, mdl.fxns['Human'].faults)
             self.assertIn(compmode, mdl.fxns['Human'].components[compname[compmode]].faults)
     def test_different_components(self):
@@ -190,4 +190,4 @@ if __name__ == '__main__':
     
     #mdl = Tank()
     #scen = {'Human': 'NotDetected'}
-    #propagate.propagate(mdl,scen,1)    
+    #mdl.propagate(scen,1)    

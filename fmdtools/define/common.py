@@ -4,6 +4,10 @@ Description: A module for methods used commonly in model definition constructs.
 """
 from collections.abc import Iterable
 import dill
+import pickle
+from itertools import chain
+import time
+
 
 def get_var(obj, var):
     """
@@ -75,16 +79,38 @@ def is_iter(data):
     if isinstance(data, Iterable) and type(data)!=str:  return True
     else:                                               return False
 
-def check_pickleability(obj, verbose=True):
+def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     """ Checks to see which attributes of an object will pickle (and thus parallelize)"""
     unpickleable = []
-    for name, attribute in vars(obj).items():
-        if not dill.pickles(attribute):
-            unpickleable = unpickleable + [name]
+    try:
+        itera = vars(obj)
+    except:
+        itera = {a: getattr(obj, a) for a in obj.__slots__}
+    for name, attribute in itera.items():
+        print(name)
+        time.sleep(pause)
+        try:
+            if not dill.pickles(attribute):
+                unpickleable = unpickleable + [name]
+        except ValueError as e:
+            raise ValueError("Problem in "+name+" with attribute "+str(attribute)) from e
+        if try_pick:
+            try:
+                a=pickle.dumps(attribute)
+                b=pickle.loads(a)
+            except:
+                raise Exception(obj.name+" will not pickle")
+    if try_pick:
+        try:
+            a=pickle.dumps(obj)
+            b=pickle.loads(a)
+        except:
+            raise Exception(obj.name+" will not pickle")
     if verbose:
         if unpickleable: print("The following attributes will not pickle: "+str(unpickleable))
         else:           print("The object is pickleable")
     return unpickleable
+
 
 
 
