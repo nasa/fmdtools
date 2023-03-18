@@ -133,7 +133,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     for scen in mdlhists:
         mdlhists[scen] = mdlhists[scen].cut(max_ind)
     times = mdlhists[[*mdlhists.keys()][0]]['time']
-    flat_mdlhists = {scen:mdlhist.flatten() for scen, mdlhist in mdlhists.items()}
+    flat_mdlhists = {scen:mdlhist.flatten(to_include=fxnflowvals) for scen, mdlhist in mdlhists.items()}
     #Sort into comparison groups
     if not comp_groups: 
         if aggregation=='individual':   grouphists = flat_mdlhists
@@ -167,37 +167,40 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
         if ylabels.get(plot_value, False): ax.set_ylabel(ylabels[plot_value])
         for group, hists in grouphists.items():
             local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
-            if aggregation=='individual':
-                if any([type(h)==tuple for h in hists.keys()]):
-                    ax.plot(times, hists[plot_value], label=group, **local_kwargs)
-                else:
-                    if 'color' not in local_kwargs: local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
-                    for hist in hists.values():
-                        ax.plot(times, hist[plot_value], label=group, **local_kwargs)
-            elif aggregation=='mean_std':
-                mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
-                std_dev = np.std([hist[plot_value] for hist in hists.values()], axis=0)
-                plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
-            elif aggregation=='mean_ci':
-                mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
-                vals = [[hist[plot_value][t] for hist in hists.values()] for t in inds]
-                boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True, confidence_level=ci) for val in vals]).transpose()
-                plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2],boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
-            elif aggregation=='mean_bound':
-                mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
-                maxs = np.max([hist[plot_value] for hist in hists.values()], axis=0)
-                mins = np.min([hist[plot_value] for hist in hists.values()], axis=0)
-                plot_line_and_err(ax, times, mean, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
-            elif aggregation=='percentile':
-                median= np.median([hist[plot_value] for hist in hists.values()], axis=0)
-                maxs = np.max([hist[plot_value] for hist in hists.values()], axis=0)
-                mins = np.min([hist[plot_value] for hist in hists.values()], axis=0)
-                low_perc = np.percentile([hist[plot_value] for hist in hists.values()],50-kwargs.get('perc_range',50)/2, axis=0)
-                high_perc = np.percentile([hist[plot_value] for hist in hists.values()],50+kwargs.get('perc_range',50)/2, axis=0)
-                plot_line_and_err(ax, times, median, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
-                if boundtype=='fill':       ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
-                elif boundtype=='line':     plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
-            else: raise Exception("Invalid aggregation option: "+aggregation)
+            try:
+                if aggregation=='individual':
+                    if any([type(h)==tuple for h in hists.keys()]):
+                        ax.plot(times, hists[plot_value], label=group, **local_kwargs)
+                    else:
+                        if 'color' not in local_kwargs: local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
+                        for hist in hists.values():
+                            ax.plot(times, hist[plot_value], label=group, **local_kwargs)
+                elif aggregation=='mean_std':
+                    mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
+                    std_dev = np.std([hist[plot_value] for hist in hists.values()], axis=0)
+                    plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
+                elif aggregation=='mean_ci':
+                    mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
+                    vals = [[hist[plot_value][t] for hist in hists.values()] for t in inds]
+                    boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True, confidence_level=ci) for val in vals]).transpose()
+                    plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2],boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
+                elif aggregation=='mean_bound':
+                    mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
+                    maxs = np.max([hist[plot_value] for hist in hists.values()], axis=0)
+                    mins = np.min([hist[plot_value] for hist in hists.values()], axis=0)
+                    plot_line_and_err(ax, times, mean, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
+                elif aggregation=='percentile':
+                    median= np.median([hist[plot_value] for hist in hists.values()], axis=0)
+                    maxs = np.max([hist[plot_value] for hist in hists.values()], axis=0)
+                    mins = np.min([hist[plot_value] for hist in hists.values()], axis=0)
+                    low_perc = np.percentile([hist[plot_value] for hist in hists.values()],50-kwargs.get('perc_range',50)/2, axis=0)
+                    high_perc = np.percentile([hist[plot_value] for hist in hists.values()],50+kwargs.get('perc_range',50)/2, axis=0)
+                    plot_line_and_err(ax, times, median, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
+                    if boundtype=='fill':       ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
+                    elif boundtype=='line':     plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
+                else: raise Exception("Invalid aggregation option: "+aggregation)
+            except Exception as e:
+                raise Exception("Error at plot_value "+str(plot_value)+" and group: "+str(group))
             if phases.get(plot_value[1]):
                 ymin, ymax = ax.get_ylim()
                 phaseseps = [i[0] for i in list(phases[plot_value[1]].values())[1:]]

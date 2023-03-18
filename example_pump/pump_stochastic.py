@@ -53,7 +53,7 @@ class ImportEE(DetImportEE):
         else:                           
             if time>self.t.time: self.r.set_rand('effstate','triangular',0.9,1,1.1)
         if time>self.t.time:
-            self.r.set_rand('grid_noise','normal',1, 0.1*(2+np.sin(np.pi/2*time)))
+            self.r.set_rand('grid_noise','normal',1, 0.05*(2+np.sin(np.pi/2*time)))
         self.ee_out.s.voltage= self.r.s.grid_noise*self.r.s.effstate * 500
 
 
@@ -81,17 +81,22 @@ class ImportSig(DetImportSig):
                 self.r.to_default()
 
 from ex_pump import MoveWat as DetMoveWat
+class MoveWatStates(State):
+    total_flow: float=0.0
+    eff:    float = 1.0 #effectiveness state
 class MoveWatRandState(State):
-    eff: float=1.0
+    eff:        float=1.0
     eff_update = ('normal', (1.0, 0.2))
 class MoveWatRand(Rand):
     s=MoveWatRandState()
     run_stochastic: bool=True
 class MoveWat(DetMoveWat):
+    _init_s = MoveWatStates
     _init_r=MoveWatRand
     def behavior(self, time):
         self.s.eff=self.r.s.eff
         super().behavior(time)
+        if time>self.t.time: self.s.inc(total_flow=self.wat_out.s.flowrate)
 
 from ex_pump import PumpParam, Electricity, Water, Signal
 from ex_pump import Pump as DetPump
@@ -133,13 +138,13 @@ if __name__=="__main__":
     app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
     app_comp.add_param_replicates(paramfunc, 'delay_10', 100, (10))
     
-    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')]) #pool=mp.Pool(4)
+    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], pool=mp.Pool(4)) #pool=mp.Pool(4)
     
-    endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True) #pool=mp.Pool(4)
+    #endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True) #pool=mp.Pool(4)
     
     comp_mdlhists = {scen:mdlhist['export_water block, t=27.0'] for scen,mdlhist in mdlhists.items()}
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
-    fig = an.plot.mdlhists(comp_mdlhists, {'move_water':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
+    fig = an.plot.mdlhists(comp_mdlhists, {'move_water':{'s':['eff','total_flow']}, 'wat_2':{'s':['flowrate','pressure']}}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
     
     
     app = NominalApproach()
@@ -157,7 +162,7 @@ if __name__=="__main__":
     
     for i in range(1,10):
         mdl.update_seed(i)
-        propagate.propagate(mdl, i, run_stochastic='track_pdf')
+        mdl.propagate(i, run_stochastic='track_pdf')
         print(mdl.return_probdens())
         #print(mdl.seed)
         
@@ -172,7 +177,7 @@ if __name__=="__main__":
     
     #mdlhist['faulty']['functions']['ImportEE']['probdens']
     
-    an.plot.mdlhists(mdlhist, fxnflowvals={'import_water'})
+    an.plot.mdlhists(mdlhist, fxnflowvals={'import_ee', 'ee_1'})
     #an.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     
     """

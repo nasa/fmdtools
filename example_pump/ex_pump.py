@@ -23,7 +23,7 @@ The flows are:
 
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.flow import Flow 
-from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.model import Model, ModelParam, check_model_pickleability
 from fmdtools.sim.approach import SampleApproach, NominalApproach
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State 
@@ -102,6 +102,7 @@ class ImportEEState(State):
     effstate : float = 1.0
 
 class ImportEE(FxnBlock):
+    __slots__ = ['ee_out']
     _init_m = ImportEEMode
     _init_s = ImportEEState
     _init_ee_out = Electricity
@@ -140,6 +141,7 @@ class ImportWaterMode(Mode):
     faultparams = {'no_wat':(1.0, [1,1,1], 1000)}
     key_phases_by='global'
 class ImportWater(FxnBlock):
+    __slots__ = ['wat_out']
     _init_m = ImportWaterMode
     _init_wat_out = Water
     flownames = {"wat_1":"wat_out"}
@@ -155,6 +157,7 @@ class ExportWaterMode(Mode):
     
 class ExportWater(FxnBlock):
     """ Import Water is the pipe with water going into the pump """
+    __slots__ = ['wat_in']
     _init_m = ExportWaterMode 
     _init_wat_in = Water
     flownames = {'wat_2':'wat_in'}
@@ -168,6 +171,7 @@ class ImportSigMode(Mode):
     key_phases_by='global'
 class ImportSig(FxnBlock):
     """ Import Signal is the on/off switch """
+    __slots__ = ['sig_out']
     _init_m = ImportSigMode
     _init_sig_out = Signal
     flownames = {'sig_1':'sig_out'}
@@ -195,6 +199,7 @@ class MoveWatMode(Mode):
     key_phases_by ='global'
 class MoveWat(FxnBlock):
     """  Move Water is the pump itself. While one could decompose this further, one function is used for simplicity """
+    __slots__ = ['ee_in', 'sig_in', 'wat_in', 'wat_out']
     _init_s = MoveWatStates
     _init_p = MoveWatParams
     _init_m = MoveWatMode
@@ -348,8 +353,29 @@ class Pump(Model):
 
 if __name__=="__main__":
     mdl = Pump()
+    check_model_pickleability(mdl, try_pick=True)
+    from define.common import check_pickleability
+    unpickleable = check_pickleability(mdl, try_pick=True)
     
-    newhist = mdl.create_hist(range(10), {'ee_1':'all',"wat_1":'s'})
+    newhist = mdl.create_hist(range(10), 'all')
+    
+    
+    
+    import pickle
+    a = pickle.dumps(newhist)
+    b = pickle.loads(a)
+    
+    a = pickle.dumps(mdl.flows)
+    b = pickle.loads(a)
+    
+    #a = pickle.dumps(mdl.fxns)
+    #b = pickle.loads(a)
+    
+    
+    
+    #c = pickle.dumps(mdl)
+    #d = pickle.loads(c)
+    
     mdl = Pump()
     newhist2 = mdl.create_hist(range(10), {'ee_1':'all',"wat_1":{'s':'flowrate'}})
     mdl = Pump()

@@ -157,7 +157,6 @@ def load_folder(folder, filetype, renest_dict=True):
         if read_filetype==filetype:
             files_toread.append(file)
     return files_toread
-    
 def get_dict_attr(dict_in, des_class, *attr):
     """Gets attributes *attr from a given dict dict_in of class des_class"""
     if len(attr)==1:    return dict_in[attr[0]]
@@ -169,6 +168,15 @@ def fromdict(resultclass, inputdict):
         if isinstance(val, dict):   newhist[k]=resultclass.fromdict(val)
         else:                       newhist[k]=val
         return newhist
+def check_include_errors(result, to_include):
+    if type(to_include)!=str:
+        for k in to_include:
+            check_include_error(result,k)
+    else:
+        check_include_error(result,to_include)
+def check_include_error(result,to_include):
+    if to_include!='all' and to_include not in result:
+        raise Exception("to_include key "+to_include+" not in result keys: "+str(result.keys()))
 
 class Result(UserDict):
     """
@@ -204,18 +212,36 @@ class Result(UserDict):
                 if res:
                     val_rep = ind*"--"+k+": \n"+res
                     str_rep = str_rep+val_rep
-            #else: str_rep=str_rep+k+'\n'
+            else: 
+                val_rep = ind*"--"+k+": "
+                if len(val_rep)>40: val_rep = val_rep[:20]
+                form = '{:>'+str(40-len(val_rep))+'}'
+                vv = form.format(str(val))
+                str_rep = str_rep+val_rep+vv+'\n'
         return str_rep
+    def all(self):
+        return tuple(self.data.values())
+    def __eq__(self, other):
+        return all([all(v==other[k]) if isinstance(v, np.ndarray) else v==other[k] for k,v in self.data.items()])
     def keys(self):
         return self.data.keys()
     def items(self):
         return self.data.items()
+    def values(self):
+        return self.data.values()
+    def __reduce__(self):
+        return (type(self), (), None, None, iter(self.items()))
     def __getattr__(self, argstr):
         args = argstr.split(".")
         try:
             return get_dict_attr(self.data, self.__class__, *args)
         except:
-            raise AttributeError("Not in dict")
+            raise AttributeError("Not in dict: "+str(argstr))
+    def __setattr__(self, key, val):
+        if key == "data":
+            UserDict.__setattr__(self, key, val)
+        else:
+            self.data[key]=val
     def fromdict(inputdict):
         return fromdict(Result, inputdict)
     def load(filename, filetype="", renest_dict=True, indiv=False):
@@ -250,11 +276,13 @@ class Result(UserDict):
         if newhist is False: 
             newhist = self.__class__()
         #TODO: Add some error handling for when the attributes in "to_include" aren't actually in hist
+        check_include_errors(self, to_include)
         for att, val in self.items():
             newname = prevname+tuple([att])
             if isinstance(val, Result): 
                 new_to_include = get_sub_include(att, to_include)
-                if new_to_include: val.flatten(newhist, newname, new_to_include)
+                if new_to_include: 
+                    val.flatten(newhist, newname, new_to_include)
             elif to_include=='all' or att in to_include: 
                 if len(newname)==1: newhist[newname[0]] = val
                 else:               newhist[newname] = val
@@ -352,11 +380,11 @@ def is_known_immutable(val):
 
 def get_sub_include(att, to_include):
     """Determines what attributes of att to include based on the provided dict/str/list/set to_include"""
-    if type(to_include)==list and att in to_include:        new_to_include = 'all'
-    elif type(to_include)==set and att in to_include:       new_to_include = 'all'
+    if type(to_include) in [list, set, tuple, str]:
+        if att in to_include:                               new_to_include = 'all'
+        elif type(to_include)==str and to_include=='all':   new_to_include='all'
+        else:                                               new_to_include=False
     elif type(to_include)==dict and att in to_include:      new_to_include = to_include[att]
-    elif type(to_include)==str and att== to_include:        new_to_include = 'all'
-    elif to_include =='all': new_to_include='all'
     else:                                                   new_to_include= False
     return new_to_include
 
@@ -390,7 +418,7 @@ def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<
         Initialized history structure corresponding to the attribute
     """
     sub_track = get_sub_include(att, track)
-    if sub_track and hasattr(val, 'create_hist'): return val.create_hist(val, timerange, sub_track)
+    if sub_track and hasattr(val, 'create_hist'): return val.create_hist(timerange, sub_track)
     elif sub_track and isinstance(val, dict):     return init_dicthist(val, timerange, sub_track)
     elif sub_track:
         if timerange is None:                     return [val]
@@ -483,7 +511,9 @@ class History(Result):
                 val=time
             else:
                 try:    val=obj[att]
-                except: val=getattr(obj, att)
+                except: 
+                    try: val=getattr(obj, att)
+                    except: val = att in obj
             
             if type(hist)==History:             hist.log(val, t_ind)
             else:

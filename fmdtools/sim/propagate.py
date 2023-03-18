@@ -589,7 +589,12 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
             - :data:`sim_kwargs` : kwargs
                 Simulation options for :func:`prop_one_scen
     """
-    if kwargs.get('staged',False):  mdl = mdl.copy(); 
+    if kwargs.get('staged',False): 
+        if 'time' in mdl.h: 
+            ctime= np.copy(mdl.h.time)
+            mdl = mdl.copy()
+            mdl.h.time=ctime
+        else: mdl = mdl.copy()
     else:                           mdl = new_mdl(mdl, {})
     result, mdlhist, _, t_end,  =prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen['properties']['name']))
@@ -804,7 +809,9 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
-           if t in ctimes: c_mdl[t]=mdl.copy()
+           if t in ctimes: 
+               c_mdl[t]=mdl.copy()
+               if 'time' in mdl.h: c_mdl[t].h['time'] = np.copy(mdl.h.time)
            if t in scen['sequence']: 
                fxnfaults = scen['sequence'][t].get('faults',{})
                disturbances = scen['sequence'][t].get('disturbances', {})

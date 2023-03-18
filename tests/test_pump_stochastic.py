@@ -24,7 +24,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         testvals = [6.32173873679189, 10.56678004828189, 37.27832255997974, 15.163623336729625,  0.10687727708471972, 5.313965836539551, 54.568223188266394, 33.79026902541023, 7.636851629723572]
         for i in range(1,10):
             self.mdl.update_seed(i)
-            propagate.propagate(self.mdl, i, run_stochastic='track_pdf')
+            self.mdl.propagate(i, run_stochastic='track_pdf')
             pd = self.mdl.return_probdens()
             self.assertAlmostEqual(pd, testvals[i-1])
     def test_run_safety(self):

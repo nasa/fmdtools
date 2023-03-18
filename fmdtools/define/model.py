@@ -13,6 +13,7 @@ import networkx as nx
 import warnings
 import sys
 from recordclass import asdict
+import time
 
 from .flow import Flow, init_flow
 from .common import check_pickleability, get_var, set_var
@@ -78,7 +79,7 @@ class Model(object):
         multigraph view of functions and flows
     
     """
-    def __init__(self, params={},modelparams=ModelParam(), valparams='all'):
+    def __init__(self, params=Parameter(),modelparams=ModelParam(), valparams='all'):
         """
         Instantiates internal model attributes with predetermined:
         
@@ -118,6 +119,10 @@ class Model(object):
         if name in self.fxns:    return self.fxns[name]
         elif name in self.flows: return self.flows[name]
         else:                    return super().__getattribute__(name)
+    def __getstate__(self): # need these to be able to pickle given the custom __getattr__.
+        return vars(self)
+    def __setstate__(self, state):
+        vars(self).update(state)
     def find_any_phase_overlap(self):
         phase_dict = {v[0]: [v[1], v[2]] for v in self.modelparams.phases}
         intervals = [*phase_dict.values()]
@@ -250,7 +255,7 @@ class Model(object):
                 class_relationship[obj.__class__.__name__].update(obj.get_flowtypes())
             else: class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
         return class_relationship
-    def build_model(self, functionorder=[], graph_pos={}, bipartite_pos={}, require_connections=True):
+    def build_model(self, functionorder=[], require_connections=True):
         """
         Builds the model graph after the functions have been added.
 
@@ -258,10 +263,6 @@ class Model(object):
         ----------
         functionorder : list, optional
             The order for the functions to be executed in. The default is [].
-        graph_pos : dict, optional
-            position of graph nodes. The default is {}.
-        bipartite_pos : dict, optional
-            position of bipartite graph nodes. The default is {}.
         """
         if not getattr(self, 'is_copy', False):
             if functionorder: self.set_functionorder(functionorder)
@@ -271,9 +272,9 @@ class Model(object):
             self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
                                            if getattr(fxn, 'dynamic_behavior', False) 
                                            or (hasattr(fxn, 'a') and getattr(fxn.a, 'proptype','')=='dynamic')])
-            self.construct_graph(graph_pos, bipartite_pos, require_connections=require_connections)
+            self.construct_graph(require_connections=require_connections)
             self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.bipartite.neighbors(flow)])]
-    def construct_graph(self, graph_pos={}, bipartite_pos={}, require_connections=True):
+    def construct_graph(self, require_connections=True):
         """
         Creates and returns a graph representation of the model
 
@@ -291,22 +292,19 @@ class Model(object):
         if dangling_nodes and require_connections: raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
         
         self.multgraph = nx.projected_graph(self.bipartite, self.fxns,multigraph=True)
-        self.graph = nx.projected_graph(self.bipartite, self.fxns)
+        graph = nx.projected_graph(self.bipartite, self.fxns)
         attrs={}
         #do we still need to do this for the objects? maybe not--I don't think we use the info anymore
-        for edge in self.graph.edges:
+        for edge in graph.edges:
             midedges=list(self.multgraph.subgraph(edge).edges)
             flows= [midedge[2] for midedge in midedges]
             flowdict={}
             for flow in flows:
                 flowdict[flow]=self.flows[flow]
             attrs[edge]=flowdict
-        nx.set_edge_attributes(self.graph, attrs)
+        nx.set_edge_attributes(graph, attrs)
         
-        nx.set_node_attributes(self.graph, self.fxns, 'obj')
-        self.graph_pos=graph_pos
-        self.bipartite_pos=bipartite_pos
-        return self.graph
+        nx.set_node_attributes(graph, self.fxns, 'obj')
     def return_typegraph(self, withflows = True):
         """
         Returns a graph with the type containment relationships of the different model constructs.
@@ -521,17 +519,16 @@ class Model(object):
         copy._fxninput=self._fxninput
         copy._fxnflows=self._fxnflows
         copy.is_copy=False
-        copy.build_model(functionorder = self.functionorder, graph_pos=self.graph_pos, bipartite_pos=self.bipartite_pos)
+        copy.build_model(functionorder = self.functionorder)
         copy.is_copy=True
         if hasattr(self, 'h'): 
             copy.h = History()
             for fname, fxn in copy.fxns.items():
                 if hasattr(fxn, 'h'):
-                    copy.h[fname]=fxn.h
+                    copy.h[fname]=fxn.h.copy()
             for fname, flow in copy.flows.items():
                 if hasattr(flow, 'h'):
-                    copy.h[fname]=flow.h
-            copy.h['time'] = np.copy(self.h.time)
+                    copy.h[fname]=flow.h.copy()
         return copy
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
@@ -701,16 +698,17 @@ class Model(object):
             if n>1000: #break if this is going for too long
                 raise Exception("Undesired looping between functions in static propagation step",
                                 "at t="+str(time)+", these functions remain active:"+str(activefxns))
-def check_model_pickleability(model):
+def check_model_pickleability(model, try_pick=False):
     """ Checks to see which attributes of a model object will pickle, providing more detail about functions/flows"""
-    unpickleable = check_pickleability(model)
-    if 'flows' in unpickleable:
-        print('FLOWS ')
-        for flowname, flow in model.flows.items():
-            print(flowname)
-            check_pickleability(flow)
-    if 'fxns' in unpickleable:
-        print('FUNCTIONS ')
-        for fxnname, fxn in model.fxns.items():
-            print(fxnname)
-            check_pickleability(fxn)
+    print('FLOWS ')
+    for flowname, flow in model.flows.items():
+        print(flowname)
+        check_pickleability(flow, try_pick=try_pick)
+    print('FUNCTIONS ')
+    for fxnname, fxn in model.fxns.items():
+        print(fxnname)
+        check_pickleability(fxn, try_pick=try_pick)
+    time.sleep(0.2)
+    print('MODEL')
+    unpickleable = check_pickleability(model, try_pick=try_pick)
+        
