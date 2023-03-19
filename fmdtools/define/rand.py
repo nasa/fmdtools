@@ -6,7 +6,7 @@ Description: A module for defining randon properties for use in blocks. Has Clas
 """
 
 from scipy import stats 
-from recordclass import dataobject, asdict
+from recordclass import dataobject, asdict, astuple
 import numpy as np
 from .common import get_true_fields, get_true_field
 import copy
@@ -53,6 +53,9 @@ class Rand(dataobject, mapping=True):
         if auto_update_only:
             rand_states = {state:vals for state,vals in  rand_states if hasattr(self.s, state+"_update")}
         return rand_states
+    def return_mutables(self):
+        if 's' in self.__fields__:  return astuple(self.s)
+        else:                       return ()
     def set_rand(self,statename,methodname, *args):
         """
         Update the given random state with a given method and arguments (if in run_stochastic mode)

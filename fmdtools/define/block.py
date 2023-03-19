@@ -17,7 +17,7 @@ import networkx as nx
 import copy
 import inspect
 import warnings
-from recordclass import dataobject, asdict
+from recordclass import dataobject, asdict, astuple
 
 from .state import State
 from .parameter import Parameter
@@ -149,7 +149,10 @@ class Block(object):
         self.update_seed()
     def __repr__(self):
         if hasattr(self,'name'):
-            return getattr(self, 'name', '')+' '+self.__class__.__name__+' '+getattr(self,'type', '')+': '+str(self.return_states())
+            fxnstr = getattr(self, 'name', '')+' '+self.__class__.__name__+'\n'
+            for at in ['s','m']:
+                fxnstr = fxnstr+"- "+getattr(self,at).__repr__()+'\n'
+            return fxnstr
         else: return 'New uninitialized '+self.__class__.__name__
     def update_seed(self, seed=[]):
         """
@@ -247,28 +250,17 @@ class Block(object):
         for state in asdict(self.s):
             mem+=2*sys.getsizeof(state) # (*2 because both the initstate and the actual state should be counted)
         return mem
-    def return_states(self):
+    def return_mutables(self):
         """
-        Returns states of the block at the current state. Used (iteratively) to record states over time.
+        Returns all mutable values in the block. Used in static propagation steps to
+        check if the block has changed
 
         Returns
         -------
-        states : dict
-            States (variables) of the block
-        faults : set
-            Faults present in the block
+        states : tuple
+            tuple of all states in the block 
         """
-        states={}
-        if hasattr(self, 's'):
-            for state, val in asdict(self.s).items():
-                if type(val) in [set, dict]: val=copy.deepcopy(val)
-                states[state]= val
-        states['mode']=self.m.mode
-        return states, self.m.faults.copy()
-    def has_new_states(self, prev_states, prev_faults):
-        states, faults = self.return_states()
-        if prev_states!=states or prev_faults!=faults:  return True
-        else:                                           return False
+        return (*astuple(self.s), *self.m.return_mutables(), *self.r.return_mutables(), *self.t.return_mutables())
     def return_probdens(self):
         """Gets the probability density associated with a Block and its components/actions (if any)"""
         state_pd = self.r.return_probdens()
@@ -429,6 +421,11 @@ class CompArch(dataobject, mapping=True):
             if comp_track: 
                 h[c]=comp.create_hist(timerange, comp_track)
         return h
+    def return_mutables(self):
+        cm=[]
+        for c in self.c.components.values():
+            cm.extend(c.return_mutables())
+        return cm
     
 ## Actions/ASGs
 class Action(Block):
@@ -722,6 +719,14 @@ class ASG(dataobject, mapping=True):
                 h[c]=comp.create_hist(timerange, comp_track)
         h['active_actions'] = init_hist_iter('active_actions', self.active_actions, timerange=timerange, track='all')
         return h
+    def return_mutables(self):
+        am=[]
+        for a in self.actions.values():
+            am.extend(a.return_mutables())
+        for f in self.flows.values():
+            am.extend(f.return_mutables())
+        am.append(copy.copy(self.active_actions))
+        return am
 #Function superclass 
 class FxnBlock(Block):
     __slots__ = ["c", "_c_arg", "a", "_a_arg"]
@@ -840,6 +845,12 @@ class FxnBlock(Block):
         if hasattr(self, 'c'): cop.c = self.c.copy_with_arg(**self._c_arg)
         if hasattr(self, 'a'): cop.a = self.a.copy_with_arg(flows = cop.flows, **self._a_arg)
         return cop
+    def return_mutables(self):
+        bm = super().return_mutables()
+        cm, am = (), ()
+        if hasattr(self, 'c'): cm = self.c.return_mutables()
+        if hasattr(self, 'a'): am = self.c.return_mutables()
+        return (*bm, *cm, *am)
     def __call__(self,proptype, faults=[], time=0, run_stochastic=False):
         """
         Updates the state of the function at a given time and injects faults.

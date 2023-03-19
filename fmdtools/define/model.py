@@ -14,6 +14,7 @@ import warnings
 import sys
 from recordclass import asdict
 import time
+import copy
 
 from .flow import Flow, init_flow
 from .common import check_pickleability, get_var, set_var
@@ -106,15 +107,15 @@ class Model(object):
         self._fxninput={}
         self._flowstates={}
     def __repr__(self):
-        fxnlist = ['- '+fxnname+':'+str(fxn.return_states())+' '+str(getattr(fxn,'active_actions',''))+'\n' for fxnname,fxn in self.fxns.items()]
-        fxnlist = [fstr[:115]+'...\n'if len(fstr)>120 else fstr for fstr in fxnlist]
+        fxnlist = [fxn.__repr__() for fxn in self.fxns.values()]
+        fxnlist = [fstr[:115]+'...'if len(fstr)>120 else fstr for fstr in fxnlist]
         if len(fxnlist)>15: fxnlist=fxnlist[:15]+["...("+str(len(fxnlist))+' total) \n']
         fxnstr = ''.join(fxnlist)
-        flowlist = ['- '+flowname+':'+str(flow.status())+'\n' for flowname,flow in self.flows.items()]
+        flowlist = [flow.__repr__()+'\n' for flow in self.flows.values()]
         flowlist = [fstr[:115]+'...\n'if len(fstr)>120 else fstr for fstr in flowlist]
         if len(flowlist)>15:  flowlist=flowlist[:15]+["...("+str(len(flowlist))+' total) \n']
         flowstr = ''.join(flowlist)
-        return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'functions: \n'+fxnstr+'flows: \n'+flowstr
+        return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'FUNCTIONS: \n'+fxnstr+'FLOWS: \n'+flowstr
     def __getattr__(self, name):
         if name in self.fxns:    return self.fxns[name]
         elif name in self.flows: return self.flows[name]
@@ -405,11 +406,12 @@ class Model(object):
         #set node values for functions
         if gtype=='typegraph':
             for fxnclass in self.fxnclasses(): 
-                fxnstates[fxnclass] = {fxn:self.fxns[fxn].return_states()[0] for fxn in self.fxns_of_class(fxnclass)}
-                fxnmodes[fxnclass] = {fxn:self.fxns[fxn].return_states()[1] for fxn in self.fxns_of_class(fxnclass)}
+                fxnstates[fxnclass] = {fxn: asdict(self.fxns[fxn].s) for fxn in self.fxns_of_class(fxnclass)}
+                fxnmodes[fxnclass] = {fxn: copy.copy(self.fxns[fxn].m.faults) for fxn in self.fxns_of_class(fxnclass)}
         else:
             for fxnname, fxn in self.fxns.items():
-                fxnstates[fxnname], fxnmodes[fxnname] = fxn.return_states()
+                fxnstates[fxnname] = asdict(self.fxns[fxnname].s)
+                fxnmodes[fxnname] = copy.copy(self.fxns[fxnname].m.faults)
                 if gtype=='normal': del graph.nodes[fxnname]['bipartite']
                 if gtype=='component':
                     for mode in fxnmodes[fxnname].copy():
@@ -669,29 +671,30 @@ class Model(object):
         if not self._flowstates: 
             self._flowstates=dict.fromkeys(self.staticflows)
             for flowname in self.staticflows:
-                self._flowstates[flowname]=self.flows[flowname].return_states()
+                self._flowstates[flowname]=self.flows[flowname].return_mutables()
         n=0
         while activefxns:
             flows_to_check = {*self.staticflows}
             for fxnname in list(activefxns).copy():
                 #Update functions with new values, check to see if new faults or states
-                oldstates, oldfaults = self.fxns[fxnname].return_states()
+                oldmutables = self.fxns[fxnname].return_mutables()
                 self.fxns[fxnname]('static', time=time, run_stochastic=run_stochastic)
-                if self.fxns[fxnname].has_new_states(oldstates, oldfaults): nextfxns.update([fxnname])
+                if oldmutables!=self.fxns[fxnname].return_mutables(): 
+                    nextfxns.update([fxnname])
                 
                 #Check to see what flows now have new values and add connected functions (done for each because of communications potential)
                 for flowname in self.fxns[fxnname].flows:
                     if flowname in flows_to_check:
-                        if self._flowstates[flowname]!=self.flows[flowname].return_states():
+                        if self._flowstates[flowname]!=self.flows[flowname].return_mutables():
                             nextfxns.update(set([n for n in self.bipartite.neighbors(flowname) if n in self.staticfxns]))
                             flows_to_check.remove(flowname)
             # check remaining flows that have not been checked already
             for flowname in flows_to_check:
-                if self._flowstates[flowname]!=self.flows[flowname].return_states():
+                if self._flowstates[flowname]!=self.flows[flowname].return_mutables():
                     nextfxns.update(set([n for n in self.bipartite.neighbors(flowname) if n in self.staticfxns]))
             # update flowstates
             for flowname in self.staticflows:
-                self._flowstates[flowname]=self.flows[flowname].return_states()
+                self._flowstates[flowname]=self.flows[flowname].return_mutables()
             activefxns=nextfxns.copy()
             nextfxns.clear()
             n+=1

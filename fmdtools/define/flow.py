@@ -11,7 +11,7 @@ import warnings
 import copy
 import sys
 import networkx as nx
-from recordclass import asdict
+from recordclass import asdict, astuple
 
 from .parameter import Parameter
 from .state import State
@@ -56,8 +56,8 @@ class Flow(object):
     def reset(self):
         """ Resets the flow to the initial state"""
         self.s=self._init_s(**self._args_s)
-    def return_states(self):
-        return self.status()
+    def return_mutables(self):
+        return astuple(self.s)
     def status(self):
         """
         Returns a dict with the current states of the flow.
