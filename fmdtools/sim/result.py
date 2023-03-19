@@ -376,6 +376,8 @@ class Result(UserDict):
 
 def is_known_immutable(val):
     return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
+def is_known_mutable(val):
+    return type(val) in [dict, set]
 
 
 def get_sub_include(att, to_include):
@@ -517,17 +519,18 @@ class History(Result):
             
             if type(hist)==History:             hist.log(val, t_ind)
             else:
-                if not is_known_immutable(val): val=copy.deepcopy(val)
+                if is_known_mutable(val): val=copy.deepcopy(val)
                 if type(hist)==list:              hist.append(val)
                 elif isinstance(hist, np.ndarray):  
-                    if t_ind >= len(hist):
-                        raise Exception("Time beyond range of model history--check staged execution and simulation time settings (end condition, mdl.modelparams.times)")
-                    if not np.can_cast(type(val), type(hist[t_ind])):
-                        raise Exception(str(att)+" changed type: "+str(type(hist[t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind))
                     try:
                         hist[t_ind]=val
                     except Exception as e:
-                        raise Exception("Value too large to represent: "+att+"="+str(val)) from e
+                        if t_ind >= len(hist):
+                            raise Exception("Time beyond range of model history--check staged execution" 
+                                            "and simulation time settings (end condition, mdl.modelparams.times)") from e
+                        elif not np.can_cast(type(val), type(hist[t_ind])):
+                            raise Exception(str(att)+" changed type: "+str(type(hist[t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind)) from e
+                        else: raise Exception("Value too large to represent: "+att+"="+str(val)) from e
     def cut(self, end_ind=None, start_ind=None, newcopy=False):
         """Cuts the history to a given index"""
         if newcopy: hist = self.copy()

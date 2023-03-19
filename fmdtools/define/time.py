@@ -139,6 +139,8 @@ class Time(dataobject):
     def __getattr__(self, item):
         if item in self.timers: return self.timers[item]
         else:                   return super().__getattribute__(item)
+    def return_mutables(self):
+        return (t.time for t in self.timers.values())
     def set_timestep(self):
         """Sets the timestep of the function given the option use_local 
         (which selects whether it uses local_timestep or global_timestep)"""

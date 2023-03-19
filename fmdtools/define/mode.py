@@ -9,6 +9,7 @@ Has classes:
 from recordclass import dataobject
 import numpy as np
 import itertools
+import copy
 from .common import get_true_fields, get_true_field
 from fmdtools.sim.result import History, init_hist_iter
 
@@ -119,6 +120,8 @@ class Mode(dataobject, readonly=False):
             self.s.set_atts(**s_kwargs)
         
         self.init_faultmodes()
+    def __repr__(self):
+        return self.__class__.__name__+"(mode="+self.mode+", faults="+str(self.faults)+")"
     def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
         """
         Calculates self.failrate based on a human error probability model.
@@ -135,6 +138,8 @@ class Mode(dataobject, readonly=False):
         elif type(EPCs)==list:  EPC_f = np.prod([((epc-1)*x+1) for [epc,x] in EPCs])
         else: raise Exception("Invalid type for EPCs: "+str(type(EPCs)))
         return gtp*EPC_f
+    def return_mutables(self):
+        return (self.mode, copy.copy(self.faults))
     def init_faultmodes(self):
         """
         Initializes the self.faultmodes dictionary from the parameters of the Mode

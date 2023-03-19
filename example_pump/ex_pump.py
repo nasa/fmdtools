@@ -353,20 +353,20 @@ class Pump(Model):
 
 if __name__=="__main__":
     mdl = Pump()
-    check_model_pickleability(mdl, try_pick=True)
-    from define.common import check_pickleability
-    unpickleable = check_pickleability(mdl, try_pick=True)
+    #check_model_pickleability(mdl, try_pick=True)
+    #from define.common import check_pickleability
+    #unpickleable = check_pickleability(mdl, try_pick=True)
     
-    newhist = mdl.create_hist(range(10), 'all')
+    #newhist = mdl.create_hist(range(10), 'all')
     
     
     
-    import pickle
-    a = pickle.dumps(newhist)
-    b = pickle.loads(a)
+    #import pickle
+    #a = pickle.dumps(newhist)
+    #b = pickle.loads(a)
     
-    a = pickle.dumps(mdl.flows)
-    b = pickle.loads(a)
+    #a = pickle.dumps(mdl.flows)
+    #b = pickle.loads(a)
     
     #a = pickle.dumps(mdl.fxns)
     #b = pickle.loads(a)
