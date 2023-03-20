@@ -245,8 +245,10 @@ def modephases(mdlhist):
     modephases={}
     phases={}
     times = mdlhist['time']
-    for fxn in mdlhist["functions"].keys():
-        modehist = mdlhist["functions"][fxn].get('mode', [])
+    f_hist = mdlhist.flatten()
+    modehists = {k:v for k,v in f_hist.items() if 'mode' in k and 'm' in k}
+    for k, modehist in modehists.items():
+        fxn = k[k.index('m')-1]
         if len(modehist)!=0:    
             modes = OrderedSet(modehist)
             modephases[fxn]=dict.fromkeys(modes)
@@ -605,17 +607,6 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
     elif return_anyway: return method(data), method(data), method(data)
     else: raise Exception("All data are the same!")
 
-def file_check(filename, overwrite):
-    """Check if files exists and whether to overwrite the file"""
-    if os.path.exists(filename):
-        if not overwrite: raise Exception("File already exists: "+filename)
-        else:                   
-            print("File already exists: "+filename+", writing anyway...")
-            os.remove(filename)
-    if "/" in filename:
-        last_split_index = filename.rfind("/")
-        foldername = filename[:last_split_index]
-        if not os.path.exists(foldername): os.makedirs(foldername)
 
 
 

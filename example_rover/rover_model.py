@@ -20,11 +20,13 @@ Flows:
     - Camera
 """
 from recordclass import asdict
-from fmdtools.define.common import Parameter, State
-from fmdtools.define.block import FxnBlock, Mode
+from fmdtools.define.parameter import Parameter
+from fmdtools.define.state import State
+from fmdtools.define.mode import Mode
+from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model, ModelParam
 from fmdtools.define.flow import Flow
-from fmdtools.sim.approach import SampleApproach, NominalApproach
+from fmdtools.sim.approach import SampleApproach
 import fmdtools.analyze as an
 import fmdtools.sim.propagate as prop
 import itertools
@@ -467,28 +469,7 @@ class Rover(Model):
                      m={'mode_args': valparams['drive_modes']},     p=asdict(params.degradation))
         self.add_fxn("environment",     Environment,    'ground',   p=asdict(params))
 
-        pos_bip = {'power': [-0.684772948203272, -0.2551613615446115],
-                 'operator': [-0.798933011500376, 0.565156755693186],
-                 'communications': [-0.5566050878414673, 0.14159180700630447],
-                 'perception': [0.996672509613648, 0.2507215448302319],
-                 'avionics': [0.28027473355741117, 0.47255264233968597],
-                 'override': [0.28987624783062627, -0.17144760874154652],
-                 'drive': [0.6671719569482308, -0.571646956655247],
-                 'environment': [1.1329643169383754, -0.6375225566564033],
-                 'ground': [1.108432946123935, -0.3228541151507237],
-                 'pos_signal': [-0.256557435572734, 0.5411037985681082],
-                 'faultstates': [0.75997843863482324, -0.04522869632581994],
-                 'ee_12': [-0.3676879520509888, -0.04754907961317867],
-                 'ee_5': [-0.2181352416728437, -0.2015320865756482],
-                 'ee_15': [-0.5352906801304353, -0.5288715575154177],
-                 'video': [0.6726175830840695, 0.396008366729458],
-                 'avionics_control': [0.45997843863482324, 0.04522869632581994],
-                 'motor_control': [0.6350063940085445, -0.3013633829278297],
-                 'switch': [-0.9857988678463686, 0.07960895587242012],
-                 'comms': [-0.642370284813957, 0.35285736707043763],
-                 'override_comms': [-0.14607433032593392, 0.2981956996230818]}
-
-        self.build_model(bipartite_pos = pos_bip)
+        self.build_model()
     def end_condition(self, time):
         if (in_area(self.flows['ground'].x,self.flows['ground'].y,1,self.params['end'][0],self.params['end'][1]) or \
             (time > 5 and self.fxns['avionics'].m.in_mode('standby')) or \
@@ -506,14 +487,15 @@ class Rover(Model):
         if any(modes):          classification = classification +' faulty'
         if not classification:  classification = 'nominal mission'
         num_modes = len(modes)
-        end_dist = dist(self.flows['ground'].s.x,self.flows['ground'].s.y,self.params.end[0],self.params.end[1])
-        endpt=[self.flows['ground'].s.x,self.flows['ground'].s.y]
+        end_dist = dist(self.ground.s.x,self.ground.s.y,self.params.end[0],self.params.end[1])
+        endpt=[self.ground.s.x ,self.ground.s.y]
 
-        f_t= min(len(mdlhist['faulty']['flows']['ground']['x']),len(mdlhist['nominal']['flows']['ground']['y']))
+        f_t= min(len(mdlhist.faulty.ground.s.x),len(mdlhist.nominal.ground.s.y))
 
-        tot_deviation = np.sum(np.sqrt((mdlhist['nominal']['flows']['ground']['x'][:f_t]-mdlhist['faulty']['flows']['ground']['x'][:f_t])**2 + (mdlhist['nominal']['flows']['ground']['y'][:f_t]-mdlhist['faulty']['flows']['ground']['y'][:f_t])**2))
-        in_bound = all(mdlhist['faulty']['functions']['environment']['in_bound'])
-        line_dist = find_line_dist(self.flows['ground'].s.x,self.flows['ground'].s.y, mdlhist['nominal']['flows']['ground']['linex'], mdlhist['nominal']['flows']['ground']['liney'])
+        tot_deviation = np.sum(np.sqrt((mdlhist.nominal.ground.s.x[:f_t]-mdlhist.faulty.ground.s.x[:f_t])**2 + 
+                                       (mdlhist.nominal.ground.s.y[:f_t]-mdlhist.faulty.ground.s.y[:f_t])**2))
+        in_bound = all(mdlhist.faulty.environment.s.in_bound)
+        line_dist = find_line_dist(self.ground.s.x,self.ground.s.y, mdlhist.nominal.ground.s.linex, mdlhist.nominal.ground.s.liney)
 
         return {'rate':0,'cost':0, 'prob':scen['properties'].get('prob',1), 
                 'expected cost':0, 'in_bound':in_bound, 'at_finish':at_finish, 
@@ -545,17 +527,17 @@ def plot_course(hist, label=True, ax=False):
     if label==True: nom_lab="Nominal"; bound_lab="Bounds"; center_lab="Center-line"
     else:           nom_lab='_nolegend_'; bound_lab='_nolegend_'; center_lab='_nolegend_'
 
-    ax.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='blue')
-    ax.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='blue', marker='*', label=nom_lab)
+    ax.plot(hist.ground.s.x,hist.ground.s.y, color='blue')
+    ax.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='blue', marker='*', label=nom_lab)
 
-    x_ground = hist['flows']['ground']['lbx']
-    y_ground = hist['flows']['ground']['lby']
+    x_ground = hist.ground.s.lbx
+    y_ground = hist.ground.s.lby
     ax.plot(x_ground,y_ground, label=bound_lab, color='grey')
-    x_ground = hist['flows']['ground']['ubx']
-    y_ground = hist['flows']['ground']['uby']
+    x_ground = hist.ground.s.ubx
+    y_ground = hist.ground.s.uby
     ax.plot(x_ground,y_ground, label=bound_lab, color='grey')
-    x_ground = hist['flows']['ground']['x']
-    y_ground = hist['flows']['ground']['liney']
+    x_ground = hist.ground.s.x
+    y_ground = hist.ground.s.liney
     ax.plot(x_ground,y_ground, label=center_lab, color='grey', linestyle='--')
 
 def plot_trajectories(mdlhists, nomhist=[],  app= [], faultlabel='Faulty', faultalpha=0.1, range_hist={}, rangealpha=0.1, setalpha=0.3, show_labels=True, title="Fault Trajectories", textoffset=2.0,mode_trunc=5,mode_trunc_end=5, xlim=None, ylim=None, figsize=(4,4), ax=False, legend=True):
@@ -566,24 +548,24 @@ def plot_trajectories(mdlhists, nomhist=[],  app= [], faultlabel='Faulty', fault
     else: fig=ax.get_figure()
     for mode, hist in range_hist.items():
         if mode[6:11]=='hmode':
-            ax.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='yellow', alpha=rangealpha)
-            ax.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='yellow', alpha=rangealpha, marker='o', label='Range')
+            ax.plot(hist.ground.s.x,hist.ground.s.y, color='yellow', alpha=rangealpha)
+            ax.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='yellow', alpha=rangealpha, marker='o', label='Range')
     for mode, hist in mdlhists.items():
         if mode=='nominal':
             plot_course(hist, ax=ax)
             in_mdlhists=True
         elif mode[6:11]=='hmode':
-            ax.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='orange', alpha=setalpha)
-            ax.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='orange', alpha=setalpha, marker='o', label='Set')
+            ax.plot(hist.ground.s.x,hist.ground.s.y, color='orange', alpha=setalpha)
+            ax.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='orange', alpha=setalpha, marker='o', label='Set')
         else:
-            ax.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='red', alpha=faultalpha)
-            ax.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='red', alpha=faultalpha, marker='*', label=faultlabel)
+            ax.plot(hist.ground.s.x,hist.ground.s.y, color='red', alpha=faultalpha)
+            ax.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='red', alpha=faultalpha, marker='*', label=faultlabel)
             if show_labels:
                 label = mode[mode_trunc:]
                 label = label[:-mode_trunc_end]
                 randang = np.pi*np.random.rand()
-                ax.annotate(label, xy=(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1]), fontsize=8, xytext=(textoffset*np.sin(randang), textoffset*np.cos(randang)), textcoords='offset points')
-    if app: ax.scatter(hist['flows']['ground']['x'][int(app.times[0])-1],hist['flows']['ground']['y'][int(app.times[0])-1], color='black', marker='X', s=5, label='fault time')
+                ax.annotate(label, xy=(hist.ground.s.x[-1],hist.ground.s.y[-1]), fontsize=8, xytext=(textoffset*np.sin(randang), textoffset*np.cos(randang)), textcoords='offset points')
+    if app: ax.scatter(hist.ground.s.x[int(app.times[0])-1],hist.ground.s.y[int(app.times[0])-1], color='black', marker='X', s=5, label='fault time')
     if not in_mdlhists and nomhist: plot_course(nomhist, ax=ax)
     if xlim: ax.set_xlim(*xlim)
     if ylim: ax.set_ylim(*ylim)
@@ -599,14 +581,14 @@ def plot_trajectories(mdlhists, nomhist=[],  app= [], faultlabel='Faulty', fault
 
 def compare_trajectories(mdlhist1, mdlhist2, mdlhist1_name='fault trajectories', mdlhist2_name='comparison trajectories', faulttimes = [], nomhist=[]):
     for mode, hist in mdlhist1.items():
-        plt.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='grey', alpha=0.2, zorder=1)
-        plt.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='grey', alpha=0.3, marker='o', label=mdlhist1_name, zorder=2)
+        plt.plot(hist.ground.s.x,hist.ground.s.y, color='grey', alpha=0.2, zorder=1)
+        plt.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='grey', alpha=0.3, marker='o', label=mdlhist1_name, zorder=2)
     for mode, hist in mdlhist2.items():
-        plt.plot(hist['flows']['ground']['x'],hist['flows']['ground']['y'], color='tab:orange', alpha=0.2, zorder=1)
-        plt.scatter(hist['flows']['ground']['x'][-1],hist['flows']['ground']['y'][-1], color='tab:orange', alpha=0.3, marker='o', label=mdlhist2_name, zorder=2)
+        plt.plot(hist.ground.s.x,hist.ground.s.y, color='tab:orange', alpha=0.2, zorder=1)
+        plt.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='tab:orange', alpha=0.3, marker='o', label=mdlhist2_name, zorder=2)
     if faulttimes:
-        xfaults = [x for ind, x in enumerate(nomhist['flows']['ground']['x']) if ind+1<len(nomhist['time']) and nomhist['time'][ind+1] in faulttimes]
-        yfaults = [y for ind, y in enumerate(nomhist['flows']['ground']['y']) if ind+1<len(nomhist['time']) and nomhist['time'][ind+1] in faulttimes]
+        xfaults = [x for ind, x in enumerate(nomhist.ground.s.x) if ind+1<len(nomhist.time) and nomhist.time[ind+1] in faulttimes]
+        yfaults = [y for ind, y in enumerate(nomhist.ground.s.y) if ind+1<len(nomhist.time) and nomhist.time[ind+1] in faulttimes]
         plt.scatter(xfaults, yfaults, marker = 'x', color='black',  label='fault times', zorder=3)
     if nomhist: plot_course(nomhist)
     handles, labels = plt.gca().get_legend_handles_labels()
@@ -636,8 +618,8 @@ def plot_map(mdl, mdlhist):
 
 def plot_centerline_err(mdl, mdlhist):
     fig = plt.figure()
-    x_rover = mdlhist['flows']['ground']['x']
-    y_rover = mdlhist['flows']['ground']['y']
+    x_rover = mdlhist.ground.s.x
+    y_rover = mdlhist.ground.s.y
     if mdl.params['linetype']=='sine':
         y_line = [sin_func(x,y_rover[i], mdl.params['amp'], mdl.params['period'])[1] for i,x in enumerate(x_rover)]
     elif mdl.params['linetype']=='turn':
@@ -668,7 +650,26 @@ class_tree = {'rover': [-0.07367185100835244, 0.6410710936138487],
  'control': [0.6801636335956871, 0.08587826440540502],
  'video': [-0.6095250803472407, -0.32199506812858303],
  'ee_12': [0.6762136362997685, -0.26803553393104507]}
-
+pos_bip = {'power': [-0.684772948203272, -0.2551613615446115],
+         'operator': [-0.798933011500376, 0.565156755693186],
+         'communications': [-0.5566050878414673, 0.14159180700630447],
+         'perception': [0.996672509613648, 0.2507215448302319],
+         'avionics': [0.28027473355741117, 0.47255264233968597],
+         'override': [0.28987624783062627, -0.17144760874154652],
+         'drive': [0.6671719569482308, -0.571646956655247],
+         'environment': [1.1329643169383754, -0.6375225566564033],
+         'ground': [1.108432946123935, -0.3228541151507237],
+         'pos_signal': [-0.256557435572734, 0.5411037985681082],
+         'faultstates': [0.75997843863482324, -0.04522869632581994],
+         'ee_12': [-0.3676879520509888, -0.04754907961317867],
+         'ee_5': [-0.2181352416728437, -0.2015320865756482],
+         'ee_15': [-0.5352906801304353, -0.5288715575154177],
+         'video': [0.6726175830840695, 0.396008366729458],
+         'avionics_control': [0.45997843863482324, 0.04522869632581994],
+         'motor_control': [0.6350063940085445, -0.3013633829278297],
+         'switch': [-0.9857988678463686, 0.07960895587242012],
+         'comms': [-0.642370284813957, 0.35285736707043763],
+         'override_comms': [-0.14607433032593392, 0.2981956996230818]}
 
 if __name__=="__main__":
     import multiprocessing as mp
@@ -732,7 +733,7 @@ if __name__=="__main__":
     
     
     line_dist = endresults['line_dist']
-    end_loc = (reshist['faulty']['flows']['ground']['x'][-1],reshist['faulty']['flows']['ground']['y'][-1])
+    end_loc = (reshist.faulty.ground.s.x[-1],reshist.faulty.ground.s.y[-1])
     #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
 
    # app = NominalApproach()

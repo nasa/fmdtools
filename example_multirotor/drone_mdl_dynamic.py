@@ -6,12 +6,14 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.define.common import Parameter, State, Time
-from fmdtools.define.block import FxnBlock, Mode
+from fmdtools.define.parameter import Parameter
+from fmdtools.define.state import State
+from fmdtools.define.time import Time
+from fmdtools.define.mode import Mode
+from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model, ModelParam
 from fmdtools.sim.approach import SampleApproach
 
-from drone_mdl_static import m2to1
 import fmdtools.sim as fs
 
 from drone_mdl_static import DistEE, EngageLand, HoldPayload, AffectDOF
@@ -202,16 +204,16 @@ class Drone(Model):
         
         self.build_model()
     def find_classification(self,scen, mdlhists):
-        if -5 >mdlhists['faulty']['flows']['env']['x'][-1] or 5<mdlhists['faulty']['flows']['env']['x'][-1]:
+        if -5 >mdlhists.faulty.env.s.x[-1] or 5<mdlhists.faulty.env.s.x[-1]:
             lostcost=50000
-        elif -5 >mdlhists['faulty']['flows']['env']['y'][-1] or 5<mdlhists['faulty']['flows']['env']['y'][-1]:
+        elif -5 >mdlhists.faulty.env.s.y[-1] or 5<mdlhists.faulty.env.s.y[-1]:
             lostcost=50000
-        elif mdlhists['faulty']['flows']['env']['z'][-1] >5:
+        elif mdlhists.faulty.env.s.z[-1] >5:
             lostcost=50000
         else:
             lostcost=0
         
-        if any(abs(mdlhists['faulty']['flows']['force_gr']['support'])>2.0):
+        if any(abs(mdlhists.faulty.force_gr.s.support)>2.0):
             crashcost = 100000
         else:
             crashcost = 0
@@ -261,6 +263,6 @@ if __name__=="__main__":
     quad_comp_endclasses_1, quad_comp_mdlhists_1 = fs.propagate.approach(mdl_quad_comp, quad_comp_app)
     
     cost_tests = [quad_comp_endclasses[ec]['expected cost']==quad_comp_endclasses_1[ec]['expected cost'] for ec in quad_comp_endclasses]
-    dist_tests = [all(quad_comp_mdlhists[ec]['flows']['env']['x']==quad_comp_mdlhists_1[ec]['flows']['env']['x']) for ec in quad_comp_mdlhists]
-    dist_tests2 = [all(quad_comp_mdlhists[ec]['flows']['env']['y']==quad_comp_mdlhists_1[ec]['flows']['env']['y']) for ec in quad_comp_mdlhists]
+    dist_tests = [all(quad_comp_mdlhists[ec].env.s.x==quad_comp_mdlhists_1[ec].env.s.x) for ec in quad_comp_mdlhists]
+    dist_tests2 = [all(quad_comp_mdlhists[ec].env.s.y==quad_comp_mdlhists_1[ec].env.s.y) for ec in quad_comp_mdlhists]
     

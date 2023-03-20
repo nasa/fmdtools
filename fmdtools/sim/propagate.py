@@ -856,7 +856,9 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     elif len(nomhist['time'])!=len(mdlhist['time']):
         nomhist = nomhist.cut(start_ind=len(nomhist['time'])-len(mdlhist['time']), newcopy=True)
     if 'endclass' in desired_result:   
-        mdlhists={'faulty':mdlhist, 'nominal':nomhist}
+        mdlhists = History()
+        mdlhists['faulty'] =mdlhist
+        mdlhists['nominal']=nomhist
         endclass = mdl.find_classification(scen, mdlhists)
         if type(desired_result['endclass'])==dict: 
             result['endclass'] = {k:v for k,v in endclass if k in desired_result['endclass']}
