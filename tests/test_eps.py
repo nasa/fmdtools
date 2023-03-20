@@ -5,8 +5,6 @@ Created on Mon Dec 20 10:32:00 2021
 @author: dhulse
 """
 import unittest
-import sys, os
-sys.path.insert(1, os.path.join('..'))
 from example_eps.eps import EPS
 from fmdtools.sim import propagate
 import fmdtools.analyze as an

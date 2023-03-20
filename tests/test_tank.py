@@ -5,8 +5,6 @@ Created on Tue Dec 21 10:51:57 2021
 @author: dhulse
 """
 import unittest
-import sys, os
-sys.path.insert(1, os.path.join('..'))
 from example_tank.tank_model import Tank
 from example_tank.tank_opt import x_to_rcost_leg, x_to_totcost_leg, x_to_descost
 from example_tank.tank_optimization_model import Tank as Tank2
