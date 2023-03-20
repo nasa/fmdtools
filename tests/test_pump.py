@@ -5,8 +5,6 @@ Created on Mon Dec 20 15:49:13 2021
 @author: dhulse
 """
 import unittest
-import sys, os
-sys.path.insert(1, os.path.join('..'))
 from example_pump.ex_pump import Pump
 from fmdtools.sim import propagate
 import fmdtools.analyze as an
