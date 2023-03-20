@@ -13,7 +13,8 @@ import fmdtools.sim as fs
 import fmdtools.analyze as an
 from IPython.display import HTML
 
-from fmdtools.define.common import Parameter, State
+from fmdtools.define.parameter import Parameter
+from fmdtools.define.state import State
 from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.define.model import Model, ModelParam
 from fmdtools.sim.approach import SampleApproach
@@ -35,17 +36,17 @@ class AffectDOFArch(CompArch):
         super().__init__(*args, **kwargs)
         if self.archtype=="quad":
             self.make_components(Line,'lf', 'lr','rf','rr')
-            self.forwaan.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5})
+            self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5})
             self.lr_dict.update({'l':{'lf', 'lr'}, 'r':{'rf','rr'}})
             self.fr_dict.update({'f':{'lf', 'rf'}, 'r':{'lr', 'rr'}})
         elif self.archtype=="hex":
             self.make_components(Line,'rf', 'lf','lr','rr', 'r', 'f')
-            self.forwaan.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5, 'r':-0.75, 'f':0.75})
+            self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5, 'r':-0.75, 'f':0.75})
             self.lr_dict.update({'l':{'lf', 'lr'}, 'r':{'rf','rr'}})
             self.fr_dict.update({'f':{'lf', 'rf', 'f'}, 'r':{'lr', 'rr', 'r'}})
         elif self.archtype=="oct":
             self.make_components(Line,'lf', 'rf','lf2', 'rf2', 'lr', 'rr','lr2', 'rr2')
-            self.forwaan.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5,'rf2':0.5,'lf2':0.5,'lr2':-0.5,'rr2':-0.5})
+            self.forward.update({'rf':0.5,'lf':0.5,'lr':-0.5,'rr':-0.5,'rf2':0.5,'lf2':0.5,'lr2':-0.5,'rr2':-0.5})
             self.lr_dict.update({'l':{'lf', 'lr','lf2', 'lr2'}, 'r':{'rf','rr','rf2','rr2'}})
             self.fr_dict.update({'f':{'lf', 'rf','lf2', 'rf2'}, 'r':{'lr', 'rr','lr2', 'rr2'}})
 
@@ -105,12 +106,13 @@ class Line(Component):
         ee_in=m2to1([ee_in,self.s.e_to])   
         return airout, ee_in
 
+from drone_mdl_dynamic import Drone as DynDrone
+
 class DroneParam(Parameter, readonly=True):
     arch:   str='quad'
     arch_set = ('quad', 'oct', 'hex')
 
-
-class Drone(Model):
+class Drone(DynDrone):
     def __init__(self, params=DroneParam(),\
             modelparams=ModelParam(phases=(('ascend',0,4),('forward',5,94),('descend',95, 100)),times=(0,135),units='sec'), 
             valparams={}):
@@ -138,58 +140,39 @@ class Drone(Model):
         self.add_fxn('hold_payload',HoldPayload,'force_lg', 'force_lin', 'force_st')
         self.add_fxn('view_env',    ViewEnvironment, 'env')
         
-        bipartite_pos = {'store_ee': [-1.067135163123663, 0.32466987344741055],
-         'dist_ee': [-0.617149602161968, 0.3165981670924663],
-         'affect_dof': [0.11827439153655106, 0.10792528450121897],
-         'ctl_dof': [-0.2636856982162134, 0.42422600969836144],
-         'plan_path': [-0.9347151173753852, 0.6943421719257798],
-         'trajectory': [0.6180477286739998, 0.32930706399226856],
-         'engage_land': [0.0015917696269229786, -0.2399760932810826],
-         'hold_payload': [-0.8833099612826893, -0.247201580673997],
-         'view_env': [0.5725955705698363, 0.6901513410348765],
-         'force_st': [-0.8925771348524384, -0.025638904424547027],
-         'force_lin': [-0.5530952425102891, -0.10380834289626095],
-         'force_gr': [0.568921162299461, -0.22991830334765573],
-         'force_lg': [-0.37244114591548894, -0.2355298479531287],
-         'ee_1': [-0.809433489993954, 0.319191761486317],
-         'ee_mot': [-0.33469985340998853, 0.1307636433702345],
-         'ee_ctl': [-0.48751243650229525, 0.4852032717825657],
-         'ctl': [-0.06913038312848868, 0.2445174568603189],
-         'dofs': [0.2606664304933561, 0.3243482171363975],
-         'env': [0.06157634305459603, 0.7099922980251693],
-         'dir': [-0.13617863906968142, 0.6037252153639261]}
+        self.build_model()
 
-        graph_pos = {'store_ee': [-1.0787279392101061, -0.06903523859088145],
-         'dist_ee': [-0.361531174332526, -0.0935883732235363],
-         'affect_dof': [0.36541282312106205, -0.09674444529230719],
-         'ctl_dof': [0.4664934329906758, 0.5822138245848214],
-         'plan_path': [-0.7095750728126631, 0.8482786785038505],
-         'trajectory': [1.1006824683444765, -0.10423208715241583],
-         'engage_land': [0.8423521094741182, -0.8813666134484857],
-         'hold_payload': [-0.5857395187723944, -0.86974898769837],
-         'view_env': [1.1035500215472247, 0.9373523025760659]}
-        
-        self.build_model(graph_pos=graph_pos, bipartite_pos=bipartite_pos)
-    def find_classification(self,scen, mdlhists):
-        if -5 >mdlhists['faulty']['flows']['env']['x'][-1] or 5<mdlhists['faulty']['flows']['env']['x'][-1]:
-            lostcost=50000
-        elif -5 >mdlhists['faulty']['flows']['env']['y'][-1] or 5<mdlhists['faulty']['flows']['env']['y'][-1]:
-            lostcost=50000
-        elif mdlhists['faulty']['flows']['env']['z'][-1] >5:
-            lostcost=50000
-        else:
-            lostcost=0
-        
-        if any(abs(mdlhists['faulty']['flows']['force_gr']['support'])>2.0):
-            crashcost = 100000
-        else:
-            crashcost = 0
-        repcost = self.calc_repaircost()
-        
-        totcost=repcost + crashcost + lostcost
-        rate=scen['properties']['rate']
-        expcost=totcost*rate*1e5
-        return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
+
+bipartite_pos = {'store_ee': [-1.067135163123663, 0.32466987344741055],
+ 'dist_ee': [-0.617149602161968, 0.3165981670924663],
+ 'affect_dof': [0.11827439153655106, 0.10792528450121897],
+ 'ctl_dof': [-0.2636856982162134, 0.42422600969836144],
+ 'plan_path': [-0.9347151173753852, 0.6943421719257798],
+ 'trajectory': [0.6180477286739998, 0.32930706399226856],
+ 'engage_land': [0.0015917696269229786, -0.2399760932810826],
+ 'hold_payload': [-0.8833099612826893, -0.247201580673997],
+ 'view_env': [0.5725955705698363, 0.6901513410348765],
+ 'force_st': [-0.8925771348524384, -0.025638904424547027],
+ 'force_lin': [-0.5530952425102891, -0.10380834289626095],
+ 'force_gr': [0.568921162299461, -0.22991830334765573],
+ 'force_lg': [-0.37244114591548894, -0.2355298479531287],
+ 'ee_1': [-0.809433489993954, 0.319191761486317],
+ 'ee_mot': [-0.33469985340998853, 0.1307636433702345],
+ 'ee_ctl': [-0.48751243650229525, 0.4852032717825657],
+ 'ctl': [-0.06913038312848868, 0.2445174568603189],
+ 'dofs': [0.2606664304933561, 0.3243482171363975],
+ 'env': [0.06157634305459603, 0.7099922980251693],
+ 'dir': [-0.13617863906968142, 0.6037252153639261]}
+
+graph_pos = {'store_ee': [-1.0787279392101061, -0.06903523859088145],
+ 'dist_ee': [-0.361531174332526, -0.0935883732235363],
+ 'affect_dof': [0.36541282312106205, -0.09674444529230719],
+ 'ctl_dof': [0.4664934329906758, 0.5822138245848214],
+ 'plan_path': [-0.7095750728126631, 0.8482786785038505],
+ 'trajectory': [1.1006824683444765, -0.10423208715241583],
+ 'engage_land': [0.8423521094741182, -0.8813666134484857],
+ 'hold_payload': [-0.5857395187723944, -0.86974898769837],
+ 'view_env': [1.1035500215472247, 0.9373523025760659]}
 
 if __name__=="__main__":
     

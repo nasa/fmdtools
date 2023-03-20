@@ -6,13 +6,16 @@ Created: June 2019, revised Nov 2022
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.define.common import Parameter, State
-from fmdtools.define.block import FxnBlock, Component, CompArch, Mode
+from fmdtools.define.parameter import Parameter
+from fmdtools.define.state import State
+from fmdtools.define.mode import Mode
+from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model, ModelParam
 from fmdtools.sim.approach import SampleApproach
 from fmdtools.sim import propagate
 from fmdtools.sim.search import ProblemInterface
+from fmdtools.sim.result import History
 
 import fmdtools.analyze as an
 import multiprocessing as mp
@@ -443,43 +446,15 @@ class Drone(Model):
         self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs','des_traj', 'force_st', 'rsig_traj', p=asdict(params))
         self.add_fxn('hold_payload',HoldPayload, 'dofs', 'force_lin', 'force_st')
         
-        pos = {'manage_health': [0.23793980988102348, 1.0551602632416588],
-               'store_ee': [-0.9665780995752296, -0.4931538151692423],
-               'dist_ee': [-0.1858834234148632, -0.20479989209711924],
-               'affect_dof': [1.0334916329507422, 0.6317263653616103],
-               'ctl_dof': [0.1835014208949617, 0.32084893189175423],
-               'plan_path': [-0.7427736219526058, 0.8569475547950892],
-               'hold_payload': [0.74072970715511, -0.7305391093272489]}
-        
-        bippos = {'manage_health': [-0.23403572483176666, 0.8119063670455383],
-                  'store_ee': [-0.7099736148158298, 0.2981652748232978],
-                  'dist_ee': [-0.28748133634190726, 0.32563569654296287],
-                  'affect_dof': [0.9073412427515959, 0.0466423266443633],
-                  'ctl_dof': [0.498663257339388, 0.44284186573420836],
-                  'plan_path': [0.5353654708147643, 0.7413936186204868],
-                  'hold_payload': [0.329334798653681, -0.17443414674339652],
-                  'force_st': [-0.2364754675127569, -0.18801548176633154],
-                  'force_lin': [0.7206415618571647, -0.17552020772024013],
-                  'hsig_dofs': [0.3209028709788254, 0.04984245810974697],
-                  'hsig_bat': [-0.6358884586093769, 0.7311076416371343],
-                  'rsig_traj': [0.18430501738656657, 0.856472541655958],
-                  'ee_1': [-0.48288657418004555, 0.3017533207866233],
-                  'ee_mot': [-0.0330582435936827, 0.2878069006385988],
-                  'ee_ctl': [0.13195069534343862, 0.4818116953414546],
-                  'ctl': [0.5682663453757308, 0.23385244312813386],
-                  'dofs': [0.8194232270836169, 0.3883256382522293],
-                  'des_traj': [0.9276094920710914, 0.6064107724557304]}
-        
-        self.build_model(graph_pos=pos, bipartite_pos=bippos)
+        self.build_model()
         
     def find_classification(self, scen, mdlhist):
         #landing costs
-        viewed = env_viewed(mdlhist['faulty']['flows']['dofs']['x'], mdlhist['faulty']['flows']['dofs']['y'],mdlhist['faulty']['flows']['dofs']['z'], self.target_area)
+        viewed = env_viewed(mdlhist.faulty.dofs.s.x, mdlhist.faulty.dofs.s.y,mdlhist.faulty.dofs.s.z, self.target_area)
         viewed_value = sum([0.5+2*view for k,view in viewed.items() if view!='unviewed'])
         
         # to fix: need to find fault time more efficiently (maybe in the toolkit?)
-        reshist,_,_ = an.process.hist(mdlhist)
-        faulttime = np.sum(reshist['stats']['total faults']>0)
+        faulttime = self.h.get_fault_time(metric='total')
         
         dofs=self.flows['dofs']
         if  inrange(self.start_area, dofs.s.x, dofs.s.y):     landloc = 'nominal' # nominal landing
@@ -512,6 +487,33 @@ class Drone(Model):
                 'landloc':landloc,'body strikes':body_strikes, 'head strikes':head_strikes, 
                 'property restrictions': property_restrictions, 'severities':classifications, 
                 'unsafe flight time':faulttime}
+
+pos = {'manage_health': [0.23793980988102348, 1.0551602632416588],
+       'store_ee': [-0.9665780995752296, -0.4931538151692423],
+       'dist_ee': [-0.1858834234148632, -0.20479989209711924],
+       'affect_dof': [1.0334916329507422, 0.6317263653616103],
+       'ctl_dof': [0.1835014208949617, 0.32084893189175423],
+       'plan_path': [-0.7427736219526058, 0.8569475547950892],
+       'hold_payload': [0.74072970715511, -0.7305391093272489]}
+
+bippos = {'manage_health': [-0.23403572483176666, 0.8119063670455383],
+          'store_ee': [-0.7099736148158298, 0.2981652748232978],
+          'dist_ee': [-0.28748133634190726, 0.32563569654296287],
+          'affect_dof': [0.9073412427515959, 0.0466423266443633],
+          'ctl_dof': [0.498663257339388, 0.44284186573420836],
+          'plan_path': [0.5353654708147643, 0.7413936186204868],
+          'hold_payload': [0.329334798653681, -0.17443414674339652],
+          'force_st': [-0.2364754675127569, -0.18801548176633154],
+          'force_lin': [0.7206415618571647, -0.17552020772024013],
+          'hsig_dofs': [0.3209028709788254, 0.04984245810974697],
+          'hsig_bat': [-0.6358884586093769, 0.7311076416371343],
+          'rsig_traj': [0.18430501738656657, 0.856472541655958],
+          'ee_1': [-0.48288657418004555, 0.3017533207866233],
+          'ee_mot': [-0.0330582435936827, 0.2878069006385988],
+          'ee_ctl': [0.13195069534343862, 0.4818116953414546],
+          'ctl': [0.5682663453757308, 0.23385244312813386],
+          'dofs': [0.8194232270836169, 0.3883256382522293],
+          'des_traj': [0.9276094920710914, 0.6064107724557304]}
 
 ## BASE FUNCTIONS
 def find_landtime(mdlhist):
@@ -583,15 +585,15 @@ def plot_nomtraj(mdlhist, params, title='Trajectory'):
     plt.show()
 
 def plot_faulttraj(mdlhist, params, title='Fault response to RFpropbreak fault at t=20'):
-    xnom=mdlhist['nominal']['flows']['dofs']['x']
-    ynom=mdlhist['nominal']['flows']['dofs']['y']
-    znom=mdlhist['nominal']['flows']['dofs']['z']
+    xnom=mdlhist.nominal.dofs.s.x
+    ynom=mdlhist.nominal.dofs.s.y
+    znom=mdlhist.nominal.dofs.s.z
     #
-    x=mdlhist['faulty']['flows']['dofs']['x']
-    y=mdlhist['faulty']['flows']['dofs']['y']
-    z=mdlhist['faulty']['flows']['dofs']['z']
+    x=mdlhist.faulty.dofs.s.x
+    y=mdlhist.faulty.dofs.s.y
+    z=mdlhist.faulty.dofs.s.z
     
-    time = mdlhist['nominal']['time']
+    time = mdlhist.nominal.time
     
     
     fig2 = plt.figure()
@@ -628,8 +630,8 @@ def plot_xy(mdlhist, endresults, mdl, title='', legend=False):
     
     return plt.gcf(), plt.gca()
 def plot_one_xy(mdlhist,endresults):
-    xnom=mdlhist['flows']['dofs']['x']
-    ynom=mdlhist['flows']['dofs']['y']
+    xnom=mdlhist.dofs.x
+    ynom=mdlhist.dofs.y
     
     plt.plot(xnom,ynom)
     
@@ -787,9 +789,9 @@ opt_prob.add_variables("rcost", "bat","line", vartype=spec_respol)
 def calc_oper(mdl):
     endresults_nom, mdlhist =propagate.nominal(mdl)
     opercost = endresults_nom['expected cost']
-    g_soc = 20 - mdlhist['functions']['store_ee']['soc'][-1] 
+    g_soc = 20 - mdlhist.store_ee.s.soc[-1] 
     #g_faults = any(endresults_nom['faults'])
-    g_max_height = sum([i for i in mdlhist['flows']['dofs']['z']-122 if i>0])
+    g_max_height = sum([i for i in mdlhist.dofs.s.z-122 if i>0])
     
     phases, modephases=an.process.modephases(mdlhist)
     return opercost, g_soc, g_max_height, phases
@@ -843,7 +845,9 @@ if __name__=="__main__":
     mdl = Drone()
     app = SampleApproach(mdl,  phases={'forward'})
     endclasses, mdlhists = prop.approach(mdl, app, staged=True)
-    plot_faulttraj({'nominal':mdlhists['nominal'], 'faulty':mdlhists['store_ee lowcharge, t=6.0']}, mdl.params, title='Fault response to RFpropbreak fault at t=20')
+    plot_faulttraj(History(nominal=mdlhists['nominal'], 
+                           faulty=mdlhists['store_ee lowcharge, t=6.0']), 
+                   mdl.params, title='Fault response to RFpropbreak fault at t=20')
 
     #opt_prob.add_combined_objective("total_cost", 'cd', 'co', 'cr')
     #opt_prob.total_cost([1,1],[100],[1,1])

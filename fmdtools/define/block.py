@@ -423,7 +423,7 @@ class CompArch(dataobject, mapping=True):
         return h
     def return_mutables(self):
         cm=[]
-        for c in self.c.components.values():
+        for c in self.components.values():
             cm.extend(c.return_mutables())
         return cm
     
@@ -713,10 +713,10 @@ class ASG(dataobject, mapping=True):
             History corresponding to the ASG.
         """
         h = History()
-        for c, comp in self.components.items():
-            comp_track = get_sub_include(c, track)
-            if comp_track: 
-                h[c]=comp.create_hist(timerange, comp_track)
+        for a, act in self.actions.items():
+            act_track = get_sub_include(a, track)
+            if act_track: 
+                h[a]=act.create_hist(timerange, act_track)
         h['active_actions'] = init_hist_iter('active_actions', self.active_actions, timerange=timerange, track='all')
         return h
     def return_mutables(self):

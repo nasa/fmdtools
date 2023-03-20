@@ -21,10 +21,12 @@ human errors during early design stage functional failure analysis. In ASME
 Information in Engineering Conference. American Society of Mechanical Engineers 
 Digital Collection.
 """
-from fmdtools.define.common import Parameter, State
+from fmdtools.define.parameter import Parameter 
+from fmdtools.define.state import State
+from fmdtools.define.mode import Mode
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model, ModelParam
-from fmdtools.define.block import FxnBlock, Action, Mode, ASG
+from fmdtools.define.block import FxnBlock, Action, ASG
 
 class WatState(State):
     effort: float=1.0
@@ -258,9 +260,9 @@ class Tank(Model):
         self.build_model()
     def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high
-        if any(mdlhists['faulty']['functions']['store_water']['level']>=20):    totcost = 1000000
-        elif any(mdlhists['faulty']['functions']['store_water']['level']<=0):   totcost = 1000000
-        else:                                                                   totcost = 0
+        if any(self.h.store_water.s.level>=20):    totcost = 1000000
+        elif any(self.h.store_water.s.level<=0):   totcost = 1000000
+        else:                                      totcost = 0
         rate=scen['properties'].get('rate',0.0)
         life=1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': rate*life*totcost}

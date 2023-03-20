@@ -512,11 +512,16 @@ class History(Result):
             if att=='time' and time is not None:
                 val=time
             else:
-                try:    val=obj[att]
+                try:            val=obj[att]
                 except: 
-                    try: val=getattr(obj, att)
-                    except: val = att in obj
-            
+                    try:        val=getattr(obj, att)
+                    except: 
+                        try:    val = att in obj
+                        except: 
+                            try: val=obj
+                            except: 
+                                raise Exception("Unable to log value "+str(val)+" to "+str(obj.__class__.__name__))
+
             if type(hist)==History:             hist.log(val, t_ind)
             else:
                 if is_known_mutable(val): val=copy.deepcopy(val)
@@ -552,3 +557,14 @@ class History(Result):
         for key, arr in flathist.items():
             slice_dict[key]=flathist[key][t_ind]
         return slice_dict
+    def get_fault_time(self, metric="earliest"):
+        flatdict = self.flatten()
+        has_faults_hist = np.prod([v for k,v in flatdict.items() if 'faults' in k], 0)
+        if metric=='earliest': 
+            return np.where(has_faults_hist==1)
+        elif metric=='latest':
+            return np.where(np.flip(has_faults_hist)==1)
+        elif metric=='total':
+            return np.sum(has_faults_hist)
+        
+            

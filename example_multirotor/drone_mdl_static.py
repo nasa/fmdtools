@@ -1,7 +1,9 @@
 import numpy as np
 
-from fmdtools.define.common import Parameter, State
-from fmdtools.define.block import FxnBlock, Mode
+from fmdtools.define.parameter import Parameter
+from fmdtools.define.state import State
+from fmdtools.define.block import FxnBlock
+from fmdtools.define.mode import Mode
 from fmdtools.define.model import Model, ModelParam
 from fmdtools.define.flow import Flow
 

@@ -380,11 +380,13 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
         kwargs["ranksep"] = kwargs.get("ranksep", "2")
     if kwargs.pop('pos',False):     print('invalid option: pos')
     if kwargs.pop('scale', False):  print('invalid option: scale')
-
-    if getattr(g,'type', '')=='model':
+    
+    from fmdtools.define.model import Model
+    from fmdtools.define.block import FxnBlock
+    if isinstance(g, Model):
         mdl=g
         g, pos = get_graph_pos(mdl,kwargs.pop('pos',[]), gtype)
-    elif getattr(g,'type', '')=='function':
+    elif isinstance(g, FxnBlock):
         fxn=g
         g,gtype, pos, seqgraph, arrows = get_asg_pos(fxn.a,kwargs.pop('pos',[]), gtype, arrows)
         a=1
@@ -764,10 +766,8 @@ def get_graph_pos(mdl, pos, gtype):
     """Helper function for getting the right graph/positions from a model"""
     if gtype=='normal':
         g = mdl.graph.copy()
-        if not pos: pos=mdl.graph_pos
     elif gtype=='bipartite':
         g = mdl.bipartite.copy()
-        if not pos: pos=mdl.bipartite_pos
     elif gtype=='typegraph':
         g=mdl.return_typegraph()
     elif gtype=='component':

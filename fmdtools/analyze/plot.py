@@ -440,7 +440,7 @@ def metric_dist_from(mdlhists, times, fxnflowvals='all', **kwargs):
     **kwargs : kwargs
         keyword arguments to plot.metric_dist
     """
-    flat_mdlhists = {scen:flatten_hist(mdlhist,newhist={}, to_include=fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    flat_mdlhists = {scen:mdlhist.flatten(to_include=fxnflowvals) for scen, mdlhist in mdlhists.items()}
     if type(times) in [int, float]: times=[times]
     if len(times)==1 and kwargs.get('comp_groups', False):
         time_classes = {scen:{metric:val[times[0]] for metric, val in flat_hist.items()} for scen, flat_hist in flat_mdlhists.items()}
