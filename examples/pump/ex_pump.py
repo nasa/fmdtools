@@ -389,6 +389,7 @@ if __name__=="__main__":
     #an.graph.exec_order(mdl)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_water','no_wat', time=29,  staged=True)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_ee','no_v', time=29,  staged=True)
+    mdlhist.get_faulty_hist(*mdl.fxns)
     endclass, mdlhist=propagate.one_fault(mdl, 'move_water', 'mech_break', time=0, staged=False)
     
     #reshist,diff1, summary = an.process.hist(mdlhist)

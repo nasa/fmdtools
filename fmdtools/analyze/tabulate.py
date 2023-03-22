@@ -34,47 +34,6 @@ import pandas as pd
 import numpy as np
 from fmdtools.analyze.process import expected, average, percent, rate, overall_diff, nan_to_x, bootstrap_confidence_interval
 
-#makehisttable
-# put history in a tabular format
-def hist(mdlhist):
-    """ Returns formatted pandas dataframe of model history"""
-    if "nominal" in mdlhist.keys(): mdlhist=mdlhist['faulty']
-    if any(isinstance(i,dict) for i in mdlhist['flows'].values()):
-        flowtable =  objtab(mdlhist, 'flows')
-    else:
-        flowtable = objtab(mdlhist, 'flowvals')
-    fxntable  =  objtab(mdlhist, 'functions')
-    timetable = pd.DataFrame()
-    timetable['time', 't'] = mdlhist['time']
-    timetable.reindex([('time', 't')], axis="columns")
-    histtable = pd.concat([timetable, fxntable, flowtable], axis =1)
-    index = pd.MultiIndex.from_tuples(histtable.columns)
-    histtable = histtable.reindex(index, axis='columns')
-    return histtable
-def objtab(hist, objtype):
-    """make table of function OR flow value attributes - objtype = 'function' or 'flow'"""
-    df = pd.DataFrame()
-    labels = []
-    for fxn, atts in hist[objtype].items():
-        for att, val in atts.items():                
-            if att != 'faults':
-                if type(val)==dict:
-                    for subatt, subval in val.items():
-                        if subatt!= 'faults':
-                            label=(fxn, att+'_'+subatt)
-                            labels=labels+[label]
-                            df[label]=subval
-                        else:
-                            label_faults(hist[objtype][fxn][att].get('faults', {}), df, fxn+'_'+subatt, labels)
-                else:
-                    label=(fxn, att)
-                    labels=labels+[label]
-                    df[label]=val
-        if objtype =='functions':
-            label_faults(hist[objtype][fxn].get('faults', {}), df, fxn, labels)
-    index = pd.MultiIndex.from_tuples(labels)
-    df = df.reindex(index, axis="columns")
-    return df
 def label_faults(faulthist, df, fxnlab, labels):
     if type(faulthist)==dict:
         for fault in faulthist:
@@ -94,11 +53,6 @@ def stats(reshist):
 def degflows(reshist):
     """Makes a table of flows over time, where 0 is degraded and 1 is nominal"""
     table = pd.DataFrame(reshist['flows'])
-    table.insert(0, 'time', reshist['time'])
-    return table
-def degflowvals(reshist):
-    """Makes a table of individual flow state values over time, where 0 is degraded and 1 is nominal"""
-    table = objtab(reshist, 'flowvals')
     table.insert(0, 'time', reshist['time'])
     return table
 def degfxns(reshist):
