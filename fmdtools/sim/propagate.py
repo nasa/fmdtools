@@ -752,6 +752,34 @@ def list_init_faults(mdl):
     return faultlist
 
 def init_histrange(mdl, start_time, staged, track, track_times):
+    """
+    Determines the timerange the model will be simulated over and initializes
+    the history
+
+    Parameters
+    ----------
+    mdl : Model
+        Model (with times)
+    start_time : float
+        Time to start the history over
+    staged : bool
+        Whether the simulation will be staged.
+    track : dict
+        Tracking dictionary.
+    track_times : dict/list
+        Specific tracking times to include in the history
+
+    Returns
+    -------
+    mdlhist : History
+        initialized model history
+    histrange : array
+        times to record history over
+    timerange : array
+        times to simulate the model over (which may be a subset of histrange)
+    shift : int
+        Time index to shift the history by.
+    """
     if staged:
         timerange=np.arange(start_time, mdl.modelparams.times[-1]+mdl.modelparams.dt, mdl.modelparams.dt)
         prevtimerange = np.arange(mdl.modelparams.times[0], start_time, mdl.modelparams.dt)
