@@ -751,6 +751,25 @@ def list_init_faults(mdl):
                 faultlist.append(newscen)
     return faultlist
 
+def init_histrange(mdl, start_time, staged, track, track_times):
+    if staged:
+        timerange=np.arange(start_time, mdl.modelparams.times[-1]+mdl.modelparams.dt, mdl.modelparams.dt)
+        prevtimerange = np.arange(mdl.modelparams.times[0], start_time, mdl.modelparams.dt)
+        if track_times == "all":            shift = len(prevtimerange)
+        elif track_times[0]=='interval':    shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
+        elif track_times[0]=='times':       shift=0
+    else: 
+        timerange=np.arange(mdl.modelparams.times[0], mdl.modelparams.times[-1]+mdl.modelparams.dt, mdl.modelparams.dt)
+        shift = 0
+    
+    if track_times == "all":            histrange = timerange
+    elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
+    elif track_times[0]=='times':       histrange = track_times[1]
+    
+    mdlhist = mdl.create_hist(histrange, track)
+    mdlhist.init_time(timerange[0], histrange)
+    return mdlhist, histrange, timerange, shift
+
 def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, cut_hist=True, **kwargs):
     """
     Runs a fault scenario in the model over time
@@ -788,22 +807,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
     desired_result, track, track_times, staged, run_stochastic = unpack_sim_kwargs(**kwargs)
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
-    if staged:
-        timerange=np.arange(scen['properties']['time'], mdl.modelparams.times[-1]+mdl.modelparams.dt, mdl.modelparams.dt)
-        prevtimerange = np.arange(mdl.modelparams.times[0], scen['properties']['time'], mdl.modelparams.dt)
-        if track_times == "all":            shift = len(prevtimerange)
-        elif track_times[0]=='interval':    shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
-        elif track_times[0]=='times':       shift=0
-    else: 
-        timerange=np.arange(mdl.modelparams.times[0], mdl.modelparams.times[-1]+mdl.modelparams.dt, mdl.modelparams.dt)
-        shift = 0
-    
-    if track_times == "all":            histrange = timerange
-    elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
-    elif track_times[0]=='times':       histrange = track_times[1]
-    
-    mdlhist = mdl.create_hist(histrange, track)
-    mdlhist.init_time(timerange[0], histrange)
+    mdlhist, histrange, timerange, shift = init_histrange(mdl, scen['properties']['time'], staged, track, track_times)
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes); result={}
     for t_ind, t in enumerate(timerange):

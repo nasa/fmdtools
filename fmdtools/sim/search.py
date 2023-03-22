@@ -350,6 +350,8 @@ class ProblemInterface():
             for func, fvars in self.var_mapping[simname].get('paramfunc',{}).items():
                 params.update(func(*[x[ind] for ind in fvars.values()]))
             mdl = prop.new_mdl(mdl, {'params':params, 'modelparams':{'times':(0, obj_time)}})
+            
+        prop.init_histrange(mdl, var_time, staged, "all", "all")
         return mdl
     def _run_single_sim(self, simname, x):
         sim = self._sims[simname]
