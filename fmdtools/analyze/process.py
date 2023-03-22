@@ -41,34 +41,6 @@ import os
 from ordered_set import OrderedSet
 from scipy.stats import bootstrap
 
-def hists(mdlhists, returndiff=True):
-    """
-    Processes a model histories for each scenario into results histories by comparing the states over time in each scenario with the states in the nominal scenario.
-
-    Parameters
-    ----------
-    mdlhists : dict
-        A dictionary of model histories for each scenario (e.g. from run_list or run_approach)
-    returndiff : bool, optional
-        Whether to return diffs, a dict of the differences between the values of the states in the nominal scenario and fault scenario. The default is True.
-
-    Returns
-    -------
-    reshists : dict
-        A dictionary of the results histories of each scenario over time.
-    diffs : dict
-        The difference between the nominal and fault scenario states (if returndiff is true--otherwise returns empty)
-    summaries : dict
-        A dict with all degraded functions and degraded flows resulting from the fault scenarios.
-    """
-    reshists={}
-    diffs={}
-    summaries={}
-    nomhist = mdlhists.pop('nominal')
-    for scenname, history in mdlhists.items():
-        reshists[scenname], diffs[scenname], summaries[scenname] = hist(history, nomhist=nomhist, returndiff=returndiff)
-    mdlhists['nominal']=nomhist
-    return reshists, diffs, summaries
 def typehist(mdl, reshist):
     """
     Summarizes results history reshist over model classes
@@ -99,112 +71,8 @@ def typehist(mdl, reshist):
         typehist['functions'][fxnclass]['numfaults'] = np.sum([reshist['functions'][fxn]['numfaults'] for fxn in fxns], axis=0)
         typehist['functions'][fxnclass]['faults'] = {fxn:reshist['functions'][fxn]['numfaults'] for fxn in fxns}
     return typehist
-
-def copy_hist(mdlhist):
-    """Creates a new independent copy of the current history dict"""
-    newhist ={}
-    for k, v in mdlhist.items():
-        if type(v)==dict:   newhist[k]=copy_hist(v)
-        else:               newhist[k]=np.copy(v)
-    return newhist
     
-#TODO: adapt to new version
-def hist(mdlhist, nomhist={}, returndiff=True, suppress_warning=False):
-    """
-    Compares model history with the nominal model history over time to make a history of degradation.
 
-    Parameters
-    ----------
-    mdlhist : dict
-        the model fault history or a dict of both the nominal and fault histories {'nominal':nomhist, 'faulty':mdlhist}
-    nomhist : dict, optional
-        The model history in the nominal scenario (if not provided in mdlhist) The default is {}.
-    returndiff : bool, optional
-        Whether to return diffs, a dict of the differences between the values of the states in the nominal scenario and fault scenario. The default is True.
-
-    Returns
-    -------
-    reshist : dict
-        The results history over time.
-    diff : dict
-        The difference between the nominal and fault scenario states (if returndiff is true--otherwise returns empty)
-    summary : dict
-        A dict with all degraded functions and degraded flows.
-    """
-    if nomhist: mdlhist={'nominal':nomhist, 'faulty':mdlhist}
-    if len(mdlhist['faulty']['time']) != len(mdlhist['nominal']['time']): 
-           if not suppress_warning: print("Faulty and nominal scenarios have different simulation times--cutting comparison to shared range.")
-           mdlhist['nominal'] = mdlhist['nominal'].cut(len(mdlhist['faulty']['time'])-1, newcopy=True)
-           mdlhist['faulty'] = mdlhist['faulty'].cut(len(mdlhist['nominal']['time'])-1)
-    reshist = {}
-    reshist['time'] = mdlhist['nominal']['time']
-    reshist['flowvals'], reshist['flows'], degflows, numdegflows, flowdiff = flowhist(mdlhist, returndiff=returndiff)
-    reshist['functions'], numfaults, degfxns, numdegfxns, fxndiff = fxnhist(mdlhist, returndiff=returndiff)
-    reshist['stats'] = {'degraded flows': numdegflows, 'degraded functions': numdegfxns, 'total faults': numfaults}
-    summary = {'degraded functions': degfxns, 'degraded flows': degflows}
-    diff = {**fxndiff, **flowdiff}
-    return reshist, diff, summary
-def flowhist(mdlhist, returndiff=True):
-    """ Compares the history of flow states in mdlhist over time."""
-    flowshist = {}
-    summhist = {}
-    degflows = []
-    diff = {}
-    for flowname in mdlhist['nominal']['flows']:
-        flowshist[flowname]={}
-        diff[flowname]={}
-        for att in mdlhist['nominal']['flows'][flowname]:
-            faulty  = mdlhist['faulty']['flows'][flowname][att]
-            nominal = mdlhist['nominal']['flows'][flowname][att]
-            try:
-                flowshist[flowname][att] = 1* (faulty == nominal)
-                if returndiff: get_diff(faulty, nominal, att, diff[flowname])
-            except: 
-                print("problem with flow: "+flowname+", att: "+att)
-                flowshist[flowname][att] = np.ones(len(mdlhist['nominal']['time']))
-        if flowshist[flowname]:
-            summhist[flowname] = np.prod(np.array(list(flowshist[flowname].values())), axis = 0)
-            if (not(type(summhist[flowname]) in [np.float64, np.int32]) and
-                   not(0 in summhist[flowname])): degflows+=[flowname]
-    numdegflows = len(summhist) - np.sum(np.array(list(summhist.values())), axis=0)
-    return flowshist, summhist, degflows, numdegflows, diff
-def fxnhist(mdlhist, returndiff=True):
-    """ Compares the history of function states in mdlhist over time."""
-    fxnshist = {}
-    faulthist = {}
-    deghist = {}
-    degfxns = []
-    diff = {}
-    for fxnname in mdlhist['nominal']['functions']:
-        fhist = copy.copy(mdlhist['faulty']['functions'][fxnname])
-        if any(fhist.get('faults', [])):  del fhist['faults']
-        fxnshist[fxnname] = {}
-        diff[fxnname]={}
-        for state in fhist:
-            if returndiff:
-                if type(fhist[state])==dict:
-                    fxnshist[fxnname][state] = {}
-                    diff[fxnname][state]={}
-                    for substate in fhist[state]:
-                        if substate!='faults':
-                            get_diff_fxnhist(mdlhist['faulty']['functions'][fxnname][state][substate], mdlhist['nominal']['functions'][fxnname][state][substate], \
-                                             diff[fxnname][state], fxnshist[fxnname][state], substate)
-                    if {'faults', 't_loc','mode'}.intersection(fhist[state]):
-                        fxnshist[fxnname][state]['faults']= mdlhist['faulty']['functions'][fxnname][state].get('faults', np.zeros(len(mdlhist['faulty']['time'])))
-                        fxnshist[fxnname][state]['numfaults'] = get_fault_hist(fxnshist[fxnname][state]['faults'], fxnname)
-                    fxnshist[fxnname][state]['status'] = get_status(len(mdlhist['faulty']['time']),fxnshist[fxnname][state])
-                else:
-                    get_diff_fxnhist(mdlhist['faulty']['functions'][fxnname][state], mdlhist['nominal']['functions'][fxnname][state], \
-                                     diff[fxnname], fxnshist[fxnname], state)
-        fxnshist[fxnname]['faults']=mdlhist['faulty']['functions'][fxnname].get('faults', np.zeros(len(mdlhist['faulty']['time'])))
-        fxnshist[fxnname]['numfaults'] = get_fault_hist(fxnshist[fxnname]['faults'], fxnname)
-        fxnshist[fxnname]['status'] = get_status(len(mdlhist['faulty']['time']),fxnshist[fxnname])
-        faulthist[fxnname]=fxnshist[fxnname]['numfaults']
-        deghist[fxnname] = fxnshist[fxnname]['status']
-        if 0 in deghist[fxnname] or any(0 < faulthist[fxnname]): degfxns+=[fxnname]
-    numfaults = np.sum(np.array(list(faulthist.values())), axis=0)
-    numdegfxns   = len(deghist) - np.sum(np.array(list(deghist.values())), axis=0)
-    return fxnshist, numfaults, degfxns, numdegfxns, diff
 def get_status(timelen, fhist=[]):
     stat=np.prod(np.array(list([i for j,i in fhist.items() if (type(i)!=dict and j not in ['faults', 'numfaults'])])), axis = 0)
     #if not stat:       stat = np.ones(timelen, dtype=int)

@@ -15,7 +15,7 @@ from collections import UserDict
 import numpy as np
 import copy
 import sys, os
-
+import pandas as pd
 
 def file_check(filename, overwrite):
     """Check if files exists and whether to overwrite the file"""
@@ -373,6 +373,10 @@ class Result(UserDict):
         else:
             raise Exception("Invalid File Type")
         file_handle.close()
+    def to_table(self):
+        flatdict=self.flatten()
+        newdict = {'.'.join(k):v if not isinstance(k, str) else k for k,v in flatdict.items()}
+        return pd.DataFrame.from_dict(newdict)
 
 def is_known_immutable(val):
     return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
@@ -558,6 +562,19 @@ class History(Result):
             slice_dict[key]=flathist[key][t_ind]
         return slice_dict
     def get_fault_time(self, metric="earliest"):
+        """
+        Gets the time a fault is present in the system
+
+        Parameters
+        ----------
+        metric : 'earliest','latest','total', optional
+            Earliest, latest, or total time fault(s) are present. The default is "earliest".
+
+        Returns
+        -------
+        int
+            index in the history when the fault is present
+        """
         flatdict = self.flatten()
         has_faults_hist = np.prod([v for k,v in flatdict.items() if 'faults' in k], 0)
         if metric=='earliest': 
@@ -566,5 +583,69 @@ class History(Result):
             return np.where(np.flip(has_faults_hist)==1)
         elif metric=='total':
             return np.sum(has_faults_hist)
-        
+    def _prep_faulty(self):
+        if 'faulty' in self:    return self.faulty.flatten()
+        else:                   return self.flatten()
+    def _prep_nom_faulty(self, nomhist={}):
+        if not nomhist:         nomhist = self.nominal.flatten()
+        else:                   nomhist = nomhist.flatten()
+        return nomhist, self._prep_faulty()
+    def get_degraded_hist(self, *attrs, nomhist={}):
+        """
+        Gets history of times when the attributes *attrs deviate from their nominal values
+
+        Parameters
+        ----------
+        *attrs : names of attributes
+            Names to check (e.g., `flow_1`, `fxn_2`)
+            nomhist : History, optional
+                Nominal history to compare against (otherwise uses internal nomhist, if available)
+
+        Returns
+        -------
+        deghist : History
+            History of degraded attributes
+        """
+        nomhist, faulthist = self._prep_nom_faulty(nomhist)
+        deghist = History()
+        for att in attrs:
+            deghist[att] =np.prod([faulthist[k]==v for k,v in nomhist.items() if att in k], 0)
+        return deghist
+    def get_faulty_hist(self, *attrs):
+        """
+        Gets the times when the attributes *attrs have faults present
+
+        Parameters
+        ----------
+        *attrs : names of attributes
+            Names to check (e.g., `fxn_1`, `fxn_2`)
+
+        Returns
+        -------
+        has_faults_hist : History
+            History of attrs being faulty/not faulty
+        """
+        faulthist =self._prep_faulty()
+        has_faults_hist = History()
+        for att in attrs:
+            has_faults_hist[att] = np.any([v for k,v in faulthist.items() if ('faults' in k) and (att in k)], 0)
+        return has_faults_hist
+    def to_summary(self, operator = np.max):
+        """
+        Creates summary of the history based on a given metric
+
+        Parameters
+        ----------
+        operator : aggregation function, optional
+            Way to aggregate the time history (E.g., np.max, np.min, np.average, etc). The default is np.max.
+
+        Returns
+        -------
+        summary : Result
+            Corresponding summary metrics from this history
+        """
+        summary = Result
+        for att in self.keys():
+            summary[att]=operator(self[att])
+        return summary
             
