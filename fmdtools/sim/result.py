@@ -428,8 +428,8 @@ def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<
     elif sub_track and isinstance(val, dict):     return init_dicthist(val, timerange, sub_track)
     elif sub_track:
         if timerange is None:                     return [val]
-        elif dtype:                               return np.empty([len(timerange)], dtype=dtype)
         elif type(val)==str:                      return np.empty([len(timerange)], dtype=str_size)
+        elif dtype:                               return np.empty([len(timerange)], dtype=dtype)
         else:
             try:                                  return np.full(len(timerange), val)
             except:                               return np.empty((len(timerange),), dtype=object)

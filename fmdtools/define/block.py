@@ -299,17 +299,6 @@ class Block(object):
                 self.h=hist
             else: self.h=None
         return self.h
-    def log_hist(self, t_ind):
-        """
-        Logs the history local to the block (and its attributes) by updating self.h
-
-        Parameters
-        ----------
-        t_ind : int
-            time-index of the history.
-        """
-        if hasattr(self, 'h'):
-            self.h.log(self, t_ind)
             
 
 ## COMPONENT/COMPONENT ARCHITECTURES
