@@ -154,7 +154,6 @@ class MultiFlow(Flow):
         """
         #TODO: Need a way of having local flows that are subsets of the global
         # I think this would be done by passing a different class with a subset of attributes
-        
         #if attrs == "all":      atts = default_states
         #elif type(attrs)==str:  attrs = [attrs]
         #if type(attrs)==list:   atts = {k:v for k,v in default_states if k in attrs}
