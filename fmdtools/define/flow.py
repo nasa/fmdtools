@@ -91,9 +91,6 @@ class Flow(object):
                 h = History()
             self.h = h
             return h
-    def log_hist(self, t_ind):
-        if hasattr(self, 'h'):
-            self.h['s'].log(self.s, t_ind)
 #Specialized Flow types
 class MultiFlow(Flow):
     """
@@ -111,7 +108,7 @@ class MultiFlow(Flow):
     slots= ['__dict__']
     def __init__(self, name, glob=[], s={}, p={}):
         self.locals=[]
-        super().__init__(name, suppress_warnings=True, s=s, p=p)
+        super().__init__(name,  s=s, p=p)
         if not glob: self.glob=self
         else:        self.glob=glob
     def __repr__(self):
@@ -260,8 +257,16 @@ class MultiFlow(Flow):
     def return_stategraph(self, **kwargs):
         g = self.create_multigraph(**kwargs, get_states=True)
         return g
+    def create_hist(self, timerange, track):
+        super().create_hist(timerange, track)
+        for localname in self.locals:
+            local_flow = getattr(self, localname)
+            local_track = get_sub_include(localname, track)
+            self.h[localname] = local_flow.create_hist(timerange, local_track)
+        return self.h
 def node_is_tagged(connections_as_tags, tag, node):
     return (connections_as_tags and (tag in node or (tag=="base" and not("_" in node)))) or tag==node
+
 
 def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False):
     """

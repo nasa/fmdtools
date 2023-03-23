@@ -213,11 +213,11 @@ class State(dataobject, mapping=True):
             Where the warning points to. The default is 2 (points to the place in the model)
         """
         warnings.warn(' '.join(messages), stacklevel=stacklevel)
-    def create_hist(self, timerange=None, track=None):
+    def create_hist(self, timerange=None, track=None, default_str_size='<U20'):
         """
         Creates a History corresponding to State
 
-        Parameters
+        Parameter
         ----------
         timerange : iterable, optional
             Time-range to initialize the history over. The default is None.
@@ -234,10 +234,11 @@ class State(dataobject, mapping=True):
         for att in self.__fields__:
             val = getattr(self, att)
             dtype = self.__annotations__[att]
+            str_size=default_str_size
             if dtype==str:
                 set_con = getattr(self, att+"_set", [])
                 if set_con:
                     strlen = max([len(i) for i in set_con])
-                    dtype="<U"+str(max(strlen))
-            hist[att] = init_hist_iter(att, val, timerange, track, dtype=dtype)
+                    str_size="<U"+str(max(strlen))
+            hist[att] = init_hist_iter(att, val, timerange, track, dtype=dtype, str_size = str_size)
         return hist
