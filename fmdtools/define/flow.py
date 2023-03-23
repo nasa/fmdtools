@@ -158,7 +158,6 @@ class MultiFlow(Flow):
         #elif type(attrs)==str:  attrs = [attrs]
         #if type(attrs)==list:   atts = {k:v for k,v in default_states if k in attrs}
         #elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in default_states}
-        
         if hasattr(self, name): newflow = getattr(self, name).copy(glob=self, p=p, s=s)
         else:                   newflow = self.__class__(name, glob=self, p=p, s=s)
         setattr(self, name, newflow)
