@@ -81,6 +81,21 @@ class Flow(object):
     def get_typename(self):
         return "Flow"
     def create_hist(self, timerange, track):
+        """
+        Creates the history for the flow
+
+        Parameters
+        ----------
+        timerange : np.array
+            Time-range to initialize the array over
+        track : dict
+            States to track
+
+        Returns
+        -------
+        h : History
+            History to initialize.
+        """
         if hasattr(self, 'h'): return self.h
         else:
             flow_track = get_sub_include('s', track)
