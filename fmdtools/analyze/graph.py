@@ -102,7 +102,7 @@ class GraphInteractor:
         plt.pause(0.0001)
         plt.show()
     def print_pos(self):
-        print(self.pos)
+        print({k:list(v) for k,v in self.pos.items()})
 
 
 def set_pos(g, gtype='bipartite', **kwargs):
