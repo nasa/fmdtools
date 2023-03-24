@@ -9,7 +9,6 @@ Uses methods:
     - :meth:`degflowvals`:    Makes a table of individual flow state values over time, where 0 is degraded and 1 is nominal
     - :meth:`degfxns`:        Makes a table showing which functions are degraded over time (0 for degraded, 1 for nominal)
     - :meth:`deghist`:        Makes a table of all funcitons and flows that are degraded over time. If withstats=True, the total # of each type degraded is provided in the last columns
-    - :meth:`heatmaps`:       Makes a table of a heatmap dictionary
     - :meth:`metricovertime`: Makes a table of the total metric, rate, and expected metric of all faults over time
     - :meth:`samptime`:       Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)
     - :meth:`summary:`        Makes a table of a summary dictionary from a given model run
@@ -45,36 +44,6 @@ def label_faults(faulthist, df, fxnlab, labels):
         labels+=[label]
         df[label]=faulthist
 
-def stats(reshist):
-    """Makes a table of #of degraded flows, # of degraded functions, and # of total faults over time given a single result history"""
-    table = pd.DataFrame(reshist['stats'])
-    table.insert(0, 'time', reshist['time'])
-    return table
-def degflows(reshist):
-    """Makes a table of flows over time, where 0 is degraded and 1 is nominal"""
-    table = pd.DataFrame(reshist['flows'])
-    table.insert(0, 'time', reshist['time'])
-    return table
-def degfxns(reshist):
-    """Makes a table showing which functions are degraded over time (0 for degraded, 1 for nominal)"""
-    table = pd.DataFrame()
-    for fxnname in reshist['functions']:
-        table[fxnname]=reshist['functions'][fxnname]['status']
-    table.insert(0, 'time', reshist['time'])
-    return table
-def deghist(reshist, withstats=False):
-    """Makes a table of all funcitons and flows that are degraded over time. If withstats=True, the total # of each type degraded is provided in the last columns """
-    fxnstable = degfxns(reshist)
-    flowstable = pd.DataFrame(reshist['flows'])
-    if withstats:
-        statstable = pd.DataFrame(reshist['stats'])
-        return pd.concat([fxnstable, flowstable, statstable], axis =1)
-    else:
-        return pd.concat([fxnstable, flowstable], axis =1)
-def heatmaps(heatmaps):
-    """Makes a table of a heatmap dictionary"""
-    table = pd.DataFrame(heatmaps)
-    return table.transpose()
 def metricovertime(endclasses, app, metric='cost'):
     """
     Makes a table of the total metric, rate, and expected metric of all faults over time
@@ -104,15 +73,31 @@ def samptime(sampletimes):
     table = pd.DataFrame()
     for phase, times in sampletimes.items():
         table[phase]= [str(list(times.keys()))]
-    return table.transpose()
-def summary(summary):
-    """Makes a table of a summary dictionary from a given model run"""
-    return pd.DataFrame.from_dict(summary, orient = 'index')    
-def result(endresults, summary):
-    """Makes a table of results (degraded functions/flows, classification) of a single run"""
-    table = pd.DataFrame(endresults['endclass'], index=[0])
-    table['degraded functions'] = [summary['degraded functions']]
-    table['degraded flows'] = [summary['degraded flows']]
+    return table.transpose() 
+
+def result_summary(endresult, mdlhist, *attrs):
+    """
+    Makes a table of results (degraded functions/flows, classification) of a single run
+
+    Parameters
+    ----------
+    endresult : Result
+        Result with end-state classification
+    mdlhist : History
+        History 
+    *attrs : str
+        Names of attributes to check in the history for degradation/faulty.
+
+    Returns
+    -------
+    table : pd.DataFrame
+        Table with summary
+    """
+    hist_summary = mdlhist.to_fault_degradation_summary(*attrs)
+    if 'endclass' in endresult: endresult = endresult['endclass']
+    table = pd.DataFrame(endresult, index=[0])
+    table['degraded'] = [hist_summary.degraded]
+    table['faulty'] = [hist_summary.faulty]
     return table
 
 def dicttab(dictionary):
@@ -406,20 +391,38 @@ def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[],
     return table
 
 ##FMEA-like tables
-def simplefmea(endclasses, metrics=["rate", "cost", "expected cost"]):
-    """Makes a simple fmea (rate, classification) of the endclasses of a list of fault scenarios run"""
-    table = pd.DataFrame(endclasses)
-    table = table.transpose()
-    if metrics=='all':          return table
-    elif type(metrics)==list:   return table.loc[:, metrics]
-    else: 
-        raise Exception("invalid metrics option: "+str(metrics))
-    return 
-def fullfmea(endclasses, summaries):
-    """Makes full fmea table (degraded functions/flows, all metrics in endclasses) of scenarios given endclasses dict and summaries dict (degraded functions, degraded flows)"""
-    degradedtable = pd.DataFrame(summaries)
-    simplefmea=pd.DataFrame(endclasses)
-    fulltable = pd.concat([degradedtable, simplefmea])
+def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
+    """
+    Makes full fmea table (degraded functions/flows, all metrics in endclasses) 
+    of scenarios given endclasses dict and summaries dict (degraded functions, degraded flows)
+
+    Parameters
+    ----------
+    endresult : Result
+        Result (over scenarios) to get metrics from
+    mdlhist : History
+        History (over scenarios) to get degradations/faults from
+    *attrs : strs
+        Model constructs to check if faulty/degraded.
+    metrics : tuple, optional
+        Metrics to include from endresult. The default is ().
+
+    Returns
+    -------
+    pandas.DataFrame
+        Table of metrics and degraded functions/flows over scenarios
+    """
+    from fmdtools.sim.result import History
+    deg_summaries={}; fault_summaries={}
+    for scen, hist in mdlhist.items():
+        hist_comp = History(faulty=hist, nominal=mdlhist.nominal)
+        hist_summary = hist_comp.to_fault_degradation_summary(*attrs)
+        deg_summaries[scen] = str(hist_summary.degraded)
+        fault_summaries[scen] = str(hist_summary.faulty)
+    degradedtable = pd.DataFrame(deg_summaries, index=['degraded'])
+    faulttable = pd.DataFrame(fault_summaries, index=['faulty'])
+    simplefmea=endresult.to_simple_fmea(*metrics)
+    fulltable = pd.concat([degradedtable, faulttable, simplefmea.transpose()])
     return fulltable.transpose()
 
 def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_metrics=[],

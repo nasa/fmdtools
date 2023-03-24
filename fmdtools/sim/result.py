@@ -375,8 +375,20 @@ class Result(UserDict):
         file_handle.close()
     def to_table(self):
         flatdict=self.flatten()
-        newdict = {'.'.join(k):v if not isinstance(k, str) else k for k,v in flatdict.items()}
+        newdict = {join_key(k):v for k,v in flatdict.items()}
         return pd.DataFrame.from_dict(newdict)
+    def to_simple_fmea(self, *metrics):
+        """Makes a simple fmea-stype table of the metrics in the endclasses 
+        of a list of fault scenarios run. If metrics not provided, returns all"""
+        tab = self.to_table().transpose()
+        if not metrics: return tab
+        else:           return tab.loc[:, metrics]
+        
+        
+
+def join_key(k):
+    if not isinstance(k, str):  return '.'.join(k)
+    else:                       return k
 
 def is_known_immutable(val):
     return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
@@ -590,7 +602,7 @@ class History(Result):
         if not nomhist:         nomhist = self.nominal.flatten()
         else:                   nomhist = nomhist.flatten()
         return nomhist, self._prep_faulty()
-    def get_degraded_hist(self, *attrs, nomhist={}):
+    def get_degraded_hist(self, *attrs, nomhist={}, withtime=True, withtotal=True):
         """
         Gets history of times when the attributes *attrs deviate from their nominal values
 
@@ -600,6 +612,10 @@ class History(Result):
             Names to check (e.g., `flow_1`, `fxn_2`)
             nomhist : History, optional
                 Nominal history to compare against (otherwise uses internal nomhist, if available)
+        withtime : bool
+            Whether to include time in the dict. Default is True.
+        withtotal : bool
+            Whether to include a total in the dict. Default is True.
 
         Returns
         -------
@@ -608,10 +624,13 @@ class History(Result):
         """
         nomhist, faulthist = self._prep_nom_faulty(nomhist)
         deghist = History()
+        if not attrs: attrs=self.keys()
         for att in attrs:
             deghist[att] =np.prod([faulthist[k]==v for k,v in nomhist.items() if att in k], 0)
+        if withtotal: deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
+        if withtime: deghist['time'] = nomhist['time']
         return deghist
-    def get_faulty_hist(self, *attrs):
+    def get_faulty_hist(self, *attrs, withtime=True, withtotal=True):
         """
         Gets the times when the attributes *attrs have faults present
 
@@ -619,6 +638,10 @@ class History(Result):
         ----------
         *attrs : names of attributes
             Names to check (e.g., `fxn_1`, `fxn_2`)
+        withtime : bool
+            Whether to include time in the dict. Default is True.
+        withtotal : bool
+            Whether to include a total in the dict. Default is True.
 
         Returns
         -------
@@ -627,15 +650,20 @@ class History(Result):
         """
         faulthist =self._prep_faulty()
         has_faults_hist = History()
+        if not attrs: attrs=self.keys()
         for att in attrs:
             has_faults_hist[att] = np.any([v for k,v in faulthist.items() if ('faults' in k) and (att in k)], 0)
+        if withtotal: has_faults_hist['total'] = np.sum([*has_faults_hist.values()], axis=0)
+        if withtime: has_faults_hist['time'] = faulthist['time']
         return has_faults_hist
-    def to_summary(self, operator = np.max):
+    def to_summary(self, *attrs, operator = np.max):
         """
         Creates summary of the history based on a given metric
 
         Parameters
         ----------
+        *attrs : names of attributes
+            Names to check (e.g., `fxn_1`, `fxn_2`). If not provided, uses all.
         operator : aggregation function, optional
             Way to aggregate the time history (E.g., np.max, np.min, np.average, etc). The default is np.max.
 
@@ -644,8 +672,30 @@ class History(Result):
         summary : Result
             Corresponding summary metrics from this history
         """
-        summary = Result
-        for att in self.keys():
+        flathist = self.flatten()
+        summary = Result()
+        if not attrs: attrs=self.keys()
+        for att in attrs:
             summary[att]=operator(self[att])
         return summary
+    def to_fault_degradation_summary(self, *attrs):
+        """
+        Creates a Result with values for the *attrs that are faulty/degraded
+        
+        Parameters
+        ----------
+        *attrs : str
+            Attribute(s) to check.
+
+        Returns
+        -------
+        Result
+            Result dict with structure {'degraded':['degattrname'], 'faulty':['faultyattrname']]}
+        """
+        faulty_hist = self.get_faulty_hist(*attrs, withtotal=False, withtime=False)
+        faulty = [k for k,v in faulty_hist.items() if np.any(v)]
+        deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
+        degraded = [k for k,v in deg_hist.items() if not np.all(v)]
+        return Result(faulty=faulty, degraded=degraded)
+        
             

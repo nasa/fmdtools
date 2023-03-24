@@ -410,7 +410,13 @@ if __name__=="__main__":
     [all(flat[k]==flat_staged[k]) for k in flat]
     all([all(flat[k]==flat_staged[k]) for k in flat])
     
+    deghist = mdlhist.get_degraded_hist(*mdl.fxns, *mdl.flows)
+    deghist
+    a=deghist.to_table()
     
+    b=mdlhist.to_fault_degradation_summary(*mdl.fxns, *mdl.flows)
+    
+    tab = an.tabulate.result_summary_fmea(endclasses, mdlhists, *mdl.fxns, *mdl.flows)
     
     
     
