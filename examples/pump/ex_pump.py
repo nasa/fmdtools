@@ -412,11 +412,18 @@ if __name__=="__main__":
     
     deghist = mdlhist.get_degraded_hist(*mdl.fxns, *mdl.flows)
     deghist
-    a=deghist.to_table()
+    a=deghist.as_table()
     
-    b=mdlhist.to_fault_degradation_summary(*mdl.fxns, *mdl.flows)
+    b=mdlhist.get_fault_degradation_summary(*mdl.fxns, *mdl.flows)
     
     tab = an.tabulate.result_summary_fmea(endclasses, mdlhists, *mdl.fxns, *mdl.flows)
+    
+    h = mdlhists.get_expected(app=faultapp, with_nominal=True)
+    ec= endclasses.get_expected()
+    
+    degsumm = h.get_summary(*mdl.fxns, *mdl.flows)
+    
+    d=h.get_degraded_hist(*mdl.fxns, nomhist=mdlhists.nominal)
     
     
     

@@ -891,7 +891,7 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
         mdlhists = History()
         mdlhists['faulty'] =mdlhist
         mdlhists['nominal']=nomhist
-        endclass = mdl.find_classification(scen, mdlhists)
+        endclass = Result(**mdl.find_classification(scen, mdlhists))
         if type(desired_result['endclass'])==dict: 
             result['endclass'] = {k:v for k,v in endclass if k in desired_result['endclass']}
         else: result['endclass']=endclass
