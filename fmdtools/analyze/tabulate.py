@@ -93,9 +93,9 @@ def result_summary(endresult, mdlhist, *attrs):
     table : pd.DataFrame
         Table with summary
     """
-    hist_summary = mdlhist.to_fault_degradation_summary(*attrs)
+    hist_summary = mdlhist.get_fault_degradation_summary(*attrs)
     if 'endclass' in endresult: endresult = endresult['endclass']
-    table = pd.DataFrame(endresult, index=[0])
+    table = pd.DataFrame(endresult.data, index=[0])
     table['degraded'] = [hist_summary.degraded]
     table['faulty'] = [hist_summary.faulty]
     return table
@@ -416,12 +416,12 @@ def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
     deg_summaries={}; fault_summaries={}
     for scen, hist in mdlhist.items():
         hist_comp = History(faulty=hist, nominal=mdlhist.nominal)
-        hist_summary = hist_comp.to_fault_degradation_summary(*attrs)
+        hist_summary = hist_comp.get_fault_degradation_summary(*attrs)
         deg_summaries[scen] = str(hist_summary.degraded)
         fault_summaries[scen] = str(hist_summary.faulty)
     degradedtable = pd.DataFrame(deg_summaries, index=['degraded'])
     faulttable = pd.DataFrame(fault_summaries, index=['faulty'])
-    simplefmea=endresult.to_simple_fmea(*metrics)
+    simplefmea=endresult.create_simple_fmea(*metrics)
     fulltable = pd.concat([degradedtable, faulttable, simplefmea.transpose()])
     return fulltable.transpose()
 

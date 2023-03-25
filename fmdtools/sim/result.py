@@ -373,18 +373,67 @@ class Result(UserDict):
         else:
             raise Exception("Invalid File Type")
         file_handle.close()
-    def to_table(self):
+    def as_table(self):
         flatdict=self.flatten()
         newdict = {join_key(k):v for k,v in flatdict.items()}
         return pd.DataFrame.from_dict(newdict)
-    def to_simple_fmea(self, *metrics):
+    def create_simple_fmea(self, *metrics):
         """Makes a simple fmea-stype table of the metrics in the endclasses 
         of a list of fault scenarios run. If metrics not provided, returns all"""
-        tab = self.to_table().transpose()
+        tab = pd.DataFrame.from_dict({k:v.flatten().data for k,v in self.items()}).transpose()
         if not metrics: return tab
         else:           return tab.loc[:, metrics]
+    def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False, to_include='all'):
+        """
+        Takes the expectation of numeric metrics in the result over given scenarios.
+
+        Parameters
+        ----------
+        app : SampleApproach, optional
+            Approach to use for weights (via rates). The default is [].
+        with_nominal : bool, optional
+            Whether to include the nominal scenario in the expectation. The default is False.
+        difference_from_nominal : bool, optional
+            Whether to calculated the difference of the expectation from nominal. The default is False.
+        to_include : str/list/etc
+            Attributes to check. If not given, the entire history is used
+
+        Returns
+        -------
+        expres : Result/History
+            Result/History with values corresponding to the expectation of
+            its quantities over the contained scenarios.
+        """
+        nomhist = {k:v for k,v in self.nominal.flatten(to_include=to_include).items() if is_numeric(v)}
+        newhists = {k: hist.flatten() for k, hist in self.items() 
+                    if not(k=='nominal' and not(with_nominal))}
+        if app:
+            weights = [w['properties']['rate'] for w in app.scenlist]
+            if with_nominal: weights.append(1)
+        else: 
+            weights = [1 for k in newhists]
         
+        expres = self.__class__()
+        for k in nomhist.keys():
+            if difference_from_nominal:
+                expres[k]=np.average([nomhist[k]-hist[k] for hist in newhists.values()], 
+                                      axis=0, weights=weights)
+            else:
+                expres[k]=np.average([hist[k] for hist in newhists.values()], 
+                                      axis=0, weights=weights)
+        return expres
         
+def diff(val1, val2, difftype='bool'):
+    if difftype=='diff':        return val1-val2
+    elif difftype=='bool':      return val1==val2
+    elif type(difftype)==float: return abs(val1-val2)>difftype
+    
+
+def is_numeric(val):
+    try:
+        return val.dtype in ['float', 'bool', 'int']
+    except:
+        return type(val) in [float, bool, int]
 
 def join_key(k):
     if not isinstance(k, str):  return '.'.join(k)
@@ -602,7 +651,7 @@ class History(Result):
         if not nomhist:         nomhist = self.nominal.flatten()
         else:                   nomhist = nomhist.flatten()
         return nomhist, self._prep_faulty()
-    def get_degraded_hist(self, *attrs, nomhist={}, withtime=True, withtotal=True):
+    def get_degraded_hist(self, *attrs, nomhist={}, operator = np.prod, difftype='bool', withtime=True, withtotal=True):
         """
         Gets history of times when the attributes *attrs deviate from their nominal values
 
@@ -612,6 +661,15 @@ class History(Result):
             Names to check (e.g., `flow_1`, `fxn_2`)
             nomhist : History, optional
                 Nominal history to compare against (otherwise uses internal nomhist, if available)
+        operator : function
+            Method of combining multiple degraded values. The default is np.prod
+        difftype : 'bool'/'diff'/float
+            Way to calculate the difference 
+                - for 'bool' it is calculated as an equality nom==faulty
+                - for 'diff' it is calculated as a difference nom-faulty
+                - if a float is provided, it is calculated as nom-fault>diff
+        threshold : 0.000001
+            Threshold for 
         withtime : bool
             Whether to include time in the dict. Default is True.
         withtotal : bool
@@ -626,7 +684,7 @@ class History(Result):
         deghist = History()
         if not attrs: attrs=self.keys()
         for att in attrs:
-            deghist[att] =np.prod([faulthist[k]==v for k,v in nomhist.items() if att in k], 0)
+            deghist[att] =operator([diff(nomhist[k],v, difftype) for k,v in faulthist.items() if att in k], 0)
         if withtotal: deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
         if withtime: deghist['time'] = nomhist['time']
         return deghist
@@ -656,7 +714,7 @@ class History(Result):
         if withtotal: has_faults_hist['total'] = np.sum([*has_faults_hist.values()], axis=0)
         if withtime: has_faults_hist['time'] = faulthist['time']
         return has_faults_hist
-    def to_summary(self, *attrs, operator = np.max):
+    def get_summary(self, *attrs, operator = np.max):
         """
         Creates summary of the history based on a given metric
 
@@ -676,9 +734,10 @@ class History(Result):
         summary = Result()
         if not attrs: attrs=self.keys()
         for att in attrs:
-            summary[att]=operator(self[att])
+            if att in self:
+                summary[att]=operator(self[att])
         return summary
-    def to_fault_degradation_summary(self, *attrs):
+    def get_fault_degradation_summary(self, *attrs):
         """
         Creates a Result with values for the *attrs that are faulty/degraded
         
@@ -697,5 +756,7 @@ class History(Result):
         deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
         degraded = [k for k,v in deg_hist.items() if not np.all(v)]
         return Result(faulty=faulty, degraded=degraded)
+
         
+                
             
