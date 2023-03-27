@@ -26,7 +26,7 @@ from .common import get_true_fields,get_true_field
 from .time import Time
 from .mode import Mode
 from .flow import init_flow, Flow
-from fmdtools.sim.result import History, get_sub_include, init_hist_iter
+from fmdtools.sim.result import History, get_sub_include, init_hist_iter, init_indicator_hist
 
 def assoc_flows(obj, flows={}):
     """
@@ -291,11 +291,13 @@ class Block(object):
         if not hasattr(self, 'h'):
             if track:
                 hist = History()
+                init_indicator_hist(self, hist, timerange, track)
                 for at in self.hist_atts:
                     at_track = get_sub_include(at, track)
                     attr = getattr(self, at, False)
                     if attr:
                         hist[at] = attr.create_hist(timerange, at_track)
+                
                 self.h=hist
             else: self.h=None
         return self.h
@@ -405,6 +407,7 @@ class CompArch(dataobject, mapping=True):
             History corresponding to the CompArch
         """
         h = History()
+        init_indicator_hist(self, h, timerange, track)
         for c, comp in self.components.items():
             comp_track = get_sub_include(c, track)
             if comp_track: 
@@ -702,6 +705,7 @@ class ASG(dataobject, mapping=True):
             History corresponding to the ASG.
         """
         h = History()
+        init_indicator_hist(self, h, timerange, track)
         for a, act in self.actions.items():
             act_track = get_sub_include(a, track)
             if act_track: 

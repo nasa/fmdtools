@@ -15,7 +15,7 @@ from recordclass import asdict, astuple
 
 from .parameter import Parameter
 from .state import State
-from fmdtools.sim.result import History, get_sub_include
+from fmdtools.sim.result import History, get_sub_include, init_indicator_hist
 
 
 class Flow(object):
@@ -104,6 +104,7 @@ class Flow(object):
                 h['s'] = self.s.create_hist(timerange, flow_track)
             else: 
                 h = History()
+            init_indicator_hist(self, h, timerange, track)
             self.h = h
             return h
 #Specialized Flow types

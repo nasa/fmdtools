@@ -227,14 +227,20 @@ class MoveWat(FxnBlock):
             When the timer exceeds the delay defined by the external variable, the fault is added.
         """
         if self.p.delay:
-            if self.wat_out.s.pressure>15.0:
+            if self.indicate_over_pressure(time):
                 if time>self.t.time: 
                     self.t.pressure_limit.inc(self.t.dt)
                 if self.t.pressure_limit.time>=self.p.delay:   
                     self.m.add_fault('mech_break')
         else:
-            if self.wat_out.s.pressure>15.0:        self.m.add_fault('mech_break')
-
+            if self.indicate_over_pressure(time):        self.m.add_fault('mech_break')
+    def indicate_over_pressure(self, time):
+        """
+        Indicators (methods with names indicate_XXX) can be used to mark individual
+        conditions present in the model. Indicators return booleans which are then
+        recorded in the .i structure in the model history
+        """
+        return self.wat_out.s.pressure>15.0
     def behavior(self, time):
         """ here we can define how the function will behave with different faults """
         if self.m.has_fault('short'):
@@ -305,9 +311,9 @@ class Pump(Model):
         self.add_fxn('export_water', ExportWater,   'wat_2')
 
         self.build_model()
-    def end_condition(self,time):
+    def indicate_finished(self,time):
         """
-        End conditions can be used to stop the simulation when certain conditions are met.
+        Indicators can addtionally be used to stop the simulation when certain conditions are met.
         This method is optional, but helpful when the simulation is expensive and there are 
         defined end conditions (e.g., reaching a destination or failing to do so).
         
@@ -315,8 +321,10 @@ class Pump(Model):
         a dummy method is provided to demonstrate, in practice this would depend on
         the intended end-states of the model.
         """
-        if time>self.times[-1]: return True
-        else:                   return False
+        if time>self.modelparams.times[-1]: return True
+        else:                               return False
+    def indicate_on(self, time):
+        return self.wat_1.s.flowrate>0
     def find_classification(self,scen, mdlhists):
         """
             Model classes use find_classification() to classify the results based on a fault scenario, returning
@@ -353,6 +361,10 @@ class Pump(Model):
 
 if __name__=="__main__":
     mdl = Pump()
+    
+    endclass, mdlhist=propagate.one_fault(mdl, 'export_water','block', time=29, 
+                                          new_params={'modelparams':{'end_condition':'indicate_on'}})
+    endclass, mdlhist=propagate.nominal(mdl,  new_params={'modelparams':{'end_condition':'indicate_on'}})
     #check_model_pickleability(mdl, try_pick=True)
     #from define.common import check_pickleability
     #unpickleable = check_pickleability(mdl, try_pick=True)
