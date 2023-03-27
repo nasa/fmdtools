@@ -19,7 +19,7 @@ import copy
 from .flow import Flow, init_flow
 from .common import check_pickleability, get_var, set_var
 from .parameter import Parameter
-from fmdtools.sim.result import History, get_sub_include, init_hist_iter
+from fmdtools.sim.result import History, get_sub_include, init_hist_iter, init_indicator_hist
 
 class ModelParam(Parameter, readonly=True):
     """
@@ -34,9 +34,9 @@ class ModelParam(Parameter, readonly=True):
             timestep used in the simulation. default is 1.0
         units : str
             time-units. default is hours`
-        use_end_condition : bool
-            whether to use an end-condition method (defined by user-defined end_condition method) 
-            or defined end time to end the simulation. Default is False
+        end_condition : str
+            Name of indicator method to use to end the simulation. If not provided (''),
+            the simulation ends at the final time. Default is ''
         seed : int
             seed used for the internal random number generator. Default is 42.
         use_local : bool
@@ -47,7 +47,7 @@ class ModelParam(Parameter, readonly=True):
     dt :                float = 1.0
     units :             str = "hr"
     units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
-    use_end_condition : bool = False
+    end_condition :     str = ''
     seed :              int = 42
     use_local :         bool = True
     def __init__(self, *args, **kwargs):
@@ -78,7 +78,6 @@ class Model(object):
         bipartite graph view of the functions and flows
     graph : networkx graph
         multigraph view of functions and flows
-    
     """
     def __init__(self, params=Parameter(),modelparams=ModelParam(), valparams='all'):
         """
@@ -531,6 +530,7 @@ class Model(object):
             for fname, flow in copy.flows.items():
                 if hasattr(flow, 'h'):
                     copy.h[fname]=flow.h.copy()
+            if 'i' in self.h: copy.h['i']=self.h['i'].copy()
         return copy
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
@@ -612,6 +612,7 @@ class Model(object):
     def create_hist(self, timerange, track):
         if not hasattr(self, 'h'):
             hist = History()
+            init_indicator_hist(self, hist, timerange, track)
             for fxnname, fxn in self.fxns.items():
                 fxn_track = get_sub_include(fxnname, track)
                 if fxn_track:

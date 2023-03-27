@@ -455,6 +455,35 @@ def get_sub_include(att, to_include):
     else:                                                   new_to_include= False
     return new_to_include
 
+def init_indicator_hist(obj, h, timerange, track):
+    """
+    Creates a history for an object with indicator methods (e.g., obj.indicate_XX)
+
+    Parameters
+    ----------
+    obj : object
+        Function/Flow/Model object with indicators
+    h : History
+        History of Function/Flow/Model object with indicators appended in h['i']
+    timerange : iterable, optional
+        Time-range to initialize the history over. The default is None.
+    track : list/str/dict, optional
+        argument specifying attributes for :func:`get_sub_include'. The default is None.
+
+    Returns
+    -------
+    h : History
+        History of states with structure {'XX':log} for indicator `obj.indicate_XX`
+    """
+    sub_track = get_sub_include('i', track)
+    if sub_track:
+        indicators = [i[9:] for i in dir(obj) if i.startswith('indicate_')]
+        if indicators:
+            h['i']= History()
+            for i in indicators:
+                val = getattr(obj, 'indicate_'+i)
+                h.i[i] = init_hist_iter(i, val, timerange, sub_track, dtype=bool)
+
 def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
     """
     Initializes the history for a given attribute att with value val. Enables
@@ -576,7 +605,7 @@ class History(Result):
         for att, hist in self.items():
             if att=='time' and time is not None:
                 val=time
-            else:
+            elif att!='i':
                 try:            val=obj[att]
                 except: 
                     try:        val=getattr(obj, att)
@@ -586,6 +615,8 @@ class History(Result):
                             try: val=obj
                             except: 
                                 raise Exception("Unable to log value "+str(val)+" to "+str(obj.__class__.__name__))
+            else:
+                val = {i:getattr(obj, 'indicate_'+i)(time) for i in hist.keys()}
 
             if type(hist)==History:             hist.log(val, t_ind)
             else:

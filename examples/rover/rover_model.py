@@ -440,7 +440,7 @@ def gen_model_params(x, scen):
     return params
 class Rover(Model):
     def __init__(self, params=RoverParam(),\
-                 modelparams=ModelParam(times=(0, 100), phases=(('start',0, 30), ('end', 31, 60))),\
+                 modelparams=ModelParam(times=(0, 100), phases=(('start',0, 30), ('end', 31, 60)), end_condition='indicate_finished'),\
                      valparams={'drive_modes':'set'}):
         super().__init__(params, modelparams, valparams)
 
@@ -470,7 +470,7 @@ class Rover(Model):
         self.add_fxn("environment",     Environment,    'ground',   p=asdict(params))
 
         self.build_model()
-    def end_condition(self, time):
+    def indicate_finished(self, time):
         if (in_area(self.flows['ground'].x,self.flows['ground'].y,1,self.params['end'][0],self.params['end'][1]) or \
             (time > 5 and self.fxns['avionics'].m.in_mode('standby')) or \
                 self.fxns['avionics'].m.in_mode('em_off', 'finished')):
@@ -680,7 +680,7 @@ if __name__=="__main__":
     
     from pymoo.algorithms.soo.nonconvex.pattern import PatternSearch
     import numpy as np
-    mdl = Rover(modelparams=ModelParam(times=(0, 100), phases=(('start',0, 30), ('end', 31, 60)), use_end_condition=False))
+    mdl = Rover(modelparams=ModelParam(times=(0, 100), phases=(('start',0, 30), ('end', 31, 60))))
     track={'functions':{"Environment":"in_bound"},'flows':{"ground":"all"}}
     rover_prob = search.ProblemInterface("rover_problem", mdl, pool=mp.Pool(5), staged=True, track=track)
     app_drive = SampleApproach(mdl, faults='drive', phases={'global':[0,39]}, defaultsamp={'samp':'evenspacing','numpts':3})

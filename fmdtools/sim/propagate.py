@@ -32,20 +32,19 @@ import copy
 import fmdtools.analyze.process as proc
 import tqdm
 import dill
-import warnings
-import sys,os
+import os
 from fmdtools.sim.approach import SampleApproach
 from fmdtools.define.model import ModelParam
-from fmdtools.define.block import Block
+from fmdtools.define.common import get_var
 from .result import Result, History
-from recordclass import asdict
 
 ##DEFAULT ARGUMENTS
 sim_kwargs= {'desired_result':'endclass',
              'track': 'all',
              'track_times':'all',
              'staged':False,
-             'run_stochastic':False}
+             'run_stochastic':False,
+             'use_end_condition':True}
 """
 Simulation keyword arguments.
 
@@ -291,7 +290,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
         n_results, n_mdlhists = unpack_res_list([*nomapp.scenarios.values()], res_list)
     else:
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
-            n_results[scenname], n_mdlhists[scenname]= exec_nom_helper(mdl, scen, scenname, **kwargs)
+            n_results[scenname], n_mdlhists[scenname]= exec_nom_helper(mdl, scen, scenname, **{**kwargs, 'use_end_condition':False})
     save_helper(kwargs['save_args'] , n_results, n_mdlhists)
     return n_results, n_mdlhists
 def unpack_res_list(scenlist, res_list):
@@ -302,7 +301,7 @@ def unpack_res_list(scenlist, res_list):
     return results, mdlhists
 
 def exec_nom_par(arg):
-    endclass, mdlhist = exec_nom_helper(arg[0], arg[1], arg[2], **arg[3])
+    endclass, mdlhist = exec_nom_helper(arg[0], arg[1], arg[2], **{**arg[3], 'use_end_condition':False})
     return endclass, mdlhist
 def exec_nom_helper(mdl, scen, name, **kwargs):
     """Helper function for executing nominal scenarios"""
@@ -398,7 +397,8 @@ def mult_fault(mdl, faultseq, disturbances, scen={}, rate=np.NaN, **kwargs):
         A dictionary of the states of the model of each fault scenario over time with structure: {'nominal':nomhist, 'faulty':faulthist}
     """
     sim_kwarg = pack_sim_kwargs(**kwargs)
-    nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, [min(faultseq)], **sim_kwarg, use_end_condition=False)
+    run_kwarg = pack_run_kwargs(**kwargs)
+    nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, [min(faultseq)], **{**sim_kwarg, 'use_end_condition':False}, **run_kwarg)
     mdl = [*mdls.values()][0]
     if not scen: scen = create_faultseq_scen(mdl, rate, faultseq=faultseq, disturbances=disturbances)
     result, faulthist, _, t_end = prop_one_scen(mdl, scen, **sim_kwarg, nomhist=nomhist, nomresult=nomresult)
@@ -418,7 +418,7 @@ def create_faultseq_scen(mdl, rate, sequence={}, faultseq={}, disturbances={}):
     scen['properties']['time']=list(times)
     return scen
 
-def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, scen={}, use_end_condition=None, **kwargs):
+def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, scen={}, **kwargs):
     """
     Helper function for initial run of nominal scenario.
 
@@ -454,8 +454,6 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, scen={}, 
         if type(ctimes) in [float, int]:ctimes=[ctimes]
         else:                           ctimes=ctimes
     else:                               ctimes=[]
-    if use_end_condition==True and hasattr(mdl, "end_condition"): mdl.use_end_condition=True
-    elif use_end_condition==False:                                mdl.use_end_condition=False
     result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)
     
     endfaults, endfaultprops = mdl.return_faultmodes()
@@ -491,7 +489,7 @@ def approach(mdl, app,  **kwargs):
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
     kwargs.update(pack_run_kwargs(**kwargs))
-    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **kwargs, use_end_condition=False)
+    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **{**kwargs, 'use_end_condition':False})
     scenlist = app.scenlist
     results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, **kwargs, nomhist=nomhist, nomresult=nomresult)
     nomhist.cut(t_end_nom)
@@ -530,7 +528,7 @@ def single_faults(mdl, **kwargs):
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
     kwargs.update(pack_run_kwargs(**kwargs))
-    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, mdl.modelparams.times,**kwargs, use_end_condition=False)
+    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, mdl.modelparams.times, **{**kwargs, 'use_end_condition':False})
     
     scenlist = list_init_faults(mdl)
     results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, **kwargs, nomhist=nomhist, nomresult=nomresult)
@@ -798,6 +796,14 @@ def init_histrange(mdl, start_time, staged, track, track_times):
     mdlhist.init_time(timerange[0], histrange)
     return mdlhist, histrange, timerange, shift
 
+def check_end_condition(mdl, use_end_condition, t):
+    if use_end_condition and mdl.modelparams.end_condition:
+        end_condition = get_var(mdl, mdl.modelparams.end_condition)
+        if end_condition(t): return True
+        else:                return False
+    else:                    return False
+    
+
 def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, cut_hist=True, **kwargs):
     """
     Runs a fault scenario in the model over time
@@ -832,7 +838,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
     t_end: float
         Last sim time 
     """
-    desired_result, track, track_times, staged, run_stochastic = unpack_sim_kwargs(**kwargs)
+    desired_result, track, track_times, staged, run_stochastic, use_end_condition = unpack_sim_kwargs(**kwargs)
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     mdlhist, histrange, timerange, shift = init_histrange(mdl, scen['properties']['time'], staged, track, track_times)
@@ -864,9 +870,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
                if t in desired_result:
                    result[t] = get_result(scen,mdl,desired_result[t], mdlhist,nomhist, nomresult.get(t, {}))
                    #desired_result.pop(t)
-           if (mdl.modelparams.use_end_condition and hasattr(mdl, 'end_condition')):
-               if mdl.end_condition(t):
-                   break
+           if check_end_condition(mdl, use_end_condition, t): break
        except:
             print("Error at t="+str(t)+' in scenario '+str(scen))
             raise

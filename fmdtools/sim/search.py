@@ -856,10 +856,7 @@ class DynamicInterface():
         self.mdl = prop.new_mdl(mdl, paramdict)
         self.log = prop.init_mdlhist(mdl, np.arange(self.t, self.t_max+2*mdl.tstep, self.mdl.tstep), track=track)
         self.run_stochastic=run_stochastic
-        if use_end_condition==None and hasattr(mdl, "end_condition"): 
-            self.use_end_condition = mdl.use_end_condition
-        else:                       
-            self.use_end_condition = use_end_condition
+        self.use_end_condition = use_end_condition
     def update(self, seed={}, faults={}, disturbances={}):
         """
         Updates the model states at the simulation time and iterates time
@@ -903,10 +900,9 @@ class DynamicInterface():
         end : bool
             Whether the simulation is finished
         """
-        if self.t>=self.t_max:                                      end = True
-        elif self.use_end_condition and self.mdl.end_condition():   end = True
-        elif external_condition:                                    end = True
-        else:                                                       end = False
+        if self.t>=self.t_max:    end = True
+        elif external_condition:  end = True
+        else:                     end = prop.check_end_condition(self.mdl, self.use_end_condition, self.t)
         if end: prop.cut_mdlhist(self.log, self.t_ind)
         return end
     
