@@ -11,7 +11,7 @@ And functions:
 """
 
 from collections import UserDict
-
+from ordered_set import OrderedSet
 import numpy as np
 import copy
 import sys, os
@@ -422,12 +422,118 @@ class Result(UserDict):
                 expres[k]=np.average([hist[k] for hist in newhists.values()], 
                                       axis=0, weights=weights)
         return expres
+    def total(self, metric):
+        """
+        Tabulates the total (non-weighted sum) of a metric over a number of runs
+    
+        Parameters
+        ----------
+        metric: str
+            metric to total
+    
+        Returns
+        -------
+        totalcost : Float
+            The total metric of the scenarios.
+        """
+        return sum([e[metric] for k,e in self.items()])
+    def state_probabilities(self, prob_key='prob', class_key='classification'):
+        """
+        Tabulates the probabilities of different classifications in the result.
+
+        Parameters
+        ----------
+        prob_key : str, optional
+            string to use for rate/probability information. default is 'prob'
+        class_key : str, optional
+            string to use for the different classifications. default is 'classification'
+
+        Returns
+        -------
+        probabilities : dict
+            Dictionary of probabilities of different simulation classifications
+
+        """
+        classifications = set([props[class_key] for k,props in self.items()])
+        probabilities = dict.fromkeys(classifications)
+        for classif in classifications:
+            probabilities[classif] = sum([props[prob_key] for k,props in self.items() if classif==props[class_key]])
+        return probabilities
+    def expected(endclasses, metric, prob_key='rate'):
+        """Calculates the expected value of a given metric in endclasses using the rate variable in endclasses"""
+        return sum([e[metric]*e[prob_key] for k,e in endclasses.items() if not np.isnan(e[metric])])
+    def average(self, metric, empty_as='nan'):
+        """Calculates the average value of a given metric in endclasses"""
+        ecs = [e[metric] for k,e in endclasses.items() if not np.isnan(e[metric])]
+        if len(ecs)>0 or empty_as=='nan':   return np.mean(ecs)
+        else:                               return empty_as
+    def percent(self, metric):
+        """Calculates the percentage of a given indicator variable being True in endclasses"""
+        return sum([int(bool(e[metric])) for k,e in endclasses.items() if not np.isnan(e[metric])])/(len(endclasses)+1e-16)
+    def rate(self, metric, prob_key='rate'):
+        """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
+        return sum([int(bool(e[metric]))*e['prob_key'] for k,e in endclasses.items() if not np.isnan(e[metric])])
+    def end_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
+        """
+        Calculates the difference between the nominal and fault scenarios for a set of endclasses
+
+        Parameters
+        ----------
+        endclasses : dict
+            endclass dictionary for the set {scen:endclass}, where endclass is a dict of metrics
+        metric : str
+            metric to calculate the difference of in the endclasses
+        nan_as : float, optional
+            How do deal with nans in the difference. The default is np.nan.
+        as_ind : bool, optional
+            Whether to return the difference as an indicator (1,-1,0) or real value. The default is False.
+        no_diff : bool, optional
+            Option for not computing the difference (but still performing the processing here). The default is False.
+        Returns
+        -------
+        difference : dict
+            dictionary of differences over the set of scenarios
+        """
+        endclasses=self.copy()
+        nomendclass = endclasses.pop('nominal')
+        if not no_diff: 
+            if as_ind:  difference = {scen:bool(nan_to_x(ec[metric], nan_as))-bool(nan_to_x(nomendclass[metric], nan_as)) for scen, ec in endclasses.items()}
+            else:       difference = {scen:nan_to_x(ec[metric], nan_as)-nan_to_x(nomendclass[metric], nan_as) for scen, ec in endclasses.items()}
+        else:           
+            difference = {scen:nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
+            if as_ind: difference = {scen:np.sign(metric) for scen,metric in difference.items()}
+        return difference
+    def overall_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
+        """
+        Calculates the difference between the nominal and fault scenarios over a set of endclasses
+
+        Parameters
+        ----------
+        nested_endclasses : dict
+            Nested dict of endclasses from propogate.nested
+        metric : str
+            metric to calculate the difference of in the endclasses
+        nan_as : float, optional
+            How do deal with nans in the difference. The default is np.nan.
+        as_ind : bool, optional
+            Whether to return the difference as an indicator (1,-1,0) or real value. The default is False.
+        no_diff : bool, optional
+            Option for not computing the difference (but still performing the processing here). The default is False.
+        Returns
+        -------
+        differences : dict
+            nested dictionary of differences over the set of fault scenarios nested in nominal scenarios 
+        """
+        return {scen:end_diff(endclass, metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff) for scen, endclass in self.items()}
         
 def diff(val1, val2, difftype='bool'):
     if difftype=='diff':        return val1-val2
     elif difftype=='bool':      return val1==val2
     elif type(difftype)==float: return abs(val1-val2)>difftype
-    
+def nan_to_x(metric, x=0.0):
+    """returns nan as zero if present, otherwise returns the number"""
+    if np.isnan(metric):    return x
+    else:                   return metric
 
 def is_numeric(val):
     try:
@@ -642,7 +748,6 @@ class History(Result):
                 if end_ind is None:     hist[name]=att[start_ind:]  
                 elif start_ind is None: hist[name]=att[:end_ind+1]  
                 else:                   hist[name]=att[start_ind:end_ind+1] 
-                    
         return hist 
     def get_slice(self,t_ind=0):
         """
@@ -711,15 +816,16 @@ class History(Result):
         deghist : History
             History of degraded attributes
         """
+        if not attrs: attrs=self.keys()
+        
         nomhist, faulthist = self._prep_nom_faulty(nomhist)
         deghist = History()
-        if not attrs: attrs=self.keys()
         for att in attrs:
             deghist[att] =operator([diff(nomhist[k],v, difftype) for k,v in faulthist.items() if att in k], 0)
         if withtotal: deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
         if withtime: deghist['time'] = nomhist['time']
         return deghist
-    def get_faulty_hist(self, *attrs, withtime=True, withtotal=True):
+    def get_faulty_hist(self, *attrs, withtime=True, withtotal=True, operator = np.any):
         """
         Gets the times when the attributes *attrs have faults present
 
@@ -731,6 +837,8 @@ class History(Result):
             Whether to include time in the dict. Default is True.
         withtotal : bool
             Whether to include a total in the dict. Default is True.
+        operator : function
+            Method of combining multiple degraded values. The default is np.any
 
         Returns
         -------
@@ -741,7 +849,7 @@ class History(Result):
         has_faults_hist = History()
         if not attrs: attrs=self.keys()
         for att in attrs:
-            has_faults_hist[att] = np.any([v for k,v in faulthist.items() if ('faults' in k) and (att in k)], 0)
+            has_faults_hist[att] = operator([v for k,v in faulthist.items() if ('faults' in k) and (att in k)], 0)
         if withtotal: has_faults_hist['total'] = np.sum([*has_faults_hist.values()], axis=0)
         if withtime: has_faults_hist['time'] = faulthist['time']
         return has_faults_hist
@@ -787,7 +895,45 @@ class History(Result):
         deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
         degraded = [k for k,v in deg_hist.items() if not np.all(v)]
         return Result(faulty=faulty, degraded=degraded)
-
+    def get_modephases(self):
+        """
+        Identifies the phases of operation for the system based on its modes.
+    
+        Returns
+        -------
+        phases : dict
+            Dictionary of distict phases that the system functions pass through, of the form: 
+                {'fxn':{'phase1':[beg, end], phase2:[beg, end]}}
+                where each phase is defined by its corresponding mode in the modelhist
+                (numbered mode, mode1, mode2... for multiple modes)
+        modephases : dict
+            Dictionary of phases that the system passes through, of the form: {'fxn':{'mode1':{'phase1', 'phase2''}}}
+        """
+        modephases={}
+        phases={}
+        times = self['time']
+        f_hist = self.flatten()
+        modehists = {k:v for k,v in f_hist.items() if 'mode' in k and 'm' in k}
+        for k, modehist in modehists.items():
+            fxn = k[k.index('m')-1]
+            if len(modehist)!=0:    
+                modes = OrderedSet(modehist)
+                modephases[fxn]=dict.fromkeys(modes)
+                phases_unsorted = dict()
+                for mode in modes:
+                    modeinds = [ind for ind,m in enumerate(modehist) if m==mode]
+                    startind = modeinds[0]
+                    phasenum = 0; phaseid=mode
+                    modephases[fxn][mode] = set()
+                    for i, ind in enumerate(modeinds):
+                        if ind+1 not in modeinds:
+                            phases_unsorted[phaseid] =[times[startind], times[ind]]
+                            modephases[fxn][mode].add(phaseid)
+                            if i!=len(modeinds)-1: 
+                                startind = modeinds[i+1]
+                                phasenum+=1; phaseid=mode+str(phasenum)
+                phases[fxn] = dict(sorted(phases_unsorted.items(), key = lambda item: item[1][0]))
+        return phases, modephases
         
                 
             

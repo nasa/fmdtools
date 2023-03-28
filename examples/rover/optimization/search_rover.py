@@ -546,7 +546,7 @@ def visualizations(soln, method="EA", figsize=(4,4), ax=False, legend=True, xlim
 
     mdl_range = rvr.Rover(params=rvr.RoverParam(linetype='turn', start=5.0), valparams={'drive_modes':list(soln)})
     _, mdlhists = prop.nominal(mdl_range)
-    phases, modephases = an.process.modephases(mdlhists)
+    phases, modephases = mdlhist.get_modephases()
     end_time = phases['Avionics']['drive'][1]+25
     mdl_range.modelparams = mdl_range.modelparams.copy_with_vals(times=(0,end_time))
     app_range = SampleApproach(mdl_range, faults='Drive', phases={'drive':phases['Avionics']['drive']})
@@ -585,7 +585,7 @@ NUM_SUBPOP = 10 #number of subpopulation
 #nominal scenario info (used to find when to inject faults in nominal scenario)
 mdl = rvr.Rover(params=rvr.RoverParam('turn', start=5.0), valparams={'drive_modes':{'custom_fault':{'friction':0.0, 'transfer':0.0,'drift':0.0}}})
 _, mdlhists_nom = prop.nominal(mdl)
-phases, modephases = an.process.modephases(mdlhists_nom)
+phases, modephases = mdlhists_nom.get_modephases()
 app= SampleApproach(mdl, faults='Drive', phases={'drive':phases['Avionics']['drive']})
 fault_time = app.times[0]
 end_time = phases['Avionics']['drive'][1]+25

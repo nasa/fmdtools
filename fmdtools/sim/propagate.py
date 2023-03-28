@@ -34,6 +34,7 @@ import tqdm
 import dill
 import os
 from fmdtools.sim.approach import SampleApproach
+from fmdtools.analyze.graph import diffgraph
 from fmdtools.define.model import ModelParam
 from fmdtools.define.common import get_var
 from .result import Result, History
@@ -688,7 +689,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
 def phases_from_hist(get_phases, t_end, nomhist):
     if get_phases=='global':      phases={'global':[0,t_end]}
     else:
-        phases, modephases = proc.modephases(nomhist)
+        phases, modephases = nomhist.get_modephases()
         if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
         elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
     return phases
@@ -912,9 +913,9 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
                 rgraph = mdl.flows[gtype].return_stategraph(**desired_result[gtype])
                 proctype="bipartite"
             
-            if nomresult and type(nomresult)==dict:     result[gtype] = proc.resultsgraph(rgraph, nomresult[gtype], proctype)
-            elif nomresult:                             result[gtype] = proc.resultsgraph(rgraph, nomresult, proctype)
-            else:           result[gtype] = proc.resultsgraph(rgraph, rgraph, proctype)
+            if nomresult and type(nomresult)==dict:     result[gtype] = diffgraph(rgraph, nomresult[gtype], proctype)
+            elif nomresult:                             result[gtype] = diffgraph(rgraph, nomresult, proctype)
+            else:           result[gtype] = diffgraph(rgraph, rgraph, proctype)
             desired_result.pop(gtype)
     if desired_result:
         if 'vars' in desired_result:

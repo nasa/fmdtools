@@ -94,17 +94,17 @@ class TankTests(unittest.TestCase, CommonTests):
         """ Tests running the model with a different local timestep in the Store_Liquid function"""
         mdl_global = Tank(modelparams = {'phases':{'na':[0],'operation':[1,20]}, 'times':[0,5,10,15,20], 'tstep':1, 'units':'min', 'use_local':False})
         _, mdlhist_global = propagate.one_fault(mdl_global,'Store_Water','Leak', time=2)
-        mdlhist_global = an.process.flatten_hist(mdlhist_global)
+        mdlhist_global = mdlhist_global.flatten()
         
         mdl_loc_low = Tank(params={'reacttime':2, 'store_tstep':0.1})
         _, mdlhist_loc_low = propagate.one_fault(mdl_loc_low,'Store_Water','Leak', time=2)
-        mdlhist_loc_low = an.process.flatten_hist(mdlhist_loc_low)
+        mdlhist_loc_low = mdlhist_loc_low.flatten()
         
         self.compare_results(mdlhist_global, mdlhist_loc_low)
         
         mdl_loc_high = Tank(params={'reacttime':2, 'store_tstep':3.0})
         _, mdlhist_loc_high = propagate.one_fault(mdl_loc_high,'Store_Water','Leak', time=2)
-        mdlhist_loc_high = an.process.flatten_hist(mdlhist_loc_high)
+        mdlhist_loc_high = mdlhist_loc_high.flatten()
         for i in [2,5,8,12]:
             slice_global = an.process.get_flat_hist_slice(mdlhist_global,t_ind=i)
             slice_loc_high = an.process.get_flat_hist_slice(mdlhist_loc_high ,t_ind=i)

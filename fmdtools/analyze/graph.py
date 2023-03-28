@@ -585,7 +585,7 @@ def result_from(mdl, reshist, time, renderer='matplotlib', gtype='bipartite', **
     mdl : model
         The model the faults were run in.
     reshist : dict
-        A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
+        A dictionary of results 
     time : float
         The time in the history to plot the graph at.
     renderer : 'matplotlib' or 'graphviz'
@@ -647,7 +647,7 @@ def results_from(mdl, reshist, times, renderer='matplotlib', gtype='bipartite', 
     mdl : model
         The model the faults were run in.
     reshist : dict
-        A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
+        A dictionary of results 
     times : list or 'all'
         The times in the history to plot the graph at. If 'all', plots them all
     renderer : 'matplotlib' or 'graphviz' or
@@ -715,7 +715,7 @@ def animation_from(mdl, reshist, times='all', faultscen=[], gtype='bipartite',fi
     mdl : model
         The model the faults were run in.
     reshist : dict
-        A dictionary of results (from process.hists() or process.typehist() for the typegraph option)
+        A dictionary of results 
     times : list or 'all'
         The times in the history to plot the graph at. If 'all', plots them all
     faultscen : str, optional
@@ -821,7 +821,7 @@ def get_plotlabels(g, reshist, t_ind):
     g : networkx graph
         The graph to get labels for
     reshist : dict
-        The dict of results history over time (from process.hists() or process.typehist() for the typegraph option)
+        The dict of results history over time 
     t_ind : float
         The time in reshist to update the graph at
 
@@ -882,7 +882,7 @@ def get_asg_plotlabels(g, fxn, reshist, t_ind):
     fxn : FxnBlock
         Corresponding function block for the graph g
     reshist : dict
-        The dict of results history over time (from process.hists() or process.typehist() for the typegraph option)
+        The dict of results history over time 
     t_ind : float
         The time in reshist to update the graph at
 
@@ -1217,3 +1217,55 @@ def gv_colors(g, gtype, colors, heatmap, cmap, faultnodes, degradednodes, faulte
             for i in range(len(mm)):
                 colors_dict[node_labels[i]] = mm[i]
     return colors_dict
+
+def diffgraph(g, nomg, gtype='bipartite'):
+    """
+    Makes a graph of nominal/non-nominal states by comparing the nominal graph states with the non-nominal graph states
+
+    Parameters
+    ----------
+    g : networkx Graph
+        graph for the fault scenario where the functions are nodes and flows are edges and with 'faults' and 'states' attributes
+    nomg : networkx Graph
+        graph for the nominal scenario where the functions are nodes and flows are edges and with 'faults' and 'states' attributes
+    gtype : 'normal' or 'bipartite'
+        whether the graph is a normal multgraph, or a bipartite graph. the default is 'bipartite'
+
+    Returns
+    -------
+    rg : networkx graph
+        copy of g with 'status' attributes added for faulty/degraded functions/flows
+    """
+    rg=g.copy()
+    if gtype=='normal':
+        for edge in g.edges:
+            for flow in list(g.edges[edge].keys()):            
+                if g.edges[edge][flow]!=nomg.edges[edge][flow]: status='Degraded'
+                else:                               status='Nominal' 
+                rg.edges[edge][flow]={'values':g.edges[edge][flow],'status':status}
+        for node in g.nodes:        
+            if g.nodes[node]['modes'].difference(['nom']): status='Faulty' 
+            elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
+            else: status='Nominal'
+            rg.nodes[node]['status']=status
+    elif gtype=='bipartite' or gtype=='component':
+        for node in g.nodes:        
+            if g.nodes[node].get('bipartite', 1)==0 or g.nodes[node].get('iscomponent', False): #condition only checked for functions
+                if g.nodes[node].get('modes', {'nom'}).difference(['nom']): status='Faulty'
+                elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
+                else: status='Nominal'
+            elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
+            else: status='Nominal'
+            rg.nodes[node]['status']=status
+    elif gtype=='typegraph':
+        for node in g.nodes:
+            if g.nodes[node]['level']==2:
+                if any({fxn for fxn, m in g.nodes[node]['modes'].items() if m not in [{'nom'},{}]}): status='Faulty'
+                elif g.nodes[node]['states']!=nomg.nodes[node]['states']:   status='Degraded'
+                else: status='Nominal'
+            elif g.nodes[node]['level']==3:
+                if g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
+                else: status='Nominal'
+            else: status='Nominal'
+            rg.nodes[node]['status']=status
+    return rg
