@@ -27,7 +27,7 @@ import copy
 import warnings
 import numpy as np
 from fmdtools.analyze.tabulate import metricovertime as metric_table
-from fmdtools.analyze.process import bootstrap_confidence_interval
+from fmdtools.sim.result import bootstrap_confidence_interval
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator

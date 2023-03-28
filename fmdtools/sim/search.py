@@ -8,7 +8,6 @@ Classes:
 """
 import copy
 import fmdtools.sim.propagate as prop
-import fmdtools.analyze.process as proc
 import fmdtools.analyze.plot as plot
 from fmdtools.sim.approach import SampleApproach
 import networkx as nx
@@ -648,7 +647,7 @@ class ProblemInterface():
         vars_to_plot = self._get_plot_vars(simname, self.variables)
         all_to_plot = {**objs_to_plot, **vars_to_plot}
         
-        fxnflowvals = proc.nest_flattened_hist({tuple(objname.split(".")):'all' for objname in all_to_plot.values()})
+        fxnflowvals = History({tuple(objname.split(".")):'all' for objname in all_to_plot.values()}).nest()
             
         if self.simulations[simname][0]=='multi':      f_times = {get_text_time(t)  for seq in self.simulations[simname][1][0] for t in seq['sequence'].keys()}
         elif self.simulations[simname][0]=='single':   f_times = {get_text_time(t) for t in self.simulations[simname][2]['sequence'].keys()}

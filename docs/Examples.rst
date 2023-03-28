@@ -21,7 +21,7 @@ After completing the workshop, it can be helpful to run through the following no
   
   - Basic simulation of dynamic and static models using methods in :mod:`fmdtools.sim.propagate` and usage of class :class:`fmdtools.define.SampleApproach` for fault sampling
   
-  - Analysis using :func:`fmdtools.analyze.process.hists()`, :func:`fmdtools.analyze.plot.mdlhistvals()` :func:`fmdtools.analyze.tabulate.fullfmea()`, and :func:`fmdtools.analyze.tabulate.simplefmea()`
+  - Analysis using Basic analysis/results processing capabilities
 
 - `Pump Example Notebook <example_pump/Pump_Example_Notebook.ipynb>`_ is helpful for understanding the breadth of fmdtools plotting, tabulation, and visualization capabilities. It covers:
   
@@ -35,7 +35,7 @@ After completing the workshop, it can be helpful to run through the following no
 
   - Adding fault and operational modes to Model functions using the method :meth:`fmdtools.define.Block.assoc_modes()` and explanation of the `key_phases_by` and `exclusive` options.
   
-  - Using :func:`fmdtools.analyze.process.modephases()` to setting a :class:`fmdtools.define.SampleApproach` up which samples individual faults based on the phases of the model and/or function defined by their operational modes.
+  - Using :func:`fmdtools.sim.result.History.get_modephases()` to setting a :class:`fmdtools.define.SampleApproach` up which samples individual faults based on the phases of the model and/or function defined by their operational modes.
 
   - Using :func:`fmdtools.analyze.plot.phases()` to visualize the phases and modes of a model over time and :func:`fmdtools.analyze.plot.samplecosts()` to visualize the consequences of each fault scenario in the approach within each phase.
   

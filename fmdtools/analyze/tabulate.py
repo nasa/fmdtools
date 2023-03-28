@@ -31,7 +31,7 @@ Also used for FMEA-like tables:
 
 import pandas as pd
 import numpy as np
-from fmdtools.analyze.process import expected, average, percent, rate, overall_diff, nan_to_x, bootstrap_confidence_interval
+from fmdtools.sim.result import nan_to_x, Result, bootstrap_confidence_interval
 
 def label_faults(faulthist, df, fxnlab, labels):
     if type(faulthist)==dict:
@@ -293,8 +293,8 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
     if type(params)==str: params=[params]
     full_stats=[]
     for factor, scens in factors.items():
-        endclass_fact = {scen:endclass for scen, endclass in nested_endclasses.items() if scen in scens}
-        ec_metrics = overall_diff(endclass_fact, value, nan_as=nan_as, as_ind=percent, no_diff=not difference)
+        endclass_fact = Result({scen:endclass for scen, endclass in nested_endclasses.items() if scen in scens})
+        ec_metrics = endclass_fact.overall_diff(value, nan_as=nan_as, as_ind=percent, no_diff=not difference)
 
         if not percent: nominal_metrics = [nan_to_x(res_scens['nominal'][value], nan_as) for res_scens in endclass_fact.values()]
         else:           nominal_metrics = [np.sign(float(nan_to_x(nan_to_x(res_scens['nominal'][value]), nan_as))) for res_scens in endclass_fact.values()]
@@ -376,16 +376,16 @@ def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[],
     for inputparam in inputparams:
         table_values.append([nomapp.scenarios[e]['properties']['inputparams'][inputparam] for e in scens])
     for metric in percent_metrics:  
-        table_values.append([percent(nested_endclasses[e], metric) for e in scens])
+        table_values.append([nested_endclasses[e].percent(metric) for e in scens])
         table_rows.append('perc_'+metric)
     for metric in rate_metrics:     
-        table_values.append([rate(nested_endclasses[e], metric) for e in scens])
+        table_values.append([nested_endclasses[e].rate(metric) for e in scens])
         table_rows.append('rate_'+metric)
     for metric in average_metrics:  
-        table_values.append([average(nested_endclasses[e], metric) for e in scens])
+        table_values.append([nested_endclasses[e].average(metric) for e in scens])
         table_rows.append('ave_'+metric)
     for metric in expected_metrics: 
-        table_values.append([expected(nested_endclasses[e], metric) for e in scens])
+        table_values.append([nested_endclasses[e].expected(metric) for e in scens])
         table_rows.append('exp_'+metric)
     table = pd.DataFrame(table_values, columns=[*nested_endclasses], index=table_rows)
     return table
@@ -522,9 +522,9 @@ def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_
         for metric in weight_metrics:
             fmeadict[group][metric] = sum([endclasses[scenid][metric]*id_weights[scenid] for scenid in ids])
         for metric in perc_metrics:
-            fmeadict[group][metric] = percent({scenid:endclasses[scenid] for scenid in ids}, metric)
+            fmeadict[group][metric] = Result({scenid:endclasses[scenid] for scenid in ids}).percent(metric)
         for metric in avg_metrics:    
-            fmeadict[group][metric] = average({scenid:endclasses[scenid] for scenid in ids}, metric, empty_as=empty_as)
+            fmeadict[group][metric] = Result({scenid:endclasses[scenid] for scenid in ids}).average(metric, empty_as=empty_as)
         for metric, to_mult in mult_metrics.items():
             if set(to_mult).intersection(weight_metrics):
                 fmeadict[group][metric] = sum([np.prod([endclasses[scenid][m] for m in to_mult])*id_weights[scenid] for scenid in ids])

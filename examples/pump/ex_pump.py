@@ -404,10 +404,6 @@ if __name__=="__main__":
     mdlhist.get_faulty_hist(*mdl.fxns)
     endclass, mdlhist=propagate.one_fault(mdl, 'move_water', 'mech_break', time=0, staged=False)
     
-    #reshist,diff1, summary = an.process.hist(mdlhist)
-    #an.graph.result_from(mdl, reshist, 40, gtype='normal')
-    #an.graph.result_from(mdl, reshist, 50, gtype='normal')
-    #an.graph.exec_order(mdl, gtype = 'normal')
     app = NominalApproach()
     app.add_seed_replicates('test', 10)
     

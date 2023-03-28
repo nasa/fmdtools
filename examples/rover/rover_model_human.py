@@ -979,7 +979,7 @@ if __name__ == "__main__":
 
     dot = an.graph.show(mdl, gtype="bipartite")  # , renderer='graphviz')
     endresults,  mdlhist1 = prop.nominal(mdl)
-    phases, modephases = an.process.modephases(mdlhist1)
+    phases, modephases = mdlhist.get_modephases()
 
     endresults,  mdlhist2 = prop.one_fault(mdl, 'Controller', 'perc_failed_S1', time=5)
 
@@ -1171,7 +1171,6 @@ if __name__ == "__main__":
     # test_actgraph.active_actions
     #endclasses, mdlhists= prop.nominal_approach(mdl, app, pool = mp.Pool(5))
 
-    #state_probabilities = an.process.state_probabilities(endclasses)
 
     #fig = an.plot.nominal_vals_1d(app, endclasses, 'amp')
     #fig = an.plot.nominal_vals_1d(app, endclasses, 'radius')

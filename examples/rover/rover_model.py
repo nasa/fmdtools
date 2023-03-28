@@ -700,7 +700,7 @@ if __name__=="__main__":
 
     #mdl = Rover(params)
     endresults,  mdlhist = prop.nominal(mdl)
-    phases, modephases = an.process.modephases(mdlhist)
+    phases, modephases = mdlhist.get_modephases()
     plot_map(mdl, mdlhist)
 
     mdl_id = Rover(valparams={'drive_modes':'set'})
@@ -752,7 +752,7 @@ if __name__=="__main__":
     #params = gen_params('sine')
     #mdl = Rover(params)
     endresults,  mdlhist = prop.nominal(mdl)
-    phases, modephases = an.process.modephases(mdlhist)
+    phases, modephases = mdlhist.get_modephases()
     plot_map(mdl, mdlhist)
 
     mdl_id = Rover(valparams={'drive_modes':'else'})
@@ -783,7 +783,7 @@ if __name__=="__main__":
 
 
     _,_, nomhist = prop.nominal(mdl_0)
-    phases, modephases = an.process.modephases(nomhist)
+    phases, modephases = mdlhist.get_modephases()
     app_0 = SampleApproach(mdl, faults='drive', phases={'drive':phases['avionics']['drive']}, defaultsamp={'samp':'evenspacing','numpts':4})
     endclasses_0, mdlhists_0 = prop.approach(mdl_0, app_0, staged=True)
     plt.figure()
@@ -800,8 +800,6 @@ if __name__=="__main__":
 
     #an.graph.show(  scale=0.7)
 
-    #summhist,_,_ = an.process.hist(mdlhist)
-    #an.graph.results_from(mdl, summhist, [10,15,20])
     #an.plot.mdlhistvals(mdlhist, legend=False)
     #an.plot.mdlhistvals(mdlhist)
 
@@ -839,8 +837,6 @@ if __name__=="__main__":
     an.graph.result_from(mdl, reshist, 10, gtype='bipartite', renderer='graphviz')
 
     #endclasses, mdlhists= prop.nominal_approach(mdl, app, pool = mp.Pool(5))
-
-    #state_probabilities = an.process.state_probabilities(endclasses)
 
     #fig = an.plot.nominal_vals_1d(app, endclasses, 'amp')
     #fig = an.plot.nominal_vals_1d(app, endclasses, 'radius')

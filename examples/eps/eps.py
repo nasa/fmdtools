@@ -15,7 +15,8 @@ at: https://c3.nasa.gov/dashlink/projects/3/
 """
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.model import Model, ModelParam
-from fmdtools.define.common import Parameter, State
+from fmdtools.define.parameter import Parameter
+from fmdtools.define.state import State
 from fmdtools.define.flow import Flow
 
 class GenericState(State):
@@ -337,6 +338,7 @@ def discrep(value):
 if __name__ == '__main__':
     import fmdtools.sim.propagate as propagate
     import fmdtools.analyze as an
+    import numpy as np
 
     mdl= EPS()
     
@@ -348,14 +350,11 @@ if __name__ == '__main__':
     #resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', desired_result="bipartite")
     an.graph.show(resgraph)
 
-
+    summary = mdlhists.get_fault_degradation_summary(*mdl.fxns, *mdl.flows)
     #endclasses, mdlhists = propagate.single_faults(mdl)
-    reshists, diffs, summary = an.process.hists(mdlhists)
-
-    sumtable = an.tabulate.summary(summary)
-
-
-    degtimemap = an.process.avg_degtime_heatmap(reshists)
+    degradation = mdlhists.get_degraded_hist(*mdl.fxns, *mdl.flows)
+    
+    degtimemap = degradation.get_summary(operator=np.sum)
 
     an.graph.show(mdl.bipartite,gtype='bipartite', heatmap=degtimemap)
     an.graph.show(resgraph,heatmap=degtimemap)

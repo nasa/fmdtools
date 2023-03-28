@@ -210,7 +210,6 @@ def exp_cost_quant(approach, mdl):
     """ Calculates the expected cost of faults over a given sampling approach 
     on the given model"""
     endclasses, mdlhists = propagate.approach(mdl, approach, showprogress=False)
-    reshists, diffs, summaries = an.process.hists(mdlhists)
     fmea = an.tabulate.summfmea(endclasses, approach)
     util=sum(fmea['expected cost'])
     return util

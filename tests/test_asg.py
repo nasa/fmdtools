@@ -138,8 +138,8 @@ mdl = HazardModel()
 
 resgraph_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard','perceive_failed', time=4, desired_result='bipartite')
 
-reshist, diff, summary = an.process.hist(mdlhist_fault)
+faulthist = mdlhist_fault.get_faulty_hist(*mdl.fxns, *mdl.flows)
 
-reshist['functions']['detect_hazard']['perceive']['faults'][4]
-fig = an.graph.result_from(mdl.fxns['detect_hazard'], reshist, 4, gtype='combined')
+faulthist['detect_hazard']['perceive']['faults'][4]
+fig = an.graph.result_from(mdl.fxns['detect_hazard'], faulthist, 4, gtype='combined')
 

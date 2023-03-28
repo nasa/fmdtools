@@ -8,7 +8,6 @@ import os
 import shutil
 import numpy as np
 from fmdtools.sim import propagate
-from fmdtools.analyze import process as proc
 from fmdtools.analyze import tabulate as tabulate
 class CommonTests():
     def check_var_setting(self,mdl, statenames, newvalues):
@@ -40,18 +39,18 @@ class CommonTests():
         """Test whether the model simulates the same when simulated using parallel or staged options"""
         from multiprocessing import Pool
         endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False,pool=False)
-        mdlhists_flat = proc.flatten_hist(mdlhists)
+        mdlhists_flat = mdlhists.flatten()
         endclasses_staged, mdlhist_staged = propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)
         self.assertEqual([*endclasses.values()], [*endclasses_staged.values()])
-        staged_flat = proc.flatten_hist(mdlhist_staged)
+        staged_flat = mdlhist_staged.flatten()
         
         endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=False)
         self.assertEqual([*endclasses.values()], [*endclasses_par.values()])
-        par_flat = proc.flatten_hist(mdlhists_par)
+        par_flat = mdlhists_par.flatten()
         
         endclasses_staged_par, mdlhists_staged_par = propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=True)
         self.assertEqual([*endclasses.values()], [*endclasses_staged_par.values()])
-        staged_par_flat = proc.flatten_hist(mdlhists_staged_par)
+        staged_par_flat = mdlhists_staged_par.flatten()
         
         for k in mdlhists_flat:
             np.testing.assert_array_equal(mdlhists_flat[k],staged_flat[k])
