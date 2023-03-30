@@ -178,6 +178,30 @@ def check_include_error(result,to_include):
     if to_include!='all' and to_include not in result:
         raise Exception("to_include key "+to_include+" not in result keys: "+str(result.keys()))
 
+def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
+    """
+    Convenience wrapper for scipy.bootstrap. 
+
+    Parameters
+    ----------
+    data : list/array/etc
+        Iterable with the data. May be float (for mean) or indicator (for proportion)
+    method : 
+        numpy method to give scipy.bootstrap.
+    return_anyway: bool
+        Gives a dummy interval of (stat, stat) if no . Used for plotting
+    Returns
+    ----------
+    statistic, lower bound, upper bound
+    """
+    if 'interval' in kwargs: kwargs['confidence_level']=kwargs.pop('interval')*0.01
+    if data.count(data[0])!=len(data):
+        bs = bootstrap([data], np.mean, **kwargs)
+        return method(data), bs.confidence_interval.low, bs.confidence_interval.high
+    elif return_anyway: return method(data), method(data), method(data)
+    else: raise Exception("All data are the same!")
+
+
 class Result(UserDict):
     """
     Result is a special type of dictionary that makes it convenient to store, access,
@@ -459,20 +483,20 @@ class Result(UserDict):
         for classif in classifications:
             probabilities[classif] = sum([props[prob_key] for k,props in self.items() if classif==props[class_key]])
         return probabilities
-    def expected(endclasses, metric, prob_key='rate'):
+    def expected(self, metric, prob_key='rate'):
         """Calculates the expected value of a given metric in endclasses using the rate variable in endclasses"""
-        return sum([e[metric]*e[prob_key] for k,e in endclasses.items() if not np.isnan(e[metric])])
+        return sum([e[metric]*e[prob_key] for k,e in self.items() if not np.isnan(e[metric])])
     def average(self, metric, empty_as='nan'):
         """Calculates the average value of a given metric in endclasses"""
-        ecs = [e[metric] for k,e in endclasses.items() if not np.isnan(e[metric])]
+        ecs = [e[metric] for k,e in self.items() if not np.isnan(e[metric])]
         if len(ecs)>0 or empty_as=='nan':   return np.mean(ecs)
         else:                               return empty_as
     def percent(self, metric):
         """Calculates the percentage of a given indicator variable being True in endclasses"""
-        return sum([int(bool(e[metric])) for k,e in endclasses.items() if not np.isnan(e[metric])])/(len(endclasses)+1e-16)
+        return sum([int(bool(e[metric])) for k,e in self.items() if not np.isnan(e[metric])])/(len(self)+1e-16)
     def rate(self, metric, prob_key='rate'):
         """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
-        return sum([int(bool(e[metric]))*e['prob_key'] for k,e in endclasses.items() if not np.isnan(e[metric])])
+        return sum([int(bool(e[metric]))*e['prob_key'] for k,e in self.items() if not np.isnan(e[metric])])
     def end_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
         """
         Calculates the difference between the nominal and fault scenarios for a set of endclasses
@@ -524,7 +548,7 @@ class Result(UserDict):
         differences : dict
             nested dictionary of differences over the set of fault scenarios nested in nominal scenarios 
         """
-        return {scen:end_diff(endclass, metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff) for scen, endclass in self.items()}
+        return {scen:endclass.end_diff(metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff) for scen, endclass in self.items()}
         
 def diff(val1, val2, difftype='bool'):
     if difftype=='diff':        return val1-val2

@@ -29,15 +29,14 @@ Private Methods:
 
 import numpy as np
 import copy
-import fmdtools.analyze.process as proc
 import tqdm
 import dill
 import os
-from fmdtools.sim.approach import SampleApproach
 from fmdtools.analyze.graph import diffgraph
 from fmdtools.define.model import ModelParam
 from fmdtools.define.common import get_var
-from .result import Result, History
+from .approach import SampleApproach
+from .result import Result, History,  create_indiv_filename, file_check
 
 ##DEFAULT ARGUMENTS
 sim_kwargs= {'desired_result':'endclass',
@@ -107,7 +106,7 @@ Parameters
         Dictionary specifying if/how to save results. Default is {}, which doesn't save anything.
         Has structure: 
             - {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
-            - where mdlhistargs and endclassargs are dictionaries of arguments to an.process.save_result
+            - where mdlhistargs and endclassargs are dictionaries of arguments to 
             - (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
             - and indiv is an (optional) bool specifying whether to save results individually (in a folder)
             or as a monolythic file
@@ -176,7 +175,7 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
     ----------
     save_args : dict
         Dict with structure: {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':individual_saving},
-        where mdlhistargs and endclassargs are dictionaries of arguments to an.process.save_result
+        where mdlhistargs and endclassargs are dictionaries of arguments to Result.save
         (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
         and individual_saving is a bool (True/False) 
     endclass : dict
@@ -190,14 +189,14 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
         if save_arg not in {'mdlhist', 'endclass', 'indiv'}: raise Exception("Invalid key in save_args: "+save_arg)
     if save_args.get('indiv', False) and indiv_id:
         if 'endclass' in save_args:
-            newfilename = proc.create_indiv_filename(save_args['endclass']['filename'], indiv_id, splitchar="/")
-            proc.save_result(endclass, **{**save_args['endclass'], 'filename':newfilename}, result_id=result_id)
+            newfilename = create_indiv_filename(save_args['endclass']['filename'], indiv_id, splitchar="/")
+            endclass.save(**{**save_args['endclass'], 'filename':newfilename}, result_id=result_id)
         if 'mdlhist' in save_args:
-            newfilename = proc.create_indiv_filename(save_args['mdlhist']['filename'], indiv_id, splitchar="/")
-            proc.save_result(mdlhist, **{**save_args['mdlhist'], 'filename':newfilename}, result_id=result_id)
+            newfilename = create_indiv_filename(save_args['mdlhist']['filename'], indiv_id, splitchar="/")
+            mdlhist.save(**{**save_args['mdlhist'], 'filename':newfilename}, result_id=result_id)
     elif not save_args.get('indiv', False) and not indiv_id:
-        if 'mdlhist' in save_args:     proc.save_result(mdlhist, **save_args['mdlhist'])
-        if 'endclass' in save_args:     proc.save_result(endclass, **save_args['endclass'])
+        if 'mdlhist' in save_args:     mdlhist.save(**save_args['mdlhist'])
+        if 'endclass' in save_args:    endclass.save(**save_args['endclass'])
     
 def update_params(params, new_params):
     """
@@ -617,7 +616,7 @@ def check_overwrite(save_args):
     for arg, args in save_args.items():
         if arg!='indiv':
             filename = args['filename']
-            if args.get('filename', False):  proc.file_check(filename, args.get('overwrite', False))
+            if args.get('filename', False):  file_check(filename, args.get('overwrite', False))
             if save_args.get('indiv', False):           
                 last_split_index = filename.rfind(".")
                 foldername = filename[:last_split_index]
