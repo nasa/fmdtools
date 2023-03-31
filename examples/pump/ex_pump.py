@@ -286,9 +286,8 @@ class Pump(Model):
 
         Models take a dictionary of parameters as input defining any veriables and values to use in the model.
     """
-    def __init__(self, p={}, sp={}, track={}):
-
-        super().__init__(p=p, sp=sp, track=track)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         """
         Here addflow() takes as input a unique name for the flow "flowname", a type for the flow, "flowtype"
         and either:   a dict with the initial flow attributes, OR
@@ -370,8 +369,8 @@ if __name__=="__main__":
     mdl = Pump()
     
     endclass, mdlhist=propagate.one_fault(mdl, 'export_water','block', time=29, 
-                                          new_params={'modelparams':{'end_condition':'indicate_on'}})
-    endclass, mdlhist=propagate.nominal(mdl,  new_params={'modelparams':{'end_condition':'indicate_on'}})
+                                          mdl_kwargs={'sp':{'end_condition':'indicate_on'}})
+    endclass, mdlhist=propagate.nominal(mdl,  mdl_kwargs={'sp':{'end_condition':'indicate_on'}})
     #check_model_pickleability(mdl, try_pick=True)
     #from define.common import check_pickleability
     #unpickleable = check_pickleability(mdl, try_pick=True)

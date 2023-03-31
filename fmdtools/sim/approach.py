@@ -62,7 +62,7 @@ class NominalApproach():
             self.num_scenarios+=1
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'sequence':{},'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                                'sp':{'seed':int(seeds[i])}, 'prob':1/len(seeds)}}
+                                                                'r':{'seed':int(seeds[i])}, 'prob':1/len(seeds)}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def add_param_replicates(self,paramfunc, rangeid, replicates, *args, ind_seeds=True, **kwargs):
         """
@@ -97,7 +97,7 @@ class NominalApproach():
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'sequence':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                    'p':p,'inputparams':kwargs,'sp':{'seed':int(seeds[i])},\
+                                                    'p':p,'inputparams':kwargs,'r':{'seed':int(seeds[i])},\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/replicates}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def get_param_scens(self, rangeid, *level_params):
@@ -185,7 +185,7 @@ class NominalApproach():
                 scenname = rangeid+'_'+str(self.num_scenarios)
                 self.scenarios[scenname]={'sequence':{},\
                                           'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                        'p':p,'inputparams':inputparams,'sp':{'seed':int(mdlseeds[i])},\
+                                                        'p':p,'inputparams':inputparams,'r':{'seed':int(mdlseeds[i])},\
                                                         'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
                 self.ranges[rangeid]['scenarios'].append(scenname)
                 if replicates>1:    self.ranges[rangeid]['levels'][level_key].append(scenname)
@@ -213,7 +213,7 @@ class NominalApproach():
         for i, level in enumerate(levels):
             scens = [scen for lev, scen in self.ranges[rangeid]['levels'].items() if lev[param_loc]==level]
             for scen in scens:
-                self.scenarios[scen]['properties']['sp']['seed'] = int(seeds[i])
+                self.scenarios[scen]['properties']['r']['seed'] = int(seeds[i])
             
     def change_params(self, rangeid='all', **kwargs):
         """
@@ -308,7 +308,7 @@ class NominalApproach():
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'sequence':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                    'p':p,'inputparams':inputparams,'sp':{'seed':int(mdlseeds[i])},\
+                                                    'p':p,'inputparams':inputparams,'r':{'seed':int(mdlseeds[i])},\
                                                     'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/replicates}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def copy(self):
