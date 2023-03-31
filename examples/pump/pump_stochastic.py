@@ -100,13 +100,11 @@ class MoveWat(DetMoveWat):
 
 from ex_pump import PumpParam, Electricity, Water, Signal
 from ex_pump import Pump as DetPump
-from fmdtools.define.model import ModelParam
+from fmdtools.define.model import SimParam
 class Pump(DetPump):
-    def __init__(self, params=PumpParam(), \
-                 modelparams = ModelParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr'), \
-                    valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
-
-        super().__init__(params=params, modelparams=modelparams, valparams=valparams)
+    default_track='all'
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.add_flow('ee_1',   Electricity)
         self.add_flow('sig_1',  Signal)
@@ -116,10 +114,10 @@ class Pump(DetPump):
         self.add_fxn('import_ee',    ImportEE,      'ee_1')
         self.add_fxn('import_water', ImportWater,   'wat_1')
         self.add_fxn('import_signal',ImportSig,     'sig_1')
-        self.add_fxn('move_water',   MoveWat,       'ee_1', 'sig_1', 'wat_1', 'wat_2', p = {'delay':params.delay})
+        self.add_fxn('move_water',   MoveWat,       'ee_1', 'sig_1', 'wat_1', 'wat_2', p = {'delay':self.p.delay})
         self.add_fxn('export_water', ExportWater,   'wat_2')
 
-        self.build_model()
+        self.build()
 
 def paramfunc(delay):
     return {'delay':delay}
@@ -128,8 +126,8 @@ if __name__=="__main__":
     import multiprocessing as mp
 
 
-    rp = ModelParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr', seed=5)
-    mdl = Pump(modelparams = rp)
+    rp = SimParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr')
+    mdl = Pump(sp = rp, r={'seed':5})
     
     mdl.set_vars([['ee_1','current']],[2])
     
@@ -138,7 +136,7 @@ if __name__=="__main__":
     app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
     app_comp.add_param_replicates(paramfunc, 'delay_10', 100, (10))
     
-    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], pool=mp.Pool(4)) #pool=mp.Pool(4)
+    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')]) #pool=mp.Pool(4)
     
     #endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True) #pool=mp.Pool(4)
     

@@ -39,7 +39,7 @@ from .result import Result, History,  create_indiv_filename, file_check
 
 ##DEFAULT ARGUMENTS
 sim_kwargs= {'desired_result':'endclass',
-             'track': 'all',
+             'track': 'default',
              'track_times':'all',
              'staged':False,
              'run_stochastic':False,
@@ -59,13 +59,11 @@ Parameters
             - a list of the above arguments (for multiple at the end)
             - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}
     track : str, optional
-        Which model states to track over time
+        Which model states to track over time (overwrites mdl.default_track). Default is 'default'
         Options:
-            - 'functions'
-            - 'flows' 
+            - 'default'
             - 'all'
             - 'none'
-            - 'valparams' (model states specified in mdl.valparams), 
             - or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
         The default is 'all'.
     track_times : str/tuple
@@ -253,7 +251,7 @@ def exec_nom_par(arg):
     return endclass, mdlhist
 def exec_nom_helper(mdl, scen, name, **kwargs):
     """Helper function for executing nominal scenarios"""
-    mdl = mdl.new_with_params(**scen['properties'])
+    mdl = mdl.new_with_params(p=scen['properties'].get('p', {}), sp=scen['properties'].get('sp', {}), r=scen['properties'].get('r', {}))
     result, mdlhist, _, t_end =prop_one_scen(mdl, scen, **kwargs)
     check_hist_memory(mdlhist,kwargs['num_scens'], max_mem=kwargs['max_mem'])
     save_helper(kwargs['save_args'], result, mdlhist, name, name)
@@ -618,7 +616,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     nest_results = Result.fromkeys(nomapp.scenarios)
     apps = dict.fromkeys(nomapp.scenarios)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
-        mdl = mdl.new_with_params(**scen['properties'])
+        mdl = mdl.new_with_params(p=scen['properties'].get('p', {}), sp=scen['properties'].get('sp', {}), r=scen['properties'].get('r', {}))
         _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **{**sim_kwarg, 'staged':False})
         if get_phases:
             app_args.update({'phases':phases_from_hist(get_phases, t_end, nomhist)})

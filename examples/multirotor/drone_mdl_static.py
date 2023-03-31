@@ -1,10 +1,10 @@
 import numpy as np
 
-from fmdtools.define.parameter import Parameter
+from fmdtools.define.parameter import Parameter, SimParam
 from fmdtools.define.state import State
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.mode import Mode
-from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.model import Model
 from fmdtools.define.flow import Flow
 
 
@@ -277,8 +277,8 @@ class ViewEnvironment(FxnBlock):
     _init_env = Env
         
 class Drone(Model):
-    def __init__(self, params=Parameter(), modelparams=ModelParam(), valparams={}):
-        super().__init__(params, modelparams, valparams)
+    def __init__(self, sp=SimParam(times=(0,1)), **kwargs):
+        super().__init__(sp=sp, **kwargs)
         #add flows to the model
         self.add_flow('force_st',   Force)
         self.add_flow('force_lin',  Force)
@@ -302,7 +302,7 @@ class Drone(Model):
         self.add_fxn('hold_payload',HoldPayload,    'force_lg', 'force_lin', 'force_st')
         self.add_fxn('view_env',    ViewEnvironment,'env')
         
-        self.build_model()
+        self.build()
     def find_classification(self,scen, mdlhist):
         modes, modeprops = self.return_faultmodes()
         repcost=sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])

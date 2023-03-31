@@ -5,18 +5,13 @@ Author: Daniel Hulse
 Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
-
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import fmdtools.sim as fs
 import fmdtools.analyze as an
-from IPython.display import HTML
 
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
 from fmdtools.define.block import FxnBlock, Component, CompArch
-from fmdtools.define.model import Model, ModelParam
 from fmdtools.sim.approach import SampleApproach
 
 from drone_mdl_static import m2to1, EngageLand, HoldPayload, DistEE
@@ -113,10 +108,9 @@ class DroneParam(Parameter, readonly=True):
     arch_set = ('quad', 'oct', 'hex')
 
 class Drone(DynDrone):
-    def __init__(self, params=DroneParam(),\
-            modelparams=ModelParam(phases=(('ascend',0,4),('forward',5,94),('descend',95, 100)),times=(0,135),units='sec'), 
-            valparams={}):
-        super().__init__(params, modelparams, valparams)
+    _init_p = DroneParam
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         #add flows to the model
         self.add_flow('force_st',   Force)
         self.add_flow('force_lin',  Force)
@@ -132,7 +126,7 @@ class Drone(DynDrone):
         #add functions to the model
         self.add_fxn('store_ee',    StoreEE,    'ee_1', 'force_st')
         self.add_fxn('dist_ee',     DistEE,     'ee_1','ee_mot','ee_ctl', 'force_st')
-        self.add_fxn('affect_dof',  AffectDOF,  'ee_mot','ctl','dofs','force_lin', c={'archtype':params.arch})
+        self.add_fxn('affect_dof',  AffectDOF,  'ee_mot','ctl','dofs','force_lin', c={'archtype':self.p.arch})
         self.add_fxn('ctl_dof',     CtlDOF,     'ee_ctl', 'dir', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path',   PlanPath,   'ee_ctl', 'env','dir', 'force_st')
         self.add_fxn('trajectory',  Trajectory, 'env','dofs','dir', 'force_gr')
@@ -140,7 +134,7 @@ class Drone(DynDrone):
         self.add_fxn('hold_payload',HoldPayload,'force_lg', 'force_lin', 'force_st')
         self.add_fxn('view_env',    ViewEnvironment, 'env')
         
-        self.build_model()
+        self.build()
 
 
 bipartite_pos = {'store_ee': [-1.067135163123663, 0.32466987344741055],
@@ -176,13 +170,13 @@ graph_pos = {'store_ee': [-1.0787279392101061, -0.06903523859088145],
 
 if __name__=="__main__":
     
-    hierarchical_model = Drone(params=DroneParam(arch='quad'))
+    hierarchical_model = Drone(p=DroneParam(arch='quad'))
     endclass, mdlhist = fs.propagate.one_fault(hierarchical_model,'affect_dof', 'rf_mechbreak', time=50)
     
-    mdl = Drone(params=DroneParam(arch='oct'))
+    mdl = Drone(p=DroneParam(arch='oct'))
     app = SampleApproach(mdl, faults=[('affect_dof', 'rr2_propstuck')])
     endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=False)
-    an.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['affect_dof rr2_propstuck, t=49.0']},fxnflowvals='env')
+    an.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['affect_dof rr2_propstuck, t=49.0']},fxnflowvals={'env':'s'})
 
 
 

@@ -175,7 +175,7 @@ def check_include_errors(result, to_include):
     else:
         check_include_error(result,to_include)
 def check_include_error(result,to_include):
-    if to_include!='all' and to_include not in result:
+    if to_include not in ('all', 'default') and to_include not in result:
         raise Exception("to_include key "+to_include+" not in result keys: "+str(result.keys()))
 
 def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
@@ -308,7 +308,7 @@ class Result(UserDict):
                 new_to_include = get_sub_include(att, to_include)
                 if new_to_include: 
                     val.flatten(newhist, newname, new_to_include)
-            elif to_include=='all' or att in to_include: 
+            elif to_include in ('all', 'default') or att in to_include: 
                 if len(newname)==1: newhist[newname[0]] = val
                 else:               newhist[newname] = val
         return newhist
@@ -581,6 +581,7 @@ def get_sub_include(att, to_include):
     if type(to_include) in [list, set, tuple, str]:
         if att in to_include:                               new_to_include = 'default'
         elif type(to_include)==str and to_include=='all':   new_to_include = 'all'
+        elif type(to_include)==str and to_include=='default': new_to_include = 'default'
         else:                                               new_to_include=False
     elif type(to_include)==dict and att in to_include:      new_to_include = to_include[att]
     else:                                                   new_to_include= False

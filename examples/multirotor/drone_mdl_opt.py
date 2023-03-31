@@ -6,12 +6,12 @@ Created: June 2019, revised Nov 2022
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.define.parameter import Parameter
+from fmdtools.define.parameter import Parameter, SimParam
 from fmdtools.define.state import State
 from fmdtools.define.mode import Mode
 from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.define.flow import Flow
-from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.model import Model
 from fmdtools.sim.approach import SampleApproach
 from fmdtools.sim import propagate
 from fmdtools.sim.search import ProblemInterface
@@ -55,6 +55,7 @@ class DroneParam(Parameter, readonly=True):
     batweight:  float=0.4
     archweight: float=1.2
     archdrag:   float=0.95
+    loc :       str='rural'
     def __init__(self, *args, **kwargs):
         args = self.get_true_fields(*args, **kwargs)
         args[7] = {'monolithic':0.4, 'series-split':0.5, 'parallel-split':0.5, 'split-both':0.6}[args[0]]
@@ -412,14 +413,14 @@ class PlanPath(FxnBlock):
 
 
 class Drone(Model):
-    def __init__(self, params=DroneParam(), 
-                 modelparams=ModelParam(phases=(('ascend',0,0),('forward',1,11),('taxi',12, 20)),times=(0,30),units='min'),
-                 valparams={'loc':'rural'}):
-        super().__init__(params, modelparams, valparams)
+    _init_p = DroneParam
+    default_sp = dict(phases=(('ascend',0,0),('forward',1,11),('taxi',12, 20)),times=(0,30),units='min')
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         
-        self.start_area = square(params.start[0:2],params.start[2],params.start[3] )
-        self.safe_area = square(params.safe[0:2],params.safe[2],params.safe[3] )
-        self.target_area = square(params.target[0:2],params.target[2],params.target[3] )
+        self.start_area = square(self.p.start[0:2],self.p.start[2],self.p.start[3] )
+        self.safe_area = square(self.p.safe[0:2],self.p.safe[2],self.p.safe[3] )
+        self.target_area = square(self.p.target[0:2],self.p.target[2],self.p.target[3] )
         
         #add flows to the model
         self.add_flow('force_st',   Force)
@@ -436,17 +437,17 @@ class Drone(Model):
         #add functions to the model
         
         flows=['ee_ctl', 'force_st', 'hsig_dofs', 'hsig_bat', 'rsig_traj']
-        self.add_fxn('manage_health', ManageHealth, *flows, p=asdict(params.respolicy))
+        self.add_fxn('manage_health', ManageHealth, *flows, p=asdict(self.p.respolicy))
         
-        store_ee_p = {'archtype':params.bat, 'weight':(params.batweight+params.archweight)/2.2 , 'drag': params.archdrag }
+        store_ee_p = {'archtype':self.p.bat, 'weight':(self.p.batweight+self.p.archweight)/2.2 , 'drag': self.p.archdrag }
         self.add_fxn('store_ee',    StoreEE, 'ee_1', 'force_st', 'hsig_bat', c=store_ee_p)
         self.add_fxn('dist_ee',     DistEE,   'ee_1','ee_mot','ee_ctl', 'force_st')
-        self.add_fxn('affect_dof',  AffectDOF,'ee_mot','ctl','dofs','des_traj','force_lin', 'hsig_dofs',  c={'archtype':params.linearch})
+        self.add_fxn('affect_dof',  AffectDOF,'ee_mot','ctl','dofs','des_traj','force_lin', 'hsig_dofs',  c={'archtype':self.p.linearch})
         self.add_fxn('ctl_dof',     CtlDOF,   'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
-        self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs','des_traj', 'force_st', 'rsig_traj', p=asdict(params))
+        self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs','des_traj', 'force_st', 'rsig_traj', p=asdict(self.p))
         self.add_fxn('hold_payload',HoldPayload, 'dofs', 'force_lin', 'force_st')
         
-        self.build_model()
+        self.build()
         
     def find_classification(self, scen, mdlhist):
         #landing costs
@@ -463,15 +464,15 @@ class Drone(Model):
         else:                                           landloc = 'outside target' # emergency unsanctioned
         # need a way to differentiate horizontal and vertical crashes/landings
         if landloc in ['over target', 'outside target']: 
-            if landloc=="outside target" and self.valparams['loc']=='congested':    loc='urban'
-            else:                                                                   loc=self.valparams['loc']
+            if landloc=="outside target" and self.p.loc=='congested':    loc='urban'
+            else:                                                        loc=self.p.loc
             body_strikes = density_categories[loc]['body strike']['horiz']
             head_strikes = density_categories[loc]['head strike']['horiz']
             property_restrictions = 1
         else: body_strikes =0.0; head_strikes=0.0; property_restrictions=0
         
-        safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes) + unsafecost[self.valparams['loc']] * faulttime
-        landcost = property_restrictions*propertycost[self.valparams['loc']]
+        safecost = safety_categories['hazardous']['cost'] * (head_strikes + body_strikes) + unsafecost[self.p.loc] * faulttime
+        landcost = property_restrictions*propertycost[self.p.loc]
         #repair costs
         repcost=self.calc_repaircost(max_cost=1500)
         rate=scen['properties']['rate']
@@ -707,8 +708,8 @@ start = [0.0,0.0, 10, 10]
 def_mdl = Drone()
 
 def plan_flight(z):
-    sq = square(def_mdl.params.target[0:2],def_mdl.params.target[2],def_mdl.params.target[3])
-    landing = [*def_mdl.params.start[0:2], 0]
+    sq = square(def_mdl.p.target[0:2],def_mdl.p.target[2],def_mdl.p.target[3])
+    landing = [*def_mdl.p.start[0:2], 0]
     
     flightplan = {0:landing, 1: landing[0:2]+[z]}
     
@@ -793,7 +794,7 @@ def calc_oper(mdl):
     #g_faults = any(endresults_nom['faults'])
     g_max_height = sum([i for i in mdlhist.dofs.s.z-122 if i>0])
     
-    phases, modephases=an.process.modephases(mdlhist)
+    phases, modephases=mdlhist.get_modephases()
     return opercost, g_soc, g_max_height, phases
 def x_to_ocost(xdes, xoper, loc='rural'):
     fp = plan_flight(xoper[0], def_mdl)
@@ -805,7 +806,7 @@ def calc_res(mdl, fullcosts=False, faultmodes = 'all', include_nominal=True, poo
     #app = SampleApproach(mdl, faults=('single-component', faultmodes), phases={'forward'})
     app = SampleApproach(mdl, faults=('single-component', 'store_ee'), phases={'move':phases['plan_path']['move']})
     endclasses, mdlhists = propagate.approach(mdl, app, staged=staged, pool=pool, showprogress=False) #, staged=False)
-    rescost = an.process.totalcost(endclasses)-(not include_nominal)*endclasses['nominal']['expected cost']
+    rescost = endclasses.total('expected cost')-(not include_nominal)*endclasses['nominal']['expected cost']
     #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'dofs'}, time_slice=6)
     #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=7.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'store_ee'}, time_slice=6)
     #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'plan_path'}, time_slice=6)
@@ -829,7 +830,7 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes = 'al
     
     
     params = DroneParam(bat=bats[xdes[0]], linearch=linarchs[xdes[1]], respolicy=ResPolicy(bat=respols[xres[0]], line=respols[xres[1]]))
-    mdl = Drone(params=params)
+    mdl = Drone(p=params)
     if not phases: _,_,_, phases = calc_oper(mdl)
     return calc_res(mdl, fullcosts=fullcosts, faultmodes = faultmodes, include_nominal=include_nominal, pool=pool, phases=phases, staged=staged)
 
@@ -839,7 +840,7 @@ if __name__=="__main__":
     
     mdl = Drone()
     ec, mdlhist = prop.nominal(mdl)
-    phases, modephases = an.process.modephases(mdlhist)
+    phases, modephases = mdlhist.get_modephases()
     an.plot.phases(phases, modephases)
     
     mdl = Drone()
@@ -847,7 +848,7 @@ if __name__=="__main__":
     endclasses, mdlhists = prop.approach(mdl, app, staged=True)
     plot_faulttraj(History(nominal=mdlhists['nominal'], 
                            faulty=mdlhists['store_ee lowcharge, t=6.0']), 
-                   mdl.params, title='Fault response to RFpropbreak fault at t=20')
+                   mdl.p, title='Fault response to RFpropbreak fault at t=20')
 
     #opt_prob.add_combined_objective("total_cost", 'cd', 'co', 'cr')
     #opt_prob.total_cost([1,1],[100],[1,1])
@@ -869,9 +870,6 @@ if __name__=="__main__":
     opt_prob.time_sims([1,1,100,1,1])
     
     opt_prob.iter_hist
-    
-    
-
     
     plt.show()
     

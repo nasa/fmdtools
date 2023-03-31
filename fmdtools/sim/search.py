@@ -34,7 +34,7 @@ class ProblemInterface():
         current_iter : dict
             Dictionary of current values for variables/objectives/constraints/etc.
     """
-    def __init__(self, name, mdl, default_params={}, negative_form=True, log_iter_hist=False, **kwargs):
+    def __init__(self, name, mdl, default_p={}, negative_form=True, log_iter_hist=False, **kwargs):
         """
         Instantiates the Problem object.
         
@@ -47,14 +47,14 @@ class ProblemInterface():
             Model to optimize
         negative_form : bool
             Whether constraints are negative when feasible (True) or positive when feasible (False)
-        default_params : dict
+        default_p : dict
             Default parameters for the model
         **kwargs : kwargs
             Default run kwargs. See :data:`sim_kwargs`, :data:`run_kwargs`, :data:`mult_kwargs`
         """
         self.name=name
         self.mdl=mdl
-        self.default_params=asdict(mdl.params)
+        self.default_p=asdict(mdl.p)
         
         self.default_sim_kwargs = {k:kwargs[k] if k in kwargs else copy.deepcopy(v) for k,v in prop.sim_kwargs.items()}
         self.default_run_kwargs = {k:kwargs[k] if k in kwargs else copy.deepcopy(v) for k,v in prop.run_kwargs.items()}
@@ -95,7 +95,7 @@ class ProblemInterface():
                 - single:      simulates a single scenario (the default)
                     - args: sequence: sequence defining fault scenario {time:{'faults':(fxn:mode), 'disturbances':{'Fxn1.var1'}})}
                 - multi:       simulates multiple scenarios (provided approach or nominalapproach)
-                    - args: scenlist: dict with structure {"scenname":{'sequence':{"faults":{}, "disturbances":{}}, "properties":{"params":params}}}
+                    - args: scenlist: dict with structure {"scenname":{'sequence':{"faults":{}, "disturbances":{}}, "properties":{"p":Parameter}}}
                             (can be gotten from prop.list_init_faults, SampleApproach, or NominalApproach)
                 - nested:      simulates nested scenarios (provided approach and nominalapproach)
                     - args: see prop.nested_approach
@@ -113,7 +113,7 @@ class ProblemInterface():
                 whether to include nominal scenario in multi simulation. default is True
             upstream_sims: dict
                 Dictionary specifying connection with an upstream simulation. With structure:
-                    {'upstream_simname':{'params':{'ext_varname':'paramname'}}}, 'vars':{'ext_varname':'varname'}}
+                    {'upstream_simname':{'p':{'ext_varname':'paramname'}}}, 'vars':{'ext_varname':'varname'}}
         """
         kwargs = {**self.default_run_kwargs,**self.default_sim_kwargs, **self.default_mult_kwargs, **kwargs}
         self.simulations[simname]=(simtype, args, kwargs)
@@ -122,7 +122,7 @@ class ProblemInterface():
             self.sim_graph.add_edge(upsim, simname, label=", ".join(kwargs['upstream_sims'][upsim].keys()))
     def add_variables(self, simnames, *args, vartype='vars', t=0): 
         """
-        Adds variable of specified type ('params', 'vars', or 'faults') to a given problem. 
+        Adds variable of specified type ('p', 'vars', or 'faults') to a given problem. 
         Also adds variable set constraints (if given)
         
         Parameters
@@ -133,7 +133,7 @@ class ProblemInterface():
             variables to add, where each tuple has the form:
             (varname, set_const (optional), vartype (optional), t (optional)), where
             - varname is:
-                an element of mdl.params (if vartype='params')
+                an element of mdl.p (if vartype='params')
                 a model variable (if vartype='vars')
                 a function name (if vartype='faults')
             - set_const defines the variable set constraints, which may be:
@@ -144,11 +144,11 @@ class ProblemInterface():
             - t is the individual time (overrides t)
         vartype : str
             overall variable type defining the variable(s). The default is 'vars'
-                - `param`: element(s) of mdl.params (set pre-simulation)
+                - `param`: element(s) of mdl.p (set pre-simulation)
                 - `vars`: function/flow variables (set during the simulation)
                 - 'faults': fault scenario variables (set during the simulation)
                 - 'external': variables for external func
-                - paramfunc: generates params from variable in function paramfunc
+                - paramfunc: generates p from variable in function paramfunc
         """
         self.clear(clearvars=False)
         simnames = self._names_to_list(simnames)
@@ -199,7 +199,7 @@ class ProblemInterface():
         *args : strs/tuples
             variables to use as objectives (auto-named to f1, f2...)
             may take form: (variablename, objtype (optional), t (optional), agg (optional)) 
-            or variablename, where variablename is the name of the variable (from params, mdlparams)
+            or variablename, where variablename is the name of the variable (from Parameter, SimParam)
             or index of the callable (for external)and objtype, t, and agg may override
             the default objtype and t (see below)
         objtype : str (optional)
@@ -278,7 +278,7 @@ class ProblemInterface():
         *args : strs/tuples
             variables to use as constraints (auto-named to f1, f2...)
             may take form: (variablename, objtype (optional), t (optional), threshold) or variablename, where
-            variablename is the name of the variable (from params, mdlparams) or index of the callable (for external)
+            variablename is the name of the variable (from Parameter, SimParam) or index of the callable (for external)
             and objtype and t may override the default objtype and t (see below)
         objtype : str (optional)
             default type of constraint: `vars`, `endclass`, or `external`. Default is 'endclass'
@@ -296,16 +296,16 @@ class ProblemInterface():
         if 'start' in var_times:    var_time=0
         else:                       var_time = min(var_times) 
         obj_times = [v[3] for v in [*self.objectives.values(),*self.constraints.values()] if v[3]!='na']
-        if 'end' in obj_times:      obj_time=self.mdl.modelparams.times[-1]
+        if 'end' in obj_times:      obj_time=self.mdl.sp.times[-1]
         else:                       obj_time=max(obj_times)
         return var_time, obj_time
     def _prep_single_sim(self, simname, x):
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
-        mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_params = kwar['new_params'])
-        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}}, use_end_condition=False)
+        mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time,  default_p = kwar.get('p', {}))
+        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}, 'use_end_condition':False})
         if kwar.get('sequence', False):
-            mdl_s = prop.new_mdl(mdl, {})
+            mdl_s = mdl.new_with_params()
             scen=prop.create_faultseq_scen(mdl_s,  rate=1.0, sequence=kwar['sequence'])
             kwargs = {**kwar, 'desired_result':{}, 'staged':False}
             kwargs.pop("sequence")
@@ -315,8 +315,8 @@ class ProblemInterface():
     def _prep_multi_sim(self, simname, x):
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
-        mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_params = kwar['new_params'])
-        result, nomhist, nomscen, c_mdls_nom, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}}, use_end_condition=False)
+        mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_p = kwar.get('p', {}))
+        result, nomhist, nomscen, c_mdls_nom, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}, 'use_end_condition':False})
         
         scenlist = copy.deepcopy(self.simulations[simname][1][0])
         for scen in scenlist: scen['properties']['time']=var_time
@@ -329,7 +329,7 @@ class ProblemInterface():
             for scen in scenlist:
                 kwargs =  {**kwar.copy(), 'desired_result':{}, 'staged':False}
                 scenname=scen['properties']['name']
-                mdl_i = prop.new_mdl(mdl, {})
+                mdl_i = mdl.new_with_params()
                 _, prevhists[scenname], c_mdls[scenname], _  = prop.prop_one_scen(mdl_i, scen, ctimes = [var_time], **kwargs)
         else: 
             c_mdls={scen['properties']['name']:{var_time:c_mdls_nom[var_time]} for scen in scenlist}
@@ -341,14 +341,14 @@ class ProblemInterface():
             c_mdls['nominal']=c_mdls_nom
         self.update_scenlist(simname, scenlist)
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhists':prevhists, 'obj_time': obj_time, 'mdl':c_mdls_nom[var_time], 'c_mdls':c_mdls}
-    def _check_new_mdl(self,simname, var_time, mdl, x, obj_time, staged=False, default_params={}):
+    def _check_new_mdl(self,simname, var_time, mdl, x, obj_time, staged=False, default_p={}):
         if var_time==0 or not staged: # set model parameters that are a part of the sim
             paramvars = self.var_mapping[simname].get('param',{'param':{}})
-            params=copy.deepcopy(default_params)
-            params.update({param: x[ind] for param, ind in paramvars['param'].items()})
+            p=copy.deepcopy(default_p)
+            p.update({param: x[ind] for param, ind in paramvars['param'].items()})
             for func, fvars in self.var_mapping[simname].get('paramfunc',{}).items():
-                params.update(func(*[x[ind] for ind in fvars.values()]))
-            mdl = prop.new_mdl(mdl, {'params':params, 'modelparams':{'times':(0, obj_time)}})
+                p.update(func(*[x[ind] for ind in fvars.values()]))
+            mdl = mdl.new_with_params({'p':p, 'sp':{'times':(0, obj_time)}})
             
         prop.init_histrange(mdl, var_time, staged, "all", "all")
         return mdl
@@ -359,7 +359,7 @@ class ProblemInterface():
         if not self.simulations[simname][2]['staged']:  mdl = self._check_new_mdl(simname, var_time, mdl, x, obj_time, staged=self.simulations[simname][2]['staged'])
         else:                                           
             mdl = c_mdl[var_time].copy(); 
-            mdl.modelparams= mdl.modelparams.copy_with_vals(times=(0,obj_time))
+            mdl.sp= mdl.sp.copy_with_vals(times=(0,obj_time))
         # set model faults/disturbances as elements of scenario 
         ##NOTE: need to make sure scenarios don't overwrite each other
         scen=prop.construct_nomscen(mdl)
@@ -368,7 +368,7 @@ class ProblemInterface():
         #propagate scenario, get results
         des_r=copy.deepcopy(self.obj_const_mapping[simname])
         kwargs = {**self.simulations[simname][2], "desired_result":des_r, "nomhist":nomhist, "prevhist":prevhist}
-        mdl.modelparams=mdl.modelparams.copy_with_vals(times=(0,obj_time))
+        mdl.sp=mdl.sp.copy_with_vals(times=(0,obj_time))
         result, mdlhist, _, _ = prop.prop_one_scen(mdl, scen, **kwargs)
         self._sims[simname]['mdlhists'] = {"faulty":mdlhist, "nominal":nomhist}
         self._sims[simname]['results'] = result
@@ -571,29 +571,29 @@ class ProblemInterface():
             # update from upstream sims
             if 'upstream_sims' in self.simulations[simname][2]:
                 upstream_sims = self.simulations[simname][2]['upstream_sims']
-                oldparams = self.simulations[simname][2]['new_params']
-                newparams=copy.deepcopy(oldparams)
+                old_p = self.simulations[simname][2].get('p', {})
+                new_p=copy.deepcopy(old_p)
                 for up_name in upstream_sims:
                     if 'params' in upstream_sims[up_name]:
                         up_vars = {self.variables[i][0]:x[i] for i in self._sim_vars[up_name] if x[i]!=np.NaN}  
-                        newparams.update({k:up_vars[v] for k,v in upstream_sims[up_name]['params'].items() if v in up_vars and not np.isnan(up_vars[v])})
+                        new_p.update({k:up_vars[v] for k,v in upstream_sims[up_name]['p'].items() if v in up_vars and not np.isnan(up_vars[v])})
                     if 'paramfunc' in upstream_sims[up_name]:
                         pvars = [x[i] for i in self._sim_vars[up_name]]
-                        newparams.update(upstream_sims[up_name]['paramfunc'](pvars))
+                        new_p.update(upstream_sims[up_name]['paramfunc'](pvars))
                     if 'pass_mdl' in upstream_sims[up_name]:
-                        newparams=copy.deepcopy(asdict(self._sims[up_name]['c_mdls'][0].params))
+                        new_p=copy.deepcopy(asdict(self._sims[up_name]['c_mdls'][0].p))
                     if 'phases' in upstream_sims[up_name]:
                         nomhist = self._sims[up_name]['mdlhists']['faulty']
-                        t_end = self._sims[up_name]['c_mdls'][0].modelparams.times[-1]
+                        t_end = self._sims[up_name]['c_mdls'][0].sp.times[-1]
                         newphases={'phases':prop.phases_from_hist(upstream_sims[up_name]['phases'], t_end, nomhist)}
-                if any([k not in oldparams for k in newparams]) or any([newparams[k]!=oldparams[k] for k in oldparams]):
-                    self.update_sim_vars(simname, newparams=newparams)
+                if any([k not in old_p for k in new_p]) or any([new_p[k]!=old_p[k] for k in old_p]):
+                    self.update_sim_vars(simname, new_p=new_p)
                     self.current_iter['sims_to_update'].add(simname)
                     self.current_iter['sims'].discard(simname)
             if 'app_args' in self.simulations[simname][2]:
                 app_args = self.simulations[simname][2]['app_args']
                 if 'newphases' in locals(): app_args.update(newphases) 
-                mdl = prop.new_mdl(self.mdl, {'params':self.simulations[simname][2]['new_params']})
+                mdl = self.mdl.new_with_params(p=self.simulations[simname][2]['p'])
                 self.update_scenlist(simname, SampleApproach(mdl, **app_args).scenlist)
                 self.simulations[simname] = self.simulations[simname][0], [SampleApproach(mdl, **app_args).scenlist], *self.simulations[simname][2:]
                 self.current_iter['sims'].discard(simname)
@@ -720,7 +720,7 @@ class ProblemInterface():
         if simnames=='all':          simnames = [*self.simulations]
         elif type(simnames)==str:    simnames=[simnames]
         return simnames
-    def update_sim_vars(self, simname, newparams={}, newvars={}, newsequence={}):
+    def update_sim_vars(self, simname, new_p={}, newvars={}, newsequence={}):
         """
         Update the simulation with new default variables/parameters
 
@@ -728,7 +728,7 @@ class ProblemInterface():
         ----------
         simname : string
             Name of simulation to update.
-        newparams : dict, optional
+        new_kwargs : dict, optional
             Params to update in the sim. The default is {}.
         newvars : dict, optional
             Variables to update in the sim (at t=0). The default is {}.
@@ -736,7 +736,8 @@ class ProblemInterface():
             New default sequence of faults/disturbances (updated accross all scenarios). The default is {}.
         """
         self.clear(simname, clearvars=False, clearhist=False)
-        self.simulations[simname][2]['new_params'].update(newparams)
+        if 'p' in self.simulations[simname][2]: self.simulations[simname][2]['p'].update(new_p)
+        else:   self.simulations[simname][2]['p'] = new_p
         update_sequence(newsequence, {0:{'disturbances':newvars}})
         if self.simulations[simname][0]=='single':
             update_sequence(self.simulations[simname][2].get('sequence',{}), newsequence)
@@ -825,7 +826,7 @@ class DynamicInterface():
         log : dict
             mdlhist for simulation
     """
-    def __init__(self, mdl, paramdict={}, t_max=False, track="all", run_stochastic="track_pdf", desired_result=[], use_end_condition=None):
+    def __init__(self, mdl, mdl_kwargs={}, t_max=False, track="all", run_stochastic="track_pdf", desired_result=[], use_end_condition=None):
         """
         Initializing the problem
 
@@ -833,7 +834,7 @@ class DynamicInterface():
         ----------
         mdl : Model
             Model defining the simulation.
-        paramdict : dict, optional
+        mdl_kwargs : dict, optional
             Parameters to run the model at. The default is {}.
         t_max : float, optional
             Maximum simulation time. The default is False.
@@ -848,11 +849,11 @@ class DynamicInterface():
         """
         self.t=0.0
         self.t_ind=0
-        if not t_max:   self.t_max=mdl.modelparams.times[-1]
+        if not t_max:   self.t_max=mdl.sp.times[-1]
         else:           self.t_max = t_max
         if type(desired_result)==str:   self.desired_result=[desired_result]
         else:                           self.desired_result = desired_result
-        self.mdl = prop.new_mdl(mdl, paramdict)
+        self.mdl = mdl.new_with_params(**mdl_kwargs)
         self.log = prop.init_mdlhist(mdl, np.arange(self.t, self.t_max+2*mdl.tstep, self.mdl.tstep), track=track)
         self.run_stochastic=run_stochastic
         self.use_end_condition = use_end_condition

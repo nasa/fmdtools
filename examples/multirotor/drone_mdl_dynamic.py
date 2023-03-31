@@ -6,12 +6,12 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.define.parameter import Parameter
+from fmdtools.define.parameter import Parameter, SimParam
 from fmdtools.define.state import State
 from fmdtools.define.time import Time
 from fmdtools.define.mode import Mode
 from fmdtools.define.block import FxnBlock
-from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.model import Model
 from fmdtools.sim.approach import SampleApproach
 
 import fmdtools.sim as fs
@@ -176,9 +176,9 @@ class ViewEnvironment(FxnBlock):
             if inrange(area, spot[0],spot[1]): self.viewingarea[spot]='viewed'
 
 class Drone(Model):
-    def __init__(self, params=Parameter(),\
-            modelparams=ModelParam(phases=(('ascend',0,4),('forward',5,94),('descend',95, 100)),times=(0,135),units='sec'), valparams={}):
-        super().__init__(params, modelparams, valparams)
+    default_sp = dict(phases=(('ascend',0,4),('forward',5,94),('descend',95, 100)),times=(0,135),units='sec')
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         #add flows to the model
         self.add_flow('force_st',   Force)
         self.add_flow('force_lin',  Force)
@@ -202,7 +202,7 @@ class Drone(Model):
         self.add_fxn('hold_payload',HoldPayload,    'force_lg', 'force_lin', 'force_st')
         self.add_fxn('view_env',    ViewEnvironment,'env')
         
-        self.build_model()
+        self.build()
     def find_classification(self,scen, mdlhists):
         if -5 >mdlhists.faulty.env.s.x[-1] or 5<mdlhists.faulty.env.s.x[-1]:
             lostcost=50000
