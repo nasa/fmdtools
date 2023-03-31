@@ -33,7 +33,6 @@ import tqdm
 import dill
 import os
 from fmdtools.analyze.graph import diffgraph
-from fmdtools.define.model import ModelParam
 from fmdtools.define.common import get_var
 from .approach import SampleApproach
 from .result import Result, History,  create_indiv_filename, file_check
@@ -112,7 +111,7 @@ Parameters
             or as a monolythic file
     new_params: dict (optional)
         Parameter dictionary to be instantiated in the model prior to simulation. Has structure:
-            - {"params":params, "modelparams":modelparams, "valparams":valparams}
+            - {"p":Parameter, "sp":SimParam, "track":track}
         Parameter dictionaries do not need to be complete (if incomplete).
 """
 def pack_run_kwargs(**kwargs):
@@ -238,15 +237,15 @@ def new_mdl_params(mdl,paramdict):
     -------
     params : Parameter
         Updated param 
-    modelparams : ModelParam
+    modelparams : SimParam
         Updated modelparam 
     valparams : dict
         Updated valparam dictionary
     """
-    params = mdl.params.copy_with_vals(**paramdict.get('params', {}))
-    modelparams = mdl.modelparams.copy_with_vals(**paramdict.get('modelparams', {}))
-    valparams = update_params(mdl.valparams, paramdict.get('valparams', {}))
-    return params, modelparams, valparams
+    p = mdl.p.copy_with_vals(**paramdict.get('p', {}))
+    sp = mdl.sp.copy_with_vals(**paramdict.get('sp', {}))
+    track = update_params(mdl.track, paramdict.get('track', {}))
+    return p, sp, track
 
 
 def nominal_approach(mdl,nomapp, **kwargs):
@@ -324,7 +323,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, **kwargs):
     faultmode : str
         Name of the faultmode
     time : float, optional
-        Time to inject fault. Must be in the range of model times (i.e. in range(0, end, mdl.modelparams.dt)). The default is 0.
+        Time to inject fault. Must be in the range of model times (i.e. in range(0, end, mdl.sp.dt)). The default is 0.
     **kwargs : kwargs
         Additional keyword arguments, may include:
             - :data:`sim_kwargs` : kwargs
@@ -361,7 +360,7 @@ def create_single_fault_scen(mdl, fxnname, faultmode, time):
         #    fxn = fxn.actions[fxn.actfaultmodes[faultmode]]
         #    faultmode = faultmode[len(fxn.name):]
         if fm.faultmodes[faultmode].probtype=='rate':
-            scen['properties']['rate']=fm.failrate*fm.faultmodes[faultmode]['dist']*eq_units(fm.faultmodes[faultmode]['units'], mdl.modelparams.units)*(mdl.modelparams.times[-1]-mdl.modelparams.times[0]) # this rate is on a per-simulation basis
+            scen['properties']['rate']=fm.failrate*fm.faultmodes[faultmode]['dist']*eq_units(fm.faultmodes[faultmode]['units'], mdl.sp.units)*(mdl.sp.times[-1]-mdl.sp.times[0]) # this rate is on a per-simulation basis
         elif fm.faultmodes[faultmode].probtype=='prob':
             scen['properties']['rate'] = fm.failrate*fm.faultmodes[faultmode]['dist'] 
     scen['properties']['time']=time
@@ -528,7 +527,7 @@ def single_faults(mdl, **kwargs):
         A dictionary with the history of all model states for each scenario (including the nominal)
     """
     kwargs.update(pack_run_kwargs(**kwargs))
-    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, mdl.modelparams.times, **{**kwargs, 'use_end_condition':False})
+    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, mdl.sp.times, **{**kwargs, 'use_end_condition':False})
     
     scenlist = list_init_faults(mdl)
     results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, **kwargs, nomhist=nomhist, nomresult=nomresult)
@@ -725,7 +724,7 @@ def list_init_faults(mdl):
     Parameters
     ----------
     mdl : Model
-        Model with list of times in mdl.modelparams.times
+        Model with list of times in mdl.sp.times
 
     Returns
     -------
@@ -733,8 +732,8 @@ def list_init_faults(mdl):
         A list of fault scenarios, where a scenario is defined as: {faults:{functions:faultmodes}, properties:{(changes depending scenario type)} }
     """
     faultlist=[]
-    trange = mdl.modelparams.times[-1]-mdl.modelparams.times[0] + 1.0
-    for time in mdl.modelparams.times:
+    trange = mdl.sp.times[-1]-mdl.sp.times[0] + 1.0
+    for time in mdl.sp.times:
         for fxnname, fxn in mdl.fxns.items():
             fm=fxn.m
             for mode in fm.faultmodes:
@@ -742,7 +741,7 @@ def list_init_faults(mdl):
                 newscen=nomscen.copy()
                 newscen['sequence']={time:{'faults':{fxnname:mode}}}
                 if fm.faultmodes[mode]['probtype']=='rate':
-                    rate=fm.failrate*fm.faultmodes[mode]['dist']*eq_units(fm.faultmodes[mode]['units'], mdl.modelparams.units)*trange # this rate is on a per-simulation basis
+                    rate=fm.failrate*fm.faultmodes[mode]['dist']*eq_units(fm.faultmodes[mode]['units'], mdl.sp.units)*trange # this rate is on a per-simulation basis
                 elif fm.faultmodes[mode]['probtype']=='prob':
                     rate = fm.failrate*fm.faultmodes[mode]['dist']
                 newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
@@ -779,13 +778,13 @@ def init_histrange(mdl, start_time, staged, track, track_times):
         Time index to shift the history by.
     """
     if staged:
-        timerange=np.arange(start_time, mdl.modelparams.times[-1]+mdl.modelparams.dt, mdl.modelparams.dt)
-        prevtimerange = np.arange(mdl.modelparams.times[0], start_time, mdl.modelparams.dt)
+        timerange=np.arange(start_time, mdl.sp.times[-1]+mdl.sp.dt, mdl.sp.dt)
+        prevtimerange = np.arange(mdl.sp.times[0], start_time, mdl.sp.dt)
         if track_times == "all":            shift = len(prevtimerange)
         elif track_times[0]=='interval':    shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
         elif track_times[0]=='times':       shift=0
     else: 
-        timerange=np.arange(mdl.modelparams.times[0], mdl.modelparams.times[-1]+mdl.modelparams.dt, mdl.modelparams.dt)
+        timerange=np.arange(mdl.sp.times[0], mdl.sp.times[-1]+mdl.sp.dt, mdl.sp.dt)
         shift = 0
     
     if track_times == "all":            histrange = timerange
@@ -793,12 +792,12 @@ def init_histrange(mdl, start_time, staged, track, track_times):
     elif track_times[0]=='times':       histrange = track_times[1]
     
     mdlhist = mdl.create_hist(histrange, track)
-    mdlhist.init_time(timerange[0], histrange)
+    if 'time' not in mdlhist: mdlhist.init_att('time', timerange[0], timerange=timerange, track='all', dtype=float)
     return mdlhist, histrange, timerange, shift
 
 def check_end_condition(mdl, use_end_condition, t):
-    if use_end_condition and mdl.modelparams.end_condition:
-        end_condition = get_var(mdl, mdl.modelparams.end_condition)
+    if use_end_condition and mdl.sp.end_condition:
+        end_condition = get_var(mdl, mdl.sp.end_condition)
         if end_condition(t): return True
         else:                return False
     else:                    return False

@@ -194,6 +194,7 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
     ----------
     statistic, lower bound, upper bound
     """
+    from scipy import bootstrap
     if 'interval' in kwargs: kwargs['confidence_level']=kwargs.pop('interval')*0.01
     if data.count(data[0])!=len(data):
         bs = bootstrap([data], np.mean, **kwargs)
@@ -578,8 +579,8 @@ def is_known_mutable(val):
 def get_sub_include(att, to_include):
     """Determines what attributes of att to include based on the provided dict/str/list/set to_include"""
     if type(to_include) in [list, set, tuple, str]:
-        if att in to_include:                               new_to_include = 'all'
-        elif type(to_include)==str and to_include=='all':   new_to_include='all'
+        if att in to_include:                               new_to_include = 'default'
+        elif type(to_include)==str and to_include=='all':   new_to_include = 'all'
         else:                                               new_to_include=False
     elif type(to_include)==dict and att in to_include:      new_to_include = to_include[att]
     else:                                                   new_to_include= False
@@ -612,7 +613,7 @@ def init_indicator_hist(obj, h, timerange, track):
             h['i']= History()
             for i in indicators:
                 val = getattr(obj, 'indicate_'+i)
-                h.i[i] = init_hist_iter(i, val, timerange, sub_track, dtype=bool)
+                h['i'].init_att(i, val, timerange, sub_track, dtype=bool)
 
 def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
     """
@@ -647,12 +648,9 @@ def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<
     if sub_track and hasattr(val, 'create_hist'): return val.create_hist(timerange, sub_track)
     elif sub_track and isinstance(val, dict):     return init_dicthist(val, timerange, sub_track)
     elif sub_track:
-        if timerange is None:                     return [val]
-        elif type(val)==str:                      return np.empty([len(timerange)], dtype=str_size)
-        elif dtype:                               return np.empty([len(timerange)], dtype=dtype)
-        else:
-            try:                                  return np.full(len(timerange), val)
-            except:                               return np.empty((len(timerange),), dtype=object)
+        hist = History()
+        hist.init_att(att, val, timerange, track, dtype, str_size)
+
 def init_dicthist(start_dict, timerange, track="all"):
     """
     Initializes histories for dictionary attributes (if any)
@@ -669,11 +667,10 @@ def init_dicthist(start_dict, timerange, track="all"):
     -------
     Hist : History
         Initialized history structure corresponding to the attribute
-
     """
     hist = History()
     for att, val in start_dict.items():
-        hist[att]=init_hist_iter(att,val, timerange, track)
+        hist.init_att(att,val, timerange, track)
     return hist
 
 
@@ -685,6 +682,15 @@ class History(Result):
     It can be updated over time t using h.log(obj, t), where obj is an object with
     (nested) attributes that match the keys of the (nested) dictionary.
     """
+    def init_att(self, att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
+        sub_track = get_sub_include(att, track)
+        if sub_track:
+            if timerange is None:     self[att] = [val]
+            elif type(val)==str:      self[att] = np.empty([len(timerange)], dtype=str_size)
+            elif dtype:               self[att] = np.empty([len(timerange)], dtype=dtype)
+            else:
+                try:                  self[att] = np.full(len(timerange), val)
+                except:               self[att] = np.empty((len(timerange),), dtype=object)
     def fromdict(inputdict):
         return fromdict(History, inputdict)
     def load(filename, filetype="", renest_dict=True, indiv=False):
@@ -705,20 +711,6 @@ class History(Result):
             if isinstance(v, History):  newhist[k]=v.copy()
             else:                       newhist[k]=np.copy(v)
         return newhist
-    def init_time(self,time, timerange):
-        """
-        Adds time to the history. Used at the top level of the history after 
-        initialization to log timesteps.
-
-        Parameters
-        ----------
-        time : float
-            time to initialize the initial time at.
-        timerange : iterable
-            Timerange to initialize the history over.
-        """
-        if not hasattr(self, 'time'):
-            self['time'] = init_hist_iter('time', time, timerange=timerange, track='all', dtype=float)
     def log(self, obj, t_ind, time=None):
         """
         Updates the history from obj at the time t_ind
@@ -756,22 +748,26 @@ class History(Result):
                     try:
                         hist[t_ind]=val
                     except Exception as e:
+                        obj_str = "Error logging obj "+obj.__class__.__name__+": "
                         if t_ind >= len(hist):
-                            raise Exception("Time beyond range of model history--check staged execution" 
-                                            "and simulation time settings (end condition, mdl.modelparams.times)") from e
+                            raise Exception(obj_str+"Time beyond range of model history--check staged execution " 
+                                            "and simulation time settings (end condition, mdl.sp.times)") from e
                         elif not np.can_cast(type(val), type(hist[t_ind])):
-                            raise Exception(str(att)+" changed type: "+str(type(hist[t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind)) from e
-                        else: raise Exception("Value too large to represent: "+att+"="+str(val)) from e
+                            raise Exception(obj_str+str(att)+" changed type: "+str(type(hist[t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind)) from e
+                        else: raise Exception(obj_str+"Value too large to represent: "+att+"="+str(val)) from e
     def cut(self, end_ind=None, start_ind=None, newcopy=False):
         """Cuts the history to a given index"""
         if newcopy: hist = self.copy()
         else:       hist = self
         for name, att in hist.items():
             if isinstance(att, History): hist[name]=hist[name].cut(end_ind, start_ind, newcopy=False)
-            else:       
-                if end_ind is None:     hist[name]=att[start_ind:]  
-                elif start_ind is None: hist[name]=att[:end_ind+1]  
-                else:                   hist[name]=att[start_ind:end_ind+1] 
+            else:   
+                try:
+                    if end_ind is None:     hist[name]=att[start_ind:]  
+                    elif start_ind is None: hist[name]=att[:end_ind+1]  
+                    else:                   hist[name]=att[start_ind:end_ind+1] 
+                except TypeError as e:
+                    raise Exception("Invalid history for name "+name+" in history "+str(hist.data)) from e
         return hist 
     def get_slice(self,t_ind=0):
         """

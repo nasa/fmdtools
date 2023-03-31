@@ -10,7 +10,7 @@ from recordclass import dataobject
 import numpy as np
 import itertools
 import copy
-from .common import get_true_fields, get_true_field
+from .common import get_true_fields, get_true_field, get_dataobj_track
 from fmdtools.sim.result import History, init_hist_iter
 
 class Fault(dataobject, readonly=True, mapping=True):
@@ -106,6 +106,7 @@ class Mode(dataobject, readonly=False):
     exclusive = False
     key_phases_by = 'global'
     longnames = {}
+    default_track = ('mode', 'faults')
     def __init__(self, *args, s_kwargs={}, **kwargs):
         if self.he_args:
             kwargs['failrate']=self.add_he_rate(*self.he_args)
@@ -357,12 +358,13 @@ class Mode(dataobject, readonly=False):
         return get_true_fields(self, *args, **kwargs)
     def create_hist(self, timerange, track):
         h = History()
-        if not self.exclusive:  
+        track = get_dataobj_track(self, track)
+        if not(self.exclusive) and 'faults' in track:  
             fh = History()
-            fh.data = {faultmode: init_hist_iter(faultmode, False, timerange, track, dtype=bool)
-                      for faultmode in self.faultmodes} 
+            for faultmode in self.faultmodes:
+                fh.init_att(faultmode, False, timerange, track='all', dtype=bool)
             h['faults']=fh
         modelength = max([len(fm) for fm in self.faultmodes]+[len(m) for m in self.opermodes])
         str_size = '<U'+str(modelength)
-        h['mode'] = init_hist_iter('mode', self.mode, timerange, track, str_size=str_size)
+        h.init_att('mode', self.mode, timerange, track, str_size=str_size)
         return h

@@ -17,90 +17,64 @@ import time
 import copy
 
 from .flow import Flow, init_flow
-from .common import check_pickleability, get_var, set_var
-from .parameter import Parameter
+from .common import check_pickleability, get_var, set_var, init_obj_attr, get_obj_track
+from .parameter import Parameter, SimParam
+from .rand import Rand
 from fmdtools.sim.result import History, get_sub_include, init_hist_iter, init_indicator_hist
-
-class ModelParam(Parameter, readonly=True):
-    """
-    Class defining Model simulation parameters.
-    
-    Has fields:
-        phases : tuple
-            phases (('name', start, end)...) that the simulation progresses through
-        times : tuple
-            tuple of times to sample (if desired) (starttime, sampletime1, sampletime2,... endtime)
-        dt : float
-            timestep used in the simulation. default is 1.0
-        units : str
-            time-units. default is hours`
-        end_condition : str
-            Name of indicator method to use to end the simulation. If not provided (''),
-            the simulation ends at the final time. Default is ''
-        seed : int
-            seed used for the internal random number generator. Default is 42.
-        use_local : bool
-            Whether to use locally-defined timesteps in functions (if any). Default is True.
-    """
-    phases :            tuple = (('na', 0, 100),)
-    times :             tuple = (0, 100)
-    dt :                float = 1.0
-    units :             str = "hr"
-    units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
-    end_condition :     str = ''
-    seed :              int = 42
-    use_local :         bool = True
-    def __init__(self, *args, **kwargs):
-        if ('times' in kwargs) and not('phases' in kwargs):
-            kwargs['phases']=(("na", 0, kwargs['times'][-1]),)
-        super().__init__(*args, **kwargs)
 
 #Model superclass    
 class Model(object):
+    __slots__ =('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'fxns', 
+                'functionorder', '_fxnflows', '_fxninput', '_flowstates', 'is_copy', 
+                'bipartite', 'multgraph', 'staticfxns', 'dynamicfxns', 'staticflows') #added in self.build())
+    _init_p = Parameter
+    _init_sp = SimParam
+    _init_r = Rand
+    default_track='all'
     """
     Model superclass used to construct the model, return representations of the model, and copy and reset the model when run.
     
     Attributes
     ----------
-    type : str
-        labels the model as a model (may not be necessary)
     flows : dict
         dictionary of flows objects in the model indexed by name
     fxns : dict
         dictionary of functions in the model indexed by name
     params : dict
         dictionaries of (optional) parameters for a given instantiation of a model
-    modelparams : ModelParam
+    sp : ModelParam
         Simulation Parameters.
-    valparams : 
+    track : 
         dictionary of parameters for defining what simulation constructs to record for find_classification
     bipartite : networkx graph
         bipartite graph view of the functions and flows
     graph : networkx graph
         multigraph view of functions and flows
     """
-    def __init__(self, params=Parameter(),modelparams=ModelParam(), valparams='all'):
+    def __init__(self, p={}, sp={}, r={}, track=''):
         """
         Instantiates internal model attributes with predetermined:
         
         Parameters
         ----------
-        params : dict 
-            design variables of the model
-        modelparams : ModelParam
-            simulation parameters for the model.
-        valparams dict or (`all`/`flows`/`fxns`)
-            parameters to keep a history of in params needed for find_classification. default is 'all'
-            dict option is of the form of mdlhist {fxns:{fxn1:{param1}}, flows:{flow1:{param1}}})
+        p : dict 
+            Parameter values to set
+        sp : dict
+            Simulation parameter values to set
+        r : dict
+            Rand parameter values to set.
+        track dict
+            tracking dictionary
         """
         self.is_copy=False
-        self.flows={}
-        self.fxns={}
-        self.params=params
-        self.valparams = valparams
-        self.modelparams=modelparams
-        self.find_any_phase_overlap()
-        self.set_rng()
+        self.flows=dict()
+        self.fxns=dict()
+        if not track:   self.track=self.default_track 
+        else:           self.track=track
+        if not sp: sp=self.default_sp
+        
+        init_obj_attr(self, p=p, sp=sp, r=r)
+        
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
@@ -123,26 +97,6 @@ class Model(object):
         return vars(self)
     def __setstate__(self, state):
         vars(self).update(state)
-    def find_any_phase_overlap(self):
-        phase_dict = {v[0]: [v[1], v[2]] for v in self.modelparams.phases}
-        intervals = [*phase_dict.values()]
-        int_low = np.sort([i[0] for i in intervals])
-        int_high = np.sort([i[1] if len(i)==2 else i[0] for i in intervals])
-        for i, il in enumerate(int_low):
-            if i+1==len(int_low): break
-            if int_low[i+1]<=int_high[i]:
-                raise Exception("Global phases overlap (see mdlparams):"+str(self.modelparams.phases)+" Ensure the max of each phase < min of each other phase")
-    def _update_model_seed(self, seed=[]):
-        """ Updates/Initializes the model seed params (helper function--use update_seed instead)""" 
-        if not seed:
-            seed=np.random.SeedSequence.generate_state(np.random.SeedSequence(),1)[0] 
-        kwargs = asdict(self.modelparams)
-        kwargs['seed']=seed
-        self.modelparams = ModelParam(**kwargs)
-        self.set_rng()
-    def set_rng(self):
-        """Sets the Model internal rng self._rng from self.modelparams.seed."""
-        self._rng = np.random.default_rng(self.modelparams.seed)
     def update_seed(self,seed=[]):
         """
         Updates model seed and the seed in all functions. 
@@ -150,11 +104,12 @@ class Model(object):
         Parameters
         ----------
         seed : int, optional
-            Seed to use. The default is [], which uplls from np.random.SeedSequence
+            Seed to use. The default is [].
         """
-        self._update_model_seed(seed)
+        if seed: self.r.update_seed(seed)
+        
         for fxn in self.fxns:
-            self.fxns[fxn].update_seed(self.modelparams.seed)
+            self.fxns[fxn].update_seed(self.r.seed)
     def get_rand_states(self, auto_update_only=False):
         """Gets dictionary of random states throughout the model functions"""
         rand_states = {}
@@ -219,7 +174,7 @@ class Model(object):
         """
         if not getattr(self, 'is_copy', False):
             flows=self.get_flows(flownames)
-            fkwargs = {**{'r':{"seed":self.modelparams.seed}}, **{'t':{'dt': self.modelparams.dt}}, **fkwargs}
+            fkwargs = {**{'r':{"seed":self.r.seed}}, **{'t':{'dt': self.sp.dt}}, **fkwargs}
             try:
                 self.fxns[name] = fclass(name, flows=flows, params=fparams, **fkwargs)
             except TypeError as e:
@@ -255,7 +210,7 @@ class Model(object):
                 class_relationship[obj.__class__.__name__].update(obj.get_flowtypes())
             else: class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
         return class_relationship
-    def build_model(self, functionorder=[], require_connections=True):
+    def build(self, functionorder=[], require_connections=True):
         """
         Builds the model graph after the functions have been added.
 
@@ -484,7 +439,7 @@ class Model(object):
         mem_profile={}
         mem = 0
         mem_profile['params'] = sys.getsizeof(self.params)
-        mem_profile['params'] += sys.getsizeof(self.modelparams)
+        mem_profile['params'] += sys.getsizeof(self.sp)
         mem_profile['params'] += sys.getsizeof(self.valparams)
         for fxnname, fxn in self.fxns.items():
             mem_profile[fxnname]=fxn.get_memory()
@@ -503,10 +458,9 @@ class Model(object):
         """
         copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         copy.is_copy=True
-        copy.__init__(params=getattr(self, 'params', {}),modelparams=getattr(self, 'modelparams', {}),valparams=getattr(self, 'valparams', {}))
+        copy.__init__(p=getattr(self, 'p', {}),sp=getattr(self, 'sp', {}),track=getattr(self, 'track', {}))
         for flowname, flow in self.flows.items():
             copy.flows[flowname]=flow.copy()
-            setattr(copy, flowname, copy.flows[flowname])
         for fxnname, fxn in self.fxns.items():
             flownames=self._fxninput[fxnname]['flows']
             fparams=self._fxninput[fxnname]['fparams']
@@ -516,11 +470,10 @@ class Model(object):
                 copy.fxns[fxnname]=fxn.copy(flows, **kwargs)
             else:                   
                 copy.fxns[fxnname]=fxn.copy(flows, fparams, **kwargs)
-            setattr(copy, fxnname, copy.fxns[fxnname])
         copy._fxninput=self._fxninput
         copy._fxnflows=self._fxnflows
         copy.is_copy=False
-        copy.build_model(functionorder = self.functionorder)
+        copy.build(functionorder = self.functionorder)
         copy.is_copy=True
         if hasattr(self, 'h'): 
             copy.h = History()
@@ -531,6 +484,7 @@ class Model(object):
                 if hasattr(flow, 'h'):
                     copy.h[fname]=flow.h.copy()
             if 'i' in self.h: copy.h['i']=self.h['i'].copy()
+            if 'time' in self.h: copy.h['time']=self.h['time'].copy()
         return copy
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
@@ -538,7 +492,7 @@ class Model(object):
             flow.reset()
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
-        self._rng=np.random.default_rng(self.modelparams.seed)
+        self.r.reset()
     def find_classification(self, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
         return {'rate':scen['properties'].get('rate', 0), 'cost': 1, 'expected cost': scen['properties'].get('rate',0)}
@@ -612,15 +566,16 @@ class Model(object):
     def create_hist(self, timerange, track):
         if not hasattr(self, 'h'):
             hist = History()
+            track = get_obj_track(self, track, (*self.fxns, *self.flows))
             init_indicator_hist(self, hist, timerange, track)
             for fxnname, fxn in self.fxns.items():
-                fxn_track = get_sub_include(fxnname, track)
-                if fxn_track:
-                    hist[fxnname] = fxn.create_hist(timerange, fxn_track)
+                fh = fxn.create_hist(timerange, get_sub_include(fxnname, track))
+                if fh: hist[fxnname]=fh
             for flowname, flow in self.flows.items():
-                flow_track = get_sub_include(flowname, track)
-                if flow_track:
-                    hist[flowname] = flow.create_hist(timerange, flow_track)
+                fh = flow.create_hist(timerange, get_sub_include(flowname, track))
+                if fh: hist[flowname] = fh
+            if len(hist)<len(track):
+                raise Exception("History doesn't match tracking options (are names correct?): \n track="+str(track)+"\n hist= \n"+str(hist))
             self.h = hist
         return self.h
     def propagate(self, time, fxnfaults={}, disturbances={}, run_stochastic=False):

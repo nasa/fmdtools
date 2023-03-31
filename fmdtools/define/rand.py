@@ -8,10 +8,10 @@ Description: A module for defining randon properties for use in blocks. Has Clas
 from scipy import stats 
 from recordclass import dataobject, asdict, astuple
 import numpy as np
-from .common import get_true_fields, get_true_field
+from .common import get_true_fields, get_true_field, get_dataobj_track
 import copy
 
-from fmdtools.sim.result import init_hist_iter, History, get_sub_include
+from fmdtools.sim.result import History, get_sub_include, init_hist_iter
 
 class Rand(dataobject, mapping=True):
     """
@@ -42,6 +42,7 @@ class Rand(dataobject, mapping=True):
     probdens:       float = 1.0
     seed:           int =   42
     run_stochastic: bool=False
+    default_track = ('s', 'probdens')
     def __init__(self, *args, seed=42, run_stochastic=False, probs = list(), s_kwargs={}):
         args = get_true_fields(self, *args, seed=seed, run_stochastic=run_stochastic, probs=probs)
         super().__init__(*args)
@@ -95,8 +96,13 @@ class Rand(dataobject, mapping=True):
     def reset(self):
         """Resets Rand to the initial state."""
         self.probs.clear()
-        self.s.reset()
+        if 's' in self.__fields__: self.s.reset()
         self.rng = np.random.default_rng(self.seed)
+    def update_seed(self, seed):
+        """Updates the random seed to the given value"""
+        self.seed=seed
+        BitGen = type(self.rng.bit_generator)
+        self.rng.bit_generator.state = BitGen(seed).state
     def assign(self, other_rand):
         if hasattr(self,'s'):
             self.s.assign(other_rand.s)
@@ -130,9 +136,10 @@ class Rand(dataobject, mapping=True):
             History of fields specified in track.
         """
         h = History()
-        if self.run_stochastic=='track_pdf': 
-            h['probdens'] = init_hist_iter('probdens', self.return_probdens(), timerange=timerange, track='all')
-        if hasattr(self,'s'):
+        track = get_dataobj_track(self, track)
+        if self.run_stochastic=='track_pdf' and 'track_pdf' in track: 
+            h.init_att('probdens', self.return_probdens(), timerange=timerange, track='all')
+        if 's' in track and hasattr(self,'s'):
             h['s'] = init_hist_iter('s', self.s, timerange=timerange, track=track)
         return h
 

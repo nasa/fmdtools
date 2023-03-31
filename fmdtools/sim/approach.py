@@ -31,7 +31,7 @@ class NominalApproach():
         dict of the parameters defined in each method for the approach
     """
     def __init__(self):
-        """Instantiates NominalApproach (simulation params are defined using methods)"""
+        """Instantiates NominalApproach (simulation p are defined using methods)"""
         self.scenarios = {}
         self.num_scenarios = 0
         self.ranges = {}
@@ -62,7 +62,7 @@ class NominalApproach():
             self.num_scenarios+=1
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'sequence':{},'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                                'modelparams':{'seed':int(seeds[i])}, 'prob':1/len(seeds)}}
+                                                                'sp':{'seed':int(seeds[i])}, 'prob':1/len(seeds)}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def add_param_replicates(self,paramfunc, rangeid, replicates, *args, ind_seeds=True, **kwargs):
         """
@@ -93,11 +93,11 @@ class NominalApproach():
         self.ranges[rangeid] = {'fixedargs':args, 'inputranges':kwargs, 'scenarios':[], 'num_pts' : replicates, 'paramfunc':paramfunc}
         for i in range(replicates):
             self.num_scenarios+=1
-            params = paramfunc(*args, **kwargs)
+            p = paramfunc(*args, **kwargs)
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'sequence':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                    'params':params,'inputparams':kwargs,'modelparams':{'seed':int(seeds[i])},\
+                                                    'p':p,'inputparams':kwargs,'sp':{'seed':int(seeds[i])},\
                                                     'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/replicates}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def get_param_scens(self, rangeid, *level_params):
@@ -181,11 +181,11 @@ class NominalApproach():
             for i in range(replicates):
                 np.random.seed(seeds[i])
                 self.num_scenarios+=1
-                params = paramfunc(*args, **inputparams)
+                p = paramfunc(*args, **inputparams)
                 scenname = rangeid+'_'+str(self.num_scenarios)
                 self.scenarios[scenname]={'sequence':{},\
                                           'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                        'params':params,'inputparams':inputparams,'modelparams':{'seed':int(mdlseeds[i])},\
+                                                        'p':p,'inputparams':inputparams,'sp':{'seed':int(mdlseeds[i])},\
                                                         'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
                 self.ranges[rangeid]['scenarios'].append(scenname)
                 if replicates>1:    self.ranges[rangeid]['levels'][level_key].append(scenname)
@@ -213,11 +213,11 @@ class NominalApproach():
         for i, level in enumerate(levels):
             scens = [scen for lev, scen in self.ranges[rangeid]['levels'].items() if lev[param_loc]==level]
             for scen in scens:
-                self.scenarios[scen]['properties']['modelparams']['seed'] = int(seeds[i])
+                self.scenarios[scen]['properties']['sp']['seed'] = int(seeds[i])
             
     def change_params(self, rangeid='all', **kwargs):
         """
-        Changes a given parameter across all scenarios. Modifies 'params' (rather than regenerating params from the paramfunc).
+        Changes a given parameter across all scenarios. Modifies 'p' (rather than regenerating p from the paramfunc).
 
         Parameters
         ----------
@@ -236,8 +236,8 @@ class NominalApproach():
                 if not scen['properties'].get('changes', False):  scen['properties']['changes']=kwargs
                 else:                                             scen['properties']['changes'].update(kwargs)
                 for kwarg, kw_value in kwargs.items(): #updates 
-                    if type(kw_value)==dict:    scen['properties']['params'][kwarg].update(kw_value)
-                    else:                       scen['properties']['params'][kwarg]=kw_value
+                    if type(kw_value)==dict:    scen['properties']['p'][kwarg].update(kw_value)
+                    else:                       scen['properties']['p'][kwarg]=kw_value
     def assoc_probs(self, rangeid, prob_weight=1.0, **inputpdfs):
         """
         Associates a probability model (assuming variable independence) with a 
@@ -304,11 +304,11 @@ class NominalApproach():
             self.num_scenarios+=1
             np.random.seed(seeds[i])
             inputparams = {name: (ins() if callable(ins) else ins[0](*ins[1:])) for name, ins in randvars.items()}
-            params = paramfunc(*fixedargs, **inputparams)
+            p = paramfunc(*fixedargs, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]={'sequence':{},\
                                       'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                    'params':params,'inputparams':inputparams,'modelparams':{'seed':int(mdlseeds[i])},\
+                                                    'p':p,'inputparams':inputparams,'sp':{'seed':int(mdlseeds[i])},\
                                                     'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/replicates}}
             self.ranges[rangeid]['scenarios'].append(scenname)
     def copy(self):
@@ -387,8 +387,8 @@ class SampleApproach():
         phases: dict or 'global' or list
             Local phases in the model to sample. 
                 Dict has structure: {'Function':{'phase':[starttime, endtime]}}
-                List has structure: ['phase1', 'phase2'] where phases are phases in mdl.modelparams.phases
-            Defaults to 'global',here only the phases defined in mdl.modelparams.phases are used.
+                List has structure: ['phase1', 'phase2'] where phases are phases in mdl.sp.phases
+            Defaults to 'global',here only the phases defined in mdl.sp.phases are used.
             Phases and modephases can be gotten from process.modephases(mdlhist)
         modephases: dict
             Dictionary of modes associated with each phase. 
@@ -440,7 +440,7 @@ class SampleApproach():
             Size of random sample to reduce the number of scenarios to (if any). Default is False.
         """
         self.unit_factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
-        mdl_phases = {v[0]:[v[1], v[2]] for v in mdl.modelparams.phases}
+        mdl_phases = {v[0]:[v[1], v[2]] for v in mdl.sp.phases}
         
         if phases=='global':                self.globalphases = mdl_phases; self.phases = {}; self.modephases = modephases
         elif type(phases) in [list, set]:   self.globalphases = {ph:mdl_phases[ph] for ph in phases}; self.phases={}; self.modephases = modephases
@@ -450,8 +450,8 @@ class SampleApproach():
             else:                                               self.globalphases = mdl_phases; self.phases = phases; self.modephases = modephases
         #elif type(phases)==set:    self.globalphases=mdl.phases; self.phases = {ph:mdl.phases[ph] for ph in phases}
         self.mdltype = mdl.__class__.__name__
-        self.tstep = mdl.modelparams.dt
-        self.units = mdl.modelparams.units
+        self.tstep = mdl.sp.dt
+        self.units = mdl.sp.units
         self.init_modelist(mdl,faults, jointfaults)
         self.init_rates(mdl, jointfaults=jointfaults, modephases=modephases, join_modephases=join_modephases)
         self.create_sampletimes(mdl, sampparams, defaultsamp)

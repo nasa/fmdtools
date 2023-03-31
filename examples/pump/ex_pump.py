@@ -23,9 +23,9 @@ The flows are:
 
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.flow import Flow 
-from fmdtools.define.model import Model, ModelParam, check_model_pickleability
+from fmdtools.define.model import Model, check_model_pickleability
 from fmdtools.sim.approach import SampleApproach, NominalApproach
-from fmdtools.define.parameter import Parameter
+from fmdtools.define.parameter import Parameter, SimParam
 from fmdtools.define.state import State 
 from fmdtools.define.time import Time
 import fmdtools.analyze as an
@@ -262,30 +262,33 @@ class MoveWat(FxnBlock):
 
 ##DEFINE MODEL OBJECT
 class Pump(Model):
+    __slots__=()
+    _init_p = PumpParam
+    """
+    To sample the model, the timerange and operational phases need to be defined.
+
+    Here we did that by setting phases as a tuple of each phase and its start and ending
+    and times to the beginning and end time (and any times to sample in between in run_list()
+
+    sp.tstep is the timestep to use in the model and must be an integer
+
+    In this model, because every time we've entered occurs at a factor of 5,
+    and there aren't any complicated controls/dynamics interactions that would need to be
+    tuned, we can easily use the timestep t=1 OR t=5. HOWEVER, if any time (e.g. in the behavior methods)
+    does not occur on the timestep, it will be missed, so proceed with caution.
+
+    t=1 is a good default.
+    """
+    default_sp = dict(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr')
+    default_track = {'wat_2':{'s':'flowrate'}, 'ee_1':{'s':{'current'}}, 'i':'all'}
     """
         This defines the pump model as a Model.
 
         Models take a dictionary of parameters as input defining any veriables and values to use in the model.
     """
-    def __init__(self, params=PumpParam(), \
-                 modelparams = ModelParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr'), \
-                    valparams={'flows':{'Wat_2':'flowrate', 'EE_1':'current'}}):
-        """
-        To sample the model, the timerange and operational phases need to be defined.
+    def __init__(self, p={}, sp={}, track={}):
 
-        Here we did that by setting phases as a tuple of each phase and its start and ending
-        and times to the beginning and end time (and any times to sample in between in run_list()
-
-        self.tstep is the timestep to use in the model and must be an integer
-
-        In this model, because every time we've entered occurs at a factor of 5,
-        and there aren't any complicated controls/dynamics interactions that would need to be
-        tuned, we can easily use the timestep t=1 OR t=5. HOWEVER, if any time (e.g. in the behavior methods)
-        does not occur on the timestep, it will be missed, so proceed with caution.
-
-        t=1 is a good default.
-        """
-        super().__init__(params=params, modelparams=modelparams, valparams=valparams)
+        super().__init__(p=p, sp=sp, track=track)
         """
         Here addflow() takes as input a unique name for the flow "flowname", a type for the flow, "flowtype"
         and either:   a dict with the initial flow attributes, OR
@@ -293,8 +296,8 @@ class Pump(Model):
         """
         self.add_flow('ee_1',   Electricity)
         self.add_flow('sig_1',  Signal)
-        self.add_flow('wat_1',  Water('Wat_1'))
-        self.add_flow('wat_2',  Water('Wat_1'))
+        self.add_flow('wat_1',  Water('wat_1'))
+        self.add_flow('wat_2',  Water('wat_2'))
 
         """
         Functions are added to the model using the addfxn() method, which needs:
@@ -307,10 +310,10 @@ class Pump(Model):
         self.add_fxn('import_ee',    ImportEE,      'ee_1')
         self.add_fxn('import_water', ImportWater,   'wat_1')
         self.add_fxn('import_signal',ImportSig,     'sig_1')
-        self.add_fxn('move_water',   MoveWat,       'ee_1', 'sig_1', 'wat_1', 'wat_2', p = {'delay':params.delay})
+        self.add_fxn('move_water',   MoveWat,       'ee_1', 'sig_1', 'wat_1', 'wat_2', p = {'delay':self.p.delay})
         self.add_fxn('export_water', ExportWater,   'wat_2')
 
-        self.build_model()
+        self.build()
     def indicate_finished(self,time):
         """
         Indicators can addtionally be used to stop the simulation when certain conditions are met.
@@ -321,8 +324,8 @@ class Pump(Model):
         a dummy method is provided to demonstrate, in practice this would depend on
         the intended end-states of the model.
         """
-        if time>self.modelparams.times[-1]: return True
-        else:                               return False
+        if time>self.sp.times[-1]: return True
+        else:                      return False
     def indicate_on(self, time):
         return self.wat_1.s.flowrate>0
     def find_classification(self,scen, mdlhists):
@@ -335,18 +338,18 @@ class Pump(Model):
                 - electrical and water costs depend on the lost water in the non-nominal case
         """
         #get fault costs and rates
-        if 'repair' in self.params.cost: repcost= self.calc_repaircost()
+        if 'repair' in self.p.cost: repcost= self.calc_repaircost()
         else:                               repcost = 0.0
-        if 'water' in self.params.cost:
+        if 'water' in self.p.cost:
             lostwat = sum(mdlhists['nominal'].wat_2.s.flowrate- mdlhists['faulty'].wat_2.s.flowrate)
-            watcost = 750 * lostwat  * self.modelparams.dt
-        elif 'water_exp' in self.params.cost:
+            watcost = 750 * lostwat  * self.sp.dt
+        elif 'water_exp' in self.p.cost:
             wat = mdlhists['nominal'].wat_2.s.flowrate - mdlhists['faulty'].wat_2.s.flowrate
-            watcost =100 *  sum(np.array(accumulate(wat))**2) * self.modelparams.dt
+            watcost =100 *  sum(np.array(accumulate(wat))**2) * self.sp.dt
         else: watcost = 0.0
-        if 'ee' in self.params.cost:
+        if 'ee' in self.p.cost:
             eespike = [spike for spike in mdlhists['faulty'].ee_1.s.current - mdlhists['nominal'].ee_1.s.current if spike >1.0]
-            if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.modelparams.dt
+            if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.sp.dt
             else: eecost =0.0
         else: eecost = 0.0
 
@@ -360,6 +363,10 @@ class Pump(Model):
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
 
 if __name__=="__main__":
+    
+    mdl = Pump()
+    newhist2 = mdl.create_hist(range(10), 'default')
+    
     mdl = Pump()
     
     endclass, mdlhist=propagate.one_fault(mdl, 'export_water','block', time=29, 
@@ -389,7 +396,7 @@ if __name__=="__main__":
     #d = pickle.loads(c)
     
     mdl = Pump()
-    newhist2 = mdl.create_hist(range(10), {'ee_1':'all',"wat_1":{'s':'flowrate'}})
+    newhist2 = mdl.create_hist(range(10), {'ee_1':'all',"wat_1":{'s':('flowrate',)}})
     mdl = Pump()
     newhist3 = mdl.create_hist(range(10), "all")
     mdl.flows['ee_1'].s
