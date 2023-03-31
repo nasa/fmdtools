@@ -522,8 +522,8 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
     tuple of form (figure, axis)
 
     """
-    if show_dyn_order and show_dyn_tstep:   dyn_highlight = {fxn:str(i)+",dt="+str(mdl.fxns[fxn].t.dt) if mdl.fxns[fxn].t.dt!=mdl.modelparams.dt else str(i) for i,fxn in enumerate(mdl.dynamicfxns)}
-    elif show_dyn_tstep:                    dyn_highlight = {fxn:"dt="+str(mdl.fxns[fxn].t.dt) if mdl.fxns[fxn].t.dt!=mdl.modelparams.dt else '' for i,fxn in enumerate(mdl.dynamicfxns)}
+    if show_dyn_order and show_dyn_tstep:   dyn_highlight = {fxn:str(i)+",dt="+str(mdl.fxns[fxn].t.dt) if mdl.fxns[fxn].t.dt!=mdl.sp.dt else str(i) for i,fxn in enumerate(mdl.dynamicfxns)}
+    elif show_dyn_tstep:                    dyn_highlight = {fxn:"dt="+str(mdl.fxns[fxn].t.dt) if mdl.fxns[fxn].t.dt!=mdl.sp.dt else '' for i,fxn in enumerate(mdl.dynamicfxns)}
     elif show_dyn_order:                    dyn_highlight = {fxn:str(i) for i,fxn in enumerate(mdl.dynamicfxns)}
     else:                                   dyn_highlight = list(mdl.dynamicfxns)
     showfaultlabels = (show_dyn_order or show_dyn_tstep)
@@ -534,7 +534,7 @@ def exec_order(mdl, renderer='matplotlib', gtype='bipartite', colors=['lightgray
         if show_dyn_arrows:
             seqgraph = nx.DiGraph([(dynamicnodes[n], dynamicnodes[n+1]) for n in range(len(dynamicnodes)-1)])
         else: seqgraph=[]
-        fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[dyn_highlight, staticnodes], colors=colors, showfaultlabels= showfaultlabels, seqgraph=seqgraph, **kwargs)
+        fig_axis = show(mdl.bipartite, renderer=renderer, gtype=gtype, highlight=[dyn_highlight, staticnodes], colors=colors, showfaultlabels= showfaultlabels, seqgraph=seqgraph, **kwargs)
     elif gtype=='actions':
         fig_axis = show(mdl, renderer=renderer, gtype=gtype, highlight=[mdl.actions, [],  []], colors=colors, showfaultlabels= showfaultlabels, arrows=show_dyn_arrows, **kwargs)
     elif gtype in ['flows', 'combined']:

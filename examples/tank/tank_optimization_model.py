@@ -12,11 +12,11 @@ inlet and outlet valves.
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
 from fmdtools.define.mode import Mode
-from fmdtools.define.model import Model, ModelParam
-from fmdtools.define.block import FxnBlock, Component
+from fmdtools.define.model import Model
+from fmdtools.define.block import FxnBlock
 import numpy as np
 
-from tank_model import WatState, SigState, TransportLiquidState, Signal, Water
+from tank_model import TransportLiquidState, Signal, Water
 
 class TankParam(Parameter, readonly=True):
     capacity:       np.float64 = np.float64(20.0)
@@ -25,7 +25,7 @@ class TankParam(Parameter, readonly=True):
     policymap:      dict=dict()
     def __init__(self, *args, **kwargs):
         args = self.get_true_fields(*args, **kwargs)
-        super().__init__(*args, strict_immutability=False, **kwargs)
+        super().__init__(*args, strict_immutability=False)
         if not self.policymap: 
             self.policymap.update(self.get_faultpolicy())
     def get_faultpolicy(self):
@@ -37,8 +37,6 @@ def make_tankparam(*args,**kwargs):
         kwargs['faultpolicy']=fp
     return kwargs
 
-
-from tank_model import ImportLiquid as ImportLiquidStd
 class TransportLiquidMode(Mode):
     faultparams={'stuck':(1e-5,[1,0],0),
                  'blockage':(1e-5,[1,0],0)}
@@ -136,9 +134,10 @@ class ContingencyActions(FxnBlock):
 
 
 class Tank(Model):
-    def __init__(self, params=TankParam(),\
-                 modelparams = ModelParam(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min'), valparams={}):
-        super().__init__(params, modelparams, valparams)
+    _init_p = TankParam 
+    default_sp = dict(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min')
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         
         self.add_flow('coolant_in',     Water)
         self.add_flow('coolant_out',    Water)
@@ -148,19 +147,19 @@ class Tank(Model):
         
         
         
-        self.add_fxn('import_coolant',  ImportLiquid, 'coolant_in', 'input_sig', p=params)
+        self.add_fxn('import_coolant',  ImportLiquid, 'coolant_in', 'input_sig', p=self.p)
         self.add_fxn('store_coolant',   StoreLiquid, 'coolant_in', 'coolant_out', 'tank_sig', 
-                     p=params, s={'level':params.capacity/2, 'coolingbuffer':params.capacity/2})
+                     p=self.p, s={'level':self.p.capacity/2, 'coolingbuffer':self.p.capacity/2})
         
         
-        self.add_fxn('export_coolant',  ExportLiquid, 'coolant_out', 'output_sig', p=params)
-        self.add_fxn('contingency',     ContingencyActions, 'input_sig', 'tank_sig', 'output_sig', p=params)
+        self.add_fxn('export_coolant',  ExportLiquid, 'coolant_out', 'output_sig', p=self.p)
+        self.add_fxn('contingency',     ContingencyActions, 'input_sig', 'tank_sig', 'output_sig', p=self.p)
         
-        self.build_model()
+        self.build()
     def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high
         overfullcost, emptycost, buffercost = 0, 0, 0
-        sum(self.h.store_coolant.s.level>=self.params.capacity)*10000        #time the tank is overfull
+        sum(self.h.store_coolant.s.level>=self.p.capacity)*10000        #time the tank is overfull
         if any(self.h.store_coolant.s.level<=0):     emptycost = 1000000     #if the tank lacks any water
         buffercost = sum(self.h.store_coolant.s.coolingbuffer<=0)*100000     #if the buffer is 'spent'
         mitigationcost = (sum(self.h.input_sig.s.action!=0)+ sum(self.h.output_sig.s.action!=0))*1000

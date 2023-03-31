@@ -21,11 +21,11 @@ human errors during early design stage functional failure analysis. In ASME
 Information in Engineering Conference. American Society of Mechanical Engineers 
 Digital Collection.
 """
-from fmdtools.define.parameter import Parameter 
+from fmdtools.define.parameter import Parameter, SimParam
 from fmdtools.define.state import State
 from fmdtools.define.mode import Mode
 from fmdtools.define.flow import Flow
-from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.model import Model
 from fmdtools.define.block import FxnBlock, Action, ASG
 
 class WatState(State):
@@ -235,12 +235,12 @@ class TankParam(Parameter, readonly=True):
     reacttime:      int = 2
     store_tstep:    float = 1.0
 
-default_modelparam = ModelParam(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min')
 class Tank(Model):
-    def __init__(self, params=TankParam(),\
-                 modelparams = default_modelparam,\
-                 valparams = {'functions':{'Store_Water':'level'}}):
-        super().__init__(params = params,modelparams=modelparams, valparams=valparams )
+    _init_p = TankParam
+    default_sp = dict(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min')
+    default_track = {'store_water':{'s':'level'}}
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         
         self.add_flow('wat_in_1',  Water)
         self.add_flow('wat_in_2',  Water)
@@ -255,9 +255,9 @@ class Tank(Model):
         self.add_fxn('store_water',     StoreLiquid,   'wat_in_2', 'wat_out_1', 'tank_sig')
         self.add_fxn('guide_water_out', GuideLiquidOut,'wat_out_1','wat_out_2')
         self.add_fxn('export_water',    ExportLiquid,  'wat_out_2','valve2_sig')
-        self.add_fxn('human',           HumanActions,  'valve1_sig','tank_sig', 'valve2_sig', a={'reacttime':params.reacttime})
+        self.add_fxn('human',           HumanActions,  'valve1_sig','tank_sig', 'valve2_sig', a={'reacttime':self.p.reacttime})
         
-        self.build_model()
+        self.build()
     def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high
         if any(self.h.store_water.s.level>=20):    totcost = 1000000
@@ -299,7 +299,7 @@ if __name__ == '__main__':
     an.graph.show(resgraph,faultscen='turn_wrong_valve', time=2)
     
     
-    mdl = Tank(params=TankParam(reacttime=2), modelparams = default_modelparam.copy_with_vals(dt=3.0))
+    mdl = Tank(p=TankParam(reacttime=2), sp = dict(dt=3.0))
     resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='bipartite')
     an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='store_water', time_slice=2)
     an.graph.show(resgraph,faultscen='turn_wrong_valve', time='end')

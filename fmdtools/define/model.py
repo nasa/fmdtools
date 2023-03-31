@@ -438,9 +438,9 @@ class Model(object):
         """
         mem_profile={}
         mem = 0
-        mem_profile['params'] = sys.getsizeof(self.params)
+        mem_profile['params'] = sys.getsizeof(self.p)
         mem_profile['params'] += sys.getsizeof(self.sp)
-        mem_profile['params'] += sys.getsizeof(self.valparams)
+        mem_profile['params'] += sys.getsizeof(self.track)
         for fxnname, fxn in self.fxns.items():
             mem_profile[fxnname]=fxn.get_memory()
         for flowname,flow in self.flows.items():
@@ -584,7 +584,7 @@ class Model(object):
             for flowname, flow in self.flows.items():
                 fh = flow.create_hist(timerange, get_sub_include(flowname, track))
                 if fh: hist[flowname] = fh
-            if len(hist)<len(track):
+            if len(hist)<len(track) and track!='all':
                 raise Exception("History doesn't match tracking options (are names correct?): \n track="+str(track)+"\n hist= \n"+str(hist))
             self.h = hist
         return self.h

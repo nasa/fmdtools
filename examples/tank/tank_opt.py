@@ -44,9 +44,9 @@ prob.add_variables("des_cost",'capacity', 'turnup')
 ## Defining resilience simulation
 app = SampleApproach(mdl)
 prob.add_simulation("res_sim", "multi", app.scenlist, include_nominal=True,
-                    upstream_sims = {"des_cost":{'params':{"capacity":"capacity", "turnup":"turnup"}}})
+                    upstream_sims = {"des_cost":{'p':{"capacity":"capacity", "turnup":"turnup"}}})
 
-res_vars_i = {(v[0],v[1],v[2],v[3]):1 for v in mdl.params.faultpolicy}
+res_vars_i = {(v[0],v[1],v[2],v[3]):1 for v in mdl.p.faultpolicy}
 res_vars = [(var, None) for var in res_vars_i.keys()]
 [v[:4] for v in TankParam().faultpolicy]
 
@@ -58,7 +58,7 @@ prob.add_combined_objective('tot_cost', 'cd', 'cost')
 def x_to_rcost_leg(xres1,xres2, xdes=[20,1], pool=False, staged=True):
     fp1 =      {(a-1,b-1,c-1, "l", xres1[i]) for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))}
     fp2 =      {(a-1,b-1,c-1, "u", xres1[i]) for i,(a,b,c) in enumerate(np.ndindex((3,3,3)))}
-    mdl=Tank(params=TankParam(capacity=xdes[0],turnup=xdes[1],faultpolicy=(*fp1,*fp2)))
+    mdl=Tank(p=TankParam(capacity=xdes[0],turnup=xdes[1],faultpolicy=(*fp1,*fp2)))
     app = SampleApproach(mdl)
     endclasses, mdlhists = propagate.approach(mdl, app, staged=staged, showprogress=False, pool=pool)
     rescost = endclasses.total('expected_cost')
@@ -201,15 +201,15 @@ if __name__=="__main__":
 
     prob.tot_cost(xdes, [*res_vars_i.values()])
 
-    prob.update_sim_vars("res_sim", newparams={'capacity':10, 'turnup':0.5})
+    prob.update_sim_vars("res_sim", new_p={'capacity':10, 'turnup':0.5})
     inter_cost = prob.cost([*res_vars_i.values()])
 
     rvar = [*res_vars_i.values()][:27]
     lvar = [*res_vars_i.values()][27:]
     
     pool=mp.Pool(5)
-    result, args, fhist, thist, xdhist = alternating_opt(pool=pool)
-    result, args, bestfhist, bestxdhist = bilevel_opt(pool=pool)
+    result, args, fhist, thist, xdhist = alternating_opt() #note: pool not working
+    result, args, bestfhist, bestxdhist = bilevel_opt()
     
     
     

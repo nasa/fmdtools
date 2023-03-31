@@ -8,7 +8,7 @@ from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
 from fmdtools.define.rand import Rand
 from fmdtools.define.block import FxnBlock
-from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.model import Model
 from fmdtools.sim.approach import NominalApproach
 import numpy as np
 from fmdtools.sim import propagate as prop
@@ -46,10 +46,11 @@ class DriveDegradation(FxnBlock):
         self.s.friction = np.sqrt(self.s.corrosion**2+self.s.wear**2)
         self.s.limit(drift=(-1,1), corrosion=(0,1), wear=(0,1))
 class RoverDegradation(Model):
-    def __init__(self, params=Parameter(), modelparams=ModelParam(times=(0,100), seed=102), valparams={}):
-        super().__init__(params, modelparams, valparams)
+    default_sp = dict(times=(0,100))
+    def __init__(self, r={'seed':102}, **kwargs):
+        super().__init__(**kwargs)
         self.add_fxn("drive", DriveDegradation)
-        self.build_model(require_connections=False)
+        self.build(require_connections=False)
 
 def get_params_from(mdlhist, t=1):
     friction = mdlhist.drive.s.friction[t]

@@ -20,11 +20,11 @@ Flows:
     - Camera
 """
 from recordclass import asdict
-from fmdtools.define.parameter import Parameter
+from fmdtools.define.parameter import Parameter, SimParam
 from fmdtools.define.state import State
 from fmdtools.define.mode import Mode
 from fmdtools.define.block import FxnBlock
-from fmdtools.define.model import Model, ModelParam
+from fmdtools.define.model import Model
 from fmdtools.define.flow import Flow
 from fmdtools.sim.approach import SampleApproach
 import fmdtools.analyze as an
@@ -137,6 +137,7 @@ class RoverParam(Parameter, readonly=True):
     cor_t :             float=1.0
     cor_f :             float=1.0
     degradation :       DegParam = DegParam()
+    drive_modes :       dict={'mode_args':'set'}
     def __init__(self, *args, **kwargs):
         linetype=self.get_true_field('linetype', *args, **kwargs)
         if linetype=='sine':
@@ -149,7 +150,7 @@ class RoverParam(Parameter, readonly=True):
             radius = self.get_true_field('radius',*args,**kwargs)
             start = self.get_true_field('start',*args,**kwargs)
             kwargs['end']=(radius+start, radius+start)
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, strict_immutability=False, **kwargs)
 
 # MODEL FUNCTIONS
 class AvionicsMode(Mode):
@@ -211,7 +212,9 @@ class DriveMode(Mode):
     key_phases_by='global'
     def __init__(self, *args, mode_args=tuple(), **kwargs):
         super().__init__(*args, **kwargs)
-        self.mode_args=mode_args
+        if 'mode_args' in mode_args:
+            self.mode_args=mode_args['mode_args']
+        else: self.mode_args=mode_args
         if self.mode_args=='degradation':
             self.assoc_faultstates({'friction':{(self.s.friction+0.5), 2*(self.s.friction+0.5), 5*(self.s.friction+0.5)}, 
                                     'transfer':{0.0}, 
@@ -395,7 +398,7 @@ class Environment(FxnBlock):
     _init_s = EnvStates
     _init_p = RoverParam
     _init_ground = Ground
-    def __init__(self, name, flows, params={}, **kwargs):
+    def __init__(self, name, flows, p={}, **kwargs):
         super().__init__(name,flows, **kwargs)
     def dynamic_behavior(self, t):
         if self.p.linetype=='sine':
@@ -439,12 +442,12 @@ def gen_model_params(x, scen):
     params = {'drive_modes':{'custom_fault':{'friction':x[scen][0][0],'drift':x[scen][0][1], 'transfer':x[scen][0][2]}}}
     return params
 class Rover(Model):
-    def __init__(self, params=RoverParam(),\
-                 modelparams=ModelParam(times=(0, 100), phases=(('start',0, 30), ('end', 31, 60)), end_condition='indicate_finished'),\
-                     valparams={'drive_modes':'set'}):
-        super().__init__(params, modelparams, valparams)
+    _init_p = RoverParam
+    default_sp = dict(times=(0, 100), phases=(('start',0, 30), ('end', 31, 60)), end_condition='indicate_finished')
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
-        self.add_flow('ground',             Ground, s={'angle':params.initangle})
+        self.add_flow('ground',             Ground, s={'angle':self.p.initangle})
         self.add_flow('pos_signal',         Pos_Signal)
         self.add_flow('ee_12',              EE)
         self.add_flow('ee_5',               EE)
@@ -463,17 +466,17 @@ class Rover(Model):
         self.add_fxn("communications",  Communications, "comms", "ee_12", 'pos_signal')
         self.add_fxn("perception",      Perception,     "ground", "ee_12", "video")
         self.add_fxn("avionics",        Avionics,       "video",'pos_signal',"ground","avionics_control", "faultstates",
-                     p=asdict(params))
+                     p=self.p)
         self.add_fxn("override",        Override,       "override_comms", "ee_5", 'motor_control','avionics_control')
         self.add_fxn("drive",           Drive,          "ground","ee_15", "motor_control", "faultstates",
-                     m={'mode_args': valparams['drive_modes']},     p=asdict(params.degradation))
-        self.add_fxn("environment",     Environment,    'ground',   p=asdict(params))
+                     m={'mode_args': self.p.drive_modes},     p=self.p.degradation)
+        self.add_fxn("environment",     Environment,    'ground',   p=self.p)
 
-        self.build_model()
+        self.build()
     def indicate_finished(self, time):
-        if (in_area(self.flows['ground'].x,self.flows['ground'].y,1,self.params['end'][0],self.params['end'][1]) or \
-            (time > 5 and self.fxns['avionics'].m.in_mode('standby')) or \
-                self.fxns['avionics'].m.in_mode('em_off', 'finished')):
+        if (in_area(self.ground.s.x,self.ground.s.y,1,self.p.end[0],self.p.end[1]) or \
+            (time > 5 and self.avionics.m.in_mode('standby')) or \
+                self.avionics.m.in_mode('em_off', 'finished')):
             return True
         else:
             return False
@@ -481,13 +484,13 @@ class Rover(Model):
         modes, modeproperties = self.return_faultmodes()
         classification = str()
         at_finish=True
-        if not in_area(self.flows['ground'].s.x,self.flows['ground'].s.y,2,self.params.end[0],self.params.end[1]):
+        if not in_area(self.ground.s.x,self.ground.s.y,2,self.p.end[0],self.p.end[1]):
                                 classification = "incomplete mission"
                                 at_finish = False
         if any(modes):          classification = classification +' faulty'
         if not classification:  classification = 'nominal mission'
         num_modes = len(modes)
-        end_dist = dist(self.ground.s.x,self.ground.s.y,self.params.end[0],self.params.end[1])
+        end_dist = dist(self.ground.s.x,self.ground.s.y,self.p.end[0],self.p.end[1])
         endpt=[self.ground.s.x ,self.ground.s.y]
 
         f_t= min(len(mdlhist.faulty.ground.s.x),len(mdlhist.nominal.ground.s.y))
@@ -605,7 +608,7 @@ def plot_map(mdl, mdlhist):
     ax = fig.add_subplot(111)
 
     plt.scatter(0,0, label="Start Location", marker = 's', color='grey')
-    plt.scatter(mdl.params.end[0],mdl.params.end[1], label="End Location", marker='X', color='grey')
+    plt.scatter(mdl.p.end[0],mdl.p.end[1], label="End Location", marker='X', color='grey')
 
     plot_course(mdlhist, ax=ax)
 
@@ -620,10 +623,10 @@ def plot_centerline_err(mdl, mdlhist):
     fig = plt.figure()
     x_rover = mdlhist.ground.s.x
     y_rover = mdlhist.ground.s.y
-    if mdl.params['linetype']=='sine':
-        y_line = [sin_func(x,y_rover[i], mdl.params['amp'], mdl.params['period'])[1] for i,x in enumerate(x_rover)]
-    elif mdl.params['linetype']=='turn':
-        y_line = [turn_func(x,y_rover[i], mdl.params['radius'], mdl.params['start'])[1] for i,x in enumerate(x_rover)]
+    if mdl.p['linetype']=='sine':
+        y_line = [sin_func(x,y_rover[i], mdl.p['amp'], mdl.p['period'])[1] for i,x in enumerate(x_rover)]
+    elif mdl.p['linetype']=='turn':
+        y_line = [turn_func(x,y_rover[i], mdl.p['radius'], mdl.p['start'])[1] for i,x in enumerate(x_rover)]
 
     plt.plot(x_rover, y_rover-y_line)
     plt.xlabel("x-distance (meters)")
@@ -680,7 +683,7 @@ if __name__=="__main__":
     
     from pymoo.algorithms.soo.nonconvex.pattern import PatternSearch
     import numpy as np
-    mdl = Rover(modelparams=ModelParam(times=(0, 100), phases=(('start',0, 30), ('end', 31, 60))))
+    mdl = Rover(sp=SimParam(times=(0, 100), phases=(('start',0, 30), ('end', 31, 60))))
     track={'functions':{"Environment":"in_bound"},'flows':{"ground":"all"}}
     rover_prob = search.ProblemInterface("rover_problem", mdl, pool=mp.Pool(5), staged=True, track=track)
     app_drive = SampleApproach(mdl, faults='drive', phases={'global':[0,39]}, defaultsamp={'samp':'evenspacing','numpts':3})
@@ -688,7 +691,7 @@ if __name__=="__main__":
     rover_prob.add_variables("drive_faults", ("cor_f", (-10,100)), ("cor_d", (-100, 100)), ("cor_t", (-10,100)), vartype='param')
     rover_prob.add_objectives("drive_faults", end_dist="end_dist", tot_deviation="tot_deviation")
     
-    params = RoverParam(linetype="turn")
+    p = RoverParam(linetype="turn")
     
     pymoo_prob = rover_prob.to_pymoo_problem(objectives="end_dist")
     algorithm=PatternSearch(x0=np.array([0.0,0.0,0.0])) 
@@ -696,14 +699,14 @@ if __name__=="__main__":
 
     #dot = an.graph.show(mdl, gtype="bipartite", renderer='graphviz')
 
-    mdl = Rover(params)
+    mdl = Rover(p=p)
 
-    #mdl = Rover(params)
+    #mdl = Rover(p)
     endresults,  mdlhist = prop.nominal(mdl)
     phases, modephases = mdlhist.get_modephases()
     plot_map(mdl, mdlhist)
 
-    mdl_id = Rover(valparams={'drive_modes':'set'})
+    mdl_id = Rover(p={'drive_modes':{'mode_args':'set'}})
     app_id = SampleApproach(mdl_id, faults='drive', phases={'drive':phases['avionics']['drive']}, defaultsamp={'samp':'evenspacing', 'numpts':3})
     endclasses_id, mdlhists_id = prop.approach(mdl_id, app_id)  #pool=mp.Pool(4))
 
@@ -717,15 +720,15 @@ if __name__=="__main__":
 
     #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift', 'transfer']})
 
-    mdl = Rover(params, valparams={'drive_modes':'manual'})
+    mdl = Rover(p=p.copy_with_vals(drive_modes={'mode_args':'manual'}))
     endresults,  mdlhist = prop.one_fault(mdl, 'drive','elec_open', time=1, staged=False)
     
-    mdl = Rover(params, valparams={'drive_modes':100})
+    mdl = Rover(p=p.copy_with_vals(drive_modes={'mode_args':100}))
     endresults,  mdlhist = prop.one_fault(mdl, 'drive','hmode_34', time=1, staged=False)
     
     
     x = [1.0,0.0,1.0]
-    mdl = Rover(params, valparams={'drive_modes':{'custom_fault':{'friction':x[0],'drift':x[1], 'transfer':x[2]}}})
+    mdl = Rover(p=p.copy_with_vals(drive_modes={'custom_fault':{'friction':x[0],'drift':x[1], 'transfer':x[2]}}))
 
     _, mdlhist = prop.nominal(mdl)
 
@@ -737,7 +740,7 @@ if __name__=="__main__":
     #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
 
    # app = NominalApproach()
-   # app.add_param_ranges(gen_model_params, 'app', x, scen = (0,len(scen)-1,1))
+   # app.add_param_ranges(gen_model_p, 'app', x, scen = (0,len(scen)-1,1))
    # endclasses, mdlhists = prop.approach(mdl, app)
 
     #plot_trajectories(mdlhist, app=app, faultlabel='Faulty Scenarios')
@@ -747,21 +750,21 @@ if __name__=="__main__":
     #fig.savefig('bipartite_rover.pdf', format="pdf", bbox_inches = 'tight', pad_inches = 0.0)
 
     """
-    mdl = Rover(params=gen_params('turn'))
+    mdl = Rover(p=gen_p('turn'))
     #dot = an.graph.show(mdl, gtype="bipartite", renderer='graphviz')
-    #params = gen_params('sine')
-    #mdl = Rover(params)
+    #p = gen_p('sine')
+    #mdl = Rover(p)
     endresults,  mdlhist = prop.nominal(mdl)
     phases, modephases = mdlhist.get_modephases()
     plot_map(mdl, mdlhist)
 
-    mdl_id = Rover(valparams={'drive_modes':'else'})
+    mdl_id = Rover(valp={'drive_modes':'else'})
     app_id = SampleApproach(mdl_id, faults='drive', phases={'drive':phases['avionics']['drive']})
     endclasses_id, mdlhists_id = prop.approach(mdl_id, app_id, staged=True)
 
 
-    params = gen_params('sine',cor_d=-180, cor_f=1)
-    mdl_thing = Rover(params=params)
+    p = gen_p('sine',cor_d=-180, cor_f=1)
+    mdl_thing = Rover(p=p)
     _,_, reshist = prop.one_fault(mdl,'drive','stuck_right', time=15, staged=True)
     plt.figure()
     f = plot_trajectories({'nominal':mdlhist}, reshist,  faultalpha=0.6)
@@ -778,8 +781,8 @@ if __name__=="__main__":
 
 
     x = [100,0,2,0,2,-2,0,0,0]
-    x_params = gen_params('sine', ub_f=x[0], lb_f=x[1], ub_t=x[2],lb_t=x[3], ub_d=x[4], lb_d=x[5], cor_f=x[6], cor_d=x[7], cor_t=x[8])
-    mdl_0 = Rover(params=x_params)
+    x_p = gen_p('sine', ub_f=x[0], lb_f=x[1], ub_t=x[2],lb_t=x[3], ub_d=x[4], lb_d=x[5], cor_f=x[6], cor_d=x[7], cor_t=x[8])
+    mdl_0 = Rover(p=x_p)
 
 
     _,_, nomhist = prop.nominal(mdl_0)
@@ -791,8 +794,8 @@ if __name__=="__main__":
 
 
     x = [100,0,2,0,2,-2,1,-180,1]
-    x_params = gen_params('sine', ub_f=x[0], lb_f=x[1], ub_t=x[2],lb_t=x[3], ub_d=x[4], lb_d=x[5], cor_f=x[6], cor_d=x[7], cor_t=x[8])
-    mdl_1 = Rover(params=x_params)
+    x_p = gen_p('sine', ub_f=x[0], lb_f=x[1], ub_t=x[2],lb_t=x[3], ub_d=x[4], lb_d=x[5], cor_f=x[6], cor_d=x[7], cor_t=x[8])
+    mdl_1 = Rover(p=x_p)
     endclasses_1, mdlhists_1 = prop.approach(mdl_1, app_0, staged=True)
 
     #compare_trajectories(mdlhists_0, mdlhists_1, mdlhist1_name='fault trajectories', mdlhist2_name='comparison trajectories', faulttimes = app.times, nomhist=nomhist)
@@ -818,9 +821,9 @@ if __name__=="__main__":
     an.plot.mdlhistvals(mdlhist, fxnflowvals={'perception':['mode']}, time = 13, phases=phases, modephases=modephases)
     #an.plot.mdlhistvals(mdlhist, fxnflowvals={}, time = 7, phases=phases, modephases=modephases)
     app = NominalApproach()
-    app.add_param_ranges(gen_params,'sine', 'sine', amp=(0, 10, 0.2), wavelength=(10,50,10))
+    app.add_param_ranges(gen_p,'sine', 'sine', amp=(0, 10, 0.2), wavelength=(10,50,10))
     app.assoc_probs('sine', amp=(stats.uniform.pdf, {'loc':0,'scale':10}), wavelength=(stats.uniform.pdf,{'loc':10, 'scale':40}))
-    #app.add_param_ranges(gen_params,'turn', radius=(5,40,5), start=(0, 20,5))
+    #app.add_param_ranges(gen_p,'turn', radius=(5,40,5), start=(0, 20,5))
 
     #labels, faultfxns, degnodes, faultlabels
 #    an.graph.plot_bipgraph(classgraph, {node:node for node in classgraph.nodes},[],[],{}, pos=pos)
@@ -842,7 +845,7 @@ if __name__=="__main__":
     #fig = an.plot.nominal_vals_1d(app, endclasses, 'radius')
 
     #app = NominalApproach()
-    #app.add_param_ranges(gen_params,'sine','sine', amp=(0, 10, 0.2), wavelength=(10,50,10), dummy=(1,10,1))
+    #app.add_param_ranges(gen_p,'sine','sine', amp=(0, 10, 0.2), wavelength=(10,50,10), dummy=(1,10,1))
 
     #endclasses, mdlhists= prop.nominal_approach(mdl, app, pool = mp.Pool(5))
     #fig = an.plot.nominal_vals_3d(app, endclasses, 'amp', 'wavelength', 'dummy')

@@ -14,8 +14,8 @@ Further information about this system (data, more detailed models) is presented
 at: https://c3.nasa.gov/dashlink/projects/3/
 """
 from fmdtools.define.block import FxnBlock, Mode
-from fmdtools.define.model import Model, ModelParam
-from fmdtools.define.parameter import Parameter
+from fmdtools.define.model import Model
+from fmdtools.define.parameter import Parameter, SimParam
 from fmdtools.define.state import State
 from fmdtools.define.flow import Flow
 
@@ -273,12 +273,12 @@ class EEtoOE(FxnBlock):
             self.oe.s.effort =  self.ee_in.s.effort 
 
 class EPS(Model):
-    def __init__(self, params=Parameter(), modelparams=ModelParam(times=(0,1)),valparams={}):
+    def __init__(self, sp=SimParam(times=(0,1)), **kwargs):
         """
         The Model superclass uses a static model representation by default if
         there are no parameters for times, phases, etc.
         """
-        super().__init__(params=params, modelparams=modelparams,valparams={})
+        super().__init__(sp=sp, **kwargs)
         
         self.add_flow('ee_1',       GenericFlow)
         self.add_flow('ee_2',       GenericFlow)
@@ -309,7 +309,7 @@ class EPS(Model):
         self.add_fxn('export_waste_ho', ExportHE, 'waste_he_o')
         self.add_fxn('export_waste_hm', ExportHE, 'waste_he_m')
         
-        self.build_model()
+        self.build()
     def find_classification(self, scen, mdlhists):
         
         outflows = ['he','me', 'oe']
