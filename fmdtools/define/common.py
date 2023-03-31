@@ -7,6 +7,7 @@ import dill
 import pickle
 from itertools import chain
 import time
+from recordclass import asdict
 
 
 def get_var(obj, var):
@@ -112,12 +113,78 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     return unpickleable
 
 
+def init_obj_attr(obj, **attrs):
+    """
+    Initializes attributes to a given object, provided the object has a given
+    _init_x in its class variables for the attribute x. 
+    
+    Object is instantiated with the attribute x corresponding to the output of _init_x
+    along with _args_x corresponding to the input dictionary given for x.
 
+    Parameters
+    ----------
+    obj : object (Block/Flow/Model)
+        Object to instantiate the attributes in
+    **attrs : dict
+        Dictionary arguments (or already instantiated objects) to use for the 
+        attributes.
+    """
+    for at in attrs:
+        at_arg = attrs[at]
+        if type(at_arg)!=dict: at_arg = asdict(at_arg)
+        setattr(obj, '_args_'+at, at_arg)
+        init_at = getattr(obj, '_init_'+at)
+        setattr(obj, at, init_at(**at_arg))
 
+def get_dataobj_track(obj, track):
+    """
+    Gets tracking params for a given dataobject (State, Mode, Rand, etc)
 
+    Parameters
+    ----------
+    obj : dataobject
+        State/Mode/Rand. Requires .default_track class variable.
+    track : track
+        str/tuple. Attributes to track. 
+        'all' tracks all fields
+        'default' tracks fields defined in default_track for the dataobject
+        'none' tracks none of the fields 
 
+    Returns
+    -------
+    track : tuple
+        fields to track
+    """
+    if not track or track=='default':   track=obj.default_track
+    if track=='all':                    track=obj.__fields__
+    elif track=='none':                 track=()
+    elif type(track)==str:              track=(track,)
+    return track
 
+def get_obj_track(obj, track, all_possible=()):
+    """
+    Gets tracking params for a given object (block, model, etc)
 
+    Parameters
+    ----------
+    obj : dataobject
+        State/Mode/Rand. Requires .default_track class variable.
+    track : track
+        str/tuple. Attributes to track. 
+        'all' tracks all fields
+        'default' tracks fields defined in default_track for the dataobject
+        'none' tracks none of the fields 
+
+    Returns
+    -------
+    track : tuple
+        fields to track
+    """
+    if track=='default':            track=obj.default_track
+    elif track=='all':              track=all_possible
+    elif track in ['none', False]:  track=()
+    elif type(track)==str:              track=(track,)
+    return track
         
 
 # def phases(times, names=[]):

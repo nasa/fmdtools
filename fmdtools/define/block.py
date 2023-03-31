@@ -22,11 +22,11 @@ from recordclass import dataobject, asdict, astuple
 from .state import State
 from .parameter import Parameter
 from .rand import Rand
-from .common import get_true_fields,get_true_field
+from .common import get_true_fields,get_true_field, init_obj_attr, get_obj_track
 from .time import Time
 from .mode import Mode
 from .flow import init_flow, Flow
-from fmdtools.sim.result import History, get_sub_include, init_hist_iter, init_indicator_hist
+from fmdtools.sim.result import History, get_sub_include, init_indicator_hist
 
 def assoc_flows(obj, flows={}):
     """
@@ -81,7 +81,7 @@ def inject_faults_internal(obj, faults):
 
 class Block(object):
     __slots__ = ['p', '_args_p', 's', '_args_s','m', '_args_m', 'r', '_args_r', 't', '_args_t', 'h', 'flows', 'name' ,'is_copy']
-    hist_atts = ['s', 'm', 'r', 't']
+    default_track = ['s', 'm', 'r', 't', 'i']
     _init_p = Parameter
     _init_s = State
     _init_m = Mode
@@ -140,12 +140,7 @@ class Block(object):
         self.is_copy = False
         self.flows = dict()
         assoc_flows(self, flows=flows)
-        for at in ['s','p','m','r', 't']:
-            at_arg = eval(at)
-            if type(at_arg)!=dict: at_arg = asdict(at_arg)
-            setattr(self, '_args_'+at, at_arg)
-            init_at = getattr(self, '_init_'+at)
-            setattr(self, at, init_at(**at_arg))
+        init_obj_attr(self, s=s, p=p, m=m, r=r, t=t)
         self.update_seed()
     def __repr__(self):
         if hasattr(self,'name'):
@@ -164,10 +159,10 @@ class Block(object):
         seed : int, optional
             Random seed. The default is [].
         """
-        if seed: self.r.seed=seed
+        if seed: self.r.update_seed(seed)
         
-        if hasattr(self, 'c'): self.c.update_seed(self.seed)
-        if hasattr(self, 'a'): self.a.update_seed(self.seed)
+        if hasattr(self, 'c'): self.c.update_seed(self.r.seed)
+        if hasattr(self, 'a'): self.a.update_seed(self.r.seed)
     def get_rand_states(self, auto_update_only=False):
         """Gets dict of random states from block and associated actions/components"""
         rand_states = self.r.get_rand_states(auto_update_only)
@@ -222,7 +217,8 @@ class Block(object):
         cop.t=self.t.copy(**self._args_t)
         cop.s.assign(self.s)
         cop.r.assign(self.r)
-        if hasattr(self, 'h'): cop.h =self.h.copy()
+        if hasattr(self, 'h'): 
+            cop.h =self.h.copy()
         return cop
     def get_memory(self):
         """ Gets the approximate memory usage of the block in bytes (not complete)"""
@@ -271,7 +267,7 @@ class Block(object):
             for actionname, action in self.a.actions:
                 state_pd*=action.return_probdens()
         return state_pd
-    def create_hist(self, timerange, track='all'):
+    def create_hist(self, timerange, track='default'):
         """Initializes the function state history fxnhist of the model mdl over the time range timerange.
         A pointer to the history is then stored at self.h.
         
@@ -288,20 +284,24 @@ class Block(object):
         fxnhist : dict
             A dictionary history of each recorded block property over the given timehist
         """
-        if not hasattr(self, 'h'):
+        if hasattr(self, 'h'):
+            return self.h
+        else:
+            if isinstance(self, FxnBlock):  all_track = FxnBlock.default_track
+            else:                           all_track=Block.default_track
+            track = get_obj_track(self, track, all_track)
             if track:
                 hist = History()
                 init_indicator_hist(self, hist, timerange, track)
-                for at in self.hist_atts:
+                for at in track:
                     at_track = get_sub_include(at, track)
                     attr = getattr(self, at, False)
-                    if attr:
-                        hist[at] = attr.create_hist(timerange, at_track)
-                
+                    if attr: 
+                        at_h = attr.create_hist(timerange, at_track)
+                        if at_h: hist[at] = at_h
                 self.h=hist
-            else: self.h=None
-        return self.h
-            
+                return self.h
+            else: return History()
 
 ## COMPONENT/COMPONENT ARCHITECTURES
 class Component(Block):
@@ -329,6 +329,7 @@ class CompArch(dataobject, mapping=True):
     archtype:       str = 'default'
     components:     dict = dict()
     faultmodes:     dict = dict()
+    default_track = ('i','components')
     def make_components(self, CompClass, *args, **kwargs):
         """
         Adds components to the component architecture.
@@ -407,11 +408,15 @@ class CompArch(dataobject, mapping=True):
             History corresponding to the CompArch
         """
         h = History()
+        if track=='default': track=self.default_track
         init_indicator_hist(self, h, timerange, track)
-        for c, comp in self.components.items():
-            comp_track = get_sub_include(c, track)
-            if comp_track: 
-                h[c]=comp.create_hist(timerange, comp_track)
+        
+        components_track = get_sub_include('components', track)
+        if components_track:
+            for c, comp in self.components.items():
+                comp_track = get_sub_include(c, components_track)
+                if comp_track: 
+                    h[c]=comp.create_hist(timerange, comp_track)
         return h
     def return_mutables(self):
         cm=[]
@@ -496,6 +501,7 @@ class ASG(dataobject, mapping=True):
     max_action_prop="until_false" 
     proptype='dynamic' 
     per_timestep=False
+    default_track = ('actions', 'active_actions', 'i')
     def __init__(self, *args, flows={}, **kwargs):
         super().__init__(*args, **kwargs)
         self.actions={} #TODO: remove restatement of defaults when fixed in recordclass
@@ -704,13 +710,17 @@ class ASG(dataobject, mapping=True):
         h : History
             History corresponding to the ASG.
         """
+        if track=='default': track=self.default_track
         h = History()
-        init_indicator_hist(self, h, timerange, track)
-        for a, act in self.actions.items():
-            act_track = get_sub_include(a, track)
-            if act_track: 
-                h[a]=act.create_hist(timerange, act_track)
-        h['active_actions'] = init_hist_iter('active_actions', self.active_actions, timerange=timerange, track='all')
+        if 'i' in track or track=='all':
+            init_indicator_hist(self, h, timerange, track)
+        actions_track = get_sub_include('actions', track)
+        if actions_track:
+            for a, act in self.actions.items():
+                act_track = get_sub_include(a, actions_track)
+                if act_track: 
+                    h[a]=act.create_hist(timerange, act_track)
+        h.init_att('active_actions', self.active_actions, timerange=timerange, track=track)
         return h
     def return_mutables(self):
         am=[]
@@ -723,7 +733,7 @@ class ASG(dataobject, mapping=True):
 #Function superclass 
 class FxnBlock(Block):
     __slots__ = ["c", "_c_arg", "a", "_a_arg"]
-    hist_atts = ["c", "a"]+Block.hist_atts
+    default_track = ["c", "a"]+Block.default_track
     """
     Superclass class for functions which is a special type of Block\
     with c and a attributes for CompArch and ASGs, as well as a defined method for propagation
@@ -766,7 +776,7 @@ class FxnBlock(Block):
         """        
         super().__init__(name, flows=flows, p=p, s=s, r=r, m=m, t=t)
         
-        for at in ['c', 'a']:
+        for at in ['c', 'a']: #NOTE: similar to init_obj_attr()
             at_arg = eval(at)
             at_init = getattr(self, '_init_'+at, False)
             if at_init:

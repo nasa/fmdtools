@@ -6,10 +6,10 @@ Description: A module for defining States, which are (generic) containers for sy
 """
 from recordclass import dataobject, asdict
 import numpy as np
-from .common import get_true_fields, is_iter
+from .common import get_true_fields, is_iter, get_dataobj_track
 import copy
 import warnings
-from fmdtools.sim.result import History, init_hist_iter
+from fmdtools.sim.result import History
 
 class State(dataobject, mapping=True):
     """
@@ -37,6 +37,7 @@ class State(dataobject, mapping=True):
     p.x
     > 10.0
     """
+    default_track='all'
     def set_atts(self, **kwargs):
         """Sets the given arguments to a given value. Mainly useful for 
         reducing length/adding clarity to assignment statements in __init__ methods
@@ -230,8 +231,9 @@ class State(dataobject, mapping=True):
         hist : History
             History of fields specified in track.
         """
+        track = get_dataobj_track(self, track)
         hist = History()
-        for att in self.__fields__:
+        for att in track:
             val = getattr(self, att)
             dtype = self.__annotations__[att]
             str_size=default_str_size
@@ -240,5 +242,5 @@ class State(dataobject, mapping=True):
                 if set_con:
                     strlen = max([len(i) for i in set_con])
                     str_size="<U"+str(max(strlen))
-            hist[att] = init_hist_iter(att, val, timerange, track, dtype=dtype, str_size = str_size)
+            hist.init_att(att, val, timerange, track, dtype=dtype, str_size = str_size)
         return hist

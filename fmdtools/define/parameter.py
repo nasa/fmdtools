@@ -126,3 +126,44 @@ class Parameter(dataobject, readonly=True):
         return get_true_field(self, fieldname, *args, **kwargs)
     def get_true_fields(self, *args, **kwargs):
         return get_true_fields(self, *args, **kwargs)
+
+class SimParam(Parameter, readonly=True):
+    """
+    Class defining Simulation parameters.
+    
+    Has fields:
+        phases : tuple
+            phases (('name', start, end)...) that the simulation progresses through
+        times : tuple
+            tuple of times to sample (if desired) (starttime, sampletime1, sampletime2,... endtime)
+        dt : float
+            timestep used in the simulation. default is 1.0
+        units : str
+            time-units. default is hours`
+        end_condition : str
+            Name of indicator method to use to end the simulation. If not provided (''),
+            the simulation ends at the final time. Default is ''
+        use_local : bool
+            Whether to use locally-defined timesteps in functions (if any). Default is True.
+    """
+    phases :            tuple = (('na', 0, 100),)
+    times :             tuple = (0, 100)
+    dt :                float = 1.0
+    units :             str = "hr"
+    units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
+    end_condition :     str = ''
+    use_local :         bool = True
+    def __init__(self, *args, **kwargs):
+        if ('times' in kwargs) and not('phases' in kwargs):
+            kwargs['phases']=(("na", 0, kwargs['times'][-1]),)
+        super().__init__(*args, **kwargs)
+        self.find_any_phase_overlap()
+    def find_any_phase_overlap(self):
+        phase_dict = {v[0]: [v[1], v[2]] for v in self.phases}
+        intervals = [*phase_dict.values()]
+        int_low = np.sort([i[0] for i in intervals])
+        int_high = np.sort([i[1] if len(i)==2 else i[0] for i in intervals])
+        for i, il in enumerate(int_low):
+            if i+1==len(int_low): break
+            if int_low[i+1]<=int_high[i]:
+                raise Exception("Global phases overlap in "+self.__class__.__name__+": "+str(self.phases)+" Ensure the max of each phase < min of each other phase")

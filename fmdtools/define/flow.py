@@ -15,6 +15,7 @@ from recordclass import asdict, astuple
 
 from .parameter import Parameter
 from .state import State
+from .common import init_obj_attr, get_obj_track
 from fmdtools.sim.result import History, get_sub_include, init_indicator_hist
 
 
@@ -22,6 +23,7 @@ class Flow(object):
     __slots__ = ['p', '_args_p', 's', '_args_s', 'h', 'name' ,'is_copy']
     _init_p = Parameter
     _init_s = State
+    default_track=('s', 'i')
     """
     Superclass for flows. Instanced by Model.add_flow but can also be used as a flow superclass if flow attributes are not easily definable as a dict.
     """
@@ -37,12 +39,8 @@ class Flow(object):
             name of the flow
         """
         self.name=name
-        if not type(s)==dict: s=asdict(s)
-        if not type(p)==dict: p=asdict(p)
-        self._args_s = s
-        self._args_p = p
-        self.p=self._init_p(**p)
-        self.s=self._init_s(**s)
+        init_obj_attr(self, s=s, p=p)
+
         # TODO : add to module for safety-checking. Alternatively, run these checks prior to use
         #if type(self)!=Flow and not suppress_warnings:
         #    if type(self).reset == Flow.reset:      warnings.warn("Custom reset() Method Not Implemented--model protection between methods may not work")
@@ -98,15 +96,17 @@ class Flow(object):
         """
         if hasattr(self, 'h'): return self.h
         else:
-            flow_track = get_sub_include('s', track)
-            if flow_track:
+            track = get_obj_track(self, track, all_possible =Flow.default_track)
+            if track:
                 h=History()
-                h['s'] = self.s.create_hist(timerange, flow_track)
+                sh = self.s.create_hist(timerange, get_sub_include('s', track))
+                if sh: h['s'] = sh
+                init_indicator_hist(self, h, timerange, track)
+                self.h = h
+                return h
             else: 
-                h = History()
-            init_indicator_hist(self, h, timerange, track)
-            self.h = h
-            return h
+                return False
+
 #Specialized Flow types
 class MultiFlow(Flow):
     """

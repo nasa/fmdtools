@@ -8,6 +8,7 @@ Description: A module for defining time-based properties for use in blocks. Has 
 from decimal import Decimal
 from recordclass import dataobject
 from fmdtools.sim.result import History, init_hist_iter, get_sub_include
+from .common import  get_dataobj_track, get_obj_track
 
 class Timer():
     """class for model timers used in functions (e.g. for conditional faults) 
@@ -22,6 +23,7 @@ class Timer():
     mode : str (standby/ticking/complete)
         the internal state of the timer
     """
+    default_track = ('time', 'mode')
     def __init__(self, name):
         """
         Initializes the Tymer
@@ -95,8 +97,9 @@ class Timer():
         return cop
     def create_hist(self, timerange, track):
         h = History()
-        h['time'] = init_hist_iter('time', self.time, timerange=timerange, track=track, dtype=float)
-        h['mode'] = init_hist_iter('mode', self.mode, timerange=timerange, track=track, str_size='<U8')
+        track = get_obj_track(self, track, all_possible=('time', 'mode'))
+        h.init_att('time', self.time, timerange=timerange, track=track, dtype=float)
+        h.init_att('mode', self.mode, timerange=timerange, track=track, str_size='<U8')
         return h
 
 class Time(dataobject):
@@ -130,6 +133,7 @@ class Time(dataobject):
     timers:     dict = {}
     use_local:  bool=True
     timernames = ()
+    default_track = ('timers')
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.timers: self.timers = {}
@@ -196,8 +200,11 @@ class Time(dataobject):
             History of time/timer attribues specified in track.
         """
         hist = History()
-        hist['time'] = init_hist_iter('time', self.time, timerange=timerange, track=track, dtype=float)
-        for tname, timer in self.timers.items():
-            sub_track = get_sub_include(tname, track)
-            hist[tname] = timer.create_hist(timerange, sub_track)
+        track = get_dataobj_track(self, track)
+        hist.init_att('time', self.time, timerange=timerange, track=track, dtype=float)
+        if 'timers' in track:
+            track_timers = get_sub_include('timers', track)
+            for tname, timer in self.timers.items():
+                sub_track = get_sub_include(tname, track_timers)
+                hist[tname] = timer.create_hist(timerange, sub_track)
         return hist
