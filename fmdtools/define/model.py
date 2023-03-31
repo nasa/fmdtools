@@ -447,6 +447,16 @@ class Model(object):
             mem_profile[flowname]=flow.get_memory()
         mem = np.sum([i for i in mem_profile.values()])
         return mem, mem_profile
+    def new_with_params(self, p={}, sp={}, r={}, track={}):
+        """
+        Creates a new Model with the same parameters as the current model but
+        with changes to params (p, sp, track, rand etc.)
+        """
+        p = self.p.copy_with_vals(**p)
+        sp = self.sp.copy_with_vals(**sp)
+        if not r:       r= {'seed':self.r.seed}
+        if not track:   track=copy.deepcopy(self.track)
+        return self.__class__(p=p, sp=sp, r=r, track=track)
     def copy(self):
         """
         Copies the model at the current state.
@@ -458,7 +468,7 @@ class Model(object):
         """
         copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         copy.is_copy=True
-        copy.__init__(p=getattr(self, 'p', {}),sp=getattr(self, 'sp', {}),track=getattr(self, 'track', {}))
+        copy.__init__(p=getattr(self, 'p', {}),sp=getattr(self, 'sp', {}),track=getattr(self, 'track', {}), r={'seed':self.r.seed})
         for flowname, flow in self.flows.items():
             copy.flows[flowname]=flow.copy()
         for fxnname, fxn in self.fxns.items():

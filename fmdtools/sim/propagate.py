@@ -89,7 +89,7 @@ def pack_sim_kwargs(**kwargs):
     return {k:kwargs.get(k,v) for k,v in sim_kwargs.items()}
 
 run_kwargs = {'save_args':{},
-              'new_params':{},
+              'mdl_kwargs':{},
               'protect':True}
 """
 Run keyword arguments.
@@ -109,7 +109,7 @@ Parameters
             - (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
             - and indiv is an (optional) bool specifying whether to save results individually (in a folder)
             or as a monolythic file
-    new_params: dict (optional)
+    mdl_kwargs: dict (optional)
         Parameter dictionary to be instantiated in the model prior to simulation. Has structure:
             - {"p":Parameter, "sp":SimParam, "track":track}
         Parameter dictionaries do not need to be complete (if incomplete).
@@ -196,57 +196,6 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
     elif not save_args.get('indiv', False) and not indiv_id:
         if 'mdlhist' in save_args:     mdlhist.save(**save_args['mdlhist'])
         if 'endclass' in save_args:    endclass.save(**save_args['endclass'])
-    
-def update_params(params, new_params):
-    """
-    Updates a dictionary with the given keyword arguments
-
-    Parameters
-    ----------
-    params : dict
-        Parameter dictionary
-    new_params : dict
-        New arguments to add/update in the parameter dictionary
-
-    Returns
-    -------
-    params : dict
-        Updated parameter dictionary
-    """
-    params = copy.deepcopy(params)
-    new_params = copy.deepcopy(new_params)
-    for kwarg in new_params: 
-        if new_params.get(kwarg, None)!=None: params[kwarg]=new_params[kwarg]
-    return params
-
-def new_mdl(mdl, paramdict):
-    return mdl.__class__(*new_mdl_params(mdl,paramdict))
-def new_mdl_params(mdl,paramdict):
-    """
-    Creates parameter inputs for a new model. Used for exploring parameter ranges and seeding models.
-
-    Parameters
-    ----------
-    mdl : Model
-        fmdtools simulation model 
-    paramdict : Dict
-        Dict of parameters to update with structure params/modelparams/valparams to update
-        e.g. {'params':{'param1': 1.0}}
-
-    Returns
-    -------
-    params : Parameter
-        Updated param 
-    modelparams : SimParam
-        Updated modelparam 
-    valparams : dict
-        Updated valparam dictionary
-    """
-    p = mdl.p.copy_with_vals(**paramdict.get('p', {}))
-    sp = mdl.sp.copy_with_vals(**paramdict.get('sp', {}))
-    track = update_params(mdl.track, paramdict.get('track', {}))
-    return p, sp, track
-
 
 def nominal_approach(mdl,nomapp, **kwargs):
     """
@@ -304,7 +253,7 @@ def exec_nom_par(arg):
     return endclass, mdlhist
 def exec_nom_helper(mdl, scen, name, **kwargs):
     """Helper function for executing nominal scenarios"""
-    mdl = new_mdl(mdl,scen['properties'])
+    mdl = mdl.new_with_params(**scen['properties'])
     result, mdlhist, _, t_end =prop_one_scen(mdl, scen, **kwargs)
     check_hist_memory(mdlhist,kwargs['num_scens'], max_mem=kwargs['max_mem'])
     save_helper(kwargs['save_args'], result, mdlhist, name, name)
@@ -417,13 +366,13 @@ def create_faultseq_scen(mdl, rate, sequence={}, faultseq={}, disturbances={}):
     scen['properties']['time']=list(times)
     return scen
 
-def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, scen={}, **kwargs):
+def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, **kwargs):
     """
     Helper function for initial run of nominal scenario.
 
     Parameters
     ----------
-    mdl : Model
+    mdl : Model (object or class)
         Model of the system
     time : float/list
         Times to copy the nominal model from
@@ -446,7 +395,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, scen={}, 
     staged = kwargs.get('staged',False)
     check_overwrite(save_args)
     #run model nominally, get relevant results
-    if protect or new_params:   mdl = new_mdl(mdl,new_params)
+    if isinstance(mdl, type):       mdl = mdl(**mdl_kwargs)  
+    elif protect or mdl_kwargs:     mdl = mdl.new_with_params(**mdl_kwargs)
     if not scen:    nomscen=construct_nomscen(mdl)
     else:           nomscen=create_faultseq_scen(mdl, scen, rate=1.0)
     if staged:  
@@ -459,7 +409,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, new_params={}, scen={}, 
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     
     mdl.reset()
-    if not staged:  mdls = {0:new_mdl(mdl, {})}
+    if not staged:  mdls = {0:mdl.new_with_params()}
     return result, nommdlhist, nomscen, mdls, t_end_nom
 
 def approach(mdl, app,  **kwargs):
@@ -592,7 +542,7 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
             mdl = mdl.copy()
             mdl.h.time=ctime
         else: mdl = mdl.copy()
-    else:                           mdl = new_mdl(mdl, {})
+    else:                           mdl = mdl.new_with_params()
     result, mdlhist, _, t_end,  =prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen['properties']['name']))
     return result, mdlhist, t_end
@@ -644,7 +594,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
                 Run options for :func:`nom_helper` and others
             - :data:`mult_kwargs` : kwargs
                 Multi-scenario options for :func:`approach` and others
-            - **app_args : new_params
+            - **app_args : mdl_kwargs
                 Keyword arguments for the SampleApproach. See define.SampleApproach documentation.
 
     Returns
@@ -668,7 +618,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     nest_results = Result.fromkeys(nomapp.scenarios)
     apps = dict.fromkeys(nomapp.scenarios)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
-        mdl = new_mdl(mdl,scen['properties'])
+        mdl = mdl.new_with_params(**scen['properties'])
         _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **{**sim_kwarg, 'staged':False})
         if get_phases:
             app_args.update({'phases':phases_from_hist(get_phases, t_end, nomhist)})
