@@ -122,13 +122,16 @@ if __name__=='__main__':
     app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':3})
     
     cores = 4
-    
-    print("STAGED + SOME TRACKING")
     pools = instantiate_pools(cores)
-    compare_pools(mdl,app,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_2':['pressure', 'flowrate']}})
-
+    
     print("STAGED + FULL MODEL TRACKING")
     compare_pools(mdl,app,pools, staged=True, track='all')
+    
+    print("STAGED + SOME TRACKING")
+    
+    compare_pools(mdl,app,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_2':['pressure', 'flowrate']}})
+
+    
 
     print("STAGED + FLOW TRACKING")
     compare_pools(mdl,app,pools, staged=True, track='flows')

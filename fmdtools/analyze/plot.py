@@ -27,14 +27,14 @@ import copy
 import warnings
 import numpy as np
 from fmdtools.analyze.tabulate import metricovertime as metric_table
-from fmdtools.sim.result import bootstrap_confidence_interval
+from fmdtools.sim.result import bootstrap_confidence_interval, History
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
 from mpl_toolkits.mplot3d import Axes3D
 
 
-def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp_groups={}, 
+def mdlhists(mdlhists, *plot_values, cols=2, aggregation='individual', comp_groups={}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
              fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95, titles={},
              title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
@@ -48,9 +48,8 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     ----------
     mdlhists : dict
         Aggregate model history with structure {'scen':mdlhist} (or single mdlhist)
-    fxnflowvals : dict, optional
-        dict of flow values to plot with structure {fxnflow:[vals], fxnflow:'val'/all, fxnflow:{'comp':[vals]}}. 
-        The default is 'all', which returns all.
+    plot_values : dict, optional
+        names of values from the dict to pull. 
     cols : int, optional
         columns to use in the figure. The default is 2.
     aggregation : str, optional
@@ -127,13 +126,13 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
         phases={}, modephases={}, label_phases=True,  **kwargs):
     """
     #Process data - clip and flatten
-    if 'time' in mdlhists: mdlhists={'nominal':mdlhists}
-    if max_ind=='max': max_ind = np.min([len(mdlhists[scen]['time']) for scen in mdlhists])-1
-    inds = [i for i in range(len(mdlhists[[*mdlhists.keys()][0]]['time']))]
-    for scen in mdlhists:
-        mdlhists[scen] = mdlhists[scen].cut(max_ind)
-    times = mdlhists[[*mdlhists.keys()][0]]['time']
-    flat_mdlhists = {scen:mdlhist.flatten(to_include=fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    if 'time' in mdlhists: 
+        mdlhists = History(nominal=mdlhists)
+    if max_ind=='max': max_ind = np.min([len(t) for t in mdlhists.time])-1
+    mdlhists.cut(max_ind)
+    times = [*mdlhists.time.values()][0]
+    flat_mdlhists = {scen: getattr(mdlhists, scen).get_values(*plot_values) 
+                     for scen in {k.split('.')[0] for k in mdlhists.keys()}}
     #Sort into comparison groups
     if not comp_groups: 
         if aggregation=='individual':   grouphists = flat_mdlhists
@@ -146,8 +145,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     if 'faulty' in grouphists.keys(): 
         indiv_kwargs['faulty'] = indiv_kwargs.get('faulty', {'color':'red'})  
     else: indiv_kwargs.pop('faulty','')
-    template = [*flat_mdlhists.values()][0]
-    plot_values = [i for i in template.keys() if i!='time']
+
     num_plots = len(plot_values)
     if num_plots==1: cols=1
     rows = int(np.ceil(num_plots/cols))
@@ -156,7 +154,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
     if type(axs)==np.ndarray:   axs = axs.flatten()
     else:                       axs=[axs]
     
-    subplot_titles = {plot_value:': '.join(plot_value[1:]) for plot_value in plot_values}
+    subplot_titles = {plot_value:plot_value for plot_value in plot_values}
     subplot_titles.update(titles)
     
     for i, plot_value in enumerate(plot_values):
@@ -169,7 +167,7 @@ def mdlhists(mdlhists, fxnflowvals='all', cols=2, aggregation='individual', comp
             local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
             try:
                 if aggregation=='individual':
-                    if any([type(h)==tuple for h in hists.keys()]):
+                    if plot_value in hists:
                         ax.plot(times, hists[plot_value], label=group, **local_kwargs)
                     else:
                         if 'color' not in local_kwargs: local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']

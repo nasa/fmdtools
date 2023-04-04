@@ -140,18 +140,19 @@ if __name__=="__main__":
     
     
     app_comp = NominalApproach()
-    app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
-    app_comp.add_param_replicates(paramfunc, 'delay_10', 100, (10))
+    app_comp.add_param_replicates(paramfunc, 'delay_1', 10, (1))
+    app_comp.add_param_replicates(paramfunc, 'delay_10', 10, (10))
     
     endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')],pool=mp.Pool(4))
     
     #endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True) #pool=mp.Pool(4)
     
-    comp_mdlhists = {scen:mdlhist['export_water block, t=27.0'] for scen,mdlhist in mdlhists.items()}
+    comp_mdlhists = mdlhists.get_values('export_water block, t=27.0')
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
-    fig = an.plot.mdlhists(comp_mdlhists, {'fxns':{'move_water':{'s':['eff','total_flow']}}, 
-                                           'flows':{'wat_2':{'s':['flowrate','pressure']}}}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
-    
+    fig = an.plot.mdlhists(comp_mdlhists, 'fxns.move_water.s.eff',
+                                           'fxns.move_water.s.total_flow',
+                                           'flows.wat_2.s.flowrate',
+                                           'flows.wat_2.s.pressure', comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
     
     app = NominalApproach()
     app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
@@ -183,7 +184,8 @@ if __name__=="__main__":
     
     #mdlhist['faulty']['functions']['ImportEE']['probdens']
     
-    an.plot.mdlhists(mdlhist, fxnflowvals={'fxns':'import_ee', 'flows':'ee_1'})
+    an.plot.mdlhists(mdlhist, 'fxns.import_ee.s.effstate','fxns.import_ee.r.s.grid_noise',
+                                           'flows.ee_1.s.voltage','flows.ee_1.s.current')
     #an.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     
     """

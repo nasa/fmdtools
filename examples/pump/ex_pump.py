@@ -366,12 +366,17 @@ if __name__=="__main__":
     mdl = Pump()
     newhist2 = mdl.create_hist(range(10), 'default')
     
+    newhist2.flows.wat_2.s.flowrate
+    
+    
     mdl = Pump()
+    
+    endclass, mdlhist=propagate.nominal(mdl,  mdl_kwargs={'sp':{'end_condition':'indicate_on'}})
     
     endclass, mdlhist=propagate.one_fault(mdl, 'export_water','block', time=29, 
                                           mdl_kwargs={'sp':{'end_condition':'indicate_on'}})
-    endclass, mdlhist=propagate.nominal(mdl,  mdl_kwargs={'sp':{'end_condition':'indicate_on'}})
-    #check_model_pickleability(mdl, try_pick=True)
+    
+    check_model_pickleability(mdl, try_pick=True)
     #from define.common import check_pickleability
     #unpickleable = check_pickleability(mdl, try_pick=True)
     
