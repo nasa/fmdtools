@@ -484,7 +484,7 @@ def single_faults(mdl, **kwargs):
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     save_helper(kwargs['save_args'], results, mdlhists)
-    return results, mdlhists
+    return results.flatten(), mdlhists.flatten()
 
 def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     #nomhist, track, track_times, desired_result, run_stochastic, save_args
@@ -790,7 +790,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
     # using a copy of the input model (which is the nominal run) at this time
     mdlhist, histrange, timerange, shift = init_histrange(mdl, scen['properties']['time'], staged, track, track_times)
     # run model through the time range defined in the object
-    c_mdl=dict.fromkeys(ctimes); result={}
+    c_mdl=dict.fromkeys(ctimes); result=Result()
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
@@ -827,7 +827,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
         result['end'] = get_result(scen,mdl,desired_result['end'],mdlhist,nomhist, nomresult)
     else:                       
         result.update(get_result(scen,mdl,desired_result,mdlhist,nomhist, nomresult))
-    if len(result)==1: result = [*result.values()][0]
+    #if len(result)==1: result = [*result.values()][0]
     if None in c_mdl.values(): raise Exception("Approach times"+str(ctimes)+" go beyond simulation time "+str(t))
     return  result, mdlhist, c_mdl, t_ind+shift
 def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
@@ -859,8 +859,8 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
                 rgraph = mdl.flows[gtype].return_stategraph(**desired_result[gtype])
                 proctype="bipartite"
             
-            if nomresult and type(nomresult)==dict:     result[gtype] = diffgraph(rgraph, nomresult[gtype], proctype)
-            elif nomresult:                             result[gtype] = diffgraph(rgraph, nomresult, proctype)
+            if nomresult and gtype in nomresult:     result[gtype] = diffgraph(rgraph, nomresult[gtype], proctype)
+            elif nomresult:                          result[gtype] = diffgraph(rgraph, nomresult, proctype)
             else:           result[gtype] = diffgraph(rgraph, rgraph, proctype)
             desired_result.pop(gtype)
     if desired_result:

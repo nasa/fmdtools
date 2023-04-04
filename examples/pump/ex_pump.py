@@ -429,7 +429,6 @@ if __name__=="__main__":
     flat_staged = mdlhists_staged.flatten()
     
     
-    
     [all(flat[k]==flat_staged[k]) for k in flat]
     all([all(flat[k]==flat_staged[k]) for k in flat])
     
@@ -446,7 +445,9 @@ if __name__=="__main__":
     
     #degsumm = h.get_summary(*mdl.fxns, *mdl.flows)
     
-    d=h.get_degraded_hist(*mdl.fxns, nomhist=mdlhists.nominal)
+    d=h.get_degraded_hist(*mdl.flows, nomhist=mdlhists.nominal)
+    
+    
     
     
     
