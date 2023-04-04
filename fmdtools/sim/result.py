@@ -12,6 +12,7 @@ And functions:
 
 from collections import UserDict
 from ordered_set import OrderedSet
+from fmdtools.define.common import get_var
 import numpy as np
 import copy
 import sys, os
@@ -115,7 +116,7 @@ def load(filename, filetype="", renest_dict=True, indiv=False):
         if indiv: 
             scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
             resultdict = {scenname: resultdict}
-    elif filetype=='json':
+    elif filetype==f'json':
         with open(filename, 'r', encoding='utf8') as file_handle:
             loadeddict = json.load(file_handle)
             if indiv:   
@@ -161,6 +162,7 @@ def get_dict_attr(dict_in, des_class, *attr):
     """Gets attributes *attr from a given dict dict_in of class des_class"""
     if len(attr)==1:    return dict_in[attr[0]]
     else:               return get_dict_attr(des_class(dict_in[attr[0]]), *attr[1:])
+    
 def fromdict(resultclass, inputdict):
     """Creates new history/result from given dictionary"""
     newhist = History()
@@ -261,12 +263,32 @@ class Result(UserDict):
         try:
             return get_dict_attr(self.data, self.__class__, *args)
         except:
-            raise AttributeError("Not in dict: "+str(argstr))
+            try:
+                return self.all_with(argstr)
+            except:
+                raise AttributeError("Not in dict: "+str(argstr))
     def __setattr__(self, key, val):
         if key == "data":
             UserDict.__setattr__(self, key, val)
         else:
             self.data[key]=val
+    def all_with(self, attr):
+        new = self.__class__()
+        for k,v in self.items():
+            if '.'+attr+'.' in k or k.startswith(attr+'.') or k.endswith(attr):
+                new[k] = v
+            #if '.'+attr+'.' in k or attr==k:  
+            
+            #elif k.startswith(attr):
+            #    new[k[len(attr)+1:]] = v
+            #elif k.endswith(attr):
+            #    new[k[:k.index(attr)-1]] = v
+                
+        if len(new)>1:  return new
+        elif len(new)>0:
+            k = [*new.keys()][0]
+            if k.endswith(attr): return new[k]
+            else:                return new
     def fromdict(inputdict):
         return fromdict(Result, inputdict)
     def load(filename, filetype="", renest_dict=True, indiv=False):
@@ -280,7 +302,14 @@ class Result(UserDict):
         for filename in files_toread:
             result.update(Result.load_folder(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
         return result
-    def flatten(self, newhist=False, prevname=(), to_include='all'):
+    def get_values(self, *values):
+        h = self.__class__()
+        for value in values:
+            val = getattr(self, value)
+            if isinstance(val, Result): h.update(val)
+            else:                       h[value]=val
+        return h.flatten()
+    def flatten(self, newhist=False, prevname="", to_include='all'):
         """
         Recursively creates a flattened result of the given nested model history
 
@@ -300,10 +329,11 @@ class Result(UserDict):
         """
         if newhist is False: 
             newhist = self.__class__()
-        #TODO: Add some error handling for when the attributes in "to_include" aren't actually in hist
+
         check_include_errors(self, to_include)
         for att, val in self.items():
-            newname = prevname+tuple([att])
+            if prevname: newname = prevname+"."+att
+            else:        newname = att
             if isinstance(val, Result): 
                 new_to_include = get_sub_include(att, to_include)
                 if new_to_include: 
@@ -312,6 +342,10 @@ class Result(UserDict):
                 if len(newname)==1: newhist[newname[0]] = val
                 else:               newhist[newname] = val
         return newhist
+    def is_flat(self):
+        for v in self.values():
+            if isinstance(v, Result): return False
+        return True
     def nest(self):
         """
         Re-nests a flattened result   
@@ -575,7 +609,18 @@ def is_known_immutable(val):
 def is_known_mutable(val):
     return type(val) in [dict, set]
 
-
+def include_to_keys(to_include):
+    """Determine what dict keys to include from Result given nested to_include dictionary"""
+    if type(to_include)==str:       return [(to_include, get_sub_include('', to_include))]
+    elif type(to_include) in [list, set, tuple]:
+        return [(to_i, get_sub_include('', to_i)) for to_i in to_include]
+    elif type(to_include) == dict:
+        keys =[]
+        for k, v in to_include.items():
+            add = include_to_keys(v)
+            keys.extend([(k+'.'+v[0], v[1]) for v in add])
+        return keys
+        
 def get_sub_include(att, to_include):
     """Determines what attributes of att to include based on the provided dict/str/list/set to_include"""
     if type(to_include) in [list, set, tuple, str]:
@@ -726,20 +771,26 @@ class History(Result):
             Real time for the history (if initialized). Used at the top level of the history.
         """
         for att, hist in self.items():
-            if att=='time' and time is not None:
-                val=time
-            elif att!='i':
-                try:            val=obj[att]
-                except: 
-                    try:        val=getattr(obj, att)
-                    except: 
-                        try:    val = att in obj
-                        except: 
-                            try: val=obj
-                            except: 
-                                raise Exception("Unable to log value "+str(val)+" to "+str(obj.__class__.__name__))
-            else:
-                val = {i:getattr(obj, 'indicate_'+i)(time) for i in hist.keys()}
+            try:
+                val=None
+                if att=='time' and time is not None:
+                    val=time
+                elif att.startswith('i.') or '.i.' in att:
+                    split_att = att.split('.')
+                    i_ind = split_att.index('i')
+                    new_split_att = split_att[:i_ind] + ['indicate_'+split_att[-1]]
+                    methname = '.'.join(new_split_att)
+                    val = get_var(obj, methname)(time)
+                elif 'faults' in att:
+                    split_att = att.split('.')
+                    faultind = split_att.index('faults')
+                    modename = split_att[faultind+1]
+                    fault_att = '.'.join(split_att[:faultind])
+                    val = modename in get_var(obj, fault_att).faults
+                else:
+                    val= get_var(obj, att)
+            except: 
+                raise Exception("Unable to log att "+str(att)+" in "+str(obj.__class__.__name__)+', val='+str(val))
 
             if type(hist)==History:             hist.log(val, t_ind)
             else:
@@ -842,7 +893,9 @@ class History(Result):
         nomhist, faulthist = self._prep_nom_faulty(nomhist)
         deghist = History()
         for att in attrs:
-            deghist[att] =operator([diff(nomhist[k],v, difftype) for k,v in faulthist.items() if att in k], 0)
+            att_diff = [diff(nomhist[k],v, difftype) for k,v in faulthist.items() if att in k]
+            if att_diff:
+                deghist[att] = operator(att_diff, 0)
         if withtotal: deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
         if withtime: deghist['time'] = nomhist['time']
         return deghist
@@ -870,7 +923,9 @@ class History(Result):
         has_faults_hist = History()
         if not attrs: attrs=self.keys()
         for att in attrs:
-            has_faults_hist[att] = operator([v for k,v in faulthist.items() if ('faults' in k) and (att in k)], 0)
+            atts_with_faults = [v for k,v in faulthist.items() if ('faults' in k) and (att in k)]
+            if atts_with_faults:
+                has_faults_hist[att] = operator(atts_with_faults, 0)
         if withtotal: has_faults_hist['total'] = np.sum([*has_faults_hist.values()], axis=0)
         if withtime: has_faults_hist['time'] = faulthist['time']
         return has_faults_hist

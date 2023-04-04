@@ -238,7 +238,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
             n_results[scenname], n_mdlhists[scenname]= exec_nom_helper(mdl, scen, scenname, **{**kwargs, 'use_end_condition':False})
     save_helper(kwargs['save_args'] , n_results, n_mdlhists)
-    return n_results, n_mdlhists
+    return n_results.flatten(), n_mdlhists.flatten()
 def unpack_res_list(scenlist, res_list):
     results= Result()
     mdlhists = History()
@@ -288,7 +288,7 @@ def one_fault(mdl, fxnname, faultmode, time=1, **kwargs):
     disturbances={}
     scen= create_single_fault_scen(mdl, fxnname, faultmode, time)
     result, mdlhists = mult_fault(mdl, faultseq, disturbances, scen=scen, **kwargs)
-    return result, mdlhists
+    return result.flatten(), mdlhists.flatten()
 def create_single_fault_scen(mdl, fxnname, faultmode, time):
     scen=construct_nomscen(mdl) #note: this is a shallow copy, so don't define it earlier
     scen['sequence'][time]={'faults':{fxnname:faultmode}}
@@ -352,7 +352,7 @@ def mult_fault(mdl, faultseq, disturbances, scen={}, rate=np.NaN, **kwargs):
     mdlhists = History(nominal=nomhist, faulty=faulthist)
     if kwargs.get('protect', False): mdl.reset()
     save_helper(kwargs.get('save_args',{}), result, mdlhists)
-    return result, mdlhists
+    return result.flatten(), mdlhists.flatten()
 def create_faultseq_scen(mdl, rate, sequence={}, faultseq={}, disturbances={}):
     scen=construct_nomscen(mdl) #note: this is a shallow copy, so don't define it earlier
     times = {*faultseq, *disturbances}
@@ -444,7 +444,7 @@ def approach(mdl, app,  **kwargs):
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     save_helper(kwargs['save_args'], results, mdlhists)
-    return results, mdlhists
+    return results.flatten(), mdlhists.flatten()
 
 def single_faults(mdl, **kwargs):
     """
@@ -630,7 +630,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     if save_app:
         with open(save_app['filename'], 'wb') as file_handle:
             dill.dump(apps, file_handle)
-    return nest_results, nest_mdlhists, apps
+    return nest_results.flatten(), nest_mdlhists.flatten(), apps
 
 def phases_from_hist(get_phases, t_end, nomhist):
     if get_phases=='global':      phases={'global':[0,t_end]}

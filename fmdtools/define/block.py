@@ -299,7 +299,7 @@ class Block(object):
                     if attr: 
                         at_h = attr.create_hist(timerange, at_track)
                         if at_h: hist[at] = at_h
-                self.h=hist
+                self.h=hist.flatten()
                 return self.h
             else: return History()
 
@@ -543,7 +543,7 @@ class ASG(dataobject, mapping=True):
             Denotes type for class (e.g. 'energy,' 'material,', 'signal')
         """
         if not getattr(self, 'is_copy', False):
-            self.flows[flowname] = init_flow(flowname,fclass, p=p, s=s, flowtype=flowtype) 
+            self.flows[flowname] = init_flow(flowname,fclass, p=p, s=s) 
     def add_act(self, name, actclass, *flownames, duration=0.0, **params):
         """
         Associate an Action with the Function Block for use in the Action Sequence Graph
@@ -844,8 +844,20 @@ class FxnBlock(Block):
             Copy of the given function with new flows
         """
         cop = super().copy(newflows, *args, **kwargs)
-        if hasattr(self, 'c'): cop.c = self.c.copy_with_arg(**self._args_c)
-        if hasattr(self, 'a'): cop.a = self.a.copy_with_arg(flows = cop.flows, **self._args_a)
+        if hasattr(self, 'c'): 
+            cop.c = self.c.copy_with_arg(**self._args_c)
+        if hasattr(self, 'a'): 
+            cop.a = self.a.copy_with_arg(flows = cop.flows, **self._args_a)
+        if hasattr(self, 'h'):
+            for k in cop.h:
+                if k.startswith('c.components'):
+                    cname = k.split('.')[2]
+                    atname = '.'.join(k.split('.')[3:])
+                    cop.h[k]=cop.c.components[cname][atname]
+                elif k.startswith('a.actions'):
+                    cname = k.split('.')[2]
+                    atname = '.'.join(k.split('.')[3:])
+                    cop.h[k]=cop.a.actions[cname][atname]
         return cop
     def return_mutables(self):
         bm = super().return_mutables()

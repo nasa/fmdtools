@@ -481,25 +481,16 @@ class Model(object):
         copy.build(functionorder = self.functionorder)
         copy.is_copy=True
         if hasattr(self, 'h'): 
-            copy.h = History()
-            if 'fxns' in self.h:
-                copy.h['fxns'] = History()
-                for fname in self.h.fxns:
-                    fxn = self.fxns[fname]
-                    copy_fxn = copy.fxns[fname]
-                    if hasattr(fxn, 'h'):
-                        copy_fxn.h=fxn.h.copy()
-                        copy.h['fxns'][fname]=copy_fxn.h
-            if 'flows' in self.h:
-                copy.h['flows'] = History()
-                for fname in self.h.flows:
-                    flow = self.flows[fname]
-                    copy_flow = copy.flows[fname]
-                    if hasattr(flow, 'h'):
-                        copy_flow.h=flow.h.copy()
-                        copy.h['flows'][fname]=copy_flow.h
-            if 'i' in self.h: copy.h['i']=self.h['i'].copy()
-            if 'time' in self.h: copy.h['time']=self.h['time'].copy()
+            hist = History()
+            for k in self.h:
+                for att in ['fxns', 'flows']:
+                    if k.startswith(att):
+                        fname = k.split('.')[1]
+                        copy_f = getattr(copy, att)[fname]
+                        hist[att+'.'+fname]=copy_f.h
+                if k=='time' or k.startswith('i.'):
+                    hist[k]=self.h[k].copy()
+            copy.h = hist.flatten()
         return copy
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
@@ -597,7 +588,7 @@ class Model(object):
                     if fh: hist.flows[flowname] = fh
             #if len(hist)<len(track) and track!='all': #TODO: this warning should be valid for all hists
             #    raise Exception("History doesn't match tracking options (are names correct?): \n track="+str(track)+"\n hist= \n"+str(hist))
-            self.h = hist
+            self.h = hist.flatten()
         return self.h
     def propagate(self, time, fxnfaults={}, disturbances={}, run_stochastic=False):
         """
