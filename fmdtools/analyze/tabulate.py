@@ -414,6 +414,7 @@ def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
     """
     from fmdtools.sim.result import History
     deg_summaries={}; fault_summaries={}
+    mdlhist = mdlhist.nest(levels=1)
     for scen, hist in mdlhist.items():
         hist_comp = History(faulty=hist, nominal=mdlhist.nominal)
         hist_summary = hist_comp.get_fault_degradation_summary(*attrs)

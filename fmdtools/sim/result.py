@@ -278,14 +278,8 @@ class Result(UserDict):
         for k,v in self.items():
             if '.'+attr+'.' in k:
                 new[k] = v
-            #elif  k==attr:
-            #    new[k]=v
             elif k.startswith(attr+'.'):
                 new[k[len(attr)+1:]] = v
-            #elif k.endswith('.'+attr) and len(k.split('.'))<=min_ind:
-            #    new[k] = v
-            #    min_ind = len(k.split('.'))
-                
         if len(new)>1:  return new
         elif len(new)>0:
             k = [*new.keys()][0]
@@ -361,17 +355,19 @@ class Result(UserDict):
         for v in self.values():
             if isinstance(v, Result): return False
         return True
-    def nest(self):
+    def nest(self, levels=np.inf):
         """
         Re-nests a flattened result   
         """
         newhist = self.__class__()
-        key_options = set([h[0] for h in self.keys()])
+        key_options = set([h.split('.')[0] for h in self.keys()])
         for key in key_options:
-            if (key,) in self:     newhist[key] = self[(key,)]
+            if key in self:     newhist[key] = self[key]
             else:
-                subhist = self.__class__(**{histkey[1:]:val for histkey, val in self.items() if key==histkey[0]})                       
-                newhist[key] = subhist.nest()
+                subhist = self.__class__(**{histkey[len(key)+1:]:val for histkey, val in self.items() if histkey.startswith(key+".")})                       
+                if levels>0:
+                    newhist[key] = subhist.nest(levels=levels-1)
+                else: newhist[key] = subhist
         return newhist
     def get_memory(self):
         """
@@ -454,7 +450,8 @@ class Result(UserDict):
     def create_simple_fmea(self, *metrics):
         """Makes a simple fmea-stype table of the metrics in the endclasses 
         of a list of fault scenarios run. If metrics not provided, returns all"""
-        tab = pd.DataFrame.from_dict({k:v.flatten().data for k,v in self.items()}).transpose()
+        nested = self.nest(levels=1)
+        tab = pd.DataFrame.from_dict(nested).transpose()
         if not metrics: return tab
         else:           return tab.loc[:, metrics]
     def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False, to_include='all'):
@@ -478,9 +475,9 @@ class Result(UserDict):
             Result/History with values corresponding to the expectation of
             its quantities over the contained scenarios.
         """
-        nomhist = {k:v for k,v in self.nominal.flatten(to_include=to_include).items() if is_numeric(v)}
-        newhists = {k: hist.flatten() for k, hist in self.items() 
-                    if not(k=='nominal' and not(with_nominal))}
+        mh = self.nest(levels=1)
+        nomhist = {k:v for k,v in mh.nominal.flatten(to_include=to_include).items() if is_numeric(v)}
+        newhists = {k:hist.flatten(to_include=to_include) for k, hist in mh.items() if not(k=='nominal' and not(with_nominal))}
         if app:
             weights = [w['properties']['rate'] for w in app.scenlist]
             if with_nominal: weights.append(1)
