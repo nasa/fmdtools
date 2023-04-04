@@ -411,8 +411,8 @@ if __name__=="__main__":
     
     #an.graph.exec_order(mdl)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_water','no_wat', time=29,  staged=True)
-    endclass, mdlhist=propagate.one_fault(mdl, 'import_ee','no_v', time=29,  staged=True)
-    mdlhist.get_faulty_hist(*mdl.fxns)
+    endclass, mdlhist=propagate.one_fault(mdl, 'import_ee','no_v', time=29,  staged=True, track='all')
+    #mdlhist.get_faulty_hist(*mdl.fxns)
     endclass, mdlhist=propagate.one_fault(mdl, 'move_water', 'mech_break', time=0, staged=False)
     
     app = NominalApproach()
@@ -423,8 +423,12 @@ if __name__=="__main__":
     endclasses, mdlhists  = propagate.approach(mdl, faultapp)
     flat = mdlhists.flatten()
     
+    gh = mdlhists.get_group_hists('flows.ee_1.s.current')
+    
     endclasses, mdlhists_staged  = propagate.approach(mdl, faultapp, staged=True)
     flat_staged = mdlhists_staged.flatten()
+    
+    
     
     [all(flat[k]==flat_staged[k]) for k in flat]
     all([all(flat[k]==flat_staged[k]) for k in flat])
@@ -440,9 +444,11 @@ if __name__=="__main__":
     h = mdlhists.get_expected(app=faultapp, with_nominal=True)
     ec= endclasses.get_expected()
     
-    degsumm = h.get_summary(*mdl.fxns, *mdl.flows)
+    #degsumm = h.get_summary(*mdl.fxns, *mdl.flows)
     
     d=h.get_degraded_hist(*mdl.fxns, nomhist=mdlhists.nominal)
+    
+    
     
     
     
