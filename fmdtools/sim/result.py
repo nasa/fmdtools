@@ -274,15 +274,17 @@ class Result(UserDict):
             self.data[key]=val
     def all_with(self, attr):
         new = self.__class__()
+        min_ind = max([len(k.split('.')) for k in self.keys()])
         for k,v in self.items():
-            if '.'+attr+'.' in k or k.startswith(attr+'.') or k.endswith(attr):
+            if '.'+attr+'.' in k:
                 new[k] = v
-            #if '.'+attr+'.' in k or attr==k:  
-            
-            #elif k.startswith(attr):
-            #    new[k[len(attr)+1:]] = v
-            #elif k.endswith(attr):
-            #    new[k[:k.index(attr)-1]] = v
+            #elif  k==attr:
+            #    new[k]=v
+            elif k.startswith(attr+'.'):
+                new[k[len(attr)+1:]] = v
+            #elif k.endswith('.'+attr) and len(k.split('.'))<=min_ind:
+            #    new[k] = v
+            #    min_ind = len(k.split('.'))
                 
         if len(new)>1:  return new
         elif len(new)>0:
@@ -304,11 +306,24 @@ class Result(UserDict):
         return result
     def get_values(self, *values):
         h = self.__class__()
-        for value in values:
-            val = getattr(self, value)
-            if isinstance(val, Result): h.update(val)
-            else:                       h[value]=val
-        return h.flatten()
+        k_vs = [k for k in self.keys() for v in values if k.endswith(v)]
+        for k in k_vs:
+            h[k]=self[k]
+        return h
+    def get_group_hists(self, *values, **groups):
+        if not groups: groups={'default':'default'}
+        if 'time' not in values: values = values + ('time', )
+        group_hist = self.__class__()
+        for group, scens in groups.items(): 
+            if scens=='default':   scens={k.split('.')[0] for k in self.keys()}
+            elif type(scens)==str: scens=[scens]
+            k_vs = [k for k in self.keys() for scen in scens for v in values if k.startswith(scen) and k.endswith(v) and '.t.' not in k]
+            if len(k_vs)>0 and (group not in group_hist): 
+                group_hist[group]=self.__class__()
+            for k in k_vs:
+                group_hist[group][k]=self[k]
+        #Sort into comparison groups
+        return group_hist
     def flatten(self, newhist=False, prevname="", to_include='all'):
         """
         Recursively creates a flattened result of the given nested model history
@@ -830,6 +845,8 @@ class History(Result):
         for key, arr in flathist.items():
             slice_dict[key]=flathist[key][t_ind]
         return slice_dict
+    def is_in(self, at):
+        return any([k for k in self.keys() if at in k])
     def get_fault_time(self, metric="earliest"):
         """
         Gets the time a fault is present in the system
@@ -853,8 +870,8 @@ class History(Result):
         elif metric=='total':
             return np.sum(has_faults_hist)
     def _prep_faulty(self):
-        if 'faulty' in self:    return self.faulty.flatten()
-        else:                   return self.flatten()
+        if self.is_in('faulty'):    return self.faulty.flatten()
+        else:                       return self.flatten()
     def _prep_nom_faulty(self, nomhist={}):
         if not nomhist:         nomhist = self.nominal.flatten()
         else:                   nomhist = nomhist.flatten()
@@ -1010,6 +1027,10 @@ class History(Result):
                                 phasenum+=1; phaseid=mode+str(phasenum)
                 phases[fxn] = dict(sorted(phases_unsorted.items(), key = lambda item: item[1][0]))
         return phases, modephases
+    def get_metric(self, value, metric=np.mean, *args):
+        vals = self.get_values(value)
+        return metric([*vals.values()], *args, axis=0)
+        
         
                 
             

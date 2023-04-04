@@ -34,7 +34,7 @@ from matplotlib.ticker import AutoMinorLocator
 from mpl_toolkits.mplot3d import Axes3D
 
 
-def mdlhists(mdlhists, *plot_values, cols=2, aggregation='individual', comp_groups={}, 
+def mdlhists(mdlhists, *plot_values, cols=2, aggregation='individual', comp_groups={'nominal':'nominal', 'faulty':'faulty'}, 
              legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
              fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95, titles={},
              title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
@@ -128,16 +128,11 @@ def mdlhists(mdlhists, *plot_values, cols=2, aggregation='individual', comp_grou
     #Process data - clip and flatten
     if 'time' in mdlhists: 
         mdlhists = History(nominal=mdlhists)
-    if max_ind=='max': max_ind = np.min([len(t) for t in mdlhists.time])-1
-    mdlhists.cut(max_ind)
-    times = [*mdlhists.time.values()][0]
-    flat_mdlhists = {scen: getattr(mdlhists, scen).get_values(*plot_values) 
-                     for scen in {k.split('.')[0] for k in mdlhists.keys()}}
+    #if max_ind=='max': 
+    #    max_ind = np.min([len(t) for t in mdlhists.values()])-1
+    #mdlhists.cut(max_ind)
     #Sort into comparison groups
-    if not comp_groups: 
-        if aggregation=='individual':   grouphists = flat_mdlhists
-        else:                           grouphists = {'default':flat_mdlhists}
-    else:   grouphists = {group:{scen:flat_mdlhists[scen] for scen in scens} for group, scens in comp_groups.items()}
+    grouphists = mdlhists.get_group_hists(*plot_values, **comp_groups)
     # Set up plots and iteration
     if 'nominal' in grouphists.keys() and len(grouphists)>1: 
         indiv_kwargs['nominal'] = indiv_kwargs.get('nominal', {'color':'blue', 'ls':'--'})
@@ -164,35 +159,34 @@ def mdlhists(mdlhists, *plot_values, cols=2, aggregation='individual', comp_grou
         if i >= (rows-1)*cols and xlabel: ax.set_xlabel(xlabel)
         if ylabels.get(plot_value, False): ax.set_ylabel(ylabels[plot_value])
         for group, hists in grouphists.items():
+            times = hists.get_metric('time') #TODO: find a better way to do this that will be compatible with timers
             local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
             try:
                 if aggregation=='individual':
-                    if plot_value in hists:
-                        ax.plot(times, hists[plot_value], label=group, **local_kwargs)
-                    else:
-                        if 'color' not in local_kwargs: local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
-                        for hist in hists.values():
-                            ax.plot(times, hist[plot_value], label=group, **local_kwargs)
+                    hist_to_plot = hists.get_values(plot_value)
+                    if 'color' not in local_kwargs: local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
+                    for h in hist_to_plot.values():
+                        ax.plot(times, h, label=group, **local_kwargs)
                 elif aggregation=='mean_std':
-                    mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
-                    std_dev = np.std([hist[plot_value] for hist in hists.values()], axis=0)
+                    mean = hists.get_metric(plot_value, np.mean)
+                    std_dev = hists.get_metric(plot_value, np.std)
                     plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                 elif aggregation=='mean_ci':
-                    mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
-                    vals = [[hist[plot_value][t] for hist in hists.values()] for t in inds]
+                    mean = hists.get_metric(plot_value, np.mean)
+                    vals = [[hist[plot_value][t] for hist in hists.values()] for t in range(max_ind)]
                     boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True, confidence_level=ci) for val in vals]).transpose()
                     plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2],boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                 elif aggregation=='mean_bound':
-                    mean = np.mean([hist[plot_value] for hist in hists.values()], axis=0)
-                    maxs = np.max([hist[plot_value] for hist in hists.values()], axis=0)
-                    mins = np.min([hist[plot_value] for hist in hists.values()], axis=0)
+                    mean = hists.get_metric(plot_value, np.mean)
+                    maxs = hists.get_metric(plot_value, np.max)
+                    mins = hists.get_metric(plot_value, np.min)
                     plot_line_and_err(ax, times, mean, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                 elif aggregation=='percentile':
-                    median= np.median([hist[plot_value] for hist in hists.values()], axis=0)
-                    maxs = np.max([hist[plot_value] for hist in hists.values()], axis=0)
-                    mins = np.min([hist[plot_value] for hist in hists.values()], axis=0)
-                    low_perc = np.percentile([hist[plot_value] for hist in hists.values()],50-kwargs.get('perc_range',50)/2, axis=0)
-                    high_perc = np.percentile([hist[plot_value] for hist in hists.values()],50+kwargs.get('perc_range',50)/2, axis=0)
+                    median = hists.get_metric(plot_value, np.median)
+                    maxs = hists.get_metric(plot_value, np.max)
+                    mins = hists.get_metric(plot_value, np.min)
+                    low_perc = hists.get_metric(plot_value, np.percentile, 50-kwargs.get('perc_range',50)/2)
+                    high_perc = hists.get_metric(plot_value, np.percentile, 50+kwargs.get('perc_range',50)/2)
                     plot_line_and_err(ax, times, median, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                     if boundtype=='fill':       ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
                     elif boundtype=='line':     plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
