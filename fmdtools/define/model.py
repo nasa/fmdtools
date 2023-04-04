@@ -24,13 +24,14 @@ from fmdtools.sim.result import History, get_sub_include, init_hist_iter, init_i
 
 #Model superclass    
 class Model(object):
-    __slots__ =('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'fxns', 
+    __slots__ =('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'fxns', 'name',
                 'functionorder', '_fxnflows', '_fxninput', '_flowstates', 'is_copy', 
                 'bipartite', 'multgraph', 'staticfxns', 'dynamicfxns', 'staticflows') #added in self.build())
     _init_p = Parameter
     _init_sp = SimParam
     _init_r = Rand
     default_track='all'
+    default_name='model'
     """
     Model superclass used to construct the model, return representations of the model, and copy and reset the model when run.
     
@@ -51,7 +52,7 @@ class Model(object):
     graph : networkx graph
         multigraph view of functions and flows
     """
-    def __init__(self, p={}, sp={}, r={}, track=''):
+    def __init__(self, name='', p={}, sp={}, r={}, track=''):
         """
         Instantiates internal model attributes with predetermined:
         
@@ -72,6 +73,8 @@ class Model(object):
         if not track:   self.track=self.default_track 
         else:           self.track=track
         if not sp: sp=self.default_sp
+        if not name: self.name=self.default_name
+        else:        self.name=name
         
         init_obj_attr(self, p=p, sp=sp, r=r)
         
@@ -89,14 +92,6 @@ class Model(object):
         if len(flowlist)>15:  flowlist=flowlist[:15]+["...("+str(len(flowlist))+' total) \n']
         flowstr = ''.join(flowlist)
         return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'FUNCTIONS: \n'+fxnstr+'FLOWS: \n'+flowstr
-    def __getattr__(self, name):
-        if name in self.fxns:    return self.fxns[name]
-        elif name in self.flows: return self.flows[name]
-        else:                    return super().__getattribute__(name)
-    def __getstate__(self): # need these to be able to pickle given the custom __getattr__.
-        return vars(self)
-    def __setstate__(self, state):
-        vars(self).update(state)
     def update_seed(self,seed=[]):
         """
         Updates model seed and the seed in all functions. 
@@ -487,12 +482,22 @@ class Model(object):
         copy.is_copy=True
         if hasattr(self, 'h'): 
             copy.h = History()
-            for fname, fxn in copy.fxns.items():
-                if hasattr(fxn, 'h'):
-                    copy.h[fname]=fxn.h.copy()
-            for fname, flow in copy.flows.items():
-                if hasattr(flow, 'h'):
-                    copy.h[fname]=flow.h.copy()
+            if 'fxns' in self.h:
+                copy.h['fxns'] = History()
+                for fname in self.h.fxns:
+                    fxn = self.fxns[fname]
+                    copy_fxn = copy.fxns[fname]
+                    if hasattr(fxn, 'h'):
+                        copy_fxn.h=fxn.h.copy()
+                        copy.h['fxns'][fname]=copy_fxn.h
+            if 'flows' in self.h:
+                copy.h['flows'] = History()
+                for fname in self.h.flows:
+                    flow = self.flows[fname]
+                    copy_flow = copy.flows[fname]
+                    if hasattr(flow, 'h'):
+                        copy_flow.h=flow.h.copy()
+                        copy.h['flows'][fname]=copy_flow.h
             if 'i' in self.h: copy.h['i']=self.h['i'].copy()
             if 'time' in self.h: copy.h['time']=self.h['time'].copy()
         return copy
@@ -576,16 +581,22 @@ class Model(object):
     def create_hist(self, timerange, track):
         if not hasattr(self, 'h'):
             hist = History()
-            track = get_obj_track(self, track, (*self.fxns, *self.flows))
+            track = get_obj_track(self, track, all_possible=('fxns', 'flows', 'i'))
             init_indicator_hist(self, hist, timerange, track)
-            for fxnname, fxn in self.fxns.items():
-                fh = fxn.create_hist(timerange, get_sub_include(fxnname, track))
-                if fh: hist[fxnname]=fh
-            for flowname, flow in self.flows.items():
-                fh = flow.create_hist(timerange, get_sub_include(flowname, track))
-                if fh: hist[flowname] = fh
-            if len(hist)<len(track) and track!='all':
-                raise Exception("History doesn't match tracking options (are names correct?): \n track="+str(track)+"\n hist= \n"+str(hist))
+            fxn_track = get_sub_include('fxns', track)
+            if fxn_track:
+                hist['fxns'] = History()
+                for fxnname, fxn in self.fxns.items():
+                    fh = fxn.create_hist(timerange, get_sub_include(fxnname, fxn_track))
+                    if fh: hist.fxns[fxnname]=fh
+            flow_track = get_sub_include('flows', track)
+            if flow_track:
+                hist['flows']=History()
+                for flowname, flow in self.flows.items():
+                    fh = flow.create_hist(timerange, get_sub_include(flowname, flow_track))
+                    if fh: hist.flows[flowname] = fh
+            #if len(hist)<len(track) and track!='all': #TODO: this warning should be valid for all hists
+            #    raise Exception("History doesn't match tracking options (are names correct?): \n track="+str(track)+"\n hist= \n"+str(hist))
             self.h = hist
         return self.h
     def propagate(self, time, fxnfaults={}, disturbances={}, run_stochastic=False):

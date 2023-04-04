@@ -44,6 +44,7 @@ class TransportLiquidMode(Mode):
     key_phases_by='global'
 
 class ImportLiquid(FxnBlock):
+    __slots__=('sig', 'wat_out')
     _init_p = TankParam
     _init_s = TransportLiquidState
     _init_m = TransportLiquidMode
@@ -66,6 +67,7 @@ class ImportLiquid(FxnBlock):
             self.sig.s.indicator =0
 
 class ExportLiquid(FxnBlock):
+    __slots__=('sig', 'wat_in')
     _init_p = TankParam
     _init_s = TransportLiquidState
     _init_m = TransportLiquidMode
@@ -94,6 +96,7 @@ class StoreLiquidState(State):
 from tank_model import StoreLiquidMode 
     
 class StoreLiquid(FxnBlock):
+    __slots__=('wat_in', 'wat_out', 'sig')
     _init_s = StoreLiquidState
     _init_m = StoreLiquidMode
     _init_p = TankParam
@@ -134,6 +137,7 @@ class ContingencyActions(FxnBlock):
 
 
 class Tank(Model):
+    __slots__=()
     _init_p = TankParam 
     default_sp = dict(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min')
     def __init__(self, **kwargs):
@@ -159,10 +163,10 @@ class Tank(Model):
     def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high
         overfullcost, emptycost, buffercost = 0, 0, 0
-        sum(self.h.store_coolant.s.level>=self.p.capacity)*10000        #time the tank is overfull
-        if any(self.h.store_coolant.s.level<=0):     emptycost = 1000000     #if the tank lacks any water
-        buffercost = sum(self.h.store_coolant.s.coolingbuffer<=0)*100000     #if the buffer is 'spent'
-        mitigationcost = (sum(self.h.input_sig.s.action!=0)+ sum(self.h.output_sig.s.action!=0))*1000
+        sum(self.h.fxns.store_coolant.s.level>=self.p.capacity)*10000        #time the tank is overfull
+        if any(self.h.fxns.store_coolant.s.level<=0):     emptycost = 1000000     #if the tank lacks any water
+        buffercost = sum(self.h.fxns.store_coolant.s.coolingbuffer<=0)*100000     #if the buffer is 'spent'
+        mitigationcost = (sum(self.h.flows.input_sig.s.action!=0)+ sum(self.h.flows.output_sig.s.action!=0))*1000
         totcost = overfullcost + emptycost + buffercost + mitigationcost
         rate=scen['properties']['rate']
         life=1e5
@@ -175,13 +179,13 @@ if __name__=="__main__":
     mdl=Tank()
     
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])
-    an.plot.mdlhists(mdlhist, fxnflowvals='store_coolant')
+    an.plot.mdlhists(mdlhist, fxnflowvals={'fxns':'store_coolant'})
 
     
     ## faulty run
     resgraph, mdlhist = propagate.one_fault(mdl,'export_coolant','blockage', time=2, desired_result='bipartite')
     
-    an.plot.mdlhists(mdlhist, title='NotVisible', fxnflowvals='store_coolant', time_slice=2)
+    an.plot.mdlhists(mdlhist, title='NotVisible', fxnflowvals={'fxns':'store_coolant'}, time_slice=2)
     an.graph.show(resgraph,faultscen='NotVisible', time=2)
     
         

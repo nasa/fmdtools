@@ -44,6 +44,7 @@ class ImportEERand(Rand):
     s= ImportEERandState()
     run_stochastic:     bool=True
 class ImportEE(DetImportEE):
+    __slots__=()
     _init_r = ImportEERand
     def condfaults(self,time):
         if self.ee_out.s.current>20.0: self.m.add_fault('no_v')
@@ -64,6 +65,7 @@ class ImportSigRand(Rand):
     s=ImportSigRandState()
     run_stochastic:     bool=True
 class ImportSig(DetImportSig):
+    __slots__=()
     _init_r=ImportSigRand
     def behavior(self, time):
         if self.m.has_fault('no_sig'): 
@@ -91,6 +93,7 @@ class MoveWatRand(Rand):
     s=MoveWatRandState()
     run_stochastic: bool=True
 class MoveWat(DetMoveWat):
+    __slots__=()
     _init_s = MoveWatStates
     _init_r=MoveWatRand
     def behavior(self, time):
@@ -102,6 +105,7 @@ from ex_pump import PumpParam, Electricity, Water, Signal
 from ex_pump import Pump as DetPump
 from fmdtools.define.model import SimParam
 class Pump(DetPump):
+    __slots__=()
     default_track='all'
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -124,10 +128,13 @@ def paramfunc(delay):
 
 if __name__=="__main__":
     import multiprocessing as mp
-
+    from fmdtools.define.model import check_model_pickleability
+    from fmdtools.define.common import check_pickleability
 
     rp = SimParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr')
     mdl = Pump(sp = rp, r={'seed':5})
+    
+    check_model_pickleability(mdl, try_pick=True)
     
     mdl.set_vars([['ee_1','current']],[2])
     
@@ -136,13 +143,14 @@ if __name__=="__main__":
     app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
     app_comp.add_param_replicates(paramfunc, 'delay_10', 100, (10))
     
-    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')]) #pool=mp.Pool(4)
+    endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')],pool=mp.Pool(4))
     
     #endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True) #pool=mp.Pool(4)
     
     comp_mdlhists = {scen:mdlhist['export_water block, t=27.0'] for scen,mdlhist in mdlhists.items()}
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
-    fig = an.plot.mdlhists(comp_mdlhists, {'move_water':{'s':['eff','total_flow']}, 'wat_2':{'s':['flowrate','pressure']}}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
+    fig = an.plot.mdlhists(comp_mdlhists, {'fxns':{'move_water':{'s':['eff','total_flow']}}, 
+                                           'flows':{'wat_2':{'s':['flowrate','pressure']}}}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
     
     
     app = NominalApproach()
@@ -175,7 +183,7 @@ if __name__=="__main__":
     
     #mdlhist['faulty']['functions']['ImportEE']['probdens']
     
-    an.plot.mdlhists(mdlhist, fxnflowvals={'import_ee', 'ee_1'})
+    an.plot.mdlhists(mdlhist, fxnflowvals={'fxns':'import_ee', 'flows':'ee_1'})
     #an.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     
     """

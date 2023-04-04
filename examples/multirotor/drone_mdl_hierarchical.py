@@ -46,6 +46,7 @@ class AffectDOFArch(CompArch):
             self.fr_dict.update({'f':{'lf', 'rf','lf2', 'rf2'}, 'r':{'lr', 'rr','lr2', 'rr2'}})
 
 class AffectDOF(FxnBlock): #EEmot,ctl,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
+    __slots__=('ee_in', 'ctl_in', 'dofs', 'force')
     _init_s = OverallAffectDOFState
     _init_c = AffectDOFArch
     _init_ee_in = EE
@@ -108,6 +109,7 @@ class DroneParam(Parameter, readonly=True):
     arch_set = ('quad', 'oct', 'hex')
 
 class Drone(DynDrone):
+    __slots__=()
     _init_p = DroneParam
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -176,7 +178,7 @@ if __name__=="__main__":
     mdl = Drone(p=DroneParam(arch='oct'))
     app = SampleApproach(mdl, faults=[('affect_dof', 'rr2_propstuck')])
     endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=False)
-    an.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['affect_dof rr2_propstuck, t=49.0']},fxnflowvals={'env':'s'})
+    an.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['affect_dof rr2_propstuck, t=49.0']},fxnflowvals={'flows':{'env':'s'}})
 
 
 

@@ -184,6 +184,7 @@ class StoreEEMode(Mode):
     key_phases_by="plan_path"
 
 class StoreEE(FxnBlock):
+    __slots__=('hsig_bat', 'ee_1', 'force_st')
     _init_s = StoreEEState
     _init_m = StoreEEMode
     _init_c = BatArch
@@ -223,6 +224,7 @@ class HoldPayloadMode(Mode):
 class HoldPayloadState(State):  
     force_gr:   float=1.0
 class HoldPayload(FxnBlock):
+    __slots__=('dofs', 'force_st', 'force_lin')
     _init_m = HoldPayloadMode
     _init_s = HoldPayloadState
     _init_dofs = DOFs
@@ -247,6 +249,7 @@ class ManageHealthMode(Mode):
                    'lostfunction':(0.05,[0.5,0.5,0.5],1000)}
     key_phases_by="plan_path"
 class ManageHealth(FxnBlock):
+    __slots__=('force_st', 'ee_ctl', 'hsig_dofs', 'hsig_bat', 'rsig_traj')
     _init_m = ManageHealthMode
     _init_p = ResPolicy
     _init_force_st = Force 
@@ -267,6 +270,7 @@ from drone_mdl_hierarchical import AffectDOFArch, OverallAffectDOFState
 class AffectMode(Mode):
     key_phases_by='plan_path'
 class AffectDOF(FxnBlock): #ee_mot,ctl,dofs,force_lin hsig_dofs, RSig_dofs
+    __slots__=('ee_mot', 'ctl', 'hsig_dofs', 'dofs', 'des_traj', 'force_lin')
     _init_c = AffectDOFArch
     _init_s = OverallAffectDOFState
     _init_m = AffectMode
@@ -322,6 +326,7 @@ class CtlDOFMode(Mode):
     key_phases_by = 'plan_path'
     mode:   str='nominal'
 class CtlDOF(FxnBlock):
+    __slots__ = ('ctl', 'ee_ctl', 'des_traj', 'force_st', 'dofs')
     _init_s = CtlDOFState
     _init_m = CtlDOFMode
     _init_ctl = Control 
@@ -365,6 +370,7 @@ class PlanPathState(State):
     z: float=0.0
 
 class PlanPath(FxnBlock):
+    __slots__=('force_st', 'rsig_traj', 'dofs', 'ee_ctl', 'des_traj', 'goals')
     _init_s = PlanPathState
     _init_m = PlanPathMode
     _init_p = DroneParam
@@ -413,6 +419,7 @@ class PlanPath(FxnBlock):
 
 
 class Drone(Model):
+    __slots__=('start_area', 'safe_area', 'target_area')
     _init_p = DroneParam
     default_sp = dict(phases=(('ascend',0,0),('forward',1,11),('taxi',12, 20)),times=(0,30),units='min')
     def __init__(self, **kwargs):
@@ -451,7 +458,7 @@ class Drone(Model):
         
     def find_classification(self, scen, mdlhist):
         #landing costs
-        viewed = env_viewed(mdlhist.faulty.dofs.s.x, mdlhist.faulty.dofs.s.y,mdlhist.faulty.dofs.s.z, self.target_area)
+        viewed = env_viewed(mdlhist.faulty.flows.dofs.s.x, mdlhist.faulty.flows.dofs.s.y,mdlhist.faulty.flows.dofs.s.z, self.target_area)
         viewed_value = sum([0.5+2*view for k,view in viewed.items() if view!='unviewed'])
         
         # to fix: need to find fault time more efficiently (maybe in the toolkit?)
@@ -586,13 +593,13 @@ def plot_nomtraj(mdlhist, params, title='Trajectory'):
     plt.show()
 
 def plot_faulttraj(mdlhist, params, title='Fault response to RFpropbreak fault at t=20'):
-    xnom=mdlhist.nominal.dofs.s.x
-    ynom=mdlhist.nominal.dofs.s.y
-    znom=mdlhist.nominal.dofs.s.z
+    xnom=mdlhist.nominal.flows.dofs.s.x
+    ynom=mdlhist.nominal.flows.dofs.s.y
+    znom=mdlhist.nominal.flows.dofs.s.z
     #
-    x=mdlhist.faulty.dofs.s.x
-    y=mdlhist.faulty.dofs.s.y
-    z=mdlhist.faulty.dofs.s.z
+    x=mdlhist.faulty.flows.dofs.s.x
+    y=mdlhist.faulty.flows.dofs.s.y
+    z=mdlhist.faulty.flows.dofs.s.z
     
     time = mdlhist.nominal.time
     
@@ -631,8 +638,8 @@ def plot_xy(mdlhist, endresults, mdl, title='', legend=False):
     
     return plt.gcf(), plt.gca()
 def plot_one_xy(mdlhist,endresults):
-    xnom=mdlhist.dofs.x
-    ynom=mdlhist.dofs.y
+    xnom=mdlhist.flows.dofs.x
+    ynom=mdlhist.flows.dofs.y
     
     plt.plot(xnom,ynom)
     
@@ -790,9 +797,9 @@ opt_prob.add_variables("rcost", "bat","line", vartype=spec_respol)
 def calc_oper(mdl):
     endresults_nom, mdlhist =propagate.nominal(mdl)
     opercost = endresults_nom['expected cost']
-    g_soc = 20 - mdlhist.store_ee.s.soc[-1] 
+    g_soc = 20 - mdlhist.fxns.store_ee.s.soc[-1] 
     #g_faults = any(endresults_nom['faults'])
-    g_max_height = sum([i for i in mdlhist.dofs.s.z-122 if i>0])
+    g_max_height = sum([i for i in mdlhist.flows.dofs.s.z-122 if i>0])
     
     phases, modephases=mdlhist.get_modephases()
     return opercost, g_soc, g_max_height, phases

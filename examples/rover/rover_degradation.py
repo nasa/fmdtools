@@ -53,8 +53,8 @@ class RoverDegradation(Model):
         self.build(require_connections=False)
 
 def get_params_from(mdlhist, t=1):
-    friction = mdlhist.drive.s.friction[t]
-    drift = mdlhist.drive.s.drift[t]
+    friction = mdlhist.fxns.drive.s.friction[t]
+    drift = mdlhist.fxns.drive.s.drift[t]
     return {'friction':friction, 'drift':drift}
 def get_paramdist_from(mdlhists, t):
     friction=[]
@@ -87,10 +87,10 @@ if __name__=="__main__":
     nomapp = NominalApproach()
     nomapp.add_seed_replicates('test', 100)
     endclasses, mdlhists = prop.nominal_approach(deg_mdl, nomapp, run_stochastic=True, desired_result='endclass')
-    an.plot.mdlhists(mdlhists, fxnflowvals={'drive':{'s':['wear', 'corrosion', 'friction', 'drift']}}, aggregation='mean_std')
+    an.plot.mdlhists(mdlhists, fxnflowvals={'fxns':{'drive':{'s':['wear', 'corrosion', 'friction', 'drift']}}}, aggregation='mean_std')
     
     #individual slice
-    an.plot.metric_dist_from(mdlhists, [1,10,20], fxnflowvals={'drive':{'s':['wear', 'corrosion', 'friction', 'drift']}})
+    an.plot.metric_dist_from(mdlhists, [1,10,20], fxnflowvals={'fxns':{'drive':{'s':['wear', 'corrosion', 'friction', 'drift']}}})
     
     
     #question -- how do we sample this:
@@ -113,7 +113,7 @@ if __name__=="__main__":
 
     an.plot.metric_dist(behave_endclasses, metrics=['line_dist', 'end_dist', 'x', 'y'], comp_groups=comp_groups, alpha=0.5, bins=10, metric_bins={'x':20})
 
-    an.plot.metric_dist_from(behave_mdlhists, times= [0, 10, 20], fxnflowvals = {'ground':{'s':['x', 'y', 'linex', 'ang']}}, alpha=0.5, bins=10)
+    an.plot.metric_dist_from(behave_mdlhists, times= [0, 10, 20], fxnflowvals = {'flows':{'ground':{'s':['x', 'y', 'linex', 'ang']}}}, alpha=0.5, bins=10)
 
-    an.plot.metric_dist_from(behave_mdlhists, times= 30, fxnflowvals = {'ground':{'s':['x', 'y', 'linex', 'ang']}}, comp_groups=comp_groups, alpha=0.5, bins=10)
+    an.plot.metric_dist_from(behave_mdlhists, times= 30, fxnflowvals = {'flows':{'ground':{'s':['x', 'y', 'linex', 'ang']}}}, comp_groups=comp_groups, alpha=0.5, bins=10)
     

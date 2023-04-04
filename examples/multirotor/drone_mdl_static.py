@@ -57,6 +57,7 @@ class StoreEEMode(Mode):
 class StoreEEState(State):
     soc:    float = 100.0
 class StoreEE(FxnBlock):
+    __slots__=('ee_out', 'fs')
     _init_s = StoreEEState
     _init_m = StoreEEMode
     _init_ee_out = EE
@@ -74,6 +75,7 @@ class DistEEState(State):
     ee_tr: float=1.0
     ee_te: float=1.0
 class DistEE(FxnBlock):
+    __slots__=('ee_in', 'ee_mot', 'ee_ctl', 'st')
     _init_s = DistEEState
     _init_m = DistEEMode
     _init_ee_in = EE
@@ -98,6 +100,7 @@ class EngageLandMode(Mode):
     faultparams = {'break':(0.2, 1000), 
                    'deform':(0.8, 1000)}
 class EngageLand(FxnBlock):
+    __slots__=('force_in', 'force_out')
     _init_m=EngageLandMode
     _init_force_in = Force
     _init_force_out = Force 
@@ -113,6 +116,7 @@ class HoldPayloadMode(Mode):
     faultparams = {'break':(0.2, 10000), 
                    'deform':(0.8, 10000)}
 class HoldPayload(FxnBlock):
+    __slots__=('force_lg', 'force_lin', 'force_st')
     _init_m = HoldPayloadMode
     _init_force_lg = Force 
     _init_force_lin = Force 
@@ -146,6 +150,7 @@ class AffectDOFMode(Mode):
                    'propstuck':     (0.02, 200), 
                    'propbreak':     (0.03, 200)}
 class AffectDOF(FxnBlock): #ee_mot,ctl,dofs,force_lin HSig_dofs, RSig_dofs
+    __slots__=('ee_in', 'ctl_in', 'dofs', 'force')
     _init_s = AffectDOFState
     _init_m = AffectDOFMode
     _init_ee_in = EE
@@ -178,6 +183,7 @@ class CtlDOFMode(Mode):
     faultparams={'noctl':   (0.2, 10000), 
                  'degctl':  (0.8, 10000)}
 class CtlDOF(FxnBlock):
+    __slots__=('ee_in', 'dir', 'ctl', 'dofs', 'fs')
     _init_s = CtlDOFstate
     _init_m = CtlDOFMode
     _init_ee_in = EE
@@ -209,6 +215,7 @@ class PlanPathMode(Mode):
     faultparams = {'noloc': (0.2, 10000),
                    'degloc':(0.8, 10000)}
 class PlanPath(FxnBlock):
+    __slots__=('ee_in', 'env', 'dir', 'fs')
     _init_m = PlanPathMode
     _init_ee_in = EE
     _init_env = Env
@@ -229,6 +236,7 @@ class TrajectoryMode(Mode):
     faultparams = {'crash':(0, 100000), 
                   'lost':(0.0, 50000)}
 class Trajectory(FxnBlock):
+    __slots__=('env', 'dofs', 'dir', 'force_gr')
     _init_m = TrajectoryMode
     _init_env = Env
     _init_dofs = DOFs 
@@ -277,6 +285,7 @@ class ViewEnvironment(FxnBlock):
     _init_env = Env
         
 class Drone(Model):
+    __slots__=()
     def __init__(self, sp=SimParam(times=(0,1)), **kwargs):
         super().__init__(sp=sp, **kwargs)
         #add flows to the model
