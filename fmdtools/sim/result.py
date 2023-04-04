@@ -365,8 +365,9 @@ class Result(UserDict):
             if key in self:     newhist[key] = self[key]
             else:
                 subhist = self.__class__(**{histkey[len(key)+1:]:val for histkey, val in self.items() if histkey.startswith(key+".")})                       
-                if levels>0:
-                    newhist[key] = subhist.nest(levels=levels-1)
+                lev = levels-1
+                if lev>0:
+                    newhist[key] = subhist.nest(levels=lev)
                 else: newhist[key] = subhist
         return newhist
     def get_memory(self):
@@ -450,7 +451,7 @@ class Result(UserDict):
     def create_simple_fmea(self, *metrics):
         """Makes a simple fmea-stype table of the metrics in the endclasses 
         of a list of fault scenarios run. If metrics not provided, returns all"""
-        nested = self.nest(levels=1)
+        nested = {k:{**v.endclass} for k,v in self.nest(levels=1).items()}
         tab = pd.DataFrame.from_dict(nested).transpose()
         if not metrics: return tab
         else:           return tab.loc[:, metrics]
