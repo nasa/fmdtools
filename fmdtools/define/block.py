@@ -732,7 +732,7 @@ class ASG(dataobject, mapping=True):
         return am
 #Function superclass 
 class FxnBlock(Block):
-    __slots__ = ["c", "_c_arg", "a", "_a_arg"]
+    __slots__ = ["c", "_args_c", "a", "_args_a"]
     default_track = ["c", "a"]+Block.default_track
     """
     Superclass class for functions which is a special type of Block\
@@ -780,7 +780,6 @@ class FxnBlock(Block):
             at_arg = eval(at)
             at_init = getattr(self, '_init_'+at, False)
             if at_init:
-                setattr(self, '_'+at+'_arg', at_arg)
                 at_flows = dict()
                 for flowname, flow in self.flows.items():
                     if hasattr(at_init, '_init_'+flowname): at_flows[flowname]=flow
@@ -845,8 +844,8 @@ class FxnBlock(Block):
             Copy of the given function with new flows
         """
         cop = super().copy(newflows, *args, **kwargs)
-        if hasattr(self, 'c'): cop.c = self.c.copy_with_arg(**self._c_arg)
-        if hasattr(self, 'a'): cop.a = self.a.copy_with_arg(flows = cop.flows, **self._a_arg)
+        if hasattr(self, 'c'): cop.c = self.c.copy_with_arg(**self._args_c)
+        if hasattr(self, 'a'): cop.a = self.a.copy_with_arg(flows = cop.flows, **self._args_a)
         return cop
     def return_mutables(self):
         bm = super().return_mutables()

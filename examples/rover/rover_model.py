@@ -159,6 +159,7 @@ class AvionicsMode(Mode):
     opermodes = ('drive','standby', 'em_off', 'finished')
     mode : str='standby'
 class Avionics(FxnBlock):
+    __slots__=('video', 'pos_signal', 'ground', 'control', 'faultstates')
     _init_m = AvionicsMode
     _init_p = RoverParam
     _init_video = Video 
@@ -250,6 +251,7 @@ class DriveMode(Mode):
                                             'drift':   np.linspace(-0.5,0.5, 100)}, 1000)
 
 class Drive(FxnBlock):
+    __slots__=('ground', 'motor_control', 'ee_in', 'faultstates')
     _init_p = DegParam
     _init_m = DriveMode
     _init_faultstates = Fault
@@ -278,6 +280,7 @@ class PerceptionMode(Mode):
     mode:   str='off'
     exclusive = True
 class Perception(FxnBlock):
+    __slots__=('ground', 'ee', 'video')
     rad=1
     _init_m = PerceptionMode
     _init_ground = Ground
@@ -316,6 +319,7 @@ class PowerMode(Mode):
     exclusive = True
     key_phases_by = 'self'
 class Power(FxnBlock):
+    __slots__=('ee_15','ee_5','ee_12','switch')
     _init_s = PowerState
     _init_m = PowerMode
     _init_ee_15 = EE
@@ -360,6 +364,7 @@ class OverrideMode(Mode):
     opermodes = ('off','standby','override')
     mode:   str = 'off'
 class Override(FxnBlock):
+    __slots__=('override_comms', 'ee', 'motor_control', 'avionics_control')
     _init_m = OverrideMode
     _init_override_comms = OverrideComms
     _init_ee = EE 
@@ -377,6 +382,7 @@ class Override(FxnBlock):
             self.motor_control.s.assign(self.override_comms.s, 'rpower', 'lpower')
 
 class Communications(FxnBlock):
+    __slots__=('ee_12', 'comms', 'pos_signal')
     _init_ee_12 = EE 
     _init_comms = Comms 
     _init_pos_signal = Pos_Signal
@@ -387,6 +393,7 @@ class Communications(FxnBlock):
         else:   self.comms.s.put(x=0, y=0, vel=0, heading=0)
 
 class Operator(FxnBlock):
+    __slots__=('switch',)
     _init_switch = Switch
     def dynamic_behavior(self, t):
         if t==1:    self.switch.s.power=1
@@ -395,6 +402,7 @@ class Operator(FxnBlock):
 class EnvStates(State):
     in_bound: int=1
 class Environment(FxnBlock):
+    __slots__=('ground',)
     _init_s = EnvStates
     _init_p = RoverParam
     _init_ground = Ground
@@ -411,7 +419,7 @@ class Environment(FxnBlock):
         self.ground.s.lby = self.ground.s.liney - 1.5 * np.cos(self.ground.s.angle*np.pi/180)
         self.ground.s.ubx = self.ground.s.linex - 1.5 * np.sin(self.ground.s.angle*np.pi/180)
         self.ground.s.uby = self.ground.s.liney + 1.5 * np.cos(self.ground.s.angle*np.pi/180)
-        self.in_bound = int(in_bounds(self.ground.s.x, self.ground.s.y, self.ground.s.lbx, self.ground.s.lby, self.ground.s.ubx, self.ground.s.uby))
+        self.s.in_bound = int(in_bounds(self.ground.s.x, self.ground.s.y, self.ground.s.lbx, self.ground.s.lby, self.ground.s.ubx, self.ground.s.uby))
 def sin_func(x,y, amp, period):
     return x, amp * np.sin(period*x)
 def sin_angle_func(x, amp, period):
@@ -442,6 +450,7 @@ def gen_model_params(x, scen):
     params = {'drive_modes':{'custom_fault':{'friction':x[scen][0][0],'drift':x[scen][0][1], 'transfer':x[scen][0][2]}}}
     return params
 class Rover(Model):
+    __slots__=()
     _init_p = RoverParam
     default_sp = dict(times=(0, 100), phases=(('start',0, 30), ('end', 31, 60)), end_condition='indicate_finished')
     def __init__(self, **kwargs):
@@ -474,9 +483,9 @@ class Rover(Model):
 
         self.build()
     def indicate_finished(self, time):
-        if (in_area(self.ground.s.x,self.ground.s.y,1,self.p.end[0],self.p.end[1]) or \
-            (time > 5 and self.avionics.m.in_mode('standby')) or \
-                self.avionics.m.in_mode('em_off', 'finished')):
+        if (in_area(self.flows['ground'].s.x,self.flows['ground'].s.y,1,self.p.end[0],self.p.end[1]) or \
+            (time > 5 and self.fxns['avionics'].m.in_mode('standby')) or \
+                self.fxns['avionics'].m.in_mode('em_off', 'finished')):
             return True
         else:
             return False
@@ -484,21 +493,21 @@ class Rover(Model):
         modes, modeproperties = self.return_faultmodes()
         classification = str()
         at_finish=True
-        if not in_area(self.ground.s.x,self.ground.s.y,2,self.p.end[0],self.p.end[1]):
+        if not in_area(self.flows['ground'].s.x,self.flows['ground'].s.y,2,self.p.end[0],self.p.end[1]):
                                 classification = "incomplete mission"
                                 at_finish = False
         if any(modes):          classification = classification +' faulty'
         if not classification:  classification = 'nominal mission'
         num_modes = len(modes)
-        end_dist = dist(self.ground.s.x,self.ground.s.y,self.p.end[0],self.p.end[1])
-        endpt=[self.ground.s.x ,self.ground.s.y]
+        end_dist = dist(self.flows['ground'].s.x,self.flows['ground'].s.y,self.p.end[0],self.p.end[1])
+        endpt=[self.flows['ground'].s.x ,self.flows['ground'].s.y]
 
-        f_t= min(len(mdlhist.faulty.ground.s.x),len(mdlhist.nominal.ground.s.y))
+        f_t= min(len(mdlhist.faulty.flows.ground.s.x),len(mdlhist.nominal.flows.ground.s.y))
 
-        tot_deviation = np.sum(np.sqrt((mdlhist.nominal.ground.s.x[:f_t]-mdlhist.faulty.ground.s.x[:f_t])**2 + 
-                                       (mdlhist.nominal.ground.s.y[:f_t]-mdlhist.faulty.ground.s.y[:f_t])**2))
-        in_bound = all(mdlhist.faulty.environment.s.in_bound)
-        line_dist = find_line_dist(self.ground.s.x,self.ground.s.y, mdlhist.nominal.ground.s.linex, mdlhist.nominal.ground.s.liney)
+        tot_deviation = np.sum(np.sqrt((mdlhist.nominal.flows.ground.s.x[:f_t]-mdlhist.faulty.flows.ground.s.x[:f_t])**2 + 
+                                       (mdlhist.nominal.flows.ground.s.y[:f_t]-mdlhist.faulty.flows.ground.s.y[:f_t])**2))
+        in_bound = all(mdlhist.faulty.fxns.environment.s.in_bound)
+        line_dist = find_line_dist(self.flows['ground'].s.x,self.flows['ground'].s.y, mdlhist.nominal.flows.ground.s.linex, mdlhist.nominal.flows.ground.s.liney)
 
         return {'rate':0,'cost':0, 'prob':scen['properties'].get('prob',1), 
                 'expected cost':0, 'in_bound':in_bound, 'at_finish':at_finish, 
@@ -530,17 +539,17 @@ def plot_course(hist, label=True, ax=False):
     if label==True: nom_lab="Nominal"; bound_lab="Bounds"; center_lab="Center-line"
     else:           nom_lab='_nolegend_'; bound_lab='_nolegend_'; center_lab='_nolegend_'
 
-    ax.plot(hist.ground.s.x,hist.ground.s.y, color='blue')
-    ax.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='blue', marker='*', label=nom_lab)
+    ax.plot(hist.flows.ground.s.x,hist.flows.ground.s.y, color='blue')
+    ax.scatter(hist.flows.ground.s.x[-1],hist.flows.ground.s.y[-1], color='blue', marker='*', label=nom_lab)
 
-    x_ground = hist.ground.s.lbx
-    y_ground = hist.ground.s.lby
+    x_ground = hist.flows.ground.s.lbx
+    y_ground = hist.flows.ground.s.lby
     ax.plot(x_ground,y_ground, label=bound_lab, color='grey')
-    x_ground = hist.ground.s.ubx
-    y_ground = hist.ground.s.uby
+    x_ground = hist.flows.ground.s.ubx
+    y_ground = hist.flows.ground.s.uby
     ax.plot(x_ground,y_ground, label=bound_lab, color='grey')
-    x_ground = hist.ground.s.x
-    y_ground = hist.ground.s.liney
+    x_ground = hist.flows.ground.s.x
+    y_ground = hist.flows.ground.s.liney
     ax.plot(x_ground,y_ground, label=center_lab, color='grey', linestyle='--')
 
 def plot_trajectories(mdlhists, nomhist=[],  app= [], faultlabel='Faulty', faultalpha=0.1, range_hist={}, rangealpha=0.1, setalpha=0.3, show_labels=True, title="Fault Trajectories", textoffset=2.0,mode_trunc=5,mode_trunc_end=5, xlim=None, ylim=None, figsize=(4,4), ax=False, legend=True):
@@ -551,24 +560,24 @@ def plot_trajectories(mdlhists, nomhist=[],  app= [], faultlabel='Faulty', fault
     else: fig=ax.get_figure()
     for mode, hist in range_hist.items():
         if mode[6:11]=='hmode':
-            ax.plot(hist.ground.s.x,hist.ground.s.y, color='yellow', alpha=rangealpha)
-            ax.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='yellow', alpha=rangealpha, marker='o', label='Range')
+            ax.plot(hist.flows.ground.s.x,hist.flows.ground.s.y, color='yellow', alpha=rangealpha)
+            ax.scatter(hist.flows.ground.s.x[-1],hist.flows.ground.s.y[-1], color='yellow', alpha=rangealpha, marker='o', label='Range')
     for mode, hist in mdlhists.items():
         if mode=='nominal':
             plot_course(hist, ax=ax)
             in_mdlhists=True
         elif mode[6:11]=='hmode':
-            ax.plot(hist.ground.s.x,hist.ground.s.y, color='orange', alpha=setalpha)
-            ax.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='orange', alpha=setalpha, marker='o', label='Set')
+            ax.plot(hist.flows.ground.s.x,hist.flows.ground.s.y, color='orange', alpha=setalpha)
+            ax.scatter(hist.flows.ground.s.x[-1],hist.flows.ground.s.y[-1], color='orange', alpha=setalpha, marker='o', label='Set')
         else:
-            ax.plot(hist.ground.s.x,hist.ground.s.y, color='red', alpha=faultalpha)
-            ax.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='red', alpha=faultalpha, marker='*', label=faultlabel)
+            ax.plot(hist.flows.ground.s.x,hist.flows.ground.s.y, color='red', alpha=faultalpha)
+            ax.scatter(hist.flows.ground.s.x[-1],hist.flows.ground.s.y[-1], color='red', alpha=faultalpha, marker='*', label=faultlabel)
             if show_labels:
                 label = mode[mode_trunc:]
                 label = label[:-mode_trunc_end]
                 randang = np.pi*np.random.rand()
-                ax.annotate(label, xy=(hist.ground.s.x[-1],hist.ground.s.y[-1]), fontsize=8, xytext=(textoffset*np.sin(randang), textoffset*np.cos(randang)), textcoords='offset points')
-    if app: ax.scatter(hist.ground.s.x[int(app.times[0])-1],hist.ground.s.y[int(app.times[0])-1], color='black', marker='X', s=5, label='fault time')
+                ax.annotate(label, xy=(hist.flows.ground.s.x[-1],hist.flows.ground.s.y[-1]), fontsize=8, xytext=(textoffset*np.sin(randang), textoffset*np.cos(randang)), textcoords='offset points')
+    if app: ax.scatter(hist.flows.ground.s.x[int(app.times[0])-1],hist.flows.ground.s.y[int(app.times[0])-1], color='black', marker='X', s=5, label='fault time')
     if not in_mdlhists and nomhist: plot_course(nomhist, ax=ax)
     if xlim: ax.set_xlim(*xlim)
     if ylim: ax.set_ylim(*ylim)
@@ -584,14 +593,14 @@ def plot_trajectories(mdlhists, nomhist=[],  app= [], faultlabel='Faulty', fault
 
 def compare_trajectories(mdlhist1, mdlhist2, mdlhist1_name='fault trajectories', mdlhist2_name='comparison trajectories', faulttimes = [], nomhist=[]):
     for mode, hist in mdlhist1.items():
-        plt.plot(hist.ground.s.x,hist.ground.s.y, color='grey', alpha=0.2, zorder=1)
-        plt.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='grey', alpha=0.3, marker='o', label=mdlhist1_name, zorder=2)
+        plt.plot(hist.flows.ground.s.x,hist.flows.ground.s.y, color='grey', alpha=0.2, zorder=1)
+        plt.scatter(hist.flows.ground.s.x[-1],hist.flows.ground.s.y[-1], color='grey', alpha=0.3, marker='o', label=mdlhist1_name, zorder=2)
     for mode, hist in mdlhist2.items():
-        plt.plot(hist.ground.s.x,hist.ground.s.y, color='tab:orange', alpha=0.2, zorder=1)
-        plt.scatter(hist.ground.s.x[-1],hist.ground.s.y[-1], color='tab:orange', alpha=0.3, marker='o', label=mdlhist2_name, zorder=2)
+        plt.plot(hist.flows.ground.s.x,hist.flows.ground.s.y, color='tab:orange', alpha=0.2, zorder=1)
+        plt.scatter(hist.flows.ground.s.x[-1],hist.flows.ground.s.y[-1], color='tab:orange', alpha=0.3, marker='o', label=mdlhist2_name, zorder=2)
     if faulttimes:
-        xfaults = [x for ind, x in enumerate(nomhist.ground.s.x) if ind+1<len(nomhist.time) and nomhist.time[ind+1] in faulttimes]
-        yfaults = [y for ind, y in enumerate(nomhist.ground.s.y) if ind+1<len(nomhist.time) and nomhist.time[ind+1] in faulttimes]
+        xfaults = [x for ind, x in enumerate(nomhist.flows.ground.s.x) if ind+1<len(nomhist.time) and nomhist.time[ind+1] in faulttimes]
+        yfaults = [y for ind, y in enumerate(nomhist.flows.ground.s.y) if ind+1<len(nomhist.time) and nomhist.time[ind+1] in faulttimes]
         plt.scatter(xfaults, yfaults, marker = 'x', color='black',  label='fault times', zorder=3)
     if nomhist: plot_course(nomhist)
     handles, labels = plt.gca().get_legend_handles_labels()
@@ -621,8 +630,8 @@ def plot_map(mdl, mdlhist):
 
 def plot_centerline_err(mdl, mdlhist):
     fig = plt.figure()
-    x_rover = mdlhist.ground.s.x
-    y_rover = mdlhist.ground.s.y
+    x_rover = mdlhist.flows.ground.s.x
+    y_rover = mdlhist.flows.ground.s.y
     if mdl.p['linetype']=='sine':
         y_line = [sin_func(x,y_rover[i], mdl.p['amp'], mdl.p['period'])[1] for i,x in enumerate(x_rover)]
     elif mdl.p['linetype']=='turn':
@@ -736,7 +745,7 @@ if __name__=="__main__":
     
     
     line_dist = endresults['line_dist']
-    end_loc = (reshist.faulty.ground.s.x[-1],reshist.faulty.ground.s.y[-1])
+    end_loc = (reshist.faulty.flows.ground.s.x[-1],reshist.faulty.flows.ground.s.y[-1])
     #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
 
    # app = NominalApproach()

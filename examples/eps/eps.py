@@ -35,6 +35,7 @@ class ImportEEModes(Mode):
                  'high_v':(5e-6, 100), 
                  'no_v':(1e-5, 300)}
 class ImportEE(FxnBlock):
+    __slots__=('ee_out',)
     _init_m = ImportEEModes
     _init_ee_out = GenericFlow
     flownames = {'ee_1':'ee_out'}
@@ -56,6 +57,7 @@ class ImportSigModes(Mode):
     faultparams={'partial_signal':(1e-5, 750), 
                  'no_signal':(1e-6, 750)}
 class ImportSig(FxnBlock):
+    __slots__=('sig_out',)
     _init_m = ImportSigModes
     _init_sig_out = Signal
     flownames = {'sig_in':'sig_out'}
@@ -68,6 +70,7 @@ class StoreEEModes(Mode):
     faultparams={'low_storage':(5e-6, 2000),
                  'no_storage':(5e-6, 2000)}
 class StoreEE(FxnBlock):
+    __slots__=('ee_in', 'ee_out')
     _init_m=StoreEEModes
     _init_ee_in = GenericFlow 
     _init_ee_out = GenericFlow 
@@ -91,6 +94,7 @@ class SupplyEEModes(Mode):
                    'short':             (1e-7, 400), 
                    'open_circuit':      (5e-8,  200)}
 class SupplyEE(FxnBlock):
+    __slots__=('ee_in', 'ee_out', 'heat_out')
     _init_m=SupplyEEModes
     _init_ee_in = GenericFlow 
     _init_ee_out = GenericFlow 
@@ -124,6 +128,7 @@ class DistEEModes(Mode):
                    'short':         (2e-5,1500), 
                    'open_circuit':  (3e-5,1500)}
 class DistEE(FxnBlock):
+    __slots__=('sig_in', 'ee_in', 'ee_m', 'ee_h', 'ee_o')
     _init_m=DistEEModes
     _init_sig_in = GenericFlow 
     _init_ee_in = GenericFlow 
@@ -159,6 +164,7 @@ class ExportHEModes(Mode):
     faultparams={'hot_sink':           (1e-5, 500), 
                  'ineffective_sink':   (0.5e-5,1000)}
 class ExportHE(FxnBlock):
+    __slots__=('he',)
     _init_m = ExportHEModes
     _init_he = GenericFlow 
     flownames = {'waste_he_1':'he', 'waste_he_o':'he', 'waste_he_m':'he'}
@@ -168,11 +174,13 @@ class ExportHE(FxnBlock):
         else:                                     self.he.s.rate=1.0
                  
 class ExportME(FxnBlock):
+    __slots__=('me',)
     _init_me = GenericFlow
     def behavior(self,time):
         self.me.s.rate = self.me.s.effort
                 
 class ExportOE(FxnBlock):
+    __slots__=('oe',)
     _init_oe = GenericFlow 
     def behavior(self,time):
         self.oe.s.rate = self.oe.s.effort
@@ -184,6 +192,7 @@ class EEtoMEModes(Mode):
                  'open_circuit':    (5e-5,200), 
                  'short':           (5e-5,200)}
 class EEtoME(FxnBlock):
+    __slots__=('ee_in', 'me', 'he_out')
     _init_m = EEtoMEModes
     _init_ee_in = GenericFlow 
     _init_me = GenericFlow 
@@ -223,6 +232,7 @@ class EEtoHEModes(Mode):
                  'toohigh_heat':    (5e-7,200), 
                  'open_circuit':    (1e-7,200)}
 class EEtoHE(FxnBlock):
+    __slots__=('ee_in', 'he')
     _init_m=EEtoHEModes
     _init_ee_in = GenericFlow 
     _init_he = GenericFlow 
@@ -251,6 +261,7 @@ class EEtoOEModes(Mode):
     faultparams = {'optical_resist':    (5e-7, 70),
                    'burnt_out':         (2e-6, 100)}
 class EEtoOE(FxnBlock):
+    __slots__=('ee_in', 'oe', 'he_out')
     _init_m = EEtoOEModes
     _init_ee_in = GenericFlow 
     _init_oe = GenericFlow 
@@ -273,6 +284,8 @@ class EEtoOE(FxnBlock):
             self.oe.s.effort =  self.ee_in.s.effort 
 
 class EPS(Model):
+    __slots__=()
+    default_track = {'flows':['he', 'me', 'oe']}
     def __init__(self, sp=SimParam(times=(0,1)), **kwargs):
         """
         The Model superclass uses a static model representation by default if
@@ -359,6 +372,7 @@ if __name__ == '__main__':
     an.graph.show(mdl.bipartite,gtype='bipartite', heatmap=degtimemap)
     an.graph.show(resgraph,heatmap=degtimemap)
 
+    propagate.single_faults(mdl)
     
     
     

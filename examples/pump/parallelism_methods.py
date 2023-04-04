@@ -9,7 +9,7 @@ from ex_pump import *
 from fmdtools.sim.approach import SampleApproach
 import fmdtools.sim.propagate as propagate
 import fmdtools.analyze as an
-from fmdtools.define.model import ModelParam
+from fmdtools.define.model import SimParam
 
 import time
 import pickle
@@ -118,18 +118,24 @@ def instantiate_pools(cores):
 
 
 if __name__=='__main__':
-    mdl=Pump(params=PumpParam(), modelparams = ModelParam(phases=(('start',0,4),('on',5, 49),('end',50,500)),times=(0,20, 500)))
+    mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)),times=(0,20, 500)))
     app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':3})
     
     cores = 4
     
     print("STAGED + SOME TRACKING")
-    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track={'flows':{'EE_1':'all', 'Wat_2':['pressure', 'flowrate']}})
+    pools = instantiate_pools(cores)
+    compare_pools(mdl,app,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_2':['pressure', 'flowrate']}})
+
     print("STAGED + FULL MODEL TRACKING")
-    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='all')
+    compare_pools(mdl,app,pools, staged=True, track='all')
+
     print("STAGED + FLOW TRACKING")
-    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='flows')
+    compare_pools(mdl,app,pools, staged=True, track='flows')
+
     print("STAGED + FUNCTION TRACKING")
-    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='functions')
+    compare_pools(mdl,app,pools, staged=True, track='fxns')
+
     print("STAGED + NO TRACKING")
-    compare_pools(mdl,app,instantiate_pools(cores), staged=True, track='none')
+    compare_pools(mdl,app,pools, staged=True, track='none')
+    for pool in pools.values(): pool.terminate()

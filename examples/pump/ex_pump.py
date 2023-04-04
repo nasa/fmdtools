@@ -280,7 +280,7 @@ class Pump(Model):
     t=1 is a good default.
     """
     default_sp = dict(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr')
-    default_track = {'wat_2':{'s':'flowrate'}, 'ee_1':{'s':{'current'}}, 'i':'all'}
+    default_track = {'flows':{'wat_2':{'s':'flowrate'}, 'ee_1':{'s':{'current'}}}, 'i':'all'}
     """
         This defines the pump model as a Model.
 
@@ -326,7 +326,7 @@ class Pump(Model):
         if time>self.sp.times[-1]: return True
         else:                      return False
     def indicate_on(self, time):
-        return self.wat_1.s.flowrate>0
+        return self.flows['wat_1'].s.flowrate>0
     def find_classification(self,scen, mdlhists):
         """
             Model classes use find_classification() to classify the results based on a fault scenario, returning
@@ -340,14 +340,14 @@ class Pump(Model):
         if 'repair' in self.p.cost: repcost= self.calc_repaircost()
         else:                               repcost = 0.0
         if 'water' in self.p.cost:
-            lostwat = sum(mdlhists['nominal'].wat_2.s.flowrate- mdlhists['faulty'].wat_2.s.flowrate)
+            lostwat = sum(mdlhists['nominal'].flows.wat_2.s.flowrate- mdlhists['faulty'].flows.wat_2.s.flowrate)
             watcost = 750 * lostwat  * self.sp.dt
         elif 'water_exp' in self.p.cost:
-            wat = mdlhists['nominal'].wat_2.s.flowrate - mdlhists['faulty'].wat_2.s.flowrate
+            wat = mdlhists['nominal'].flows.wat_2.s.flowrate - mdlhists['faulty'].flows.wat_2.s.flowrate
             watcost =100 *  sum(np.array(accumulate(wat))**2) * self.sp.dt
         else: watcost = 0.0
         if 'ee' in self.p.cost:
-            eespike = [spike for spike in mdlhists['faulty'].ee_1.s.current - mdlhists['nominal'].ee_1.s.current if spike >1.0]
+            eespike = [spike for spike in mdlhists['faulty'].flows.ee_1.s.current - mdlhists['nominal'].flows.ee_1.s.current if spike >1.0]
             if len(eespike)>0: eecost = 14 * sum(np.array(reseting_accumulate(eespike))) * self.sp.dt
             else: eecost =0.0
         else: eecost = 0.0
@@ -395,13 +395,13 @@ if __name__=="__main__":
     #d = pickle.loads(c)
     
     mdl = Pump()
-    newhist2 = mdl.create_hist(range(10), {'ee_1':'all',"wat_1":{'s':('flowrate',)}})
+    newhist2 = mdl.create_hist(range(10), {'flows':{'ee_1':'all',"wat_1":{'s':('flowrate',)}}})
     mdl = Pump()
     newhist3 = mdl.create_hist(range(10), "all")
     mdl.flows['ee_1'].s
     
     mdl = Pump()
-    newhist4 = mdl.create_hist(range(10), {'move_water':['s', 't']})
+    newhist4 = mdl.create_hist(range(10), {'fxns':{'move_water':['s', 't']}})
     mdl.flows['ee_1'].s
     
     #an.graph.exec_order(mdl)

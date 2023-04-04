@@ -36,6 +36,7 @@ class CtlDOFState(State):
     cs:     float = 1.0
     vel:    float = 0.0     
 class CtlDOF(FxnBlock):
+    __slots__=('ee_in', 'dir', 'ctl', 'dofs', 'fs')
     _init_s = CtlDOFState
     _init_m = CtlDOFMode
     _init_ee_in = EE
@@ -93,6 +94,7 @@ class PlanPathParams(Parameter):
 class PlanPathTime(Time):
     timernames = ('pause',)
 class PlanPath(FxnBlock):
+    __slots__=('ee_in', 'env', 'dir', 'fs')
     _init_t = PlanPathTime
     _init_m = PlanPathMode
     _init_s = PlanPathStates
@@ -136,6 +138,7 @@ class PlanPath(FxnBlock):
         if self.ee_in.s.effort<0.5:       self.dir.s.assign([0,0,0,0], "x","y","z", "power")
 
 class Trajectory(FxnBlock):
+    __slots__=('env', 'dofs', 'dir', 'force_gr')
     _init_env = Env
     _init_dofs = DOFs 
     _init_dir = Dir 
@@ -176,6 +179,7 @@ class ViewEnvironment(FxnBlock):
             if inrange(area, spot[0],spot[1]): self.viewingarea[spot]='viewed'
 
 class Drone(Model):
+    __slots__=()
     default_sp = dict(phases=(('ascend',0,4),('forward',5,94),('descend',95, 100)),times=(0,135),units='sec')
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -204,16 +208,16 @@ class Drone(Model):
         
         self.build()
     def find_classification(self,scen, mdlhists):
-        if -5 >mdlhists.faulty.env.s.x[-1] or 5<mdlhists.faulty.env.s.x[-1]:
+        if -5 >mdlhists.faulty.flows.env.s.x[-1] or 5<mdlhists.faulty.flows.env.s.x[-1]:
             lostcost=50000
-        elif -5 >mdlhists.faulty.env.s.y[-1] or 5<mdlhists.faulty.env.s.y[-1]:
+        elif -5 >mdlhists.faulty.flows.env.s.y[-1] or 5<mdlhists.faulty.flows.env.s.y[-1]:
             lostcost=50000
-        elif mdlhists.faulty.env.s.z[-1] >5:
+        elif mdlhists.faulty.flows.env.s.z[-1] >5:
             lostcost=50000
         else:
             lostcost=0
         
-        if any(abs(mdlhists.faulty.force_gr.s.support)>2.0):
+        if any(abs(mdlhists.faulty.flows.force_gr.s.support)>2.0):
             crashcost = 100000
         else:
             crashcost = 0
@@ -263,6 +267,6 @@ if __name__=="__main__":
     quad_comp_endclasses_1, quad_comp_mdlhists_1 = fs.propagate.approach(mdl_quad_comp, quad_comp_app)
     
     cost_tests = [quad_comp_endclasses[ec]['expected cost']==quad_comp_endclasses_1[ec]['expected cost'] for ec in quad_comp_endclasses]
-    dist_tests = [all(quad_comp_mdlhists[ec].env.s.x==quad_comp_mdlhists_1[ec].env.s.x) for ec in quad_comp_mdlhists]
-    dist_tests2 = [all(quad_comp_mdlhists[ec].env.s.y==quad_comp_mdlhists_1[ec].env.s.y) for ec in quad_comp_mdlhists]
+    dist_tests = [all(quad_comp_mdlhists[ec].flows.env.s.x==quad_comp_mdlhists_1[ec].flows.env.s.x) for ec in quad_comp_mdlhists]
+    dist_tests2 = [all(quad_comp_mdlhists[ec].flows.env.s.y==quad_comp_mdlhists_1[ec].flows.env.s.y) for ec in quad_comp_mdlhists]
     

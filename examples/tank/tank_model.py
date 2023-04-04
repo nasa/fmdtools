@@ -47,6 +47,7 @@ class TransportLiquidMode(Mode):
     units='hr'
     key_phases_by='global'
 class ImportLiquid(FxnBlock):
+    __slots__=('sig', 'watout')
     _init_s = TransportLiquidState
     _init_m = TransportLiquidMode
     _init_sig = Signal
@@ -61,6 +62,7 @@ class ImportLiquid(FxnBlock):
         self.sig.s.indicator = self.s.amt_open
 
 class ExportLiquid(FxnBlock):
+    __slots__=('sig', 'watin')
     _init_s = TransportLiquidState 
     _init_m = TransportLiquidMode
     _init_sig = Signal
@@ -78,6 +80,7 @@ class GuideLiquidMode(Mode):
                    'Clogged':(1e-5,[1,0],0)}
     key_phases_by='global'
 class GuideLiquid(FxnBlock):
+    __slots__=('watin', 'watout')
     _init_watin=Water
     _init_watout=Water 
     def static_behavior(self,time):
@@ -101,6 +104,7 @@ class StoreLiquidMode(Mode):
     faultparams={'leak':(1e-5,[1,0],0)}
     key_phases_by='global'
 class StoreLiquid(FxnBlock):
+    __slots__=('watin', 'watout', 'sig')
     _init_s = StoreLiquidState
     _init_m = StoreLiquidMode
     _init_watin = Water
@@ -236,9 +240,10 @@ class TankParam(Parameter, readonly=True):
     store_tstep:    float = 1.0
 
 class Tank(Model):
+    __slots__=()
     _init_p = TankParam
     default_sp = dict(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min')
-    default_track = {'store_water':{'s':'level'}}
+    default_track = {'fxns':{'store_water':{'s':'level'}}}
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
@@ -260,9 +265,9 @@ class Tank(Model):
         self.build()
     def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high
-        if any(self.h.store_water.s.level>=20):    totcost = 1000000
-        elif any(self.h.store_water.s.level<=0):   totcost = 1000000
-        else:                                      totcost = 0
+        if any(self.h.fxns.store_water.s.level>=20):    totcost = 1000000
+        elif any(self.h.fxns.store_water.s.level<=0):   totcost = 1000000
+        else:                                           totcost = 0
         rate=scen['properties'].get('rate',0.0)
         life=1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': rate*life*totcost}
@@ -278,30 +283,30 @@ if __name__ == '__main__':
     
     ## nominal run
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])
-    an.plot.mdlhists(mdlhist, fxnflowvals='store_water')
+    an.plot.mdlhists(mdlhist, fxnflowvals={'fxns':'store_water'})
     an.graph.show(endresults['bipartite'])
     
     
     ## faulty run
     resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='bipartite')
-    an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='store_water', time_slice=2)
+    an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals={'fxns':'store_water'}, time_slice=2)
     an.graph.show(resgraph,faultscen='leak response', time='end')
     
     
     resgraph, mdlhist = propagate.one_fault(mdl,'human','detect_false_high', time=2, desired_result='bipartite')
     
-    an.plot.mdlhists(mdlhist, title='detect_false_high', fxnflowvals='store_water', time_slice=2)
+    an.plot.mdlhists(mdlhist, title='detect_false_high', fxnflowvals={'fxns':'store_water'}, time_slice=2)
     an.graph.show(resgraph,faultscen='detect_false_high', time=2)
     
     resgraph, mdlhist = propagate.one_fault(mdl,'human','turn_wrong_valve', time=2, desired_result='bipartite')
     
-    an.plot.mdlhists(mdlhist,title='turn_wrong_valve', fxnflowvals='store_water', time_slice=2)
+    an.plot.mdlhists(mdlhist,title='turn_wrong_valve', fxnflowvals={'fxns':'store_water'}, time_slice=2)
     an.graph.show(resgraph,faultscen='turn_wrong_valve', time=2)
     
     
     mdl = Tank(p=TankParam(reacttime=2), sp = dict(dt=3.0))
     resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='bipartite')
-    an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals='store_water', time_slice=2)
+    an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals={'fxns':'store_water'}, time_slice=2)
     an.graph.show(resgraph,faultscen='turn_wrong_valve', time='end')
     
     ## run all faults - note: all faults get caught!
