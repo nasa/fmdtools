@@ -692,7 +692,7 @@ def list_init_faults(mdl):
                     rate=fm.failrate*fm.faultmodes[mode]['dist']*eq_units(fm.faultmodes[mode]['units'], mdl.sp.units)*trange # this rate is on a per-simulation basis
                 elif fm.faultmodes[mode]['probtype']=='prob':
                     rate = fm.failrate*fm.faultmodes[mode]['dist']
-                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+str(time)}
+                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+'-'.join(str(time).split('.'))}
                 faultlist.append(newscen)
     return faultlist
 

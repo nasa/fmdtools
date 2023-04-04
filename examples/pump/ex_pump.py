@@ -425,7 +425,7 @@ if __name__=="__main__":
     
     gh = mdlhists.get_group_hists('flows.ee_1.s.current')
     
-    endclasses, mdlhists_staged  = propagate.approach(mdl, faultapp, staged=True)
+    endclasses, mdlhists_staged  = propagate.approach(mdl, faultapp, staged=True, track='all')
     flat_staged = mdlhists_staged.flatten()
     
     

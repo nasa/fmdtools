@@ -797,12 +797,12 @@ class SampleApproach():
                         else: 
                             rate = self.rates[fxnmode][phaseid] * self.weights[fxnmode][phaseid][time]
                         if type(fxnmode[0])==str:
-                            name = fxnmode[0]+' '+fxnmode[1]+', t='+str(time)
+                            name = fxnmode[0]+' '+fxnmode[1]+', t='+'-'.join(str(time).split('.'))
                             scen={'sequence':{time:{'faults':{fxnmode[0]:fxnmode[1]}}},\
                                   'properties':{'type': 'single-fault', 'function': fxnmode[0],\
                                                 'fault': fxnmode[1], 'rate': rate, 'time': time, 'name': name}}
                         else:
-                            name = ' '.join([fm[0]+': '+fm[1]+',' for fm in fxnmode])+' t='+str(time)
+                            name = ' '.join([fm[0]+': '+fm[1]+',' for fm in fxnmode])+' t='+'-'.join(str(time).split('.'))
                             faults = dict.fromkeys([fm[0] for fm in fxnmode])
                             for fault in faults:
                                 faults[fault] = [fm[1] for fm in fxnmode if fm[0]==fault]
