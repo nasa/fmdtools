@@ -1,11 +1,8 @@
 # fmdtools
 
-![fmdtools logo](https://github.com/nasa/fmdtools/blob/main/docs/figures/logo.png "fmdtools logo").
-
-
+![fmdtools logo](https://github.com/nasa/fmdtools/blob/main/docs/figures/logo.png).
 
 ![PyPI](https://img.shields.io/pypi/v/fmdtools)
-
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release)
 
 
