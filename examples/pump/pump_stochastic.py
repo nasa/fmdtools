@@ -149,10 +149,8 @@ if __name__=="__main__":
     
     comp_mdlhists = getattr(mdlhists, 'export_water block, t=27-0')
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
-    fig = an.plot.mdlhists(comp_mdlhists, 'fxns.move_water.s.eff',
-                                           'fxns.move_water.s.total_flow',
-                                           'flows.wat_2.s.flowrate',
-                                           'flows.wat_2.s.pressure', comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
+    fig = an.plot.hist(comp_mdlhists, 'fxns.move_water.s.eff', 'fxns.move_water.s.total_flow', 'flows.wat_2.s.flowrate','flows.wat_2.s.pressure', 
+                       comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
     
     app = NominalApproach()
     app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
@@ -184,7 +182,7 @@ if __name__=="__main__":
     
     #mdlhist['faulty']['functions']['ImportEE']['probdens']
     
-    an.plot.mdlhists(mdlhist, 'fxns.import_ee.s.effstate','fxns.import_ee.r.s.grid_noise',
+    an.plot.hist(mdlhist, 'fxns.import_ee.s.effstate','fxns.import_ee.r.s.grid_noise',
                                'flows.ee_1.s.voltage','flows.ee_1.s.current')
     #an.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     

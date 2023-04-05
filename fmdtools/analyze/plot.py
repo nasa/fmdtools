@@ -34,22 +34,22 @@ from matplotlib.ticker import AutoMinorLocator
 from mpl_toolkits.mplot3d import Axes3D
 
 
-def mdlhists(mdlhists, *plot_values, cols=2, aggregation='individual', comp_groups={'nominal':'nominal', 'faulty':'faulty'}, 
-             legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
-             fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95, titles={},
-             title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
-             v_padding=None, h_padding=None, title_padding=0.0,
-             phases={}, modephases={}, label_phases=True, legend_title=None,  **kwargs):
+def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={'nominal':'nominal', 'faulty':'faulty'}, 
+         legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
+         fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95, titles={},
+         title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
+         v_padding=None, h_padding=None, title_padding=0.0,
+         phases={}, modephases={}, label_phases=True, legend_title=None,  **kwargs):
     """
     Plot the behavior over time of the given function/flow values 
     over a set of scenarios, with ability to aggregate behaviors as needed.
 
     Parameters
     ----------
-    mdlhists : dict
-        Aggregate model history with structure {'scen':mdlhist} (or single mdlhist)
-    plot_values : dict, optional
-        names of values from the dict to pull. 
+    simhists : History
+        Simulation history
+    plot_values : strs, optional
+        names of values to pull from the history 
     cols : int, optional
         columns to use in the figure. The default is 2.
     aggregation : str, optional
@@ -126,13 +126,13 @@ def mdlhists(mdlhists, *plot_values, cols=2, aggregation='individual', comp_grou
         phases={}, modephases={}, label_phases=True,  **kwargs):
     """
     #Process data - clip and flatten
-    if 'time' in mdlhists: 
-        mdlhists = History(nominal=mdlhists)
+    if 'time' in simhists: 
+        simhists = History(nominal=simhists)
     #if max_ind=='max': 
     #    max_ind = np.min([len(t) for t in mdlhists.values()])-1
     #mdlhists.cut(max_ind)
     #Sort into comparison groups
-    grouphists = mdlhists.get_group_hists(*plot_values, **comp_groups)
+    grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
     # Set up plots and iteration
     if 'nominal' in grouphists.keys() and len(grouphists)>1: 
         indiv_kwargs['nominal'] = indiv_kwargs.get('nominal', {'color':'blue', 'ls':'--'})
@@ -208,53 +208,6 @@ def mdlhists(mdlhists, *plot_values, cols=2, aggregation='individual', comp_grou
             for ts in time_slice: ax.axvline(x=ts, color='k', label=time_slice_label)
     multiplot_legend_title(grouphists, axs, ax, legend_loc, title, v_padding, h_padding, title_padding, legend_title)
     return fig, axs
-def indiv_mdlhists(mdlhist, fxnflows={}, cols=2, aggregation='individual', comp_groups={}, 
-             legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
-             fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95,
-             title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
-             phases={}, modephases={}, label_phases=True,  **kwargs):
-    """
-    Successively calls an.plot.mdlhists to plot a number of seperate plots. Each
-    function or flow is given its own plot.
-
-    Parameters
-    ----------
-    mdlhists : dict
-        Aggregate model history with structure {'scen':mdlhist} (or single mdlhist)
-    fxnflows : dict, optional
-        dict of flow values to plot with structure {fxnflow:[vals], fxnflow:'val'/all, fxnflow:{'comp':[vals]}}.
-        Each mdlhist is given an individual plot.
-        The default is {}, which returns all.
-    **kwargs : see kwargs for an.plot.mdlhists
-    Returns
-    -------
-    figs : list
-        List of individual figures.
-    """
-    inputs = copy.copy(locals())
-    inputs.pop('mdlhist',''); inputs.pop('fxnflows',''); inputs.pop('kwargs','')
-    inputs = {**inputs, **kwargs}
-    figs = []
-    if 'time' in mdlhist: mdlhist={'nominal':mdlhist}
-    if not fxnflows: fxnflows = {fxnflow:"all" for fxnflow in list(mdlhist['nominal']['functions'].keys())+list(mdlhist['nominal']['flows'].keys()) if any(mdlhist['nominal']['functions'].get(fxnflow, [])) or any(mdlhist['nominal']['flows'].get(fxnflow, []))}
-    for fxnflow in fxnflows:
-        fig = mdlhists(mdlhist.copy(), fxnflowvals={fxnflow:fxnflows.get(fxnflow,'all')}, **inputs, **kwargs)
-        figs.append(fig)
-    return figs
-def mdlhist(mdlhist, fault='', time=0, fxnflows={},cols=2, returnfigs=False, legend=-1, timelabel='Time', units={}, phases={}, modephases={}, label_phases=True):
-    """
-    Deprecated legacy plotting function. Use analyze.plot.indiv_mdlhists instead.
-    """
-    warnings.warn("Deprecated function. Use analyze.plot.indiv_mdlhists instead.")
-    figs = indiv_mdlhists(mdlhist, fxnflows, cols, title=fault, time_slice=time, legend_loc=legend, xlabel=timelabel, ylabels=units, phases=phases, modephases=modephases, label_phases=label_phases)
-    if returnfigs: return figs
-def mdlhistvals(mdlhist, fault='', time=0, fxnflowvals='all', cols=2, returnfig=True, legend=-1, timelabel="time", units={}, phases={}, modephases={}, label_phases=True):
-    """
-    Deprecated legacy plotting function. Use analyze.plot.mdlhists instead.
-    """
-    warnings.warn("Deprecated function. Use analyze.plot.mdlhists instead.")
-    fig = mdlhists(mdlhist, fxnflowvals, cols, title=fault, time_slice=time, legend_loc=legend, xlabel=timelabel, ylabels=units, phases=phases, modephases=modephases, label_phases=label_phases)
-    if returnfig: return fig
 def plot_line_and_err(ax, times, line, lows, highs, boundtype, boundcolor='gray', boundlinestyle='--', fillalpha=0.3, **kwargs):
     """
     Plots a line with a given range of uncertainty around it.
@@ -330,7 +283,7 @@ def make_consolidated_legend(ax):
     ax.get_legend().remove()
     ax.legend(by_label.values(), by_label.keys(), bbox_to_anchor=(1.05, 1), loc='upper left')
     
-def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metric_bins={}, legend_loc=-1, 
+def metric_dist(result, *plot_values, cols=2, comp_groups={}, bins=10, metric_bins={}, legend_loc=-1, 
                 xlabels={}, ylabel='count', title='', indiv_kwargs={}, figsize='default', 
                 v_padding=0.4, h_padding=0.05, title_padding=0.1, legend_title=None, **kwargs):
     """
@@ -338,9 +291,9 @@ def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metr
 
     Parameters
     ----------
-    endclasses : dict
+    endclasses : Result
         Dictionary of metrics with structure {'scen':{'metric':value}}
-    metrics : list, optional
+    plot_values : list, optional
         list of metrics in the dictionary to plot
     cols : int, optional
         columns to use in the figure. The default is 2. 
@@ -381,11 +334,8 @@ def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metr
         keyword arguments to mpl.hist e.g. bins, etc
     """
     #Sort into comparison groups
-    if not comp_groups:     groupmetrics = {'default':endclasses}
-    else:                   groupmetrics = {group:{ec:cl for ec,cl in endclasses.items() if ec in groupscens} for group, groupscens in comp_groups.items()}
-    template = [*endclasses.values()][0]
-    if metrics=='all':  plot_values = [i for i in template.keys()]
-    else:               plot_values = [i for i in template.keys() if i in metrics]
+    groupmetrics = result.get_comp_groups(*plot_values, **comp_groups)
+
     num_plots = len(plot_values)
     if num_plots==1: cols=1
     rows = int(np.ceil(num_plots/cols))
@@ -411,7 +361,7 @@ def metric_dist(endclasses, metrics='all', cols=2, comp_groups={}, bins=10, metr
     multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,v_padding, h_padding, title_padding, legend_title)
     return fig, axs
 
-def metric_dist_from(mdlhists, times, fxnflowvals='all', **kwargs):
+def metric_dist_from(mdlhists, times, *plot_values, **kwargs):
     """
     Plot the distribution of model history function/flow value over at defined time(s) over a number of scenarios.
 
@@ -432,7 +382,7 @@ def metric_dist_from(mdlhists, times, fxnflowvals='all', **kwargs):
     **kwargs : kwargs
         keyword arguments to plot.metric_dist
     """
-    flat_mdlhists = {scen:mdlhist.flatten(to_include=fxnflowvals) for scen, mdlhist in mdlhists.items()}
+    flat_mdlhists = mdlhists.nest(levels=1)
     if type(times) in [int, float]: times=[times]
     if len(times)==1 and kwargs.get('comp_groups', False):
         time_classes = {scen:{metric:val[times[0]] for metric, val in flat_hist.items()} for scen, flat_hist in flat_mdlhists.items()}
@@ -441,7 +391,7 @@ def metric_dist_from(mdlhists, times, fxnflowvals='all', **kwargs):
     else:
         time_classes = {str(t)+'_'+scen:{metric:val[t] for metric, val in flat_hist.items()} for scen, flat_hist in flat_mdlhists.items() for t in times}
         comp_groups = {t:{str(t)+'_'+scen for scen in flat_mdlhists} for t in times}
-    fig, axs= metric_dist(time_classes,comp_groups=comp_groups, **kwargs)
+    fig, axs= metric_dist(time_classes, *plot_values, comp_groups=comp_groups, **kwargs)
     return fig, axs
 
 def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4), xlabel=''):
