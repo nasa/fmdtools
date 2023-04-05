@@ -304,7 +304,7 @@ class Result(UserDict):
         for k in k_vs:
             h[k]=self[k]
         return h
-    def get_group_hists(self, *values, **groups):
+    def get_comp_groups(self, *values, **groups):
         if not groups: groups={'default':'default'}
         if 'time' not in values: values = values + ('time', )
         group_hist = self.__class__()
