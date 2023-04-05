@@ -273,8 +273,8 @@ class Result(UserDict):
         else:
             self.data[key]=val
     def all_with(self, attr):
+        """Gets all values with the attribute attr"""
         new = self.__class__()
-        min_ind = max([len(k.split('.')) for k in self.keys()])
         for k,v in self.items():
             if '.'+attr+'.' in k:
                 new[k] = v
@@ -299,12 +299,29 @@ class Result(UserDict):
             result.update(Result.load_folder(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
         return result
     def get_values(self, *values):
+        """Gets a dict with all values corresponding to the strings in *values"""
         h = self.__class__()
         k_vs = [k for k in self.keys() for v in values if k.endswith(v)]
         for k in k_vs:
             h[k]=self[k]
         return h
     def get_comp_groups(self, *values, **groups):
+        """
+        Gets comparison groups of *values (i.e., aspects of the model) in groups
+        **groups (sets of scenarios with structure )
+
+        Parameters
+        ----------
+        *values : str
+            Values to get (e.g. `fxns.fxnname.s.val`)
+        **groups : list
+            Sets of scenarios to group (e.g. set_1=['scen1', 'scen2'...])
+
+        Returns
+        -------
+        group_hist : History
+            Single-level history with structure {group:{scenname.valuename}}
+        """
         if not groups: groups={'default':'default'}
         if 'time' not in values: values = values + ('time', )
         group_hist = self.__class__()
@@ -352,6 +369,7 @@ class Result(UserDict):
                 else:               newhist[newname] = val
         return newhist
     def is_flat(self):
+        """Checks if the history is flat."""
         for v in self.values():
             if isinstance(v, Result): return False
         return True
@@ -445,6 +463,7 @@ class Result(UserDict):
             raise Exception("Invalid File Type")
         file_handle.close()
     def as_table(self):
+        """Creates a table corresponding to the current dict structure"""
         flatdict=self.flatten()
         newdict = {join_key(k):v for k,v in flatdict.items()}
         return pd.DataFrame.from_dict(newdict)
@@ -599,6 +618,11 @@ class Result(UserDict):
         return {scen:endclass.end_diff(metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff) for scen, endclass in self.items()}
         
 def diff(val1, val2, difftype='bool'):
+    """
+    Helper function for finding inconsistent states between val1, val2, with the 
+    difftype option ('diff' (takes the difference), 'bool' (checks if the same), 
+                     and float (checks if under the provided tolerance))
+    """
     if difftype=='diff':        return val1-val2
     elif difftype=='bool':      return val1==val2
     elif type(difftype)==float: return abs(val1-val2)>difftype
@@ -608,6 +632,7 @@ def nan_to_x(metric, x=0.0):
     else:                   return metric
 
 def is_numeric(val):
+    """Checks if a given value is numeric"""
     try:
         return val.dtype in ['float', 'bool', 'int']
     except:
@@ -844,6 +869,7 @@ class History(Result):
             slice_dict[key]=flathist[key][t_ind]
         return slice_dict
     def is_in(self, at):
+        """ checks if at is in the dictionary"""
         return any([k for k in self.keys() if at in k])
     def get_fault_time(self, metric="earliest"):
         """
@@ -868,9 +894,11 @@ class History(Result):
         elif metric=='total':
             return np.sum(has_faults_hist)
     def _prep_faulty(self):
+        """Helper that creates a faulty history of states from the current history"""
         if self.is_in('faulty'):    return self.faulty.flatten()
         else:                       return self.flatten()
     def _prep_nom_faulty(self, nomhist={}):
+        """Helper that creates a nominal history of states from the current history"""
         if not nomhist:         nomhist = self.nominal.flatten()
         else:                   nomhist = nomhist.flatten()
         return nomhist, self._prep_faulty()
@@ -1026,6 +1054,18 @@ class History(Result):
                 phases[fxn] = dict(sorted(phases_unsorted.items(), key = lambda item: item[1][0]))
         return phases, modephases
     def get_metric(self, value, metric=np.mean, *args):
+        """
+        Calculates a statistic of the value using a provided metric function.
+
+        Parameters
+        ----------
+        value : str
+            Value of the history to calculate the statistic over
+        metric : func, optional
+            Function to process the history (e.g. np.mean, np.min...). The default is np.mean.
+        *args : args
+            Arguments for the metric function.
+        """
         vals = self.get_values(value)
         return metric([*vals.values()], *args, axis=0)
         

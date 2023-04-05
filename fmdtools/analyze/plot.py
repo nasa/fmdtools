@@ -277,6 +277,7 @@ def multiplot_legend_title(groupmetrics, axs, ax, legend_loc=False, title='', v_
     plt.subplots_adjust(hspace=v_padding, wspace=h_padding)
     if title: plt.suptitle(title, y=1.0+title_padding)
 def make_consolidated_legend(ax):
+    """Creates a single legend for a given multiplot where multiple groups are being compared"""
     ax.legend()
     handles, labels = ax.get_legend_handles_labels()
     by_label = dict(zip(labels, handles))
@@ -627,7 +628,7 @@ def phases(mdlphases, modephases=[], mdl=[], dt=1.0, singleplot = True, phase_ti
 
     Parameters
     ----------
-    mdlphases : dict
+    mdlphases : History
         phases that the functions of the model progresses through (e.g. from an.process.mdlhist)
         of structure {'fxnname':'phase':[start, end]}
     modephases : dict, optional
