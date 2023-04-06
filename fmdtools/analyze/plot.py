@@ -27,7 +27,7 @@ import copy
 import warnings
 import numpy as np
 from fmdtools.analyze.tabulate import metricovertime as metric_table
-from fmdtools.sim.result import bootstrap_confidence_interval, History
+from fmdtools.sim.result import bootstrap_confidence_interval, History, to_include_keys
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
@@ -128,10 +128,9 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
     #Process data - clip and flatten
     if 'time' in simhists: 
         simhists = History(nominal=simhists)
-    #if max_ind=='max': 
-    #    max_ind = np.min([len(t) for t in mdlhists.values()])-1
-    #mdlhists.cut(max_ind)
-    #Sort into comparison groups
+    if len(plot_values)==1 and type(plot_values[0])==dict:
+        plot_values = to_include_keys(plot_values[0])
+    
     grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
     # Set up plots and iteration
     if 'nominal' in grouphists.keys() and len(grouphists)>1: 

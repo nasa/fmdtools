@@ -10,6 +10,7 @@ Has classes:
 import numpy as np
 from collections.abc import Hashable
 from operator import itemgetter
+from fmdtools.define.common import t_key
 import itertools
 import copy
 
@@ -797,12 +798,12 @@ class SampleApproach():
                         else: 
                             rate = self.rates[fxnmode][phaseid] * self.weights[fxnmode][phaseid][time]
                         if type(fxnmode[0])==str:
-                            name = fxnmode[0]+' '+fxnmode[1]+', t='+'-'.join(str(time).split('.'))
+                            name = fxnmode[0]+' '+fxnmode[1]+', t='+t_key(time)
                             scen={'sequence':{time:{'faults':{fxnmode[0]:fxnmode[1]}}},\
                                   'properties':{'type': 'single-fault', 'function': fxnmode[0],\
                                                 'fault': fxnmode[1], 'rate': rate, 'time': time, 'name': name}}
                         else:
-                            name = ' '.join([fm[0]+': '+fm[1]+',' for fm in fxnmode])+' t='+'-'.join(str(time).split('.'))
+                            name = ' '.join([fm[0]+': '+fm[1]+',' for fm in fxnmode])+' t='+t_key(time)
                             faults = dict.fromkeys([fm[0] for fm in fxnmode])
                             for fault in faults:
                                 faults[fault] = [fm[1] for fm in fxnmode if fm[0]==fault]

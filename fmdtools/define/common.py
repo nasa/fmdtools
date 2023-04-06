@@ -185,7 +185,9 @@ def get_obj_track(obj, track, all_possible=()):
     elif track in ['none', False]:  track=()
     elif type(track)==str:              track=(track,)
     return track
-        
+
+def t_key(time):
+    return 'p'.join(str(time).split('.'))
 
 # def phases(times, names=[]):
 #     """ Creates named phases from a set of times defining the edges of the intervals """
