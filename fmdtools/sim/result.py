@@ -12,7 +12,7 @@ And functions:
 
 from collections import UserDict
 from ordered_set import OrderedSet
-from fmdtools.define.common import get_var
+from fmdtools.define.common import get_var, t_key
 import numpy as np
 import copy
 import sys, os
@@ -159,7 +159,7 @@ def load_folder(folder, filetype, renest_dict=True):
             files_toread.append(file)
     return files_toread
 def get_dict_attr(dict_in, des_class, *attr):
-    """Gets attributes *attr from a given dict dict_in of class des_class"""
+    """Gets attributes *attr from a given nested dict dict_in of class des_class"""
     if len(attr)==1:    return dict_in[attr[0]]
     else:               return get_dict_attr(des_class(dict_in[attr[0]]), *attr[1:])
     
@@ -288,7 +288,7 @@ class Result(UserDict):
         Result/History
             Result/History with the attributes (or single att)
         """
-        atts_to_get = argstr + include_to_keys(to_include)
+        atts_to_get = argstr + to_include_keys(to_include)
         res = self.__class__()
         for at in atts_to_get:
             res[at]=self.__getattr__(at)
@@ -301,9 +301,7 @@ class Result(UserDict):
         if attr in self: return self[attr]
         new = self.__class__()
         for k,v in self.items():
-            if '.'+attr+'.' in k:
-                new[k] = v
-            elif k.startswith(attr+'.'):
+            if k.startswith(attr+'.'):
                 new[k[len(attr)+1:]] = v
         if len(new)>1:  return new
         elif len(new)>0:
@@ -353,7 +351,8 @@ class Result(UserDict):
         for group, scens in groups.items(): 
             if scens=='default':   scens={k.split('.')[0] for k in self.keys()}
             elif type(scens)==str: scens=[scens]
-            k_vs = [k for k in self.keys() for scen in scens for v in values if k.startswith(scen) and k.endswith(v) and '.t.' not in k]
+            k_vs = [k for k in self.keys() for scen in scens for v in values 
+                    if k.startswith(scen) and k.endswith(v) and '.t.' not in k]
             if len(k_vs)>0 and (group not in group_hist): 
                 group_hist[group]=self.__class__()
             for k in k_vs:
@@ -383,6 +382,8 @@ class Result(UserDict):
 
         check_include_errors(self, to_include)
         for att, val in self.items():
+            if is_numeric(att): 
+                att=t_key(att)
             if prevname: newname = prevname+"."+att
             else:        newname = att
             if isinstance(val, Result): 
@@ -672,7 +673,7 @@ def is_known_immutable(val):
 def is_known_mutable(val):
     return type(val) in [dict, set]
 
-def include_to_keys(to_include):
+def to_include_keys(to_include):
     """Determine what dict keys to include from Result given nested to_include dictionary"""
     if type(to_include)==str:       return [to_include]
     elif type(to_include) in [list, set, tuple]:
@@ -680,7 +681,7 @@ def include_to_keys(to_include):
     elif type(to_include) == dict:
         keys =[]
         for k, v in to_include.items():
-            add = include_to_keys(v)
+            add = to_include_keys(v)
             keys.extend([k+'.'+v for v in add])
         return tuple(keys)
 def get_sub_include(att, to_include):
@@ -1057,8 +1058,9 @@ class History(Result):
         phases={}
         times = self['time']
         f_hist = self.flatten()
-        modehists = {k:v for k,v in f_hist.items() if 'mode' in k and 'm' in k}
+        modehists = self.get_values('m.mode')
         for k, modehist in modehists.items():
+            if type(k)==str: k=k.split(".")
             fxn = k[k.index('m')-1]
             if len(modehist)!=0:    
                 modes = OrderedSet(modehist)

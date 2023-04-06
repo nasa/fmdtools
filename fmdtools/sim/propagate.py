@@ -33,7 +33,7 @@ import tqdm
 import dill
 import os
 from fmdtools.analyze.graph import diffgraph
-from fmdtools.define.common import get_var
+from fmdtools.define.common import get_var, t_key
 from .approach import SampleApproach
 from .result import Result, History,  create_indiv_filename, file_check
 
@@ -692,7 +692,7 @@ def list_init_faults(mdl):
                     rate=fm.failrate*fm.faultmodes[mode]['dist']*eq_units(fm.faultmodes[mode]['units'], mdl.sp.units)*trange # this rate is on a per-simulation basis
                 elif fm.faultmodes[mode]['probtype']=='prob':
                     rate = fm.failrate*fm.faultmodes[mode]['dist']
-                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+'-'.join(str(time).split('.'))}
+                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+' '+mode+', t='+t_key(time)}
                 faultlist.append(newscen)
     return faultlist
 
@@ -815,7 +815,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
                if "all" in desired_result: 
                    result[t] = get_result(scen,mdl,desired_result['all'], mdlhist,nomhist, nomresult)
                if t in desired_result:
-                   result[t] = get_result(scen,mdl,desired_result[t], mdlhist,nomhist, nomresult.get(t, {}))
+                   result[t] = get_result(scen,mdl,desired_result[t], mdlhist,nomhist, nomresult.get(t))
                    #desired_result.pop(t)
            if check_end_condition(mdl, use_end_condition, t): break
        except:
@@ -834,7 +834,7 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     desired_result = copy.deepcopy(desired_result)
     if type(desired_result)==str:               desired_result = {desired_result:None}
     elif type(desired_result) in [list, set]:   desired_result = dict.fromkeys(desired_result)
-    result={}
+    result=Result()
     if not nomhist: nomhist=mdlhist
     elif len(nomhist['time'])!=len(mdlhist['time']):
         nomhist = nomhist.cut(start_ind=len(nomhist['time'])-len(mdlhist['time']), newcopy=True)
