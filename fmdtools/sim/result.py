@@ -259,8 +259,8 @@ class Result(UserDict):
     def __reduce__(self):
         return (type(self), (), None, None, iter(self.items()))
     def __getattr__(self, argstr):
-        args = argstr.split(".")
         try:
+            args = argstr.split(".")
             return get_dict_attr(self.data, self.__class__, *args)
         except:
             try:
@@ -272,8 +272,33 @@ class Result(UserDict):
             UserDict.__setattr__(self, key, val)
         else:
             self.data[key]=val
+    def get(self, *argstr,  **to_include):
+        """
+        Provides dict-like access to the history/result across a number of arguments
+
+        Parameters
+        ----------
+        *argstr : str
+            keys to get directly (e.g. 'fxns.fxnname')
+        **to_include : dict/str/
+            to_include dict for arguments to get (e.g., {'fxns':{'fxnname'}})
+
+        Returns
+        -------
+        Result/History
+            Result/History with the attributes (or single att)
+        """
+        atts_to_get = argstr + include_to_keys(to_include)
+        res = self.__class__()
+        for at in atts_to_get:
+            res[at]=self.__getattr__(at)
+        if len(res)==1:
+            return res[at]
+        else:
+            return res
     def all_with(self, attr):
         """Gets all values with the attribute attr"""
+        if attr in self: return self[attr]
         new = self.__class__()
         for k,v in self.items():
             if '.'+attr+'.' in k:
@@ -649,16 +674,15 @@ def is_known_mutable(val):
 
 def include_to_keys(to_include):
     """Determine what dict keys to include from Result given nested to_include dictionary"""
-    if type(to_include)==str:       return [(to_include, get_sub_include('', to_include))]
+    if type(to_include)==str:       return [to_include]
     elif type(to_include) in [list, set, tuple]:
-        return [(to_i, get_sub_include('', to_i)) for to_i in to_include]
+        return [to_i for to_i in to_include]
     elif type(to_include) == dict:
         keys =[]
         for k, v in to_include.items():
             add = include_to_keys(v)
-            keys.extend([(k+'.'+v[0], v[1]) for v in add])
-        return keys
-        
+            keys.extend([k+'.'+v for v in add])
+        return tuple(keys)
 def get_sub_include(att, to_include):
     """Determines what attributes of att to include based on the provided dict/str/list/set to_include"""
     if type(to_include) in [list, set, tuple, str]:
@@ -771,6 +795,7 @@ class History(Result):
         if sub_track:
             if timerange is None:     self[att] = [val]
             elif type(val)==str:      self[att] = np.empty([len(timerange)], dtype=str_size)
+            elif type(val)==dict:     self[att] = init_dicthist(val, timerange, sub_track) 
             elif dtype:               self[att] = np.empty([len(timerange)], dtype=dtype)
             else:
                 try:                  self[att] = np.full(len(timerange), val)
