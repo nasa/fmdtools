@@ -49,7 +49,9 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
     simhists : History
         Simulation history
     plot_values : strs, optional
-        names of values to pull from the history 
+        names of values to pull from the history (e.g., 'fxns.move_water.s.flowrate'). 
+        Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
+        from a given fxn/flow/mode/etc.
     cols : int, optional
         columns to use in the figure. The default is 2.
     aggregation : str, optional

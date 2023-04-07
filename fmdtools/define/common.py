@@ -187,7 +187,10 @@ def get_obj_track(obj, track, all_possible=()):
     return track
 
 def t_key(time):
-    return 'p'.join(str(time).split('.'))
+    """Used to generate keys for a given (float) time that is queryable
+    as an attribute of an object/dict, e.g. endresults.t10p0, the result at time
+    t=10.0"""
+    return 't'+'p'.join(str(time).split('.'))
 
 # def phases(times, names=[]):
 #     """ Creates named phases from a set of times defining the edges of the intervals """

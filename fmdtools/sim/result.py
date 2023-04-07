@@ -328,6 +328,13 @@ class Result(UserDict):
         for k in k_vs:
             h[k]=self[k]
         return h
+    def get_scens(self, *scens):
+        """Gets a dictlike with all scenarios corresponding to the strings in *scens"""
+        h = self.__class__()
+        k_s = [k for k in self.keys() for s in scens if k.startswith(s) or '.'+s+'.' in k]
+        for k in k_s:
+            h[k]=self[k]
+        return h
     def get_comp_groups(self, *values, **groups):
         """
         Gets comparison groups of *values (i.e., aspects of the model) in groups

@@ -147,7 +147,7 @@ if __name__=="__main__":
     
     #endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True) #pool=mp.Pool(4)
     
-    comp_mdlhists = getattr(mdlhists, 'export_water block, t=27-0')
+    comp_mdlhists = mdlhists.get_scens('export_water_block_t27p0')
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
     fig = an.plot.hist(comp_mdlhists, 'fxns.move_water.s.eff', 'fxns.move_water.s.total_flow', 'flows.wat_2.s.flowrate','flows.wat_2.s.pressure', 
                        comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
@@ -177,8 +177,13 @@ if __name__=="__main__":
         #    print(fxn.return_probdens())
         #    print(getattr(fxn,'pds', None))
     
-    endresults,  mdlhist=propagate.one_fault(mdl, 'export_water','block', time=20, staged=False, run_stochastic=False, new_params={'modelparams':{'seed':50}})
+    endresults,  mdlhist=propagate.one_fault(mdl, 'export_water','block', 
+                                             time=20, staged=False, run_stochastic=False, 
+                                             new_params={'modelparams':{'seed':50}})
     
+    endresults,  mdlhist=propagate.one_fault(mdl, 'export_water','block', 
+                                             time=20, staged=False, run_stochastic=True, 
+                                             new_params={'modelparams':{'seed':50}})
     
     #mdlhist['faulty']['functions']['ImportEE']['probdens']
     

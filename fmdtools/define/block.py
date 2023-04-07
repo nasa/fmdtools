@@ -512,7 +512,7 @@ class ASG(dataobject, mapping=True):
         self.flows = {}
         assoc_flows(self, flows=flows)
         self.active_actions = set()
-    def build(self): #TODO: implement as post-__init__??
+    def build(self): 
         if self.initial_action=='auto': 
             initial_action = [act for act, in_degree  in self.action_graph.in_degree if in_degree==0]
             if not initial_action: raise Exception("Cannot set initial action--no starting node")
