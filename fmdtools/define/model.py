@@ -26,7 +26,7 @@ from fmdtools.sim.result import History, get_sub_include, init_hist_iter, init_i
 class Model(object):
     __slots__ =('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'fxns', 'name',
                 'functionorder', '_fxnflows', '_fxninput', '_flowstates', 'is_copy', 
-                'bipartite', 'multgraph', 'staticfxns', 'dynamicfxns', 'staticflows') #added in self.build())
+                'graph', 'staticfxns', 'dynamicfxns', 'staticflows') #added in self.build())
     _init_p = Parameter
     _init_sp = SimParam
     _init_r = Rand
@@ -47,8 +47,8 @@ class Model(object):
         Simulation Parameters.
     track : 
         dictionary of parameters for defining what simulation constructs to record for find_classification
-    bipartite : networkx graph
-        bipartite graph view of the functions and flows
+    graph : networkx graph
+        bipartite graph view of the functions and flows (fxnflowgraph)
     graph : networkx graph
         multigraph view of functions and flows
     """
@@ -223,39 +223,31 @@ class Model(object):
                                            if getattr(fxn, 'dynamic_behavior', False) 
                                            or (hasattr(fxn, 'a') and getattr(fxn.a, 'proptype','')=='dynamic')])
             self.construct_graph(require_connections=require_connections)
-            self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.bipartite.neighbors(flow)])]
+            self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.graph.neighbors(flow)])]
     def construct_graph(self, require_connections=True):
         """
-        Creates and returns a graph representation of the model
-
-        Returns
-        -------
-        graph : networkx graph
-            multgraph representation of the model functions and flows
+        Creates .graph nx.graph representation of the model
         """
-        self.bipartite=nx.Graph()
-        self.bipartite.add_nodes_from(self.fxns, bipartite=0)
-        self.bipartite.add_nodes_from(self.flows, bipartite=1)
-        self.bipartite.add_edges_from(self._fxnflows)
+        self.graph=nx.Graph()
+        self.graph.add_nodes_from(self.fxns, bipartite=0)
+        self.graph.add_nodes_from(self.flows, bipartite=1)
+        self.graph.add_edges_from(self._fxnflows)
         
-        dangling_nodes = [e for e in nx.isolates(self.bipartite)] # check to see that all functions/flows are connected
+        dangling_nodes = [e for e in nx.isolates(self.graph)] # check to see that all functions/flows are connected
         if dangling_nodes and require_connections: raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
-        
-        self.multgraph = nx.projected_graph(self.bipartite, self.fxns,multigraph=True)
-        graph = nx.projected_graph(self.bipartite, self.fxns)
-        attrs={}
-        #do we still need to do this for the objects? maybe not--I don't think we use the info anymore
-        for edge in graph.edges:
-            midedges=list(self.multgraph.subgraph(edge).edges)
-            flows= [midedge[2] for midedge in midedges]
-            flowdict={}
-            for flow in flows:
-                flowdict[flow]=self.flows[flow]
-            attrs[edge]=flowdict
-        nx.set_edge_attributes(graph, attrs)
-        
-        nx.set_node_attributes(graph, self.fxns, 'obj')
-    def return_typegraph(self, withflows = True):
+    def get_fxnflowgraph(self):
+        """Returns a bipartite graph representation of the functions and flows
+        in the model, where both functions and flows are nodes (fxn=0, flows=1)"""
+        return self.graph.copy()
+    def get_flowgraph(self):
+        """ Returns a graph representation of the flows in the model, where flows are nodes and edges are 
+        associations in functions """
+        return nx.projected_graph(self.graph, self.flows)
+    def get_fxngraph(self):
+        """ Returns a graph representation of the functions of the model, where
+        functions are nodes and flows are edges"""
+        return nx.projected_graph(self.graph, self.fxns)
+    def get_typegraph(self, withflows = True):
         """
         Returns a graph with the type containment relationships of the different model constructs.
 
@@ -281,30 +273,17 @@ class Model(object):
             flow_edges = [(fxn, flow) for fxn, flows in fxnclass_flowtype.items() for flow in flows]
             g.add_edges_from(flow_edges)
         return g
-    def return_paramgraph(self):
-        """ Returns a graph representation of the flows in the model, where flows are nodes and edges are 
-        associations in functions """
-        return nx.projected_graph(self.bipartite, self.flows)
-    def return_componentgraph(self, fxnname):
-        """
-        Returns a graph representation of the components associated with a given funciton
-
-        Parameters
-        ----------
-        fxnname : str
-            Name of the function (e.g. in mdl.fxns)
-
-        Returns
-        -------
-        g : networkx graph
-            Bipartite graph representation of the function with components.
-        """
-        g = nx.Graph()
-        g.add_nodes_from([fxnname], bipartite=0)
-        g.add_nodes_from(self.fxns[fxnname].components, bipartite=1)
-        g.add_edges_from([(fxnname, component) for component in self.fxns[fxnname].components])        
-        return g
-    def return_stategraph(self, gtype='bipartite'):
+    def get_compgraph(self):
+        """Creates a bipartite graph view with components attached to functions"""
+        graph=self.graph.copy()
+        for fxnname, fxn in self.fxns.items():
+            if {**fxn.components, **fxn.actions}: 
+                graph.add_nodes_from({**fxn.components, **fxn.actions}, bipartite=1)
+                graph.add_edges_from([(fxnname, comp) for comp in {**fxn.components, **fxn.actions}])
+        return graph
+    def get_gtypes(self):
+        return [gtype for gtype in dir(self) if gtype.startswith('get_') and gtype.endswith('graph')]
+    def create_graph(self, gtype='fxnflowgraph'):
         """
         Returns a graph representation of the current state of the model.
 
@@ -320,31 +299,20 @@ class Model(object):
         graph : networkx graph
             Graph representation of the system with the modes and states added as attributes.
         """
-        if  gtype==None: return None
-        elif gtype=='normal':
-            graph=nx.projected_graph(self.bipartite, self.fxns)
-        elif gtype=='bipartite':
-            graph=self.bipartite.copy()
-        elif gtype=='component':
-            graph=self.bipartite.copy()
-            for fxnname, fxn in self.fxns.items():
-                if {**fxn.components, **fxn.actions}: 
-                    graph.add_nodes_from({**fxn.components, **fxn.actions}, bipartite=1)
-                    graph.add_edges_from([(fxnname, comp) for comp in {**fxn.components, **fxn.actions}])
-        elif gtype=='typegraph':
-            graph=self.return_typegraph()
+        graph = getattr(self, 'get_'+gtype)()
             
         edgevals, fxnmodes, fxnstates, flowstates, compmodes, compstates, comptypes ={}, {}, {}, {}, {}, {}, {}
-        if gtype=='normal': #set edge values for normal graph
+        if gtype=='fxngraph': #set edge values for normal graph
             for edge in graph.edges:
-                midedges=list(self.multgraph.subgraph(edge).edges)
+                multgraph = nx.projected_graph(self.graph, self.fxns,multigraph=True)
+                midedges=list(multgraph.subgraph(edge).edges)
                 flows= [midedge[2] for midedge in midedges]
                 flowdict={}
                 for flow in flows: 
                     flowdict[flow]=self.flows[flow].status()
                 edgevals[edge]=flowdict
             nx.set_edge_attributes(graph, edgevals) 
-        elif gtype=='bipartite' or gtype=='component': #set flow node values for bipartite graph
+        elif gtype=='fxnflowgraph' or gtype=='compgraph': #set flow node values for bipartite graph
             for flowname, flow in self.flows.items():
                 flowstates[flowname]=flow.status()
             nx.set_node_attributes(graph, flowstates, 'states')
@@ -361,8 +329,8 @@ class Model(object):
             for fxnname, fxn in self.fxns.items():
                 fxnstates[fxnname] = asdict(self.fxns[fxnname].s)
                 fxnmodes[fxnname] = copy.copy(self.fxns[fxnname].m.faults)
-                if gtype=='normal': del graph.nodes[fxnname]['bipartite']
-                if gtype=='component':
+                if gtype=='fxngraph': del graph.nodes[fxnname]['graph']
+                if gtype=='compgraph':
                     for mode in fxnmodes[fxnname].copy():
                         for compname, comp in {**fxn.actions, **fxn.components}.items():
                             compstates[compname]={}
@@ -374,8 +342,8 @@ class Model(object):
                                 fxnmodes[fxnname].update(['Comp_Fault'])
         nx.set_node_attributes(graph, fxnstates, 'states')
         nx.set_node_attributes(graph, fxnmodes, 'modes')
-        if gtype=='component': 
-            nx.set_node_attributes(graph,compstates, 'states')
+        if gtype=='compgraph': 
+            nx.set_node_attributes(graph, compstates, 'states')
             nx.set_node_attributes(graph, compmodes, 'modes') 
             nx.set_node_attributes(graph, comptypes, 'iscomponent')
         return graph
@@ -654,12 +622,12 @@ class Model(object):
                 for flowname in self.fxns[fxnname].flows:
                     if flowname in flows_to_check:
                         if self._flowstates[flowname]!=self.flows[flowname].return_mutables():
-                            nextfxns.update(set([n for n in self.bipartite.neighbors(flowname) if n in self.staticfxns]))
+                            nextfxns.update(set([n for n in self.graph.neighbors(flowname) if n in self.staticfxns]))
                             flows_to_check.remove(flowname)
             # check remaining flows that have not been checked already
             for flowname in flows_to_check:
                 if self._flowstates[flowname]!=self.flows[flowname].return_mutables():
-                    nextfxns.update(set([n for n in self.bipartite.neighbors(flowname) if n in self.staticfxns]))
+                    nextfxns.update(set([n for n in self.graph.neighbors(flowname) if n in self.staticfxns]))
             # update flowstates
             for flowname in self.staticflows:
                 self._flowstates[flowname]=self.flows[flowname].return_mutables()

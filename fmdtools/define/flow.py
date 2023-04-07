@@ -268,7 +268,7 @@ class MultiFlow(Flow):
                             and not((in_node, out_node) in g.edges) and in_node!=out_node):
                             g.add_edge(in_node, out_node, label="sends")
         return g
-    def return_stategraph(self, **kwargs):
+    def create_stategraph(self, **kwargs):
         g = self.create_multigraph(**kwargs, get_states=True)
         return g
     def create_hist(self, timerange, track):
@@ -532,7 +532,7 @@ class CommsFlow(MultiFlow):
                                    send_connections=send_connections, 
                                    get_states=get_states)
         return g
-    def return_stategraph(self, include_glob=False, ports_only=False):
+    def create_graph(self, include_glob=False, ports_only=False):
         g= self.create_commsgraph(get_states=True, include_glob=include_glob, ports_only=ports_only)
         return g
     def get_typename(self):

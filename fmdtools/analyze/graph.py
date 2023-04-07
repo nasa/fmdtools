@@ -266,8 +266,8 @@ def show_matplotlib(g, gtype='bipartite', filename='', filetype='png', pos=[], s
             labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
             if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
             else:
-                faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
-                faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
+                faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='degraded' for flow in g.edges[edge]])]
+                faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='degraded')]) for edge in faultedges}
             fig_axis = plot_normgraph(g, edgeflows, faultnodes, degradednodes, faultflows, faultlabels, faultedges, faultflows, faultscen, time, showfaultlabels, edgeflows, scale=scale, pos=pos,colors=colors, show=False, arrows=arrows)
     elif gtype in ['bipartite', 'component']:
         labels={node:node for node in g.nodes}
@@ -430,8 +430,8 @@ def show_graphviz(g, gtype='bipartite', faultscen=[], time=[],filename='',filety
             labels, faultnodes, degradednodes, faults, faultlabels = get_graph_annotations(g, gtype)
             if not list(g.nodes(data='status'))[0][1]: faultedges = {}; faultflows = {}
             else:
-                faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='Degraded' for flow in g.edges[edge]])]
-                faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='Degraded')]) for edge in faultedges}
+                faultedges = [edge for edge in g.edges if any([g.edges[edge][flow].get('status','nom')=='degraded' for flow in g.edges[edge]])]
+                faultflows = {edge:''.join([' ',''.join(flow+' ' for flow in g.edges[edge] if g.edges[edge][flow]['status']=='degraded')]) for edge in faultedges}
         #handles heatmap and highlight
         faultlabels_form = {node:'\n\n '+str(fault) for node,fault in faultlabels.items() if fault!={'nom'}}
         colors_dict = gv_colors(g, gtype, colors=colors, heatmap=heatmap, cmap=cmap, faultnodes=faultnodes, degradednodes=degradednodes, faultedges=faultflows, edgeflows=edgeflows)
@@ -804,9 +804,9 @@ def get_asg_pos(asg, pos, gtype, arrows):
 def get_graph_annotations(g, gtype='bipartite'):
     """Helper method that returns labels/lists degraded nodes for the plot annotations"""
     labels={node:node for node in g.nodes}
-    statuses=dict(g.nodes(data='status', default='Nominal'))
+    statuses=dict(g.nodes(data='status', default='nominal'))
     faultnodes=[node for node,status in statuses.items() if status=='Faulty' or 'Faulty' in status]
-    degradednodes=[node for node,status in statuses.items() if status=='Degraded' or 'Degraded' in status]
+    degradednodes=[node for node,status in statuses.items() if status=='degraded' or 'degraded' in status]
     faults=dict(g.nodes(data='modes', default={'nom'}))
     if gtype=='typegraph':
         faultlabels = {fclass:set(fxns.keys()) for fclass, fxns in g.nodes(data='modes') if fxns and set([mode for modes in fxns.values() for mode in modes if mode!='nom'])}
@@ -1237,35 +1237,35 @@ def diffgraph(g, nomg, gtype='bipartite'):
         copy of g with 'status' attributes added for faulty/degraded functions/flows
     """
     rg=g.copy()
-    if gtype=='normal':
+    if gtype=='fxngraph':
         for edge in g.edges:
             for flow in list(g.edges[edge].keys()):            
-                if g.edges[edge][flow]!=nomg.edges[edge][flow]: status='Degraded'
-                else:                               status='Nominal' 
+                if g.edges[edge][flow]!=nomg.edges[edge][flow]: status='degraded'
+                else:                               status='nominal' 
                 rg.edges[edge][flow]={'values':g.edges[edge][flow],'status':status}
         for node in g.nodes:        
             if g.nodes[node]['modes'].difference(['nom']): status='Faulty' 
-            elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
-            else: status='Nominal'
+            elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='degraded'
+            else: status='nominal'
             rg.nodes[node]['status']=status
-    elif gtype=='bipartite' or gtype=='component':
+    elif gtype=='fxnflowgraph' or gtype=='compgraph':
         for node in g.nodes:        
             if g.nodes[node].get('bipartite', 1)==0 or g.nodes[node].get('iscomponent', False): #condition only checked for functions
                 if g.nodes[node].get('modes', {'nom'}).difference(['nom']): status='Faulty'
-                elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
-                else: status='Nominal'
-            elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
-            else: status='Nominal'
+                elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='degraded'
+                else: status='nominal'
+            elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='degraded'
+            else: status='nominal'
             rg.nodes[node]['status']=status
     elif gtype=='typegraph':
         for node in g.nodes:
             if g.nodes[node]['level']==2:
                 if any({fxn for fxn, m in g.nodes[node]['modes'].items() if m not in [{'nom'},{}]}): status='Faulty'
-                elif g.nodes[node]['states']!=nomg.nodes[node]['states']:   status='Degraded'
-                else: status='Nominal'
+                elif g.nodes[node]['states']!=nomg.nodes[node]['states']:   status='degraded'
+                else: status='nominal'
             elif g.nodes[node]['level']==3:
-                if g.nodes[node]['states']!=nomg.nodes[node]['states']: status='Degraded'
-                else: status='Nominal'
-            else: status='Nominal'
+                if g.nodes[node]['states']!=nomg.nodes[node]['states']: status='degraded'
+                else: status='nominal'
+            else: status='nominal'
             rg.nodes[node]['status']=status
     return rg
