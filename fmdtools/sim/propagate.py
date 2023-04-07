@@ -850,14 +850,14 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     if 'endfaults' in desired_result:  
         result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
         desired_result.pop('endfaults')
-    for gtype in ["normal","bipartite", "typegraph", "component", *mdl.flows]:
+    for gtype in [mdl.get_gtypes(), *mdl.flows]:
         if gtype in desired_result:
-            if gtype in ["normal","bipartite", "typegraph", "component"]:
-                rgraph = mdl.return_stategraph(gtype)
+            if gtype in mdl.get_gtypes():
+                rgraph = mdl.create_graph(gtype)
                 proctype=gtype
             elif gtype in mdl.flows:
-                rgraph = mdl.flows[gtype].return_stategraph(**desired_result[gtype])
-                proctype="bipartite"
+                rgraph = mdl.flows[gtype].create_graph(**desired_result[gtype])
+                proctype="fxnflowgraph"
             
             if nomresult and gtype in nomresult:     result[gtype] = diffgraph(rgraph, nomresult[gtype], proctype)
             elif nomresult:                          result[gtype] = diffgraph(rgraph, nomresult, proctype)
