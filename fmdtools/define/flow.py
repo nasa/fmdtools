@@ -268,7 +268,7 @@ class MultiFlow(Flow):
                             and not((in_node, out_node) in g.edges) and in_node!=out_node):
                             g.add_edge(in_node, out_node, label="sends")
         return g
-    def create_stategraph(self, **kwargs):
+    def create_graph(self, **kwargs):
         g = self.create_multigraph(**kwargs, get_states=True)
         return g
     def create_hist(self, timerange, track):

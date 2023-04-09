@@ -282,7 +282,7 @@ class Model(object):
                 graph.add_edges_from([(fxnname, comp) for comp in {**fxn.components, **fxn.actions}])
         return graph
     def get_gtypes(self):
-        return [gtype for gtype in dir(self) if gtype.startswith('get_') and gtype.endswith('graph')]
+        return [gtype[4:] for gtype in dir(self) if gtype.startswith('get_') and gtype.endswith('graph')]
     def create_graph(self, gtype='fxnflowgraph'):
         """
         Returns a graph representation of the current state of the model.
