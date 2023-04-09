@@ -850,7 +850,7 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     if 'endfaults' in desired_result:  
         result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
         desired_result.pop('endfaults')
-    for gtype in [mdl.get_gtypes(), *mdl.flows]:
+    for gtype in [*mdl.get_gtypes(), *mdl.flows]:
         if gtype in desired_result:
             if gtype in mdl.get_gtypes():
                 rgraph = mdl.create_graph(gtype)

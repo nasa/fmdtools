@@ -5,9 +5,9 @@ Created on Tue Dec 21 10:51:57 2021
 @author: dhulse
 """
 import unittest
-from example_tank.tank_model import Tank
-from example_tank.tank_opt import x_to_rcost_leg, x_to_totcost_leg, x_to_descost
-from example_tank.tank_optimization_model import Tank as Tank2
+from examples.tank.tank_model import Tank
+from examples.tank.tank_opt import x_to_rcost_leg, x_to_totcost_leg, x_to_descost
+from examples.tank.tank_optimization_model import Tank as Tank2
 from fmdtools.sim.search import ProblemInterface
 from fmdtools.sim import propagate
 import fmdtools.analyze as an
