@@ -5,7 +5,7 @@ Created on Tue Dec 21 08:52:58 2021
 @author: dhulse
 """
 import unittest
-from example_pump.pump_stochastic import Pump
+from examples.pump.pump_stochastic import Pump
 from fmdtools.sim import propagate
 import fmdtools.analyze as an
 from fmdtools.define import SampleApproach, NominalApproach

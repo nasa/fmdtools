@@ -7,7 +7,7 @@ Created on Tue Dec 21 09:52:57 2021
 import os
 import shutil
 import numpy as np
-from fmdtools.sim import propagate
+from fmdtools import sim
 from fmdtools.analyze import tabulate as tabulate
 class CommonTests():
     def check_var_setting(self,mdl, statenames, newvalues):
@@ -33,22 +33,22 @@ class CommonTests():
                     self.check_same_model(mdl, mdl2)
                     if t==copy_time: mdl_copy = mdl.copy()
                     if t>copy_time: 
-                        mdl_copy.propagate(, t,run_stochastic=run_stochastic, fxnfaults=scen)
+                        mdl_copy.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen)
                         self.check_same_model(mdl, mdl_copy)
     def check_approach_parallelism(self, mdl, app):
         """Test whether the model simulates the same when simulated using parallel or staged options"""
         from multiprocessing import Pool
-        endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False,pool=False)
+        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False,pool=False)
         mdlhists_flat = mdlhists.flatten()
-        endclasses_staged, mdlhist_staged = propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)
+        endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)
         self.assertEqual([*endclasses.values()], [*endclasses_staged.values()])
         staged_flat = mdlhist_staged.flatten()
         
-        endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=False)
+        endclasses_par, mdlhists_par = sim.propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=False)
         self.assertEqual([*endclasses.values()], [*endclasses_par.values()])
         par_flat = mdlhists_par.flatten()
         
-        endclasses_staged_par, mdlhists_staged_par = propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=True)
+        endclasses_staged_par, mdlhists_staged_par = sim.propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=True)
         self.assertEqual([*endclasses.values()], [*endclasses_staged_par.values()])
         staged_par_flat = mdlhists_staged_par.flatten()
         
@@ -67,11 +67,11 @@ class CommonTests():
                 for t in range(max_time):
                     if t==inj_time:     scen=faultscen
                     else:               scen={}
-                    mdl_reset.propagate(,t,run_stochastic=run_stochastic, fxnfaults=scen)       
+                    mdl_reset.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen)       
                 mdl_reset.reset()
                 mdl = mdls.pop()
                 for t in range(max_time):
-                    mdl_reset.propagate(,t,run_stochastic=run_stochastic)  
+                    mdl_reset.propagate(t,run_stochastic=run_stochastic)  
                     mdl.propagate(t,run_stochastic=run_stochastic)  
                     self.check_same_model(mdl, mdl_reset)
     def check_model_copy_different(self,mdl, inj_times, max_time=55, run_stochastic=False):
@@ -84,7 +84,7 @@ class CommonTests():
                     mdl.propagate(t,run_stochastic=run_stochastic)       
                     if t==inj_time: mdl_copy = mdl.copy()
                     if t>inj_time: 
-                        mdl_copy.propagate(, t, fxnfaults=faultscen)
+                        mdl_copy.propagate(t, fxnfaults=faultscen)
                         self.check_diff_model(mdl, mdl_copy)
     def check_same_model(self, mdl, mdl2):
         """Checks if models mdl and mdl2 have the same attributes"""
@@ -130,16 +130,16 @@ class CommonTests():
         if os.path.exists(ecfile):  os.remove(ecfile)
         check_link=False
         if runtype=='nominal':
-            endresult,  mdlhist=propagate.nominal(mdl,  save_args={'mdlhist':{'filename':mfile},\
+            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={'mdlhist':{'filename':mfile},\
                                                                    'endclass':{'filename':ecfile}})
             check_link=True
         elif runtype=='one_fault':
             fxnname, faultmode, faulttime = faultscen
-            endresult, mdlhist=propagate.one_fault(mdl, fxnname, faultmode, faulttime,\
+            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\
                                                         save_args={'mdlhist':{'filename':mfile},\
                                                                    'endclass':{'filename':ecfile}})
         elif runtype=='mult_fault':
-            endresult, mdlhist=propagate.mult_fault(mdl, faultscen, {}, \
+            endresult, mdlhist=sim.propagate.mult_fault(mdl, faultscen, {}, \
                                                         save_args={'mdlhist':{'filename':mfile},\
                                                                    'endclass':{'filename':ecfile}})
         else: raise Exception("Invalid Run Type"+runtype)
@@ -158,9 +158,9 @@ class CommonTests():
             self.assertAlmostEqual(none_exp_cost,exp_cost)
     def check_same_file(self, result, resfile, check_link=False):
         """ Checks if the mdlhist/endclass result is the same as the result loaded from resfile """
-        result_flattened = proc.flatten_hist(result)
-        result_saved = proc.load_result(resfile)
-        result_saved_flattened = proc.flatten_hist(result_saved)
+        result_flattened = result.flatten()
+        result_saved = sim.result.load_result(resfile)
+        result_saved_flattened = result_saved.flatten()
         self.assertCountEqual([*result_flattened.keys()], [*result_saved_flattened.keys()])
         self.compare_results(result_flattened, result_saved_flattened)
         if check_link and isinstance(result_saved_flattened['time'], (np.ndarray, list)):
@@ -182,9 +182,9 @@ class CommonTests():
         """Checks to see if the given endclass/mdlhist result is the same as the results
         loaded from resfolder. filetype is the type of file in resfolder, while check_link
         checks if modifying one modifies the other (set to False--usually not applicable)"""
-        result_flattened = proc.flatten_hist(result)
-        result_saved = proc.load_results(resfolder, filetype)
-        result_saved_flattened = proc.flatten_hist(result_saved)
+        result_flattened = result.flatten()
+        result_saved = sim.result.load_results(resfolder, filetype)
+        result_saved_flattened = result_saved.flatten()
         self.assertCountEqual([*result_flattened.keys()], [*result_saved_flattened.keys()])
         self.compare_results(result_flattened, result_saved_flattened)
         if check_link:
@@ -207,19 +207,19 @@ class CommonTests():
         if os.path.exists(ecfile):  os.remove(ecfile)
         
         if runtype=='single_faults':
-            endclasses, mdlhists = propagate.single_faults(mdl, showprogress=False, \
+            endclasses, mdlhists = sim.propagate.single_faults(mdl, showprogress=False, \
                                                         save_args={'mdlhist':{'filename':mfile},\
                                                                    'endclass':{'filename':ecfile}}, **kwargs)
         elif runtype=='nominal_approach':
-            endclasses, mdlhists = propagate.nominal_approach(mdl, app, showprogress=False, \
+            endclasses, mdlhists = sim.propagate.nominal_approach(mdl, app, showprogress=False, \
                                                             save_args={'mdlhist':{'filename':mfile},\
                                                                        'endclass':{'filename':ecfile}}, **kwargs)
         elif runtype=='nested_approach':
-            endclasses, mdlhists, apps = propagate.nested_approach(mdl, app, showprogress=False, \
+            endclasses, mdlhists, apps = sim.propagate.nested_approach(mdl, app, showprogress=False, \
                                                             save_args={'mdlhist':{'filename':mfile},\
                                                                        'endclass':{'filename':ecfile}}, **kwargs)
         elif runtype=='approach':
-            endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, \
+            endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False, \
                                                       save_args={'mdlhist':{'filename':mfile},\
                                                                  'endclass':{'filename':ecfile}}, **kwargs)
         else: raise Exception("Invalid run type:"+runtype)
@@ -244,22 +244,22 @@ class CommonTests():
         if os.path.exists(ecfolder):  shutil.rmtree(ecfolder)
         
         if runtype=='single_faults':
-            endclasses, mdlhists = propagate.single_faults(mdl, showprogress=False, \
+            endclasses, mdlhists = sim.propagate.single_faults(mdl, showprogress=False, \
                                                             save_args={'mdlhist':{'filename':mfolder+"."+ext},\
                                                                        'endclass':{'filename':ecfolder+"."+ext},
                                                                        'indiv':True}, **kwargs)
         elif runtype=='nominal_approach':
-            endclasses, mdlhists = propagate.nominal_approach(mdl, app, showprogress=False, \
+            endclasses, mdlhists = sim.propagate.nominal_approach(mdl, app, showprogress=False, \
                                                             save_args={'mdlhist':{'filename':mfolder+"."+ext},\
                                                                        'endclass':{'filename':ecfolder+"."+ext},\
                                                                        'indiv':True}, **kwargs)
         elif runtype=='nested_approach':
-            endclasses, mdlhists, apps = propagate.nested_approach(mdl, app, showprogress=False, \
+            endclasses, mdlhists, apps = sim.propagate.nested_approach(mdl, app, showprogress=False, \
                                                             save_args={'mdlhist':{'filename':mfolder+"."+ext},\
                                                                        'endclass':{'filename':ecfolder+"."+ext},\
                                                                        'indiv':True}, **kwargs)
         elif runtype=='approach':
-            endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, \
+            endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False, \
                                                       save_args={'mdlhist':{'filename':mfolder+"."+ext},\
                                                                  'endclass':{'filename':ecfolder+"."+ext},\
                                                                 'indiv':True}, **kwargs)

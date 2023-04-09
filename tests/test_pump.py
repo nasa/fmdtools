@@ -4,8 +4,9 @@ Created on Mon Dec 20 15:49:13 2021
 
 @author: dhulse
 """
+import os
 import unittest
-from example_pump.ex_pump import Pump
+from examples.pump.ex_pump import Pump
 from fmdtools.sim import propagate
 import fmdtools.analyze as an
 from fmdtools.define import SampleApproach, check_pickleability, NominalApproach
