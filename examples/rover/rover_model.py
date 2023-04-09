@@ -706,7 +706,7 @@ if __name__=="__main__":
     algorithm=PatternSearch(x0=np.array([0.0,0.0,0.0])) 
     #res = minimize(pymoo_prob, algorithm, verbose=True)
 
-    #dot = an.graph.show(mdl, gtype="bipartite", renderer='graphviz')
+    #dot = an.graph.show(mdl, gtype="fxnflowgraph", renderer='graphviz')
 
     mdl = Rover(p=p)
 
@@ -755,12 +755,12 @@ if __name__=="__main__":
     #plot_trajectories(mdlhist, app=app, faultlabel='Faulty Scenarios')
 
 
-    #fig, ax =an.graph.show(mdl, gtype='bipartite')
-    #fig.savefig('bipartite_rover.pdf', format="pdf", bbox_inches = 'tight', pad_inches = 0.0)
+    #fig, ax =an.graph.show(mdl, gtype='fxnflowgraph')
+    #fig.savefig('fxnflowgraph_rover.pdf', format="pdf", bbox_inches = 'tight', pad_inches = 0.0)
 
     """
     mdl = Rover(p=gen_p('turn'))
-    #dot = an.graph.show(mdl, gtype="bipartite", renderer='graphviz')
+    #dot = an.graph.show(mdl, gtype="fxnflowgraph", renderer='graphviz')
     #p = gen_p('sine')
     #mdl = Rover(p)
     endresults,  mdlhist = prop.nominal(mdl)
@@ -838,15 +838,15 @@ if __name__=="__main__":
 #    an.graph.plot_bipgraph(classgraph, {node:node for node in classgraph.nodes},[],[],{}, pos=pos)
     an.graph.show( gtype='typegraph', scale=0.7)
 
-    #endresults,  mdlhist = prop.one_fault(mdl, 'drive','elec_open', staged=True, time=13, gtype='bipartite')
-    endresults,  mdlhist = prop.one_fault(mdl, 'perception', 'bad_feed', staged=True, time=13, gtype='bipartite')
-    an.graph.show( gtype='bipartite', scale=0.7)
+    #endresults,  mdlhist = prop.one_fault(mdl, 'drive','elec_open', staged=True, time=13, gtype='fxnflowgraph')
+    endresults,  mdlhist = prop.one_fault(mdl, 'perception', 'bad_feed', staged=True, time=13, gtype='fxnflowgraph')
+    an.graph.show( gtype='fxnflowgraph', scale=0.7)
 
     reshist, _, _ = an.process.hist(mdlhist)
     typehist = an.process.typehist(mdl, reshist)
     an.graph.results_from(mdl, reshist, [10,15,20])
     an.graph.results_from(mdl, typehist, [10,15,20], gtype='typegraph') #), gtype='typegraph')
-    an.graph.result_from(mdl, reshist, 10, gtype='bipartite', renderer='graphviz')
+    an.graph.result_from(mdl, reshist, 10, gtype='fxnflowgraph', renderer='graphviz')
 
     #endclasses, mdlhists= prop.nominal_approach(mdl, app, pool = mp.Pool(5))
 

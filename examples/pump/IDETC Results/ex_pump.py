@@ -69,7 +69,7 @@ class ImportEE(FxnBlock):
         #here we can define how the function will behave with different faults
         if self.has_fault('no_v'): self.effstate=0.0 #an open circuit means no voltage is exported
         elif self.has_fault('inf_v'): self.effstate=100.0 #a voltage spike means voltage is much higher
-        else: self.effstate=1.0 #normally, voltage is 500 V
+        else: self.effstate=1.0 #fxngraphly, voltage is 500 V
         self.EEout.voltage=self.effstate * 500
 
 # Import Water is the pipe with water going into the pump
@@ -259,7 +259,7 @@ class Pump(Model):
         #squared loss function
         # sum(vec)
         # need to check: 
-        #       - normal (linear) costs
+        #       - fxngraph (linear) costs
         #       - accumulated costs
         #       - resetting accumulated costs
         #       - costs w- degradation / no degradation 

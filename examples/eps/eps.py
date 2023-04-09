@@ -355,12 +355,12 @@ if __name__ == '__main__':
 
     mdl= EPS()
     
-    resgraph, mdlhists = propagate.one_fault(mdl, 'distribute_ee', 'short', desired_result="bipartite")
+    resgraph, mdlhists = propagate.one_fault(mdl, 'distribute_ee', 'short', desired_result="fxnflowgraph")
     
-    an.graph.show(mdl.bipartite, gtype='bipartite')
+    an.graph.show(mdl.fxnflowgraph, gtype='fxnflowgraph')
     #endclasses, mdlhists = propagate.single_faults(mdl)
 
-    #resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', desired_result="bipartite")
+    #resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', desired_result="fxnflowgraph")
     an.graph.show(resgraph)
 
     summary = mdlhists.get_fault_degradation_summary(*mdl.fxns, *mdl.flows)
@@ -369,7 +369,7 @@ if __name__ == '__main__':
     
     degtimemap = degradation.get_summary(operator=np.sum)
 
-    an.graph.show(mdl.bipartite,gtype='bipartite', heatmap=degtimemap)
+    an.graph.show(mdl.fxnflowgraph,gtype='fxnflowgraph', heatmap=degtimemap)
     an.graph.show(resgraph,heatmap=degtimemap)
 
     propagate.single_faults(mdl)
