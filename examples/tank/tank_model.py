@@ -282,30 +282,30 @@ if __name__ == '__main__':
     endclass, mdlhist = propagate.one_fault(mdl,'human','look_not_visible', time=2)
     
     ## nominal run
-    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])
+    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','fxnflowgraph'])
     an.plot.mdlhists(mdlhist, fxnflowvals={'fxns':'store_water'})
-    an.graph.show(endresults['bipartite'])
+    an.graph.show(endresults['fxnflowgraph'])
     
     
     ## faulty run
-    resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='bipartite')
+    resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='fxnflowgraph')
     an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals={'fxns':'store_water'}, time_slice=2)
     an.graph.show(resgraph,faultscen='leak response', time='end')
     
     
-    resgraph, mdlhist = propagate.one_fault(mdl,'human','detect_false_high', time=2, desired_result='bipartite')
+    resgraph, mdlhist = propagate.one_fault(mdl,'human','detect_false_high', time=2, desired_result='fxnflowgraph')
     
     an.plot.mdlhists(mdlhist, title='detect_false_high', fxnflowvals={'fxns':'store_water'}, time_slice=2)
     an.graph.show(resgraph,faultscen='detect_false_high', time=2)
     
-    resgraph, mdlhist = propagate.one_fault(mdl,'human','turn_wrong_valve', time=2, desired_result='bipartite')
+    resgraph, mdlhist = propagate.one_fault(mdl,'human','turn_wrong_valve', time=2, desired_result='fxnflowgraph')
     
     an.plot.mdlhists(mdlhist,title='turn_wrong_valve', fxnflowvals={'fxns':'store_water'}, time_slice=2)
     an.graph.show(resgraph,faultscen='turn_wrong_valve', time=2)
     
     
     mdl = Tank(p=TankParam(reacttime=2), sp = dict(dt=3.0))
-    resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='bipartite')
+    resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='fxnflowgraph')
     an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals={'fxns':'store_water'}, time_slice=2)
     an.graph.show(resgraph,faultscen='turn_wrong_valve', time='end')
     

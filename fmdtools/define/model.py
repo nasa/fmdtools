@@ -48,7 +48,7 @@ class Model(object):
     track : 
         dictionary of parameters for defining what simulation constructs to record for find_classification
     graph : networkx graph
-        bipartite graph view of the functions and flows (fxnflowgraph)
+        fxnflowgraph graph view of the functions and flows (fxnflowgraph)
     graph : networkx graph
         multigraph view of functions and flows
     """
@@ -236,7 +236,7 @@ class Model(object):
         dangling_nodes = [e for e in nx.isolates(self.graph)] # check to see that all functions/flows are connected
         if dangling_nodes and require_connections: raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
     def get_fxnflowgraph(self):
-        """Returns a bipartite graph representation of the functions and flows
+        """Returns a fxnflowgraph graph representation of the functions and flows
         in the model, where both functions and flows are nodes (fxn=0, flows=1)"""
         return self.graph.copy()
     def get_flowgraph(self):
@@ -274,7 +274,7 @@ class Model(object):
             g.add_edges_from(flow_edges)
         return g
     def get_compgraph(self):
-        """Creates a bipartite graph view with components attached to functions"""
+        """Creates a fxnflowgraph graph view with components attached to functions"""
         graph=self.graph.copy()
         for fxnname, fxn in self.fxns.items():
             if {**fxn.components, **fxn.actions}: 
@@ -290,7 +290,7 @@ class Model(object):
         Parameters
         ----------
         gtype : str/dict, optional
-            Type of graph to return (normal, bipartite, component, or typegraph). The default is 'bipartite'.
+            Type of graph to return (fxngraph, fxnflowgraph, component, or typegraph). The default is 'fxnflowgraph'.
             dict: for function/flowgraphs, a dict with {flow:**kwargs} will return the graph view corresponding 
             to that function/flow
 
@@ -302,7 +302,7 @@ class Model(object):
         graph = getattr(self, 'get_'+gtype)()
             
         edgevals, fxnmodes, fxnstates, flowstates, compmodes, compstates, comptypes ={}, {}, {}, {}, {}, {}, {}
-        if gtype=='fxngraph': #set edge values for normal graph
+        if gtype=='fxngraph': #set edge values for fxngraph graph
             for edge in graph.edges:
                 multgraph = nx.projected_graph(self.graph, self.fxns,multigraph=True)
                 midedges=list(multgraph.subgraph(edge).edges)
@@ -312,7 +312,7 @@ class Model(object):
                     flowdict[flow]=self.flows[flow].status()
                 edgevals[edge]=flowdict
             nx.set_edge_attributes(graph, edgevals) 
-        elif gtype=='fxnflowgraph' or gtype=='compgraph': #set flow node values for bipartite graph
+        elif gtype=='fxnflowgraph' or gtype=='compgraph': #set flow node values for fxnflowgraph graph
             for flowname, flow in self.flows.items():
                 flowstates[flowname]=flow.status()
             nx.set_node_attributes(graph, flowstates, 'states')

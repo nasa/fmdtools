@@ -54,7 +54,7 @@ Parameters
         Options are:
             - 'endclass': a dict returned by find_classification (default)
             - 'endfaults': a dict of returned fault modes and their propagation {'endfaults':faultdict, 'faultprops':faultpropdict}
-            - 'normal'/'bipartite'/'typegraph': a networkx graph of the model with fault modes superimposed
+            - 'fxngraph'/'fxnflowgraph'/'typegraph': a networkx graph of the model with fault modes superimposed
             - 'fxnname.varname': variable values to get
             - a list of the above arguments (for multiple at the end)
             - a dict of lists (for multiple over time), e.g. {time:[varnames,... 'endclass']}

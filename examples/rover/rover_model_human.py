@@ -671,7 +671,7 @@ class Rover(Model):
                      'Environment': [0.8812338278458673, -0.03270816057506423],
                      'Power': [0.08855773535620892, 0.22730017067603847]}
 
-        self.build_model(bipartite_pos=pos_bip)
+        self.build_model(fxnflowgraph_pos=pos_bip)
     def find_classification(self,scen,mdlhist):
         modes, modeproperties = self.return_faultmodes()
         classification = str()
@@ -977,7 +977,7 @@ if __name__ == "__main__":
     mdl = Rover(params=gen_params('turn', amp=4))
     #mdl = Rover(params=gen_params('turn'))
 
-    dot = an.graph.show(mdl, gtype="bipartite")  # , renderer='graphviz')
+    dot = an.graph.show(mdl, gtype="fxnflowgraph")  # , renderer='graphviz')
     endresults,  mdlhist1 = prop.nominal(mdl)
     phases, modephases = mdlhist.get_modephases()
 
@@ -1046,15 +1046,15 @@ if __name__ == "__main__":
     an.graph.animation_from(mdl.fxns['Controller'], reshist, gtype='actions', renderer='netgraph')
 
     #matplotlib
-    an.graph.show(mdl.fxns['Controller'].action_graph, gtype='normal', pos=act_pos, scale=0.4, arrows=True)
+    an.graph.show(mdl.fxns['Controller'].action_graph, gtype='fxngraph', pos=act_pos, scale=0.4, arrows=True)
     an.graph.show(mdl.fxns['Controller'].flow_graph, pos=act_pos, highlight=[[*mdl.fxns['Controller'].actions],[],[]],seqgraph=mdl.fxns['Controller'].action_graph)
     #netgraph
-    an.graph.show(mdl.fxns['Controller'].action_graph, gtype='normal', renderer='netgraph', pos=act_pos, scale=0.3, arrows=True)
+    an.graph.show(mdl.fxns['Controller'].action_graph, gtype='fxngraph', renderer='netgraph', pos=act_pos, scale=0.3, arrows=True)
     _,_, gra = an.graph.show(mdl.fxns['Controller'].flow_graph, pos=act_pos, scale=0.6, renderer='netgraph', highlight=[[*mdl.fxns['Controller'].actions],[],[]],seqgraph=mdl.fxns['Controller'].action_graph)
     _,_, gra = an.graph.show(mdl.fxns['Controller'].flow_graph, pos=act_pos, scale=0.6, renderer='netgraph', highlight=[[*mdl.fxns['Controller'].actions],[],[]],seqgraph=mdl.fxns['Controller'].action_graph, seqlabels=True)
     #graphviz
-    dot = an.graph.show(mdl.fxns['Controller'].action_graph, gtype='normal', renderer='graphviz', arrows=True)
-    dot_bip = an.graph.show(mdl.fxns['Controller'].flow_graph, gtype='bipartite', renderer='graphviz', arrows=True,seqgraph=mdl.fxns['Controller'].action_graph, seqlabels=True)
+    dot = an.graph.show(mdl.fxns['Controller'].action_graph, gtype='fxngraph', renderer='graphviz', arrows=True)
+    dot_bip = an.graph.show(mdl.fxns['Controller'].flow_graph, gtype='fxnflowgraph', renderer='graphviz', arrows=True,seqgraph=mdl.fxns['Controller'].action_graph, seqlabels=True)
 
     #matplotlib
     an.graph.show(mdl.fxns['Controller'], gtype='actions', scale=0.6)
@@ -1118,8 +1118,8 @@ if __name__ == "__main__":
 #     pos = an.graph.set_pos(classgraph, gtype='typegraph')
 #     an.graph.show(classgraph, gtype='typegraph', pos=pos) #, pos=class_tree)
 
-#     an.graph.exec_order(mdl, gtype='normal')
-#     an.graph.exec_order(mdl, gtype='bipartite', renderer='graphviz')
+#     an.graph.exec_order(mdl, gtype='fxngraph')
+#     an.graph.exec_order(mdl, gtype='fxnflowgraph', renderer='graphviz')
 
 #     an.plot.dyn_order(mdl)
 #     phases, modephases = an.process.modephases(mdlhist)
@@ -1145,14 +1145,14 @@ if __name__ == "__main__":
 
 #     an.graph.show( gtype='typegraph', scale=0.7)
 
-#     endresults,  mdlhist = prop.one_fault(mdl, 'Drive','elec_open', staged=True, time=13, gtype='bipartite')
-#     an.graph.show( gtype='bipartite', scale=0.7)
+#     endresults,  mdlhist = prop.one_fault(mdl, 'Drive','elec_open', staged=True, time=13, gtype='fxnflowgraph')
+#     an.graph.show( gtype='fxnflowgraph', scale=0.7)
 
 #     reshist, _, _ = an.process.hist(mdlhist)
 #     typehist = an.process.typehist(mdl, reshist)
 #     an.graph.results_from(mdl, reshist, [10,15,20])
 #     an.graph.results_from(mdl, typehist, [10,15,20], gtype='typegraph') #), gtype='typegraph')
-#     an.graph.result_from(mdl, reshist, 10, gtype='bipartite', renderer='graphviz')
+#     an.graph.result_from(mdl, reshist, 10, gtype='fxnflowgraph', renderer='graphviz')
 
     # test_actgraph = Controller("guy", {})
     # plt.figure()

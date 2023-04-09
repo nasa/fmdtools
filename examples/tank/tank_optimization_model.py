@@ -178,12 +178,12 @@ if __name__=="__main__":
     from fmdtools.sim.approach import SampleApproach
     mdl=Tank()
     
-    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','bipartite'])
+    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','fxnflowgraph'])
     an.plot.mdlhists(mdlhist, fxnflowvals={'fxns':'store_coolant'})
 
     
     ## faulty run
-    resgraph, mdlhist = propagate.one_fault(mdl,'export_coolant','blockage', time=2, desired_result='bipartite')
+    resgraph, mdlhist = propagate.one_fault(mdl,'export_coolant','blockage', time=2, desired_result='fxnflowgraph')
     
     an.plot.mdlhists(mdlhist, title='NotVisible', fxnflowvals={'fxns':'store_coolant'}, time_slice=2)
     an.graph.show(resgraph,faultscen='NotVisible', time=2)

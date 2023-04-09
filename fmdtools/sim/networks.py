@@ -35,7 +35,7 @@ def calc_aspl(mdl, gtype='parameter'):
         mdl : model or graph
             graph to run the analysis for. (will get from model if provided)
         gtype : str
-            type of graph representation of the model to show. default is 'bipartite'
+            type of graph representation of the model to show. default is 'fxnflowgraph'
         
         Returns
         -------
@@ -54,7 +54,7 @@ def calc_modularity(mdl, gtype='parameter'):
         mdl : model or graph
             graph to run the analysis for. (will get from model if provided)
         gtype : str
-            type of graph representation of the model to show. default is 'bipartite'
+            type of graph representation of the model to show. default is 'fxnflowgraph'
         
         Returns
         -------
@@ -76,7 +76,7 @@ def find_bridging_nodes(mdl,plot='off', gtype = 'parameter', pos={}, scale=1):
         plot : str (optional)
             plots graph with high degree nodes visualized if set to 'on'
         gtype : str
-            type of graph representation of the model to show. default is 'bipartite'
+            type of graph representation of the model to show. default is 'fxnflowgraph'
         pos : dict  (optional)
             dict of node positions in the model (if desired)
         scale : int (optional)
@@ -109,7 +109,7 @@ def find_bridging_nodes(mdl,plot='off', gtype = 'parameter', pos={}, scale=1):
                 bridgingNodes.append(nodes[i])
     bridgingNodes = sorted(list(set(bridgingNodes)))
     if plot == 'on':
-        if gtype=='normal':
+        if gtype=='fxngraph':
             fig, ax= plot_normgraph(g,{},bridgingNodes,{},{},{},{},{},{},{},False,{}, pos=pos, scale=scale, colors=['lightgray','yellow', 'yellow'],show=False, title='Bridging Nodes')
         else:
             fig, ax = plot_bipgraph(g,{n:n for n in g.nodes()},{},bridgingNodes,{},{},showfaultlabels=False, pos=pos, scale=scale, colors=['lightgray','yellow', 'yellow'],show=False,  title='Bridging Nodes')
@@ -117,7 +117,7 @@ def find_bridging_nodes(mdl,plot='off', gtype = 'parameter', pos={}, scale=1):
         return bridgingNodes, fig, ax
     else:
         return bridgingNodes
-def find_high_degree_nodes(mdl,p=90,plot='off', gtype='bipartite', pos={}, scale=1):
+def find_high_degree_nodes(mdl,p=90,plot='off', gtype='fxnflowgraph', pos={}, scale=1):
     """
         Determines highest degree nodes, up to percentile p, in graph representation of model mdl.
         
@@ -130,7 +130,7 @@ def find_high_degree_nodes(mdl,p=90,plot='off', gtype='bipartite', pos={}, scale
         plot : str (optional)
             plots graph with high degree nodes visualized if set to 'on'
         gtype : str
-            type of graph representation of the model to show. default is 'bipartite'
+            type of graph representation of the model to show. default is 'fxnflowgraph'
         pos : dict  (optional)
             dict of node positions in the model (if desired)
         scale : int (optional)
@@ -159,7 +159,7 @@ def find_high_degree_nodes(mdl,p=90,plot='off', gtype='bipartite', pos={}, scale
         else:
             highDegreeNodes.append(sortedNodes[i])
     if plot == 'on':
-        if gtype=='normal':
+        if gtype=='fxngraph':
             fig, ax= plot_normgraph(g,{},[h for h,i in highDegreeNodes],{},{},{},{},{},{},{},False,{}, pos=pos, scale=scale, colors=['lightgray','red', 'red'],show=False, title='High Degree Nodes ('+str(p)+'th Percentile)')
         else:
             fig, ax = plot_bipgraph(g,{n:n for n in g.nodes()}, {},[h for h,i in highDegreeNodes],{},{},showfaultlabels=False, pos=pos, scale=scale, colors=['lightgray','red', 'red'], show=False,  title='High Degree Nodes ('+str(p)+'th Percentile)')
@@ -167,7 +167,7 @@ def find_high_degree_nodes(mdl,p=90,plot='off', gtype='bipartite', pos={}, scale
         return highDegreeNodes, fig, ax
     else:
         return highDegreeNodes
-def calc_robustness_coefficient(mdl,trials=100, gtype='bipartite'):
+def calc_robustness_coefficient(mdl,trials=100, gtype='fxnflowgraph'):
     """
         Computes robustness coefficient of graph representation of model mdl.
         
@@ -178,7 +178,7 @@ def calc_robustness_coefficient(mdl,trials=100, gtype='bipartite'):
         trials : int 
             number of times to run robustness coefficient algorithm (result is averaged over all trials)
         gtype : str
-            type of graph representation of the model to show. default is 'bipartite'
+            type of graph representation of the model to show. default is 'fxnflowgraph'
         
         Returns
         -------
@@ -201,7 +201,7 @@ def calc_robustness_coefficient(mdl,trials=100, gtype='bipartite'):
         trialsRC.append((200*sum(s)-100*s[0])/N/N)
     RC = sum(trialsRC)/len(trialsRC)
     return RC
-def degree_dist(mdl, gtype='bipartite'):
+def degree_dist(mdl, gtype='fxnflowgraph'):
     """
         Plots degree distribution of graph representation of model mdl.
         
@@ -210,7 +210,7 @@ def degree_dist(mdl, gtype='bipartite'):
         mdl : model or graph
             graph to calculated degree distribution for. (will get from model if provided)
         gtype : str
-            type of graph representation of the model to show. default is 'bipartite'
+            type of graph representation of the model to show. default is 'fxnflowgraph'
         Returns
         -------
         fig : matplotlib figure
@@ -386,8 +386,8 @@ def data_error(data,average):
 
 def get_graph(mdl, gtype):
     "gets the appropriate graph of type gtype from mdl"
-    if gtype == 'normal':       g = mdl.graph
-    elif gtype == 'bipartite':  g = mdl.bipartite
+    if gtype == 'fxngraph':       g = mdl.graph
+    elif gtype == 'fxnflowgraph':  g = mdl.fxnflowgraph
     elif gtype == 'parameter':  g = mdl.return_paramgraph()
     elif gtype == 'component':  g = mdl.return_stategraph(gtype='component')
     return g

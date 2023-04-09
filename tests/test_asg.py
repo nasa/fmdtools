@@ -136,7 +136,7 @@ class HazardModel(Model):
 mdl = HazardModel()
 #endstate,  mdlhist = prop.nominal(mdl)
 
-resgraph_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard','perceive_failed', time=4, desired_result='bipartite')
+resgraph_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard','perceive_failed', time=4, desired_result='fxnflowgraph')
 
 faulthist = mdlhist_fault.get_faulty_hist(*mdl.fxns, *mdl.flows)
 
