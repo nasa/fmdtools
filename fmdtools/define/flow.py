@@ -306,7 +306,7 @@ def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False
     if include_states:
         for state in multiflow.s.__fields__:
             if get_states:  kwargs={"states":getattr(multiflow.s, state)}
-            g.add_node(base_name+"_"+state, label="state", **kwargs)
+            g.add_node(base_name+"_"+state, label="State", **kwargs)
             g.add_edge(base_name, base_name+"_"+state, label="contains")
     for loc in multiflow.locals:
         local_flow = getattr(multiflow, loc)
@@ -320,7 +320,7 @@ def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False
         if include_states:
             for state in local_flow.s.__fields__:
                 if get_states:  kwargs={"states":getattr(multiflow.s, state)}
-                g.add_node(local_name+"_"+state, label="state", **kwargs)
+                g.add_node(local_name+"_"+state, label="State", **kwargs)
                 g.add_edge(local_name, local_name+"_"+state, label="contains")
     def get_typename(self):
         return "MultiFlow"
