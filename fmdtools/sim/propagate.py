@@ -32,8 +32,8 @@ import copy
 import tqdm
 import dill
 import os
-from fmdtools.analyze.graph import diffgraph
 from fmdtools.define.common import get_var, t_key
+from fmdtools.analyze.graph import Graph, get_gtypes
 from .approach import SampleApproach
 from .result import Result, History,  create_indiv_filename, file_check
 
@@ -850,19 +850,20 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     if 'endfaults' in desired_result:  
         result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
         desired_result.pop('endfaults')
-    for gtype in [*mdl.get_gtypes(), *mdl.flows]:
-        if gtype in desired_result:
-            if gtype in mdl.get_gtypes():
-                rgraph = mdl.create_graph(gtype)
-                proctype=gtype
-            elif gtype in mdl.flows:
-                rgraph = mdl.flows[gtype].create_graph(**desired_result[gtype])
-                proctype="fxnflowgraph"
-            
-            if nomresult and gtype in nomresult:     result[gtype] = diffgraph(rgraph, nomresult[gtype], proctype)
-            elif nomresult:                          result[gtype] = diffgraph(rgraph, nomresult, proctype)
-            else:           result[gtype] = diffgraph(rgraph, rgraph, proctype)
-            desired_result.pop(gtype)
+    
+    graphs_to_get = [g for g in desired_result if g.endswith(g)]
+    for gtype in graphs_to_get:
+        if gtype in get_gtypes(mdl): 
+            rgraph = Graph(mdl, gtype, **desired_result[gtype])
+        else:
+            strs = gtype.split(".")
+            obj = get_var(mdl,strs[:-1])
+            rgraph = Graph(obj, strs[-1], **desired_result[gtype])
+    
+        if nomresult and gtype in nomresult:     result[gtype] = rgraph.diff(nomresult[gtype])
+        elif nomresult:                          result[gtype] = rgraph.diff(nomresult)
+        else:                                    result[gtype] = rgraph.diff(rgraph)
+        desired_result.pop(gtype)
     if desired_result:
         if 'vars' in desired_result:
             result['vars']={}
