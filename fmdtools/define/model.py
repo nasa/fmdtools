@@ -239,14 +239,45 @@ class Model(object):
         """Returns a fxnflowgraph graph representation of the functions and flows
         in the model, where both functions and flows are nodes (fxn=0, flows=1)"""
         return self.graph.copy()
+    def set_fxnflowgraph_states(self, graph):
+        self.set_flow_nodestates(graph)
+        self.set_fxn_nodestates(graph)
+    def set_flow_nodestates(self, graph):
+        flowstates = {}
+        for flowname, flow in self.flows.items():
+            flowstates[flowname]= asdict(flow.s)
+        nx.set_node_attributes(graph, flowstates, 'states')    
     def get_flowgraph(self):
         """ Returns a graph representation of the flows in the model, where flows are nodes and edges are 
         associations in functions """
         return nx.projected_graph(self.graph, self.flows)
+    def set_flowgraph_states(self, graph):
+        self.set_flow_nodestates(self, graph)
     def get_fxngraph(self):
         """ Returns a graph representation of the functions of the model, where
         functions are nodes and flows are edges"""
         return nx.projected_graph(self.graph, self.fxns)
+    def set_fxngraph_states(self, graph):
+        self.set_flow_edgestates(graph)
+        self.set_fxn_nodestates(graph)
+    def set_flow_edgestates(self, graph):
+        edgevals = {}
+        for edge in graph.edges:
+            multgraph = nx.projected_graph(graph, self.fxns,multigraph=True)
+            midedges=list(multgraph.subgraph(edge).edges)
+            flows= [midedge[2] for midedge in midedges]
+            flowdict={}
+            for flow in flows: 
+                flowdict[flow]=asdict(self.flows[flow].s)
+            edgevals[edge]=flowdict
+        nx.set_edge_attributes(graph, edgevals) 
+    def set_fxn_nodestates(self,graph):
+        fxnmodes, fxnstates = {}, {}
+        for fxnname, fxn in self.fxns.items():
+            fxnstates[fxnname] = asdict(self.fxns[fxnname].s)
+            fxnmodes[fxnname] = copy.copy(self.fxns[fxnname].m.faults)
+        nx.set_node_attributes(graph, fxnstates, 'states')
+        nx.set_node_attributes(graph, fxnmodes, 'modes')
     def get_typegraph(self, withflows = True):
         """
         Returns a graph with the type containment relationships of the different model constructs.
@@ -273,6 +304,17 @@ class Model(object):
             flow_edges = [(fxn, flow) for fxn, flows in fxnclass_flowtype.items() for flow in flows]
             g.add_edges_from(flow_edges)
         return g
+    def set_typegraph_states(self, graph):
+        flowstates={}
+        for flowtype in self.flowtypes():
+            flowstates[flowtype] = {flow: asdict(self.flows[flow].s) for flow in self.flows_of_type(flowtype)}
+        nx.set_node_attributes(graph, flowstates, 'states')
+        fxnstates, fxnmodes = {}, {}
+        for fxnclass in self.fxnclasses(): 
+            fxnstates[fxnclass] = {fxn: asdict(self.fxns[fxn].s) for fxn in self.fxns_of_class(fxnclass)}
+            fxnmodes[fxnclass] = {fxn: copy.copy(self.fxns[fxn].m.faults) for fxn in self.fxns_of_class(fxnclass)}
+        nx.set_node_attributes(graph, fxnstates, 'states')
+        nx.set_node_attributes(graph, fxnmodes, 'modes')
     def get_compgraph(self):
         """Creates a fxnflowgraph graph view with components attached to functions"""
         graph=self.graph.copy()
@@ -281,72 +323,34 @@ class Model(object):
                 graph.add_nodes_from({**fxn.components, **fxn.actions}, bipartite=1)
                 graph.add_edges_from([(fxnname, comp) for comp in {**fxn.components, **fxn.actions}])
         return graph
-    def get_gtypes(self):
-        return [gtype[4:] for gtype in dir(self) if gtype.startswith('get_') and gtype.endswith('graph')]
-    def create_graph(self, gtype='fxnflowgraph'):
-        """
-        Returns a graph representation of the current state of the model.
-
-        Parameters
-        ----------
-        gtype : str/dict, optional
-            Type of graph to return (fxngraph, fxnflowgraph, component, or typegraph). The default is 'fxnflowgraph'.
-            dict: for function/flowgraphs, a dict with {flow:**kwargs} will return the graph view corresponding 
-            to that function/flow
-
-        Returns
-        -------
-        graph : networkx graph
-            Graph representation of the system with the modes and states added as attributes.
-        """
-        graph = getattr(self, 'get_'+gtype)()
-            
-        edgevals, fxnmodes, fxnstates, flowstates, compmodes, compstates, comptypes ={}, {}, {}, {}, {}, {}, {}
-        if gtype=='fxngraph': #set edge values for fxngraph graph
-            for edge in graph.edges:
-                multgraph = nx.projected_graph(self.graph, self.fxns,multigraph=True)
-                midedges=list(multgraph.subgraph(edge).edges)
-                flows= [midedge[2] for midedge in midedges]
-                flowdict={}
-                for flow in flows: 
-                    flowdict[flow]=self.flows[flow].status()
-                edgevals[edge]=flowdict
-            nx.set_edge_attributes(graph, edgevals) 
-        elif gtype=='fxnflowgraph' or gtype=='compgraph': #set flow node values for fxnflowgraph graph
-            for flowname, flow in self.flows.items():
-                flowstates[flowname]=flow.status()
-            nx.set_node_attributes(graph, flowstates, 'states')
-        elif gtype=='typegraph':
-            for flowtype in self.flowtypes():
-                flowstates[flowtype] = {flow:self.flows[flow].status() for flow in self.flows_of_type(flowtype)}
-            nx.set_node_attributes(graph, flowstates, 'states')
-        #set node values for functions
-        if gtype=='typegraph':
-            for fxnclass in self.fxnclasses(): 
-                fxnstates[fxnclass] = {fxn: asdict(self.fxns[fxn].s) for fxn in self.fxns_of_class(fxnclass)}
-                fxnmodes[fxnclass] = {fxn: copy.copy(self.fxns[fxn].m.faults) for fxn in self.fxns_of_class(fxnclass)}
-        else:
-            for fxnname, fxn in self.fxns.items():
-                fxnstates[fxnname] = asdict(self.fxns[fxnname].s)
-                fxnmodes[fxnname] = copy.copy(self.fxns[fxnname].m.faults)
-                if gtype=='fxngraph': del graph.nodes[fxnname]['graph']
-                if gtype=='compgraph':
-                    for mode in fxnmodes[fxnname].copy():
-                        for compname, comp in {**fxn.actions, **fxn.components}.items():
-                            compstates[compname]={}
-                            comptypes[compname]=True
-                            if mode in comp.faultmodes:
-                                compmodes[compname]=compmodes.get(compname, set())
-                                compmodes[compname].update([mode])
-                                fxnmodes[fxnname].remove(mode)
-                                fxnmodes[fxnname].update(['Comp_Fault'])
+    def create_graph(self, gtype='fxnflowgraph', get_states=True, **kwargs):
+        graph = getattr(self, 'get_'+gtype)(**kwargs)
+        if get_states:
+            set_state_func = getattr(self, 'set_'+gtype+'_states')
+            set_state_func(graph)
+        return graph
+    def set_compgraph_blockstates(self, graph):
+        compmodes, compstates, comptypes, fxnstates, fxnmodes = {}, {}, {}, {}
+        for fxnname, fxn in self.fxns.items():
+            fxnstates[fxnname] = asdict(self.fxns[fxnname].s)
+            fxnmodes[fxnname] = copy.copy(self.fxns[fxnname].m.faults)
+            for mode in fxnmodes[fxnname].copy():
+                for compname, comp in {**fxn.actions, **fxn.components}.items():
+                    compstates[compname]={}
+                    comptypes[compname]=True
+                    if mode in comp.faultmodes:
+                        compmodes[compname]=compmodes.get(compname, set())
+                        compmodes[compname].update([mode])
+                        fxnmodes[fxnname].remove(mode)
+                        fxnmodes[fxnname].update(['comp_fault'])
         nx.set_node_attributes(graph, fxnstates, 'states')
         nx.set_node_attributes(graph, fxnmodes, 'modes')
-        if gtype=='compgraph': 
-            nx.set_node_attributes(graph, compstates, 'states')
-            nx.set_node_attributes(graph, compmodes, 'modes') 
-            nx.set_node_attributes(graph, comptypes, 'iscomponent')
-        return graph
+        nx.set_node_attributes(graph, compstates, 'states')
+        nx.set_node_attributes(graph, compmodes, 'modes') 
+        nx.set_node_attributes(graph, comptypes, 'iscomponent')
+    def set_compgraph_states(self, graph):
+        self.set_flowgraph_states(graph)
+        self.set_compgraph_blockstates(graph)
     def calc_repaircost(self, additional_cost=0, default_cost=0, max_cost=np.inf):
         """
         Calculates the repair cost of the fault modes in the model based on given
