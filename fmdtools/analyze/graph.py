@@ -57,6 +57,7 @@ class EdgeStyle(dataobject):
 
 default_node_kwargs={'Model':       dict(node_shape='^'),
                      'Block':       dict(node_shape='s'),
+                     'FxnBlock':    dict(node_shape='s'),
                      'Flow':        dict(node_shape='o'),
                      'MultiFlow':   dict(node_shape='h'),
                      'CommsFlow':   dict(node_shape='8'),
@@ -80,8 +81,11 @@ class NodeStyle(dataobject):
             tuple of tag values to create the keywords for
         """
         style_kwargs = {}
-        for i, tagstyles in enumerate(styles.values()):
-            style_kwargs.update(default_node_kwargs.get(label[i], {}))
+        for i, (style, tagstyles) in enumerate(styles.items()):
+            if type(label[i])==bool and label[i]: 
+                style_kwargs.update(default_node_kwargs.get(style, {}))
+            else:   
+                style_kwargs.update(default_node_kwargs.get(label[i], {}))
             style_kwargs.update(tagstyles.get(label[i],{}))
         return NodeStyle(**style_kwargs)
     def kwargs(self):
@@ -140,15 +144,6 @@ class Labels(dataobject, mapping=True):
         return {k:self[k+'_style'] for k in self.iter_groups()}     
     def group_styles(self):
         return {k:(self[k], self[k+'_style']) for k in self.iter_groups()}
-    
-def auto_pos_robust(g, gtype='fxnflowgraph', pos={}):
-    """Tries to get the best positions for the graph"""
-    if not pos:
-        if gtype=='typegraph': pos=nx.multipartite_layout(g, 'level')
-        else:
-            try: pos=nx.planar_layout(g)
-            except: pos=nx.spectral_layout(g)
-    return pos
 
 def get_style_kwargs(styles, label, default_kwargs={}, style_class=EdgeStyle):
     """
@@ -193,51 +188,32 @@ def get_label_groups(iterator, *tags):
         labels = {k:tuple(vals[tag] for tag in tags) for k,vals in iterator.items()}
     except KeyError as e:
         unable = {k: tuple(tag for tag in tags if tag not in vals) for k, vals in iterator.items()}
-        raise Exception("The following keys lack the following tags: "+str(unable))
+        raise Exception("The following keys lack the following tags: "+str(unable)) from e
     label_groups = {}
     for key, label in labels.items():
         if label in label_groups:   label_groups[label].append(key)
         else:                       label_groups[label]=[key]
     return label_groups
 
-def get_gtypes(obj):
-    return [gtype[4:] for gtype in dir(obj) if gtype.startswith('get_') and gtype.endswith('graph')]
-
-def diff_typegraph(g, nomg):
-    rg=g.copy()
-    for node in g.nodes:
-        if g.nodes[node]['level']==2:
-            faulty = any({fxn for fxn, m in g.nodes[node]['modes'].items() if m not in [{'nom'},{}]})
-            rg.nodes[node]['faulty']=faulty
-        if g.nodes[node]['level']>=3:
-            degraded = g.nodes[node]['states']!=nomg.nodes[node]['states']
-            rg.nodes[node]['degraded']=degraded
-    return rg
-
-
 class Graph(object):
-    def __init__(self, obj, gtype='', get_states=True, **kwargs):
-        if isinstance(obj, nx.Graph):   self.g=obj
-        else:                           self.g = obj.create_graph(gtype, get_states=get_states **kwargs)
-        self.gtype=gtype
-    def set_pos(self, gtype='', **pos):
+    def __init__(self, obj, get_states=True, **kwargs):
+        if isinstance(obj, nx.Graph):       self.g=obj
+        elif hasattr(self, 'nx_from_obj'):  self.g=self.nx_from_obj(obj, get_states=get_states **kwargs)
+    def set_pos(self, auto=True, **pos):
         """
         Sets graph positions to given positions, (automatically or manually)
 
         Parameters
         ----------
-        gtype : str, optional
-            Name of graph type for auto-layout. The default is ''. Options are:
-                - hierarchical: creates tree layout
-                - standard: tries a planar layout, otherwise defaults to spectral
+        auto : str, optional
+            Whether to auto-layout the node position. The default is True. 
         **pos : nodename=(x,y)
             Positions of nodes to set. Otherwise updates to the auto-layout or (0.5,0.5)
         """
-        if not self.pos:self.pos={}
-        if gtype=='hierarchical':   self.pos=nx.multipartite_layout(self.g, 'level')
-        elif gtype=='standard':
-            try:                    self.pos=nx.planar_layout(self.g)
-            except:                 self.pos=nx.spectral_layout(self.g)
+        if not getattr(self, 'pos', False): self.pos={}
+        if auto:
+            try:                    self.pos=nx.planar_layout(nx.MultiGraph(self.g))
+            except:                 self.pos=nx.spring_layout(nx.MultiGraph(self.g))
         else:                       self.pos = {n:self.pos.get(n, (0.5,0.5)) for n in self.g.nodes}
         self.pos.update(pos)
     def set_edge_styles(self, **edge_styles):
@@ -252,6 +228,7 @@ class Graph(object):
             nx.draw_networkx_edges. The default is {"label":{}}.
         """
         self.edge_styles={}
+        if "label" not in edge_styles: edge_styles["label"]={}
         self.edge_groups = get_label_groups(self.g.edges(), *edge_styles)
         for edge_group in self.edge_groups:
             self.edge_styles[edge_group]=EdgeStyle.from_styles(edge_styles, edge_group)
@@ -267,6 +244,7 @@ class Graph(object):
             nx.draw_networkx_nodes. The default is {"label":{}}.
         """
         self.node_styles={}
+        if "label" not in node_styles: node_styles['label']={}
         self.node_groups = get_label_groups(self.g.nodes(), *node_styles)
         for node_group in self.node_groups:
             self.node_styles[node_group]=NodeStyle.from_styles(node_styles, node_group)
@@ -274,6 +252,12 @@ class Graph(object):
         self.edge_labels = Labels.from_iterator(self.g, self.g.edges, EdgeLabelStyle, title=title, title2=title2, subtext=subtext, **edge_label_styles)
     def set_node_labels(self, title='id', title2='', subtext='', **node_label_styles):
         self.node_labels = Labels.from_iterator(self.g, self.g.nodes, LabelStyle, title=title, title2=title2, subtext=subtext, **node_label_styles)
+    def add_node_groups(self, **node_groups):
+        group_attrs={}
+        for node_group, nodes in node_groups.items():
+            group_attrs.update({n:node_group for n in nodes})
+        group_attrs.update({n:'' for n in self.g.nodes if n not in group_attrs})
+        nx.set_node_attributes(self.g, group_attrs, 'group')
     def draw(self, figsize=(12,10), withlegend=True, title="", **kwargs):
         """
         Draws a networkx graph g with given styles corresponding to the node/edge properties.
@@ -344,23 +328,15 @@ class Graph(object):
             Graph Iterator (in analyze.Graph)
         """
         plt.ion()
-        p = GraphInteractor(self, gtype, **kwargs)
+        p = GraphInteractor(self, **kwargs)
         if 'inline' in get_backend():
             print("Cannot place nodes in inline version of plot. Use '%matplotlib qt' (or '%matplotlib osx') to open in external window")
         return p
-    def diff(self, other):
+    def set_degraded(self, other):
         g = self.g 
         nomg = other.g
-        for edge in g.edges:
-            for flow in list(g.edges[edge].keys()):            
-                if g.edges[edge][flow]!=nomg.edges[edge][flow]: status='degraded'
-                else:                                           status='nominal' 
-                self.g.edges[edge][flow]={'values':g.edges[edge][flow],'status':status}
-            for node in g.nodes:        
-                if g.nodes[node]['modes'].difference(['nom']):            status='faulty' 
-                elif g.nodes[node]['states']!=nomg.nodes[node]['states']: status='degraded'
-                else: status='nominal'
-                self.g.nodes[node]['status']=status
+        for node in g.nodes:   
+            g.nodes[node]['degraded'] = g.nodes[node]['states']!=nomg.nodes[node]['states']
 
 class GraphInteractor: 
     """A simple interactive graph for consistent node placement, etc--used in set_pos to set node positions"""
