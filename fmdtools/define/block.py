@@ -142,6 +142,8 @@ class Block(object):
         assoc_flows(self, flows=flows)
         init_obj_attr(self, s=s, p=p, m=m, r=r, t=t)
         self.update_seed()
+    def get_typename(self):
+        return "Block"
     def __repr__(self):
         if hasattr(self,'name'):
             fxnstr = getattr(self, 'name', '')+' '+self.__class__.__name__+'\n'
@@ -324,6 +326,8 @@ class Component(Block):
         """ Placeholder for component behavior methods. Enables one to include components
         without yet having a defined behavior for them."""
         return 0
+    def get_typename(self):
+        return "Component"
 class CompArch(dataobject, mapping=True):
     """Container for holding component architectures"""
     archtype:       str = 'default'
@@ -798,6 +802,8 @@ class FxnBlock(Block):
                     self.m.faultmodes.update({ca.name+"_"+f:vals for f, vals in ca.m.faultmodes.items()})
             elif at_arg: 
                 raise Exception(at+" argument provided: "+str(at_arg)+"without associating a CompArch/ASG to _init_"+at)
+    def get_typename(self):
+        return "FxnBlock"
     def add_local_to_flowdict(self,flowdict, local, ftype):
         """
         Adds local flows to the flow dictionary during initialization

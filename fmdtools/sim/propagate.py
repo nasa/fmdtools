@@ -33,7 +33,6 @@ import tqdm
 import dill
 import os
 from fmdtools.define.common import get_var, t_key
-from fmdtools.analyze.graph import Graph, get_gtypes
 from .approach import SampleApproach
 from .result import Result, History,  create_indiv_filename, file_check
 
@@ -851,19 +850,23 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
         result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
         desired_result.pop('endfaults')
     
-    graphs_to_get = [g for g in desired_result if g.endswith(g)]
-    for gtype in graphs_to_get:
-        if gtype in get_gtypes(mdl): 
-            rgraph = Graph(mdl, gtype, **desired_result[gtype])
+    graphs_to_get = [g for g in desired_result if type(g)==str and g.startswith('graph')]
+    for g in graphs_to_get:
+        arg = desired_result.pop(g)
+        if isinstance(arg, tuple):  Gclass, kwargs = arg
+        else:                       Gclass=arg; kwargs={}
+
+        if '.' in g:
+            strs = g.split(".")
+            obj = get_var(mdl,strs[1:])
+            rgraph = Gclass(obj, **kwargs)
         else:
-            strs = gtype.split(".")
-            obj = get_var(mdl,strs[:-1])
-            rgraph = Graph(obj, strs[-1], **desired_result[gtype])
+            rgraph = Gclass(mdl, **kwargs)
     
-        if nomresult and gtype in nomresult:     result[gtype] = rgraph.diff(nomresult[gtype])
-        elif nomresult:                          result[gtype] = rgraph.diff(nomresult)
-        else:                                    result[gtype] = rgraph.diff(rgraph)
-        desired_result.pop(gtype)
+        if nomresult and g in nomresult:  rgraph.set_degraded(nomresult[g])
+        elif nomresult:                   rgraph.set_degraded(nomresult)
+        result[g] = rgraph
+        
     if desired_result:
         if 'vars' in desired_result:
             result['vars']={}
