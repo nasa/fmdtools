@@ -543,6 +543,13 @@ def check_model_pickleability(model, try_pick=False):
     unpickleable = check_pickleability(model, try_pick=try_pick)
 
 class ModelGraph(Graph):
+    """
+    Creates a Graph of model functions and flow for display, where both functions
+    and flows are nodes.
+    
+    If withstates option is used on instantiation, a `states` dict is associated
+    with the edges/nodes which can then be used to visualize function/flow attributes.
+    """
     def __init__(self, mdl, withstates=True, **kwargs):
         self.g=self.nx_from_obj(mdl)
         if withstates: self.set_nx_states(mdl)
@@ -570,6 +577,10 @@ class ModelGraph(Graph):
         nx.set_node_attributes(self.g, flowstates, 'states') 
     
 class ModelFlowGraph(ModelGraph):
+    """
+    Creates a Graph of model flows for display, where flows are
+    set as nodes and connections (via functions) are edges
+    """
     def nx_from_obj(self, mdl):
         g = nx.projected_graph(mdl.graph, mdl.flows)
         labels = {fname:f.get_typename() for fname, f in mdl.flows.items()}
@@ -579,6 +590,10 @@ class ModelFlowGraph(ModelGraph):
         self.set_flow_nodestates(mdl)
 
 class ModelCompGraph(ModelGraph):
+    """
+    Creates a graph of model functions, and flows, with component containment
+    relationships shown for functions.
+    """
     def nx_from_obj(self, mdl):
         graph=super().nx_from_obj(mdl)
         for fxnname, fxn in mdl.fxns.items():
@@ -642,6 +657,10 @@ class ModelFxnGraph(ModelGraph):
             g.edges[edge]['degraded'] = degraded
 
 class ModelTypeGraph(ModelGraph):
+    """
+    Creates a graph representation of model Classes, showing the containment relationship
+    between function classes and flow classes in the model.
+    """
     def nx_from_obj(self, mdl, withflows = True, **kwargs):
         """
         Returns a graph with the type containment relationships of the different model constructs.
