@@ -159,7 +159,7 @@ class CommonTests():
     def check_same_file(self, result, resfile, check_link=False):
         """ Checks if the mdlhist/endclass result is the same as the result loaded from resfile """
         result_flattened = result.flatten()
-        result_saved = sim.result.load_result(resfile)
+        result_saved = analyze.result.load_result(resfile)
         result_saved_flattened = result_saved.flatten()
         self.assertCountEqual([*result_flattened.keys()], [*result_saved_flattened.keys()])
         self.compare_results(result_flattened, result_saved_flattened)
@@ -183,7 +183,7 @@ class CommonTests():
         loaded from resfolder. filetype is the type of file in resfolder, while check_link
         checks if modifying one modifies the other (set to False--usually not applicable)"""
         result_flattened = result.flatten()
-        result_saved = sim.result.load_results(resfolder, filetype)
+        result_saved = analyze.result.load_results(resfolder, filetype)
         result_saved_flattened = result_saved.flatten()
         self.assertCountEqual([*result_flattened.keys()], [*result_saved_flattened.keys()])
         self.compare_results(result_flattened, result_saved_flattened)

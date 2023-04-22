@@ -26,8 +26,7 @@ from .common import get_true_fields,get_true_field, init_obj_attr, get_obj_track
 from .time import Time
 from .mode import Mode
 from .flow import init_flow, Flow
-from fmdtools.sim.result import History, get_sub_include, init_indicator_hist
-from fmdtools.analyze.graph import Graph
+from fmdtools.analyze.result import History, get_sub_include, init_indicator_hist
 
 def assoc_flows(obj, flows={}):
     """
@@ -704,39 +703,6 @@ class ASG(dataobject, mapping=True):
             am.extend(f.return_mutables())
         am.append(copy.copy(self.active_actions))
         return am
-
-class ASGGraph(Graph):
-    """
-    Shows a visual representation of the internal Action Sequence Graph of 
-    the Function Block, with:
-        - Sequence as edges
-        - Flows as (circular) Nodes
-        - Actions as (square) Nodes
-    """
-    def __init__(self, asg, gtype):
-        self.g = nx.compose(asg.flow_graph, asg.action_graph) 
-        self.set_nx_states(asg)
-    def set_nx_labels(self, asg):
-        for n in self.g.nodes():
-            if n in asg.flow_graph.nodes():     self.g[n]['label'] = 'Flow'
-            elif n in asg.action_graph.nodes(): self.g[n]['label'] = 'Action'
-    def set_nx_states(self, asg):
-        for g in self.g.nodes():
-            self.g.nodes[g]['active'] = g in asg.active_actions
-class ASGActGraph(ASGGraph):
-    """
-    Variant of ASGGraph where only the sequence between actions is shown.
-    """
-    def __init__(self, asg):
-        self.g=asg.action_graph.copy()
-        self.set_nx_states(asg)
-class FlowGraph(ASGGraph):
-    """
-    Variant of ASGGraph where only the flow relationships between actions is shown.
-    """
-    def __init__(self, asg):
-        self.g=asg.flow_graph.copy()
-        self.set_nx_states(asg)
 
 #Function superclass 
 class FxnBlock(Block):
