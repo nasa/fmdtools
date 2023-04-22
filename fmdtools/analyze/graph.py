@@ -28,6 +28,7 @@ from matplotlib.patches import Patch
 from matplotlib.widgets import Button
 from matplotlib import get_backend
 from recordclass import dataobject, asdict
+from copy import copy
 
 
 default_edge_kwargs={'sends':       dict(edge_color='grey', style='dashed'),
@@ -481,5 +482,365 @@ class GraphInteractor:
         plt.show()
     def print_pos(self):
         print({k:list(v) for k,v in self.pos.items()})
+
+# INDIVIDUAL GRAPH VARIANTS
+# MODELS 
+class ModelGraph(Graph):
+    """
+    Creates a Graph of Model functions and flow for display, where both functions
+    and flows are nodes.
+    
+    If withstates option is used on instantiation, a `states` dict is associated
+    with the edges/nodes which can then be used to visualize function/flow attributes.
+    """
+    def __init__(self, mdl, withstates=True, **kwargs):
+        """
+        Generates the ModelGraph corresponding to a given Model
+
+        Parameters
+        ----------
+        mdl : define.Model
+            fmdtools model to represent graphically
+        withstates : bool, optional
+            Whether to copy states to the node/edge 'states' property. The default is True.
+        **kwargs : kwargs
+            (placeholder for kwargs)
+        """
+        self.g=self.nx_from_obj(mdl)
+        if withstates: self.set_nx_states(mdl)
+    def nx_from_obj(self, mdl):
+        g=mdl.graph.copy()
+        labels = {fname:f.get_typename() for fname, f in mdl.fxns.items()}
+        labels.update({fname:f.get_typename() for fname, f in mdl.flows.items()})
+        nx.set_node_attributes(g, labels, name='label')
+        nx.set_edge_attributes(g, 'contains', name='label')
+        return g
+    def set_nx_states(self, mdl):
+        self.set_flow_nodestates(mdl)
+        self.set_fxn_nodestates(mdl)
+    def set_fxn_nodestates(self, mdl):
+        fxnmodes, fxnstates = {}, {}
+        for fxnname, fxn in mdl.fxns.items():
+            fxnstates[fxnname] = asdict(mdl.fxns[fxnname].s)
+            fxnmodes[fxnname] = copy.copy(mdl.fxns[fxnname].m.faults)
+        nx.set_node_attributes(self.g, fxnstates, 'states')
+        nx.set_node_attributes(self.g, fxnmodes, 'modes')
+    def set_flow_nodestates(self, mdl):
+        flowstates = {}
+        for flowname, flow in mdl.flows.items():
+            flowstates[flowname]= asdict(flow.s)
+        nx.set_node_attributes(self.g, flowstates, 'states') 
+class ModelFlowGraph(ModelGraph):
+    """
+    Creates a Graph of model flows for display, where flows are
+    set as nodes and connections (via functions) are edges
+    """
+    def nx_from_obj(self, mdl):
+        g = nx.projected_graph(mdl.graph, mdl.flows)
+        labels = {fname:f.get_typename() for fname, f in mdl.flows.items()}
+        nx.set_node_attributes(g, labels, name='label')
+        return g
+    def set_nx_states(self, mdl):
+        self.set_flow_nodestates(mdl)
+class ModelCompGraph(ModelGraph):
+    """
+    Creates a graph of model functions, and flows, with component containment
+    relationships shown for functions.
+    """
+    def nx_from_obj(self, mdl):
+        graph=super().nx_from_obj(mdl)
+        for fxnname, fxn in mdl.fxns.items():
+            if {**fxn.components, **fxn.actions}: 
+                graph.add_nodes_from({**fxn.components, **fxn.actions}, bipartite=1, label="Block")
+                graph.add_edges_from([(fxnname, comp) for comp in {**fxn.components, **fxn.actions}])
+        return graph
+    def set_nx_states(self, mdl):
+        self.set_flowgraph_states(mdl)
+        self.set_compgraph_blockstates(mdl)
+    def set_compgraph_blockstates(self, mdl):
+        compmodes, compstates, comptypes, fxnstates, fxnmodes = {}, {}, {}, {}
+        for fxnname, fxn in mdl.fxns.items():
+            fxnstates[fxnname] = asdict(mdl.fxns[fxnname].s)
+            fxnmodes[fxnname] = copy.copy(mdl.fxns[fxnname].m.faults)
+            for mode in fxnmodes[fxnname].copy():
+                for compname, comp in {**fxn.actions, **fxn.components}.items():
+                    compstates[compname]={}
+                    comptypes[compname]=True
+                    if mode in comp.faultmodes:
+                        compmodes[compname]=compmodes.get(compname, set())
+                        compmodes[compname].update([mode])
+                        fxnmodes[fxnname].remove(mode)
+                        fxnmodes[fxnname].update(['comp_fault'])
+        nx.set_node_attributes(self.g, fxnstates, 'states')
+        nx.set_node_attributes(self.g, fxnmodes, 'modes')
+        nx.set_node_attributes(self.g, compstates, 'states')
+        nx.set_node_attributes(self.g, compmodes, 'modes') 
+        nx.set_node_attributes(self.g, comptypes, 'iscomponent')
+class ModelFxnGraph(ModelGraph):
+    """ Returns a graph representation of the functions of the model, where
+    functions are nodes and flows are edges"""
+    def nx_from_obj(self, mdl, withstates=True, **kwargs):
+        g = nx.projected_graph(mdl.graph, mdl.fxns)
+        labels = {fname:f.get_typename() for fname, f in mdl.fxns.items()}
+        nx.set_node_attributes(g, labels, name='label')
+        return g
+    def set_nx_states(self, mdl):
+        self.set_flow_edgestates(mdl)
+        self.set_fxn_nodestates(mdl)
+    def set_flow_edgestates(self, mdl):
+        edgevals = {}
+        for edge in self.g.edges:
+            multgraph = nx.projected_graph(self.g, mdl.fxns,multigraph=True)
+            midedges=list(multgraph.subgraph(edge).edges)
+            flows= [midedge[2] for midedge in midedges]
+            flowdict={}
+            for flow in flows: 
+                flowdict[flow]=asdict(mdl.flows[flow].s)
+            edgevals[edge]=flowdict
+        nx.set_edge_attributes(self.g, edgevals) 
+    def set_degraded(self, other):
+        super().set_degraded(other)
+        g = self.g
+        nomg = other.g
+        for edge in g.edges:
+            degraded = False
+            for flow in list(g.edges[edge].keys()):            
+                if g.edges[edge][flow]!=nomg.edges[edge][flow]: degraded=True
+            g.edges[edge]['degraded'] = degraded
+class ModelTypeGraph(ModelGraph):
+    """
+    Creates a graph representation of model Classes, showing the containment relationship
+    between function classes and flow classes in the model.
+    """
+    def nx_from_obj(self, mdl, withflows = True, **kwargs):
+        """
+        Returns a graph with the type containment relationships of the different model constructs.
+
+        Parameters
+        ----------
+        withflows : bool, optional
+            Whether to include flows. The default is True.
+
+        Returns
+        -------
+        g : nx.DiGraph
+            networkx directed graph of the type relationships
+        """
+        g = nx.DiGraph()
+        modelname = type(mdl).__name__
+        g.add_node(modelname, level=1, label="Model")
+        g.add_nodes_from(mdl.fxnclasses(), level=2, label="FxnBlock")
+        function_connections = [(modelname, fname) for fname in mdl.fxnclasses()]
+        g.add_edges_from(function_connections, label="contains")
+        if withflows:
+            g.add_nodes_from(mdl.flowtypes(), level=3, label="Flow")
+            fxnclass_flowtype = mdl.flowtypes_for_fxnclasses()
+            flow_edges = [(fxn, flow) for fxn, flows in fxnclass_flowtype.items() for flow in flows]
+            g.add_edges_from(flow_edges, label="contains")
+        return g
+    def set_nx_states(self, mdl):
+        graph = self.g
+        flowstates={}
+        for flowtype in mdl.flowtypes():
+            flowstates[flowtype] = {flow: asdict(mdl.flows[flow].s) 
+                                    for flow in mdl.flows_of_type(flowtype)}
+        nx.set_node_attributes(graph, flowstates, 'states')
+        fxnstates, fxnmodes = {}, {}
+        for fxnclass in mdl.fxnclasses(): 
+            fxnstates[fxnclass] = {fxn: asdict(mdl.fxns[fxn].s) 
+                                   for fxn in mdl.fxns_of_class(fxnclass)}
+            fxnmodes[fxnclass] = {fxn: copy.copy(mdl.fxns[fxn].m.faults) 
+                                  for fxn in mdl.fxns_of_class(fxnclass)}
+        nx.set_node_attributes(graph, fxnstates, 'states')
+        nx.set_node_attributes(graph, fxnmodes, 'modes')
+    def set_degraded(self, nomg):
+        g=self.g
+        rg=self.g.copy()
+        for node in g.nodes:
+            if g.nodes[node]['level']==2:
+                faulty = any({fxn for fxn, m in g.nodes[node]['modes'].items() if m not in [{'nom'},{}]})
+                rg.nodes[node]['faulty']=faulty
+            if g.nodes[node]['level']>=2:
+                degraded = g.nodes[node]['states']!=nomg.nodes[node]['states']
+                rg.nodes[node]['degraded']=degraded
+        self.g=rg
+    def set_pos(self, auto=True, **pos):
+        if auto: self.pos=nx.multipartite_layout(self.g, 'level')
+        super().set_pos(auto=False, **pos)
+## FLOW/MULTIFLOW/COMMSFLOW
+class MultiFlowGraph(Graph):
+    def __init__(self, flow, include_glob=False,
+                               send_connections={"closest":"base"},
+                               connections_as_tags=True,
+                               include_states=False,
+                               get_states=True):
+        """
+        Creates a networkx graph corresponding to the MultiFlow.
+    
+        Parameters
+        ----------
+        include_glob : bool, optional
+            Whether to include the base flow (if used). The default is False.
+        send_connections : dict/list, optional
+            Tags/edges to create as send/recieve connections between local views of the 
+            flow without explicit containment relationships.
+            
+            With structure {in_tag : out_tag}. The default is {}.
+            Or structure [(in_node : out_node)]
+        include_states:
+            whether to include states in the graph
+        get_states:
+            whether to attach state information as node attributes
+    
+        Returns
+        -------
+        g : nx.DiGraph
+            Networkx graph corresponding to the MultiFlow
+        """
+        g = nx.DiGraph()
+        if include_glob:
+            add_g_nested(g,flow,flow.name, include_states=include_states, get_states=get_states)
+        else:
+            for loc in flow.locals:
+                local_flow = getattr(flow, loc)
+                add_g_nested(g, local_flow, loc, include_states=include_states, get_states=get_states)
+        if type(send_connections)==dict:   send_iter = send_connections.items();    connections_as_tags=True
+        elif type(send_connections)==list: send_iter = send_connections;            connections_as_tags=False
+        
+        for in_tag, out_tag in send_iter:
+            for in_node in g.nodes:
+                if node_is_tagged(connections_as_tags, in_tag, in_node):
+                    for out_node in g.nodes:
+                        if (node_is_tagged(connections_as_tags, out_tag, out_node)
+                            and not((in_node, out_node) in g.edges) and in_node!=out_node):
+                            g.add_edge(in_node, out_node, label="sends")
+        self.g=g
+class CommsFlowGraph(MultiFlowGraph):
+    def __init__(self, flow, include_glob=False, ports_only=False, get_states=True):
+        """
+        Creates a graph representation of the CommsFlow (assuming no additional locals)
+    
+        Parameters
+        ----------
+        include_glob : bool, optional
+            Whether to include the base (root) node. The default is False.
+        ports_only : bool, optional
+            Whether to only include the explicit port connections betwen flows. The default is False
+        with_internal: bool, optional
+            Whether to include the internal aspect of the commsflow in the commsflow.
+    
+        Returns
+        -------
+        g : networkx.DiGraph
+            Graph of the commsflow connections.
+        """
+        send_connections=[]
+        for f in flow.fxns:
+            int_flow = getattr(flow, f)
+            int_ports = int_flow.locals
+            out_flow = getattr(flow, f+"_out")
+            out_ports = out_flow.locals
+            send_connections.append((f, f+"_out"))
+            for port in int_ports:
+                portname = f+"_"+port
+                if port in out_ports:   send_connections.append((portname, f+"_out_"+port))
+                else:                   send_connections.append((portname, f+"_out"))
+            for f2 in flow.fxns:
+                f2_int = getattr(flow,f2)
+                if f2 in out_ports:
+                    for port in out_ports:
+                        portname = f+"_out: "+port
+                        if port in f2_int.locals:
+                            send_connections.append((portname, f2+": "+port))
+                        elif port==f2:
+                            send_connections.append((portname,f2))
+                else:
+                    if f in f2_int.locals:
+                        send_connections.append((f+"_out", f2+"_"+f))
+                    elif not(ports_only):
+                        send_connections.append((f+"_out", f2))
+                        
+        super().__init__(flow, include_glob=include_glob, 
+                         send_connections=send_connections, 
+                         get_states=get_states)
+
+def node_is_tagged(connections_as_tags, tag, node):
+    return (connections_as_tags and (tag in node or (tag=="base" and not("_" in node)))) or tag==node
+def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False):
+    """
+    Helper function for MultiFlow.create_multigraph. Iterates recursively
+    through multigraph locals to construct the containment tree.
+
+    Parameters
+    ----------
+    g : networkx.graph
+        Existing graph
+    multiflow : MultiFlow
+        Multiflow Structure
+    base_name : str
+        Name at the current level of recursion
+    include_states : bool, optional
+        Whether to include state attributes in the plot. The default is False.
+    get_states : bool, optional
+        Whether to attach states as attributes to the graph. The default is False
+    """
+    if not get_states:  kwargs={}
+    else:               kwargs={"states":multiflow.return_states()}
+    g.add_node(base_name, label=multiflow.get_typename(), **kwargs)
+    if include_states:
+        for state in multiflow.s.__fields__:
+            if get_states:  kwargs={"states":getattr(multiflow.s, state)}
+            g.add_node(base_name+"_"+state, label="State", **kwargs)
+            g.add_edge(base_name, base_name+"_"+state, label="contains")
+    for loc in multiflow.locals:
+        local_flow = getattr(multiflow, loc)
+        local_name = base_name+"_"+loc
+        if get_states:  kwargs={"states":local_flow.return_states()}
+        
+        g.add_node(local_name, label=local_flow.get_typename(), **kwargs)
+        g.add_edge(base_name, local_name, label="contains")
+        if local_flow.locals:
+            add_g_nested(g, local_flow, local_name)
+        if include_states:
+            for state in local_flow.s.__fields__:
+                if get_states:  kwargs={"states":getattr(multiflow.s, state)}
+                g.add_node(local_name+"_"+state, label="State", **kwargs)
+                g.add_edge(local_name, local_name+"_"+state, label="contains")
+
+## ASG
+class ASGGraph(Graph):
+    """
+    Shows a visual representation of the internal Action Sequence Graph of 
+    the Function Block, with:
+        - Sequence as edges
+        - Flows as (circular) Nodes
+        - Actions as (square) Nodes
+    """
+    def __init__(self, asg, gtype):
+        self.g = nx.compose(asg.flow_graph, asg.action_graph) 
+        self.set_nx_states(asg)
+    def set_nx_labels(self, asg):
+        for n in self.g.nodes():
+            if n in asg.flow_graph.nodes():     self.g[n]['label'] = 'Flow'
+            elif n in asg.action_graph.nodes(): self.g[n]['label'] = 'Action'
+    def set_nx_states(self, asg):
+        for g in self.g.nodes():
+            self.g.nodes[g]['active'] = g in asg.active_actions
+class ASGActGraph(ASGGraph):
+    """
+    Variant of ASGGraph where only the sequence between actions is shown.
+    """
+    def __init__(self, asg):
+        self.g=asg.action_graph.copy()
+        self.set_nx_states(asg)
+class ASGFlowGraph(ASGGraph):
+    """
+    Variant of ASGGraph where only the flow relationships between actions is shown.
+    """
+    def __init__(self, asg):
+        self.g=asg.flow_graph.copy()
+        self.set_nx_states(asg)
+
+
 
 

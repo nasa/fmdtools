@@ -15,7 +15,7 @@ from fmdtools.define.model import Model
 from fmdtools.sim.approach import SampleApproach
 from fmdtools.sim import propagate
 from fmdtools.sim.search import ProblemInterface
-from fmdtools.sim.result import History
+from fmdtools.analyze.result import History
 
 import fmdtools.analyze as an
 import multiprocessing as mp

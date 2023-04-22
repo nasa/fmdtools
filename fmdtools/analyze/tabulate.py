@@ -31,7 +31,7 @@ Also used for FMEA-like tables:
 
 import pandas as pd
 import numpy as np
-from fmdtools.sim.result import nan_to_x, Result, bootstrap_confidence_interval
+from fmdtools.analyze.result import nan_to_x, Result, bootstrap_confidence_interval
 
 def label_faults(faulthist, df, fxnlab, labels):
     if type(faulthist)==dict:
@@ -412,7 +412,7 @@ def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
     pandas.DataFrame
         Table of metrics and degraded functions/flows over scenarios
     """
-    from fmdtools.sim.result import History
+    from fmdtools.analyze.result import History
     deg_summaries={}; fault_summaries={}
     mdlhist = mdlhist.nest(levels=1)
     for scen, hist in mdlhist.items():

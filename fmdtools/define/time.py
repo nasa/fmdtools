@@ -7,7 +7,7 @@ Description: A module for defining time-based properties for use in blocks. Has 
 """
 from decimal import Decimal
 from recordclass import dataobject
-from fmdtools.sim.result import History, init_hist_iter, get_sub_include
+from fmdtools.analyze.result import History, init_hist_iter, get_sub_include
 from .common import  get_dataobj_track, get_obj_track
 
 class Timer():

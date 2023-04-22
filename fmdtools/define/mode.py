@@ -11,7 +11,7 @@ import numpy as np
 import itertools
 import copy
 from .common import get_true_fields, get_true_field, get_dataobj_track
-from fmdtools.sim.result import History, init_hist_iter
+from fmdtools.analyze.result import History, init_hist_iter
 
 class Fault(dataobject, readonly=True, mapping=True):
     """
