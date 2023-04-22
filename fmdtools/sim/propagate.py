@@ -34,7 +34,7 @@ import dill
 import os
 from fmdtools.define.common import get_var, t_key
 from .approach import SampleApproach
-from .result import Result, History,  create_indiv_filename, file_check
+from fmdtools.analyze.result import Result, History,  create_indiv_filename, file_check
 
 ##DEFAULT ARGUMENTS
 sim_kwargs= {'desired_result':'endclass',
