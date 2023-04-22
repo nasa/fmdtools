@@ -31,11 +31,17 @@ from recordclass import dataobject, asdict
 
 
 default_edge_kwargs={'sends':       dict(edge_color='grey', style='dashed'),
-                     'contains':    dict(arrows=True)}
+                     'contains':    dict(arrows=True),
+                     'next':        dict(arrows=True, arrowstyle='->')}
 class EdgeStyle(dataobject):
+    """
+    Holds kwargs for nx.draw_networkx_edges to be applied as a style for multiple edges
+    """
     edge_color: str = 'black'
     style:      str = 'solid'
     arrows:     bool = False
+    arrowstyle: str = '->'
+    arrowsize:  int = 30
     def from_styles(styles, label):
         """
         Gets the keywords for networkx plotting
@@ -58,14 +64,19 @@ class EdgeStyle(dataobject):
 default_node_kwargs={'Model':       dict(node_shape='^'),
                      'Block':       dict(node_shape='s'),
                      'FxnBlock':    dict(node_shape='s'),
+                     'Action':    dict(node_shape='s'),
                      'Flow':        dict(node_shape='o'),
                      'MultiFlow':   dict(node_shape='h'),
                      'CommsFlow':   dict(node_shape='8'),
                      'State':       dict(node_shape='d'),
+                     'actiive':     dict(node_color='orange'),
                      'degraded':    dict(node_color='orange'),
                      'faulty':      dict(node_color='red')}  
 
 class NodeStyle(dataobject):
+    """
+    Holds kwargs for nx.draw_networkx_nodes to be applied as a style for multiple nodes
+    """
     node_color: str="lightgrey"
     node_size:  int=500
     node_shape: str='o'
@@ -92,6 +103,9 @@ class NodeStyle(dataobject):
         return asdict(self)
 
 class LabelStyle(dataobject):
+    """
+    Holds kwargs for nx.draw_networkx_labels to be applied as a style for multiple labels
+    """
     font_size:              int=12 
     font_color:             str='k'
     font_weight:            str='normal'
@@ -105,11 +119,43 @@ class EdgeLabelStyle(LabelStyle):
     rotate:                 bool=False
     
 class Labels(dataobject, mapping=True):
+    """
+    Defines a set of labels to be drawn using draw_networkx_labels. Labels have
+    three distinct parts: 
+        - title (upper text for the node/edge)
+        - title2 (if provided, uppder text for the node/edge after a colon)
+        - subtext (lower text of the node/edge)
+        
+    title and subtext may both be given different LabelStyles.
+    """
     title:          dict={}
     title_style:    LabelStyle=LabelStyle()
     subtext:        dict={}
     subtext_style:  LabelStyle=LabelStyle()
     def from_iterator(g, iterator, LabStyle, title='id', title2='', subtext='', **node_label_styles):
+        """
+        Condstructs the labels from an interator (nodes or edges)
+
+        Parameters
+        ----------
+        g : nx.graph
+        iterator : nx.graph.nodes/edges
+        LabStyle : class
+            Class to use for label styles (e.g. LabelStyle or EdgeStyle)
+        title : str, optional
+            property to get for title text. The default is 'id'.
+        title2 : str, optional
+            property to get for title text after the colon. The default is ''.
+        subtext : str, optional
+            property to get for the subtext. The default is ''.
+        **node_label_styles : TYPE
+            :abStyle arguments to overwrite.
+
+        Returns
+        -------
+        labs : Labels
+            Labels corresponding to the given inputs
+        """
         is_edge = 'Edge' in iterator.__class__.__name__
         is_node = 'Node' in iterator.__class__.__name__
         labs = Labels()
@@ -197,6 +243,18 @@ def get_label_groups(iterator, *tags):
 
 class Graph(object):
     def __init__(self, obj, get_states=True, **kwargs):
+        """
+        Creates a Graph.
+        
+        Parameters
+        ----------
+        obj: object
+            must either be a networkx graph (or be a verion of Graph corresponding to the object)
+        get_states: bool
+            whether to get states for the graph
+        **kwargs:
+            keyword arguments for self.nx_from_obj
+        """
         if isinstance(obj, nx.Graph):       self.g=obj
         elif hasattr(self, 'nx_from_obj'):  self.g=self.nx_from_obj(obj, get_states=get_states **kwargs)
     def set_pos(self, auto=True, **pos):
@@ -249,10 +307,30 @@ class Graph(object):
         for node_group in self.node_groups:
             self.node_styles[node_group]=NodeStyle.from_styles(node_styles, node_group)
     def set_edge_labels(self, title='label', title2='', subtext='', **edge_label_styles):
+        """
+        Creates labels using Labels.from_iterator for the edges in the graph
+        """
         self.edge_labels = Labels.from_iterator(self.g, self.g.edges, EdgeLabelStyle, title=title, title2=title2, subtext=subtext, **edge_label_styles)
     def set_node_labels(self, title='id', title2='', subtext='', **node_label_styles):
+        """
+        Creates labels using Labels.from_iterator for the nodes in the graph
+        """
         self.node_labels = Labels.from_iterator(self.g, self.g.nodes, LabelStyle, title=title, title2=title2, subtext=subtext, **node_label_styles)
     def add_node_groups(self, **node_groups):
+        """
+        Creates arbitrary groups of nodes which may be then be displayed with different styles
+
+        Parameters
+        ----------
+        **node_groups : iterable
+            
+        e.g. 
+        graph.add_node_groups(group1=('node1', 'node2'), group2=('node3'))
+        graph.set_node_styles(group={'group1':{'color':'green'}, 'group2':{'color':'red'}})
+        graph.draw()
+        
+        would show two different groups of nodes, one with green nodes, and the other with red nodes
+        """
         group_attrs={}
         for node_group, nodes in node_groups.items():
             group_attrs.update({n:node_group for n in nodes})
@@ -266,19 +344,13 @@ class Graph(object):
         ----------
         figsize : tuple, optional
             Size for the figure (plt.figure arg). The default is (12,10).
-        pos : dict, optional
-            dictionary for node positions. The default is {}.
-
-        nodelabels : str, optional
-            How to label the nodes. If "id", gives the full node name. If "last" just
-            gives the last part of the node name. The default is "id".
-
         withlegend : bool, optional
             Whether to include a legend. The default is True.
         title : str, optional
             Title for the plot. The default is "".
         **kwargs : kwargs
-            Arguments for various supporting functions (set_pos, set_edge_groups, etc)
+            Arguments for various supporting functions:
+                (set_pos, set_edge_styles, set_edge_labels, set_node_styles, set_node_labels, etc)
     
         Returns
         -------

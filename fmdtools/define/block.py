@@ -27,6 +27,7 @@ from .time import Time
 from .mode import Mode
 from .flow import init_flow, Flow
 from fmdtools.sim.result import History, get_sub_include, init_indicator_hist
+from fmdtools.analyze.graph import Graph
 
 def assoc_flows(obj, flows={}):
     """
@@ -608,37 +609,6 @@ class ASG(dataobject, mapping=True):
             self.active_actions = set(actions)
             if any(self.active_actions.difference(self.actions)): raise Exception("Initial actions not associated with model: "+str(self.active_actions.difference(self.actions)))
         else: raise Exception("Invalid option for initial_action")
-    def show(self, gtype='combined', with_cond_labels=True, pos=[]):
-        """
-        Shows a visual representation of the internal Action Sequence Graph of the Function Block
-
-        Parameters
-        ----------
-        gtype : 'combined'/'flows'/'actions'
-            Gives a graphical representation of the ASG. Default is 'combined'
-            - 'actions'     (for function input):    plots the sequence of actions in the function's Action Sequence Graph
-            - 'flows'       (for function input):    plots the action/flow connections in the function's Action Sequence Graph
-            - 'combined'    (for function input):    plots both the sequence of actions in the functions ASG and action/flow connections
-        with_cond_labels: Bool
-            Whether or not to label the conditions
-        pos : dict
-            Dictionary of node positions for actions/flows
-        """
-        import matplotlib.pyplot as plt; plt.rcParams['pdf.fonttype'] = 42 
-        fig = plt.figure()
-        if gtype=='combined':       graph = nx.compose(self.flow_graph, self.action_graph)
-        elif gtype=='flows':        graph = self.flow_graph
-        elif gtype=='actions':      graph = self.action_graph
-        if not pos and self.pos: pos = self.pos
-        else:                    pos=nx.planar_layout(nx.compose(self.flow_graph, self.action_graph))
-        nx.draw(graph, pos=pos, with_labels=True, node_color='grey')
-        nx.draw_networkx_nodes(self.action_graph, pos=pos, node_shape='s', node_color='skyblue')
-        nx.draw_networkx_nodes(self.action_graph, nodelist=self.active_actions, pos=pos, node_shape='s', node_color='green')
-        edge_labels = {(in_node, out_node): label for in_node, out_node, label in graph.edges(data='name') if label}
-        if with_cond_labels: nx.draw_networkx_edge_labels(graph, pos, edge_labels)
-        if gtype=='combined' or gtype=='conditions':
-            nx.draw_networkx_edges(self.action_graph, pos,arrows=True, arrowsize=30, arrowstyle='->', node_shape='s', node_size=100)
-        return fig
     def __call__(self, time, run_stochastic, proptype, dt):
         """
         Propagates behaviors through the internal Action Sequence Graph
@@ -734,6 +704,40 @@ class ASG(dataobject, mapping=True):
             am.extend(f.return_mutables())
         am.append(copy.copy(self.active_actions))
         return am
+
+class ASGGraph(Graph):
+    """
+    Shows a visual representation of the internal Action Sequence Graph of 
+    the Function Block, with:
+        - Sequence as edges
+        - Flows as (circular) Nodes
+        - Actions as (square) Nodes
+    """
+    def __init__(self, asg, gtype):
+        self.g = nx.compose(asg.flow_graph, asg.action_graph) 
+        self.set_nx_states(asg)
+    def set_nx_labels(self, asg):
+        for n in self.g.nodes():
+            if n in asg.flow_graph.nodes():     self.g[n]['label'] = 'Flow'
+            elif n in asg.action_graph.nodes(): self.g[n]['label'] = 'Action'
+    def set_nx_states(self, asg):
+        for g in self.g.nodes():
+            self.g.nodes[g]['active'] = g in asg.active_actions
+class ASGActGraph(ASGGraph):
+    """
+    Variant of ASGGraph where only the sequence between actions is shown.
+    """
+    def __init__(self, asg):
+        self.g=asg.action_graph.copy()
+        self.set_nx_states(asg)
+class FlowGraph(ASGGraph):
+    """
+    Variant of ASGGraph where only the flow relationships between actions is shown.
+    """
+    def __init__(self, asg):
+        self.g=asg.flow_graph.copy()
+        self.set_nx_states(asg)
+
 #Function superclass 
 class FxnBlock(Block):
     __slots__ = ["c", "_args_c", "a", "_args_a"]
