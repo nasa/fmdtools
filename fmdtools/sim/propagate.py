@@ -35,6 +35,7 @@ import os
 from fmdtools.define.common import get_var, t_key
 from .approach import SampleApproach
 from fmdtools.analyze.result import Result, History,  create_indiv_filename, file_check
+from fmdtools.analyze.graph import graph_factory
 
 ##DEFAULT ARGUMENTS
 sim_kwargs= {'desired_result':'endclass',
@@ -832,7 +833,10 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
 def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     desired_result = copy.deepcopy(desired_result)
     if type(desired_result)==str:               desired_result = {desired_result:None}
-    elif type(desired_result) in [list, set]:   desired_result = dict.fromkeys(desired_result)
+    elif type(desired_result) in [list, set]:   
+        des_res = desired_result
+        desired_result = {str(k):k for k in des_res if type(k)!=str}
+        desired_result.update({k:None for k in des_res if type(k)==str})
     result=Result()
     if not nomhist: nomhist=mdlhist
     elif len(nomhist['time'])!=len(mdlhist['time']):
@@ -850,7 +854,7 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
         result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
         desired_result.pop('endfaults')
     
-    graphs_to_get = [g for g in desired_result if type(g)==str and g.startswith('graph')]
+    graphs_to_get = [g for g in desired_result if type(g)==str and (g.startswith('graph') or g.startswith('Graph'))]
     for g in graphs_to_get:
         arg = desired_result.pop(g)
         if isinstance(arg, tuple):  Gclass, kwargs = arg
@@ -859,12 +863,14 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
         if '.' in g:
             strs = g.split(".")
             obj = get_var(mdl,strs[1:])
-            rgraph = Gclass(obj, **kwargs)
-        else:
-            rgraph = Gclass(mdl, **kwargs)
+        else: obj = mdl
+        
+        if Gclass:  rgraph = Gclass(obj, **kwargs)
+        else:       rgraph = graph_factory(obj, **kwargs)
     
-        if nomresult and g in nomresult:  rgraph.set_degraded(nomresult[g])
-        elif nomresult:                   rgraph.set_degraded(nomresult)
+        if nomresult and g in nomresult:  rgraph.set_resgraph(nomresult[g])
+        elif nomresult:                   rgraph.set_resgraph(nomresult)
+        else:                             rgraph.set_resgraph()
         result[g] = rgraph
         
     if desired_result:
@@ -874,6 +880,7 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
         else:                           
             get_endclass_vars(mdl,desired_result, result)
     return result
+
     
 def get_endclass_vars(mdl, desired_result, result):
     if type(desired_result)==str:   vars_to_get = [desired_result]

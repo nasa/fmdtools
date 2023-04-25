@@ -292,7 +292,7 @@ class Result(UserDict):
         res = self.__class__()
         for at in atts_to_get:
             res[at]=self.__getattr__(at)
-        if len(res)==1:
+        if len(res)==1 and res[at]:
             return res[at]
         else:
             return res
@@ -975,6 +975,13 @@ class History(Result):
         if withtotal: deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
         if withtime: deghist['time'] = nomhist['time']
         return deghist
+    def get_faults_hist(self, *attrs):
+        faulthist =self._prep_faulty()
+        faults_hist = History()
+        if not attrs: attrs=self.keys()
+        for att in attrs:
+            faults_hist[att] = History({k.split('.')[-1]:v for k,v in faulthist.items() if ('faults' in k) and (att in k)})
+        return faults_hist
     def get_faulty_hist(self, *attrs, withtime=True, withtotal=True, operator = np.any):
         """
         Gets the times when the attributes *attrs have faults present
@@ -996,12 +1003,11 @@ class History(Result):
             History of attrs being faulty/not faulty
         """
         faulthist =self._prep_faulty()
+        faults_hist = self.get_faults_hist(*attrs)
         has_faults_hist = History()
-        if not attrs: attrs=self.keys()
         for att in attrs:
-            atts_with_faults = [v for k,v in faulthist.items() if ('faults' in k) and (att in k)]
-            if atts_with_faults:
-                has_faults_hist[att] = operator(atts_with_faults, 0)
+            if faults_hist[att]:
+                has_faults_hist[att] = operator([*faults_hist[att].values()], 0)
         if withtotal: has_faults_hist['total'] = np.sum([*has_faults_hist.values()], axis=0)
         if withtime: has_faults_hist['time'] = faulthist['time']
         return has_faults_hist

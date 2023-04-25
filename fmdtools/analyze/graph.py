@@ -36,7 +36,7 @@ from .result import Result, History
 
 default_edge_kwargs={'sends':       dict(edge_color='grey', style='dashed'),
                      'contains':    dict(arrows=True),
-                     'next':        dict(arrows=True, arrowstyle='->')}
+                     'next':        dict(arrows=True, arrowstyle='->', arrowsize=30)}
 class EdgeStyle(dataobject):
     """
     Holds kwargs for nx.draw_networkx_edges to be applied as a style for multiple edges
@@ -44,8 +44,8 @@ class EdgeStyle(dataobject):
     edge_color: str = 'black'
     style:      str = 'solid'
     arrows:     bool = False
-    arrowstyle: str = '->'
-    arrowsize:  int = 30
+    arrowstyle: str = '-|>'
+    arrowsize:  int = 15
     def from_styles(styles, label):
         """
         Gets the keywords for networkx plotting
@@ -66,16 +66,16 @@ class EdgeStyle(dataobject):
         return asdict(self)
 
 default_node_kwargs={'Model':       dict(node_shape='^'),
-                     'Block':       dict(node_shape='s'),
-                     'FxnBlock':    dict(node_shape='s'),
-                     'Action':    dict(node_shape='s'),
+                     'Block':       dict(node_shape='s', linewidths=2),
+                     'FxnBlock':    dict(node_shape='s', linewidths=2),
+                     'Action':      dict(node_shape='s', linewidths=2),
                      'Flow':        dict(node_shape='o'),
                      'MultiFlow':   dict(node_shape='h'),
                      'CommsFlow':   dict(node_shape='8'),
                      'State':       dict(node_shape='d'),
                      'active':     dict(node_color='orange'),
                      'degraded':    dict(node_color='orange'),
-                     'faulty':      dict(node_color='red')}  
+                     'faulty':      dict(edgecolors='red')}  
 
 class NodeStyle(dataobject):
     """
@@ -84,6 +84,8 @@ class NodeStyle(dataobject):
     node_color: str="lightgrey"
     node_size:  int=500
     node_shape: str='o'
+    edgecolors: str='grey'
+    linewidths: int=0
     def from_styles(styles, label):
         """
         Gets the keywords for networkx plotting
@@ -117,6 +119,7 @@ class LabelStyle(dataobject):
     horizontalalignment:    str='center'
     verticalalignment:      str='center'
     clip_on:                bool=False
+    bbox:                   dict=dict(alpha=0)
     def kwargs(self):
         return asdict(self)
 class EdgeLabelStyle(LabelStyle):
@@ -310,7 +313,7 @@ class Graph(object):
         self.node_groups = get_label_groups(self.g.nodes(), *node_styles)
         for node_group in self.node_groups:
             self.node_styles[node_group]=NodeStyle.from_styles(node_styles, node_group)
-    def set_edge_labels(self, title='label', title2='', subtext='', **edge_label_styles):
+    def set_edge_labels(self, title='label', title2='', subtext='states', **edge_label_styles):
         """
         Creates labels using Labels.from_iterator for the edges in the graph
         """
@@ -340,7 +343,35 @@ class Graph(object):
             group_attrs.update({n:node_group for n in nodes})
         group_attrs.update({n:'' for n in self.g.nodes if n not in group_attrs})
         nx.set_node_attributes(self.g, group_attrs, 'group')
-    def draw(self, figsize=(12,10), withlegend=True, title="", **kwargs):
+    def set_resgraph(self, other=False):
+        """
+        Standard results processing for results graphs (show faults and degradations)
+
+        Parameters
+        ----------
+        other : Graph, optional
+            Graph to compare with (for degradations). The default is False.
+        """
+        if not other: other = self
+        self.set_degraded(other)
+        self.set_node_styles(degraded={}, faulty={})
+        self.set_node_labels(title='id', subtext='faults')
+    def set_degraded(self, other):
+        """
+        Sets 'degraded' state in underlying networkx graph based on difference between
+        states with another Graph object
+
+        Parameters
+        ----------
+        other : Graph
+            (assumed nominal) Graph to compare to
+        """
+        g = self.g 
+        nomg = other.g
+        for node in g.nodes:   
+            g.nodes[node]['degraded'] = g.nodes[node]['states']!=nomg.nodes[node]['states']
+            g.nodes[node]['faulty'] = any(g.nodes[node].get('faults', []))
+    def draw(self, figsize=(12,10), withlegend=True, title="", fig=False, ax=False, **kwargs):
         """
         Draws a networkx graph g with given styles corresponding to the node/edge properties.
     
@@ -359,40 +390,41 @@ class Graph(object):
         Returns
         -------
         fig : matplotlib figure
-            Figure object that the graph is plotted on.
+            matplotlib figure to draw
+        ax : matplotlib axis
+            Ax in the figure
         """
-        fig = plt.figure(figsize=figsize)
+        if not fig: fig = plt.figure(figsize=figsize)
+        if not ax:  ax = plt.gca()
         for to_set in ['pos', 'edge_styles', 'edge_labels', 'node_styles', 'node_labels']:
             if to_set in kwargs or not hasattr(self, to_set):
                 set_func = getattr(self, 'set_'+to_set)
                 set_func(**kwargs.get(to_set, {}))
         
         for label, edges in self.edge_groups.items():
-            nx.draw_networkx_edges(self.g, self.pos, edges, **self.edge_styles[label].kwargs(), label=label)
+            nx.draw_networkx_edges(self.g, self.pos, edges, **self.edge_styles[label].kwargs(), label=label, ax=ax)
         
         for level in self.edge_labels.iter_groups():
-            nx.draw_networkx_edge_labels(self.g, self.pos, self.edge_labels[level], **self.edge_labels[level+'_style'].kwargs())
+            nx.draw_networkx_edge_labels(self.g, self.pos, self.edge_labels[level], **self.edge_labels[level+'_style'].kwargs(), ax=ax)
         
         for label, nodes in self.node_groups.items():
-            nx.draw_networkx_nodes(self.g, self.pos, nodes, **self.node_styles[label].kwargs(), label=label)
+            nx.draw_networkx_nodes(self.g, self.pos, nodes, **self.node_styles[label].kwargs(), label=label, ax=ax)
         
         for level in self.node_labels.iter_groups():
-            nx.draw_networkx_labels(self.g, self.pos, self.node_labels[level], **self.node_labels[level+'_style'].kwargs())
+            nx.draw_networkx_labels(self.g, self.pos, self.node_labels[level], **self.node_labels[level+'_style'].kwargs(), ax=ax)
         
         if withlegend:
             legend = plt.legend(labelspacing=2, borderpad=1)
         
         if title: plt.title(title)
-        return fig
-    def move_nodes(self, g, **kwargs):
+        return fig, ax
+    def move_nodes(self, **kwargs):
         """
         Sets the position of nodes for plots in analyze.graph using a graphical tool.
         Note: make sure matplotlib is set to plot in an external window (e.g using '%matplotlib qt)
     
         Parameters
         ----------
-        g : networkx graph or model or function
-            fxngraph or fxnflowgraph graph of the model of interest
         **kwargs : kwargs
             keyword arguments for graph.draw
     
@@ -406,29 +438,71 @@ class Graph(object):
         if 'inline' in get_backend():
             print("Cannot place nodes in inline version of plot. Use '%matplotlib qt' (or '%matplotlib osx') to open in external window")
         return p
-    def set_degraded(self, other):
+    def draw_from(self, time, history=History(), **kwargs):
         """
-        Sets 'degraded' state in underlying networkx graph based on difference between
-        states with another Graph object
+        Draws the graph with degraded/fault data at a given time.
 
         Parameters
         ----------
-        other : Graph
-            (assumed nominal) Graph to compare to
+        time : int
+            Time to draw the graph (in the history)
+        history : History, optional
+            History with nominal and faulty history. The default is History().
+        **kwargs : **kwargs
+            arguments for Graph.draw
+
+        Returns
+        -------
+        fig : matplotlib figure
+            matplotlib figure to draw
+        ax : matplotlib axis
+            Ax in the figure
         """
-        g = self.g 
-        nomg = other.g
-        for node in g.nodes:   
-            g.nodes[node]['degraded'] = g.nodes[node]['states']!=nomg.nodes[node]['states']
-    def draw_state_from(self, time, history=History(), degraded=History(), **kwargs):
-        faulty = history.get_faulty_hist(*self.nodes)
-        fault_nodes = faulty.get_slice(time)
-        deg_nodes = degraded.get_slice(time)
-        state_nodes = history.get(*self.nodes)
+        faulty = history.get_faulty_hist(*self.g.nodes, withtotal=False, withtime=False).get_slice(time)
+        fault_nodes = {n: bool(faulty.get(n, 0)) for n in self.g.nodes}
         nx.set_node_attributes(self.g, fault_nodes, 'faulty')
+        
+        faults = Result(history.get_faults_hist(*self.g.nodes).get_slice(time))
+        faults_nodes = {n:[k for k,v in faults.get(n).items() if v] for n in self.g.nodes}
+        nx.set_node_attributes(self.g, faults_nodes, 'faults')
+        
+        degraded = history.get_degraded_hist(*self.g.nodes, withtotal=False, withtime=False).get_slice(time)
+        deg_nodes = {n: not bool(degraded.get(n, 1)) for n in self.g.nodes}
         nx.set_node_attributes(self.g, deg_nodes, 'degraded')
-        nx.set_node_attributes(self.g, state_nodes, 'states')
-        self.draw(**kwargs)
+        
+        #nx.set_node_attributes(self.g, state_nodes, 'states')
+        self.set_node_styles(degraded={}, faulty={})
+        self.set_node_labels(title='id', subtext='faults')
+        kwargs['title'] = kwargs.get('title', '')+' t='+str(time)
+        if 'fig' in kwargs: kwargs['fig'].clf()
+        return self.draw(**kwargs)
+    def animate_from(self, history, times='all', figsize=(6,4), **kwargs):
+        """
+        Successively animates a plot using Graph.draw_from
+
+        Parameters
+        ----------
+        history : History
+            History with faulty and nominal states
+        times : list, optional
+            List of times to animate over. The default is 'all'.
+        figsize : tuple, optional
+            Size for the figure. The default is (6,4).
+        **kwargs : kwargs
+
+        Returns
+        -------
+        ani : matplotlib.animation.FuncAnimation
+            Animation object with the given frames
+        """
+        from functools import partial
+        if times=='all':    t_inds=[i for i in range(len(history.faulty.time))]
+        else:               t_inds=times
+         
+        fig = plt.figure(figsize=figsize)
+        
+        ani = matplotlib.animation.FuncAnimation(fig, partial(self.draw_from, history=history, fig=fig, withlegend=False, **kwargs), frames=t_inds)
+        return ani
     def draw_pyvis(self, filename="graph", width=1000, filt=True, physics=False, notebook=False):
         """
         Method for plotting graphs with pyvis. Produces interactive HTML!
@@ -459,7 +533,10 @@ class Graph(object):
             n = Network(directed=True, layout='hierarchical', width=width, notebook=notebook)
         else:
             n = Network(width=width, notebook=notebook)
-        n.from_nx(self.g)
+        g = self.g.copy()
+        nx.set_node_attributes(g, {g:g for g in g.nodes}, name='label')
+
+        n.from_nx(g)
         n.toggle_physics(physics)
         if filt: n.show_buttons(filter_=filt)
         n.show(filename+".html")
@@ -819,9 +896,9 @@ class GraphInteractor:
         self.fig.canvas.mpl_connect('motion_notify_event', self.on_mouse_move)
     def get_closest_point(self, event):
         """Finds the closest node to the given click to see if it should be moved"""
-        pt_x = np.array([x[0] for x in self.pos.values()])
-        pt_y = np.array([x[1] for x in self.pos.values()])
-        pt_names =[*self.pos.keys()]
+        pt_x = np.array([x[0] for x in self.g_obj.pos.values()])
+        pt_y = np.array([x[1] for x in self.g_obj.pos.values()])
+        pt_names =[*self.g_obj.pos.keys()]
 
         dists = np.hypot(pt_x - event.xdata, pt_y - event.ydata)
         closest_pt = pt_names[dists.argmin()]
@@ -854,11 +931,11 @@ class GraphInteractor:
         if event.button != 1:
             return
         x, y = event.xdata, event.ydata
-        if self._clicked_node: self.g.pos[self._clicked_node]=[x,y]
+        if self._clicked_node: self.g_obj.pos[self._clicked_node]=[x,y]
     def refresh_plot(self):
         """Refreshes the plot with the new positions."""
-        self.g_obj.pos = {pt:np.round(loc,2) for pt, loc in self.g.pos.items()}
-        self.g_obj.show(fig=self.fig, **self.kwargs)
+        self.g_obj.pos = {pt:np.round(loc,2) for pt, loc in self.g_obj.pos.items()}
+        self.g_obj.draw(fig=self.fig, ax=self.ax, withlegend=False, **self.kwargs)
         self.ax.set_xlim(-1,1)
         self.ax.set_ylim(-1,1)
         limits=plt.axis('on')
@@ -867,10 +944,9 @@ class GraphInteractor:
         self.ax.grid(True, which='both')
         self.ax.set_title('Drag nodes to change their positions')
         self.t+=1
-        plt.pause(0.0001)
-        plt.show()
+        plt.pause(0.001)
     def print_pos(self):
-        print({k:list(v) for k,v in self.pos.items()})
+        print({k:list(v) for k,v in self.g_obj.pos.items()})
     
 
 # INDIVIDUAL GRAPH VARIANTS
@@ -909,17 +985,28 @@ class ModelGraph(Graph):
         self.set_flow_nodestates(mdl)
         self.set_fxn_nodestates(mdl)
     def set_fxn_nodestates(self, mdl):
-        fxnmodes, fxnstates = {}, {}
+        fxnfaults, fxnstates = {}, {}
         for fxnname, fxn in mdl.fxns.items():
             fxnstates[fxnname] = asdict(mdl.fxns[fxnname].s)
-            fxnmodes[fxnname] = copy.copy(mdl.fxns[fxnname].m.faults)
+            fxnfaults[fxnname] = [*mdl.fxns[fxnname].m.faults]
         nx.set_node_attributes(self.g, fxnstates, 'states')
-        nx.set_node_attributes(self.g, fxnmodes, 'modes')
+        nx.set_node_attributes(self.g, fxnfaults, 'faults')
     def set_flow_nodestates(self, mdl):
         flowstates = {}
         for flowname, flow in mdl.flows.items():
             flowstates[flowname]= asdict(flow.s)
         nx.set_node_attributes(self.g, flowstates, 'states') 
+    def get_multi_edges(self,mdl, subedges):
+        """ Used by subclasses to attach functions/flows (subedges arg) to
+        edges"""
+        flows={}
+        multgraph = nx.projected_graph(mdl.graph, subedges ,multigraph=True)
+        g = nx.projected_graph(mdl.graph, subedges)
+        for edge in g.edges:
+            midedges=list(multgraph.subgraph(edge).edges)
+            flows[edge]= [midedge[2] for midedge in midedges]
+        return flows
+
 class ModelFlowGraph(ModelGraph):
     """
     Creates a Graph of model flows for display, where flows are
@@ -929,9 +1016,15 @@ class ModelFlowGraph(ModelGraph):
         g = nx.projected_graph(mdl.graph, mdl.flows)
         labels = {fname:f.get_typename() for fname, f in mdl.flows.items()}
         nx.set_node_attributes(g, labels, name='label')
+        fxns = self.get_multi_edges(mdl, mdl.flows)
+        edgelabels = {e: str(fl) for e, fl in fxns.items()}
+        nx.set_edge_attributes(g, edgelabels, name='functions')
+        nx.set_edge_attributes(g, {e:"functions" for e in g.edges()}, name='label')
         return g
     def set_nx_states(self, mdl):
         self.set_flow_nodestates(mdl)
+    def set_edge_labels(self, title='label', title2='', subtext='functions', **edge_label_styles):
+        super().set_edge_labels(title=title, title2=title2, subtext=subtext, **edge_label_styles)
 class ModelCompGraph(ModelGraph):
     """
     Creates a graph of model functions, and flows, with component containment
@@ -948,41 +1041,43 @@ class ModelCompGraph(ModelGraph):
         self.set_flowgraph_states(mdl)
         self.set_compgraph_blockstates(mdl)
     def set_compgraph_blockstates(self, mdl):
-        compmodes, compstates, comptypes, fxnstates, fxnmodes = {}, {}, {}, {}
+        compfaults, compstates, comptypes, fxnstates, fxnfaults = {}, {}, {}, {}
         for fxnname, fxn in mdl.fxns.items():
             fxnstates[fxnname] = asdict(mdl.fxns[fxnname].s)
-            fxnmodes[fxnname] = copy.copy(mdl.fxns[fxnname].m.faults)
-            for mode in fxnmodes[fxnname].copy():
+            fxnfaults[fxnname] = copy.copy(mdl.fxns[fxnname].m.faults)
+            for mode in fxnfaults[fxnname].copy():
                 for compname, comp in {**fxn.actions, **fxn.components}.items():
                     compstates[compname]={}
                     comptypes[compname]=True
-                    if mode in comp.faultmodes:
-                        compmodes[compname]=compmodes.get(compname, set())
-                        compmodes[compname].update([mode])
-                        fxnmodes[fxnname].remove(mode)
-                        fxnmodes[fxnname].update(['comp_fault'])
+                    if mode in comp.faultfaults:
+                        compfaults[compname]=compfaults.get(compname, set())
+                        compfaults[compname].update([mode])
+                        fxnfaults[fxnname].remove(mode)
+                        fxnfaults[fxnname].update(['comp_fault'])
         nx.set_node_attributes(self.g, fxnstates, 'states')
-        nx.set_node_attributes(self.g, fxnmodes, 'modes')
+        nx.set_node_attributes(self.g, fxnfaults, 'faults')
         nx.set_node_attributes(self.g, compstates, 'states')
-        nx.set_node_attributes(self.g, compmodes, 'modes') 
+        nx.set_node_attributes(self.g, compfaults, 'faults') 
         nx.set_node_attributes(self.g, comptypes, 'iscomponent')
 class ModelFxnGraph(ModelGraph):
     """ Returns a graph representation of the functions of the model, where
     functions are nodes and flows are edges"""
-    def nx_from_obj(self, mdl, withstates=True, **kwargs):
+    def nx_from_obj(self, mdl):
         g = nx.projected_graph(mdl.graph, mdl.fxns)
         labels = {fname:f.get_typename() for fname, f in mdl.fxns.items()}
         nx.set_node_attributes(g, labels, name='label')
+        flows = self.get_multi_edges(mdl, mdl.fxns)
+        edgelabels = {e: str(fl) for e, fl in flows.items()}
+        nx.set_edge_attributes(g, edgelabels, name='flows')
+        nx.set_edge_attributes(g, {e:"flows" for e in g.edges()}, name='label')
         return g
     def set_nx_states(self, mdl):
         self.set_flow_edgestates(mdl)
         self.set_fxn_nodestates(mdl)
     def set_flow_edgestates(self, mdl):
         edgevals = {}
-        for edge in self.g.edges:
-            multgraph = nx.projected_graph(self.g, mdl.fxns,multigraph=True)
-            midedges=list(multgraph.subgraph(edge).edges)
-            flows= [midedge[2] for midedge in midedges]
+        flows = self.get_multi_edges(mdl, mdl.fxns)
+        for edge, flows in flows.items():
             flowdict={}
             for flow in flows: 
                 flowdict[flow]=asdict(mdl.flows[flow].s)
@@ -997,6 +1092,8 @@ class ModelFxnGraph(ModelGraph):
             for flow in list(g.edges[edge].keys()):            
                 if g.edges[edge][flow]!=nomg.edges[edge][flow]: degraded=True
             g.edges[edge]['degraded'] = degraded
+    def set_edge_labels(self, title='label', title2='', subtext='flows', **edge_label_styles):
+        super().set_edge_labels(title=title, title2=title2, subtext=subtext, **edge_label_styles)
 class ModelTypeGraph(ModelGraph):
     """
     Creates a graph representation of model Classes, showing the containment relationship
@@ -1035,20 +1132,20 @@ class ModelTypeGraph(ModelGraph):
             flowstates[flowtype] = {flow: asdict(mdl.flows[flow].s) 
                                     for flow in mdl.flows_of_type(flowtype)}
         nx.set_node_attributes(graph, flowstates, 'states')
-        fxnstates, fxnmodes = {}, {}
+        fxnstates, fxnfaults = {}, {}
         for fxnclass in mdl.fxnclasses(): 
             fxnstates[fxnclass] = {fxn: asdict(mdl.fxns[fxn].s) 
                                    for fxn in mdl.fxns_of_class(fxnclass)}
-            fxnmodes[fxnclass] = {fxn: copy.copy(mdl.fxns[fxn].m.faults) 
+            fxnfaults[fxnclass] = {fxn: copy.copy(mdl.fxns[fxn].m.faults) 
                                   for fxn in mdl.fxns_of_class(fxnclass)}
         nx.set_node_attributes(graph, fxnstates, 'states')
-        nx.set_node_attributes(graph, fxnmodes, 'modes')
+        nx.set_node_attributes(graph, fxnfaults, 'faults')
     def set_degraded(self, nomg):
         g=self.g
         rg=self.g.copy()
         for node in g.nodes:
             if g.nodes[node]['level']==2:
-                faulty = any({fxn for fxn, m in g.nodes[node]['modes'].items() if m not in [{'nom'},{}]})
+                faulty = any({fxn for fxn, m in g.nodes[node]['faults'].items() if m not in [['nom'],[]]})
                 rg.nodes[node]['faulty']=faulty
             if g.nodes[node]['level']>=2:
                 degraded = g.nodes[node]['states']!=nomg.nodes[node]['states']
@@ -1105,6 +1202,21 @@ class MultiFlowGraph(Graph):
                             and not((in_node, out_node) in g.edges) and in_node!=out_node):
                             g.add_edge(in_node, out_node, label="sends")
         self.g=g
+    def set_resgraph(self, other=False):
+        """
+        Standard results processing for results graphs (show faults and degradations)
+
+        Parameters
+        ----------
+        other : Graph, optional
+            Graph to compare with (for degradations). The default is False.
+        """
+        if other:
+            self.set_degraded(other)
+            self.set_node_styles(degraded={}, faulty={})
+        else:
+            self.set_node_styles(degraded={}, faulty={})
+        self.set_node_labels(title='id', subtext='faults')
 class CommsFlowGraph(MultiFlowGraph):
     def __init__(self, flow, include_glob=False, ports_only=False, get_states=True):
         """
@@ -1231,6 +1343,31 @@ class ASGFlowGraph(ASGGraph):
         self.g=asg.flow_graph.copy()
         self.set_nx_states(asg)
 
+def graph_factory(obj, **kwargs):
+    """
+    Creates the default Graph for a given object. Used in fmdtools.sim.get_result
+
+    Parameters
+    ----------
+    obj : object
+        object corresponding to a specific graph type
+    **kwargs : kwargs
+        Keyword arguments for the Graph class
+
+    Returns
+    -------
+    graph : Graph
+        Graph of the appropriate (default) class
+    """
+    from fmdtools.define.model import Model 
+    from fmdtools.define.flow import CommsFlow, MultiFlow
+    from fmdtools.define.block import ASG
+    
+    if isinstance(obj, Model):       return ModelGraph(obj, **kwargs)
+    elif isinstance(obj, CommsFlow): return CommsFlowGraph(obj, **kwargs)
+    elif isinstance(obj, MultiFlow): return MultiFlowGraph(obj, **kwargs)
+    elif isinstance(obj, ASG):       return ASGActGraph(obj, **kwargs)
+    else: raise Exception("No default graph for class "+obj.__class__.__name__)
 
 
 
