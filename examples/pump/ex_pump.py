@@ -364,6 +364,10 @@ class Pump(Model):
 if __name__=="__main__":
     
     mdl = Pump()
+    endclass, mdlhist=propagate.nominal(mdl, track='all')
+    fig, ax = an.plot.hist(mdlhist ,'flows.wat_1.s', 'i.on')
+    
+    mdl = Pump()
     newhist2 = mdl.create_hist(range(10), 'default')
     
     newhist2.flows.wat_2.s.flowrate
@@ -447,6 +451,8 @@ if __name__=="__main__":
     
     d=h.get_degraded_hist(*mdl.flows, nomhist=mdlhists.nominal)
     
+    
+
     
     
     

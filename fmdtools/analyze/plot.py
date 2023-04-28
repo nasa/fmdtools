@@ -129,7 +129,7 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
     """
     #Process data - clip and flatten
     if 'time' in simhists: 
-        simhists = History(nominal=simhists)
+        simhists = History(nominal=simhists).flatten()
     if len(plot_values)==1 and type(plot_values[0])==dict:
         plot_values = to_include_keys(plot_values[0])
     

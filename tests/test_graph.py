@@ -34,6 +34,9 @@ class ModelGraphTests(unittest.TestCase):
                                         desired_result=['graph','endclass','endfaults'])
         endresults.graph.set_node_styles(degraded={}, faulty={})
         endresults.graph.draw(title="Should show Faults (color edges) as well as degradations (orange color)")
+        
+        endresults.graph.set_node_styles(degraded={'node_color':'green'}, faulty={'node_size': 1500, 'edgecolors':'purple'})
+        endresults.graph.draw(title="Should be identical but faulty nodes are large and have purple edges while degradations are green")
 
 #def test_move_nodes(self):
 #   p = endresults.graph.move_nodes()
@@ -49,6 +52,10 @@ if __name__ == '__main__':
     endresults, mdlhist=propagate.one_fault(mdl, 'move_water', 'short', time=10, 
                                     desired_result=['graph','endclass','endfaults'],
                                     track='all')
+    
+    
+    
+    #p = endresults.graph.move_nodes()
     #endresults.graph.set_node_styles(degraded={}, faulty={})
     #endresults.graph.set_node_labels(title='id', subtext='faults')
     #endresults.graph.draw()
@@ -57,8 +64,8 @@ if __name__ == '__main__':
     #a.draw_from(10, mdlhist)
     #a.draw_from(50, mdlhist)
     
-    an = a.animate_from(mdlhist)
-    from IPython.display import HTML
-    HTML(an.to_jshtml())
+    #an = a.animate_from(mdlhist)
+    #from IPython.display import HTML
+    #HTML(an.to_jshtml())
     
     #p = endresults.graph.move_nodes()
