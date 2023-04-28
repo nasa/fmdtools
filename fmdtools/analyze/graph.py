@@ -101,9 +101,10 @@ class NodeStyle(dataobject):
         for i, (style, tagstyles) in enumerate(styles.items()):
             if type(label[i])==bool and label[i]: 
                 style_kwargs.update(default_node_kwargs.get(style, {}))
+                style_kwargs.update(**tagstyles)
             else:   
                 style_kwargs.update(default_node_kwargs.get(label[i], {}))
-            style_kwargs.update(tagstyles.get(label[i],{}))
+                style_kwargs.update(tagstyles.get(label[i],{}))
         return NodeStyle(**style_kwargs)
     def kwargs(self):
         return asdict(self)
