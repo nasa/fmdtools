@@ -29,6 +29,7 @@ import matplotlib.animation
 from matplotlib.patches import Patch
 from matplotlib.widgets import Button
 from matplotlib import get_backend
+from matplotlib.colors import Colormap
 from recordclass import dataobject, asdict
 import copy
 from .result import Result, History
@@ -75,7 +76,9 @@ default_node_kwargs={'Model':       dict(node_shape='^'),
                      'State':       dict(node_shape='d'),
                      'active':     dict(node_color='orange'),
                      'degraded':    dict(node_color='orange'),
-                     'faulty':      dict(edgecolors='red')}  
+                     'faulty':      dict(edgecolors='red'),
+                     'high_degree_nodes': dict(node_color='red'),
+                     'high_degree_nodes': dict(node_color='red')}  
 
 class NodeStyle(dataobject):
     """
@@ -86,6 +89,7 @@ class NodeStyle(dataobject):
     node_shape: str='o'
     edgecolors: str='grey'
     linewidths: int=0
+    cmap:       Colormap=None
     def from_styles(styles, label):
         """
         Gets the keywords for networkx plotting
@@ -372,6 +376,29 @@ class Graph(object):
         for node in g.nodes:   
             g.nodes[node]['degraded'] = g.nodes[node]['states']!=nomg.nodes[node]['states']
             g.nodes[node]['faulty'] = any(g.nodes[node].get('faults', []))
+    def set_heatmap(self, heatmap, cmap =plt.cm.coolwarm, default_color_val=0.0):
+        """
+        Enables the association and plotting of a heatmap on a graph.
+        
+        e.g. graph.set_heatmap({'node_1':1.0, 'node_2': 0.0, 'node_3':0.5})
+        graph.draw()
+        Should draw node_1 the bluest, node_2 the reddest, and node_3 in between.
+
+        Parameters
+        ----------
+        heatmap : dict/result
+            dict/result with keys corresponding to the nodes and values in the range 
+            of a heatmap (0-1)
+        cmap : mpl.Colormap, optional
+            Colormap to use for the heatmap. The default is plt.cm.coolwarm.
+        default_color_val : float, optional
+            Value to use if a node is not in the heatmap dict. The default is 0.0.
+        """
+        self.set_node_styles()
+        for label, nodes in self.node_groups.items():
+            nodes_colors=[heatmap[node] if node in heatmap else default_color_val for node in nodes]
+            self.node_styles[label].node_color = nodes_colors
+            self.node_styles[label].cmap = cmap
     def draw(self, figsize=(12,10), withlegend=True, title="", fig=False, ax=False, **kwargs):
         """
         Draws a networkx graph g with given styles corresponding to the node/edge properties.
@@ -595,7 +622,7 @@ class Graph(object):
                     bridgingNodes.append(nodes[i])
         bridgingNodes = sorted(list(set(bridgingNodes)))
         return bridgingNodes 
-    def plot_bridging_nodes(self, title='bridging nodes', **kwargs):
+    def plot_bridging_nodes(self, title='bridging nodes', node_kwargs={'node_color':'red'}, **kwargs):
         """
         Plots bridging nodes using self.draw()
 
@@ -613,6 +640,7 @@ class Graph(object):
         """
         bridgingnodes = self.find_bridging_nodes()
         self.add_node_groups(bridging_nodes=bridgingnodes)
+        self.set_node_styles(group={'bridging_nodes':node_kwargs})
         fig = self.draw(title=title, **kwargs)
         return fig
     def find_high_degree_nodes(self, p=90):
@@ -646,7 +674,7 @@ class Graph(object):
             else:
                 highDegreeNodes.append(sortedNodes[i])
         return highDegreeNodes
-    def plot_high_degree_nodes(self, p=90, title='', **kwargs):
+    def plot_high_degree_nodes(self, p=90, title='', node_kwargs={'node_color':'red'}, **kwargs):
         """
         Plots high-degree nodes using self.draw()
 
@@ -666,7 +694,8 @@ class Graph(object):
         """
         if not title: title='High Degree Nodes ('+str(p)+'th Percentile)'
         hdnodes = self.find_high_degree_nodes()
-        self.add_node_groups(high_degree_nodes=hdnodes)
+        self.add_node_groups(high_degree_nodes=[h[0] for h in hdnodes])
+        self.set_node_styles(group={'high_degree_nodes':node_kwargs})
         fig = self.draw(title=title, **kwargs)
         return fig
     def calc_robustness_coefficient(self, trials=100, seed=False):

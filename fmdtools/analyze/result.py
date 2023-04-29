@@ -507,7 +507,7 @@ class Result(UserDict):
         tab = pd.DataFrame.from_dict(nested).transpose()
         if not metrics: return tab
         else:           return tab.loc[:, metrics]
-    def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False, to_include='all'):
+    def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False):
         """
         Takes the expectation of numeric metrics in the result over given scenarios.
 
@@ -519,8 +519,6 @@ class Result(UserDict):
             Whether to include the nominal scenario in the expectation. The default is False.
         difference_from_nominal : bool, optional
             Whether to calculated the difference of the expectation from nominal. The default is False.
-        to_include : str/list/etc
-            Attributes to check. If not given, the entire history is used
 
         Returns
         -------
@@ -529,8 +527,9 @@ class Result(UserDict):
             its quantities over the contained scenarios.
         """
         mh = self.nest(levels=1)
-        nomhist = {k:v for k,v in mh.nominal.flatten(to_include=to_include).items() if is_numeric(v)}
-        newhists = {k:hist.flatten(to_include=to_include) for k, hist in mh.items() if not(k=='nominal' and not(with_nominal))}
+
+        nomhist = {k:v for k,v in mh.nominal.items() if is_numeric(v)}
+        newhists = {k:hist for k, hist in mh.items() if not('nominal' in k and not(with_nominal))}
         if app:
             weights = [w['properties']['rate'] for w in app.scenlist]
             if with_nominal: weights.append(1)
@@ -1093,7 +1092,7 @@ class History(Result):
                                 phasenum+=1; phaseid=mode+str(phasenum)
                 phases[fxn] = dict(sorted(phases_unsorted.items(), key = lambda item: item[1][0]))
         return phases, modephases
-    def get_metric(self, value, metric=np.mean, *args):
+    def get_metric(self, value, metric=np.mean, args=(), axis=None):
         """
         Calculates a statistic of the value using a provided metric function.
 
@@ -1103,12 +1102,35 @@ class History(Result):
             Value of the history to calculate the statistic over
         metric : func, optional
             Function to process the history (e.g. np.mean, np.min...). The default is np.mean.
-        *args : args
-            Arguments for the metric function.
+        args : args
+            Arguments for the metric function. Default is ().
+        axis : None or 0 or 1
+            Whether to take the metric over variables (0) or over time (1) or both (None).
+            The default is None.
         """
         vals = self.get_values(value)
-        return metric([*vals.values()], *args, axis=0)
-        
+        return metric([*vals.values()], *args, axis=axis)
+    def get_metrics(self, *values, metric=np.mean, args=(), axis=None):
+        """
+        Calculates a statistic of the values using a provided metric function.
+
+        Parameters
+        ----------
+        *values : strs
+            Values of the history to calculate the statistic over (if none provided, creates metric of all)
+        metric : func, optional
+            Function to process the history (e.g. np.mean, np.min...). The default is np.mean.
+        args : args, optional
+            Arguments for the metric function. Default is ().
+        axis : None or 0 or 1
+            Whether to take the metric over variables (0) or over time (1) or both (None).
+            The default is None.
+        """
+        if not values: values = self.keys()
+        metrics = Result()
+        for value in values:
+            metrics[value] = self.get_metric(value, metric=metric, args=args, axis=axis)
+        return metrics
         
                 
             

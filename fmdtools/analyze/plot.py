@@ -160,7 +160,7 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
         if i >= (rows-1)*cols and xlabel: ax.set_xlabel(xlabel)
         if ylabels.get(plot_value, False): ax.set_ylabel(ylabels[plot_value])
         for group, hists in grouphists.items():
-            times = hists.get_metric('time') #TODO: find a better way to do this that will be compatible with timers
+            times = hists.get_metric('time', axis=0) #TODO: find a better way to do this that will be compatible with timers
             local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
             try:
                 if aggregation=='individual':
@@ -169,25 +169,25 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
                     for h in hist_to_plot.values():
                         ax.plot(times, h, label=group, **local_kwargs)
                 elif aggregation=='mean_std':
-                    mean = hists.get_metric(plot_value, np.mean)
+                    mean = hists.get_metric(plot_value, np.mean, axis=0)
                     std_dev = hists.get_metric(plot_value, np.std)
                     plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                 elif aggregation=='mean_ci':
-                    mean = hists.get_metric(plot_value, np.mean)
+                    mean = hists.get_metric(plot_value, np.mean, axis=0)
                     vals = [[hist[plot_value][t] for hist in hists.values()] for t in range(max_ind)]
                     boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True, confidence_level=ci) for val in vals]).transpose()
                     plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2],boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                 elif aggregation=='mean_bound':
-                    mean = hists.get_metric(plot_value, np.mean)
-                    maxs = hists.get_metric(plot_value, np.max)
-                    mins = hists.get_metric(plot_value, np.min)
+                    mean = hists.get_metric(plot_value, np.mean, axis=0)
+                    maxs = hists.get_metric(plot_value, np.max, axis=0)
+                    mins = hists.get_metric(plot_value, np.min, axis=0)
                     plot_line_and_err(ax, times, mean, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                 elif aggregation=='percentile':
-                    median = hists.get_metric(plot_value, np.median)
-                    maxs = hists.get_metric(plot_value, np.max)
-                    mins = hists.get_metric(plot_value, np.min)
-                    low_perc = hists.get_metric(plot_value, np.percentile, 50-kwargs.get('perc_range',50)/2)
-                    high_perc = hists.get_metric(plot_value, np.percentile, 50+kwargs.get('perc_range',50)/2)
+                    median = hists.get_metric(plot_value, np.median, axis=0)
+                    maxs = hists.get_metric(plot_value, np.max, axis=0)
+                    mins = hists.get_metric(plot_value, np.min, axis=0)
+                    low_perc = hists.get_metric(plot_value, np.percentile, 50-kwargs.get('perc_range',50)/2, axis=0)
+                    high_perc = hists.get_metric(plot_value, np.percentile, 50+kwargs.get('perc_range',50)/2, axis=0)
                     plot_line_and_err(ax, times, median, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                     if boundtype=='fill':       ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
                     elif boundtype=='line':     plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
