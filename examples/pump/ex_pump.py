@@ -415,7 +415,7 @@ if __name__=="__main__":
     
     #an.graph.exec_order(mdl)
     endclass, mdlhist=propagate.one_fault(mdl, 'import_water','no_wat', time=29,  staged=True)
-    endclass, mdlhist=propagate.one_fault(mdl, 'import_ee','no_v', time=29,  staged=True, track='all')
+    
     #mdlhist.get_faulty_hist(*mdl.fxns)
     endclass, mdlhist=propagate.one_fault(mdl, 'move_water', 'mech_break', time=0, staged=False)
     
@@ -436,7 +436,10 @@ if __name__=="__main__":
     [all(flat[k]==flat_staged[k]) for k in flat]
     all([all(flat[k]==flat_staged[k]) for k in flat])
     
+    endclass, mdlhist=propagate.one_fault(mdl, 'import_ee','no_v', time=29,  staged=True, track='all')
+    
     deghist = mdlhist.get_degraded_hist(*mdl.fxns, *mdl.flows)
+    exp = deghist.get_metrics()
     deghist
     a=deghist.as_table()
     
@@ -452,8 +455,15 @@ if __name__=="__main__":
     d=h.get_degraded_hist(*mdl.flows, nomhist=mdlhists.nominal)
     
     
-
+    exp = deghist.get_metrics()
     
+    from fmdtools.analyze.graph import ModelGraph
+    mg = ModelGraph(mdl)
+    mg.set_heatmap(exp)
+    mg.draw()
+    
+    mg = ModelGraph(mdl)
+    fig, ax = mg.plot_high_degree_nodes()
     
     
     
