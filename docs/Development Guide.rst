@@ -107,7 +107,7 @@ fmdtools was originally developed around a very simple use-case of modelling phy
 - Flows define *shared data structures*, meaning interacting variables
 - Functions define *behaviors*, meaning things to be done to flows.
 
-These functions and flows are connected via containment relationships in an undirected graph, meaning that they functions can be run in any order within a time-step to enable faults to propogate throughout the model graph. This is a very general representation, but also leads to pit-falls if the model is too complex, since this behavior needs to be convergent within each timestep. The following gives some advice for conventions to follow in models based on their size/scope.
+These functions and flows are connected via containment relationships in an undirected graph, meaning that functions can be run in any order within a time-step to enable faults to propogate throughout the model graph. This is a very general representation, but also leads to pit-falls if the model is too complex, since this behavior needs to be convergent within each timestep. The following gives some advice for conventions to follow in models based on their size/scope.
 
 **Small Models**
 
@@ -152,7 +152,7 @@ Systems of Systems models involve the interaction of multiple systems in a singl
 		* Asset/Agent(s)					(individual system models)
 		* AgentController(s)				(coordinator which issues commans to each system)
 
-Note that, unlike other model types, System of Systems models very often will have multiple copies of functions and flows instantiated in the model. As a result, it is important to use dedicated model structures to the overall structure from being intractible. Specifically multiple copies of flows can be handled using the `MultiFlow` class while Communications between agents can be handled using the `CommsFlow` class. The `typegraph` graph representation can be used to represent the model as just the types involved (rather than all instantiations). In general, it can be helpful to create tests/analyses for individual agents in addition to the overall system.
+Note that, unlike other model types, System of Systems models very often will have multiple copies of functions and flows instantiated in the model. As a result, it is important to use dedicated model structures to the overall structure from being intractible. Specifically multiple copies of flows can be handled using the `MultiFlow` class while Communications between agents can be handled using the `CommsFlow` class. The `ModelTypeGraph` graph representation can be used to represent the model as just the types involved (rather than all instantiations). In general, it can be helpful to create tests/analyses for individual agents in addition to the overall system.
 
 Use model constructs to simplify your code
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

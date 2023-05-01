@@ -8,7 +8,7 @@ The analyze package is organized into the :mod:`fmdtools.analyze.plot`, :mod:`fm
 
 - :mod:`plot` creates plots in ``matplotlib`` for simulation results (e.g., model histories, end-state classifications, etc).
 
-- :mod:`graph` creates visualizations of the model graph using ``NetworkX``, ``Netgraph`` and/or ``Graphviz`` packages.
+- :mod:`graph` creates graph visualizations and analyses of the model structures using ``NetworkX``, and/or ``Graphviz`` packages.
 
 - :mod:`tabulate` creates ``pandas`` tables of desired simulation metrics.
 

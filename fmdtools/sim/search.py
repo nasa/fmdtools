@@ -767,6 +767,7 @@ class ProblemInterface():
             self.simulations[simname][2].update(kwargs)
             self.clear(simname, clearvars=False)
     def show_architecture(self):
+        #TODO: leverage Graph to draw this
         fig = plt.figure()
         edge_labels = nx.get_edge_attributes(self.sim_graph, "label")
         pos=nx.planar_layout(self.sim_graph)
