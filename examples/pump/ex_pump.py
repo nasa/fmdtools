@@ -25,7 +25,7 @@ from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.flow import Flow 
 from fmdtools.define.model import Model, check_model_pickleability
 from fmdtools.sim.approach import SampleApproach, NominalApproach
-from fmdtools.define.parameter import Parameter, SimParam
+from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State 
 from fmdtools.define.time import Time
 import fmdtools.analyze as an

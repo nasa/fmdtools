@@ -359,7 +359,7 @@ class Mode(dataobject, readonly=False):
     def create_hist(self, timerange, track):
         h = History()
         track = get_dataobj_track(self, track)
-        if not(self.exclusive) and 'faults' in track:  
+        if 'faults' in track:  
             fh = History()
             for faultmode in self.faultmodes:
                 fh.init_att(faultmode, False, timerange, track='all', dtype=bool)

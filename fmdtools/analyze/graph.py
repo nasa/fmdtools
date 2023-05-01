@@ -37,7 +37,7 @@ from .result import Result, History
 
 default_edge_kwargs={'sends':       dict(edge_color='grey', style='dashed'),
                      'contains':    dict(arrows=True),
-                     'next':        dict(arrows=True, arrowstyle='->', arrowsize=30)}
+                     'condition':   dict(arrows=True, arrowstyle='->', arrowsize=30)}
 class EdgeStyle(dataobject):
     """
     Holds kwargs for nx.draw_networkx_edges to be applied as a style for multiple edges
@@ -74,7 +74,7 @@ default_node_kwargs={'Model':       dict(node_shape='^'),
                      'MultiFlow':   dict(node_shape='h'),
                      'CommsFlow':   dict(node_shape='8'),
                      'State':       dict(node_shape='d'),
-                     'active':     dict(node_color='orange'),
+                     'active':      dict(node_color='green'),
                      'degraded':    dict(node_color='orange'),
                      'faulty':      dict(edgecolors='red'),
                      'high_degree_nodes': dict(node_color='red'),
@@ -1348,30 +1348,49 @@ class ASGGraph(Graph):
         - Flows as (circular) Nodes
         - Actions as (square) Nodes
     """
-    def __init__(self, asg, gtype):
+    def __init__(self, asg, withstates=True):
         self.g = nx.compose(asg.flow_graph, asg.action_graph) 
-        self.set_nx_states(asg)
+        self.set_nx_labels(asg)
+        if withstates: self.set_nx_states(asg)
     def set_nx_labels(self, asg):
         for n in self.g.nodes():
-            if n in asg.flow_graph.nodes():     self.g[n]['label'] = 'Flow'
-            elif n in asg.action_graph.nodes(): self.g[n]['label'] = 'Action'
+            if n in asg.action_graph.nodes():   self.g.nodes[n]['label'] = 'Action'
+            elif n in asg.flow_graph.nodes():   self.g.nodes[n]['label'] = 'Flow'
+        for e in self.g.edges():
+            if e in asg.action_graph.edges():   self.g.edges[e]['label'] = 'condition'
+            elif e in asg.flow_graph.edges():   self.g.edges[e]['label'] = 'contains' 
     def set_nx_states(self, asg):
         for g in self.g.nodes():
             self.g.nodes[g]['active'] = g in asg.active_actions
+        states={}
+        faults={}
+        for aname, action in asg.actions.items():
+            states[aname] = asdict(action.s)
+            faults[aname] = [*action.m.faults]
+        for fname, flow in asg.flows.items():
+            states[fname] = asdict(flow.s)
+        nx.set_node_attributes(self.g, states, 'states')
+        nx.set_node_attributes(self.g, faults, 'faults')
+    def set_edge_labels(self, title='label', title2='', subtext='name', **edge_label_styles):
+        super().set_edge_labels(title=title, title2=title2, subtext=subtext, **edge_label_styles)
+    def set_node_styles(self, active={}, **node_styles):
+        super().set_node_styles(active=active, **node_styles)
 class ASGActGraph(ASGGraph):
     """
     Variant of ASGGraph where only the sequence between actions is shown.
     """
-    def __init__(self, asg):
+    def __init__(self, asg, withstates=True):
         self.g=asg.action_graph.copy()
-        self.set_nx_states(asg)
+        self.set_nx_labels(asg)
+        if withstates: self.set_nx_states(asg)
 class ASGFlowGraph(ASGGraph):
     """
     Variant of ASGGraph where only the flow relationships between actions is shown.
     """
-    def __init__(self, asg):
+    def __init__(self, asg, withstates=True):
         self.g=asg.flow_graph.copy()
-        self.set_nx_states(asg)
+        self.set_nx_labels(asg)
+        if withstates: self.set_nx_states(asg)
 
 def graph_factory(obj, **kwargs):
     """
@@ -1396,7 +1415,7 @@ def graph_factory(obj, **kwargs):
     if isinstance(obj, Model):       return ModelGraph(obj, **kwargs)
     elif isinstance(obj, CommsFlow): return CommsFlowGraph(obj, **kwargs)
     elif isinstance(obj, MultiFlow): return MultiFlowGraph(obj, **kwargs)
-    elif isinstance(obj, ASG):       return ASGActGraph(obj, **kwargs)
+    elif isinstance(obj, ASG):       return ASGGraph(obj, **kwargs)
     else: raise Exception("No default graph for class "+obj.__class__.__name__)
 
 

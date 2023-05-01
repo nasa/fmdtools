@@ -494,7 +494,7 @@ class ASG(dataobject, mapping=True):
     """
     actions:            dict = {}
     action_graph:       nx.DiGraph = nx.DiGraph()
-    flow_graph:         nx.Graph = nx.Graph()
+    flow_graph:         nx.DiGraph = nx.DiGraph()
     conditions:         dict = {}
     faultmodes:         dict = {}
     flows:              dict = {}
@@ -510,7 +510,7 @@ class ASG(dataobject, mapping=True):
         super().__init__(*args, **kwargs)
         self.actions={} #TODO: remove restatement of defaults when fixed in recordclass
         self.action_graph= nx.DiGraph()
-        self.flow_graph=nx.Graph()
+        self.flow_graph=nx.DiGraph()
         self.conditions={}
         self.faultmodes= {}
         self.flows = {}
@@ -525,7 +525,6 @@ class ASG(dataobject, mapping=True):
         self.set_active_actions(initial_action)
         if self.state_rep=='finite-state' and len(self.active_actions)>1: 
             raise Exception("Cannot have more than one initial action with finite-state representation")
-        if not self.pos: self.pos = nx.planar_layout(nx.compose(self.flow_graph, self.action_graph))
     def add_flow(self,flowname, fclass=Flow, p={}, s={}, flowtype=''):
         """
         Adds a flow with given attributes to ASG. Used to enable a flexible
@@ -689,10 +688,12 @@ class ASG(dataobject, mapping=True):
             init_indicator_hist(self, h, timerange, track)
         actions_track = get_sub_include('actions', track)
         if actions_track:
+            ha = History()
             for a, act in self.actions.items():
                 act_track = get_sub_include(a, actions_track)
                 if act_track: 
-                    h[a]=act.create_hist(timerange, act_track)
+                    ha[a]=act.create_hist(timerange, act_track)
+            h['actions']=ha
         h.init_att('active_actions', self.active_actions, timerange=timerange, track=track)
         return h
     def return_mutables(self):
