@@ -5,7 +5,7 @@ Created on Mon Dec 20 10:32:00 2021
 @author: dhulse
 """
 import unittest
-from example_eps.eps import EPS
+from examples.eps.eps import EPS
 from fmdtools.sim import propagate
 import fmdtools.analyze as an
 from fmdtools.define import SampleApproach, check_pickleability

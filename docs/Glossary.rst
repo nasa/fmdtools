@@ -19,7 +19,7 @@ Glossary
 		How the states of a system unfold over time, including in the various :term:`mode` s it may encounter. Defined in :term:`Function` s, :term:`Component` s, and :term:`Action` s using :meth:`fmdtools.define.Block.behavior`, :meth:`fmdtools.define.Block.static_behavior`, :meth:`fmdtools.define.Block.dynamic_behavior`, and :meth:`fmdtools.define.Block.condfaults`
 	
 	Graph
-		A view of :term:`fmdtools.define.Model`/:term:`function` connections and/or relationships. Graphs may be "fxngraph" (meaning each :term:`function` is a node and each :term:`flow` is an edge) or "fxnflowgraph" (meaning both functions and flows are nodes). Graphs in fmdtools leverage the networkx package. 
+		A view of simulation construct connections and/or relationships embodied by the :class:`fmdtools.analyze.graph.Graph` class (which uses networkx to represent the structure itself).
 	
 	Component
 		A physical that embodies specific behavior for a :term:`function`. May have :term:`mode` s and :term:`behavior` s of its own. Specified by extending the :class:`fmdtools.define.Component` class.
@@ -37,7 +37,7 @@ Glossary
 		Defined :term:`mode` that the system progresses through as a part of its desired functioning. For example, a light switch may be in "on" and "off" modes.
 
 	Action Sequence Graph
-		A graph of :term:`action` s which embody a (human or autonomous) :term:`agent` 's sequence of tasks which it performs to accomplish a certain function. Created by adding actions and internal flows to a function and then using the method :meth:`fmdtools.define.FxnBlock.build_ASG`.
+		An instance of the :class:`define.block.ASG` which embodies a (human or autonomous) :term:`agent` 's sequence of tasks which it performs to accomplish a certain function. 
 	
 	Agent
 		An actor which controls behaviors in a system. May be modelled as a :term:`function`.

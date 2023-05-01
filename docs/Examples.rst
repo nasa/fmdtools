@@ -7,13 +7,7 @@ To get started with fmdtools, it is reccomended to start with the **Intro to fmd
    
 After completing the workshop, it can be helpful to run through the following notebooks to better understand fmdtools modelling, simulation, and analysis basics as well as more advanced features and use-cases:
 
-- `Defining and Visualizing fmdtools Model Structures <docs/Model_Structure_Visualization_Tutorial.ipynb>`_ is helpful for understanding how a given model simulates over time. It covers the methods:
-
-  - :func:`fmdtools.analyze.graph.show()`
-
-  - :func:`fmdtools.analyze.graph.exec_order()`
-
-  - :func:`fmdtools.analyze.plot.graph_order()`
+- `Defining and Visualizing fmdtools Model Structures <docs/Model_Structure_Visualization_Tutorial.ipynb>`_ is helpful for understanding how a given model simulates over time. It covers the class  :class:`fmdtools.analyze.graph.Graph` and containing methods.
 
 - `fmdtools Paper Demonstration <example_multirotor/Demonstration.ipynb>`_  is helpful for understanding network/static/dynamic/hierarchical model types, covering:
 
