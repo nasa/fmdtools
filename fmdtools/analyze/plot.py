@@ -712,8 +712,8 @@ def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cos
     ----------
     app : sampleapproach
         Sample approach defining the underlying samples to take and probability model of the list of scenarios.
-    endclasses : dict
-        A dict with the end classification of each fault (metrics, etc)
+    endclasses : Result
+        A Result with the end classification of each fault (metrics, etc)
     fxnmode : tuple
         tuple (or tuple of tuples) with structure ('function name', 'mode name') defining the fault mode
     metric : str
@@ -729,7 +729,7 @@ def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cos
     for phasetup in app.mode_phase_map[fxnmode]:
         associated_scens = associated_scens + app.scenids.get((fxnmode, phasetup), [])
     associated_scens = list(set(associated_scens))
-    costs = np.array([endclasses[scen][metric] for scen in associated_scens])
+    costs = np.array([endclasses.get(scen).endclass[metric] for scen in associated_scens])
     #times = np.array(list(set([time  for phase, timemodes in app.sampletimes.items() if timemodes for time in timemodes if fxnmode in timemodes.get(time)])))  
     times = np.array([[a['properties']['time'] for a in app.scenlist if a['properties']['name']==scen][0] for scen in associated_scens])
     timesort = np.argsort(times)

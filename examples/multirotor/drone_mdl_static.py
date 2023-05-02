@@ -173,8 +173,8 @@ class AffectDOF(FxnBlock): #ee_mot,ctl,dofs,force_lin HSig_dofs, RSig_dofs
         
         self.ee_in.s.rate=self.s.e_ti
         pwr = self.s.mul('e_to','e_ti','ct','mt','pt')
-        self.dofs.uppwr=self.ctl_in.s.upward*pwr
-        self.dofs.planpwr=self.ctl_in.s.forward*pwr 
+        self.dofs.s.uppwr=self.ctl_in.s.upward*pwr
+        self.dofs.s.planpwr=self.ctl_in.s.forward*pwr 
 
 class CtlDOFstate(State):
     cs: float = 1.0
@@ -251,7 +251,7 @@ class Trajectory(FxnBlock):
             self.env.s.z=0.0
         if self.dofs.s.planvel>1.5 or self.dofs.s.planvel<0.5:
             self.m.add_fault('lost')
-            self.dofs.s.x=0.0
+            self.env.s.x=0.0
         else:
             self.env.s.x=1.0
 

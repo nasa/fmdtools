@@ -723,7 +723,7 @@ class Graph(object):
             N = float(len(tmp))
             largestCC = max(nx.connected_components(tmp), key=len)
             s = [float(len(largestCC))]
-            rs = rng.sample(range(int(s[0])),int(s[0]))
+            rs = rng.choice(range(int(s[0])),int(s[0]), replace=False)
             nodes = list(g)
             for i in range(int(s[0])-1):
                 tmp.remove_node(nodes[rs[i]])
@@ -844,6 +844,7 @@ def sff_one_trial(start_node_selected,g,endtime=5,pi=.1,pr=.1):
     pf : float
         recovery (fix) rate
     """
+    rng = np.random.default_rng()
     nodes = list(g.nodes)
     num_nodes = len(nodes)
     time = 0
@@ -860,7 +861,7 @@ def sff_one_trial(start_node_selected,g,endtime=5,pi=.1,pr=.1):
         for i in range(0,len(fail_nodes)):
             n = list(g.neighbors(fail_nodes[i])) 
             new_exposed_nodes.extend(n)
-        ri_list = [random.random() for iter in range(len(new_exposed_nodes))]
+        ri_list = [rng.random() for iter in range(len(new_exposed_nodes))]
         new_fail_nodes = []
         for i in range(0,len(new_exposed_nodes)):
             if new_exposed_nodes[i] in fix_nodes: pass
@@ -875,7 +876,7 @@ def sff_one_trial(start_node_selected,g,endtime=5,pi=.1,pr=.1):
         fail_nodes.extend(new_fail_nodes)
         fail_nodes_set = set(fail_nodes)
         fail_nodes = list(fail_nodes_set)
-        rf_list = [random.random() for iter in range(len(fail_nodes))]
+        rf_list = [rng.random() for iter in range(len(fail_nodes))]
         new_fix_nodes = []
         for i in range(0,len(fail_nodes)):
             if rf_list[i] <= pr:
