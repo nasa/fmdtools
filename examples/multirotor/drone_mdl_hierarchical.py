@@ -177,8 +177,9 @@ if __name__=="__main__":
     
     mdl = Drone(p=DroneParam(arch='oct'))
     app = SampleApproach(mdl, faults=[('affect_dof', 'rr2_propstuck')])
-    endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=False)
-    an.plot.mdlhists({'nominal': mdlhists['nominal'],'faulty': mdlhists['affect_dof rr2_propstuck, t=49.0']},fxnflowvals={'flows':{'env':'s'}})
+    endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=True)
+    an.plot.hist(mdlhists.get('nominal', 'affect_dof_rr2_propstuck_t49p0').flatten(),
+                 'flows.env.s.x', 'env.s.y', 'env.s.z', 'store_ee.s.soc')
 
 
 

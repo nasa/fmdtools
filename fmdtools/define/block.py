@@ -364,6 +364,7 @@ class CompArch(dataobject, mapping=True):
             cop_comp.s = cop_comp._init_s(**asdict(component.s))
             cop_comp.m.mirror(component.m)
             cop_comp.t = component.t.copy()
+            cop_comp.h = component.h.copy()
         return cop
     def inject_fault_in_component(self, fault):
         """
@@ -417,10 +418,12 @@ class CompArch(dataobject, mapping=True):
         
         components_track = get_sub_include('components', track)
         if components_track:
+            hc = History()
             for c, comp in self.components.items():
                 comp_track = get_sub_include(c, components_track)
                 if comp_track: 
-                    h[c]=comp.create_hist(timerange, comp_track)
+                    hc[c]=comp.create_hist(timerange, comp_track)
+            h['components']=hc
         return h
     def return_mutables(self):
         cm=[]
@@ -830,11 +833,11 @@ class FxnBlock(Block):
                 if k.startswith('c.components'):
                     cname = k.split('.')[2]
                     atname = '.'.join(k.split('.')[3:])
-                    cop.h[k]=cop.c.components[cname][atname]
+                    cop.h[k]=cop.c.components[cname].h[atname]
                 elif k.startswith('a.actions'):
                     cname = k.split('.')[2]
                     atname = '.'.join(k.split('.')[3:])
-                    cop.h[k]=cop.a.actions[cname][atname]
+                    cop.h[k]=cop.a.actions[cname].h[atname]
         return cop
     def return_mutables(self):
         bm = super().return_mutables()
