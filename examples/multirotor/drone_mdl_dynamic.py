@@ -29,7 +29,7 @@ class StoreEE(StaticstoreEE):
         if self.m.has_fault('nocharge'):    self.ee_out.s.effort=0.0
         else:                               self.ee_out.s.effort=1.0
         if time > self.t.time:
-            self.s.inc(soc=self.ee_out.s.mul('rate', 'effort')*(time-self.t.time)/2)
+            self.s.inc(soc=-self.ee_out.s.mul('rate', 'effort')*(time-self.t.time)/2)
             
 from drone_mdl_static import CtlDOFMode
 class CtlDOFState(State):
@@ -113,18 +113,19 @@ class PlanPath(FxnBlock):
         self.s.assign(vectdist(self.s.goal,loc), 'dz', 'dy', 'dz')
         
         if self.m.mode=='taxi' and t>5: self.m.mode='taxi'
-        elif dist<5 and self.m.in_mode({'move', 'hover'}):
+        elif self.env.s.z<1 and self.s.pt==5:                       self.m.mode = 'taxi'
+        elif dist<5 and self.s.pt==5:                               self.m.mode = 'land'
+        elif self.s.pt==6 and self.m.in_mode('move', 'hover'):      self.m.mode = 'descend'
+        elif dist>5 and not(self.m.mode=='descend'):                self.m.mode = 'move'
+        elif dist<5 and self.m.in_mode('move', 'hover'):
             self.m.mode='hover'
             if t>self.t.time:
                 self.t.pause.inc(1)
                 if self.t.pause.t() > 2:
                     self.s.inc(pt=1)
-                    self.s.goal = self.s.goals[self.pt]
+                    self.s.limit(pt=(0,5))
+                    self.s.goal = self.p.goals[self.s.pt]
                     self.t.pause.reset()
-        elif self.env.s.z<1 and self.s.pt==6:                       self.m.mode = 'taxi'
-        elif dist<5 and self.s.pt==6:                               self.m.mode = 'land'
-        elif self.s.pt==6 and self.m.in_mode({'move', 'hover'}):    self.m.mode = 'descend'
-        elif dist>5 and not(self.m.mode=='descend'):                self.m.mode = 'move'
         # nominal behaviors
         self.dir.s.power=1.0
         if self.m.mode=='taxi':           self.dir.s.power=0.0
@@ -264,7 +265,13 @@ if __name__=="__main__":
     mdl_quad_comp = Drone()
     quad_comp_app = SampleApproach(mdl_quad_comp, faults=[('affect_dof', 'mechbreak')],defaultsamp={'samp':'evenspacing','numpts':5})
     quad_comp_endclasses, quad_comp_mdlhists = fs.propagate.approach(mdl_quad_comp, quad_comp_app, staged=True)
+    
+    import fmdtools.analyze as an
+    an.plot.samplemetric(quad_comp_app, quad_comp_endclasses, ('affect_dof', 'mechbreak'))
+    
     quad_comp_endclasses_1, quad_comp_mdlhists_1 = fs.propagate.approach(mdl_quad_comp, quad_comp_app)
+    
+    
     
     cost_tests = [quad_comp_endclasses[ec]['expected cost']==quad_comp_endclasses_1[ec]['expected cost'] for ec in quad_comp_endclasses]
     dist_tests = [all(quad_comp_mdlhists[ec].flows.env.s.x==quad_comp_mdlhists_1[ec].flows.env.s.x) for ec in quad_comp_mdlhists]
