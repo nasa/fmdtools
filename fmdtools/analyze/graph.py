@@ -443,6 +443,7 @@ class Graph(object):
         
         if withlegend:
             legend = plt.legend(labelspacing=2, borderpad=1)
+        plt.axis('off')
         
         if title: plt.title(title)
         return fig, ax
@@ -1246,6 +1247,7 @@ class MultiFlowGraph(Graph):
             self.set_degraded(other)
             self.set_node_styles(degraded={}, faulty={})
         else:
+            self.set_degraded(self)
             self.set_node_styles(degraded={}, faulty={})
         self.set_node_labels(title='id', subtext='faults')
 class CommsFlowGraph(MultiFlowGraph):

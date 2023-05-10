@@ -341,7 +341,7 @@ def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[],
     ----------
     nomapp : NominalApproach
         NominalApproach used to generate the simulation.
-    endclasses : dict
+    endclasses : Result
         End-state classifcations for the set of simulations from propagate.nested_approach()
     percent_metrics : list
         List of metrics to calculate a percent of (e.g. use with an indicator variable like failure=1/0 or True/False)
@@ -360,7 +360,7 @@ def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[],
     table : pandas DataFrame
         Table with the averages/percentages of interest layed out over the input parameters for the set of scenarios in endclasses
     """
-    if scenarios=='all':            scens = [*nested_endclasses]
+    if scenarios=='all':            scens = [k.split('.')[0] for k in nested_endclasses]
     elif type(scenarios)==str:      scens = nomapp.ranges[scenarios]['scenarios']
     elif not type(scenarios)==list: raise Exception("Invalid option for scenarios. Provide 'all'/'rangeid' or list")
     else:                           scens = scenarios
@@ -369,23 +369,23 @@ def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[],
         if not(scenarios=='all') and not(type(scenarios)==list):    app_range= scenarios
         elif len(ranges)==1:                                        app_range=ranges[0]
         else: raise Exception("Multiple approach ranges "+str(ranges)+" in approach. Use inputparams=`all` or inputparams=[param1, param2,...]")
-        inputparams= [*nomapp.ranges[app_range]['inputranges']]
+        inputparams= [*nomapp.ranges[app_range]['p']]
     elif inputparams=='all':
-        inputparams=[*nomapp.scenarios.values()][0]['properties']['inputparams']
+        inputparams=[*nomapp.scenarios.values()][0]['properties']['p']
     table_values=[]; table_rows = inputparams
     for inputparam in inputparams:
-        table_values.append([nomapp.scenarios[e]['properties']['inputparams'][inputparam] for e in scens])
+        table_values.append([nomapp.scenarios[e]['properties']['p'][inputparam] for e in scens])
     for metric in percent_metrics:  
-        table_values.append([nested_endclasses[e].percent(metric) for e in scens])
+        table_values.append([nested_endclasses.get(e).percent(metric) for e in scens])
         table_rows.append('perc_'+metric)
     for metric in rate_metrics:     
-        table_values.append([nested_endclasses[e].rate(metric) for e in scens])
+        table_values.append([nested_endclasses.get(e).rate(metric) for e in scens])
         table_rows.append('rate_'+metric)
     for metric in average_metrics:  
-        table_values.append([nested_endclasses[e].average(metric) for e in scens])
+        table_values.append([nested_endclasses.get(e).average(metric) for e in scens])
         table_rows.append('ave_'+metric)
     for metric in expected_metrics: 
-        table_values.append([nested_endclasses[e].expected(metric) for e in scens])
+        table_values.append([nested_endclasses.get(e).expected(metric) for e in scens])
         table_rows.append('exp_'+metric)
     table = pd.DataFrame(table_values, columns=[*nested_endclasses], index=table_rows)
     return table
