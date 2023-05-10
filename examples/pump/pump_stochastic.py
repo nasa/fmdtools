@@ -130,20 +130,43 @@ if __name__=="__main__":
     import multiprocessing as mp
     from fmdtools.define.model import check_model_pickleability
     from fmdtools.define.common import check_pickleability
-
+    
+    # convert to tests 1:
+    mdl = Pump()
+    """
+    app = NominalApproach()
+    app.add_seed_replicates('test_seeds', 100)
+    
+    endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
+    
+    fig = an.plot.hist(mdlhists, 'move_water.r.s.eff', 'move_water.s.total_flow',
+                   'wat_2.s.flowrate', 'wat_2.s.pressure',
+                   'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
+                   'ee_1.s.voltage', 'sig_1.s.power',
+                   color='blue', comp_groups={}, aggregation='percentile')
+    
+    fig = an.plot.hist(mdlhists, 'move_water.r.s.eff', 'move_water.s.total_flow',
+                   'wat_2.s.flowrate', 'wat_2.s.pressure',
+                   'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
+                   'ee_1.s.voltage', 'sig_1.s.power',
+                   color='blue', comp_groups={}, aggregation='mean_ci')
+    
+    # convert to test 2:
     rp = SimParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr')
     mdl = Pump(sp = rp, r={'seed':5})
     
     check_model_pickleability(mdl, try_pick=True)
     
     mdl.set_vars([['ee_1','current']],[2])
-    
-    
+    """
+    # convert to test 3:
     app_comp = NominalApproach()
     app_comp.add_param_replicates(paramfunc, 'delay_1', 10, (1))
     app_comp.add_param_replicates(paramfunc, 'delay_10', 10, (10))
     
     endclasses, mdlhists, apps=propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')],pool=mp.Pool(4))
+    
+    an.tabulate.nested_stats(app_comp, endclasses, average_metrics=['cost'], inputparams=['delay'])
     
     #endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True) #pool=mp.Pool(4)
     

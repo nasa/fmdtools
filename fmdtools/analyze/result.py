@@ -196,7 +196,7 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
     ----------
     statistic, lower bound, upper bound
     """
-    from scipy import bootstrap
+    from scipy.stats import bootstrap
     if 'interval' in kwargs: kwargs['confidence_level']=kwargs.pop('interval')*0.01
     if data.count(data[0])!=len(data):
         bs = bootstrap([data], np.mean, **kwargs)
@@ -292,7 +292,7 @@ class Result(UserDict):
         res = self.__class__()
         for at in atts_to_get:
             res[at]=self.__getattr__(at)
-        if len(res)==1 and res[at]:
+        if len(res)==1 and at in res:
             return res[at]
         else:
             return res
@@ -584,18 +584,23 @@ class Result(UserDict):
         return probabilities
     def expected(self, metric, prob_key='rate'):
         """Calculates the expected value of a given metric in endclasses using the rate variable in endclasses"""
-        return sum([e[metric]*e[prob_key] for k,e in self.items() if not np.isnan(e[metric])])
+        ecs = np.array([e for e in self.get_values(metric).values() if not np.isnan(e)])
+        weights = np.array([e for e in self.get_values(prob_key).values() if not np.isnan(e)])
+        return sum(ecs*weights)
     def average(self, metric, empty_as='nan'):
         """Calculates the average value of a given metric in endclasses"""
-        ecs = [e[metric] for k,e in self.items() if not np.isnan(e[metric])]
+        ecs = [e for e in self.get_values(metric).values() if not np.isnan(e)]
         if len(ecs)>0 or empty_as=='nan':   return np.mean(ecs)
         else:                               return empty_as
     def percent(self, metric):
         """Calculates the percentage of a given indicator variable being True in endclasses"""
-        return sum([int(bool(e[metric])) for k,e in self.items() if not np.isnan(e[metric])])/(len(self)+1e-16)
+        return sum([int(bool(e)) for e in self.get_values(metric).values() 
+                    if not np.isnan(e)])/(len(self.get_values(metric))+1e-16)
     def rate(self, metric, prob_key='rate'):
         """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
-        return sum([int(bool(e[metric]))*e['prob_key'] for k,e in self.items() if not np.isnan(e[metric])])
+        ecs = np.array([bool(e) for e in self.get_values(metric).values() if not np.isnan(e)])
+        weights = np.array([e for e in self.get_values(prob_key).values() if not np.isnan(e)])
+        return sum(ecs*weights)
     def end_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
         """
         Calculates the difference between the nominal and fault scenarios for a set of endclasses

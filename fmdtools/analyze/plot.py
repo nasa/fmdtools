@@ -174,7 +174,9 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
                     plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                 elif aggregation=='mean_ci':
                     mean = hists.get_metric(plot_value, np.mean, axis=0)
-                    vals = [[hist[plot_value][t] for hist in hists.values()] for t in range(max_ind)]
+                    if max_ind=='max': 
+                        max_ind = min([len(h) for h in hists.values()])
+                    vals = [[hist[t] for hist in hists.get_values(plot_value).values()] for t in range(max_ind)]
                     boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True, confidence_level=ci) for val in vals]).transpose()
                     plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2],boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                 elif aggregation=='mean_bound':
@@ -186,8 +188,8 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
                     median = hists.get_metric(plot_value, np.median, axis=0)
                     maxs = hists.get_metric(plot_value, np.max, axis=0)
                     mins = hists.get_metric(plot_value, np.min, axis=0)
-                    low_perc = hists.get_metric(plot_value, np.percentile, 50-kwargs.get('perc_range',50)/2, axis=0)
-                    high_perc = hists.get_metric(plot_value, np.percentile, 50+kwargs.get('perc_range',50)/2, axis=0)
+                    low_perc = hists.get_metric(plot_value, np.percentile, args=(50-kwargs.get('perc_range',50)/2,), axis=0)
+                    high_perc = hists.get_metric(plot_value, np.percentile, args=(50+kwargs.get('perc_range',50)/2,), axis=0)
                     plot_line_and_err(ax, times, median, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
                     if boundtype=='fill':       ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
                     elif boundtype=='line':     plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)

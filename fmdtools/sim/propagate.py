@@ -858,7 +858,7 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     for g in graphs_to_get:
         arg = desired_result.pop(g)
         if isinstance(arg, tuple):  Gclass, kwargs = arg
-        else:                       Gclass=arg; kwargs={}
+        else:                       Gclass = False; kwargs={}
 
         if '.' in g:
             strs = g.split(".")
