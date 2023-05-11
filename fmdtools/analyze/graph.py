@@ -99,7 +99,9 @@ default_node_kwargs={'Model':       dict(node_shape='^'),
                      'degraded':    dict(node_color='orange'),
                      'faulty':      dict(edgecolors='red'),
                      'high_degree_nodes': dict(node_color='red'),
-                     'high_degree_nodes': dict(node_color='red')}  
+                     'high_degree_nodes': dict(node_color='red'),
+                     'static_execution':  dict(node_color='cyan'),
+                     'dynamic_execution': dict(edgecolors='teal')}  
 
 class NodeStyle(dataobject):
     """
@@ -222,7 +224,7 @@ class Labels(dataobject, mapping=True):
             else:         evals={}
             if evals:
                 if entry=='title':      labs.title=evals
-                elif entry=='title2':   labs.title={k: v+': '+evals.get(k,'') for k,v in title.items()}
+                elif entry=='title2':   labs.title={k: v+': '+evals.get(k,'') for k,v in labs.title.items()}
                 elif entry=='subtext':  labs.subtext=evals
         
         node_labels = labs.iter_groups()
@@ -1133,6 +1135,21 @@ class ModelGraph(Graph):
             midedges=list(multgraph.subgraph(edge).edges)
             flows[edge]= [midedge[2] for midedge in midedges]
         return flows
+    def set_exec_order(self, mdl):
+        staticnodes = list(mdl.staticfxns) + list(set([n for node in mdl.staticfxns for n in mdl.graph.neighbors(node)]))
+        dynamicnodes = list(mdl.dynamicfxns) 
+        
+        orders = {n:str(i) for i, n in enumerate(dynamicnodes)}
+        orders.update({n:"" for n in self.g.nodes() if n not in orders})
+        nx.set_node_attributes(self.g, orders, name='order')
+        
+        tsteps = {n:str(mdl.fxns[n].t.dt) if n in mdl.fxns else "" for n in self.g.nodes}
+        nx.set_node_attributes(self.g, tsteps, name='tstep')
+        
+        self.add_node_groups(static_execution=staticnodes, dynamic_execution=dynamicnodes)
+        self.set_node_styles(group=dict(dynamic_execution={},static_execution={}))
+        self.set_node_labels(title='id', title2='order', subtext='tstep')
+        
     def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
