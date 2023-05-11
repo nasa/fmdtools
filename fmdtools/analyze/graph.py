@@ -38,6 +38,9 @@ from .result import Result, History
 default_edge_kwargs={'sends':       dict(edge_color='grey', style='dashed'),
                      'contains':    dict(arrows=True),
                      'condition':   dict(arrows=True, arrowstyle='->', arrowsize=30)}
+
+
+
 class EdgeStyle(dataobject):
     """
     Holds kwargs for nx.draw_networkx_edges to be applied as a style for multiple edges
@@ -65,6 +68,24 @@ class EdgeStyle(dataobject):
         return EdgeStyle(**style_kwargs)
     def kwargs(self):
         return asdict(self)
+    def as_gv_kwargs(self):
+        """
+        Transates elements of the style (arrow, color, style) into kwargs for graphviz
+
+        Returns
+        -------
+        gv : dict
+            kwargs for graphviz
+        """
+        gv_arrowstyles = {'-|>': 'open',
+                          '':   'none',
+                          '->': 'normal'}
+        gv = {'color':      self.edge_color,
+              'style':      self.style}
+        if self.arrows: gv['arrowhead'] = gv_arrowstyles.get(self.arrowstyle, 'none')
+        else:           gv['arrowhead'] = 'none'
+        return gv
+        
 
 default_node_kwargs={'Model':       dict(node_shape='^'),
                      'Block':       dict(node_shape='s', linewidths=2),
@@ -112,6 +133,26 @@ class NodeStyle(dataobject):
         return NodeStyle(**style_kwargs)
     def kwargs(self):
         return asdict(self)
+    def as_gv_kwargs(self):
+        """
+        Transates elements of the style (shape, color, width) into kwargs for graphviz
+
+        Returns
+        -------
+        gv : dict
+            kwargs for graphviz
+        """
+        gv_shapes = {'^': 'triangle',
+                     's': 'box',
+                     'o': 'ellipse',
+                     'h': 'hexagon',
+                     '8': 'octagon',
+                     'd': 'diamond'}
+        gv= dict(fillcolor = self.node_color,
+                 color = self.edgecolors,
+                 shape = gv_shapes.get(self.node_shape, 'ellipse'),
+                 penwidth = str(self.linewidths))
+        return gv
 
 class LabelStyle(dataobject):
     """
@@ -532,6 +573,53 @@ class Graph(object):
         
         ani = matplotlib.animation.FuncAnimation(fig, partial(self.draw_from, history=history, fig=fig, withlegend=False, **kwargs), frames=t_inds)
         return ani
+    def draw_graphviz(self, filename='', filetype='png', **kwargs):
+        """
+        Draws the graph using pygraphviz for publication-quality figures.
+        
+        Note that the style may not match one-to-one with the defined none/edge styles.
+
+        Parameters
+        ----------
+        filename : str, optional
+            Name to save the figure to (if saving the figure). The default is ''.
+        filetype : str, optional
+            Type of file to safe. The default is 'png'.
+        **kwargs : kwargs
+            kwargs to 
+
+        Returns
+        -------
+        dot : PyGraphviz DiGraph
+            Graph object corresponding to the figure.
+        """
+        from IPython.display import display, SVG
+        Digraph, Graph = gv_import_check()
+        dot = Digraph(graph_attr=kwargs)
+        
+        
+        for group, nodes in self.node_groups.items():
+            gv_kwargs = self.node_styles[group].as_gv_kwargs()
+            for node in nodes:
+                label = ""
+                if node in self.node_labels.title:      label+=self.node_labels.title[node]
+                if node in self.node_labels.subtext:    label+='\n'+self.node_labels.subtext[node]
+                
+                dot.node(node, style="filled", label=label, **gv_kwargs) #,label=node_label, style="filled", fillcolor=colors_dict[node], shape=shapes[node])
+            
+        for group, edges in self.edge_groups.items():
+            gv_kwargs = self.edge_styles[group].as_gv_kwargs()
+            for edge in edges:
+                label = ""
+                if edge in self.edge_labels.title:      label+=self.edge_labels.title[edge]
+                if edge in self.edge_labels.subtext:    label+='\n'+self.edge_labels.subtext[edge]
+                
+                dot.edge(edge[0], edge[1], label=label, **gv_kwargs)
+        
+        if filename:    dot.render(filename = filename, format = filetype)
+        else:           display(SVG(dot._repr_image_svg_xml()))
+        
+        return dot
     def draw_pyvis(self, filename="graph", width=1000, filt=True, physics=False, notebook=False):
         """
         Method for plotting graphs with pyvis. Produces interactive HTML!
@@ -907,7 +995,14 @@ def data_error(data,average):
     lower_error = [x - y for x, y in zip(average,q1)]
     upper_error = [x - y for x, y in zip(q3,average)]
     return lower_error, upper_error
-        
+def gv_import_check():
+    """Checks if graphviz is installed on the system before plotting."""
+    try:
+        from graphviz import Digraph, Graph
+    except ImportError as error:
+        print(error.__class__.__name__ + ": " + error.message)
+        raise Exception("GraphViz not installed. Please see:\n https://pypi.org/project/graphviz/ \n https://www.graphviz.org/download/")
+    return Digraph, Graph
 
 class GraphInteractor: 
     """A simple interactive graph for consistent node placement, etc--used in set_pos to set node positions"""
@@ -1038,6 +1133,8 @@ class ModelGraph(Graph):
             midedges=list(multgraph.subgraph(edge).edges)
             flows[edge]= [midedge[2] for midedge in midedges]
         return flows
+    def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
+        return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
 class ModelFlowGraph(ModelGraph):
     """
@@ -1185,7 +1282,9 @@ class ModelTypeGraph(ModelGraph):
         self.g=rg
     def set_pos(self, auto=True, **pos):
         if auto: self.pos=nx.multipartite_layout(self.g, 'level')
-        super().set_pos(auto=False, **pos)
+        super().set_pos(auto=False, **pos) 
+    def draw_graphviz(self, layout="dot", ranksep='2.0', **kwargs):
+        return super().draw_graphviz(layout=layout, ranksep=ranksep, **kwargs)
 ## FLOW/MULTIFLOW/COMMSFLOW
 class MultiFlowGraph(Graph):
     def __init__(self, flow, include_glob=False,
@@ -1250,6 +1349,8 @@ class MultiFlowGraph(Graph):
             self.set_degraded(self)
             self.set_node_styles(degraded={}, faulty={})
         self.set_node_labels(title='id', subtext='faults')
+    def draw_graphviz(self, layout="neato", overlap='false', **kwargs):
+        return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 class CommsFlowGraph(MultiFlowGraph):
     def __init__(self, flow, include_glob=False, ports_only=False, get_states=True):
         """
@@ -1378,6 +1479,8 @@ class ASGGraph(Graph):
         super().set_edge_labels(title=title, title2=title2, subtext=subtext, **edge_label_styles)
     def set_node_styles(self, active={}, **node_styles):
         super().set_node_styles(active=active, **node_styles)
+    def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
+        return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 class ASGActGraph(ASGGraph):
     """
     Variant of ASGGraph where only the sequence between actions is shown.
@@ -1420,6 +1523,8 @@ def graph_factory(obj, **kwargs):
     elif isinstance(obj, MultiFlow): return MultiFlowGraph(obj, **kwargs)
     elif isinstance(obj, ASG):       return ASGGraph(obj, **kwargs)
     else: raise Exception("No default graph for class "+obj.__class__.__name__)
+
+
 
 
 
