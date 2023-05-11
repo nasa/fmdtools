@@ -465,6 +465,10 @@ if __name__=="__main__":
     mg = ModelGraph(mdl)
     fig, ax = mg.plot_high_degree_nodes()
     
+    mg = ModelGraph(mdl)
+    mg.set_exec_order(mdl)
+    mg.draw()
+    
     
     
     
