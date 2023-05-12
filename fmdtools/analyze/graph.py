@@ -469,7 +469,9 @@ class Graph(object):
             nodes_colors=[heatmap[node] if node in heatmap else default_color_val for node in nodes]
             self.node_styles[label].node_color = nodes_colors
             self.node_styles[label].cmap = cmap
-    def draw(self, figsize=(12,10), withlegend=True, title="", fig=False, ax=False, **kwargs):
+    def draw(self, figsize=(12,10), title="", fig=False, ax=False, withlegend=True, 
+             legend_bbox=(1,0.5), legend_loc="center left", legend_labelspacing=2,
+             legend_borderpad=1, **kwargs):
         """
         Draws a networkx graph g with given styles corresponding to the node/edge properties.
     
@@ -477,10 +479,18 @@ class Graph(object):
         ----------
         figsize : tuple, optional
             Size for the figure (plt.figure arg). The default is (12,10).
-        withlegend : bool, optional
-            Whether to include a legend. The default is True.
         title : str, optional
             Title for the plot. The default is "".
+        withlegend : bool, optional
+            Whether to include a legend. The default is True.
+        legend_bbox : tuple, optional
+            bbox to anchor the legend to. The default is (1,0.5) (places legend on the right)
+        legend_loc : str, optional
+            loc argument for plt.legend. the default is "center left"
+        legend_labelspacing : float, optional
+            labelspacing argument for plt.legend. the default is "2
+        legend_borderpad : str, optional
+            borderpad argument for plt.legend. the default is 1
         **kwargs : kwargs
             Arguments for various supporting functions:
                 (set_pos, set_edge_styles, set_edge_labels, set_node_styles, set_node_labels, etc)
@@ -514,7 +524,8 @@ class Graph(object):
             nx.draw_networkx_labels(self.g, self.pos, self.node_labels[level], **self.node_labels[level+'_style'].kwargs(), ax=ax)
         
         if withlegend:
-            legend = plt.legend(labelspacing=2, borderpad=1)
+            legend = plt.legend(labelspacing=legend_labelspacing, borderpad=legend_borderpad, 
+                                bbox_to_anchor=legend_bbox, loc=legend_loc)
         plt.axis('off')
         
         if title: plt.title(title)
