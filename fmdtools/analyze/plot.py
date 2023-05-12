@@ -594,7 +594,7 @@ def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
     times = [i+0.5 for i in range(len(fxnorder))]
     fxntimes = {f:i for i,f in enumerate(fxnorder)}
     
-    flowtimes = {f:[fxntimes[n] for n in mdl.fxnflowgraph.neighbors(f) if n in mdl.dynamicfxns] for f in mdl.flows}
+    flowtimes = {f:[fxntimes[n] for n in mdl.graph.neighbors(f) if n in mdl.dynamicfxns] for f in mdl.flows}
     
     lengthorder = {k:v for k,v in sorted(flowtimes.items(), key=lambda x: len(x[1]), reverse=True) if len(v)>0}
     starttimeorder = {k:v for k,v in sorted(lengthorder.items(), key=lambda x: x[1][0], reverse=True)}

@@ -1,0 +1,134 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 1000px;
+            height: 500px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "Pump", "label": "Pump", "level": 1, "shape": "dot", "size": 10}, {"faults": "{\u0027export_water\u0027: set()}", "id": "ExportWater", "label": "ExportWater", "level": 2, "shape": "dot", "size": 10, "states": "{\u0027export_water\u0027: {}}"}, {"faults": "{\u0027import_water\u0027: set()}", "id": "ImportWater", "label": "ImportWater", "level": 2, "shape": "dot", "size": 10, "states": "{\u0027import_water\u0027: {}}"}, {"faults": "{\u0027import_ee\u0027: set()}", "id": "ImportEE", "label": "ImportEE", "level": 2, "shape": "dot", "size": 10, "states": "{\u0027import_ee\u0027: {\u0027effstate\u0027: 1.0}}"}, {"faults": "{\u0027import_signal\u0027: set()}", "id": "ImportSig", "label": "ImportSig", "level": 2, "shape": "dot", "size": 10, "states": "{\u0027import_signal\u0027: {}}"}, {"faults": "{\u0027move_water\u0027: set()}", "id": "MoveWat", "label": "MoveWat", "level": 2, "shape": "dot", "size": 10, "states": "{\u0027move_water\u0027: {\u0027eff\u0027: 1.0}}"}, {"id": "Water", "label": "Water", "level": 3, "shape": "dot", "size": 10, "states": "{\u0027wat_2\u0027: {\u0027flowrate\u0027: 1.0, \u0027pressure\u0027: 1.0, \u0027area\u0027: 1.0, \u0027level\u0027: 1.0}, \u0027wat_1\u0027: {\u0027flowrate\u0027: 1.0, \u0027pressure\u0027: 1.0, \u0027area\u0027: 1.0, \u0027level\u0027: 1.0}}"}, {"id": "Electricity", "label": "Electricity", "level": 3, "shape": "dot", "size": 10, "states": "{\u0027ee_1\u0027: {\u0027current\u0027: 1.0, \u0027voltage\u0027: 1.0}}"}, {"id": "Signal", "label": "Signal", "level": 3, "shape": "dot", "size": 10, "states": "{\u0027sig_1\u0027: {\u0027power\u0027: 1.0}}"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "Pump", "label": "contains", "to": "ExportWater", "weight": 1}, {"arrows": "to", "from": "Pump", "label": "contains", "to": "ImportWater", "weight": 1}, {"arrows": "to", "from": "Pump", "label": "contains", "to": "ImportEE", "weight": 1}, {"arrows": "to", "from": "Pump", "label": "contains", "to": "ImportSig", "weight": 1}, {"arrows": "to", "from": "Pump", "label": "contains", "to": "MoveWat", "weight": 1}, {"arrows": "to", "from": "ExportWater", "label": "contains", "to": "Water", "weight": 1}, {"arrows": "to", "from": "ImportWater", "label": "contains", "to": "Water", "weight": 1}, {"arrows": "to", "from": "ImportEE", "label": "contains", "to": "Electricity", "weight": 1}, {"arrows": "to", "from": "ImportSig", "label": "contains", "to": "Signal", "weight": 1}, {"arrows": "to", "from": "MoveWat", "label": "contains", "to": "Electricity", "weight": 1}, {"arrows": "to", "from": "MoveWat", "label": "contains", "to": "Water", "weight": 1}, {"arrows": "to", "from": "MoveWat", "label": "contains", "to": "Signal", "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": true
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

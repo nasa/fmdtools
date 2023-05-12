@@ -37,7 +37,8 @@ from .result import Result, History
 
 default_edge_kwargs={'sends':       dict(edge_color='grey', style='dashed'),
                      'contains':    dict(arrows=True),
-                     'condition':   dict(arrows=True, arrowstyle='->', arrowsize=30)}
+                     'condition':   dict(arrows=True, arrowstyle='->', arrowsize=30),
+                     'next':        dict(arrows=True, arrowstyle='->', arrowsize=30, style='dashed')}
 
 
 
@@ -100,8 +101,8 @@ default_node_kwargs={'Model':       dict(node_shape='^'),
                      'faulty':      dict(edgecolors='red'),
                      'high_degree_nodes': dict(node_color='red'),
                      'high_degree_nodes': dict(node_color='red'),
-                     'static_execution':  dict(node_color='cyan'),
-                     'dynamic_execution': dict(edgecolors='teal')}  
+                     'static':      dict(node_color='cyan'),
+                     'dynamic':     dict(edgecolors='teal')}  
 
 class NodeStyle(dataobject):
     """
@@ -296,6 +297,30 @@ def get_label_groups(iterator, *tags):
         else:                       label_groups[label]=[key]
     return label_groups
 
+def to_legend_label(group_label, style_labels):
+    """
+    Creates a legend label string for the group corresponding to style_labels
+
+    Parameters
+    ----------
+    group_label : tuple
+        tuple defining the group
+    style_labels : list
+        properties the tuple is meant to describe
+
+    Returns
+    -------
+    legend_label : str
+        String labeling the group
+    """
+    legend_label=""
+    for i, entry in enumerate(group_label):
+        if entry==True:     legend_label+=style_labels[i]+', '
+        elif entry!=False:  legend_label+=entry+", "
+    if legend_label: legend_label  = legend_label[:len(legend_label)-2]
+    return legend_label
+
+
 class Graph(object):
     def __init__(self, obj, get_states=True, **kwargs):
         """
@@ -345,6 +370,7 @@ class Graph(object):
         self.edge_groups = get_label_groups(self.g.edges(), *edge_styles)
         for edge_group in self.edge_groups:
             self.edge_styles[edge_group]=EdgeStyle.from_styles(edge_styles, edge_group)
+        self.edge_style_labels = [*edge_styles.keys()]
     def set_node_styles(self, **node_styles):
         """
         Sets self.node_styles and self.edge_groups given the provided node styles.
@@ -361,6 +387,7 @@ class Graph(object):
         self.node_groups = get_label_groups(self.g.nodes(), *node_styles)
         for node_group in self.node_groups:
             self.node_styles[node_group]=NodeStyle.from_styles(node_styles, node_group)
+        self.node_style_labels = [*node_styles.keys()]
     def set_edge_labels(self, title='label', title2='', subtext='states', **edge_label_styles):
         """
         Creates labels using Labels.from_iterator for the edges in the graph
@@ -473,13 +500,15 @@ class Graph(object):
                 set_func(**kwargs.get(to_set, {}))
         
         for label, edges in self.edge_groups.items():
-            nx.draw_networkx_edges(self.g, self.pos, edges, **self.edge_styles[label].kwargs(), label=label, ax=ax)
+            legend_label = to_legend_label(label, self.edge_style_labels)
+            nx.draw_networkx_edges(self.g, self.pos, edges, **self.edge_styles[label].kwargs(), label=legend_label, ax=ax)
         
         for level in self.edge_labels.iter_groups():
             nx.draw_networkx_edge_labels(self.g, self.pos, self.edge_labels[level], **self.edge_labels[level+'_style'].kwargs(), ax=ax)
         
         for label, nodes in self.node_groups.items():
-            nx.draw_networkx_nodes(self.g, self.pos, nodes, **self.node_styles[label].kwargs(), label=label, ax=ax)
+            legend_label = to_legend_label(label, self.node_style_labels)
+            nx.draw_networkx_nodes(self.g, self.pos, nodes, **self.node_styles[label].kwargs(), label=legend_label, ax=ax)
         
         for level in self.node_labels.iter_groups():
             nx.draw_networkx_labels(self.g, self.pos, self.node_labels[level], **self.node_labels[level+'_style'].kwargs(), ax=ax)
@@ -535,7 +564,8 @@ class Graph(object):
         nx.set_node_attributes(self.g, fault_nodes, 'faulty')
         
         faults = Result(history.get_faults_hist(*self.g.nodes).get_slice(time))
-        faults_nodes = {n:[k for k,v in faults.get(n).items() if v] for n in self.g.nodes}
+        faults_nodes = {n:[k for k in faults.get(n)] if faults.get(n)
+                        else [] for n in self.g.nodes}
         nx.set_node_attributes(self.g, faults_nodes, 'faults')
         
         degraded = history.get_degraded_hist(*self.g.nodes, withtotal=False, withtime=False).get_slice(time)
@@ -605,7 +635,7 @@ class Graph(object):
             for node in nodes:
                 label = ""
                 if node in self.node_labels.title:      label+=self.node_labels.title[node]
-                if node in self.node_labels.subtext:    label+='\n'+self.node_labels.subtext[node]
+                if node in self.node_labels.subtext:    label+='\n'+str(self.node_labels.subtext[node])
                 
                 dot.node(node, style="filled", label=label, **gv_kwargs) #,label=node_label, style="filled", fillcolor=colors_dict[node], shape=shapes[node])
             
@@ -654,7 +684,12 @@ class Graph(object):
             n = Network(width=width, notebook=notebook)
         g = self.g.copy()
         nx.set_node_attributes(g, {g:g for g in g.nodes}, name='label')
-
+        
+        for nd in g.nodes(): #fixes JSON serializability needed for pyvis
+            for attr in g.nodes[nd]:
+                if type(g.nodes[nd][attr]) in (set,dict):
+                    g.nodes[nd][attr]=str(g.nodes[nd][attr])
+        
         n.from_nx(g)
         n.toggle_physics(physics)
         if filt: n.show_buttons(filter_=filt)
@@ -1135,20 +1170,59 @@ class ModelGraph(Graph):
             midedges=list(multgraph.subgraph(edge).edges)
             flows[edge]= [midedge[2] for midedge in midedges]
         return flows
-    def set_exec_order(self, mdl):
-        staticnodes = list(mdl.staticfxns) + list(set([n for node in mdl.staticfxns for n in mdl.graph.neighbors(node)]))
-        dynamicnodes = list(mdl.dynamicfxns) 
+    def set_exec_order(self, mdl, static={}, dynamic={}, next_edges = {}, label_order=True, label_tstep=True):
+        """
+        Enables the plotting of ModelGraph execution order.
+
+        Parameters
+        ----------
+        mdl : Model
+            Model to plot the execution order of.
+        static : dict/False, optional
+            kwargs to overwrite the default style for functions/flows in the static execution step.
+            If False, static functions are not differentiated. The default is {}.
+        dynamic : dict/False, optional
+            kwargs to overwrite the default style for functions/flows in the dynamic execution step.
+            If False, dynamic functions are not differentiated. The default is {}.
+        next_edges : dict
+            kwargs to overwrite the default style for edges indicating the flow order.
+            If False, these edges are not added. the default is {}.
+        label_order : bool, optional
+            Whether to label execution order (with a number on each node). The default is True.
+        label_tstep : bool, optional
+            Whether to label each timestep (with a number in the subtitle). The default is True.
+        """
+        node_style_kwargs={}
+        if not static==False:
+            staticnodes = list(mdl.staticfxns) + list(set([n for node in mdl.staticfxns for n in mdl.graph.neighbors(node)]))
+            nx.set_node_attributes(self.g, {n:n in staticnodes for n in self.g.nodes()}, name='static')
+            node_style_kwargs['static']=static
+        if not dynamic==False:
+            dynamicnodes = list(mdl.dynamicfxns) 
+            orders = {n:str(i) for i, n in enumerate(dynamicnodes)}
+            nx.set_node_attributes(self.g, {n:n in orders for n in self.g.nodes()}, name='dynamic')
+            node_style_kwargs['dynamic'] = dynamic
         
-        orders = {n:str(i) for i, n in enumerate(dynamicnodes)}
-        orders.update({n:"" for n in self.g.nodes() if n not in orders})
-        nx.set_node_attributes(self.g, orders, name='order')
+        if not next_edges==False:
+            self.g.add_edges_from([(dynamicnodes[n], dynamicnodes[n+1]) for n in range(len(dynamicnodes)-1) 
+                                   if (dynamicnodes[n] in self.g.nodes and dynamicnodes[n+1] in self.g.nodes)], 
+                                  label='next')
+            self.set_edge_styles(label={'next':next_edges})
         
-        tsteps = {n:str(mdl.fxns[n].t.dt) if n in mdl.fxns else "" for n in self.g.nodes}
-        nx.set_node_attributes(self.g, tsteps, name='tstep')
+        if label_order:
+            orders.update({n:"" for n in self.g.nodes() if n not in orders})
+            nx.set_node_attributes(self.g, orders, name='order')
+            title2='order'
+        else: title2=''
         
-        self.add_node_groups(static_execution=staticnodes, dynamic_execution=dynamicnodes)
-        self.set_node_styles(group=dict(dynamic_execution={},static_execution={}))
-        self.set_node_labels(title='id', title2='order', subtext='tstep')
+        if label_tstep:
+            tsteps = {n:str(mdl.fxns[n].t.dt) if n in mdl.fxns else "" for n in self.g.nodes}
+            nx.set_node_attributes(self.g, tsteps, name='tstep')
+            subtext='tstep'
+        else: subtext=''
+
+        self.set_node_styles(**node_style_kwargs)
+        self.set_node_labels(title='id', title2=title2, subtext=subtext)
         
     def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
@@ -1302,6 +1376,8 @@ class ModelTypeGraph(ModelGraph):
         super().set_pos(auto=False, **pos) 
     def draw_graphviz(self, layout="dot", ranksep='2.0', **kwargs):
         return super().draw_graphviz(layout=layout, ranksep=ranksep, **kwargs)
+    def set_exec_order(self, *args, **kwargs):
+        raise Exception("Cannot specify exec_order for ModelTypeGraph")
 ## FLOW/MULTIFLOW/COMMSFLOW
 class MultiFlowGraph(Graph):
     def __init__(self, flow, include_glob=False,
