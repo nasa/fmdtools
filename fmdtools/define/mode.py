@@ -45,8 +45,8 @@ class Mode(dataobject, readonly=False):
     failrate : float
         Overall failure rate for the block. The default is 1.0.
     faultparams : dict 
-            Dictionary/Set of arguments defining faultmodes, which can have the forms:
-                - set {'fault1', 'fault2', 'fault3'} (just the respective faults)
+            Dictionary/tuple of arguments defining faultmodes, which can have the forms:
+                - tuple ('fault1', 'fault2', 'fault3') (just the respective faults)
                 - dict {'fault1': faultattributes, 'fault2': faultattributes}, where faultattributes is:
                     - float: rate for the mode
                     - dict/set/str: opportunity vector for the mode specified as a dictionary/set/string
