@@ -20,7 +20,7 @@ import warnings
 from recordclass import dataobject, asdict, astuple
 
 from .state import State
-from .parameter import Parameter
+from .parameter import Parameter, SimParam
 from .rand import Rand
 from .common import get_true_fields,get_true_field, init_obj_attr, get_obj_track
 from .time import Time
@@ -79,14 +79,76 @@ def inject_faults_internal(obj, faults):
             comp.m.add_fault(fault[len(comp.name)+1:])
 
 
-class Block(object):
-    __slots__ = ['p', '_args_p', 's', '_args_s','m', '_args_m', 'r', '_args_r', 't', '_args_t', 'h', 'flows', 'name' ,'is_copy']
-    default_track = ['s', 'm', 'r', 't', 'i']
+class Simulable(object):
+    """
+    Base class for object which simulate (blocks and models).
+    
+    Note that classes soley based on Simulable may not themselves be able to be simulated.
+    """
+    __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows')
+    default_sp = []
     _init_p = Parameter
     _init_s = State
-    _init_m = Mode
     _init_r = Rand
+    def __init__(self, name='', p={}, sp={}, r={}, track={}):
+        """
+        Instantiates internal Simulable attributes with predetermined:
+        
+        Parameters
+        ----------
+        p : dict 
+            Parameter values to set
+        sp : dict
+            Simulation parameter values to set
+        r : dict
+            Rand parameter values to set.
+        track dict
+            tracking dictionary
+        """
+        self.is_copy=False
+        self.flows=dict()
+        if not track:   self.track=self.default_track 
+        else:           self.track=track
+        if not name: self.name=self.__class__.__name__.lower()
+        else:        self.name=name
+        if not sp:   sp=self.default_sp
+        init_obj_attr(self, p=p, sp=sp, r=r)
+        self.update_seed()
+    def add_flow_hist(self, hist, timerange, track):
+        flow_track = get_sub_include('flows', track)
+        if flow_track:
+            hist['flows']=History()
+            for flowname, flow in self.flows.items():
+                fh = flow.create_hist(timerange, get_sub_include(flowname, flow_track))
+                if fh: hist.flows[flowname] = fh
+    def update_seed(self, seed=[]):
+        """
+        Updates seed and propogates update to contained actions/components.
+        (keeps seeds in sync)
+
+        Parameters
+        ----------
+        seed : int, optional
+            Random seed. The default is [].
+        """
+        if seed: self.r.update_seed(seed)
+    def find_classification(self, scen, mdlhists):
+        """Placeholder for model find_classification methods (for running nominal models)"""
+        return {'rate':scen['properties'].get('rate', 0), 'cost': 1, 'expected cost': scen['properties'].get('rate',0)}
+    def new_params(self, p={}, sp={}, r={}, track={}):
+        p = self.p.copy_with_vals(**p)
+        sp = self.sp.copy_with_vals(**sp)
+        if not r:       r= {'seed':self.r.seed}
+        if not track:   track=copy.deepcopy(self.track)
+        return p, sp, r, track
+
+
+class Block(Simulable):
+    __slots__ = ['s', '_args_s','m', '_args_m', 't', '_args_t',  'name' ,'is_copy']
+    default_track = ['s', 'm', 'r', 't', 'i']
+    _init_m = Mode
     _init_t = Time
+    _init_sp = SimParam
     """ 
     Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
     
@@ -109,7 +171,7 @@ class Block(object):
     is_copy : bool
         Marker for whether the object is a copy.
     """
-    def __init__(self, name, flows={}, s={}, p={}, m={}, r={}, t={}):
+    def __init__(self, name='', flows={}, s={}, p={}, m={}, r={}, t={}, sp={}, track=''):
         """
         Instance superclass. Called by FxnBlock and Component classes.
 
@@ -136,12 +198,20 @@ class Block(object):
         t : dict, optional
             Internal Time fields/arguments to override from defaults. The defautl is {}
         """
-        self.name=name
-        self.is_copy = False
-        self.flows = dict()
+        super().__init__(name=name, p=p, sp=sp, r=r, track=track)
         assoc_flows(self, flows=flows)
-        init_obj_attr(self, s=s, p=p, m=m, r=r, t=t)
-        self.update_seed()
+        init_obj_attr(self, s=s, m=m, t=t)
+    def new_with_params(self, s={}, m={}, t={}, **kwargs):
+        """
+        Creates a new Block with the same parameters as the current model but
+        with changes to params (p, sp, track, rand etc.). For use when simulating
+        individually.
+        """
+        p, sp, r, track = super().new_params(**kwargs)
+        if not s:   s=self._args_s
+        if not m:   m=self._args_m
+        if not t:   t=self._args_t
+        return self.__class__(name=self.name, s=s, p=p, m=m, t=t, sp=sp, r=r, track=track)
     def get_typename(self):
         return "Block"
     def __repr__(self):
@@ -151,20 +221,6 @@ class Block(object):
                 fxnstr = fxnstr+"- "+getattr(self,at).__repr__()+'\n'
             return fxnstr
         else: return 'New uninitialized '+self.__class__.__name__
-    def update_seed(self, seed=[]):
-        """
-        Updates seed and propogates update to contained actions/components.
-        (keeps seeds in sync)
-
-        Parameters
-        ----------
-        seed : int, optional
-            Random seed. The default is [].
-        """
-        if seed: self.r.update_seed(seed)
-        
-        if hasattr(self, 'c'): self.c.update_seed(self.r.seed)
-        if hasattr(self, 'a'): self.a.update_seed(self.r.seed)
     def get_rand_states(self, auto_update_only=False):
         """Gets dict of random states from block and associated actions/components"""
         rand_states = self.r.get_rand_states(auto_update_only)
@@ -289,39 +345,75 @@ class Block(object):
         if hasattr(self, 'h'):
             return self.h
         else:
-            if isinstance(self, FxnBlock):  all_track = FxnBlock.default_track
-            else:                           all_track=Block.default_track
+            if isinstance(self, FxnBlock):  all_track = FxnBlock.default_track+['flows']
+            else:                           all_track=Block.default_track+['flows']
             track = get_obj_track(self, track, all_track)
             if track:
                 hist = History()
                 init_indicator_hist(self, hist, timerange, track)
-                for at in track:
+                self.add_flow_hist(hist, timerange, track)
+                other_tracks = [t for t in track if t not in ('i', 'flows')]
+                for at in other_tracks:
                     at_track = get_sub_include(at, track)
                     attr = getattr(self, at, False)
                     if attr: 
                         at_h = attr.create_hist(timerange, at_track)
                         if at_h: hist[at] = at_h
+                
                 self.h=hist.flatten()
                 return self.h
             else: return History()
+    def propagate(self, time, faults=[], disturbances={}, run_stochastic=False):
+        """
+        Injects and propagates faults through the graph at one time-step
+
+        Parameters
+        ----------
+        time : float
+            The current timestep.
+        fxnfaults : list
+            Faults to inject during this propagation step. With structure ['fault1', 'fault2'...]
+        disturbances : dict
+            Variables to change during this propagation step. With structure {'var1':value}
+        run_stochastic : bool
+            Whether to run stochastic behaviors or use default values. Default is False.
+            Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
+        """
+        #Step 0: Update block states with disturbances
+        for var, val in disturbances.items():
+            set_var(self, var, val)
+        
+        #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
+        if hasattr(self, 'dynamic_loading_before'): self.dynamic_loading_before(self, time)
+        if hasattr(self, 'dynamic_behavior'):       self("dynamic", time=time, faults=faults, run_stochastic=run_stochastic)
+        if hasattr(self, 'dynamic_loading_after'):  self.dynamic_loading_after(self, time)
+        
+        #Step 2: Run Static Propagation Methods
+        active = True
+        oldmutables = self.return_mutables()
+        flows_mutables={f:fl.return_mutables() for f, fl in self.flows.items()}
+        while active:
+            if hasattr(self, 'static_behavior') or hasattr(self, 'behavior'):
+                self("static", time=time, faults=faults, run_stochastic=run_stochastic)
+            if hasattr(self, 'static_loading'):
+                self.static_loading(time)
+            #Check to see what flows now have new values and add connected functions (done for each because of communications potential)
+            active=False
+            newmutables=self.return_mutables()
+            if oldmutables!=newmutables: 
+                active=True 
+                oldmutables=newmutables
+            for flowname, fl in self.flows.items():
+                newflowmutables = fl.return_mutables()
+                if flows_mutables[flowname]!=newflowmutables:
+                    active=True
+                    flows_mutables[flowname] = newflowmutables
 
 ## COMPONENT/COMPONENT ARCHITECTURES
 class Component(Block):
     """
     Superclass for components (most attributes and methods inherited from Block superclass)
     """
-    def __init__(self,name, **kwargs):
-        """
-        Inherit the component class
-
-        Parameters
-        ----------
-        name : str
-            Unique name ID for the component
-        **kwargs: kwargs
-            kwargs for the Block
-        """
-        super().__init__(name, **kwargs)
     def behavior(self,time):
         """ Placeholder for component behavior methods. Enables one to include components
         without yet having a defined behavior for them."""
@@ -436,21 +528,6 @@ class Action(Block):
     """
     Superclass for actions (most attributes and methods inherited from Block superclass)
     """
-    def __init__(self,name, flows={}, **kwargs):
-        """
-        Inherit the Block class
-
-        Parameters
-        ----------
-        name : str
-            Unique name ID for the action
-        flows : dict
-            flows for the action
-        **kwargs: kwargs
-            kwargs for Block
-        """
-        self.name = name
-        super().__init__(name, flows=flows,**kwargs)
     def __call__(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
         Updates the behaviors, faults, times, etc of the action 
@@ -566,7 +643,7 @@ class ASG(dataobject, mapping=True):
             parameters to instantiate the Action with. 
         """
         flows = {fl:self.flows[fl] for fl in flownames}
-        action = actclass(name, flows={**flows}, **params)
+        action = actclass(name=name, flows={**flows}, **params)
         self.actions[name] = action
         self.actions[name].duration=duration
         self.action_graph.add_node(name)
@@ -716,8 +793,7 @@ class FxnBlock(Block):
     Superclass class for functions which is a special type of Block\
     with c and a attributes for CompArch and ASGs, as well as a defined method for propagation
     """
-    def __init__(self,name, flows={}, params={}, p=dict(), s=dict(), c=dict(), a=dict(), r=dict(), m=dict(), t=dict(),
-                 local=dict(), comms=dict()):
+    def __init__(self,name='', flows={}, c=dict(), a=dict(), local=dict(), **kwargs):
         """
         Instantiates the function superclass with the relevant parameters.
 
@@ -740,7 +816,9 @@ class FxnBlock(Block):
         m : dict, optional
             Internal Mode fields/arguments override from defaults. The default is {}.
         t : dict, optional
-            Internal Time fields/arguments to override from defaults. The defautl is {}
+            Internal Time fields/arguments to override from defaults. The default is {}
+        sp : dict, otpional
+            SimParam arguments to override from defaults. The default is {}
         local : dict/list
             Views of MultiFlows to add instantiate local. May be of forms: 
                 - {flowname:(localname, attrs)} (to only create local view of specific attributes)
@@ -752,7 +830,7 @@ class FxnBlock(Block):
                 - {flowname:localname}          (to create view with all attributes)
                 - [flowname1, flowname2...]     (to give overwrite the global flow with the local view of it)
         """        
-        super().__init__(name, flows=flows, p=p, s=s, r=r, m=m, t=t)
+        super().__init__(name=name, flows=flows, **kwargs)
         
         for at in ['c', 'a']: #NOTE: similar to init_obj_attr()
             at_arg = eval(at)
@@ -778,6 +856,24 @@ class FxnBlock(Block):
                 raise Exception(at+" argument provided: "+str(at_arg)+"without associating a CompArch/ASG to _init_"+at)
     def get_typename(self):
         return "FxnBlock"
+    def return_faultmodes(self):
+        """
+        Gets the fault modes present in the simulation (for propagate/model)
+
+        Returns
+        -------
+        ms : list
+            List of faults present.
+        modeprops : dict
+            Dict of corresponding fault mode properties.
+        """
+        ms = [m for m in self.m.faults.copy() if m!='nom']
+        modeprops = dict.fromkeys(ms)
+        for mode in ms: 
+            modeprops[mode] = self.m.faultmodes.get(mode)
+            if mode not in self.m.faultmodes: 
+                raise Exception("Mode "+mode+" not in m.faultmodes for fxn "+self.__class__.__name__+" and may not be tracked.")
+        return ms, modeprops
     def add_local_to_flowdict(self,flowdict, local, ftype):
         """
         Adds local flows to the flow dictionary during initialization
@@ -807,6 +903,20 @@ class FxnBlock(Block):
                 loc_flow = gen_fl(self.name)
                 loc_name = l
             flowdict[loc_name]=loc_flow
+    def update_seed(self, seed=[]):
+        """
+        Updates seed and propogates update to contained actions/components.
+        (keeps seeds in sync)
+
+        Parameters
+        ----------
+        seed : int, optional
+            Random seed. The default is [].
+        """
+        super().update_seed(seed)
+        
+        if hasattr(self, 'c'): self.c.update_seed(self.r.seed)
+        if hasattr(self, 'a'): self.a.update_seed(self.r.seed)
     def copy(self, newflows, *args, **kwargs):
         """
         Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.
@@ -906,8 +1016,8 @@ class FxnBlock(Block):
 class GenericFxn(FxnBlock):
     """Generic function block. For use when the user has not yet defined a class for the
     given (to be implemented) function block. Acts as a placeholder that enables simulation."""
-    def __init__(self, name, flows):
-        super().__init__(name, flows)
+    def __init__(self, name='', flows={}):
+        super().__init__(name =name, flows=flows)
 
 
 

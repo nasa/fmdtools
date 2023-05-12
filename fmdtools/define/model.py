@@ -20,17 +20,14 @@ from .flow import Flow, init_flow
 from .common import check_pickleability, get_var, set_var, init_obj_attr, get_obj_track
 from .parameter import Parameter, SimParam
 from .rand import Rand
+from .block import Simulable
 from fmdtools.analyze.result import History, get_sub_include, init_hist_iter, init_indicator_hist
 
 #Model superclass    
-class Model(object):
-    __slots__ =('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'fxns', 'name',
-                'functionorder', '_fxnflows', '_fxninput', '_flowstates', 'is_copy', 
-                'graph', 'staticfxns', 'dynamicfxns', 'staticflows') #added in self.build())
-    _init_p = Parameter
-    _init_sp = SimParam
-    _init_r = Rand
-    default_track='all'
+class Model(Simulable):
+    __slots__ =['fxns', 'name', 'functionorder', '_fxnflows', '_fxninput', '_flowstates', 'is_copy', 
+                'graph', 'staticfxns', 'dynamicfxns', 'staticflows'] #added in self.build())
+    default_track=('fxns', 'flows', 'i')
     default_name='model'
     """
     Model superclass used to construct the model, return representations of the model, and copy and reset the model when run.
@@ -53,31 +50,9 @@ class Model(object):
         multigraph view of functions and flows
     """
     def __init__(self, name='', p={}, sp={}, r={}, track=''):
-        """
-        Instantiates internal model attributes with predetermined:
+        super().__init__(name=name, p=p, sp=sp, r=r, track=track)
         
-        Parameters
-        ----------
-        p : dict 
-            Parameter values to set
-        sp : dict
-            Simulation parameter values to set
-        r : dict
-            Rand parameter values to set.
-        track dict
-            tracking dictionary
-        """
-        self.is_copy=False
-        self.flows=dict()
         self.fxns=dict()
-        if not track:   self.track=self.default_track 
-        else:           self.track=track
-        if not sp: sp=self.default_sp
-        if not name: self.name=self.default_name
-        else:        self.name=name
-        
-        init_obj_attr(self, p=p, sp=sp, r=r)
-        
         self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
         self._fxnflows=[]
         self._fxninput={}
@@ -103,8 +78,7 @@ class Model(object):
         seed : int, optional
             Seed to use. The default is [].
         """
-        if seed: self.r.update_seed(seed)
-        
+        super().update_seed(seed)
         for fxn in self.fxns:
             self.fxns[fxn].update_seed(self.r.seed)
     def get_rand_states(self, auto_update_only=False):
@@ -216,6 +190,7 @@ class Model(object):
         functionorder : list, optional
             The order for the functions to be executed in. The default is [].
         """
+        self.update_seed()
         if not getattr(self, 'is_copy', False):
             if functionorder: self.set_functionorder(functionorder)
             self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
@@ -275,15 +250,10 @@ class Model(object):
         """
         modes, modeprops = {}, {}
         for fxnname, fxn in self.fxns.items():
-            ms = [m for m in fxn.m.faults.copy() if m!='nom']
+            ms, mps = fxn.return_faultmodes()
             if ms: 
-                modeprops[fxnname] = {}
+                modeprops[fxnname] = mps
                 modes[fxnname] = ms
-            for mode in ms:
-                if mode!='nom': 
-                    modeprops[fxnname][mode] = fxn.m.faultmodes.get(mode)
-                    if mode not in fxn.m.faultmodes: 
-                        raise Exception("Mode "+mode+" not in m.faultmodes for fxn "+fxnname+" and may not be tracked.")
         return modes, modeprops
     def get_memory(self):
         """
@@ -300,15 +270,12 @@ class Model(object):
             mem_profile[flowname]=flow.get_memory()
         mem = np.sum([i for i in mem_profile.values()])
         return mem, mem_profile
-    def new_with_params(self, p={}, sp={}, r={}, track={}):
+    def new_with_params(self, **kwargs):
         """
         Creates a new Model with the same parameters as the current model but
         with changes to params (p, sp, track, rand etc.)
         """
-        p = self.p.copy_with_vals(**p)
-        sp = self.sp.copy_with_vals(**sp)
-        if not r:       r= {'seed':self.r.seed}
-        if not track:   track=copy.deepcopy(self.track)
+        p, sp, r, track = super().new_params(**kwargs)
         return self.__class__(p=p, sp=sp, r=r, track=track)
     def copy(self):
         """
@@ -357,9 +324,6 @@ class Model(object):
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
         self.r.reset()
-    def find_classification(self, scen, mdlhists):
-        """Placeholder for model find_classification methods (for running nominal models)"""
-        return {'rate':scen['properties'].get('rate', 0), 'cost': 1, 'expected cost': scen['properties'].get('rate',0)}
     def return_probdens(self):
         """Returns the probability desnity of the model distributions given a """
         probdens=1.0
@@ -430,7 +394,7 @@ class Model(object):
     def create_hist(self, timerange, track):
         if not hasattr(self, 'h'):
             hist = History()
-            track = get_obj_track(self, track, all_possible=('fxns', 'flows', 'i'))
+            track = get_obj_track(self, track, all_possible=Model.default_track)
             init_indicator_hist(self, hist, timerange, track)
             fxn_track = get_sub_include('fxns', track)
             if fxn_track:
@@ -438,12 +402,7 @@ class Model(object):
                 for fxnname, fxn in self.fxns.items():
                     fh = fxn.create_hist(timerange, get_sub_include(fxnname, fxn_track))
                     if fh: hist.fxns[fxnname]=fh
-            flow_track = get_sub_include('flows', track)
-            if flow_track:
-                hist['flows']=History()
-                for flowname, flow in self.flows.items():
-                    fh = flow.create_hist(timerange, get_sub_include(flowname, flow_track))
-                    if fh: hist.flows[flowname] = fh
+            self.add_flow_hist(hist, timerange, track)
             #if len(hist)<len(track) and track!='all': #TODO: this warning should be valid for all hists
             #    raise Exception("History doesn't match tracking options (are names correct?): \n track="+str(track)+"\n hist= \n"+str(hist))
             self.h = hist.flatten()

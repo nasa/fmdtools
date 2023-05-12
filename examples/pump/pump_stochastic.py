@@ -5,20 +5,7 @@ Author: Daniel Hulse
 Created: October 2019
 Description: A simple model for explaining stochastic behavior modelling
 
-This model constitudes an extremely simple functional model of an electric-powered pump.
-
-The functions are:
-    -import EE
-    -import Water
-    -import Signal
-    -move Water
-    -export Water
-
-The flows are:
-    - EE (to power the pump)
-    - Water_in
-    - Water_out
-    - Signal input (on/off)
+This model is an exension of ex_pump.py that includes stochastic behaviors
 """
 from fmdtools.define.rand import Rand
 from fmdtools.define.state import State
@@ -30,10 +17,7 @@ import fmdtools.analyze as an
 import fmdtools.sim.propagate as propagate
 import numpy as np
 
-"""
-DEFINE MODEL FUNCTIONS
-Functions are defined using Python classes that are instantiated as objects
-"""
+
 from ex_pump import ImportWater, ExportWater
 from ex_pump import ImportEE as DetImportEE
 

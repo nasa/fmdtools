@@ -198,7 +198,16 @@ class MoveWatMode(Mode):
     faultparams = {'mech_break':(0.6, [0.1, 1.2, 0.1], 5000), 'short':(1.0, [1.5, 1.0, 1.0], 10000)}
     key_phases_by ='global'
 class MoveWat(FxnBlock):
-    """  Move Water is the pump itself. While one could decompose this further, one function is used for simplicity """
+    """  
+    Move Water is the pump itself. While one could decompose this further, one function is used for simplicity.
+    
+    In this function, more states are initialized than flows:
+        - states (internal variables to be given to the function)
+            states are given as {'name':initval}
+        - timers (objects that keep track of time), given as a set of timer names
+
+        We also have a parameter `delay` which we use to change a design variable in the function
+    """
     __slots__ = ['ee_in', 'sig_in', 'wat_in', 'wat_out']
     _init_s = MoveWatStates
     _init_p = MoveWatParams
@@ -209,15 +218,6 @@ class MoveWat(FxnBlock):
     _init_wat_in = Water 
     _init_wat_out = Water
     flownames = {"ee_1":"ee_in", "sig_1":"sig_in", "wat_1":"wat_in", "wat_2":"wat_out"}
-    def __init__(self,name, flows,  **kwargs):
-        """ In this function, more states are initialized than flows:
-            - states (internal variables to be given to the function)
-                states are given as {'name':initval}
-            - timers (objects that keep track of time), given as a set of timer names
-
-            We also have a parameter `delay` which we use to change a design variable in the function
-        """
-        super().__init__(name,flows=flows, **kwargs)
     def condfaults(self, time):
         """
             Here we use the timer to define a conditional fault that only occurs after a state is present after 10 seconds.

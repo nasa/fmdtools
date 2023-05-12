@@ -181,7 +181,7 @@ def get_obj_track(obj, track, all_possible=()):
         fields to track
     """
     if track=='default':            track=obj.default_track
-    elif track=='all':              track=all_possible
+    if track=='all':                track=all_possible
     elif track in ['none', False]:  track=()
     elif type(track)==str:              track=(track,)
     return track
@@ -191,6 +191,8 @@ def t_key(time):
     as an attribute of an object/dict, e.g. endresults.t10p0, the result at time
     t=10.0"""
     return 't'+'p'.join(str(time).split('.'))
+
+
 
 # def phases(times, names=[]):
 #     """ Creates named phases from a set of times defining the edges of the intervals """
