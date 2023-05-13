@@ -509,7 +509,7 @@ class Rover(Model):
         in_bound = all(mdlhist.faulty.fxns.environment.s.in_bound)
         line_dist = find_line_dist(self.flows['ground'].s.x,self.flows['ground'].s.y, mdlhist.nominal.flows.ground.s.linex, mdlhist.nominal.flows.ground.s.liney)
 
-        return {'rate':0,'cost':0, 'prob':scen['properties'].get('prob',1), 
+        return {'rate':0,'cost':0, 'prob':scen.rate, 
                 'expected cost':0, 'in_bound':in_bound, 'at_finish':at_finish, 
                 'line_dist':line_dist, 'num_modes':num_modes, 'end_dist':end_dist, 
                 'tot_deviation':tot_deviation, 'faults':modes, 'classification':classification, 

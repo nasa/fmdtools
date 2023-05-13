@@ -45,8 +45,9 @@ result, mdlhist = nominal(a, track='all')
 
 plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
 
-result, mdlhist = one_fault(a, "movewat", "short", track='all')
+result, mdlhist = one_fault(a, "short", time=10, track='all')
 
+plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
                     
 
             

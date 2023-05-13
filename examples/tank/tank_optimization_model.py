@@ -168,7 +168,7 @@ class Tank(Model):
         buffercost = sum(self.h.fxns.store_coolant.s.coolingbuffer<=0)*100000     #if the buffer is 'spent'
         mitigationcost = (sum(self.h.flows.input_sig.s.action!=0)+ sum(self.h.flows.output_sig.s.action!=0))*1000
         totcost = overfullcost + emptycost + buffercost + mitigationcost
-        rate=scen['properties']['rate']
+        rate=scen.rate
         life=1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': rate*life*totcost}
 

@@ -64,9 +64,9 @@ def metricovertime(endclasses, app, metric='cost'):
     expected_metric = "expected "+metric
     met_overtime={metric:{time:0.0 for time in app.times}, 'rate':{time:0.0 for time in app.times}, expected_metric:{time:0.0 for time in app.times}}
     for scen in app.scenlist:
-        met_overtime[metric][scen['properties']['time']]+=endclasses[scen['properties']['name']][metric]
-        met_overtime['rate'][scen['properties']['time']]+=endclasses[scen['properties']['name']]['rate']
-        met_overtime[expected_metric][scen['properties']['time']]+=endclasses[scen['properties']['name']][expected_metric] 
+        met_overtime[metric][scen.time]+=endclasses[scen.name][metric]
+        met_overtime['rate'][scen.time]+=endclasses[scen.name]['rate']
+        met_overtime[expected_metric][scen.time]+=endclasses[scen.name][expected_metric] 
     return pd.DataFrame.from_dict(met_overtime)
 def samptime(sampletimes):
     """Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)"""
@@ -140,11 +140,11 @@ def nominal_stats(nomapp, nomapp_endclasses, metrics='all', inputparams='from_ra
         elif len(ranges)==1:                                        app_range=ranges[0]
         else: raise Exception("Multiple approach ranges "+str(ranges)+" in approach. Use inputparams=`all` or inputparams=[param1, param2,...]")
         inputparams= [*nomapp.ranges[app_range]['inputranges']]
-    elif inputparams=='all':    inputparams=[*nomapp.scenarios.values()][0]['properties']['inputparams']
+    elif inputparams=='all':    inputparams=[*nomapp.scenarios.values()][0].inputparams
     elif inputparams=='none':   inputparams=[]
     table_values=[]
     for inputparam in inputparams:
-        table_values.append([nomapp.scenarios[e]['properties']['inputparams'][inputparam] for e in scens])
+        table_values.append([nomapp.scenarios[e].inputparams[inputparam] for e in scens])
     for metric in metrics:
         table_values.append([nomapp_endclasses[e][metric] for e in scens])
     table = pd.DataFrame(table_values, columns=[*nomapp_endclasses], index=inputparams+metrics)
@@ -371,10 +371,10 @@ def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[],
         else: raise Exception("Multiple approach ranges "+str(ranges)+" in approach. Use inputparams=`all` or inputparams=[param1, param2,...]")
         inputparams= [*nomapp.ranges[app_range]['p']]
     elif inputparams=='all':
-        inputparams=[*nomapp.scenarios.values()][0]['properties']['p']
+        inputparams=[*nomapp.scenarios.values()][0].p
     table_values=[]; table_rows = inputparams
     for inputparam in inputparams:
-        table_values.append([nomapp.scenarios[e]['properties']['p'][inputparam] for e in scens])
+        table_values.append([nomapp.scenarios[e].p[inputparam] for e in scens])
     for metric in percent_metrics:  
         table_values.append([nested_endclasses.get(e).percent(metric) for e in scens])
         table_rows.append('perc_'+metric)

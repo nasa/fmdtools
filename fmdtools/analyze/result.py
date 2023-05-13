@@ -531,7 +531,7 @@ class Result(UserDict):
         nomhist = {k:v for k,v in mh.nominal.items() if is_numeric(v)}
         newhists = {k:hist for k, hist in mh.items() if not('nominal' in k and not(with_nominal))}
         if app:
-            weights = [w['properties']['rate'] for w in app.scenlist]
+            weights = [w.rate for w in app.scenlist]
             if with_nominal: weights.append(1)
         else: 
             weights = [1 for k in newhists]

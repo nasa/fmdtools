@@ -191,6 +191,11 @@ def t_key(time):
     as an attribute of an object/dict, e.g. endresults.t10p0, the result at time
     t=10.0"""
     return 't'+'p'.join(str(time).split('.'))
+def eq_units(rateunit, timeunit):
+    """Provides conversion factor for from rateunit (str) to timeunit (str)
+    Options for units are: 'sec', 'min', 'hr', 'day', 'wk', 'month', and 'year' """
+    factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
+    return factors[timeunit]/factors[rateunit]
 
 
 

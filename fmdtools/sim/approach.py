@@ -11,6 +11,7 @@ import numpy as np
 from collections.abc import Hashable
 from operator import itemgetter
 from fmdtools.define.common import t_key
+from .scenario import Scenario, SingleFaultScenario, JointFaultScenario, NominalScenario, ParamScenario
 import itertools
 import copy
 
@@ -62,8 +63,7 @@ class NominalApproach():
         for i in range(len(seeds)):
             self.num_scenarios+=1
             scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname]={'sequence':{},'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                                'r':{'seed':int(seeds[i])}, 'prob':1/len(seeds)}}
+            self.scenarios[scenname]= NominalScenario(rangeid=rangeid, r={'seed':int(seeds[i])}, prob=1/len(seeds), name=scenname)
             self.ranges[rangeid]['scenarios'].append(scenname)
     def add_param_replicates(self,paramfunc, rangeid, replicates, *args, ind_seeds=True, **kwargs):
         """
@@ -96,10 +96,13 @@ class NominalApproach():
             self.num_scenarios+=1
             p = paramfunc(*args, **kwargs)
             scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname]={'sequence':{},\
-                                      'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                    'p':p,'inputparams':kwargs,'r':{'seed':int(seeds[i])},\
-                                                    'paramfunc':paramfunc, 'fixedargs':args, 'prob':1/replicates}}
+            self.scenarios[scenname]=ParamScenario(name=scenname,
+                                                   rangeid=rangeid,
+                                                   p=p,
+                                                   r={'seed':int(seeds[i])},
+                                                   paramfunc=paramfunc,
+                                                   fixedargs=args,
+                                                   prob=1/replicates)
             self.ranges[rangeid]['scenarios'].append(scenname)
     def get_param_scens(self, rangeid, *level_params):
         """
@@ -184,10 +187,15 @@ class NominalApproach():
                 self.num_scenarios+=1
                 p = paramfunc(*args, **inputparams)
                 scenname = rangeid+'_'+str(self.num_scenarios)
-                self.scenarios[scenname]={'sequence':{},\
-                                          'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                        'p':p,'inputparams':inputparams,'r':{'seed':int(mdlseeds[i])},\
-                                                        'paramfunc':paramfunc, 'fixedargs':args, 'fixedkwargs':fixedkwargs, 'prob':1/(len(fullspace)*replicates)}}
+                self.scenarios[scenname]= ParamScenario(name=scenname, 
+                                                        rangeid=rangeid, 
+                                                        p=p, 
+                                                        r={'seed':int(seeds[i])}, 
+                                                        paramfunc=paramfunc,
+                                                        fixedargs=args,
+                                                        fixedkwargs=fixedkwargs,
+                                                        prob = 1/(len(fullspace)*replicates))
+
                 self.ranges[rangeid]['scenarios'].append(scenname)
                 if replicates>1:    self.ranges[rangeid]['levels'][level_key].append(scenname)
                 else:               self.ranges[rangeid]['levels'][level_key]=scenname
@@ -214,31 +222,7 @@ class NominalApproach():
         for i, level in enumerate(levels):
             scens = [scen for lev, scen in self.ranges[rangeid]['levels'].items() if lev[param_loc]==level]
             for scen in scens:
-                self.scenarios[scen]['properties']['r']['seed'] = int(seeds[i])
-            
-    def change_params(self, rangeid='all', **kwargs):
-        """
-        Changes a given parameter across all scenarios. Modifies 'p' (rather than regenerating p from the paramfunc).
-
-        Parameters
-        ----------
-        rangeid : str
-            Name of the range to modify. Optional. Defaults to "all"
-        **kwargs : any
-            Parameters to change stated as paramname=value or 
-            as a dict paramname={'sub_param':value}, where 'sub_param' is the parameter of the dictionary with name paramname to update
-        """
-        for r in self.ranges:
-            if rangeid=='all' or rangeid==r: 
-                if not self.ranges.get('changes', False):   self.ranges[r]['changes'] = kwargs
-                else:                                       self.ranges[r]['changes'].update(kwargs)
-        for scenname, scen in self.scenarios.items():
-            if rangeid=='all' or rangeid==scen['properties']['rangeid']:
-                if not scen['properties'].get('changes', False):  scen['properties']['changes']=kwargs
-                else:                                             scen['properties']['changes'].update(kwargs)
-                for kwarg, kw_value in kwargs.items(): #updates 
-                    if type(kw_value)==dict:    scen['properties']['p'][kwarg].update(kw_value)
-                    else:                       scen['properties']['p'][kwarg]=kw_value
+                self.scenarios[scen].r['seed'] = int(seeds[i])
     def assoc_probs(self, rangeid, prob_weight=1.0, **inputpdfs):
         """
         Associates a probability model (assuming variable independence) with a 
@@ -259,12 +243,12 @@ class NominalApproach():
             as the key/parameter inputs to the pdf
         """
         for scenname in self.ranges[rangeid]['scenarios']:
-            inputparams = self.scenarios[scenname]['properties']['inputparams']
+            inputparams = self.scenarios[scenname].inputparams
             inputprobs = [inpdf[0](inputparams[name], **inpdf[1]) for name, inpdf in inputpdfs.items()]
-            self.scenarios[scenname]['properties']['prob'] = np.prod(inputprobs)
-        totprobs = sum([self.scenarios[scenname]['properties']['prob'] for scenname in self.ranges[rangeid]['scenarios']])
+            self.scenarios[scenname].prob = np.prod(inputprobs)
+        totprobs = sum([self.scenarios[scenname].prob for scenname in self.ranges[rangeid]['scenarios']])
         for scenname in self.ranges[rangeid]['scenarios']:
-            self.scenarios[scenname]['properties']['prob'] = self.scenarios[scenname]['properties']['prob']*prob_weight/totprobs
+            self.scenarios[scenname].prob = self.scenarios[scenname].prob*prob_weight/totprobs
     def add_rand_params(self, paramfunc, rangeid, *fixedargs, prob_weight=1.0, replicates=1000, seeds='shared', **randvars):
         """
         Adds a set of random scenarios to the approach.
@@ -307,10 +291,14 @@ class NominalApproach():
             inputparams = {name: (ins() if callable(ins) else ins[0](*ins[1:])) for name, ins in randvars.items()}
             p = paramfunc(*fixedargs, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname]={'sequence':{},\
-                                      'properties':{'type':'nominal','time':0.0, 'name':scenname, 'rangeid':rangeid,\
-                                                    'p':p,'inputparams':inputparams,'r':{'seed':int(mdlseeds[i])},\
-                                                    'paramfunc':paramfunc, 'fixedargs':fixedargs, 'prob':prob_weight/replicates}}
+            self.scenarios[scenname] = ParamScenario(name=scenname, 
+                                                    rangeid=rangeid, 
+                                                    p=p, 
+                                                    r={'seed':int(mdlseeds[i])}, 
+                                                    paramfunc=paramfunc,
+                                                    fixedargs=fixedargs,
+                                                    inputparams=inputparams,
+                                                    prob = prob_weight/replicates)
             self.ranges[rangeid]['scenarios'].append(scenname)
     def copy(self):
         """Copies the given sampleapproach. Used in nested scenario sampling."""
@@ -775,14 +763,6 @@ class SampleApproach():
                 else: self.sampletimes[phaseid][time] = [(fxnmode)]
                 if any(weights): self.weights[fxnmode][phaseid][time] = weights[ind]
                 else:       self.weights[fxnmode][phaseid][time] = 1/len(phasetimes)
-    def create_nomscen(self, mdl):
-        """ Creates a nominal scenario """
-        nomscen={'sequence':{},'properties':{}}
-        nomscen['properties']['time']=0.0
-        nomscen['properties']['type']='nominal'
-        nomscen['properties']['name']='nominal'
-        nomscen['properties']['weight']=1.0
-        return nomscen
     def create_scenarios(self):
         """ Creates list of scenarios to be iterated over in fault injection. Added as scenlist and scenids """
         self.scenlist=[]
@@ -799,17 +779,22 @@ class SampleApproach():
                             rate = self.rates[fxnmode][phaseid] * self.weights[fxnmode][phaseid][time]
                         if type(fxnmode[0])==str:
                             name = fxnmode[0]+'_'+fxnmode[1]+'_'+t_key(time)
-                            scen={'sequence':{time:{'faults':{fxnmode[0]:fxnmode[1]}}},\
-                                  'properties':{'type': 'single-fault', 'function': fxnmode[0],\
-                                                'fault': fxnmode[1], 'rate': rate, 'time': time, 'name': name}}
+                            scen = SingleFaultScenario(sequence = {time:{'faults':{fxnmode[0]:fxnmode[1]}}},
+                                            function = fxnmode[0],
+                                            fault = fxnmode[1],
+                                            rate = rate,
+                                            time = time,
+                                            name=name)
                         else:
                             name = ' '.join([fm[0]+'_'+fm[1]+'_' for fm in fxnmode])+t_key(time)
                             faults = dict.fromkeys([fm[0] for fm in fxnmode])
                             for fault in faults:
                                 faults[fault] = [fm[1] for fm in fxnmode if fm[0]==fault]
-                            scen = {'sequence':{time:{'faults':faults}},\
-                                    'properties':{'type': str(len(fxnmode))+'-joint-faults', 'functions':{fm[0] for fm in fxnmode}, \
-                                    'modes':{fm[1] for fm in fxnmode}, 'rate': rate, 'time': time, 'name': name}}
+                            scen = JointFaultScenario(sequence = {time:{'faults':faults}},
+                                                      joint_faults=len(fxnmode),
+                                                      functions = tuple(fm[0] for fm in fxnmode),
+                                                      modes = tuple(fm[1] for fm in fxnmode),
+                                                      rate=rate, time=time, name=name)
                         self.scenlist=self.scenlist+[scen]
                         if self.scenids.get((fxnmode, phaseid)): self.scenids[fxnmode, phaseid] = self.scenids[fxnmode, phaseid] + [name]
                         else: self.scenids[fxnmode, phaseid] = [name]
@@ -875,14 +860,14 @@ class SampleApproach():
                     weights = weights + list(np.array(part_weights)*overall_part_weight)
                 pts.sort()
             newscenids[modeinphase] =  [self.scenids[modeinphase][pt] for pt in pts]
-            newscens = [scen for scen in self.scenlist if scen['properties']['name'] in newscenids[modeinphase]]
-            newweights[modeinphase[0]][modeinphase[1]] = {scen['properties']['time']:weights[ind] for (ind, scen) in enumerate(newscens)}
+            newscens = [scen for scen in self.scenlist if scen.name in newscenids[modeinphase]]
+            newweights[modeinphase[0]][modeinphase[1]] = {scen.name:weights[ind] for (ind, scen) in enumerate(newscens)}
             newscenids[modeinphase] =  [self.scenids[modeinphase][pt] for pt in pts]
             for newscen in newscens:
-                if not newsampletimes[modeinphase[1]].get(newscen['properties']['time']):
-                    newsampletimes[modeinphase[1]][newscen['properties']['time']] = [modeinphase[0]]
+                if not newsampletimes[modeinphase[1]].get(newscen.time):
+                    newsampletimes[modeinphase[1]][newscen.time] = [modeinphase[0]]
                 else:
-                    newsampletimes[modeinphase[1]][newscen['properties']['time']] = newsampletimes[modeinphase[1]][newscen['properties']['time']] + [modeinphase[0]]
+                    newsampletimes[modeinphase[1]][newscen.time] = newsampletimes[modeinphase[1]][newscen.time] + [modeinphase[0]]
         self.scenids = newscenids
         self.weights = newweights
         self.sampletimes = newsampletimes
@@ -932,8 +917,8 @@ class SampleApproach():
         elif group_by=='times':
             grouped_scens = {float(t):set() for t in set(self.times)}
             for scen in self.scenlist: 
-                time = float(scen['properties']['time'])
-                grouped_scens[time].add(scen['properties']['name'])
+                time = float(scen.time)
+                grouped_scens[time].add(scen.name)
         elif group_by=='fxnclass':
             fxn_groups = {sub_v:k for k,v in group_dict.items() for sub_v in v}
             grouped_scens= {fxn_groups[fxnmode[0]]:set() for fxnmode in self.list_modes(True)}

@@ -22,7 +22,7 @@ from recordclass import dataobject, asdict, astuple
 from .state import State
 from .parameter import Parameter, SimParam
 from .rand import Rand
-from .common import get_true_fields,get_true_field, init_obj_attr, get_obj_track
+from .common import get_true_fields,get_true_field, init_obj_attr, get_obj_track, eq_units
 from .time import Time
 from .mode import Mode
 from .flow import init_flow, Flow
@@ -85,10 +85,9 @@ class Simulable(object):
     
     Note that classes soley based on Simulable may not themselves be able to be simulated.
     """
-    __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows')
+    __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows',  'name' ,'is_copy')
     default_sp = []
     _init_p = Parameter
-    _init_s = State
     _init_r = Rand
     def __init__(self, name='', p={}, sp={}, r={}, track={}):
         """
@@ -134,7 +133,7 @@ class Simulable(object):
         if seed: self.r.update_seed(seed)
     def find_classification(self, scen, mdlhists):
         """Placeholder for model find_classification methods (for running nominal models)"""
-        return {'rate':scen['properties'].get('rate', 0), 'cost': 1, 'expected cost': scen['properties'].get('rate',0)}
+        return {'rate':scen.rate, 'cost': 1, 'expected cost': scen.rate}
     def new_params(self, p={}, sp={}, r={}, track={}):
         p = self.p.copy_with_vals(**p)
         sp = self.sp.copy_with_vals(**sp)
@@ -144,8 +143,9 @@ class Simulable(object):
 
 
 class Block(Simulable):
-    __slots__ = ['s', '_args_s','m', '_args_m', 't', '_args_t',  'name' ,'is_copy']
+    __slots__ = ['s', '_args_s','m', '_args_m', 't', '_args_t']
     default_track = ['s', 'm', 'r', 't', 'i']
+    _init_s = State
     _init_m = Mode
     _init_t = Time
     _init_sp = SimParam
@@ -408,6 +408,22 @@ class Block(Simulable):
                 if flows_mutables[flowname]!=newflowmutables:
                     active=True
                     flows_mutables[flowname] = newflowmutables
+    def get_scen_rate(self, faultmode, time):
+        fm= self.m
+        if not fm.faultmodes.get(faultmode, False): 
+            raise Exception("faultmode "+faultmode+" not in "+str(fm.__class__))
+        else:
+            #if hasattr(fxn, 'c') and faultmode in fxn.c.faultmodes:
+            #    fxn = fxn.c.components[fxn.c.faultmodes[faultmode]]
+            #    faultmode = faultmode[len(fxn.name):]
+            #elif faultmode in fxn.actfaultmodes:
+            #    fxn = fxn.actions[fxn.actfaultmodes[faultmode]]
+            #    faultmode = faultmode[len(fxn.name):]
+            if fm.faultmodes[faultmode].probtype=='rate':
+                rate = fm.failrate*fm.faultmodes[faultmode]['dist']*eq_units(fm.faultmodes[faultmode]['units'], self.sp.units)*(self.sp.times[-1]-self.sp.times[0]) # this rate is on a per-simulation basis
+            elif fm.faultmodes[faultmode].probtype=='prob':
+                rate = fm.failrate*fm.faultmodes[faultmode]['dist'] 
+        return rate
 
 ## COMPONENT/COMPONENT ARCHITECTURES
 class Component(Block):

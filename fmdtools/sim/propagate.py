@@ -5,7 +5,7 @@ Description: functions to propagate faults through a user-defined fault model
 Main Methods:
     - :func:`nominal()`:            Runs the model over time in the nominal scenario.
     - :func:`one_fault()`:          Runs one fault in the model at a specified time.
-    - :func:`mult_fault()`:         Runs arbitrary scenario of fault modes at specified times
+    - :func:`sequence()'         Runs arbitrary scenario of fault modes at specified times
     - :func:`single_faults()`:       Creates and propagates a list of failure scenarios in a model over given model times
     - :func:`approach`:             Injects and propagates faults in the model defined by a given sample approach.
     - :func:`nominal_approach`:     Simulates a model over a range of parameters defined by a nominal approach.
@@ -34,6 +34,7 @@ import dill
 import os
 from fmdtools.define.common import get_var, t_key
 from .approach import SampleApproach
+from .scenario import create_sequence, Scenario, SingleFaultScenario
 from fmdtools.analyze.result import Result, History,  create_indiv_filename, file_check
 from fmdtools.analyze.graph import graph_factory
 
@@ -242,8 +243,8 @@ def nominal_approach(mdl,nomapp, **kwargs):
 def unpack_res_list(scenlist, res_list):
     results= Result()
     mdlhists = History()
-    results.data = { scen['properties']['name']: res_list[i][0] for i, scen in enumerate(scenlist)}
-    mdlhists.data = {scen['properties']['name']: res_list[i][1] for i, scen in enumerate(scenlist)}
+    results.data = { scen.name: res_list[i][0] for i, scen in enumerate(scenlist)}
+    mdlhists.data = {scen.name: res_list[i][1] for i, scen in enumerate(scenlist)}
     return results, mdlhists
 
 def exec_nom_par(arg):
@@ -251,13 +252,13 @@ def exec_nom_par(arg):
     return endclass, mdlhist
 def exec_nom_helper(mdl, scen, name, **kwargs):
     """Helper function for executing nominal scenarios"""
-    mdl = mdl.new_with_params(p=scen['properties'].get('p', {}), sp=scen['properties'].get('sp', {}), r=scen['properties'].get('r', {}))
+    mdl = mdl.new_with_params(p=scen.p, sp=scen.sp, r=scen.r)
     result, mdlhist, _, t_end =prop_one_scen(mdl, scen, **kwargs)
     check_hist_memory(mdlhist,kwargs['num_scens'], max_mem=kwargs['max_mem'])
     save_helper(kwargs['save_args'], result, mdlhist, name, name)
     return result, mdlhist
 
-def one_fault(mdl, fxnname, faultmode, time=1, **kwargs):
+def one_fault(mdl, *fxnfault, time=1, **kwargs):
     """
     Runs one fault in the model at a specified time.
 
@@ -265,10 +266,10 @@ def one_fault(mdl, fxnname, faultmode, time=1, **kwargs):
     ----------
     mdl : Model
         The model to inject the fault in.
-    fxnname : str
-        Name of the function with the faultmode
-    faultmode : str
-        Name of the faultmode
+    *fxnfault:
+        - fxnname, faultmode when a Model is provided, or
+        
+        - faultmode when a Block/FxnBlock is provided
     time : float, optional
         Time to inject fault. Must be in the range of model times (i.e. in range(0, end, mdl.sp.dt)). The default is 0.
     **kwargs : kwargs
@@ -284,49 +285,33 @@ def one_fault(mdl, fxnname, faultmode, time=1, **kwargs):
     mdlhists : dict
         A dictionary of the states of the model of each fault scenario over time with structure: {'nominal':nomhist, 'faulty':faulthist}
     """
-    faultseq = {time:{fxnname:faultmode}}
-    disturbances={}
-    scen= create_single_fault_scen(mdl, fxnname, faultmode, time)
-    result, mdlhists = mult_fault(mdl, faultseq, disturbances, scen=scen, **kwargs)
+    if len(fxnfault)==2: fxnname, fault = fxnfault
+    else:                fxnname, fault = mdl.name, fxnfault[0] 
+    seq = create_sequence(faultseq={time:{fxnname:fault}})
+    
+    scen= SingleFaultScenario(sequence = seq,
+                              fault = fault,
+                              function = fxnname,
+                              time = time)
+    result, mdlhists = sequence(mdl, scen=scen, **kwargs)
     return result.flatten(), mdlhists.flatten()
-def create_single_fault_scen(mdl, fxnname, faultmode, time):
-    scen=construct_nomscen(mdl) #note: this is a shallow copy, so don't define it earlier
-    scen['sequence'][time]={'faults':{fxnname:faultmode}}
-    scen['properties']['type']='single fault'
-    scen['properties']['function']=fxnname
-    scen['properties']['fault']=faultmode
-    fxn = mdl.fxns[fxnname]
-    fm= fxn.m
-    if not fm.faultmodes.get(faultmode, False): 
-        raise Exception("faultmode "+faultmode+" not in "+str(fm.__class__)+" for "+fxnname)
-    else:
-        #if hasattr(fxn, 'c') and faultmode in fxn.c.faultmodes:
-        #    fxn = fxn.c.components[fxn.c.faultmodes[faultmode]]
-        #    faultmode = faultmode[len(fxn.name):]
-        #elif faultmode in fxn.actfaultmodes:
-        #    fxn = fxn.actions[fxn.actfaultmodes[faultmode]]
-        #    faultmode = faultmode[len(fxn.name):]
-        if fm.faultmodes[faultmode].probtype=='rate':
-            scen['properties']['rate']=fm.failrate*fm.faultmodes[faultmode]['dist']*eq_units(fm.faultmodes[faultmode]['units'], mdl.sp.units)*(mdl.sp.times[-1]-mdl.sp.times[0]) # this rate is on a per-simulation basis
-        elif fm.faultmodes[faultmode].probtype=='prob':
-            scen['properties']['rate'] = fm.failrate*fm.faultmodes[faultmode]['dist'] 
-    scen['properties']['time']=time
-    return  scen
 
-def mult_fault(mdl, faultseq, disturbances, scen={}, rate=np.NaN, **kwargs):
+def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **kwargs):
     """
-    Runs a sequence of faults in the model at given times.
+    Runs a sequence of faults and disturbances in the model at given times.
 
     Parameters
     ----------
     mdl : Model
         The model to inject the fault in.
+    seq : dict
+        Scenario dict defining the scenario {time:{`faults`:faults, `disturbances`:disturbances}}
     faultseq : dict
         Dict of times and modes defining the fault scenario {time:{fxns: [modes]},}
     disturbances : dict
         Dict of times and modes defining the disturbances in the scenario {time:{fxns: [modes]},}
-    scen : dict, optional
-        Scenario dictionary (for external calls)
+    scen : Scenario, optional
+        Scenario dictionary, if already constructed (for external calls)
     rate : float, optional
         Input rate for the sequence (must be calculated elsewhere)
     **kwargs : kwargs
@@ -344,25 +329,20 @@ def mult_fault(mdl, faultseq, disturbances, scen={}, rate=np.NaN, **kwargs):
     """
     sim_kwarg = pack_sim_kwargs(**kwargs)
     run_kwarg = pack_run_kwargs(**kwargs)
-    nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, [min(faultseq)], **{**sim_kwarg, 'use_end_condition':False}, **run_kwarg)
+    
+    if not scen: 
+        if not seq: seq = create_sequence(faultseq=faultseq, disturbances=disturbances)
+        scen = Scenario(sequence=seq, rate=rate, name='faulty', times=tuple(*seq.keys()))
+    
+    nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, [min(scen.sequence)], **{**sim_kwarg, 'use_end_condition':False}, **run_kwarg)
     mdl = [*mdls.values()][0]
-    if not scen: scen = create_faultseq_scen(mdl, rate, faultseq=faultseq, disturbances=disturbances)
+        
     result, faulthist, _, t_end = prop_one_scen(mdl, scen, **sim_kwarg, nomhist=nomhist, nomresult=nomresult)
     nomhist.cut(t_end_nom)
     mdlhists = History(nominal=nomhist, faulty=faulthist)
     if kwargs.get('protect', False): mdl.reset()
     save_helper(kwargs.get('save_args',{}), result, mdlhists)
     return result.flatten(), mdlhists.flatten()
-def create_faultseq_scen(mdl, rate, sequence={}, faultseq={}, disturbances={}):
-    scen=construct_nomscen(mdl) #note: this is a shallow copy, so don't define it earlier
-    times = {*faultseq, *disturbances}
-    if not sequence: scen['sequence']= {t:{'faults':faultseq.get(t, {}), 'disturbances': disturbances.get(t, {})} for t in times}
-    else:            scen['sequence']=sequence
-    scen['properties']['type']='sequence'
-    scen['properties']['sequence']=scen['sequence']
-    scen['properties']['rate']=rate # this rate is on a per-simulation basis
-    scen['properties']['time']=list(times)
-    return scen
 
 def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, **kwargs):
     """
@@ -395,8 +375,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, 
     #run model nominally, get relevant results
     if isinstance(mdl, type):       mdl = mdl(**mdl_kwargs)  
     elif protect or mdl_kwargs:     mdl = mdl.new_with_params(**mdl_kwargs)
-    if not scen:    nomscen=construct_nomscen(mdl)
-    else:           nomscen=create_faultseq_scen(mdl, scen, rate=1.0)
+    if not scen:    nomscen=Scenario()
+    else:           nomscen=scen
     if staged:  
         if type(ctimes) in [float, int]:ctimes=[ctimes]
         else:                           ctimes=ctimes
@@ -497,15 +477,15 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     if pool:
         check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
         if staged:  
-            inputs = [(c_mdl[scen['properties']['time']], scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
+            inputs = [(c_mdl[min(scen.times)], scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
         else:       
             inputs = [(mdl, scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
         res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         results, mdlhists = unpack_res_list(scenlist, res_list)
     else:
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
-            name = scen['properties']['name']
-            if staged:  mdl_i = c_mdl[scen['properties']['time']]
+            name = scen.name
+            if staged:  mdl_i = c_mdl[min(scen.times)]
             else:       mdl_i = mdl
             ec, mh, t_end = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
             results[name],mdlhists[name] = ec, mh
@@ -542,7 +522,7 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
         else: mdl = mdl.copy()
     else:                           mdl = mdl.new_with_params()
     result, mdlhist, _, t_end,  =prop_one_scen(mdl, scen, **kwargs)
-    save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen['properties']['name']))
+    save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
     return result, mdlhist, t_end
 
 def check_hist_memory(mdlhist, nscens, max_mem=2e9):
@@ -616,7 +596,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     nest_results = Result.fromkeys(nomapp.scenarios)
     apps = dict.fromkeys(nomapp.scenarios)
     for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="NESTED SCENARIOS COMPLETE"):
-        mdl = mdl.new_with_params(p=scen['properties'].get('p', {}), sp=scen['properties'].get('sp', {}), r=scen['properties'].get('r', {}))
+        mdl = mdl.new_with_params(p=scen.p, sp=scen.sp, r=scen.r)
         _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **{**sim_kwarg, 'staged':False})
         if get_phases:
             app_args.update({'phases':phases_from_hist(get_phases, t_end, nomhist)})
@@ -624,7 +604,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
         apps[scenname]=app
         check_hist_memory(nomhist,len(app.scenlist)*nomapp.num_scenarios, max_mem=max_mem)
         
-        nest_results[scenname], nest_mdlhists[scenname] = approach(mdl, app, pool=pool, showprogress=False, **sim_kwarg, **scen['properties'])
+        nest_results[scenname], nest_mdlhists[scenname] = approach(mdl, app, pool=pool, showprogress=False, **sim_kwarg, **scen)
         save_helper(save_args, nest_results[scenname], nest_mdlhists[scenname], indiv_id=scenname, result_id=scenname)
     save_helper(save_args, nest_results, nest_mdlhists)
     if save_app:
@@ -639,31 +619,6 @@ def phases_from_hist(get_phases, t_end, nomhist):
         if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
         elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
     return phases
-
-def construct_nomscen(mdl):
-    """
-    Creates a nominal scenario nomscen given a graph object g by setting all function modes to nominal.
-
-    Parameters
-    ----------
-    mdl : Model
-
-    Returns
-    -------
-    nomscen : scen
-    """
-    nomscen={'sequence':{}, 'properties':{}}
-    nomscen['properties']['time']=0.0
-    nomscen['properties']['rate']=1.0
-    nomscen['properties']['type']='nominal'
-    return nomscen
-
-
-def eq_units(rateunit, timeunit):
-    """Provides conversion factor for from rateunit (str) to timeunit (str)
-    Options for units are: 'sec', 'min', 'hr', 'day', 'wk', 'month', and 'year' """
-    factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
-    return factors[timeunit]/factors[rateunit]
 
 def list_init_faults(mdl):
     """
@@ -685,14 +640,13 @@ def list_init_faults(mdl):
         for fxnname, fxn in mdl.fxns.items():
             fm=fxn.m
             for mode in fm.faultmodes:
-                nomscen=construct_nomscen(mdl)
-                newscen=nomscen.copy()
-                newscen['sequence']={time:{'faults':{fxnname:mode}}}
-                if fm.faultmodes[mode]['probtype']=='rate':
-                    rate=fm.failrate*fm.faultmodes[mode]['dist']*eq_units(fm.faultmodes[mode]['units'], mdl.sp.units)*trange # this rate is on a per-simulation basis
-                elif fm.faultmodes[mode]['probtype']=='prob':
-                    rate = fm.failrate*fm.faultmodes[mode]['dist']
-                newscen['properties']={'type': 'single-fault', 'function': fxnname, 'fault': mode, 'rate': rate, 'time': time, 'name': fxnname+'_'+mode+'_'+t_key(time)}
+                rate = mdl.get_scen_rate(fxnname, mode, time)
+                newscen = SingleFaultScenario(sequence = {time:{'faults':{fxnname:mode}}},
+                                              function = fxnname,
+                                              fault = mode,
+                                              rate = rate ,
+                                              time = time,
+                                              name = fxnname+'_'+mode+'_'+t_key(time))
                 faultlist.append(newscen)
     return faultlist
 
@@ -759,8 +713,8 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
     ----------
     mdl : model
         The model to inject faults in.
-    scen : Dict
-        The fault scenario to run. Has structure: {'faults':{fxn:fault}, 'properties':{rate, time, name, etc}}
+    scen : Scenario
+        The Scenario to run.
     ctimes : list, optional
         List of times to copy the model (for use in staged execution). The default is [].
     nomhist : dict, optional
@@ -788,7 +742,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, c
     desired_result, track, track_times, staged, run_stochastic, use_end_condition = unpack_sim_kwargs(**kwargs)
     #if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
-    mdlhist, histrange, timerange, shift = init_histrange(mdl, scen['properties']['time'], staged, track, track_times)
+    mdlhist, histrange, timerange, shift = init_histrange(mdl, scen.time, staged, track, track_times)
     # run model through the time range defined in the object
     c_mdl=dict.fromkeys(ctimes); result=Result()
     for t_ind, t in enumerate(timerange):

@@ -426,8 +426,8 @@ def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operationa
     
     fig = plt.figure(figsize=figsize)
     
-    data = [(x, scen['properties']['inputparams'][param1]) for x,scen in nomapp.scenarios.items()\
-            if (scen['properties']['inputparams'].get(param1,False)!=False)]
+    data = [(x, scen.inputparams[param1]) for x,scen in nomapp.scenarios.items()\
+            if (scen.inputparams.get(param1,False)!=False)]
     names = [d[0] for d in data]
     classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
     all_classes = set(classifications)
@@ -483,8 +483,8 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2, title="Nominal Op
     """
     fig = plt.figure(figsize=figsize)
     
-    data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2]) for x,scen in nomapp.scenarios.items()\
-            if (scen['properties']['inputparams'].get(param1,False)!=False and scen['properties']['inputparams'].get(param2,False)!=False)]
+    data = [(x, scen.inputparams[param1], scen.inputparams[param2]) for x,scen in nomapp.scenarios.items()\
+            if (scen.inputparams.get(param1,False)!=False and scen.inputparams.get(param2,False)!=False)]
     names = [d[0] for d in data]
     classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
     all_classes = set(classifications)
@@ -541,8 +541,8 @@ def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3, title="No
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
     
-    data = [(x, scen['properties']['inputparams'][param1], scen['properties']['inputparams'][param2], scen['properties']['inputparams'][param3]) for x,scen in nomapp.scenarios.items()\
-            if (scen['properties']['inputparams'].get(param1,False)!=False and scen['properties']['inputparams'].get(param2,False)!=False and scen['properties']['inputparams'].get(param3,False)!=False)]
+    data = [(x, scen.inputparams[param1], scen.inputparams[param2], scen.inputparams[param3]) for x,scen in nomapp.scenarios.items()\
+            if (scen.inputparams.get(param1,False)!=False and scen.inputparams.get(param2,False)!=False and scen.inputparams.get(param3,False)!=False)]
     names = [d[0] for d in data]
     classifications = [str(nomapp_endclasses[name][metric]) for name in names] 
     all_classes = set(classifications)
@@ -733,7 +733,7 @@ def samplemetric(app, endclasses, fxnmode, samptype='std', title="", metric='cos
     associated_scens = list(set(associated_scens))
     costs = np.array([endclasses.get(scen).endclass[metric] for scen in associated_scens])
     #times = np.array(list(set([time  for phase, timemodes in app.sampletimes.items() if timemodes for time in timemodes if fxnmode in timemodes.get(time)])))  
-    times = np.array([[a['properties']['time'] for a in app.scenlist if a['properties']['name']==scen][0] for scen in associated_scens])
+    times = np.array([[a.time for a in app.scenlist if a.name==scen][0] for scen in associated_scens])
     timesort = np.argsort(times)
     times = times[timesort]; costs=costs[timesort]
     a=1

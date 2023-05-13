@@ -288,10 +288,7 @@ class Pump(Model):
         totcost = repcost + watcost + eecost
         
         
-        if scen['properties']['type']=='nominal':
-            rate=1.0
-        else:
-            rate=scen['properties']['rate']
+        rate=scen.rate
         
         life=1e5
         

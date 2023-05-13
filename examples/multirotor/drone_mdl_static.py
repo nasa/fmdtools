@@ -317,7 +317,7 @@ class Drone(Model):
         repcost=sum([ c['rcost'] for f,m in modeprops.items() for a, c in m.items()])
         
         totcost=repcost
-        rate=scen['properties']['rate']
+        rate=scen.rate
         expcost=totcost*rate*1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': expcost}
     

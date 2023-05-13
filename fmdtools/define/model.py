@@ -17,7 +17,7 @@ import time
 import copy
 
 from .flow import Flow, init_flow
-from .common import check_pickleability, get_var, set_var, init_obj_attr, get_obj_track
+from .common import check_pickleability, get_var, set_var, init_obj_attr, get_obj_track, eq_units
 from .parameter import Parameter, SimParam
 from .rand import Rand
 from .block import Simulable
@@ -25,7 +25,7 @@ from fmdtools.analyze.result import History, get_sub_include, init_hist_iter, in
 
 #Model superclass    
 class Model(Simulable):
-    __slots__ =['fxns', 'name', 'functionorder', '_fxnflows', '_fxninput', '_flowstates', 'is_copy', 
+    __slots__ =['fxns', 'functionorder', '_fxnflows', '_fxninput', '_flowstates',
                 'graph', 'staticfxns', 'dynamicfxns', 'staticflows'] #added in self.build())
     default_track=('fxns', 'flows', 'i')
     default_name='model'
@@ -486,6 +486,9 @@ class Model(Simulable):
             if n>1000: #break if this is going for too long
                 raise Exception("Undesired looping between functions in static propagation step",
                                 "at t="+str(time)+", these functions remain active:"+str(activefxns))
+    def get_scen_rate(self, fxnname, faultmode, time):
+        return self.fxns[fxnname].get_scen_rate(faultmode, time)
+        
 def check_model_pickleability(model, try_pick=False):
     """ Checks to see which attributes of a model object will pickle, providing more detail about functions/flows"""
     print('FLOWS ')

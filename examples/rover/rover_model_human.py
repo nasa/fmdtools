@@ -688,7 +688,7 @@ class Rover(Model):
         #tot_deviation = np.sum(np.sqrt((mdlhist['nominal']['flows']['Ground']['x']-mdlhist['faulty']['flows']['Ground']['x'])**2 + (mdlhist['nominal']['flows']['Ground']['y']-mdlhist['faulty']['flows']['Ground']['y'])**2))
         line_dist = find_line_dist(self.flows['Ground'].x,self.flows['Ground'].y, mdlhist['nominal']['flows']['Ground']['linex'], mdlhist['nominal']['flows']['Ground']['liney'])
 
-        return {'rate':0,'cost':0, 'prob':scen['properties'].get('prob',1), 'expected cost':0,'at_finish':at_finish, 'line_dist':line_dist, 'num_modes':num_modes, 'end_dist':end_dist, 'faults':modes, 'classification':classification, 'x':self.flows['Ground'].x ,'y':self.flows['Ground'].y}
+        return {'rate':0,'cost':0, 'prob':scen.prob, 'expected cost':0,'at_finish':at_finish, 'line_dist':line_dist, 'num_modes':num_modes, 'end_dist':end_dist, 'faults':modes, 'classification':classification, 'x':self.flows['Ground'].x ,'y':self.flows['Ground'].y}
 
 class LongParams(Parameter, readonly=True):
     experience_param:   np.float64=np.float64(1.0)
@@ -860,13 +860,13 @@ if __name__ == "__main__":
     early_scens= scendict[13,1]
     
     plt.figure()
-    plt.hist([behave_nomapp_hum.scenarios[scen]['properties']['params']['stress'] for scen in early_scens], alpha=0.5, label='early')
-    plt.hist([behave_nomapp_hum.scenarios[scen]['properties']['params']['stress'] for scen in late_scens], alpha=0.5, label='late')
+    plt.hist([behave_nomapp_hum.scenarios[scen].p['stress'] for scen in early_scens], alpha=0.5, label='early')
+    plt.hist([behave_nomapp_hum.scenarios[scen].p['stress'] for scen in late_scens], alpha=0.5, label='late')
     plt.legend()
     
     plt.figure()
-    plt.hist([behave_nomapp_hum.scenarios[scen]['properties']['params']['fatigue'] for scen in early_scens], alpha=0.5, label='early')
-    plt.hist([behave_nomapp_hum.scenarios[scen]['properties']['params']['fatigue'] for scen in late_scens], alpha=0.5, label='late')
+    plt.hist([behave_nomapp_hum.scenarios[scen].p['fatigue'] for scen in early_scens], alpha=0.5, label='early')
+    plt.hist([behave_nomapp_hum.scenarios[scen].p['fatigue'] for scen in late_scens], alpha=0.5, label='late')
     plt.legend()
     
     plt.figure()
