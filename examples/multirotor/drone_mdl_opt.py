@@ -482,7 +482,7 @@ class Drone(Model):
         landcost = property_restrictions*propertycost[self.p.loc]
         #repair costs
         repcost=self.calc_repaircost(max_cost=1500)
-        rate=scen['properties']['rate']
+        rate=scen.rate
         p_safety = 1-np.exp(-(body_strikes+head_strikes) * 60/(faulttime+0.001)) #convert to pfh
         classifications = {'hazardous':rate*p_safety, 'minor':rate*(1-p_safety)}
 

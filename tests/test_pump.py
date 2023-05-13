@@ -47,8 +47,8 @@ class PumpTests(unittest.TestCase, CommonTests):
         approach = SampleApproach(self.water_mdl, faults=[('MoveWater','mech_break')], phases=['on'],defaultsamp={'samp':'evenspacing','numpts':5})
         endclasses, mdlhists = propagate.approach(self.water_mdl, approach, showprogress=False)
         for scen in approach.scenlist:
-            name = scen['properties']['name']
-            exp_wcost = self.expected_water_cost(scen['properties']['time'])
+            name = scen.name
+            exp_wcost = self.expected_water_cost(scen.time)
             self.assertAlmostEqual(exp_wcost, endclasses[name]['cost'])
     def expected_water_cost(self, faulttime):
         return (50-faulttime) * 0.3*750 

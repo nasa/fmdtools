@@ -11,6 +11,7 @@ import fmdtools.sim.propagate as prop
 import fmdtools.analyze.plot as plot
 from fmdtools.sim.approach import SampleApproach
 from fmdtools.analyze.result import History
+from .scenario import Scenario
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
@@ -96,7 +97,7 @@ class ProblemInterface():
                 - single:      simulates a single scenario (the default)
                     - args: sequence: sequence defining fault scenario {time:{'faults':(fxn:mode), 'disturbances':{'Fxn1.var1'}})}
                 - multi:       simulates multiple scenarios (provided approach or nominalapproach)
-                    - args: scenlist: dict with structure {"scenname":{'sequence':{"faults":{}, "disturbances":{}}, "properties":{"p":Parameter}}}
+                    - args: scenlist: dict with structure {"scenname":Scenario}
                             (can be gotten from prop.list_init_faults, SampleApproach, or NominalApproach)
                 - nested:      simulates nested scenarios (provided approach and nominalapproach)
                     - args: see prop.nested_approach
@@ -307,7 +308,7 @@ class ProblemInterface():
         result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}, 'use_end_condition':False})
         if kwar.get('sequence', False):
             mdl_s = mdl.new_with_params()
-            scen=prop.create_faultseq_scen(mdl_s,  rate=1.0, sequence=kwar['sequence'])
+            scen= Scenario(rate=1.0, sequence=kwar['sequence'])
             kwargs = {**kwar, 'desired_result':{}, 'staged':False}
             kwargs.pop("sequence")
             _, prevhist, c_mdls, _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
@@ -319,8 +320,9 @@ class ProblemInterface():
         mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_p = kwar.get('p', {}))
         result, nomhist, nomscen, c_mdls_nom, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}, 'use_end_condition':False})
         
-        scenlist = copy.deepcopy(self.simulations[simname][1][0])
-        for scen in scenlist: scen['properties']['time']=var_time
+        scenlist=[]
+        for scen in copy.deepcopy(self.simulations[simname][1][0]):
+            scenlist.append(scen.copy_with(time=var_time))
         
         prevhists = dict(); c_mdls = dict()
         include_nominal = self.simulations[simname][2].get('include_nominal', True)
@@ -329,15 +331,13 @@ class ProblemInterface():
         if var_time>0:
             for scen in scenlist:
                 kwargs =  {**kwar.copy(), 'desired_result':{}, 'staged':False}
-                scenname=scen['properties']['name']
                 mdl_i = mdl.new_with_params()
-                _, prevhists[scenname], c_mdls[scenname], _  = prop.prop_one_scen(mdl_i, scen, ctimes = [var_time], **kwargs)
+                _, prevhists[scen.name], c_mdls[scen.name], _  = prop.prop_one_scen(mdl_i, scen, ctimes = [var_time], **kwargs)
         else: 
-            c_mdls={scen['properties']['name']:{var_time:c_mdls_nom[var_time]} for scen in scenlist}
-            prevhists={scen['properties']['name']:nomhist for scen in scenlist}
-        if include_nominal and scenlist[-1]['properties']['name']!='nominal': 
-            nomscen['properties']['name']='nominal'
-            scenlist.append(nomscen)
+            c_mdls={scen.name:{var_time:c_mdls_nom[var_time]} for scen in scenlist}
+            prevhists={scen.name:nomhist for scen in scenlist}
+        if include_nominal and scenlist[-1].name!='nominal': 
+            scenlist.append(nomscen.copy_with(name='nominal'))
             prevhists['nominal']=nomhist
             c_mdls['nominal']=c_mdls_nom
         self.update_scenlist(simname, scenlist)
@@ -363,9 +363,8 @@ class ProblemInterface():
             mdl.sp= mdl.sp.copy_with_vals(times=(0,obj_time))
         # set model faults/disturbances as elements of scenario 
         ##NOTE: need to make sure scenarios don't overwrite each other
-        scen=prop.construct_nomscen(mdl)
-        scen['sequence'] = self._update_sequence(self.simulations[simname][2].get('sequence',{}), simname, x)
-        scen['properties']['time'] = var_time
+        sequence = self._update_sequence(self.simulations[simname][2].get('sequence',{}), simname, x)
+        scen = Scenario(sequence=sequence, time=var_time)
         #propagate scenario, get results
         des_r=copy.deepcopy(self.obj_const_mapping[simname])
         kwargs = {**self.simulations[simname][2], "desired_result":des_r, "nomhist":nomhist, "prevhist":prevhist}
@@ -391,23 +390,22 @@ class ProblemInterface():
         results, objs, consts, mh = {}, {}, {}, {}
         new_scenlist = []
         for scen in scenlist:
-            newscen = copy.deepcopy(scen)
-            newscen['sequence']= self._update_sequence(newscen['sequence'], simname, x)
-            newscen['properties']['time'] = var_time
+            newscen=scen.copy_with(sequence=self._update_sequence(scen.sequence, simname, x),
+                                   time=var_time)
             new_scenlist.append(newscen)
         scenlist = new_scenlist
         if pool: 
-            if staged:  inputs = [(self._check_new_mdl(simname, var_time, c_mdls[scen['properties']['name']][var_time], x, obj_time), scen, {**kwargs, 'prevhist':prevhists[scen['properties']['name']]},  str(i)) for i, scen in enumerate(scenlist)]
+            if staged:  inputs = [(self._check_new_mdl(simname, var_time, c_mdls[scen.name][var_time], x, obj_time), scen, {**kwargs, 'prevhist':prevhists[scen.name]},  str(i)) for i, scen in enumerate(scenlist)]
             else:       inputs = [(self._check_new_mdl(simname, var_time, mdl, x, obj_time), scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
             res_list = list(pool.imap(prop.exec_scen_par, inputs))
             results, mh = prop.unpack_res_list(scenlist, res_list)
         else:
             for i, scen in enumerate(scenlist):
-                name = scen['properties']['name']
+                name = scen.name
                 prevhist = prevhists[name]
                 kwargs['nomhist'] = nomhist
                 kwargs['desired_result'] = copy.deepcopy(self.obj_const_mapping[simname])
-                if staged:  mdl_i = c_mdls[scen['properties']['name']][var_time]
+                if staged:  mdl_i = c_mdls[name][var_time]
                 else:       mdl_i = mdl
                 results[name], mh[name], t_end = prop.exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs, prevhist=prevhist)
         objs = self._get_obj_from_result(simname, results, "objectives")

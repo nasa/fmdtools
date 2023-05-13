@@ -338,7 +338,7 @@ class EPS(Model):
         repcost= self.calc_repaircost()
         cost = repcost+flowcost
         
-        rate = scen['properties']['rate'] 
+        rate = scen.rate 
         return {'rate': rate, 'cost': cost, 'expected cost': 24*365*5*rate*cost}
 
 def discrep(value):

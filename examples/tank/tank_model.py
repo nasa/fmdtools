@@ -268,7 +268,7 @@ class Tank(Model):
         if any(self.h.fxns.store_water.s.level>=20):    totcost = 1000000
         elif any(self.h.fxns.store_water.s.level<=0):   totcost = 1000000
         else:                                           totcost = 0
-        rate=scen['properties'].get('rate',0.0)
+        rate=scen.rate
         life=1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': rate*life*totcost}
 
