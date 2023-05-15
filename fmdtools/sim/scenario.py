@@ -13,8 +13,8 @@ class Injection(dataobject, readonly=True, mapping=True):
     faults:         dict={}
     disturbances:   dict={}
     def get(self, entry, fallback):
-        if entry not in self: return fallback
-        else:                 return self[entry] 
+        if not hasattr(self, entry): return fallback
+        else:                        return self[entry] 
 
 def create_sequence(faultseq={}, disturbances={}):
     times = {*faultseq, *disturbances}
@@ -33,8 +33,8 @@ class Scenario(dataobject, readonly=True, mapping=True):
         existing_kwargs = asdict(self)
         return self.__class__(**{**existing_kwargs, **kwargs})
     def get(self, entry, fallback):
-        if entry not in self: return fallback
-        else:                 return self[entry]
+        if not hasattr(self, entry): return fallback
+        else:                        return self[entry] 
 
 class SingleFaultScenario(Scenario):
     function:   str=''
@@ -52,6 +52,7 @@ class JointFaultScenario(Scenario):
 class NominalScenario(Scenario, readonly=True):
     p:          dict={}
     r:          dict={}
+    sp:         dict={}
     inputparams:    dict = {}
     rangeid:    str=''
     prob:       float=1.0

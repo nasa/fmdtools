@@ -559,7 +559,7 @@ class Result(UserDict):
         totalcost : Float
             The total metric of the scenarios.
         """
-        return sum([e[metric] for k,e in self.items()])
+        return sum([e for e in self.get_values(metric).values()])
     def state_probabilities(self, prob_key='prob', class_key='classification'):
         """
         Tabulates the probabilities of different classifications in the result.

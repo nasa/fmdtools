@@ -22,7 +22,7 @@ from recordclass import dataobject, asdict, astuple
 from .state import State
 from .parameter import Parameter, SimParam
 from .rand import Rand
-from .common import get_true_fields,get_true_field, init_obj_attr, get_obj_track, eq_units
+from .common import get_true_fields,get_true_field, init_obj_attr, get_obj_track, eq_units, set_var
 from .time import Time
 from .mode import Mode
 from .flow import init_flow, Flow
@@ -86,9 +86,10 @@ class Simulable(object):
     Note that classes soley based on Simulable may not themselves be able to be simulated.
     """
     __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows',  'name' ,'is_copy')
-    default_sp = []
+    default_sp = {}
     _init_p = Parameter
     _init_r = Rand
+    _init_sp = SimParam
     def __init__(self, name='', p={}, sp={}, r={}, track={}):
         """
         Instantiates internal Simulable attributes with predetermined:
@@ -112,7 +113,6 @@ class Simulable(object):
         else:        self.name=name
         if not sp:   sp=self.default_sp
         init_obj_attr(self, p=p, sp=sp, r=r)
-        self.update_seed()
     def add_flow_hist(self, hist, timerange, track):
         flow_track = get_sub_include('flows', track)
         if flow_track:
@@ -140,6 +140,28 @@ class Simulable(object):
         if not r:       r= {'seed':self.r.seed}
         if not track:   track=copy.deepcopy(self.track)
         return p, sp, r, track
+    def get_fxns(self):
+        if hasattr(self, 'fxns'): fxns = self.fxns
+        else:                     fxns = {self.name: self}
+        return fxns
+    def get_scen_rate(self, fxnname, faultmode, time):
+        fxn = self.get_fxns()[fxnname]
+        fm= fxn.m
+        rate_time = eq_units(fm.faultmodes[faultmode]['units'], self.sp.units)*(self.sp.times[-1]-self.sp.times[0]) # this rate is on a per-simulation basis
+        if not fm.faultmodes.get(faultmode, False): 
+            raise Exception("faultmode "+faultmode+" not in "+str(fm.__class__))
+        else:
+            #if hasattr(fxn, 'c') and faultmode in fxn.c.faultmodes:
+            #    fxn = fxn.c.components[fxn.c.faultmodes[faultmode]]
+            #    faultmode = faultmode[len(fxn.name):]
+            #elif faultmode in fxn.actfaultmodes:
+            #    fxn = fxn.actions[fxn.actfaultmodes[faultmode]]
+            #    faultmode = faultmode[len(fxn.name):]
+            if fm.faultmodes[faultmode].probtype=='rate':
+                rate = fm.failrate*fm.faultmodes[faultmode]['dist']*rate_time
+            elif fm.faultmodes[faultmode].probtype=='prob':
+                rate = fm.failrate*fm.faultmodes[faultmode]['dist'] 
+        return rate
 
 
 class Block(Simulable):
@@ -148,7 +170,6 @@ class Block(Simulable):
     _init_s = State
     _init_m = Mode
     _init_t = Time
-    _init_sp = SimParam
     """ 
     Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
     
@@ -201,6 +222,7 @@ class Block(Simulable):
         super().__init__(name=name, p=p, sp=sp, r=r, track=track)
         assoc_flows(self, flows=flows)
         init_obj_attr(self, s=s, m=m, t=t)
+        self.update_seed()
     def new_with_params(self, s={}, m={}, t={}, **kwargs):
         """
         Creates a new Block with the same parameters as the current model but
@@ -363,7 +385,7 @@ class Block(Simulable):
                 self.h=hist.flatten()
                 return self.h
             else: return History()
-    def propagate(self, time, faults=[], disturbances={}, run_stochastic=False):
+    def propagate(self, time, faults={}, disturbances={}, run_stochastic=False):
         """
         Injects and propagates faults through the graph at one time-step
 
@@ -371,8 +393,8 @@ class Block(Simulable):
         ----------
         time : float
             The current timestep.
-        fxnfaults : list
-            Faults to inject during this propagation step. With structure ['fault1', 'fault2'...]
+        fxnfaults : dict
+            Faults to inject during this propagation step. With structure {fname:['fault1', 'fault2'...]}
         disturbances : dict
             Variables to change during this propagation step. With structure {'var1':value}
         run_stochastic : bool
@@ -382,6 +404,7 @@ class Block(Simulable):
         #Step 0: Update block states with disturbances
         for var, val in disturbances.items():
             set_var(self, var, val)
+        faults = faults.get(self.name, [])
         
         #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
         if hasattr(self, 'dynamic_loading_before'): self.dynamic_loading_before(self, time)
@@ -408,22 +431,6 @@ class Block(Simulable):
                 if flows_mutables[flowname]!=newflowmutables:
                     active=True
                     flows_mutables[flowname] = newflowmutables
-    def get_scen_rate(self, faultmode, time):
-        fm= self.m
-        if not fm.faultmodes.get(faultmode, False): 
-            raise Exception("faultmode "+faultmode+" not in "+str(fm.__class__))
-        else:
-            #if hasattr(fxn, 'c') and faultmode in fxn.c.faultmodes:
-            #    fxn = fxn.c.components[fxn.c.faultmodes[faultmode]]
-            #    faultmode = faultmode[len(fxn.name):]
-            #elif faultmode in fxn.actfaultmodes:
-            #    fxn = fxn.actions[fxn.actfaultmodes[faultmode]]
-            #    faultmode = faultmode[len(fxn.name):]
-            if fm.faultmodes[faultmode].probtype=='rate':
-                rate = fm.failrate*fm.faultmodes[faultmode]['dist']*eq_units(fm.faultmodes[faultmode]['units'], self.sp.units)*(self.sp.times[-1]-self.sp.times[0]) # this rate is on a per-simulation basis
-            elif fm.faultmodes[faultmode].probtype=='prob':
-                rate = fm.failrate*fm.faultmodes[faultmode]['dist'] 
-        return rate
 
 ## COMPONENT/COMPONENT ARCHITECTURES
 class Component(Block):
@@ -803,13 +810,13 @@ class ASG(dataobject, mapping=True):
 
 #Function superclass 
 class FxnBlock(Block):
-    __slots__ = ["c", "_args_c", "a", "_args_a"]
+    __slots__ = ["c", "_args_c", "a", "_args_a", "args_f"]
     default_track = ["c", "a"]+Block.default_track
     """
     Superclass class for functions which is a special type of Block\
     with c and a attributes for CompArch and ASGs, as well as a defined method for propagation
     """
-    def __init__(self,name='', flows={}, c=dict(), a=dict(), local=dict(), **kwargs):
+    def __init__(self,name='', flows={}, c=dict(), a=dict(), local=dict(), args_f=dict(), **kwargs):
         """
         Instantiates the function superclass with the relevant parameters.
 
@@ -845,8 +852,11 @@ class FxnBlock(Block):
                 - {flowname:(localname, attrs)} (to only create local view of specific attributes)
                 - {flowname:localname}          (to create view with all attributes)
                 - [flowname1, flowname2...]     (to give overwrite the global flow with the local view of it)
+        args_f : dict, optional
+            arguments to pass to custom __init__ function 
         """        
         super().__init__(name=name, flows=flows, **kwargs)
+        self.args_f = args_f
         
         for at in ['c', 'a']: #NOTE: similar to init_obj_attr()
             at_arg = eval(at)
@@ -870,6 +880,7 @@ class FxnBlock(Block):
                     self.m.faultmodes.update({ca.name+"_"+f:vals for f, vals in ca.m.faultmodes.items()})
             elif at_arg: 
                 raise Exception(at+" argument provided: "+str(at_arg)+"without associating a CompArch/ASG to _init_"+at)
+        self.update_seed()
     def get_typename(self):
         return "FxnBlock"
     def return_faultmodes(self):

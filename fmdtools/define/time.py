@@ -178,6 +178,7 @@ class Time(dataobject):
         for timer in self.timers:
             cop.timers[timer] = self.timers[timer].copy()
         cop.run_times=self.run_times
+        cop.time = self.time
         cop.t_ind=self.t_ind
         cop.t_loc=self.t_loc
         cop.dt=self.dt

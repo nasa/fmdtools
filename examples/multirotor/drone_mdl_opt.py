@@ -796,7 +796,7 @@ opt_prob.add_variables("rcost", "bat","line", vartype=spec_respol)
 
 def calc_oper(mdl):
     endresults_nom, mdlhist =propagate.nominal(mdl)
-    opercost = endresults_nom['expected cost']
+    opercost = endresults_nom.endclass['expected cost']
     g_soc = 20 - mdlhist.fxns.store_ee.s.soc[-1] 
     #g_faults = any(endresults_nom['faults'])
     g_max_height = sum([i for i in mdlhist.flows.dofs.s.z-122 if i>0])
@@ -812,8 +812,8 @@ def x_to_ocost(xdes, xoper, loc='rural'):
 def calc_res(mdl, fullcosts=False, faultmodes = 'all', include_nominal=True, pool=False, phases={}, staged=True):
     #app = SampleApproach(mdl, faults=('single-component', faultmodes), phases={'forward'})
     app = SampleApproach(mdl, faults=('single-component', 'store_ee'), phases={'move':phases['plan_path']['move']})
-    endclasses, mdlhists = propagate.approach(mdl, app, staged=staged, pool=pool, showprogress=False) #, staged=False)
-    rescost = endclasses.total('expected cost')-(not include_nominal)*endclasses['nominal']['expected cost']
+    result, mdlhists = propagate.approach(mdl, app, staged=staged, pool=pool, showprogress=False) #, staged=False)
+    rescost = result.total('expected cost')-(not include_nominal)*result.nominal.endclass['expected cost']
     #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'dofs'}, time_slice=6)
     #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=7.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'store_ee'}, time_slice=6)
     #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'plan_path'}, time_slice=6)
@@ -853,8 +853,8 @@ if __name__=="__main__":
     mdl = Drone()
     app = SampleApproach(mdl,  phases={'forward'})
     endclasses, mdlhists = prop.approach(mdl, app, staged=True)
-    plot_faulttraj(History(nominal=mdlhists['nominal'], 
-                           faulty=mdlhists['store_ee lowcharge, t=6.0']), 
+    plot_faulttraj(History(nominal=mdlhists.nominal, 
+                           faulty=mdlhists.store_ee_lowcharge_t6p0), 
                    mdl.p, title='Fault response to RFpropbreak fault at t=20')
 
     #opt_prob.add_combined_objective("total_cost", 'cd', 'co', 'cr')

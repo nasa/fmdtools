@@ -11,7 +11,7 @@ import numpy as np
 from collections.abc import Hashable
 from operator import itemgetter
 from fmdtools.define.common import t_key
-from .scenario import Scenario, SingleFaultScenario, JointFaultScenario, NominalScenario, ParamScenario
+from .scenario import Scenario, SingleFaultScenario, JointFaultScenario, NominalScenario, ParamScenario, Injection
 import itertools
 import copy
 
@@ -357,7 +357,7 @@ class SampleApproach():
 
         Parameters
         ----------
-        mdl : Model
+        mdl : Model or Block
             Model to sample.
         faults : str/list/tuple, optional
             - The default is 'all', which gets all fault modes from the model.
@@ -441,6 +441,8 @@ class SampleApproach():
         self.mdltype = mdl.__class__.__name__
         self.tstep = mdl.sp.dt
         self.units = mdl.sp.units
+        self.fxns = mdl.get_fxns()
+        
         self.init_modelist(mdl,faults, jointfaults)
         self.init_rates(mdl, jointfaults=jointfaults, modephases=modephases, join_modephases=join_modephases)
         self.create_sampletimes(mdl, sampparams, defaultsamp)
@@ -461,8 +463,8 @@ class SampleApproach():
         self.comprates={}
         self._fxnmodes={}
         if faults=='all':
-            self.fxnrates=dict.fromkeys(mdl.fxns)
-            for fxnname, fxn in  mdl.fxns.items():
+            self.fxnrates=dict.fromkeys(self.fxns)
+            for fxnname, fxn in  self.fxns.items():
                 for mode, params in fxn.m.faultmodes.items():
                     if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.m.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
                     else:               self._fxnmodes[fxnname, mode] = params
@@ -473,13 +475,13 @@ class SampleApproach():
                     self.comprates[fxnname] = {}
         elif faults=='single-component' or faults[0]=='single-component':
             if type(faults)==tuple: 
-                if faults[1]=='all':        fxns_to_sample = mdl.fxns
+                if faults[1]=='all':        fxns_to_sample = self.fxns
                 elif type(faults[1])==str:  fxns_to_sample = [faults[1]]
                 else:                       fxns_to_sample=faults[1]
-            else:                           fxns_to_sample = mdl.fxns
+            else:                           fxns_to_sample = self.fxns
             self.fxnrates=dict.fromkeys(fxns_to_sample)
             for fxnname in fxns_to_sample:
-                fxn = mdl.fxns[fxnname]
+                fxn = self.fxns[fxnname]
                 if getattr(fxn, 'c', {}):
                     firstcomp = list(fxn.c.components)[0]
                     for mode, params in fxn.m.faultmodes.items():
@@ -501,7 +503,7 @@ class SampleApproach():
             fxns_to_use = {list(fxns)[0]: len(fxns) for f, fxns in fxns_for_class.items()}
             self.fxnrates=dict.fromkeys(fxns_to_use)
             for fxnname in fxns_to_use:
-                fxn = mdl.fxns[fxnname]
+                fxn = self.fxns[fxnname]
                 for mode, params in fxn.m.faultmodes.items():
                     if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(fxn.m.faultmodes),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
                     else:               self._fxnmodes[fxnname, mode] = params
@@ -511,16 +513,16 @@ class SampleApproach():
                 else:
                     self.comprates[fxnname] = {}
         else:
-            if type(faults)==str:   faults = [(faults, mode) for mode in mdl.fxns[faults].m.faultmodes] #single-function modes
+            if type(faults)==str:   faults = [(faults, mode) for mode in self.fxns[faults].m.faultmodes] #single-function modes
             elif type(faults)==tuple:
-                if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.m.faultmodes if mode==faults[1]]  
-                elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns.items() for mode in fxn.m.faultmodes if mode==f]  
+                if faults[0]=='mode name':          faults = [(fxnname, mode) for fxnname,fxn in self.fxns.items() for mode in fxn.m.faultmodes if mode==faults[1]]  
+                elif faults[0]=='mode names':       faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in self.fxns.items() for mode in fxn.m.faultmodes if mode==f]  
                 elif faults[0]=='mode type':        
-                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.m.faultmodes if (faults[1] in mode and (len(faults)<3 or not faults[2] in mode))]
+                    faults = [(fxnname, mode) for fxnname,fxn in self.fxns.items() for mode in fxn.m.faultmodes if (faults[1] in mode and (len(faults)<3 or not faults[2] in mode))]
                 elif faults[0]=='mode types':       
                     if type(faults[1])==str:    secondarg=(faults[1],)
                     else:                       secondarg=faults[1]
-                    faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns.items() for mode in fxn.m.faultmodes if any([f in mode for f in secondarg])]
+                    faults = [(fxnname, mode) for fxnname,fxn in self.fxns.items() for mode in fxn.m.faultmodes if any([f in mode for f in secondarg])]
                 elif faults[0]=='function class':   faults = [(fxnname, mode) for fxnname,fxn in mdl.fxns_of_class(faults[1]).items() for mode in fxn.m.faultmodes]
                 elif faults[0]=='function classes': faults = [(fxnname, mode) for f in faults[1] for fxnname,fxn in mdl.fxns_of_class(f).items() for mode in fxn.m.faultmodes]
                 else: raise Exception("Invalid option in tuple argument: "+str(faults[0]))
@@ -530,12 +532,12 @@ class SampleApproach():
             else: raise Exception("Invalid option for faults: "+str(faults)) 
             self.fxnrates=dict.fromkeys([fxnname for (fxnname, mode) in faults])
             for fxnname, mode in faults: 
-                params = mdl.fxns[fxnname].m.faultmodes[mode]
+                params = self.fxns[fxnname].m.faultmodes[mode]
                 if params=='synth': self._fxnmodes[fxnname, mode] = {'dist':1/len(faults),'oppvect':[1], 'rcost':0,'probtype':'prob','units':'hrs'}
                 else:               self._fxnmodes[fxnname, mode] = params
-                self.fxnrates[fxnname]=mdl.fxns[fxnname].m.failrate
-                if hasattr(mdl.fxns[fxnname], 'c'):
-                    self.comprates[fxnname] = {compname:comp.m.failrate for compname, comp in mdl.fxns[fxnname].c.components.items()}
+                self.fxnrates[fxnname]=self.fxns[fxnname].m.failrate
+                if hasattr(self.fxns[fxnname], 'c'):
+                    self.comprates[fxnname] = {compname:comp.m.failrate for compname, comp in self.fxns[fxnname].c.components.items()}
                 else:
                     self.comprates[fxnname] = {}
         if type(jointfaults['faults'])==int or jointfaults['faults']=='all':
@@ -572,11 +574,11 @@ class SampleApproach():
             self.rates[fxnname, mode]=dict(); self.rates_timeless[fxnname, mode]=dict(); self.mode_phase_map[fxnname, mode] = dict()
             overallrate = self.fxnrates[fxnname]
             dist = self._fxnmodes[fxnname, mode]['dist']
-            if self.comprates[fxnname] and mode in mdl.fxns[fxnname].c.faultmodes:
-                compname = mdl.fxns[fxnname].c.faultmodes[mode]
+            if self.comprates[fxnname] and mode in self.fxns[fxnname].c.faultmodes:
+                compname = self.fxns[fxnname].c.faultmodes[mode]
                 overallrate=self.comprates[fxnname][compname]
                         
-            key_phases = mdl.fxns[fxnname].m.key_phases_by
+            key_phases = self.fxns[fxnname].m.key_phases_by
             if key_phases == 'self': key_phases = fxnname
             if modephases and type(self._fxnmodes[fxnname, mode]['oppvect'])==list:
                 raise Exception("Poorly specified oppvect for fxn: "+fxnname+" mode: "+mode+"--provide a dict to use with modephases")
@@ -586,7 +588,7 @@ class SampleApproach():
                 fxnphases = {m:[self.phases[fxnname][ph] for ph in m_phs] for m, m_phs in modephases[fxnname].items()}
             else:
                 if key_phases=='global': fxnphases = self.globalphases
-                elif key_phases=='none': fxnphases = {'operating':[mdl.times[0], mdl.times[-1]]} 
+                elif key_phases=='none': fxnphases = {'operating':[mdl.sp.times[0], mdl.sp.times[-1]]} 
                 else:                    fxnphases = self.phases.get(key_phases, self.globalphases)
                 fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))  
                 if modephases and (key_phases not in ['global', 'none']):
@@ -779,7 +781,7 @@ class SampleApproach():
                             rate = self.rates[fxnmode][phaseid] * self.weights[fxnmode][phaseid][time]
                         if type(fxnmode[0])==str:
                             name = fxnmode[0]+'_'+fxnmode[1]+'_'+t_key(time)
-                            scen = SingleFaultScenario(sequence = {time:{'faults':{fxnmode[0]:fxnmode[1]}}},
+                            scen = SingleFaultScenario(sequence = {time:Injection(faults={fxnmode[0]:[fxnmode[1]]})},
                                             function = fxnmode[0],
                                             fault = fxnmode[1],
                                             rate = rate,
@@ -790,7 +792,7 @@ class SampleApproach():
                             faults = dict.fromkeys([fm[0] for fm in fxnmode])
                             for fault in faults:
                                 faults[fault] = [fm[1] for fm in fxnmode if fm[0]==fault]
-                            scen = JointFaultScenario(sequence = {time:{'faults':faults}},
+                            scen = JointFaultScenario(sequence = {time:Injection(faults=faults)},
                                                       joint_faults=len(fxnmode),
                                                       functions = tuple(fm[0] for fm in fxnmode),
                                                       modes = tuple(fm[1] for fm in fxnmode),

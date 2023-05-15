@@ -125,7 +125,7 @@ class Model(Simulable):
         """
         if not getattr(self, 'is_copy', False):
             self.flows[flowname] = init_flow(flowname,fclass, p=p, s=s)
-    def add_fxn(self,name, fclass, *flownames, fparams='None', **fkwargs):
+    def add_fxn(self,name, fclass, *flownames, args_f='None', **fkwargs):
         """
         Instantiates a given function in the model.
 
@@ -138,7 +138,7 @@ class Model(Simulable):
             the user can send the block.GenericFxn class.
         flownames : list
             List of flows to associate with the function.
-        fparams : dict.
+        args_f : dict.
             Other parameters to send to the __init__ method of the function class
         fkwargs : dict
             Parameters to send to __init__ method of the FxnBlock superclass
@@ -147,10 +147,10 @@ class Model(Simulable):
             flows=self.get_flows(flownames)
             fkwargs = {**{'r':{"seed":self.r.seed}}, **{'t':{'dt': self.sp.dt}}, **fkwargs}
             try:
-                self.fxns[name] = fclass(name, flows=flows, params=fparams, **fkwargs)
+                self.fxns[name] = fclass(name, flows=flows, args_f=args_f, **fkwargs)
             except TypeError as e:
                 raise TypeError("Poorly specified class "+str(fclass)+" (or poor arguments) ") from e
-            self._fxninput[name]={'name':name,'flows': flownames, 'fparams': fparams, 'kwargs': fkwargs}
+            self._fxninput[name]={'name':name,'flows': flownames, 'args_f': args_f, 'kwargs': fkwargs}
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
             self.functionorder.update([name])
@@ -293,13 +293,13 @@ class Model(Simulable):
             copy.flows[flowname]=flow.copy()
         for fxnname, fxn in self.fxns.items():
             flownames=self._fxninput[fxnname]['flows']
-            fparams=self._fxninput[fxnname]['fparams']
+            args_f=self._fxninput[fxnname]['args_f']
             kwargs = self._fxninput[fxnname]['kwargs']
             flows = copy.get_flows(flownames)
-            if fparams=='None':     
+            if args_f=='None':     
                 copy.fxns[fxnname]=fxn.copy(flows, **kwargs)
             else:                   
-                copy.fxns[fxnname]=fxn.copy(flows, fparams, **kwargs)
+                copy.fxns[fxnname]=fxn.copy(flows, args_f, **kwargs)
         copy._fxninput=self._fxninput
         copy._fxnflows=self._fxnflows
         copy.is_copy=False
