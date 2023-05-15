@@ -273,7 +273,7 @@ if __name__=="__main__":
     
     
     
-    cost_tests = [quad_comp_endclasses[ec]['expected cost']==quad_comp_endclasses_1[ec]['expected cost'] for ec in quad_comp_endclasses]
-    dist_tests = [all(quad_comp_mdlhists[ec].flows.env.s.x==quad_comp_mdlhists_1[ec].flows.env.s.x) for ec in quad_comp_mdlhists]
-    dist_tests2 = [all(quad_comp_mdlhists[ec].flows.env.s.y==quad_comp_mdlhists_1[ec].flows.env.s.y) for ec in quad_comp_mdlhists]
+    cost_tests = [ec for ec in quad_comp_endclasses if quad_comp_endclasses[ec]!=quad_comp_endclasses_1[ec]]
+    
+    dist_tests = [ec for ec in quad_comp_mdlhists if any(quad_comp_mdlhists.get(ec)!=quad_comp_mdlhists_1.get(ec))]
     

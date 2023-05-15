@@ -350,27 +350,28 @@ def discrep(value):
     
 if __name__ == '__main__':
     import fmdtools.sim.propagate as propagate
-    import fmdtools.analyze as an
+    from fmdtools.analyze.graph import ModelGraph
     import numpy as np
 
     mdl= EPS()
     
-    resgraph, mdlhists = propagate.one_fault(mdl, 'distribute_ee', 'short', desired_result="fxnflowgraph")
+    result, mdlhists = propagate.one_fault(mdl, 'distribute_ee', 'short', desired_result="graph", track="all")
     
-    an.graph.show(mdl.fxnflowgraph, gtype='fxnflowgraph')
+    result.graph.draw()
     #endclasses, mdlhists = propagate.single_faults(mdl)
 
     #resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', desired_result="fxnflowgraph")
-    an.graph.show(resgraph)
+    #result.graph.draw()
 
     summary = mdlhists.get_fault_degradation_summary(*mdl.fxns, *mdl.flows)
     #endclasses, mdlhists = propagate.single_faults(mdl)
     degradation = mdlhists.get_degraded_hist(*mdl.fxns, *mdl.flows)
     
     degtimemap = degradation.get_summary(operator=np.sum)
-
-    an.graph.show(mdl.fxnflowgraph,gtype='fxnflowgraph', heatmap=degtimemap)
-    an.graph.show(resgraph,heatmap=degtimemap)
+    
+    mg = ModelGraph(mdl)
+    mg.set_heatmap(degtimemap)
+    mg.draw()
 
     propagate.single_faults(mdl)
     

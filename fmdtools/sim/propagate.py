@@ -287,12 +287,13 @@ def one_fault(mdl, *fxnfault, time=1, **kwargs):
     """
     if len(fxnfault)==2: fxnname, fault = fxnfault
     else:                fxnname, fault = mdl.name, fxnfault[0] 
-    seq = create_sequence(faultseq={time:{fxnname:fault}})
+    seq = create_sequence(faultseq={time:{fxnname:[fault]}})
     
     scen= SingleFaultScenario(sequence = seq,
                               fault = fault,
                               function = fxnname,
-                              time = time)
+                              time = time,
+                              rate = mdl.get_scen_rate(fxnname, fault, time))
     result, mdlhists = sequence(mdl, scen=scen, **kwargs)
     return result.flatten(), mdlhists.flatten()
 
@@ -477,7 +478,7 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     if pool:
         check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
         if staged:  
-            inputs = [(c_mdl[min(scen.times)], scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
+            inputs = [(c_mdl[scen.time], scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
         else:       
             inputs = [(mdl, scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
         res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
@@ -485,7 +486,7 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     else:
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
             name = scen.name
-            if staged:  mdl_i = c_mdl[min(scen.times)]
+            if staged:  mdl_i = c_mdl[scen.time]
             else:       mdl_i = mdl
             ec, mh, t_end = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
             results[name],mdlhists[name] = ec, mh
@@ -604,7 +605,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
         apps[scenname]=app
         check_hist_memory(nomhist,len(app.scenlist)*nomapp.num_scenarios, max_mem=max_mem)
         
-        nest_results[scenname], nest_mdlhists[scenname] = approach(mdl, app, pool=pool, showprogress=False, **sim_kwarg, **scen)
+        nest_results[scenname], nest_mdlhists[scenname] = approach(mdl, app, pool=pool, showprogress=False, **{**sim_kwarg, 'p':scen.p, 'r':scen.r})
         save_helper(save_args, nest_results[scenname], nest_mdlhists[scenname], indiv_id=scenname, result_id=scenname)
     save_helper(save_args, nest_results, nest_mdlhists)
     if save_app:
@@ -622,12 +623,12 @@ def phases_from_hist(get_phases, t_end, nomhist):
 
 def list_init_faults(mdl):
     """
-    Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
+    Creates a list of single-fault scenarios for the Model, given the modes set up in the fault model
 
     Parameters
     ----------
-    mdl : Model
-        Model with list of times in mdl.sp.times
+    mdl : Model/FxnBlock
+        Simulable with list of times in mdl.sp.times
 
     Returns
     -------
@@ -636,8 +637,9 @@ def list_init_faults(mdl):
     """
     faultlist=[]
     trange = mdl.sp.times[-1]-mdl.sp.times[0] + 1.0
+    fxns = mdl.get_fxns()
     for time in mdl.sp.times:
-        for fxnname, fxn in mdl.fxns.items():
+        for fxnname, fxn in fxns.items():
             fm=fxn.m
             for mode in fm.faultmodes:
                 rate = mdl.get_scen_rate(fxnname, mode, time)

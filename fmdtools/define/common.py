@@ -131,7 +131,8 @@ def init_obj_attr(obj, **attrs):
     """
     for at in attrs:
         at_arg = attrs[at]
-        if type(at_arg)!=dict: at_arg = asdict(at_arg)
+        if type(at_arg)!=dict: 
+            at_arg = asdict(at_arg)
         setattr(obj, '_args_'+at, at_arg)
         init_at = getattr(obj, '_init_'+at)
         setattr(obj, at, init_at(**at_arg))

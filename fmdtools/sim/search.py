@@ -349,7 +349,7 @@ class ProblemInterface():
             p.update({param: x[ind] for param, ind in paramvars['param'].items()})
             for func, fvars in self.var_mapping[simname].get('paramfunc',{}).items():
                 p.update(func(*[x[ind] for ind in fvars.values()]))
-            mdl = mdl.new_with_params({'p':p, 'sp':{'times':(0, obj_time)}})
+            mdl = mdl.new_with_params(p=p, sp={'times':(0, obj_time)})
             
         prop.init_histrange(mdl, var_time, staged, "all", "all")
         return mdl
@@ -742,7 +742,7 @@ class ProblemInterface():
             update_sequence(self.simulations[simname][2].get('sequence',{}), newsequence)
         elif self.simulations[simname][0]=='multi':
             for i,_ in enumerate(self.simulations[simname][1][0]):
-                update_sequence(self.simulations[simname][1][0][i], newsequence)
+                update_sequence(self.simulations[simname][1][0][i].sequence, newsequence)
     def update_sim_options(self, simnames, **kwargs):
         """
         Update options for simulation kwargs. Useful for changing simulation parameters, e.g.:
