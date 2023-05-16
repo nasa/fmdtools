@@ -24,7 +24,6 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
-from drone_mdl_static import m2to1
 from drone_mdl_dynamic import finddist,vectdist, inrange
 from recordclass import asdict
 

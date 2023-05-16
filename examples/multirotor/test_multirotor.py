@@ -7,11 +7,10 @@ Created on Wed Dec 14 13:51:18 2022
 import unittest
 import sys, os
 sys.path.insert(0, os.path.join('..'))
-from example_multirotor.drone_mdl_opt import Drone, opt_prob, x_to_rcost, x_to_ocost
-from CommonTests import CommonTests
+from examples.multirotor.drone_mdl_opt import Drone, opt_prob, x_to_rcost, x_to_ocost
 import multiprocessing as mp
 
-class DroneTests(unittest.TestCase, CommonTests):
+class DroneTests(unittest.TestCase):
     def test_interface_values(self):
         
         testvalues = [[0,0, 50, 0,0], [0,2, 100, 1,1],[2,2, 150, 1,1]]

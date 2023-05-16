@@ -486,8 +486,6 @@ class Model(Simulable):
             if n>1000: #break if this is going for too long
                 raise Exception("Undesired looping between functions in static propagation step",
                                 "at t="+str(time)+", these functions remain active:"+str(activefxns))
-    def get_scen_rate(self, fxnname, faultmode, time):
-        return self.fxns[fxnname].get_scen_rate(faultmode, time)
         
 def check_model_pickleability(model, try_pick=False):
     """ Checks to see which attributes of a model object will pickle, providing more detail about functions/flows"""

@@ -1,12 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri May 12 15:06:53 2023
+Description: Classes for defining scenarios to simulate. 
 
-@author: dhulse
+Classes:
+    - :class:`Injection`:           Defines faults and disturbances to inject at a specific time
+    - :class:`Scenario`:            Defines a generic scenario to simulation
+    - :class:`SingleFaultScenario`: Defines the scenario of a single fault injected in a function
+    - :class:`JointFaultScenario`:  Defines the scenario of multiple faults injected in a function at the same time
+    - :class:`NominalScenario`:     Defines the scenario of a model having given parameters at the outset
+    - :class:`ParamScenario`:       Defines the scenario of a model having parameters from a given paramfunc
+
+Functions::
+    - :func:`create_sequence`:     Creates an overall sequence of Injections from a given sequence of faults and disturbances
 """
 from recordclass import dataobject, asdict
-import warnings
-import numpy as np
+
 
 
 class Injection(dataobject, readonly=True, mapping=True):

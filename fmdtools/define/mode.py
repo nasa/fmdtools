@@ -172,7 +172,7 @@ class Mode(dataobject, readonly=False):
             if type(kwargs['oppvect'])==set:            
                 kwargs['oppvect'] = {o:1.0 for o in kwargs['oppvect']}
             self.faultmodes[mode] = Fault(**kwargs)
-    def assoc_faultstates(self, franges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='global', seed=42):
+    def assoc_faultstates(self, franges = {}, mode_app = 'none', manual_modes={}, probtype='prob', units='hr', key_phases_by='global', seed=42, **kwargs):
         """
         Associates modes with given faultstates.
 
@@ -192,13 +192,15 @@ class Mode(dataobject, readonly=False):
             The default is 'rate'
         units : str, optional
             Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr' 
+        **kwargs : kwargs
+            Entries for the Faults (e.g., oppvect, etc)
         """
         nom_fstates = {state: self.s.__defaults__[self.s.__fields__.index(state)] for state in franges}
         if mode_app=='none': a=0
         elif mode_app=='single-state':
             tot_faults = len([f for s in franges.values() for f in s])
             for state in franges:
-                modes = {state+'_'+str(value): Fault(probtype='prob', dist =1/tot_faults)  
+                modes = {state+'_'+str(value): Fault(probtype='prob', dist =1/tot_faults, **kwargs)  
                          for value in franges[state]}
                 modestates = {state+'_'+str(value): {state:value} for value in franges[state]}
                 self.faultmodes.update(modes)
@@ -211,7 +213,7 @@ class Mode(dataobject, readonly=False):
                 rng = np.random.default_rng(seed)
                 sample = rng.choice([i for i,_ in enumerate(statecombos)], size=mode_app, replace=False)
                 statecombos = [statecombos[i] for i in sample]
-            self.faultmodes.update({'hmode_'+str(i):Fault(probtype='prob', dist =1/len(statecombos)) 
+            self.faultmodes.update({'hmode_'+str(i):Fault(probtype='prob', dist =1/len(statecombos), **kwargs) 
                                     for i in range(len(statecombos))}) 
             self.mode_state_dict.update({'hmode_'+str(i): {list(franges)[j]:state for j, state in enumerate(statecombos[i])} for i in range(len(statecombos))})
         else: raise Exception("Invalid mode elaboration approach")
@@ -223,7 +225,7 @@ class Mode(dataobject, readonly=False):
                 self.assoc_modes(faultmodes={mode:atts[1]}, initmode=getattr(self,'mode', 'nom'), probtype=probtype, proptype=probtype, exclusive=True, key_phases_by=key_phases_by)
             elif  type(atts)==dict:
                 self.mode_state_dict.update({mode:atts})
-                self.faultmodes.update({mode:Fault(probtype='prob', dist =1/len(manual_modes))})
+                self.faultmodes.update({mode:Fault(probtype='prob', dist =1/len(manual_modes), **kwargs)})
     def update_modestates(self):
         """Updates states of the model associated with a specific fault mode (see assoc_modes)."""
         num_update = 0
