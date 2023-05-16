@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Description: functions to propagate faults through a user-defined fault model
+Description: functions to propagate faults through a user-defined fault model.
 
 Main Methods:
     - :func:`nominal()`:            Runs the model over time in the nominal scenario.

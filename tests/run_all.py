@@ -18,7 +18,7 @@ if __name__=="__main__":
     
     # Run defined tests in the example repositories 
     loader = unittest.TestLoader()
-    suite = loader.discover(os.path.join('..', 'example_pump'))
+    suite = loader.discover(os.path.join('..', 'examples/pump'))
     
     runner = unittest.TextTestRunner()
     runner.run(suite)

@@ -6,8 +6,8 @@ Created on Tue Aug  9 12:44:01 2022
 """
 import unittest
 from fmdtools.sim import propagate
-import fmdtools.analyze as an
-from fmdtools.define.block import FxnBlock, get_pdf_for_rand
+from fmdtools.define.block import FxnBlock
+from fmdtools.define.rand import get_pdf_for_rand
 from fmdtools.define.model import Model
 from fmdtools.define.flow import CommsFlow, MultiFlow
 import numpy as np
@@ -53,8 +53,9 @@ class Coordinator(FxnBlock):
         self.coord_view.update("local", "Mover_1", "y")
         self.coord_view.update("local", "Mover_2", "x")
 class TestModel(Model):
-    def __init__(self, params={}, modelparams={'times':[0,10], 'tstep':1}, valparams={}):
-        super().__init__(params=params, modelparams=modelparams, valparams=valparams)
+    default_sp = dict(times=(0,10))
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         
         self.add_flow("Communications",{"x":0.0, "y":1.0}, fclass=CommsFlow)
         self.add_flow("Location", {"x":0.0, "y":0.0}, fclass=MultiFlow)

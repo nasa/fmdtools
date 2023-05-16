@@ -5,7 +5,7 @@ Created on Thu Dec 15 15:26:19 2022
 @author: dhulse
 """
 import unittest
-from example_rover.optimization.search_rover import line_dist, line_dist_faster
+from examples.rover.optimization.search_rover import line_dist, line_dist_faster
 from CommonTests import CommonTests
 import multiprocessing as mp
 

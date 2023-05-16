@@ -6,7 +6,7 @@ Created on Wed Mar  1 20:47:04 2023
 """
 import unittest
 
-from fmdtools.define.common import State
+from fmdtools.define.state import State
 from fmdtools.define.block import FxnBlock, Action, Mode, ASG
 from fmdtools.define.model import Model
 from fmdtools.define.flow import Flow
@@ -120,26 +120,30 @@ class PassHazard(FxnBlock):
         if self.hazard.s.present and self.hazard.s.mitigated:       self.s.hazards_mitigated+=1
         elif self.hazard.s.present and not self.hazard.s.mitigated: self.s.hazards_propagated+=1
 
-from fmdtools.define.common import Parameter
-from fmdtools.define.model import ModelParam
+from fmdtools.define.parameter import Parameter, SimParam
+from fmdtools.analyze.graph import ASGGraph
 class HazardModel(Model):
-    def __init__(self, params=Parameter(), modelparams=ModelParam(times=(0,60), dt=1.0), valparams={}):
-        super().__init__(params,modelparams,valparams)
+    default_sp = dict(times=(0,60))
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         
         self.add_flow("hazard", Hazard)
         
         self.add_fxn("produce_hazard", ProduceHazard, 'hazard')
         self.add_fxn("detect_hazard",  DetectHazard,  'hazard')
         self.add_fxn("pass_hazard",    PassHazard,    'hazard')
-        self.build_model()
+        self.build()
 
 mdl = HazardModel()
 #endstate,  mdlhist = prop.nominal(mdl)
 
-resgraph_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard','perceive_failed', time=4, desired_result='fxnflowgraph')
+result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard','perceive_failed', time=4, desired_result='graph.fxns.detect_hazard.a')
 
-faulthist = mdlhist_fault.get_faulty_hist(*mdl.fxns, *mdl.flows)
+result_fault.graph.fxns.detect_hazard.a.draw()
 
-faulthist['detect_hazard']['perceive']['faults'][4]
-fig = an.graph.result_from(mdl.fxns['detect_hazard'], faulthist, 4, gtype='combined')
+faulthist = mdlhist_fault.get_faulty_hist(*mdl.fxns['detect_hazard'].a.actions,*mdl.fxns['detect_hazard'].a.flows)
+
+
+ag = ASGGraph(mdl.fxns['detect_hazard'].a)
+ag.draw_from(4, faulthist)
 

@@ -9,7 +9,7 @@ import fmdtools.sim.propagate as prop
 import fmdtools.analyze as an
 from fmdtools.sim.approach import SampleApproach
 from fmdtools.sim.search import ProblemInterface
-import example_rover.rover_model as rvr
+import examples.rover.rover_model as rvr
 import tqdm
 
 import numpy as np
@@ -24,11 +24,13 @@ def line_dist(ind, show_plot=False, print_time=False):
 #    """Takes all of the individuals in a species and returns each of their distances
 #    from the end line in an array"""
     starttime=time.time()
-    mdl = rvr.Rover(params=rvr.RoverParam('turn', start=5.0), valparams={'drive_modes':{'custom_fault':{'friction':ind[0],'transfer':ind[1], 'drift':ind[2]}}})
-    endresults, reshist = prop.one_fault(mdl,'Drive','custom_fault', time=fault_time, staged=True, protect=False, track={'functions':{'Environment':'all'}, 'flows':{'Ground':'all'}})
-    dist = endresults['line_dist']
-    enddist = endresults['end_dist']
-    endpt = endresults['endpt']
+    mdl = rvr.Rover(p=rvr.RoverParam('turn', start=5.0,
+                                     drive_modes={'custom_fault':{'friction':ind[0],'transfer':ind[1], 'drift':ind[2]}}))
+    endresults, reshist = prop.one_fault(mdl,'drive','custom_fault', time=fault_time, staged=True, protect=False, 
+                                         track={'fxns':{'environment':'all'}, 'flows':{'ground':'all'}})
+    dist = endresults.endclass['line_dist']
+    enddist = endresults.endclass['end_dist']
+    endpt = endresults.endclass['endpt']
     
     if print_time: print("Standard Exec Time: "+str(time.time()-starttime))
     if show_plot: rvr.plot_trajectories(reshist, faultlabel='Faulty Scenarios', faultalpha=1.0)
@@ -546,7 +548,7 @@ def visualizations(soln, method="EA", figsize=(4,4), ax=False, legend=True, xlim
 
     mdl_range = rvr.Rover(params=rvr.RoverParam(linetype='turn', start=5.0), valparams={'drive_modes':list(soln)})
     _, mdlhists = prop.nominal(mdl_range)
-    phases, modephases = mdlhist.get_modephases()
+    phases, modephases = mdlhists.get_modephases()
     end_time = phases['Avionics']['drive'][1]+25
     mdl_range.modelparams = mdl_range.modelparams.copy_with_vals(times=(0,end_time))
     app_range = SampleApproach(mdl_range, faults='Drive', phases={'drive':phases['Avionics']['drive']})
@@ -583,21 +585,22 @@ SUBPOP_SIZE = 50 #number of individuals in a subpopulation
 NUM_SUBPOP = 10 #number of subpopulation
 
 #nominal scenario info (used to find when to inject faults in nominal scenario)
-mdl = rvr.Rover(params=rvr.RoverParam('turn', start=5.0), valparams={'drive_modes':{'custom_fault':{'friction':0.0, 'transfer':0.0,'drift':0.0}}})
-_, mdlhists_nom = prop.nominal(mdl)
+mdl = rvr.Rover(p=rvr.RoverParam('turn', start=5.0,
+                                 drive_modes={'custom_fault':{'friction':0.0, 'transfer':0.0,'drift':0.0}}))
+res_nom, mdlhists_nom = prop.nominal(mdl)
 phases, modephases = mdlhists_nom.get_modephases()
-app= SampleApproach(mdl, faults='Drive', phases={'drive':phases['Avionics']['drive']})
+app= SampleApproach(mdl, faults='drive', phases={'avionics':{'drive':phases['avionics']['drive']}})
 fault_time = app.times[0]
-end_time = phases['Avionics']['drive'][1]+25
-mdl =prop.new_mdl(mdl,{'modelparams':{'times':(0,end_time)}})   
+end_time = phases['avionics']['drive'][1]+25
+mdl=mdl.new_with_params(sp={'times':(0,end_time)})  
 
 #defining optimization problem interface (for line_dist_faster)
 mode_search_prob = ProblemInterface("Mode Search", mdl, default_params=rvr.RoverParam('turn', start=5.0))
 mode_search_prob.add_simulation("custom_fault", "single", staged=True,\
-                                track={"flows":{"Ground":"all"},"functions":{"Environment":"all"}})
-mode_search_prob.add_variables("custom_fault", "Drive.friction", "Drive.transfer", "Drive.drift", t=fault_time)
+                                track={"flows":{"ground":"all"},"fxns":{"environment":"all"}})
+mode_search_prob.add_variables("custom_fault", "drive.m.s.friction", "drive.m.s.transfer", "drive.m.s.drift", t=fault_time)
 mode_search_prob.add_objectives("custom_fault", line_dist="line_dist", end_dist="end_dist", endpt="endpt")
-mode_search_prob.add_objectives("custom_fault", endx="Ground.x", endy="Ground.y", objtype="vars")
+mode_search_prob.add_objectives("custom_fault", endx="ground.s.x", endy="ground.s.y", objtype="vars")
 
 #a=time.time(); line_dist([1,1.1,1]); print(time.time()-a)
 #mode_search_prob.plot_obj_const("custom_fault")

@@ -108,12 +108,12 @@ class OverrideState(State):
 class OverrideComms(Flow):
     _init_s = OverrideState
     
-class FaultStates(State):
+class FaultyStates(State):
     transfer:   float=1.0
     friction:   float=1.0
     drift:      float=0.0
 class Fault(Flow):
-    _init_s = FaultStates
+    _init_s = FaultyStates
 
 # MODEL PARAMETERS
 class RoverParam(Parameter, readonly=True):
@@ -159,14 +159,14 @@ class AvionicsMode(Mode):
     opermodes = ('drive','standby', 'em_off', 'finished')
     mode : str='standby'
 class Avionics(FxnBlock):
-    __slots__=('video', 'pos_signal', 'ground', 'control', 'faultstates')
+    __slots__=('video', 'pos_signal', 'ground', 'control', 'faultystates')
     _init_m = AvionicsMode
     _init_p = RoverParam
     _init_video = Video 
     _init_pos_signal = Pos_Signal
     _init_ground = Ground 
     _init_control = Control
-    _init_faultstates = Fault
+    _init_faultystates = Fault
     flownames={'avionics_control':'control'}
     def dynamic_behavior(self,time):
         if not self.m.in_mode('no_con'):
@@ -180,25 +180,25 @@ class Avionics(FxnBlock):
 
             if in_area(*self.p.end,1,*self.pos_signal.s.get('x','y')):  self.m.set_mode('finished')
             elif self.video.s.quality==0:                               self.m.set_mode('em_off')
-            elif not self.faultstates_in_bounds():                      self.m.set_mode('em_off')
+            elif not self.faultystates_in_bounds():                      self.m.set_mode('em_off')
             else:
                 ycorrection= np.arctan((self.pos_signal.s.y-self.pos_signal.s.liney)/(self.pos_signal.s.vel*np.cos(np.pi/180 * self.pos_signal.s.heading)+0.001))
                 xcorrection= np.arctan((self.pos_signal.s.x-self.pos_signal.s.linex)/(self.pos_signal.s.vel*np.sin(np.pi/180 * self.pos_signal.s.heading)+0.001))
-                turn_fault_correction = self.p.cor_d*self.faultstates.s.drift
+                turn_fault_correction = self.p.cor_d*self.faultystates.s.drift
                 if self.video.s.quality==0.5: 
                     ang_diff = np.arctan((self.pos_signal.s.y - self.p.end[1])/(self.pos_signal.s.x - self.p.end[0])) - self.pos_signal.s.heading + turn_fault_correction
                 else:                       
                     ang_diff = (self.pos_signal.s.angle - self.pos_signal.s.heading + turn_fault_correction -5.5*(xcorrection+ycorrection))
                 rdiff = (translate_angle(ang_diff)/180)
-                vel_fault_correction = 1 + self.p.cor_f*(self.faultstates.s.friction) + self.p.cor_t*(self.faultstates.s.transfer-1)
+                vel_fault_correction = 1 + self.p.cor_f*(self.faultystates.s.friction) + self.p.cor_t*(self.faultystates.s.transfer-1)
                 vel_adj = max(0.2, 1- 0.9*abs(rdiff*20)) *vel_fault_correction
                 self.control.s.put(rpower = vel_adj*(1+(rdiff)), lpower = vel_adj*(1-(rdiff)))
                 self.control.s.limit(rpower=(-1,2), lpower=(-1,2))
         if self.m.in_mode('standby','em_off','finished'):   self.control.s.put(rpower = 0, lpower = 0)
-    def faultstates_in_bounds(self):
-        return (self.p.lb_f <= self.faultstates.s.friction <= self.p.ub_f and \
-                self.p.lb_d <=self.faultstates.s.drift <= self.p.ub_d and \
-                    self.p.lb_t<=self.faultstates.s.transfer <= self.p.ub_t)
+    def faultystates_in_bounds(self):
+        return (self.p.lb_f <= self.faultystates.s.friction <= self.p.ub_f and \
+                self.p.lb_d <=self.faultystates.s.drift <= self.p.ub_d and \
+                    self.p.lb_t<=self.faultystates.s.transfer <= self.p.ub_t)
 
 def translate_angle(angle):
     if angle <-180:      angle = angle % 180
@@ -207,10 +207,10 @@ def translate_angle(angle):
 
 class DriveMode(Mode):
     """ """
-    s:          FaultStates=FaultStates()
+    s:          FaultyStates=FaultyStates()
     mode_args : tuple = tuple()
     faultparams = dict()
-    key_phases_by='global'
+    key_phases_by='avionics'
     def __init__(self, *args, mode_args=tuple(), **kwargs):
         super().__init__(*args, **kwargs)
         if 'mode_args' in mode_args:
@@ -219,49 +219,48 @@ class DriveMode(Mode):
         if self.mode_args=='degradation':
             self.assoc_faultstates({'friction':{(self.s.friction+0.5), 2*(self.s.friction+0.5), 5*(self.s.friction+0.5)}, 
                                     'transfer':{0.0}, 
-                                    'drift':{self.s.drift+0.2, self.s.drift-0.2}}, 'all')
+                                    'drift':{self.s.drift+0.2, self.s.drift-0.2}}, 'all', oppvect={"drive":1.0})
         elif type(self.mode_args)==int:
             self.assoc_faultstates({'friction':{*np.linspace(0.0,20, 100)}, 
                                     'transfer':{*np.linspace(1.0,0.0, 100)}, 
-                                    'drift': {*np.linspace(-0.5,0.5, 100)}}, self.mode_args)
+                                    'drift': {*np.linspace(-0.5,0.5, 100)}}, self.mode_args, oppvect={"drive":1.0})
         elif type(self.mode_args)==list:
             self.assoc_faultstates(manual_modes={'s_'+str(i):{'friction':mode[0], 
                                                               'transfer':mode[1], 
-                                                              'drift':mode[2]} for i,mode in enumerate(self.mode_args)})
+                                                              'drift':mode[2]} for i,mode in enumerate(self.mode_args)}, oppvect={"drive":1.0})
         elif  type(self.mode_args)==dict:
-            self.assoc_faultstates(manual_modes=self.mode_args)
+            self.assoc_faultstates(manual_modes=self.mode_args, oppvect={"drive":1.0})
         else:
             if 'manual' in self.mode_args:
                 self.assoc_faultstates(manual_modes={'elec_open':{'transfer':0.0}, 
                                                      'stuck':{'friction':10.0}, 
                                                      'stuck_right':{'friction':3.0, 'drift':0.2},
-                                                     'stuck_left':{'friction':3.0, 'drift':-0.2}})
+                                                     'stuck_left':{'friction':3.0, 'drift':-0.2}}, oppvect={"drive":1.0})
             if  'set' in self.mode_args:
                 self.assoc_faultstates({'friction':{1.5,3.0,10.0}, 
                                         'transfer':{0.5,0.0}, 
-                                        'drift':{-0.2,0.2}}, 'all')
+                                        'drift':{-0.2,0.2}}, 'all', oppvect={"drive":1.0})
             if 'range' in self.mode_args:
                 if 'all' in kwargs['drive_modes']:
                     self.assoc_faultstates({'friction':np.linspace(0.0,20, 10), 
                                             'transfer':np.linspace(1.0,0.0, 10), 
-                                            'drift':   np.linspace(-0.5,0.5, 10)}, 'all')
+                                            'drift':   np.linspace(-0.5,0.5, 10)}, 'all', oppvect={"drive":1.0})
                 else:
                     self.assoc_faultstates({'friction':np.linspace(0.0,20, 100), 
                                             'transfer':np.linspace(1.0,0.0, 100), 
-                                            'drift':   np.linspace(-0.5,0.5, 100)}, 1000)
+                                            'drift':   np.linspace(-0.5,0.5, 100)}, 1000, oppvect={"drive":1.0})
 
 class Drive(FxnBlock):
-    __slots__=('ground', 'motor_control', 'ee_in', 'faultstates')
+    __slots__=('ground', 'motor_control', 'ee_in', 'faultystates')
     _init_p = DegParam
     _init_m = DriveMode
-    _init_faultstates = Fault
+    _init_faultystates = Fault
     _init_ground = Ground 
     _init_motor_control=Control
     _init_ee_in = EE 
-    _init_faultstates = Fault
     flownames = {'ee_15':'ee_in'}
     def dynamic_behavior(self, time):
-        self.faultstates.s.assign(self.m.s, 'friction', 'transfer', 'drift')
+        self.faultystates.s.assign(self.m.s, 'friction', 'transfer', 'drift')
         rpower = self.m.s.transfer*self.ee_in.s.v*self.motor_control.s.rpower/15 + self.m.s.drift
         lpower = self.m.s.transfer*self.ee_in.s.v*self.motor_control.s.lpower/15 - self.m.s.drift
         if self.m.has_fault("elec_open"):   self.ee_in.s.a = 0
@@ -467,17 +466,17 @@ class Rover(Model):
         self.add_flow('switch',             Switch)
         self.add_flow('comms',              Comms)
         self.add_flow('override_comms',     OverrideComms)
-        self.add_flow('faultstates',        Fault)
+        self.add_flow('faultystates',        Fault)
         #self.add_flow('Example_Disconnect')
 
         self.add_fxn("power",           Power,          "ee_15","ee_5",'ee_12', "switch")
         self.add_fxn("operator",        Operator,       "switch")
         self.add_fxn("communications",  Communications, "comms", "ee_12", 'pos_signal')
         self.add_fxn("perception",      Perception,     "ground", "ee_12", "video")
-        self.add_fxn("avionics",        Avionics,       "video",'pos_signal',"ground","avionics_control", "faultstates",
+        self.add_fxn("avionics",        Avionics,       "video",'pos_signal',"ground","avionics_control", "faultystates",
                      p=self.p)
         self.add_fxn("override",        Override,       "override_comms", "ee_5", 'motor_control','avionics_control')
-        self.add_fxn("drive",           Drive,          "ground","ee_15", "motor_control", "faultstates",
+        self.add_fxn("drive",           Drive,          "ground","ee_15", "motor_control", "faultystates",
                      m={'mode_args': self.p.drive_modes},     p=self.p.degradation)
         self.add_fxn("environment",     Environment,    'ground',   p=self.p)
 
@@ -570,7 +569,7 @@ def plot_trajectories(mdlhists, nomhist=[],  app= [], faultlabel='Faulty', fault
             ax.plot(hist.flows.ground.s.x,hist.flows.ground.s.y, color='orange', alpha=setalpha)
             ax.scatter(hist.flows.ground.s.x[-1],hist.flows.ground.s.y[-1], color='orange', alpha=setalpha, marker='o', label='Set')
         else:
-            ax.plot(hist.flows.ground.s.x,hist.flows.ground.s.y, color='red', alpha=faultalpha)
+            ax.plot(hist.flows.ground.s.x, hist.flows.ground.s.y, color='red', alpha=faultalpha)
             ax.scatter(hist.flows.ground.s.x[-1],hist.flows.ground.s.y[-1], color='red', alpha=faultalpha, marker='*', label=faultlabel)
             if show_labels:
                 label = mode[mode_trunc:]
@@ -672,7 +671,7 @@ pos_bip = {'power': [-0.684772948203272, -0.2551613615446115],
          'environment': [1.1329643169383754, -0.6375225566564033],
          'ground': [1.108432946123935, -0.3228541151507237],
          'pos_signal': [-0.256557435572734, 0.5411037985681082],
-         'faultstates': [0.75997843863482324, -0.04522869632581994],
+         'faultystates': [0.75997843863482324, -0.04522869632581994],
          'ee_12': [-0.3676879520509888, -0.04754907961317867],
          'ee_5': [-0.2181352416728437, -0.2015320865756482],
          'ee_15': [-0.5352906801304353, -0.5288715575154177],
@@ -744,7 +743,7 @@ if __name__=="__main__":
     endresults, reshist = prop.one_fault(mdl,'drive','custom_fault', time=15, staged=True)
     
     
-    line_dist = endresults['line_dist']
+    line_dist = endresults.endclass.line_dist
     end_loc = (reshist.faulty.flows.ground.s.x[-1],reshist.faulty.flows.ground.s.y[-1])
     #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
 
