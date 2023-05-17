@@ -5,8 +5,6 @@ Created on Wed Dec 14 13:51:18 2022
 @author: dhulse
 """
 import unittest
-import sys, os
-sys.path.insert(0, os.path.join('..'))
 from examples.multirotor.drone_mdl_opt import Drone, opt_prob, x_to_rcost, x_to_ocost
 import multiprocessing as mp
 

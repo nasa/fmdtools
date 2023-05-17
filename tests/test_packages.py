@@ -11,7 +11,7 @@ from fmdtools.define.rand import get_pdf_for_rand
 from fmdtools.define.model import Model
 from fmdtools.define.flow import CommsFlow, MultiFlow
 import numpy as np
-from CommonTests import CommonTests
+from tests.common import CommonTests
 
 
 class Mover(FxnBlock):

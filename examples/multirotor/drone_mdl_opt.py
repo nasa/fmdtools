@@ -24,7 +24,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
-from drone_mdl_dynamic import finddist,vectdist, inrange
+from examples.multirotor.drone_mdl_dynamic import finddist,vectdist, inrange
 from recordclass import asdict
 
 # DEFINE PARAMETERS
@@ -64,7 +64,7 @@ class DroneParam(Parameter, readonly=True):
         
 
 # DEFINE FLOWS
-from drone_mdl_static import EE, Force, Control
+from examples.multirotor.drone_mdl_static import EE, Force, Control
 class DOFstate(State):
     vertvel:    float=1.0
     planvel:    float=1.0
@@ -95,7 +95,7 @@ class RSig(Flow):
     _init_s = RSigState
 
 #DEFINE FUNCTIONS
-from drone_mdl_static import DistEE
+from examples.multirotor.drone_mdl_static import DistEE
 
 class BatState(State):
     soc:  float=100.0
@@ -175,7 +175,7 @@ class BatArch(CompArch):
         kwargs.update(batparams)
         super().__init__(*args, **kwargs)
         self.make_components(Battery, *compnames, p=batparams)
-from drone_mdl_static import StoreEEState
+from examples.multirotor.drone_mdl_static import StoreEEState
 class StoreEEMode(Mode):
     failrate=1e-4
     faultparams = {'nocharge':  (0.2,[0.6,0.2,0.2],0),
@@ -265,7 +265,7 @@ class ManageHealth(FxnBlock):
         elif  self.hsig_bat.s.hstate=='faulty':   self.rsig_traj.s.mode = self.p.bat
         else:                                     self.rsig_traj.s.mode = 'continue'
 
-from drone_mdl_hierarchical import AffectDOFArch, OverallAffectDOFState
+from examples.multirotor.drone_mdl_hierarchical import AffectDOFArch, OverallAffectDOFState
 class AffectMode(Mode):
     key_phases_by='plan_path'
 class AffectDOF(FxnBlock): #ee_mot,ctl,dofs,force_lin hsig_dofs, RSig_dofs

@@ -7,9 +7,8 @@ Created on Tue Dec 21 08:52:58 2021
 import unittest
 from examples.pump.pump_stochastic import Pump
 from fmdtools.sim import propagate
-import fmdtools.analyze as an
-from fmdtools.define import SampleApproach, NominalApproach
-from CommonTests import CommonTests
+from fmdtools.sim.approach import NominalApproach
+from tests.common import CommonTests
 import numpy as np
 import multiprocessing as mp
 

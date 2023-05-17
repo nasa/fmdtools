@@ -10,7 +10,6 @@ from fmdtools.define.state import State
 from fmdtools.define.block import FxnBlock, Action, Mode, ASG
 from fmdtools.define.model import Model
 from fmdtools.define.flow import Flow
-import fmdtools.analyze as an
 import fmdtools.sim.propagate as prop
 
 class OutcomeStates(State):
@@ -141,9 +140,6 @@ result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard','perceive_fail
 
 result_fault.graph.fxns.detect_hazard.a.draw()
 
-faulthist = mdlhist_fault.get_faulty_hist(*mdl.fxns['detect_hazard'].a.actions,*mdl.fxns['detect_hazard'].a.flows)
-
-
 ag = ASGGraph(mdl.fxns['detect_hazard'].a)
-ag.draw_from(4, faulthist)
+ag.draw_from(4, mdlhist_fault)
 
