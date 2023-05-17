@@ -10,7 +10,7 @@
 
 For full reference and examples, please see the [documentation page](https://nasa.github.io/fmdtools/).
 
-Note: This version (2.0-alpha) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. [Click here to view the status of our test results.](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/pytest.html). For stable versions, download packages releases without the -alpha or -beta tags.
+Note: This version (2.0-alpha) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. [Click here to view the status of our test results.](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/pytest_report.html). For stable versions, download packages releases without the -alpha or -beta tags.
 
 ## Contributions
 fmdtools is developed primarily by researchers at NASA Ames Research Center. External contributions are welcome under a Contributor License Agreement:
