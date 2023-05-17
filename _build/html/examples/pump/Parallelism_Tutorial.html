@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using Parallel Computing in fmdtools &mdash; fmdtools 2.0-alpha documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">fmdtools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#notices">Notices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#how-to-write-good-models-development-best-practices">How to Write Good Models - Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/Examples.html">Examples</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-networks">fmdtools.sim.networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.html#fmdtools-define">fmdtools.define</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Using Parallel Computing in fmdtools</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples/pump/Parallelism_Tutorial.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Using-Parallel-Computing-in-fmdtools">
+<h1>Using Parallel Computing in fmdtools<a class="headerlink" href="#Using-Parallel-Computing-in-fmdtools" title="Permalink to this headline"></a></h1>
+<p>This notebook will discuss how to use parallel programming in fmdtools, including: - how to set up a model for parallelism - syntax for using parallelism in simulation functions - considerations for optimizing computational performance in a model</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ex_pump</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fmdtools.sim.approach</span> <span class="kn">import</span> <span class="n">SampleApproach</span>
+<span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">propagate</span>
+<span class="kn">import</span> <span class="nn">fmdtools.analyze</span> <span class="k">as</span> <span class="nn">an</span>
+</pre></div>
+</div>
+</div>
+<p>This notebook uses the pump example (see ex_pump.py) to illustrate the use of parallelism in fmdtools. This is fairly simple model, and thus it should be noted that there may be considerations with more complex models which may not be adequately covered here.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_5_0.png" src="../../_images/examples_pump_Parallelism_Tutorial_5_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_6_0.png" src="../../_images/examples_pump_Parallelism_Tutorial_6_0.png" />
+</div>
+</div>
+<section id="Model-Checks">
+<h2>Model Checks<a class="headerlink" href="#Model-Checks" title="Permalink to this headline"></a></h2>
+<p>Before attempting to leverage parallelism in model execution, it can be helpful to check whether a model is compatible with python parallel computing libraries. In order for a model to be parallelized, it must be compatible with <a class="reference external" href="https://docs.python.org/3/library/pickle.html#:~:text=%E2%80%9CPickling%E2%80%9D%20is%20the%20process%20whereby,back%20into%20an%20object%20hierarchy.">pickling</a>–python’s method of data serialization. This is used in parallel programming methods to copy the model
+from the main process thread to the seperate processes of the pool.</p>
+<p>fmdtools has two methods to check whether a model can be pickled, <code class="docutils literal notranslate"><span class="pre">check_pickleability</span></code> and <code class="docutils literal notranslate"><span class="pre">check_model_pickleability</span></code>. The main difference between these is that <code class="docutils literal notranslate"><span class="pre">check_pickleability</span></code> works for all objects (e.g. functions and flows), while <code class="docutils literal notranslate"><span class="pre">check_model_pickleability</span></code> gives more information for an overall model structure</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.common</span> <span class="kn">import</span> <span class="n">check_pickleability</span>
+<span class="kn">from</span> <span class="nn">fmdtools.define.model</span> <span class="kn">import</span> <span class="n">check_model_pickleability</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unpickleable_attributes</span> <span class="o">=</span> <span class="n">check_pickleability</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+is_copy
+flows
+fxns
+params
+valparams
+modelparams
+_rng
+functionorder
+_fxnflows
+_fxninput
+_flowstates
+staticfxns
+dynamicfxns
+fxnflowgraph
+multgraph
+staticflows
+The object is pickleable
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check_model_pickleability</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FLOWS
+ee_1
+The object is pickleable
+sig_1
+The object is pickleable
+wat_1
+The object is pickleable
+wat_2
+The object is pickleable
+FUNCTIONS
+import_ee
+ee_out
+The object is pickleable
+import_water
+wat_out
+The object is pickleable
+import_signal
+sig_out
+The object is pickleable
+move_water
+ee_in
+sig_in
+wat_in
+wat_out
+The object is pickleable
+export_water
+wat_in
+The object is pickleable
+MODEL
+is_copy
+flows
+fxns
+params
+valparams
+modelparams
+_rng
+functionorder
+_fxnflows
+_fxninput
+_flowstates
+staticfxns
+dynamicfxns
+fxnflowgraph
+multgraph
+staticflows
+The object is pickleable
+</pre></div></div>
+</div>
+<p>As you can see, this model is pickleable. However, this may not be the case for all structures if they rely on unpickleable data structures, one common one being iterators like .values().</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Using-Parallelism-in-Simulation">
+<h2>Using Parallelism in Simulation<a class="headerlink" href="#Using-Parallelism-in-Simulation" title="Permalink to this headline"></a></h2>
+<p>Parallelism generally requires using some external parallel processing toolkit. The syntax used by fmdtools methods is compatible with: - <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html">multiprocessing</a>, python’s default parallel computing library - <a class="reference external" href="https://pypi.org/project/multiprocess/">multiprocess</a>, a fork of multiprocessing developed by The UQ Foundation - <a class="reference external" href="https://github.com/uqfoundation/pathos">pathos</a>, a broader parallel computing package developed by The UQ Foundation</p>
+<p>And any other package that emulates multiprocessing.Pool</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+<span class="kn">import</span> <span class="nn">multiprocess</span> <span class="k">as</span> <span class="nn">ms</span>
+<span class="kn">from</span> <span class="nn">pathos.pools</span> <span class="kn">import</span> <span class="n">ParallelPool</span><span class="p">,</span> <span class="n">ProcessPool</span><span class="p">,</span> <span class="n">SerialPool</span><span class="p">,</span> <span class="n">ThreadPool</span>
+</pre></div>
+</div>
+</div>
+<p>Parallelism can speed up simulation time when there is a large number of independent simulations to run. The prefered methods for using parallelism are to use a <code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code> or <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> with the methods: - propagate.singlefaults (for all single-fault scenarios in a static model with no approach) - propagate.approach (for sampling a set of faults) - propagate.nominal_approach (for simulating the model nominally over a set of parameters) - propagate.nested_approach (for sampling a
+set of faults over a set of model parameters)</p>
+<p>These methods can be run in parallel by sending them a <code class="docutils literal notranslate"><span class="pre">pool</span></code> object from one of these modules as the optional <code class="docutils literal notranslate"><span class="pre">pool</span></code> argument. Further details on setting up and running an approach are provided in <code class="docutils literal notranslate"><span class="pre">docs/Approach</span> <span class="pre">Use-Cases.ipynb</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+<span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+<span class="c1">#an.tabulate.simplefmea(endclasses)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 17/17 [00:02&lt;00:00,  5.96it/s]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+<span class="c1">#an.tabulate.simplefmea(endclasses)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\dhulse\Anaconda3\lib\multiprocessing\pool.py:265: ResourceWarning: unclosed running multiprocessing pool &lt;multiprocessing.pool.Pool state=RUN pool_size=4&gt;
+  _warn(f&#34;unclosed running multiprocessing pool {self!r}&#34;,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 21/21 [00:02&lt;00:00,  7.30it/s]
+</pre></div></div>
+</div>
+<p>It can also be helpful to verify that the results of parallel simulation and normal serial execution are the same:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_par</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+<span class="c1">#tab_par = an.tabulate.simplefmea(endclasses_par)</span>
+<span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+<span class="c1">#tab = an.tabulate.simplefmea(endclasses)</span>
+<span class="c1">#tab - tab_par</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 21/21 [00:00&lt;00:00, 80.15it/s]
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 21/21 [00:01&lt;00:00, 19.86it/s]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_par</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+<span class="c1">#tab_par = an.tabulate.simplefmea(endclasses_par)</span>
+<span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">app</span><span class="p">)</span>
+<span class="c1">#tab = an.tabulate.simplefmea(endclasses)</span>
+<span class="c1">#tab - tab_par</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 79.23it/s]
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 27.07it/s]
+</pre></div></div>
+</div>
+<p>While fmdtools built-in methods are the easiest way to leverage parallelism, it can also be used with custom arguments/methods to meet the needs of simulation. However, (on Windows) these methods need to be defined in an external module with an “if <strong>name</strong>==‘<strong>main</strong>’:” statement, otherwise execution will hang from spawning new processes. This has to do with how multiprocessing works in windows.</p>
+<p>To show how parellism can be leveraged manually for a desired use-case, below the model is run over the blockage fault mode at time t=1 with a different model parameter (delayed failure behavior), as defined in the <code class="docutils literal notranslate"><span class="pre">parallelism_methods.py</span></code> module in this folder.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">parallelism_methods</span> <span class="kn">import</span> <span class="n">delay_test</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">delay_test</span><span class="p">()</span>
+<span class="n">results</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 20125.000000000007,
+  &#39;expected cost&#39;: 1106875.0000000005},
+ {&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 20102.500000000007,
+  &#39;expected cost&#39;: 1105637.5000000005},
+ {&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 20080.000000000007,
+  &#39;expected cost&#39;: 1104400.0000000005},
+ {&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 20057.500000000007,
+  &#39;expected cost&#39;: 1103162.5000000005},
+ {&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 20035.000000000007,
+  &#39;expected cost&#39;: 1101925.0000000005},
+ {&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 15023.750000000005,
+  &#39;expected cost&#39;: 826306.2500000003},
+ {&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 15023.750000000005,
+  &#39;expected cost&#39;: 826306.2500000003},
+ {&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 15023.750000000005,
+  &#39;expected cost&#39;: 826306.2500000003},
+ {&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 15023.750000000005,
+  &#39;expected cost&#39;: 826306.2500000003},
+ {&#39;rate&#39;: 0.00055,
+  &#39;cost&#39;: 15023.750000000005,
+  &#39;expected cost&#39;: 826306.2500000003}]
+</pre></div></div>
+</div>
+<p>In this method, the model is run many times over a given fault with different delay parameters. It should be noted that this approach is not especially efficient, since the nominal scenario is simulated at each call of <code class="docutils literal notranslate"><span class="pre">propagate.one_fault()</span></code>. It is thus preferred to use the appropriate fault/parameter sampling approaches and propagate methods, since these methods only run the nominal simulation once for fault scenarios and can also use staged execution (copying the model at fault time for
+fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
+</section>
+<section id="Performance-Comparison">
+<h2>Performance Comparison<a class="headerlink" href="#Performance-Comparison" title="Permalink to this headline"></a></h2>
+<p>Parallelism is often used in computation to speed up up a set of independent simulations. Conventionally, one might say it leads to a reduced computational cost of <span class="math notranslate nohighlight">\(t/n\)</span>, where t was the original time of the set of processes, and n is the number of cores.</p>
+<p>However, this computational performance increase is dependent on the implementation. In Python, there is some overhead from from communicating data structures in and out of parallel threads which can become a significant consideration when the data structures are large. Additionally, different Pools can execute more or less efficiently. Below these are each compared.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">parallelism_methods</span> <span class="kn">import</span> <span class="n">compare_pools</span><span class="p">,</span> <span class="n">instantiate_pools</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cores</span><span class="o">=</span><span class="mi">4</span>
+<span class="n">pools</span> <span class="o">=</span> <span class="n">instantiate_pools</span><span class="p">(</span><span class="n">cores</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 8288 is still running
+  _warn(&#34;subprocess %s is still running&#34; % self.pid,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=8&gt;
+  self.start()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 8372 is still running
+  _warn(&#34;subprocess %s is still running&#34; % self.pid,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=10&gt;
+  self.start()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 13136 is still running
+  _warn(&#34;subprocess %s is still running&#34; % self.pid,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=12&gt;
+  self.start()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 7068 is still running
+  _warn(&#34;subprocess %s is still running&#34; % self.pid,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=14&gt;
+  self.start()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 12732 is still running
+  _warn(&#34;subprocess %s is still running&#34; % self.pid,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=16&gt;
+  self.start()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 6508 is still running
+  _warn(&#34;subprocess %s is still running&#34; % self.pid,
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=18&gt;
+  self.start()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+</pre></div></div>
+</div>
+<p>Below is the baseline comparison, where the the following parameters characterize the sampling approach: - single faults: only the single-fault scenarios are considered - 3 points per phase: an evenly-spaced quadrature is sampled at each phase of operation (start, on, end) for the model - staged: the model is copied at each point in time where faults is injected during the model time to save computation - track: the entire model history is returned for each simulation</p>
+<p>This is typical for a small model like this where the per-model expense is low.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
+<span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">exectimes_baseline</span> <span class="o">=</span> <span class="n">exectimes</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Baseline Performance - Some faults, Staged, Normal Simulation, Full Model History&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Computational Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_31_0.png" src="../../_images/examples_pump_Parallelism_Tutorial_31_0.png" />
+</div>
+</div>
+<p>As shown, in this situation, both the multiprocessing and threadpool pools give computational performance increases.</p>
+<section id="Comparison:-No-Histories">
+<h3>Comparison: No Histories<a class="headerlink" href="#Comparison:-No-Histories" title="Permalink to this headline"></a></h3>
+<p>In the below comparison, the same simulation approach is run, except without tracking a history of model states through the simulation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">()</span>
+<span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;comparison&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;baseline&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Computational Performance - Many Faults, Staged, Normal Simulation, No Model History&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Computational Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x29e6cc6ef10&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_35_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_35_1.png" />
+</div>
+</div>
+<p>As shown, in this situation, the overall simulation expense decreases dramatically (~1/2), even in the serial execution case.</p>
+<p>Additionally, the case for using a parallel processing pool increases immensely (the multiprocessing pool takes ~1/4 of the normal simulation time). This is because passing the model history back to the main process is nearly comparable in time to simulation itself.</p>
+<p>As a result, removing it saves a large amount of computational time when using parallel processing.</p>
+</section>
+<section id="Comparison:-Many-Faults">
+<h3>Comparison: Many Faults<a class="headerlink" href="#Comparison:-Many-Faults" title="Permalink to this headline"></a></h3>
+<p>In the below comparison, many faults are injected in the system to increase the number of scenarios (ostensibly making the case better for parallelism)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">()</span>
+<span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;comparison&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;baseline&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Computational Performance - Many Faults, Staged, Normal Simulation, Full Model History&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Computational Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x29e6cb93220&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_39_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_39_1.png" />
+</div>
+</div>
+<p>As shown, increasing the number of joint-fault scenarios increases computational costs significantly–as would be expected.</p>
+<p>In this situation, multiprocessing performs comparatively better, but only slightly–instead of taking 1/4 the time, it only takes about 1/2 the time.</p>
+</section>
+<section id="Comparison:-Long-simulation">
+<h3>Comparison: Long simulation<a class="headerlink" href="#Comparison:-Long-simulation" title="Permalink to this headline"></a></h3>
+<p>It may be of interest to simulate how the comparative performance changes for longer simulations. In this comparison, the simulation time is extended tenfold.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">modelparams</span> <span class="o">=</span> <span class="n">ModelParam</span><span class="p">(</span><span class="n">phases</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;start&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">)),</span> <span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;comparison&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;baseline&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Computational Performance - Normal Faults, Staged, Long Simulation, Full Model History&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Computational Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x29e6de97d90&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_43_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_43_1.png" />
+</div>
+</div>
+<p>As shown, the simulation time does increase significantly–about tenfold. In terms of comparative performance, the same general trends hold, except some pools take more of a performance decrease than others. Ostensibly because they require more computational overhead to copy larger data structures back to the main process.</p>
+</section>
+<section id="Comparison:-Long-Simulation-No-Tracking">
+<h3>Comparison: Long Simulation No Tracking<a class="headerlink" href="#Comparison:-Long-Simulation-No-Tracking" title="Permalink to this headline"></a></h3>
+<p>Finally, it may be interesting to see how performance is affected in long simulations when there is no tracking. This is because in these simulations, there should be very little overhead from creating the respective data structures, even when there is a long simulation. This comparison is shown below.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">modelparams</span> <span class="o">=</span> <span class="n">ModelParam</span><span class="p">(</span><span class="n">phases</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;start&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">)),</span> <span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;comparison&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;baseline&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Computational Performance - Normal Faults, Staged, Long Simulation, No Model History&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Computational Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x29e6c649340&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_47_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_47_1.png" />
+</div>
+</div>
+<p>As shown, with a long simulation, the case for pools (other than multiprocessing–ProcessPool, ParallelPool, multiprocess) increases somewhat.</p>
+</section>
+<section id="Comparison:-Long-Simulation-Only-Necessary-Tracking">
+<h3>Comparison: Long Simulation Only Necessary Tracking<a class="headerlink" href="#Comparison:-Long-Simulation-Only-Necessary-Tracking" title="Permalink to this headline"></a></h3>
+<p>In practice, it can be necessary to track some states over time. Here we perform the same comparison using the ‘valstates’ option, which only tracks states which have been defined in the model to be necessary to track (using ‘valparams’)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">modelparams</span> <span class="o">=</span> <span class="n">ModelParam</span><span class="p">(</span><span class="n">phases</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;start&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">)),</span> <span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;valparams&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;comparison&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;baseline&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Computational Performance - Normal Faults, Staged, Long Simulation, Only Necessary History&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Computational Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x29e6cbc2fa0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_51_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_51_1.png" />
+</div>
+</div>
+<p>As shown, even though this model has a large increase in simulation time, the this time can be reduced by not returning the full history.</p>
+<p>Thus, the major computational performance limitation in this model is not necessarily the model, but the generation, update, and passing of the history itself.</p>
+</section>
+</section>
+<section id="Comparison:-Lower-Tracking-Time-Resolution">
+<h2>Comparison: Lower Tracking Time Resolution<a class="headerlink" href="#Comparison:-Lower-Tracking-Time-Resolution" title="Permalink to this headline"></a></h2>
+<p>Finally, the number of recorded timesteps can be lowered to lower computational costs while still returning all relevant variables.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">modelparams</span> <span class="o">=</span> <span class="n">ModelParam</span><span class="p">(</span><span class="n">phases</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;start&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">)),</span> <span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">track_times</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;comparison&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes_baseline</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;baseline&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exectimes</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="n">exectimes</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Computational Performance - Many Faults, Staged, Normal Simulation, No Model History&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Computational Time (s)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x29e6dee08e0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_55_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_55_1.png" />
+</div>
+</div>
+<p>As shown, while lowering time resolution could theoretically lower computational time, it does not significantly change much in this example.</p>
+</section>
+<section id="Comparison-Conclusions:">
+<h2>Comparison Conclusions:<a class="headerlink" href="#Comparison-Conclusions:" title="Permalink to this headline"></a></h2>
+<p>Parallelism can the improve computational performance of a given resilience simulation approach. However, this improvement is dependent on the parameters of the simulation. Generally, the official python <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code> module seems to be the only package that consistently gives a performance improvement over a single-process execution, although this can change depending on the underlying model and modelling approach. There are additionally reasons you might choose other pools–<code class="docutils literal notranslate"><span class="pre">Pathos</span></code> and
+<code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> pools may enable more data structures in the model because they extend what can be communicated in and out of threads.</p>
+<p>In general, one of the major considerations for optimization compuational time is not just the <em>simulation of the model</em>, but the <em>size of the returned data structures</em>. Minimizing the size of the returned data structures can reduce computational time both by reducing the time of an individual simulation and by reducing the <em>parallelism overhead</em> from copying these data structures in and out of parallel threads. However, it is important to recognize that for resilience assessment, one often
+needs a history of model states (or, at least, states of interest) to properly quantify the dynamic costs (i.e., <span class="math notranslate nohighlight">\(\int C_f(t) dt\)</span>). Indeed, in this model, only repair costs were able to be used in the comparison of non-tracked states, because the other dynamic costs required a history of their corresponding flows. Changing the number and size of tracked model states can influence the computational time, but only to a point–while one would expect lowering time-fidelity to have a significant
+effect, it does not because the overhead is less to do with filling the underlying data structures as it has to do with instantiating and returning them–a far more effective method is to only return the functions/flows which are needed by the model.</p>
+</section>
+<section id="Further-Computational-Cost-Reduction-via-Profiling">
+<h2>Further Computational Cost Reduction via Profiling<a class="headerlink" href="#Further-Computational-Cost-Reduction-via-Profiling" title="Permalink to this headline"></a></h2>
+<p>While parallelism and staged execution are helpful and relatively easy-to-implement methods of computational cost reduction, it can be helpful (especially for more complex models) to see what aspects of the model are taking the most computational time.</p>
+<p>Python’s builtin <code class="docutils literal notranslate"><span class="pre">cProfile</span></code> package can ge used to see the relative computational times of different functions/processes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cProfile</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;propagate.nominal(mdl)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+         279899 function calls (261791 primitive calls) in 0.156 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(amin)
+       18    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(concatenate)
+        4    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(sort)
+        1    0.000    0.000    0.000    0.000 &lt;string&gt;:1(&lt;module&gt;)
+       37    0.000    0.000    0.000    0.000 __init__.py:1043(__init__)
+       36    0.000    0.000    0.000    0.000 __init__.py:1053(__getitem__)
+      131    0.000    0.000    0.000    0.000 __init__.py:1060(__setitem__)
+        4    0.000    0.000    0.000    0.000 _asarray.py:110(asanyarray)
+     1006    0.002    0.000    0.005    0.000 _collections_abc.py:706(__ior__)
+       96    0.000    0.000    0.000    0.000 _collections_abc.py:779(items)
+       96    0.000    0.000    0.000    0.000 _collections_abc.py:802(__init__)
+      216    0.000    0.000    0.001    0.000 _collections_abc.py:849(__iter__)
+       36    0.000    0.000    0.000    0.000 _ufunc_config.py:132(geterr)
+       36    0.000    0.000    0.000    0.000 _ufunc_config.py:32(seterr)
+       18    0.000    0.000    0.000    0.000 _ufunc_config.py:433(__enter__)
+       18    0.000    0.000    0.000    0.000 _ufunc_config.py:438(__exit__)
+       51    0.000    0.000    0.000    0.000 abc.py:117(__instancecheck__)
+       10    0.000    0.000    0.003    0.000 block.py:112(__init__)
+       10    0.000    0.000    0.000    0.000 block.py:157(update_seed)
+        5    0.000    0.000    0.000    0.000 block.py:205(reset)
+     5042    0.010    0.000    0.023    0.000 block.py:253(return_mutables)
+        5    0.000    0.000    0.000    0.000 block.py:274(create_hist)
+       10    0.000    0.000    0.001    0.000 block.py:31(assoc_flows)
+       10    0.000    0.000    0.000    0.000 block.py:49(&lt;dictcomp&gt;)
+       10    0.000    0.000    0.004    0.000 block.py:738(__init__)
+     5042    0.005    0.000    0.030    0.000 block.py:848(return_mutables)
+     2526    0.008    0.000    0.025    0.000 block.py:854(__call__)
+        5    0.000    0.000    0.000    0.000 block.py:908(reset)
+       25    0.000    0.000    0.000    0.000 common.py:57(get_true_fields)
+       18    0.000    0.000    0.000    0.000 contextlib.py:63(_recreate_cm)
+       18    0.000    0.000    0.001    0.000 contextlib.py:76(inner)
+     1010    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
+     17/5    0.000    0.000    0.000    0.000 copy.py:128(deepcopy)
+       11    0.000    0.000    0.000    0.000 copy.py:182(_deepcopy_atomic)
+      6/4    0.000    0.000    0.000    0.000 copy.py:226(_deepcopy_dict)
+        6    0.000    0.000    0.000    0.000 copy.py:242(_keep_alive)
+     6052    0.004    0.000    0.005    0.000 copy.py:66(copy)
+       56    0.000    0.000    0.000    0.000 coreviews.py:268(__init__)
+       24    0.000    0.000    0.000    0.000 coreviews.py:275(__iter__)
+       48    0.000    0.000    0.000    0.000 coreviews.py:282(&lt;genexpr&gt;)
+       24    0.000    0.000    0.000    0.000 coreviews.py:284(__getitem__)
+       56    0.000    0.000    0.000    0.000 coreviews.py:316(__init__)
+       24    0.000    0.000    0.000    0.000 coreviews.py:324(__iter__)
+       72    0.000    0.000    0.000    0.000 coreviews.py:330(&lt;genexpr&gt;)
+       96    0.000    0.000    0.000    0.000 coreviews.py:383(__iter__)
+       96    0.000    0.000    0.000    0.000 coreviews.py:391(&lt;genexpr&gt;)
+       48    0.000    0.000    0.000    0.000 coreviews.py:401(__getitem__)
+       48    0.000    0.000    0.000    0.000 coreviews.py:404(new_node_ok)
+       48    0.000    0.000    0.000    0.000 coreviews.py:439(__getitem__)
+      184    0.000    0.000    0.000    0.000 coreviews.py:44(__init__)
+       96    0.000    0.000    0.000    0.000 coreviews.py:442(edge_ok)
+       84    0.000    0.000    0.000    0.000 coreviews.py:50(__iter__)
+        8    0.000    0.000    0.000    0.000 coreviews.py:53(__getitem__)
+       92    0.000    0.000    0.000    0.000 coreviews.py:81(__getitem__)
+       86    0.000    0.000    0.000    0.000 enum.py:358(__call__)
+       86    0.000    0.000    0.000    0.000 enum.py:670(__new__)
+      505    0.000    0.000    0.000    0.000 ex_pump.py:121(condfaults)
+      504    0.001    0.000    0.002    0.000 ex_pump.py:129(behavior)
+      504    0.000    0.000    0.001    0.000 ex_pump.py:148(behavior)
+      504    0.000    0.000    0.001    0.000 ex_pump.py:164(behavior)
+      504    0.001    0.000    0.001    0.000 ex_pump.py:178(behavior)
+        2    0.000    0.000    0.001    0.000 ex_pump.py:212(__init__)
+      506    0.000    0.000    0.000    0.000 ex_pump.py:221(condfaults)
+      505    0.002    0.000    0.007    0.000 ex_pump.py:238(behavior)
+        2    0.000    0.000    0.007    0.003 ex_pump.py:264(__init__)
+        1    0.000    0.000    0.000    0.000 ex_pump.py:320(find_classification)
+       96    0.000    0.000    0.000    0.000 filters.py:20(no_filter)
+        8    0.000    0.000    0.000    0.000 filters.py:51(__init__)
+      312    0.000    0.000    0.000    0.000 filters.py:54(__call__)
+        8    0.000    0.000    0.000    0.000 flow.py:28(__init__)
+        8    0.000    0.000    0.000    0.000 flow.py:522(init_flow)
+       12    0.000    0.000    0.000    0.000 flow.py:56(reset)
+     4044    0.001    0.000    0.002    0.000 flow.py:59(return_mutables)
+        4    0.000    0.000    0.000    0.000 flow.py:83(create_hist)
+        1    0.000    0.000    0.000    0.000 fromnumeric.py:2737(_amin_dispatcher)
+        1    0.000    0.000    0.000    0.000 fromnumeric.py:2742(amin)
+        1    0.000    0.000    0.000    0.000 fromnumeric.py:70(_wrapreduction)
+        1    0.000    0.000    0.000    0.000 fromnumeric.py:71(&lt;dictcomp&gt;)
+        4    0.000    0.000    0.000    0.000 fromnumeric.py:840(_sort_dispatcher)
+        4    0.000    0.000    0.000    0.000 fromnumeric.py:844(sort)
+        8    0.000    0.000    0.000    0.000 function.py:161(freeze)
+        2    0.000    0.000    0.000    0.000 function.py:590(set_node_attributes)
+        2    0.000    0.000    0.000    0.000 function.py:715(set_edge_attributes)
+       20    0.000    0.000    0.000    0.000 graph.py:1214(neighbors)
+        2    0.000    0.000    0.000    0.000 graph.py:1257(edges)
+        2    0.000    0.000    0.000    0.000 graph.py:1380(degree)
+        6    0.000    0.000    0.000    0.000 graph.py:1454(is_multigraph)
+        4    0.000    0.000    0.000    0.000 graph.py:1458(is_directed)
+        8    0.000    0.000    0.000    0.000 graph.py:1664(subgraph)
+        8    0.000    0.000    0.000    0.000 graph.py:1863(nbunch_iter)
+       24    0.000    0.000    0.000    0.000 graph.py:1909(bunch_iter)
+       14    0.000    0.000    0.000    0.000 graph.py:289(__init__)
+       92    0.000    0.000    0.000    0.000 graph.py:338(adj)
+        8    0.000    0.000    0.000    0.000 graph.py:416(__contains__)
+       92    0.000    0.000    0.000    0.000 graph.py:452(__getitem__)
+        8    0.000    0.000    0.000    0.000 graph.py:526(add_nodes_from)
+       30    0.000    0.000    0.000    0.000 graph.py:661(nodes)
+       12    0.000    0.000    0.000    0.000 graph.py:895(add_edges_from)
+        8    0.000    0.000    0.000    0.000 graphviews.py:75(subgraph_view)
+       44    0.000    0.000    0.000    0.000 inspect.py:159(isfunction)
+       22    0.000    0.000    0.000    0.000 inspect.py:1838(_signature_bound_method)
+       22    0.000    0.000    0.001    0.000 inspect.py:2150(_signature_from_function)
+    44/22    0.000    0.000    0.001    0.000 inspect.py:2244(_signature_from_callable)
+       86    0.000    0.000    0.000    0.000 inspect.py:2496(__init__)
+      150    0.000    0.000    0.000    0.000 inspect.py:2546(name)
+      236    0.000    0.000    0.000    0.000 inspect.py:2558(kind)
+       64    0.000    0.000    0.000    0.000 inspect.py:2580(__str__)
+       44    0.000    0.000    0.000    0.000 inspect.py:2779(__init__)
+      108    0.000    0.000    0.000    0.000 inspect.py:2828(&lt;genexpr&gt;)
+       22    0.000    0.000    0.001    0.000 inspect.py:2857(from_callable)
+       44    0.000    0.000    0.000    0.000 inspect.py:2863(parameters)
+       22    0.000    0.000    0.000    0.000 inspect.py:2867(return_annotation)
+       22    0.000    0.000    0.000    0.000 inspect.py:2871(replace)
+       22    0.000    0.000    0.000    0.000 inspect.py:3063(__str__)
+       22    0.000    0.000    0.001    0.000 inspect.py:3109(signature)
+       22    0.000    0.000    0.000    0.000 inspect.py:494(unwrap)
+       22    0.000    0.000    0.000    0.000 inspect.py:514(_is_wrapper)
+       66    0.000    0.000    0.000    0.000 inspect.py:73(isclass)
+        2    0.000    0.000    0.000    0.000 isolate.py:40(isolates)
+        2    0.000    0.000    0.000    0.000 isolate.py:82(&lt;genexpr&gt;)
+       10    0.000    0.000    0.000    0.000 mode.py:109(__init__)
+     5042    0.003    0.000    0.007    0.000 mode.py:141(return_mutables)
+       10    0.000    0.000    0.000    0.000 mode.py:143(init_faultmodes)
+       14    0.000    0.000    0.000    0.000 mode.py:164(&lt;dictcomp&gt;)
+     3530    0.003    0.000    0.004    0.000 mode.py:257(has_fault)
+        5    0.000    0.000    0.000    0.000 mode.py:334(remove_any_faults)
+        5    0.000    0.000    0.000    0.000 mode.py:358(create_hist)
+        5    0.000    0.000    0.000    0.000 mode.py:362(&lt;dictcomp&gt;)
+        5    0.000    0.000    0.000    0.000 mode.py:365(&lt;listcomp&gt;)
+     4510    0.001    0.000    0.001    0.000 model.py:119(__getattr__)
+        2    0.000    0.000    0.000    0.000 model.py:127(find_any_phase_overlap)
+        2    0.000    0.000    0.000    0.000 model.py:128(&lt;dictcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:130(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:131(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:144(set_rng)
+        8    0.000    0.000    0.000    0.000 model.py:184(add_flow)
+       10    0.000    0.000    0.004    0.000 model.py:203(add_fxn)
+       10    0.000    0.000    0.000    0.000 model.py:236(get_flows)
+       10    0.000    0.000    0.000    0.000 model.py:238(&lt;dictcomp&gt;)
+        2    0.000    0.000    0.002    0.001 model.py:259(build_model)
+        2    0.000    0.000    0.000    0.000 model.py:270(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:273(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:277(&lt;listcomp&gt;)
+        2    0.000    0.000    0.002    0.001 model.py:278(construct_graph)
+        2    0.000    0.000    0.000    0.000 model.py:292(&lt;listcomp&gt;)
+        8    0.000    0.000    0.000    0.000 model.py:301(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 model.py:433(calc_repaircost)
+        1    0.000    0.000    0.000    0.000 model.py:455(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:458(return_faultmodes)
+       10    0.000    0.000    0.000    0.000 model.py:471(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:53(__init__)
+        1    0.000    0.000    0.000    0.000 model.py:535(reset)
+      501    0.000    0.000    0.001    0.000 model.py:551(set_vars)
+        1    0.000    0.000    0.001    0.001 model.py:612(create_hist)
+      501    0.002    0.000    0.077    0.000 model.py:625(propagate)
+      501    0.010    0.000    0.071    0.000 model.py:656(prop_static)
+       12    0.000    0.000    0.000    0.000 model.py:694(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:83(__init__)
+       18    0.000    0.000    0.000    0.000 multiarray.py:143(concatenate)
+       10    0.000    0.000    0.000    0.000 multigraph.py:291(__init__)
+        8    0.000    0.000    0.000    0.000 multigraph.py:403(add_edge)
+       16    0.000    0.000    0.000    0.000 multigraph.py:686(has_edge)
+        8    0.000    0.000    0.000    0.000 multigraph.py:742(edges)
+        8    0.000    0.000    0.000    0.000 multigraph.py:915(is_multigraph)
+        8    0.000    0.000    0.000    0.000 multigraph.py:919(is_directed)
+      501    0.000    0.000    0.004    0.000 ordered_set.py:122(copy)
+       40    0.000    0.000    0.000    0.000 ordered_set.py:157(__contains__)
+     2525    0.002    0.000    0.002    0.000 ordered_set.py:169(add)
+       10    0.000    0.000    0.000    0.000 ordered_set.py:190(update)
+     2004    0.001    0.000    0.001    0.000 ordered_set.py:287(__iter__)
+      501    0.001    0.000    0.003    0.000 ordered_set.py:336(union)
+     1008    0.001    0.000    0.006    0.000 ordered_set.py:65(__init__)
+     2505    0.001    0.000    0.001    0.000 ordered_set.py:71(__len__)
+       22    0.000    0.000    0.000    0.000 parameter.py:102(check_type)
+        4    0.000    0.000    0.000    0.000 parameter.py:117(copy_with_vals)
+       22    0.000    0.000    0.001    0.000 parameter.py:120(check_pickle)
+       22    0.000    0.000    0.002    0.000 parameter.py:35(__init__)
+       20    0.000    0.000    0.000    0.000 parameter.py:59(check_lim)
+       22    0.000    0.000    0.000    0.000 parameter.py:84(check_immutable)
+       24    0.000    0.000    0.000    0.000 projection.py:101(&lt;genexpr&gt;)
+       20    0.000    0.000    0.000    0.000 projection.py:103(&lt;setcomp&gt;)
+       26    0.000    0.000    0.000    0.000 projection.py:114(&lt;genexpr&gt;)
+        4    0.000    0.000    0.001    0.000 projection.py:15(projected_graph)
+        1    0.000    0.000    0.156    0.156 propagate.py:145(nominal)
+        1    0.000    0.000    0.000    0.000 propagate.py:171(save_helper)
+        2    0.000    0.000    0.000    0.000 propagate.py:202(update_params)
+        2    0.000    0.000    0.007    0.004 propagate.py:224(new_mdl)
+        2    0.000    0.000    0.001    0.000 propagate.py:226(new_mdl_params)
+        1    0.000    0.000    0.156    0.156 propagate.py:421(nom_helper)
+        1    0.000    0.000    0.000    0.000 propagate.py:617(check_overwrite)
+        1    0.000    0.000    0.000    0.000 propagate.py:698(construct_nomscen)
+        1    0.001    0.001    0.148    0.148 propagate.py:754(prop_one_scen)
+        1    0.000    0.000    0.000    0.000 propagate.py:850(get_result)
+        1    0.000    0.000    0.000    0.000 propagate.py:86(unpack_sim_kwargs)
+        6    0.000    0.000    0.000    0.000 propagate.py:88(&lt;genexpr&gt;)
+        5    0.000    0.000    0.000    0.000 rand.py:115(create_hist)
+       15    0.000    0.000    0.001    0.000 rand.py:45(__init__)
+     5042    0.001    0.000    0.001    0.000 rand.py:56(return_mutables)
+     2500    0.001    0.000    0.001    0.000 rand.py:87(update_stochastic_states)
+       10    0.000    0.000    0.000    0.000 reportviews.py:1003(__init__)
+       10    0.000    0.000    0.000    0.000 reportviews.py:1132(__iter__)
+       16    0.000    0.000    0.001    0.000 reportviews.py:1247(__len__)
+       32    0.000    0.000    0.001    0.000 reportviews.py:1248(&lt;genexpr&gt;)
+       48    0.000    0.000    0.001    0.000 reportviews.py:1250(__iter__)
+       30    0.000    0.000    0.000    0.000 reportviews.py:177(__init__)
+       30    0.000    0.000    0.000    0.000 reportviews.py:187(__getitem__)
+        2    0.000    0.000    0.000    0.000 reportviews.py:355(__init__)
+        2    0.000    0.000    0.000    0.000 reportviews.py:362(__call__)
+       20    0.000    0.000    0.000    0.000 reportviews.py:465(__iter__)
+        7    0.000    0.000    0.000    0.000 result.py:160(get_dict_attr)
+    18574    0.006    0.000    0.008    0.000 result.py:228(items)
+        7    0.000    0.000    0.000    0.000 result.py:234(__getattr__)
+       42    0.000    0.000    0.000    0.000 result.py:240(__setattr__)
+    16533    0.004    0.000    0.004    0.000 result.py:379(is_known_mutable)
+       77    0.000    0.000    0.000    0.000 result.py:383(get_sub_include)
+       33    0.000    0.000    0.000    0.000 result.py:393(init_hist_iter)
+        1    0.000    0.000    0.000    0.000 result.py:484(init_time)
+18537/501    0.048    0.000    0.070    0.000 result.py:498(log)
+     37/1    0.000    0.000    0.000    0.000 result.py:534(cut)
+        6    0.000    0.000    0.000    0.000 state.py:216(create_hist)
+      505    0.002    0.000    0.004    0.000 state.py:61(assign)
+      505    0.000    0.000    0.000    0.000 state.py:80(&lt;dictcomp&gt;)
+       10    0.000    0.000    0.000    0.000 time.py:133(__init__)
+      501    0.000    0.000    0.000    0.000 time.py:139(__getattr__)
+     5042    0.003    0.000    0.004    0.000 time.py:142(return_mutables)
+     6052    0.001    0.000    0.001    0.000 time.py:143(&lt;genexpr&gt;)
+       10    0.000    0.000    0.000    0.000 time.py:144(set_timestep)
+        5    0.000    0.000    0.000    0.000 time.py:164(reset)
+        5    0.000    0.000    0.000    0.000 time.py:181(create_hist)
+        2    0.000    0.000    0.000    0.000 time.py:25(__init__)
+        1    0.000    0.000    0.000    0.000 time.py:50(reset)
+        1    0.000    0.000    0.000    0.000 time.py:96(create_hist)
+       51    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
+     3539    0.001    0.000    0.001    0.000 {built-in method builtins.any}
+       52    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
+       10    0.000    0.000    0.000    0.000 {built-in method builtins.dir}
+       70    0.001    0.000    0.001    0.000 {built-in method builtins.eval}
+        1    0.000    0.000    0.156    0.156 {built-in method builtins.exec}
+    33939    0.008    0.000    0.010    0.000 {built-in method builtins.getattr}
+    27878    0.004    0.000    0.004    0.000 {built-in method builtins.hasattr}
+       55    0.000    0.000    0.000    0.000 {built-in method builtins.id}
+    17999    0.002    0.000    0.002    0.000 {built-in method builtins.isinstance}
+       66    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
+     2108    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
+     6434    0.001    0.000    0.001    0.000 {built-in method builtins.len}
+       15    0.000    0.000    0.000    0.000 {built-in method builtins.max}
+     1010    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+       20    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
+     1126    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+       18    0.000    0.000    0.001    0.000 {built-in method builtins.sum}
+      501    0.000    0.000    0.000    0.000 {built-in method from_iterable}
+        2    0.000    0.000    0.000    0.000 {built-in method fromkeys}
+        1    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
+        4    0.000    0.000    0.000    0.000 {built-in method numpy.array}
+       23    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
+       33    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
+       72    0.000    0.000    0.000    0.000 {built-in method numpy.geterrobj}
+       36    0.000    0.000    0.000    0.000 {built-in method numpy.seterrobj}
+        4    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.asdict}
+     9086    0.001    0.000    0.001    0.000 {built-in method recordclass._dataobject.astuple}
+       22    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
+       18    0.001    0.000    0.001    0.000 {function SeedSequence.generate_state at 0x0000029E660EFD30}
+     2693    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
+      510    0.000    0.000    0.000    0.000 {method &#39;clear&#39; of &#39;set&#39; objects}
+       20    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;dict&#39; objects}
+      505    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;list&#39; objects}
+        4    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
+     5557    0.001    0.000    0.001    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
+        1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
+       42    0.000    0.000    0.000    0.000 {method &#39;format&#39; of &#39;str&#39; objects}
+     6298    0.001    0.000    0.001    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
+       15    0.000    0.000    0.000    0.000 {method &#39;index&#39; of &#39;tuple&#39; objects}
+     3530    0.001    0.000    0.001    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
+       86    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
+    19141    0.002    0.000    0.002    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
+       22    0.000    0.000    0.000    0.000 {method &#39;join&#39; of &#39;str&#39; objects}
+      501    0.000    0.000    0.000    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
+       17    0.000    0.000    0.000    0.000 {method &#39;pop&#39; of &#39;dict&#39; objects}
+        1    0.000    0.000    0.000    0.000 {method &#39;reduce&#39; of &#39;numpy.ufunc&#39; objects}
+        4    0.000    0.000    0.000    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
+        7    0.000    0.000    0.000    0.000 {method &#39;split&#39; of &#39;str&#39; objects}
+      686    0.000    0.000    0.000    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
+      157    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
+       12    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
+     5067    0.001    0.000    0.001    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
+       44    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
+       18    0.000    0.000    0.001    0.000 {numpy.random._generator.default_rng}
+
+
+</pre></div></div>
+</div>
+<p>This is difficult to vizualize, although there are methods to store and sort through this output if needed. The <code class="docutils literal notranslate"><span class="pre">pycallgraph</span></code> package (requires a graphviz installation) can give a more immediate and insightful picture of where the code bottlenecks are.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycallgraph2</span> <span class="kn">import</span> <span class="n">PyCallGraph</span>
+<span class="kn">from</span> <span class="nn">pycallgraph2.output</span> <span class="kn">import</span> <span class="n">GraphvizOutput</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">PyCallGraph</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">GraphvizOutput</span><span class="p">()):</span>
+    <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;pycallgraph.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_64_0.png" src="../../_images/examples_pump_Parallelism_Tutorial_64_0.png" />
+</div>
+</div>
+<p>As shown, running this model is not particularly computationally expensive. As a result, the majority of the computational expense is not actually because of the simulation itself, but because of the way the model is simulated: - 0.03 of 0.13 s (23%) is spent re-initalizing the model at first so that the model object can be re-used without worrying about it being modified by any previous executions - 0.026 of 0.13 s (20%) is spent recording the model history - 0.062 of 0.13 s (47%) is spent
+simulating the model</p>
+<p>This is mostly because the model itself is computationally inexpensive. However, this example shows how one might easily speed up simulation for optimization or large-n simulations–avoiding unnecessary re-initialization, tracking fewer model states, or speeding up model execution. This can be done in the following ways: - using the options for <code class="docutils literal notranslate"><span class="pre">track</span></code> (as mentioned above) to track fewer states (reducing time spent recording the history) - using <code class="docutils literal notranslate"><span class="pre">protect</span></code> options, which specifies whether the
+model used is re-instantiated for the simulation (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or used directly (<code class="docutils literal notranslate"><span class="pre">False</span></code>) - speeding up the model by using <code class="docutils literal notranslate"><span class="pre">dynamic_behavior()</span></code> methods instead of <code class="docutils literal notranslate"><span class="pre">static_behavior()</span></code> or <code class="docutils literal notranslate"><span class="pre">behavior()</span></code> methods (which can halve the simulation time at the expense of undirected propagation) - speeding up the model by using a longer global timestep (<code class="docutils literal notranslate"><span class="pre">'tstep'</span></code> in <code class="docutils literal notranslate"><span class="pre">modelparams</span></code>) or by speeding up paricularly expensive Function dynamic behaviors by setting (<code class="docutils literal notranslate"><span class="pre">dt=local_tstep</span></code>) in
+<code class="docutils literal notranslate"><span class="pre">super().__init__()</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
