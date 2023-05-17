@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Development Guide &mdash; fmdtools 2.0-alpha documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="Examples.html" />
+    <link rel="prev" title="fmdtools" href="../README.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">fmdtools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#notices">Notices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-write-good-models-development-best-practices">How to Write Good Models - Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-networks">fmdtools.sim.networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.html#fmdtools-define">fmdtools.define</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Development Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/docs/Development Guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="development-guide">
+<h1>Development Guide<a class="headerlink" href="#development-guide" title="Permalink to this headline"></a></h1>
+<section id="how-to-write-good-models-development-best-practices">
+<h2>How to Write Good Models - Development Best Practices<a class="headerlink" href="#how-to-write-good-models-development-best-practices" title="Permalink to this headline"></a></h2>
+<section id="plan-your-model-to-avoid-technical-debt">
+<h3>Plan your model to avoid technical debt<a class="headerlink" href="#plan-your-model-to-avoid-technical-debt" title="Permalink to this headline"></a></h3>
+<p>Simple, small models are relatively easy to define in fmdtools with a few functions, flows, and behaviors. As such, it can be easy to get in the habit of not planning or organizing development in a systematic, which leads to issues when developing larger models: specifically, code that is <em>written into existence</em> instead of designed, planned, edited, tested, and documented. This leads to <a class="reference external" href="https://en.wikipedia.org/wiki/Technical_debt/">Technical debt</a>, which is the inherent difficulty of modifying code that was written ad-hoc rather than designed. Unless this technical debt is resolved, the ability to modify a model (e.g., to add new behaviors, conduct analyses, etc) will be limited by the complicated and unwieldy existing code.</p>
+<p>The next subsections give some advice to help avoid technical debt, based on lessons learned developing fmdtools models over the past few years.</p>
+</section>
+<section id="don-t-copy-inherit-and-functionalize">
+<h3>Don’t copy, inherit and functionalize<a class="headerlink" href="#don-t-copy-inherit-and-functionalize" title="Permalink to this headline"></a></h3>
+<p>Copy-and-paste can be a useful concept, but often gets over-relied upon by novice model developers who want to create several variants of the same programming structure. However, in the world of systems engineering (and software development), there are many cases where developers should be using <a class="reference external" href="https://www.w3schools.com/python/python_inheritance.asp/">class inheritance</a> and <a class="reference external" href="https://swcarpentry.github.io/python-novice-gapminder/16-writing-functions/index.html/">writing functions</a> instead.</p>
+<p>The advantages of inheritance are:</p>
+<ol class="arabic simple">
+<li><p>it reduces the bulk amount of code required to represent functions, making code more comprehensible</p></li>
+<li><p>it makes the distinction between similar classes easier to distinguish, since <em>there is no redundant code</em></p></li>
+<li><p>it makes it easier to edit code afterward, since the developer <em>only has to edit in one place</em> for it to apply to all the relevant types</p></li>
+<li><p>it makes testing easier, since common methods only need to be tested once</p></li>
+</ol>
+<p>In fmdtools, these patterns can be helpful:</p>
+<ul class="simple">
+<li><p>Instead of creating two very similar <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.FxnBlock</span></code> classes (e.g. Drone and PilotedAircraft) and copying code between each, create a single class (e.g. Aircraft) with common methods/structures (e.g., Fly, Taxi, Park, etc.) and then use sub-classes to extend and/or replace methods/structures the common class as needed (e.g., Autonomous Navigation in the Drone vs. Piloted Navigation in the normal aircraft).</p></li>
+<li><p>In a <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.Model</span></code> definition, instead of having several flow dictionaries with similar/the same data inputs, define one dictionary at the beginning and use it in each of the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Model.add_flow()</span></code> methods.</p></li>
+<li><p>Instead copying code for the same operations to several different places in a model, write a single function instead. This method can then be documented/tested and extended to a variety of different use-cases which require the same basic operation to be done.</p></li>
+</ul>
+<p>This is an incomplete list. In general, it can be a helpful limitation to <em>try to avoid using copy-and-paste as much as possible.</em> Instead if a piece of code needs to be run more than once in more than once place, write a function or method which will be used everywhere. The idea should be to <em>write the code once, and run it everywhere.</em></p>
+</section>
+<section id="document-your-code-sometimes-before-your-write-it">
+<h3>Document your code, sometimes <em>before</em> your write it<a class="headerlink" href="#document-your-code-sometimes-before-your-write-it" title="Permalink to this headline"></a></h3>
+<p>In general, Python coding style aspires to be <a class="reference external" href="https://en.wikipedia.org/wiki/Self-documenting_code/">as self-documenting</a> as possible. However, this is not a replacement for documentation. In general, novice developers think of documentation as something which happens at the end of the software development process, as something to primarily assist users.</p>
+<p>This neglects the major benefits of documentation in the development process. Specifically:</p>
+<ol class="arabic simple">
+<li><p>It helps other people understand how to use and <em>contribute to</em> your code,</p></li>
+<li><p>It helps define what your code is supposed to do, its interfaces, and the desired behavior, and</p></li>
+<li><p>As a result, it helps you understand your code.</p></li>
+</ol>
+<p>For fmdtools models, documentation should at the very least take the following form:</p>
+<ul class="simple">
+<li><p>A README (in markdown or rst) that explains how to set up the model environment (e.g., requirements/dependencies), as well as explains the structure of the folder/repo (model file, tests, analyses, etc.)</p></li>
+<li><p>Documented examples of using the code. Usually you can use a jupyter notebook for this to show the different analyses you can run with your model.</p></li>
+<li><dl class="simple">
+<dt>Docstrings which document the classes and functions which make up your model. These are most important for development and should include:</dt><dd><ul>
+<li><p>An overall module description (top of file)</p></li>
+<li><p>Docstrings for flows: What does the state represent? What are the states? What values may these take?</p></li>
+<li><p>Docstrings for <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.FxnBlock</span></code>: What are the states, parameters, behaviors, and modes?</p></li>
+<li><p>For any method/function, try to follow existing docstring conventions, with a summary of the purpose/behavior of the method, and a description of all input/output data types.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Documentation can best be thought of as a <em>contract that your code should fulfill</em>. As such, it can be very helpful to think of the documentation first, as a way of specifying your work. Tests (formal and informal) can then be defined based on the stated behavior of the function. It is thus recommended to <em>document your code as you write it</em>, instead of waiting until the end of the development process, to avoid technical debt.</p>
+</section>
+<section id="don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">
+<h3>Don’t get ahead of yourself–try to get a running simulation first<a class="headerlink" href="#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first" title="Permalink to this headline"></a></h3>
+<p>In the model development process, it can often be tempting to try to model every single mode or behavior in immense detail from the get-go. This is motivated by a desire to acheive realism, but can lead to issues from a project management and integration perspective. A model does not have much meaning outside a simulation or analysis, and, as such, development needs to be motivated <em>first</em> by getting a working simulation and <em>then</em> by adding detail. These simulations are the key feedback loop for determining whether model code is embodying desired behavior.</p>
+<p>A very basic model development process should thus proceed:</p>
+<ol class="arabic simple">
+<li><p>Create model file and create place-holder major function/flow classes</p></li>
+<li><p>Connect classes in a model file and visualize structure</p></li>
+<li><p>Create low-fidelity model behaviors and verify in nominal scenario</p></li>
+<li><p>Add hazard metrics in <cite>find_classification</cite></p></li>
+<li><p>Add more detailed behaviors (e.g., modes, actions, components, etc) as needed</p></li>
+<li><p>Perform more complex analyses…</p></li>
+</ol>
+<p>In general, it is bad to spend a lot of time developing a model without running any sort of simulation for verification purposes. This toolkit has been designed to enable the use of simulations early in the development process, and it is best to use these features earlier rather than later.</p>
+<p>Finally, <em>smaller, incremental iterations are better than large iterations.</em> Instead of spending time implementing large sections of code at once (with documentation and testing TBD), instead implement small sections of code that you can then document, test, and edit immediately after. Using these small iterative cycles can increase code quality by ensuring that large blocks of undocumented/untested (and ultimately unreliable) code don’t make it into your project, only for you to have to deal with it later.</p>
+</section>
+<section id="preserve-your-prototype-setup-by-formalizing-it-as-a-test">
+<h3>Preserve your prototype setup by formalizing it as a test<a class="headerlink" href="#preserve-your-prototype-setup-by-formalizing-it-as-a-test" title="Permalink to this headline"></a></h3>
+<p>Testing code is something which is often neglected in the development process, as something to do when the project is finished (i.e., as an assurance rather than development task). Simultaneously, developers often iterate over temporary scripts and code snippets during development to ensure that it works as expected in what is essentially an informal testing process. The major problem with this process is that these tests are easily lost and are only run one at a time, making it difficult to verify that code works after it has been modified.</p>
+<p>Instead, it is best to <em>formalize scripts into tests</em>. This can be done with Python’s <a class="reference external" href="https://docs.python.org/3/library/unittest.html">unittest</a> module, which integrates well with existing python IDEs and enables execution of several different tests in a sequence. Instead of losing prototype code, one can easily place this code into a <cite>test_X</cite> method and use it iteratively in the development process to ensure that the code still works as intended. This is true even for more “qualitative” prototype script, where the output that is being iterated over is a plot of results. Rather than abandoning a prototyping setup like this, (e.g., by commenting it out), a much better approach is to formalize the script as a test which can be run at the will of the user when desired. In this case, the plot should show the analysis and describe expected results so that it can be quickly verified. The testing of plots is enabled with the function <a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.suite_for_plots" title="fmdtools.analyze.plot.suite_for_plots"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.plot.suite_for_plots()</span></code></a>, which enables you to filter plotting tests out of a model’s test suite (or specify only running specific tests/showing specific plots).</p>
+<p>While testing is an assurance activity, it should also be considered a development activity. Testing ensures that the changes made to code don’t cause it to take on undesired behaviors, or be unable to operate with its interfacing functions. To enable tests to continue to be useful through the modelling process, they should be given meaningful names as well as descriptions describing what is being tested by the test (and why).</p>
+<p>Finally, don’t create tests solely to create tests. Tests should have a specific purpose in mind ideally single tests should cover as many considerations as possible, rather than creating new tests for each individual consideration. As in model development, try to avoid bloat as much as possible. If the desire is to cover every edge-case, try to parameterize tests over these cases instead of creating individual test methods.</p>
+</section>
+<section id="edit-your-code">
+<h3>Edit your code<a class="headerlink" href="#edit-your-code" title="Permalink to this headline"></a></h3>
+<p>The nature of writing code is a messy process–often we spend a considerable amount of time getting code to a place where it “works” (i.e., runs) and leave it as-is. The problem with doing this over and over is that it neglects the syntax, documetation, and structural aspects of coding and thus contributes to technical debt. One of the best ways to avoid this from impacting development too much is to edit code after writing it.</p>
+<p>Editing is the process of reviewing the code, recognizing potential (functional and stylistic) problems, and ultimately revising the code to resolve these problems. In this process, all of the following concerns should be considered:</p>
+<ul class="simple">
+<li><p>Do the data structures make logical sense? Are they used systematically throughout the project?</p></li>
+<li><p>Are operations organized with a logical structure? Is it easy to see what is performed in what sequence? Are lines too long?</p></li>
+<li><p>Are naming and stylistic conventions being followed? Do variables have self-explanatory names? Are names being spelled correctly?</p></li>
+<li><p>Are lines too long? Are there too many nested statements?</p></li>
+<li><p>Are the methods/classes fully documented?</p></li>
+<li><p>Will the functions work in every possible case implied by the documentation?</p></li>
+<li><p>Is inheritance being used correctly?</p></li>
+<li><p>Is the code re-inventing existing fmdtools structure or syntax or going against existing protocols?</p></li>
+<li><p>Does it pass all tests?</p></li>
+</ul>
+<p>This is an incomplete list. The point is to regularly review and improve code <em>after it is implemented to minimize future technical debt</em>. Waiting to edit will cause more hardship down the line.</p>
+</section>
+<section id="structuring-a-model">
+<h3>Structuring a model<a class="headerlink" href="#structuring-a-model" title="Permalink to this headline"></a></h3>
+<p>fmdtools was originally developed around a very simple use-case of modelling physical behaviors using a Function/Flow ontology, where Functions (referred to as “technical functions”) are supposed to be the high-level roles to be performed in the system, while flows are the data passed between these roles (energy, material, or signal).  Many of the models in the repository were developed to follow this form, or some variation on it, however, more complex modelling use-cases have led us to need to expand our conception of what can/should be modelled with a function or flow. More generally,
+- Flows define <em>shared data structures</em>, meaning interacting variables
+- Functions define <em>behaviors</em>, meaning things to be done to flows.</p>
+<p>These functions and flows are connected via containment relationships in an undirected graph, meaning that functions can be run in any order within a time-step to enable faults to propogate throughout the model graph. This is a very general representation, but also leads to pit-falls if the model is too complex, since this behavior needs to be convergent within each timestep. The following gives some advice for conventions to follow in models based on their size/scope.</p>
+<p><strong>Small Models</strong></p>
+<p>Small models have a few functions with simple behaviors that are being loaded in simple ways. A good example of this is the <a class="reference external" href="example_pump/Pump_Example_Notebook.ipynb">Pump Example</a> and <a class="reference external" href="example_eps/EPS_Example_Notebook.ipynb">EPS Example</a> , where the model is a simple translation of inputs to (defined in input functions) outputs (defined in output functions. These models have the most ability to follow the functional basis modelling ontology (with <cite>import_x</cite> loadings and <cite>output_x</cite> outputs) , as well as use static_behavior methods. It is also possible to model many different modes with full behavioral detail, since the system itself is not too complicated. Technical debt and development process is less of a consideration in these models, but should still not be ignored. A typical structure for a model would be:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Model</dt><dd><dl class="simple">
+<dt><a href="#id1"><span class="problematic" id="id2">*</span></a>flows</dt><dd><ul>
+<li><p>X</p></li>
+<li><p>Y</p></li>
+</ul>
+</dd>
+<dt><a href="#id3"><span class="problematic" id="id4">*</span></a>functions</dt><dd><ul>
+<li><p>Import_X</p></li>
+<li><p>Change_X_to_Y</p></li>
+<li><p>Export_Y</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>System Models</strong></p>
+<p>Moderate-size system models are models which have a control/planning system (e.g., something that tells it what to do at any given time). They also often interact with their environment in complex ways. A typical structure for a model would be:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Model</dt><dd><dl class="simple">
+<dt><a href="#id5"><span class="problematic" id="id6">*</span></a>flows</dt><dd><ul>
+<li><p>Environment, Location, etc            (place the system is located in and its place in it)</p></li>
+<li><p>Power, Actions, etc                           (internal power/other physical states)</p></li>
+<li><p>Commands,Communications, etc  (external commands/comms with an operator)</p></li>
+</ul>
+</dd>
+<dt><a href="#id7"><span class="problematic" id="id8">*</span></a>functions</dt><dd><ul>
+<li><p>Affect_Environment                            (Physical behaviors the system performs on the environment)</p></li>
+<li><p>Control_System                                        (Controls, Planning, Perception, etc)</p></li>
+<li><p>Distribute_Energy, Hold_X, etc        (Internal components, etc)</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+<p>A good example of this are the Drone and Rover models. Models like this are simply more complex and thus require more care and attention to avoid the accumulation of technical debt. It may be desireable for some of the more complex functions to be specified tested in isolation, and developed in their own files. Finally, flows such as <cite>Environment</cite> may require developing custom visualization methods (maps, etc) to show the how the system interacts with its environment.</p>
+<p><strong>System of Systems Models</strong></p>
+<p>Systems of Systems models involve the interaction of multiple systems in a single model. These models are much more complex and thus require very good development practices to develop to maturity. A typical structure for a model for this might be:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Model</dt><dd><dl class="simple">
+<dt><a href="#id9"><span class="problematic" id="id10">*</span></a>flows</dt><dd><ul>
+<li><p>Environment                                           (place the systems are located in)</p></li>
+<li><p>Location(s)                                           (individual states of the agents)</p></li>
+<li><p>Communication(s)                              (agent interactions with each other</p></li>
+</ul>
+</dd>
+<dt><a href="#id11"><span class="problematic" id="id12">*</span></a>functions</dt><dd><ul>
+<li><p>Asset/Agent(s)                                        (individual system models)</p></li>
+<li><p>AgentController(s)                            (coordinator which issues commans to each system)</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Note that, unlike other model types, System of Systems models very often will have multiple copies of functions and flows instantiated in the model. As a result, it is important to use dedicated model structures to the overall structure from being intractible. Specifically multiple copies of flows can be handled using the <cite>MultiFlow</cite> class while Communications between agents can be handled using the <cite>CommsFlow</cite> class. The <cite>ModelTypeGraph</cite> graph representation can be used to represent the model as just the types involved (rather than all instantiations). In general, it can be helpful to create tests/analyses for individual agents in addition to the overall system.</p>
+</section>
+<section id="use-model-constructs-to-simplify-your-code">
+<h3>Use model constructs to simplify your code<a class="headerlink" href="#use-model-constructs-to-simplify-your-code" title="Permalink to this headline"></a></h3>
+<p>The fmdtools codebase is quite large, and, as a result, it can be tempting to dive into modelling before learning about all of its capabilities. The problem with this is that many of these capabilities and interfaces are there to make your life easier, provided you understand and use them correctly. Below are some commonly-misunderstood constructs to integrate into your code:</p>
+<ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.Common</span></code> has a number of very basic operations which can be used in all model structures to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.Timer</span></code> can be used very simply using to represent timed behavior and state-transitions</p></li>
+<li><p>While modes can be used to describe fault modes in a very general way, faulty behavior that can also be queried from the model using the concept of a <em>disturbance</em>, which is merely a change in a given variable value. While disturbances are less general, they requie much less to be implemented in the model.</p></li>
+<li><p>parameters and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.</p></li>
+<li><p>Randomness can be used throughout, but use the specified interfaces (<cite>seed</cite>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.assoc_rand_states()</span></code>, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can get you in trouble.</p></li>
+<li><p>A variety of custom attributes can be added to <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.FxnBlock</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.Flow</span></code>, but not every custom attribute is going to work with staged execution and parallelism options. In general, all function constructs that change should be <cite>states</cite>, while parameters may be attributes. If you want to do something fancy with data structures, you may need to re-implement <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.FxnBlock</span></code> methods for copying and returning states to <cite>propagate</cite>.</p></li>
+<li><p>If there’s something that you’d like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing you own ad-hoc solution. Alternatively, try devoping your solution as a <em>feature</em> rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.</p></li>
+</ul>
+</section>
+<section id="style-advice">
+<h3>Style advice<a class="headerlink" href="#style-advice" title="Permalink to this headline"></a></h3>
+<p>Development of fmdtools models should follow the <a class="reference external" href="https://peps.python.org/pep-0008/#introduction">PEP 8 Style Guide</a> as much as possible. While this won’t be entirely re-iterated here, the following applies:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Use CamelCase for classes like <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.Model</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.FxnBlock</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.Flow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.Component</span></code>, etc. Use lowercase for object instantiations of these classes, and lower_case_with_underscores (e.g. do_this()) for methods/functions.</dt><dd><ul>
+<li><p>if a model class is named Model (e.g., Drone), the instance should be named model_X, where X is an identifying string for the model being used (e.g. drone_test).</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Names should be descriptive, but keep the length down. Use abbreviations if needed.</p></li>
+<li><p>Try to use the code formatting structure to show what your code is doing as much as possible. Single-line if statements can be good for this, as long as they don’t go too long.</p></li>
+<li><p>Python one-liners can be fun, but try to keep them short enough to be able to read.</p></li>
+<li><p>If a file is &gt;1000 lines, you may want to split it into multiple files, for the model, complex classes, visualization, analysis, tests, etc.</p></li>
+<li><p>fmdtools lets you specify names for functions/flows. Keep these consistent with with the class names but consider making them short to enable visualization on model graphs and throughout the code.</p></li>
+<li><p>It’s <cite>fmdtools</cite>. Not <cite>Fmdtools</cite> or <cite>fmd tool</cite>. Even when it starts the sentence.</p></li>
+</ul>
+</section>
+<section id="see-also">
+<h3>See also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://peps.python.org/pep-0008/#introduction">PEP 8 Style Guide</a></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Technical_debt/">Technical debt</a></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Code_smell">Code smell</a></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Anti-pattern">Anti-patterns</a></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Iterative_and_incremental_development">Iterative development</a></p></li>
+<li><p><a class="reference external" href="https://en.wikibooks.org/wiki/Python_Programming/Idioms">Python Programming Idioms</a></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Zen_of_Python">The Zen of Python</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../README.html" class="btn btn-neutral float-left" title="fmdtools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

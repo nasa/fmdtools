@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Probability Modelling in fmdtools &mdash; fmdtools 2.0-alpha documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html">
+            <img src="../../../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">fmdtools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#notices">Notices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../docs/Development%20Guide.html#how-to-write-good-models-development-best-practices">How to Write Good Models - Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/Examples.html">Examples</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.sim.html#fmdtools-sim-networks">fmdtools.sim.networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../docs/fmdtools.html#fmdtools-define">fmdtools.define</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Probability Modelling in fmdtools</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/examples/pump/IDETC Results/IDETC_Figures.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Probability-Modelling-in-fmdtools">
+<h1>Probability Modelling in fmdtools<a class="headerlink" href="#Probability-Modelling-in-fmdtools" title="Permalink to this headline"></a></h1>
+<p>Here we will demonstrate the fmdtool toolkit’s abilities to find a set of scenarios that represent the effects of a given mode.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#First, import the fault propogation library as well as the model</span>
+<span class="c1">#since the package is in a parallel location to examples...</span>
+<span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">propagate</span>
+<span class="kn">import</span> <span class="nn">fmdtools.analyze</span> <span class="k">as</span> <span class="nn">an</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmdtools</span>
+<span class="n">help</span><span class="p">(</span><span class="n">fmdtools</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Help on package fmdtools:
+
+NAME
+    fmdtools
+
+PACKAGE CONTENTS
+    sim (package)
+    define
+    analyze (package)
+
+DATA
+    __all__ = [&#39;analyze&#39;, &#39;sim&#39;, &#39;define&#39;]
+
+FILE
+    c:\users\dhulse\documents\github\fmdtools\fmdtools\__init__.py
+
+
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">quadpy</span>
+<span class="kn">from</span> <span class="nn">ex_pump</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+<span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<section id="Theory-and-Goals">
+<h2>Theory and Goals<a class="headerlink" href="#Theory-and-Goals" title="Permalink to this headline"></a></h2>
+<p>The purpose of this document is to show the relative performance of various numerical integration techniques for resilience quantification.</p>
+<section id="Some-approaches:">
+<h3>Some approaches:<a class="headerlink" href="#Some-approaches:" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>monte carlo with and without variance reduction</p></li>
+<li><p>quadrature (from quadpy)</p></li>
+<li><p>sample likeliest phase (<code class="docutils literal notranslate"><span class="pre">maxlike</span></code> option)</p></li>
+</ul>
+</section>
+</section>
+<section id="Model-Description">
+<h2>Model Description<a class="headerlink" href="#Model-Description" title="Permalink to this headline"></a></h2>
+<p>pump: defined in ex_pump. Has the following functions: - import EE - import Water - import Signal - move Water - export Water</p>
+<p>and flows: - EE (to power the pump) - Water_in - Water_out - Signal input (on/off)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">an</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_6_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_6_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1">#rp.show_graph(resgraph)</span>
+</pre></div>
+</div>
+</div>
+<p>The following shows the states of the system over time with and without a fault:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_9_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_9_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhistvals</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="s1">&#39;blockage&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Wat_2&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span> <span class="s1">&#39;pressure&#39;</span><span class="p">],</span><span class="s1">&#39;EE_1&#39;</span><span class="p">:</span><span class="s1">&#39;current&#39;</span><span class="p">},</span> <span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">returnfig</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timelabel</span><span class="o">=</span><span class="s2">&quot;time (min)&quot;</span><span class="p">)</span>
+<span class="c1">#plt.rcParams.update({&#39;font.size&#39;: 14})</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Amps&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$m^3/s$&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;kPa&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.93</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\IDETC Results\..\..\fmdtools\analyze\plot.py:260: UserWarning: Deprecated function. Use analyze.plot.mdlhists instead.
+  warnings.warn(&#34;Deprecated function. Use analyze.plot.mdlhists instead.&#34;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_10_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_10_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span><span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Wat_2&#39;</span><span class="p">:[</span><span class="s1">&#39;flowrate&#39;</span><span class="p">,</span> <span class="s1">&#39;pressure&#39;</span><span class="p">],</span><span class="s1">&#39;EE_1&#39;</span><span class="p">:</span><span class="s1">&#39;current&#39;</span><span class="p">},</span> <span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;time (min)&quot;</span><span class="p">,</span>\
+                           <span class="n">ylabels</span><span class="o">=</span><span class="p">{(</span><span class="s1">&#39;flows&#39;</span><span class="p">,</span> <span class="s2">&quot;EE_1&quot;</span><span class="p">,</span><span class="s1">&#39;current&#39;</span><span class="p">):</span><span class="s1">&#39;Amps&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;flows&#39;</span><span class="p">,</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">,</span> <span class="s1">&#39;flowrate&#39;</span><span class="p">):</span><span class="s2">&quot;$m^3/s$&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;flows&#39;</span><span class="p">,</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">,</span> <span class="s1">&#39;pressure&#39;</span><span class="p">):</span><span class="s2">&quot;kPa&quot;</span><span class="p">},</span>\
+                          <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">time_slice_label</span><span class="o">=</span><span class="s1">&#39;fault time&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Pump Response to Blockage&quot;</span><span class="p">,</span> <span class="n">h_padding</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_11_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_11_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;behaviorovertime.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;behaviorovertime.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">deghist_fault</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">get_degraded_hist</span><span class="p">(</span><span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
+<span class="n">fault_fault</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">get_faulty_hist</span><span class="p">(</span><span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">result_from</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">deghist_fault</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;fxngraph&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Pump System with Blockage Fault&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#39;Pump System with Blockage Fault&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_14_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_14_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;modelgraph.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Each of these flows also have different different costs associated with degraded performance: - repair cost - lost water cost - ee use cost These costs also have different forms.</p>
+</section>
+<section id="Experiments">
+<h2>Experiments<a class="headerlink" href="#Experiments" title="Permalink to this headline"></a></h2>
+<p>The goal of these experiments is to compare the error and efficiency of quadrature approaches at approximating the expected resilience over the simulation interval.</p>
+<section id="Introduce-Quadratures">
+<h3>Introduce Quadratures<a class="headerlink" href="#Introduce-Quadratures" title="Permalink to this headline"></a></h3>
+<p>The quadratures used in this experiment are shown below. While quadpy has a few other quadratures that can be used, these were chosen becuase they take a single argument for the number of points used.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quadratures</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;gauss-legendre&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">quadpy</span><span class="o">.</span><span class="n">c1</span><span class="o">.</span><span class="n">gauss_legendre</span>
+<span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;gauss-legendre&#39;</span><span class="p">](</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;gauss-legendre&#39;</span><span class="p">](</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_20_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_20_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([-0.77459667,  0.        ,  0.77459667])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;fejer 1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">quadpy</span><span class="o">.</span><span class="n">c1</span><span class="o">.</span><span class="n">fejer_1</span> <span class="c1">#argument is # of points</span>
+<span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;fejer 1&#39;</span><span class="p">](</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;fejer 1&#39;</span><span class="p">](</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_21_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_21_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([-9.51056516e-01, -5.87785252e-01, -6.12323400e-17,  5.87785252e-01,
+        9.51056516e-01])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;fejer 2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">quadpy</span><span class="o">.</span><span class="n">c1</span><span class="o">.</span><span class="n">fejer_2</span> <span class="c1">#argument is # of points</span>
+<span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;fejer 2&#39;</span><span class="p">](</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;fejer 2&#39;</span><span class="p">](</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_22_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_22_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([-8.66025404e-01, -5.00000000e-01, -6.12323400e-17,  5.00000000e-01,
+        8.66025404e-01])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;gauss lobatto&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">quadpy</span><span class="o">.</span><span class="n">c1</span><span class="o">.</span><span class="n">gauss_lobatto</span> <span class="c1">#argument is # of points</span>
+<span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;gauss lobatto&#39;</span><span class="p">](</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="p">(</span><span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;gauss lobatto&#39;</span><span class="p">](</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">points</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_23_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_23_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([-1.00000000e+00, -6.54653671e-01,  6.66133815e-16,  6.54653671e-01,
+        1.00000000e+00])
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#argument is number of pts, (optional) bias left, bias right (maybe try flipping?)</span>
+<span class="c1">#quadratures[&#39;gauss radau&#39;] = quadpy.line_segment.gauss_radau</span>
+<span class="c1">#quadratures[&#39;gauss radau&#39;](3).show()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#argument is n which makes the number of pts n+1</span>
+<span class="c1">#quadratures[&#39;newton cotes closed&#39;] = quadpy.line_segment.newton_cotes_closed</span>
+<span class="c1">#quadratures[&#39;newton cotes closed&#39;](2).show()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#quadratures[&#39;newton cotes open&#39;] = quadpy.line_segment.newton_cotes_open #argument num of pts</span>
+<span class="c1">#quadratures[&#39;newton cotes open&#39;](3).show()</span>
+</pre></div>
+</div>
+</div>
+<p>Some other possible quadratures are shown below.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Gauss-kronrod</span>
+<span class="n">quadpy</span><span class="o">.</span><span class="n">c1</span><span class="o">.</span><span class="n">gauss_kronrod</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1">#argument is n which makes the number off pts 2*n+1</span>
+<span class="c1">#Gauss-jacobi</span>
+<span class="n">quadpy</span><span class="o">.</span><span class="n">c1</span><span class="o">.</span><span class="n">gauss_jacobi</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1">#argument is # of points, left weighting, right weighting &gt; -1</span>
+<span class="c1">#Gauss-patterson</span>
+<span class="n">quadpy</span><span class="o">.</span><span class="n">c1</span><span class="o">.</span><span class="n">gauss_patterson</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1">#argument is the order n, num pts is [1, 3, 7, 15, 31, 63, 127, 255 or 511]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_2.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_2.png" />
+</div>
+</div>
+<p>The code below calculates the error of each approach over the number of points used. For the monte-carlo approaches, the results are averaged over 10 simulations and the standard deviation is provided for error bars. The computational cost is also determined by determined by taking the number of simulations needed for each (which is 1 per point (from simulating the nominal) and a fraction based on the injection time of the simulation (faults injected later take less time in simulation)).</p>
+</section>
+<section id="Experimental-setup">
+<h3>Experimental setup<a class="headerlink" href="#Experimental-setup" title="Permalink to this headline"></a></h3>
+<p>The following function calculates the expected resilience of a model <code class="docutils literal notranslate"><span class="pre">mdl</span></code> (as well as a few other useful things) over the fault sampling approach defined in <code class="docutils literal notranslate"><span class="pre">approach</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">resilquant</span><span class="p">(</span><span class="n">approach</span><span class="p">,</span> <span class="n">mdl</span><span class="p">):</span>
+    <span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">approach</span><span class="p">,</span> <span class="n">showprogress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">fmea</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">summfmea</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">approach</span><span class="p">)</span>
+    <span class="n">fmea2</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">phasefmea</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">approach</span><span class="p">)</span>
+    <span class="n">util</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">fmea</span><span class="p">[</span><span class="s1">&#39;expected cost&#39;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">util</span><span class="p">,</span> <span class="n">fmea</span><span class="p">,</span> <span class="n">fmea2</span>
+</pre></div>
+</div>
+</div>
+<p>This experiment will test how well the quadratures approximate the expected costs of resilience by sampling different points in interval. This is done for the pump model introduced above using the blockage fault.</p>
+<p>Below each of the cost types are shown: - repair costs (which is a step function due to the conditional fault that occurs due to delays) - water costs (which is linear due to the water lost at each timestep) - EE costs (which is constant and then exponentially decreasing due to the interval of adverse high current draw) - all costs together</p>
+<p>where the delay for degradation is 20 time-steps</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">costs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;repair&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;water&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;ee&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;repair&#39;</span><span class="p">,</span> <span class="s1">&#39;water&#39;</span><span class="p">,</span> <span class="s1">&#39;ee&#39;</span><span class="p">}]</span>
+<span class="n">costtitle</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;repair&#39;</span><span class="p">:</span><span class="s1">&#39;Repair&#39;</span><span class="p">,</span> <span class="s1">&#39;water&#39;</span><span class="p">:</span><span class="s1">&#39; Decreased Flow&#39;</span><span class="p">,</span> <span class="s1">&#39;ee&#39;</span><span class="p">:</span> <span class="s1">&#39;Increased Current&#39;</span><span class="p">}</span>
+<span class="n">costfig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">costfig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">})</span>
+<span class="n">n</span><span class="o">=</span><span class="mi">1</span>
+<span class="k">for</span> <span class="n">cost</span> <span class="ow">in</span> <span class="n">costs</span><span class="p">:</span>
+    <span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:</span><span class="n">cost</span><span class="p">,</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">})</span>
+    <span class="n">app_full</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;fullint&#39;</span><span class="p">})</span>
+    <span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">app_full</span><span class="p">,</span> <span class="n">showprogress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">costfig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">metricovertime</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">app_full</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;cost&#39;</span><span class="p">,</span> <span class="n">metrictype</span><span class="o">=</span><span class="s1">&#39;cost&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Composite&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">costtitle</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">cost</span><span class="p">)[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">30000</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">55</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">%</span><span class="k">2</span>&lt;1:
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Cost (USD)&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">n</span><span class="o">+=</span><span class="mi">1</span>
+<span class="n">costfig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Cost of Faults Over Injection Times&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_33_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_33_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;costsovertime.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Figure size 432x288 with 0 Axes&gt;
+</pre></div></div>
+</div>
+</section>
+<section id="Comparing-Quadrature-Error">
+<h3>Comparing Quadrature Error<a class="headerlink" href="#Comparing-Quadrature-Error" title="Permalink to this headline"></a></h3>
+<p>The functions below compare the result from a set of sampling approaches with the full integral given that quadrature can use a certain amount of points to approximate the function. The error being used is absolute error.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calcerror</span><span class="p">(</span><span class="n">fullutil</span><span class="p">,</span> <span class="n">util</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">((</span><span class="n">fullutil</span><span class="o">-</span><span class="n">util</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">fullutil</span><span class="o">+</span><span class="mf">0.000001</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calc_errors</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">quadratures</span><span class="p">,</span> <span class="n">possible_pts</span><span class="p">,</span> <span class="n">util_full</span><span class="p">):</span>
+    <span class="n">errs</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">quadratures</span><span class="p">)</span>
+    <span class="n">num_samps</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">quadratures</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">quadname</span><span class="p">,</span> <span class="n">quad</span> <span class="ow">in</span> <span class="n">quadratures</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">errs</span><span class="p">[</span><span class="n">quadname</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">num_samps</span><span class="p">[</span><span class="n">quadname</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">quadname</span><span class="o">==</span><span class="s1">&#39;likeliest&#39;</span><span class="p">:</span>
+            <span class="n">app</span><span class="o">=</span><span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span> <span class="p">,</span><span class="s1">&#39;block&#39;</span><span class="p">)],</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;likeliest&#39;</span><span class="p">})</span>
+            <span class="n">util</span><span class="p">,</span> <span class="n">fmea</span><span class="p">,</span> <span class="n">phasefmea</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+            <span class="n">errs</span><span class="p">[</span><span class="n">quadname</span><span class="p">]</span> <span class="o">=</span> <span class="n">errs</span><span class="p">[</span><span class="n">quadname</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">calcerror</span><span class="p">(</span><span class="n">util_full</span><span class="p">,</span> <span class="n">util</span><span class="p">)]</span>
+            <span class="n">num_samps</span><span class="p">[</span><span class="n">quadname</span><span class="p">]</span> <span class="o">=</span> <span class="n">num_samps</span><span class="p">[</span><span class="n">quadname</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">times</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([(</span><span class="mi">55</span><span class="o">-</span><span class="n">scen</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">/</span><span class="mi">55</span> <span class="k">for</span> <span class="n">scen</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">scenlist</span><span class="p">])]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">possible_pts</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">quadname</span> <span class="o">==</span> <span class="s1">&#39;evenspacing&#39;</span><span class="p">:</span> <span class="n">app</span><span class="o">=</span><span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span> <span class="p">,</span><span class="s1">&#39;block&#39;</span><span class="p">)],</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="n">pt</span><span class="p">})</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">quadobj</span> <span class="o">=</span> <span class="n">quad</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+                        <span class="n">app</span><span class="o">=</span><span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span> <span class="p">,</span><span class="s1">&#39;block&#39;</span><span class="p">)],</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;quadrature&#39;</span><span class="p">,</span><span class="s1">&#39;quad&#39;</span><span class="p">:{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span><span class="n">quadobj</span><span class="o">.</span><span class="n">points</span><span class="p">,</span><span class="s1">&#39;weights&#39;</span><span class="p">:</span><span class="n">quadobj</span><span class="o">.</span><span class="n">weights</span><span class="p">}})</span>
+                    <span class="n">util</span><span class="p">,</span> <span class="n">fmea</span><span class="p">,</span> <span class="n">phasefmea</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+                    <span class="n">errs</span><span class="p">[</span><span class="n">quadname</span><span class="p">]</span> <span class="o">=</span> <span class="n">errs</span><span class="p">[</span><span class="n">quadname</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">calcerror</span><span class="p">(</span><span class="n">util_full</span><span class="p">,</span> <span class="n">util</span><span class="p">)]</span>
+                    <span class="n">num_samps</span><span class="p">[</span><span class="n">quadname</span><span class="p">]</span> <span class="o">=</span> <span class="n">num_samps</span><span class="p">[</span><span class="n">quadname</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">times</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([(</span><span class="mi">55</span><span class="o">-</span><span class="n">scen</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">/</span><span class="mi">55</span> <span class="k">for</span> <span class="n">scen</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">scenlist</span><span class="p">])]</span>
+                <span class="k">except</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">errs</span><span class="p">,</span> <span class="n">num_samps</span>
+</pre></div>
+</div>
+</div>
+<p>Paremeters for the experiment:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">possible_pts</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span> <span class="c1"># points for the quadrature</span>
+<span class="c1">#quadratures[&#39;evenspacing&#39;] = 1   # adding evenly spaced sampling</span>
+<span class="c1">#quadratures[&#39;likeliest&#39;] = 1     # adding likeliest phase sampling</span>
+<span class="n">delaytimes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">34</span><span class="p">]</span>        <span class="c1"># delay times to test</span>
+</pre></div>
+</div>
+</div>
+<p>Calculating the error over each cost type, delay, and number of points</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">errovercosts</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">cost</span> <span class="ow">in</span> <span class="n">costs</span><span class="p">:</span>
+    <span class="n">errovercosts</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">)]</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">delaytimes</span><span class="p">:</span>
+        <span class="n">n</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:</span><span class="n">cost</span><span class="p">,</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="n">delay</span><span class="p">})</span>
+        <span class="n">app_full</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;fullint&#39;</span><span class="p">})</span>
+        <span class="n">util_full</span><span class="p">,</span> <span class="n">fmea_full</span><span class="p">,</span> <span class="n">phasefmea_full</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_full</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+        <span class="n">errovercosts</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">),</span><span class="n">delay</span><span class="p">],</span> <span class="n">num_samps</span> <span class="o">=</span> <span class="n">calc_errors</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">quadratures</span><span class="p">,</span> <span class="n">possible_pts</span><span class="p">,</span> <span class="n">util_full</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Plotting results:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
+<span class="n">figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">costs</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">delaytimes</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">costs</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">delaytimes</span><span class="p">))</span>
+<span class="n">n</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">markers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gauss-legendre&quot;</span><span class="p">:</span><span class="s2">&quot;o&quot;</span><span class="p">,</span><span class="s2">&quot;fejer 1&quot;</span><span class="p">:</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;fejer 2&quot;</span><span class="p">:</span><span class="s2">&quot;^&quot;</span><span class="p">,</span> <span class="s2">&quot;gauss lobatto&quot;</span><span class="p">:</span><span class="s2">&quot;s&quot;</span><span class="p">}</span>
+<span class="n">labs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gauss-legendre&quot;</span><span class="p">:</span><span class="s2">&quot;Gauss-Legendre&quot;</span><span class="p">,</span><span class="s2">&quot;fejer 1&quot;</span><span class="p">:</span><span class="s2">&quot;Fejer 1&quot;</span><span class="p">,</span> <span class="s2">&quot;fejer 2&quot;</span><span class="p">:</span><span class="s2">&quot;Fejer 2&quot;</span><span class="p">,</span> <span class="s2">&quot;gauss lobatto&quot;</span><span class="p">:</span><span class="s2">&quot;Gauss-Lobatto&quot;</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">cost</span> <span class="ow">in</span> <span class="n">costs</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">delaytimes</span><span class="p">:</span>
+        <span class="n">n</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">costs</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">delaytimes</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">quad</span> <span class="ow">in</span> <span class="n">errovercosts</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">),</span> <span class="n">delay</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">num_samps</span><span class="p">[</span><span class="n">quad</span><span class="p">],</span> <span class="n">errovercosts</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">),</span> <span class="n">delay</span><span class="p">][</span><span class="n">quad</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">quad</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labs</span><span class="p">[</span><span class="n">quad</span><span class="p">])</span><span class="c1">#, label=labels[quad], marker=markers[quad])</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Composite&quot;</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">title</span> <span class="o">=</span> <span class="n">costtitle</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">cost</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="o">+</span><span class="s2">&quot;, &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">delay</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;symlog&quot;</span><span class="p">,</span> <span class="n">linthresh</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">delay</span> <span class="o">!=</span> <span class="nb">min</span><span class="p">(</span><span class="n">delaytimes</span><span class="p">):</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="o">!=</span> <span class="s2">&quot;Composite&quot;</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+        <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+<span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Error of Quadratures Over # of Points, Cost Types, and Delay Parameter&quot;</span><span class="p">)</span>
+<span class="n">figure</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;center right&quot;</span><span class="p">)</span> <span class="c1">#bbox_to_anchor=(1.1, 0.5))</span>
+<span class="n">figure</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="s1">&#39;Number of Full Model Runs&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">figure</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span>
+
+<span class="n">figure</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">0.80</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.91</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/274113487.py:17: MatplotlibDeprecationWarning: The &#39;linthreshy&#39; parameter of __init__() has been renamed &#39;linthresh&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  ax.set_yscale(&#34;symlog&#34;, linthreshy=0.001)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_43_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_43_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;quad_errors.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Figure size 432x288 with 0 Axes&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">avg_cost</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">cost</span> <span class="ow">in</span> <span class="n">costs</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">delaytimes</span><span class="p">:</span>
+        <span class="n">ed</span><span class="o">=</span><span class="n">errovercosts</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">),</span> <span class="n">delay</span><span class="p">]</span>
+        <span class="n">df_cost</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">ed</span><span class="o">.</span><span class="n">items</span><span class="p">()]))</span>
+        <span class="n">df_cost</span><span class="p">[</span><span class="s2">&quot;gauss lobatto&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">df_cost</span><span class="p">[</span><span class="s2">&quot;gauss lobatto&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">avg_cost</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">),</span><span class="n">delay</span><span class="p">]</span><span class="o">=</span><span class="n">df_cost</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">avg_cost</span> <span class="o">=</span> <span class="n">avg_cost</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">avg_cost</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>gauss-legendre</th>
+      <th>fejer 1</th>
+      <th>fejer 2</th>
+      <th>gauss lobatto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>({'repair'}, 12)</th>
+      <td>0.028688</td>
+      <td>0.033483</td>
+      <td>0.029748</td>
+      <td>0.040842</td>
+    </tr>
+    <tr>
+      <th>({'repair'}, 23)</th>
+      <td>0.031691</td>
+      <td>0.035953</td>
+      <td>0.027976</td>
+      <td>0.040340</td>
+    </tr>
+    <tr>
+      <th>({'repair'}, 34)</th>
+      <td>0.041654</td>
+      <td>0.041307</td>
+      <td>0.039838</td>
+      <td>0.048520</td>
+    </tr>
+    <tr>
+      <th>({'water'}, 12)</th>
+      <td>0.000047</td>
+      <td>0.000085</td>
+      <td>0.000070</td>
+      <td>0.000196</td>
+    </tr>
+    <tr>
+      <th>({'water'}, 23)</th>
+      <td>0.000087</td>
+      <td>0.000152</td>
+      <td>0.000045</td>
+      <td>0.000282</td>
+    </tr>
+    <tr>
+      <th>({'water'}, 34)</th>
+      <td>0.000058</td>
+      <td>0.000068</td>
+      <td>0.000060</td>
+      <td>0.000176</td>
+    </tr>
+    <tr>
+      <th>({'ee'}, 12)</th>
+      <td>0.015633</td>
+      <td>0.031434</td>
+      <td>0.021652</td>
+      <td>0.049239</td>
+    </tr>
+    <tr>
+      <th>({'ee'}, 23)</th>
+      <td>0.020304</td>
+      <td>0.031134</td>
+      <td>0.012642</td>
+      <td>0.046851</td>
+    </tr>
+    <tr>
+      <th>({'ee'}, 34)</th>
+      <td>0.014471</td>
+      <td>0.012037</td>
+      <td>0.008859</td>
+      <td>0.012037</td>
+    </tr>
+    <tr>
+      <th>({'water', 'repair', 'ee'}, 12)</th>
+      <td>0.016882</td>
+      <td>0.021200</td>
+      <td>0.014403</td>
+      <td>0.029028</td>
+    </tr>
+    <tr>
+      <th>({'water', 'repair', 'ee'}, 23)</th>
+      <td>0.009762</td>
+      <td>0.013091</td>
+      <td>0.009398</td>
+      <td>0.013806</td>
+    </tr>
+    <tr>
+      <th>({'water', 'repair', 'ee'}, 34)</th>
+      <td>0.016870</td>
+      <td>0.016790</td>
+      <td>0.007744</td>
+      <td>0.015589</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">averages</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">avg_cost</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span><span class="n">avg_cost</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="p">,</span><span class="n">avg_cost</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">avg_cost</span><span class="p">[</span><span class="mi">9</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">avg_cost</span><span class="o">.</span><span class="n">mean</span><span class="p">()])</span>
+<span class="n">averages</span><span class="p">[</span><span class="s2">&quot;names&quot;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;repair&quot;</span><span class="p">,</span> <span class="s2">&quot;water&quot;</span><span class="p">,</span> <span class="s2">&quot;ee&quot;</span><span class="p">,</span> <span class="s2">&quot;composite&quot;</span><span class="p">,</span> <span class="s2">&quot;average&quot;</span><span class="p">]</span>
+<span class="n">averages</span><span class="o">=</span> <span class="n">averages</span><span class="p">[[</span><span class="s2">&quot;names&quot;</span><span class="p">,</span> <span class="s2">&quot;gauss-legendre&quot;</span><span class="p">,</span> <span class="s2">&quot;fejer 1&quot;</span><span class="p">,</span> <span class="s2">&quot;fejer 2&quot;</span><span class="p">,</span> <span class="s2">&quot;gauss lobatto&quot;</span><span class="p">]]</span>
+<span class="n">averages</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>names</th>
+      <th>gauss-legendre</th>
+      <th>fejer 1</th>
+      <th>fejer 2</th>
+      <th>gauss lobatto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>repair</td>
+      <td>0.034011</td>
+      <td>0.036915</td>
+      <td>0.032521</td>
+      <td>0.043234</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>water</td>
+      <td>0.000064</td>
+      <td>0.000102</td>
+      <td>0.000058</td>
+      <td>0.000218</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>ee</td>
+      <td>0.016802</td>
+      <td>0.024868</td>
+      <td>0.014384</td>
+      <td>0.036042</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>composite</td>
+      <td>0.014504</td>
+      <td>0.017027</td>
+      <td>0.010515</td>
+      <td>0.019474</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>average</td>
+      <td>0.016345</td>
+      <td>0.019728</td>
+      <td>0.014370</td>
+      <td>0.024742</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">averages</span><span class="o">.</span><span class="n">to_latex</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;\\begin{tabular}{llrrrr}\n\\toprule\n{} &amp;      names &amp;  gauss-legendre &amp;   fejer 1 &amp;   fejer 2 &amp;  gauss lobatto \\\\\n\\midrule\n0 &amp;     repair &amp;        0.034011 &amp;  0.036915 &amp;  0.032521 &amp;       0.043234 \\\\\n1 &amp;      water &amp;        0.000064 &amp;  0.000102 &amp;  0.000058 &amp;       0.000218 \\\\\n2 &amp;         ee &amp;        0.016802 &amp;  0.024868 &amp;  0.014384 &amp;       0.036042 \\\\\n3 &amp;  composite &amp;        0.014504 &amp;  0.017027 &amp;  0.010515 &amp;       0.019474 \\\\\n4 &amp;    average &amp;        0.016345 &amp;  0.019728 &amp;  0.014370 &amp;       0.024742 \\\\\n\\bottomrule\n\\end{tabular}\n&#39;
+</pre></div></div>
+</div>
+<p>If individual plots are desired:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_errors</span><span class="p">(</span><span class="n">errs</span><span class="p">,</span> <span class="n">num_samps</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">quad</span> <span class="ow">in</span> <span class="n">errs</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">num_samps</span><span class="p">[</span><span class="n">quad</span><span class="p">],</span> <span class="n">errs</span><span class="p">[</span><span class="n">quad</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">quad</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">showlegend</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Number of Full Model Runs&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;symlog&quot;</span><span class="p">,</span> <span class="n">linthreshy</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Percent Error&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">delaytimes</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">cost</span> <span class="ow">in</span> <span class="n">costs</span><span class="p">:</span>
+        <span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:</span><span class="n">cost</span><span class="p">,</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="n">delay</span><span class="p">})</span>
+        <span class="n">app_full</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;fullint&#39;</span><span class="p">})</span>
+        <span class="n">util_full</span><span class="p">,</span> <span class="n">fmea_full</span><span class="p">,</span> <span class="n">phasefmea_full</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_full</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+        <span class="n">errs</span><span class="p">,</span> <span class="n">num_samps</span> <span class="o">=</span> <span class="n">calc_errors</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">quadratures</span><span class="p">,</span> <span class="n">possible_pts</span><span class="p">,</span> <span class="n">util_full</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Error of Sampling Approaches (cost: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; delay: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">delay</span><span class="p">))</span>
+        <span class="n">plot_errors</span><span class="p">(</span><span class="n">errs</span><span class="p">,</span> <span class="n">num_samps</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/4080221526.py:6: MatplotlibDeprecationWarning: The &#39;linthreshy&#39; parameter of __init__() has been renamed &#39;linthresh&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  plt.yscale(&#34;symlog&#34;, linthreshy=0.001)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_2.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_3.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_4.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_4.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_5.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_5.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_6.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_6.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_7.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_7.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_8.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_8.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_9.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_9.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_10.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_10.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_11.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_11.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_12.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_12.png" />
+</div>
+</div>
+<p>What if the form of the integral was known beforehand? In that case one would be interested in knowing the points that best represente the space for future iteration. There are two options for that in this model: ‘single-point’ and ‘piecewise’</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;water&#39;</span><span class="p">,</span> <span class="s1">&#39;repair&#39;</span><span class="p">,</span> <span class="s1">&#39;ee&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
+<span class="n">app_full</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;fullint&#39;</span><span class="p">})</span>
+<span class="n">app_piecewise</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;fullint&#39;</span><span class="p">})</span>
+<span class="n">app_bestpt</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;fullint&#39;</span><span class="p">})</span>
+<span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">app_full</span><span class="p">,</span> <span class="n">showprogress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">app_piecewise</span><span class="o">.</span><span class="n">prune_scenarios</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">samptype</span><span class="o">=</span><span class="s1">&#39;piecewise&#39;</span><span class="p">)</span>
+<span class="n">app_bestpt</span><span class="o">.</span><span class="n">prune_scenarios</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">samptype</span><span class="o">=</span><span class="s1">&#39;bestpt&#39;</span><span class="p">)</span>
+
+<span class="n">delaytimes</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">1</span><span class="p">)]</span>
+<span class="n">piecewiseerr</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">bestpterr</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">delaytimes</span><span class="p">:</span>
+    <span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;water&#39;</span><span class="p">,</span> <span class="s1">&#39;repair&#39;</span><span class="p">,</span> <span class="s1">&#39;ee&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="n">delay</span><span class="p">,</span> <span class="s1">&#39;units&#39;</span><span class="p">:</span><span class="s1">&#39;hrs&#39;</span><span class="p">})</span>
+    <span class="n">util_full</span><span class="p">,</span>  <span class="n">fmea_full</span><span class="p">,</span> <span class="n">phasefmea_full</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_full</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+    <span class="n">util_piecewise</span><span class="p">,</span>  <span class="n">fmea_piecewise</span><span class="p">,</span> <span class="n">phasefmea_piecewise</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_piecewise</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+    <span class="n">util_bestpt</span><span class="p">,</span>  <span class="n">fmea_bestpt</span><span class="p">,</span> <span class="n">phasefmea_bestpt</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_bestpt</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+    <span class="n">piecewiseerr</span><span class="o">=</span><span class="n">piecewiseerr</span><span class="o">+</span><span class="p">[</span><span class="n">calcerror</span><span class="p">(</span><span class="n">util_full</span><span class="p">,</span> <span class="n">util_piecewise</span><span class="p">)]</span>
+    <span class="n">bestpterr</span> <span class="o">=</span> <span class="n">bestpterr</span> <span class="o">+</span><span class="p">[</span><span class="n">calcerror</span><span class="p">(</span><span class="n">util_full</span><span class="p">,</span> <span class="n">util_bestpt</span><span class="p">)]</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">delaytimes</span><span class="p">,</span> <span class="n">piecewiseerr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;piecewise&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">delaytimes</span><span class="p">,</span> <span class="n">bestpterr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;bestpt&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x2772bb01d30&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_53_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_53_1.png" />
+</div>
+</div>
+<p>This may change over the delay time parameters chosen. The code below plots the value over a set of possible delay paremeters.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">postplot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">})</span>
+<span class="n">postplot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">n</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">initdelay</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">36</span><span class="p">]:</span>
+    <span class="n">n</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;water&#39;</span><span class="p">,</span> <span class="s1">&#39;repair&#39;</span><span class="p">,</span> <span class="s1">&#39;ee&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="n">initdelay</span><span class="p">})</span>
+    <span class="n">app_full</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;fullint&#39;</span><span class="p">})</span>
+    <span class="n">app_piecewise</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;fullint&#39;</span><span class="p">})</span>
+    <span class="n">app_bestpt</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;fullint&#39;</span><span class="p">})</span>
+    <span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">app_full</span><span class="p">,</span> <span class="n">showprogress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">app_piecewise</span><span class="o">.</span><span class="n">prune_scenarios</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">samptype</span><span class="o">=</span><span class="s1">&#39;piecewise&#39;</span><span class="p">)</span>
+    <span class="n">app_bestpt</span><span class="o">.</span><span class="n">prune_scenarios</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">samptype</span><span class="o">=</span><span class="s1">&#39;bestpt&#39;</span><span class="p">)</span>
+
+    <span class="n">delays</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">46</span><span class="p">,</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">piecewiseerr</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">bestpterr</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">delays</span><span class="p">:</span>
+        <span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cost&#39;</span><span class="p">:{</span><span class="s1">&#39;water&#39;</span><span class="p">,</span> <span class="s1">&#39;repair&#39;</span><span class="p">,</span> <span class="s1">&#39;ee&#39;</span><span class="p">},</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span><span class="n">delay</span><span class="p">})</span>
+        <span class="n">util_full</span><span class="p">,</span> <span class="n">fmea_full</span><span class="p">,</span> <span class="n">phasefmea_full</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_full</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+        <span class="n">util_piecewise</span><span class="p">,</span>  <span class="n">fmea_piecewise</span><span class="p">,</span> <span class="n">phasefmea_piecewise</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_piecewise</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+        <span class="n">util_bestpt</span><span class="p">,</span>  <span class="n">fmea_bestpt</span><span class="p">,</span> <span class="n">phasefmea_bestpt</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_bestpt</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+        <span class="n">piecewiseerr</span><span class="o">=</span><span class="n">piecewiseerr</span><span class="o">+</span><span class="p">[</span><span class="n">calcerror</span><span class="p">(</span><span class="n">util_full</span><span class="p">,</span> <span class="n">util_piecewise</span><span class="p">)]</span>
+        <span class="n">bestpterr</span> <span class="o">=</span> <span class="n">bestpterr</span> <span class="o">+</span><span class="p">[</span><span class="n">calcerror</span><span class="p">(</span><span class="n">util_full</span><span class="p">,</span> <span class="n">util_bestpt</span><span class="p">)]</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">postplot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">delays</span><span class="p">,</span> <span class="n">piecewiseerr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;piecewise&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">delays</span><span class="p">,</span> <span class="n">bestpterr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;bestpt&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+    <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">initdelay</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;init. delay&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Initial delay = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">initdelay</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">%</span><span class="k">2</span>&lt;1:
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (min)&quot;</span><span class="p">)</span>
+<span class="n">postplot</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;A Posteriori Approach Robustness&quot;</span><span class="p">)</span>
+<span class="n">postplot</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">postplot</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.88</span><span class="p">)</span>
+<span class="n">postplot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x27729fb11f0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_55_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_55_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">postplot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;posthoc_err.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>This gives an overall look at how quadratures compare with other types of fault sampling approaches:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app_full</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;fullint&#39;</span><span class="p">})</span>
+<span class="n">util_full</span><span class="p">,</span> <span class="n">fmea_full</span><span class="p">,</span> <span class="n">phasefmea_full</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_full</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">possible_pts</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">samp_types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span> <span class="s1">&#39;randtimes&#39;</span><span class="p">,</span> <span class="s1">&#39;symrandtimes&#39;</span><span class="p">,</span> <span class="s1">&#39;quadrature&#39;</span><span class="p">]</span>
+<span class="n">errs</span><span class="o">=</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">samp_types</span><span class="p">)</span>
+<span class="n">errbars</span><span class="o">=</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">samp_types</span><span class="p">)</span>
+<span class="n">errbar_samps</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">samp_types</span><span class="p">)</span>
+<span class="n">num_samples</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">samp_types</span><span class="p">)</span>
+<span class="n">ave_pts</span><span class="o">=</span><span class="mi">20</span>
+
+<span class="n">util_full</span><span class="p">,</span> <span class="n">fmea_full</span><span class="p">,</span> <span class="n">phasefmea_full</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_full</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">samp_type</span> <span class="ow">in</span> <span class="n">samp_types</span><span class="p">:</span>
+    <span class="n">errs</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">errbars</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">num_samples</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">errbar_samps</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">possible_pts</span><span class="p">:</span> <span class="c1">#calc errors</span>
+        <span class="k">if</span> <span class="n">samp_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;randtimes&#39;</span><span class="p">,</span> <span class="s1">&#39;arandtimes&#39;</span><span class="p">,</span> <span class="s1">&#39;symrandtimes&#39;</span><span class="p">]:</span>
+            <span class="n">samperrs</span><span class="o">=</span><span class="p">[]</span>
+            <span class="n">samps</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ave_pt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ave_pts</span><span class="p">):</span>
+                <span class="n">app</span><span class="o">=</span><span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="n">samp_type</span><span class="p">,</span> <span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="n">pt</span><span class="p">})</span>
+                <span class="n">util</span><span class="p">,</span> <span class="n">fmea</span><span class="p">,</span> <span class="n">phasefmea</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+                <span class="n">samperrs</span><span class="o">=</span><span class="n">samperrs</span><span class="o">+</span><span class="p">[</span><span class="n">calcerror</span><span class="p">(</span><span class="n">util_full</span><span class="p">,</span> <span class="n">util</span><span class="p">)]</span>
+                <span class="n">samps</span> <span class="o">=</span> <span class="n">samps</span> <span class="o">+</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">times</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([(</span><span class="mi">55</span><span class="o">-</span><span class="n">scen</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">/</span><span class="mi">55</span> <span class="k">for</span> <span class="n">scen</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">scenlist</span><span class="p">])]</span>
+            <span class="n">err</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">samperrs</span><span class="p">)</span>
+            <span class="n">errbar</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">samperrs</span><span class="p">)</span>
+            <span class="n">num_samps</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">samps</span><span class="p">)</span>
+            <span class="n">errbar_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">samps</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">samp_type</span><span class="o">==</span><span class="s1">&#39;quadrature&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">quadrature</span> <span class="o">=</span> <span class="n">quadpy</span><span class="o">.</span><span class="n">c1</span><span class="o">.</span><span class="n">gauss_legendre</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+                <span class="n">app</span><span class="o">=</span><span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;quadrature&#39;</span><span class="p">,</span> <span class="s1">&#39;quad&#39;</span><span class="p">:{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span><span class="n">quadrature</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="s1">&#39;weights&#39;</span><span class="p">:</span><span class="n">quadrature</span><span class="o">.</span><span class="n">weights</span><span class="p">}})</span>
+                <span class="n">util</span><span class="p">,</span>  <span class="n">fmea</span><span class="p">,</span> <span class="n">phasefmea</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+                <span class="n">err</span> <span class="o">=</span> <span class="n">calcerror</span><span class="p">(</span><span class="n">util_full</span><span class="p">,</span> <span class="n">util</span><span class="p">)</span>
+                <span class="n">errbar</span><span class="o">=</span><span class="mf">0.0</span>
+                <span class="n">num_samps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">times</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([(</span><span class="mi">55</span><span class="o">-</span><span class="n">scen</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">/</span><span class="mi">55</span> <span class="k">for</span> <span class="n">scen</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">scenlist</span><span class="p">])</span>
+                <span class="n">errbar_samp</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">app</span><span class="o">=</span><span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="n">samp_type</span><span class="p">,</span> <span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="n">pt</span><span class="p">})</span>
+            <span class="n">util</span><span class="p">,</span>  <span class="n">fmea</span><span class="p">,</span> <span class="n">phasefmea</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">calcerror</span><span class="p">(</span><span class="n">util_full</span><span class="p">,</span> <span class="n">util</span><span class="p">)</span>
+            <span class="n">errbar</span><span class="o">=</span><span class="mf">0.0</span>
+            <span class="n">num_samps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">times</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([(</span><span class="mi">55</span><span class="o">-</span><span class="n">scen</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">/</span><span class="mi">55</span> <span class="k">for</span> <span class="n">scen</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">scenlist</span><span class="p">])</span>
+            <span class="n">errbar_samp</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">errs</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span><span class="o">=</span><span class="n">errs</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="n">err</span><span class="p">]</span>
+        <span class="n">errbars</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span><span class="o">=</span><span class="n">errbars</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="n">errbar</span><span class="p">]</span>
+        <span class="n">num_samples</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">num_samples</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">num_samps</span><span class="p">]</span>
+        <span class="n">errbar_samps</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">errbar_samps</span><span class="p">[</span><span class="n">samp_type</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">errbar_samp</span><span class="p">]</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">})</span>
+<span class="n">errbar_samps</span><span class="p">[</span><span class="s1">&#39;full&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">errs</span><span class="p">[</span><span class="s1">&#39;full&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">errbars</span><span class="p">[</span><span class="s1">&#39;full&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">num_samples</span><span class="p">[</span><span class="s1">&#39;full&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">app_full</span><span class="o">.</span><span class="n">times</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([(</span><span class="mi">55</span><span class="o">-</span><span class="n">scen</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">/</span><span class="mi">55</span> <span class="k">for</span> <span class="n">scen</span> <span class="ow">in</span> <span class="n">app_full</span><span class="o">.</span><span class="n">scenlist</span><span class="p">])]</span>
+
+
+<span class="n">app_maxlike</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ExportWater&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;likeliest&#39;</span><span class="p">})</span>
+<span class="n">util_maxlike</span><span class="p">,</span> <span class="n">fmea_maxlike</span><span class="p">,</span> <span class="n">phasefmea_maxlike</span> <span class="o">=</span> <span class="n">resilquant</span><span class="p">(</span><span class="n">app_maxlike</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+<span class="n">errbar_samps</span><span class="p">[</span><span class="s1">&#39;likeliest&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">errs</span><span class="p">[</span><span class="s1">&#39;likeliest&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">calcerror</span><span class="p">(</span><span class="n">util_full</span><span class="p">,</span> <span class="n">util_maxlike</span><span class="p">)]</span>
+<span class="n">errbars</span><span class="p">[</span><span class="s1">&#39;likeliest&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">num_samples</span><span class="p">[</span><span class="s1">&#39;likeliest&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">app_maxlike</span><span class="o">.</span><span class="n">times</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([(</span><span class="mi">55</span><span class="o">-</span><span class="n">scen</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">/</span><span class="mi">55</span> <span class="k">for</span> <span class="n">scen</span> <span class="ow">in</span> <span class="n">app_maxlike</span><span class="o">.</span><span class="n">scenlist</span><span class="p">])]</span>
+
+
+<span class="n">markers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;evenspacing&quot;</span><span class="p">:</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="s2">&quot;randtimes&quot;</span><span class="p">:</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;symrandtimes&quot;</span><span class="p">:</span><span class="s2">&quot;^&quot;</span><span class="p">,</span> <span class="s2">&quot;full&quot;</span><span class="p">:</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;likeliest&quot;</span><span class="p">:</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;quadrature&quot;</span><span class="p">:</span><span class="s2">&quot;s&quot;</span><span class="p">}</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;evenspacing&quot;</span><span class="p">:</span><span class="s2">&quot;Evenly-Spaced&quot;</span><span class="p">,</span> <span class="s2">&quot;randtimes&quot;</span><span class="p">:</span><span class="s2">&quot;Monte Carlo&quot;</span><span class="p">,</span> <span class="s2">&quot;symrandtimes&quot;</span><span class="p">:</span><span class="s2">&quot;Monte Carlo (AV)&quot;</span><span class="p">,</span> <span class="s2">&quot;full&quot;</span><span class="p">:</span><span class="s2">&quot;Full&quot;</span><span class="p">,</span> <span class="s2">&quot;likeliest&quot;</span><span class="p">:</span><span class="s2">&quot;Likeliest&quot;</span><span class="p">,</span> <span class="s2">&quot;quadrature&quot;</span><span class="p">:</span><span class="s2">&quot;Gauss-Legendre&quot;</span><span class="p">}</span>
+<span class="c1">#for samp in num_samples:</span>
+<span class="c1">#    plt.errorbar(num_samples[samp], errs[samp], yerr=errbars[samp],marker = markers[samp], label=samp)</span>
+<span class="k">for</span> <span class="n">samp</span> <span class="ow">in</span> <span class="n">num_samples</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">samp</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;evenspacing&quot;</span><span class="p">,</span> <span class="s2">&quot;randtimes&quot;</span><span class="p">,</span> <span class="s2">&quot;symrandtimes&quot;</span><span class="p">,</span> <span class="s2">&quot;quadrature&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">samp</span><span class="o">==</span><span class="s2">&quot;quadrature&quot;</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">possible_pts</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">22</span><span class="p">],</span> <span class="n">errs</span><span class="p">[</span><span class="n">samp</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">22</span><span class="p">],</span><span class="n">marker</span> <span class="o">=</span> <span class="n">markers</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">samp</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">possible_pts</span><span class="p">,</span> <span class="n">errs</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span><span class="n">marker</span> <span class="o">=</span> <span class="n">markers</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">samp</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">samp</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;symrandtimes&quot;</span><span class="p">,</span> <span class="s2">&quot;randtimes&quot;</span><span class="p">]:</span>
+            <span class="n">errline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">errs</span><span class="p">[</span><span class="n">samp</span><span class="p">])</span>
+            <span class="n">bars</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">errbars</span><span class="p">[</span><span class="n">samp</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">possible_pts</span><span class="p">,</span><span class="n">errline</span><span class="o">+</span><span class="n">bars</span><span class="p">,</span><span class="n">errline</span><span class="o">-</span><span class="n">bars</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_color</span><span class="p">())</span>
+    <span class="k">elif</span> <span class="n">samp</span><span class="o">==</span><span class="s2">&quot;likeliest&quot;</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">errs</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span> <span class="n">yerr</span><span class="o">=</span><span class="n">errbars</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span><span class="n">marker</span> <span class="o">=</span> <span class="n">markers</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">samp</span><span class="o">==</span><span class="s2">&quot;full&quot;</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="n">errs</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span> <span class="n">yerr</span><span class="o">=</span><span class="n">errbars</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span><span class="n">marker</span> <span class="o">=</span> <span class="n">markers</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">samp</span><span class="p">],</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1">#plt.errorbar(range(len(num_samps)), list(num_samps.values(), )</span>
+<span class="c1">#plt.xticks(range(len(num_samps)), list(num_samps.keys())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.48</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Number of Points Used&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;symlog&quot;</span><span class="p">,</span> <span class="n">linthreshy</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.0001</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1">#plt.xscale(&quot;log&quot;)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Error of Sampling Approaches&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/2632459810.py:40: MatplotlibDeprecationWarning: The &#39;linthreshy&#39; parameter of __init__() has been renamed &#39;linthresh&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  plt.yscale(&#34;symlog&#34;, linthreshy=0.001)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#39;Error of Sampling Approaches&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_60_2.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_60_2.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;hl_error.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Figure size 432x288 with 0 Axes&gt;
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">avgoverallerr</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">errs</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">avgoverallerr</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;evenspacing&#39;: 0.01895966996134437,
+ &#39;randtimes&#39;: 0.07498012852547022,
+ &#39;symrandtimes&#39;: 0.019694077910216993,
+ &#39;quadrature&#39;: 0.006950743750489463,
+ &#39;full&#39;: 0.0,
+ &#39;likeliest&#39;: 0.39126717428773433}
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
