@@ -9,8 +9,9 @@ import unittest
 from examples.pump.ex_pump import Pump
 from fmdtools.sim import propagate
 import fmdtools.analyze as an
-from fmdtools.define import SampleApproach, check_pickleability, NominalApproach
-from CommonTests import CommonTests
+from fmdtools.define.common import check_pickleability
+from fmdtools.sim.approach import SampleApproach, NominalApproach
+from tests.common import CommonTests
 import numpy as np
 
 class PumpTests(unittest.TestCase, CommonTests):

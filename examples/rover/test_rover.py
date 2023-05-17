@@ -6,7 +6,7 @@ Created on Thu Dec 15 15:26:19 2022
 """
 import unittest
 from examples.rover.optimization.search_rover import line_dist, line_dist_faster
-from CommonTests import CommonTests
+from tests.common import CommonTests
 import multiprocessing as mp
 
 class RoverTests(unittest.TestCase, CommonTests):

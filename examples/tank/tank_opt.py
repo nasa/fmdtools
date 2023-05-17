@@ -20,7 +20,7 @@ from scipy.optimize import minimize
 
 import fmdtools.sim.propagate as propagate
 import fmdtools.analyze as an
-from tank_optimization_model import Tank, TankParam, make_tankparam
+from examples.tank.tank_optimization_model import Tank, TankParam, make_tankparam
 from fmdtools.sim.approach import SampleApproach
 import multiprocessing as mp
 from fmdtools.sim.search import ProblemInterface

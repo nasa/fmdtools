@@ -14,9 +14,9 @@ from fmdtools.define.state import State
 from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.sim.approach import SampleApproach
 
-from drone_mdl_static import m2to1, EngageLand, HoldPayload, DistEE
-from drone_mdl_static import Force, EE, Control, DOFs, Env, Dir
-from drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, Trajectory, ViewEnvironment
+from examples.multirotor.drone_mdl_static import m2to1, EngageLand, HoldPayload, DistEE
+from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, Env, Dir
+from examples.multirotor.drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, Trajectory, ViewEnvironment
             
 class OverallAffectDOFState(State):
     lrstab:     float=0.0
@@ -74,7 +74,7 @@ class AffectDOF(FxnBlock): #EEmot,ctl,DOFs,Force_Lin HSig_DOFs, RSig_DOFs
             self.dofs.s.uppwr=np.mean(airs)
             self.dofs.s.planpwr=-2*self.s.frstab
 
-from drone_mdl_static import AffectDOFMode, AffectDOFState
+from examples.multirotor.drone_mdl_static import AffectDOFMode, AffectDOFState
 class Line(Component):
     _init_s = AffectDOFState
     _init_m = AffectDOFMode
@@ -102,7 +102,7 @@ class Line(Component):
         ee_in=m2to1([ee_in,self.s.e_to])   
         return airout, ee_in
 
-from drone_mdl_dynamic import Drone as DynDrone
+from examples.multirotor.drone_mdl_dynamic import Drone as DynDrone
 
 class DroneParam(Parameter, readonly=True):
     arch:   str='quad'

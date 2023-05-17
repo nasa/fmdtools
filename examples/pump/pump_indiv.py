@@ -5,7 +5,7 @@ Created on Fri May 12 09:59:41 2023
 @author: dhulse
 """
 
-from ex_pump import MoveWat
+from examples.pump.ex_pump import MoveWat
 from fmdtools.define.common import set_var
 from fmdtools.sim.propagate import nominal, one_fault, approach, single_faults, nominal_approach, nested_approach
 from fmdtools.sim.approach import SampleApproach, NominalApproach

@@ -12,14 +12,14 @@ from fmdtools.define.state import State
 from fmdtools.define.model import Model
 from fmdtools.sim.approach import NominalApproach 
 
-from ex_pump import accumulate, reseting_accumulate
+from examples.pump.ex_pump import accumulate, reseting_accumulate
 import fmdtools.analyze as an
 import fmdtools.sim.propagate as propagate
 import numpy as np
 
 
-from ex_pump import ImportWater, ExportWater
-from ex_pump import ImportEE as DetImportEE
+from examples.pump.ex_pump import ImportWater, ExportWater
+from examples.pump.ex_pump import ImportEE as DetImportEE
 
 class ImportEERandState(State):
     effstate:   float=1.0
@@ -42,7 +42,7 @@ class ImportEE(DetImportEE):
         self.ee_out.s.voltage= self.r.s.grid_noise*self.r.s.effstate * 500
 
 
-from ex_pump import ImportSig as DetImportSig
+from examples.pump.ex_pump  import ImportSig as DetImportSig
 class ImportSigRandState(State):
     sig_noise : float = 1.0
 class ImportSigRand(Rand):
@@ -66,7 +66,7 @@ class ImportSig(DetImportSig):
                 self.sig_out.power=0.0; 
                 self.r.to_default()
 
-from ex_pump import MoveWat as DetMoveWat
+from examples.pump.ex_pump  import MoveWat as DetMoveWat
 class MoveWatStates(State):
     total_flow: float=0.0
     eff:    float = 1.0 #effectiveness state
@@ -85,8 +85,8 @@ class MoveWat(DetMoveWat):
         super().behavior(time)
         if time>self.t.time: self.s.inc(total_flow=self.wat_out.s.flowrate)
 
-from ex_pump import PumpParam, Electricity, Water, Signal
-from ex_pump import Pump as DetPump
+from examples.pump.ex_pump  import PumpParam, Electricity, Water, Signal
+from examples.pump.ex_pump  import Pump as DetPump
 from fmdtools.define.model import SimParam
 class Pump(DetPump):
     __slots__=()

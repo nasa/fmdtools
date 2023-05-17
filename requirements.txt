@@ -9,3 +9,5 @@ ordered-set
 dill 
 deap
 shapely
+recordclass
+pytest

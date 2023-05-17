@@ -16,9 +16,9 @@ from fmdtools.sim.approach import SampleApproach
 
 import fmdtools.sim as fs
 
-from drone_mdl_static import DistEE, EngageLand, HoldPayload, AffectDOF
-from drone_mdl_static import StoreEE as StaticstoreEE
-from drone_mdl_static import Force, EE, Control, DOFs, Env, Dir
+from examples.multirotor.drone_mdl_static import DistEE, EngageLand, HoldPayload, AffectDOF
+from examples.multirotor.drone_mdl_static import StoreEE as StaticstoreEE
+from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, Env, Dir
 
 class StoreEE(StaticstoreEE):
     def condfaults(self,time):
@@ -31,7 +31,7 @@ class StoreEE(StaticstoreEE):
         if time > self.t.time:
             self.s.inc(soc=-self.ee_out.s.mul('rate', 'effort')*(time-self.t.time)/2)
             
-from drone_mdl_static import CtlDOFMode
+from examples.multirotor.drone_mdl_static import CtlDOFMode
 class CtlDOFState(State):
     cs:     float = 1.0
     vel:    float = 0.0     

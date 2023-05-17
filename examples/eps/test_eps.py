@@ -8,9 +8,10 @@ import unittest
 from examples.eps.eps import EPS
 from fmdtools.sim import propagate
 import fmdtools.analyze as an
-from fmdtools.define import SampleApproach, check_pickleability
+from fmdtools.sim.approach import SampleApproach
+from fmdtools.define.common import check_pickleability
 import numpy as np
-from CommonTests import CommonTests
+from tests.common import CommonTests
 
 class epsTests(unittest.TestCase, CommonTests):
     def setUp(self):

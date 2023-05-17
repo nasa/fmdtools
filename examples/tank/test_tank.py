@@ -11,12 +11,10 @@ from examples.tank.tank_optimization_model import Tank as Tank2
 from fmdtools.sim.search import ProblemInterface
 from fmdtools.sim import propagate
 import fmdtools.analyze as an
-from fmdtools.define import SampleApproach, NominalApproach
-from CommonTests import CommonTests
+from fmdtools.sim.approach import SampleApproach, NominalApproach
+from tests.common import CommonTests
 import numpy as np
 import multiprocessing as mp
-
-
 
 class TankTests(unittest.TestCase, CommonTests):
     def setUp(self):

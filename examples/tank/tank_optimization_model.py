@@ -16,7 +16,7 @@ from fmdtools.define.model import Model
 from fmdtools.define.block import FxnBlock
 import numpy as np
 
-from tank_model import TransportLiquidState, Signal, Water
+from examples.tank.tank_model import TransportLiquidState, Signal, Water
 
 class TankParam(Parameter, readonly=True):
     capacity:       np.float64 = np.float64(20.0)
@@ -93,7 +93,7 @@ class StoreLiquidState(State):
     level:          float=10.0
     net_flow:       float=0.0
     coolingbuffer:  float=10.0
-from tank_model import StoreLiquidMode 
+from examples.tank.tank_model import StoreLiquidMode 
     
 class StoreLiquid(FxnBlock):
     __slots__=('wat_in', 'wat_out', 'sig')
