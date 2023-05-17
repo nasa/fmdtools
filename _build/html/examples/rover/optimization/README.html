@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exploring Faulty-State Space using MOO &mdash; fmdtools 2.0-alpha documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html">
+            <img src="../../../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">fmdtools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#notices">Notices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../docs/Development%20Guide.html#how-to-write-good-models-development-best-practices">How to Write Good Models - Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/Examples.html">Examples</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.sim.html#fmdtools-sim-networks">fmdtools.sim.networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../docs/fmdtools.html#fmdtools-define">fmdtools.define</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Exploring Faulty-State Space using MOO</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/examples/rover/optimization/README.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section class="tex2jax_ignore mathjax_ignore" id="exploring-faulty-state-space-using-moo">
+<h1>Exploring Faulty-State Space using MOO<a class="headerlink" href="#exploring-faulty-state-space-using-moo" title="Permalink to this headline"></a></h1>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h2>
+<p>The three pertinent scripts are <strong>ccea.py</strong>, <strong>ea.py</strong>, and <strong>random.py</strong>. There are accessory scripts that externally handle some analysis of results, <strong>animation.py</strong> and <strong>ea_analysis.py</strong>, but these are secondary.</p>
+<p><strong>ccea.py</strong> is the Cooperative Co-evolutionary Algorithm. <strong>ea.py</strong> is the
+standard Evolutionary Algorithm. <strong>random.py</strong> is the Random Sampling Algorithm.</p>
+</section>
+<section id="evolutionary-algorithms">
+<h2>Evolutionary Algorithms<a class="headerlink" href="#evolutionary-algorithms" title="Permalink to this headline"></a></h2>
+<p><strong>ccea.py</strong> and <strong>ea.py</strong> were both written with the help of <strong>DEAP</strong>, a python
+framework for evolutionary algorithms. Below are links to resources for the
+framework.</p>
+<p><a class="reference external" href="https://deap.readthedocs.io/en/master/index.html">DEAP Documentation</a></p>
+<p><a class="reference external" href="https://github.com/deap/deap">DEAP GitHub</a></p>
+<section id="ccea">
+<h3>CCEA<a class="headerlink" href="#ccea" title="Permalink to this headline"></a></h3>
+<p>For the CCEA, there were no examples in the <strong>DEAP</strong> documentation that perfectly modeled this project, but <a class="reference external" href="https://deap.readthedocs.io/en/master/tutorials/basic/part1.html#a-funky-one">“A Funky One”</a> proved useful for guidance. Additionally, <a class="reference external" href="https://github.com/DEAP/deap/tree/master/examples/coev">DEAP GitHub COEV Examples</a> were helpful as well.</p>
+<p>Moveover, the preexisting mutation, crossover and selection functions in <strong>DEAP</strong> were not directly implemented but, instead, used as a guide to build the functions for this project.</p>
+<p><code class="docutils literal notranslate"><span class="pre">varAnd2()</span></code> is the evolutionary algorithm that employs <code class="docutils literal notranslate"><span class="pre">mutHealthStates()</span></code> and <code class="docutils literal notranslate"><span class="pre">cxHealthStates()</span></code> for mutation and crossover, respectively.</p>
+<p>Here, a population of size <code class="docutils literal notranslate"><span class="pre">SUBPOP_SIZE</span> <span class="pre">*</span> <span class="pre">NUM_SUBPOP</span></code> consists of  subpopulations, such that a subpopulation is defined as a list of faulty-space tuples (called individuals in the code for this isolated case) of size <code class="docutils literal notranslate"><span class="pre">SUBPOP_SIZE</span></code>. A solution is a representative which is a list of individuals such that one individual is selected from each subpopulation, resulting in a list of <code class="docutils literal notranslate"><span class="pre">NUM_SUBPOP</span></code> number of faulty-state space tuples.</p>
+<p>When running an experiment, the parameters to vary are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SUBPOP_SIZE</span></code>
+: number of individuals per subpopulation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NUM_SUBPOP</span></code>
+: number of subpopulations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ngen</span></code>
+: number of generations</p></li>
+</ul>
+<p>Then, the top <code class="docutils literal notranslate"><span class="pre">k</span></code> number of individuals are selected. Currently, the CCEA is using a tournament selection. <code class="docutils literal notranslate"><span class="pre">k</span></code> and the selection function can be changed here:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;select&quot;</span><span class="p">,</span> <span class="n">tools</span><span class="o">.</span><span class="n">selTournament</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">SUBPOP_SIZE</span><span class="p">),</span> <span class="n">tournsize</span><span class="o">=</span><span class="n">SUBPOP_SIZE</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="ea">
+<h3>EA<a class="headerlink" href="#ea" title="Permalink to this headline"></a></h3>
+<p>The EA was developed after the CCEA and is a simplified version of the CCEA, so if the CCEA makes sense, then the EA <em>should</em> be easier to comprehend. It,  also, closely resembles many examples in the <a class="reference external" href="https://github.com/DEAP/deap/tree/master/examples">DEAP GitHub Examples</a> if one wishes for extra resources.</p>
+<p>Similarly to the CCEA, <code class="docutils literal notranslate"><span class="pre">varAnd2()</span></code> is the evolutionary algorithm that employs <code class="docutils literal notranslate"><span class="pre">mutHealthStates()</span></code> and <code class="docutils literal notranslate"><span class="pre">cxHealthStates()</span></code> for mutation and crossover, respectively.</p>
+<p>Here, a population of size <code class="docutils literal notranslate"><span class="pre">POP_SIZE</span></code> consists of individuals, such that an individual is defined as a list of faulty-state space tuples of size <code class="docutils literal notranslate"><span class="pre">IND_SIZE</span></code>. A solution in an individual and it is found after <code class="docutils literal notranslate"><span class="pre">ngen</span></code> number of generations.</p>
+<p>When running an experiment, the parameters to vary are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IND_SIZE</span></code>
+: number of faulty-state space tuples per individual</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POP_SIZE</span></code>
+: number of individuals in population</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ngen</span></code>
+: number of generations</p></li>
+</ul>
+<p>Then, the top <code class="docutils literal notranslate"><span class="pre">k</span></code> number of individuals are selected. Currently, the EA is using a <code class="docutils literal notranslate"><span class="pre">selBest</span></code> selection. <code class="docutils literal notranslate"><span class="pre">k</span></code> and the selection function can be changed here:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;select&quot;</span><span class="p">,</span> <span class="n">tools</span><span class="o">.</span><span class="n">selBest</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">POP_SIZE</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="random">
+<h3>Random<a class="headerlink" href="#random" title="Permalink to this headline"></a></h3>
+<p>The Random Sampling Algorithm is similar in structure to the EA code. A population is randomly generated and an individual from that population is randomly selected per generation. Its fitness values are computed and, if the preceding generation performs worse, then it replaces the preceding generation’s individual. Otherwise, it is thrown out.
+The variables are defined in the same way as the EA.</p>
+<p>When running an experiment, the parameters to vary are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IND_SIZE</span></code>
+: number of faulty-state space tuples per individual</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POP_SIZE</span></code>
+: number of individuals in population</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ngen</span></code>
+: number of generations</p></li>
+</ul>
+</section>
+</section>
+<section id="results-and-analysis">
+<h2>Results and Analysis<a class="headerlink" href="#results-and-analysis" title="Permalink to this headline"></a></h2>
+<p>The results from <strong>ccea.py</strong>, <strong>ea.py</strong>, and <strong>random.py</strong> are either stored in a <strong>csv</strong> as Pandas Dataframe (and then interpreted) or generated as a <strong>pdf</strong> or <strong>png</strong> after compiling each program.</p>
+<p>The dataframe is then analyzed in <strong>animation.py</strong> and <strong>ea_analysis.py</strong>.</p>
+<p><strong>ea_analysis.py</strong> plots the fitness values of the top performing individual(or representative in the case of CCEA) in each generation for all algorithm.</p>
+<p><em>Note: if one runs into any errors, consider checking the</em> <strong>csv</strong> <em>result files</em> (<strong>rslt_ccea.csv</strong>,<strong>rslt_ea.csv</strong>,<strong>rslt_random.csv</strong>). <em>Errors typically arise in the there after running each of the algorithms.</em></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
