@@ -8,6 +8,6 @@ import pytest
 
 if __name__=="__main__":
     
-    #retcode = pytest.main(["--html=pytest_report.html"])
+    retcode = pytest.main(["--html=pytest_report.html"])
     
-    retcode = pytest.main(["--html=pytest_report.html", "--continue-on-collection-errors"])
+    #retcode = pytest.main(["--html=pytest_report.html", "--continue-on-collection-errors"])
