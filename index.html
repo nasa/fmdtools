@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="fmdtools" href="README.html" /> 
+    <link rel="next" title="README" href="README.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,7 +40,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="README.html">fmdtools</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">README</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="README.html#contributors">Contributors</a></li>
 </ul>
@@ -72,18 +72,32 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.define.html">fmdtools.define package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.sim.html#fmdtools-sim-networks">fmdtools.sim.networks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.html#module-0">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.html#fmdtools-define">fmdtools.define</a></li>
 </ul>
 </li>
 </ul>
@@ -205,6 +219,8 @@
 <span class="n">pandas</span>
 <span class="n">ordered</span><span class="o">-</span><span class="nb">set</span>
 <span class="n">dill</span>
+<span class="n">recordclass</span> <span class="o">&gt;=</span><span class="mf">0.14.4</span>
+<span class="n">pytest</span>
 </pre></div>
 </div>
 <p>These packages are optional but recommended to enable specific fmdtools use-cases and to work with examples in the repository:</p>
@@ -262,7 +278,7 @@ SOFTWARE.
 <h1>TABLE OF CONTENTS<a class="headerlink" href="#table-of-contents" title="Permalink to this headline"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="README.html">fmdtools</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">README</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="README.html#contributors">Contributors</a></li>
 </ul>
@@ -292,18 +308,32 @@ SOFTWARE.
 <li class="toctree-l1"><a class="reference internal" href="docs/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.define.html">fmdtools.define package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.sim.html#fmdtools-sim-networks">fmdtools.sim.networks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.html#module-0">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.html#fmdtools-define">fmdtools.define</a></li>
 </ul>
 </li>
 </ul>
@@ -314,7 +344,7 @@ SOFTWARE.
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="README.html" class="btn btn-neutral float-right" title="fmdtools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="README.html" class="btn btn-neutral float-right" title="README" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

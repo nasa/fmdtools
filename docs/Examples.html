@@ -41,7 +41,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../README.html">fmdtools</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">README</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
 </ul>
@@ -73,18 +73,32 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html">fmdtools.define package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-networks">fmdtools.sim.networks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-0">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.html#fmdtools-define">fmdtools.define</a></li>
 </ul>
 </li>
 </ul>
@@ -143,7 +157,7 @@
 <p>To get started with fmdtools, it is reccomended to start with the <strong>Intro to fmdtools</strong> workshop, which provides a basic high-level overview of modelling and simulation in fmdtools, with a corresponding model and example notebook to fill out. To start the workshop, first download the workshop slides (<code class="xref download docutils literal notranslate"><span class="pre">Intro</span> <span class="pre">to</span> <span class="pre">fmdtools.pptx</span></code>), tutorial model (<code class="xref download docutils literal notranslate"><span class="pre">ex_pump.py</span></code>), and Unfilled Notebook <code class="xref download docutils literal notranslate"><span class="pre">ex_pump.py</span></code>.  If you cloned fmdtools, you can just navigate to these files in the repository–they are in a directory called <code class="docutils literal notranslate"><span class="pre">example_pump</span></code>. Then, follow along with the slides and the (see: <a class="reference external" href="example_pump/Tutorial_complete.ipynb">filled-in notebook</a>).</p>
 <p>After completing the workshop, it can be helpful to run through the following notebooks to better understand fmdtools modelling, simulation, and analysis basics as well as more advanced features and use-cases:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="docs/Model_Structure_Visualization_Tutorial.ipynb">Defining and Visualizing fmdtools Model Structures</a> is helpful for understanding how a given model simulates over time. It covers the class  <a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a> and containing methods.</p></li>
+<li><p><a class="reference external" href="docs/Model_Structure_Visualization_Tutorial.ipynb">Defining and Visualizing fmdtools Model Structures</a> is helpful for understanding how a given model simulates over time. It covers the class  <a class="reference internal" href="fmdtools.analyze.html#id32" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a> and containing methods.</p></li>
 <li><p><a class="reference external" href="example_multirotor/Demonstration.ipynb">fmdtools Paper Demonstration</a>  is helpful for understanding network/static/dynamic/hierarchical model types, covering:</p>
 <ul>
 <li><p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.networks</span></code> module.</p></li>
@@ -153,7 +167,7 @@
 </li>
 <li><p><a class="reference external" href="example_pump/Pump_Example_Notebook.ipynb">Pump Example Notebook</a> is helpful for understanding the breadth of fmdtools plotting, tabulation, and visualization capabilities. It covers:</p>
 <ul>
-<li><p>A variety of graphing usecases in <a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a> functions which enable viewing different graph types, simulation results at individual times, and overall model statistics/results.</p></li>
+<li><p>A variety of graphing usecases in <a class="reference internal" href="fmdtools.analyze.html#module-0" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a> functions which enable viewing different graph types, simulation results at individual times, and overall model statistics/results.</p></li>
 <li><p><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a> functions for viewing simulation results over time and summarizing run information</p></li>
 <li><p>Save/load using the <cite>dill</cite> package</p></li>
 </ul>
@@ -198,13 +212,13 @@
 <li><p>Demonstrate the optimization of parameters over a set of fault scenarios using <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInterface</span></code> in <a class="reference external" href="example_rover/optimization/RoverResponseOptimization.ipynb">Rover Response Optimization</a></p></li>
 </ul>
 </div></blockquote>
-<p>The following notebooks showcase the optimization interfaces in <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.search</span></code>:</p>
+<p>The following notebooks showcase the optimization interfaces in <a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.search" title="fmdtools.sim.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.search</span></code></a>:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference external" href="example_pump/Optimization.ipynb">Optimization</a> shows some of the basics of working with the <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.ProblemInterface</span></code> class for optimization.</p></li>
-<li><p><a class="reference external" href="example_pump/AST_Sampling.ipynb">AST Sampling</a> shows how fmdtools models called from the AdaSress Julia package to leverage the adaptive stress testing methodology using the <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.DynamicInterface</span></code> class.</p></li>
-<li><p><a class="reference external" href="example_multirotor/MultirotorOptimization.ipynb">Multirotor Optimization</a> shows how the design, operations, and contingency management of a system can be co-optimized with the <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.ProblemInterface</span></code> class.</p></li>
-<li><p><a class="reference external" href="example_tank/TankOptimization.ipynb">Tank Optimization</a> shows how design and contingency management of a system can be co-optimized with the <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.ProblemInterface</span></code> class, as well as external solvers.</p></li>
+<li><p><a class="reference external" href="example_pump/Optimization.ipynb">Optimization</a> shows some of the basics of working with the <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ProblemInterface" title="fmdtools.sim.search.ProblemInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.ProblemInterface</span></code></a> class for optimization.</p></li>
+<li><p><a class="reference external" href="example_pump/AST_Sampling.ipynb">AST Sampling</a> shows how fmdtools models called from the AdaSress Julia package to leverage the adaptive stress testing methodology using the <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DynamicInterface" title="fmdtools.sim.search.DynamicInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.DynamicInterface</span></code></a> class.</p></li>
+<li><p><a class="reference external" href="example_multirotor/MultirotorOptimization.ipynb">Multirotor Optimization</a> shows how the design, operations, and contingency management of a system can be co-optimized with the <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ProblemInterface" title="fmdtools.sim.search.ProblemInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.ProblemInterface</span></code></a> class.</p></li>
+<li><p><a class="reference external" href="example_tank/TankOptimization.ipynb">Tank Optimization</a> shows how design and contingency management of a system can be co-optimized with the <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ProblemInterface" title="fmdtools.sim.search.ProblemInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.ProblemInterface</span></code></a> class, as well as external solvers.</p></li>
 </ul>
 </div></blockquote>
 <p>There are also two other example models which demonstrate specialized use-cases:</p>
