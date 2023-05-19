@@ -7,10 +7,8 @@ Description: A module to define flows used to conect functions in a model. Conta
 - :class:`CommsFlow`:   Class for flows which enable communications (e.g., sending/recieving messages) between functions
 - :func:`init_flow`:    Flow constructor/factory method.
 """
-import warnings
 import copy
 import sys
-import networkx as nx
 from recordclass import asdict, astuple
 
 from .parameter import Parameter

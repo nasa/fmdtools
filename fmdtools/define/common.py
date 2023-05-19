@@ -5,7 +5,6 @@ Description: A module for methods used commonly in model definition constructs.
 from collections.abc import Iterable
 import dill
 import pickle
-from itertools import chain
 import time
 from recordclass import asdict
 
