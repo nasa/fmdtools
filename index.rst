@@ -93,6 +93,8 @@ fmdtools requires Python 3 and depends directly on these packages (see requireme
    pandas
    ordered-set
    dill 
+   recordclass >=0.14.4
+   pytest
 
 These packages are optional but recommended to enable specific fmdtools use-cases and to work with examples in the repository:
 
