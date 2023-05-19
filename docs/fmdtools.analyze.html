@@ -40,7 +40,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../README.html">fmdtools</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">README</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
 </ul>
@@ -72,18 +72,32 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html">fmdtools.define package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-networks">fmdtools.sim.networks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-0">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.html#fmdtools-define">fmdtools.define</a></li>
 </ul>
 </li>
 </ul>
@@ -139,16 +153,16 @@
 </style>
 <section id="fmdtools-analyze-package">
 <h1>fmdtools.analyze package<a class="headerlink" href="#fmdtools-analyze-package" title="Permalink to this headline"></a></h1>
-<a class="reference internal image-reference" href="docs/figures/analyze.png"><img alt="docs/figures/analyze.png" src="docs/figures/analyze.png" style="width: 800px;" /></a>
-<p>The analyze package is organized into the <a class="reference internal" href="#module-fmdtools.analyze.plot" title="fmdtools.analyze.plot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.plot</span></code></a>, <a class="reference internal" href="#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a>, and  <a class="reference internal" href="#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a> modules, as shown above. These modules can be of as <em>convenience interfaces</em> for their respective packages, where:</p>
-<ul class="simple">
-<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot</span></code> creates plots in <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> for simulation results (e.g., model histories, end-state classifications, etc).</p></li>
-<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">graph</span></code> creates graph visualizations and analyses of the model structures using <code class="docutils literal notranslate"><span class="pre">NetworkX</span></code>, and/or <code class="docutils literal notranslate"><span class="pre">Graphviz</span></code> packages.</p></li>
-<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">tabulate</span></code> creates <code class="docutils literal notranslate"><span class="pre">pandas</span></code> tables of desired simulation metrics.</p></li>
-</ul>
+<p>The analyze package is organized into the modules:
+- <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.result</span></code>, which defines the <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.result.Result</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.result.History</span></code> classes for tracking, saving, and processing simulation outputs.
+- <a class="reference internal" href="#module-fmdtools.analyze.plot" title="fmdtools.analyze.plot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.plot</span></code></a>, which provides functions for plotting <cite>History</cite> and <cite>Result</cite> metrics (and is essentially a convenience interface for <cite>matplotlib</cite>)
+- <a class="reference internal" href="#module-0" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a>, which provides classes for creating and visualizing Graphs of simulation structures (and is a sort of convenience iterface for <cite>networkx</cite>/<cite>graphviz</cite> and other graphing libraries).</p>
+<blockquote>
+<div><p><a class="reference internal" href="#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a>, which provides functions to generate tables of metrics of interest using <cite>pandas</cite> (e.g., FMEAs).</p>
+</div></blockquote>
 <p>The model reference for each of these is provided below:</p>
 <section id="module-fmdtools.analyze.graph">
-<span id="fmdtools-analyze-graph"></span><h2>fmdtools.analyze.graph<a class="headerlink" href="#module-fmdtools.analyze.graph" title="Permalink to this headline"></a></h2>
+<span id="fmdtools-analyze-result"></span><h2>fmdtools.analyze.result<a class="headerlink" href="#module-fmdtools.analyze.graph" title="Permalink to this headline"></a></h2>
 <p>Description: Gives graph-level visualizations of the model using installed renderers.</p>
 <dl class="simple">
 <dt>Public user-facing methods:</dt><dd><ul class="simple">
@@ -162,28 +176,28 @@
 </ul>
 </dd>
 <dt>Private class:</dt><dd><ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.GraphInteractor" title="fmdtools.analyze.graph.GraphInteractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a>:             Used to set nodes in set_pos</p></li>
+<li><p><a class="reference internal" href="#id59" title="fmdtools.analyze.graph.GraphInteractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a>:             Used to set nodes in set_pos</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ASGActGraph">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ASGActGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ASGActGraph" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.ASGGraph" title="fmdtools.analyze.graph.ASGGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ASGGraph</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id6" title="fmdtools.analyze.graph.ASGGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ASGGraph</span></code></a></p>
 <p>Variant of ASGGraph where only the sequence between actions is shown.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ASGFlowGraph">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ASGFlowGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ASGFlowGraph" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.ASGGraph" title="fmdtools.analyze.graph.ASGGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ASGGraph</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id6" title="fmdtools.analyze.graph.ASGGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ASGGraph</span></code></a></p>
 <p>Variant of ASGGraph where only the flow relationships between actions is shown.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ASGGraph">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ASGGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ASGGraph" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a></p>
 <p>Shows a visual representation of the internal Action Sequence Graph of
 the Function Block, with:</p>
 <blockquote>
@@ -249,13 +263,13 @@ nx.draw_networkx_nodes. The default is {“label”:{}}.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.CommsFlowGraph">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">CommsFlowGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ports_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.CommsFlowGraph" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.MultiFlowGraph" title="fmdtools.analyze.graph.MultiFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.MultiFlowGraph</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id116" title="fmdtools.analyze.graph.MultiFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.MultiFlowGraph</span></code></a></p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.EdgeLabelStyle">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">EdgeLabelStyle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_color</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'k'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontalalignment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verticalalignment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_on</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">{'alpha':</span> <span class="pre">0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.EdgeLabelStyle" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.LabelStyle" title="fmdtools.analyze.graph.LabelStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.LabelStyle</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id68" title="fmdtools.analyze.graph.LabelStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.LabelStyle</span></code></a></p>
 <p>–
 Create class EdgeLabelStyle instance</p>
 <dl class="py attribute">
@@ -676,7 +690,7 @@ Note: make sure matplotlib is set to plot in an external window (e.g using ‘%m
 states with another Graph object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a>) – (assumed nominal) Graph to compare to</p>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a>) – (assumed nominal) Graph to compare to</p>
 </dd>
 </dl>
 </dd></dl>
@@ -758,7 +772,7 @@ nx.draw_networkx_nodes. The default is {“label”:{}}.</p>
 <dd><p>Standard results processing for results graphs (show faults and degradations)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a><em>, </em><em>optional</em>) – Graph to compare with (for degradations). The default is False.</p>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a><em>, </em><em>optional</em>) – Graph to compare with (for degradations). The default is False.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -927,7 +941,7 @@ three distinct parts:</p>
 <dd class="field-even"><p><strong>labs</strong> – Labels corresponding to the given inputs</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.graph.Labels" title="fmdtools.analyze.graph.Labels">Labels</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#id78" title="fmdtools.analyze.graph.Labels">Labels</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -954,7 +968,7 @@ three distinct parts:</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.Labels.subtext_style">
-<span class="sig-name descname"><span class="pre">subtext_style</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#fmdtools.analyze.graph.LabelStyle" title="fmdtools.analyze.graph.LabelStyle"><span class="pre">fmdtools.analyze.graph.LabelStyle</span></a></em><a class="headerlink" href="#fmdtools.analyze.graph.Labels.subtext_style" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">subtext_style</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#id68" title="fmdtools.analyze.graph.LabelStyle"><span class="pre">fmdtools.analyze.graph.LabelStyle</span></a></em><a class="headerlink" href="#fmdtools.analyze.graph.Labels.subtext_style" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -964,7 +978,7 @@ three distinct parts:</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.Labels.title_style">
-<span class="sig-name descname"><span class="pre">title_style</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#fmdtools.analyze.graph.LabelStyle" title="fmdtools.analyze.graph.LabelStyle"><span class="pre">fmdtools.analyze.graph.LabelStyle</span></a></em><a class="headerlink" href="#fmdtools.analyze.graph.Labels.title_style" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">title_style</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#id68" title="fmdtools.analyze.graph.LabelStyle"><span class="pre">fmdtools.analyze.graph.LabelStyle</span></a></em><a class="headerlink" href="#fmdtools.analyze.graph.Labels.title_style" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -972,7 +986,7 @@ three distinct parts:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ModelCompGraph">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ModelCompGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ModelCompGraph" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.ModelGraph" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id101" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
 <p>Creates a graph of model functions, and flows, with component containment
 relationships shown for functions.</p>
 <dl class="py method">
@@ -995,7 +1009,7 @@ relationships shown for functions.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ModelFlowGraph">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ModelFlowGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ModelFlowGraph" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.ModelGraph" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id101" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
 <p>Creates a Graph of model flows for display, where flows are
 set as nodes and connections (via functions) are edges</p>
 <dl class="py method">
@@ -1019,7 +1033,7 @@ set as nodes and connections (via functions) are edges</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ModelFxnGraph">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ModelFxnGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ModelFxnGraph" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.ModelGraph" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id101" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
 <p>Returns a graph representation of the functions of the model, where
 functions are nodes and flows are edges</p>
 <dl class="py method">
@@ -1034,7 +1048,7 @@ functions are nodes and flows are edges</p>
 states with another Graph object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a>) – (assumed nominal) Graph to compare to</p>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a>) – (assumed nominal) Graph to compare to</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1060,7 +1074,7 @@ states with another Graph object</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ModelGraph">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ModelGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ModelGraph" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a></p>
 <p>Creates a Graph of Model functions and flow for display, where both functions
 and flows are nodes.</p>
 <p>If withstates option is used on instantiation, a <cite>states</cite> dict is associated
@@ -1106,7 +1120,7 @@ edges</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<em>Model</em>) – Model to plot the execution order of.</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.model.Model" title="fmdtools.define.model.Model"><em>Model</em></a>) – Model to plot the execution order of.</p></li>
 <li><p><strong>static</strong> (<em>dict/False</em><em>, </em><em>optional</em>) – kwargs to overwrite the default style for functions/flows in the static execution step.
 If False, static functions are not differentiated. The default is {}.</p></li>
 <li><p><strong>dynamic</strong> (<em>dict/False</em><em>, </em><em>optional</em>) – kwargs to overwrite the default style for functions/flows in the dynamic execution step.
@@ -1140,7 +1154,7 @@ If False, these edges are not added. the default is {}.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ModelTypeGraph">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ModelTypeGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ModelTypeGraph" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.ModelGraph" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id101" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
 <p>Creates a graph representation of model Classes, showing the containment relationship
 between function classes and flow classes in the model.</p>
 <dl class="py method">
@@ -1189,7 +1203,7 @@ between function classes and flow classes in the model.</p>
 states with another Graph object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a>) – (assumed nominal) Graph to compare to</p>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a>) – (assumed nominal) Graph to compare to</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1201,7 +1215,7 @@ states with another Graph object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<em>Model</em>) – Model to plot the execution order of.</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.model.Model" title="fmdtools.define.model.Model"><em>Model</em></a>) – Model to plot the execution order of.</p></li>
 <li><p><strong>static</strong> (<em>dict/False</em><em>, </em><em>optional</em>) – kwargs to overwrite the default style for functions/flows in the static execution step.
 If False, static functions are not differentiated. The default is {}.</p></li>
 <li><p><strong>dynamic</strong> (<em>dict/False</em><em>, </em><em>optional</em>) – kwargs to overwrite the default style for functions/flows in the dynamic execution step.
@@ -1239,7 +1253,7 @@ If False, these edges are not added. the default is {}.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.MultiFlowGraph">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">MultiFlowGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">send_connections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'closest':</span> <span class="pre">'base'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections_as_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.MultiFlowGraph" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.MultiFlowGraph.draw_graphviz">
 <span class="sig-name descname"><span class="pre">draw_graphviz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neato'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'false'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.MultiFlowGraph.draw_graphviz" title="Permalink to this definition"></a></dt>
@@ -1268,7 +1282,7 @@ If False, these edges are not added. the default is {}.</p></li>
 <dd><p>Standard results processing for results graphs (show faults and degradations)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a><em>, </em><em>optional</em>) – Graph to compare with (for degradations). The default is False.</p>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a><em>, </em><em>optional</em>) – Graph to compare with (for degradations). The default is False.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1354,7 +1368,7 @@ through multigraph locals to construct the containment tree.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>g</strong> (<em>networkx.graph</em>) – Existing graph</p></li>
-<li><p><strong>multiflow</strong> (<em>MultiFlow</em>) – Multiflow Structure</p></li>
+<li><p><strong>multiflow</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.flow.MultiFlow" title="fmdtools.define.flow.MultiFlow"><em>MultiFlow</em></a>) – Multiflow Structure</p></li>
 <li><p><strong>base_name</strong> (<em>str</em>) – Name at the current level of recursion</p></li>
 <li><p><strong>include_states</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include state attributes in the plot. The default is False.</p></li>
 <li><p><strong>get_states</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to attach states as attributes to the graph. The default is False</p></li>
@@ -1432,7 +1446,7 @@ through multigraph locals to construct the containment tree.</p>
 <dd class="field-even"><p><strong>graph</strong> – Graph of the appropriate (default) class</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph">Graph</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph">Graph</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1525,7 +1539,7 @@ given methods.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<em>Model</em>) – fmdtools model</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.model.Model" title="fmdtools.define.model.Model"><em>Model</em></a>) – fmdtools model</p></li>
 <li><p><strong>rotateticks</strong> (<em>Bool</em><em>, </em><em>optional</em>) – Whether to rotate the x-ticks (for bigger plots). The default is False.</p></li>
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – String to use for the title (if any). The default is “Dynamic Run Order”.</p></li>
 </ul>
@@ -1766,7 +1780,7 @@ Adds seperators to table groups (if any), limits the bounds of the plot, adds a 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nomapp</strong> (<em>NominalApproach</em>) – Nominal sample approach simulated in the model.</p></li>
+<li><p><strong>nomapp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.approach.NominalApproach" title="fmdtools.sim.approach.NominalApproach"><em>NominalApproach</em></a>) – Nominal sample approach simulated in the model.</p></li>
 <li><p><strong>nomapp_endclasses</strong> (<em>dict</em>) – End-classifications for the set of simulations in the model.</p></li>
 <li><p><strong>param1</strong> (<em>str</em>) – Parameter range desired to visualize in the operational envelope</p></li>
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Plot title. The default is “Nominal Operational Envelope”.</p></li>
@@ -1790,7 +1804,7 @@ Adds seperators to table groups (if any), limits the bounds of the plot, adds a 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nomapp</strong> (<em>NominalApproach</em>) – Nominal sample approach simulated in the model.</p></li>
+<li><p><strong>nomapp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.approach.NominalApproach" title="fmdtools.sim.approach.NominalApproach"><em>NominalApproach</em></a>) – Nominal sample approach simulated in the model.</p></li>
 <li><p><strong>nomapp_endclasses</strong> (<em>dict</em>) – End-classifications for the set of simulations in the model.</p></li>
 <li><p><strong>param1</strong> (<em>str</em>) – First parameter (x) desired to visualize in the operational envelope</p></li>
 <li><p><strong>param2</strong> (<em>str</em>) – Second arameter (y) desired to visualize in the operational envelope</p></li>
@@ -1816,7 +1830,7 @@ Adds seperators to table groups (if any), limits the bounds of the plot, adds a 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nomapp</strong> (<em>NominalApproach</em>) – Nominal sample approach simulated in the model.</p></li>
+<li><p><strong>nomapp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.approach.NominalApproach" title="fmdtools.sim.approach.NominalApproach"><em>NominalApproach</em></a>) – Nominal sample approach simulated in the model.</p></li>
 <li><p><strong>nomapp_endclasses</strong> (<em>dict</em>) – End-classifications for the set of simulations in the model.</p></li>
 <li><p><strong>param1</strong> (<em>str</em>) – First parameter (x) desired to visualize in the operational envelope</p></li>
 <li><p><strong>param2</strong> (<em>str</em>) – Second parameter (y) desired to visualize in the operational envelope</p></li>
@@ -1848,7 +1862,7 @@ Adds seperators to table groups (if any), limits the bounds of the plot, adds a 
 of structure {‘fxnname’:’phase’:[start, end]}</p></li>
 <li><p><strong>modephases</strong> (<em>dict</em><em>, </em><em>optional</em>) – dictionary that maps the phases to operational modes, if it is desired to track the progression
 through modes</p></li>
-<li><p><strong>mdl</strong> (<em>Model</em><em>, </em><em>optional</em>) – model, if it is desired to additionally plot the phases of the model with the function phases</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.model.Model" title="fmdtools.define.model.Model"><em>Model</em></a><em>, </em><em>optional</em>) – model, if it is desired to additionally plot the phases of the model with the function phases</p></li>
 <li><p><strong>singleplot</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the functions’ progressions through phases are plotted on the same plot or on different plots.
 The default is True.</p></li>
 <li><p><strong>phase_ticks</strong> (<em>'std'/'phases'/'both'</em>) – x-ticks to use (standard, at the edge of phases, or both). Default is ‘both’</p></li>
@@ -2006,6 +2020,1352 @@ runner.run(suite_for_plots(UnitTests, plottests=False)))</p>
 </dd></dl>
 
 </section>
+<section id="module-0">
+<span id="fmdtools-analyze-graph"></span><h2>fmdtools.analyze.graph<a class="headerlink" href="#module-0" title="Permalink to this headline"></a></h2>
+<p>Description: Gives graph-level visualizations of the model using installed renderers.</p>
+<dl class="simple">
+<dt>Public user-facing methods:</dt><dd><ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">set_pos()</span></code>:                      Set graph node positions manually</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">show()</span></code>:                         Plots a single graph object g. Has options for heatmaps/overlays and matplotlib/graphviz/pyvis renderers.</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">exec_order()</span></code>:                   Displays the propagation order and type (dynamic/static) in the model. Works with matplotlib/graphviz renderers.</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">history()</span></code>:                      Displays plots of the graph over time given a dict history of graph objects.  Works with matplotlib/graphviz renderers.</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">result_from()</span></code>:                  Plots a representation of the model graph at a specific time in the results history. Works with matplotlib/graphviz renderers.</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">results_from()</span></code>:                 Plots a set of representations of the model graph at given times in the results history. Works with matplotlib/graphviz renderers.</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">animation_from()</span></code>:               Creates an animation of the model graph using results at given times in the results history.  Works with matplotlib renderers.</p></li>
+</ul>
+</dd>
+<dt>Private class:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#id59" title="fmdtools.analyze.graph.GraphInteractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a>:             Used to set nodes in set_pos</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ASGActGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id6" title="fmdtools.analyze.graph.ASGGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ASGGraph</span></code></a></p>
+<p>Variant of ASGGraph where only the sequence between actions is shown.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ASGFlowGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id6" title="fmdtools.analyze.graph.ASGGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ASGGraph</span></code></a></p>
+<p>Variant of ASGGraph where only the flow relationships between actions is shown.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ASGGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a></p>
+<p>Shows a visual representation of the internal Action Sequence Graph of
+the Function Block, with:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Sequence as edges</p></li>
+<li><p>Flows as (circular) Nodes</p></li>
+<li><p>Actions as (square) Nodes</p></li>
+</ul>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">draw_graphviz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'twopi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'voronoi'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id7" title="Permalink to this definition"></a></dt>
+<dd><p>Draws the graph using pygraphviz for publication-quality figures.</p>
+<p>Note that the style may not match one-to-one with the defined none/edge styles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to save the figure to (if saving the figure). The default is ‘’.</p></li>
+<li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of file to safe. The default is ‘png’.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dot</strong> – Graph object corresponding to the figure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>PyGraphviz DiGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">set_edge_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'name'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">edge_label_styles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id8" title="Permalink to this definition"></a></dt>
+<dd><p>Creates labels using Labels.from_iterator for the edges in the graph</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">set_node_styles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">active</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">node_styles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id9" title="Permalink to this definition"></a></dt>
+<dd><p>Sets self.node_styles and self.edge_groups given the provided node styles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**node_styles</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of tags, labels, and style kwargs for the nodes that overwrite the default.
+Has structure {tag:{label:kwargs}}, where kwargs are the keyword arguments to
+nx.draw_networkx_nodes. The default is {“label”:{}}.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">set_nx_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id10" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">set_nx_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id11" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id12">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">CommsFlowGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ports_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id12" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id116" title="fmdtools.analyze.graph.MultiFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.MultiFlowGraph</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id13">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">EdgeLabelStyle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_color</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'k'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontalalignment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verticalalignment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_on</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">{'alpha':</span> <span class="pre">0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id13" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id68" title="fmdtools.analyze.graph.LabelStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.LabelStyle</span></code></a></p>
+<p>–
+Create class EdgeLabelStyle instance</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#id14" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">bbox</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#id15" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">clip_on</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#id16" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">font_color</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id17" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">font_size</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id18" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">font_weight</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id19" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">horizontalalignment</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id20" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">rotate</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#id21" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">verticalalignment</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id22" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id23">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">EdgeStyle</span></span><a class="headerlink" href="#id23" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">recordclass.datatype.dataobject</span></code></p>
+<p>Holds kwargs for nx.draw_networkx_edges to be applied as a style for multiple edges</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">arrows</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#id24" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">arrowsize</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id25" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">arrowstyle</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id26" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">as_gv_kwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id27" title="Permalink to this definition"></a></dt>
+<dd><p>Transates elements of the style (arrow, color, style) into kwargs for graphviz</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>gv</strong> – kwargs for graphviz</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">edge_color</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id28" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">from_styles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id29" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the keywords for networkx plotting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>styles</strong> (<em>dict</em>) – edge_styles/node_styles</p></li>
+<li><p><strong>label</strong> (<em>tuple</em>) – tuple of tag values to create the keywords for</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">kwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id30" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">style</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id31" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id32">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">Graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id32" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">add_node_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">node_groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id33" title="Permalink to this definition"></a></dt>
+<dd><p>Creates arbitrary groups of nodes which may be then be displayed with different styles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>**node_groups</strong> (<em>iterable</em>) – </p></li>
+<li><p><strong>e.g.</strong> – </p></li>
+<li><p><strong>graph.add_node_groups</strong><strong>(</strong><strong>group1=</strong><strong>(</strong><strong>'node1'</strong> – </p></li>
+<li><p><strong>'node2'</strong><strong>)</strong> – </p></li>
+<li><p><strong>group2=</strong><strong>(</strong><strong>'node3'</strong><strong>)</strong><strong>)</strong> – </p></li>
+<li><p><strong>graph.set_node_styles</strong><strong>(</strong><strong>group={'group1'</strong> (<em>{'color':'green'}</em><em>, </em><em>'group2':{'color':'red'}}</em><em>)</em>) – </p></li>
+<li><p><strong>graph.draw</strong><strong>(</strong><strong>)</strong> – </p></li>
+<li><p><strong>nodes</strong> (<em>and the other with red</em>) – </p></li>
+<li><p><strong>nodes</strong> – </p></li>
+<li><p><strong>nodes</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">animate_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">history</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id34" title="Permalink to this definition"></a></dt>
+<dd><p>Successively animates a plot using Graph.draw_from</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>history</strong> (<em>History</em>) – History with faulty and nominal states</p></li>
+<li><p><strong>times</strong> (<em>list</em><em>, </em><em>optional</em>) – List of times to animate over. The default is ‘all’.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size for the figure. The default is (6,4).</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ani</strong> – Animation object with the given frames</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib.animation.FuncAnimation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id35">
+<span class="sig-name descname"><span class="pre">calc_aspl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id35" title="Permalink to this definition"></a></dt>
+<dd><p>Computes average shortest path length of</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>aspl</strong> – Average shortest path length</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id36">
+<span class="sig-name descname"><span class="pre">calc_modularity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id36" title="Permalink to this definition"></a></dt>
+<dd><p>Computes network modularity of the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>modularity</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Modularity</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id37">
+<span class="sig-name descname"><span class="pre">calc_robustness_coefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id37" title="Permalink to this definition"></a></dt>
+<dd><p>Computes robustness coefficient of graph representation of model mdl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trials</strong> (<em>int</em>) – number of times to run robustness coefficient algorithm (result is averaged over all trials)</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – optional seed to instantiate test with</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>RC</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>robustness coefficient</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id38">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withlegend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">0.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'center</span> <span class="pre">left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_labelspacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_borderpad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id38" title="Permalink to this definition"></a></dt>
+<dd><p>Draws a networkx graph g with given styles corresponding to the node/edge properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size for the figure (plt.figure arg). The default is (12,10).</p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Title for the plot. The default is “”.</p></li>
+<li><p><strong>withlegend</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include a legend. The default is True.</p></li>
+<li><p><strong>legend_bbox</strong> (<em>tuple</em><em>, </em><em>optional</em>) – bbox to anchor the legend to. The default is (1,0.5) (places legend on the right)</p></li>
+<li><p><strong>legend_loc</strong> (<em>str</em><em>, </em><em>optional</em>) – loc argument for plt.legend. the default is “center left”</p></li>
+<li><p><strong>legend_labelspacing</strong> (<em>float</em><em>, </em><em>optional</em>) – labelspacing argument for plt.legend. the default is “2</p></li>
+<li><p><strong>legend_borderpad</strong> (<em>str</em><em>, </em><em>optional</em>) – borderpad argument for plt.legend. the default is 1</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <dl class="simple">
+<dt>Arguments for various supporting functions:</dt><dd><p>(set_pos, set_edge_styles, set_edge_labels, set_node_styles, set_node_labels, etc)</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>fig</strong> (<em>matplotlib figure</em>) – matplotlib figure to draw</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib axis</em>) – Ax in the figure</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id39">
+<span class="sig-name descname"><span class="pre">draw_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">time</span></em>, <em class="sig-param"><span class="pre">history=</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id39" title="Permalink to this definition"></a></dt>
+<dd><p>Draws the graph with degraded/fault data at a given time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>int</em>) – Time to draw the graph (in the history)</p></li>
+<li><p><strong>history</strong> (<em>History</em><em>, </em><em>optional</em>) – History with nominal and faulty history. The default is History().</p></li>
+<li><p><strong>**kwargs</strong> (<a href="#id40"><span class="problematic" id="id41">**</span></a>kwargs) – arguments for Graph.draw</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>fig</strong> (<em>matplotlib figure</em>) – matplotlib figure to draw</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib axis</em>) – Ax in the figure</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id42">
+<span class="sig-name descname"><span class="pre">draw_graphviz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'png'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id42" title="Permalink to this definition"></a></dt>
+<dd><p>Draws the graph using pygraphviz for publication-quality figures.</p>
+<p>Note that the style may not match one-to-one with the defined none/edge styles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to save the figure to (if saving the figure). The default is ‘’.</p></li>
+<li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of file to safe. The default is ‘png’.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dot</strong> – Graph object corresponding to the figure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>PyGraphviz DiGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id43">
+<span class="sig-name descname"><span class="pre">draw_pyvis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'graph'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notebook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id43" title="Permalink to this definition"></a></dt>
+<dd><p>Method for plotting graphs with pyvis. Produces interactive HTML!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>networkx graph</em><em> or </em><em>model</em>) – Graph to plot or fmdtools model (which will be used to get the graph)</p></li>
+<li><p><strong>gtype</strong> (<em>'hierarchical'/'fxnflowgraph'/'component'</em><em>, </em><em>optional</em>) – Type of model graph to plot The default is ‘hierarchical’.</p></li>
+<li><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – File to save the html to. The default is “typegraph.html”.</p></li>
+<li><p><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – Width of the frame in px. The default is 1000.</p></li>
+<li><p><strong>filt</strong> (<em>Dict/Bool</em><em>, </em><em>optional</em>) – Whether to display sliders. The default is True.</p></li>
+<li><p><strong>physics</strong> (<em>Bool</em><em>, </em><em>optional</em>) – Whether to use physics during node placement. The default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – pyvis object of the drawn graph</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pyvis object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id44">
+<span class="sig-name descname"><span class="pre">find_bridging_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id44" title="Permalink to this definition"></a></dt>
+<dd><p>Determines bridging nodes in a graph representation of model mdl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>bridgingNodes</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of bridging nodes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id45">
+<span class="sig-name descname"><span class="pre">find_high_degree_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id45" title="Permalink to this definition"></a></dt>
+<dd><p>Determines highest degree nodes, up to percentile p, in graph representation of model mdl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> (<em>int</em><em> (</em><em>optional</em><em>)</em>) – percentile of degrees to return, between 0 and 100</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>highDegreeNodes</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of high degree nodes in format (node,degree)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id46">
+<span class="sig-name descname"><span class="pre">move_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id46" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the position of nodes for plots in analyze.graph using a graphical tool.
+Note: make sure matplotlib is set to plot in an external window (e.g using ‘%matplotlib qt)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> (<em>kwargs</em>) – keyword arguments for graph.draw</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>p</strong> – Graph Iterator (in analyze.Graph)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GraphIterator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id47">
+<span class="sig-name descname"><span class="pre">plot_bridging_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bridging</span> <span class="pre">nodes'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'node_color':</span> <span class="pre">'red'}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id47" title="Permalink to this definition"></a></dt>
+<dd><p>Plots bridging nodes using self.draw()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Title for the plot. The default is ‘bridging nodes’.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs for Graph.draw</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fig</strong> – Figure</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id48">
+<span class="sig-name descname"><span class="pre">plot_degree_dist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id48" title="Permalink to this definition"></a></dt>
+<dd><p>Plots degree distribution of graph representation of model mdl.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>fig</strong> – plot of distribution</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id49">
+<span class="sig-name descname"><span class="pre">plot_high_degree_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'node_color':</span> <span class="pre">'red'}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id49" title="Permalink to this definition"></a></dt>
+<dd><p>Plots high-degree nodes using self.draw()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>int</em><em> (</em><em>optional</em><em>)</em>) – percentile of degrees to return, between 0 and 100</p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Title for the plot. The default is ‘High Degree Nodes’.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs for Graph.draw</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fig</strong> – Figure</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id50">
+<span class="sig-name descname"><span class="pre">set_degraded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id50" title="Permalink to this definition"></a></dt>
+<dd><p>Sets ‘degraded’ state in underlying networkx graph based on difference between
+states with another Graph object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a>) – (assumed nominal) Graph to compare to</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id51">
+<span class="sig-name descname"><span class="pre">set_edge_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'states'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">edge_label_styles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id51" title="Permalink to this definition"></a></dt>
+<dd><p>Creates labels using Labels.from_iterator for the edges in the graph</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id52">
+<span class="sig-name descname"><span class="pre">set_edge_styles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">edge_styles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id52" title="Permalink to this definition"></a></dt>
+<dd><p>Sets self.edge_styles and self.edge_groups given the provided edge styles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**edge_styles</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of tags, labels, and styles for the edges that overwrite the default.
+Has structure {tag:{label:kwargs}}, where kwargs are the keyword arguments to
+nx.draw_networkx_edges. The default is {“label”:{}}.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id53">
+<span class="sig-name descname"><span class="pre">set_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">heatmap</span></em>, <em class="sig-param"><span class="pre">cmap=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></em>, <em class="sig-param"><span class="pre">default_color_val=0.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id53" title="Permalink to this definition"></a></dt>
+<dd><p>Enables the association and plotting of a heatmap on a graph.</p>
+<p>e.g. graph.set_heatmap({‘node_1’:1.0, ‘node_2’: 0.0, ‘node_3’:0.5})
+graph.draw()
+Should draw node_1 the bluest, node_2 the reddest, and node_3 in between.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>heatmap</strong> (<em>dict/result</em>) – dict/result with keys corresponding to the nodes and values in the range
+of a heatmap (0-1)</p></li>
+<li><p><strong>cmap</strong> (<em>mpl.Colormap</em><em>, </em><em>optional</em>) – Colormap to use for the heatmap. The default is plt.cm.coolwarm.</p></li>
+<li><p><strong>default_color_val</strong> (<em>float</em><em>, </em><em>optional</em>) – Value to use if a node is not in the heatmap dict. The default is 0.0.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id54">
+<span class="sig-name descname"><span class="pre">set_node_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">node_label_styles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id54" title="Permalink to this definition"></a></dt>
+<dd><p>Creates labels using Labels.from_iterator for the nodes in the graph</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id55">
+<span class="sig-name descname"><span class="pre">set_node_styles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">node_styles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id55" title="Permalink to this definition"></a></dt>
+<dd><p>Sets self.node_styles and self.edge_groups given the provided node styles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**node_styles</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of tags, labels, and style kwargs for the nodes that overwrite the default.
+Has structure {tag:{label:kwargs}}, where kwargs are the keyword arguments to
+nx.draw_networkx_nodes. The default is {“label”:{}}.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id56">
+<span class="sig-name descname"><span class="pre">set_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auto</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id56" title="Permalink to this definition"></a></dt>
+<dd><p>Sets graph positions to given positions, (automatically or manually)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>auto</strong> (<em>str</em><em>, </em><em>optional</em>) – Whether to auto-layout the node position. The default is True.</p></li>
+<li><p><strong>**pos</strong> (<em>nodename=</em><em>(</em><em>x</em><em>,</em><em>y</em><em>)</em>) – Positions of nodes to set. Otherwise updates to the auto-layout or (0.5,0.5)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id57">
+<span class="sig-name descname"><span class="pre">set_resgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id57" title="Permalink to this definition"></a></dt>
+<dd><p>Standard results processing for results graphs (show faults and degradations)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a><em>, </em><em>optional</em>) – Graph to compare with (for degradations). The default is False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id58">
+<span class="sig-name descname"><span class="pre">sff_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_trials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_bar_option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'off'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id58" title="Permalink to this definition"></a></dt>
+<dd><p>susc-fix-fail model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endtime</strong> (<em>int</em>) – simulation end time</p></li>
+<li><p><strong>pi</strong> (<em>float</em>) – infection (failure spread) rate</p></li>
+<li><p><strong>pf</strong> (<em>float</em>) – recovery (fix) rate</p></li>
+<li><p><strong>num_trials</strong> (<em>int</em>) – number of times to run the epidemic model, default is 100</p></li>
+<li><p><strong>error_bar_option</strong> (<em>str</em>) – option for plotting error bars (first to third quartile), default is off</p></li>
+<li><p><strong>start_node</strong> (<em>str</em>) – start node to use in the trial. default is ‘random’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fig</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot of susc, fail, and fix nodes over time</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id59">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">GraphInteractor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g_obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id59" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A simple interactive graph for consistent node placement, etc–used in set_pos to set node positions</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id60">
+<span class="sig-name descname"><span class="pre">epsilon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0.2</span></em><a class="headerlink" href="#id60" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id61">
+<span class="sig-name descname"><span class="pre">get_closest_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id61" title="Permalink to this definition"></a></dt>
+<dd><p>Finds the closest node to the given click to see if it should be moved</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id62">
+<span class="sig-name descname"><span class="pre">on_button_press</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id62" title="Permalink to this definition"></a></dt>
+<dd><p>Determines what to do when a button is pressed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id63">
+<span class="sig-name descname"><span class="pre">on_button_release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id63" title="Permalink to this definition"></a></dt>
+<dd><p>Determines what to do when the mouse is released</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id64">
+<span class="sig-name descname"><span class="pre">on_mouse_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id64" title="Permalink to this definition"></a></dt>
+<dd><p>Changes the node position when the user drags it</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id65">
+<span class="sig-name descname"><span class="pre">print_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id65" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id66">
+<span class="sig-name descname"><span class="pre">refresh_plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id66" title="Permalink to this definition"></a></dt>
+<dd><p>Refreshes the plot with the new positions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id67">
+<span class="sig-name descname"><span class="pre">showverts</span></span><em class="property"> <span class="pre">=</span> <span class="pre">True</span></em><a class="headerlink" href="#id67" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id68">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">LabelStyle</span></span><a class="headerlink" href="#id68" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">recordclass.datatype.dataobject</span></code></p>
+<p>Holds kwargs for nx.draw_networkx_labels to be applied as a style for multiple labels</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id69">
+<span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#id69" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id70">
+<span class="sig-name descname"><span class="pre">bbox</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#id70" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id71">
+<span class="sig-name descname"><span class="pre">clip_on</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#id71" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id72">
+<span class="sig-name descname"><span class="pre">font_color</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id72" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id73">
+<span class="sig-name descname"><span class="pre">font_size</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id73" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id74">
+<span class="sig-name descname"><span class="pre">font_weight</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id74" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id75">
+<span class="sig-name descname"><span class="pre">horizontalalignment</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id75" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id76">
+<span class="sig-name descname"><span class="pre">kwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id76" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id77">
+<span class="sig-name descname"><span class="pre">verticalalignment</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id77" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id78">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">Labels</span></span><a class="headerlink" href="#id78" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">recordclass.datatype.dataobject</span></code></p>
+<p>Defines a set of labels to be drawn using draw_networkx_labels. Labels have
+three distinct parts:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>title (upper text for the node/edge)</p></li>
+<li><p>title2 (if provided, uppder text for the node/edge after a colon)</p></li>
+<li><p>subtext (lower text of the node/edge)</p></li>
+</ul>
+</div></blockquote>
+<p>title and subtext may both be given different LabelStyles.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id79">
+<span class="sig-name descname"><span class="pre">from_iterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LabStyle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">node_label_styles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id79" title="Permalink to this definition"></a></dt>
+<dd><p>Condstructs the labels from an interator (nodes or edges)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>nx.graph</em>) – </p></li>
+<li><p><strong>iterator</strong> (<em>nx.graph.nodes/edges</em>) – </p></li>
+<li><p><strong>LabStyle</strong> (<em>class</em>) – Class to use for label styles (e.g. LabelStyle or EdgeStyle)</p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text. The default is ‘id’.</p></li>
+<li><p><strong>title2</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text after the colon. The default is ‘’.</p></li>
+<li><p><strong>subtext</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for the subtext. The default is ‘’.</p></li>
+<li><p><strong>**node_label_styles</strong> (<em>TYPE</em>) – :abStyle arguments to overwrite.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>labs</strong> – Labels corresponding to the given inputs</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#id78" title="fmdtools.analyze.graph.Labels">Labels</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id80">
+<span class="sig-name descname"><span class="pre">group_styles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id80" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id81">
+<span class="sig-name descname"><span class="pre">iter_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id81" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id82">
+<span class="sig-name descname"><span class="pre">styles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id82" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id83">
+<span class="sig-name descname"><span class="pre">subtext</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#id83" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id84">
+<span class="sig-name descname"><span class="pre">subtext_style</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#id68" title="fmdtools.analyze.graph.LabelStyle"><span class="pre">fmdtools.analyze.graph.LabelStyle</span></a></em><a class="headerlink" href="#id84" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id85">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#id85" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id86">
+<span class="sig-name descname"><span class="pre">title_style</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#id68" title="fmdtools.analyze.graph.LabelStyle"><span class="pre">fmdtools.analyze.graph.LabelStyle</span></a></em><a class="headerlink" href="#id86" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id87">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ModelCompGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id87" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id101" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
+<p>Creates a graph of model functions, and flows, with component containment
+relationships shown for functions.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id88">
+<span class="sig-name descname"><span class="pre">nx_from_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id88" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id89">
+<span class="sig-name descname"><span class="pre">set_compgraph_blockstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id89" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id90">
+<span class="sig-name descname"><span class="pre">set_nx_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id90" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id91">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ModelFlowGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id91" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id101" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
+<p>Creates a Graph of model flows for display, where flows are
+set as nodes and connections (via functions) are edges</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id92">
+<span class="sig-name descname"><span class="pre">nx_from_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id92" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id93">
+<span class="sig-name descname"><span class="pre">set_edge_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'functions'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">edge_label_styles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id93" title="Permalink to this definition"></a></dt>
+<dd><p>Creates labels using Labels.from_iterator for the edges in the graph</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id94">
+<span class="sig-name descname"><span class="pre">set_nx_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id94" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id95">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ModelFxnGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id95" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id101" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
+<p>Returns a graph representation of the functions of the model, where
+functions are nodes and flows are edges</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id96">
+<span class="sig-name descname"><span class="pre">nx_from_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id96" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id97">
+<span class="sig-name descname"><span class="pre">set_degraded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id97" title="Permalink to this definition"></a></dt>
+<dd><p>Sets ‘degraded’ state in underlying networkx graph based on difference between
+states with another Graph object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a>) – (assumed nominal) Graph to compare to</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id98">
+<span class="sig-name descname"><span class="pre">set_edge_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'flows'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">edge_label_styles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id98" title="Permalink to this definition"></a></dt>
+<dd><p>Creates labels using Labels.from_iterator for the edges in the graph</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id99">
+<span class="sig-name descname"><span class="pre">set_flow_edgestates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id99" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id100">
+<span class="sig-name descname"><span class="pre">set_nx_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id100" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id101">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ModelGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id101" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a></p>
+<p>Creates a Graph of Model functions and flow for display, where both functions
+and flows are nodes.</p>
+<p>If withstates option is used on instantiation, a <cite>states</cite> dict is associated
+with the edges/nodes which can then be used to visualize function/flow attributes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id102">
+<span class="sig-name descname"><span class="pre">draw_graphviz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'twopi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'voronoi'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id102" title="Permalink to this definition"></a></dt>
+<dd><p>Draws the graph using pygraphviz for publication-quality figures.</p>
+<p>Note that the style may not match one-to-one with the defined none/edge styles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to save the figure to (if saving the figure). The default is ‘’.</p></li>
+<li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of file to safe. The default is ‘png’.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dot</strong> – Graph object corresponding to the figure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>PyGraphviz DiGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id103">
+<span class="sig-name descname"><span class="pre">get_multi_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subedges</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id103" title="Permalink to this definition"></a></dt>
+<dd><p>Used by subclasses to attach functions/flows (subedges arg) to
+edges</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id104">
+<span class="sig-name descname"><span class="pre">nx_from_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id104" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id105">
+<span class="sig-name descname"><span class="pre">set_exec_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynamic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_edges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_tstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id105" title="Permalink to this definition"></a></dt>
+<dd><p>Enables the plotting of ModelGraph execution order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.model.Model" title="fmdtools.define.model.Model"><em>Model</em></a>) – Model to plot the execution order of.</p></li>
+<li><p><strong>static</strong> (<em>dict/False</em><em>, </em><em>optional</em>) – kwargs to overwrite the default style for functions/flows in the static execution step.
+If False, static functions are not differentiated. The default is {}.</p></li>
+<li><p><strong>dynamic</strong> (<em>dict/False</em><em>, </em><em>optional</em>) – kwargs to overwrite the default style for functions/flows in the dynamic execution step.
+If False, dynamic functions are not differentiated. The default is {}.</p></li>
+<li><p><strong>next_edges</strong> (<em>dict</em>) – kwargs to overwrite the default style for edges indicating the flow order.
+If False, these edges are not added. the default is {}.</p></li>
+<li><p><strong>label_order</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to label execution order (with a number on each node). The default is True.</p></li>
+<li><p><strong>label_tstep</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to label each timestep (with a number in the subtitle). The default is True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id106">
+<span class="sig-name descname"><span class="pre">set_flow_nodestates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id106" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id107">
+<span class="sig-name descname"><span class="pre">set_fxn_nodestates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id107" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id108">
+<span class="sig-name descname"><span class="pre">set_nx_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id108" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id109">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ModelTypeGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id109" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id101" title="fmdtools.analyze.graph.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.ModelGraph</span></code></a></p>
+<p>Creates a graph representation of model Classes, showing the containment relationship
+between function classes and flow classes in the model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id110">
+<span class="sig-name descname"><span class="pre">draw_graphviz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dot'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranksep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2.0'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id110" title="Permalink to this definition"></a></dt>
+<dd><p>Draws the graph using pygraphviz for publication-quality figures.</p>
+<p>Note that the style may not match one-to-one with the defined none/edge styles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to save the figure to (if saving the figure). The default is ‘’.</p></li>
+<li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of file to safe. The default is ‘png’.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dot</strong> – Graph object corresponding to the figure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>PyGraphviz DiGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id111">
+<span class="sig-name descname"><span class="pre">nx_from_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withflows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id111" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a graph with the type containment relationships of the different model constructs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>withflows</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include flows. The default is True.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>g</strong> – networkx directed graph of the type relationships</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>nx.DiGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id112">
+<span class="sig-name descname"><span class="pre">set_degraded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nomg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id112" title="Permalink to this definition"></a></dt>
+<dd><p>Sets ‘degraded’ state in underlying networkx graph based on difference between
+states with another Graph object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a>) – (assumed nominal) Graph to compare to</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id113">
+<span class="sig-name descname"><span class="pre">set_exec_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id113" title="Permalink to this definition"></a></dt>
+<dd><p>Enables the plotting of ModelGraph execution order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.model.Model" title="fmdtools.define.model.Model"><em>Model</em></a>) – Model to plot the execution order of.</p></li>
+<li><p><strong>static</strong> (<em>dict/False</em><em>, </em><em>optional</em>) – kwargs to overwrite the default style for functions/flows in the static execution step.
+If False, static functions are not differentiated. The default is {}.</p></li>
+<li><p><strong>dynamic</strong> (<em>dict/False</em><em>, </em><em>optional</em>) – kwargs to overwrite the default style for functions/flows in the dynamic execution step.
+If False, dynamic functions are not differentiated. The default is {}.</p></li>
+<li><p><strong>next_edges</strong> (<em>dict</em>) – kwargs to overwrite the default style for edges indicating the flow order.
+If False, these edges are not added. the default is {}.</p></li>
+<li><p><strong>label_order</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to label execution order (with a number on each node). The default is True.</p></li>
+<li><p><strong>label_tstep</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to label each timestep (with a number in the subtitle). The default is True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id114">
+<span class="sig-name descname"><span class="pre">set_nx_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id114" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id115">
+<span class="sig-name descname"><span class="pre">set_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auto</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id115" title="Permalink to this definition"></a></dt>
+<dd><p>Sets graph positions to given positions, (automatically or manually)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>auto</strong> (<em>str</em><em>, </em><em>optional</em>) – Whether to auto-layout the node position. The default is True.</p></li>
+<li><p><strong>**pos</strong> (<em>nodename=</em><em>(</em><em>x</em><em>,</em><em>y</em><em>)</em>) – Positions of nodes to set. Otherwise updates to the auto-layout or (0.5,0.5)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id116">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">MultiFlowGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">send_connections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'closest':</span> <span class="pre">'base'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections_as_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id116" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id117">
+<span class="sig-name descname"><span class="pre">draw_graphviz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neato'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'false'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id117" title="Permalink to this definition"></a></dt>
+<dd><p>Draws the graph using pygraphviz for publication-quality figures.</p>
+<p>Note that the style may not match one-to-one with the defined none/edge styles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to save the figure to (if saving the figure). The default is ‘’.</p></li>
+<li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of file to safe. The default is ‘png’.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dot</strong> – Graph object corresponding to the figure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>PyGraphviz DiGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id118">
+<span class="sig-name descname"><span class="pre">set_resgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id118" title="Permalink to this definition"></a></dt>
+<dd><p>Standard results processing for results graphs (show faults and degradations)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph"><em>Graph</em></a><em>, </em><em>optional</em>) – Graph to compare with (for degradations). The default is False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id119">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">NodeStyle</span></span><a class="headerlink" href="#id119" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">recordclass.datatype.dataobject</span></code></p>
+<p>Holds kwargs for nx.draw_networkx_nodes to be applied as a style for multiple nodes</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id120">
+<span class="sig-name descname"><span class="pre">as_gv_kwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id120" title="Permalink to this definition"></a></dt>
+<dd><p>Transates elements of the style (shape, color, width) into kwargs for graphviz</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>gv</strong> – kwargs for graphviz</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id121">
+<span class="sig-name descname"><span class="pre">cmap</span></span><em class="property"><span class="pre">:</span> <span class="pre">matplotlib.colors.Colormap</span></em><a class="headerlink" href="#id121" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id122">
+<span class="sig-name descname"><span class="pre">edgecolors</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id122" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id123">
+<span class="sig-name descname"><span class="pre">from_styles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id123" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the keywords for networkx plotting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>styles</strong> (<em>dict</em>) – edge_styles/node_styles</p></li>
+<li><p><strong>label</strong> (<em>tuple</em>) – tuple of tag values to create the keywords for</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id124">
+<span class="sig-name descname"><span class="pre">kwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id124" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id125">
+<span class="sig-name descname"><span class="pre">linewidths</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id125" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id126">
+<span class="sig-name descname"><span class="pre">node_color</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id126" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id127">
+<span class="sig-name descname"><span class="pre">node_shape</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#id127" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id128">
+<span class="sig-name descname"><span class="pre">node_size</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id128" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id129">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">add_g_nested</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiflow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id129" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function for MultiFlow.create_multigraph. Iterates recursively
+through multigraph locals to construct the containment tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>networkx.graph</em>) – Existing graph</p></li>
+<li><p><strong>multiflow</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.flow.MultiFlow" title="fmdtools.define.flow.MultiFlow"><em>MultiFlow</em></a>) – Multiflow Structure</p></li>
+<li><p><strong>base_name</strong> (<em>str</em>) – Name at the current level of recursion</p></li>
+<li><p><strong>include_states</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include state attributes in the plot. The default is False.</p></li>
+<li><p><strong>get_states</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to attach states as attributes to the graph. The default is False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id130">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">data_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id130" title="Permalink to this definition"></a></dt>
+<dd><p>Averages each column in data</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id131">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">data_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id131" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates error for each column in data</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id132">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">get_label_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterator</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id132" title="Permalink to this definition"></a></dt>
+<dd><p>Creates groups of nodes/edges in terms of discrete values for the given tags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iterator</strong> (<em>iterable</em>) – e.g. nx.graph.nodes(), nx.graph.edges()</p></li>
+<li><p><strong>*tags</strong> (<em>list</em>) – Tags to find in the graph object (e.g., <cite>label</cite>, <cite>status</cite>, etc.)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>label_groups</strong> – Dict of groups of nodes/edges with given tag values. With structure:
+{(tagval1, tagval2…):[list_of_nodes]}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id133">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">get_style_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">styles</span></em>, <em class="sig-param"><span class="pre">label</span></em>, <em class="sig-param"><span class="pre">default_kwargs={}</span></em>, <em class="sig-param"><span class="pre">style_class=&lt;class</span> <span class="pre">'fmdtools.analyze.graph.EdgeStyle'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id133" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the keywords for networkx plotting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>styles</strong> (<em>dict</em>) – edge_styles/node_styles</p></li>
+<li><p><strong>label</strong> (<em>tuple</em>) – tuple of tag values to create the keywords for</p></li>
+<li><p><strong>styletype</strong> (<em>&quot;node&quot;/&quot;edge&quot;</em><em>, </em><em>optional</em>) – Whether the kwargs are for a node or edge. The default is “edge”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>style_kwargs</strong> – Keyword arguments for nx.draw_networkx_nodes and nx.draw_networkx_edges</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id134">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">graph_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id134" title="Permalink to this definition"></a></dt>
+<dd><p>Creates the default Graph for a given object. Used in fmdtools.sim.get_result</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>object</em>) – object corresponding to a specific graph type</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments for the Graph class</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>graph</strong> – Graph of the appropriate (default) class</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#id32" title="fmdtools.analyze.graph.Graph">Graph</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id135">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">gv_import_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id135" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if graphviz is installed on the system before plotting.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id136">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">node_is_tagged</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connections_as_tags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id136" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id137">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id137" title="Permalink to this definition"></a></dt>
+<dd><p>Return random floats in the half-open interval [0.0, 1.0). Alias for
+<cite>random_sample</cite> to ease forward-porting to the new random API.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id138">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">sff_one_trial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_node_selected</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id138" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates one trial of the sff model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_node_selected</strong> (<em>str</em>) – node to start the trial from</p></li>
+<li><p><strong>g</strong> (<em>networkx graph</em>) – graph to run the trial over</p></li>
+<li><p><strong>endtime</strong> (<em>int</em>) – simulation end time</p></li>
+<li><p><strong>pi</strong> (<em>float</em>) – infection (failure spread) rate</p></li>
+<li><p><strong>pf</strong> (<em>float</em>) – recovery (fix) rate</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id139">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">to_legend_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style_labels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id139" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a legend label string for the group corresponding to style_labels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group_label</strong> (<em>tuple</em>) – tuple defining the group</p></li>
+<li><p><strong>style_labels</strong> (<em>list</em>) – properties the tuple is meant to describe</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>legend_label</strong> – String labeling the group</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-fmdtools.analyze.tabulate">
 <span id="fmdtools-analyze-tabulate"></span><h2>fmdtools.analyze.tabulate<a class="headerlink" href="#module-fmdtools.analyze.tabulate" title="Permalink to this headline"></a></h2>
 <p>Description: Translates simulation outputs to pandas tables for display, export, etc.</p>
@@ -2077,7 +3437,7 @@ The default is {}.</p></li>
 - ‘fxnclassfault’:  All scenarios (fxnclass, mode) from a given function class are grouped. A Model must be provided.
 - ‘fxnclass’:       All scenarios from a given function class are grouped. A Model must be provided.</p></li>
 <li><p><strong>mode_types</strong> (<em>set</em>) – Mode types to group by in ‘mode type’ option</p></li>
-<li><p><strong>mdl</strong> (<em>Model</em>) – Model for use in ‘fxnclassfault’ and ‘fxnclass’ options</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.model.Model" title="fmdtools.define.model.Model"><em>Model</em></a>) – Model for use in ‘fxnclassfault’ and ‘fxnclass’ options</p></li>
 <li><p><strong>sort_by</strong> (<em>str</em><em>, </em><em>optional</em>) – Column value to sort the table by. The default is “expected cost”.</p></li>
 <li><p><strong>ascending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to sort in ascending order. The default is False.</p></li>
 <li><p><strong>empty_as</strong> (<em>float/'nan'</em>) – How to calculate stats of empty variables (for avg_metrics). Default is 0.0.</p></li>
@@ -2131,7 +3491,7 @@ The default is {}.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nomapp</strong> (<em>NominalApproach</em>) – NominalApproach used to generate the simulation.</p></li>
+<li><p><strong>nomapp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.approach.NominalApproach" title="fmdtools.sim.approach.NominalApproach"><em>NominalApproach</em></a>) – NominalApproach used to generate the simulation.</p></li>
 <li><p><strong>endclasses</strong> (<em>Result</em>) – End-state classifcations for the set of simulations from propagate.nested_approach()</p></li>
 <li><p><strong>percent_metrics</strong> (<em>list</em>) – List of metrics to calculate a percent of (e.g. use with an indicator variable like failure=1/0 or True/False)</p></li>
 <li><p><strong>rate_metrics</strong> (<em>list</em>) – List of metrics to calculate the probability of using the rate variable in endclasses</p></li>
@@ -2157,7 +3517,7 @@ The default is {}.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nomapp</strong> (<em>NominalApproach</em>) – Nominal Approach used to generate the simulations</p></li>
+<li><p><strong>nomapp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.approach.NominalApproach" title="fmdtools.sim.approach.NominalApproach"><em>NominalApproach</em></a>) – Nominal Approach used to generate the simulations</p></li>
 <li><p><strong>endclasses</strong> (<em>dict</em>) – <dl class="simple">
 <dt>dict of endclasses from propagate.nominal_approach or nested_approach with structure:</dt><dd><p>{scen_x:{metric1:x, metric2:x…}} or {scen_x:{fault:{metric1:x, metric2:x…}}}</p>
 </dd>
@@ -2198,7 +3558,7 @@ or as averages (False - results in a comparison of average values of real valued
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nomapp</strong> (<em>NominalApproach</em>) – NominalApproach used to generate the simulation.</p></li>
+<li><p><strong>nomapp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.approach.NominalApproach" title="fmdtools.sim.approach.NominalApproach"><em>NominalApproach</em></a>) – NominalApproach used to generate the simulation.</p></li>
 <li><p><strong>nomapp_endclasses</strong> (<em>dict</em>) – End-state classifcations for the set of simulations from propagate.nominalapproach()</p></li>
 <li><p><strong>metrics</strong> (<em>'all'/list</em><em>, </em><em>optional</em>) – Metrics to show on the plot. The default is ‘all’.</p></li>
 <li><p><strong>inputparams</strong> (<em>'from_range'/'all'</em><em>,</em><em>list</em><em>, </em><em>optional</em>) – Parameters to show on the plot. The default is ‘from_range’.</p></li>
@@ -2247,7 +3607,7 @@ Weights are used to calculate an average, rather than a total.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nomapp</strong> (<em>NominalApproach</em>) – Nominal Approach used to generate the simulations</p></li>
+<li><p><strong>nomapp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.approach.NominalApproach" title="fmdtools.sim.approach.NominalApproach"><em>NominalApproach</em></a>) – Nominal Approach used to generate the simulations</p></li>
 <li><p><strong>nested_endclasses</strong> (<em>dict</em>) – dict of endclasses from propagate.nested_approach with structure: {scen_x:{fault:{metric1:x, metric2:x…}}}</p></li>
 <li><p><strong>params</strong> (<em>list/str</em>) – List of parameters (or parameter) to use for the factor levels in the comparison</p></li>
 <li><p><strong>value</strong> (<em>string</em>) – metric of the endclass (returned by mdl.find_classification) to use for the comparison.</p></li>
@@ -2256,7 +3616,7 @@ Weights are used to calculate an average, rather than a total.</p></li>
 –‘functions’ (modes for each function are grouped)
 –‘mode type’ (modes with the same name are grouped)
 – or a set of specific modes/functions. The default is ‘functions’.
-– or a tuple of form (group_by, apps, <a href="#id5"><span class="problematic" id="id6">*</span></a>arg), where</p>
+– or a tuple of form (group_by, apps, <a href="#id140"><span class="problematic" id="id141">*</span></a>arg), where</p>
 <blockquote>
 <div><ul>
 <li><p>group_by is an argument to SampleApproach.get_scenid_groups</p></li>

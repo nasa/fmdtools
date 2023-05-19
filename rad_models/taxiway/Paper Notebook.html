@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taxiway Model Overview &mdash; fmdtools 2.0-alpha documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#notices">Notices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#how-to-write-good-models-development-best-practices">How to Write Good Models - Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/Examples.html">Examples</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-0">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Taxiway Model Overview</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/rad_models/taxiway/Paper Notebook.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">model</span> <span class="kn">import</span> <span class="n">taxiway_model</span>
+
+<span class="kn">from</span> <span class="nn">fmdtools.analyze</span> <span class="kn">import</span> <span class="n">plot</span> <span class="k">as</span> <span class="n">plot</span>
+<span class="kn">from</span> <span class="nn">fmdtools.sim</span> <span class="kn">import</span> <span class="n">propagate</span> <span class="k">as</span> <span class="n">prop</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">common</span> <span class="kn">import</span> <span class="n">plot_tstep</span><span class="p">,</span> <span class="n">plot_course</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+<section id="Taxiway-Model-Overview">
+<h1>Taxiway Model Overview<a class="headerlink" href="#Taxiway-Model-Overview" title="Permalink to this headline"></a></h1>
+<p>The taxiway model has three main agents: - Helicopter, which lands and takes off from a helipad - Aircraft, which lands at a runway, taxis to a gate, and takes off from a runway (and may be UAVs or Piloted Aircraft) - ATC, which coordinates operations</p>
+<p>These agents interact via the flows: - Ground, a MultiFlow tracking the map as well as agent assignments/allocations - Location, a MultiFlow tracking the position/velocity of each route on the map, and - Requests, a CommsFlow tracking the messages sent between the ATC and the Aircraft/Helicopters</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">ModelTypeGraph</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">taxiway_model</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tg</span> <span class="o">=</span> <span class="n">ModelTypeGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tg</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">tg</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">withlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legend_bbox</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_7_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_7_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;modelstructure.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+location Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   ma1 Location flow: LocationState(x=10.0, y=20.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;takeoff&#39;, mode=&#39;standby&#39;)
+   percieved Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   closest Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   ma2 Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   percieved Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   closest Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   ma3 Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   percieved Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   closest Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   ua1 Location flow: LocationState(x=45.0, y=-5.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;park&#39;, mode=&#39;standby&#39;)
+   percieved Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   closest Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   ua2 Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   percieved Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   closest Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   ua3 Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   percieved Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   closest Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   h1 Location flow: LocationState(x=65.0, y=15.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;land&#39;, mode=&#39;standby&#39;)
+   percieved Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   closest Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   h2 Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   percieved Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+   closest Location flow: LocationState(x=30.0, y=25.0, xd=0.0, yd=0.0, speed=0.0, stage=&#39;flight&#39;, mode=&#39;standby&#39;)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;requests&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+requests Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+   atc: atc Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;land&#39;, route=&#39;           &#39;)
+       out: atc_out Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       in: {}
+       received: {}
+       h1: h1 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       h2: h2 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       ua1: ua1 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       ua2: ua2 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       ua3: ua3 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       ma1: ma1 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       ma2: ma2 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       ma3: ma3 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+   ma1: ma1 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;takeoff&#39;, route=&#39;           &#39;)
+       out: ma1_out Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       in: {}
+       received: {}
+   ma2: ma2 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;land&#39;, route=&#39;           &#39;)
+       out: ma2_out Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       in: {}
+       received: {}
+   ma3: ma3 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;land&#39;, route=&#39;           &#39;)
+       out: ma3_out Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       in: {}
+       received: {}
+   ua1: ua1 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;taxi&#39;, route=&#39;           &#39;)
+       out: ua1_out Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       in: {}
+       received: {}
+   ua2: ua2 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;land&#39;, route=&#39;           &#39;)
+       out: ua2_out Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       in: {}
+       received: {}
+   ua3: ua3 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;land&#39;, route=&#39;           &#39;)
+       out: ua3_out Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       in: {}
+       received: {}
+   h1: h1 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;taxi&#39;, route=&#39;           &#39;)
+       out: h1_out Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       in: {}
+       received: {}
+   h2: h2 Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;land&#39;, route=&#39;           &#39;)
+       out: h2_out Requests flow: RequestState(atc_com=&#39;None&#39;, asset_req=&#39;None&#39;, route=&#39;           &#39;)
+       in: {}
+       received: {}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;ground&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ground Environment flow: TaxiwayStates(area_allocation={&#39;takeoff1&#39;: {&#39;ma1&#39;}, &#39;landing1&#39;: set(), &#39;helipad1&#39;: {&#39;h1&#39;}, &#39;gate1&#39;: set(), &#39;gate2&#39;: set(), &#39;gate3&#39;: set(), &#39;gate4&#39;: set(), &#39;gate5&#39;: set(), &#39;gate6&#39;: {&#39;ua1&#39;}, &#39;air_loc&#39;: set()}, asset_area={&#39;h1&#39;: &#39;helipad1&#39;, &#39;h2&#39;: &#39;air_loc&#39;, &#39;ua1&#39;: &#39;gate6&#39;, &#39;ua2&#39;: &#39;air_loc&#39;, &#39;ua3&#39;: &#39;air_loc&#39;, &#39;ma1&#39;: &#39;takeoff1&#39;, &#39;ma2&#39;: &#39;air_loc&#39;, &#39;ma3&#39;: &#39;air_loc&#39;}, asset_assignment={&#39;h1&#39;: &#39;helipad1&#39;, &#39;h2&#39;: &#39;air_loc&#39;, &#39;ua1&#39;: &#39;gate6&#39;, &#39;ua2&#39;: &#39;air_loc&#39;, &#39;ua3&#39;: &#39;air_loc&#39;, &#39;ma1&#39;: &#39;takeoff1&#39;, &#39;ma2&#39;: &#39;air_loc&#39;, &#39;ma3&#39;: &#39;air_loc&#39;})
+   atc Environment flow: TaxiwayStates(area_allocation={&#39;takeoff1&#39;: {&#39;ma1&#39;}, &#39;landing1&#39;: set(), &#39;helipad1&#39;: {&#39;h1&#39;}, &#39;gate1&#39;: set(), &#39;gate2&#39;: set(), &#39;gate3&#39;: set(), &#39;gate4&#39;: set(), &#39;gate5&#39;: set(), &#39;gate6&#39;: {&#39;ua1&#39;}, &#39;air_loc&#39;: set()}, asset_area={&#39;h1&#39;: &#39;helipad1&#39;, &#39;h2&#39;: &#39;air_loc&#39;, &#39;ua1&#39;: &#39;gate6&#39;, &#39;ua2&#39;: &#39;air_loc&#39;, &#39;ua3&#39;: &#39;air_loc&#39;, &#39;ma1&#39;: &#39;takeoff1&#39;, &#39;ma2&#39;: &#39;air_loc&#39;, &#39;ma3&#39;: &#39;air_loc&#39;}, asset_assignment={&#39;h1&#39;: &#39;helipad1&#39;, &#39;h2&#39;: &#39;air_loc&#39;, &#39;ua1&#39;: &#39;gate6&#39;, &#39;ua2&#39;: &#39;air_loc&#39;, &#39;ua3&#39;: &#39;air_loc&#39;, &#39;ma1&#39;: &#39;takeoff1&#39;, &#39;ma2&#39;: &#39;air_loc&#39;, &#39;ma3&#39;: &#39;air_loc&#39;})
+</pre></div></div>
+</div>
+<section id="Model-Simulation">
+<h2>Model Simulation<a class="headerlink" href="#Model-Simulation" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;ground&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">show_map</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_13_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_13_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">plot_tstep</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">mdlhist</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">show_area_allocation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">locattr</span><span class="o">=</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Taxiway Activity &quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_15_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_15_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;modelactivity.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_course</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">mdlhist</span><span class="p">,</span> <span class="s2">&quot;ma2&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;One aircraft&#39;s route over time&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_17_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_17_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;assetroute.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phasehist</span><span class="p">,</span> <span class="n">modephases</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">get_modephases</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">phases</span><span class="p">({</span><span class="s2">&quot;ma2&quot;</span><span class="p">:</span><span class="n">phasehist</span><span class="p">[</span><span class="s2">&quot;ma2&quot;</span><span class="p">],</span> <span class="s1">&#39;h2&#39;</span><span class="p">:</span> <span class="n">phasehist</span><span class="p">[</span><span class="s1">&#39;h2&#39;</span><span class="p">]},</span> <span class="n">singleplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">modephases</span><span class="o">=</span><span class="n">modephases</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+                    <span class="n">title_padding</span><span class="o">=-</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Asset Operational Phases&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_20_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_20_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;assetmodes.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Fault-Simulation-and-Analysis">
+<h1>Fault Simulation and Analysis<a class="headerlink" href="#Fault-Simulation-and-Analysis" title="Permalink to this headline"></a></h1>
+<section id="Perception-Fault---AC-Vision-Fault">
+<h2>Perception Fault - AC Vision Fault<a class="headerlink" href="#Perception-Fault---AC-Vision-Fault" title="Permalink to this headline"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s2">&quot;ma3&quot;</span><span class="p">,</span> <span class="s2">&quot;lost_sight&quot;</span><span class="p">,</span>
+                                    <span class="n">desired_result</span><span class="o">=</span><span class="p">{</span><span class="mi">93</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;graph.flows.location&quot;</span><span class="p">:{</span><span class="s1">&#39;include_glob&#39;</span><span class="p">:</span><span class="kc">False</span><span class="p">}},</span>
+                                                    <span class="mi">110</span><span class="p">:{</span><span class="s2">&quot;graph.flows.location&quot;</span><span class="p">:{</span><span class="s1">&#39;include_glob&#39;</span><span class="p">:</span><span class="kc">False</span><span class="p">}},</span>
+                                                    <span class="mi">20</span><span class="p">:[</span><span class="s2">&quot;graph&quot;</span><span class="p">],</span> <span class="mi">120</span><span class="p">:[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span> <span class="s2">&quot;endclass&quot;</span><span class="p">]})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_tstep</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">faulty</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span>  <span class="n">locattr</span><span class="o">=</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span> <span class="n">assets_to_label</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ma3&quot;</span><span class="p">,</span> <span class="s2">&quot;ma2&quot;</span><span class="p">],</span> <span class="n">areas_to_label</span><span class="o">=</span><span class="p">[],</span>
+           <span class="n">title</span><span class="o">=</span><span class="s2">&quot;MA3 approaches MA2 with no vision cone &quot;</span><span class="p">,</span> <span class="n">show_area_allocation</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_24_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_24_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;ac_vision_map.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="o">.</span><span class="n">t120p0</span><span class="o">.</span><span class="n">endclass</span> <span class="c1">#table should also include local, global metrics</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+num_cycled:                            4
+perc_cycled:                         0.5
+num_crashed:                           2
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="o">.</span><span class="n">t93p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">location</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t93p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%matplotlib qt</span>
+<span class="c1">#endresults.t93p0.graph.flows.location.move_nodes()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pos</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ma1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.51</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.08</span><span class="p">],</span> <span class="s1">&#39;ma1_percieved&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.88</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">],</span>
+       <span class="s1">&#39;ma1_closest&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">],</span> <span class="s1">&#39;ma2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.66</span><span class="p">,</span> <span class="mf">0.59</span><span class="p">],</span>
+       <span class="s1">&#39;ma2_percieved&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.81</span><span class="p">,</span> <span class="mf">0.84</span><span class="p">],</span> <span class="s1">&#39;ma2_closest&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.67</span><span class="p">,</span> <span class="mf">0.26</span><span class="p">],</span>
+       <span class="s1">&#39;ma3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.77</span><span class="p">,</span> <span class="mf">0.49</span><span class="p">],</span> <span class="s1">&#39;ma3_percieved&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.81</span><span class="p">,</span> <span class="mf">0.83</span><span class="p">],</span>
+       <span class="s1">&#39;ma3_closest&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.51</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">],</span> <span class="s1">&#39;ua1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.62</span><span class="p">],</span>
+       <span class="s1">&#39;ua1_percieved&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.91</span><span class="p">],</span> <span class="s1">&#39;ua1_closest&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.34</span><span class="p">],</span>
+       <span class="s1">&#39;ua2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.02</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.64</span><span class="p">],</span> <span class="s1">&#39;ua2_percieved&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.88</span><span class="p">],</span>
+       <span class="s1">&#39;ua2_closest&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.04</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.38</span><span class="p">],</span> <span class="s1">&#39;ua3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.66</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.48</span><span class="p">],</span>
+       <span class="s1">&#39;ua3_percieved&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.84</span><span class="p">],</span> <span class="s1">&#39;ua3_closest&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.42</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.23</span><span class="p">],</span>
+       <span class="s1">&#39;h1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.64</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">],</span> <span class="s1">&#39;h1_percieved&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.93</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">],</span>
+       <span class="s1">&#39;h1_closest&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.07</span><span class="p">],</span> <span class="s1">&#39;h2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.69</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.52</span><span class="p">],</span>
+       <span class="s1">&#39;h2_percieved&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.79</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.85</span><span class="p">],</span> <span class="s1">&#39;h2_closest&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.45</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.32</span><span class="p">]}</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t93p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">set_pos</span><span class="p">(</span><span class="o">**</span><span class="n">pos</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endresults</span><span class="o">.</span><span class="n">t93p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;t=93&quot;</span><span class="p">,</span> <span class="n">legend_bbox</span><span class="o">=</span><span class="p">(</span><span class="mf">0.85</span><span class="p">,</span><span class="mf">0.65</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_31_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_31_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;ac_loc_93.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%matplotlib qt</span>
+<span class="c1">#endresults.t120p0.graph.move_nodes()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pos</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;atc&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">],</span> <span class="s1">&#39;ma1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.86</span><span class="p">,</span> <span class="mf">0.52</span><span class="p">],</span> <span class="s1">&#39;ma2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.33</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">],</span>
+       <span class="s1">&#39;ma3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.78</span><span class="p">],</span> <span class="s1">&#39;ua1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.66</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.76</span><span class="p">],</span> <span class="s1">&#39;ua2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.94</span><span class="p">],</span>
+       <span class="s1">&#39;ua3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.02</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="s1">&#39;h1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.89</span><span class="p">,</span> <span class="mf">0.48</span><span class="p">],</span> <span class="s1">&#39;h2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">],</span>
+       <span class="s1">&#39;ground&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.31</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.26</span><span class="p">],</span> <span class="s1">&#39;location&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.31</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24</span><span class="p">],</span> <span class="s1">&#39;requests&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.43</span><span class="p">]}</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t120p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">set_pos</span><span class="p">(</span><span class="o">**</span><span class="n">pos</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="o">.</span><span class="n">t120p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t120p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">set_node_styles</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">FxnBlock</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">node_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">),</span>
+                                                  <span class="n">MultiFlow</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">node_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">),</span>
+                                                  <span class="n">CommsFlow</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">node_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)),</span>
+                                       <span class="n">degraded</span><span class="o">=</span><span class="p">{},</span> <span class="n">faulty</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endresults</span><span class="o">.</span><span class="n">t120p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">withlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_37_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_37_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;ac_faultprop_120.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">perc_cycled_nom</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">nominal</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s1">&#39;cycled&#39;</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">perc_cycled</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s1">&#39;cycled&#39;</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">perc_degraded</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">get_degraded_hist</span><span class="p">(</span><span class="o">*</span><span class="n">mdlhist</span><span class="o">.</span><span class="n">nominal</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">mdlhist</span><span class="o">.</span><span class="n">nominal</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">perc_faulty</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">get_faulty_hist</span><span class="p">(</span><span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">)[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">)</span>
+<span class="n">perc_faulty</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0.        , 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.11111111, 0.11111111, 0.11111111, 0.11111111, 0.11111111,
+       0.22222222, 0.22222222, 0.22222222, 0.22222222, 0.22222222,
+       0.22222222, 0.22222222, 0.22222222, 0.22222222, 0.22222222,
+       0.22222222, 0.22222222, 0.22222222, 0.22222222, 0.22222222,
+       0.22222222, 0.22222222, 0.22222222, 0.22222222, 0.22222222,
+       0.22222222, 0.22222222, 0.22222222, 0.22222222, 0.22222222,
+       0.22222222])
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">analyze.result</span> <span class="kn">import</span> <span class="n">Result</span><span class="p">,</span> <span class="n">History</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshist</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s2">&quot;nominal.cycled_assets&quot;</span><span class="p">:</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_cycled_nom</span><span class="p">,</span>
+                    <span class="s2">&quot;nominal.degraded_fields&quot;</span><span class="p">:</span><span class="mi">0</span><span class="o">*</span><span class="n">perc_degraded</span><span class="p">,</span>
+                    <span class="s2">&quot;nominal.faulty_assets&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="o">*</span><span class="n">perc_faulty</span><span class="p">,</span>
+                    <span class="s2">&quot;nominal.time&quot;</span><span class="p">:</span><span class="n">mdlhist</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                   <span class="s2">&quot;faulty.cycled_assets&quot;</span><span class="p">:</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_cycled</span><span class="p">,</span>
+                    <span class="s2">&quot;faulty.degraded_fields&quot;</span><span class="p">:</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_degraded</span><span class="p">,</span>
+                    <span class="s2">&quot;faulty.faulty_assets&quot;</span><span class="p">:</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_faulty</span><span class="p">,</span>
+                     <span class="s2">&quot;faulty.time&quot;</span><span class="p">:</span><span class="n">mdlhist</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">time</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshist</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+nominal.cycled_assets:        array(121)
+nominal.degraded_fields:      array(121)
+nominal.faulty_assets:        array(121)
+nominal.time:                 array(121)
+faulty.cycled_assets:         array(121)
+faulty.degraded_fields:       array(121)
+faulty.faulty_assets:         array(121)
+faulty.time:                  array(121)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">reshist</span><span class="p">,</span> <span class="s1">&#39;cycled_assets&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;degraded_fields&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;faulty_assets&#39;</span><span class="p">,</span>
+                    <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">93</span><span class="p">],</span> <span class="n">time_slice_label</span> <span class="o">=</span> <span class="s2">&quot;fault injection/occurence&quot;</span><span class="p">,</span>
+                   <span class="n">ylabels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cycled_assets&#39;</span><span class="p">:</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="s1">&#39;degraded_fields&#39;</span><span class="p">:</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="s1">&#39;faulty_assets&#39;</span><span class="p">:</span><span class="s1">&#39;%&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_46_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_46_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;fault_history_ac_vision.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tab_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cycled assets (%)&quot;</span><span class="p">:[</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_cycled</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+ <span class="s2">&quot;degraded fields (%)&quot;</span><span class="p">:[</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_degraded</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+ <span class="s2">&quot;faulty assets (%)&quot;</span><span class="p">:[</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_faulty</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">final_res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">tab_dict</span><span class="p">)</span>
+<span class="n">final_res</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cycled assets (%)</th>
+      <th>degraded fields (%)</th>
+      <th>faulty assets (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>50.0</td>
+      <td>29.518072</td>
+      <td>22.222222</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">final_res</span><span class="o">.</span><span class="n">to_latex</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+\begin{tabular}{lrrr}
+\toprule
+{} &amp;  cycled assets (\%) &amp;  degraded fields (\%) &amp;  faulty assets (\%) \\
+\midrule
+0 &amp;               50.0 &amp;            29.518072 &amp;          22.222222 \\
+\bottomrule
+\end{tabular}
+
+</pre></div></div>
+</div>
+</section>
+<section id="Communications-Fault---Poor-land-command-by-ATC">
+<h2>Communications Fault - Poor land command by ATC<a class="headerlink" href="#Communications-Fault---Poor-land-command-by-ATC" title="Permalink to this headline"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">MultiFlowGraph</span><span class="p">,</span> <span class="n">CommsFlowGraph</span>
+<span class="n">ground_args</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;include_glob&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;include_states&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
+              <span class="s1">&#39;send_connections&#39;</span><span class="p">:{</span><span class="s2">&quot;asset_area&quot;</span><span class="p">:</span><span class="s2">&quot;asset_area&quot;</span><span class="p">,</span>
+                                  <span class="s2">&quot;area_allocation&quot;</span><span class="p">:</span><span class="s2">&quot;area_allocation&quot;</span><span class="p">,</span>
+                                  <span class="s2">&quot;asset_assignment&quot;</span><span class="p">:</span><span class="s2">&quot;asset_assignment&quot;</span><span class="p">}}</span>
+<span class="n">req_args</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;include_glob&#39;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;ports_only&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">}</span>
+
+<span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">mult_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="p">{</span><span class="mi">8</span><span class="p">:{</span><span class="s2">&quot;atc&quot;</span><span class="p">:[</span><span class="s2">&quot;wrong_land_command&quot;</span><span class="p">]},</span><span class="mi">10</span><span class="p">:{</span><span class="s2">&quot;ua2&quot;</span><span class="p">:[</span><span class="s2">&quot;lost_sight&quot;</span><span class="p">]}},</span> <span class="p">{},</span>
+                                         <span class="n">desired_result</span><span class="o">=</span><span class="p">{</span><span class="mi">10</span><span class="p">:{</span><span class="s2">&quot;graph.flows.requests&quot;</span><span class="p">:(</span><span class="n">CommsFlowGraph</span><span class="p">,</span> <span class="n">req_args</span><span class="p">)},</span>
+                                                         <span class="mi">11</span><span class="p">:{</span><span class="s2">&quot;graph.flows.requests&quot;</span><span class="p">:(</span><span class="n">CommsFlowGraph</span><span class="p">,</span> <span class="n">req_args</span><span class="p">),</span>
+                                                            <span class="s2">&quot;graph.flows.ground&quot;</span><span class="p">:(</span><span class="n">MultiFlowGraph</span><span class="p">,</span> <span class="n">ground_args</span><span class="p">)},</span>
+                                                         <span class="mi">19</span><span class="p">:{</span><span class="s2">&quot;graph.flows.requests&quot;</span><span class="p">:{</span><span class="s1">&#39;include_glob&#39;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;ports_only&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">}},</span>
+                                                         <span class="mi">20</span><span class="p">:[</span><span class="s2">&quot;graph&quot;</span><span class="p">],</span> <span class="mi">120</span><span class="p">:</span><span class="s2">&quot;endclass&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_tstep</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">faulty</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Aircraft crashed&quot;</span><span class="p">,</span> <span class="n">areas_to_label</span><span class="o">=</span><span class="p">[])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_53_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_53_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;atc_comms_map.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="o">.</span><span class="n">t120p0</span><span class="o">.</span><span class="n">endclass</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+num_cycled:                            5
+perc_cycled:                       0.625
+num_crashed:                           2
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="o">.</span><span class="n">t11p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">ground</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;fmdtools.analyze.graph.MultiFlowGraph at 0x2b90b4ccf40&gt;
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">(</span><span class="n">endresults</span><span class="o">.</span><span class="n">t11p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">ground</span><span class="o">.</span><span class="n">g</span><span class="p">))</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t11p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">ground</span><span class="o">.</span><span class="n">set_pos</span><span class="p">(</span><span class="o">**</span><span class="n">pos</span><span class="p">)</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t11p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">ground</span><span class="o">.</span><span class="n">set_node_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">,</span> <span class="n">subtext</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">)</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t11p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">ground</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t11p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">ground</span><span class="o">.</span><span class="n">set_node_styles</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;State&#39;</span><span class="p">:</span><span class="nb">dict</span><span class="p">(</span><span class="n">node_size</span><span class="o">=</span><span class="mi">800</span><span class="p">),</span>
+                                                          <span class="s1">&#39;MultiFlow&#39;</span><span class="p">:</span><span class="nb">dict</span><span class="p">(</span><span class="n">node_size</span><span class="o">=</span><span class="mi">800</span><span class="p">)},</span>
+                                                   <span class="n">degraded</span><span class="o">=</span><span class="p">{},</span> <span class="n">faulty</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endresults</span><span class="o">.</span><span class="n">t11p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">ground</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">legend_bbox</span><span class="o">=</span><span class="p">(</span><span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">),</span> <span class="n">legend_labelspacing</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_59_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_59_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[67]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;atc_comms_ground_11.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">(</span><span class="n">endresults</span><span class="o">.</span><span class="n">t10p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">requests</span><span class="o">.</span><span class="n">g</span><span class="p">),</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t10p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">requests</span><span class="o">.</span><span class="n">set_pos</span><span class="p">(</span><span class="o">**</span><span class="n">pos</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[69]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endresults</span><span class="o">.</span><span class="n">t10p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">requests</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t10p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">requests</span><span class="o">.</span><span class="n">set_node_styles</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;CommsFlow&#39;</span><span class="p">:</span><span class="nb">dict</span><span class="p">(</span><span class="n">node_size</span><span class="o">=</span><span class="mi">900</span><span class="p">)},</span>
+                                                   <span class="n">degraded</span><span class="o">=</span><span class="p">{},</span> <span class="n">faulty</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[72]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endresults</span><span class="o">.</span><span class="n">t10p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">requests</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">legend_bbox</span><span class="o">=</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_63_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_63_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[73]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;atc_comms_requests_10.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[80]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pos</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;atc&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.22</span><span class="p">],</span> <span class="s1">&#39;ma1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.86</span><span class="p">,</span> <span class="mf">0.52</span><span class="p">],</span> <span class="s1">&#39;ma2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.33</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">],</span>
+       <span class="s1">&#39;ma3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.78</span><span class="p">],</span> <span class="s1">&#39;ua1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.66</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.76</span><span class="p">],</span> <span class="s1">&#39;ua2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.94</span><span class="p">],</span>
+       <span class="s1">&#39;ua3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.02</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="s1">&#39;h1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.89</span><span class="p">,</span> <span class="mf">0.48</span><span class="p">],</span> <span class="s1">&#39;h2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">],</span>
+       <span class="s1">&#39;ground&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.31</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.26</span><span class="p">],</span> <span class="s1">&#39;location&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.31</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24</span><span class="p">],</span> <span class="s1">&#39;requests&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.43</span><span class="p">]}</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t20p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">set_pos</span><span class="p">(</span><span class="o">**</span><span class="n">pos</span><span class="p">)</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t20p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">endresults</span><span class="o">.</span><span class="n">t20p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">set_node_styles</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">FxnBlock</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">node_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">),</span>
+                                                  <span class="n">MultiFlow</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">node_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">),</span>
+                                                  <span class="n">CommsFlow</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">node_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)),</span>
+                                       <span class="n">degraded</span><span class="o">=</span><span class="p">{},</span> <span class="n">faulty</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[81]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endresults</span><span class="o">.</span><span class="n">t20p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">withlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_66_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_66_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[82]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;atc_comms_resgraph.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[92]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dot</span> <span class="o">=</span> <span class="n">endresults</span><span class="o">.</span><span class="n">t20p0</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_graphviz</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">&quot;neato&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_68_0.svg" src="../../_images/rad_models_taxiway_Paper_Notebook_68_0.svg" /></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[83]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">perc_cycled_nom</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">nominal</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s1">&#39;cycled&#39;</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">perc_cycled</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s1">&#39;cycled&#39;</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">perc_degraded</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">get_degraded_hist</span><span class="p">(</span><span class="o">*</span><span class="n">mdlhist</span><span class="o">.</span><span class="n">nominal</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">mdlhist</span><span class="o">.</span><span class="n">nominal</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<span class="n">perc_faulty</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">get_faulty_hist</span><span class="p">(</span><span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">)[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">)</span>
+<span class="n">perc_faulty</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[83]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0.        , 0.        , 0.        , 0.        , 0.        ,
+       0.        , 0.        , 0.        , 0.11111111, 0.11111111,
+       0.22222222, 0.22222222, 0.22222222, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333, 0.33333333, 0.33333333, 0.33333333, 0.33333333,
+       0.33333333])
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[84]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshist</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s2">&quot;nominal.cycled_assets&quot;</span><span class="p">:</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_cycled_nom</span><span class="p">,</span>
+                    <span class="s2">&quot;nominal.degraded_fields&quot;</span><span class="p">:</span><span class="mi">0</span><span class="o">*</span><span class="n">perc_degraded</span><span class="p">,</span>
+                    <span class="s2">&quot;nominal.faulty_assets&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="o">*</span><span class="n">perc_faulty</span><span class="p">,</span>
+                    <span class="s2">&quot;nominal.time&quot;</span><span class="p">:</span><span class="n">mdlhist</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                   <span class="s2">&quot;faulty.cycled_assets&quot;</span><span class="p">:</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_cycled</span><span class="p">,</span>
+                    <span class="s2">&quot;faulty.degraded_fields&quot;</span><span class="p">:</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_degraded</span><span class="p">,</span>
+                    <span class="s2">&quot;faulty.faulty_assets&quot;</span><span class="p">:</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_faulty</span><span class="p">,</span>
+                     <span class="s2">&quot;faulty.time&quot;</span><span class="p">:</span><span class="n">mdlhist</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">time</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[85]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">reshist</span><span class="p">,</span> <span class="s1">&#39;cycled_assets&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;degraded_fields&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;faulty_assets&#39;</span><span class="p">,</span>
+                    <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">time_slice_label</span> <span class="o">=</span> <span class="s2">&quot;fault injection/occurence&quot;</span><span class="p">,</span>
+                   <span class="n">ylabels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cycled_assets&#39;</span><span class="p">:</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="s1">&#39;degraded_fields&#39;</span><span class="p">:</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="s1">&#39;faulty_assets&#39;</span><span class="p">:</span><span class="s1">&#39;%&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/rad_models_taxiway_Paper_Notebook_71_0.png" src="../../_images/rad_models_taxiway_Paper_Notebook_71_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[86]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;fault_history_atc_comms.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[87]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tab_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cycled assets (%)&quot;</span><span class="p">:[</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_cycled</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+ <span class="s2">&quot;degraded fields (%)&quot;</span><span class="p">:[</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_degraded</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+ <span class="s2">&quot;faulty assets (%)&quot;</span><span class="p">:[</span><span class="mi">100</span><span class="o">*</span><span class="n">perc_faulty</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[88]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">final_res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">tab_dict</span><span class="p">)</span>
+<span class="n">final_res</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[88]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cycled assets (%)</th>
+      <th>degraded fields (%)</th>
+      <th>faulty assets (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>62.5</td>
+      <td>24.096386</td>
+      <td>33.333333</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[89]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">final_res</span><span class="o">.</span><span class="n">to_latex</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+\begin{tabular}{lrrr}
+\toprule
+{} &amp;  cycled assets (\%) &amp;  degraded fields (\%) &amp;  faulty assets (\%) \\
+\midrule
+0 &amp;               62.5 &amp;            24.096386 &amp;          33.333333 \\
+\bottomrule
+\end{tabular}
+
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
