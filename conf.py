@@ -32,6 +32,9 @@ release = '2.0-alpha'
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', "nbsphinx", "myst_parser", "sphinx.ext.githubpages"]
 
+#"gaphor.extensions.sphinx"
+#gaphor_models = "/docs/figures/module-reference-diagrams.gaphor"
+
 
 exclude_patterns = ['_build', '**.ipynb_checkpoints', 'rad_models*']
 
