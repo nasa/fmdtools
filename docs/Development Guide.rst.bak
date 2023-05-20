@@ -1,43 +1,7 @@
 Development Guide
 ===========================
 
-Contributions
---------------------------------
-
-- Contributors document
-
-- Keeping track of contributions
-
-Repo Structure
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- need figure
-
-Development Process
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- need figure
-
-- issues
-- branches
-- pull requests
-- merge process 
-- documentation and testing
-- packaging
-
-Documentation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- examples
-
-Testing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- quantitative tests 
-- qualitative tests
-
-
-Model Development Best Practices
+How to Write Good Models - Development Best Practices
 --------------------------------
 
 Plan your model to avoid technical debt
