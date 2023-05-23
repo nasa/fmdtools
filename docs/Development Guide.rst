@@ -4,7 +4,7 @@ Development Guide
 Contributions
 --------------------------------
 
-Development of fmdtools is coordinated by the `fmdtools team <https://github.com/NASA/fmdtools/CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests) external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
+Development of fmdtools is coordinated by the `fmdtools team <https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests) external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
 
 Repo Structure
