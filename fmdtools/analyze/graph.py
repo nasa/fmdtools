@@ -22,7 +22,7 @@ Private class:
 # File Name: analyze/graph.py
 # Contributors: Daniel Hulse, Sequoia Andrade, Hannah Walsh, Johan Louwers
 # Created: November 2019
-# Refactored: MAY 2023
+# Refactored: APR 2020
 # Added major interfaces: July 2021
 # Adopted object-oriented architecture and merged in networks.py: April 2023
 
@@ -111,7 +111,6 @@ default_node_kwargs={'Model':       dict(node_shape='^'),
                      'active':      dict(node_color='green'),
                      'degraded':    dict(node_color='orange'),
                      'faulty':      dict(edgecolors='red'),
-                     'high_degree_nodes': dict(node_color='red'),  # TODO this looks to be double. Needs checking
                      'high_degree_nodes': dict(node_color='red'),
                      'static':      dict(node_color='cyan'),
                      'dynamic':     dict(edgecolors='teal')}  
@@ -454,10 +453,14 @@ class Graph(object):
 
         Parameters
         ----------
-        title
-        title2
-        subtext
-        edge_label_styles
+        title : str, optional
+            property to get for title text. The default is 'id'.
+        title2 : str, optional
+            property to get for title text after the colon. The default is ''.
+        subtext : str, optional
+            property to get for the subtext. The default is ''.
+        **node_label_styles : dict
+            LabelStyle arguments to overwrite.
 
         Returns
         -------
@@ -571,9 +574,9 @@ class Graph(object):
         title : str, optional
             Title for the plot. The default is "".
         fig : bool, optional
-            TODO : Need documentation update
+            matplotlib figure to project on (if provided). The default is False.
         ax : bool, optional
-            TODO : need documentation update
+            matplotlib axis to plot on (if provided). The default is False.
         withlegend : bool, optional
             Whether to include a legend. The default is True.
         legend_bbox : tuple, optional
@@ -786,7 +789,7 @@ class Graph(object):
         physics : Bool, optional
             Whether to use physics during node placement. The default is False.
         notebook : Bool, optional
-            todo : requires documentation update.
+            passes notebook arg to pyviz Network (for displaying in jupyter)
         Returns
         -------
         n : pyvis object
@@ -936,7 +939,7 @@ class Graph(object):
             percentile of degrees to return, between 0 and 100
         title : str, optional
             Title for the plot. The default is 'High Degree Nodes'.
-        node_kwargs : todo : needs documentation update
+        node_kwargs : dict : kwargs to overwrite the default NodeStyle
         **kwargs : kwargs
             kwargs for Graph.draw
 
@@ -1165,11 +1168,17 @@ def data_error(data, average):
 
     Parameters
     ----------
-    data
-    average
+    data : list
+        List of lists from sff_model
+    average : list
+        Average of data generated from sff_model over time
 
     Returns
     -------
+    lower_error : float
+    Lower bound of error
+    upper_error : float
+    Upper bound of error
 
     """
     q1 = []
@@ -1208,8 +1217,10 @@ class GraphInteractor:
 
         Parameters
         ----------
-        g_obj
-        kwargs
+        g_obj : Graph
+            Graph object to plot interactively
+        kwargs : dict
+            kwargs for Graph.draw
         """
         self.t = 0
         self.fig, (self.bax, self.ax) = plt.subplots(2, gridspec_kw={'height_ratios': [1, 10]})
@@ -1329,7 +1340,7 @@ class GraphInteractor:
 
     def print_pos(self):
         """
-        TODO : Needs documentation
+        Prints the current node positions in the graph so they can be viewed (and copied) from the console.
         Returns
         -------
 
@@ -1366,14 +1377,16 @@ class ModelGraph(Graph):
 
     def nx_from_obj(self, mdl):
         """
-        TODO Needs documentation
+        Generates the networkx.graph object corresponding to the model.
         Parameters
         ----------
-        mdl
+        mdl: Model
+            Model to create the graph representation of.
 
         Returns
         -------
-
+        g : networkx.Graph
+            networkx.Graph representation of model functions and flows (along with their attributes)
         """
         g = mdl.graph.copy()
         labels = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
@@ -1384,10 +1397,11 @@ class ModelGraph(Graph):
 
     def set_nx_states(self, mdl):
         """
-        TODO : need documentation
+        Attaches state attributes to Graph corresponding to the states of the model
         Parameters
         ----------
-        mdl
+        mdl: Model
+            Model to represent.
 
         Returns
         -------
@@ -1398,10 +1412,11 @@ class ModelGraph(Graph):
 
     def set_fxn_nodestates(self, mdl):
         """
-        TODO : requires documentation
+        Attaches state attributes to Graph corresponding to the states of the model that belong to functions
         Parameters
         ----------
-        mdl
+        mdl: Model
+            Model to represent.
 
         Returns
         -------
@@ -1416,11 +1431,12 @@ class ModelGraph(Graph):
 
     def set_flow_nodestates(self, mdl):
         """
-        TODO : requires documentation
+        Attaches node state attributes to Graph corresponding to the states of the model that belong to flows.
 
         Parameters
         ----------
-        mdl
+        mdl: Model
+            Model to represent.
 
         Returns
         -------
@@ -1437,12 +1453,15 @@ class ModelGraph(Graph):
 
         Parameters
         ----------
-        mdl
-        subedges
+        mdl: Model
+            Model to represent.
+        subedges : list
+            nodes from the full graph which will become edges in the subgraph (e.g. individual flows)
 
         Returns
         -------
-
+        flows : dict
+                Dictionary of edges with keys representing each sub-attribute of the edge (e.g., flows)
         """
         flows = {}
         multgraph = nx.projected_graph(mdl.graph, subedges, multigraph=True)
@@ -1625,7 +1644,8 @@ class ModelTypeGraph(ModelGraph):
 
         Parameters
         ----------
-        mdl : TODO Needs documentation update.
+        mdl: Model
+            Model to represent
 
         withflows : bool, optional
             Whether to include flows. The default is True.
@@ -1883,10 +1903,11 @@ class ASGGraph(Graph):
 
     def set_nx_labels(self, asg):
         """
-        TODO : requires documentation
+        Labels the underlying networkx graph structure with type attributes corresponding to the ASG.
         Parameters
         ----------
-        asg
+        asg : ASG
+            Action Sequence Graph object to represent
 
         Returns
         -------
@@ -1905,11 +1926,12 @@ class ASGGraph(Graph):
 
     def set_nx_states(self, asg):
         """
-        TODO : requires documentation
+        Attaches state and fault information to the underlying graph.
 
         Parameters
         ----------
-        asg
+        asg : ASG
+            Underlying action sequence graph object to get states from
 
         Returns
         -------
@@ -1929,13 +1951,18 @@ class ASGGraph(Graph):
 
     def set_edge_labels(self, title='label', title2='', subtext='name', **edge_label_styles):
         """
-        TODO : requires documentation
+        set / define the edge labels.
         Parameters
         ----------
-        title
-        title2
-        subtext
-        edge_label_styles
+        title : str, optional
+            property to get for title text. The default is 'label'.
+        title2 : str, optional
+            property to get for title text after the colon. The default is ''.
+        subtext : str, optional
+            property to get for the subtext. The default is ''.
+        **edge_label_styles : dict
+            edgeStyle arguments to overwrite.
+
 
         Returns
         -------
@@ -1945,32 +1972,21 @@ class ASGGraph(Graph):
 
     def set_node_styles(self, active={}, **node_styles):
         """
-        TODO : requires documentation
+        Sets self.node_styles and self.edge_groups given the provided node styles.
 
         Parameters
         ----------
-        active
-        node_styles
-
-        Returns
-        -------
+        **node_styles : dict, optional
+            Dictionary of tags, labels, and style kwargs for the nodes that overwrite the default.
+            Has structure {tag:{label:kwargs}}, where kwargs are the keyword arguments to
+            nx.draw_networkx_nodes. The default is {"label":{}}.
 
         """
         super().set_node_styles(active=active, **node_styles)
 
     def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
         """
-        TODO : requires documentation
-
-        Parameters
-        ----------
-        layout
-        overlap
-        kwargs
-
-        Returns
-        -------
-
+        calls Graph.draw_graphviz
         """
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
