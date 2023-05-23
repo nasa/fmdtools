@@ -52,7 +52,21 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#how-to-write-good-models-development-best-practices">How to Write Good Models - Development Best Practices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#repo-structure">Repo Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#remote-structure">Remote Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -934,7 +948,7 @@ three distinct parts:</p>
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text. The default is ‘id’.</p></li>
 <li><p><strong>title2</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text after the colon. The default is ‘’.</p></li>
 <li><p><strong>subtext</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for the subtext. The default is ‘’.</p></li>
-<li><p><strong>**node_label_styles</strong> (<em>TYPE</em>) – :abStyle arguments to overwrite.</p></li>
+<li><p><strong>**node_label_styles</strong> (<em>dict</em>) – LabStyle arguments to overwrite.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -2793,7 +2807,7 @@ three distinct parts:</p>
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text. The default is ‘id’.</p></li>
 <li><p><strong>title2</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text after the colon. The default is ‘’.</p></li>
 <li><p><strong>subtext</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for the subtext. The default is ‘’.</p></li>
-<li><p><strong>**node_label_styles</strong> (<em>TYPE</em>) – :abStyle arguments to overwrite.</p></li>
+<li><p><strong>**node_label_styles</strong> (<em>dict</em>) – LabStyle arguments to overwrite.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

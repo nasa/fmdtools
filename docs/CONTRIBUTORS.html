@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Module Reference &mdash; fmdtools 2.0-alpha documentation</title>
+  <title>CONTRIBUTORS &mdash; fmdtools 2.0-alpha documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -19,9 +19,7 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fmdtools.define package" href="fmdtools.define.html" />
-    <link rel="prev" title="Glossary" href="Glossary.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,7 +38,7 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../README.html">README</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
@@ -86,7 +84,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Module Reference</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html">fmdtools.define package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
@@ -131,9 +129,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Module Reference</li>
+      <li>CONTRIBUTORS</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/docs/fmdtools.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/docs/CONTRIBUTORS.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -165,54 +163,43 @@
     text-align: unset;
 }
 </style>
-<section id="module-reference">
-<h1>Module Reference<a class="headerlink" href="#module-reference" title="Permalink to this headline"></a></h1>
-<a class="reference internal image-reference" href="../_images/module_organization.svg"><img alt="../_images/module_organization.svg" src="../_images/module_organization.svg" width="800" /></a>
-<p>The fmdtools package is split into three subpackages for design, simulation, and analysis. As shown above:
-* The <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.define</span></code> subpackage provides classes for model and simulation definition, and is used for defining system (nominal and faulty) behavior.
-* The <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim</span></code> subpackage provides functions to simulate these models in a variety of configurations (e.g., nominal and faulty scenarios).
-* The <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code> subpackage provides classes for processing, analyzing, and visualizing simulation results.</p>
-<p>Thus, working with fmdtools often means creating a model file which extends classes from <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.define</span></code>, and then simulating and analyzing that model in a script or notebook using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code> subpackages. This page provides references for the functions and classes in these modules.</p>
-<p><strong>Submodule Links</strong></p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+<section class="tex2jax_ignore mathjax_ignore" id="contributors">
+<h1>CONTRIBUTORS<a class="headerlink" href="#contributors" title="Permalink to this headline"></a></h1>
+<a href="https://github.com/nasa/fmdtools/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=nasa/fmdtools" />
+</a>
+<section id="internal-contributors">
+<h2>Internal Contributors<a class="headerlink" href="#internal-contributors" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/hulsed">Daniel Hulse</a></p></li>
+<li><p><a class="reference external" href="https://www.researchgate.net/profile/Lukman-Irshad">Lukman Irshad</a></p></li>
+<li><p><a class="reference external" href="https://github.com/sequoiarose">Sequoia Andrade</a></p></li>
+<li><p>Hannah Walsh</p></li>
+<li><p><a class="reference external" href="https://github.com/teubert">Chris Teubert</a></p></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
+</section>
+<section id="external-contributors">
+<h2>External Contributors<a class="headerlink" href="#external-contributors" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Johan Louwers</p></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html#module-0">fmdtools.analyze.graph</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+</section>
+<section id="alumni-and-interns">
+<h2>Alumni and Interns<a class="headerlink" href="#alumni-and-interns" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Inga Girshfeld</p></li>
 </ul>
-</li>
-</ul>
-</div>
+</section>
+<section id="fmdtools-at-osu">
+<h2>fmdtools at OSU<a class="headerlink" href="#fmdtools-at-osu" title="Permalink to this headline"></a></h2>
+<p>Prior to fmdtools being developed at NASA, it was a project in the Design Engineering Lab at Oregon State University (<a class="reference external" href="https://github.com/DesignEngrLab/fmdtools">available here</a>), which was conceptualized in this initial paper by Daniel Hulse, Hannah Walsh, Andy Dong, Christopher Hoyle and Irem Tumer (at OSU) and Chetan Kulkarni and Kai Goebel (at NASA). Special thanks to Arpan Biswas and Hongyang Zhang also for working on some case studies in the repository.</p>
+</section>
 </section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Glossary.html" class="btn btn-neutral float-left" title="Glossary" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="fmdtools.define.html" class="btn btn-neutral float-right" title="fmdtools.define package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

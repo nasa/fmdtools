@@ -53,7 +53,21 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Development Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-write-good-models-development-best-practices">How to Write Good Models - Development Best Practices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#repo-structure">Repo Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#remote-structure">Remote Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#upload-to-pypi">Upload to PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#model-development-best-practices">Model Development Best Practices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -153,8 +167,111 @@
 </style>
 <section id="development-guide">
 <h1>Development Guide<a class="headerlink" href="#development-guide" title="Permalink to this headline"></a></h1>
-<section id="how-to-write-good-models-development-best-practices">
-<h2>How to Write Good Models - Development Best Practices<a class="headerlink" href="#how-to-write-good-models-development-best-practices" title="Permalink to this headline"></a></h2>
+<section id="contributions">
+<h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline"></a></h2>
+<p>Development of fmdtools is coordinated by the <a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md">fmdtools team</a> at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests) external contributors should first submit a contributors license agreement (<a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf">Individual CLA</a> , <a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf">Corporate CLA</a>).</p>
+<section id="repo-structure">
+<h3>Repo Structure<a class="headerlink" href="#repo-structure" title="Permalink to this headline"></a></h3>
+<a class="reference internal image-reference" href="../_images/repo_structure.svg"><img alt="../_images/repo_structure.svg" src="../_images/repo_structure.svg" width="800" /></a>
+<p>Getting started with development first requires some basic familiarity with the repo structure, shown above. As shown, the repo contains:
+- <code class="docutils literal notranslate"><span class="pre">/fmdtools</span></code>, which is where the toolkit sub-packages and modules are held
+- <code class="docutils literal notranslate"><span class="pre">/tests</span></code>, which has tests of the modules
+- <code class="docutils literal notranslate"><span class="pre">/examples</span></code>, which are different case study examples
+- <code class="docutils literal notranslate"><span class="pre">/docs</span></code>, which contains documentation</p>
+<p>There are additionally a few scripts with specific purposes to serve the development process:
+- <code class="docutils literal notranslate"><span class="pre">run_all_tests.py</span></code> which is a script that runs tests defined in <cite>/tests</cite> and <cite>/examples</cite>
+- <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>, which is used for building PyPI packages, and
+- <code class="docutils literal notranslate"><span class="pre">MAKE</span></code>, which is used to build the sphinx documentation.</p>
+<section id="remote-structure">
+<h4>Remote Structure<a class="headerlink" href="#remote-structure" title="Permalink to this headline"></a></h4>
+<a class="reference internal image-reference" href="../_images/git_structure.svg"><img alt="../_images/git_structure.svg" src="../_images/git_structure.svg" width="800" /></a>
+<p>Development of fmdtools uses a two-track development model, in which contributions are provided within NASA as well as by external collaborators. To support this, there are multiple repositories which must be managed in the development process, as shown above. Essentially, there is:</p>
+<ul class="simple">
+<li><p>An internal bitbucket, where NASA coordination and development takes place,</p></li>
+<li><p>A public GitHub, where collaboration with outside developers takes place (and where documentation is hosted), and</p></li>
+<li><p>A PyPI repository which contains stable versions of fmdtools which can be readily installed via <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p></li>
+</ul>
+<p>The fmdtools team is responsible for coordinating the development between the internal and external git repositories. Managing multiple repositories can best be coordinated by:
+- setting up multiple remotes on a single git repo on your machine using <cite>git remote</cite>
+- propagating changes between repositories during development using <cite>git push</cite> and <cite>git pull</cite> from each repository</p>
+</section>
+</section>
+<section id="development-process">
+<h3>Development Process<a class="headerlink" href="#development-process" title="Permalink to this headline"></a></h3>
+<a class="reference internal image-reference" href="../_images/dev_process.svg"><img alt="../_images/dev_process.svg" src="../_images/dev_process.svg" width="800" /></a>
+<p>To encourage code quality we follow the general process above to manage contributions:</p>
+<ol class="arabic simple">
+<li><p>Development begins on a <code class="docutils literal notranslate"><span class="pre">/dev</span></code> branch for a given version of fmdtools. This branch is used to test and integrate contributions from multiple sources.</p></li>
+<li><p>The first step in making a contribution is then to create an issue, which describes the work to be performed and/or problem to be solved.</p></li>
+<li><p>This issue can then be taken on in an issue branch (or repo for external contributions) and fixed.</p></li>
+<li><p>When the contributor is done with a given fix, they can submit a pull request, which enables the review of the fix as a whole.</p></li>
+<li><p>This fix is reviewed by a member of the fmdtools team, who may suggest changes.</p></li>
+<li><p>When the review is accepted, it is merged into the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch.</p></li>
+<li><p>When all the issues for a given version are complete (this may also happen concurrently with development), tests and documentation are updated for the branch. If tests don’t pass (or are obsolete), contributions may be made directly on the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch to fix it, or further issues may be generated based on the impact of the change.</p></li>
+<li><p>When the software team deems the release process to be complete, the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch may be merged into the <cite>main</cite> branch. These branches are then used to create releases.</p></li>
+</ol>
+<p>The major exceptions to this process are:</p>
+<ul class="simple">
+<li><p>bug fixes, which, if minor, may occur on <code class="docutils literal notranslate"><span class="pre">main</span></code>/<code class="docutils literal notranslate"><span class="pre">dev</span></code> branches (or may be given their own branches off of <code class="docutils literal notranslate"><span class="pre">main</span></code>)</p></li>
+<li><p>external contributions, which are managed via pull request off of <code class="docutils literal notranslate"><span class="pre">main</span></code> (or some external dev branch)</p></li>
+<li><p>minor documentation changes</p></li>
+</ul>
+<p>The release process is as follows:</p>
+<ul class="simple">
+<li><p>Update all version numbers in the appropriate files (conf, LICENSE, README, etc)</p></li>
+<li><p>Generate the documentation using <cite>make</cite></p></li>
+<li><p>Tag the version in git with the appropriate version (e.g., <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">tag</span> <span class="pre">-a</span> <span class="pre">v2.X.X</span> <span class="pre">-m</span> <span class="pre">&quot;version</span> <span class="pre">2.x.x&quot;</span></code>)</p></li>
+<li><p>Sync <code class="docutils literal notranslate"><span class="pre">main</span></code> branches between the internal and github remotes and push new documentation to <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code></p></li>
+<li><p><a class="reference external" href="https://github.com/nasa/fmdtools/releases/new">Create a release in GitHub</a> that incorporates (1) a narrative summary of features and changes in the release and (2) the auto-generated release notes corresponding to the issues in bitbucket.</p></li>
+<li><p>If the release is a “stable” release, generate the PyPI package using wheel and twine and upload it to PyPI</p></li>
+</ul>
+<section id="upload-to-pypi">
+<h4>Upload to PyPI<a class="headerlink" href="#upload-to-pypi" title="Permalink to this headline"></a></h4>
+<p>Note: Performing this process requires an account with the Python Package Index and Owner/Maintainer status in the fmdtools repository. Presently, this repository is owned by Daniel Hulse and setup should be coordinated with him.</p>
+<p>Note: Performing this process also requires a twine setup. For full instructions, see: <a class="reference external" href="https://www.geeksforgeeks.org/how-to-publish-python-package-at-pypi-using-twine-module/">https://www.geeksforgeeks.org/how-to-publish-python-package-at-pypi-using-twine-module/</a></p>
+<p>Once this is set up, the code and be built and uploaded using the following commands in powershell from the repository folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>python -m build
+python -m twine check dist/*
+python -m twine upload –repository pypi dist/*
+</pre></div>
+</div>
+<p>Note: when performing for the first time, it may be helpful to use the test python repo (substitute testpypi for pypi) first—an account is required however.</p>
+<p>Note: make sure that there are no old versions in <cite>dist/</cite></p>
+<p>After upload, test the deployment by:</p>
+<ol class="arabic simple">
+<li><p>Spot-checking the online repo (e.g., has the version updated?)</p></li>
+<li><p>Updating the package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">–upgrade</span> <span class="pre">pip</span></code>) and</p></li>
+</ol>
+</section>
+</section>
+<section id="roles">
+<h3>Roles<a class="headerlink" href="#roles" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>team lead:            coordinates all activities and has technical authority over project direction</p></li>
+<li><p>full developer:       can make changes off of version and main branches and has full ability to perform the release process</p></li>
+<li><p>contributor:          creates issues and develops off of issue branches</p></li>
+</ul>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline"></a></h3>
+<p>Documentation is generated using Sphinx, which generates html from rst files. The process for generating documentation (after sphinx has been set up) is to open powershell and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">fmdtools</span>
+<span class="o">./</span><span class="n">make</span> <span class="n">clean</span>
+<span class="o">./</span><span class="n">make</span> <span class="n">html</span>
+</pre></div>
+</div>
+</section>
+<section id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this headline"></a></h3>
+<p>There are two major types of tests:</p>
+<ul class="simple">
+<li><p>quantitative tests, which are testing running <code class="docutils literal notranslate"><span class="pre">run_all_tests.py</span></code>, and</p></li>
+<li><p>qualitative tests, which are the example notebooks</p></li>
+</ul>
+</section>
+</section>
+<section id="model-development-best-practices">
+<h2>Model Development Best Practices<a class="headerlink" href="#model-development-best-practices" title="Permalink to this headline"></a></h2>
 <section id="plan-your-model-to-avoid-technical-debt">
 <h3>Plan your model to avoid technical debt<a class="headerlink" href="#plan-your-model-to-avoid-technical-debt" title="Permalink to this headline"></a></h3>
 <p>Simple, small models are relatively easy to define in fmdtools with a few functions, flows, and behaviors. As such, it can be easy to get in the habit of not planning or organizing development in a systematic, which leads to issues when developing larger models: specifically, code that is <em>written into existence</em> instead of designed, planned, edited, tested, and documented. This leads to <a class="reference external" href="https://en.wikipedia.org/wiki/Technical_debt/">Technical debt</a>, which is the inherent difficulty of modifying code that was written ad-hoc rather than designed. Unless this technical debt is resolved, the ability to modify a model (e.g., to add new behaviors, conduct analyses, etc) will be limited by the complicated and unwieldy existing code.</p>

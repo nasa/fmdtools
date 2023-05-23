@@ -1,7 +1,130 @@
 Development Guide
 ===========================
 
-How to Write Good Models - Development Best Practices
+Contributions
+--------------------------------
+
+Development of fmdtools is coordinated by the `fmdtools team <https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests) external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
+
+
+Repo Structure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: /docs/figures/repo_structure.svg
+   :width: 800
+   
+Getting started with development first requires some basic familiarity with the repo structure, shown above. As shown, the repo contains:
+- ``/fmdtools``, which is where the toolkit sub-packages and modules are held
+- ``/tests``, which has tests of the modules
+- ``/examples``, which are different case study examples 
+- ``/docs``, which contains documentation
+
+There are additionally a few scripts with specific purposes to serve the development process:
+- ``run_all_tests.py`` which is a script that runs tests defined in `/tests` and `/examples`
+- ``setup.py``, which is used for building PyPI packages, and 
+- ``MAKE``, which is used to build the sphinx documentation.
+
+
+Remote Structure
+********************************
+
+.. image:: /docs/figures/git_structure.svg
+   :width: 800
+
+Development of fmdtools uses a two-track development model, in which contributions are provided within NASA as well as by external collaborators. To support this, there are multiple repositories which must be managed in the development process, as shown above. Essentially, there is:
+
+- An internal bitbucket, where NASA coordination and development takes place,
+- A public GitHub, where collaboration with outside developers takes place (and where documentation is hosted), and 
+- A PyPI repository which contains stable versions of fmdtools which can be readily installed via ``pip``.
+
+The fmdtools team is responsible for coordinating the development between the internal and external git repositories. Managing multiple repositories can best be coordinated by:
+- setting up multiple remotes on a single git repo on your machine using `git remote`
+- propagating changes between repositories during development using `git push` and `git pull` from each repository
+
+Development Process
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: /docs/figures/dev_process.svg
+   :width: 800
+
+To encourage code quality we follow the general process above to manage contributions:
+
+1. Development begins on a ``/dev`` branch for a given version of fmdtools. This branch is used to test and integrate contributions from multiple sources.
+2. The first step in making a contribution is then to create an issue, which describes the work to be performed and/or problem to be solved. 
+3. This issue can then be taken on in an issue branch (or repo for external contributions) and fixed. 
+4. When the contributor is done with a given fix, they can submit a pull request, which enables the review of the fix as a whole.
+5. This fix is reviewed by a member of the fmdtools team, who may suggest changes. 
+6. When the review is accepted, it is merged into the ``dev`` branch.
+7. When all the issues for a given version are complete (this may also happen concurrently with development), tests and documentation are updated for the branch. If tests don't pass (or are obsolete), contributions may be made directly on the ``dev`` branch to fix it, or further issues may be generated based on the impact of the change.
+8. When the software team deems the release process to be complete, the ``dev`` branch may be merged into the `main` branch. These branches are then used to create releases. 
+
+The major exceptions to this process are:
+
+- bug fixes, which, if minor, may occur on ``main``/``dev`` branches (or may be given their own branches off of ``main``)
+- external contributions, which are managed via pull request off of ``main`` (or some external dev branch)
+- minor documentation changes
+
+The release process is as follows:
+
+- Update all version numbers in the appropriate files (conf, LICENSE, README, etc)
+- Generate the documentation using `make`
+- Tag the version in git with the appropriate version (e.g., ``git tag -a v2.X.X -m "version 2.x.x"``)
+- Sync ``main`` branches between the internal and github remotes and push new documentation to ``gh-pages``
+- `Create a release in GitHub <https://github.com/nasa/fmdtools/releases/new>`_ that incorporates (1) a narrative summary of features and changes in the release and (2) the auto-generated release notes corresponding to the issues in bitbucket.
+- If the release is a "stable" release, generate the PyPI package using wheel and twine and upload it to PyPI
+
+Upload to PyPI
+********************************
+
+Note: Performing this process requires an account with the Python Package Index and Owner/Maintainer status in the fmdtools repository. Presently, this repository is owned by Daniel Hulse and setup should be coordinated with him.  
+
+Note: Performing this process also requires a twine setup. For full instructions, see: https://www.geeksforgeeks.org/how-to-publish-python-package-at-pypi-using-twine-module/  
+
+
+Once this is set up, the code and be built and uploaded using the following commands in powershell from the repository folder::
+
+	python -m build 
+	python -m twine check dist/* 
+	python -m twine upload –repository pypi dist/*  
+
+Note: when performing for the first time, it may be helpful to use the test python repo (substitute testpypi for pypi) first—an account is required however. 
+
+Note: make sure that there are no old versions in `dist/`
+
+After upload, test the deployment by: 
+
+1. Spot-checking the online repo (e.g., has the version updated?) 
+
+2. Updating the package (``pip install –upgrade pip``) and
+
+Roles
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- team lead: 		coordinates all activities and has technical authority over project direction
+- full developer: 	can make changes off of version and main branches and has full ability to perform the release process
+- contributor: 		creates issues and develops off of issue branches
+
+
+Documentation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Documentation is generated using Sphinx, which generates html from rst files. The process for generating documentation (after sphinx has been set up) is to open powershell and run::
+	
+	cd path/to/fmdtools
+	./make clean
+	./make html
+
+
+Testing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are two major types of tests:
+
+- quantitative tests, which are testing running ``run_all_tests.py``, and
+- qualitative tests, which are the example notebooks
+
+
+Model Development Best Practices
 --------------------------------
 
 Plan your model to avoid technical debt
