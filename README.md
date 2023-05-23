@@ -23,6 +23,8 @@ fmdtools is developed primarily by researchers at NASA Ames Research Center. Ext
   <img src="https://contrib.rocks/image?repo=nasa/fmdtools" />
 </a>
 
+See: [CONTRIBUTORS.md](https://github.com/NASA/fmdtools/CONTRIBUTORS.md)
+
 ## Notices
 
 Released under the [NASA Open Source Agreement Version 1.3](https://github.com/nasa/fmdtools/blob/main/NASA_Open_Source_Agreement_fmdtools.pdf)

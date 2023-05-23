@@ -204,8 +204,8 @@ class Labels(dataobject, mapping=True):
             property to get for title text after the colon. The default is ''.
         subtext : str, optional
             property to get for the subtext. The default is ''.
-        **node_label_styles : TYPE
-            :abStyle arguments to overwrite.
+        **node_label_styles : dict
+            LabStyle arguments to overwrite.
 
         Returns
         -------
