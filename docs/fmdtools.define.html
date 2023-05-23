@@ -53,7 +53,21 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#how-to-write-good-models-development-best-practices">How to Write Good Models - Development Best Practices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#repo-structure">Repo Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#remote-structure">Remote Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -232,8 +246,9 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – Internal Name for the Action</p></li>
-<li><p><strong>action</strong> (<a class="reference internal" href="#fmdtools.define.block.Action" title="fmdtools.define.block.Action"><em>Action</em></a>) – Action class to instantiate</p></li>
-<li><p><strong>*flows</strong> (<em>flow</em>) – Flows (optional) which connect the actions</p></li>
+<li><p><strong>actclass</strong> (<a class="reference internal" href="#fmdtools.define.block.Action" title="fmdtools.define.block.Action"><em>Action</em></a>) – Action class to instantiate</p></li>
+<li><p><strong>*flownames</strong> (<em>flow</em>) – Flows (optional) which connect the actions</p></li>
+<li><p><strong>duration</strong> – Not documented</p></li>
 <li><p><strong>**params</strong> (<em>any</em>) – parameters to instantiate the Action with.</p></li>
 </ul>
 </dd>
@@ -442,7 +457,16 @@ The default is 1, which just chooses single fault modes.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Block.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Block.copy" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flows</strong> – </p></li>
+<li><p><strong>args</strong> – </p></li>
+<li><p><strong>kwargs</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Block.create_hist">
@@ -453,7 +477,7 @@ A pointer to the history is then stored at self.h.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>timerange</strong> (<em>array</em>) – Numpy array of times to initialize in the dictionary.</p></li>
-<li><p><strong>track</strong> (<em>'all'</em><em> or </em><em>dict</em><em>, </em><em>'none'</em><em>)</em><em>, </em><em>optional</em>) – Which model states to track over time, which can be given as ‘all’ or a
+<li><p><strong>track</strong> (<em>'all'</em><em> or </em><em>dict</em><em>, </em><em>'none'</em><em>, </em><em>optional</em>) – Which model states to track over time, which can be given as ‘all’ or a
 dict of form {‘functions’:{‘fxn1’:’att1’}, ‘flows’:{‘flow1’:’att1’}}
 The default is ‘all’.</p></li>
 </ul>
@@ -488,12 +512,18 @@ The default is ‘all’.</p></li>
 <dt class="sig sig-object py" id="fmdtools.define.block.Block.get_rand_states">
 <span class="sig-name descname"><span class="pre">get_rand_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auto_update_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Block.get_rand_states" title="Permalink to this definition"></a></dt>
 <dd><p>Gets dict of random states from block and associated actions/components</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>auto_update_only</strong> – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Block.get_typename">
 <span class="sig-name descname"><span class="pre">get_typename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Block.get_typename" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>TODO : requires proper documentation</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.Block.m">
@@ -516,7 +546,7 @@ individually.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>time</strong> (<em>float</em>) – The current timestep.</p></li>
-<li><p><strong>fxnfaults</strong> (<em>dict</em>) – Faults to inject during this propagation step. With structure {fname:[‘fault1’, ‘fault2’…]}</p></li>
+<li><p><strong>faults</strong> (<em>dict</em>) – Faults to inject during this propagation step. With structure {fname:[‘fault1’, ‘fault2’…]}</p></li>
 <li><p><strong>disturbances</strong> (<em>dict</em>) – Variables to change during this propagation step. With structure {‘var1’:value}</p></li>
 <li><p><strong>run_stochastic</strong> (<em>bool</em>) – Whether to run stochastic behaviors or use default values. Default is False.
 Can set as ‘track_pdf’ to calculate/track the probability densities of random states over time.</p></li>
@@ -528,8 +558,8 @@ Can set as ‘track_pdf’ to calculate/track the probability densities of rando
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Block.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Block.reset" title="Permalink to this definition"></a></dt>
-<dd><p>Resets the block to the initial state with no faults. Used by default in
-derived objects when resetting the model. Requires associated flows to be cleared first.</p>
+<dd><p>reset requires flows to be cleared first. Resets the block to the initial state with no faults. Used by default
+in derived objects when resetting the model. Requires associated flows to be cleared first.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -694,7 +724,8 @@ without yet having a defined behavior for them.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Component.get_typename">
 <span class="sig-name descname"><span class="pre">get_typename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Component.get_typename" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>TODO : requires proper documentation</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.Component.m">
@@ -758,13 +789,11 @@ without yet having a defined behavior for them.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.FxnBlock.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newflows</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.FxnBlock.copy" title="Permalink to this definition"></a></dt>
-<dd><p>Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.</p>
+<dd><p>Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when
+copying the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>newflows</strong> (<em>list</em>) – list of new flow objects to be associated with the copy of the function</p></li>
-<li><p><strong>*attr</strong> (<em>any</em>) – arbitrary parameters to add (if funciton takes in more than flows e.g. design variables)</p></li>
-</ul>
+<dd class="field-odd"><p><strong>newflows</strong> (<em>list</em>) – list of new flow objects to be associated with the copy of the function</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>copy</strong> – Copy of the given function with new flows</p>
@@ -784,13 +813,14 @@ without yet having a defined behavior for them.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.FxnBlock.get_typename">
 <span class="sig-name descname"><span class="pre">get_typename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.FxnBlock.get_typename" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>TODO : requires proper documentation</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.FxnBlock.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.FxnBlock.reset" title="Permalink to this definition"></a></dt>
-<dd><p>Resets the block to the initial state with no faults. Used by default in
-derived objects when resetting the model. Requires associated flows to be cleared first.</p>
+<dd><p>reset requires flows to be cleared first. Resets the block to the initial state with no faults. Used by default
+in derived objects when resetting the model. Requires associated flows to be cleared first.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -869,7 +899,11 @@ given (to be implemented) function block. Acts as a placeholder that enables sim
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.add_flow_hist">
 <span class="sig-name descname"><span class="pre">add_flow_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Simulable.add_flow_hist" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>TODO : requires propper documentation.
+:param hist:
+:param timerange:
+:param track:</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.default_sp">
@@ -880,6 +914,14 @@ given (to be implemented) function block. Acts as a placeholder that enables sim
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.find_classification">
 <span class="sig-name descname"><span class="pre">find_classification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlhists</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Simulable.find_classification" title="Permalink to this definition"></a></dt>
 <dd><p>Placeholder for model find_classification methods (for running nominal models)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scen</strong> – </p></li>
+<li><p><strong>mdlhists</strong> – </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -890,12 +932,17 @@ given (to be implemented) function block. Acts as a placeholder that enables sim
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.get_fxns">
 <span class="sig-name descname"><span class="pre">get_fxns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Simulable.get_fxns" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>TODO : requires proper documentation</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.get_scen_rate">
 <span class="sig-name descname"><span class="pre">get_scen_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fxnname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Simulable.get_scen_rate" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>TODO : requires proper documentation
+:param fxnname:
+:param faultmode:
+:param time:</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.h">
@@ -915,7 +962,12 @@ given (to be implemented) function block. Acts as a placeholder that enables sim
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.new_params">
 <span class="sig-name descname"><span class="pre">new_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Simulable.new_params" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>TODO : requires proper documentation
+:param p:
+:param sp:
+:param r:
+:param track:</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.p">
@@ -954,9 +1006,8 @@ given (to be implemented) function block. Acts as a placeholder that enables sim
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.block.assoc_flows">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.block.</span></span><span class="sig-name descname"><span class="pre">assoc_flows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.assoc_flows" title="Permalink to this definition"></a></dt>
-<dd><p>Associates flows with with the given object (Block, ASG, etc.)</p>
-<p>Flows must be defined with the _init_ class variable pointing to the class
-to initialize (e.g., _init_flowname = FlowClass).</p>
+<dd><p>Associates flows with the given object (Block, ASG, etc.) Flows must be defined with the _init_ class variable
+pointing to the class to initialize (e.g., _init_flowname = FlowClass).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
