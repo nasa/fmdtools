@@ -253,7 +253,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>pytest_report.html</h1>
-    <p>Report generated on 19-May-2023 at 17:34:47 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <p>Report generated on 24-May-2023 at 10:22:42 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -269,7 +269,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>Python</td>
         <td>3.9.7</td></tr></table>
     <h2>Summary</h2>
-    <p>90 tests ran in 118.80 seconds. </p>
+    <p>90 tests ran in 49.39 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">21 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">69 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -285,11 +285,11 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_all_faults</td>
-          <td class="col-duration">0.77</td>
+          <td class="col-duration">0.42</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_all_faults&gt;<br/><br/>    def test_all_faults(self):<br/>        &quot;&quot;&quot; Some basic tests for propagating lists of faults in the model--<br/>        that histories have length 1, endresults have &gt;0 costs, and total costs are higher<br/>        than repairs&quot;&quot;&quot;<br/>        mdl=self.mdl<br/>        endclasses, reshists = propagate.single_faults(mdl, showprogress=False)<br/>&gt;       actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><br/>examples\eps\test_eps.py:38: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x0000028202F77EA0&gt;<br/><br/>&gt;   actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:38: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_all_faults&gt;<br/><br/>    def test_all_faults(self):<br/>        &quot;&quot;&quot; Some basic tests for propagating lists of faults in the model--<br/>        that histories have length 1, endresults have &gt;0 costs, and total costs are higher<br/>        than repairs&quot;&quot;&quot;<br/>        mdl=self.mdl<br/>        endclasses, reshists = propagate.single_faults(mdl, showprogress=False)<br/>&gt;       actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><br/>examples\eps\test_eps.py:38: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x0000018041AA1DB0&gt;<br/><br/>&gt;   actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:38: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -298,16 +298,16 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_1&gt;<br/><br/>    def test_backward_fault_prop_1(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - distributor short leads to empty battery<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;Distribute_EE&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:23: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:296: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x2820304d280 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;Distribute_EE&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Distribute_EE&#x27;</span><br/><br/>fmdtools\define\block.py:148: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_1&gt;<br/><br/>    def test_backward_fault_prop_1(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - distributor short leads to empty battery<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;Distribute_EE&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:23: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:296: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x18041b74340 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;Distribute_EE&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        TODO : requires proper documentation<br/>        Parameters<br/>        ----------<br/>        fxnname<br/>        faultmode<br/>        time<br/>    <br/>        Returns<br/>        -------<br/>    <br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Distribute_EE&#x27;</span><br/><br/>fmdtools\define\block.py:226: KeyError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_backward_fault_prop_2</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_2&gt;<br/><br/>    def test_backward_fault_prop_2(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - motor short leads to distributor short<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;EE_to_ME&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:296: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x2820304dd00 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;EE_to_ME&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;EE_to_ME&#x27;</span><br/><br/>fmdtools\define\block.py:148: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_2&gt;<br/><br/>    def test_backward_fault_prop_2(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - motor short leads to distributor short<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;EE_to_ME&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:296: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x18041b74dc0 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;EE_to_ME&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        TODO : requires proper documentation<br/>        Parameters<br/>        ----------<br/>        fxnname<br/>        faultmode<br/>        time<br/>    <br/>        Returns<br/>        -------<br/>    <br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;EE_to_ME&#x27;</span><br/><br/>fmdtools\define\block.py:226: KeyError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -316,7 +316,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_fault_app&gt;<br/><br/>    def test_fault_app(self):<br/>        &quot;&quot;&quot; Tests that the expected number of scenarios are generated for a given approach &quot;&quot;&quot;<br/>&gt;       actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><br/>examples\eps\test_eps.py:49: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x0000028203163590&gt;<br/><br/>&gt;   actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:49: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_fault_app&gt;<br/><br/>    def test_fault_app(self):<br/>        &quot;&quot;&quot; Tests that the expected number of scenarios are generated for a given approach &quot;&quot;&quot;<br/>&gt;       actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><br/>examples\eps\test_eps.py:49: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x0000018041A1C0E0&gt;<br/><br/>&gt;   actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:49: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -325,12 +325,12 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {0:{&#x27;Store_EE&#x27;:[&#x27;no_storage&#x27;], &#x27;Distribute_EE&#x27;:&#x27;short&#x27;}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\eps\test_eps.py:66: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/>mdl = EPS model at 0x28203091100 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>mfile = &#x27;eps_mdlhist.pkl&#x27;, ecfile = &#x27;eps_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {0: {&#x27;Distribute_EE&#x27;: &#x27;short&#x27;, &#x27;Store_EE&#x27;: [&#x27;no_storage&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;mult_fault&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for mult_fault, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;mult_fault&#x27;:<br/>&gt;           endresult, mdlhist=sim.propagate.mult_fault(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/><span class="error">E                                                       AttributeError: module &#x27;fmdtools.sim.propagate&#x27; has no attribute &#x27;mult_fault&#x27;</span><br/><br/>tests\common.py:142: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {0:{&#x27;Store_EE&#x27;:[&#x27;no_storage&#x27;], &#x27;Distribute_EE&#x27;:&#x27;short&#x27;}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\eps\test_eps.py:66: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/>mdl = EPS model at 0x18041bb4640 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>mfile = &#x27;eps_mdlhist.pkl&#x27;, ecfile = &#x27;eps_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {0: {&#x27;Distribute_EE&#x27;: &#x27;short&#x27;, &#x27;Store_EE&#x27;: [&#x27;no_storage&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;mult_fault&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for mult_fault, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;mult_fault&#x27;:<br/>&gt;           endresult, mdlhist=sim.propagate.mult_fault(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/><span class="error">E                                                       AttributeError: module &#x27;fmdtools.sim.propagate&#x27; has no attribute &#x27;mult_fault&#x27;</span><br/><br/>tests\common.py:142: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_nominal</td>
-          <td class="col-duration">0.05</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -343,12 +343,12 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Store_EE&#x27;, &#x27;no_storage&#x27;,0))<br/><br/>examples\eps\test_eps.py:62: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:138: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:296: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x282030917c0 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;eps&#x27;, faultmode = &#x27;Store_EE&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;eps&#x27;</span><br/><br/>fmdtools\define\block.py:148: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Store_EE&#x27;, &#x27;no_storage&#x27;,0))<br/><br/>examples\eps\test_eps.py:62: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:138: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:296: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x18041bb4880 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;eps&#x27;, faultmode = &#x27;Store_EE&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        TODO : requires proper documentation<br/>        Parameters<br/>        ----------<br/>        fxnname<br/>        faultmode<br/>        time<br/>    <br/>        Returns<br/>        -------<br/>    <br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;eps&#x27;</span><br/><br/>fmdtools\define\block.py:226: KeyError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_singlefaults</td>
-          <td class="col-duration">1.19</td>
+          <td class="col-duration">0.48</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -357,7 +357,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneTests::test_interface_values</td>
-          <td class="col-duration">5.86</td>
+          <td class="col-duration">2.98</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -366,7 +366,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneTests::test_sim_types</td>
-          <td class="col-duration">5.52</td>
+          <td class="col-duration">1.73</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -375,268 +375,268 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_app_prop_values</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_app_prop_values&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820426a940&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_app_prop_values&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041d6e700&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_cost_calc</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_cost_calc&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820426ab80&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_cost_calc&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041d6edc0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_parallelism</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_parallelism&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x282042807c0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_parallelism&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041cc9940&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_pruning</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_pruning&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x28204280640&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_pruning&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041cc94c0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_dynamic_prop_values&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x28204280a00&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_dynamic_prop_values&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041cc9880&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values_2</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_dynamic_prop_values_2&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x28204280f40&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_dynamic_prop_values_2&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041ebd040&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fmea_options</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_fmea_options&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820434d040&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_fmea_options&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041ebd100&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_model_copy_different&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x28204280a00&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_model_copy_different&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041cc9880&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_same</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_model_copy_same&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x28204280700&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_model_copy_same&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041cc9040&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_reset</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_model_reset&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x28204280640&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_model_reset&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041cc94c0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_csv</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_one_run_csv&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x282042807c0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_one_run_csv&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041cc9880&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_json</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_one_run_json&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x28204280d00&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_one_run_json&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041d6e700&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_pickle</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_one_run_pickle&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820426ab80&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_one_run_pickle&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041951040&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_pickleability</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_pickleability&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820434d280&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_pickleability&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041ebd280&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_approach</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_approach&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820434d100&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_approach&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041ebd1c0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_approach_indiv</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_approach_indiv&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820434d880&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_approach_indiv&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041ebd940&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_multfault</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_multfault&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820434d700&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_multfault&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041ebd640&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nestedapproach</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_nestedapproach&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820434d1c0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_nestedapproach&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041ebd340&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nestedapproach_indiv</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_nestedapproach_indiv&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820434dac0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_nestedapproach_indiv&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041ebdd00&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominal</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_nominal&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820316e040&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_nominal&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041c60100&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominalapproach</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_nominalapproach&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820434df40&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_nominalapproach&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041ebd040&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominalapproach_indiv</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_nominalapproach_indiv&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820316e280&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_nominalapproach_indiv&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041c60340&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_onefault</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_onefault&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820316e400&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_onefault&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041c604c0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_singlefaults</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_singlefaults&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820316e100&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_singlefaults&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041c601c0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_singlefaults_indiv</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_singlefaults_indiv&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820316eac0&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_save_load_singlefaults_indiv&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041c60b80&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_value_setting</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_value_setting&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2820426ab80&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_value_setting&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041d6ed00&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_value_setting_dict</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_value_setting_dict&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x28202d05700&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_value_setting_dict&gt;<br/><br/>    def setUp(self):<br/>        self.default_mdl = Pump()<br/>        self.mdl = Pump()<br/>&gt;       self.water_mdl = Pump(params={&#x27;cost&#x27;:{&#x27;water&#x27;}, &#x27;delay&#x27;:10, &#x27;units&#x27;:&#x27;hrs&#x27;})<br/><br/>examples\pump\test_pump.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041bb4880&gt;<br/>kwargs = {&#x27;params&#x27;: {&#x27;cost&#x27;: {&#x27;water&#x27;}, &#x27;delay&#x27;: 10, &#x27;units&#x27;: &#x27;hrs&#x27;}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;params&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump_stochastic.StochasticPumpTests testMethod=test_model_copy_different&gt;<br/><br/>    def test_model_copy_different(self):<br/>&gt;       self.check_model_copy_different(Pump(), [10,20,30], max_time=55, run_stochastic=True)<br/><br/>examples\pump\test_pump_stochastic.py:60: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:80: in check_model_copy_different<br/>    faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x0000028202DD9AE0&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>tests\common.py:80: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump_stochastic.StochasticPumpTests testMethod=test_model_copy_different&gt;<br/><br/>    def test_model_copy_different(self):<br/>&gt;       self.check_model_copy_different(Pump(), [10,20,30], max_time=55, run_stochastic=True)<br/><br/>examples\pump\test_pump_stochastic.py:60: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:80: in check_model_copy_different<br/>    faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x000001804190AD10&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>tests\common.py:80: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_same</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump_stochastic.StochasticPumpTests testMethod=test_model_copy_same&gt;<br/><br/>    def test_model_copy_same(self):<br/>&gt;       self.check_model_copy_same(Pump(), Pump(), [10,20,30], 25, max_time=55, run_stochastic=True)<br/><br/>examples\pump\test_pump_stochastic.py:58: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:25: in check_model_copy_same<br/>    faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x000002820435F680&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>tests\common.py:25: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump_stochastic.StochasticPumpTests testMethod=test_model_copy_same&gt;<br/><br/>    def test_model_copy_same(self):<br/>&gt;       self.check_model_copy_same(Pump(), Pump(), [10,20,30], 25, max_time=55, run_stochastic=True)<br/><br/>examples\pump\test_pump_stochastic.py:58: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:25: in check_model_copy_same<br/>    faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x0000018041CF8EA0&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>tests\common.py:25: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_reset</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -645,7 +645,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_approach</td>
-          <td class="col-duration">74.54</td>
+          <td class="col-duration">24.59</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -654,16 +654,16 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_safety</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump_stochastic.StochasticPumpTests testMethod=test_run_safety&gt;<br/><br/>    def test_run_safety(self):<br/>        &quot;&quot;&quot; Tests that two models with the same seed will run the same and produce the same results&quot;&quot;&quot;<br/>        for seed in [None, 1, 10, 209840]:<br/>&gt;           mdl = Pump(modelparams = {&#x27;phases&#x27;:{&#x27;start&#x27;:[0,4], &#x27;on&#x27;:[5, 49], &#x27;end&#x27;:[50,55]}, &#x27;times&#x27;:[0,20, 55], &#x27;tstep&#x27;:1,&#x27;seed&#x27;:seed})<br/><br/>examples\pump\test_pump_stochastic.py:30: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>examples\pump\pump_stochastic.py:95: in __init__<br/>    super().__init__(**kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x28204280e80&gt;<br/>kwargs = {&#x27;modelparams&#x27;: {&#x27;phases&#x27;: {&#x27;end&#x27;: [50, 55], &#x27;on&#x27;: [5, 49], &#x27;start&#x27;: [0, 4]}, &#x27;seed&#x27;: None, &#x27;times&#x27;: [0, 20, 55], &#x27;tstep&#x27;: 1}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;modelparams&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump_stochastic.StochasticPumpTests testMethod=test_run_safety&gt;<br/><br/>    def test_run_safety(self):<br/>        &quot;&quot;&quot; Tests that two models with the same seed will run the same and produce the same results&quot;&quot;&quot;<br/>        for seed in [None, 1, 10, 209840]:<br/>&gt;           mdl = Pump(modelparams = {&#x27;phases&#x27;:{&#x27;start&#x27;:[0,4], &#x27;on&#x27;:[5, 49], &#x27;end&#x27;:[50,55]}, &#x27;times&#x27;:[0,20, 55], &#x27;tstep&#x27;:1,&#x27;seed&#x27;:seed})<br/><br/>examples\pump\test_pump_stochastic.py:30: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>examples\pump\pump_stochastic.py:95: in __init__<br/>    super().__init__(**kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x18041cc94c0&gt;<br/>kwargs = {&#x27;modelparams&#x27;: {&#x27;phases&#x27;: {&#x27;end&#x27;: [50, 55], &#x27;on&#x27;: [5, 49], &#x27;start&#x27;: [0, 4]}, &#x27;seed&#x27;: None, &#x27;times&#x27;: [0, 20, 55], &#x27;tstep&#x27;: 1}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;modelparams&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nestedapproach</td>
-          <td class="col-duration">8.06</td>
+          <td class="col-duration">7.30</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -672,7 +672,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nestedapproach_indiv</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -681,7 +681,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nominalapproach</td>
-          <td class="col-duration">2.86</td>
+          <td class="col-duration">3.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -690,7 +690,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nominalapproach_indiv</td>
-          <td class="col-duration">0.07</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -699,7 +699,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_stochastic_pdf</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -708,7 +708,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/test_rover.py::RoverTests::test_obj_values</td>
-          <td class="col-duration">0.17</td>
+          <td class="col-duration">0.25</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -717,17 +717,17 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism</td>
-          <td class="col-duration">0.40</td>
+          <td class="col-duration">0.33</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_approach_parallelism&gt;<br/><br/>    def test_approach_parallelism(self):<br/>        &quot;&quot;&quot;Test whether the pump simulates the same when simulated using parallel or staged options&quot;&quot;&quot;<br/>        app = SampleApproach(self.mdl)<br/>&gt;       self.check_approach_parallelism(self.mdl, app)<br/><br/>examples\tank\test_tank.py:33: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:43: in check_approach_parallelism<br/>    endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)<br/>fmdtools\sim\propagate.py:420: in approach<br/>    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **{**kwargs, &#x27;use_end_condition&#x27;:False})<br/>fmdtools\sim\propagate.py:385: in nom_helper<br/>    result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)<br/>fmdtools\sim\propagate.py:754: in prop_one_scen<br/>    c_mdl[t]=mdl.copy()<br/>fmdtools\define\model.py:300: in copy<br/>    copy.fxns[fxnname]=fxn.copy(flows, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/>newflows = {}, args = ()<br/>kwargs = {&#x27;a&#x27;: {&#x27;reacttime&#x27;: 2}, &#x27;r&#x27;: {&#x27;seed&#x27;: 42}, &#x27;t&#x27;: {&#x27;dt&#x27;: 1.0}}<br/>cop = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/><br/>    def copy(self, newflows, *args, **kwargs):<br/>        &quot;&quot;&quot;<br/>        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.<br/>    <br/>        Parameters<br/>        ----------<br/>        newflows : list<br/>            list of new flow objects to be associated with the copy of the function<br/>        *attr : any<br/>            arbitrary parameters to add (if funciton takes in more than flows e.g. design variables)<br/>    <br/>        Returns<br/>        -------<br/>        copy : FxnBlock<br/>            Copy of the given function with new flows<br/>        &quot;&quot;&quot;<br/>        cop = super().copy(newflows, *args, **kwargs)<br/>        if hasattr(self, &#x27;c&#x27;):<br/>            cop.c = self.c.copy_with_arg(**self._args_c)<br/>        if hasattr(self, &#x27;a&#x27;):<br/>&gt;           cop.a = self.a.copy_with_arg(flows = cop.flows, **self._args_a)<br/><span class="error">E           AttributeError: &#x27;HumanASG&#x27; object has no attribute &#x27;copy_with_arg&#x27;</span><br/><br/>fmdtools\define\block.py:967: AttributeError<br/> ------------------------------Captured stdout call------------------------------ <br/>Error at t=0.0 in scenario Scenario(sequence={}, rate=1.0, name=&#x27;nominal&#x27;, times=(), time=0.0)
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_approach_parallelism&gt;<br/><br/>    def test_approach_parallelism(self):<br/>        &quot;&quot;&quot;Test whether the pump simulates the same when simulated using parallel or staged options&quot;&quot;&quot;<br/>        app = SampleApproach(self.mdl)<br/>&gt;       self.check_approach_parallelism(self.mdl, app)<br/><br/>examples\tank\test_tank.py:33: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:43: in check_approach_parallelism<br/>    endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)<br/>fmdtools\sim\propagate.py:420: in approach<br/>    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **{**kwargs, &#x27;use_end_condition&#x27;:False})<br/>fmdtools\sim\propagate.py:385: in nom_helper<br/>    result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)<br/>fmdtools\sim\propagate.py:754: in prop_one_scen<br/>    c_mdl[t]=mdl.copy()<br/>fmdtools\define\model.py:300: in copy<br/>    copy.fxns[fxnname]=fxn.copy(flows, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/>newflows = {}, args = ()<br/>kwargs = {&#x27;a&#x27;: {&#x27;reacttime&#x27;: 2}, &#x27;r&#x27;: {&#x27;seed&#x27;: 42}, &#x27;t&#x27;: {&#x27;dt&#x27;: 1.0}}<br/>cop = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/><br/>    def copy(self, newflows, *args, **kwargs):<br/>        &quot;&quot;&quot;<br/>        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when<br/>        copying the model.<br/>    <br/>        Parameters<br/>        ----------<br/>        newflows : list<br/>            list of new flow objects to be associated with the copy of the function<br/>    <br/>        Returns<br/>        -------<br/>        copy : FxnBlock<br/>            Copy of the given function with new flows<br/>        &quot;&quot;&quot;<br/>        cop = super().copy(newflows, *args, **kwargs)<br/>        if hasattr(self, &#x27;c&#x27;):<br/>            cop.c = self.c.copy_with_arg(**self._args_c)<br/>        if hasattr(self, &#x27;a&#x27;):<br/>&gt;           cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)<br/><span class="error">E           AttributeError: &#x27;HumanASG&#x27; object has no attribute &#x27;copy_with_arg&#x27;</span><br/><br/>fmdtools\define\block.py:1191: AttributeError<br/> ------------------------------Captured stdout call------------------------------ <br/>Error at t=0.0 in scenario Scenario(sequence={}, rate=1.0, name=&#x27;nominal&#x27;, times=(), time=0.0)
 <br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_comp_mode_inj</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -736,16 +736,16 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_different_components</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_different_components&gt;<br/><br/>    def test_different_components(self):<br/>        &quot;&quot;&quot; Tests that model copies have different components&quot;&quot;&quot;<br/>        mdl=Tank()<br/>&gt;       mdl_copy = mdl.copy()<br/><br/>examples\tank\test_tank.py:87: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\define\model.py:300: in copy<br/>    copy.fxns[fxnname]=fxn.copy(flows, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/>newflows = {}, args = ()<br/>kwargs = {&#x27;a&#x27;: {&#x27;reacttime&#x27;: 2}, &#x27;r&#x27;: {&#x27;seed&#x27;: 42}, &#x27;t&#x27;: {&#x27;dt&#x27;: 1.0}}<br/>cop = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/><br/>    def copy(self, newflows, *args, **kwargs):<br/>        &quot;&quot;&quot;<br/>        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when copying the model.<br/>    <br/>        Parameters<br/>        ----------<br/>        newflows : list<br/>            list of new flow objects to be associated with the copy of the function<br/>        *attr : any<br/>            arbitrary parameters to add (if funciton takes in more than flows e.g. design variables)<br/>    <br/>        Returns<br/>        -------<br/>        copy : FxnBlock<br/>            Copy of the given function with new flows<br/>        &quot;&quot;&quot;<br/>        cop = super().copy(newflows, *args, **kwargs)<br/>        if hasattr(self, &#x27;c&#x27;):<br/>            cop.c = self.c.copy_with_arg(**self._args_c)<br/>        if hasattr(self, &#x27;a&#x27;):<br/>&gt;           cop.a = self.a.copy_with_arg(flows = cop.flows, **self._args_a)<br/><span class="error">E           AttributeError: &#x27;HumanASG&#x27; object has no attribute &#x27;copy_with_arg&#x27;</span><br/><br/>fmdtools\define\block.py:967: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_different_components&gt;<br/><br/>    def test_different_components(self):<br/>        &quot;&quot;&quot; Tests that model copies have different components&quot;&quot;&quot;<br/>        mdl=Tank()<br/>&gt;       mdl_copy = mdl.copy()<br/><br/>examples\tank\test_tank.py:87: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\define\model.py:300: in copy<br/>    copy.fxns[fxnname]=fxn.copy(flows, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/>newflows = {}, args = ()<br/>kwargs = {&#x27;a&#x27;: {&#x27;reacttime&#x27;: 2}, &#x27;r&#x27;: {&#x27;seed&#x27;: 42}, &#x27;t&#x27;: {&#x27;dt&#x27;: 1.0}}<br/>cop = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/><br/>    def copy(self, newflows, *args, **kwargs):<br/>        &quot;&quot;&quot;<br/>        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when<br/>        copying the model.<br/>    <br/>        Parameters<br/>        ----------<br/>        newflows : list<br/>            list of new flow objects to be associated with the copy of the function<br/>    <br/>        Returns<br/>        -------<br/>        copy : FxnBlock<br/>            Copy of the given function with new flows<br/>        &quot;&quot;&quot;<br/>        cop = super().copy(newflows, *args, **kwargs)<br/>        if hasattr(self, &#x27;c&#x27;):<br/>            cop.c = self.c.copy_with_arg(**self._args_c)<br/>        if hasattr(self, &#x27;a&#x27;):<br/>&gt;           cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)<br/><span class="error">E           AttributeError: &#x27;HumanASG&#x27; object has no attribute &#x27;copy_with_arg&#x27;</span><br/><br/>fmdtools\define\block.py:1191: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_epc_math</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -754,43 +754,43 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_local_tstep</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_local_tstep&gt;<br/><br/>    def test_local_tstep(self):<br/>        &quot;&quot;&quot; Tests running the model with a different local timestep in the Store_Liquid function&quot;&quot;&quot;<br/>&gt;       mdl_global = Tank(modelparams = {&#x27;phases&#x27;:{&#x27;na&#x27;:[0],&#x27;operation&#x27;:[1,20]}, &#x27;times&#x27;:[0,5,10,15,20], &#x27;tstep&#x27;:1, &#x27;units&#x27;:&#x27;min&#x27;, &#x27;use_local&#x27;:False})<br/><br/>examples\tank\test_tank.py:93: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Tank object at 0x2820451f280&gt;<br/>kwargs = {&#x27;modelparams&#x27;: {&#x27;phases&#x27;: {&#x27;na&#x27;: [0], &#x27;operation&#x27;: [1, 20]}, &#x27;times&#x27;: [0, 5, 10, 15, 20], &#x27;tstep&#x27;: 1, &#x27;units&#x27;: &#x27;min&#x27;, ...}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;modelparams&#x27;</span><br/><br/>examples\tank\tank_model.py:248: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_local_tstep&gt;<br/><br/>    def test_local_tstep(self):<br/>        &quot;&quot;&quot; Tests running the model with a different local timestep in the Store_Liquid function&quot;&quot;&quot;<br/>&gt;       mdl_global = Tank(modelparams = {&#x27;phases&#x27;:{&#x27;na&#x27;:[0],&#x27;operation&#x27;:[1,20]}, &#x27;times&#x27;:[0,5,10,15,20], &#x27;tstep&#x27;:1, &#x27;units&#x27;:&#x27;min&#x27;, &#x27;use_local&#x27;:False})<br/><br/>examples\tank\test_tank.py:93: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Tank object at 0x18041f1e7c0&gt;<br/>kwargs = {&#x27;modelparams&#x27;: {&#x27;phases&#x27;: {&#x27;na&#x27;: [0], &#x27;operation&#x27;: [1, 20]}, &#x27;times&#x27;: [0, 5, 10, 15, 20], &#x27;tstep&#x27;: 1, &#x27;units&#x27;: &#x27;min&#x27;, ...}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;modelparams&#x27;</span><br/><br/>examples\tank\tank_model.py:248: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_different</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_copy_different&gt;<br/><br/>    def test_model_copy_different(self):<br/>&gt;       self.check_model_copy_different(Tank(), [5,10,15], max_time=20)<br/><br/>examples\tank\test_tank.py:26: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:80: in check_model_copy_different<br/>    faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x000002820438F040&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   AttributeError: &#x27;ImportLiquid&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>tests\common.py:80: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_copy_different&gt;<br/><br/>    def test_model_copy_different(self):<br/>&gt;       self.check_model_copy_different(Tank(), [5,10,15], max_time=20)<br/><br/>examples\tank\test_tank.py:26: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:80: in check_model_copy_different<br/>    faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x0000018043014860&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   AttributeError: &#x27;ImportLiquid&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>tests\common.py:80: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_same</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_copy_same&gt;<br/><br/>    def test_model_copy_same(self):<br/>&gt;       self.check_model_copy_same(Tank(),Tank(), [5,10,15], 10, max_time=20)<br/><br/>examples\tank\test_tank.py:24: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:25: in check_model_copy_same<br/>    faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x000002820319EDB0&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   AttributeError: &#x27;ImportLiquid&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>tests\common.py:25: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_copy_same&gt;<br/><br/>    def test_model_copy_same(self):<br/>&gt;       self.check_model_copy_same(Tank(),Tank(), [5,10,15], 10, max_time=20)<br/><br/>examples\tank\test_tank.py:24: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:25: in check_model_copy_same<br/>    faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x0000018043026A40&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   AttributeError: &#x27;ImportLiquid&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>tests\common.py:25: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_reset</td>
-          <td class="col-duration">0.05</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;<br/><br/>    def test_model_reset(self):<br/>        mdl = Tank(); mdl2 = Tank()<br/>&gt;       self.check_model_reset(mdl, mdl2, [5,10,15], max_time=20)<br/><br/>examples\tank\test_tank.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:63: in check_model_reset<br/>    faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x000002820439FD10&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   AttributeError: &#x27;ImportLiquid&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>tests\common.py:63: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;<br/><br/>    def test_model_reset(self):<br/>        mdl = Tank(); mdl2 = Tank()<br/>&gt;       self.check_model_reset(mdl, mdl2, [5,10,15], max_time=20)<br/><br/>examples\tank\test_tank.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:63: in check_model_reset<br/>    faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x00000180431FE860&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   AttributeError: &#x27;ImportLiquid&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>tests\common.py:63: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_same_rcost</td>
-          <td class="col-duration">0.17</td>
+          <td class="col-duration">0.09</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -799,7 +799,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_approach</td>
-          <td class="col-duration">0.22</td>
+          <td class="col-duration">0.14</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -808,7 +808,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_approach_indiv</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -817,16 +817,16 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_multfault</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {5:{&quot;Import_Water&quot;: [&#x27;Stuck&#x27;]},10:{&quot;Store_Water&quot;:[&quot;Leak&quot;]}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;tank_mdlhist&quot;+extension, &quot;tank_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\tank\test_tank.py:124: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_multfault&gt;<br/>mdl = Tank model at 0x2820451fac0 <br/>FUNCTIONS: <br/>import_water ImportLiquid<br/>- TransportLiquidState(amt_open=1)<br/>- TransportLiqui...ction=0)<br/>tank_sig Signal flow: SigState(indicator=0, action=0)<br/>valve2_sig Signal flow: SigState(indicator=1, action=0)<br/><br/>mfile = &#x27;tank_mdlhist.pkl&#x27;, ecfile = &#x27;tank_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {5: {&#x27;Import_Water&#x27;: [&#x27;Stuck&#x27;]}, 10: {&#x27;Store_Water&#x27;: [&#x27;Leak&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;mult_fault&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for mult_fault, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;mult_fault&#x27;:<br/>&gt;           endresult, mdlhist=sim.propagate.mult_fault(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/><span class="error">E                                                       AttributeError: module &#x27;fmdtools.sim.propagate&#x27; has no attribute &#x27;mult_fault&#x27;</span><br/><br/>tests\common.py:142: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {5:{&quot;Import_Water&quot;: [&#x27;Stuck&#x27;]},10:{&quot;Store_Water&quot;:[&quot;Leak&quot;]}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;tank_mdlhist&quot;+extension, &quot;tank_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\tank\test_tank.py:124: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_multfault&gt;<br/>mdl = Tank model at 0x18041ebd100 <br/>FUNCTIONS: <br/>import_water ImportLiquid<br/>- TransportLiquidState(amt_open=1)<br/>- TransportLiqui...ction=0)<br/>tank_sig Signal flow: SigState(indicator=0, action=0)<br/>valve2_sig Signal flow: SigState(indicator=1, action=0)<br/><br/>mfile = &#x27;tank_mdlhist.pkl&#x27;, ecfile = &#x27;tank_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {5: {&#x27;Import_Water&#x27;: [&#x27;Stuck&#x27;]}, 10: {&#x27;Store_Water&#x27;: [&#x27;Leak&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;mult_fault&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for mult_fault, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;mult_fault&#x27;:<br/>&gt;           endresult, mdlhist=sim.propagate.mult_fault(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/><span class="error">E                                                       AttributeError: module &#x27;fmdtools.sim.propagate&#x27; has no attribute &#x27;mult_fault&#x27;</span><br/><br/>tests\common.py:142: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nestedapproach</td>
-          <td class="col-duration">3.29</td>
+          <td class="col-duration">1.36</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -835,7 +835,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nestedapproach_indiv</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -844,7 +844,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominal</td>
-          <td class="col-duration">0.07</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -853,7 +853,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominalapproach</td>
-          <td class="col-duration">0.28</td>
+          <td class="col-duration">0.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -862,7 +862,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominalapproach_indiv</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -871,16 +871,16 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_onefault</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;tank_mdlhist&quot;+extension, &quot;tank_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Import_Water&#x27;, &#x27;Stuck&#x27;, 5))<br/><br/>examples\tank\test_tank.py:120: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:138: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:296: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = Tank model at 0x28205e21c40 <br/>FUNCTIONS: <br/>import_water ImportLiquid<br/>- TransportLiquidState(amt_open=1)<br/>- TransportLiqui...ction=0)<br/>tank_sig Signal flow: SigState(indicator=0, action=0)<br/>valve2_sig Signal flow: SigState(indicator=1, action=0)<br/><br/>fxnname = &#x27;tank&#x27;, faultmode = &#x27;Import_Water&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;tank&#x27;</span><br/><br/>fmdtools\define\block.py:148: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;tank_mdlhist&quot;+extension, &quot;tank_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Import_Water&#x27;, &#x27;Stuck&#x27;, 5))<br/><br/>examples\tank\test_tank.py:120: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:138: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:296: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = Tank model at 0x1804495fac0 <br/>FUNCTIONS: <br/>import_water ImportLiquid<br/>- TransportLiquidState(amt_open=1)<br/>- TransportLiqui...ction=0)<br/>tank_sig Signal flow: SigState(indicator=0, action=0)<br/>valve2_sig Signal flow: SigState(indicator=1, action=0)<br/><br/>fxnname = &#x27;tank&#x27;, faultmode = &#x27;Import_Water&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        TODO : requires proper documentation<br/>        Parameters<br/>        ----------<br/>        fxnname<br/>        faultmode<br/>        time<br/>    <br/>        Returns<br/>        -------<br/>    <br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;tank&#x27;</span><br/><br/>fmdtools\define\block.py:226: KeyError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults</td>
-          <td class="col-duration">0.89</td>
+          <td class="col-duration">0.42</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -889,7 +889,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults_indiv</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -898,11 +898,11 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">tests/test_packages.py::define_Tests::test_multiflows</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;tests.test_packages.define_Tests testMethod=test_multiflows&gt;<br/><br/>    def test_multiflows(self):<br/>&gt;       mdl = TestModel()<br/><br/>tests\test_packages.py:100: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = TestModel model at 0x282030f4ee0 <br/>FUNCTIONS: <br/>FLOWS: <br/>, kwargs = {}<br/><br/>    def __init__(self, **kwargs):<br/>        super().__init__(**kwargs)<br/>    <br/>&gt;       self.add_flow(&quot;Communications&quot;,{&quot;x&quot;:0.0, &quot;y&quot;:1.0}, fclass=CommsFlow)<br/><span class="error">E       TypeError: add_flow() got multiple values for argument &#x27;fclass&#x27;</span><br/><br/>tests\test_packages.py:60: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;tests.test_packages.define_Tests testMethod=test_multiflows&gt;<br/><br/>    def test_multiflows(self):<br/>&gt;       mdl = TestModel()<br/><br/>tests\test_packages.py:100: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = TestModel model at 0x18041be7ee0 <br/>FUNCTIONS: <br/>FLOWS: <br/>, kwargs = {}<br/><br/>    def __init__(self, **kwargs):<br/>        super().__init__(**kwargs)<br/>    <br/>&gt;       self.add_flow(&quot;Communications&quot;,{&quot;x&quot;:0.0, &quot;y&quot;:1.0}, fclass=CommsFlow)<br/><span class="error">E       TypeError: add_flow() got multiple values for argument &#x27;fclass&#x27;</span><br/><br/>tests\test_packages.py:60: TypeError<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
@@ -997,7 +997,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_blockage_results</td>
-          <td class="col-duration">0.14</td>
+          <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1015,7 +1015,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_nominal_results</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1024,7 +1024,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fault_plot</td>
-          <td class="col-duration">0.45</td>
+          <td class="col-duration">0.12</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1033,7 +1033,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_flowgraph_plot</td>
-          <td class="col-duration">0.66</td>
+          <td class="col-duration">0.25</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1042,7 +1042,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fxngraph_plot</td>
-          <td class="col-duration">0.46</td>
+          <td class="col-duration">0.12</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1051,7 +1051,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_modelgraph_plot</td>
-          <td class="col-duration">0.51</td>
+          <td class="col-duration">0.19</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1060,7 +1060,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_result_from_plot</td>
-          <td class="col-duration">0.26</td>
+          <td class="col-duration">0.09</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1069,7 +1069,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_typegraph_plot</td>
-          <td class="col-duration">0.16</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
