@@ -17,6 +17,7 @@ from fmdtools.analyze.result import load, load_folder, Result, History
 
 
 class PumpTests(unittest.TestCase, CommonTests):
+    """Overall test structure for Pump model"""
     def setUp(self):
         self.default_mdl = Pump()
         self.mdl = Pump()
