@@ -10,44 +10,59 @@ And functions:
 - :func:`load_folder`:      Loads a given folder to a Result/History
 """
 
+import numpy as np
+import pandas as pd
+import copy
+import sys
+import os
 from collections import UserDict
 from ordered_set import OrderedSet
 from fmdtools.define.common import get_var, t_key
-import numpy as np
-import copy
-import sys, os
-import pandas as pd
+
 
 def file_check(filename, overwrite):
     """Check if files exists and whether to overwrite the file"""
     if os.path.exists(filename):
-        if not overwrite: raise Exception("File already exists: "+filename)
-        else:                   
+        if not overwrite:
+            raise Exception("File already exists: "+filename)
+        else:
             print("File already exists: "+filename+", writing anyway...")
             os.remove(filename)
     if "/" in filename:
         last_split_index = filename.rfind("/")
         foldername = filename[:last_split_index]
-        if not os.path.exists(foldername): os.makedirs(foldername)
+        if not os.path.exists(foldername):
+            os.makedirs(foldername)
+
+
 def auto_filetype(filename, filetype=""):
     """Helper function that automatically determines the filetype (pickle, csv, or json) of a given filename"""
     if not filetype:
-        if '.' not in filename: raise Exception("No file extension")
-        if filename[-4:]=='.pkl':       filetype="pickle"
-        elif filename[-4:]=='.csv':     filetype="csv"     
-        elif filename[-5:]=='.json':    filetype="json"
-        else: raise Exception("Invalid File Type in: "+filename+", ensure extension is pkl, csv, or json ")
+        if '.' not in filename:
+            raise Exception("No file extension")
+        if filename[-4:] == '.pkl':
+            filetype = "pickle"
+        elif filename[-4:] == '.csv':
+            filetype = "csv"
+        elif filename[-5:] == '.json':
+            filetype = "json"
+        else:
+            raise Exception("Invalid File Type in: "+filename+", ensure extension is pkl, csv, or json ")
     return filetype
+
+
 def create_indiv_filename(filename, indiv_id, splitchar='_'):
     """Helper file that creates an individualized name for a file given the general filename and an individual id"""
     filename_parts = filename.split(".")
-    filename_parts.insert(1,'.')
-    filename_parts.insert(1,splitchar+indiv_id)   
+    filename_parts.insert(1, '.')
+    filename_parts.insert(1, splitchar+indiv_id)
     return "".join(filename_parts)
+
+
 def clean_resultdict_keys(resultdict_dirty):
     """
-    Helper function for recreating results dictionary keys (tuples) from a dictionary loaded from a file (where keys are strings)
-    (used in csv/json results)
+    Helper function for recreating results dictionary keys (tuples) from a dictionary loaded from a file (where keys are
+    strings) (used in csv/json results)
 
     Parameters
     ----------
@@ -61,19 +76,22 @@ def clean_resultdict_keys(resultdict_dirty):
     """
     resultdict = {}
     for key in resultdict_dirty:
-        newkey = tuple(key.replace("'","").replace("(","").replace(")","").split(", "))
-        if any(['t=' in strs for strs in  newkey]):
-            joinfirst = [ind for ind, strs in enumerate(newkey) if 't=' in strs][0] +1
-        else:                           joinfirst=0
-        if joinfirst==2:
+        newkey = tuple(key.replace("'", "").replace("(", "").replace(")", "").split(", "))
+        if any(['t=' in strs for strs in newkey]):
+            joinfirst = [ind for ind, strs in enumerate(newkey) if 't=' in strs][0] + 1
+        else:
+            joinfirst = 0
+        if joinfirst == 2:
             newkey = tuple([", ".join(newkey[:2])])+newkey[2:]
-        elif joinfirst>2:
+        elif joinfirst > 2:
             nomscen = newkey[:joinfirst-2]
             faultscen = tuple([", ".join(newkey[joinfirst-2:joinfirst])])
             vals = newkey[joinfirst:]
             newkey = nomscen+faultscen+vals
-        resultdict[newkey]=resultdict_dirty[key]
+        resultdict[newkey] = resultdict_dirty[key]
     return resultdict
+
+
 def load(filename, filetype="", renest_dict=True, indiv=False):
     """
     Loads a given (endclasses or mdlhists) results dictionary from a (pickle/csv/json) file.
@@ -97,40 +115,49 @@ def load(filename, filetype="", renest_dict=True, indiv=False):
         Corresponding result/hist object with data loaded from the file.
     """
     import dill, json, csv, pandas
-    if not os.path.exists(filename): raise Exception("File does not exist: "+filename)
+    if not os.path.exists(filename):
+        raise Exception("File does not exist: "+filename)
     filetype = auto_filetype(filename, filetype)
-    if filetype=='pickle':
+    if filetype == 'pickle':
         with open(filename, 'rb') as file_handle:
             resultdict = dill.load(file_handle)
         file_handle.close()
-    elif filetype=='csv': # add support for nested dict mdlhist using flatten_hist?
-        if indiv:   resulttab = pandas.read_csv(filename, skiprows=1)
-        else:           resulttab = pandas.read_csv(filename)
+    elif filetype == 'csv':  # add support for nested dict mdlhist using flatten_hist?
+        if indiv:
+            resulttab = pandas.read_csv(filename, skiprows=1)
+        else:
+            resulttab = pandas.read_csv(filename)
         resultdict = resulttab.to_dict("list")
         resultdict = clean_resultdict_keys(resultdict)
         for key in resultdict:
-            if len(resultdict[key])==1 and isinstance(resultdict[key], list):
+            if len(resultdict[key]) == 1 and isinstance(resultdict[key], list):
                 resultdict[key] = resultdict[key][0]
-            else: resultdict[key] = np.array(resultdict[key])             
-        if renest_dict: resultdict = History.fromdict(resultdict)
+            else:
+                resultdict[key] = np.array(resultdict[key])
+        if renest_dict:
+            resultdict = History.fromdict(resultdict)
         if indiv: 
             scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
             resultdict = {scenname: resultdict}
-    elif filetype==f'json':
+    elif filetype == f'json':
         with open(filename, 'r', encoding='utf8') as file_handle:
             loadeddict = json.load(file_handle)
             if indiv:   
                 key = [*loadeddict.keys()][0]
                 loadeddict = loadeddict[key]
-                loadeddict= {key+", "+innerkey:values for innerkey, values in loadeddict.items()}
+                loadeddict = {key+", "+innerkey:values for innerkey, values in loadeddict.items()}
                 resultdict = clean_resultdict_keys(loadeddict)
-            else:       resultdict = clean_resultdict_keys(loadeddict)
+            else:
+                resultdict = clean_resultdict_keys(loadeddict)
             
-            if renest_dict: resultdict = History.fromdict(resultdict)
+            if renest_dict:
+                resultdict = History.fromdict(resultdict)
         file_handle.close()
     else:
         raise Exception("Invalid File Type")
     return resultdict
+
+
 def load_folder(folder, filetype, renest_dict=True):
     """
     Loads endclass/mdlhist results from a given folder 
@@ -155,30 +182,42 @@ def load_folder(folder, filetype, renest_dict=True):
     files_toread = []
     for file in files:
         read_filetype = auto_filetype(file)
-        if read_filetype==filetype:
+        if read_filetype == filetype:
             files_toread.append(file)
     return files_toread
+
+
 def get_dict_attr(dict_in, des_class, *attr):
     """Gets attributes *attr from a given nested dict dict_in of class des_class"""
-    if len(attr)==1:    return dict_in[attr[0]]
-    else:               return get_dict_attr(des_class(dict_in[attr[0]]), *attr[1:])
+    if len(attr) == 1:
+        return dict_in[attr[0]]
+    else:
+        return get_dict_attr(des_class(dict_in[attr[0]]), *attr[1:])
     
+
 def fromdict(resultclass, inputdict):
     """Creates new history/result from given dictionary"""
     newhist = History()
     for k, val in inputdict.items():
-        if isinstance(val, dict):   newhist[k]=resultclass.fromdict(val)
-        else:                       newhist[k]=val
+        if isinstance(val, dict):
+            newhist[k] = resultclass.fromdict(val)
+        else:
+            newhist[k] = val
         return newhist
+
+
 def check_include_errors(result, to_include):
-    if type(to_include)!=str:
+    if type(to_include) != str:
         for k in to_include:
-            check_include_error(result,k)
+            check_include_error(result, k)
     else:
-        check_include_error(result,to_include)
-def check_include_error(result,to_include):
+        check_include_error(result, to_include)
+
+
+def check_include_error(result, to_include):
     if to_include not in ('all', 'default') and to_include not in result:
         raise Exception("to_include key "+to_include+" not in result keys: "+str(result.keys()))
+
 
 def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
     """
@@ -197,12 +236,15 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
     statistic, lower bound, upper bound
     """
     from scipy.stats import bootstrap
-    if 'interval' in kwargs: kwargs['confidence_level']=kwargs.pop('interval')*0.01
-    if data.count(data[0])!=len(data):
+    if 'interval' in kwargs:
+        kwargs['confidence_level'] = kwargs.pop('interval')*0.01
+    if data.count(data[0]) != len(data):
         bs = bootstrap([data], np.mean, **kwargs)
         return method(data), bs.confidence_interval.low, bs.confidence_interval.high
-    elif return_anyway: return method(data), method(data), method(data)
-    else: raise Exception("All data are the same!")
+    elif return_anyway:
+        return method(data), method(data), method(data)
+    else:
+        raise Exception("All data are the same!")
 
 
 class Result(UserDict):
@@ -228,9 +270,11 @@ class Result(UserDict):
         str_rep = ""
         for k, val in self.items():
             if isinstance(val, np.ndarray) or isinstance(val, list):
-                if type(k)==tuple: k = str(k)
+                if type(k) == tuple:
+                    k = str(k)
                 val_rep = ind*"--"+k+": "
-                if len(val_rep)>40: val_rep = val_rep[:20]
+                if len(val_rep) > 40:
+                    val_rep = val_rep[:20]
                 form = '{:>'+str(40-len(val_rep))+'}'
                 vv = form.format("array("+str(len(val))+")")
                 str_rep = str_rep+val_rep+vv+'\n'
@@ -241,23 +285,31 @@ class Result(UserDict):
                     str_rep = str_rep+val_rep
             else: 
                 val_rep = ind*"--"+k+": "
-                if len(val_rep)>40: val_rep = val_rep[:20]
+                if len(val_rep) > 40:
+                    val_rep = val_rep[:20]
                 form = '{:>'+str(40-len(val_rep))+'}'
                 vv = form.format(str(val))
                 str_rep = str_rep+val_rep+vv+'\n'
         return str_rep
+
     def all(self):
         return tuple(self.data.values())
+
     def __eq__(self, other):
-        return all([all(v==other[k]) if isinstance(v, np.ndarray) else v==other[k] for k,v in self.data.items()])
+        return all([all(v == other[k]) if isinstance(v, np.ndarray) else v == other[k] for k, v in self.data.items()])
+
     def keys(self):
         return self.data.keys()
+
     def items(self):
         return self.data.items()
+
     def values(self):
         return self.data.values()
+
     def __reduce__(self):
-        return (type(self), (), None, None, iter(self.items()))
+        return type(self), (), None, None, iter(self.items())
+
     def __getattr__(self, argstr):
         try:
             args = argstr.split(".")
@@ -267,11 +319,13 @@ class Result(UserDict):
                 return self.all_with(argstr)
             except:
                 raise AttributeError("Not in dict: "+str(argstr))
+
     def __setattr__(self, key, val):
         if key == "data":
             UserDict.__setattr__(self, key, val)
         else:
-            self.data[key]=val
+            self.data[key] = val
+
     def get(self, *argstr,  **to_include):
         """
         Provides dict-like access to the history/result across a number of arguments
@@ -291,29 +345,37 @@ class Result(UserDict):
         atts_to_get = argstr + to_include_keys(to_include)
         res = self.__class__()
         for at in atts_to_get:
-            res[at]=self.__getattr__(at)
-        if len(res)==1 and at in res:
+            res[at] = self.__getattr__(at)
+        if len(res) == 1 and at in res:
             return res[at]
         else:
             return res
+
     def all_with(self, attr):
         """Gets all values with the attribute attr"""
-        if attr in self: return self[attr]
+        if attr in self:
+            return self[attr]
         new = self.__class__()
-        for k,v in self.items():
+        for k, v in self.items():
             if k.startswith(attr+'.'):
                 new[k[len(attr)+1:]] = v
-        if len(new)>1:  return new
-        elif len(new)>0:
+        if len(new) > 1:
+            return new
+        elif len(new) > 0:
             k = [*new.keys()][0]
-            if k.endswith(attr): return new[k]
-            else:                return new
+            if k.endswith(attr):
+                return new[k]
+            else:
+                return new
+
     def fromdict(inputdict):
         return fromdict(Result, inputdict)
+
     def load(filename, filetype="", renest_dict=True, indiv=False):
         """Loads as Result using :func:`load'"""
         inputdict = load(filename, filetype="", renest_dict=True, indiv=False)
         return fromdict(Result, inputdict)
+
     def load_folder(folder, filetype, renest_dict=True):
         """Loads as History using :func:`load_folder'"""
         files_toread = load_folder(folder, filetype, renest_dict=True)
@@ -321,20 +383,23 @@ class Result(UserDict):
         for filename in files_toread:
             result.update(Result.load_folder(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
         return result
+
     def get_values(self, *values):
         """Gets a dict with all values corresponding to the strings in *values"""
         h = self.__class__()
         k_vs = [k for k in self.keys() for v in values if k.endswith(v)]
         for k in k_vs:
-            h[k]=self[k]
+            h[k] = self[k]
         return h
+
     def get_scens(self, *scens):
         """Gets a dictlike with all scenarios corresponding to the strings in *scens"""
         h = self.__class__()
         k_s = [k for k in self.keys() for s in scens if k.startswith(s) or '.'+s+'.' in k]
         for k in k_s:
-            h[k]=self[k]
+            h[k] = self[k]
         return h
+
     def get_comp_groups(self, *values, **groups):
         """
         Gets comparison groups of *values (i.e., aspects of the model) in groups
@@ -352,26 +417,32 @@ class Result(UserDict):
         group_hist : History
             Single-level history with structure {group:{scenname.valuename}}
         """
-        if not groups: groups={'default':'default'}
-        if 'time' not in values: values = values + ('time', )
+        if not groups:
+            groups = {'default':'default'}
+        if 'time' not in values:
+            values = values + ('time', )
         group_hist = self.__class__()
         for group, scens in groups.items(): 
-            if scens=='default':   scens={k.split('.')[0] for k in self.keys()}
-            elif type(scens)==str: scens=[scens]
+            if scens == 'default':
+                scens = {k.split('.')[0] for k in self.keys()}
+            elif type(scens) == str:
+                scens = [scens]
             k_vs = [k for k in self.keys() for scen in scens for v in values 
                     if k.startswith(scen) and k.endswith(v) and '.t.' not in k]
-            if len(k_vs)>0 and (group not in group_hist): 
-                group_hist[group]=self.__class__()
+            if len(k_vs) > 0 and (group not in group_hist):
+                group_hist[group] = self.__class__()
             for k in k_vs:
-                group_hist[group][k]=self[k]
-        #Sort into comparison groups
+                group_hist[group][k] = self[k]
+        # Sort into comparison groups
         return group_hist
+
     def flatten(self, newhist=False, prevname="", to_include='all'):
         """
         Recursively creates a flattened result of the given nested model history
 
         Parameters
         ----------
+        newhist : Boolean, default = false
         prevname : tuple, optional
             Current key of the flattened history (used when called recursively). The default is ().
         to_include : str/list/dict, optional
@@ -390,22 +461,29 @@ class Result(UserDict):
         check_include_errors(self, to_include)
         for att, val in self.items():
             if is_numeric(att): 
-                att=t_key(att)
-            if prevname: newname = prevname+"."+att
-            else:        newname = att
+                att = t_key(att)
+            if prevname:
+                newname = prevname+"."+att
+            else:
+                newname = att
             if isinstance(val, Result): 
                 new_to_include = get_sub_include(att, to_include)
                 if new_to_include: 
                     val.flatten(newhist, newname, new_to_include)
             elif to_include in ('all', 'default') or att in to_include: 
-                if len(newname)==1: newhist[newname[0]] = val
-                else:               newhist[newname] = val
+                if len(newname) == 1:
+                    newhist[newname[0]] = val
+                else:
+                    newhist[newname] = val
         return newhist
+
     def is_flat(self):
         """Checks if the history is flat."""
         for v in self.values():
-            if isinstance(v, Result): return False
+            if isinstance(v, Result):
+                return False
         return True
+
     def nest(self, levels=np.inf):
         """
         Re-nests a flattened result   
@@ -413,14 +491,17 @@ class Result(UserDict):
         newhist = self.__class__()
         key_options = set([h.split('.')[0] for h in self.keys()])
         for key in key_options:
-            if key in self:     newhist[key] = self[key]
+            if key in self:
+                newhist[key] = self[key]
             else:
-                subhist = self.__class__(**{histkey[len(key)+1:]:val for histkey, val in self.items() if histkey.startswith(key+".")})                       
+                subhist = self.__class__(**{histkey[len(key)+1:]: val for histkey, val in self.items() if histkey.startswith(key+".")})
                 lev = levels-1
-                if lev>0:
+                if lev > 0:
                     newhist[key] = subhist.nest(levels=lev)
-                else: newhist[key] = subhist
+                else:
+                    newhist[key] = subhist
         return newhist
+
     def get_memory(self):
         """
         Determines the memory usage of a given history and profiles by 
@@ -435,16 +516,17 @@ class Result(UserDict):
         fhist = self.flatten()
         mem_total = 0
         mem_profile = dict.fromkeys(fhist.keys())
-        for k,h in fhist.items():
+        for k, h in fhist.items():
             if np.issubdtype(h.dtype, np.number) or np.issubdtype(h.dtype, np.flexible) or np.issubdtype(h.dtype, np.bool_):
-                mem=h.nbytes
+                mem = h.nbytes
             else:
-                mem=0
+                mem = 0
                 for entry in h:
                     mem+=sys.getsizeof(entry)
             mem_total+=mem
-            mem_profile[k]=mem
+            mem_profile[k] = mem
         return mem_total, mem_profile
+
     def save(self, filename, filetype="", overwrite=False, result_id=''):
         """
         Saves a given result variable (endclasses or mdlhists) to a file filename. 
@@ -466,47 +548,55 @@ class Result(UserDict):
         
         variable = self
         filetype = auto_filetype(filename, filetype)
-        if filetype=='pickle':
+        if filetype == 'pickle':
             with open(filename, 'wb') as file_handle:
-                if result_id: variable = {result_id:variable}
+                if result_id:
+                    variable = {result_id:variable}
                 dill.dump(variable, file_handle)
-        elif filename[-4:]=='.csv': # add support for nested dict mdlhist using flatten_hist?
+        elif filename[-4:] == '.csv':  # add support for nested dict mdlhist using flatten_hist?
             variable = variable.flatten()
             with open(filename, 'w', newline='') as file_handle:
                 writer = csv.writer(file_handle)
-                if result_id: writer.writerow([result_id])
+                if result_id:
+                    writer.writerow([result_id])
                 writer.writerow(variable.keys())
                 if isinstance([*variable.values()][0], np.ndarray):
                     writer.writerows(zip(*variable.values()))
                 else:
                     writer.writerow([*variable.values()])
-        elif filename[-5:]=='.json':
+        elif filename[-5:] == '.json':
             with open(filename, 'w', encoding='utf8') as file_handle:
                 variable = variable.flatten()
                 new_variable = {}
                 for key in variable:
                     if isinstance(variable[key], np.ndarray):
-                        new_variable[str(key)] =  [var.item() for var in variable[key]]
+                        new_variable[str(key)] = [var.item() for var in variable[key]]
                     else:
-                        new_variable[str(key)] =  variable[key]
-                if result_id: new_variable = {result_id:new_variable}
+                        new_variable[str(key)] = variable[key]
+                if result_id:
+                    new_variable = {result_id:new_variable}
                 strs = json.dumps(new_variable, indent=4, sort_keys=True, separators=(',', ': '), ensure_ascii=False)
                 file_handle.write(str(strs))
         else:
             raise Exception("Invalid File Type")
         file_handle.close()
+
     def as_table(self):
         """Creates a table corresponding to the current dict structure"""
-        flatdict=self.flatten()
+        flatdict = self.flatten()
         newdict = {join_key(k):v for k,v in flatdict.items()}
         return pd.DataFrame.from_dict(newdict)
+
     def create_simple_fmea(self, *metrics):
         """Makes a simple fmea-stype table of the metrics in the endclasses 
         of a list of fault scenarios run. If metrics not provided, returns all"""
         nested = {k:{**v.endclass} for k,v in self.nest(levels=1).items()}
         tab = pd.DataFrame.from_dict(nested).transpose()
-        if not metrics: return tab
-        else:           return tab.loc[:, metrics]
+        if not metrics:
+            return tab
+        else:
+            return tab.loc[:, metrics]
+
     def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False):
         """
         Takes the expectation of numeric metrics in the result over given scenarios.
@@ -532,19 +622,21 @@ class Result(UserDict):
         newhists = {k:hist for k, hist in mh.items() if not('nominal' in k and not(with_nominal))}
         if app:
             weights = [w.rate for w in app.scenlist]
-            if with_nominal: weights.append(1)
+            if with_nominal:
+                weights.append(1)
         else: 
             weights = [1 for k in newhists]
         
         expres = self.__class__()
         for k in nomhist.keys():
             if difference_from_nominal:
-                expres[k]=np.average([nomhist[k]-hist[k] for hist in newhists.values()], 
+                expres[k] = np.average([nomhist[k]-hist[k] for hist in newhists.values()],
                                       axis=0, weights=weights)
             else:
-                expres[k]=np.average([hist[k] for hist in newhists.values()], 
+                expres[k] = np.average([hist[k] for hist in newhists.values()],
                                       axis=0, weights=weights)
         return expres
+
     def total(self, metric):
         """
         Tabulates the total (non-weighted sum) of a metric over a number of runs
@@ -560,6 +652,7 @@ class Result(UserDict):
             The total metric of the scenarios.
         """
         return sum([e for e in self.get_values(metric).values()])
+
     def state_probabilities(self, prob_key='prob', class_key='classification'):
         """
         Tabulates the probabilities of different classifications in the result.
@@ -577,38 +670,43 @@ class Result(UserDict):
             Dictionary of probabilities of different simulation classifications
 
         """
-        classifications = set([props[class_key] for k,props in self.items()])
+        classifications = set([props[class_key] for k, props in self.items()])
         probabilities = dict.fromkeys(classifications)
         for classif in classifications:
-            probabilities[classif] = sum([props[prob_key] for k,props in self.items() if classif==props[class_key]])
+            probabilities[classif] = sum([props[prob_key] for k, props in self.items() if classif == props[class_key]])
         return probabilities
+
     def expected(self, metric, prob_key='rate'):
         """Calculates the expected value of a given metric in endclasses using the rate variable in endclasses"""
         ecs = np.array([e for e in self.get_values(metric).values() if not np.isnan(e)])
         weights = np.array([e for e in self.get_values(prob_key).values() if not np.isnan(e)])
         return sum(ecs*weights)
+
     def average(self, metric, empty_as='nan'):
         """Calculates the average value of a given metric in endclasses"""
         ecs = [e for e in self.get_values(metric).values() if not np.isnan(e)]
-        if len(ecs)>0 or empty_as=='nan':   return np.mean(ecs)
-        else:                               return empty_as
+        if len(ecs) > 0 or empty_as == 'nan':
+            return np.mean(ecs)
+        else:
+            return empty_as
+
     def percent(self, metric):
         """Calculates the percentage of a given indicator variable being True in endclasses"""
         return sum([int(bool(e)) for e in self.get_values(metric).values() 
                     if not np.isnan(e)])/(len(self.get_values(metric))+1e-16)
+
     def rate(self, metric, prob_key='rate'):
         """Calculates the rate of a given indicator variable being True in endclasses using the rate variable in endclasses"""
         ecs = np.array([bool(e) for e in self.get_values(metric).values() if not np.isnan(e)])
         weights = np.array([e for e in self.get_values(prob_key).values() if not np.isnan(e)])
         return sum(ecs*weights)
+
     def end_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
         """
         Calculates the difference between the nominal and fault scenarios for a set of endclasses
 
         Parameters
         ----------
-        endclasses : dict
-            endclass dictionary for the set {scen:endclass}, where endclass is a dict of metrics
         metric : str
             metric to calculate the difference of in the endclasses
         nan_as : float, optional
@@ -622,15 +720,19 @@ class Result(UserDict):
         difference : dict
             dictionary of differences over the set of scenarios
         """
-        endclasses=self.copy()
+        endclasses = self.copy()
         nomendclass = endclasses.pop('nominal')
         if not no_diff: 
-            if as_ind:  difference = {scen:bool(nan_to_x(ec[metric], nan_as))-bool(nan_to_x(nomendclass[metric], nan_as)) for scen, ec in endclasses.items()}
-            else:       difference = {scen:nan_to_x(ec[metric], nan_as)-nan_to_x(nomendclass[metric], nan_as) for scen, ec in endclasses.items()}
+            if as_ind:
+                difference = {scen:bool(nan_to_x(ec[metric], nan_as))-bool(nan_to_x(nomendclass[metric], nan_as)) for scen, ec in endclasses.items()}
+            else:
+                difference = {scen:nan_to_x(ec[metric], nan_as)-nan_to_x(nomendclass[metric], nan_as) for scen, ec in endclasses.items()}
         else:           
             difference = {scen:nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
-            if as_ind: difference = {scen:np.sign(metric) for scen,metric in difference.items()}
+            if as_ind:
+                difference = {scen:np.sign(metric) for scen,metric in difference.items()}
         return difference
+
     def overall_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
         """
         Calculates the difference between the nominal and fault scenarios over a set of endclasses
@@ -654,19 +756,28 @@ class Result(UserDict):
         """
         return {scen:endclass.end_diff(metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff) for scen, endclass in self.items()}
         
+
 def diff(val1, val2, difftype='bool'):
     """
     Helper function for finding inconsistent states between val1, val2, with the 
     difftype option ('diff' (takes the difference), 'bool' (checks if the same), 
                      and float (checks if under the provided tolerance))
     """
-    if difftype=='diff':        return val1-val2
-    elif difftype=='bool':      return val1==val2
-    elif type(difftype)==float: return abs(val1-val2)>difftype
+    if difftype == 'diff':
+        return val1-val2
+    elif difftype == 'bool':
+        return val1 == val2
+    elif type(difftype) == float:
+        return abs(val1-val2) > difftype
+
+
 def nan_to_x(metric, x=0.0):
     """returns nan as zero if present, otherwise returns the number"""
-    if np.isnan(metric):    return x
-    else:                   return metric
+    if np.isnan(metric):
+        return x
+    else:
+        return metric
+
 
 def is_numeric(val):
     """Checks if a given value is numeric"""
@@ -675,36 +786,53 @@ def is_numeric(val):
     except:
         return type(val) in [float, bool, int]
 
+
 def join_key(k):
-    if not isinstance(k, str):  return '.'.join(k)
-    else:                       return k
+    if not isinstance(k, str):
+        return '.'.join(k)
+    else:
+        return k
+
 
 def is_known_immutable(val):
     return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
+
+
 def is_known_mutable(val):
     return type(val) in [dict, set]
 
+
 def to_include_keys(to_include):
     """Determine what dict keys to include from Result given nested to_include dictionary"""
-    if type(to_include)==str:       return [to_include]
+    if type(to_include) == str:
+        return [to_include]
     elif type(to_include) in [list, set, tuple]:
         return [to_i for to_i in to_include]
     elif type(to_include) == dict:
-        keys =[]
+        keys = []
         for k, v in to_include.items():
             add = to_include_keys(v)
             keys.extend([k+'.'+v for v in add])
         return tuple(keys)
+
+
 def get_sub_include(att, to_include):
     """Determines what attributes of att to include based on the provided dict/str/list/set to_include"""
     if type(to_include) in [list, set, tuple, str]:
-        if att in to_include:                               new_to_include = 'default'
-        elif type(to_include)==str and to_include=='all':   new_to_include = 'all'
-        elif type(to_include)==str and to_include=='default': new_to_include = 'default'
-        else:                                               new_to_include=False
-    elif type(to_include)==dict and att in to_include:      new_to_include = to_include[att]
-    else:                                                   new_to_include= False
+        if att in to_include:
+            new_to_include = 'default'
+        elif type(to_include) == str and to_include == 'all':
+            new_to_include = 'all'
+        elif type(to_include) == str and to_include == 'default':
+            new_to_include = 'default'
+        else:
+            new_to_include = False
+    elif type(to_include) == dict and att in to_include:
+        new_to_include = to_include[att]
+    else:
+        new_to_include = False
     return new_to_include
+
 
 def init_indicator_hist(obj, h, timerange, track):
     """
@@ -730,10 +858,11 @@ def init_indicator_hist(obj, h, timerange, track):
     if sub_track:
         indicators = [i[9:] for i in dir(obj) if i.startswith('indicate_')]
         if indicators:
-            h['i']= History()
+            h['i'] = History()
             for i in indicators:
                 val = getattr(obj, 'indicate_'+i)
                 h['i'].init_att(i, val, timerange, sub_track, dtype=bool)
+
 
 def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
     """
@@ -765,11 +894,14 @@ def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<
         Initialized history structure corresponding to the attribute
     """
     sub_track = get_sub_include(att, track)
-    if sub_track and hasattr(val, 'create_hist'): return val.create_hist(timerange, sub_track)
-    elif sub_track and isinstance(val, dict):     return init_dicthist(val, timerange, sub_track)
+    if sub_track and hasattr(val, 'create_hist'):
+        return val.create_hist(timerange, sub_track)
+    elif sub_track and isinstance(val, dict):
+        return init_dicthist(val, timerange, sub_track)
     elif sub_track:
         hist = History()
         hist.init_att(att, val, timerange, track, dtype, str_size)
+
 
 def init_dicthist(start_dict, timerange, track="all"):
     """
@@ -790,7 +922,7 @@ def init_dicthist(start_dict, timerange, track="all"):
     """
     hist = History()
     for att, val in start_dict.items():
-        hist.init_att(att,val, timerange, track)
+        hist.init_att(att, val, timerange, track)
     return hist
 
 
@@ -805,19 +937,28 @@ class History(Result):
     def init_att(self, att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
         sub_track = get_sub_include(att, track)
         if sub_track:
-            if timerange is None:     self[att] = [val]
-            elif type(val)==str:      self[att] = np.empty([len(timerange)], dtype=str_size)
-            elif type(val)==dict:     self[att] = init_dicthist(val, timerange, sub_track) 
-            elif dtype:               self[att] = np.empty([len(timerange)], dtype=dtype)
+            if timerange is None:
+                self[att] = [val]
+            elif type(val) == str:
+                self[att] = np.empty([len(timerange)], dtype=str_size)
+            elif type(val) == dict:
+                self[att] = init_dicthist(val, timerange, sub_track)
+            elif dtype:
+                self[att] = np.empty([len(timerange)], dtype=dtype)
             else:
-                try:                  self[att] = np.full(len(timerange), val)
-                except:               self[att] = np.empty((len(timerange),), dtype=object)
+                try:
+                    self[att] = np.full(len(timerange), val)
+                except:
+                    self[att] = np.empty((len(timerange),), dtype=object)
+
     def fromdict(inputdict):
         return fromdict(History, inputdict)
+
     def load(filename, filetype="", renest_dict=True, indiv=False):
         """Loads as History using :func:`load'"""
         inputdict = load(filename, filetype=filetype, renest_dict=renest_dict, indiv=indiv)
         return fromdict(History, inputdict)
+
     def load_folder(folder, filetype, renest_dict=True):
         """Loads as History using :func:`load_folder'"""
         files_toread = load_folder
@@ -825,13 +966,17 @@ class History(Result):
         for filename in files_toread:
             hist.update(History.load_folder(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
         return hist
+
     def copy(self):
         """Creates a new independent copy of the current history dict"""
-        newhist =History()
+        newhist = History()
         for k, v in self.items():
-            if isinstance(v, History):  newhist[k]=v.copy()
-            else:                       newhist[k]=np.copy(v)
+            if isinstance(v, History):
+                newhist[k] = v.copy()
+            else:
+                newhist[k] = np.copy(v)
         return newhist
+
     def log(self, obj, t_ind, time=None):
         """
         Updates the history from obj at the time t_ind
@@ -847,9 +992,9 @@ class History(Result):
         """
         for att, hist in self.items():
             try:
-                val=None
-                if att=='time' and time is not None:
-                    val=time
+                val = None
+                if att == 'time' and time is not None:
+                    val = time
                 elif att.startswith('i.') or '.i.' in att:
                     split_att = att.split('.')
                     i_ind = split_att.index('i')
@@ -863,17 +1008,20 @@ class History(Result):
                     fault_att = '.'.join(split_att[:faultind])
                     val = modename in get_var(obj, fault_att).faults
                 else:
-                    val= get_var(obj, att)
+                    val = get_var(obj, att)
             except: 
                 raise Exception("Unable to log att "+str(att)+" in "+str(obj.__class__.__name__)+', val='+str(val))
 
-            if type(hist)==History:             hist.log(val, t_ind)
+            if type(hist) == History:
+                hist.log(val, t_ind)
             else:
-                if is_known_mutable(val): val=copy.deepcopy(val)
-                if type(hist)==list:              hist.append(val)
+                if is_known_mutable(val):
+                    val = copy.deepcopy(val)
+                if type(hist) == list:
+                    hist.append(val)
                 elif isinstance(hist, np.ndarray):  
                     try:
-                        hist[t_ind]=val
+                        hist[t_ind] = val
                     except Exception as e:
                         obj_str = "Error logging obj "+obj.__class__.__name__+": "
                         if t_ind >= len(hist):
@@ -881,33 +1029,44 @@ class History(Result):
                                             "and simulation time settings (end condition, mdl.sp.times)") from e
                         elif not np.can_cast(type(val), type(hist[t_ind])):
                             raise Exception(obj_str+str(att)+" changed type: "+str(type(hist[t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind)) from e
-                        else: raise Exception(obj_str+"Value too large to represent: "+att+"="+str(val)) from e
+                        else:
+                            raise Exception(obj_str+"Value too large to represent: "+att+"="+str(val)) from e
+
     def cut(self, end_ind=None, start_ind=None, newcopy=False):
         """Cuts the history to a given index"""
-        if newcopy: hist = self.copy()
-        else:       hist = self
+        if newcopy:
+            hist = self.copy()
+        else:
+            hist = self
         for name, att in hist.items():
-            if isinstance(att, History): hist[name]=hist[name].cut(end_ind, start_ind, newcopy=False)
+            if isinstance(att, History):
+                hist[name] = hist[name].cut(end_ind, start_ind, newcopy=False)
             else:   
                 try:
-                    if end_ind is None:     hist[name]=att[start_ind:]  
-                    elif start_ind is None: hist[name]=att[:end_ind+1]  
-                    else:                   hist[name]=att[start_ind:end_ind+1] 
+                    if end_ind is None:
+                        hist[name] = att[start_ind:]
+                    elif start_ind is None:
+                        hist[name] = att[:end_ind+1]
+                    else:
+                        hist[name] = att[start_ind:end_ind+1]
                 except TypeError as e:
                     raise Exception("Invalid history for name "+name+" in history "+str(hist.data)) from e
         return hist 
-    def get_slice(self,t_ind=0):
+
+    def get_slice(self, t_ind=0):
         """
         Returns a dictionary of values from (flattenned) version of the history at t_ind
         """
         flathist = self.flatten()
         slice_dict = dict.fromkeys(flathist)
         for key, arr in flathist.items():
-            slice_dict[key]=flathist[key][t_ind]
+            slice_dict[key] = flathist[key][t_ind]
         return slice_dict
+
     def is_in(self, at):
         """ checks if at is in the dictionary"""
         return any([k for k in self.keys() if at in k])
+
     def get_fault_time(self, metric="earliest"):
         """
         Gets the time a fault is present in the system
@@ -923,23 +1082,30 @@ class History(Result):
             index in the history when the fault is present
         """
         flatdict = self.flatten()
-        has_faults_hist = np.prod([v for k,v in flatdict.items() if 'faults' in k], 0)
-        if metric=='earliest': 
-            return np.where(has_faults_hist==1)
-        elif metric=='latest':
-            return np.where(np.flip(has_faults_hist)==1)
-        elif metric=='total':
+        has_faults_hist = np.prod([v for k, v in flatdict.items() if 'faults' in k], 0)
+        if metric == 'earliest':
+            return np.where(has_faults_hist == 1)
+        elif metric == 'latest':
+            return np.where(np.flip(has_faults_hist) == 1)
+        elif metric == 'total':
             return np.sum(has_faults_hist)
+
     def _prep_faulty(self):
         """Helper that creates a faulty history of states from the current history"""
-        if self.is_in('faulty'):    return self.faulty.flatten()
-        else:                       return self.flatten()
+        if self.is_in('faulty'):
+            return self.faulty.flatten()
+        else:
+            return self.flatten()
+
     def _prep_nom_faulty(self, nomhist={}):
         """Helper that creates a nominal history of states from the current history"""
-        if not nomhist:         nomhist = self.nominal.flatten()
-        else:                   nomhist = nomhist.flatten()
+        if not nomhist:
+            nomhist = self.nominal.flatten()
+        else:
+            nomhist = nomhist.flatten()
         return nomhist, self._prep_faulty()
-    def get_degraded_hist(self, *attrs, nomhist={}, operator = np.prod, difftype='bool', withtime=True, withtotal=True):
+
+    def get_degraded_hist(self, *attrs, nomhist={}, operator=np.prod, difftype='bool', withtime=True, withtotal=True):
         """
         Gets history of times when the attributes *attrs deviate from their nominal values
 
@@ -968,25 +1134,31 @@ class History(Result):
         deghist : History
             History of degraded attributes
         """
-        if not attrs: attrs=self.keys()
+        if not attrs:
+            attrs = self.keys()
         
         nomhist, faulthist = self._prep_nom_faulty(nomhist)
         deghist = History()
         for att in attrs:
-            att_diff = [diff(nomhist[k],v, difftype) for k,v in faulthist.items() if att in k]
+            att_diff = [diff(nomhist[k], v, difftype) for k, v in faulthist.items() if att in k]
             if att_diff:
                 deghist[att] = operator(att_diff, 0)
-        if withtotal: deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
-        if withtime: deghist['time'] = nomhist['time']
+        if withtotal:
+            deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
+        if withtime:
+            deghist['time'] = nomhist['time']
         return deghist
+
     def get_faults_hist(self, *attrs):
-        faulthist =self._prep_faulty()
+        faulthist = self._prep_faulty()
         faults_hist = History()
-        if not attrs: attrs=self.keys()
+        if not attrs:
+            attrs = self.keys()
         for att in attrs:
-            faults_hist[att] = History({k.split('.')[-1]:v for k,v in faulthist.items() if ('faults' in k) and (att in k)})
+            faults_hist[att] = History({k.split('.')[-1]:v for k, v in faulthist.items() if ('faults' in k) and (att in k)})
         return faults_hist
-    def get_faulty_hist(self, *attrs, withtime=True, withtotal=True, operator = np.any):
+
+    def get_faulty_hist(self, *attrs, withtime=True, withtotal=True, operator=np.any):
         """
         Gets the times when the attributes *attrs have faults present
 
@@ -1006,16 +1178,18 @@ class History(Result):
         has_faults_hist : History
             History of attrs being faulty/not faulty
         """
-        faulthist =self._prep_faulty()
+        faulthist = self._prep_faulty()
         faults_hist = self.get_faults_hist(*attrs)
         has_faults_hist = History()
         for att in attrs:
             if faults_hist[att]:
                 has_faults_hist[att] = operator([*faults_hist[att].values()], 0)
-        if withtotal: has_faults_hist['total'] = np.sum([*has_faults_hist.values()], axis=0)
+        if withtotal:
+            has_faults_hist['total'] = np.sum([*has_faults_hist.values()], axis=0)
         if withtime: has_faults_hist['time'] = faulthist['time']
         return has_faults_hist
-    def get_summary(self, *attrs, operator = np.max):
+
+    def get_summary(self, *attrs, operator=np.max):
         """
         Creates summary of the history based on a given metric
 
@@ -1033,11 +1207,13 @@ class History(Result):
         """
         flathist = self.flatten()
         summary = Result()
-        if not attrs: attrs=self.keys()
+        if not attrs:
+            attrs = self.keys()
         for att in attrs:
             if att in self:
-                summary[att]=operator(self[att])
+                summary[att] = operator(self[att])
         return summary
+
     def get_fault_degradation_summary(self, *attrs):
         """
         Creates a Result with values for the *attrs that are faulty/degraded
@@ -1053,10 +1229,11 @@ class History(Result):
             Result dict with structure {'degraded':['degattrname'], 'faulty':['faultyattrname']]}
         """
         faulty_hist = self.get_faulty_hist(*attrs, withtotal=False, withtime=False)
-        faulty = [k for k,v in faulty_hist.items() if np.any(v)]
+        faulty = [k for k, v in faulty_hist.items() if np.any(v)]
         deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
-        degraded = [k for k,v in deg_hist.items() if not np.all(v)]
+        degraded = [k for k, v in deg_hist.items() if not np.all(v)]
         return Result(faulty=faulty, degraded=degraded)
+
     def get_modephases(self):
         """
         Identifies the phases of operation for the system based on its modes.
@@ -1071,32 +1248,34 @@ class History(Result):
         modephases : dict
             Dictionary of phases that the system passes through, of the form: {'fxn':{'mode1':{'phase1', 'phase2''}}}
         """
-        modephases={}
-        phases={}
+        modephases = {}
+        phases = {}
         times = self['time']
         f_hist = self.flatten()
         modehists = self.get_values('m.mode')
         for k, modehist in modehists.items():
-            if type(k)==str: k=k.split(".")
+            if type(k) == str:
+                k = k.split(".")
             fxn = k[k.index('m')-1]
-            if len(modehist)!=0:    
+            if len(modehist) != 0:
                 modes = OrderedSet(modehist)
-                modephases[fxn]=dict.fromkeys(modes)
+                modephases[fxn] = dict.fromkeys(modes)
                 phases_unsorted = dict()
                 for mode in modes:
-                    modeinds = [ind for ind,m in enumerate(modehist) if m==mode]
+                    modeinds = [ind for ind, m in enumerate(modehist) if m == mode]
                     startind = modeinds[0]
-                    phasenum = 0; phaseid=mode
+                    phasenum = 0; phaseid = mode
                     modephases[fxn][mode] = set()
                     for i, ind in enumerate(modeinds):
                         if ind+1 not in modeinds:
-                            phases_unsorted[phaseid] =[times[startind], times[ind]]
+                            phases_unsorted[phaseid] = [times[startind], times[ind]]
                             modephases[fxn][mode].add(phaseid)
-                            if i!=len(modeinds)-1: 
+                            if i != len(modeinds)-1:
                                 startind = modeinds[i+1]
-                                phasenum+=1; phaseid=mode+str(phasenum)
-                phases[fxn] = dict(sorted(phases_unsorted.items(), key = lambda item: item[1][0]))
+                                phasenum+=1; phaseid = mode+str(phasenum)
+                phases[fxn] = dict(sorted(phases_unsorted.items(), key=lambda item: item[1][0]))
         return phases, modephases
+
     def get_metric(self, value, metric=np.mean, args=(), axis=None):
         """
         Calculates a statistic of the value using a provided metric function.
@@ -1115,6 +1294,7 @@ class History(Result):
         """
         vals = self.get_values(value)
         return metric([*vals.values()], *args, axis=axis)
+
     def get_metrics(self, *values, metric=np.mean, args=(), axis=None):
         """
         Calculates a statistic of the values using a provided metric function.
@@ -1131,7 +1311,8 @@ class History(Result):
             Whether to take the metric over variables (0) or over time (1) or both (None).
             The default is None.
         """
-        if not values: values = self.keys()
+        if not values:
+            values = self.keys()
         metrics = Result()
         for value in values:
             metrics[value] = self.get_metric(value, metric=metric, args=args, axis=axis)
