@@ -285,8 +285,9 @@ def one_fault(mdl, *fxnfault, time=1, **kwargs):
     mdlhists : dict
         A dictionary of the states of the model of each fault scenario over time with structure: {'nominal':nomhist, 'faulty':faulthist}
     """
-    if len(fxnfault)==2: fxnname, fault = fxnfault
-    else:                fxnname, fault = mdl.name, fxnfault[0] 
+    if len(fxnfault)==2:  fxnname, fault = fxnfault
+    elif len(fxnfault)==3:fxnname, fault, time = fxnfault
+    else:                 fxnname, fault = mdl.name, fxnfault[0] 
     seq = create_sequence(faultseq={time:{fxnname:[fault]}})
     
     scen= SingleFaultScenario(sequence = seq,
@@ -333,7 +334,7 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
     
     if not scen: 
         if not seq: seq = create_sequence(faultseq=faultseq, disturbances=disturbances)
-        scen = Scenario(sequence=seq, rate=rate, name='faulty', times=tuple(*seq.keys()))
+        scen = Scenario(sequence=seq, rate=rate, name='faulty', times=tuple([*seq.keys()]))
     
     nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, [min(scen.sequence)], **{**sim_kwarg, 'use_end_condition':False}, **run_kwarg)
     mdl = [*mdls.values()][0]
