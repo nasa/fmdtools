@@ -13,44 +13,46 @@ from fmdtools.define.common import check_pickleability
 from fmdtools.sim.approach import SampleApproach, NominalApproach
 from tests.common import CommonTests
 import numpy as np
+from fmdtools.analyze.result import load, load_folder, Result, History
+
 
 class PumpTests(unittest.TestCase, CommonTests):
+    """Overall test structure for Pump model"""
     def setUp(self):
         self.default_mdl = Pump()
         self.mdl = Pump()
-        self.water_mdl = Pump(params={'cost':{'water'}, 'delay':10, 'units':'hrs'})
+        self.water_mdl = Pump(p={'cost':('water',), 'delay':10})
     def test_value_setting(self):
-        statenames = ['ImportEE.mode', 'Sig_1.power', 'MoveWater.eff']
+        statenames = ['import_ee.m.mode', 'sig_1.s.power', 'move_water.s.eff']
         newvalues = ['newmode', 20, 0.1]
         self.check_var_setting(self.mdl, statenames, newvalues)
     def test_value_setting_dict(self):
-        dict_to_check ={'ImportSignal.mode':'thismode', 'Wat_2.area':0.0}
+        dict_to_check ={'import_ee.m.mode':'thismode', 'wat_2.s.area':0.0}
         self.check_var_setting_dict(self.mdl, dict_to_check)
     def test_dynamic_prop_values(self):
         """Test that given fault times result in the expected water/value loss"""
         faulttimes = [10,20,30]
         for faulttime in faulttimes:
-            endresults, mdlhist = propagate.one_fault(self.water_mdl, "MoveWater", "mech_break", time=faulttime)
+            endresults, mdlhist = propagate.one_fault(self.water_mdl, "move_water", "mech_break", time=faulttime)
             expected_wcost = self.expected_water_cost(faulttime)
-            self.assertAlmostEqual(expected_wcost, endresults['cost'])
+            self.assertAlmostEqual(expected_wcost, endresults.endclass.cost)
     def test_dynamic_prop_values_2(self):
         """Test that the delayed fault behavior occurs at the time specified"""
         delays = [0, 1, 5, 10]
         for delay in delays:
-            mdl = Pump(params={'cost':{'water'}, 'delay':delay, 'units':'hrs'})
-            endresults, mdlhist = propagate.one_fault(mdl, 'ExportWater', 'block', time=25)
-            has_fault_at_time = mdlhist['faulty']['functions']['MoveWater']['faults']['mech_break'][25+delay]
+            mdl = Pump(p={'cost':('water',), 'delay':delay})
+            endresults, mdlhist = propagate.one_fault(mdl, 'export_water', 'block', time=25, track="all")
+            has_fault_at_time = mdlhist.faulty.fxns.move_water.m.faults.mech_break[25+delay]
             self.assertEqual(has_fault_at_time, 1)
-            has_fault_before_time = mdlhist['faulty']['functions']['MoveWater']['faults']['mech_break'][25+delay-1]
+            has_fault_before_time = mdlhist.faulty.fxns.move_water.m.faults.mech_break[25+delay-1]
             self.assertEqual(has_fault_before_time, 0)
     def test_app_prop_values(self):
         """Test that the delayed fault behavior occurs at the time specified (with approach)"""
-        approach = SampleApproach(self.water_mdl, faults=[('MoveWater','mech_break')], phases=['on'],defaultsamp={'samp':'evenspacing','numpts':5})
+        approach = SampleApproach(self.water_mdl, faults=[('move_water','mech_break')], phases=['on'],defaultsamp={'samp':'evenspacing','numpts':5})
         endclasses, mdlhists = propagate.approach(self.water_mdl, approach, showprogress=False)
         for scen in approach.scenlist:
-            name = scen.name
             exp_wcost = self.expected_water_cost(scen.time)
-            self.assertAlmostEqual(exp_wcost, endclasses[name]['cost'])
+            self.assertAlmostEqual(exp_wcost, endclasses.get(scen.name).endclass.cost)
     def expected_water_cost(self, faulttime):
         return (50-faulttime) * 0.3*750 
     def test_model_copy_same(self):
@@ -68,7 +70,7 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_approach_cost_calc(self):
         """Test that the (linear) resilience loss function is perfectly approximated 
         using the given sampling methods"""
-        mdl = Pump(params={'cost':{'ee', 'repair', 'water'}, 'delay':0})
+        mdl = Pump(p={'cost':('ee', 'repair', 'water'), 'delay':0})
         app_full = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
         full_util=exp_cost_quant(app_full,mdl)
         
@@ -92,9 +94,9 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_approach_pruning(self):
         """Tests that sample approach pruning places points in the center of their
         respective intervals for linear resilience loss functions."""
-        mdl = Pump(params={'cost':{'ee', 'repair', 'water'}, 'delay':0})
-        app_full = SampleApproach(mdl, defaultsamp={'samp':'fullint'})
-        app_center = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':1})
+        mdl = Pump(p={'cost':('ee', 'repair', 'water'), 'delay':0})
+        app_full = SampleApproach(mdl, phases= ["on"], defaultsamp={'samp':'fullint'})
+        app_center = SampleApproach(mdl, phases=["on"], defaultsamp={'samp':'evenspacing', 'numpts':1})
         endclasses, mdlhists = propagate.approach(mdl, app_full, showprogress=False)
         self.assertNotEqual(app_full.times, app_center.times)
         app_full.prune_scenarios(endclasses)
@@ -105,58 +107,51 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_one_run_pickle(self):
         if os.path.exists("single_fault.pkl"): os.remove("single_fault.pkl")
         
-        endresults, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
-        mdlhist_flattened = an.process.flatten_hist(mdlhist)
-        an.process.save_result(mdlhist, "single_fault.pkl")
-        mdlhist_saved = an.process.load_result("single_fault.pkl")
-        mdlhist_saved_flattened = an.process.flatten_hist(mdlhist_saved)
+        endresults, mdlhist=propagate.one_fault(self.mdl, 'export_water','block', time=20, staged=False, run_stochastic=True, sp={'seed':10})
         
-        self.assertCountEqual([*mdlhist_flattened.keys()], [*mdlhist_saved_flattened.keys()])
+        mdlhist.save("single_fault.pkl")
+        mdlhist_saved = load("single_fault.pkl", renest_dict=False)
+        self.assertCountEqual([*mdlhist.keys()], [*mdlhist_saved.keys()])
         
-        for hist_key in mdlhist_flattened: # test to see that all values of the arrays in the hist are the same
-            np.testing.assert_array_equal(mdlhist_flattened[hist_key],mdlhist_saved_flattened[hist_key])
+        for hist_key in mdlhist: # test to see that all values of the arrays in the hist are the same
+            np.testing.assert_array_equal(mdlhist[hist_key],mdlhist_saved[hist_key])
             
-        mdlhist_flattened['faulty', 'time'][0]=100
-        self.assertNotEqual(mdlhist_flattened['faulty', 'time'][0], mdlhist_saved_flattened['faulty', 'time'][0])
+        mdlhist.faulty.time[0]=100
+        self.assertNotEqual(mdlhist.faulty.time[0], mdlhist_saved.faulty.time[0])
         
         os.remove("single_fault.pkl")
         
     def test_one_run_csv(self):
         if os.path.exists("single_fault.csv"): os.remove("single_fault.csv")
-        endresults, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
-        mdlhist_flattened = an.process.flatten_hist(mdlhist)
+        endresults, mdlhist=propagate.one_fault(self.mdl, 'export_water','block', time=20, staged=False, run_stochastic=True, sp={'seed':10})
+        mdlhist.save("single_fault.csv")
+        mdlhist_saved = load("single_fault.csv", renest_dict=False, Rclass=History)
+        self.assertCountEqual([*mdlhist.keys()], [*mdlhist_saved.keys()])
         
-        an.process.save_result(mdlhist, "single_fault.csv")
-        mdlhist_saved = an.process.load_result("single_fault.csv")
-        mdlhist_saved_flattened = an.process.flatten_hist(mdlhist_saved)
-        
-        self.assertCountEqual([*mdlhist_flattened.keys()], [*mdlhist_saved_flattened.keys()])
-        for hist_key in mdlhist_flattened: # test to see that all values of the arrays in the hist are the same
-            np.testing.assert_array_equal(mdlhist_flattened[hist_key],mdlhist_saved_flattened[hist_key])
+        for hist_key in mdlhist: # test to see that all values of the arrays in the hist are the same
+            np.testing.assert_array_equal(mdlhist[hist_key],mdlhist_saved[hist_key])
         os.remove("single_fault.csv")
     def test_one_run_json(self):
         if os.path.exists("single_fault.json"): os.remove("single_fault.json")
-        endresults, mdlhist=propagate.one_fault(self.mdl, 'ExportWater','block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
-        mdlhist_flattened = an.process.flatten_hist(mdlhist)
+        endresults, mdlhist=propagate.one_fault(self.mdl, 'export_water','block', time=20, staged=False, run_stochastic=True, sp={'seed':10})
+        mdlhist.save("single_fault.json")
         
-        an.process.save_result(mdlhist, "single_fault.json")
-        mdlhist_saved = an.process.load_result("single_fault.json")
-        mdlhist_saved_flattened = an.process.flatten_hist(mdlhist_saved)
+        mdlhist_saved = load("single_fault.json", Rclass=History)
         
-        self.assertCountEqual([*mdlhist_flattened.keys()], [*mdlhist_saved_flattened.keys()])
-        for hist_key in mdlhist_flattened: # test to see that all values of the arrays in the hist are the same
-            np.testing.assert_array_equal(mdlhist_flattened[hist_key],mdlhist_saved_flattened[hist_key])
+        self.assertCountEqual([*mdlhist.keys()], [*mdlhist_saved.keys()])
+        for hist_key in mdlhist: # test to see that all values of the arrays in the hist are the same
+            np.testing.assert_array_equal(mdlhist[hist_key],mdlhist_saved[hist_key])
         os.remove("single_fault.json")
     def test_save_load_nominal(self):
         for extension in [".pkl",".csv",".json"]:
             self.check_save_load_onerun(self.mdl, "pump_mdlhist"+extension, "pump_endclass"+extension, 'nominal')
     def test_save_load_onefault(self):
         for extension in [".pkl",".csv",".json"]:
-            self.check_save_load_onerun(self.mdl, "pump_mdlhist"+extension, "pump_endclass"+extension, 'one_fault', faultscen=('ExportWater', 'block', 25))
+            self.check_save_load_onerun(self.mdl, "pump_mdlhist"+extension, "pump_endclass"+extension, 'one_fault', faultscen=('export_water', 'block', 25))
     def test_save_load_multfault(self):
         for extension in [".pkl",".csv",".json"]:
-            faultscen = {10:{"ExportWater": ['block']},20:{"MoveWater":["short"]}}
-            self.check_save_load_onerun(self.mdl, "pump_mdlhist"+extension, "pump_endclass"+extension, 'mult_fault', faultscen =faultscen )
+            faultscen = {10:{"export_water": ['block']},20:{"move_water":["short"]}}
+            self.check_save_load_onerun(self.mdl, "pump_mdlhist"+extension, "pump_endclass"+extension, 'sequence', faultscen =faultscen )
     def test_save_load_singlefaults(self):
         self.check_save_load_approach(self.mdl, "pump_mdlhists.pkl", "pump_endclasses.pkl", 'single_faults')
         self.check_save_load_approach(self.mdl, "pump_mdlhists.csv", "pump_endclasses.csv", 'single_faults')
@@ -200,7 +195,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.check_save_load_approach_indiv(self.mdl,"pump_mdlhists", "pump_endclasses", "csv", 'approach', app=app)
         self.check_save_load_approach_indiv(self.mdl,"pump_mdlhists", "pump_endclasses", "json", 'approach', app=app)
     def test_fmea_options(self):
-        app = SampleApproach(self.water_mdl, faults=[('MoveWater','mech_break')], phases=['on'],defaultsamp={'samp':'evenspacing','numpts':5})
+        app = SampleApproach(self.water_mdl, faults=[('move_water','mech_break')], phases=['on'],defaultsamp={'samp':'evenspacing','numpts':5})
         endclasses, mdlhists = propagate.approach(self.water_mdl, app, showprogress=False)
         self.check_same_fmea(app, endclasses, self.water_mdl)
         
@@ -211,15 +206,16 @@ class PumpTests(unittest.TestCase, CommonTests):
 def exp_cost_quant(approach, mdl):
     """ Calculates the expected cost of faults over a given sampling approach 
     on the given model"""
-    endclasses, mdlhists = propagate.approach(mdl, approach, showprogress=False)
-    fmea = an.tabulate.summfmea(endclasses, approach)
+    result, mdlhists = propagate.approach(mdl, approach, showprogress=False)
+    fmea = an.tabulate.summfmea(result, approach)
     util=sum(fmea['expected cost'])
     return util
 
 if __name__ == '__main__':
     unittest.main()
+    
     #suite = unittest.TestSuite()
-    #suite.addTest(PumpTests("test_value_setting"))
+    #suite.addTest(PumpTests("test_approach_cost_calc"))
     #suite.addTest(PumpTests("test_value_setting_dict"))
     #runner = unittest.TextTestRunner()
     #runner.run(suite)
