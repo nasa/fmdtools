@@ -24,13 +24,10 @@ Uses the following methods:
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-import copy  # TODO - copy not used, could be removed.
-import warnings # TODO - warnings not used, could be removed.
 from fmdtools.analyze.tabulate import metricovertime as metric_table
 from fmdtools.analyze.result import bootstrap_confidence_interval, History, to_include_keys
 from matplotlib.collections import PolyCollection
 from matplotlib.ticker import AutoMinorLocator
-from mpl_toolkits.mplot3d import Axes3D  # TODO - Axes3D not used, could be removed.
 
 plt.rcParams['pdf.fonttype'] = 42
 
