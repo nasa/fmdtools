@@ -88,103 +88,8 @@ def clean_resultdict_keys(resultdict_dirty):
             faultscen = tuple([", ".join(newkey[joinfirst-2:joinfirst])])
             vals = newkey[joinfirst:]
             newkey = nomscen+faultscen+vals
-        resultdict[newkey] = resultdict_dirty[key]
+        resultdict[newkey[0]] = resultdict_dirty[key]
     return resultdict
-
-
-def load(filename, filetype="", renest_dict=True, indiv=False):
-    """
-    Loads a given (endclasses or mdlhists) results dictionary from a (pickle/csv/json) file.
-    e.g. a file saved using process.save_result or save_args in propagate functions.
-
-    Parameters
-    ----------
-    filename : str
-        Name of the file.
-    filetype : str, optional
-        Use to specify a filetype for the file (if not included in the filename). The default is "".
-    renest_dict : bool, optional
-        Whether to return . The default is True.
-    indiv : bool, optional
-        Whether the result is an individual file (e.g. in a folder of results for a given simulation). 
-        The default is False.
-
-    Returns
-    -------
-    result : Result
-        Corresponding result/hist object with data loaded from the file.
-    """
-    import dill, json, csv, pandas
-    if not os.path.exists(filename):
-        raise Exception("File does not exist: "+filename)
-    filetype = auto_filetype(filename, filetype)
-    if filetype == 'pickle':
-        with open(filename, 'rb') as file_handle:
-            resultdict = dill.load(file_handle)
-        file_handle.close()
-    elif filetype == 'csv':  # add support for nested dict mdlhist using flatten_hist?
-        if indiv:
-            resulttab = pandas.read_csv(filename, skiprows=1)
-        else:
-            resulttab = pandas.read_csv(filename)
-        resultdict = resulttab.to_dict("list")
-        resultdict = clean_resultdict_keys(resultdict)
-        for key in resultdict:
-            if len(resultdict[key]) == 1 and isinstance(resultdict[key], list):
-                resultdict[key] = resultdict[key][0]
-            else:
-                resultdict[key] = np.array(resultdict[key])
-        if renest_dict:
-            resultdict = History.fromdict(resultdict)
-        if indiv: 
-            scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
-            resultdict = {scenname: resultdict}
-    elif filetype == f'json':
-        with open(filename, 'r', encoding='utf8') as file_handle:
-            loadeddict = json.load(file_handle)
-            if indiv:   
-                key = [*loadeddict.keys()][0]
-                loadeddict = loadeddict[key]
-                loadeddict = {key+", "+innerkey:values for innerkey, values in loadeddict.items()}
-                resultdict = clean_resultdict_keys(loadeddict)
-            else:
-                resultdict = clean_resultdict_keys(loadeddict)
-            
-            if renest_dict:
-                resultdict = History.fromdict(resultdict)
-        file_handle.close()
-    else:
-        raise Exception("Invalid File Type")
-    return resultdict
-
-
-def load_folder(folder, filetype, renest_dict=True):
-    """
-    Loads endclass/mdlhist results from a given folder 
-    (e.g., that have been saved from multi-scenario propagate methods with 'indiv':True)
-
-    Parameters
-    ----------
-    folder : str
-        Name of the folder. Must be in the current directory
-    filetype : str
-        Type of files in the folder ('pickle', 'csv', or 'json')
-    renest_dict : bool, optional
-        Whether to return result as a nested dict (as opposed to a flattenned dict). 
-        The default is True.
-
-    Returns
-    -------
-    resultdict : dict
-        endclasses/mdlhists result dictionary reconstructed by the files in the folder.
-    """
-    files = os.listdir(folder)
-    files_toread = []
-    for file in files:
-        read_filetype = auto_filetype(file)
-        if read_filetype == filetype:
-            files_toread.append(file)
-    return files_toread
 
 
 def get_dict_attr(dict_in, des_class, *attr):
@@ -371,17 +276,18 @@ class Result(UserDict):
     def fromdict(inputdict):
         return fromdict(Result, inputdict)
 
-    def load(filename, filetype="", renest_dict=True, indiv=False):
+    def load(filename, filetype="", renest_dict=False, indiv=False):
         """Loads as Result using :func:`load'"""
-        inputdict = load(filename, filetype="", renest_dict=True, indiv=False)
+        inputdict = load(filename, filetype="", renest_dict=renest_dict, indiv=indiv, Rclass=Result)
         return fromdict(Result, inputdict)
 
-    def load_folder(folder, filetype, renest_dict=True):
+    def load_folder(folder, filetype, renest_dict=False):
         """Loads as History using :func:`load_folder'"""
-        files_toread = load_folder(folder, filetype, renest_dict=True)
+        files_toread = load_folder(folder, filetype)
         result = Result()
         for filename in files_toread:
-            result.update(Result.load_folder(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
+            result.update(Result.load(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
+        if renest_dict==False: result = result.flatten()
         return result
 
     def get_values(self, *values):
@@ -954,17 +860,18 @@ class History(Result):
     def fromdict(inputdict):
         return fromdict(History, inputdict)
 
-    def load(filename, filetype="", renest_dict=True, indiv=False):
-        """Loads as History using :func:`load'"""
-        inputdict = load(filename, filetype=filetype, renest_dict=renest_dict, indiv=indiv)
+    def load(filename, filetype="", renest_dict=False, indiv=False):
+        """Loads file as History using :func:`load'"""
+        inputdict = load(filename, filetype=filetype, renest_dict=renest_dict, indiv=indiv, Rclass=History)
         return fromdict(History, inputdict)
 
-    def load_folder(folder, filetype, renest_dict=True):
-        """Loads as History using :func:`load_folder'"""
-        files_toread = load_folder
+    def load_folder(folder, filetype, renest_dict=False):
+        """Loads folder as History using :func:`load_folder'"""
+        files_toread = load_folder(folder, filetype)
         hist = History()
         for filename in files_toread:
-            hist.update(History.load_folder(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
+            hist.update(History.load(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
+        if renest_dict==False: hist = hist.flatten()
         return hist
 
     def copy(self):
@@ -1317,6 +1224,104 @@ class History(Result):
         for value in values:
             metrics[value] = self.get_metric(value, metric=metric, args=args, axis=axis)
         return metrics
+
+
+def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=History):
+    """
+    Loads a given (endclasses or mdlhists) results dictionary from a (pickle/csv/json) file.
+    e.g. a file saved using process.save_result or save_args in propagate functions.
+
+    Parameters
+    ----------
+    filename : str
+        Name of the file.
+    filetype : str, optional
+        Use to specify a filetype for the file (if not included in the filename). The default is "".
+    renest_dict : bool, optional
+        Whether to return . The default is True.
+    indiv : bool, optional
+        Whether the result is an individual file (e.g. in a folder of results for a given simulation). 
+        The default is False.
+    Rclass : class
+        Class to return (Result, History, or Dict)
+
+    Returns
+    -------
+    result : Result/History
+        Corresponding result/hist object with data loaded from the file.
+    """
+    import dill, json, pandas
+    if not os.path.exists(filename): raise Exception("File does not exist: "+filename)
+    filetype = auto_filetype(filename, filetype)
+    if filetype == 'pickle':
+        with open(filename, 'rb') as file_handle:
+            resultdict = dill.load(file_handle)
+        file_handle.close()
+    elif filetype == 'csv': # add support for nested dict mdlhist using flatten_hist?
+        if indiv:   
+            resulttab = pandas.read_csv(filename, skiprows=1)
+        else:           
+            resulttab = pandas.read_csv(filename)
+        resultdict = resulttab.to_dict("list")
+        resultdict = clean_resultdict_keys(resultdict)
+        for key in resultdict:
+            if len(resultdict[key]) == 1 and (isinstance(resultdict[key], list) or isinstance(resultdict[key], tuple)):
+                resultdict[key] = resultdict[key][0]
+            else: 
+                resultdict[key] = np.array(resultdict[key])             
+        if indiv: 
+            scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
+            resultdict = {scenname: resultdict}
+    elif filetype == 'json':
+        with open(filename, 'r', encoding='utf8') as file_handle:
+            loadeddict = json.load(file_handle)
+            if indiv:   
+                key = [*loadeddict.keys()][0]
+                loadeddict = loadeddict[key]
+                loadeddict = {key+"."+innerkey:values for innerkey, values in loadeddict.items()}
+                resultdict = clean_resultdict_keys(loadeddict)
+            else:       
+                resultdict = clean_resultdict_keys(loadeddict)
+        file_handle.close()
+    else:
+        raise Exception("Invalid File Type")
+    if Rclass not in [dict, 'dict']:
+        result = fromdict(Rclass, resultdict)
+        if renest_dict == False: result = result.flatten()
+    else: result = resultdict
+    
+    return result
+
+
+def load_folder(folder, filetype):
+    """
+    Loads endclass/mdlhist results from a given folder 
+    (e.g., that have been saved from multi-scenario propagate methods with 'indiv':True)
+
+    Parameters
+    ----------
+    folder : str
+        Name of the folder. Must be in the current directory
+    filetype : str
+        Type of files in the folder ('pickle', 'csv', or 'json')
+
+    Returns
+    -------
+    files_to_read : list
+        files to load for endclasses/mdlhists.
+    """
+    files = os.listdir(folder)
+    files_toread = []
+    for file in files:
+        read_filetype = auto_filetype(file)
+        if read_filetype == filetype:
+            files_toread.append(file)
+    return files_toread
+
+
         
-                
+
+
+
+
             

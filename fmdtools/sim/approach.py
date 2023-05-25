@@ -14,6 +14,7 @@ from fmdtools.define.common import t_key
 from .scenario import Scenario, SingleFaultScenario, JointFaultScenario, NominalScenario, ParamScenario, Injection
 import itertools
 import copy
+from warnings import warn
 
 class NominalApproach():
     """
@@ -809,7 +810,7 @@ class SampleApproach():
         if samp_size<len(self.scenlist):
             rng = np.random.default_rng(seed)
             self.scenlist = rng.choice(self.scenlist, samp_size, replace=False)
-    def prune_scenarios(self,endclasses,samptype='piecewise', threshold=0.1, sampparam={'samp':'evenspacing','numpts':1}):
+    def prune_scenarios(self,endclasses, value="cost", samptype='piecewise', threshold=0.1, sampparam={'samp':'evenspacing','numpts':1}):
         """
         Finds the best sample approach to approximate the full integral (given the approach was the full integral).
 
@@ -817,6 +818,8 @@ class SampleApproach():
         ----------
         endclasses : dict
             dict of results (cost, rate, expected cost) for the model run indexed by scenid 
+        value: str
+            balue to prune scenarios over. The default is "cost"
         samptype : str ('piecewise' or 'bestpt'), optional
             Method to use. 
             If 'bestpt', finds the point in the interval that gives the average cost. 
@@ -827,11 +830,12 @@ class SampleApproach():
         sampparam : float, optional
             If 'piecewise,' the sampparam sampparam to prune to. The default is {'samp':'evenspacing','numpts':1}, which would be a single point (optimal for linear).
         """
+        warn("Prune_scenarios may not be up-to-date, see: RAD-222")
         newscenids = dict.fromkeys(self.scenids.keys())
         newsampletimes = {key:{} for key in self.sampletimes.keys()}
         newweights = {fault:dict.fromkeys(phasetimes) for fault, phasetimes in self.weights.items()}
         for modeinphase in self.scenids:
-            costs= np.array([endclasses[scen]['cost'] for scen in self.scenids[modeinphase]])
+            costs= np.array([endclasses.get(scen).get('endclass.'+value) for scen in self.scenids[modeinphase]])
             if samptype=='bestpt':
                 errs = abs(np.mean(costs) - costs)
                 mins = np.where(errs == errs.min())[0]
@@ -863,7 +867,7 @@ class SampleApproach():
                 pts.sort()
             newscenids[modeinphase] =  [self.scenids[modeinphase][pt] for pt in pts]
             newscens = [scen for scen in self.scenlist if scen.name in newscenids[modeinphase]]
-            newweights[modeinphase[0]][modeinphase[1]] = {scen.name:weights[ind] for (ind, scen) in enumerate(newscens)}
+            newweights[modeinphase[0]][modeinphase[1]] = {scen.time:weights[ind] for (ind, scen) in enumerate(newscens)}
             newscenids[modeinphase] =  [self.scenids[modeinphase][pt] for pt in pts]
             for newscen in newscens:
                 if not newsampletimes[modeinphase[1]].get(newscen.time):
