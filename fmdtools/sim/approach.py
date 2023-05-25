@@ -830,7 +830,7 @@ class SampleApproach():
         sampparam : float, optional
             If 'piecewise,' the sampparam sampparam to prune to. The default is {'samp':'evenspacing','numpts':1}, which would be a single point (optimal for linear).
         """
-        warn("Prune_scenarios may not be up-to-date")
+        warn("Prune_scenarios may not be up-to-date, see: RAD-222")
         newscenids = dict.fromkeys(self.scenids.keys())
         newsampletimes = {key:{} for key in self.sampletimes.keys()}
         newweights = {fault:dict.fromkeys(phasetimes) for fault, phasetimes in self.weights.items()}
