@@ -21,17 +21,15 @@ Uses the following methods:
 #Author: Daniel Hulse
 #Created: November 2019 (Refactored April 2020, Feb 2022)
 
-import matplotlib.pyplot as plt
-plt.rcParams['pdf.fonttype'] = 42 
-import copy
-import warnings
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 from fmdtools.analyze.tabulate import metricovertime as metric_table
 from fmdtools.analyze.result import bootstrap_confidence_interval, History, to_include_keys
 from matplotlib.collections import PolyCollection
-import matplotlib.colors as mcolors
 from matplotlib.ticker import AutoMinorLocator
-from mpl_toolkits.mplot3d import Axes3D
+
+plt.rcParams['pdf.fonttype'] = 42
 
 
 def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={'nominal':'nominal', 'faulty':'faulty'}, 
