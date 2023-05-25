@@ -519,18 +519,20 @@ def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_
     for group, ids in grouped_scens.items():
         b=1
         for metric in metrics:
-            fmeadict[group][metric] = sum([endclasses[scenid][metric] for scenid in ids])
+            fmeadict[group][metric] = sum([endclasses.get(scenid).get('endclass.'+metric) for scenid in ids])
         for metric in weight_metrics:
-            fmeadict[group][metric] = sum([endclasses[scenid][metric]*id_weights[scenid] for scenid in ids])
+            fmeadict[group][metric] = sum([endclasses.get(scenid).get('endclass.'+metric)*id_weights[scenid] for scenid in ids])
         for metric in perc_metrics:
-            fmeadict[group][metric] = Result({scenid:endclasses[scenid] for scenid in ids}).percent(metric)
+            fmeadict[group][metric] = Result({scenid:endclasses.get(scenid) for scenid in ids}).percent(metric)
         for metric in avg_metrics:    
-            fmeadict[group][metric] = Result({scenid:endclasses[scenid] for scenid in ids}).average(metric, empty_as=empty_as)
+            fmeadict[group][metric] = Result({scenid:endclasses.get(scenid) for scenid in ids}).average(metric, empty_as=empty_as)
         for metric, to_mult in mult_metrics.items():
             if set(to_mult).intersection(weight_metrics):
-                fmeadict[group][metric] = sum([np.prod([endclasses[scenid][m] for m in to_mult])*id_weights[scenid] for scenid in ids])
+                fmeadict[group][metric] = sum([np.prod([endclasses.get(scenid).get('endclass.'+m) 
+                                                        for m in to_mult])*id_weights[scenid] for scenid in ids])
             else:
-                fmeadict[group][metric] = sum([np.prod([endclasses[scenid][m] for m in to_mult]) for scenid in ids])
+                fmeadict[group][metric] = sum([np.prod([endclasses.get(scenid).get('endclass.'+m) 
+                                                        for m in to_mult]) for scenid in ids])
     table=pd.DataFrame(fmeadict)
     table=table.transpose() 
     if sort_by not in allmetrics: sort_by = allmetrics[0]

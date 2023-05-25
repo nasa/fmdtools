@@ -26,7 +26,7 @@ from .common import get_true_fields, get_true_field, init_obj_attr, get_obj_trac
 from .time import Time
 from .mode import Mode
 from .flow import init_flow, Flow
-from fmdtools.analyze.result import History, get_sub_include, init_indicator_hist
+from fmdtools.analyze.result import Result, History, get_sub_include, init_indicator_hist
 
 
 def assoc_flows(obj, flows={}):
@@ -128,16 +128,16 @@ class Simulable(object):
 
     def add_flow_hist(self, hist, timerange, track):
         """
-        TODO : requires propper documentation.
+        Creates a history of flows for the Simulable and appends it to the History hist.
+
         Parameters
         ----------
-        hist
-        timerange
-        track
-
-        Returns
-        -------
-
+        h : History
+            History to append flow history to
+        timerange : iterable, optional
+            Time-range to initialize the history over. The default is None.
+        track : list/str/dict, optional
+            argument specifying attributes for :func:`get_sub_include'. The default is None.
         """
         flow_track = get_sub_include('flows', track)
         if flow_track:
@@ -166,28 +166,42 @@ class Simulable(object):
 
         Parameters
         ----------
-        scen     :
-        mdlhists :
+        scen     : Scenario
+            Scenario defining the model run.
+        mdlhists : History
+            History for the simulation(s)
 
         Returns
         -------
-
+        endclass: Result
+            Result dictionary with rate, cost, and expected cost values
         """
-        return {'rate': scen.rate, 'cost': 1, 'expected cost': scen.rate}
+        return Result({'rate': scen.rate, 'cost': 1, 'expected cost': scen.rate})
 
     def new_params(self, p={}, sp={}, r={}, track={}):
         """
-        TODO : requires proper documentation
+        Creates a copy of the defining parameters for use in a new Simulable
         Parameters
         ----------
-        p     :
-        sp    :
-        r     :
-        track :
+        p     : dict
+            Parameter args to update
+        sp    : dict
+            SimParam args to update
+        r     : dict
+            Rand args to update
+        track : dict
+            track kwargs to update.
 
         Returns
         -------
-
+        p     : Param
+            New Parameter
+        sp    : SimParam
+            New SimParam
+        r     : dict
+            Rand args
+        track : dict
+            track args
         """
         p = self.p.copy_with_vals(**p)
         sp = self.sp.copy_with_vals(**sp)
@@ -196,32 +210,38 @@ class Simulable(object):
         if not track:
             track = copy.deepcopy(self.track)
         return p, sp, r, track
-
+    
     def get_fxns(self):
         """
-        TODO : requires proper documentation
+        Gets the fxns associated with the given Simulable (self if FxnBlock, self.fxns if Model)
+        
         Returns
         -------
-
+        fxns: dict
+            Dict with structure {fxnname: fxnobj}
         """
         if hasattr(self, 'fxns'):
             fxns = self.fxns
         else:
             fxns = {self.name: self}
         return fxns
-
     def get_scen_rate(self, fxnname, faultmode, time):
         """
-        TODO : requires proper documentation
+        Gets the scenario rate for the given single-fault scenario.
+        
         Parameters
         ----------
-        fxnname
-        faultmode
-        time
+        fxnname: str
+            Name of the function with the fault
+        faultmode: str
+            Name of the fault mode
+        time: int
+            Time when the scenario is to occur
 
         Returns
         -------
-
+        rate: float
+            Rate of the scenario
         """
         fxn = self.get_fxns()[fxnname]
         fm = fxn.m
@@ -313,19 +333,22 @@ class Block(Simulable):
 
     def get_typename(self):
         """
-        TODO : requires proper documentation
+        Gets the name of the type (Block for Blocks)
         Returns
         -------
-
+        typename: str
+            Block
         """
         return "Block"
 
     def __repr__(self):
         """
-        TODO : Requires proper documentation
+        Provides a repl-friendly string showing the states of the Block
+        
         Returns
         -------
-
+        repr: str
+            console string
         """
         if hasattr(self, 'name'):
             fxnstr = getattr(self, 'name', '')+' '+self.__class__.__name__+'\n'
