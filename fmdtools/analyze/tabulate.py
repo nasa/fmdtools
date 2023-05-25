@@ -361,8 +361,10 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
                     factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(fault_metrics, **kwargs)
                     factor_stats= factor_stats+[factor_lb, factor_ub]
             else:                       
-                if not give_ci: factor_stats.append(np.NaN)
-                else:           factor_stats= factor_stats + [np.NaN,np.NaN,np.NaN]
+                if not give_ci:
+                    factor_stats.append(np.NaN)
+                else:
+                    factor_stats= factor_stats + [np.NaN,np.NaN,np.NaN]
         full_stats.append(factor_stats)
     if give_ci=='combined': full_stats = [[str(round(v,3))+' ('+str(round(f[i+1],3))+','+str(round(f[i+2],3))+')' for i,v in enumerate(f) if not i%3] for f in full_stats]
     if give_ci !=True: 
