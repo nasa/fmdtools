@@ -296,7 +296,7 @@ class Result(UserDict):
         return tuple(self.data.values())
 
     def __eq__(self, other):
-        return all([all(v==other[k]) if isinstance(v, np.ndarray) else v==other[k] for k,v in self.data.items()])
+        return all([all(v == other[k]) if isinstance(v, np.ndarray) else v == other[k] for k, v in self.data.items()])
 
     def keys(self):
         return self.data.keys()
@@ -308,7 +308,7 @@ class Result(UserDict):
         return self.data.values()
 
     def __reduce__(self):
-        return (type(self), (), None, None, iter(self.items()))
+        return type(self), (), None, None, iter(self.items())
 
     def __getattr__(self, argstr):
         try:
@@ -324,7 +324,7 @@ class Result(UserDict):
         if key == "data":
             UserDict.__setattr__(self, key, val)
         else:
-            self.data[key]=val
+            self.data[key] = val
 
     def get(self, *argstr,  **to_include):
         """
@@ -345,23 +345,28 @@ class Result(UserDict):
         atts_to_get = argstr + to_include_keys(to_include)
         res = self.__class__()
         for at in atts_to_get:
-            res[at]=self.__getattr__(at)
-        if len(res)==1 and at in res:
+            res[at] = self.__getattr__(at)
+        if len(res) == 1 and at in res:
             return res[at]
         else:
             return res
+
     def all_with(self, attr):
         """Gets all values with the attribute attr"""
-        if attr in self: return self[attr]
+        if attr in self:
+            return self[attr]
         new = self.__class__()
-        for k,v in self.items():
+        for k, v in self.items():
             if k.startswith(attr+'.'):
                 new[k[len(attr)+1:]] = v
-        if len(new)>1:  return new
-        elif len(new)>0:
+        if len(new) > 1:
+            return new
+        elif len(new) > 0:
             k = [*new.keys()][0]
-            if k.endswith(attr): return new[k]
-            else:                return new
+            if k.endswith(attr):
+                return new[k]
+            else:
+                return new
 
     def fromdict(inputdict):
         return fromdict(Result, inputdict)
@@ -668,7 +673,7 @@ class Result(UserDict):
         classifications = set([props[class_key] for k, props in self.items()])
         probabilities = dict.fromkeys(classifications)
         for classif in classifications:
-            probabilities[classif] = sum([props[prob_key] for k, props in self.items() if classif==props[class_key]])
+            probabilities[classif] = sum([props[prob_key] for k, props in self.items() if classif == props[class_key]])
         return probabilities
 
     def expected(self, metric, prob_key='rate'):
@@ -702,8 +707,6 @@ class Result(UserDict):
 
         Parameters
         ----------
-        endclasses : dict
-            endclass dictionary for the set {scen:endclass}, where endclass is a dict of metrics
         metric : str
             metric to calculate the difference of in the endclasses
         nan_as : float, optional
@@ -765,7 +768,7 @@ def diff(val1, val2, difftype='bool'):
     elif difftype == 'bool':
         return val1 == val2
     elif type(difftype) == float:
-        return abs(val1-val2)>difftype
+        return abs(val1-val2) > difftype
 
 
 def nan_to_x(metric, x=0.0):
@@ -1269,8 +1272,8 @@ class History(Result):
                             modephases[fxn][mode].add(phaseid)
                             if i != len(modeinds)-1:
                                 startind = modeinds[i+1]
-                                phasenum+=1; phaseid=mode+str(phasenum)
-                phases[fxn] = dict(sorted(phases_unsorted.items(), key = lambda item: item[1][0]))
+                                phasenum+=1; phaseid = mode+str(phasenum)
+                phases[fxn] = dict(sorted(phases_unsorted.items(), key=lambda item: item[1][0]))
         return phases, modephases
 
     def get_metric(self, value, metric=np.mean, args=(), axis=None):
