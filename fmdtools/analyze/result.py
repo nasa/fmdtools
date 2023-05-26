@@ -102,13 +102,13 @@ def get_dict_attr(dict_in, des_class, *attr):
 
 def fromdict(resultclass, inputdict):
     """Creates new history/result from given dictionary"""
-    newhist = History()
+    newhist = resultclass()
     for k, val in inputdict.items():
         if isinstance(val, dict):
             newhist[k] = resultclass.fromdict(val)
         else:
             newhist[k] = val
-        return newhist
+    return newhist
 
 
 def check_include_errors(result, to_include):
