@@ -49,6 +49,8 @@ class Rand(dataobject, mapping=True):
         self.rng = np.random.default_rng(self.seed)
         if 's' in self.__fields__:
             self.s.set_atts(**s_kwargs)
+        if self.seed==None:
+            raise Exception("Invalid seed: None")
     def get_rand_states(self, auto_update_only=False):
         rand_states = asdict(self.s)
         if auto_update_only:
