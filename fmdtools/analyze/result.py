@@ -1011,6 +1011,7 @@ class History(Result):
         else:
             nomhist = nomhist.flatten()
         return nomhist, self._prep_faulty()
+    
 
     def get_degraded_hist(self, *attrs, nomhist={}, operator=np.prod, difftype='bool', withtime=True, withtotal=True):
         """
@@ -1020,8 +1021,8 @@ class History(Result):
         ----------
         *attrs : names of attributes
             Names to check (e.g., `flow_1`, `fxn_2`)
-            nomhist : History, optional
-                Nominal history to compare against (otherwise uses internal nomhist, if available)
+        nomhist : History, optional
+            Nominal history to compare against (otherwise uses internal nomhist, if available)
         operator : function
             Method of combining multiple degraded values. The default is np.prod
         difftype : 'bool'/'diff'/float
