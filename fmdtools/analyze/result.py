@@ -630,11 +630,11 @@ class Result(UserDict):
         nomendclass = endclasses.pop('nominal')
         if not no_diff: 
             if as_ind:
-                difference = {scen:bool(nan_to_x(ec[metric], nan_as))-bool(nan_to_x(nomendclass[metric], nan_as)) for scen, ec in endclasses.items()}
+                difference = {scen:bool(nan_to_x(ec.endclass[metric], nan_as))-bool(nan_to_x(nomendclass[metric], nan_as)) for scen, ec in endclasses.items()}
             else:
-                difference = {scen:nan_to_x(ec[metric], nan_as)-nan_to_x(nomendclass[metric], nan_as) for scen, ec in endclasses.items()}
+                difference = {scen:nan_to_x(ec.endclass[metric], nan_as)-nan_to_x(nomendclass[metric], nan_as) for scen, ec in endclasses.items()}
         else:           
-            difference = {scen:nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
+            difference = {scen:nan_to_x(ec.endclass[metric], nan_as) for scen, ec in endclasses.items()}
             if as_ind:
                 difference = {scen:np.sign(metric) for scen,metric in difference.items()}
         return difference
