@@ -19,7 +19,7 @@ import warnings
 import time
 from recordclass import asdict
 
-class ProblemInterface(): 
+class ProblemInterface:
     """
     Interfaces for resilience optimization problems. 
     
@@ -208,6 +208,8 @@ class ProblemInterface():
             default type of objective: `vars`, `endclass`, or `external`. Default is 'endclass'
         t : int (optional)
             default time to get objective: 'end' or set time t
+        obj_const: str (optional)
+            default value : objectives
         agg : tuple
             Specifies the aggregation of the objective/constraint:
             - for objectives: ('+'/'-','sum'/'difference'/'mult'/'max'/'min'), specifying 
@@ -293,14 +295,20 @@ class ProblemInterface():
             constraintname = variablename
         """
         self.add_objectives(simname, *args, objtype=objtype, t=t, obj_const='constraints', agg=threshold, **kwargs)
-    def _get_var_obj_time(self, simname):
+
+    def _get_var_obj_time(self):
         var_times = [v[3] for v in self.variables]
-        if 'start' in var_times:    var_time=0
-        else:                       var_time = min(var_times) 
+        if 'start' in var_times:
+            var_time = 0
+        else:
+            var_time = min(var_times)
         obj_times = [v[3] for v in [*self.objectives.values(),*self.constraints.values()] if v[3]!='na']
-        if 'end' in obj_times:      obj_time=self.mdl.sp.times[-1]
-        else:                       obj_time=max(obj_times)
+        if 'end' in obj_times:
+            obj_time = self.mdl.sp.times[-1]
+        else:
+            obj_time = max(obj_times)
         return var_time, obj_time
+
     def _prep_single_sim(self, simname, x):
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
@@ -767,7 +775,6 @@ class ProblemInterface():
     def show_architecture(self):
         #TODO: leverage Graph to draw this
         fig = plt.figure()
-        edge_labels = nx.get_edge_attributes(self.sim_graph, "label")
         pos=nx.planar_layout(self.sim_graph)
         nx.draw(self.sim_graph, with_labels=True, pos=pos)
         nx.draw_networkx_edge_labels(self.sim_graph, pos, edge_labels=nx.get_edge_attributes(self.sim_graph, "label"))
