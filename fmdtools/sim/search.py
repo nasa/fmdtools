@@ -900,10 +900,14 @@ class DynamicInterface():
         end : bool
             Whether the simulation is finished
         """
-        if self.t>=self.t_max:    end = True
-        elif external_condition:  end = True
-        else:                     end = prop.check_end_condition(self.mdl, self.use_end_condition, self.t)
-        if end: prop.cut_mdlhist(self.log, self.t_ind)
+        if self.t> = self.t_max:
+            end = True
+        elif external_condition:
+            end = True
+        else:
+            end = prop.check_end_condition(self.mdl, self.use_end_condition, self.t)
+        if end:
+            prop.cut_mdlhist(self.log, self.t_ind)
         return end
     
                 
