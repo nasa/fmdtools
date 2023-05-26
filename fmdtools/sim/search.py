@@ -823,7 +823,7 @@ class DynamicInterface():
             time index in log
         desired_result : list
             variables to get from the model at each time-step
-        log : dict
+        hist : History
             mdlhist for simulation
     """
     def __init__(self, mdl, mdl_kwargs={}, t_max=False, track="all", run_stochastic="track_pdf", desired_result=[], use_end_condition=None):
@@ -854,7 +854,10 @@ class DynamicInterface():
         if type(desired_result)==str:   self.desired_result=[desired_result]
         else:                           self.desired_result = desired_result
         self.mdl = mdl.new_with_params(**mdl_kwargs)
-        self.log = prop.init_mdlhist(mdl, np.arange(self.t, self.t_max+2*mdl.tstep, self.mdl.tstep), track=track)
+        timerange= np.arange(self.t, self.t_max+2*mdl.sp.dt, mdl.sp.dt)
+        self.hist = mdl.create_hist(timerange, track)
+        if 'time' not in self.hist: 
+            self.hist.init_att('time', timerange[0], timerange=timerange, track='all', dtype=float)
         self.run_stochastic=run_stochastic
         self.use_end_condition = use_end_condition
     def update(self, seed={}, faults={}, disturbances={}):
@@ -876,14 +879,14 @@ class DynamicInterface():
             dictionary of returns with values corresponding to desired_result
         """
         if seed: self.mdl.update_seed(seed)
-        prop.propagate(self.mdl,self.t, fxnfaults=faults, disturbances=disturbances, run_stochastic=self.run_stochastic)
-        prop.update_mdlhist(self.mdl, self.log, self.t_ind)
+        self.mdl.propagate(self.t, fxnfaults=faults, disturbances=disturbances, run_stochastic=self.run_stochastic)
+        self.hist.log(self.mdl, self.t_ind, time=self.t)
         
         returns = {}
         for result in self.desired_result:      returns[result] = self.mdl.get_vars(result)
         if self.run_stochastic=="track_pdf":    returns['pdf'] = self.mdl.return_probdens()
 
-        self.t += self.mdl.tstep
+        self.t += self.mdl.sp.dt
         self.t_ind +=1
         if returns: return returns
     def check_sim_end(self, external_condition=False):
@@ -903,7 +906,8 @@ class DynamicInterface():
         if self.t>=self.t_max:    end = True
         elif external_condition:  end = True
         else:                     end = prop.check_end_condition(self.mdl, self.use_end_condition, self.t)
-        if end: prop.cut_mdlhist(self.log, self.t_ind)
+        if end: 
+            self.hist.cut(self.t_ind)
         return end
     
                 
