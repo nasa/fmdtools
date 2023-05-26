@@ -217,6 +217,7 @@ if __name__ == '__main__':
     #suite = unittest.TestSuite()
     #suite.addTest(PumpTests("test_approach_cost_calc"))
     #suite.addTest(PumpTests("test_value_setting_dict"))
+    #suite.addTest(PumpTests("test_one_run_csv"))
     #runner = unittest.TextTestRunner()
     #runner.run(suite)
 
