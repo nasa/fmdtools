@@ -310,19 +310,28 @@ class ProblemInterface:
         return var_time, obj_time
 
     def _prep_single_sim(self, simname, x):
+        # Get variable and objective times for the simulation
         var_time, obj_time = self._get_var_obj_time(simname)
+        # Get keyword arguments for the simulation
         kwar = self.simulations[simname][2]
+        # Check if a new model is needed and create it
         mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time,  default_p = kwar.get('p', {}))
+        # Prepare nominal values, scenarios, and other variables using prop.nom_helper()
         result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}, 'use_end_condition':False})
         if kwar.get('sequence', False):
-            mdl_s = mdl.new_with_params()
+            # Create a new model and scenario for sequence simulation
             scen= Scenario(rate=1.0, sequence=kwar['sequence'])
             kwargs = {**kwar, 'desired_result':{}, 'staged':False}
             kwargs.pop("sequence")
+            # Perform propagation for the scenario
             _, prevhist, c_mdls, _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
-        else: prevhist = nomhist; mdl=mdl
+        else:
+            # Use nominal history if sequence simulation is not required
+            prevhist = nomhist; mdl=mdl
+        # Store simulation data in the _sims dictionary
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhist':prevhist, 'obj_time': obj_time, 'mdl':mdl, 'c_mdls':c_mdls}
-    def _prep_multi_sim(self, simname, x):
+
+   def _prep_multi_sim(self, simname, x):
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
         mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_p = kwar.get('p', {}))
