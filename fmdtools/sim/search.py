@@ -359,6 +359,8 @@ class ProblemInterface:
             c_mdls['nominal']=c_mdls_nom
         self.update_scenlist(simname, scenlist)
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhists':prevhists, 'obj_time': obj_time, 'mdl':c_mdls_nom[var_time], 'c_mdls':c_mdls}
+
+
     def _check_new_mdl(self,simname, var_time, mdl, x, obj_time, staged=False, default_p={}):
         if var_time==0 or not staged: # set model parameters that are a part of the sim
             paramvars = self.var_mapping[simname].get('param',{'param':{}})
@@ -370,6 +372,7 @@ class ProblemInterface:
             
         prop.init_histrange(mdl, var_time, staged, "all", "all")
         return mdl
+
     def _run_single_sim(self, simname, x):
         sim = self._sims[simname]
         var_time, prevhist, nomhist, obj_time, mdl, c_mdl = sim['var_time'], sim['prevhist'], sim['nomhist'], sim['obj_time'], sim['mdl'], sim['c_mdls']
