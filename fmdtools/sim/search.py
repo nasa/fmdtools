@@ -646,19 +646,20 @@ class ProblemInterface():
         vars_to_plot = self._get_plot_vars(simname, self.variables)
         all_to_plot = {**objs_to_plot, **vars_to_plot}
         
-        fxnflowvals = History({tuple(objname.split(".")):'all' for objname in all_to_plot.values()}).nest()
+        vals = [objname for objname in all_to_plot.values()]
             
         if self.simulations[simname][0]=='multi':      f_times = {get_text_time(t)  for seq in self.simulations[simname][1][0] for t in seq['sequence'].keys()}
         elif self.simulations[simname][0]=='single':   f_times = {get_text_time(t) for t in self.simulations[simname][2]['sequence'].keys()}
         
-        fig, axs = plot.mdlhists(self._sims[simname]['mdlhists'], fxnflowvals=fxnflowvals, time_slice=f_times, **kwargs)
+        hist = History(self._sims[simname]['mdlhists']).flatten()
+        fig, axs = plot.hist(hist, *vals, time_slice=f_times, **kwargs)
         
         vars_ordered = [".".join(ax.get_title().split(": ")) for ax in axs]
         rev_all_to_plot = {v:k for k,v in all_to_plot.items()}
         objnames_ordered = [rev_all_to_plot[v] for v in vars_ordered if v in rev_all_to_plot]
         
         vartimes = self._get_var_times()
-        objcontimes = self._get_plot_times(simname, {**self.objectives, **self.constraints}, self._sims[simname]['mdlhists']['faulty']['time'][-1])
+        objcontimes = self._get_plot_times(simname, {**self.objectives, **self.constraints}, self._sims[simname]['mdlhists']['faulty'].time[-1])
         times = {**vartimes, **objcontimes}
         current_vars = self.get_var_obj_con()
         for i, val in enumerate(objnames_ordered):
