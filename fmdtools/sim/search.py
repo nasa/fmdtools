@@ -271,6 +271,7 @@ class ProblemInterface:
     def _make_nested_dict(self, *args):
         if len(args)==1:    return args[0]
         else:               return {args[0]:self._make_nested_dict(*args[1:])}
+
     def add_constraints(self, simname, *args, objtype='endclass', t='end', threshold=('less', 0.0), **kwargs):
         """
         Adds constraints to the given problem.
