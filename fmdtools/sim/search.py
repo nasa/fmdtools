@@ -320,6 +320,7 @@ class ProblemInterface:
         # Prepare nominal values, scenarios, and other variables using prop.nom_helper()
         result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}, 'use_end_condition':False})
         if kwar.get('sequence', False):
+            mdl_s = mdl.new_with_params()
             # Create a new model and scenario for sequence simulation
             scen= Scenario(rate=1.0, sequence=kwar['sequence'])
             kwargs = {**kwar, 'desired_result':{}, 'staged':False}
