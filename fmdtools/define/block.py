@@ -836,7 +836,7 @@ class ASG(dataobject, mapping=True):
         if self.state_rep == 'finite-state' and len(self.active_actions) > 1:
             raise Exception("Cannot have more than one initial action with finite-state representation")
 
-    def add_flow(self, flowname, fclass=Flow, p={}, s={}, flowtype=''):
+    def add_flow(self, flowname, fclass=Flow, p={}, s={}):
         """
         Adds a flow with given attributes to ASG. Used to enable a flexible
         internal flow architecture in the ASG.
@@ -853,8 +853,6 @@ class ASG(dataobject, mapping=True):
             Parameter dictionary to instantiate the flow with
         s : dict, optional
             State dictionary to overwrite Flow default state values with
-        flowtype : str, optional
-            Denotes type for class (e.g. 'energy,' 'material,', 'signal')
         """
         if not getattr(self, 'is_copy', False):
             self.flows[flowname] = init_flow(flowname, fclass, p=p, s=s)
@@ -1048,7 +1046,7 @@ class FxnBlock(Block):
     Superclass class for functions which is a special type of Block\
     with c and a attributes for CompArch and ASGs, as well as a defined method for propagation
     """
-    def __init__(self, name='', flows={}, c=dict(), a=dict(), local=dict(), args_f=dict(), **kwargs):
+    def __init__(self, name='', flows={}, args_f=dict(), **kwargs):
         """
         Instantiates the function superclass with the relevant parameters.
 
@@ -1056,29 +1054,6 @@ class FxnBlock(Block):
         ----------
         flows :dict
             Flow objects passed from the model level to use instead of instantiating locally.
-        p : dict, optional
-            Internal parameters to override from defaults. The default is {}.
-        s : dict, optional
-            Internal states to override from defaults. The default is {}.
-        c : dict, optional
-            Internal CompArch fields/arguments override from defaults. The default is {}.
-            FxnBlock must have an _init_c property.
-        a : dict, optional
-            Internal ASG fields/arguments override from defaults. The default is {}.
-            FxnBlock must have an _init_a property.
-        r : dict, optional
-            Internal Rand fields/arguments override from defaults. The default is {}.
-        m : dict, optional
-            Internal Mode fields/arguments override from defaults. The default is {}.
-        t : dict, optional
-            Internal Time fields/arguments to override from defaults. The default is {}
-        sp : dict, otpional
-            SimParam arguments to override from defaults. The default is {}
-        local : dict/list
-            Views of MultiFlows to add instantiate local. May be of forms: 
-                - {flowname:(localname, attrs)} (to only create local view of specific attributes)
-                - {flowname:localname}          (to create view with all attributes)
-                - [flowname1, flowname2...]     (to give overwrite the global flow with the local view of it)
         comms : dict/list
             Views of CommsFlows to add instantiate local. May be of forms: 
                 - {flowname:(localname, attrs)} (to only create local view of specific attributes)
