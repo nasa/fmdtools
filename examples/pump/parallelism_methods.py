@@ -29,7 +29,7 @@ def delay_test(delays =  [i for i in range(0,100,10)]):
 def one_delay_helper(delay):
     """This helper function is used by pool.map to generate output over the given 
     input delays"""
-    mdl = Pump(params=PumpParam(delay=delay))
+    mdl = Pump(p=PumpParam(delay=delay))
     endclasses, mdlhists = propagate.one_fault(mdl, 'export_water', 'block')
     return endclasses
 

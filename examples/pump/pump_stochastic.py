@@ -152,6 +152,8 @@ if __name__=="__main__":
     
     an.tabulate.nested_stats(app_comp, endclasses, average_metrics=['cost'], inputparams=['delay'])
     
+    an.tabulate.resilience_factor_comparison(app_comp, endclasses, ['delay'], 'cost',  difference=False, percent=False)
+    
     #endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True) #pool=mp.Pool(4)
     
     comp_mdlhists = mdlhists.get_scens('export_water_block_t27p0')

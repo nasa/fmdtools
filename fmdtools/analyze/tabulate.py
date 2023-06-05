@@ -298,6 +298,7 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
     table : pandas table
         Table with the metric statistic (percent or average) over the nominal scenario and each listed function/mode (as differences or averages)
     """
+    nested_endclasses=nested_endclasses.nest()
     if rangeid == 'default':
         if len(nomapp.ranges.keys()) == 1:
             rangeid = [*nomapp.ranges.keys()][0]
@@ -307,11 +308,14 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
     else:
         factors = nomapp.get_param_scens(rangeid, *params)
     if faults == 'functions':
-        faultlist = set([e.partition(' ')[0] for scen in nested_endclasses for e in nested_endclasses[scen]])
+        faultlist = set(["_".join(e.split("_")[:-2]) for scen in nested_endclasses.nest() 
+                         for e in nested_endclasses.get(scen).nest()])
     elif faults == 'modes':
-        faultlist = set([e.partition(',')[0] for scen in nested_endclasses for e in nested_endclasses[scen]])
+        faultlist = set(["_".join(e.split("_")[:-1]) for scen in nested_endclasses.nest()
+                         for e in nested_endclasses.get(scen).nest()])
     elif faults == 'mode type':
-        faultlist = set([e.partition(',')[0].partition(' ')[2] for scen in nested_endclasses for e in nested_endclasses[scen]])
+        faultlist = set(["_".join(e.split("_")[-1]) for scen in nested_endclasses.nest()
+                         for e in nested_endclasses.get(scen).nest()])
     elif type(faults) == str:
         raise Exception("Invalid faults option: "+faults)
     elif type(faults) == list:
@@ -338,8 +342,10 @@ def resilience_factor_comparison(nomapp, nested_endclasses, params, value, fault
         endclass_fact = Result({scen:endclass for scen, endclass in nested_endclasses.items() if scen in scens})
         ec_metrics = endclass_fact.overall_diff(value, nan_as=nan_as, as_ind=percent, no_diff=not difference)
 
-        if not percent: nominal_metrics = [nan_to_x(res_scens['nominal'][value], nan_as) for res_scens in endclass_fact.values()]
-        else:           nominal_metrics = [np.sign(float(nan_to_x(nan_to_x(res_scens['nominal'][value]), nan_as))) for res_scens in endclass_fact.values()]
+        if not percent: 
+            nominal_metrics = [nan_to_x(res_scens['nominal'].endclass[value], nan_as) for res_scens in endclass_fact.values()]
+        else:           
+            nominal_metrics = [np.sign(float(nan_to_x(nan_to_x(res_scens.endclass['nominal'][value]), nan_as))) for res_scens in endclass_fact.values()]
         factor_stats=[sum(nominal_metrics)/len(nominal_metrics)]
         if give_ci: 
             factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(nominal_metrics, **kwargs)
