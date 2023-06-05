@@ -1064,7 +1064,6 @@ class FxnBlock(Block):
                 - {flowname:(localname, attrs)} (to only create local view of specific attributes)
                 - {flowname:localname}          (to create view with all attributes)
                 - [flowname1, flowname2...]     (to give overwrite the global flow with the local view of it)
-
         args_f : dict, optional
             arguments to pass to custom __init__ function 
         """        
