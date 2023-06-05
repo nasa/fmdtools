@@ -1046,7 +1046,8 @@ class FxnBlock(Block):
     Superclass class for functions which is a special type of Block\
     with c and a attributes for CompArch and ASGs, as well as a defined method for propagation
     """
-    def __init__(self, name='', flows={}, args_f=dict(), **kwargs):
+
+    def __init__(self, name='', flows={}, c=dict(), a=dict(), local=dict(), args_f=dict(), **kwargs):
         """
         Instantiates the function superclass with the relevant parameters.
 
@@ -1054,11 +1055,16 @@ class FxnBlock(Block):
         ----------
         flows :dict
             Flow objects passed from the model level to use instead of instantiating locally.
-        comms : dict/list
-            Views of CommsFlows to add instantiate local. May be of forms: 
+        c : dict, optional
+            Internal CompArch fields/arguments override from defaults. The default is {}.
+        a : dict, optional
+            Internal ASG fields/arguments override from defaults. The default is {}.
+        local : dict/list
+            Views of MultiFlows to add instantiate local. May be of forms:
                 - {flowname:(localname, attrs)} (to only create local view of specific attributes)
                 - {flowname:localname}          (to create view with all attributes)
                 - [flowname1, flowname2...]     (to give overwrite the global flow with the local view of it)
+
         args_f : dict, optional
             arguments to pass to custom __init__ function 
         """        
