@@ -630,11 +630,11 @@ class Result(UserDict):
         nomendclass = endclasses.pop('nominal')
         if not no_diff: 
             if as_ind:
-                difference = {scen:bool(nan_to_x(ec[metric], nan_as))-bool(nan_to_x(nomendclass[metric], nan_as)) for scen, ec in endclasses.items()}
+                difference = {scen:bool(nan_to_x(ec.endclass[metric], nan_as))-bool(nan_to_x(nomendclass[metric], nan_as)) for scen, ec in endclasses.items()}
             else:
-                difference = {scen:nan_to_x(ec[metric], nan_as)-nan_to_x(nomendclass[metric], nan_as) for scen, ec in endclasses.items()}
+                difference = {scen:nan_to_x(ec.endclass[metric], nan_as)-nan_to_x(nomendclass[metric], nan_as) for scen, ec in endclasses.items()}
         else:           
-            difference = {scen:nan_to_x(ec[metric], nan_as) for scen, ec in endclasses.items()}
+            difference = {scen:nan_to_x(ec.endclass[metric], nan_as) for scen, ec in endclasses.items()}
             if as_ind:
                 difference = {scen:np.sign(metric) for scen,metric in difference.items()}
         return difference
@@ -1011,6 +1011,7 @@ class History(Result):
         else:
             nomhist = nomhist.flatten()
         return nomhist, self._prep_faulty()
+    
 
     def get_degraded_hist(self, *attrs, nomhist={}, operator=np.prod, difftype='bool', withtime=True, withtotal=True):
         """
@@ -1020,8 +1021,8 @@ class History(Result):
         ----------
         *attrs : names of attributes
             Names to check (e.g., `flow_1`, `fxn_2`)
-            nomhist : History, optional
-                Nominal history to compare against (otherwise uses internal nomhist, if available)
+        nomhist : History, optional
+            Nominal history to compare against (otherwise uses internal nomhist, if available)
         operator : function
             Method of combining multiple degraded values. The default is np.prod
         difftype : 'bool'/'diff'/float

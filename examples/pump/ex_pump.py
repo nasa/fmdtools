@@ -34,8 +34,10 @@ import numpy as np
 
 """
 DEFINING MODEL FLOWS
-Flows can be defined using Python classes that are instantiated as objects
-Most flows are defined in the initialize() function, however custom flows can be defined as their own objects
+Flows can be defined using Python classes that are instantiated as objects.
+
+Flows contain State objects which hold variables, but may be given other attributes
+(parameters etc)
 """
 class WaterStates(State):
     """States for Water Flows"""
@@ -59,7 +61,10 @@ class SignalStates(State):
 class Signal(Flow):
     _init_s=SignalStates
 
-## Functions for defining resilience metrics
+"""
+DEFINING RESILIENCE METRICS
+Below we define certain functions used in the value function in find_classification
+"""
 def reseting_accumulate(vec):
     """ Accummulates vector for all positive output (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,0,1,2])"""
     newvec = vec
@@ -74,6 +79,10 @@ def accumulate(vec):
     """ Accummulates vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])"""
     return [sum(vec[:i+1]) for i in range(len(vec)) ]
 
+"""
+DEFINING MODEL PARAMETERS
+Below we define a class that defines the parameter of the model
+"""
 class PumpParam(Parameter, readonly=True):
     """PumpParam defines the parameters which the pump may be simulated over."""
     cost: tuple = ("repair", "water")   # costs to tabulate in cost model (see find_classification)
@@ -83,15 +92,21 @@ class PumpParam(Parameter, readonly=True):
 
 """
 DEFINE MODEL FUNCTIONS
-Functions are defined using Python classes that are instantiated as objects
+Functions are defined using Python classes that are instantiated as objects.
+
+Functions are additionally composed of the following classes:
+    - Mode for faulty and operational modes
+    - State for variables
+    - Flow(s) for flow connections
+    - ... and several others
 """
 class ImportEEMode(Mode):
     """
-    A probability model for faults is associated with each function:
-        - self.failrate = X sets the failure rate for the function (to be distributed over all modes
-        - self.assoc_modes(modes) creates a probability model for each mode, where modes is:
-            - {modename: [%of failures, [% at each phase in mdl.phases], repaircosts]
-    These failure rates will then be used to generate a list of scenarios for fp.run_list() and SampleApproach()
+    Mode contains the probability model for faults is associated with each function:
+        - failrate = X sets the failure rate for the function (to be distributed over all modes
+        - faultparams defines a probability model for each mode, where modes is:
+            - {modename: (%of failures, (% at each phase in mdl.phases), repaircosts)
+    These failure rates will then be used to generate a list of scenarios for propagate.single_faults and SampleApproach()
     
     Note that these rates are given in occurences/hr by default. To change the units, use the option units='sec'/'min'/'hr'/'day' etc
     """
@@ -110,14 +125,17 @@ class ImportEE(FxnBlock):
     """
     Import EE is the line of electricity going into the pump
     We define it here as a subclass of the FxnBlock superclass (imported from define.py)
-    the FxnBlock superclass, which adds the common aspects of the function objects:
-     - flows added to .flow
-     - faults set to nominal
-     - a number of useful methods added for dealing with internal faults (e.g. addfault()) and fault
-     propagation (e.g. updatefxn()) are added to the object
-
-     This pattern should be used for all functions in a model
+    the FxnBlock superclass, which adds the common aspects of the function objects.
+    
+    Notice how _init_m, _init_s, _init_ee_out variables are assigned to the classes for
+    Modes, States, and the Electricity flow used in this FxnBlock. This binds those types
+    to the FxnBlock so they are instiantiated and take the `m` (for mode) and `s` (for state) 
+    role in the FxnBlock, respectively. For the flow `ee_out`, this defines a Flow variable
+    which will be electricity and will additional be held in .flows here. The flownames 
+    variable then tells us that `ee_1` at the model level will be `ee_out`
+    at the function level (which isn't necessary if they are given the same name).
     """
+    
     def condfaults(self,time):
         """
         condfaults() changes the state of the system if there is a change in state in a flow
@@ -126,6 +144,7 @@ class ImportEE(FxnBlock):
         In this example,  if the current is too high, the line becomes an open circuit (e.g. due to a fuse or line burnout)
         """
         if self.ee_out.s.current>15.0: self.m.add_fault('no_v')
+        
     def behavior(self,time):
         """
         behavior() defines the behavior of the function in terms of
@@ -136,24 +155,36 @@ class ImportEE(FxnBlock):
         else:                           self.s.effstate=1.0 #normally, voltage is 500 V
         self.ee_out.s.voltage=self.s.effstate * 500
 
+""" 
+Import Water Classes
+"""
+
 class ImportWaterMode(Mode):
     failrate=1e-5
     faultparams = {'no_wat':(1.0, [1,1,1], 1000)}
     key_phases_by='global'
+
+
 class ImportWater(FxnBlock):
     __slots__ = ['wat_out']
     _init_m = ImportWaterMode
     _init_wat_out = Water
     flownames = {"wat_1":"wat_out"}
+
     def behavior(self,time):
         """ The behavior is that if the flow has a no_wat fault, the wate level goes to zero"""
         if self.m.has_fault('no_wat'):  self.wat_out.s.level=0.0
         else:                           self.wat_out.s.level=1.0
 
+
+""" 
+Export Water Classes
+"""
 class ExportWaterMode(Mode):
     failrate=1e-5
     faultparams = {'block':(1.0, [1.5, 1.0, 1.0], 5000)}
     key_phases_by='global'
+    
     
 class ExportWater(FxnBlock):
     """ Import Water is the pipe with water going into the pump """
@@ -161,23 +192,30 @@ class ExportWater(FxnBlock):
     _init_m = ExportWaterMode 
     _init_wat_in = Water
     flownames = {'wat_2':'wat_in'}
+    
     def behavior(self,time):
         """ Here a blockage changes the area the output water flows through """
         if self.m.has_fault('block'): self.wat_in.s.area=0.01
 
+""" 
+Import Signal Classes
+"""
 class ImportSigMode(Mode):
     failrate=1e-6
     faultparams = {'no_sig':(1.0, [1.5, 1.0, 1.0], 10000)}
     key_phases_by='global'
+
 class ImportSig(FxnBlock):
     """ Import Signal is the on/off switch """
     __slots__ = ['sig_out']
     _init_m = ImportSigMode
     _init_sig_out = Signal
     flownames = {'sig_1':'sig_out'}
+    
     def behavior(self, time):
         """ This function has time-dependent behavior.
-        To have different operational modes depending on the time, use if/else statements on the time variable, which is the system time.
+        To have different operational modes depending on the time, use if/else 
+        statements on the time variable, which is the simulation time.
 
         In this case, the power turns on at t=5 and turns back off at t=50.
         """
@@ -187,26 +225,37 @@ class ImportSig(FxnBlock):
             elif time<50:   self.sig_out.s.power=1.0
             else:           self.sig_out.s.power=0.0
 
+""" 
+Move Water Classes
+"""
 class MoveWatTime(Time):
     timernames = ('pressure_limit',)
+
+
 class MoveWatStates(State):
     eff:    float = 1.0 #effectiveness state
+
+
 class MoveWatParams(Parameter, readonly=True):
     delay:  int = 1 #delay parameter
+
+
 class MoveWatMode(Mode):
     failrate=1e-5
     faultparams = {'mech_break':(0.6, [0.1, 1.2, 0.1], 5000), 'short':(1.0, [1.5, 1.0, 1.0], 10000)}
     key_phases_by ='global'
+
+
 class MoveWat(FxnBlock):
     """  
     Move Water is the pump itself. While one could decompose this further, one function is used for simplicity.
     
-    In this function, more states are initialized than flows:
-        - states (internal variables to be given to the function)
-            states are given as {'name':initval}
-        - timers (objects that keep track of time), given as a set of timer names
-
-        We also have a parameter `delay` which we use to change a design variable in the function
+    Note how this Function has more roles being filled
+    
+    - s (states) by MoveWatStates
+    - p (parameter) by MoveWatParams, which lets us parameterize a delay
+    - m (mode) by MoveWatMode
+    - t (time) by MoveWatTime, which will be used so we can have a timer
     """
     __slots__ = ['ee_in', 'sig_in', 'wat_in', 'wat_out']
     _init_s = MoveWatStates
@@ -220,7 +269,7 @@ class MoveWat(FxnBlock):
     flownames = {"ee_1":"ee_in", "sig_1":"sig_in", "wat_1":"wat_in", "wat_2":"wat_out"}
     def condfaults(self, time):
         """
-            Here we use the timer to define a conditional fault that only occurs after a state is present after 10 seconds.
+            Here we use the timer to define a conditional fault that only occurs after a state is present after X seconds.
             We do that by incrementing the timer when the state is present.
             Note that this is done with the internal timestep dt, which we can change locally (for the function) 
             by passing dt=timestep in the super().__init__ method or globally by changing 'tstep' in modelparams
@@ -264,34 +313,27 @@ class MoveWat(FxnBlock):
 class Pump(Model):
     __slots__=()
     _init_p = PumpParam
-    """
-    To sample the model, the timerange and operational phases need to be defined.
-
-    Here we did that by setting phases as a tuple of each phase and its start and ending
-    and times to the beginning and end time (and any times to sample in between in run_list()
-
-    sp.tstep is the timestep to use in the model and must be an integer
-
-    In this model, because every time we've entered occurs at a factor of 5,
-    and there aren't any complicated controls/dynamics interactions that would need to be
-    tuned, we can easily use the timestep t=1 OR t=5. HOWEVER, if any time (e.g. in the behavior methods)
-    does not occur on the timestep, it will be missed, so proceed with caution.
-
-    t=1 is a good default.
-    """
     default_sp = dict(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr')
     default_track = {'flows':{'wat_2':{'s':'flowrate'}, 'ee_1':{'s':{'current'}}}, 'i':'all'}
     """
         This defines the pump model as a Model.
 
         Models take a dictionary of parameters as input defining any veriables and values to use in the model.
+    
+        Note that sp is the SimParam defining the simulation. phases in this dictionary are queues for fault 
+        sampling which can be used by SampleApproach
+        
+        We can also chage dt to change the timestep, but note that this can change behavior.  
+        In this model, because every time we've entered occurs at a factor of 5,
+        and there aren't any complicated controls/dynamics interactions that would need to be
+        tuned, we can easily use the timestep t=1 OR t=5.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         """
-        Here addflow() takes as input a unique name for the flow "flowname", a type for the flow, "flowtype"
-        and either:   a dict with the initial flow attributes, OR
-                      a flow object defined in the model file
+        Here add_flow() is used to instantiate a given flow object with a given type
+        to a given name. Non-default values (for s, p, etc) can be passed, and we
+        can also pass already-instantiated objects if desired.
         """
         self.add_flow('ee_1',   Electricity)
         self.add_flow('sig_1',  Signal)
@@ -299,19 +341,19 @@ class Pump(Model):
         self.add_flow('wat_2',  Water('wat_2'))
 
         """
-        Functions are added to the model using the addfxn() method, which needs:
+        Functions are added to the model using the add_fxn() method, which must be 
+        called after add_flow, and needs:
            - a unique function name
            - the class to instantiate the function with (defined above)
-           - a list of flow names corresponding to the inputs to the flow
-               -the *order* of which corresponds to those in the function definition
-               -the *name* of which corresponds to the name defined above for the flow
+           - non-default values (in this case, we are passing p from the model to function level for move_water)
         """
         self.add_fxn('import_ee',    ImportEE,      'ee_1')
         self.add_fxn('import_water', ImportWater,   'wat_1')
         self.add_fxn('import_signal',ImportSig,     'sig_1')
         self.add_fxn('move_water',   MoveWat,       'ee_1', 'sig_1', 'wat_1', 'wat_2', p = {'delay':self.p.delay})
         self.add_fxn('export_water', ExportWater,   'wat_2')
-
+        
+        """ __init__ for models ends with a build command to construct the underlying structure"""
         self.build()
     def indicate_finished(self,time):
         """
@@ -329,12 +371,13 @@ class Pump(Model):
         return self.flows['wat_1'].s.flowrate>0
     def find_classification(self,scen, mdlhists):
         """
-            Model classes use find_classification() to classify the results based on a fault scenario, returning
-            a dictionary with rate, cost, and expected cost for the given variables in the model history.
+        Propagation methods use find_classification() to classify the results based on the
+        effects of a fault scenario, returning whatever metrics are desired. In this case,
+        a dictionary with rate, cost, and expected cost is calculated.
 
-            In this example, there are three costs--water, electrical, and repair costs:
-                - repair costs depends on the cost of each mode, while
-                - electrical and water costs depend on the lost water in the non-nominal case
+       In this example, there are three costs--water, electrical, and repair costs:
+           - repair costs depends on the cost of each mode, while
+           - electrical and water costs depend on the lost water in the non-nominal case
         """
         #get fault costs and rates
         if 'repair' in self.p.cost: repcost= self.calc_repaircost()

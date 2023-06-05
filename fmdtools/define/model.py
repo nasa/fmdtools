@@ -328,7 +328,7 @@ class Model(Simulable):
         """Returns the probability desnity of the model distributions given a """
         probdens=1.0
         for fxn in self.fxns.values():
-            probdens *= getattr(fxn, 'probdens', 1.0)
+            probdens *= fxn.return_probdens()
         return probdens
     def set_vars(self, *args, **kwargs):
         """
