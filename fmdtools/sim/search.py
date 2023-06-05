@@ -19,7 +19,7 @@ import warnings
 import time
 from recordclass import asdict
 
-class ProblemInterface(): 
+class ProblemInterface:
     """
     Interfaces for resilience optimization problems. 
     
@@ -208,6 +208,8 @@ class ProblemInterface():
             default type of objective: `vars`, `endclass`, or `external`. Default is 'endclass'
         t : int (optional)
             default time to get objective: 'end' or set time t
+        obj_const: str (optional)
+            default value : objectives
         agg : tuple
             Specifies the aggregation of the objective/constraint:
             - for objectives: ('+'/'-','sum'/'difference'/'mult'/'max'/'min'), specifying 
@@ -269,6 +271,7 @@ class ProblemInterface():
     def _make_nested_dict(self, *args):
         if len(args)==1:    return args[0]
         else:               return {args[0]:self._make_nested_dict(*args[1:])}
+
     def add_constraints(self, simname, *args, objtype='endclass', t='end', threshold=('less', 0.0), **kwargs):
         """
         Adds constraints to the given problem.
@@ -293,28 +296,44 @@ class ProblemInterface():
             constraintname = variablename
         """
         self.add_objectives(simname, *args, objtype=objtype, t=t, obj_const='constraints', agg=threshold, **kwargs)
-    def _get_var_obj_time(self, simname):
+
+    def _get_var_obj_time(self):
         var_times = [v[3] for v in self.variables]
-        if 'start' in var_times:    var_time=0
-        else:                       var_time = min(var_times) 
+        if 'start' in var_times:
+            var_time = 0
+        else:
+            var_time = min(var_times)
         obj_times = [v[3] for v in [*self.objectives.values(),*self.constraints.values()] if v[3]!='na']
-        if 'end' in obj_times:      obj_time=self.mdl.sp.times[-1]
-        else:                       obj_time=max(obj_times)
+        if 'end' in obj_times:
+            obj_time = self.mdl.sp.times[-1]
+        else:
+            obj_time = max(obj_times)
         return var_time, obj_time
+
     def _prep_single_sim(self, simname, x):
+        # Get variable and objective times for the simulation
         var_time, obj_time = self._get_var_obj_time(simname)
+        # Get keyword arguments for the simulation
         kwar = self.simulations[simname][2]
+        # Check if a new model is needed and create it
         mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time,  default_p = kwar.get('p', {}))
+        # Prepare nominal values, scenarios, and other variables using prop.nom_helper()
         result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}, 'use_end_condition':False})
         if kwar.get('sequence', False):
             mdl_s = mdl.new_with_params()
+            # Create a new model and scenario for sequence simulation
             scen= Scenario(rate=1.0, sequence=kwar['sequence'])
             kwargs = {**kwar, 'desired_result':{}, 'staged':False}
             kwargs.pop("sequence")
+            # Perform propagation for the scenario
             _, prevhist, c_mdls, _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
-        else: prevhist = nomhist; mdl=mdl
+        else:
+            # Use nominal history if sequence simulation is not required
+            prevhist = nomhist; mdl=mdl
+        # Store simulation data in the _sims dictionary
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhist':prevhist, 'obj_time': obj_time, 'mdl':mdl, 'c_mdls':c_mdls}
-    def _prep_multi_sim(self, simname, x):
+
+   def _prep_multi_sim(self, simname, x):
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
         mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_p = kwar.get('p', {}))
@@ -342,6 +361,8 @@ class ProblemInterface():
             c_mdls['nominal']=c_mdls_nom
         self.update_scenlist(simname, scenlist)
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhists':prevhists, 'obj_time': obj_time, 'mdl':c_mdls_nom[var_time], 'c_mdls':c_mdls}
+
+
     def _check_new_mdl(self,simname, var_time, mdl, x, obj_time, staged=False, default_p={}):
         if var_time==0 or not staged: # set model parameters that are a part of the sim
             paramvars = self.var_mapping[simname].get('param',{'param':{}})
@@ -353,6 +374,7 @@ class ProblemInterface():
             
         prop.init_histrange(mdl, var_time, staged, "all", "all")
         return mdl
+
     def _run_single_sim(self, simname, x):
         sim = self._sims[simname]
         var_time, prevhist, nomhist, obj_time, mdl, c_mdl = sim['var_time'], sim['prevhist'], sim['nomhist'], sim['obj_time'], sim['mdl'], sim['c_mdls']
@@ -767,7 +789,6 @@ class ProblemInterface():
     def show_architecture(self):
         #TODO: leverage Graph to draw this
         fig = plt.figure()
-        edge_labels = nx.get_edge_attributes(self.sim_graph, "label")
         pos=nx.planar_layout(self.sim_graph)
         nx.draw(self.sim_graph, with_labels=True, pos=pos)
         nx.draw_networkx_edge_labels(self.sim_graph, pos, edge_labels=nx.get_edge_attributes(self.sim_graph, "label"))
@@ -900,10 +921,14 @@ class DynamicInterface():
         end : bool
             Whether the simulation is finished
         """
-        if self.t>=self.t_max:    end = True
-        elif external_condition:  end = True
-        else:                     end = prop.check_end_condition(self.mdl, self.use_end_condition, self.t)
-        if end: prop.cut_mdlhist(self.log, self.t_ind)
+        if self.t> = self.t_max:
+            end = True
+        elif external_condition:
+            end = True
+        else:
+            end = prop.check_end_condition(self.mdl, self.use_end_condition, self.t)
+        if end:
+            prop.cut_mdlhist(self.log, self.t_ind)
         return end
     
                 
