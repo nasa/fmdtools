@@ -107,9 +107,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-0">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
@@ -1671,12 +1671,13 @@ Returns:
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.approach.SampleApproach.prune_scenarios">
-<span class="sig-name descname"><span class="pre">prune_scenarios</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samptype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'piecewise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'numpts':</span> <span class="pre">1,</span> <span class="pre">'samp':</span> <span class="pre">'evenspacing'}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.approach.SampleApproach.prune_scenarios" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">prune_scenarios</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endclasses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samptype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'piecewise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'numpts':</span> <span class="pre">1,</span> <span class="pre">'samp':</span> <span class="pre">'evenspacing'}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.approach.SampleApproach.prune_scenarios" title="Permalink to this definition"></a></dt>
 <dd><p>Finds the best sample approach to approximate the full integral (given the approach was the full integral).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>endclasses</strong> (<em>dict</em>) – dict of results (cost, rate, expected cost) for the model run indexed by scenid</p></li>
+<li><p><strong>value</strong> (<em>str</em>) – balue to prune scenarios over. The default is “cost”</p></li>
 <li><p><strong>samptype</strong> (<em>str</em><em> (</em><em>'piecewise'</em><em> or </em><em>'bestpt'</em><em>)</em><em>, </em><em>optional</em>) – Method to use.
 If ‘bestpt’, finds the point in the interval that gives the average cost.
 If ‘piecewise’, attempts to split the inverval into sub-intervals of continuity
@@ -1793,9 +1794,9 @@ variables to get from the model at each time-step</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.sim.search.DynamicInterface.log">
-<span class="sig-name descname"><span class="pre">log</span></span><a class="headerlink" href="#fmdtools.sim.search.DynamicInterface.log" title="Permalink to this definition"></a></dt>
-<dd><p>dict
+<dt class="sig sig-object py" id="fmdtools.sim.search.DynamicInterface.hist">
+<span class="sig-name descname"><span class="pre">hist</span></span><a class="headerlink" href="#fmdtools.sim.search.DynamicInterface.hist" title="Permalink to this definition"></a></dt>
+<dd><p>History
 mdlhist for simulation</p>
 </dd></dl>
 
@@ -1941,6 +1942,7 @@ or index of the callable (for external)and objtype, t, and agg may override
 the default objtype and t (see below)</p></li>
 <li><p><strong>objtype</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – default type of objective: <cite>vars</cite>, <cite>endclass</cite>, or <cite>external</cite>. Default is ‘endclass’</p></li>
 <li><p><strong>t</strong> (<em>int</em><em> (</em><em>optional</em><em>)</em>) – default time to get objective: ‘end’ or set time t</p></li>
+<li><p><strong>obj_const</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – default value : objectives</p></li>
 <li><p><strong>agg</strong> (<em>tuple</em>) – <p>Specifies the aggregation of the objective/constraint:
 - for objectives: (‘+’/’-‘,’sum’/’difference’/’mult’/’max’/’min’), specifying
 (1) whether the objective is:</p>

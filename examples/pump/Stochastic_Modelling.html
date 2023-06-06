@@ -107,9 +107,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-0">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
@@ -419,8 +419,7 @@ states</em> to function blocks and incorporating them in function behavior - How
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.rand</span> <span class="kn">import</span> <span class="n">Rand</span>
-<span class="kn">from</span> <span class="nn">fmdtools.sim.approach</span> <span class="kn">import</span> <span class="n">SampleApproach</span><span class="p">,</span> <span class="n">NominalApproach</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.approach</span> <span class="kn">import</span> <span class="n">SampleApproach</span><span class="p">,</span> <span class="n">NominalApproach</span>
 <span class="kn">from</span> <span class="nn">fmdtools.define.block</span> <span class="kn">import</span> <span class="n">FxnBlock</span><span class="p">,</span> <span class="n">Block</span>
 <span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">propagate</span>
 <span class="kn">import</span> <span class="nn">fmdtools.analyze</span> <span class="k">as</span> <span class="nn">an</span>
@@ -435,7 +434,7 @@ states</em> to function blocks and incorporating them in function behavior - How
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pump_stochastic</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pump_stochastic</span> <span class="kn">import</span> <span class="n">Pump</span>
 </pre></div>
 </div>
 </div>
@@ -459,194 +458,30 @@ states</em> to function blocks and incorporating them in function behavior - How
 <section id="Model-Setup">
 <h2>Model Setup<a class="headerlink" href="#Model-Setup" title="Permalink to this headline"></a></h2>
 <p>This model has been augmented stochastic states and behaviors to enable stochastic simulation using the <code class="docutils literal notranslate"><span class="pre">Rand</span></code> class.</p>
+<ul class="simple">
+<li><p>See rand documentation: <a class="reference external" href="https://nasa.github.io/fmdtools/docs/fmdtools.define.html#fmdtools.define.rand.Rand">https://nasa.github.io/fmdtools/docs/fmdtools.define.html#fmdtools.define.rand.Rand</a></p></li>
+</ul>
+<p>This is what a Rand object looks like:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">Rand</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.rand</span> <span class="kn">import</span> <span class="n">Rand</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">Rand</span><span class="p">()</span>
+<span class="n">r</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Help on class Rand in module fmdtools.define.rand:
-
-class Rand(recordclass.datatype.dataobject)
- |  Rand(*args, seed=42, run_stochastic=False, probs=[], s_kwargs={})
- |
- |  Class for defining and interacting with random states of the model.
- |
- |  Attributes
- |  ----------
- |  rng : np.random.default_rng
- |      random number generator
- |  probs : list
- |      probability of the given states
- |  seed : int
- |      state for the random number generator
- |
- |  Rand is meant to be extended in model definition with random states, e.g.:
- |
- |  class RandState(State):
- |      noise: float=1.0
- |  class ExampleRand(Rand):
- |      s= RandState()
- |      run_stochastic:     bool=True
- |
- |  Which enables the use of set_rand, update_stochastic_states, etc for updating
- |  these states with methods called from the rng.
- |
- |  Method resolution order:
- |      Rand
- |      recordclass.datatype.dataobject
- |      builtins.object
- |
- |  Methods defined here:
- |
- |  __init__(self, *args, seed=42, run_stochastic=False, probs=[], s_kwargs={})
- |      Initialize self.  See help(type(self)) for accurate signature.
- |
- |  assign(self, other_rand)
- |
- |  create_hist(self, timerange, track)
- |      Creates a History corresponding to Rand
- |
- |      Parameters
- |      ----------
- |      timerange : iterable, optional
- |          Time-range to initialize the history over. The default is None.
- |      track : list/str/dict, optional
- |          argument specifying attributes for :func:`get_sub_include&#39;. The default is None.
- |              DESCRIPTION. The default is None.
- |
- |      Returns
- |      -------
- |      hist : History
- |          History of fields specified in track.
- |
- |  get_rand_states(self, auto_update_only=False)
- |
- |  get_true_field(self, fieldname, *args, **kwargs)
- |
- |  get_true_fields(self, *args, **kwargs)
- |
- |  reset(self)
- |      Resets Rand to the initial state.
- |
- |  return_mutables(self)
- |
- |  return_probdens(self)
- |
- |  set_rand(self, statename, methodname, *args)
- |      Update the given random state with a given method and arguments (if in run_stochastic mode)
- |
- |      Parameters
- |      ----------
- |      statename : str
- |          name of the random state defined in assoc_rand_state(s)
- |      methodname :
- |          str name of the numpy method to call in the rng
- |      *args : args
- |          arguments for the numpy method
- |
- |  to_default(self, *statenames)
- |      Resets given random states to their default values
- |
- |  update_seed(self, seed)
- |      Updates the random seed to the given value
- |
- |  update_stochastic_states(self)
- |      Updates the defined stochastic states defined to auto-update.
- |
- |  ----------------------------------------------------------------------
- |  Data descriptors defined here:
- |
- |  __dict__
- |      dictionary for instance variables (if defined)
- |
- |  __weakref__
- |      list of weak references to the object (if defined)
- |
- |  probdens
- |
- |  probs
- |
- |  rng
- |
- |  run_stochastic
- |
- |  seed
- |
- |  ----------------------------------------------------------------------
- |  Data and other attributes defined here:
- |
- |  __annotations__ = {&#39;probdens&#39;: &lt;class &#39;float&#39;&gt;, &#39;probs&#39;: &lt;class &#39;list&#39;...
- |
- |  __defaults__ = (None, [], 1.0, 42, False)
- |
- |  __fields__ = (&#39;rng&#39;, &#39;probs&#39;, &#39;probdens&#39;, &#39;seed&#39;, &#39;run_stochastic&#39;)
- |
- |  __options__ = {&#39;deep_dealloc&#39;: False, &#39;fast_new&#39;: True, &#39;gc&#39;: False, &#39;...
- |
- |  default_track = (&#39;s&#39;, &#39;probdens&#39;)
- |
- |  ----------------------------------------------------------------------
- |  Methods inherited from recordclass.datatype.dataobject:
- |
- |  __copy__(...)
- |      T.__copy__() -- copy of T
- |
- |  __eq__(self, value, /)
- |      Return self==value.
- |
- |  __ge__(self, value, /)
- |      Return self&gt;=value.
- |
- |  __getstate__(...)
- |      T.__getstate__()
- |
- |  __gt__(self, value, /)
- |      Return self&gt;value.
- |
- |  __hash__(self, /)
- |      Return hash(self).
- |
- |  __le__(self, value, /)
- |      Return self&lt;=value.
- |
- |  __len__(self, /)
- |      Return len(self).
- |
- |  __lt__(self, value, /)
- |      Return self&lt;value.
- |
- |  __ne__(self, value, /)
- |      Return self!=value.
- |
- |  __reduce__(...)
- |      T.__reduce__()
- |
- |  __repr__(...)
- |      T.__repr__() -- representation of T
- |
- |  __setstate__(...)
- |      T.__setstate__()
- |
- |  __sizeof__(...)
- |      T.__sizeof__() -- size of T
- |
- |  ----------------------------------------------------------------------
- |  Static methods inherited from recordclass.datatype.dataobject:
- |
- |  __new__(*args, **kwargs) from recordclass.datatype.datatype
- |      Create and return a new object.  See help(type) for accurate signature.
-
+Rand(rng=Generator(PCG64) at 0x14063A5D120, probs=[], probdens=1.0, seed=42, run_stochastic=False)
 </pre></div></div>
 </div>
-<p>Below, <code class="docutils literal notranslate"><span class="pre">assoc_rand_states</span></code> is used in the ImportEE function to add two random states: - effstate, the quality of the input voltage (i.e. large fluctuations from a step change in power) - grid_noise, which is meant to be fluctuations in voltage from the power source (i.e., more ordinary noise)</p>
+<p>Below, <code class="docutils literal notranslate"><span class="pre">assoc_rand_states</span></code> is used in the ImportEE function to add two random states: - <code class="docutils literal notranslate"><span class="pre">effstate</span></code>, the quality of the input voltage (i.e. large fluctuations from a step change in power) - <code class="docutils literal notranslate"><span class="pre">grid_noise</span></code>, which is meant to be fluctuations in voltage from the power source (i.e., more ordinary noise)</p>
 <p>This is then reflected in the behavior, which is defined in the <code class="docutils literal notranslate"><span class="pre">Rand.set_rand</span></code> method.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -677,11 +512,48 @@ set_rand(self, statename, methodname, *args)
 
 </pre></div></div>
 </div>
-<p>In this method, <code class="docutils literal notranslate"><span class="pre">statename</span></code> is the name of the random state, while <code class="docutils literal notranslate"><span class="pre">methodname</span></code> corresponds to the name of a random distribution to update the state from. These distributions are pulled from a numpy random number generator and thus the options for distributions are provided in the numpy documentation: <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#distributions">https://numpy.org/doc/stable/reference/random/generator.html#distributions</a> . These distributions include most one might need including normal, beta, uniform, etc.</p>
-<p><code class="docutils literal notranslate"><span class="pre">*args</span></code> in <code class="docutils literal notranslate"><span class="pre">set_rand</span></code> refers to the corresponding arguments to call the given method with, which should be pulled from the corresponding documentation. Below, we have points where this is called. - First, to pull <code class="docutils literal notranslate"><span class="pre">effstate</span></code> from a triangular distribution with minimum 0.9, mode 1.0, and max 1.1 - Parameters are provided here: <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.triangular.html#numpy.random.Generator.triangular">https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.triangular.html#numpy.random.Generator.triangular</a> - Second, to pull <code class="docutils literal notranslate"><span class="pre">grid_noise</span></code> from
-a normal distribution centered on 1 with a standard deviation that varies over time according to a sine wave. - Parameters are provided here: <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html#numpy.random.Generator.normal">https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html#numpy.random.Generator.normal</a></p>
-<div class="nbinput docutils container">
+<p>In this method,</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">statename</span></code> is the name of the random state, while</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">methodname</span></code> corresponds to the name of a random distribution to update the state from. These distributions are pulled from a numpy random number generator (see <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#distributions">numpy documentation</a>) and include most one might need including normal, beta, uniform, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*args</span></code> refers to the corresponding arguments to call the given method with, which should be pulled from the corresponding documentation. Below, we have points where this is called.</p></li>
+</ul>
+<p>Belo we show how this is used in the model:</p>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pump_stochastic</span> <span class="kn">import</span> <span class="n">ImportEERand</span><span class="p">,</span> <span class="n">ImportEERandState</span><span class="p">,</span> <span class="n">ImportEE</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">ImportEERand</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">ImportEERandState</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class ImportEERand(Rand):
+    s= ImportEERandState()
+    run_stochastic:     bool=True
+
+class ImportEERandState(State):
+    effstate:   float=1.0
+    grid_noise: float=1.0
+
+</pre></div></div>
+</div>
+<p>In this setup, the <code class="docutils literal notranslate"><span class="pre">effstate</span></code> and <code class="docutils literal notranslate"><span class="pre">grid_noise</span></code> states are to be set by the rng in <code class="docutils literal notranslate"><span class="pre">ImportEERand</span></code>. Below shows how this is embodied in behavior:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">ImportEE</span><span class="o">.</span><span class="n">behavior</span><span class="p">))</span>
@@ -704,13 +576,29 @@ a normal distribution centered on 1 with a standard deviation that varies over t
 
 </pre></div></div>
 </div>
-<p>The Import Signal function has a similar setup, where <code class="docutils literal notranslate"><span class="pre">sig_noise</span></code> is associated as a random state and then pulled as a random choice from a given set of options. To vary the behavior, here the noise is only pulled every five seconds.</p>
-<p>This function also uses the <code class="docutils literal notranslate"><span class="pre">to_default</span></code> method, whic resets a given stochastic state to its default value. Here this is used to zero out any signal noise which would otherwise occur when there is no power.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<p>As shown, <code class="docutils literal notranslate"><span class="pre">set_rand</span></code> is used:</p>
+<ul class="simple">
+<li><p>First, to pull <code class="docutils literal notranslate"><span class="pre">effstate</span></code> from a triangular distribution with minimum 0.9, mode 1.0, and max 1.1</p></li>
+<li><p>Parameters are provided here: <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.triangular.html#numpy.random.Generator.triangular">https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.triangular.html#numpy.random.Generator.triangular</a></p></li>
+<li><p>Second, to pull <code class="docutils literal notranslate"><span class="pre">grid_noise</span></code> from a normal distribution centered on 1 with a standard deviation that varies over time according to a sine wave.</p></li>
+<li><p>Parameters are provided here: <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html#numpy.random.Generator.normal">https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html#numpy.random.Generator.normal</a></p></li>
+</ul>
+<section id="Move-Water-Example">
+<h3>Move Water Example<a class="headerlink" href="#Move-Water-Example" title="Permalink to this headline"></a></h3>
+<p>The Move Water function has a similar setup, except the stochasticity is auto-updated at each timestep. This is done by providing an <code class="docutils literal notranslate"><span class="pre">eff_update</span></code> class varaible to the <code class="docutils literal notranslate"><span class="pre">RandState</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">Rand</span><span class="o">.</span><span class="n">to_default</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pump_stochastic</span> <span class="kn">import</span> <span class="n">MoveWat</span><span class="p">,</span> <span class="n">MoveWatRandState</span><span class="p">,</span> <span class="n">MoveWatRand</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">MoveWatRandState</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -719,16 +607,16 @@ a normal distribution centered on 1 with a standard deviation that varies over t
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Help on function to_default in module fmdtools.define.rand:
-
-to_default(self, *statenames)
-    Resets given random states to their default values
+class MoveWatRandState(State):
+    eff:        float=1.0
+    eff_update = (&#39;normal&#39;, (1.0, 0.2))
 
 </pre></div></div>
 </div>
-<p>The advantage of this is that simple stochastic behaviors do not need to be defined in the behavior method, however, it is less flexible than the previous approach, since one is limited to always drawing from the same distribution at each time-step. The resulting behavior method (below) thus has no <code class="docutils literal notranslate"><span class="pre">set_rand</span></code> call, since the state <code class="docutils literal notranslate"><span class="pre">eff</span></code> is automaticall updated outside the behavior definition.</p>
+<p>In this case, the normal distribution will be drawn from with mean 1.0 and standard deviation 0.2.</p>
+<p>The advantage of this is that simple stochastic behaviors do not need to be defined in the behavior method, however, it is less flexible than the previous approach, since one is limited to always drawing from the same distribution at each time-step. The corresponding behavior method (below) thus has no <code class="docutils literal notranslate"><span class="pre">set_rand</span></code> call, since the state <code class="docutils literal notranslate"><span class="pre">eff</span></code> is automaticall updated outside the behavior definition.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">MoveWat</span><span class="o">.</span><span class="n">behavior</span><span class="p">))</span>
@@ -747,48 +635,55 @@ to_default(self, *statenames)
 
 </pre></div></div>
 </div>
-<p>Finally, it can be helpful for stochastic simulation to include a default seed in the model’s modelparams, as shown.</p>
+</section>
+<section id="Model-Considerations">
+<h3>Model Considerations<a class="headerlink" href="#Model-Considerations" title="Permalink to this headline"></a></h3>
+<p>To get a distribution of stochastic behavior, the simulation must be run over a number of different random seeds. This <code class="docutils literal notranslate"><span class="pre">seed</span></code> parameter ensures that each simulation in the same random thread will produce the same results, and that results can be replicated from stochastic simulation by running the model with the same seed.</p>
+<p>By default, the seed for the <code class="docutils literal notranslate"><span class="pre">Rand</span></code> in each of the functions is set to match the Model <code class="docutils literal notranslate"><span class="pre">Rand</span></code>, meaning that passing a sead at the <code class="docutils literal notranslate"><span class="pre">Model</span></code> level sets it in all the containing functions also. This can be set by passing an <code class="docutils literal notranslate"><span class="pre">r</span></code> parameter to the Model.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Pump</span><span class="o">.</span><span class="fm">__init__</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl1</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">23</span><span class="p">})</span>
+<span class="n">mdl1</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;move_water&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">r</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        self.add_flow(&#39;ee_1&#39;,   Electricity)
-        self.add_flow(&#39;sig_1&#39;,  Signal)
-        self.add_flow(&#39;wat_1&#39;,  Water(&#39;Wat_1&#39;))
-        self.add_flow(&#39;wat_2&#39;,  Water(&#39;Wat_1&#39;))
-
-        self.add_fxn(&#39;import_ee&#39;,    ImportEE,      &#39;ee_1&#39;)
-        self.add_fxn(&#39;import_water&#39;, ImportWater,   &#39;wat_1&#39;)
-        self.add_fxn(&#39;import_signal&#39;,ImportSig,     &#39;sig_1&#39;)
-        self.add_fxn(&#39;move_water&#39;,   MoveWat,       &#39;ee_1&#39;, &#39;sig_1&#39;, &#39;wat_1&#39;, &#39;wat_2&#39;, p = {&#39;delay&#39;:self.p.delay})
-        self.add_fxn(&#39;export_water&#39;, ExportWater,   &#39;wat_2&#39;)
-
-        self.build()
-
+MoveWatRand(rng=Generator(PCG64) at 0x140640C22E0, probs=[], probdens=1.0, seed=23, run_stochastic=False)
 </pre></div></div>
 </div>
-<p>This <code class="docutils literal notranslate"><span class="pre">seed</span></code> parameter ensures that each simulation in the same random thread will produce the same results, and that results can be replicated from stochastic simulation by running the model with the same seed.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl2</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;seed&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
+<span class="n">mdl2</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;move_water&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">r</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+MoveWatRand(rng=Generator(PCG64) at 0x14063AA72E0, probs=[], probdens=1.0, seed=10, run_stochastic=False)
+</pre></div></div>
+</div>
+</section>
 </section>
 <section id="Simulation-and-Analysis">
 <h2>Simulation and Analysis<a class="headerlink" href="#Simulation-and-Analysis" title="Permalink to this headline"></a></h2>
 <p>With this model set up, we can now simulate it using the methods in <code class="docutils literal notranslate"><span class="pre">propagate</span></code>.</p>
-<section id="Single-Scenario-Simulation">
-<h3>Single-Scenario Simulation<a class="headerlink" href="#Single-Scenario-Simulation" title="Permalink to this headline"></a></h3>
 <p>First, let’s simulate it in the nominal scenario:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
@@ -804,12 +699,12 @@ to_default(self, *statenames)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Stochastic_Modelling_22_0.png" src="../../_images/examples_pump_Stochastic_Modelling_22_0.png" />
+<img alt="../../_images/examples_pump_Stochastic_Modelling_28_0.png" src="../../_images/examples_pump_Stochastic_Modelling_28_0.png" />
 </div>
 </div>
 <p>As shown, even with all of these random states, it doesn’t appear that the behavior actually changes stochastically over time. This is because, by default, the model is set to run <em>deterministically</em>, meaning the stochastic states take their default values. To run stochastically, we use the option <code class="docutils literal notranslate"><span class="pre">run_stochastic=True</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
@@ -818,7 +713,7 @@ to_default(self, *statenames)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="s1">&#39;import_ee.r.s.effstate&#39;</span><span class="p">,</span>
@@ -832,12 +727,12 @@ to_default(self, *statenames)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Stochastic_Modelling_25_0.png" src="../../_images/examples_pump_Stochastic_Modelling_25_0.png" />
+<img alt="../../_images/examples_pump_Stochastic_Modelling_31_0.png" src="../../_images/examples_pump_Stochastic_Modelling_31_0.png" />
 </div>
 </div>
 <p>As shown, this is more what we would expect from a random . Note that this simulation comes from the default model seed, and will this will always be the same. To get a different seed, we can pass new modelparams as an argument to <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
@@ -854,12 +749,12 @@ to_default(self, *statenames)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Stochastic_Modelling_27_0.png" src="../../_images/examples_pump_Stochastic_Modelling_27_0.png" />
+<img alt="../../_images/examples_pump_Stochastic_Modelling_33_0.png" src="../../_images/examples_pump_Stochastic_Modelling_33_0.png" />
 </div>
 </div>
 <p>We can further simulate faults as we would before.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
@@ -877,12 +772,13 @@ to_default(self, *statenames)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Stochastic_Modelling_29_0.png" src="../../_images/examples_pump_Stochastic_Modelling_29_0.png" />
+<img alt="../../_images/examples_pump_Stochastic_Modelling_35_0.png" src="../../_images/examples_pump_Stochastic_Modelling_35_0.png" />
 </div>
 </div>
-<p>As shown the stochastic states still simulated over time after the fault. One thing to watch is thus that the stochastic update in the faulty scenario does or does not change the variables compared to the nominal state–since many of the visualizations (e.g., in <code class="docutils literal notranslate"><span class="pre">graph</span></code>) are based on finding <em>differences</em> between faulty and nominal models to visualize degradation, these methods may be less useful/reliable.</p>
+<p>As shown, the stochastic states still simulated over time after the fault.</p>
+<p>One thing to watch in stochastic models is that <strong>off-nominal behavior may be more difficult to track</strong>, since stochastic behavior may vary without necessarily being adverse behavior. This can be a problem because many of the visualizations (e.g., in <code class="docutils literal notranslate"><span class="pre">graph</span></code>) are based on finding <em>differences</em> between faulty and nominal models to visualize degradation, these methods may be less useful/reliable.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="s1">&#39;import_ee.r.s.effstate&#39;</span><span class="p">,</span>
@@ -896,12 +792,12 @@ to_default(self, *statenames)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Stochastic_Modelling_31_0.png" src="../../_images/examples_pump_Stochastic_Modelling_31_0.png" />
+<img alt="../../_images/examples_pump_Stochastic_Modelling_37_0.png" src="../../_images/examples_pump_Stochastic_Modelling_37_0.png" />
 </div>
 </div>
 <p>In the blockage scenario, there is no effect on the underlying stochastic states, since nothing was set up for this in the behavior. In the <code class="docutils literal notranslate"><span class="pre">no_sig</span></code> fault, on the other hand, we defined the signal noise to go to zero, as shown:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
@@ -920,15 +816,12 @@ to_default(self, *statenames)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Stochastic_Modelling_33_0.png" src="../../_images/examples_pump_Stochastic_Modelling_33_0.png" />
+<img alt="../../_images/examples_pump_Stochastic_Modelling_39_0.png" src="../../_images/examples_pump_Stochastic_Modelling_39_0.png" />
 </div>
 </div>
-</section>
-<section id="Multi-Scenario-Simulation">
-<h3>Multi-Scenario Simulation<a class="headerlink" href="#Multi-Scenario-Simulation" title="Permalink to this headline"></a></h3>
 <p>Because stochastic models are non-deterministic, we are often interested not in the results of a single thread, but of the distribution of outcomes that might occur. To perform this kind of assessment, we can use a <code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code> to instantiate the model with a number of different seeds.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">NominalApproach</span><span class="o">.</span><span class="n">add_seed_replicates</span><span class="p">)</span>
@@ -956,7 +849,7 @@ add_seed_replicates(self, rangeid, seeds)
 </div>
 <p>A <code class="docutils literal notranslate"><span class="pre">seeds</span></code> option can also be used in several other NominalApproach methods to simultaneously change the input parameters and seeds of the model. Below, we create an approach to simulate the model 100 times.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">NominalApproach</span><span class="p">()</span>
@@ -965,7 +858,7 @@ add_seed_replicates(self, rangeid, seeds)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">nominal_approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -977,117 +870,12 @@ add_seed_replicates(self, rangeid, seeds)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 100/100 [00:02&lt;00:00, 41.68it/s]
+SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 100/100 [00:02&lt;00:00, 40.00it/s]
 </pre></div></div>
 </div>
-<p>To evaluate this behavior over time, we can then use <code class="docutils literal notranslate"><span class="pre">an.plot.mdlhists</span></code>, which will plot the <em>distribution</em> of behaviors over time.</p>
+<p>To evaluate this behavior over time, we can then use <code class="docutils literal notranslate"><span class="pre">an.plot.hist</span></code>, to plot the <em>distribution</em> of behaviors over time. <code class="docutils literal notranslate"><span class="pre">an.plot.hist</span></code> has a number of different options for visualization of distributions. For example, below we plot model states as individual lines:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on function hist in module fmdtools.analyze.plot:
-
-hist(simhists, *plot_values, cols=2, aggregation=&#39;individual&#39;, comp_groups={&#39;nominal&#39;: &#39;nominal&#39;, &#39;faulty&#39;: &#39;faulty&#39;}, legend_loc=-1, xlabel=&#39;time&#39;, ylabels={}, max_ind=&#39;max&#39;, boundtype=&#39;fill&#39;, fillalpha=0.3, boundcolor=&#39;gray&#39;, boundlinestyle=&#39;--&#39;, ci=0.95, titles={}, title=&#39;&#39;, indiv_kwargs={&#39;nominal&#39;: {&#39;color&#39;: &#39;blue&#39;, &#39;ls&#39;: &#39;--&#39;}, &#39;faulty&#39;: {&#39;color&#39;: &#39;red&#39;}}, time_slice=[], time_slice_label=None, figsize=&#39;default&#39;, v_padding=None, h_padding=None, title_padding=0.0, phases={}, modephases={}, label_phases=True, legend_title=None, **kwargs)
-    Plot the behavior over time of the given function/flow values
-    over a set of scenarios, with ability to aggregate behaviors as needed.
-
-    Parameters
-    ----------
-    simhists : History
-        Simulation history
-    plot_values : strs, optional
-        names of values to pull from the history (e.g., &#39;fxns.move_water.s.flowrate&#39;).
-        Can also be specified as a dict (e.g. {&#39;fxns&#39;:&#39;move_water&#39;}) to get all keys
-        from a given fxn/flow/mode/etc.
-    cols : int, optional
-        columns to use in the figure. The default is 2.
-    aggregation : str, optional
-        Way of aggregating the plot values. The default is &#39;individual&#39;
-        Note that only the `individual` option can be used for histories of non-numeric quantities
-        (e.g., modes, which are recorded as strings)
-        - &#39;individual&#39; plots each run individually.
-        - &#39;mean_std&#39; plots the mean values over the sim with standard deviation error bars
-        - &#39;mean_ci&#39;  plots the mean values over the sim with mean confidence interval error bars
-            - optional argument ci (float 0.0-1.0) specifies the confidence interval (Default:0.95)
-        - &#39;mean_bound&#39; plots the mean values over the sim with variable bound error bars
-        - &#39;percentile&#39; plots the percentile distribution of the sim over time (does not reject outliers)
-            - optional argument &#39;perc_range&#39; (int 0-100) specifies the percentile range of the inner bars (Default: 50)
-    comp_groups : dict, optional
-        Dictionary for comparison groups (if more than one) with structure:
-            {&#39;group1&#39;:(&#39;scen1&#39;, &#39;scen2&#39;), &#39;group2&#39;:(&#39;scen3&#39;, &#39;scen4&#39;)} Default is {}
-            If a legend is shown, group names are used as labels.
-    legend_loc : int, optional
-        Specifies the plot to place the legend on, if runs are bine compared. Default is -1 (the last plot)
-        To remove the legend, give a value of False
-    xlabel : str, optional
-        Label for the x-axes. Default is &#39;time&#39;
-    ylabels : dict, optional
-        Label for the y-axes with structure {(fxnflowname, value):&#39;label&#39;}
-    max_ind : int, optional
-        index (usually correlates to time) cutoff for the simulation. Default is &#39;max&#39; which uses the first simulation termination time.
-    boundtype : &#39;fill&#39; or &#39;line&#39;, optional
-        -&#39;fill&#39; plots the error bounds as a filled area
-            - optional fillalpha (float) changes the alpha of this area.
-        -&#39;line&#39; plots the error bounds as lines
-            - optional boundcolor (str) changes the color of the bounds (default &#39;gray&#39;)
-            - optional boundlinestyle (str) changes the style of the bound lines (default &#39;--&#39;)
-    fillalpha : float
-        alpha value for fill in aggregated plots. Default is 0.3.
-    boundcolor : str, optional
-        color to make the bounds in aggregated plots. Default is &#39;gray&#39;
-    boundlinestyle : str, optional
-        linestyle to use for bounds in aggregated plots. Default is &#39;--&#39;
-    ci : float, optional
-        Bootstrap confidence interval (0-1) to use in &#39;mean_ci&#39; bound argument. Default is 0.95.
-    title : str, optional
-        overall title for the plot. Default is &#39;&#39;
-    indiv_kwargs : dict, optional
-        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where
-        where kwargs is an individual dict of keyword arguments for the
-        comparison group comp (or scenario, if not aggregated) which overrides
-        the global kwargs (or default behavior). If no comparison groups are given,
-        use &#39;default&#39; for a single history or &#39;nominal&#39;/&#39;faulty&#39; for a fault history
-        e.g. kwargs = {&#39;nominal&#39;:{color:&#39;green&#39;}} would make the nominal color green
-        Default is {}.
-    time_slice : int/list, optional
-        overlays a bar or bars at the given index when the fault was injected (if any). Default is []
-    time_slice_label : str, optional
-        label to use for the time slice bars in the legend. Default is None
-    figsize : tuple (float,float)
-        x-y size for the figure. The default is &#39;default&#39;, which dymanically gives 3 for each column and 2 for each row
-    v_padding : float
-        vertical padding between subplots as a fraction of axis height
-    h_padding : float
-        horizontal padding between subplots as a fraction of axis width
-    title_padding : float
-        padding for title as a fraction of figure height
-    phases : dict, optional
-        Provide to overlay phases on the individual function histories, where phases
-        is from an.process.mdlhist and of structure {&#39;fxnname&#39;:&#39;phase&#39;:[start, end]}.
-        Default is {}.
-    modephases : dict, optional
-        dictionary that maps the phases to operational modes, if it is desired to track the progression
-        through modes
-    legend_title : str, optional
-        title for the legend. Default is None
-    **kwargs : kwargs
-        keyword arguments to mpl.plot e.g. linestyle, color, etc. See &#39;aggregation&#39; for specification.
-        phases={}, modephases={}, label_phases=True,  **kwargs):
-
-</pre></div></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">an.plot.hist</span></code> has a number of different options for visualization. For example, below we plot model states as individual lines:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="s1">&#39;move_water.r.s.eff&#39;</span><span class="p">,</span> <span class="s1">&#39;move_water.s.total_flow&#39;</span><span class="p">,</span>
@@ -1102,12 +890,12 @@ hist(simhists, *plot_values, cols=2, aggregation=&#39;individual&#39;, comp_grou
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Stochastic_Modelling_42_0.png" src="../../_images/examples_pump_Stochastic_Modelling_42_0.png" />
+<img alt="../../_images/examples_pump_Stochastic_Modelling_46_0.png" src="../../_images/examples_pump_Stochastic_Modelling_46_0.png" />
 </div>
 </div>
 <p>Or as percentiles:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="s1">&#39;move_water.r.s.eff&#39;</span><span class="p">,</span> <span class="s1">&#39;move_water.s.total_flow&#39;</span><span class="p">,</span>
@@ -1122,12 +910,12 @@ hist(simhists, *plot_values, cols=2, aggregation=&#39;individual&#39;, comp_grou
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Stochastic_Modelling_44_0.png" src="../../_images/examples_pump_Stochastic_Modelling_44_0.png" />
+<img alt="../../_images/examples_pump_Stochastic_Modelling_48_0.png" src="../../_images/examples_pump_Stochastic_Modelling_48_0.png" />
 </div>
 </div>
 <p>Or as a mean with confidence interval:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="s1">&#39;move_water.r.s.eff&#39;</span><span class="p">,</span> <span class="s1">&#39;move_water.s.total_flow&#39;</span><span class="p">,</span>
@@ -1142,15 +930,12 @@ hist(simhists, *plot_values, cols=2, aggregation=&#39;individual&#39;, comp_grou
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Stochastic_Modelling_46_0.png" src="../../_images/examples_pump_Stochastic_Modelling_46_0.png" />
+<img alt="../../_images/examples_pump_Stochastic_Modelling_50_0.png" src="../../_images/examples_pump_Stochastic_Modelling_50_0.png" />
 </div>
 </div>
-</section>
-<section id="Nested-Fault-Simulation">
-<h3>Nested Fault Simulation<a class="headerlink" href="#Nested-Fault-Simulation" title="Permalink to this headline"></a></h3>
 <p>We can also compare stochastic output over a set of scenarios using <code class="docutils literal notranslate"><span class="pre">plot.hist</span></code> with the <code class="docutils literal notranslate"><span class="pre">comp_groups</span></code> parameter, which places the scenarios in different groups.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">paramfunc</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -1160,7 +945,7 @@ hist(simhists, *plot_values, cols=2, aggregation=&#39;individual&#39;, comp_grou
 </div>
 <p>This can be done by first creating an approach with two parameters we wish to compare. The pump still has one real parameter–the fault delay.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app_comp</span> <span class="o">=</span> <span class="n">NominalApproach</span><span class="p">()</span>
@@ -1171,7 +956,7 @@ hist(simhists, *plot_values, cols=2, aggregation=&#39;individual&#39;, comp_grou
 </div>
 <p>Since this delay only shows up in blockage fault modes, to compare the behaviors, we will first simulate it in a nested approach with only the blockage fault added.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
@@ -1179,7 +964,7 @@ hist(simhists, *plot_values, cols=2, aggregation=&#39;individual&#39;, comp_grou
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pool</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
@@ -1187,7 +972,7 @@ hist(simhists, *plot_values, cols=2, aggregation=&#39;individual&#39;, comp_grou
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="p">,</span> <span class="n">apps</span><span class="o">=</span><span class="n">propagate</span><span class="o">.</span><span class="n">nested_approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app_comp</span><span class="p">,</span> <span class="n">run_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;export_water&#39;</span><span class="p">,</span><span class="s1">&#39;block&#39;</span><span class="p">)])</span>
@@ -1199,7 +984,7 @@ hist(simhists, *plot_values, cols=2, aggregation=&#39;individual&#39;, comp_grou
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  42%|██████████████████████▍                               | 83/200 [00:09&lt;00:13,  8.58it/s]
+NESTED SCENARIOS COMPLETE:  42%|██████████████████████▋                               | 84/200 [00:10&lt;00:14,  8.05it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1210,34 +995,17 @@ NESTED SCENARIOS COMPLETE:  42%|████████████████
 Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </pre></div></div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  50%|██████████████████████████▌                          | 100/200 [00:11&lt;00:11,  8.74it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████| 200/200 [00:23&lt;00:00,  8.39it/s]
+NESTED SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████| 200/200 [00:25&lt;00:00,  7.95it/s]
 </pre></div></div>
 </div>
 <p>Next, we get just the scenarios of interest:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp_mdlhists</span> <span class="o">=</span> <span class="n">mdlhists</span><span class="o">.</span><span class="n">get_scens</span><span class="p">(</span><span class="s1">&#39;export_water_block_t27p0&#39;</span><span class="p">)</span>
@@ -1246,7 +1014,7 @@ NESTED SCENARIOS COMPLETE: 100%|████████████████
 </div>
 <p>Finally, we create some comparison groups to group the results by:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp_groups</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;delay_1&#39;</span><span class="p">:</span> <span class="n">app_comp</span><span class="o">.</span><span class="n">ranges</span><span class="p">[</span><span class="s1">&#39;delay_1&#39;</span><span class="p">][</span><span class="s1">&#39;scenarios&#39;</span><span class="p">],</span> <span class="s1">&#39;delay_10&#39;</span><span class="p">:</span><span class="n">app_comp</span><span class="o">.</span><span class="n">ranges</span><span class="p">[</span><span class="s1">&#39;delay_10&#39;</span><span class="p">][</span><span class="s1">&#39;scenarios&#39;</span><span class="p">]}</span>
@@ -1255,7 +1023,7 @@ NESTED SCENARIOS COMPLETE: 100%|████████████████
 </div>
 <p>These are the resulting behaviors:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">comp_mdlhists</span><span class="p">,</span><span class="s1">&#39;move_water.r.s.eff&#39;</span><span class="p">,</span> <span class="s1">&#39;move_water.s.total_flow&#39;</span><span class="p">,</span>
@@ -1270,14 +1038,14 @@ NESTED SCENARIOS COMPLETE: 100%|████████████████
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Stochastic_Modelling_61_0.png" src="../../_images/examples_pump_Stochastic_Modelling_61_0.png" />
+<img alt="../../_images/examples_pump_Stochastic_Modelling_65_0.png" src="../../_images/examples_pump_Stochastic_Modelling_65_0.png" />
 </div>
 </div>
 <p>There a few interesting aspects of this simulation: - First, some of the <code class="docutils literal notranslate"><span class="pre">delay_1</span></code> design simulations have a zero flowrate before the fault is injected. This is because the reduced delay means that nominal behavior can easily cause the fault–all that nees to happen is for the pressure to go over 15 for two time-steps, which is entirely forseeable with all the variability in the simulation. This can also be seen in the “total_flow” graph. - Second, the <code class="docutils literal notranslate"><span class="pre">delay_10</span></code> gives the nominal behavior
 until the fault time, when pressure increases dramatically. This is also observed in the <code class="docutils literal notranslate"><span class="pre">delay_1</span></code> design, but with a much smaller delay (1 instead of 1).</p>
 <p>Finally, running multiple simulations relies on the NominalApproach, it can be combined fairly easily with existing methods used in conjunction with NominalApproach. (e.g., <code class="docutils literal notranslate"><span class="pre">tabulate.nested_stats</span></code>).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">nested_stats</span><span class="p">(</span><span class="n">app_comp</span><span class="p">,</span> <span class="n">endclasses</span><span class="p">,</span> <span class="n">average_metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">],</span> <span class="n">inputparams</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;delay&#39;</span><span class="p">])</span>
@@ -1285,7 +1053,7 @@ until the fault time, when pressure increases dramatically. This is also observe
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1357,27 +1125,27 @@ until the fault time, when pressure increases dramatically. This is also observe
     </tr>
     <tr>
       <th>ave_cost</th>
-      <td>41009.073401</td>
-      <td>41009.073401</td>
-      <td>41009.073401</td>
-      <td>41009.073401</td>
-      <td>41009.073401</td>
-      <td>41009.073401</td>
-      <td>41009.073401</td>
-      <td>41009.073401</td>
-      <td>41009.073401</td>
-      <td>41009.073401</td>
+      <td>40963.015793</td>
+      <td>40963.015793</td>
+      <td>40963.015793</td>
+      <td>40963.015793</td>
+      <td>40963.015793</td>
+      <td>40963.015793</td>
+      <td>40963.015793</td>
+      <td>40963.015793</td>
+      <td>40963.015793</td>
+      <td>40963.015793</td>
       <td>...</td>
-      <td>39606.301057</td>
-      <td>39606.301057</td>
-      <td>39606.301057</td>
-      <td>39606.301057</td>
-      <td>39606.301057</td>
-      <td>39606.301057</td>
-      <td>39606.301057</td>
-      <td>39606.301057</td>
-      <td>39606.301057</td>
-      <td>39606.301057</td>
+      <td>38906.587712</td>
+      <td>38906.587712</td>
+      <td>38906.587712</td>
+      <td>38906.587712</td>
+      <td>38906.587712</td>
+      <td>38906.587712</td>
+      <td>38906.587712</td>
+      <td>38906.587712</td>
+      <td>38906.587712</td>
+      <td>38906.587712</td>
     </tr>
   </tbody>
 </table>
@@ -1385,7 +1153,7 @@ until the fault time, when pressure increases dramatically. This is also observe
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">resilience_factor_comparison</span><span class="p">(</span><span class="n">app_comp</span><span class="p">,</span> <span class="n">endclasses</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;delay&#39;</span><span class="p">],</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span>  <span class="n">difference</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">percent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1393,49 +1161,47 @@ until the fault time, when pressure increases dramatically. This is also observe
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
 </div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">TypeError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_18972/82623819.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>an<span class="ansi-yellow-intense-fg ansi-bold">.</span>tabulate<span class="ansi-yellow-intense-fg ansi-bold">.</span>resilience_factor_comparison<span class="ansi-yellow-intense-fg ansi-bold">(</span>app_comp<span class="ansi-yellow-intense-fg ansi-bold">,</span> endclasses<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;delay&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;cost&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span>  difference<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">False</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> percent<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">False</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\tabulate.py</span> in <span class="ansi-cyan-fg">resilience_factor_comparison</span><span class="ansi-blue-intense-fg ansi-bold">(nomapp, nested_endclasses, params, value, faults, rangeid, nan_as, percent, difference, give_ci, **kwargs)</span>
-<span class="ansi-green-fg">    275</span>             factors <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span>rangeid<span class="ansi-yellow-intense-fg ansi-bold">:</span>nomapp<span class="ansi-yellow-intense-fg ansi-bold">.</span>ranges<span class="ansi-yellow-intense-fg ansi-bold">[</span>rangeid<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;scenarios&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-green-intense-fg ansi-bold">for</span> rangeid <span class="ansi-green-intense-fg ansi-bold">in</span> nomapp<span class="ansi-yellow-intense-fg ansi-bold">.</span>ranges<span class="ansi-yellow-intense-fg ansi-bold">}</span>
-<span class="ansi-green-fg">    276</span>     <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> factors <span class="ansi-yellow-intense-fg ansi-bold">=</span> nomapp<span class="ansi-yellow-intense-fg ansi-bold">.</span>get_param_scens<span class="ansi-yellow-intense-fg ansi-bold">(</span>rangeid<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span>params<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 277</span><span class="ansi-yellow-intense-fg ansi-bold">     </span><span class="ansi-green-intense-fg ansi-bold">if</span> faults<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;functions&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>     faultlist <span class="ansi-yellow-intense-fg ansi-bold">=</span> set<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>e<span class="ansi-yellow-intense-fg ansi-bold">.</span>partition<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39; &#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-green-intense-fg ansi-bold">for</span> scen <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses <span class="ansi-green-intense-fg ansi-bold">for</span> e <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses<span class="ansi-yellow-intense-fg ansi-bold">[</span>scen<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    278</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> faults<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;modes&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>       faultlist <span class="ansi-yellow-intense-fg ansi-bold">=</span> set<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>e<span class="ansi-yellow-intense-fg ansi-bold">.</span>partition<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;,&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-green-intense-fg ansi-bold">for</span> scen <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses <span class="ansi-green-intense-fg ansi-bold">for</span> e <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses<span class="ansi-yellow-intense-fg ansi-bold">[</span>scen<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    279</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> faults<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;mode type&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>   faultlist <span class="ansi-yellow-intense-fg ansi-bold">=</span> set<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>e<span class="ansi-yellow-intense-fg ansi-bold">.</span>partition<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;,&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>partition<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39; &#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-green-intense-fg ansi-bold">for</span> scen <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses <span class="ansi-green-intense-fg ansi-bold">for</span> e <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses<span class="ansi-yellow-intense-fg ansi-bold">[</span>scen<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\tabulate.py</span> in <span class="ansi-cyan-fg">&lt;listcomp&gt;</span><span class="ansi-blue-intense-fg ansi-bold">(.0)</span>
-<span class="ansi-green-fg">    275</span>             factors <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span>rangeid<span class="ansi-yellow-intense-fg ansi-bold">:</span>nomapp<span class="ansi-yellow-intense-fg ansi-bold">.</span>ranges<span class="ansi-yellow-intense-fg ansi-bold">[</span>rangeid<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;scenarios&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-green-intense-fg ansi-bold">for</span> rangeid <span class="ansi-green-intense-fg ansi-bold">in</span> nomapp<span class="ansi-yellow-intense-fg ansi-bold">.</span>ranges<span class="ansi-yellow-intense-fg ansi-bold">}</span>
-<span class="ansi-green-fg">    276</span>     <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> factors <span class="ansi-yellow-intense-fg ansi-bold">=</span> nomapp<span class="ansi-yellow-intense-fg ansi-bold">.</span>get_param_scens<span class="ansi-yellow-intense-fg ansi-bold">(</span>rangeid<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span>params<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 277</span><span class="ansi-yellow-intense-fg ansi-bold">     </span><span class="ansi-green-intense-fg ansi-bold">if</span> faults<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;functions&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>     faultlist <span class="ansi-yellow-intense-fg ansi-bold">=</span> set<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>e<span class="ansi-yellow-intense-fg ansi-bold">.</span>partition<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39; &#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-green-intense-fg ansi-bold">for</span> scen <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses <span class="ansi-green-intense-fg ansi-bold">for</span> e <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses<span class="ansi-yellow-intense-fg ansi-bold">[</span>scen<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    278</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> faults<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;modes&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>       faultlist <span class="ansi-yellow-intense-fg ansi-bold">=</span> set<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>e<span class="ansi-yellow-intense-fg ansi-bold">.</span>partition<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;,&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-green-intense-fg ansi-bold">for</span> scen <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses <span class="ansi-green-intense-fg ansi-bold">for</span> e <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses<span class="ansi-yellow-intense-fg ansi-bold">[</span>scen<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    279</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> faults<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;mode type&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>   faultlist <span class="ansi-yellow-intense-fg ansi-bold">=</span> set<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>e<span class="ansi-yellow-intense-fg ansi-bold">.</span>partition<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;,&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>partition<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39; &#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-green-intense-fg ansi-bold">for</span> scen <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses <span class="ansi-green-intense-fg ansi-bold">for</span> e <span class="ansi-green-intense-fg ansi-bold">in</span> nested_endclasses<span class="ansi-yellow-intense-fg ansi-bold">[</span>scen<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-red-intense-fg ansi-bold">TypeError</span>: &#39;float&#39; object is not iterable
-</pre></div></div>
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>(delay,)</th>
+      <th>nominal</th>
+      <th>export_water</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>delay_1</th>
+      <td>100.0</td>
+      <td>16488.984295</td>
+    </tr>
+    <tr>
+      <th>delay_10</th>
+      <td>0.0</td>
+      <td>14837.051311</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
-</section>
 </section>
 </section>
 

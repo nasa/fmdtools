@@ -12,7 +12,7 @@ The model reference for each of these is provided below:
 fmdtools.analyze.result 
 --------------------------------
 
-.. automodule:: fmdtools.analyze.graph
+.. automodule:: fmdtools.analyze.result
    :members:
    :undoc-members:
    :show-inheritance:
