@@ -107,9 +107,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-0">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
@@ -425,7 +425,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>This notebook uses the pump example (see ex_pump.py) to illustrate the use of parallelism in fmdtools. This is fairly simple model, and thus it should be noted that there may be considerations with more complex models which may not be adequately covered here.</p>
+<p>This notebook uses the pump example (see <code class="docutils literal notranslate"><span class="pre">ex_pump.py</span></code>) to illustrate the use of parallelism in fmdtools. This is fairly simple model, and thus it should be noted that there may be considerations with more complex models which may not be adequately covered here.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -461,7 +461,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="s1">&#39;flows.ee_1.s.current&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.wat_2.s.flowrate&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -499,22 +499,6 @@ from the main process thread to the seperate processes of the pool.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-is_copy
-flows
-fxns
-params
-valparams
-modelparams
-_rng
-functionorder
-_fxnflows
-_fxninput
-_flowstates
-staticfxns
-dynamicfxns
-fxnflowgraph
-multgraph
-staticflows
 The object is pickleable
 </pre></div></div>
 </div>
@@ -560,41 +544,17 @@ export_water
 wat_in
 The object is pickleable
 MODEL
-is_copy
-flows
-fxns
-params
-valparams
-modelparams
-_rng
-functionorder
-_fxnflows
-_fxninput
-_flowstates
-staticfxns
-dynamicfxns
-fxnflowgraph
-multgraph
-staticflows
 The object is pickleable
 </pre></div></div>
 </div>
 <p>As you can see, this model is pickleable. However, this may not be the case for all structures if they rely on unpickleable data structures, one common one being iterators like .values().</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
 </section>
 <section id="Using-Parallelism-in-Simulation">
 <h2>Using Parallelism in Simulation<a class="headerlink" href="#Using-Parallelism-in-Simulation" title="Permalink to this headline"></a></h2>
 <p>Parallelism generally requires using some external parallel processing toolkit. The syntax used by fmdtools methods is compatible with: - <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html">multiprocessing</a>, python’s default parallel computing library - <a class="reference external" href="https://pypi.org/project/multiprocess/">multiprocess</a>, a fork of multiprocessing developed by The UQ Foundation - <a class="reference external" href="https://github.com/uqfoundation/pathos">pathos</a>, a broader parallel computing package developed by The UQ Foundation</p>
 <p>And any other package that emulates multiprocessing.Pool</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
@@ -607,7 +567,7 @@ The object is pickleable
 set of faults over a set of model parameters)</p>
 <p>These methods can be run in parallel by sending them a <code class="docutils literal notranslate"><span class="pre">pool</span></code> object from one of these modules as the optional <code class="docutils literal notranslate"><span class="pre">pool</span></code> argument. Further details on setting up and running an approach are provided in <code class="docutils literal notranslate"><span class="pre">docs/Approach</span> <span class="pre">Use-Cases.ipynb</span></code></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
@@ -622,11 +582,11 @@ set of faults over a set of model parameters)</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 17/17 [00:02&lt;00:00,  5.96it/s]
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 17/17 [00:02&lt;00:00,  7.51it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
@@ -643,12 +603,12 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 C:\Users\dhulse\Anaconda3\lib\multiprocessing\pool.py:265: ResourceWarning: unclosed running multiprocessing pool &lt;multiprocessing.pool.Pool state=RUN pool_size=4&gt;
   _warn(f&#34;unclosed running multiprocessing pool {self!r}&#34;,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 21/21 [00:02&lt;00:00,  7.30it/s]
+SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 21/21 [00:02&lt;00:00,  9.76it/s]
 </pre></div></div>
 </div>
 <p>It can also be helpful to verify that the results of parallel simulation and normal serial execution are the same:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_par</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">single_faults</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
@@ -664,12 +624,12 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 21/21 [00:00&lt;00:00, 80.15it/s]
-SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 21/21 [00:01&lt;00:00, 19.86it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 21/21 [00:00&lt;00:00, 285.96it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 21/21 [00:00&lt;00:00, 125.31it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses_par</span><span class="p">,</span> <span class="n">mdlhists</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
@@ -685,14 +645,14 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 79.23it/s]
-SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 27.07it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 300.03it/s]
+SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 121.98it/s]
 </pre></div></div>
 </div>
 <p>While fmdtools built-in methods are the easiest way to leverage parallelism, it can also be used with custom arguments/methods to meet the needs of simulation. However, (on Windows) these methods need to be defined in an external module with an “if <strong>name</strong>==‘<strong>main</strong>’:” statement, otherwise execution will hang from spawning new processes. This has to do with how multiprocessing works in windows.</p>
 <p>To show how parellism can be leveraged manually for a desired use-case, below the model is run over the blockage fault mode at time t=1 with a different model parameter (delayed failure behavior), as defined in the <code class="docutils literal notranslate"><span class="pre">parallelism_methods.py</span></code> module in this folder.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">parallelism_methods</span> <span class="kn">import</span> <span class="n">delay_test</span>
@@ -700,7 +660,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">delay_test</span><span class="p">()</span>
@@ -709,41 +669,41 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;rate&#39;: 0.00055,
-  &#39;cost&#39;: 20125.000000000007,
-  &#39;expected cost&#39;: 1106875.0000000005},
- {&#39;rate&#39;: 0.00055,
-  &#39;cost&#39;: 20102.500000000007,
-  &#39;expected cost&#39;: 1105637.5000000005},
- {&#39;rate&#39;: 0.00055,
-  &#39;cost&#39;: 20080.000000000007,
-  &#39;expected cost&#39;: 1104400.0000000005},
- {&#39;rate&#39;: 0.00055,
-  &#39;cost&#39;: 20057.500000000007,
-  &#39;expected cost&#39;: 1103162.5000000005},
- {&#39;rate&#39;: 0.00055,
-  &#39;cost&#39;: 20035.000000000007,
-  &#39;expected cost&#39;: 1101925.0000000005},
- {&#39;rate&#39;: 0.00055,
-  &#39;cost&#39;: 15023.750000000005,
-  &#39;expected cost&#39;: 826306.2500000003},
- {&#39;rate&#39;: 0.00055,
-  &#39;cost&#39;: 15023.750000000005,
-  &#39;expected cost&#39;: 826306.2500000003},
- {&#39;rate&#39;: 0.00055,
-  &#39;cost&#39;: 15023.750000000005,
-  &#39;expected cost&#39;: 826306.2500000003},
- {&#39;rate&#39;: 0.00055,
-  &#39;cost&#39;: 15023.750000000005,
-  &#39;expected cost&#39;: 826306.2500000003},
- {&#39;rate&#39;: 0.00055,
-  &#39;cost&#39;: 15023.750000000005,
-  &#39;expected cost&#39;: 826306.2500000003}]
+[endclass.rate:                   0.00055
+ endclass.cost:        20125.000000000007
+ endclass.expected cost: 1106875.0000000005,
+ endclass.rate:                   0.00055
+ endclass.cost:        20102.500000000007
+ endclass.expected cost: 1105637.5000000005,
+ endclass.rate:                   0.00055
+ endclass.cost:        20080.000000000007
+ endclass.expected cost: 1104400.0000000005,
+ endclass.rate:                   0.00055
+ endclass.cost:        20057.500000000007
+ endclass.expected cost: 1103162.5000000005,
+ endclass.rate:                   0.00055
+ endclass.cost:        20035.000000000007
+ endclass.expected cost: 1101925.0000000005,
+ endclass.rate:                   0.00055
+ endclass.cost:        15023.750000000005
+ endclass.expected cost: 826306.2500000003,
+ endclass.rate:                   0.00055
+ endclass.cost:        15023.750000000005
+ endclass.expected cost: 826306.2500000003,
+ endclass.rate:                   0.00055
+ endclass.cost:        15023.750000000005
+ endclass.expected cost: 826306.2500000003,
+ endclass.rate:                   0.00055
+ endclass.cost:        15023.750000000005
+ endclass.expected cost: 826306.2500000003,
+ endclass.rate:                   0.00055
+ endclass.cost:        15023.750000000005
+ endclass.expected cost: 826306.2500000003]
 </pre></div></div>
 </div>
 <p>In this method, the model is run many times over a given fault with different delay parameters. It should be noted that this approach is not especially efficient, since the nominal scenario is simulated at each call of <code class="docutils literal notranslate"><span class="pre">propagate.one_fault()</span></code>. It is thus preferred to use the appropriate fault/parameter sampling approaches and propagate methods, since these methods only run the nominal simulation once for fault scenarios and can also use staged execution (copying the model at fault time for
@@ -754,7 +714,7 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 <p>Parallelism is often used in computation to speed up up a set of independent simulations. Conventionally, one might say it leads to a reduced computational cost of <span class="math notranslate nohighlight">\(t/n\)</span>, where t was the original time of the set of processes, and n is the number of cores.</p>
 <p>However, this computational performance increase is dependent on the implementation. In Python, there is some overhead from from communicating data structures in and out of parallel threads which can become a significant consideration when the data structures are large. Additionally, different Pools can execute more or less efficiently. Below these are each compared.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -763,7 +723,7 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cores</span><span class="o">=</span><span class="mi">4</span>
@@ -776,37 +736,37 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 8288 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 6880 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=8&gt;
   self.start()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 8372 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 17824 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=10&gt;
   self.start()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 13136 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 10244 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=12&gt;
   self.start()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 7068 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 14440 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=14&gt;
   self.start()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 12732 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 11584 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=16&gt;
   self.start()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 6508 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 14264 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=18&gt;
@@ -817,7 +777,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <p>Below is the baseline comparison, where the the following parameters characterize the sampling approach: - single faults: only the single-fault scenarios are considered - 3 points per phase: an evenly-spaced quadrature is sampled at each phase of operation (start, on, end) for the model - staged: the model is copied at each point in time where faults is injected during the model time to save computation - track: the entire model history is returned for each simulation</p>
 <p>This is typical for a small model like this where the per-model expense is low.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">()</span>
@@ -828,7 +788,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -844,7 +804,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_31_0.png" src="../../_images/examples_pump_Parallelism_Tutorial_31_0.png" />
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_30_0.png" src="../../_images/examples_pump_Parallelism_Tutorial_30_0.png" />
 </div>
 </div>
 <p>As shown, in this situation, both the multiprocessing and threadpool pools give computational performance increases.</p>
@@ -852,7 +812,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <h3>Comparison: No Histories<a class="headerlink" href="#Comparison:-No-Histories" title="Permalink to this headline"></a></h3>
 <p>In the below comparison, the same simulation approach is run, except without tracking a history of model states through the simulation.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
@@ -862,7 +822,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -878,30 +838,30 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x29e6cc6ef10&gt;
+&lt;matplotlib.legend.Legend at 0x263c7d8e550&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_35_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_35_1.png" />
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_34_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_34_1.png" />
 </div>
 </div>
-<p>As shown, in this situation, the overall simulation expense decreases dramatically (~1/2), even in the serial execution case.</p>
-<p>Additionally, the case for using a parallel processing pool increases immensely (the multiprocessing pool takes ~1/4 of the normal simulation time). This is because passing the model history back to the main process is nearly comparable in time to simulation itself.</p>
+<p>As shown, in this situation, the overall simulation expense decreases, even in the serial execution case.</p>
+<p>Additionally, the case for using a parallel processing pool increases somewhat. This is because passing the model history back to the main process is nearly comparable in time to simulation itself.</p>
 <p>As a result, removing it saves a large amount of computational time when using parallel processing.</p>
 </section>
 <section id="Comparison:-Many-Faults">
 <h3>Comparison: Many Faults<a class="headerlink" href="#Comparison:-Many-Faults" title="Permalink to this headline"></a></h3>
 <p>In the below comparison, many faults are injected in the system to increase the number of scenarios (ostensibly making the case better for parallelism)</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
@@ -911,7 +871,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -927,19 +887,19 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x29e6cb93220&gt;
+&lt;matplotlib.legend.Legend at 0x263c5623040&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_39_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_39_1.png" />
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_38_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_38_1.png" />
 </div>
 </div>
 <p>As shown, increasing the number of joint-fault scenarios increases computational costs significantly–as would be expected.</p>
@@ -949,17 +909,17 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <h3>Comparison: Long simulation<a class="headerlink" href="#Comparison:-Long-simulation" title="Permalink to this headline"></a></h3>
 <p>It may be of interest to simulate how the comparative performance changes for longer simulations. In this comparison, the simulation time is extended tenfold.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">modelparams</span> <span class="o">=</span> <span class="n">ModelParam</span><span class="p">(</span><span class="n">phases</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;start&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">)),</span> <span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">sp</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">)))</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -975,19 +935,19 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x29e6de97d90&gt;
+&lt;matplotlib.legend.Legend at 0x263c7eb1d00&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_43_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_43_1.png" />
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_42_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_42_1.png" />
 </div>
 </div>
 <p>As shown, the simulation time does increase significantly–about tenfold. In terms of comparative performance, the same general trends hold, except some pools take more of a performance decrease than others. Ostensibly because they require more computational overhead to copy larger data structures back to the main process.</p>
@@ -996,17 +956,17 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <h3>Comparison: Long Simulation No Tracking<a class="headerlink" href="#Comparison:-Long-Simulation-No-Tracking" title="Permalink to this headline"></a></h3>
 <p>Finally, it may be interesting to see how performance is affected in long simulations when there is no tracking. This is because in these simulations, there should be very little overhead from creating the respective data structures, even when there is a long simulation. This comparison is shown below.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">modelparams</span> <span class="o">=</span> <span class="n">ModelParam</span><span class="p">(</span><span class="n">phases</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;start&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">)),</span> <span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">sp</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">)))</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1022,38 +982,39 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x29e6c649340&gt;
+&lt;matplotlib.legend.Legend at 0x263c5845b50&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_47_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_47_1.png" />
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_46_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_46_1.png" />
 </div>
 </div>
-<p>As shown, with a long simulation, the case for pools (other than multiprocessing–ProcessPool, ParallelPool, multiprocess) increases somewhat.</p>
+<p>As shown, removing the tracking makes the long simulations take less time than the short simulation!</p>
+<p>Additionally, with these long simulations, the case for pools (other than multiprocessing–ProcessPool, ParallelPool, multiprocess) increases somewhat. This is because the time spent initializing the model is much less.</p>
 </section>
 <section id="Comparison:-Long-Simulation-Only-Necessary-Tracking">
 <h3>Comparison: Long Simulation Only Necessary Tracking<a class="headerlink" href="#Comparison:-Long-Simulation-Only-Necessary-Tracking" title="Permalink to this headline"></a></h3>
 <p>In practice, it can be necessary to track some states over time. Here we perform the same comparison using the ‘valstates’ option, which only tracks states which have been defined in the model to be necessary to track (using ‘valparams’)</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">modelparams</span> <span class="o">=</span> <span class="n">ModelParam</span><span class="p">(</span><span class="n">phases</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;start&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">)),</span> <span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">sp</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">)))</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;valparams&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1069,22 +1030,22 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x29e6cbc2fa0&gt;
+&lt;matplotlib.legend.Legend at 0x263c5613100&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_51_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_51_1.png" />
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_50_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_50_1.png" />
 </div>
 </div>
-<p>As shown, even though this model has a large increase in simulation time, the this time can be reduced by not returning the full history.</p>
+<p>As shown, only tracking a few variables results in similar computational time no tracking.</p>
 <p>Thus, the major computational performance limitation in this model is not necessarily the model, but the generation, update, and passing of the history itself.</p>
 </section>
 </section>
@@ -1092,17 +1053,17 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <h2>Comparison: Lower Tracking Time Resolution<a class="headerlink" href="#Comparison:-Lower-Tracking-Time-Resolution" title="Permalink to this headline"></a></h2>
 <p>Finally, the number of recorded timesteps can be lowered to lower computational costs while still returning all relevant variables.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">modelparams</span> <span class="o">=</span> <span class="n">ModelParam</span><span class="p">(</span><span class="n">phases</span><span class="o">=</span><span class="p">((</span><span class="s1">&#39;start&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">500</span><span class="p">)),</span> <span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">(</span><span class="n">sp</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span> <span class="mi">500</span><span class="p">)))</span>
 <span class="n">exectimes</span> <span class="o">=</span> <span class="n">compare_pools</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">app</span><span class="p">,</span><span class="n">pools</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">track_times</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1118,19 +1079,19 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x29e6dee08e0&gt;
+&lt;matplotlib.legend.Legend at 0x263c56df520&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_55_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_55_1.png" />
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_54_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_54_1.png" />
 </div>
 </div>
 <p>As shown, while lowering time resolution could theoretically lower computational time, it does not significantly change much in this example.</p>
@@ -1148,7 +1109,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 <p>While parallelism and staged execution are helpful and relatively easy-to-implement methods of computational cost reduction, it can be helpful (especially for more complex models) to see what aspects of the model are taking the most computational time.</p>
 <p>Python’s builtin <code class="docutils literal notranslate"><span class="pre">cProfile</span></code> package can ge used to see the relative computational times of different functions/processes.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span>
@@ -1156,7 +1117,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cProfile</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;propagate.nominal(mdl)&#39;</span><span class="p">)</span>
@@ -1168,177 +1129,142 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-         279899 function calls (261791 primitive calls) in 0.156 seconds
+         187348 function calls (184256 primitive calls) in 0.103 seconds
 
    Ordered by: standard name
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
         1    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(amin)
-       18    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(concatenate)
-        4    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(sort)
+       28    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(concatenate)
+       28    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(sort)
         1    0.000    0.000    0.000    0.000 &lt;string&gt;:1(&lt;module&gt;)
-       37    0.000    0.000    0.000    0.000 __init__.py:1043(__init__)
-       36    0.000    0.000    0.000    0.000 __init__.py:1053(__getitem__)
-      131    0.000    0.000    0.000    0.000 __init__.py:1060(__setitem__)
-        4    0.000    0.000    0.000    0.000 _asarray.py:110(asanyarray)
+       18    0.000    0.000    0.000    0.000 __init__.py:1043(__init__)
+       14    0.000    0.000    0.000    0.000 __init__.py:1050(__len__)
+        5    0.000    0.000    0.000    0.000 __init__.py:1053(__getitem__)
+       35    0.000    0.000    0.000    0.000 __init__.py:1060(__setitem__)
+        1    0.000    0.000    0.000    0.000 __init__.py:1066(__iter__)
+        7    0.000    0.000    0.000    0.000 __init__.py:1070(__contains__)
+       28    0.000    0.000    0.000    0.000 _asarray.py:110(asanyarray)
      1006    0.002    0.000    0.005    0.000 _collections_abc.py:706(__ior__)
-       96    0.000    0.000    0.000    0.000 _collections_abc.py:779(items)
-       96    0.000    0.000    0.000    0.000 _collections_abc.py:802(__init__)
-      216    0.000    0.000    0.001    0.000 _collections_abc.py:849(__iter__)
-       36    0.000    0.000    0.000    0.000 _ufunc_config.py:132(geterr)
-       36    0.000    0.000    0.000    0.000 _ufunc_config.py:32(seterr)
-       18    0.000    0.000    0.000    0.000 _ufunc_config.py:433(__enter__)
-       18    0.000    0.000    0.000    0.000 _ufunc_config.py:438(__exit__)
-       51    0.000    0.000    0.000    0.000 abc.py:117(__instancecheck__)
-       10    0.000    0.000    0.003    0.000 block.py:112(__init__)
-       10    0.000    0.000    0.000    0.000 block.py:157(update_seed)
-        5    0.000    0.000    0.000    0.000 block.py:205(reset)
-     5042    0.010    0.000    0.023    0.000 block.py:253(return_mutables)
-        5    0.000    0.000    0.000    0.000 block.py:274(create_hist)
-       10    0.000    0.000    0.001    0.000 block.py:31(assoc_flows)
-       10    0.000    0.000    0.000    0.000 block.py:49(&lt;dictcomp&gt;)
-       10    0.000    0.000    0.004    0.000 block.py:738(__init__)
-     5042    0.005    0.000    0.030    0.000 block.py:848(return_mutables)
-     2526    0.008    0.000    0.025    0.000 block.py:854(__call__)
-        5    0.000    0.000    0.000    0.000 block.py:908(reset)
-       25    0.000    0.000    0.000    0.000 common.py:57(get_true_fields)
-       18    0.000    0.000    0.000    0.000 contextlib.py:63(_recreate_cm)
-       18    0.000    0.000    0.001    0.000 contextlib.py:76(inner)
+        2    0.000    0.000    0.000    0.000 _collections_abc.py:933(update)
+       56    0.000    0.000    0.000    0.000 _ufunc_config.py:132(geterr)
+       56    0.000    0.000    0.000    0.000 _ufunc_config.py:32(seterr)
+       28    0.000    0.000    0.000    0.000 _ufunc_config.py:433(__enter__)
+       28    0.000    0.000    0.000    0.000 _ufunc_config.py:438(__exit__)
+       45    0.000    0.000    0.000    0.000 abc.py:117(__instancecheck__)
+       12    0.000    0.000    0.003    0.000 block.py:100(__init__)
+       10    0.000    0.000    0.004    0.000 block.py:1051(__init__)
+       10    0.000    0.000    0.000    0.000 block.py:1127(return_faultmodes)
+       10    0.000    0.000    0.000    0.000 block.py:1138(&lt;listcomp&gt;)
+       30    0.000    0.000    0.001    0.000 block.py:1178(update_seed)
+     5042    0.005    0.000    0.031    0.000 block.py:1227(return_mutables)
+     2526    0.008    0.000    0.025    0.000 block.py:1236(__call__)
+        1    0.000    0.000    0.000    0.000 block.py:129(add_flow_hist)
+        5    0.000    0.000    0.000    0.000 block.py:1300(reset)
+       32    0.000    0.000    0.001    0.000 block.py:150(update_seed)
+        2    0.000    0.000    0.001    0.000 block.py:181(new_params)
+       10    0.000    0.000    0.003    0.000 block.py:287(__init__)
+       10    0.000    0.000    0.001    0.000 block.py:32(assoc_flows)
+        5    0.000    0.000    0.000    0.000 block.py:418(reset)
+       10    0.000    0.000    0.000    0.000 block.py:48(&lt;dictcomp&gt;)
+     5042    0.010    0.000    0.024    0.000 block.py:495(return_mutables)
+       30    0.000    0.000    0.004    0.000 common.py:115(init_obj_attr)
+5010/2004    0.005    0.000    0.006    0.000 common.py:12(get_var)
+        2    0.000    0.000    0.000    0.000 common.py:139(get_dataobj_track)
+        5    0.000    0.000    0.000    0.000 common.py:164(get_obj_track)
+       27    0.000    0.000    0.000    0.000 common.py:57(get_true_fields)
+       28    0.000    0.000    0.000    0.000 contextlib.py:63(_recreate_cm)
+       28    0.000    0.000    0.001    0.000 contextlib.py:76(inner)
      1010    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
-     17/5    0.000    0.000    0.000    0.000 copy.py:128(deepcopy)
-       11    0.000    0.000    0.000    0.000 copy.py:182(_deepcopy_atomic)
-      6/4    0.000    0.000    0.000    0.000 copy.py:226(_deepcopy_dict)
-        6    0.000    0.000    0.000    0.000 copy.py:242(_keep_alive)
-     6052    0.004    0.000    0.005    0.000 copy.py:66(copy)
-       56    0.000    0.000    0.000    0.000 coreviews.py:268(__init__)
-       24    0.000    0.000    0.000    0.000 coreviews.py:275(__iter__)
-       48    0.000    0.000    0.000    0.000 coreviews.py:282(&lt;genexpr&gt;)
-       24    0.000    0.000    0.000    0.000 coreviews.py:284(__getitem__)
-       56    0.000    0.000    0.000    0.000 coreviews.py:316(__init__)
-       24    0.000    0.000    0.000    0.000 coreviews.py:324(__iter__)
-       72    0.000    0.000    0.000    0.000 coreviews.py:330(&lt;genexpr&gt;)
-       96    0.000    0.000    0.000    0.000 coreviews.py:383(__iter__)
-       96    0.000    0.000    0.000    0.000 coreviews.py:391(&lt;genexpr&gt;)
-       48    0.000    0.000    0.000    0.000 coreviews.py:401(__getitem__)
-       48    0.000    0.000    0.000    0.000 coreviews.py:404(new_node_ok)
-       48    0.000    0.000    0.000    0.000 coreviews.py:439(__getitem__)
-      184    0.000    0.000    0.000    0.000 coreviews.py:44(__init__)
-       96    0.000    0.000    0.000    0.000 coreviews.py:442(edge_ok)
-       84    0.000    0.000    0.000    0.000 coreviews.py:50(__iter__)
-        8    0.000    0.000    0.000    0.000 coreviews.py:53(__getitem__)
-       92    0.000    0.000    0.000    0.000 coreviews.py:81(__getitem__)
-       86    0.000    0.000    0.000    0.000 enum.py:358(__call__)
-       86    0.000    0.000    0.000    0.000 enum.py:670(__new__)
+     31/3    0.000    0.000    0.000    0.000 copy.py:128(deepcopy)
+       19    0.000    0.000    0.000    0.000 copy.py:182(_deepcopy_atomic)
+        2    0.000    0.000    0.000    0.000 copy.py:200(_deepcopy_list)
+      8/2    0.000    0.000    0.000    0.000 copy.py:226(_deepcopy_dict)
+       12    0.000    0.000    0.000    0.000 copy.py:242(_keep_alive)
+        2    0.000    0.000    0.000    0.000 copy.py:258(_reconstruct)
+        4    0.000    0.000    0.000    0.000 copy.py:263(&lt;genexpr&gt;)
+     6052    0.004    0.000    0.006    0.000 copy.py:66(copy)
+      130    0.000    0.000    0.000    0.000 enum.py:358(__call__)
+      130    0.000    0.000    0.000    0.000 enum.py:670(__new__)
       505    0.000    0.000    0.000    0.000 ex_pump.py:121(condfaults)
       504    0.001    0.000    0.002    0.000 ex_pump.py:129(behavior)
       504    0.000    0.000    0.001    0.000 ex_pump.py:148(behavior)
       504    0.000    0.000    0.001    0.000 ex_pump.py:164(behavior)
       504    0.001    0.000    0.001    0.000 ex_pump.py:178(behavior)
-        2    0.000    0.000    0.001    0.000 ex_pump.py:212(__init__)
-      506    0.000    0.000    0.000    0.000 ex_pump.py:221(condfaults)
-      505    0.002    0.000    0.007    0.000 ex_pump.py:238(behavior)
-        2    0.000    0.000    0.007    0.003 ex_pump.py:264(__init__)
-        1    0.000    0.000    0.000    0.000 ex_pump.py:320(find_classification)
-       96    0.000    0.000    0.000    0.000 filters.py:20(no_filter)
-        8    0.000    0.000    0.000    0.000 filters.py:51(__init__)
-      312    0.000    0.000    0.000    0.000 filters.py:54(__call__)
-        8    0.000    0.000    0.000    0.000 flow.py:28(__init__)
-        8    0.000    0.000    0.000    0.000 flow.py:522(init_flow)
-       12    0.000    0.000    0.000    0.000 flow.py:56(reset)
-     4044    0.001    0.000    0.002    0.000 flow.py:59(return_mutables)
-        4    0.000    0.000    0.000    0.000 flow.py:83(create_hist)
+      506    0.000    0.000    0.001    0.000 ex_pump.py:221(condfaults)
+      506    0.000    0.000    0.000    0.000 ex_pump.py:237(indicate_over_pressure)
+      505    0.002    0.000    0.007    0.000 ex_pump.py:244(behavior)
+        2    0.000    0.000    0.006    0.003 ex_pump.py:289(__init__)
+      501    0.000    0.000    0.000    0.000 ex_pump.py:316(indicate_finished)
+      501    0.000    0.000    0.000    0.000 ex_pump.py:328(indicate_on)
+        1    0.000    0.000    0.000    0.000 ex_pump.py:330(find_classification)
+        8    0.000    0.000    0.001    0.000 flow.py:27(__init__)
+        8    0.000    0.000    0.000    0.000 flow.py:394(init_flow)
+       12    0.000    0.000    0.000    0.000 flow.py:51(reset)
+     4044    0.001    0.000    0.002    0.000 flow.py:54(return_mutables)
+        4    0.000    0.000    0.000    0.000 flow.py:78(create_hist)
         1    0.000    0.000    0.000    0.000 fromnumeric.py:2737(_amin_dispatcher)
         1    0.000    0.000    0.000    0.000 fromnumeric.py:2742(amin)
         1    0.000    0.000    0.000    0.000 fromnumeric.py:70(_wrapreduction)
         1    0.000    0.000    0.000    0.000 fromnumeric.py:71(&lt;dictcomp&gt;)
-        4    0.000    0.000    0.000    0.000 fromnumeric.py:840(_sort_dispatcher)
-        4    0.000    0.000    0.000    0.000 fromnumeric.py:844(sort)
-        8    0.000    0.000    0.000    0.000 function.py:161(freeze)
-        2    0.000    0.000    0.000    0.000 function.py:590(set_node_attributes)
-        2    0.000    0.000    0.000    0.000 function.py:715(set_edge_attributes)
+       28    0.000    0.000    0.000    0.000 fromnumeric.py:840(_sort_dispatcher)
+       28    0.000    0.000    0.000    0.000 fromnumeric.py:844(sort)
        20    0.000    0.000    0.000    0.000 graph.py:1214(neighbors)
-        2    0.000    0.000    0.000    0.000 graph.py:1257(edges)
         2    0.000    0.000    0.000    0.000 graph.py:1380(degree)
-        6    0.000    0.000    0.000    0.000 graph.py:1454(is_multigraph)
-        4    0.000    0.000    0.000    0.000 graph.py:1458(is_directed)
-        8    0.000    0.000    0.000    0.000 graph.py:1664(subgraph)
-        8    0.000    0.000    0.000    0.000 graph.py:1863(nbunch_iter)
-       24    0.000    0.000    0.000    0.000 graph.py:1909(bunch_iter)
-       14    0.000    0.000    0.000    0.000 graph.py:289(__init__)
-       92    0.000    0.000    0.000    0.000 graph.py:338(adj)
-        8    0.000    0.000    0.000    0.000 graph.py:416(__contains__)
-       92    0.000    0.000    0.000    0.000 graph.py:452(__getitem__)
-        8    0.000    0.000    0.000    0.000 graph.py:526(add_nodes_from)
-       30    0.000    0.000    0.000    0.000 graph.py:661(nodes)
-       12    0.000    0.000    0.000    0.000 graph.py:895(add_edges_from)
-        8    0.000    0.000    0.000    0.000 graphviews.py:75(subgraph_view)
-       44    0.000    0.000    0.000    0.000 inspect.py:159(isfunction)
-       22    0.000    0.000    0.000    0.000 inspect.py:1838(_signature_bound_method)
-       22    0.000    0.000    0.001    0.000 inspect.py:2150(_signature_from_function)
-    44/22    0.000    0.000    0.001    0.000 inspect.py:2244(_signature_from_callable)
-       86    0.000    0.000    0.000    0.000 inspect.py:2496(__init__)
-      150    0.000    0.000    0.000    0.000 inspect.py:2546(name)
-      236    0.000    0.000    0.000    0.000 inspect.py:2558(kind)
-       64    0.000    0.000    0.000    0.000 inspect.py:2580(__str__)
-       44    0.000    0.000    0.000    0.000 inspect.py:2779(__init__)
-      108    0.000    0.000    0.000    0.000 inspect.py:2828(&lt;genexpr&gt;)
-       22    0.000    0.000    0.001    0.000 inspect.py:2857(from_callable)
-       44    0.000    0.000    0.000    0.000 inspect.py:2863(parameters)
-       22    0.000    0.000    0.000    0.000 inspect.py:2867(return_annotation)
-       22    0.000    0.000    0.000    0.000 inspect.py:2871(replace)
-       22    0.000    0.000    0.000    0.000 inspect.py:3063(__str__)
-       22    0.000    0.000    0.001    0.000 inspect.py:3109(signature)
-       22    0.000    0.000    0.000    0.000 inspect.py:494(unwrap)
-       22    0.000    0.000    0.000    0.000 inspect.py:514(_is_wrapper)
-       66    0.000    0.000    0.000    0.000 inspect.py:73(isclass)
+        2    0.000    0.000    0.000    0.000 graph.py:289(__init__)
+        4    0.000    0.000    0.000    0.000 graph.py:526(add_nodes_from)
+        2    0.000    0.000    0.000    0.000 graph.py:895(add_edges_from)
+       72    0.000    0.000    0.000    0.000 inspect.py:159(isfunction)
+       36    0.000    0.000    0.000    0.000 inspect.py:1838(_signature_bound_method)
+       36    0.000    0.000    0.001    0.000 inspect.py:2150(_signature_from_function)
+    72/36    0.000    0.000    0.002    0.000 inspect.py:2244(_signature_from_callable)
+      130    0.000    0.000    0.000    0.000 inspect.py:2496(__init__)
+      224    0.000    0.000    0.000    0.000 inspect.py:2546(name)
+      354    0.000    0.000    0.000    0.000 inspect.py:2558(kind)
+       94    0.000    0.000    0.000    0.000 inspect.py:2580(__str__)
+       72    0.000    0.000    0.000    0.000 inspect.py:2779(__init__)
+      166    0.000    0.000    0.000    0.000 inspect.py:2828(&lt;genexpr&gt;)
+       36    0.000    0.000    0.002    0.000 inspect.py:2857(from_callable)
+       72    0.000    0.000    0.000    0.000 inspect.py:2863(parameters)
+       36    0.000    0.000    0.000    0.000 inspect.py:2867(return_annotation)
+       36    0.000    0.000    0.000    0.000 inspect.py:2871(replace)
+       36    0.000    0.000    0.000    0.000 inspect.py:3063(__str__)
+       36    0.000    0.000    0.002    0.000 inspect.py:3109(signature)
+       36    0.000    0.000    0.000    0.000 inspect.py:494(unwrap)
+       36    0.000    0.000    0.000    0.000 inspect.py:514(_is_wrapper)
+       76    0.000    0.000    0.000    0.000 inspect.py:73(isclass)
         2    0.000    0.000    0.000    0.000 isolate.py:40(isolates)
         2    0.000    0.000    0.000    0.000 isolate.py:82(&lt;genexpr&gt;)
-       10    0.000    0.000    0.000    0.000 mode.py:109(__init__)
-     5042    0.003    0.000    0.007    0.000 mode.py:141(return_mutables)
-       10    0.000    0.000    0.000    0.000 mode.py:143(init_faultmodes)
-       14    0.000    0.000    0.000    0.000 mode.py:164(&lt;dictcomp&gt;)
-     3530    0.003    0.000    0.004    0.000 mode.py:257(has_fault)
-        5    0.000    0.000    0.000    0.000 mode.py:334(remove_any_faults)
-        5    0.000    0.000    0.000    0.000 mode.py:358(create_hist)
-        5    0.000    0.000    0.000    0.000 mode.py:362(&lt;dictcomp&gt;)
-        5    0.000    0.000    0.000    0.000 mode.py:365(&lt;listcomp&gt;)
-     4510    0.001    0.000    0.001    0.000 model.py:119(__getattr__)
-        2    0.000    0.000    0.000    0.000 model.py:127(find_any_phase_overlap)
-        2    0.000    0.000    0.000    0.000 model.py:128(&lt;dictcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:130(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:131(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:144(set_rng)
-        8    0.000    0.000    0.000    0.000 model.py:184(add_flow)
-       10    0.000    0.000    0.004    0.000 model.py:203(add_fxn)
-       10    0.000    0.000    0.000    0.000 model.py:236(get_flows)
-       10    0.000    0.000    0.000    0.000 model.py:238(&lt;dictcomp&gt;)
-        2    0.000    0.000    0.002    0.001 model.py:259(build_model)
-        2    0.000    0.000    0.000    0.000 model.py:270(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:273(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:277(&lt;listcomp&gt;)
-        2    0.000    0.000    0.002    0.001 model.py:278(construct_graph)
-        2    0.000    0.000    0.000    0.000 model.py:292(&lt;listcomp&gt;)
-        8    0.000    0.000    0.000    0.000 model.py:301(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 model.py:433(calc_repaircost)
-        1    0.000    0.000    0.000    0.000 model.py:455(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:458(return_faultmodes)
-       10    0.000    0.000    0.000    0.000 model.py:471(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:53(__init__)
-        1    0.000    0.000    0.000    0.000 model.py:535(reset)
-      501    0.000    0.000    0.001    0.000 model.py:551(set_vars)
-        1    0.000    0.000    0.001    0.001 model.py:612(create_hist)
-      501    0.002    0.000    0.077    0.000 model.py:625(propagate)
-      501    0.010    0.000    0.071    0.000 model.py:656(prop_static)
-       12    0.000    0.000    0.000    0.000 model.py:694(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:83(__init__)
-       18    0.000    0.000    0.000    0.000 multiarray.py:143(concatenate)
-       10    0.000    0.000    0.000    0.000 multigraph.py:291(__init__)
-        8    0.000    0.000    0.000    0.000 multigraph.py:403(add_edge)
-       16    0.000    0.000    0.000    0.000 multigraph.py:686(has_edge)
-        8    0.000    0.000    0.000    0.000 multigraph.py:742(edges)
-        8    0.000    0.000    0.000    0.000 multigraph.py:915(is_multigraph)
-        8    0.000    0.000    0.000    0.000 multigraph.py:919(is_directed)
-      501    0.000    0.000    0.004    0.000 ordered_set.py:122(copy)
+       10    0.000    0.000    0.000    0.000 mode.py:110(__init__)
+     5042    0.003    0.000    0.008    0.000 mode.py:142(return_mutables)
+       10    0.000    0.000    0.000    0.000 mode.py:144(init_faultmodes)
+       14    0.000    0.000    0.000    0.000 mode.py:165(&lt;dictcomp&gt;)
+     3530    0.003    0.000    0.004    0.000 mode.py:260(has_fault)
+        5    0.000    0.000    0.000    0.000 mode.py:337(remove_any_faults)
+        8    0.000    0.000    0.000    0.000 model.py:109(add_flow)
+       10    0.000    0.000    0.004    0.000 model.py:128(add_fxn)
+       10    0.000    0.000    0.000    0.000 model.py:161(get_flows)
+       10    0.000    0.000    0.000    0.000 model.py:163(&lt;dictcomp&gt;)
+        2    0.000    0.000    0.001    0.000 model.py:184(build)
+        2    0.000    0.000    0.000    0.000 model.py:196(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:199(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:203(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:204(construct_graph)
+        2    0.000    0.000    0.000    0.000 model.py:213(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 model.py:215(calc_repaircost)
+        1    0.000    0.000    0.000    0.000 model.py:237(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:240(return_faultmodes)
+        2    0.000    0.000    0.007    0.003 model.py:273(new_with_params)
+        1    0.000    0.000    0.000    0.000 model.py:320(reset)
+      501    0.000    0.000    0.000    0.000 model.py:333(set_vars)
+        1    0.000    0.000    0.000    0.000 model.py:394(create_hist)
+      501    0.002    0.000    0.077    0.000 model.py:410(propagate)
+      501    0.010    0.000    0.072    0.000 model.py:441(prop_static)
+       12    0.000    0.000    0.000    0.000 model.py:479(&lt;listcomp&gt;)
+        2    0.000    0.000    0.001    0.000 model.py:52(__init__)
+        2    0.000    0.000    0.001    0.000 model.py:72(update_seed)
+       28    0.000    0.000    0.000    0.000 multiarray.py:143(concatenate)
+      501    0.000    0.000    0.005    0.000 ordered_set.py:122(copy)
        40    0.000    0.000    0.000    0.000 ordered_set.py:157(__contains__)
      2525    0.002    0.000    0.002    0.000 ordered_set.py:169(add)
        10    0.000    0.000    0.000    0.000 ordered_set.py:190(update)
@@ -1346,119 +1272,121 @@ effect, it does not because the overhead is less to do with filling the underlyi
       501    0.001    0.000    0.003    0.000 ordered_set.py:336(union)
      1008    0.001    0.000    0.006    0.000 ordered_set.py:65(__init__)
      2505    0.001    0.000    0.001    0.000 ordered_set.py:71(__len__)
-       22    0.000    0.000    0.000    0.000 parameter.py:102(check_type)
-        4    0.000    0.000    0.000    0.000 parameter.py:117(copy_with_vals)
-       22    0.000    0.000    0.001    0.000 parameter.py:120(check_pickle)
-       22    0.000    0.000    0.002    0.000 parameter.py:35(__init__)
-       20    0.000    0.000    0.000    0.000 parameter.py:59(check_lim)
-       22    0.000    0.000    0.000    0.000 parameter.py:84(check_immutable)
-       24    0.000    0.000    0.000    0.000 projection.py:101(&lt;genexpr&gt;)
-       20    0.000    0.000    0.000    0.000 projection.py:103(&lt;setcomp&gt;)
-       26    0.000    0.000    0.000    0.000 projection.py:114(&lt;genexpr&gt;)
-        4    0.000    0.000    0.001    0.000 projection.py:15(projected_graph)
-        1    0.000    0.000    0.156    0.156 propagate.py:145(nominal)
-        1    0.000    0.000    0.000    0.000 propagate.py:171(save_helper)
-        2    0.000    0.000    0.000    0.000 propagate.py:202(update_params)
-        2    0.000    0.000    0.007    0.004 propagate.py:224(new_mdl)
-        2    0.000    0.000    0.001    0.000 propagate.py:226(new_mdl_params)
-        1    0.000    0.000    0.156    0.156 propagate.py:421(nom_helper)
-        1    0.000    0.000    0.000    0.000 propagate.py:617(check_overwrite)
-        1    0.000    0.000    0.000    0.000 propagate.py:698(construct_nomscen)
-        1    0.001    0.001    0.148    0.148 propagate.py:754(prop_one_scen)
-        1    0.000    0.000    0.000    0.000 propagate.py:850(get_result)
-        1    0.000    0.000    0.000    0.000 propagate.py:86(unpack_sim_kwargs)
-        6    0.000    0.000    0.000    0.000 propagate.py:88(&lt;genexpr&gt;)
-        5    0.000    0.000    0.000    0.000 rand.py:115(create_hist)
-       15    0.000    0.000    0.001    0.000 rand.py:45(__init__)
-     5042    0.001    0.000    0.001    0.000 rand.py:56(return_mutables)
-     2500    0.001    0.000    0.001    0.000 rand.py:87(update_stochastic_states)
-       10    0.000    0.000    0.000    0.000 reportviews.py:1003(__init__)
-       10    0.000    0.000    0.000    0.000 reportviews.py:1132(__iter__)
-       16    0.000    0.000    0.001    0.000 reportviews.py:1247(__len__)
-       32    0.000    0.000    0.001    0.000 reportviews.py:1248(&lt;genexpr&gt;)
-       48    0.000    0.000    0.001    0.000 reportviews.py:1250(__iter__)
-       30    0.000    0.000    0.000    0.000 reportviews.py:177(__init__)
-       30    0.000    0.000    0.000    0.000 reportviews.py:187(__getitem__)
+       36    0.000    0.000    0.000    0.000 parameter.py:102(check_type)
+        4    0.000    0.000    0.001    0.000 parameter.py:117(copy_with_vals)
+       36    0.000    0.000    0.002    0.000 parameter.py:120(check_pickle)
+       14    0.000    0.000    0.001    0.000 parameter.py:156(__init__)
+       14    0.000    0.000    0.000    0.000 parameter.py:161(find_any_phase_overlap)
+       14    0.000    0.000    0.000    0.000 parameter.py:162(&lt;dictcomp&gt;)
+       14    0.000    0.000    0.000    0.000 parameter.py:164(&lt;listcomp&gt;)
+       14    0.000    0.000    0.000    0.000 parameter.py:165(&lt;listcomp&gt;)
+       36    0.000    0.000    0.002    0.000 parameter.py:35(__init__)
+       34    0.000    0.000    0.000    0.000 parameter.py:59(check_lim)
+       36    0.000    0.000    0.000    0.000 parameter.py:84(check_immutable)
+        1    0.000    0.000    0.103    0.103 propagate.py:142(nominal)
+        1    0.000    0.000    0.000    0.000 propagate.py:168(save_helper)
+        1    0.000    0.000    0.103    0.103 propagate.py:349(nom_helper)
+        1    0.000    0.000    0.000    0.000 propagate.py:544(check_overwrite)
+        1    0.000    0.000    0.000    0.000 propagate.py:656(init_histrange)
+      501    0.000    0.000    0.000    0.000 propagate.py:703(check_end_condition)
+        1    0.002    0.002    0.096    0.096 propagate.py:711(prop_one_scen)
+        1    0.000    0.000    0.000    0.000 propagate.py:790(get_result)
+        1    0.000    0.000    0.000    0.000 propagate.py:814(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 propagate.py:83(unpack_sim_kwargs)
+        7    0.000    0.000    0.000    0.000 propagate.py:85(&lt;genexpr&gt;)
+       10    0.000    0.000    0.001    0.000 rand.py:103(update_seed)
+       17    0.000    0.000    0.001    0.000 rand.py:46(__init__)
+     5042    0.001    0.000    0.001    0.000 rand.py:59(return_mutables)
+     2500    0.001    0.000    0.001    0.000 rand.py:90(update_stochastic_states)
+        1    0.000    0.000    0.000    0.000 rand.py:98(reset)
         2    0.000    0.000    0.000    0.000 reportviews.py:355(__init__)
         2    0.000    0.000    0.000    0.000 reportviews.py:362(__call__)
        20    0.000    0.000    0.000    0.000 reportviews.py:465(__iter__)
-        7    0.000    0.000    0.000    0.000 result.py:160(get_dict_attr)
-    18574    0.006    0.000    0.008    0.000 result.py:228(items)
-        7    0.000    0.000    0.000    0.000 result.py:234(__getattr__)
-       42    0.000    0.000    0.000    0.000 result.py:240(__setattr__)
-    16533    0.004    0.000    0.004    0.000 result.py:379(is_known_mutable)
-       77    0.000    0.000    0.000    0.000 result.py:383(get_sub_include)
-       33    0.000    0.000    0.000    0.000 result.py:393(init_hist_iter)
-        1    0.000    0.000    0.000    0.000 result.py:484(init_time)
-18537/501    0.048    0.000    0.070    0.000 result.py:498(log)
-     37/1    0.000    0.000    0.000    0.000 result.py:534(cut)
-        6    0.000    0.000    0.000    0.000 state.py:216(create_hist)
-      505    0.002    0.000    0.004    0.000 state.py:61(assign)
-      505    0.000    0.000    0.000    0.000 state.py:80(&lt;dictcomp&gt;)
-       10    0.000    0.000    0.000    0.000 time.py:133(__init__)
-      501    0.000    0.000    0.000    0.000 time.py:139(__getattr__)
-     5042    0.003    0.000    0.004    0.000 time.py:142(return_mutables)
-     6052    0.001    0.000    0.001    0.000 time.py:143(&lt;genexpr&gt;)
-       10    0.000    0.000    0.000    0.000 time.py:144(set_timestep)
-        5    0.000    0.000    0.000    0.000 time.py:164(reset)
-        5    0.000    0.000    0.000    0.000 time.py:181(create_hist)
-        2    0.000    0.000    0.000    0.000 time.py:25(__init__)
-        1    0.000    0.000    0.000    0.000 time.py:50(reset)
-        1    0.000    0.000    0.000    0.000 time.py:96(create_hist)
-       51    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
+        7    0.000    0.000    0.000    0.000 result.py:114(check_include_errors)
+        7    0.000    0.000    0.000    0.000 result.py:122(check_include_error)
+        4    0.000    0.000    0.000    0.000 result.py:206(keys)
+      515    0.000    0.000    0.000    0.000 result.py:209(items)
+       10    0.000    0.000    0.000    0.000 result.py:218(__getattr__)
+       18    0.000    0.000    0.000    0.000 result.py:228(__setattr__)
+        6    0.000    0.000    0.000    0.000 result.py:259(all_with)
+      7/1    0.000    0.000    0.000    0.000 result.py:345(flatten)
+       10    0.000    0.000    0.000    0.000 result.py:688(is_numeric)
+     2505    0.001    0.000    0.001    0.000 result.py:707(is_known_mutable)
+       22    0.000    0.000    0.000    0.000 result.py:725(get_sub_include)
+        3    0.000    0.000    0.000    0.000 result.py:743(init_indicator_hist)
+        1    0.000    0.000    0.000    0.000 result.py:765(&lt;listcomp&gt;)
+        5    0.000    0.000    0.000    0.000 result.py:843(init_att)
+      501    0.007    0.000    0.016    0.000 result.py:887(log)
+        1    0.000    0.000    0.000    0.000 result.py:942(cut)
+       10    0.000    0.000    0.000    0.000 result.py:95(get_dict_attr)
+        2    0.000    0.000    0.000    0.000 state.py:217(create_hist)
+      505    0.002    0.000    0.004    0.000 state.py:62(assign)
+      505    0.000    0.000    0.000    0.000 state.py:81(&lt;dictcomp&gt;)
+       10    0.000    0.000    0.000    0.000 time.py:137(__init__)
+     5042    0.003    0.000    0.004    0.000 time.py:146(return_mutables)
+     6052    0.001    0.000    0.001    0.000 time.py:147(&lt;genexpr&gt;)
+       10    0.000    0.000    0.000    0.000 time.py:148(set_timestep)
+        5    0.000    0.000    0.000    0.000 time.py:168(reset)
+        2    0.000    0.000    0.000    0.000 time.py:27(__init__)
+        1    0.000    0.000    0.000    0.000 time.py:52(reset)
+       45    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
      3539    0.001    0.000    0.001    0.000 {built-in method builtins.any}
-       52    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
-       10    0.000    0.000    0.000    0.000 {built-in method builtins.dir}
-       70    0.001    0.000    0.001    0.000 {built-in method builtins.eval}
-        1    0.000    0.000    0.156    0.156 {built-in method builtins.exec}
-    33939    0.008    0.000    0.010    0.000 {built-in method builtins.getattr}
-    27878    0.004    0.000    0.004    0.000 {built-in method builtins.hasattr}
-       55    0.000    0.000    0.000    0.000 {built-in method builtins.id}
-    17999    0.002    0.000    0.002    0.000 {built-in method builtins.isinstance}
-       66    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
-     2108    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
-     6434    0.001    0.000    0.001    0.000 {built-in method builtins.len}
-       15    0.000    0.000    0.000    0.000 {built-in method builtins.max}
+       80    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
+       11    0.000    0.000    0.000    0.000 {built-in method builtins.dir}
+       20    0.000    0.000    0.000    0.000 {built-in method builtins.eval}
+        1    0.000    0.000    0.103    0.103 {built-in method builtins.exec}
+    10589    0.002    0.000    0.002    0.000 {built-in method builtins.getattr}
+    27870    0.004    0.000    0.004    0.000 {built-in method builtins.hasattr}
+       93    0.000    0.000    0.000    0.000 {built-in method builtins.id}
+     4121    0.001    0.000    0.001    0.000 {built-in method builtins.isinstance}
+       78    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
+     2025    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
+11308/11298    0.001    0.000    0.001    0.000 {built-in method builtins.len}
+       10    0.000    0.000    0.000    0.000 {built-in method builtins.max}
      1010    0.000    0.000    0.000    0.000 {built-in method builtins.min}
-       20    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
-     1126    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
-       18    0.000    0.000    0.001    0.000 {built-in method builtins.sum}
+       22    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
+     1190    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.sum}
       501    0.000    0.000    0.000    0.000 {built-in method from_iterable}
-        2    0.000    0.000    0.000    0.000 {built-in method fromkeys}
+       12    0.000    0.000    0.000    0.000 {built-in method fromkeys}
         1    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
-        4    0.000    0.000    0.000    0.000 {built-in method numpy.array}
-       23    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
-       33    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
-       72    0.000    0.000    0.000    0.000 {built-in method numpy.geterrobj}
-       36    0.000    0.000    0.000    0.000 {built-in method numpy.seterrobj}
-        4    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.asdict}
+       28    0.000    0.000    0.000    0.000 {built-in method numpy.array}
+       57    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
+        5    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
+      112    0.000    0.000    0.000    0.000 {built-in method numpy.geterrobj}
+       56    0.000    0.000    0.000    0.000 {built-in method numpy.seterrobj}
+        8    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.asdict}
      9086    0.001    0.000    0.001    0.000 {built-in method recordclass._dataobject.astuple}
-       22    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
-       18    0.001    0.000    0.001    0.000 {function SeedSequence.generate_state at 0x0000029E660EFD30}
-     2693    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
+       36    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
+       28    0.000    0.000    0.000    0.000 {function SeedSequence.generate_state at 0x00000263BF9A2430}
+        2    0.000    0.000    0.000    0.000 {method &#39;__reduce_ex__&#39; of &#39;object&#39; objects}
+     2777    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
+        1    0.000    0.000    0.000    0.000 {method &#39;clear&#39; of &#39;list&#39; objects}
       510    0.000    0.000    0.000    0.000 {method &#39;clear&#39; of &#39;set&#39; objects}
-       20    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;dict&#39; objects}
       505    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;list&#39; objects}
-        4    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
+       28    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
      5557    0.001    0.000    0.001    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
         1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
-       42    0.000    0.000    0.000    0.000 {method &#39;format&#39; of &#39;str&#39; objects}
-     6298    0.001    0.000    0.001    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
+        4    0.000    0.000    0.000    0.000 {method &#39;endswith&#39; of &#39;str&#39; objects}
+       58    0.000    0.000    0.000    0.000 {method &#39;format&#39; of &#39;str&#39; objects}
+     6441    0.001    0.000    0.001    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
+     1002    0.000    0.000    0.000    0.000 {method &#39;index&#39; of &#39;list&#39; objects}
        15    0.000    0.000    0.000    0.000 {method &#39;index&#39; of &#39;tuple&#39; objects}
      3530    0.001    0.000    0.001    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
-       86    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
-    19141    0.002    0.000    0.002    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
-       22    0.000    0.000    0.000    0.000 {method &#39;join&#39; of &#39;str&#39; objects}
-      501    0.000    0.000    0.000    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
+      130    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
+     1088    0.000    0.000    0.000    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
+     1038    0.000    0.000    0.000    0.000 {method &#39;join&#39; of &#39;str&#39; objects}
+      505    0.000    0.000    0.000    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
+        2    0.000    0.000    0.000    0.000 {method &#39;lower&#39; of &#39;str&#39; objects}
        17    0.000    0.000    0.000    0.000 {method &#39;pop&#39; of &#39;dict&#39; objects}
         1    0.000    0.000    0.000    0.000 {method &#39;reduce&#39; of &#39;numpy.ufunc&#39; objects}
-        4    0.000    0.000    0.000    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
-        7    0.000    0.000    0.000    0.000 {method &#39;split&#39; of &#39;str&#39; objects}
-      686    0.000    0.000    0.000    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
-      157    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
+       28    0.000    0.000    0.000    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
+     3016    0.001    0.000    0.001    0.000 {method &#39;split&#39; of &#39;str&#39; objects}
+     2934    0.001    0.000    0.001    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
+       52    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
        12    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
-     5067    0.001    0.000    0.001    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
-       44    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
+     5078    0.001    0.000    0.001    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
+       72    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
        18    0.000    0.000    0.001    0.000 {numpy.random._generator.default_rng}
 
 
@@ -1466,7 +1394,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 <p>This is difficult to vizualize, although there are methods to store and sort through this output if needed. The <code class="docutils literal notranslate"><span class="pre">pycallgraph</span></code> package (requires a graphviz installation) can give a more immediate and insightful picture of where the code bottlenecks are.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycallgraph2</span> <span class="kn">import</span> <span class="n">PyCallGraph</span>
@@ -1476,7 +1404,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">PyCallGraph</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">GraphvizOutput</span><span class="p">()):</span>
@@ -1485,7 +1413,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;pycallgraph.png&#39;</span><span class="p">)</span>
@@ -1493,15 +1421,15 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_64_0.png" src="../../_images/examples_pump_Parallelism_Tutorial_64_0.png" />
+<img alt="../../_images/examples_pump_Parallelism_Tutorial_63_0.png" src="../../_images/examples_pump_Parallelism_Tutorial_63_0.png" />
 </div>
 </div>
-<p>As shown, running this model is not particularly computationally expensive. As a result, the majority of the computational expense is not actually because of the simulation itself, but because of the way the model is simulated: - 0.03 of 0.13 s (23%) is spent re-initalizing the model at first so that the model object can be re-used without worrying about it being modified by any previous executions - 0.026 of 0.13 s (20%) is spent recording the model history - 0.062 of 0.13 s (47%) is spent
-simulating the model</p>
+<p>As shown, running this model is not particularly computationally expensive. As a result, the majority of the computational expense is not actually because of the simulation itself, but because of the way the model is simulated: - the majority is spent simulating the model - a certain amount is spent re-initalizing the model at first so that the model object can be re-used without worrying about it being modified by any previous executions - another amount is spent recording the model history,
+wich can increase or decrease depending on tracking options (note the low number of values tracked in the pump model by default)</p>
 <p>This is mostly because the model itself is computationally inexpensive. However, this example shows how one might easily speed up simulation for optimization or large-n simulations–avoiding unnecessary re-initialization, tracking fewer model states, or speeding up model execution. This can be done in the following ways: - using the options for <code class="docutils literal notranslate"><span class="pre">track</span></code> (as mentioned above) to track fewer states (reducing time spent recording the history) - using <code class="docutils literal notranslate"><span class="pre">protect</span></code> options, which specifies whether the
 model used is re-instantiated for the simulation (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or used directly (<code class="docutils literal notranslate"><span class="pre">False</span></code>) - speeding up the model by using <code class="docutils literal notranslate"><span class="pre">dynamic_behavior()</span></code> methods instead of <code class="docutils literal notranslate"><span class="pre">static_behavior()</span></code> or <code class="docutils literal notranslate"><span class="pre">behavior()</span></code> methods (which can halve the simulation time at the expense of undirected propagation) - speeding up the model by using a longer global timestep (<code class="docutils literal notranslate"><span class="pre">'tstep'</span></code> in <code class="docutils literal notranslate"><span class="pre">modelparams</span></code>) or by speeding up paricularly expensive Function dynamic behaviors by setting (<code class="docutils literal notranslate"><span class="pre">dt=local_tstep</span></code>) in
 <code class="docutils literal notranslate"><span class="pre">super().__init__()</span></code></p>

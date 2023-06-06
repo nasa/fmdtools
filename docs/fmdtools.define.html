@@ -107,9 +107,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-0">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
@@ -273,7 +273,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.ASG.add_flow">
-<span class="sig-name descname"><span class="pre">add_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">flowname</span></em>, <em class="sig-param"><span class="pre">fclass=&lt;class</span> <span class="pre">'fmdtools.define.flow.Flow'&gt;</span></em>, <em class="sig-param"><span class="pre">p={}</span></em>, <em class="sig-param"><span class="pre">s={}</span></em>, <em class="sig-param"><span class="pre">flowtype=''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.ASG.add_flow" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">flowname</span></em>, <em class="sig-param"><span class="pre">fclass=&lt;class</span> <span class="pre">'fmdtools.define.flow.Flow'&gt;</span></em>, <em class="sig-param"><span class="pre">p={}</span></em>, <em class="sig-param"><span class="pre">s={}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.ASG.add_flow" title="Permalink to this definition"></a></dt>
 <dd><p>Adds a flow with given attributes to ASG. Used to enable a flexible
 internal flow architecture in the ASG.</p>
 <dl class="field-list simple">
@@ -285,7 +285,6 @@ Class must take flowname, flowdict, flowtype as input to __init__()
 May alternatively provide already-instanced object.</p></li>
 <li><p><strong>p</strong> (<em>dict</em><em>, </em><em>optional</em>) – Parameter dictionary to instantiate the flow with</p></li>
 <li><p><strong>s</strong> (<em>dict</em><em>, </em><em>optional</em>) – State dictionary to overwrite Flow default state values with</p></li>
-<li><p><strong>flowtype</strong> (<em>str</em><em>, </em><em>optional</em>) – Denotes type for class (e.g. ‘energy,’ ‘material,’, ‘signal’)</p></li>
 </ul>
 </dd>
 </dl>
@@ -326,7 +325,7 @@ May alternatively provide already-instanced object.</p></li>
 <dd class="field-even"><p><strong>h</strong> – History corresponding to the ASG.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>History</p>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -522,7 +521,9 @@ The default is ‘all’.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Block.get_typename">
 <span class="sig-name descname"><span class="pre">get_typename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Block.get_typename" title="Permalink to this definition"></a></dt>
-<dd><p>TODO : requires proper documentation</p>
+<dd><p>Gets the name of the type (Block for Blocks)
+:returns: <strong>typename</strong> – Block
+:rtype: str</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -630,7 +631,7 @@ check if the block has changed</p>
 <dd class="field-even"><p><strong>h</strong> – History corresponding to the CompArch</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>History</p>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -724,7 +725,9 @@ without yet having a defined behavior for them.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Component.get_typename">
 <span class="sig-name descname"><span class="pre">get_typename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Component.get_typename" title="Permalink to this definition"></a></dt>
-<dd><p>TODO : requires proper documentation</p>
+<dd><p>Gets the name of the type (Block for Blocks)
+:returns: <strong>typename</strong> – Block
+:rtype: str</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -813,7 +816,9 @@ copying the model.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.FxnBlock.get_typename">
 <span class="sig-name descname"><span class="pre">get_typename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.FxnBlock.get_typename" title="Permalink to this definition"></a></dt>
-<dd><p>TODO : requires proper documentation</p>
+<dd><p>Gets the name of the type (Block for Blocks)
+:returns: <strong>typename</strong> – Block
+:rtype: str</p>
 </dd></dl>
 
 <dl class="py method">
@@ -899,10 +904,16 @@ given (to be implemented) function block. Acts as a placeholder that enables sim
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.add_flow_hist">
 <span class="sig-name descname"><span class="pre">add_flow_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Simulable.add_flow_hist" title="Permalink to this definition"></a></dt>
-<dd><p>TODO : requires propper documentation.
-:param hist:
-:param timerange:
-:param track:</p>
+<dd><p>Creates a history of flows for the Simulable and appends it to the History hist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History"><em>History</em></a>) – History to append flow history to</p></li>
+<li><p><strong>timerange</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Time-range to initialize the history over. The default is None.</p></li>
+<li><p><strong>track</strong> (<em>list/str/dict</em><em>, </em><em>optional</em>) – argument specifying attributes for :func:<a href="#id5"><span class="problematic" id="id6">`</span></a>get_sub_include’. The default is None.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -917,9 +928,15 @@ given (to be implemented) function block. Acts as a placeholder that enables sim
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>scen</strong> – </p></li>
-<li><p><strong>mdlhists</strong> – </p></li>
+<li><p><strong>scen</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.Scenario" title="fmdtools.sim.scenario.Scenario"><em>Scenario</em></a>) – Scenario defining the model run.</p></li>
+<li><p><strong>mdlhists</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History"><em>History</em></a>) – History for the simulation(s)</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>endclass</strong> – Result dictionary with rate, cost, and expected cost values</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result">Result</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -932,16 +949,36 @@ given (to be implemented) function block. Acts as a placeholder that enables sim
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.get_fxns">
 <span class="sig-name descname"><span class="pre">get_fxns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Simulable.get_fxns" title="Permalink to this definition"></a></dt>
-<dd><p>TODO : requires proper documentation</p>
+<dd><p>Gets the fxns associated with the given Simulable (self if FxnBlock, self.fxns if Model)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>fxns</strong> – Dict with structure {fxnname: fxnobj}</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.get_scen_rate">
 <span class="sig-name descname"><span class="pre">get_scen_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fxnname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultmode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Simulable.get_scen_rate" title="Permalink to this definition"></a></dt>
-<dd><p>TODO : requires proper documentation
-:param fxnname:
-:param faultmode:
-:param time:</p>
+<dd><p>Gets the scenario rate for the given single-fault scenario.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fxnname</strong> (<em>str</em>) – Name of the function with the fault</p></li>
+<li><p><strong>faultmode</strong> (<em>str</em>) – Name of the fault mode</p></li>
+<li><p><strong>time</strong> (<em>int</em>) – Time when the scenario is to occur</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>rate</strong> – Rate of the scenario</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -962,11 +999,26 @@ given (to be implemented) function block. Acts as a placeholder that enables sim
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.Simulable.new_params">
 <span class="sig-name descname"><span class="pre">new_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Simulable.new_params" title="Permalink to this definition"></a></dt>
-<dd><p>TODO : requires proper documentation
-:param p:
-:param sp:
-:param r:
-:param track:</p>
+<dd><p>Creates a copy of the defining parameters for use in a new Simulable
+:param p: Parameter args to update
+:type p: dict
+:param sp: SimParam args to update
+:type sp: dict
+:param r: Rand args to update
+:type r: dict
+:param track: track kwargs to update.
+:type track: dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>p</strong> (<em>Param</em>) – New Parameter</p></li>
+<li><p><strong>sp</strong> (<em>SimParam</em>) – New SimParam</p></li>
+<li><p><strong>r</strong> (<em>dict</em>) – Rand args</p></li>
+<li><p><strong>track</strong> (<em>dict</em>) – track args</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1100,14 +1152,14 @@ Options for units are: ‘sec’, ‘min’, ‘hr’, ‘day’, ‘wk’, ‘m
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.common.get_true_field">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.common.</span></span><span class="sig-name descname"><span class="pre">get_true_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataobject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.common.get_true_field" title="Permalink to this definition"></a></dt>
-<dd><p>Gets the value that will be set to fieldname given <a href="#id5"><span class="problematic" id="id6">*</span></a>args and <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs</p>
+<dd><p>Gets the value that will be set to fieldname given <a href="#id7"><span class="problematic" id="id8">*</span></a>args and <a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.common.get_true_fields">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.common.</span></span><span class="sig-name descname"><span class="pre">get_true_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataobject</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.common.get_true_fields" title="Permalink to this definition"></a></dt>
-<dd><p>Resolves the args to pass to a dataobject given certain defaults, <a href="#id9"><span class="problematic" id="id10">*</span></a>args and <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs</p>
-<p>NOTE: must be used for pickling, since pickle passes arguments as <a href="#id13"><span class="problematic" id="id14">*</span></a>args and not <a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs.</p>
+<dd><p>Resolves the args to pass to a dataobject given certain defaults, <a href="#id11"><span class="problematic" id="id12">*</span></a>args and <a href="#id13"><span class="problematic" id="id14">**</span></a>kwargs</p>
+<p>NOTE: must be used for pickling, since pickle passes arguments as <a href="#id15"><span class="problematic" id="id16">*</span></a>args and not <a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1374,7 +1426,7 @@ received (update its internal view).</p>
 <dd class="field-even"><p><strong>h</strong> – History to initialize.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>History</p>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1478,7 +1530,7 @@ as well as a single global view (which may represent the actual value)</p>
 <dd class="field-even"><p><strong>h</strong> – History to initialize.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>History</p>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1615,7 +1667,7 @@ or  pass an already-constructured flow class.</p>
 <p>Description: Module for helping define Modes (faulty and otherwise).</p>
 <p>Has classes:
 - <a class="reference internal" href="#fmdtools.define.mode.Fault" title="fmdtools.define.mode.Fault"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fault</span></code></a>: Class for defining fault parameters
-- <a href="#id17"><span class="problematic" id="id18">:Mode:`Mode`</span></a>: Class for defining the mode property (and associated probability model) held in Blocks.</p>
+- <a href="#id19"><span class="problematic" id="id20">:Mode:`Mode`</span></a>: Class for defining the mode property (and associated probability model) held in Blocks.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Fault">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.mode.</span></span><span class="sig-name descname"><span class="pre">Fault</span></span><a class="headerlink" href="#fmdtools.define.mode.Fault" title="Permalink to this definition"></a></dt>
@@ -2253,8 +2305,8 @@ in assoc_faultmodes/ Default is 0.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id19">
-<span class="sig-name descname"><span class="pre">fxns</span></span><a class="headerlink" href="#id19" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">fxns</span></span><a class="headerlink" href="#id21" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2306,8 +2358,8 @@ a str ‘fxnname.comp1.att2’</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id20">
-<span class="sig-name descname"><span class="pre">graph</span></span><a class="headerlink" href="#id20" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">graph</span></span><a class="headerlink" href="#id22" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2397,7 +2449,7 @@ Can set as ‘track_pdf’ to calculate/track the probability densities of rando
 </p></li>
 <li><p><strong>varvalues</strong> (<em>list</em>) – List of values corresponding to varlist</p></li>
 <li><p><strong>kwargs</strong> (<em>kwargs</em>) – attribute-value pairs. If provided, must be passed using ** syntax:
-mdl.set_vars(<a href="#id21"><span class="problematic" id="id22">**</span></a>{‘fxnname.varname’:value})</p></li>
+mdl.set_vars(<a href="#id23"><span class="problematic" id="id24">**</span></a>{‘fxnname.varname’:value})</p></li>
 </ul>
 </dd>
 </dl>
@@ -2495,7 +2547,7 @@ self.k_lim or set constraints self.k_set</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.parameter.Parameter.check_pickle">
 <span class="sig-name descname"><span class="pre">check_pickle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.parameter.Parameter.check_pickle" title="Permalink to this definition"></a></dt>
-<dd><p>Checks to make sure pickled object will get <a href="#id23"><span class="problematic" id="id24">*</span></a>args and <a href="#id25"><span class="problematic" id="id26">**</span></a>kwargs</p>
+<dd><p>Checks to make sure pickled object will get <a href="#id25"><span class="problematic" id="id26">*</span></a>args and <a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2678,7 +2730,7 @@ run_stochastic:     bool=True</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>timerange</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Time-range to initialize the history over. The default is None.</p></li>
 <li><p><strong>track</strong> (<em>list/str/dict</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>argument specifying attributes for :func:<a href="#id27"><span class="problematic" id="id28">`</span></a>get_sub_include’. The default is None.</dt><dd><p>DESCRIPTION. The default is None.</p>
+<dt>argument specifying attributes for :func:<a href="#id29"><span class="problematic" id="id30">`</span></a>get_sub_include’. The default is None.</dt><dd><p>DESCRIPTION. The default is None.</p>
 </dd>
 </dl>
 </p></li>
@@ -2688,7 +2740,7 @@ run_stochastic:     bool=True</p>
 <dd class="field-even"><p><strong>hist</strong> – History of fields specified in track.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>History</p>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2719,8 +2771,8 @@ run_stochastic:     bool=True</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id29">
-<span class="sig-name descname"><span class="pre">probs</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#id29" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">probs</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#id31" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2740,8 +2792,8 @@ run_stochastic:     bool=True</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id30">
-<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.random._generator.default_rng</span></em><a class="headerlink" href="#id30" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id32">
+<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.random._generator.default_rng</span></em><a class="headerlink" href="#id32" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2750,8 +2802,8 @@ run_stochastic:     bool=True</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id31">
-<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id31" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id33" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2920,7 +2972,7 @@ as_copy: bool, set to True for dicts/sets to be copied rather than referenced</p
 <dt>timerange<span class="classifier">iterable, optional</span></dt><dd><p>Time-range to initialize the history over. The default is None.</p>
 </dd>
 <dt>track<span class="classifier">list/str/dict, optional</span></dt><dd><dl class="simple">
-<dt>argument specifying attributes for :func:<a href="#id32"><span class="problematic" id="id33">`</span></a>get_sub_include’. The default is None.</dt><dd><p>DESCRIPTION. The default is None.</p>
+<dt>argument specifying attributes for :func:<a href="#id34"><span class="problematic" id="id35">`</span></a>get_sub_include’. The default is None.</dt><dd><p>DESCRIPTION. The default is None.</p>
 </dd>
 </dl>
 </dd>
@@ -2930,7 +2982,7 @@ as_copy: bool, set to True for dicts/sets to be copied rather than referenced</p
 <dd class="field-odd"><p><strong>hist</strong> – History of fields specified in track.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>History</p>
+<dd class="field-even"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -3212,7 +3264,7 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>timerange</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Time-range to initialize the history over. The default is None.</p></li>
 <li><p><strong>track</strong> (<em>list/str/dict</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>argument specifying attributes for :func:<a href="#id34"><span class="problematic" id="id35">`</span></a>get_sub_include’. The default is None.</dt><dd><p>DESCRIPTION. The default is None.</p>
+<dt>argument specifying attributes for :func:<a href="#id36"><span class="problematic" id="id37">`</span></a>get_sub_include’. The default is None.</dt><dd><p>DESCRIPTION. The default is None.</p>
 </dd>
 </dl>
 </p></li>
@@ -3222,7 +3274,7 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <dd class="field-even"><p><strong>hist</strong> – History of time/timer attribues specified in track.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>History</p>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History">History</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -3233,8 +3285,8 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id36">
-<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#id36" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id38">
+<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#id38" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -3249,8 +3301,8 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id37">
-<span class="sig-name descname"><span class="pre">run_times</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id37" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id39">
+<span class="sig-name descname"><span class="pre">run_times</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id39" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -3261,33 +3313,33 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id38">
-<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id38" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id39">
-<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#id39" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="id40">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#id40" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#id40" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id41">
-<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"> <span class="pre">=</span> <span class="pre">()</span></em><a class="headerlink" href="#id41" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#id41" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id42">
-<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#id42" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#id42" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id43">
-<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#id43" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"> <span class="pre">=</span> <span class="pre">()</span></em><a class="headerlink" href="#id43" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id44">
+<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#id44" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id45">
+<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#id45" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

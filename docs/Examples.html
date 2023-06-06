@@ -107,9 +107,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-0">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
@@ -171,7 +171,7 @@
 <p>To get started with fmdtools, it is reccomended to start with the <strong>Intro to fmdtools</strong> workshop, which provides a basic high-level overview of modelling and simulation in fmdtools, with a corresponding model and example notebook to fill out. To start the workshop, first download the workshop slides (<code class="xref download docutils literal notranslate"><span class="pre">Intro</span> <span class="pre">to</span> <span class="pre">fmdtools.pptx</span></code>), tutorial model (<code class="xref download docutils literal notranslate"><span class="pre">ex_pump.py</span></code>), and Unfilled Notebook <code class="xref download docutils literal notranslate"><span class="pre">ex_pump.py</span></code>.  If you cloned fmdtools, you can just navigate to these files in the repository–they are in a directory called <code class="docutils literal notranslate"><span class="pre">example_pump</span></code>. Then, follow along with the slides and the (see: <a class="reference external" href="example_pump/Tutorial_complete.ipynb">filled-in notebook</a>).</p>
 <p>After completing the workshop, it can be helpful to run through the following notebooks to better understand fmdtools modelling, simulation, and analysis basics as well as more advanced features and use-cases:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="docs/Model_Structure_Visualization_Tutorial.ipynb">Defining and Visualizing fmdtools Model Structures</a> is helpful for understanding how a given model simulates over time. It covers the class  <a class="reference internal" href="fmdtools.analyze.html#id32" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a> and containing methods.</p></li>
+<li><p><a class="reference external" href="docs/Model_Structure_Visualization_Tutorial.ipynb">Defining and Visualizing fmdtools Model Structures</a> is helpful for understanding how a given model simulates over time. It covers the class  <a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a> and containing methods.</p></li>
 <li><p><a class="reference external" href="example_multirotor/Demonstration.ipynb">fmdtools Paper Demonstration</a>  is helpful for understanding network/static/dynamic/hierarchical model types, covering:</p>
 <ul>
 <li><p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.networks</span></code> module.</p></li>
@@ -181,7 +181,7 @@
 </li>
 <li><p><a class="reference external" href="example_pump/Pump_Example_Notebook.ipynb">Pump Example Notebook</a> is helpful for understanding the breadth of fmdtools plotting, tabulation, and visualization capabilities. It covers:</p>
 <ul>
-<li><p>A variety of graphing usecases in <a class="reference internal" href="fmdtools.analyze.html#module-0" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a> functions which enable viewing different graph types, simulation results at individual times, and overall model statistics/results.</p></li>
+<li><p>A variety of graphing usecases in <a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a> functions which enable viewing different graph types, simulation results at individual times, and overall model statistics/results.</p></li>
 <li><p><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a> functions for viewing simulation results over time and summarizing run information</p></li>
 <li><p>Save/load using the <cite>dill</cite> package</p></li>
 </ul>
@@ -189,7 +189,7 @@
 <li><p><a class="reference external" href="docs/Approach_Use-Cases.ipynb">Defining Fault Sampling Approaches in fmdtools</a> covers how to set up a fault sampling approach and use it to simulate a large number of hazardous scenarios in a model. This includes:</p>
 <ul>
 <li><p>Adding fault and operational modes to Model functions using the method <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.assoc_modes()</span></code> and explanation of the <cite>key_phases_by</cite> and <cite>exclusive</cite> options.</p></li>
-<li><p>Using <code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.result.History.get_modephases()</span></code> to setting a <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.SampleApproach</span></code> up which samples individual faults based on the phases of the model and/or function defined by their operational modes.</p></li>
+<li><p>Using <a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History.get_modephases" title="fmdtools.analyze.result.History.get_modephases"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.result.History.get_modephases()</span></code></a> to setting a <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.SampleApproach</span></code> up which samples individual faults based on the phases of the model and/or function defined by their operational modes.</p></li>
 <li><p>Using <a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.phases" title="fmdtools.analyze.plot.phases"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.plot.phases()</span></code></a> to visualize the phases and modes of a model over time and <code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.plot.samplecosts()</span></code> to visualize the consequences of each fault scenario in the approach within each phase.</p></li>
 <li><p>Using the <cite>defaultsamp</cite> option and <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.SampleApproach.prune_scenarios()</span></code> in <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.SampleApproach</span></code> to control how many time-steps in each phase are sampled (and when).</p></li>
 </ul>
