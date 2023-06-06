@@ -333,7 +333,7 @@ class ProblemInterface:
         # Store simulation data in the _sims dictionary
         self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhist':prevhist, 'obj_time': obj_time, 'mdl':mdl, 'c_mdls':c_mdls}
 
-   def _prep_multi_sim(self, simname, x):
+    def _prep_multi_sim(self, simname, x):
         var_time, obj_time = self._get_var_obj_time(simname)
         kwar = self.simulations[simname][2]
         mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_p = kwar.get('p', {}))
@@ -925,7 +925,7 @@ class DynamicInterface():
         end : bool
             Whether the simulation is finished
         """
-        if self.t> = self.t_max:
+        if self.t >= self.t_max:
             end = True
         elif external_condition:
             end = True

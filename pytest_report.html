@@ -253,7 +253,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>pytest_report.html</h1>
-    <p>Report generated on 25-May-2023 at 17:27:02 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <p>Report generated on 05-Jun-2023 at 16:58:02 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -269,8 +269,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>Python</td>
         <td>3.9.7</td></tr></table>
     <h2>Summary</h2>
-    <p>90 tests ran in 150.48 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">63 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">27 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>91 tests ran in 119.96 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">68 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">23 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -285,11 +285,11 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_all_faults</td>
-          <td class="col-duration">0.44</td>
+          <td class="col-duration">0.41</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_all_faults&gt;<br/><br/>    def test_all_faults(self):<br/>        &quot;&quot;&quot; Some basic tests for propagating lists of faults in the model--<br/>        that histories have length 1, endresults have &gt;0 costs, and total costs are higher<br/>        than repairs&quot;&quot;&quot;<br/>        mdl=self.mdl<br/>        endclasses, reshists = propagate.single_faults(mdl, showprogress=False)<br/>&gt;       actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><br/>examples\eps\test_eps.py:38: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x000002CA1DDA2DB0&gt;<br/><br/>&gt;   actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:38: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_all_faults&gt;<br/><br/>    def test_all_faults(self):<br/>        &quot;&quot;&quot; Some basic tests for propagating lists of faults in the model--<br/>        that histories have length 1, endresults have &gt;0 costs, and total costs are higher<br/>        than repairs&quot;&quot;&quot;<br/>        mdl=self.mdl<br/>        endclasses, reshists = propagate.single_faults(mdl, showprogress=False)<br/>&gt;       actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><br/>examples\eps\test_eps.py:38: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x0000027DB26F2F90&gt;<br/><br/>&gt;   actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:38: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -298,7 +298,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_1&gt;<br/><br/>    def test_backward_fault_prop_1(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - distributor short leads to empty battery<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;Distribute_EE&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:23: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x2ca21b2eb80 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;Distribute_EE&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Distribute_EE&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_1&gt;<br/><br/>    def test_backward_fault_prop_1(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - distributor short leads to empty battery<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;Distribute_EE&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:23: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x27db25904c0 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;Distribute_EE&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Distribute_EE&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -307,7 +307,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_2&gt;<br/><br/>    def test_backward_fault_prop_2(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - motor short leads to distributor short<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;EE_to_ME&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x2ca1ae4f1c0 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;EE_to_ME&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;EE_to_ME&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_2&gt;<br/><br/>    def test_backward_fault_prop_2(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - motor short leads to distributor short<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;EE_to_ME&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x27db25aeac0 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;EE_to_ME&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;EE_to_ME&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -316,7 +316,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_fault_app&gt;<br/><br/>    def test_fault_app(self):<br/>        &quot;&quot;&quot; Tests that the expected number of scenarios are generated for a given approach &quot;&quot;&quot;<br/>&gt;       actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><br/>examples\eps\test_eps.py:49: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x000002CA1F969180&gt;<br/><br/>&gt;   actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:49: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_fault_app&gt;<br/><br/>    def test_fault_app(self):<br/>        &quot;&quot;&quot; Tests that the expected number of scenarios are generated for a given approach &quot;&quot;&quot;<br/>&gt;       actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><br/>examples\eps\test_eps.py:49: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x0000027DB088AF40&gt;<br/><br/>&gt;   actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:49: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -325,7 +325,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {0:{&#x27;Store_EE&#x27;:[&#x27;no_storage&#x27;], &#x27;Distribute_EE&#x27;:&#x27;short&#x27;}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\eps\test_eps.py:66: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/>mdl = EPS model at 0x2ca21b2e640 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>mfile = &#x27;eps_mdlhist.pkl&#x27;, ecfile = &#x27;eps_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {0: {&#x27;Distribute_EE&#x27;: &#x27;short&#x27;, &#x27;Store_EE&#x27;: [&#x27;no_storage&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;sequence&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for sequence, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;sequence&#x27;:<br/>            endresult, mdlhist=sim.propagate.sequence(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>&gt;       else: raise Exception(&quot;Invalid Run Type&quot;+runtype)<br/><span class="error">E       Exception: Invalid Run Typemult_fault</span><br/><br/>tests\common.py:141: Exception<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {0:{&#x27;Store_EE&#x27;:[&#x27;no_storage&#x27;], &#x27;Distribute_EE&#x27;:&#x27;short&#x27;}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\eps\test_eps.py:66: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/>mdl = EPS model at 0x27db25b2dc0 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>mfile = &#x27;eps_mdlhist.pkl&#x27;, ecfile = &#x27;eps_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {0: {&#x27;Distribute_EE&#x27;: &#x27;short&#x27;, &#x27;Store_EE&#x27;: [&#x27;no_storage&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;sequence&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for sequence, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;sequence&#x27;:<br/>            endresult, mdlhist=sim.propagate.sequence(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>&gt;       else: raise Exception(&quot;Invalid Run Type&quot;+runtype)<br/><span class="error">E       Exception: Invalid Run Typemult_fault</span><br/><br/>tests\common.py:141: Exception<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -334,39 +334,39 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Store_EE&#x27;, &#x27;no_storage&#x27;,0))<br/><br/>examples\eps\test_eps.py:62: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:134: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x2ca21b2ec40 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;Store_EE&#x27;, faultmode = &#x27;no_storage&#x27;, time = 0<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Store_EE&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Store_EE&#x27;, &#x27;no_storage&#x27;,0))<br/><br/>examples\eps\test_eps.py:62: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:134: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x27db25b5dc0 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;Store_EE&#x27;, faultmode = &#x27;no_storage&#x27;, time = 0<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Store_EE&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneTests::test_interface_values</td>
-          <td class="col-duration">3.40</td>
+          <td class="col-duration">1.21</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.multirotor.test_multirotor.DroneTests testMethod=test_interface_values&gt;<br/><br/>    def test_interface_values(self):<br/>    <br/>        testvalues = [[0,0, 50, 0,0], [0,2, 100, 1,1],[2,2, 150, 1,1]]<br/>        # NOTE: because there is a fault in the nominal sim that triggers the resilience policy<br/>        # the value [2,2, 50, 0,0] will give inconsistent results, since the operational model<br/>        # doesn&#x27;t have a consistent resilience policy in that case<br/>        for testvalue in testvalues:<br/>    <br/>            rcost_manual = x_to_rcost(testvalue[:2], [testvalue[2]], testvalue[3:], faultmodes=&#x27;StoreEE&#x27;)<br/>            rcost_int = opt_prob.cr(testvalue)<br/>&gt;           self.assertAlmostEqual(rcost_manual, rcost_int)<br/><span class="error">E           AssertionError: 10460.427910138082 != 10474.000000000002 within 7 places (13.572089861920176 difference)</span><br/><br/>examples\multirotor\test_multirotor.py:22: AssertionError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.multirotor.test_multirotor.DroneTests testMethod=test_interface_values&gt;<br/><br/>    def test_interface_values(self):<br/>    <br/>        testvalues = [[0,0, 50, 0,0], [0,2, 100, 1,1],[2,2, 150, 1,1]]<br/>        # NOTE: because there is a fault in the nominal sim that triggers the resilience policy<br/>        # the value [2,2, 50, 0,0] will give inconsistent results, since the operational model<br/>        # doesn&#x27;t have a consistent resilience policy in that case<br/>        for testvalue in testvalues:<br/>    <br/>            rcost_manual = x_to_rcost(testvalue[:2], [testvalue[2]], testvalue[3:], faultmodes=&#x27;StoreEE&#x27;)<br/>&gt;           rcost_int = opt_prob.cr(testvalue)<br/><br/>examples\multirotor\test_multirotor.py:21: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\search.py:254: in newobj<br/>    return self.x_to_obj_const(x, simname)[0][objname]<br/>fmdtools\sim\search.py:623: in x_to_obj_const<br/>    self._prep_sim_type(self.simulations[simname][0], simname, x)<br/>fmdtools\sim\search.py:487: in _prep_sim_type<br/>    if simtype==&#x27;single&#x27;: self._prep_single_sim(simname, x)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = Problem drone_problem                                                   current value<br/> Variables<br/> -vars batteryarch at...1)                               nan<br/> Simulations<br/> -dcost: external scen: <br/> -ocost: single scen: <br/> -rcost: multi scen: <br/>simname = &#x27;ocost&#x27;, x = array([ 0,  0, 50,  0,  0])<br/><br/>    def _prep_single_sim(self, simname, x):<br/>        # Get variable and objective times for the simulation<br/>&gt;       var_time, obj_time = self._get_var_obj_time(simname)<br/><span class="error">E       TypeError: _get_var_obj_time() takes 1 positional argument but 2 were given</span><br/><br/>fmdtools\sim\search.py:315: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneTests::test_sim_types</td>
-          <td class="col-duration">2.00</td>
+          <td class="col-duration">1.52</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.multirotor.test_multirotor.DroneTests testMethod=test_sim_types&gt;<br/><br/>    def test_sim_types(self):<br/>    <br/>        testvalue= [0,2, 100, 1,1]<br/>        rcost_manual = x_to_rcost(testvalue[:2], [testvalue[2]], testvalue[3:], faultmodes=&#x27;StoreEE&#x27;)<br/>    <br/>        opt_prob.update_sim_options(&quot;rcost&quot;, staged=True)<br/>&gt;       rcost_int = opt_prob.cr(testvalue)<br/><br/>examples\multirotor\test_multirotor.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\search.py:252: in newobj<br/>    return self.x_to_obj_const(x, simname)[0][objname]<br/>fmdtools\sim\search.py:589: in x_to_obj_const<br/>    self.update_sim_vars(simname, new_p=new_p)<br/>fmdtools\sim\search.py:745: in update_sim_vars<br/>    update_sequence(self.simulations[simname][1][0][i].sequence, newsequence)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>sequence_to_update = {0.0: Injection(faults={&#x27;store_ee&#x27;: [&#x27;nocharge&#x27;]}, disturbances={})}<br/>new_sequence = {0: {&#x27;disturbances&#x27;: {}}}<br/><br/>    def update_sequence(sequence_to_update, new_sequence):<br/>        for i in new_sequence:<br/>            if i not in sequence_to_update:             sequence_to_update[i]=new_sequence[i]<br/>            else:<br/>                for j in new_sequence[i]:<br/>&gt;                   if j not in sequence_to_update[i]:  sequence_to_update[i][j]=new_sequence[i][j]<br/><span class="error">E                   TypeError: &#x27;Injection&#x27; object does not support item assignment</span><br/><br/>fmdtools\sim\search.py:781: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.multirotor.test_multirotor.DroneTests testMethod=test_sim_types&gt;<br/><br/>    def test_sim_types(self):<br/>    <br/>        testvalue= [0,2, 100, 1,1]<br/>        rcost_manual = x_to_rcost(testvalue[:2], [testvalue[2]], testvalue[3:], faultmodes=&#x27;StoreEE&#x27;)<br/>    <br/>        opt_prob.update_sim_options(&quot;rcost&quot;, staged=True)<br/>&gt;       rcost_int = opt_prob.cr(testvalue)<br/><br/>examples\multirotor\test_multirotor.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\search.py:254: in newobj<br/>    return self.x_to_obj_const(x, simname)[0][objname]<br/>fmdtools\sim\search.py:623: in x_to_obj_const<br/>    self._prep_sim_type(self.simulations[simname][0], simname, x)<br/>fmdtools\sim\search.py:487: in _prep_sim_type<br/>    if simtype==&#x27;single&#x27;: self._prep_single_sim(simname, x)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = Problem drone_problem                                                   current value<br/> Variables<br/> -vars batteryarch at...1)                               nan<br/> Simulations<br/> -dcost: external scen: <br/> -ocost: single scen: <br/> -rcost: multi scen: <br/>simname = &#x27;ocost&#x27;, x = array([  0,   2, 100,   1,   1])<br/><br/>    def _prep_single_sim(self, simname, x):<br/>        # Get variable and objective times for the simulation<br/>&gt;       var_time, obj_time = self._get_var_obj_time(simname)<br/><span class="error">E       TypeError: _get_var_obj_time() takes 1 positional argument but 2 were given</span><br/><br/>fmdtools\sim\search.py:315: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_cost_calc</td>
-          <td class="col-duration">3.74</td>
+          <td class="col-duration">3.42</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_cost_calc&gt;<br/><br/>    def test_approach_cost_calc(self):<br/>        &quot;&quot;&quot;Test that the (linear) resilience loss function is perfectly approximated<br/>        using the given sampling methods&quot;&quot;&quot;<br/>        mdl = Pump(p={&#x27;cost&#x27;:(&#x27;ee&#x27;, &#x27;repair&#x27;, &#x27;water&#x27;), &#x27;delay&#x27;:0})<br/>        app_full = SampleApproach(mdl, defaultsamp={&#x27;samp&#x27;:&#x27;fullint&#x27;})<br/>        full_util=exp_cost_quant(app_full,mdl)<br/>    <br/>        app_multipt = SampleApproach(mdl, defaultsamp={&#x27;samp&#x27;:&#x27;evenspacing&#x27;, &#x27;numpts&#x27;:3})<br/>        multipt_util=exp_cost_quant(app_multipt,mdl)<br/>&gt;       self.assertAlmostEqual(full_util, multipt_util)<br/><span class="error">E       AssertionError: 1799299.0952380951 != 1799153.8095238095 within 7 places (145.28571428568102 difference)</span><br/><br/>examples\pump\test_pump.py:79: AssertionError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_cost_calc&gt;<br/><br/>    def test_approach_cost_calc(self):<br/>        &quot;&quot;&quot;Test that the (linear) resilience loss function is perfectly approximated<br/>        using the given sampling methods&quot;&quot;&quot;<br/>        mdl = Pump(p={&#x27;cost&#x27;:(&#x27;ee&#x27;, &#x27;repair&#x27;, &#x27;water&#x27;), &#x27;delay&#x27;:0})<br/>        app_full = SampleApproach(mdl, defaultsamp={&#x27;samp&#x27;:&#x27;fullint&#x27;})<br/>        full_util=exp_cost_quant(app_full,mdl)<br/>    <br/>        app_multipt = SampleApproach(mdl, defaultsamp={&#x27;samp&#x27;:&#x27;evenspacing&#x27;, &#x27;numpts&#x27;:3})<br/>        multipt_util=exp_cost_quant(app_multipt,mdl)<br/>&gt;       self.assertAlmostEqual(full_util, multipt_util)<br/><span class="error">E       AssertionError: 1799299.0952380951 != 1799153.8095238097 within 7 places (145.2857142854482 difference)</span><br/><br/>examples\pump\test_pump.py:79: AssertionError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_pruning</td>
-          <td class="col-duration">1.94</td>
+          <td class="col-duration">1.77</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -374,63 +374,27 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_reset</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump_stochastic.StochasticPumpTests testMethod=test_model_reset&gt;<br/><br/>    def test_model_reset(self):<br/>&gt;       mdl = Pump(); mdl2 = Pump(); mdl2.seed=mdl.seed<br/><span class="error">E       AttributeError: &#x27;Pump&#x27; object has no attribute &#x27;seed&#x27;</span><br/><br/>examples\pump\test_pump_stochastic.py:62: AttributeError<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_approach</td>
-          <td class="col-duration">26.20</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump_stochastic.StochasticPumpTests testMethod=test_run_approach&gt;<br/><br/>    def test_run_approach(self):<br/>         mdl = Pump()<br/>         nomapp = NominalApproach()<br/>         nomapp.add_seed_replicates(&#x27;default&#x27;,1000)<br/>         endresults, mdlhists = propagate.nominal_approach(mdl, nomapp, showprogress=False, run_stochastic=True)<br/>         ave_effs=[]; std_effs=[]<br/>         for scen in mdlhists:<br/>&gt;            ave_effs.append(np.mean(mdlhists[scen][&#x27;functions&#x27;][&#x27;MoveWater&#x27;][&#x27;eff&#x27;]))<br/><span class="error">E            IndexError: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices</span><br/><br/>examples\pump\test_pump_stochastic.py:51: IndexError<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_safety</td>
+          <td class="col-name">examples/rover/test_rover.py::RoverTests::test_obj_values</td>
           <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump_stochastic.StochasticPumpTests testMethod=test_run_safety&gt;<br/><br/>    def test_run_safety(self):<br/>        &quot;&quot;&quot; Tests that two models with the same seed will run the same and produce the same results&quot;&quot;&quot;<br/>        for seed in [None, 1, 10, 209840]:<br/>&gt;           mdl = Pump(modelparams = {&#x27;phases&#x27;:{&#x27;start&#x27;:[0,4], &#x27;on&#x27;:[5, 49], &#x27;end&#x27;:[50,55]}, &#x27;times&#x27;:[0,20, 55], &#x27;tstep&#x27;:1,&#x27;seed&#x27;:seed})<br/><br/>examples\pump\test_pump_stochastic.py:30: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>examples\pump\pump_stochastic.py:95: in __init__<br/>    super().__init__(**kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Pump object at 0x2ca21b2e100&gt;<br/>kwargs = {&#x27;modelparams&#x27;: {&#x27;phases&#x27;: {&#x27;end&#x27;: [50, 55], &#x27;on&#x27;: [5, 49], &#x27;start&#x27;: [0, 4]}, &#x27;seed&#x27;: None, &#x27;times&#x27;: [0, 20, 55], &#x27;tstep&#x27;: 1}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;modelparams&#x27;</span><br/><br/>examples\pump\ex_pump.py:290: TypeError<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_stochastic_pdf</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.pump.test_pump_stochastic.StochasticPumpTests testMethod=test_stochastic_pdf&gt;<br/><br/>    def test_stochastic_pdf(self):<br/>        &quot;&quot;&quot;Tests that (1) track_pdf option runs and (2) gives repeated probability density results under the same seed(s)&quot;&quot;&quot;<br/>        testvals = [6.32173873679189, 10.56678004828189, 37.27832255997974, 15.163623336729625,  0.10687727708471972, 5.313965836539551, 54.568223188266394, 33.79026902541023, 7.636851629723572]<br/>        for i in range(1,10):<br/>            self.mdl.update_seed(i)<br/>            self.mdl.propagate(i, run_stochastic=&#x27;track_pdf&#x27;)<br/>            pd = self.mdl.return_probdens()<br/>&gt;           self.assertAlmostEqual(pd, testvals[i-1])<br/><span class="error">E           AssertionError: 1.0 != 6.32173873679189 within 7 places (5.32173873679189 difference)</span><br/><br/>examples\pump\test_pump_stochastic.py:26: AssertionError<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/rover/test_rover.py::RoverTests::test_obj_values</td>
-          <td class="col-duration">0.16</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.rover.test_rover.RoverTests testMethod=test_obj_values&gt;<br/><br/>    def test_obj_values(self):<br/>    <br/>        testvalues = [[1.0,0.5,0.0],[0.0,0.0,0.0], [1.0,1.0,1.0], [0.5,0.5,0.5]]<br/>        for testvalue in testvalues:<br/>            dist_int,enddist_int, endpt_int = line_dist_faster(testvalue)<br/>            dist,enddist, endpt = line_dist(testvalue)<br/>    <br/>&gt;           self.assertEqual(dist, dist_int)<br/><span class="error">E           AssertionError: 0.11329848698471573 != 0.5763384838180136</span><br/><br/>examples\rover\test_rover.py:20: AssertionError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.rover.test_rover.RoverTests testMethod=test_obj_values&gt;<br/><br/>    def test_obj_values(self):<br/>    <br/>        testvalues = [[1.0,0.5,0.0],[0.0,0.0,0.0], [1.0,1.0,1.0], [0.5,0.5,0.5]]<br/>        for testvalue in testvalues:<br/>&gt;           dist_int,enddist_int, endpt_int = line_dist_faster(testvalue)<br/><br/>examples\rover\test_rover.py:17: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>examples\rover\optimization\search_rover.py:42: in line_dist_faster<br/>    dist = mode_search_prob.line_dist(ind)<br/>fmdtools\sim\search.py:254: in newobj<br/>    return self.x_to_obj_const(x, simname)[0][objname]<br/>fmdtools\sim\search.py:623: in x_to_obj_const<br/>    self._prep_sim_type(self.simulations[simname][0], simname, x)<br/>fmdtools\sim\search.py:487: in _prep_sim_type<br/>    if simtype==&#x27;single&#x27;: self._prep_single_sim(simname, x)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = Problem Mode Search                                                     current value<br/> Variables<br/> -vars drive.m.s.fric... vars ground.s.y at t=end)                               nan<br/> Constraints<br/> -<br/> Simulations<br/> -custom_fault: single scen: <br/>simname = &#x27;custom_fault&#x27;, x = array([1. , 0.5, 0. ])<br/><br/>    def _prep_single_sim(self, simname, x):<br/>        # Get variable and objective times for the simulation<br/>&gt;       var_time, obj_time = self._get_var_obj_time(simname)<br/><span class="error">E       TypeError: _get_var_obj_time() takes 1 positional argument but 2 were given</span><br/><br/>fmdtools\sim\search.py:315: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism</td>
-          <td class="col-duration">0.15</td>
+          <td class="col-duration">0.13</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_approach_parallelism&gt;<br/><br/>    def test_approach_parallelism(self):<br/>        &quot;&quot;&quot;Test whether the pump simulates the same when simulated using parallel or staged options&quot;&quot;&quot;<br/>        app = SampleApproach(self.mdl)<br/>&gt;       self.check_approach_parallelism(self.mdl, app)<br/><br/>examples\tank\test_tank.py:33: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:44: in check_approach_parallelism<br/>    endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)<br/>fmdtools\sim\propagate.py:421: in approach<br/>    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **{**kwargs, &#x27;use_end_condition&#x27;:False})<br/>fmdtools\sim\propagate.py:386: in nom_helper<br/>    result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)<br/>fmdtools\sim\propagate.py:755: in prop_one_scen<br/>    c_mdl[t]=mdl.copy()<br/>fmdtools\define\model.py:300: in copy<br/>    copy.fxns[fxnname]=fxn.copy(flows, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/>newflows = {}, args = ()<br/>kwargs = {&#x27;a&#x27;: {&#x27;reacttime&#x27;: 2}, &#x27;r&#x27;: {&#x27;seed&#x27;: 42}, &#x27;t&#x27;: {&#x27;dt&#x27;: 1.0}}<br/>cop = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/><br/>    def copy(self, newflows, *args, **kwargs):<br/>        &quot;&quot;&quot;<br/>        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when<br/>        copying the model.<br/>    <br/>        Parameters<br/>        ----------<br/>        newflows : list<br/>            list of new flow objects to be associated with the copy of the function<br/>    <br/>        Returns<br/>        -------<br/>        copy : FxnBlock<br/>            Copy of the given function with new flows<br/>        &quot;&quot;&quot;<br/>        cop = super().copy(newflows, *args, **kwargs)<br/>        if hasattr(self, &#x27;c&#x27;):<br/>            cop.c = self.c.copy_with_arg(**self._args_c)<br/>        if hasattr(self, &#x27;a&#x27;):<br/>&gt;           cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)<br/><span class="error">E           AttributeError: &#x27;HumanASG&#x27; object has no attribute &#x27;copy_with_arg&#x27;</span><br/><br/>fmdtools\define\block.py:1214: AttributeError<br/> ------------------------------Captured stdout call------------------------------ <br/>Error at t=0.0 in scenario Scenario(sequence={}, rate=1.0, name=&#x27;nominal&#x27;, times=(), time=0.0)
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_approach_parallelism&gt;<br/><br/>    def test_approach_parallelism(self):<br/>        &quot;&quot;&quot;Test whether the pump simulates the same when simulated using parallel or staged options&quot;&quot;&quot;<br/>        app = SampleApproach(self.mdl)<br/>&gt;       self.check_approach_parallelism(self.mdl, app)<br/><br/>examples\tank\test_tank.py:33: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:44: in check_approach_parallelism<br/>    endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)<br/>fmdtools\sim\propagate.py:421: in approach<br/>    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **{**kwargs, &#x27;use_end_condition&#x27;:False})<br/>fmdtools\sim\propagate.py:386: in nom_helper<br/>    result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)<br/>fmdtools\sim\propagate.py:755: in prop_one_scen<br/>    c_mdl[t]=mdl.copy()<br/>fmdtools\define\model.py:300: in copy<br/>    copy.fxns[fxnname]=fxn.copy(flows, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/>newflows = {}, args = ()<br/>kwargs = {&#x27;a&#x27;: {&#x27;reacttime&#x27;: 2}, &#x27;r&#x27;: {&#x27;seed&#x27;: 42}, &#x27;t&#x27;: {&#x27;dt&#x27;: 1.0}}<br/>cop = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/><br/>    def copy(self, newflows, *args, **kwargs):<br/>        &quot;&quot;&quot;<br/>        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when<br/>        copying the model.<br/>    <br/>        Parameters<br/>        ----------<br/>        newflows : list<br/>            list of new flow objects to be associated with the copy of the function<br/>    <br/>        Returns<br/>        -------<br/>        copy : FxnBlock<br/>            Copy of the given function with new flows<br/>        &quot;&quot;&quot;<br/>        cop = super().copy(newflows, *args, **kwargs)<br/>        if hasattr(self, &#x27;c&#x27;):<br/>            cop.c = self.c.copy_with_arg(**self._args_c)<br/>        if hasattr(self, &#x27;a&#x27;):<br/>&gt;           cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)<br/><span class="error">E           AttributeError: &#x27;HumanASG&#x27; object has no attribute &#x27;copy_with_arg&#x27;</span><br/><br/>fmdtools\define\block.py:1194: AttributeError<br/> ------------------------------Captured stdout call------------------------------ <br/>Error at t=0.0 in scenario Scenario(sequence={}, rate=1.0, name=&#x27;nominal&#x27;, times=(), time=0.0)
 <br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_comp_mode_inj</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -443,7 +407,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_different_components&gt;<br/><br/>    def test_different_components(self):<br/>        &quot;&quot;&quot; Tests that model copies have different components&quot;&quot;&quot;<br/>        mdl=Tank()<br/>&gt;       mdl_copy = mdl.copy()<br/><br/>examples\tank\test_tank.py:87: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\define\model.py:300: in copy<br/>    copy.fxns[fxnname]=fxn.copy(flows, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/>newflows = {}, args = ()<br/>kwargs = {&#x27;a&#x27;: {&#x27;reacttime&#x27;: 2}, &#x27;r&#x27;: {&#x27;seed&#x27;: 42}, &#x27;t&#x27;: {&#x27;dt&#x27;: 1.0}}<br/>cop = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/><br/>    def copy(self, newflows, *args, **kwargs):<br/>        &quot;&quot;&quot;<br/>        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when<br/>        copying the model.<br/>    <br/>        Parameters<br/>        ----------<br/>        newflows : list<br/>            list of new flow objects to be associated with the copy of the function<br/>    <br/>        Returns<br/>        -------<br/>        copy : FxnBlock<br/>            Copy of the given function with new flows<br/>        &quot;&quot;&quot;<br/>        cop = super().copy(newflows, *args, **kwargs)<br/>        if hasattr(self, &#x27;c&#x27;):<br/>            cop.c = self.c.copy_with_arg(**self._args_c)<br/>        if hasattr(self, &#x27;a&#x27;):<br/>&gt;           cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)<br/><span class="error">E           AttributeError: &#x27;HumanASG&#x27; object has no attribute &#x27;copy_with_arg&#x27;</span><br/><br/>fmdtools\define\block.py:1214: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_different_components&gt;<br/><br/>    def test_different_components(self):<br/>        &quot;&quot;&quot; Tests that model copies have different components&quot;&quot;&quot;<br/>        mdl=Tank()<br/>&gt;       mdl_copy = mdl.copy()<br/><br/>examples\tank\test_tank.py:87: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\define\model.py:300: in copy<br/>    copy.fxns[fxnname]=fxn.copy(flows, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/>newflows = {}, args = ()<br/>kwargs = {&#x27;a&#x27;: {&#x27;reacttime&#x27;: 2}, &#x27;r&#x27;: {&#x27;seed&#x27;: 42}, &#x27;t&#x27;: {&#x27;dt&#x27;: 1.0}}<br/>cop = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/><br/>    def copy(self, newflows, *args, **kwargs):<br/>        &quot;&quot;&quot;<br/>        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when<br/>        copying the model.<br/>    <br/>        Parameters<br/>        ----------<br/>        newflows : list<br/>            list of new flow objects to be associated with the copy of the function<br/>    <br/>        Returns<br/>        -------<br/>        copy : FxnBlock<br/>            Copy of the given function with new flows<br/>        &quot;&quot;&quot;<br/>        cop = super().copy(newflows, *args, **kwargs)<br/>        if hasattr(self, &#x27;c&#x27;):<br/>            cop.c = self.c.copy_with_arg(**self._args_c)<br/>        if hasattr(self, &#x27;a&#x27;):<br/>&gt;           cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)<br/><span class="error">E           AttributeError: &#x27;HumanASG&#x27; object has no attribute &#x27;copy_with_arg&#x27;</span><br/><br/>fmdtools\define\block.py:1194: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -461,7 +425,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_local_tstep&gt;<br/><br/>    def test_local_tstep(self):<br/>        &quot;&quot;&quot; Tests running the model with a different local timestep in the Store_Liquid function&quot;&quot;&quot;<br/>&gt;       mdl_global = Tank(modelparams = {&#x27;phases&#x27;:{&#x27;na&#x27;:[0],&#x27;operation&#x27;:[1,20]}, &#x27;times&#x27;:[0,5,10,15,20], &#x27;tstep&#x27;:1, &#x27;units&#x27;:&#x27;min&#x27;, &#x27;use_local&#x27;:False})<br/><br/>examples\tank\test_tank.py:93: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Tank object at 0x2ca238774c0&gt;<br/>kwargs = {&#x27;modelparams&#x27;: {&#x27;phases&#x27;: {&#x27;na&#x27;: [0], &#x27;operation&#x27;: [1, 20]}, &#x27;times&#x27;: [0, 5, 10, 15, 20], &#x27;tstep&#x27;: 1, &#x27;units&#x27;: &#x27;min&#x27;, ...}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;modelparams&#x27;</span><br/><br/>examples\tank\tank_model.py:248: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_local_tstep&gt;<br/><br/>    def test_local_tstep(self):<br/>        &quot;&quot;&quot; Tests running the model with a different local timestep in the Store_Liquid function&quot;&quot;&quot;<br/>&gt;       mdl_global = Tank(modelparams = {&#x27;phases&#x27;:{&#x27;na&#x27;:[0],&#x27;operation&#x27;:[1,20]}, &#x27;times&#x27;:[0,5,10,15,20], &#x27;tstep&#x27;:1, &#x27;units&#x27;:&#x27;min&#x27;, &#x27;use_local&#x27;:False})<br/><br/>examples\tank\test_tank.py:93: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Tank object at 0x27db273a340&gt;<br/>kwargs = {&#x27;modelparams&#x27;: {&#x27;phases&#x27;: {&#x27;na&#x27;: [0], &#x27;operation&#x27;: [1, 20]}, &#x27;times&#x27;: [0, 5, 10, 15, 20], &#x27;tstep&#x27;: 1, &#x27;units&#x27;: &#x27;min&#x27;, ...}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;modelparams&#x27;</span><br/><br/>examples\tank\tank_model.py:248: TypeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -470,7 +434,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_copy_different&gt;<br/><br/>    def test_model_copy_different(self):<br/>&gt;       self.check_model_copy_different(Tank(), [5,10,15], max_time=20)<br/><br/>examples\tank\test_tank.py:26: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:81: in check_model_copy_different<br/>    faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x000002CA1E3DDE50&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   IndexError: list index out of range</span><br/><br/>tests\common.py:81: IndexError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_copy_different&gt;<br/><br/>    def test_model_copy_different(self):<br/>&gt;       self.check_model_copy_different(Tank(), [5,10,15], max_time=20)<br/><br/>examples\tank\test_tank.py:26: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:81: in check_model_copy_different<br/>    faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x0000027DB1CEE400&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   IndexError: list index out of range</span><br/><br/>tests\common.py:81: IndexError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -479,7 +443,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_copy_same&gt;<br/><br/>    def test_model_copy_same(self):<br/>&gt;       self.check_model_copy_same(Tank(),Tank(), [5,10,15], 10, max_time=20)<br/><br/>examples\tank\test_tank.py:24: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:26: in check_model_copy_same<br/>    faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x000002CA1D9027C0&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   IndexError: list index out of range</span><br/><br/>tests\common.py:26: IndexError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_copy_same&gt;<br/><br/>    def test_model_copy_same(self):<br/>&gt;       self.check_model_copy_same(Tank(),Tank(), [5,10,15], 10, max_time=20)<br/><br/>examples\tank\test_tank.py:24: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:26: in check_model_copy_same<br/>    faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x0000027DAED92CC0&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   IndexError: list index out of range</span><br/><br/>tests\common.py:26: IndexError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -488,12 +452,12 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;<br/><br/>    def test_model_reset(self):<br/>        mdl = Tank(); mdl2 = Tank()<br/>&gt;       self.check_model_reset(mdl, mdl2, [5,10,15], max_time=20)<br/><br/>examples\tank\test_tank.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:64: in check_model_reset<br/>    faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x000002CA1F63ACC0&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   IndexError: list index out of range</span><br/><br/>tests\common.py:64: IndexError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;<br/><br/>    def test_model_reset(self):<br/>        mdl = Tank(); mdl2 = Tank()<br/>&gt;       self.check_model_reset(mdl, mdl2, [5,10,15], max_time=20)<br/><br/>examples\tank\test_tank.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:64: in check_model_reset<br/>    faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x0000027DB28E8A40&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   IndexError: list index out of range</span><br/><br/>tests\common.py:64: IndexError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_same_rcost</td>
-          <td class="col-duration">0.15</td>
+          <td class="col-duration">0.06</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -506,7 +470,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {5:{&quot;Import_Water&quot;: [&#x27;Stuck&#x27;]},10:{&quot;Store_Water&quot;:[&quot;Leak&quot;]}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;tank_mdlhist&quot;+extension, &quot;tank_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\tank\test_tank.py:124: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_multfault&gt;<br/>mdl = Tank model at 0x2ca1e1eef40 <br/>FUNCTIONS: <br/>import_water ImportLiquid<br/>- TransportLiquidState(amt_open=1)<br/>- TransportLiqui...ction=0)<br/>tank_sig Signal flow: SigState(indicator=0, action=0)<br/>valve2_sig Signal flow: SigState(indicator=1, action=0)<br/><br/>mfile = &#x27;tank_mdlhist.pkl&#x27;, ecfile = &#x27;tank_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {5: {&#x27;Import_Water&#x27;: [&#x27;Stuck&#x27;]}, 10: {&#x27;Store_Water&#x27;: [&#x27;Leak&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;sequence&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for sequence, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;sequence&#x27;:<br/>            endresult, mdlhist=sim.propagate.sequence(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>&gt;       else: raise Exception(&quot;Invalid Run Type&quot;+runtype)<br/><span class="error">E       Exception: Invalid Run Typemult_fault</span><br/><br/>tests\common.py:141: Exception<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {5:{&quot;Import_Water&quot;: [&#x27;Stuck&#x27;]},10:{&quot;Store_Water&quot;:[&quot;Leak&quot;]}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;tank_mdlhist&quot;+extension, &quot;tank_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\tank\test_tank.py:124: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_multfault&gt;<br/>mdl = Tank model at 0x27db273a940 <br/>FUNCTIONS: <br/>import_water ImportLiquid<br/>- TransportLiquidState(amt_open=1)<br/>- TransportLiqui...ction=0)<br/>tank_sig Signal flow: SigState(indicator=0, action=0)<br/>valve2_sig Signal flow: SigState(indicator=1, action=0)<br/><br/>mfile = &#x27;tank_mdlhist.pkl&#x27;, ecfile = &#x27;tank_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {5: {&#x27;Import_Water&#x27;: [&#x27;Stuck&#x27;]}, 10: {&#x27;Store_Water&#x27;: [&#x27;Leak&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;sequence&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for sequence, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;sequence&#x27;:<br/>            endresult, mdlhist=sim.propagate.sequence(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>&gt;       else: raise Exception(&quot;Invalid Run Type&quot;+runtype)<br/><span class="error">E       Exception: Invalid Run Typemult_fault</span><br/><br/>tests\common.py:141: Exception<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -515,7 +479,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;tank_mdlhist&quot;+extension, &quot;tank_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Import_Water&#x27;, &#x27;Stuck&#x27;, 5))<br/><br/>examples\tank\test_tank.py:120: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:134: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = Tank model at 0x2ca1c34eb80 <br/>FUNCTIONS: <br/>import_water ImportLiquid<br/>- TransportLiquidState(amt_open=1)<br/>- TransportLiqui...ction=0)<br/>tank_sig Signal flow: SigState(indicator=0, action=0)<br/>valve2_sig Signal flow: SigState(indicator=1, action=0)<br/><br/>fxnname = &#x27;Import_Water&#x27;, faultmode = &#x27;Stuck&#x27;, time = 5<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Import_Water&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;tank_mdlhist&quot;+extension, &quot;tank_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Import_Water&#x27;, &#x27;Stuck&#x27;, 5))<br/><br/>examples\tank\test_tank.py:120: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:134: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = Tank model at 0x27daf2a8b80 <br/>FUNCTIONS: <br/>import_water ImportLiquid<br/>- TransportLiquidState(amt_open=1)<br/>- TransportLiqui...ction=0)<br/>tank_sig Signal flow: SigState(indicator=0, action=0)<br/>valve2_sig Signal flow: SigState(indicator=1, action=0)<br/><br/>fxnname = &#x27;Import_Water&#x27;, faultmode = &#x27;Stuck&#x27;, time = 5<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Import_Water&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -524,7 +488,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;tests.test_packages.define_Tests testMethod=test_multiflows&gt;<br/><br/>    def test_multiflows(self):<br/>&gt;       mdl = TestModel()<br/><br/>tests\test_packages.py:100: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = TestModel model at 0x2ca23bcce10 <br/>FUNCTIONS: <br/>FLOWS: <br/>, kwargs = {}<br/><br/>    def __init__(self, **kwargs):<br/>        super().__init__(**kwargs)<br/>    <br/>&gt;       self.add_flow(&quot;Communications&quot;,{&quot;x&quot;:0.0, &quot;y&quot;:1.0}, fclass=CommsFlow)<br/><span class="error">E       TypeError: add_flow() got multiple values for argument &#x27;fclass&#x27;</span><br/><br/>tests\test_packages.py:60: TypeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;tests.test_packages.define_Tests testMethod=test_multiflows&gt;<br/><br/>    def test_multiflows(self):<br/>&gt;       mdl = TestModel()<br/><br/>tests\test_packages.py:100: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = TestModel model at 0x27db081ed40 <br/>FUNCTIONS: <br/>FLOWS: <br/>, kwargs = {}<br/><br/>    def __init__(self, **kwargs):<br/>        super().__init__(**kwargs)<br/>    <br/>&gt;       self.add_flow(&quot;Communications&quot;,{&quot;x&quot;:0.0, &quot;y&quot;:1.0}, fclass=CommsFlow)<br/><span class="error">E       TypeError: add_flow() got multiple values for argument &#x27;fclass&#x27;</span><br/><br/>tests\test_packages.py:60: TypeError<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
@@ -538,7 +502,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_nominal</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.09</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -547,7 +511,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_singlefaults</td>
-          <td class="col-duration">1.85</td>
+          <td class="col-duration">1.47</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -556,7 +520,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_app_prop_values</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -565,7 +529,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_parallelism</td>
-          <td class="col-duration">12.58</td>
+          <td class="col-duration">10.47</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -583,7 +547,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values_2</td>
-          <td class="col-duration">0.13</td>
+          <td class="col-duration">0.12</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -592,7 +556,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fmea_options</td>
-          <td class="col-duration">0.43</td>
+          <td class="col-duration">0.42</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -601,7 +565,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.23</td>
+          <td class="col-duration">0.22</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -610,7 +574,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_same</td>
-          <td class="col-duration">0.37</td>
+          <td class="col-duration">0.33</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -619,7 +583,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_reset</td>
-          <td class="col-duration">0.40</td>
+          <td class="col-duration">0.38</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -628,7 +592,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_csv</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -664,7 +628,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_approach</td>
-          <td class="col-duration">0.60</td>
+          <td class="col-duration">0.48</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -673,7 +637,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_approach_indiv</td>
-          <td class="col-duration">1.02</td>
+          <td class="col-duration">0.74</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -682,7 +646,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_multfault</td>
-          <td class="col-duration">0.08</td>
+          <td class="col-duration">0.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -691,7 +655,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nestedapproach</td>
-          <td class="col-duration">5.66</td>
+          <td class="col-duration">5.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -700,7 +664,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nestedapproach_indiv</td>
-          <td class="col-duration">6.56</td>
+          <td class="col-duration">5.21</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -709,7 +673,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominal</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -718,7 +682,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominalapproach</td>
-          <td class="col-duration">0.45</td>
+          <td class="col-duration">0.33</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -727,7 +691,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominalapproach_indiv</td>
-          <td class="col-duration">0.54</td>
+          <td class="col-duration">0.38</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -736,7 +700,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_onefault</td>
-          <td class="col-duration">0.09</td>
+          <td class="col-duration">0.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -745,7 +709,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_singlefaults</td>
-          <td class="col-duration">0.69</td>
+          <td class="col-duration">0.67</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -754,7 +718,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_singlefaults_indiv</td>
-          <td class="col-duration">1.21</td>
+          <td class="col-duration">0.91</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -862,7 +826,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_blockage_results</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -880,7 +844,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_nominal_results</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -889,7 +853,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.39</td>
+          <td class="col-duration">0.34</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -898,7 +862,34 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_same</td>
-          <td class="col-duration">0.37</td>
+          <td class="col-duration">0.35</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_reset</td>
+          <td class="col-duration">0.57</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_approach</td>
+          <td class="col-duration">16.22</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_safety</td>
+          <td class="col-duration">3.21</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -907,7 +898,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nestedapproach</td>
-          <td class="col-duration">18.57</td>
+          <td class="col-duration">16.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -916,7 +907,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nestedapproach_indiv</td>
-          <td class="col-duration">20.57</td>
+          <td class="col-duration">16.47</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -925,7 +916,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nominalapproach</td>
-          <td class="col-duration">10.23</td>
+          <td class="col-duration">7.11</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -934,7 +925,25 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nominalapproach_indiv</td>
-          <td class="col-duration">8.95</td>
+          <td class="col-duration">7.19</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_set_seeds</td>
+          <td class="col-duration">0.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_stochastic_pdf</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -943,7 +952,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_approach</td>
-          <td class="col-duration">0.61</td>
+          <td class="col-duration">0.52</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -952,7 +961,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_approach_indiv</td>
-          <td class="col-duration">0.88</td>
+          <td class="col-duration">0.61</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -961,7 +970,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nestedapproach</td>
-          <td class="col-duration">4.33</td>
+          <td class="col-duration">3.78</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -970,7 +979,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nestedapproach_indiv</td>
-          <td class="col-duration">5.30</td>
+          <td class="col-duration">3.99</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -979,7 +988,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominal</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -988,7 +997,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominalapproach</td>
-          <td class="col-duration">0.31</td>
+          <td class="col-duration">0.25</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -997,7 +1006,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominalapproach_indiv</td>
-          <td class="col-duration">0.55</td>
+          <td class="col-duration">0.37</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1006,7 +1015,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults</td>
-          <td class="col-duration">1.79</td>
+          <td class="col-duration">1.34</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1015,7 +1024,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults_indiv</td>
-          <td class="col-duration">3.03</td>
+          <td class="col-duration">2.13</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1024,7 +1033,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fault_plot</td>
-          <td class="col-duration">0.15</td>
+          <td class="col-duration">0.19</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1033,7 +1042,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_flowgraph_plot</td>
-          <td class="col-duration">0.16</td>
+          <td class="col-duration">0.14</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1042,7 +1051,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fxngraph_plot</td>
-          <td class="col-duration">0.13</td>
+          <td class="col-duration">0.12</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1060,7 +1069,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_result_from_plot</td>
-          <td class="col-duration">0.22</td>
+          <td class="col-duration">0.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1069,7 +1078,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_typegraph_plot</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1087,7 +1096,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_packages.py::define_Tests::test_pdf_translation_options</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
