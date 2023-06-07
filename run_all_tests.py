@@ -7,7 +7,7 @@ Created on Tue May 16 15:12:39 2023
 import pytest
 
 if __name__=="__main__":
-    
-    retcode = pytest.main(["--html=pytest_report.html"])
+    # requires pytest, nbmake, pytest-html
+    retcode = pytest.main(["--html=pytest_report.html", "--nbmake"])
     
     #retcode = pytest.main(["--html=pytest_report.html", "--continue-on-collection-errors"])
