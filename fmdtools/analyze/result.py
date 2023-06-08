@@ -1058,12 +1058,27 @@ class History(Result):
         return deghist
 
     def get_faults_hist(self, *attrs):
+        """
+        Gets fault names associated with the given attributes
+
+        Parameters
+        ----------
+        *attrs : strs
+            Names to find in the history.
+
+        Returns
+        -------
+        faults_hist : History
+            History of the attrs and their corresponding faults
+        """
         faulthist = self._prep_faulty()
         faults_hist = History()
         if not attrs:
             attrs = self.keys()
         for att in attrs:
-            faults_hist[att] = History({k.split('.')[-1]:v for k, v in faulthist.items() if ('faults' in k) and (att in k)})
+            faults_hist[att] = History({k.split('.')[-1]:v for k, v in faulthist.items() 
+                                        if ('.'+att+'.m.faults' in k) or 
+                                        (att+'.m.faults' in k and k.startswith(att))})
         return faults_hist
 
     def get_faulty_hist(self, *attrs, withtime=True, withtotal=True, operator=np.any):
