@@ -682,19 +682,6 @@ class CompArch(dataobject, mapping=True):
             cop_comp.h = component.h.copy()
         return cop
 
-    def inject_fault_in_component(self, fault):
-        """
-        Injects the fault fault in the component architecture.
-
-        Parameters
-        ----------
-        fault : str
-            Function-level name of the fault.
-        """
-        if fault in self.faultmodes:
-            component = self.components[self.faultmodes[fault]]
-            component.m.add_fault(fault[len(component.name):]+1)
-
     def update_seed(self, seed):
         for comp in self.components.values():
             comp.update_seed(seed)
@@ -993,7 +980,7 @@ class ASG(dataobject, mapping=True):
             self.active_actions = active_actions
 
     def get_faults(self):
-        return {act.name+f for act in self.actions.values() for f in act.m.faults}
+        return {act.name+"_"+f for act in self.actions.values() for f in act.m.faults}
 
     def update_seed(self, seed=[]):
         if seed:
