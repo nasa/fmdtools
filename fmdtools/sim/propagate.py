@@ -377,7 +377,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, 
     #run model nominally, get relevant results
     if isinstance(mdl, type):       mdl = mdl(**mdl_kwargs)  
     elif protect or mdl_kwargs:     mdl = mdl.new_with_params(**mdl_kwargs)
-    if not scen:    nomscen=Scenario()
+    if not scen:    nomscen=Scenario(sequence=create_sequence(disturbances=kwargs.get('disturbances', {})))
     else:           nomscen=scen
     if staged:  
         if type(ctimes) in [float, int]:ctimes=[ctimes]

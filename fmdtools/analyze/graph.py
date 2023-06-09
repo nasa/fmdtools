@@ -675,7 +675,8 @@ class Graph(object):
         nx.set_node_attributes(self.g, fault_nodes, 'faulty')
         
         faults = Result(history.get_faults_hist(*self.g.nodes).get_slice(time))
-        faults_nodes = {n: [k for k in faults.get(n)] if faults.get(n)
+        faults_nodes = {n: [k for k,v in faults.get(n).items() if v] 
+                        if fault_nodes.get(n)
                         else [] for n in self.g.nodes}
         nx.set_node_attributes(self.g, faults_nodes, 'faults')
         
@@ -1989,6 +1990,17 @@ class ASGGraph(Graph):
         calls Graph.draw_graphviz
         """
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
+    
+    def draw_from(self, time, history=History(), **kwargs):
+        
+        activities = history._prep_faulty().get_values("a.active_actions").get_slice(time) #TODO: make this so that it works with multiple ASGs
+        activity = {i for v in activities.values() for i in v}
+        for n in self.g.nodes(): 
+            if n in activity:
+                self.g.nodes[n]['active'] = True 
+            else:
+                self.g.nodes[n]['active'] = False
+        return super().draw_from(time, history=history, **kwargs)
 
 
 class ASGActGraph(ASGGraph):

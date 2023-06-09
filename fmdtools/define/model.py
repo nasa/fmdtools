@@ -194,11 +194,9 @@ class Model(Simulable):
         if not getattr(self, 'is_copy', False):
             if functionorder: self.set_functionorder(functionorder)
             self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
-                                          if getattr(fxn, 'behavior', False) or getattr(fxn, 'static_behavior', False) 
-                                          or (hasattr(fxn, 'a') and getattr(fxn.a, 'proptype','')=='static')])
+                                          if fxn.is_static()])
             self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
-                                           if getattr(fxn, 'dynamic_behavior', False) 
-                                           or (hasattr(fxn, 'a') and getattr(fxn.a, 'proptype','')=='dynamic')])
+                                           if fxn.is_dynamic()])
             self.construct_graph(require_connections=require_connections)
             self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.graph.neighbors(flow)])]
     def construct_graph(self, require_connections=True):

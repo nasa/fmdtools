@@ -340,6 +340,18 @@ class Block(Simulable):
             Block
         """
         return "Block"
+    
+    def is_static(self):
+        """Checks if Block has static execution step"""
+        return (getattr(self, 'behavior', False) or 
+                getattr(self, 'static_behavior', False) or
+                (hasattr(self, 'a') and getattr(self.a, 'proptype','')=='static'))
+        
+    def is_dynamic(self):
+        """Checks if Block has dynamic execution step"""
+        return (getattr(self, 'dynamic_behavior', False) or
+                (hasattr(self, 'a') and getattr(self.a, 'proptype','')=='dynamic'))
+        
 
     def __repr__(self):
         """
@@ -582,8 +594,9 @@ class Block(Simulable):
         # Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
         if hasattr(self, 'dynamic_loading_before'):
             self.dynamic_loading_before(self, time)
-        if hasattr(self, 'dynamic_behavior'):
+        if self.is_dynamic():
             self("dynamic", time=time, faults=faults, run_stochastic=run_stochastic)
+        
         if hasattr(self, 'dynamic_loading_after'):
             self.dynamic_loading_after(self, time)
         
@@ -592,8 +605,9 @@ class Block(Simulable):
         oldmutables = self.return_mutables()
         flows_mutables = {f: fl.return_mutables() for f, fl in self.flows.items()}
         while active:
-            if hasattr(self, 'static_behavior') or hasattr(self, 'behavior'):
+            if self.is_static():
                 self("static", time=time, faults=faults, run_stochastic=run_stochastic)
+            
             if hasattr(self, 'static_loading'):
                 self.static_loading(time)
             # Check to see what flows now have new values and add connected functions (done for each because of communications potential)
@@ -667,19 +681,6 @@ class CompArch(dataobject, mapping=True):
             cop_comp.t = component.t.copy()
             cop_comp.h = component.h.copy()
         return cop
-
-    def inject_fault_in_component(self, fault):
-        """
-        Injects the fault fault in the component architecture.
-
-        Parameters
-        ----------
-        fault : str
-            Function-level name of the fault.
-        """
-        if fault in self.faultmodes:
-            component = self.components[self.faultmodes[fault]]
-            component.m.add_fault(fault[len(component.name):]+1)
 
     def update_seed(self, seed):
         for comp in self.components.values():
@@ -979,7 +980,7 @@ class ASG(dataobject, mapping=True):
             self.active_actions = active_actions
 
     def get_faults(self):
-        return {act.name+f for act in self.actions.values() for f in act.m.faults}
+        return {act.name+"_"+f for act in self.actions.values() for f in act.m.faults}
 
     def update_seed(self, seed=[]):
         if seed:
@@ -1210,7 +1211,7 @@ class FxnBlock(Block):
         if hasattr(self, 'c'):
             cm = self.c.return_mutables()
         if hasattr(self, 'a'):
-            am = self.c.return_mutables()
+            am = self.a.return_mutables()
         return *bm, *cm, *am
 
     def __call__(self, proptype, faults=[], time=0, run_stochastic=False):
