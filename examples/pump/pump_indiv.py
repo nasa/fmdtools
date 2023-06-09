@@ -29,6 +29,9 @@ class MoveWatDynamic(MoveWat):
 
 a = MoveWatDynamic()
 
+result, mdlhist = nominal(a, track='all', disturbances={10:{"wat_in.s.level":0.0}})
+plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate','flows.wat_in.s.level','flows.wat_in.s.flowrate')
+
 app = SampleApproach(a)
 results, mdlhists = approach(a, app)
                     
@@ -49,7 +52,8 @@ results, mdlhists = nominal_approach(a, nomapp)
 
 results, mdlhists, apps = nested_approach(a, nomapp)
             
-        
+
+
     
 
 
