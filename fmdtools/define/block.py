@@ -1060,11 +1060,6 @@ class FxnBlock(Block):
             Internal CompArch fields/arguments override from defaults. The default is {}.
         a : dict, optional
             Internal ASG fields/arguments override from defaults. The default is {}.
-        local : dict/list
-            Views of MultiFlows to add instantiate local. May be of forms:
-                - {flowname:(localname, attrs)} (to only create local view of specific attributes)
-                - {flowname:localname}          (to create view with all attributes)
-                - [flowname1, flowname2...]     (to give overwrite the global flow with the local view of it)
         args_f : dict, optional
             arguments to pass to custom __init__ function 
         """        
@@ -1123,38 +1118,6 @@ class FxnBlock(Block):
             if mode not in self.m.faultmodes: 
                 raise Exception("Mode "+mode+" not in m.faultmodes for fxn "+self.__class__.__name__+" and may not be tracked.")
         return ms, modeprops
-
-    def add_local_to_flowdict(self, flowdict, local, ftype):
-        """
-        Adds local flows to the flow dictionary during initialization
-
-        Parameters
-        ----------
-        flowdict : dict
-            Dictionary of flows {flowname:flow_object}
-        local : dict/list
-            Local flows to add. May be of forms: 
-                - {flowname:(localname, attrs)} (to only create local view of specific attributes)
-                - {flowname:localname}          (to create view with all attributes)
-                - [flowname1, flowname2...]     (to give overwrite the global flow with the local view of it)
-        ftype : str ('local'/'comms')
-            Switches whether the flow added is to be a local or comms flow
-        """
-        for l in local:
-            if ftype == 'local':
-                gen_fl = flowdict[l].create_local
-            elif ftype == 'comms':
-                gen_fl = flowdict[l].create_comms
-            if type(local) == dict and type(local[l]) in [list, tuple, set]:
-                loc_flow = gen_fl(self.name, local[l][1])
-                loc_name = local[l][0]
-            elif type(local) == dict:
-                loc_flow = gen_fl(self.name)
-                loc_name = local[l]
-            else:
-                loc_flow = gen_fl(self.name)
-                loc_name = l
-            flowdict[loc_name] = loc_flow
 
     def update_seed(self, seed=[]):
         """

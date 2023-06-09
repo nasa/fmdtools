@@ -152,26 +152,26 @@ class NodeStyle(dataobject):
         return asdict(self)
 
 
-def as_gv_kwargs(self):
-    """
-    Transates elements of the style (shape, color, width) into kwargs for graphviz
-
-    Returns
-    -------
-    gv : dict
-        kwargs for graphviz
-    """
-    gv_shapes = {'^': 'triangle',
-                 's': 'box',
-                 'o': 'ellipse',
-                 'h': 'hexagon',
-                 '8': 'octagon',
-                 'd': 'diamond'}
-    gv = dict(fillcolor=self.node_color,
-              color=self.edgecolors,
-              shape=gv_shapes.get(self.node_shape, 'ellipse'),
-              penwidth=str(self.linewidths))
-    return gv
+    def as_gv_kwargs(self):
+        """
+        Transates elements of the style (shape, color, width) into kwargs for graphviz
+    
+        Returns
+        -------
+        gv : dict
+            kwargs for graphviz
+        """
+        gv_shapes = {'^': 'triangle',
+                     's': 'box',
+                     'o': 'ellipse',
+                     'h': 'hexagon',
+                     '8': 'octagon',
+                     'd': 'diamond'}
+        gv = dict(fillcolor=self.node_color,
+                  color=self.edgecolors,
+                  shape=gv_shapes.get(self.node_shape, 'ellipse'),
+                  penwidth=str(self.linewidths))
+        return gv
 
 
 class LabelStyle(dataobject):
