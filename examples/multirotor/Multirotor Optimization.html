@@ -456,8 +456,14 @@ Mechanical Design, 144(11), 111704. - This reference provides a better review of
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Multirotor_Optimization_5_0.png" src="../../_images/examples_multirotor_Multirotor_Optimization_5_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_9156/1445480979.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>fig<span class="ansi-yellow-intense-fg ansi-bold">,</span> ax <span class="ansi-yellow-intense-fg ansi-bold">=</span> an<span class="ansi-yellow-intense-fg ansi-bold">.</span>graph<span class="ansi-yellow-intense-fg ansi-bold">.</span>show<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> gtype<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;fxnflowgraph&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> scale<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">1.2</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>: module &#39;fmdtools.analyze.graph&#39; has no attribute &#39;show&#39;
+</pre></div></div>
 </div>
 <p>This is what is called and <em>integrated resilience optimization</em> problem, the combined optimization of Design (cost of design architecture), Operations (cost/revenue of a single flight), and Resilience (cost of a set of hazardous scenarios).</p>
 <p>Note that it is <em>integrated</em> because design model/variables (architecture) affects the operational model/variables (nominal flight), which in turn affects the resilience model (performance over scenarios).</p>
@@ -507,7 +513,7 @@ Mechanical Design, 144(11), 111704. - This reference provides a better review of
 </div>
 </div>
 <p>We can then use the <code class="docutils literal notranslate"><span class="pre">cd</span></code> callable to the the design cost from this model in terms of the battery and line architecture variables:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
@@ -515,16 +521,7 @@ Mechanical Design, 144(11), 111704. - This reference provides a better review of
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
@@ -532,31 +529,13 @@ Mechanical Design, 144(11), 111704. - This reference provides a better review of
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-300
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opt_prob</span><span class="o">.</span><span class="n">cd</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-2300
-</pre></div></div>
 </div>
 </section>
 <section id="Operational-Model">
@@ -610,7 +589,7 @@ Mechanical Design, 144(11), 111704. - This reference provides a better review of
 </div>
 </div>
 <p>We can now use the <code class="docutils literal notranslate"><span class="pre">co</span></code> callable (note that design variables should be sent first e.g. by calling <code class="docutils literal notranslate"><span class="pre">cd</span></code>):</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
@@ -619,24 +598,7 @@ Mechanical Design, 144(11), 111704. - This reference provides a better review of
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S1P2lowcharge&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-29500000.0
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
@@ -644,16 +606,7 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-29447829.861346588
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
@@ -661,16 +614,7 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-26217611.994080096
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
@@ -678,17 +622,8 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
--300052.49013183225
-</pre></div></div>
-</div>
 <p>Note that we can view the results of these simulations by looking in <code class="docutils literal notranslate"><span class="pre">_sims</span></code>, provided the history is being tracked.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
@@ -696,60 +631,12 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x576 with 8 Axes&gt;,
- array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;DOFs: vertvel&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;DOFs: planvel&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;DOFs: planpwr&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;DOFs: uppwr&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;DOFs: x&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;DOFs: y&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;DOFs: z&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;AxesSubplot:&gt;], dtype=object))
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Multirotor_Optimization_32_1.png" src="../../_images/examples_multirotor_Multirotor_Optimization_32_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">opt_prob</span><span class="o">.</span><span class="n">_sims</span><span class="p">[</span><span class="s1">&#39;operational_model&#39;</span><span class="p">][</span><span class="s1">&#39;mdlhists&#39;</span><span class="p">][</span><span class="s1">&#39;nominal&#39;</span><span class="p">],</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;StoreEE&#39;</span><span class="p">:</span><span class="s1">&#39;soc&#39;</span><span class="p">,</span> <span class="s1">&#39;EE_1&#39;</span><span class="p">:</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="s1">&#39;EEmot&#39;</span><span class="p">:</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="s1">&#39;EEctl&#39;</span><span class="p">:</span><span class="s1">&#39;all&#39;</span><span class="p">},</span> <span class="n">time_slice</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x576 with 8 Axes&gt;,
- array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;EE_1: rate&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;EE_1: effort&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;EEmot: rate&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;EEmot: effort&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;EEctl: rate&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;EEctl: effort&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;StoreEE: soc&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;AxesSubplot:&gt;], dtype=object))
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Multirotor_Optimization_33_1.png" src="../../_images/examples_multirotor_Multirotor_Optimization_33_1.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -760,7 +647,7 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
@@ -768,15 +655,8 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Multirotor_Optimization_35_0.png" src="../../_images/examples_multirotor_Multirotor_Optimization_35_0.png" />
-</div>
-</div>
 <p>Note also how the cost model changes depending on the design model (Due to weight/capacity):</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
@@ -785,16 +665,7 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
--9.356060606060666
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
@@ -802,15 +673,6 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 <span class="n">opt_prob</span><span class="o">.</span><span class="n">g_soc</span><span class="p">([</span><span class="mi">50</span><span class="p">])</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
--12.720057720057767
-</pre></div></div>
 </div>
 </section>
 <section id="Resilience-Model">
@@ -851,7 +713,7 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </div>
 </div>
 <p>We can now use the callable <code class="docutils literal notranslate"><span class="pre">cr</span></code>:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
@@ -861,16 +723,7 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-6647.486717651139
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
@@ -878,16 +731,7 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-6647.486717651139
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
@@ -895,32 +739,16 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-22923.55957263046
-</pre></div></div>
-</div>
 </section>
 <section id="Combined-Simulation/Optimization">
 <h2>Combined Simulation/Optimization<a class="headerlink" href="#Combined-Simulation/Optimization" title="Permalink to this headline"></a></h2>
 <p>We thus have a combined optimization architecture, where each model callable can be called externally while keeping dependent relationships with the upstream models. We can view these architectures using:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">opt_prob</span><span class="o">.</span><span class="n">show_architecture</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Multirotor_Optimization_50_0.png" src="../../_images/examples_multirotor_Multirotor_Optimization_50_0.png" />
 </div>
 </div>
 <p>We can also define a combined objective summing each of the costs from each model:</p>
@@ -932,7 +760,7 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
@@ -940,53 +768,22 @@ Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
--1192532.8848038088
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opt_prob</span><span class="o">.</span><span class="n">total_cost</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">100</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
--1192532.8848038088
-</pre></div></div>
 </div>
 <p>To get an idea of the times of the different simulations, we can also use the method <code class="docutils literal notranslate"><span class="pre">time_sims</span></code> (provided a given variable).</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">opt_prob</span><span class="o">.</span><span class="n">time_sims</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Simulation Times:
-design_model: 0.0 s
-set_const: 0.0 s
-operational_model: 0.06482696533203125 s
-resilience_model: 0.9953393936157227 s
-total: 1.060166358947754
-</pre></div></div>
 </div>
 <p>We can further speed this up by updating the simulation options to track specific parts of the model history (instead of all) as well as provide a multiprocessing pool.</p>
 <div class="nbinput nblast docutils container">
@@ -997,7 +794,7 @@ total: 1.060166358947754
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
@@ -1005,40 +802,14 @@ total: 1.060166358947754
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Simulation Times:
-design_model: 0.0 s
-set_const: 0.0009975433349609375 s
-operational_model: 0.08078622817993164 s
-resilience_model: 2.322371244430542 s
-total: 2.4041550159454346
-</pre></div></div>
-</div>
 <p>Note that cost savings from parallelism often come after a single simulation (since initialization of the pool takes time), but are still not major in this case. This is because the parameters in the approach both require re-instantiation of the model (which is a significant amount of the computational cost).</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">opt_prob</span><span class="o">.</span><span class="n">time_sims</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Simulation Times:
-design_model: 0.0009984970092773438 s
-set_const: 0.0 s
-operational_model: 0.06283092498779297 s
-resilience_model: 0.3859684467315674 s
-total: 0.4497978687286377
-</pre></div></div>
 </div>
 <p>Below we show a very simple optimization of these variables using brute force search. Much more sophisticated architectures/methods can be used on this problem, this code is mainly to demonstrate how these disciplines can be used together as a single objective/problem.</p>
 <div class="nbinput nblast docutils container">
@@ -1058,692 +829,13 @@ total: 0.4497978687286377
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opt_hist</span> <span class="o">=</span> <span class="n">brute_search</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-Faults found during the nominal run {&#39;StoreEE&#39;: [&#39;S1P1lowcharge&#39;, &#39;lowcharge&#39;, &#39;S2P1lowcharge&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">IndexError</span>                                Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\multiprocessing\pool.py</span> in <span class="ansi-cyan-fg">next</span><span class="ansi-blue-intense-fg ansi-bold">(self, timeout)</span>
-<span class="ansi-green-fg">    852</span>             <span class="ansi-green-intense-fg ansi-bold">try</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 853</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>item <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_items<span class="ansi-yellow-intense-fg ansi-bold">.</span>popleft<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    854</span>             <span class="ansi-green-intense-fg ansi-bold">except</span> IndexError<span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-red-intense-fg ansi-bold">IndexError</span>: pop from an empty deque
-
-During handling of the above exception, another exception occurred:
-
-<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>                         Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_20512/720555738.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>opt_hist <span class="ansi-yellow-intense-fg ansi-bold">=</span> brute_search<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_20512/608583741.py</span> in <span class="ansi-cyan-fg">brute_search</span><span class="ansi-blue-intense-fg ansi-bold">(Xranges)</span>
-<span class="ansi-green-fg">      4</span>     results <span class="ansi-yellow-intense-fg ansi-bold">=</span> dict<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">;</span> opt_hist <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-yellow-intense-fg ansi-bold">]</span>
-<span class="ansi-green-fg">      5</span>     <span class="ansi-green-intense-fg ansi-bold">for</span> X <span class="ansi-green-intense-fg ansi-bold">in</span> Xvals<span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 6</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>tot_cost <span class="ansi-yellow-intense-fg ansi-bold">=</span> opt_prob<span class="ansi-yellow-intense-fg ansi-bold">.</span>total_cost<span class="ansi-yellow-intense-fg ansi-bold">(</span>X<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-yellow-intense-fg ansi-bold">:</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span>X<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> X<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">3</span><span class="ansi-yellow-intense-fg ansi-bold">:</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">      7</span>         is_feasible <span class="ansi-yellow-intense-fg ansi-bold">=</span> all<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>i<span class="ansi-yellow-intense-fg ansi-bold">&lt;=</span><span class="ansi-cyan-intense-fg ansi-bold">0.0</span> <span class="ansi-green-intense-fg ansi-bold">for</span> k<span class="ansi-yellow-intense-fg ansi-bold">,</span>i <span class="ansi-green-intense-fg ansi-bold">in</span> opt_prob<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;consts&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>items<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;set&#39;</span> <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">in</span> k<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">      8</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> opt_hist<span class="ansi-yellow-intense-fg ansi-bold">:</span>                                     opt_hist<span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>tot_cost<span class="ansi-yellow-intense-fg ansi-bold">,</span> X<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">comb_obj</span><span class="ansi-blue-intense-fg ansi-bold">(*args)</span>
-<span class="ansi-green-fg">    477</span>             <span class="ansi-green-intense-fg ansi-bold">for</span> i<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj <span class="ansi-green-intense-fg ansi-bold">in</span> enumerate<span class="ansi-yellow-intense-fg ansi-bold">(</span>objnames<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    478</span>                 func <span class="ansi-yellow-intense-fg ansi-bold">=</span> getattr<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 479</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>objs<span class="ansi-yellow-intense-fg ansi-bold">.</span>append<span class="ansi-yellow-intense-fg ansi-bold">(</span>func<span class="ansi-yellow-intense-fg ansi-bold">(</span>args<span class="ansi-yellow-intense-fg ansi-bold">[</span>i<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    480</span>             aggfunc <span class="ansi-yellow-intense-fg ansi-bold">=</span> getattr<span class="ansi-yellow-intense-fg ansi-bold">(</span>np<span class="ansi-yellow-intense-fg ansi-bold">,</span> agg<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    481</span>             <span class="ansi-green-intense-fg ansi-bold">return</span> aggfunc<span class="ansi-yellow-intense-fg ansi-bold">(</span>objs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">newobj</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
-<span class="ansi-green-fg">    248</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _assoc_obj_con<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> objname<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_const<span class="ansi-yellow-intense-fg ansi-bold">,</span> arg<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    249</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newobj<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 250</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
-<span class="ansi-green-fg">    251</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newconst<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    252</span>             <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">1</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">x_to_obj_const</span><span class="ansi-blue-intense-fg ansi-bold">(self, x, simnames)</span>
-<span class="ansi-green-fg">    602</span>             <span class="ansi-red-intense-fg ansi-bold"># run sims</span>
-<span class="ansi-green-fg">    603</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> simname <span class="ansi-green-intense-fg ansi-bold">in</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims_to_update&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 604</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>objs<span class="ansi-yellow-intense-fg ansi-bold">,</span> consts <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_run_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    605</span>                 self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;objs&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>update<span class="ansi-yellow-intense-fg ansi-bold">(</span>objs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    606</span>                 self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;consts&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>update<span class="ansi-yellow-intense-fg ansi-bold">(</span>consts<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_run_sim_type</span><span class="ansi-blue-intense-fg ansi-bold">(self, simtype, simname, x)</span>
-<span class="ansi-green-fg">    466</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;set_const&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>    <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_get_set_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    467</span>         <span class="ansi-green-intense-fg ansi-bold">elif</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;single&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>     <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_run_single_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 468</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">elif</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;multi&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>      <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_run_multi_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    469</span>         <span class="ansi-green-intense-fg ansi-bold">elif</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;external&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>   <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_run_external_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    470</span>         <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> <span class="ansi-green-intense-fg ansi-bold">raise</span> Exception<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#34;Invalid simulation type: &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>simtype<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_run_multi_sim</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, x)</span>
-<span class="ansi-green-fg">    396</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> staged<span class="ansi-yellow-intense-fg ansi-bold">:</span>  inputs <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_check_new_mdl<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> var_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> c_mdls<span class="ansi-yellow-intense-fg ansi-bold">[</span>scen<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;properties&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;name&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>var_time<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> scen<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;prevhist&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>prevhists<span class="ansi-yellow-intense-fg ansi-bold">[</span>scen<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;properties&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;name&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span>  str<span class="ansi-yellow-intense-fg ansi-bold">(</span>i<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-green-intense-fg ansi-bold">for</span> i<span class="ansi-yellow-intense-fg ansi-bold">,</span> scen <span class="ansi-green-intense-fg ansi-bold">in</span> enumerate<span class="ansi-yellow-intense-fg ansi-bold">(</span>scenlist<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">]</span>
-<span class="ansi-green-fg">    397</span>             <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>       inputs <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_check_new_mdl<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> var_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> scen<span class="ansi-yellow-intense-fg ansi-bold">,</span>  kwargs<span class="ansi-yellow-intense-fg ansi-bold">,</span> str<span class="ansi-yellow-intense-fg ansi-bold">(</span>i<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-green-intense-fg ansi-bold">for</span> i<span class="ansi-yellow-intense-fg ansi-bold">,</span> scen <span class="ansi-green-intense-fg ansi-bold">in</span> enumerate<span class="ansi-yellow-intense-fg ansi-bold">(</span>scenlist<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">]</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 398</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>res_list <span class="ansi-yellow-intense-fg ansi-bold">=</span> list<span class="ansi-yellow-intense-fg ansi-bold">(</span>pool<span class="ansi-yellow-intense-fg ansi-bold">.</span>imap<span class="ansi-yellow-intense-fg ansi-bold">(</span>prop<span class="ansi-yellow-intense-fg ansi-bold">.</span>exec_scen_par<span class="ansi-yellow-intense-fg ansi-bold">,</span> inputs<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    399</span>             results<span class="ansi-yellow-intense-fg ansi-bold">,</span> mh <span class="ansi-yellow-intense-fg ansi-bold">=</span> prop<span class="ansi-yellow-intense-fg ansi-bold">.</span>unpack_res_list<span class="ansi-yellow-intense-fg ansi-bold">(</span>scenlist<span class="ansi-yellow-intense-fg ansi-bold">,</span> res_list<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    400</span>         <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\multiprocessing\pool.py</span> in <span class="ansi-cyan-fg">next</span><span class="ansi-blue-intense-fg ansi-bold">(self, timeout)</span>
-<span class="ansi-green-fg">    856</span>                     self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_pool <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-green-intense-fg ansi-bold">None</span>
-<span class="ansi-green-fg">    857</span>                     <span class="ansi-green-intense-fg ansi-bold">raise</span> StopIteration <span class="ansi-green-intense-fg ansi-bold">from</span> <span class="ansi-green-intense-fg ansi-bold">None</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 858</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_cond<span class="ansi-yellow-intense-fg ansi-bold">.</span>wait<span class="ansi-yellow-intense-fg ansi-bold">(</span>timeout<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    859</span>                 <span class="ansi-green-intense-fg ansi-bold">try</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    860</span>                     item <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_items<span class="ansi-yellow-intense-fg ansi-bold">.</span>popleft<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\threading.py</span> in <span class="ansi-cyan-fg">wait</span><span class="ansi-blue-intense-fg ansi-bold">(self, timeout)</span>
-<span class="ansi-green-fg">    310</span>         <span class="ansi-green-intense-fg ansi-bold">try</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>    <span class="ansi-red-intense-fg ansi-bold"># restore state no matter what (e.g., KeyboardInterrupt)</span>
-<span class="ansi-green-fg">    311</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> timeout <span class="ansi-green-intense-fg ansi-bold">is</span> <span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 312</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>waiter<span class="ansi-yellow-intense-fg ansi-bold">.</span>acquire<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    313</span>                 gotit <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-green-intense-fg ansi-bold">True</span>
-<span class="ansi-green-fg">    314</span>             <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>:
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:

@@ -418,11 +418,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.state</span> <span class="kn">import</span> <span class="n">State</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.mode</span> <span class="kn">import</span> <span class="n">Mode</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.mode</span> <span class="kn">import</span> <span class="n">Mode</span>
 <span class="kn">from</span> <span class="nn">fmdtools.define.block</span> <span class="kn">import</span> <span class="n">FxnBlock</span><span class="p">,</span> <span class="n">Action</span><span class="p">,</span> <span class="n">ASG</span>
 <span class="kn">from</span> <span class="nn">fmdtools.define.model</span> <span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.flow</span> <span class="kn">import</span> <span class="n">Flow</span>
+
 <span class="kn">import</span> <span class="nn">fmdtools.analyze</span> <span class="k">as</span> <span class="nn">an</span>
 <span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">prop</span>
 </pre></div>
@@ -436,7 +435,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">OutcomeStates</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.state</span> <span class="kn">import</span> <span class="n">State</span>
+<span class="kn">from</span> <span class="nn">fmdtools.define.flow</span> <span class="kn">import</span> <span class="n">Flow</span>
+
+<span class="k">class</span> <span class="nc">OutcomeStates</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
     <span class="n">num_perceptions</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span>
     <span class="n">num_actions</span><span class="p">:</span>     <span class="nb">int</span><span class="o">=</span><span class="mi">0</span>
 <span class="k">class</span> <span class="nc">Outcome</span><span class="p">(</span><span class="n">Flow</span><span class="p">):</span>
@@ -514,7 +516,7 @@ div.rendered_html tbody tr:hover {
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;perceive&quot;</span><span class="p">,</span>    <span class="n">Perceive</span><span class="p">,</span>   <span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;act&quot;</span><span class="p">,</span>         <span class="n">Act</span><span class="p">,</span>        <span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span>        <span class="n">Done</span><span class="p">,</span>       <span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span>        <span class="n">Done</span><span class="p">,</span>       <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;perceive&quot;</span><span class="p">,</span>   <span class="s2">&quot;act&quot;</span><span class="p">,</span>      <span class="s2">&quot;percieved&quot;</span><span class="p">,</span>    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;perceive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">percieved</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;act&quot;</span><span class="p">,</span>        <span class="s2">&quot;done&quot;</span><span class="p">,</span>     <span class="s2">&quot;acted&quot;</span><span class="p">,</span>        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;act&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">acted</span><span class="p">)</span>
@@ -539,7 +541,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 Help on function add_flow in module fmdtools.define.block:
 
-add_flow(self, flowname, fclass=&lt;class &#39;fmdtools.define.flow.Flow&#39;&gt;, p={}, s={}, flowtype=&#39;&#39;)
+add_flow(self, flowname, fclass=&lt;class &#39;fmdtools.define.flow.Flow&#39;&gt;, p={}, s={})
     Adds a flow with given attributes to ASG. Used to enable a flexible
     internal flow architecture in the ASG.
 
@@ -555,8 +557,6 @@ add_flow(self, flowname, fclass=&lt;class &#39;fmdtools.define.flow.Flow&#39;&gt
         Parameter dictionary to instantiate the flow with
     s : dict, optional
         State dictionary to overwrite Flow default state values with
-    flowtype : str, optional
-        Denotes type for class (e.g. &#39;energy,&#39; &#39;material,&#39;, &#39;signal&#39;)
 
 </pre></div></div>
 </div>
@@ -585,10 +585,12 @@ add_act(self, name, actclass, *flownames, duration=0.0, **params)
     ----------
     name : str
         Internal Name for the Action
-    action : Action
+    actclass : Action
         Action class to instantiate
-    *flows : flow
+    *flownames : flow
         Flows (optional) which connect the actions
+    duration:
+        Not documented
     **params : any
         parameters to instantiate the Action with.
 
@@ -650,17 +652,9 @@ build(self)
 
 </pre></div></div>
 </div>
-<p>ASGGraphs can then be used to visualize the flow of actions.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">ASGGraph</span>
-</pre></div>
-</div>
-</div>
+<p>We can look at the attributes of the <code class="docutils literal notranslate"><span class="pre">ASG</span></code> by instantiating it:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">h</span> <span class="o">=</span> <span class="n">Human</span><span class="p">()</span>
@@ -668,17 +662,8 @@ build(self)
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:60: UserWarning: these flows sent from model [&#39;outcome&#39;] not added to class &lt;class &#39;__main__.Done&#39;&gt;
-  warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -692,7 +677,7 @@ Human(actions={&#39;perceive&#39;: perceive Perceive
 , &#39;done&#39;: done Done
 - State()
 - Mode(mode=nominal, faults=set())
-}, action_graph=&lt;networkx.classes.digraph.DiGraph object at 0x000001BD67AFB670&gt;, flow_graph=&lt;networkx.classes.digraph.DiGraph object at 0x000001BD67AFB820&gt;, conditions={&#39;percieved&#39;: &lt;bound method Perceive.percieved of perceive Perceive
+}, action_graph=&lt;networkx.classes.digraph.DiGraph object at 0x0000018E64B76550&gt;, flow_graph=&lt;networkx.classes.digraph.DiGraph object at 0x0000018E64B768E0&gt;, conditions={&#39;percieved&#39;: &lt;bound method Perceive.percieved of perceive Perceive
 - State()
 - ActionMode(mode=nominal, faults=set())
 &gt;, &#39;acted&#39;: &lt;bound method Act.acted of act Act
@@ -703,6 +688,15 @@ Human(actions={&#39;perceive&#39;: perceive Perceive
 - Mode(mode=nominal, faults=set())
 &gt;}, faultmodes={&#39;perceive_failed&#39;: &#39;perceive&#39;, &#39;perceive_unable&#39;: &#39;perceive&#39;, &#39;act_failed&#39;: &#39;act&#39;, &#39;act_unable&#39;: &#39;act&#39;}, flows={&#39;hazard&#39;: hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False), &#39;outcome&#39;: outcome Outcome flow: OutcomeStates(num_perceptions=0, num_actions=0)}, active_actions={&#39;perceive&#39;}, pos={})
 </pre></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">ASGGraph</span></code> can also be used to visualize the flow of actions (e.g., which are active, flows vs conditions, etc.).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">ASGGraph</span>
+</pre></div>
+</div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
@@ -716,12 +710,29 @@ Human(actions={&#39;perceive&#39;: perceive Perceive
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_22_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_22_0.png" />
+</div>
+</div>
+<p>As shown, the “Percieve” action is active (green), while the inactive actions are shown in blue. This action is active because it was defined as initial_action in the ASG definition.</p>
+<p>These are stored as attributes in the underlying graph structure:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ag</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;perceive&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -729,32 +740,9 @@ Human(actions={&#39;perceive&#39;: perceive Perceive
 {&#39;bipartite&#39;: 0, &#39;label&#39;: &#39;Action&#39;, &#39;active&#39;: True, &#39;states&#39;: {}, &#39;faults&#39;: []}
 </pre></div></div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ag</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 864x720 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_22_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_22_1.png" />
-</div>
-</div>
-<p>As shown, the “Percieve” action is active (green), while the inactive actions are shown in blue. This action is active because it was defined as initial_action in the ASG definition.</p>
-<p>Below we first instantiate the function to how how it (and the ASG) simulates on its own</p>
+<section id="Function-level-Simulation">
+<h2>Function-level Simulation<a class="headerlink" href="#Function-level-Simulation" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ASG</span></code>s must be instantiated within a <code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code> in order to be simulable with methods in <code class="docutils literal notranslate"><span class="pre">propagate</span></code>. Below we instantiate a <code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code> and show how an <code class="docutils literal notranslate"><span class="pre">ASG</span></code> can be simulated independent of other Model attributes.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
@@ -817,7 +805,7 @@ hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_28_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_28_1.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_30_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_30_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -837,8 +825,16 @@ hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False)
 hazard Hazard flow: HazardState(present=True, percieved=True, mitigated=True)
 </pre></div></div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;outcome&#39;</span><span class="p">]</span>
@@ -846,7 +842,7 @@ hazard Hazard flow: HazardState(present=True, percieved=True, mitigated=True)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -854,9 +850,18 @@ hazard Hazard flow: HazardState(present=True, percieved=True, mitigated=True)
 outcome Outcome flow: OutcomeStates(num_perceptions=1, num_actions=1)
 </pre></div></div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;outcome&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">num_perceptions</span><span class="o">==</span><span class="mi">1</span>
+<span class="k">assert</span> <span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;outcome&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">num_actions</span><span class="o">==</span><span class="mi">1</span>
+</pre></div>
+</div>
+</div>
 <p>As shown, each of the actions are progressed throuh in a single timestep until the ASG is in the “Done” action</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span><span class="o">=</span><span class="kc">False</span>
@@ -865,32 +870,24 @@ outcome Outcome flow: OutcomeStates(num_perceptions=1, num_actions=1)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ag</span> <span class="o">=</span> <span class="n">ASGGraph</span><span class="p">(</span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 864x720 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_33_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_33_1.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_37_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_37_0.png" />
 </div>
 </div>
+<p>As shown, now that the hazard is no longer present, the “Ready” Condition is triggered and the ASG goes back to the percieve state.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;outcome&#39;</span><span class="p">]</span>
@@ -898,7 +895,7 @@ outcome Outcome flow: OutcomeStates(num_perceptions=1, num_actions=1)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -907,7 +904,7 @@ outcome Outcome flow: OutcomeStates(num_perceptions=1, num_actions=1)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">]</span>
@@ -915,7 +912,7 @@ outcome Outcome flow: OutcomeStates(num_perceptions=1, num_actions=1)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -923,10 +920,108 @@ outcome Outcome flow: OutcomeStates(num_perceptions=1, num_actions=1)
 hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=True)
 </pre></div></div>
 </div>
-<p>As shown, now that the hazard is no longer present, the “Ready” Condition is triggered and the ASG goes back to the percieve state.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">hazard</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=True)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span><span class="o">==</span><span class="kc">False</span>
+<span class="k">assert</span> <span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">==</span><span class="kc">True</span>
+<span class="k">assert</span> <span class="nb">id</span><span class="p">(</span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">hazard</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="p">(</span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>This is essentially what a step-though of a simulation looks like. In practice, we simulate these behaviors using <code class="docutils literal notranslate"><span class="pre">propagate</span></code> as long as the <code class="docutils literal notranslate"><span class="pre">ASG</span></code> is contained in a <code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code>. Here we use the <code class="docutils literal notranslate"><span class="pre">disturbances</span></code> argument to simulate an external hazard occuring at <code class="docutils literal notranslate"><span class="pre">t=5</span></code>:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_indiv</span><span class="p">,</span> <span class="n">hist_indiv</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">ex_fxn</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">disturbances</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">:{</span><span class="s1">&#39;a.flows.hazard.s.present&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">}})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">hist_indiv</span><span class="p">,</span><span class="s1">&#39;flows.hazard.s.present&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;flows.hazard.s.percieved&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;flows.hazard.s.mitigated&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_45_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_45_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist_indiv</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">active_actions</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([{&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;},
+       {&#39;perceive&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;}, {&#39;done&#39;},
+       {&#39;done&#39;}], dtype=object)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">hist_indiv</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<span class="k">assert</span> <span class="n">hist_indiv</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">active_actions</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="p">{</span><span class="s1">&#39;done&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Model-Simulation">
+<h2>Model Simulation<a class="headerlink" href="#Model-Simulation" title="Permalink to this headline"></a></h2>
 <p>Below, this function is placed in the context of a model so we can see how it behaves in the context of a simulation</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ProduceHazard</span><span class="p">(</span><span class="n">FxnBlock</span><span class="p">):</span>
@@ -961,8 +1056,10 @@ hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=True)
 </pre></div>
 </div>
 </div>
+<p>As shown, this model connects the <code class="docutils literal notranslate"><span class="pre">detect_hazard</span></code> with a <code class="docutils literal notranslate"><span class="pre">detect_hazard</span></code> function, which are used (1) to load the system and then to (2) tabulate the number of mitigations.</p>
+<p>Below we show how this translates into simulation results:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">HazardModel</span><span class="p">()</span>
@@ -972,7 +1069,7 @@ hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=True)
 </div>
 <p>Below we look at the states of the functions/flows to see how this has simulated.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist</span>
@@ -980,7 +1077,7 @@ hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=True)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1009,7 +1106,7 @@ time:                          array(61)
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">restab</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fxns.detect_hazard.a.active_actions&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.hazard.s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
@@ -1017,7 +1114,7 @@ time:                          array(61)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">restab</span>
@@ -1025,7 +1122,7 @@ time:                          array(61)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1136,12 +1233,10 @@ time:                          array(61)
 <p>61 rows × 4 columns</p>
 </div></div>
 </div>
-<p>As shown, the ASG alternates between Perceive (when the hazard is not present) and Done (when the hazard is present)</p>
-<p>As a result, all of the present hazards (above) are also perceived and mitigated.</p>
-<p>And as a result no hazards are propagated.</p>
+<p>As shown, the ASG alternates between Perceive (when the hazard is not present) and Done (when the hazard is present). As a result, all of the present hazards (above) are also perceived and mitigated, and no hazards are propagated.</p>
 <p>Or, in plot form:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="s1">&#39;fxns.pass_hazard.s.hazards_mitigated&#39;</span><span class="p">,</span>
@@ -1156,32 +1251,24 @@ time:                          array(61)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_48_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_48_0.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_57_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_57_0.png" />
 </div>
 </div>
 <p>As shown, perceptions and actions track the hazards mitigated.</p>
+</section>
 <section id="Fault-Simulation">
 <h2>Fault Simulation<a class="headerlink" href="#Fault-Simulation" title="Permalink to this headline"></a></h2>
 <p>Below we will simulate a fault and see how it tracks in the model.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_fault</span><span class="p">,</span> <span class="n">mdlhist_fault</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;detect_hazard&#39;</span><span class="p">,</span><span class="s1">&#39;perceive_failed&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:60: UserWarning: these flows sent from model [&#39;outcome&#39;] not added to class &lt;class &#39;__main__.Done&#39;&gt;
-  warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-</pre></div></div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist_fault</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">detect_hazard</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">act</span>
@@ -1189,7 +1276,7 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:60: UserWarni
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1201,7 +1288,7 @@ m.mode:                        array(61)
 </div>
 <p>As shown, this fault results in the hazard not being perceived (and thus the hazard propagating)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhist_fault</span><span class="p">,</span> <span class="s1">&#39;fxns.pass_hazard.s.hazards_mitigated&#39;</span><span class="p">,</span>
@@ -1216,12 +1303,12 @@ m.mode:                        array(61)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_54_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_54_0.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_63_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_63_0.png" />
 </div>
 </div>
 <p>As shown, this only shows up in the PassHazard function (since the fault is removed in one timestep).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_fault</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
@@ -1229,7 +1316,7 @@ m.mode:                        array(61)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1241,12 +1328,12 @@ m.mode:                        array(61)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_56_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_56_1.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_65_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_65_1.png" />
 </div>
 </div>
 <p>To see this in more detail, we will process the results history and then use <code class="docutils literal notranslate"><span class="pre">graph.results_from</span></code> at the time of the fault. Note how the model histories can be processed below:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshist</span> <span class="o">=</span> <span class="n">mdlhist_fault</span><span class="o">.</span><span class="n">get_degraded_hist</span><span class="p">(</span><span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
@@ -1255,7 +1342,7 @@ m.mode:                        array(61)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1391,7 +1478,7 @@ m.mode:                        array(61)
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshist</span> <span class="o">=</span> <span class="n">mdlhist_fault</span><span class="o">.</span><span class="n">get_faulty_hist</span><span class="p">(</span><span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
@@ -1400,7 +1487,7 @@ m.mode:                        array(61)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1423,7 +1510,6 @@ m.mode:                        array(61)
     <tr style="text-align: right;">
       <th></th>
       <th>detect_hazard</th>
-      <th>hazard</th>
       <th>total</th>
       <th>time</th>
     </tr>
@@ -1432,13 +1518,11 @@ m.mode:                        array(61)
     <tr>
       <th>0</th>
       <td>False</td>
-      <td>False</td>
       <td>0</td>
       <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>1.0</td>
@@ -1446,20 +1530,17 @@ m.mode:                        array(61)
     <tr>
       <th>2</th>
       <td>False</td>
-      <td>False</td>
       <td>0</td>
       <td>2.0</td>
     </tr>
     <tr>
       <th>3</th>
       <td>False</td>
-      <td>False</td>
       <td>0</td>
       <td>3.0</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>4.0</td>
@@ -1469,11 +1550,9 @@ m.mode:                        array(61)
       <td>...</td>
       <td>...</td>
       <td>...</td>
-      <td>...</td>
     </tr>
     <tr>
       <th>56</th>
-      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>56.0</td>
@@ -1481,13 +1560,11 @@ m.mode:                        array(61)
     <tr>
       <th>57</th>
       <td>False</td>
-      <td>False</td>
       <td>0</td>
       <td>57.0</td>
     </tr>
     <tr>
       <th>58</th>
-      <td>False</td>
       <td>False</td>
       <td>0</td>
       <td>58.0</td>
@@ -1495,25 +1572,23 @@ m.mode:                        array(61)
     <tr>
       <th>59</th>
       <td>False</td>
-      <td>False</td>
       <td>0</td>
       <td>59.0</td>
     </tr>
     <tr>
       <th>60</th>
       <td>False</td>
-      <td>False</td>
       <td>0</td>
       <td>60.0</td>
     </tr>
   </tbody>
 </table>
-<p>61 rows × 4 columns</p>
+<p>61 rows × 3 columns</p>
 </div></div>
 </div>
 <p>We can further use <code class="docutils literal notranslate"><span class="pre">draw_from</span></code> to view the state of the ASG. See below:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_fault</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_fault</span><span class="p">)</span>
@@ -1521,7 +1596,7 @@ m.mode:                        array(61)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1533,13 +1608,13 @@ m.mode:                        array(61)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_61_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_61_1.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_70_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_70_1.png" />
 </div>
 </div>
 <p>Note the lack of a fault at this time-step, despite it being instantiated here. This is because the fault was removed at the end of the same time-step it was added in.</p>
 <p>The ‘unable’ fault, on the other hand, stays throughout the simulation and thus shows up:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="p">,</span> <span class="n">mdlhist_unable</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;detect_hazard&#39;</span><span class="p">,</span><span class="s1">&#39;act_unable&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
@@ -1554,66 +1629,42 @@ m.mode:                        array(61)
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:60: UserWarning: these flows sent from model [&#39;outcome&#39;] not added to class &lt;class &#39;__main__.Done&#39;&gt;
-  warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_63_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_63_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 864x720 with 1 Axes&gt;, &lt;AxesSubplot:title={&#39;center&#39;:&#39; t=5&#39;}&gt;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_64_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_64_1.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_72_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_72_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 864x720 with 1 Axes&gt;, &lt;AxesSubplot:title={&#39;center&#39;:&#39; t=4&#39;}&gt;)
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_65_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_65_0.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_73_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_73_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1621,7 +1672,30 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:60: UserWarni
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_66_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_66_0.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_74_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_74_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_75_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_75_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
 </div>
 </div>
 </section>

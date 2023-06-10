@@ -280,7 +280,19 @@ histories (e.g., a log of states over time).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.History.get_faults_hist">
 <span class="sig-name descname"><span class="pre">get_faults_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.History.get_faults_hist" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Gets fault names associated with the given attributes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*attrs</strong> (<em>strs</em>) – Names to find in the history.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>faults_hist</strong> – History of the attrs and their corresponding faults</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History">History</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.History.get_faulty_hist">
@@ -1584,6 +1596,28 @@ the Function Block, with:</p>
 </ul>
 </div></blockquote>
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.analyze.graph.ASGGraph.draw_from">
+<span class="sig-name descname"><span class="pre">draw_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">time</span></em>, <em class="sig-param"><span class="pre">history=</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ASGGraph.draw_from" title="Permalink to this definition"></a></dt>
+<dd><p>Draws the graph with degraded/fault data at a given time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>int</em>) – Time to draw the graph (in the history)</p></li>
+<li><p><strong>history</strong> (<a class="reference internal" href="#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History"><em>History</em></a><em>, </em><em>optional</em>) – History with nominal and faulty history. The default is History().</p></li>
+<li><p><strong>**kwargs</strong> (<a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs) – arguments for Graph.draw</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>fig</strong> (<em>matplotlib figure</em>) – matplotlib figure to draw</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib axis</em>) – Ax in the figure</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ASGGraph.draw_graphviz">
 <span class="sig-name descname"><span class="pre">draw_graphviz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'twopi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'voronoi'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ASGGraph.draw_graphviz" title="Permalink to this definition"></a></dt>
 <dd><p>calls Graph.draw_graphviz</p>
@@ -1899,7 +1933,7 @@ Create class EdgeLabelStyle instance</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>time</strong> (<em>int</em>) – Time to draw the graph (in the history)</p></li>
 <li><p><strong>history</strong> (<a class="reference internal" href="#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History"><em>History</em></a><em>, </em><em>optional</em>) – History with nominal and faulty history. The default is History().</p></li>
-<li><p><strong>**kwargs</strong> (<a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs) – arguments for Graph.draw</p></li>
+<li><p><strong>**kwargs</strong> (<a href="#id33"><span class="problematic" id="id34">**</span></a>kwargs) – arguments for Graph.draw</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -2831,6 +2865,20 @@ If False, these edges are not added. the default is {}.</p></li>
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">NodeStyle</span></span><a class="headerlink" href="#fmdtools.analyze.graph.NodeStyle" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">recordclass.datatype.dataobject</span></code></p>
 <p>Holds kwargs for nx.draw_networkx_nodes to be applied as a style for multiple nodes</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.analyze.graph.NodeStyle.as_gv_kwargs">
+<span class="sig-name descname"><span class="pre">as_gv_kwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.NodeStyle.as_gv_kwargs" title="Permalink to this definition"></a></dt>
+<dd><p>Transates elements of the style (shape, color, width) into kwargs for graphviz</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>gv</strong> – kwargs for graphviz</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.NodeStyle.cmap">
 <span class="sig-name descname"><span class="pre">cmap</span></span><em class="property"><span class="pre">:</span> <span class="pre">matplotlib.colors.Colormap</span></em><a class="headerlink" href="#fmdtools.analyze.graph.NodeStyle.cmap" title="Permalink to this definition"></a></dt>
@@ -2896,20 +2944,6 @@ through multigraph locals to construct the containment tree.</p>
 <li><p><strong>include_states</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include state attributes in the plot. The default is False.</p></li>
 <li><p><strong>get_states</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to attach states as attributes to the graph. The default is False</p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.graph.as_gv_kwargs">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">as_gv_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.as_gv_kwargs" title="Permalink to this definition"></a></dt>
-<dd><p>Transates elements of the style (shape, color, width) into kwargs for graphviz</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>gv</strong> – kwargs for graphviz</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3312,7 +3346,7 @@ Weights are used to calculate an average, rather than a total.</p></li>
 –‘functions’ (modes for each function are grouped)
 –‘mode type’ (modes with the same name are grouped)
 – or a set of specific modes/functions. The default is ‘functions’.
-– or a tuple of form (group_by, apps, <a href="#id33"><span class="problematic" id="id34">*</span></a>arg), where</p>
+– or a tuple of form (group_by, apps, <a href="#id35"><span class="problematic" id="id36">*</span></a>arg), where</p>
 <blockquote>
 <div><ul>
 <li><p>group_by is an argument to SampleApproach.get_scenid_groups</p></li>

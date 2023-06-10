@@ -468,7 +468,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-PyObject Pump model at 0x6e5c1e80
+PyObject Pump model at 0x6a293c40
 FUNCTIONS:
 import_ee ImportEE
 - ImportEEState(effstate=1.0)
@@ -584,7 +584,7 @@ PyObject &lt;class &#39;sim.search.DynamicInterface&#39;&gt;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-PyObject &lt;sim.search.DynamicInterface object at 0x0000000063D57610&gt;
+PyObject &lt;sim.search.DynamicInterface object at 0x0000000063E96FA0&gt;
 </pre></div></div>
 </div>
 <p>Defining the simulation is quite simple with the DynamicProblem class. Note the possible options from this class</p>
@@ -831,34 +831,63 @@ AdaStress.Solvers.MonteCarloSearch.MCS(1000, 10)
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-<span class="ansi-green-fg">Progress: 100%|█████████████████████████████████████████| Time: 0:01:28</span>mmm
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-DataStructures.PriorityQueue{Any, Any, Base.Order.ForwardOrdering} with 10 entries:
-  MCSResult(UInt32[0x5b2abcec, 0x92d1a5f8, 0xb86ba795, 0x5b4b9e9c, 0… =&gt; 109.094
-  MCSResult(UInt32[0xf00df22d, 0xdf98badb, 0x4a9a534c, 0x60ee7ad8, 0… =&gt; 109.142
-  MCSResult(UInt32[0xdb88ca70, 0xc52b4d41, 0x21ccd11f, 0x3c4aabf1, 0… =&gt; 109.326
-  MCSResult(UInt32[0x4a239cdf, 0xaf1e0548, 0xf9264ede, 0xc880beb5, 0… =&gt; 109.507
-  MCSResult(UInt32[0x6b3d0716, 0x6cadf6c4, 0x85bb9844, 0xaffe31ff, 0… =&gt; 110.969
-  MCSResult(UInt32[0x64128c37, 0x21a75e9f, 0xfabfa0aa, 0x333f1f66, 0… =&gt; 111.936
-  MCSResult(UInt32[0xf12f6322, 0xf40066f4, 0x885ecfb5, 0x7567dc2c, 0… =&gt; 112.297
-  MCSResult(UInt32[0x5b5615ac, 0x7c596448, 0x8ba4463e, 0xf9f13f6e, 0… =&gt; 114.143
-  MCSResult(UInt32[0xb4d69480, 0x5e903a6f, 0xbe260d66, 0xd68e07f6, 0… =&gt; 115.192
-  MCSResult(UInt32[0x8765695d, 0xa0bd1063, 0x6c4ccfb5, 0x2c4b3ea4, 0… =&gt; 125.809
+PyError ($(Expr(:escape, :(ccall(#= C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:43 =# @pysym(:PyObject_Call), PyPtr, (PyPtr, PyPtr, PyPtr), o, pyargsptr, kw))))) &lt;class &#39;AttributeError&#39;&gt;
+AttributeError(&#34;module &#39;fmdtools.sim.propagate&#39; has no attribute &#39;cut_mdlhist&#39;&#34;)
+  File &#34;C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\sim\search.py&#34;, line 935, in check_sim_end
+    prop.cut_mdlhist(self.log, self.t_ind)
+
+
+Stacktrace:
+  [1] pyerr_check
+    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:62 [inlined]
+  [2] pyerr_check
+    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:66 [inlined]
+  [3] _handle_error(msg::String)
+    @ PyCall C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:83
+  [4] macro expansion
+    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:97 [inlined]
+  [5] #107
+    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:43 [inlined]
+  [6] disable_sigint
+    @ .\c.jl:458 [inlined]
+  [7] __pycall!
+    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:42 [inlined]
+  [8] _pycall!(ret::PyObject, o::PyObject, args::Tuple{}, nargs::Int64, kw::PyObject)
+    @ PyCall C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:29
+  [9] _pycall!
+    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:11 [inlined]
+ [10] (::PyObject)(; kwargs::Base.Pairs{Symbol, Bool, Tuple{Symbol}, NamedTuple{(:external_condition,), Tuple{Bool}}})
+    @ PyCall C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:86
+ [11] isterminal!(sim::PumpSim)
+    @ Main .\In[15]:3
+ [12] isterminal
+    @ .\In[17]:3 [inlined]
+ [13] terminated(mdp::AdaStress.Interface.ASTMDP{AdaStress.Interface.UnobservableState, AdaStress.Interface.SeedAction})
+    @ AdaStress.Interface C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\interface\RL.jl:99
+ [14] terminated(mdp::AdaStress.Interface.ASTMDP{AdaStress.Interface.UnobservableState, AdaStress.Interface.SeedAction})
+    @ AdaStress.Interface C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\interface\RL.jl:111
+ [15] macro expansion
+    @ C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\solvers\local\MonteCarloSearch\MonteCarloSearch.jl:78 [inlined]
+ [16] macro expansion
+    @ C:\Users\dhulse\.julia\packages\ProgressMeter\sN2xr\src\ProgressMeter.jl:938 [inlined]
+ [17] solve(mcs::AdaStress.Solvers.MonteCarloSearch.MCS, env_fn::var&#34;#2#3&#34;)
+    @ AdaStress.Solvers.MonteCarloSearch C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\solvers\local\MonteCarloSearch\MonteCarloSearch.jl:72
+ [18] (::AdaStress.Solvers.MonteCarloSearch.MCS)(env_fn::Function)
+    @ AdaStress.Solvers C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\solvers\types.jl:74
+ [19] top-level scope
+    @ In[21]:2
+ [20] eval
+    @ .\boot.jl:373 [inlined]
+ [21] include_string(mapexpr::typeof(REPL.softscope), mod::Module, code::String, filename::String)
+    @ Base .\loading.jl:1196
 </pre></div></div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
@@ -874,376 +903,7 @@ DataStructures.PriorityQueue{Any, Any, Base.Order.ForwardOrdering} with 10 entri
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-PyObject scen1.i.finished:              array(56)
-scen1.i.on:                    array(56)
-scen1.fxns.import_ee.s.effstate: array(56)
-scen1.fxns.import_ee.m.faults.no_v: array(56)
-scen1.fxns.import_ee.m.faults.inf_v: array(56)
-scen1.fxns.import_ee.m.mode:   array(56)
-scen1.fxns.import_ee.r.s.effstate: array(56)
-scen1.fxns.import_ee.r.s.grid_noise: array(56)
-scen1.fxns.import_wa           array(56)
-scen1.fxns.import_water.m.mode: array(56)
-scen1.fxns.import_si           array(56)
-scen1.fxns.import_signal.m.mode: array(56)
-scen1.fxns.import_signal.r.s.sig_noise: array(56)
-scen1.fxns.move_water.i.over_pressure: array(56)
-scen1.fxns.move_water.s.total_flow: array(56)
-scen1.fxns.move_water.s.eff:   array(56)
-scen1.fxns.move_wate           array(56)
-scen1.fxns.move_water.m.faults.short: array(56)
-scen1.fxns.move_water.m.mode:  array(56)
-scen1.fxns.move_water.r.s.eff: array(56)
-scen1.fxns.move_wate           array(56)
-scen1.fxns.move_wate           array(56)
-scen1.fxns.export_water.m.faults.block: array(56)
-scen1.fxns.export_water.m.mode: array(56)
-scen1.flows.ee_1.s.current:    array(56)
-scen1.flows.ee_1.s.voltage:    array(56)
-scen1.flows.sig_1.s.power:     array(56)
-scen1.flows.wat_1.s.flowrate:  array(56)
-scen1.flows.wat_1.s.pressure:  array(56)
-scen1.flows.wat_1.s.area:      array(56)
-scen1.flows.wat_1.s.level:     array(56)
-scen1.flows.wat_2.s.flowrate:  array(56)
-scen1.flows.wat_2.s.pressure:  array(56)
-scen1.flows.wat_2.s.area:      array(56)
-scen1.flows.wat_2.s.level:     array(56)
-scen1.time:                    array(56)
-scen5.i.finished:              array(56)
-scen5.i.on:                    array(56)
-scen5.fxns.import_ee.s.effstate: array(56)
-scen5.fxns.import_ee.m.faults.no_v: array(56)
-scen5.fxns.import_ee.m.faults.inf_v: array(56)
-scen5.fxns.import_ee.m.mode:   array(56)
-scen5.fxns.import_ee.r.s.effstate: array(56)
-scen5.fxns.import_ee.r.s.grid_noise: array(56)
-scen5.fxns.import_wa           array(56)
-scen5.fxns.import_water.m.mode: array(56)
-scen5.fxns.import_si           array(56)
-scen5.fxns.import_signal.m.mode: array(56)
-scen5.fxns.import_signal.r.s.sig_noise: array(56)
-scen5.fxns.move_water.i.over_pressure: array(56)
-scen5.fxns.move_water.s.total_flow: array(56)
-scen5.fxns.move_water.s.eff:   array(56)
-scen5.fxns.move_wate           array(56)
-scen5.fxns.move_water.m.faults.short: array(56)
-scen5.fxns.move_water.m.mode:  array(56)
-scen5.fxns.move_water.r.s.eff: array(56)
-scen5.fxns.move_wate           array(56)
-scen5.fxns.move_wate           array(56)
-scen5.fxns.export_water.m.faults.block: array(56)
-scen5.fxns.export_water.m.mode: array(56)
-scen5.flows.ee_1.s.current:    array(56)
-scen5.flows.ee_1.s.voltage:    array(56)
-scen5.flows.sig_1.s.power:     array(56)
-scen5.flows.wat_1.s.flowrate:  array(56)
-scen5.flows.wat_1.s.pressure:  array(56)
-scen5.flows.wat_1.s.area:      array(56)
-scen5.flows.wat_1.s.level:     array(56)
-scen5.flows.wat_2.s.flowrate:  array(56)
-scen5.flows.wat_2.s.pressure:  array(56)
-scen5.flows.wat_2.s.area:      array(56)
-scen5.flows.wat_2.s.level:     array(56)
-scen5.time:                    array(56)
-scen6.i.finished:              array(56)
-scen6.i.on:                    array(56)
-scen6.fxns.import_ee.s.effstate: array(56)
-scen6.fxns.import_ee.m.faults.no_v: array(56)
-scen6.fxns.import_ee.m.faults.inf_v: array(56)
-scen6.fxns.import_ee.m.mode:   array(56)
-scen6.fxns.import_ee.r.s.effstate: array(56)
-scen6.fxns.import_ee.r.s.grid_noise: array(56)
-scen6.fxns.import_wa           array(56)
-scen6.fxns.import_water.m.mode: array(56)
-scen6.fxns.import_si           array(56)
-scen6.fxns.import_signal.m.mode: array(56)
-scen6.fxns.import_signal.r.s.sig_noise: array(56)
-scen6.fxns.move_water.i.over_pressure: array(56)
-scen6.fxns.move_water.s.total_flow: array(56)
-scen6.fxns.move_water.s.eff:   array(56)
-scen6.fxns.move_wate           array(56)
-scen6.fxns.move_water.m.faults.short: array(56)
-scen6.fxns.move_water.m.mode:  array(56)
-scen6.fxns.move_water.r.s.eff: array(56)
-scen6.fxns.move_wate           array(56)
-scen6.fxns.move_wate           array(56)
-scen6.fxns.export_water.m.faults.block: array(56)
-scen6.fxns.export_water.m.mode: array(56)
-scen6.flows.ee_1.s.current:    array(56)
-scen6.flows.ee_1.s.voltage:    array(56)
-scen6.flows.sig_1.s.power:     array(56)
-scen6.flows.wat_1.s.flowrate:  array(56)
-scen6.flows.wat_1.s.pressure:  array(56)
-scen6.flows.wat_1.s.area:      array(56)
-scen6.flows.wat_1.s.level:     array(56)
-scen6.flows.wat_2.s.flowrate:  array(56)
-scen6.flows.wat_2.s.pressure:  array(56)
-scen6.flows.wat_2.s.area:      array(56)
-scen6.flows.wat_2.s.level:     array(56)
-scen6.time:                    array(56)
-scen3.i.finished:              array(56)
-scen3.i.on:                    array(56)
-scen3.fxns.import_ee.s.effstate: array(56)
-scen3.fxns.import_ee.m.faults.no_v: array(56)
-scen3.fxns.import_ee.m.faults.inf_v: array(56)
-scen3.fxns.import_ee.m.mode:   array(56)
-scen3.fxns.import_ee.r.s.effstate: array(56)
-scen3.fxns.import_ee.r.s.grid_noise: array(56)
-scen3.fxns.import_wa           array(56)
-scen3.fxns.import_water.m.mode: array(56)
-scen3.fxns.import_si           array(56)
-scen3.fxns.import_signal.m.mode: array(56)
-scen3.fxns.import_signal.r.s.sig_noise: array(56)
-scen3.fxns.move_water.i.over_pressure: array(56)
-scen3.fxns.move_water.s.total_flow: array(56)
-scen3.fxns.move_water.s.eff:   array(56)
-scen3.fxns.move_wate           array(56)
-scen3.fxns.move_water.m.faults.short: array(56)
-scen3.fxns.move_water.m.mode:  array(56)
-scen3.fxns.move_water.r.s.eff: array(56)
-scen3.fxns.move_wate           array(56)
-scen3.fxns.move_wate           array(56)
-scen3.fxns.export_water.m.faults.block: array(56)
-scen3.fxns.export_water.m.mode: array(56)
-scen3.flows.ee_1.s.current:    array(56)
-scen3.flows.ee_1.s.voltage:    array(56)
-scen3.flows.sig_1.s.power:     array(56)
-scen3.flows.wat_1.s.flowrate:  array(56)
-scen3.flows.wat_1.s.pressure:  array(56)
-scen3.flows.wat_1.s.area:      array(56)
-scen3.flows.wat_1.s.level:     array(56)
-scen3.flows.wat_2.s.flowrate:  array(56)
-scen3.flows.wat_2.s.pressure:  array(56)
-scen3.flows.wat_2.s.area:      array(56)
-scen3.flows.wat_2.s.level:     array(56)
-scen3.time:                    array(56)
-scen4.i.finished:              array(56)
-scen4.i.on:                    array(56)
-scen4.fxns.import_ee.s.effstate: array(56)
-scen4.fxns.import_ee.m.faults.no_v: array(56)
-scen4.fxns.import_ee.m.faults.inf_v: array(56)
-scen4.fxns.import_ee.m.mode:   array(56)
-scen4.fxns.import_ee.r.s.effstate: array(56)
-scen4.fxns.import_ee.r.s.grid_noise: array(56)
-scen4.fxns.import_wa           array(56)
-scen4.fxns.import_water.m.mode: array(56)
-scen4.fxns.import_si           array(56)
-scen4.fxns.import_signal.m.mode: array(56)
-scen4.fxns.import_signal.r.s.sig_noise: array(56)
-scen4.fxns.move_water.i.over_pressure: array(56)
-scen4.fxns.move_water.s.total_flow: array(56)
-scen4.fxns.move_water.s.eff:   array(56)
-scen4.fxns.move_wate           array(56)
-scen4.fxns.move_water.m.faults.short: array(56)
-scen4.fxns.move_water.m.mode:  array(56)
-scen4.fxns.move_water.r.s.eff: array(56)
-scen4.fxns.move_wate           array(56)
-scen4.fxns.move_wate           array(56)
-scen4.fxns.export_water.m.faults.block: array(56)
-scen4.fxns.export_water.m.mode: array(56)
-scen4.flows.ee_1.s.current:    array(56)
-scen4.flows.ee_1.s.voltage:    array(56)
-scen4.flows.sig_1.s.power:     array(56)
-scen4.flows.wat_1.s.flowrate:  array(56)
-scen4.flows.wat_1.s.pressure:  array(56)
-scen4.flows.wat_1.s.area:      array(56)
-scen4.flows.wat_1.s.level:     array(56)
-scen4.flows.wat_2.s.flowrate:  array(56)
-scen4.flows.wat_2.s.pressure:  array(56)
-scen4.flows.wat_2.s.area:      array(56)
-scen4.flows.wat_2.s.level:     array(56)
-scen4.time:                    array(56)
-scen0.i.finished:              array(56)
-scen0.i.on:                    array(56)
-scen0.fxns.import_ee.s.effstate: array(56)
-scen0.fxns.import_ee.m.faults.no_v: array(56)
-scen0.fxns.import_ee.m.faults.inf_v: array(56)
-scen0.fxns.import_ee.m.mode:   array(56)
-scen0.fxns.import_ee.r.s.effstate: array(56)
-scen0.fxns.import_ee.r.s.grid_noise: array(56)
-scen0.fxns.import_wa           array(56)
-scen0.fxns.import_water.m.mode: array(56)
-scen0.fxns.import_si           array(56)
-scen0.fxns.import_signal.m.mode: array(56)
-scen0.fxns.import_signal.r.s.sig_noise: array(56)
-scen0.fxns.move_water.i.over_pressure: array(56)
-scen0.fxns.move_water.s.total_flow: array(56)
-scen0.fxns.move_water.s.eff:   array(56)
-scen0.fxns.move_wate           array(56)
-scen0.fxns.move_water.m.faults.short: array(56)
-scen0.fxns.move_water.m.mode:  array(56)
-scen0.fxns.move_water.r.s.eff: array(56)
-scen0.fxns.move_wate           array(56)
-scen0.fxns.move_wate           array(56)
-scen0.fxns.export_water.m.faults.block: array(56)
-scen0.fxns.export_water.m.mode: array(56)
-scen0.flows.ee_1.s.current:    array(56)
-scen0.flows.ee_1.s.voltage:    array(56)
-scen0.flows.sig_1.s.power:     array(56)
-scen0.flows.wat_1.s.flowrate:  array(56)
-scen0.flows.wat_1.s.pressure:  array(56)
-scen0.flows.wat_1.s.area:      array(56)
-scen0.flows.wat_1.s.level:     array(56)
-scen0.flows.wat_2.s.flowrate:  array(56)
-scen0.flows.wat_2.s.pressure:  array(56)
-scen0.flows.wat_2.s.area:      array(56)
-scen0.flows.wat_2.s.level:     array(56)
-scen0.time:                    array(56)
-scen2.i.finished:              array(56)
-scen2.i.on:                    array(56)
-scen2.fxns.import_ee.s.effstate: array(56)
-scen2.fxns.import_ee.m.faults.no_v: array(56)
-scen2.fxns.import_ee.m.faults.inf_v: array(56)
-scen2.fxns.import_ee.m.mode:   array(56)
-scen2.fxns.import_ee.r.s.effstate: array(56)
-scen2.fxns.import_ee.r.s.grid_noise: array(56)
-scen2.fxns.import_wa           array(56)
-scen2.fxns.import_water.m.mode: array(56)
-scen2.fxns.import_si           array(56)
-scen2.fxns.import_signal.m.mode: array(56)
-scen2.fxns.import_signal.r.s.sig_noise: array(56)
-scen2.fxns.move_water.i.over_pressure: array(56)
-scen2.fxns.move_water.s.total_flow: array(56)
-scen2.fxns.move_water.s.eff:   array(56)
-scen2.fxns.move_wate           array(56)
-scen2.fxns.move_water.m.faults.short: array(56)
-scen2.fxns.move_water.m.mode:  array(56)
-scen2.fxns.move_water.r.s.eff: array(56)
-scen2.fxns.move_wate           array(56)
-scen2.fxns.move_wate           array(56)
-scen2.fxns.export_water.m.faults.block: array(56)
-scen2.fxns.export_water.m.mode: array(56)
-scen2.flows.ee_1.s.current:    array(56)
-scen2.flows.ee_1.s.voltage:    array(56)
-scen2.flows.sig_1.s.power:     array(56)
-scen2.flows.wat_1.s.flowrate:  array(56)
-scen2.flows.wat_1.s.pressure:  array(56)
-scen2.flows.wat_1.s.area:      array(56)
-scen2.flows.wat_1.s.level:     array(56)
-scen2.flows.wat_2.s.flowrate:  array(56)
-scen2.flows.wat_2.s.pressure:  array(56)
-scen2.flows.wat_2.s.area:      array(56)
-scen2.flows.wat_2.s.level:     array(56)
-scen2.time:                    array(56)
-scen9.i.finished:              array(56)
-scen9.i.on:                    array(56)
-scen9.fxns.import_ee.s.effstate: array(56)
-scen9.fxns.import_ee.m.faults.no_v: array(56)
-scen9.fxns.import_ee.m.faults.inf_v: array(56)
-scen9.fxns.import_ee.m.mode:   array(56)
-scen9.fxns.import_ee.r.s.effstate: array(56)
-scen9.fxns.import_ee.r.s.grid_noise: array(56)
-scen9.fxns.import_wa           array(56)
-scen9.fxns.import_water.m.mode: array(56)
-scen9.fxns.import_si           array(56)
-scen9.fxns.import_signal.m.mode: array(56)
-scen9.fxns.import_signal.r.s.sig_noise: array(56)
-scen9.fxns.move_water.i.over_pressure: array(56)
-scen9.fxns.move_water.s.total_flow: array(56)
-scen9.fxns.move_water.s.eff:   array(56)
-scen9.fxns.move_wate           array(56)
-scen9.fxns.move_water.m.faults.short: array(56)
-scen9.fxns.move_water.m.mode:  array(56)
-scen9.fxns.move_water.r.s.eff: array(56)
-scen9.fxns.move_wate           array(56)
-scen9.fxns.move_wate           array(56)
-scen9.fxns.export_water.m.faults.block: array(56)
-scen9.fxns.export_water.m.mode: array(56)
-scen9.flows.ee_1.s.current:    array(56)
-scen9.flows.ee_1.s.voltage:    array(56)
-scen9.flows.sig_1.s.power:     array(56)
-scen9.flows.wat_1.s.flowrate:  array(56)
-scen9.flows.wat_1.s.pressure:  array(56)
-scen9.flows.wat_1.s.area:      array(56)
-scen9.flows.wat_1.s.level:     array(56)
-scen9.flows.wat_2.s.flowrate:  array(56)
-scen9.flows.wat_2.s.pressure:  array(56)
-scen9.flows.wat_2.s.area:      array(56)
-scen9.flows.wat_2.s.level:     array(56)
-scen9.time:                    array(56)
-scen8.i.finished:              array(56)
-scen8.i.on:                    array(56)
-scen8.fxns.import_ee.s.effstate: array(56)
-scen8.fxns.import_ee.m.faults.no_v: array(56)
-scen8.fxns.import_ee.m.faults.inf_v: array(56)
-scen8.fxns.import_ee.m.mode:   array(56)
-scen8.fxns.import_ee.r.s.effstate: array(56)
-scen8.fxns.import_ee.r.s.grid_noise: array(56)
-scen8.fxns.import_wa           array(56)
-scen8.fxns.import_water.m.mode: array(56)
-scen8.fxns.import_si           array(56)
-scen8.fxns.import_signal.m.mode: array(56)
-scen8.fxns.import_signal.r.s.sig_noise: array(56)
-scen8.fxns.move_water.i.over_pressure: array(56)
-scen8.fxns.move_water.s.total_flow: array(56)
-scen8.fxns.move_water.s.eff:   array(56)
-scen8.fxns.move_wate           array(56)
-scen8.fxns.move_water.m.faults.short: array(56)
-scen8.fxns.move_water.m.mode:  array(56)
-scen8.fxns.move_water.r.s.eff: array(56)
-scen8.fxns.move_wate           array(56)
-scen8.fxns.move_wate           array(56)
-scen8.fxns.export_water.m.faults.block: array(56)
-scen8.fxns.export_water.m.mode: array(56)
-scen8.flows.ee_1.s.current:    array(56)
-scen8.flows.ee_1.s.voltage:    array(56)
-scen8.flows.sig_1.s.power:     array(56)
-scen8.flows.wat_1.s.flowrate:  array(56)
-scen8.flows.wat_1.s.pressure:  array(56)
-scen8.flows.wat_1.s.area:      array(56)
-scen8.flows.wat_1.s.level:     array(56)
-scen8.flows.wat_2.s.flowrate:  array(56)
-scen8.flows.wat_2.s.pressure:  array(56)
-scen8.flows.wat_2.s.area:      array(56)
-scen8.flows.wat_2.s.level:     array(56)
-scen8.time:                    array(56)
-scen7.i.finished:              array(56)
-scen7.i.on:                    array(56)
-scen7.fxns.import_ee.s.effstate: array(56)
-scen7.fxns.import_ee.m.faults.no_v: array(56)
-scen7.fxns.import_ee.m.faults.inf_v: array(56)
-scen7.fxns.import_ee.m.mode:   array(56)
-scen7.fxns.import_ee.r.s.effstate: array(56)
-scen7.fxns.import_ee.r.s.grid_noise: array(56)
-scen7.fxns.import_wa           array(56)
-scen7.fxns.import_water.m.mode: array(56)
-scen7.fxns.import_si           array(56)
-scen7.fxns.import_signal.m.mode: array(56)
-scen7.fxns.import_signal.r.s.sig_noise: array(56)
-scen7.fxns.move_water.i.over_pressure: array(56)
-scen7.fxns.move_water.s.total_flow: array(56)
-scen7.fxns.move_water.s.eff:   array(56)
-scen7.fxns.move_wate           array(56)
-scen7.fxns.move_water.m.faults.short: array(56)
-scen7.fxns.move_water.m.mode:  array(56)
-scen7.fxns.move_water.r.s.eff: array(56)
-scen7.fxns.move_wate           array(56)
-scen7.fxns.move_wate           array(56)
-scen7.fxns.export_water.m.faults.block: array(56)
-scen7.fxns.export_water.m.mode: array(56)
-scen7.flows.ee_1.s.current:    array(56)
-scen7.flows.ee_1.s.voltage:    array(56)
-scen7.flows.sig_1.s.power:     array(56)
-scen7.flows.wat_1.s.flowrate:  array(56)
-scen7.flows.wat_1.s.pressure:  array(56)
-scen7.flows.wat_1.s.area:      array(56)
-scen7.flows.wat_1.s.level:     array(56)
-scen7.flows.wat_2.s.flowrate:  array(56)
-scen7.flows.wat_2.s.pressure:  array(56)
-scen7.flows.wat_2.s.area:      array(56)
-scen7.flows.wat_2.s.level:     array(56)
-scen7.time:                    array(56)
-
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
@@ -1254,27 +914,11 @@ scen7.time:                    array(56)
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_AST_Sampling_34_0.png" src="../../_images/examples_pump_AST_Sampling_34_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;fxns.move_water.s.eff&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;fxns.move_water.s.total_flow&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;flows.wat_2.s.flowrate&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;flows.wat_2.s.pressure&#39;}, xlabel=&#39;time&#39;&gt;])
-</pre></div></div>
-</div>
 </section>
 <section id="MCTS">
 <h2>MCTS<a class="headerlink" href="#MCTS" title="Permalink to this headline"></a></h2>
 <p>Monte Carlo Tree Search</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
@@ -1282,16 +926,7 @@ scen7.time:                    array(56)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-AdaStress.Solvers.MonteCarloTreeSearch.MCTS(1000, 10, 1.0, 0.7, 1.0, nothing)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
@@ -1299,41 +934,6 @@ AdaStress.Solvers.MonteCarloTreeSearch.MCTS(1000, 10, 1.0, 0.7, 1.0, nothing)
 <span class="nd">@time</span> <span class="n">sol</span> <span class="o">=</span> <span class="n">mcts</span><span class="p">(()</span> <span class="o">-&gt;</span> <span class="n">mdp</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-<span class="ansi-green-fg">Progress: 100%|█████████████████████████████████████████| Time: 0:01:53</span>
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-113.442056 seconds (176.37 M allocations: 7.913 GiB, 2.99% gc time, 0.02% compilation time)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-DataStructures.PriorityQueue{Any, Any, Base.Order.ForwardOrdering} with 10 entries:
-  MCTSResult(UInt32[0xf2f16c22, 0xb7d2c17d, 0x17c321e0, 0x4522ee6c, … =&gt; 121.215
-  MCTSResult(UInt32[0x419dea2c, 0xa4a2a569, 0x5a54294c, 0x745fca30, … =&gt; 121.265
-  MCTSResult(UInt32[0xd52d4423, 0x9569dcd8, 0xdfb53527, 0xa3b2a596, … =&gt; 121.582
-  MCTSResult(UInt32[0x2d821bb3, 0xb3c414a5, 0x11bc16dd, 0x62fbf98c, … =&gt; 125.019
-  MCTSResult(UInt32[0x17d5e66c, 0x04b06d54, 0x7473de98, 0x03d1a98f, … =&gt; 125.603
-  MCTSResult(UInt32[0xba03b1cc, 0x4e5c1f6e, 0x64ac4a47, 0x236c618f, … =&gt; 128.108
-  MCTSResult(UInt32[0x08754edb, 0x411777bd, 0x5ad59a28, 0xfffb946f, … =&gt; 128.117
-  MCTSResult(UInt32[0x372f6504, 0xfb25b078, 0x9e695f15, 0xec1b0ce1, … =&gt; 129.095
-  MCTSResult(UInt32[0xf2f16c22, 0x727114cf, 0x4be07ea6, 0x1a3a9b8f, … =&gt; 130.084
-  MCTSResult(UInt32[0xfed17443, 0xb163078f, 0x3dacaf15, 0x12e2466f, … =&gt; 287.136
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
@@ -1349,7 +949,7 @@ DataStructures.PriorityQueue{Any, Any, Base.Order.ForwardOrdering} with 10 entri
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
@@ -1357,23 +957,7 @@ DataStructures.PriorityQueue{Any, Any, Base.Order.ForwardOrdering} with 10 entri
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_AST_Sampling_39_0.png" src="../../_images/examples_pump_AST_Sampling_39_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: pressure&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: flowrate&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: total_flow&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: eff&#39;}, xlabel=&#39;time&#39;&gt;])
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
@@ -1381,22 +965,6 @@ DataStructures.PriorityQueue{Any, Any, Base.Order.ForwardOrdering} with 10 entri
 <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists2</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="n">fxnflows</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_AST_Sampling_40_0.png" src="../../_images/examples_pump_AST_Sampling_40_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: pressure&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: flowrate&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: faults: short&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: faults: mech_break&#39;}, xlabel=&#39;time&#39;&gt;])
-</pre></div></div>
 </div>
 <p>As we can see, MCTS finds more breakage faults (8 instead of 3), as a result of being a more informed search method.</p>
 <section id="Grey-Box-Methods">
@@ -1421,7 +989,7 @@ DataStructures.PriorityQueue{Any, Any, Base.Order.ForwardOrdering} with 10 entri
 <p>To use the gray box method, we have to first define which variables in the model to sample/update. fmdtools models have two types of random states: - general random states, which are updated in the behavioral method (whose distributions thus cannot be accessed without looking at the code) - auto-updating random states, which are updated from a given distribution defined with auto_update=(dist,params). These distributions can be accessed directly from the model.</p>
 <p>Both can be queried in AdaStress, but using different methods. In general, however, using a Gray Box method means that <em>all</em> stochastic behavior (desired by the analysis) should be represented in AdaStress/Julia, since integration relies on running the model as deterministic.</p>
 <p>Below are the random states of the model:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
@@ -1429,36 +997,14 @@ DataStructures.PriorityQueue{Any, Any, Base.Order.ForwardOrdering} with 10 entri
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Dict{Any, Any} with 3 entries:
-  &#34;ImportSignal&#34; =&gt; Dict{Any, Any}(&#34;sig_noise&#34;=&gt;(1.0, nothing, nothing, 9540584…
-  &#34;MoveWater&#34;    =&gt; Dict{Any, Any}(&#34;eff&#34;=&gt;(1.0, &#34;normal&#34;, (1.0, 0.2), 192379353…
-  &#34;ImportEE&#34;     =&gt; Dict{Any, Any}(&#34;effstate&#34;=&gt;(1.0, nothing, nothing, 56058474…
-</pre></div></div>
-</div>
 <p>As well as the auto-updating random states:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">rand_states</span> <span class="o">=</span> <span class="n">pump_model</span><span class="o">.</span><span class="n">get_rand_states</span><span class="p">(</span><span class="n">auto_update_only</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Dict{Any, Any} with 1 entry:
-  &#34;MoveWater&#34; =&gt; Dict{Any, Any}(&#34;eff&#34;=&gt;(1.0, &#34;normal&#34;, (1.0, 0.2), 1923793530))
-</pre></div></div>
 </div>
 <p>Because of the different methods that julia/AdaStress uses to sample random distributions, these distributions need to be re-implemented in julia. In this example we do this for the eff parameter in MoveWater.</p>
 <p>Below we create a <code class="docutils literal notranslate"><span class="pre">Pump</span></code> struct, and define random disturbances which will affect the model.</p>
@@ -1514,7 +1060,7 @@ Dict{Any, Any} with 1 entry:
 <section id="Simulator">
 <h2>Simulator<a class="headerlink" href="#Simulator" title="Permalink to this headline"></a></h2>
 <p>The simulator is roughly the same as the simulation for the black box model except it has an <code class="docutils literal notranslate"><span class="pre">environment</span></code> which samples stochastic variables and then changes parameters in the model. Note that in this case <code class="docutils literal notranslate"><span class="pre">run_stochastic</span></code> is set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, since the variables are being sampled in AdaStress itself (rather than the model).</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
@@ -1538,17 +1084,8 @@ Dict{Any, Any} with 1 entry:
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-update! (generic function with 2 methods)
-</pre></div></div>
-</div>
 <p>The isterminal and isevent functions will be the same as in the black box model.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
@@ -1563,15 +1100,6 @@ update! (generic function with 2 methods)
 <span class="k">end</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-isevent! (generic function with 2 methods)
-</pre></div></div>
 </div>
 <p>The interface to adastress is set up below. Of note is the observation interface, which observes <code class="docutils literal notranslate"><span class="pre">eff</span></code> (which is also the action in this simple setup)</p>
 <div class="nbinput nblast docutils container">
@@ -1594,7 +1122,7 @@ isevent! (generic function with 2 methods)
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
@@ -1606,17 +1134,8 @@ isevent! (generic function with 2 methods)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-mdp_env (generic function with 1 method)
-</pre></div></div>
-</div>
 <p>Now using the gray box mdp solver:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
@@ -1625,16 +1144,7 @@ mdp_env (generic function with 1 method)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-┌ Info: Enabled submodule SoftActorCritic.
-└ @ AdaStress C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\utils.jl:123
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
@@ -1665,27 +1175,6 @@ mdp_env (generic function with 1 method)
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-<span class="ansi-green-fg">Progress: 100%|█████████████████████████████████████████| Time: 0:05:03</span>
-<span class="ansi-blue-fg">  epoch:  100</span>
-<span class="ansi-blue-fg">  score:  3368.1538</span>
-<span class="ansi-blue-fg">  stdev:  3.8171678</span>
-<span class="ansi-blue-fg">  fails:  1.0</span>
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(MLPActorCritic(SoftActorCritic.SquashedGaussianMLPActor(Chain(Dense(2, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu)), Dense(30, 1), Dense(30, 1), Float32[-1.0], Float32[10.0], Random._GLOBAL_RNG(), nothing, false), SoftActorCritic.MLPQFunction[SoftActorCritic.MLPQFunction(Chain(Dense(3, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu), Dense(30, 1))), SoftActorCritic.MLPQFunction(Chain(Dense(3, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu), Dense(30, 1)))]), Dict{String, Any}(&#34;score&#34; =&gt; Any[3639.3154f0, 3530.497f0, 3672.3123f0, 3822.8728f0, 3862.532f0, 3807.7275f0, 3723.1453f0, 3487.176f0, 3434.0913f0, 3402.7625f0  …  3368.7217f0, 3367.503f0, 3367.4807f0, 3365.4263f0, 3368.8118f0, 3368.653f0, 3370.3752f0, 3366.7698f0, 3368.8843f0, 3368.1538f0], &#34;stdev&#34; =&gt; Any[7.968369f0, 45.299828f0, 5.8645067f0, 8.091826f0, 10.341684f0, 11.02232f0, 12.91226f0, 14.24669f0, 11.250485f0, 8.590219f0  …  3.1053045f0, 3.1790936f0, 3.3331904f0, 4.5494237f0, 3.981168f0, 3.603496f0, 4.142967f0, 4.085335f0, 3.3034844f0, 3.8171678f0], &#34;fails&#34; =&gt; Any[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0  …  1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]))
-</pre></div></div>
-</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
@@ -1694,7 +1183,7 @@ mdp_env (generic function with 1 method)
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
@@ -1702,24 +1191,7 @@ mdp_env (generic function with 1 method)
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_AST_Sampling_66_0.png" src="../../_images/examples_pump_AST_Sampling_66_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-1-element Vector{PyObject}:
- PyObject &lt;matplotlib.lines.Line2D object at 0x0000000062E71220&gt;
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
@@ -1727,39 +1199,13 @@ mdp_env (generic function with 1 method)
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_AST_Sampling_67_0.png" src="../../_images/examples_pump_AST_Sampling_67_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-1-element Vector{PyObject}:
- PyObject &lt;matplotlib.lines.Line2D object at 0x000000005B260280&gt;
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
 <div class="input_area highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">ac</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-MLPActorCritic(SoftActorCritic.SquashedGaussianMLPActor(Chain(Dense(2, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu)), Dense(30, 1), Dense(30, 1), Float32[-1.0], Float32[10.0], Random._GLOBAL_RNG(), nothing, false), SoftActorCritic.MLPQFunction[SoftActorCritic.MLPQFunction(Chain(Dense(3, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu), Dense(30, 1))), SoftActorCritic.MLPQFunction(Chain(Dense(3, 30, relu), Dense(30, 30, relu), Dense(30, 30, relu), Dense(30, 1)))])
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
@@ -1776,7 +1222,7 @@ MLPActorCritic(SoftActorCritic.SquashedGaussianMLPActor(Chain(Dense(2, 30, relu)
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
@@ -1784,16 +1230,7 @@ MLPActorCritic(SoftActorCritic.SquashedGaussianMLPActor(Chain(Dense(2, 30, relu)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-true
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
@@ -1801,19 +1238,7 @@ true
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Dict{String, Any} with 3 entries:
-  &#34;score&#34; =&gt; Any[3639.32, 3530.5, 3672.31, 3822.87, 3862.53, 3807.73, 3723.15, …
-  &#34;stdev&#34; =&gt; Any[7.96837, 45.2998, 5.86451, 8.09183, 10.3417, 11.0223, 12.9123,…
-  &#34;fails&#34; =&gt; Any[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0  …  1.0, 1.0,…
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
@@ -1822,23 +1247,7 @@ Dict{String, Any} with 3 entries:
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_AST_Sampling_72_0.png" src="../../_images/examples_pump_AST_Sampling_72_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: pressure&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: flowrate&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: total_flow&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: eff&#39;}, xlabel=&#39;time&#39;&gt;])
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
@@ -1846,22 +1255,6 @@ Dict{String, Any} with 3 entries:
 <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhists3</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="n">fxnflows</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_AST_Sampling_73_0.png" src="../../_images/examples_pump_AST_Sampling_73_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: pressure&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;Wat_2: flowrate&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: faults: short&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;MoveWater: faults: mech_break&#39;}, xlabel=&#39;time&#39;&gt;])
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:

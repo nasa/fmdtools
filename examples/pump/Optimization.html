@@ -655,6 +655,8 @@ add_objectives(self, simname, *args, objtype=&#39;endclass&#39;, t=&#39;end&#39;
         default type of objective: `vars`, `endclass`, or `external`. Default is &#39;endclass&#39;
     t : int (optional)
         default time to get objective: &#39;end&#39; or set time t
+    obj_const: str (optional)
+        default value : objectives
     agg : tuple
         Specifies the aggregation of the objective/constraint:
         - for objectives: (&#39;+&#39;/&#39;-&#39;,&#39;sum&#39;/&#39;difference&#39;/&#39;mult&#39;/&#39;max&#39;/&#39;min&#39;), specifying
@@ -728,42 +730,54 @@ Problem new_problem                                                     current 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.6999999999999997
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_20208/2166557829.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>new_problem<span class="ansi-yellow-intense-fg ansi-bold">.</span>obj_1<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">3</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">newobj</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
+<span class="ansi-green-fg">    252</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _assoc_obj_con<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> objname<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_const<span class="ansi-yellow-intense-fg ansi-bold">,</span> arg<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    253</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newobj<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 254</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
+<span class="ansi-green-fg">    255</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newconst<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    256</span>             <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">1</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">x_to_obj_const</span><span class="ansi-blue-intense-fg ansi-bold">(self, x, simnames)</span>
+<span class="ansi-green-fg">    621</span>             <span class="ansi-red-intense-fg ansi-bold"># prep sims</span>
+<span class="ansi-green-fg">    622</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> simname <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">in</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">.</span>get<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 623</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    624</span>                 self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>add<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    625</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_prep_sim_type</span><span class="ansi-blue-intense-fg ansi-bold">(self, simtype, simname, x)</span>
+<span class="ansi-green-fg">    485</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>ubs<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>lbs<span class="ansi-yellow-intense-fg ansi-bold">}</span>
+<span class="ansi-green-fg">    486</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _prep_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 487</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;single&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_single_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    488</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;multi&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_multi_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    489</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _run_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_prep_single_sim</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, x)</span>
+<span class="ansi-green-fg">    313</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _prep_single_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    314</span>         <span class="ansi-red-intense-fg ansi-bold"># Get variable and objective times for the simulation</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 315</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>var_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_get_var_obj_time<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    316</span>         <span class="ansi-red-intense-fg ansi-bold"># Get keyword arguments for the simulation</span>
+<span class="ansi-green-fg">    317</span>         kwar <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">]</span>
+
+<span class="ansi-red-intense-fg ansi-bold">TypeError</span>: _get_var_obj_time() takes 1 positional argument but 2 were given
 </pre></div></div>
 </div>
 <p>Note that despite being different callables, to reduce simulation costs, <code class="docutils literal notranslate"><span class="pre">obj_1</span></code> and <code class="docutils literal notranslate"><span class="pre">con_1</span></code> only <em>simulate the model</em> when a new variable value is entered into the problem. This can be seen by looking at the <code class="docutils literal notranslate"><span class="pre">current_iter</span></code> <strong>repr</strong>, which shows the values of the objectives/constraints a the current variable value.</p>
 <p>Additionally, provided the tracking options are set to on, the <code class="docutils literal notranslate"><span class="pre">plot_obj_const</span></code> method enables rapid visualization of objectives, constraints, and variables (and where they are queried):</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">plot_obj_const</span><span class="p">(</span><span class="s1">&#39;test_sim&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 4 Axes&gt;,
- array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.total_flow&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;wat_1.s.pressure&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;AxesSubplot:&gt;], dtype=object))
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Optimization_29_1.png" src="../../_images/examples_pump_Optimization_29_1.png" />
 </div>
 </div>
 </section>
@@ -778,26 +792,13 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">current_iter</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;vars&#39;: array([3]),
- &#39;objs&#39;: {&#39;obj_1&#39;: 2.6999999999999997},
- &#39;consts&#39;: {&#39;con_1&#39;: 20.0},
- &#39;sims&#39;: {&#39;test_sim&#39;},
- &#39;sims_to_update&#39;: {&#39;set_const&#39;}}
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
@@ -807,22 +808,13 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">constraints</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;fun&#39;</span><span class="p">]([</span><span class="mi">8</span><span class="p">])</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-8
-</pre></div></div>
 </div>
 <p>Note that scipy minimize assumes that: - objectives are to be minimized, and - constraints must be held positive</p>
 <p>The problem should thus be set up to accomodate this, by stating whether objectives should be positive/negative and by setting <code class="docutils literal notranslate"><span class="pre">negative_form=False</span></code>.</p>
@@ -834,7 +826,7 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
@@ -842,25 +834,8 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-     fun: 2.6999999999999997
-     jac: array([0.])
- message: &#39;Optimization terminated successfully&#39;
-    nfev: 2
-     nit: 1
-    njev: 1
-  status: 0
- success: True
-       x: array([1.])
-</pre></div></div>
-</div>
 <p>As shown, the variables are optimized to a value of x=0.0, the minimum possible value of MoveWater.eff which was put in the problem. We can further verify the optimized result by looking at the problem:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
@@ -868,51 +843,14 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem new_problem                                                     current value
- Variables
- -vars move_water.s.eff at t=10: [0, 5]                                        1.0000
- Objectives
- -obj_1: +sum(test_sim vars move_water.s.total_flow at t=25)                   2.7000
- Constraints
- -con_1: -(test_sim vars wat_1.s.pressure at t=11 -20)                        20.0000
- Simulations
- -test_sim: single scen: {20: {&#39;faults&#39;: {&#39;import_ee&#39;: &#39;no_v&#39;}}}
-</pre></div></div>
-</div>
 <p>As shown, the bound set constraint x&gt;0 is active at the found minimum, as we would expect.</p>
 <p>We can further visualize this solution using:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">plot_obj_const</span><span class="p">(</span><span class="s1">&#39;test_sim&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 4 Axes&gt;,
- array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.total_flow&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;wat_1.s.pressure&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;AxesSubplot:&gt;], dtype=object))
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Optimization_41_1.png" src="../../_images/examples_pump_Optimization_41_1.png" />
 </div>
 </div>
 <p>This result for this minimization is somewhat obvious. Alternatively, it may be interesting to see what would happen if we instead maximized the objective (as in, searched for the <code class="docutils literal notranslate"><span class="pre">eff</span></code> value that maximized total flow despite constraints/fault modes).</p>
@@ -929,7 +867,7 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
@@ -937,24 +875,7 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem new_problem                                                     current value
- Variables
- -vars move_water.s.eff at t=10: [0, 5]                                           nan
- Objectives
- -obj_1: -sum(test_sim vars move_water.s.total_flow at t=25)                      nan
- Constraints
- -con_1: -(test_sim vars wat_1.s.pressure at t=11 -20)                            nan
- Simulations
- -test_sim: single scen: {20: {&#39;faults&#39;: {&#39;import_ee&#39;: &#39;no_v&#39;}}}
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
@@ -962,31 +883,13 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-20.0
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">problem_2</span><span class="o">.</span><span class="n">x_to_obj_const</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;set_const&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-({&#39;obj_1&#39;: -0.0}, {&#39;con_1&#39;: 20.0, &#39;set_var_0_ub&#39;: 4, &#39;set_var_0_lb&#39;: 1})
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
@@ -996,7 +899,7 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
@@ -1004,24 +907,7 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-     fun: -0.0
-     jac: array([0.])
- message: &#39;Optimization terminated successfully&#39;
-    nfev: 2
-     nit: 1
-    njev: 1
-  status: 0
- success: True
-       x: array([1.])
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
@@ -1029,51 +915,14 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem new_problem                                                     current value
- Variables
- -vars move_water.s.eff at t=10: [0, 5]                                        1.0000
- Objectives
- -obj_1: -sum(test_sim vars move_water.s.total_flow at t=25)                  -0.0000
- Constraints
- -con_1: -(test_sim vars wat_1.s.pressure at t=11 -20)                        20.0000
- Simulations
- -test_sim: single scen: {20: {&#39;faults&#39;: {&#39;import_ee&#39;: &#39;no_v&#39;}}}
-</pre></div></div>
-</div>
 <p>As shown, the constraint <code class="docutils literal notranslate"><span class="pre">con_1</span></code> is active, meaning the optimal presure at <code class="docutils literal notranslate"><span class="pre">t=11</span></code> is just at the threshold of 20. This corresponds to the optimized <code class="docutils literal notranslate"><span class="pre">MoveWater.eff</span></code> value of 2.0.</p>
 <p>We can see this below:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">problem_2</span><span class="o">.</span><span class="n">plot_obj_const</span><span class="p">(</span><span class="s1">&#39;test_sim&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x288 with 4 Axes&gt;,
- array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.total_flow&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;wat_1.s.pressure&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;AxesSubplot:&gt;], dtype=object))
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Optimization_51_1.png" src="../../_images/examples_pump_Optimization_51_1.png" />
 </div>
 </div>
 </section>
@@ -1090,29 +939,13 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-SampleApproach for Pump model with 1 modes:
- -export_water: block
-None joint modes (0 combinations),
-in 1 phases:
- -(&#39;global&#39;, &#39;on&#39;): [5, 49]
-sampled at 4 times:
- -[14.0, 23.0, 31.0, 40.0]
-resulting in 4 total fault scenarios.
-</pre></div></div>
 </div>
 <p>The scenlist from this approach is given to the same model.</p>
 <div class="nbinput nblast docutils container">
@@ -1143,7 +976,7 @@ resulting in 4 total fault scenarios.
 </div>
 </div>
 <p>We can then verify the problem setup. Note that no constraints will be used in this problem:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
@@ -1151,163 +984,14 @@ resulting in 4 total fault scenarios.
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem multi_problem                                                   current value
- Variables
- -param delay at t=0: [0, 45]                                                     nan
- Objectives
- -cost: +sum(test_multi endclass expected cost at t=end)                          nan
- Constraints
- -
- Simulations
- -test_multi: multi scen:
-</pre></div></div>
-</div>
 <p>We may now minimize the objective function:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">multi_problem</span><span class="o">.</span><span class="n">cost</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;SLSQP&quot;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">]])</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">Exception</span>                                 Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_21312/2162782049.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>res <span class="ansi-yellow-intense-fg ansi-bold">=</span> minimize<span class="ansi-yellow-intense-fg ansi-bold">(</span>multi_problem<span class="ansi-yellow-intense-fg ansi-bold">.</span>cost<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">5</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> method<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#34;SLSQP&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> bounds<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-cyan-intense-fg ansi-bold">40</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_minimize.py</span> in <span class="ansi-cyan-fg">minimize</span><span class="ansi-blue-intense-fg ansi-bold">(fun, x0, args, method, jac, hess, hessp, bounds, constraints, tol, callback, options)</span>
-<span class="ansi-green-fg">    629</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> _minimize_cobyla<span class="ansi-yellow-intense-fg ansi-bold">(</span>fun<span class="ansi-yellow-intense-fg ansi-bold">,</span> x0<span class="ansi-yellow-intense-fg ansi-bold">,</span> args<span class="ansi-yellow-intense-fg ansi-bold">,</span> constraints<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>options<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    630</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> meth <span class="ansi-yellow-intense-fg ansi-bold">==</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;slsqp&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 631</span><span class="ansi-yellow-intense-fg ansi-bold">         return _minimize_slsqp(fun, x0, args, jac, bounds,
-</span><span class="ansi-green-fg">    632</span>                                constraints, callback=callback, **options)
-<span class="ansi-green-fg">    633</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> meth <span class="ansi-yellow-intense-fg ansi-bold">==</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;trust-constr&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\slsqp.py</span> in <span class="ansi-cyan-fg">_minimize_slsqp</span><span class="ansi-blue-intense-fg ansi-bold">(func, x0, args, jac, bounds, constraints, maxiter, ftol, iprint, disp, eps, callback, finite_diff_rel_step, **unknown_options)</span>
-<span class="ansi-green-fg">    373</span>
-<span class="ansi-green-fg">    374</span>     <span class="ansi-red-intense-fg ansi-bold"># ScalarFunction provides function and gradient evaluation</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 375</span><span class="ansi-yellow-intense-fg ansi-bold">     sf = _prepare_scalar_function(func, x, jac=jac, args=args, epsilon=eps,
-</span><span class="ansi-green-fg">    376</span>                                   finite_diff_rel_step<span class="ansi-yellow-intense-fg ansi-bold">=</span>finite_diff_rel_step<span class="ansi-yellow-intense-fg ansi-bold">,</span>
-<span class="ansi-green-fg">    377</span>                                   bounds=new_bounds)
-
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\optimize.py</span> in <span class="ansi-cyan-fg">_prepare_scalar_function</span><span class="ansi-blue-intense-fg ansi-bold">(fun, x0, jac, args, bounds, epsilon, finite_diff_rel_step, hess)</span>
-<span class="ansi-green-fg">    259</span>     <span class="ansi-red-intense-fg ansi-bold"># ScalarFunction caches. Reuse of fun(x) during grad</span>
-<span class="ansi-green-fg">    260</span>     <span class="ansi-red-intense-fg ansi-bold"># calculation reduces overall function evaluations.</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 261</span><span class="ansi-yellow-intense-fg ansi-bold">     sf = ScalarFunction(fun, x0, args, grad, hess,
-</span><span class="ansi-green-fg">    262</span>                         finite_diff_rel_step, bounds, epsilon=epsilon)
-<span class="ansi-green-fg">    263</span>
-
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, fun, x0, args, grad, hess, finite_diff_rel_step, finite_diff_bounds, epsilon)</span>
-<span class="ansi-green-fg">    138</span>
-<span class="ansi-green-fg">    139</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl <span class="ansi-yellow-intense-fg ansi-bold">=</span> update_fun
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 140</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    141</span>
-<span class="ansi-green-fg">    142</span>         <span class="ansi-red-intense-fg ansi-bold"># Gradient evaluation</span>
-
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">_update_fun</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
-<span class="ansi-green-fg">    231</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    232</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f_updated<span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 233</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    234</span>             self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f_updated <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-green-intense-fg ansi-bold">True</span>
-<span class="ansi-green-fg">    235</span>
-
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">update_fun</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-fg">    135</span>
-<span class="ansi-green-fg">    136</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 137</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f <span class="ansi-yellow-intense-fg ansi-bold">=</span> fun_wrapped<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    138</span>
-<span class="ansi-green-fg">    139</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl <span class="ansi-yellow-intense-fg ansi-bold">=</span> update_fun
-
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">fun_wrapped</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
-<span class="ansi-green-fg">    132</span>             <span class="ansi-red-intense-fg ansi-bold"># Overwriting results in undefined behaviour because</span>
-<span class="ansi-green-fg">    133</span>             <span class="ansi-red-intense-fg ansi-bold"># fun(self.x) will change self.x, with the two no longer linked.</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 134</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> fun<span class="ansi-yellow-intense-fg ansi-bold">(</span>np<span class="ansi-yellow-intense-fg ansi-bold">.</span>copy<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    135</span>
-<span class="ansi-green-fg">    136</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">newobj</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
-<span class="ansi-green-fg">    250</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _assoc_obj_con<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> objname<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_const<span class="ansi-yellow-intense-fg ansi-bold">,</span> arg<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    251</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newobj<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 252</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
-<span class="ansi-green-fg">    253</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newconst<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    254</span>             <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">1</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">x_to_obj_const</span><span class="ansi-blue-intense-fg ansi-bold">(self, x, simnames)</span>
-<span class="ansi-green-fg">    599</span>             <span class="ansi-red-intense-fg ansi-bold"># prep sims</span>
-<span class="ansi-green-fg">    600</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> simname <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">in</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">.</span>get<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 601</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    602</span>                 self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>add<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    603</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_prep_sim_type</span><span class="ansi-blue-intense-fg ansi-bold">(self, simtype, simname, x)</span>
-<span class="ansi-green-fg">    464</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _prep_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    465</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;single&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_single_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 466</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;multi&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_multi_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    467</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _run_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    468</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;set_const&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>    <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_get_set_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_prep_multi_sim</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, x)</span>
-<span class="ansi-green-fg">    318</span>         var_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_get_var_obj_time<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    319</span>         kwar <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">]</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 320</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>mdl <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_check_new_mdl<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> default_p <span class="ansi-yellow-intense-fg ansi-bold">=</span> kwar<span class="ansi-yellow-intense-fg ansi-bold">.</span>get<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;p&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    321</span>         result<span class="ansi-yellow-intense-fg ansi-bold">,</span> nomhist<span class="ansi-yellow-intense-fg ansi-bold">,</span> nomscen<span class="ansi-yellow-intense-fg ansi-bold">,</span> c_mdls_nom<span class="ansi-yellow-intense-fg ansi-bold">,</span> t_end <span class="ansi-yellow-intense-fg ansi-bold">=</span> prop<span class="ansi-yellow-intense-fg ansi-bold">.</span>nom_helper<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span>var_time<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>kwar<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;scen&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;use_end_condition&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span><span class="ansi-green-intense-fg ansi-bold">False</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    322</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_check_new_mdl</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, var_time, mdl, x, obj_time, staged, default_p)</span>
-<span class="ansi-green-fg">    350</span>             <span class="ansi-green-intense-fg ansi-bold">for</span> func<span class="ansi-yellow-intense-fg ansi-bold">,</span> fvars <span class="ansi-green-intense-fg ansi-bold">in</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>var_mapping<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>get<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;paramfunc&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>items<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    351</span>                 p<span class="ansi-yellow-intense-fg ansi-bold">.</span>update<span class="ansi-yellow-intense-fg ansi-bold">(</span>func<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>x<span class="ansi-yellow-intense-fg ansi-bold">[</span>ind<span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-green-intense-fg ansi-bold">for</span> ind <span class="ansi-green-intense-fg ansi-bold">in</span> fvars<span class="ansi-yellow-intense-fg ansi-bold">.</span>values<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 352</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>mdl <span class="ansi-yellow-intense-fg ansi-bold">=</span> mdl<span class="ansi-yellow-intense-fg ansi-bold">.</span>new_with_params<span class="ansi-yellow-intense-fg ansi-bold">(</span>p<span class="ansi-yellow-intense-fg ansi-bold">=</span>p<span class="ansi-yellow-intense-fg ansi-bold">,</span> sp<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-blue-intense-fg ansi-bold">&#39;times&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span><span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    353</span>
-<span class="ansi-green-fg">    354</span>         prop<span class="ansi-yellow-intense-fg ansi-bold">.</span>init_histrange<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> var_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> staged<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#34;all&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#34;all&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\model.py</span> in <span class="ansi-cyan-fg">new_with_params</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
-<span class="ansi-green-fg">    276</span>         <span class="ansi-green-intense-fg ansi-bold">with</span> changes to params <span class="ansi-yellow-intense-fg ansi-bold">(</span>p<span class="ansi-yellow-intense-fg ansi-bold">,</span> sp<span class="ansi-yellow-intense-fg ansi-bold">,</span> track<span class="ansi-yellow-intense-fg ansi-bold">,</span> rand etc<span class="ansi-yellow-intense-fg ansi-bold">.</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    277</span>         &#34;&#34;&#34;
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 278</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>p<span class="ansi-yellow-intense-fg ansi-bold">,</span> sp<span class="ansi-yellow-intense-fg ansi-bold">,</span> r<span class="ansi-yellow-intense-fg ansi-bold">,</span> track <span class="ansi-yellow-intense-fg ansi-bold">=</span> super<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>new_params<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    279</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>__class__<span class="ansi-yellow-intense-fg ansi-bold">(</span>p<span class="ansi-yellow-intense-fg ansi-bold">=</span>p<span class="ansi-yellow-intense-fg ansi-bold">,</span> sp<span class="ansi-yellow-intense-fg ansi-bold">=</span>sp<span class="ansi-yellow-intense-fg ansi-bold">,</span> r<span class="ansi-yellow-intense-fg ansi-bold">=</span>r<span class="ansi-yellow-intense-fg ansi-bold">,</span> track<span class="ansi-yellow-intense-fg ansi-bold">=</span>track<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    280</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> copy<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py</span> in <span class="ansi-cyan-fg">new_params</span><span class="ansi-blue-intense-fg ansi-bold">(self, p, sp, r, track)</span>
-<span class="ansi-green-fg">    204</span>             track args
-<span class="ansi-green-fg">    205</span>         &#34;&#34;&#34;
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 206</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>p <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>p<span class="ansi-yellow-intense-fg ansi-bold">.</span>copy_with_vals<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>p<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    207</span>         sp <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>sp<span class="ansi-yellow-intense-fg ansi-bold">.</span>copy_with_vals<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>sp<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    208</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> r<span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py</span> in <span class="ansi-cyan-fg">copy_with_vals</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
-<span class="ansi-green-fg">    117</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> copy_with_vals<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    118</span>         <span class="ansi-blue-intense-fg ansi-bold">&#34;&#34;&#34;Creates a copy of itself with modified values given by kwargs&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 119</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>__class__<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">**</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>asdict<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    120</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> check_pickle<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    121</span>         <span class="ansi-blue-intense-fg ansi-bold">&#34;&#34;&#34;Checks to make sure pickled object will get *args and **kwargs&#34;&#34;&#34;</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, strict_immutability, *args, **kwargs)</span>
-<span class="ansi-green-fg">     55</span>             <span class="ansi-green-intense-fg ansi-bold">raise</span> Exception<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#34;Invalid args/kwargs: &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>args<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; , &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; in &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>__class__<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     56</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> strict_immutability<span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>check_immutable<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 57</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>check_type<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     58</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>check_pickle<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     59</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> check_lim<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> k<span class="ansi-yellow-intense-fg ansi-bold">,</span> v<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py</span> in <span class="ansi-cyan-fg">check_type</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
-<span class="ansi-green-fg">    114</span>             if ((true_type and not attr_type==true_type) and
-<span class="ansi-green-fg">    115</span>                 str(true_type).split(&#34;&#39;&#34;)[1] not in str(attr_type)): # weaker, but enables use of np.str, np.float, etc
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 116</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span><span class="ansi-green-intense-fg ansi-bold">raise</span> Exception<span class="ansi-yellow-intense-fg ansi-bold">(</span>typed_field<span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; in &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>__class__<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; assigned incorrect type: &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>attr_type<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; (should be &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>true_type<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34;)&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    117</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> copy_with_vals<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    118</span>         <span class="ansi-blue-intense-fg ansi-bold">&#34;&#34;&#34;Creates a copy of itself with modified values given by kwargs&#34;&#34;&#34;</span>
-
-<span class="ansi-red-intense-fg ansi-bold">Exception</span>: delay in &lt;class &#39;examples.pump.ex_pump.PumpParam&#39;&gt; assigned incorrect type: &lt;class &#39;numpy.float64&#39;&gt; (should be &lt;class &#39;int&#39;&gt;)
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
@@ -1317,30 +1001,13 @@ Problem multi_problem                                                   current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
- final_simplex: (array([[5.        ],
-       [5.00006104]]), array([682267.5, 682267.5]))
-           fun: 682267.5000000001
-       message: &#39;Optimization terminated successfully.&#39;
-          nfev: 38
-           nit: 13
-        status: 0
-       success: True
-             x: array([5.])
-</pre></div></div>
 </div>
 <p>Interestingly enough, while the optimizer gives a “optimization terminated successfully,” it stays at the initial point. This may be because of a poor fit of oftimization method. See:</p>
 <div class="nbinput nblast docutils container">
@@ -1351,29 +1018,13 @@ Problem multi_problem                                                   current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">objs</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">fun</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.collections.PathCollection at 0x23ac6f56220&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Optimization_69_1.png" src="../../_images/examples_pump_Optimization_69_1.png" />
 </div>
 </div>
 <p>As shown, the objective appears to be non-differentiable, with several plateaus between the starting point (20) and the minimum. Since the <code class="docutils literal notranslate"><span class="pre">SLSQP</span></code> solver is a gradient-based solver, it probably sees the gradient as 0 at this point, making it think the result is already an optimum.</p>
@@ -1405,7 +1056,7 @@ Problem multi_problem                                                   current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
@@ -1413,31 +1064,7 @@ Problem multi_problem                                                   current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-=================================================
-n_gen  |  n_eval  |     f_avg     |     f_min
-=================================================
-     1 |        1 |  6.822675E+05 |  6.822675E+05
-     2 |        2 |  6.539020E+05 |  6.255366E+05
-     3 |        4 |  5.970572E+05 |  5.685778E+05
-     4 |        6 |  5.120620E+05 |  4.555462E+05
-     5 |        9 |  4.555462E+05 |  4.555462E+05
-     6 |       11 |  4.555462E+05 |  4.555462E+05
-     7 |       13 |  4.555462E+05 |  4.555462E+05
-     8 |       15 |  4.555462E+05 |  4.555462E+05
-     9 |       17 |  4.555462E+05 |  4.555462E+05
-    10 |       19 |  4.555462E+05 |  4.555462E+05
-    11 |       21 |  4.555462E+05 |  4.555462E+05
-    12 |       23 |  4.555462E+05 |  4.555462E+05
-    13 |       25 |  4.555462E+05 |  4.555462E+05
-    14 |       27 |  4.555462E+05 |  4.555462E+05
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
@@ -1445,16 +1072,7 @@ n_gen  |  n_eval  |     f_avg     |     f_min
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-array([36.875])
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
@@ -1462,16 +1080,7 @@ array([36.875])
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-array([455546.25])
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
@@ -1480,25 +1089,9 @@ array([455546.25])
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.collections.PathCollection at 0x23ac716b4c0&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Optimization_78_1.png" src="../../_images/examples_pump_Optimization_78_1.png" />
-</div>
-</div>
 <p>As shown, this method more capably finds the minimum in this case, in part because the underlying search algorithm (Hooke and Jeeves Pattern Search) is more robust to this type of problem.</p>
 <p>We can visualize the results of this problem by looking at the simulation log:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
@@ -1508,15 +1101,8 @@ array([455546.25])
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Optimization_81_0.png" src="../../_images/examples_pump_Optimization_81_0.png" />
-</div>
-</div>
 <p>Compare this with the response at the initial value:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
@@ -1525,13 +1111,6 @@ array([455546.25])
               <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;MoveWater&quot;</span><span class="p">:[</span><span class="s1">&#39;total_flow&#39;</span><span class="p">,</span> <span class="s2">&quot;faults&quot;</span><span class="p">],</span> <span class="s2">&quot;Wat_2&quot;</span><span class="p">:{</span><span class="s2">&quot;area&quot;</span><span class="p">,</span> <span class="s1">&#39;flowrate&#39;</span><span class="p">,</span> <span class="s1">&#39;pressure&#39;</span><span class="p">}},</span>\
               <span class="n">time_slice</span><span class="o">=</span><span class="n">app</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Optimization_83_0.png" src="../../_images/examples_pump_Optimization_83_0.png" />
 </div>
 </div>
 <p>As shown, the main difference is that at the initial point, the short delay causes the pump to during the time of the simulation, while at a long delay, the pump breaks later in the simulation. The optimum is at t=37 since this is the first point where all four scenarios no longer result in a mechanical break of the pump.</p>

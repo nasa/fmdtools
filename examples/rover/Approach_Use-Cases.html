@@ -445,48 +445,15 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Help on function assoc_modes in module fmdtools.define.block:
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_15912/414845463.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>help<span class="ansi-yellow-intense-fg ansi-bold">(</span>FxnBlock<span class="ansi-yellow-intense-fg ansi-bold">.</span>assoc_modes<span class="ansi-yellow-intense-fg ansi-bold">)</span>
 
-assoc_modes(self, faultmodes={}, opermodes=[], initmode=&#39;nom&#39;, name=&#39;&#39;, probtype=&#39;rate&#39;, units=&#39;hr&#39;, exclusive=False, key_phases_by=&#39;global&#39;, longnames={})
-    Associates fault and operational modes with the block when called in the function or component.
-
-    Parameters
-    ----------
-    faultmodes : dict, optional
-        Dictionary/Set of faultmodes with structure, which can have the forms:
-            - set {&#39;fault1&#39;, &#39;fault2&#39;, &#39;fault3&#39;} (just the respective faults)
-            - dict {&#39;fault1&#39;: faultattributes, &#39;fault2&#39;: faultattributes}, where faultattributes is:
-                - float: rate for the mode
-                - dict/set/str: opportunity vector for the mode specified as a dictionary/set/string
-                - list: [rate, oppvect, rcost]
-                    - a list of arguments where the float arguments are specified in the order rate, rcost (if provided) and
-                        an oppvect opportunity vector is provided (anywhere) with the form:
-                            -list: [float1, float2,...], a vector of relative likelihoods for each phase, or
-                            -dict: {opermode:float1, opermode:float1}, a dict of relative likelihoods for each phase/mode
-                            -set: {opermode, opermode,...}, a set of applicable phases (assumed equally likely).
-                            the phases/modes to key by are defined in &#34;key_phases_by&#34;
-                            -str: &#39;all&#39;/&#39;modename&#39;, either specifying all operational modes/phases or a single operational mode/phase
-    opermodes : list, optional
-        List of operational modes
-    initmode : str, optional
-        Initial operational mode. Default is &#39;nom&#39;
-    name : str, optional
-        (for components/actions only) Name of the component. The default is &#39;&#39;.
-    probtype : str, optional
-        Type of probability in the probability model, a per-time &#39;rate&#39; or per-run &#39;prob&#39;.
-        The default is &#39;rate&#39;
-    units : str, optional
-        Type of units (&#39;sec&#39;/&#39;min&#39;/&#39;hr&#39;/&#39;day&#39;) used for the rates. Default is &#39;hr&#39;
-    exclusive : True/False
-        Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present).
-    key_phases_by : &#39;self&#39;/&#39;none&#39;/&#39;global&#39;/&#39;fxnname&#39;
-        Phases to key the faultmodes by (using local, global, or an external function&#39;s modes&#39;). Default is &#39;global&#39;
-    longnames : dict
-        Longer names for the faults (if desired). {faultname: longname}
-
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>: type object &#39;FxnBlock&#39; has no attribute &#39;assoc_modes&#39;
 </pre></div></div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
@@ -494,281 +461,13 @@ assoc_modes(self, faultmodes={}, opermodes=[], initmode=&#39;nom&#39;, name=&#39
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on class SampleApproach in module fmdtools.sim.approach:
-
-class SampleApproach(builtins.object)
- |  SampleApproach(mdl, faults=&#39;all&#39;, phases=&#39;global&#39;, modephases={}, join_modephases=False, jointfaults={&#39;faults&#39;: &#39;None&#39;}, sampparams={}, defaultsamp={&#39;samp&#39;: &#39;evenspacing&#39;, &#39;numpts&#39;: 1}, reduce_to=False)
- |
- |  Class for defining the sample approach to be used for a set of faults.
- |
- |  Attributes
- |  ----------
- |  phases : dict
- |      phases given to sample the fault modes in
- |  globalphases : dict
- |      phases defined in the model
- |  modephases : dict
- |      Dictionary of modes associated with each state
- |  mode_phase_map : dict
- |      Mapping of modes to their corresponding phases
- |  tstep : float
- |      timestep defined in the model
- |  fxnrates : dict
- |      overall failure rates for each function
- |  comprates : dict
- |      overall failure rates for each component
- |  jointmodes : list
- |      (if any) joint fault modes to be injected in the approach
- |  rates/comprates/rates_timeless : dict
- |      rates of each mode (fxn, mode) in each model phase, structured {fxnmode: {phaseid:rate}}
- |  sampletimes : dict
- |      faults to inject at each time in each phase, structured {phaseid:time:fnxmode}
- |  weights : dict
- |      weight to put on each time each fault was injected, structured {fxnmode:phaseid:time:weight}
- |  sampparams : dict
- |      parameters used to sample each mode
- |  scenlist : list
- |      list of fault scenarios (dicts of faults and properties) that fault propagation iterates through
- |  scenids : dict
- |      a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,phaseid):listofnames}
- |  mode_phase_map : dict
- |      a dict of modes and their respective phases to inject with structure {fxnmode:{mode_phase_map:[starttime, endtime]}}
- |  units : str
- |      time-units to use in the approach probability model
- |  unit_factors : dict
- |      multiplication factors for converting some time units to others.
- |
- |  Methods defined here:
- |
- |  __init__(self, mdl, faults=&#39;all&#39;, phases=&#39;global&#39;, modephases={}, join_modephases=False, jointfaults={&#39;faults&#39;: &#39;None&#39;}, sampparams={}, defaultsamp={&#39;samp&#39;: &#39;evenspacing&#39;, &#39;numpts&#39;: 1}, reduce_to=False)
- |      Initializes the sample approach for a given model
- |
- |      Parameters
- |      ----------
- |      mdl : Model
- |          Model to sample.
- |      faults : str/list/tuple, optional
- |          - The default is &#39;all&#39;, which gets all fault modes from the model.
- |          - &#39;single-component&#39; uses faults from a single component to represent faults from all components
- |          - &#39;single-function&#39; uses faults from a single function to represent faults from that type
- |          - passing the function name only includes modes from that function
- |          - List of faults of form [(fxn, mode)] to inject in the model.
- |          -Tuple arguments
- |              - (&#39;mode type&#39;, &#39;mode&#39;,&#39;notmode&#39;), gets all modes with &#39;mode&#39; as a string (e.g. &#34;mech&#34;, &#34;comms&#34;, &#34;loss&#34; faults). &#39;notmode&#39; (if given) specifies strings to remove
- |              - (&#39;mode types&#39;, (&#39;mode1&#39;, &#39;mode2&#39;)), gets all modes with the listed strings (e.g. &#34;mech&#34;, &#34;comms&#34;, &#34;loss&#34; faults)
- |              - (&#39;mode name&#39;, &#39;mode&#39;), gets all modes with the exact name &#39;mode&#39;
- |              - (&#39;mode names&#39;, (&#39;mode1&#39;, &#39;mode2&#39;)), gets all modes with the exact names defined in the tuple
- |              - (&#39;function class&#39;, &#39;Classname&#39;), which gets all modes from a function with class &#39;Classname&#39;
- |              - (&#39;function classes&#39;, (&#39;Classname1&#39;, &#39;Classname2&#39;)), which gets all modes from a function with the names in the tuple
- |              - (&#39;single-component&#39;, (&#39;fxnname2&#39;, &#39;fxnname2&#39;)), which specifies single-component modes in the given functions
- |      phases: dict or &#39;global&#39; or list
- |          Local phases in the model to sample.
- |              Dict has structure: {&#39;Function&#39;:{&#39;phase&#39;:[starttime, endtime]}}
- |              List has structure: [&#39;phase1&#39;, &#39;phase2&#39;] where phases are phases in mdl.phases
- |          Defaults to &#39;global&#39;,here only the phases defined in mdl.phases are used.
- |          Phases and modephases can be gotten from process.modephases(mdlhist)
- |      modephases: dict
- |          Dictionary of modes associated with each phase.
- |          For use when the opportunity vector is keyed to modes and each mode is
- |          entered multiple times in a simulation, resulting in
- |          multiple phases associated with that mode. Has structure:
- |              {&#39;Function&#39;:{&#39;mode&#39;:{&#39;phase&#39;,&#39;phase1&#39;, &#39;phase2&#39;...}}}
- |              Phases and modephases can be gotten from process.modephases(mdlhist)
- |      join_modephases: bool
- |          Whether to join phases with the same modes defined in modephases. Default is False
- |      jointfaults : dict, optional
- |          Defines how the approach considers joint faults. The default is {&#39;faults&#39;:&#39;None&#39;}. Has structure:
- |              - faults : float
- |                  # of joint faults to inject. &#39;all&#39; specifies all faults at the same time
- |              - jointfuncs :  bool
- |                  determines whether more than one mode can be injected in a single function
- |              - pcond (optional) : float in range (0,1)
- |                  conditional probabilities for joint faults. If not give, independence is assumed.
- |              - inclusive (optional) : bool
- |                  specifies whether the fault set includes all joint faults up to the given level, or only the given level
- |                  (e.g., True with &#39;all&#39; means SampleApproach includes every combination of joint fault modes while
- |                         False with &#39;all&#39; means SampleApproach only includes the joint fault mode with all faults)
- |              - limit jointphases (optional) : int
- |                  Limits the number of jointphases to sample (by randomly sampling them instead). Necessary when the
- |                  number of faults is large
- |      sampparams : dict, optional
- |          Defines how specific modes in the model will be sampled over time. The default is {}.
- |          Has structure: {key: sampparam}, where a key may be &#39;fxnmode&#39;,&#39;fxnname&#39;,&#39;mode&#39;, &#39;phase&#39;, or (&#39;fxnmode&#39;,&#39;phase&#39;)
- |          and sampparam has structure:
- |              - &#39;samp&#39; : str (&#39;quad&#39;, &#39;fullint&#39;, &#39;evenspacing&#39;,&#39;randtimes&#39;,&#39;symrandtimes&#39;)
- |                  sample strategy to use (quadrature, full integral, even spacing, random times, likeliest, or symmetric random times)
- |              - &#39;numpts&#39; : float
- |                  number of points to use (for evenspacing, randtimes, and symrandtimes only)
- |              - &#39;quad&#39; : dict
- |                  dict with structure {&#39;nodes&#39;[nodelist], &#39;weights&#39;:weightlist}
- |                  where the nodes in the nodelist range between -1 and 1
- |                  and the weights in the weightlist sum to 2.
- |      defaultsamp : TYPE, optional
- |          Defines how the model will be sampled over time by default. The default is {&#39;samp&#39;:&#39;evenspacing&#39;,&#39;numpts&#39;:1}. Has structure:
- |              - &#39;samp&#39; : str (&#39;quad&#39;, &#39;fullint&#39;, &#39;evenspacing&#39;,&#39;randtimes&#39;,&#39;symrandtimes&#39;)
- |                  sample strategy to use (quadrature, full integral, even spacing, random times,likeliest, or symmetric random times)
- |              - &#39;numpts&#39; : float
- |                  number of points to use (for evenspacing, randtimes, and symrandtimes only)
- |              - &#39;quad&#39; : dict
- |                  dict with structure {&#39;nodes&#39;[nodelist], &#39;weights&#39;:weightlist}
- |                  where the nodes in the nodelist range between -1 and 1
- |                  and the weights in the weightlist sum to 2.
- |      reduce_to : int, optional
- |          Size of random sample to reduce the number of scenarios to (if any). Default is False.
- |
- |  __repr__(self)
- |      Return repr(self).
- |
- |  add_phasetimes(self, fxnmode, phaseid, phasetimes, weights=[])
- |      Adds a set of times for a given mode to sampletimes
- |
- |  calc_intervaltime(self, times, tstep)
- |
- |  create_nomscen(self, mdl)
- |      Creates a nominal scenario
- |
- |  create_sampletimes(self, mdl, params={}, default={&#39;samp&#39;: &#39;evenspacing&#39;, &#39;numpts&#39;: 1})
- |      Initializes weights and sampletimes
- |
- |  create_scenarios(self)
- |      Creates list of scenarios to be iterated over in fault injection. Added as scenlist and scenids
- |
- |  get_id_weights(self)
- |      Returns a dictionary with weights for each scenario with structure {scenid:weight}
- |
- |  get_scenid_groups(self, group_by=&#39;phases&#39;, group_dict={})
- |      Returns a dict with different scenario ids grouped according to group_by.
- |      group_by: str, with options:
- |      - &#39;none&#39;:           Returns {&#39;scenid&#39;:&#39;scenid&#39;} for all scenarios
- |      - &#39;phase&#39;:          Returns {(fxnmode, fxnphase):{scenids}}--identical scenarios within a given phase are grouped
- |      - &#39;fxnfault&#39;:       Returns {fxnmode:{scenids}} All identical scenarios (fxn, mode) are grouped
- |      - &#39;mode&#39;:           Returns {mode:{scenids}}. All scenarios with the same mode name are grouped
- |      - &#39;mode type&#39;:      Returns {modetype:scenids}. All scenarios with the same mode type (mode types must be given to the sampleapproach) are grouped
- |      - &#39;functions&#39;:      Returns {function:scenids}. All scenarios and modes from a given function are grouped.
- |      - &#39;times&#39;:          Returns {time:scenids}. All scenarios at a given time are grouped.
- |      - &#39;fxnclassfault&#39;:  Returns {(fxnclass, mode):scenids}. All scenarios (fxnclass, mode) from a given function class are grouped.
- |      - &#39;fxnclass&#39;:       Returns {fxnclass:scendis}. All scenarios from a given function class are grouped.
- |      For &#39;fxnclass&#39;, &#39;fxnclassfault&#39;, and &#39;modetype&#39;, a group_dict dictionary must be provided that groups the function/mode classes/types.
- |      -------------------
- |      Returns:
- |      - grouped_scens: dict
- |            A dictionary of the scenario ids associated with the given group {group:scenids}
- |
- |  init_modelist(self, mdl, faults, jointfaults={&#39;faults&#39;: &#39;None&#39;})
- |      Initializes comprates, jointmodes internal list of modes
- |
- |  init_rates(self, mdl, jointfaults={&#39;faults&#39;: &#39;None&#39;}, modephases={}, join_modephases=False)
- |      Initializes rates, rates_timeless
- |
- |  list_moderates(self)
- |      Returns the rates for each mode
- |
- |  list_modes(self, joint=False)
- |      Returns a list of modes in the approach
- |
- |  prune_scenarios(self, endclasses, samptype=&#39;piecewise&#39;, threshold=0.1, sampparam={&#39;samp&#39;: &#39;evenspacing&#39;, &#39;numpts&#39;: 1})
- |      Finds the best sample approach to approximate the full integral (given the approach was the full integral).
- |
- |      Parameters
- |      ----------
- |      endclasses : dict
- |          dict of results (cost, rate, expected cost) for the model run indexed by scenid
- |      samptype : str (&#39;piecewise&#39; or &#39;bestpt&#39;), optional
- |          Method to use.
- |          If &#39;bestpt&#39;, finds the point in the interval that gives the average cost.
- |          If &#39;piecewise&#39;, attempts to split the inverval into sub-intervals of continuity
- |          The default is &#39;piecewise&#39;.
- |      threshold : float, optional
- |          If &#39;piecewise,&#39; the threshold for detecting a discontinuity based on deviation from linearity. The default is 0.1.
- |      sampparam : float, optional
- |          If &#39;piecewise,&#39; the sampparam sampparam to prune to. The default is {&#39;samp&#39;:&#39;evenspacing&#39;,&#39;numpts&#39;:1}, which would be a single point (optimal for linear).
- |
- |  reduce_scens_to_samp(self, samp_size=100, seed=None)
- |      Reduces the number of scenarios (in the scenlist) to a given sample size samp_size. Useful for
- |      choosing a random subset of an approach which would otherwise have a large number of scenarios.
- |      Note that many structures may not be preserved and some artefacts may be present.
- |
- |  select_points(self, param, possible_pts)
- |      Selects points in the list possible_points according to a given sample strategy.
- |
- |      Parameters
- |      ----------
- |      param : dict
- |          Sample parameter. Has structure:
- |              - &#39;samp&#39; : str (&#39;quad&#39;, &#39;fullint&#39;, &#39;evenspacing&#39;,&#39;randtimes&#39;,&#39;symrandtimes&#39;)
- |                  sample strategy to use (quadrature, full integral, even spacing, random times, or symmetric random times)
- |              - &#39;numpts&#39; : float
- |                  number of points to use (for evenspacing, randtimes, and symrandtimes only)
- |              - &#39;quad&#39; : dict
- |                  dict with structure {&#39;nodes&#39;[nodelist], &#39;weights&#39;:weightlist}
- |                  where the nodes in the nodelist range between -1 and 1
- |                  and the weights in the weightlist sum to 2.
- |      possible_pts :
- |          list of possible points in time.
- |
- |      Returns
- |      -------
- |      pts : list
- |          selected points
- |      weights : list
- |          weights for each point
- |
- |  ----------------------------------------------------------------------
- |  Data descriptors defined here:
- |
- |  __dict__
- |      dictionary for instance variables (if defined)
- |
- |  __weakref__
- |      list of weak references to the object (if defined)
-
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">approach</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on function approach in module fmdtools.sim.propagate:
-
-approach(mdl, app, **kwargs)
-    Injects and propagates faults in the model defined by a given sample approach
-
-    Parameters
-    ----------
-    mdl : model
-        The model to inject faults in.
-    app : sampleapproach
-        SampleApproach used to define the list of faults and sample time for the model.
-    **kwargs : kwargs
-        Additional keyword arguments, may include:
-            - :data:`sim_kwargs` : kwargs
-                Simulation options for :func:`prop_one_scen
-            - :data:`run_kwargs` : kwargs
-                Run options for :func:`nom_helper` and others
-            - :data:`mult_kwargs` : kwargs
-                Multi-scenario options for :func:`approach` and others
-    Returns
-    -------
-    endclasses : dict
-        A dictionary with the rate, cost, and expected cost of each scenario run with structure {scenname:{expected cost, cost, rate}}
-    mdlhists : dict
-        A dictionary with the history of all model states for each scenario (including the nominal)
-
-</pre></div></div>
 </div>
 </section>
 <section id="Model-Setup">
@@ -886,7 +585,7 @@ approach(mdl, app, **kwargs)
 </div>
 </div>
 <p>To form this history, the model is run in the nominal scenario, as shown.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
@@ -894,37 +593,6 @@ approach(mdl, app, **kwargs)
 <span class="n">mdlhist</span><span class="p">[</span><span class="s1">&#39;functions&#39;</span><span class="p">][</span><span class="s1">&#39;Store_Energy&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;faults&#39;: array([&#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
-        &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
-        &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
-        &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
-        &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
-        &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;,
-        &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;, &#39;nom&#39;], dtype=&#39;&lt;U9&#39;),
- &#39;charge&#39;: array([100, 100, 100, 100, 100, 100,  99,  98,  97,  96,  95,  94,  93,
-         92,  91,  90,  89,  88,  87,  86,  85,  84,  83,  82,  81,  80,
-         79,  78,  77,  76,  75,  74,  73,  72,  71,  70,  69,  68,  67,
-         66,  65,  64,  63,  62,  61,  60,  59,  58,  57,  56,  55,  55,
-         55,  55,  55,  55,  55,  55,  55,  55,  55]),
- &#39;mode&#39;: array([&#39;standby&#39;, &#39;standby&#39;, &#39;standby&#39;, &#39;standby&#39;, &#39;standby&#39;, &#39;supply&#39;,
-        &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;,
-        &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;,
-        &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;,
-        &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;,
-        &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;,
-        &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;,
-        &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;, &#39;supply&#39;,
-        &#39;supply&#39;, &#39;supply&#39;, &#39;standby&#39;, &#39;standby&#39;, &#39;standby&#39;, &#39;standby&#39;,
-        &#39;standby&#39;, &#39;standby&#39;, &#39;standby&#39;, &#39;standby&#39;, &#39;standby&#39;, &#39;standby&#39;,
-        &#39;standby&#39;], dtype=&#39;&lt;U9&#39;)}
-</pre></div></div>
 </div>
 <p>To get the phase information, the ‘process.modephases’ method is used.</p>
 <div class="nbinput nblast docutils container">
@@ -936,7 +604,7 @@ approach(mdl, app, **kwargs)
 </div>
 </div>
 <p>Which returns <code class="docutils literal notranslate"><span class="pre">phases</span></code>, the phases of operation for each function where operational modes were defined:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
@@ -944,19 +612,8 @@ approach(mdl, app, **kwargs)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;Control_Rover&#39;: {&#39;standby&#39;: [0, 4], &#39;drive&#39;: [5, 49], &#39;standby1&#39;: [50, 60]},
- &#39;Move_Rover&#39;: {&#39;nom&#39;: [0, 60]},
- &#39;Store_Energy&#39;: {&#39;standby&#39;: [0, 4], &#39;supply&#39;: [5, 49], &#39;standby1&#39;: [50, 60]}}
-</pre></div></div>
-</div>
 <p>as well as <code class="docutils literal notranslate"><span class="pre">modephases</span></code>, which lists the phases associated with each mode.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
@@ -964,19 +621,8 @@ approach(mdl, app, **kwargs)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;Control_Rover&#39;: {&#39;standby&#39;: {&#39;standby&#39;, &#39;standby1&#39;}, &#39;drive&#39;: {&#39;drive&#39;}},
- &#39;Move_Rover&#39;: {&#39;nom&#39;: {&#39;nom&#39;}},
- &#39;Store_Energy&#39;: {&#39;standby&#39;: {&#39;standby&#39;, &#39;standby1&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}}
-</pre></div></div>
-</div>
 <p>These phases can be visualized with <code class="docutils literal notranslate"><span class="pre">an.plot.phases</span></code></p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
@@ -984,15 +630,8 @@ approach(mdl, app, **kwargs)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_rover_Approach_Use-Cases_26_0.png" src="../../_images/examples_rover_Approach_Use-Cases_26_0.png" />
-</div>
-</div>
 <p>To correctly sample according to the fault model’s intent (that each fault can occur within each <code class="docutils literal notranslate"><span class="pre">mode</span></code>), SampleApproach is given both <code class="docutils literal notranslate"><span class="pre">phases</span></code> and <code class="docutils literal notranslate"><span class="pre">modephases</span></code>, as shown below.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
@@ -1000,34 +639,6 @@ approach(mdl, app, **kwargs)
 <span class="n">app_correct</span><span class="o">.</span><span class="n">sampletimes</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">Exception</span>                                 Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_21356/3288823254.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>app_correct <span class="ansi-yellow-intense-fg ansi-bold">=</span> SampleApproach<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> phases<span class="ansi-yellow-intense-fg ansi-bold">=</span>phases<span class="ansi-yellow-intense-fg ansi-bold">,</span> modephases<span class="ansi-yellow-intense-fg ansi-bold">=</span>modephases<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">      2</span> app_correct<span class="ansi-yellow-intense-fg ansi-bold">.</span>sampletimes
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\approach.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, mdl, faults, phases, modephases, join_modephases, jointfaults, sampparams, defaultsamp, reduce_to)</span>
-<span class="ansi-green-fg">    452</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>units <span class="ansi-yellow-intense-fg ansi-bold">=</span> mdl<span class="ansi-yellow-intense-fg ansi-bold">.</span>units
-<span class="ansi-green-fg">    453</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>init_modelist<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span>faults<span class="ansi-yellow-intense-fg ansi-bold">,</span> jointfaults<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 454</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>init_rates<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> jointfaults<span class="ansi-yellow-intense-fg ansi-bold">=</span>jointfaults<span class="ansi-yellow-intense-fg ansi-bold">,</span> modephases<span class="ansi-yellow-intense-fg ansi-bold">=</span>modephases<span class="ansi-yellow-intense-fg ansi-bold">,</span> join_modephases<span class="ansi-yellow-intense-fg ansi-bold">=</span>join_modephases<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    455</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>create_sampletimes<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> sampparams<span class="ansi-yellow-intense-fg ansi-bold">,</span> defaultsamp<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    456</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>create_scenarios<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\approach.py</span> in <span class="ansi-cyan-fg">init_rates</span><span class="ansi-blue-intense-fg ansi-bold">(self, mdl, jointfaults, modephases, join_modephases)</span>
-<span class="ansi-green-fg">    579</span>             key_phases <span class="ansi-yellow-intense-fg ansi-bold">=</span> mdl<span class="ansi-yellow-intense-fg ansi-bold">.</span>fxns<span class="ansi-yellow-intense-fg ansi-bold">[</span>fxnname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>key_phases_by
-<span class="ansi-green-fg">    580</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> modephases <span class="ansi-green-intense-fg ansi-bold">and</span> type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_fxnmodes<span class="ansi-yellow-intense-fg ansi-bold">[</span>fxnname<span class="ansi-yellow-intense-fg ansi-bold">,</span> mode<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;oppvect&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">==</span>list<span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 581</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span><span class="ansi-green-intense-fg ansi-bold">raise</span> Exception<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#34;Poorly specified oppvect for fxn: &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>fxnname<span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; mode: &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>mode<span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34;--provide a dict to use with modephases&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    582</span>
-<span class="ansi-green-fg">    583</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> modephases <span class="ansi-green-intense-fg ansi-bold">and</span> join_modephases <span class="ansi-green-intense-fg ansi-bold">and</span> <span class="ansi-yellow-intense-fg ansi-bold">(</span>key_phases <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">in</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;global&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;none&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-red-intense-fg ansi-bold">Exception</span>: Poorly specified oppvect for fxn: Control_Rover mode: no_con--provide a dict to use with modephases
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:

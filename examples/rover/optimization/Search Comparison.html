@@ -448,71 +448,72 @@ MC PERFORMANCE:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████████████████████████████████████████████████████████████████████████████| 50/50 [01:07&lt;00:00,  1.34s/it]
+  0%|          | 0/50 [00:00&lt;?, ?it/s]
 </pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3414658635716239
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████████████████████████████████████████████████████████████████████████████| 50/50 [01:03&lt;00:00,  1.26s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.369662091466399
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████████████████████████████████████████████████████████████████████████████| 50/50 [01:07&lt;00:00,  1.35s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4439390164913954
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_3_7.png" src="../../../_images/examples_rover_optimization_Search_Comparison_3_7.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_3_8.png" src="../../../_images/examples_rover_optimization_Search_Comparison_3_8.png" />
-</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_3_9.png" src="../../../_images/examples_rover_optimization_Search_Comparison_3_9.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_10144/2259828233.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>result_mc<span class="ansi-yellow-intense-fg ansi-bold">,</span> sol_mc<span class="ansi-yellow-intense-fg ansi-bold">=</span> montecarlo<span class="ansi-yellow-intense-fg ansi-bold">(</span>ngen<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">50</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> weight<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">0.5</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> filename<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;results/rslt_random.csv&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      2</span> result_ea<span class="ansi-yellow-intense-fg ansi-bold">,</span> sol_ea<span class="ansi-yellow-intense-fg ansi-bold">=</span> ea<span class="ansi-yellow-intense-fg ansi-bold">(</span>ngen<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">50</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> weight<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">0.5</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> filename<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;results/rslt_ea.csv&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      3</span> result_ccea<span class="ansi-yellow-intense-fg ansi-bold">,</span> sol_ccea<span class="ansi-yellow-intense-fg ansi-bold">,</span> pop<span class="ansi-yellow-intense-fg ansi-bold">=</span> ccea<span class="ansi-yellow-intense-fg ansi-bold">(</span>ngen<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">50</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> weight<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">0.5</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> filename<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#34;results/rslt_ccea.csv&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\rover\optimization\search_rover.py</span> in <span class="ansi-cyan-fg">montecarlo</span><span class="ansi-blue-intense-fg ansi-bold">(verbose, ngen, show_sol, weight, filename, formulation)</span>
+<span class="ansi-green-fg">    279</span>         <span class="ansi-blue-intense-fg ansi-bold">&#34;&#34;&#34;Generate offspring&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    280</span>         offspring <span class="ansi-yellow-intense-fg ansi-bold">=</span> toolbox<span class="ansi-yellow-intense-fg ansi-bold">.</span>population<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 281</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>offspring <span class="ansi-yellow-intense-fg ansi-bold">=</span> eval_pop_linedist<span class="ansi-yellow-intense-fg ansi-bold">(</span>offspring<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    282</span>
+<span class="ansi-green-fg">    283</span>         <span class="ansi-red-intense-fg ansi-bold">#plot_hspace(offspring,g)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\rover\optimization\search_rover.py</span> in <span class="ansi-cyan-fg">eval_pop_linedist</span><span class="ansi-blue-intense-fg ansi-bold">(pop)</span>
+<span class="ansi-green-fg">    164</span>     <span class="ansi-green-intense-fg ansi-bold">for</span> k<span class="ansi-yellow-intense-fg ansi-bold">,</span>ind <span class="ansi-green-intense-fg ansi-bold">in</span> enumerate<span class="ansi-yellow-intense-fg ansi-bold">(</span>pop<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    165</span>         <span class="ansi-green-intense-fg ansi-bold">for</span> i <span class="ansi-green-intense-fg ansi-bold">in</span> range<span class="ansi-yellow-intense-fg ansi-bold">(</span>len<span class="ansi-yellow-intense-fg ansi-bold">(</span>ind<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 166</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>ind<span class="ansi-yellow-intense-fg ansi-bold">[</span>i<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>linedist<span class="ansi-yellow-intense-fg ansi-bold">,</span>ind<span class="ansi-yellow-intense-fg ansi-bold">[</span>i<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>enddist<span class="ansi-yellow-intense-fg ansi-bold">,</span> ind<span class="ansi-yellow-intense-fg ansi-bold">[</span>i<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>endpt <span class="ansi-yellow-intense-fg ansi-bold">=</span> line_dist_faster<span class="ansi-yellow-intense-fg ansi-bold">(</span>ind<span class="ansi-yellow-intense-fg ansi-bold">[</span>i<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    167</span>     <span class="ansi-green-intense-fg ansi-bold">return</span> pop
+<span class="ansi-green-fg">    168</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\rover\optimization\search_rover.py</span> in <span class="ansi-cyan-fg">line_dist_faster</span><span class="ansi-blue-intense-fg ansi-bold">(ind, show_plot, print_time)</span>
+<span class="ansi-green-fg">     40</span> <span class="ansi-red-intense-fg ansi-bold"># Uses Probleminterface class to calculate the same properties as line_dist (end dist, line dist, endpt)</span>
+<span class="ansi-green-fg">     41</span>     starttime<span class="ansi-yellow-intense-fg ansi-bold">=</span>time<span class="ansi-yellow-intense-fg ansi-bold">.</span>time<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 42</span><span class="ansi-yellow-intense-fg ansi-bold">     </span>dist <span class="ansi-yellow-intense-fg ansi-bold">=</span> mode_search_prob<span class="ansi-yellow-intense-fg ansi-bold">.</span>line_dist<span class="ansi-yellow-intense-fg ansi-bold">(</span>ind<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     43</span>     end_dist <span class="ansi-yellow-intense-fg ansi-bold">=</span> mode_search_prob<span class="ansi-yellow-intense-fg ansi-bold">.</span>end_dist<span class="ansi-yellow-intense-fg ansi-bold">(</span>ind<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     44</span>     endpt <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span>mode_search_prob<span class="ansi-yellow-intense-fg ansi-bold">.</span>endx<span class="ansi-yellow-intense-fg ansi-bold">(</span>ind<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span>mode_search_prob<span class="ansi-yellow-intense-fg ansi-bold">.</span>endy<span class="ansi-yellow-intense-fg ansi-bold">(</span>ind<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">]</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">newobj</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
+<span class="ansi-green-fg">    252</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _assoc_obj_con<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> objname<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_const<span class="ansi-yellow-intense-fg ansi-bold">,</span> arg<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    253</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newobj<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 254</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
+<span class="ansi-green-fg">    255</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newconst<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    256</span>             <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">1</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">x_to_obj_const</span><span class="ansi-blue-intense-fg ansi-bold">(self, x, simnames)</span>
+<span class="ansi-green-fg">    621</span>             <span class="ansi-red-intense-fg ansi-bold"># prep sims</span>
+<span class="ansi-green-fg">    622</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> simname <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">in</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">.</span>get<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 623</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    624</span>                 self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>add<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    625</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_prep_sim_type</span><span class="ansi-blue-intense-fg ansi-bold">(self, simtype, simname, x)</span>
+<span class="ansi-green-fg">    485</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>ubs<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>lbs<span class="ansi-yellow-intense-fg ansi-bold">}</span>
+<span class="ansi-green-fg">    486</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _prep_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 487</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;single&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_single_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    488</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;multi&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_multi_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    489</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _run_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_prep_single_sim</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, x)</span>
+<span class="ansi-green-fg">    313</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _prep_single_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    314</span>         <span class="ansi-red-intense-fg ansi-bold"># Get variable and objective times for the simulation</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 315</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>var_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_get_var_obj_time<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    316</span>         <span class="ansi-red-intense-fg ansi-bold"># Get keyword arguments for the simulation</span>
+<span class="ansi-green-fg">    317</span>         kwar <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">]</span>
+
+<span class="ansi-red-intense-fg ansi-bold">TypeError</span>: _get_var_obj_time() takes 1 positional argument but 2 were given
+</pre></div></div>
 </div>
 <p>Alternatively, we can pull this data from saves:</p>
 <div class="nbinput nblast docutils container">
@@ -526,7 +527,7 @@ Best Fitness: 0.4439390164913954
 </div>
 </div>
 <p>This shows the computational performance of (one run) of these methods:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
@@ -543,22 +544,6 @@ Best Fitness: 0.4439390164913954
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Text(0.5, 1.0, &#39;Search Performance Comparison&#39;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_7_1.png" src="../../../_images/examples_rover_optimization_Search_Comparison_7_1.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -570,7 +555,7 @@ Text(0.5, 1.0, &#39;Search Performance Comparison&#39;)
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
@@ -578,14 +563,7 @@ Text(0.5, 1.0, &#39;Search Performance Comparison&#39;)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_9_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_9_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
@@ -593,26 +571,12 @@ Text(0.5, 1.0, &#39;Search Performance Comparison&#39;)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_10_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_10_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_trajs</span><span class="p">(</span><span class="n">sols</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_11_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_11_0.png" />
 </div>
 </div>
 <section id="Performance-Comparison">
@@ -627,7 +591,7 @@ Text(0.5, 1.0, &#39;Search Performance Comparison&#39;)
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
@@ -637,1041 +601,6 @@ Text(0.5, 1.0, &#39;Search Performance Comparison&#39;)
     <span class="n">result_ccea</span><span class="p">,</span> <span class="n">sol_ccea</span><span class="p">,</span> <span class="n">pop</span><span class="o">=</span> <span class="n">ccea</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;results/result_ccea_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span> <span class="n">show_sol</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:25&lt;00:00,  1.45s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3504051533889263
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:00&lt;00:00,  1.20s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3684630654669317
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:15&lt;00:00,  1.35s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4375603819050795
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:18&lt;00:00,  1.39s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.34586573617025507
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:44&lt;00:00,  1.04s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3684082747374896
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:17&lt;00:00,  1.37s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.44057045346991475
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:16&lt;00:00,  1.36s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3472422674593918
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:58&lt;00:00,  1.19s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.37913411858493706
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:08&lt;00:00,  1.29s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4422517117416127
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:17&lt;00:00,  1.37s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3447040574832574
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:39&lt;00:00,  1.00it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.39830569979394115
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:15&lt;00:00,  1.35s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4380628313111985
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:17&lt;00:00,  1.38s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3458329244592572
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:49&lt;00:00,  1.09s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.37303480757391316
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:11&lt;00:00,  1.31s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4395245203140752
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:16&lt;00:00,  1.36s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3438939943163204
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:50&lt;00:00,  1.11s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.36283772269489345
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:17&lt;00:00,  1.37s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4416407770265117
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:20&lt;00:00,  1.41s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3462505071467047
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:45&lt;00:00,  1.06s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3716487568655512
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:12&lt;00:00,  1.33s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.44056003960765644
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:19&lt;00:00,  1.40s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.34009992006075945
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:36&lt;00:00,  1.03it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.41102539955622036
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:09&lt;00:00,  1.30s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.44082348466374044
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:15&lt;00:00,  1.36s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.34250176907916463
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:50&lt;00:00,  1.10s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.38099904322766837
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:11&lt;00:00,  1.32s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.42978555804501556
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:14&lt;00:00,  1.35s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3507805116409458
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:01&lt;00:00,  1.22s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.37102695761037885
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:10&lt;00:00,  1.30s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.44465156600313516
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:15&lt;00:00,  1.35s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3382654684000501
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:51&lt;00:00,  1.11s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3693300984113532
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:08&lt;00:00,  1.28s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4386016143655443
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:19&lt;00:00,  1.40s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3432073900218818
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:09&lt;00:00,  1.29s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3779388095437253
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:23&lt;00:00,  1.43s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.42684062916428206
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:19&lt;00:00,  1.39s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.35779093728589245
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:02&lt;00:00,  1.22s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.369586278916136
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:17&lt;00:00,  1.37s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.43427100204550295
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:18&lt;00:00,  1.38s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3421195428892446
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:49&lt;00:00,  1.10s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3692856672562269
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:12&lt;00:00,  1.33s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4358303794352967
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:23&lt;00:00,  1.43s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3530191893513074
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:56&lt;00:00,  1.17s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.369296924717719
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:11&lt;00:00,  1.32s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4390228848368948
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:21&lt;00:00,  1.41s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.341978694851156
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:50&lt;00:00,  1.10s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.37908184240877596
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:10&lt;00:00,  1.31s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4461716860941064
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:20&lt;00:00,  1.41s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.34168009046070824
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:47&lt;00:00,  1.07s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3708783419414223
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:13&lt;00:00,  1.34s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4311719132979099
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:29&lt;00:00,  1.50s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3516698188102384
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:04&lt;00:00,  1.24s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.36803554051119935
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:17&lt;00:00,  1.38s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.4315063583148736
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:22&lt;00:00,  1.43s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.339028430752939
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:06&lt;00:00,  1.26s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3712464386194454
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:17&lt;00:00,  1.37s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.45145219664310465
-MC PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:19&lt;00:00,  1.39s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.34933680029876624
-EA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:50&lt;00:00,  1.11s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3826547111759632
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:18&lt;00:00,  1.39s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.45072393758024265
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-
-</pre></div></div>
 </div>
 <p>Loading results from saves:</p>
 <div class="nbinput nblast docutils container">
@@ -1687,7 +616,7 @@ Best Fitness: 0.45072393758024265
 </div>
 </div>
 <p>Plotting results:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
@@ -1726,14 +655,7 @@ Best Fitness: 0.45072393758024265
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_18_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_18_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
@@ -1768,13 +690,6 @@ Best Fitness: 0.45072393758024265
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_19_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_19_0.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
@@ -1797,7 +712,7 @@ Best Fitness: 0.45072393758024265
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
@@ -1805,106 +720,6 @@ Best Fitness: 0.45072393758024265
     <span class="n">result_ccea</span><span class="p">,</span> <span class="n">sol_ccea</span><span class="p">,</span> <span class="n">pop</span><span class="o">=</span> <span class="n">ccea</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;results/result_weight_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span> <span class="n">show_sol</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:21&lt;00:00,  1.41s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.3781926524332245
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:18&lt;00:00,  1.39s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.38626775512049766
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:22&lt;00:00,  1.43s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.43630621379720236
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:09&lt;00:00,  1.30s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.5592113591995105
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [01:45&lt;00:00,  1.05s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 0.7203644238815546
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-
-</pre></div></div>
 </div>
 <p>Load Results</p>
 <div class="nbinput nblast docutils container">
@@ -1918,19 +733,12 @@ Best Fitness: 0.7203644238815546
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_hspaces</span><span class="p">(</span><span class="n">weight_sols</span><span class="p">,</span> <span class="n">v_padding</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_26_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_26_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -1941,19 +749,12 @@ Best Fitness: 0.7203644238815546
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_line_dist</span><span class="p">(</span><span class="n">weight_sols</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_28_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_28_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -1964,19 +765,12 @@ Best Fitness: 0.7203644238815546
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_trajs</span><span class="p">(</span><span class="n">weight_sols</span><span class="p">,</span> <span class="n">v_padding</span><span class="o">=</span><span class="mf">0.35</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_30_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_30_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -2003,7 +797,7 @@ Best Fitness: 0.7203644238815546
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
@@ -2018,13 +812,6 @@ Best Fitness: 0.7203644238815546
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_34_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_34_0.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
@@ -2033,7 +820,7 @@ Best Fitness: 0.7203644238815546
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
@@ -2041,39 +828,7 @@ Best Fitness: 0.7203644238815546
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:20&lt;00:00,  1.41s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 5.417529465169648
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
@@ -2081,14 +836,7 @@ Best Fitness: 5.417529465169648
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_38_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_38_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
@@ -2096,14 +844,7 @@ Best Fitness: 5.417529465169648
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_39_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_39_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
@@ -2115,22 +856,6 @@ Best Fitness: 5.417529465169648
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(0.0, 10.0)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_40_1.png" src="../../../_images/examples_rover_optimization_Search_Comparison_40_1.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
@@ -2140,7 +865,7 @@ Best Fitness: 5.417529465169648
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
@@ -2159,22 +884,6 @@ Best Fitness: 5.417529465169648
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Text(0, 0.5, &#39;Sum of Min Health State Separation&#39;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_42_1.png" src="../../../_images/examples_rover_optimization_Search_Comparison_42_1.png" />
-</div>
-</div>
 <p>As shown, the multiplicative formulation produces degenerate results, placing all weight on a single point instead of producing points that are both spread out and hazardous.</p>
 </section>
 <section id="Comparing-Solutions-over-weights---Result-Space-Formulation">
@@ -2189,7 +898,7 @@ Text(0, 0.5, &#39;Sum of Min Health State Separation&#39;)
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
@@ -2197,106 +906,6 @@ Text(0, 0.5, &#39;Sum of Min Health State Separation&#39;)
     <span class="n">result_ccea</span><span class="p">,</span> <span class="n">sol_ccea</span><span class="p">,</span> <span class="n">pop</span><span class="o">=</span> <span class="n">ccea</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">formulation</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;results/result2_weight_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span> <span class="n">show_sol</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:21&lt;00:00,  1.41s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 3.6380372257263214
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:16&lt;00:00,  1.37s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 2.911819102836982
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:15&lt;00:00,  1.35s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 2.130329495575795
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:11&lt;00:00,  1.31s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 1.533858302521348
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:06&lt;00:00,  1.27s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 1.083657812394273
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
@@ -2309,19 +918,12 @@ Best Fitness: 1.083657812394273
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_hspaces</span><span class="p">(</span><span class="n">weight_sols</span><span class="p">,</span> <span class="n">v_padding</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_48_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_48_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -2332,19 +934,12 @@ Best Fitness: 1.083657812394273
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_line_dist</span><span class="p">(</span><span class="n">weight_sols</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_50_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_50_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -2355,19 +950,12 @@ Best Fitness: 1.083657812394273
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_trajs</span><span class="p">(</span><span class="n">weight_sols</span><span class="p">,</span> <span class="n">v_padding</span><span class="o">=</span><span class="mf">0.35</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_52_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_52_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -2411,7 +999,7 @@ Best Fitness: 1.083657812394273
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
@@ -2426,13 +1014,6 @@ Best Fitness: 1.083657812394273
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_57_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_57_0.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
@@ -2441,7 +1022,7 @@ Best Fitness: 1.083657812394273
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
@@ -2449,39 +1030,7 @@ Best Fitness: 1.083657812394273
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-CCEA PERFORMANCE:
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|████████████████████████████████████████████████████████████████████████████████| 100/100 [02:30&lt;00:00,  1.51s/it]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Best Fitness: 36.054113875533695
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
@@ -2489,14 +1038,7 @@ Best Fitness: 36.054113875533695
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_60_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_60_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
@@ -2504,14 +1046,7 @@ Best Fitness: 36.054113875533695
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_61_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_61_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
@@ -2523,23 +1058,7 @@ Best Fitness: 36.054113875533695
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(0.0, 10.0)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_62_1.png" src="../../../_images/examples_rover_optimization_Search_Comparison_62_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
@@ -2553,13 +1072,6 @@ Best Fitness: 36.054113875533695
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_63_0.png" src="../../../_images/examples_rover_optimization_Search_Comparison_63_0.png" />
-</div>
-</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
@@ -2569,7 +1081,7 @@ Best Fitness: 36.054113875533695
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
@@ -2586,22 +1098,6 @@ Best Fitness: 36.054113875533695
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Sum of Line Distance&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Sum of Min Health State Separation&quot;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Text(0, 0.5, &#39;Sum of Min Health State Separation&#39;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Search_Comparison_65_1.png" src="../../../_images/examples_rover_optimization_Search_Comparison_65_1.png" />
 </div>
 </div>
 <p>As with the previous objective, the solutions produced appear degenerate in terms of objectives. Qualitatively, however, the results look “good” with both a wide range of trajectories and points with a high line distance.</p>

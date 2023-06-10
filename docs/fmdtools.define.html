@@ -526,6 +526,18 @@ The default is ‘all’.</p></li>
 :rtype: str</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.block.Block.is_dynamic">
+<span class="sig-name descname"><span class="pre">is_dynamic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Block.is_dynamic" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if Block has dynamic execution step</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.block.Block.is_static">
+<span class="sig-name descname"><span class="pre">is_static</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.Block.is_static" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if Block has static execution step</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.Block.m">
 <span class="sig-name descname"><span class="pre">m</span></span><a class="headerlink" href="#fmdtools.define.block.Block.m" title="Permalink to this definition"></a></dt>
@@ -667,17 +679,6 @@ check if the block has changed</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.block.CompArch.inject_fault_in_component">
-<span class="sig-name descname"><span class="pre">inject_fault_in_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.CompArch.inject_fault_in_component" title="Permalink to this definition"></a></dt>
-<dd><p>Injects the fault fault in the component architecture.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fault</strong> (<em>str</em>) – Function-level name of the fault.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.CompArch.make_components">
 <span class="sig-name descname"><span class="pre">make_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CompClass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.CompArch.make_components" title="Permalink to this definition"></a></dt>
 <dd><p>Adds components to the component architecture.</p>
@@ -755,29 +756,6 @@ without yet having a defined behavior for them.</p>
 <dt class="sig sig-object py" id="fmdtools.define.block.FxnBlock.a">
 <span class="sig-name descname"><span class="pre">a</span></span><a class="headerlink" href="#fmdtools.define.block.FxnBlock.a" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.block.FxnBlock.add_local_to_flowdict">
-<span class="sig-name descname"><span class="pre">add_local_to_flowdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowdict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.FxnBlock.add_local_to_flowdict" title="Permalink to this definition"></a></dt>
-<dd><p>Adds local flows to the flow dictionary during initialization</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>flowdict</strong> (<em>dict</em>) – Dictionary of flows {flowname:flow_object}</p></li>
-<li><p><strong>local</strong> (<em>dict/list</em>) – <dl class="simple">
-<dt>Local flows to add. May be of forms:</dt><dd><ul>
-<li><p>{flowname:(localname, attrs)} (to only create local view of specific attributes)</p></li>
-<li><p>{flowname:localname}          (to create view with all attributes)</p></li>
-<li><p>[flowname1, flowname2…]     (to give overwrite the global flow with the local view of it)</p></li>
-</ul>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>ftype</strong> (<em>str</em><em> (</em><em>'local'/'comms'</em><em>)</em>) – Switches whether the flow added is to be a local or comms flow</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.FxnBlock.args_f">

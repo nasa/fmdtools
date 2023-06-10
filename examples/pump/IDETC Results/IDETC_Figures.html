@@ -445,9 +445,9 @@ NAME
     fmdtools
 
 PACKAGE CONTENTS
-    sim (package)
-    define
     analyze (package)
+    define (package)
+    sim (package)
 
 DATA
     __all__ = [&#39;analyze&#39;, &#39;sim&#39;, &#39;define&#39;]
@@ -458,7 +458,7 @@ FILE
 
 </pre></div></div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
@@ -472,6 +472,28 @@ FILE
 <span class="n">mdl</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_10936/4258221960.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">      6</span> <span class="ansi-green-intense-fg ansi-bold">from</span> ex_pump <span class="ansi-green-intense-fg ansi-bold">import</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span>
+<span class="ansi-green-fg">      7</span> <span class="ansi-green-intense-fg ansi-bold">from</span> IPython<span class="ansi-yellow-intense-fg ansi-bold">.</span>display <span class="ansi-green-intense-fg ansi-bold">import</span> HTML
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 8</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>mdl <span class="ansi-yellow-intense-fg ansi-bold">=</span> Pump<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\pump\IDETC Results\ex_pump.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, params, modelparams, valparams)</span>
+<span class="ansi-green-fg">    213</span>         super<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>__init__<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    214</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 215</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>super<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>__init__<span class="ansi-yellow-intense-fg ansi-bold">(</span>params<span class="ansi-yellow-intense-fg ansi-bold">=</span>params<span class="ansi-yellow-intense-fg ansi-bold">,</span> modelparams<span class="ansi-yellow-intense-fg ansi-bold">=</span>modelparams<span class="ansi-yellow-intense-fg ansi-bold">,</span> valparams<span class="ansi-yellow-intense-fg ansi-bold">=</span>valparams<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    216</span>         <span class="ansi-red-intense-fg ansi-bold">#Stepsize: (change at your own risk, because this changes how the model will execute)</span>
+<span class="ansi-green-fg">    217</span>         <span class="ansi-red-intense-fg ansi-bold"># Timestep at the moment must be an integer.</span>
+
+<span class="ansi-red-intense-fg ansi-bold">TypeError</span>: __init__() got an unexpected keyword argument &#39;params&#39;
+</pre></div></div>
 </div>
 <section id="Theory-and-Goals">
 <h2>Theory and Goals<a class="headerlink" href="#Theory-and-Goals" title="Permalink to this headline"></a></h2>
@@ -489,20 +511,13 @@ FILE
 <h2>Model Description<a class="headerlink" href="#Model-Description" title="Permalink to this headline"></a></h2>
 <p>pump: defined in ex_pump. Has the following functions: - import EE - import Water - import Signal - move Water - export Water</p>
 <p>and flows: - EE (to power the pump) - Water_in - Water_out - Signal input (on/off)</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">an</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_6_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_6_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -515,7 +530,7 @@ FILE
 </div>
 </div>
 <p>The following shows the states of the system over time with and without a fault:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
@@ -523,14 +538,7 @@ FILE
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_9_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_9_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
@@ -544,23 +552,7 @@ FILE
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\IDETC Results\..\..\fmdtools\analyze\plot.py:260: UserWarning: Deprecated function. Use analyze.plot.mdlhists instead.
-  warnings.warn(&#34;Deprecated function. Use analyze.plot.mdlhists instead.&#34;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_10_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_10_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
@@ -568,13 +560,6 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\IDETC Results\..\..\fmdto
                            <span class="n">ylabels</span><span class="o">=</span><span class="p">{(</span><span class="s1">&#39;flows&#39;</span><span class="p">,</span> <span class="s2">&quot;EE_1&quot;</span><span class="p">,</span><span class="s1">&#39;current&#39;</span><span class="p">):</span><span class="s1">&#39;Amps&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;flows&#39;</span><span class="p">,</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">,</span> <span class="s1">&#39;flowrate&#39;</span><span class="p">):</span><span class="s2">&quot;$m^3/s$&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;flows&#39;</span><span class="p">,</span> <span class="s1">&#39;Wat_2&#39;</span><span class="p">,</span> <span class="s1">&#39;pressure&#39;</span><span class="p">):</span><span class="s2">&quot;kPa&quot;</span><span class="p">},</span>\
                           <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">time_slice_label</span><span class="o">=</span><span class="s1">&#39;fault time&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Pump Response to Blockage&quot;</span><span class="p">,</span> <span class="n">h_padding</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 <br/></pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_11_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_11_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -593,7 +578,7 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\IDETC Results\..\..\fmdto
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
@@ -603,22 +588,6 @@ C:\Users\dhulse\Documents\GitHub\fmdtools\example_pump\IDETC Results\..\..\fmdto
 <span class="n">fig</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">result_from</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">deghist_fault</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">gtype</span><span class="o">=</span><span class="s1">&#39;fxngraph&#39;</span><span class="p">)</span>
 <span class="n">axis</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Pump System with Blockage Fault&quot;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Text(0.5, 1.0, &#39;Pump System with Blockage Fault&#39;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_14_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_14_1.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -645,7 +614,7 @@ Text(0.5, 1.0, &#39;Pump System with Blockage Fault&#39;)
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
@@ -655,23 +624,7 @@ Text(0.5, 1.0, &#39;Pump System with Blockage Fault&#39;)
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_20_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_20_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-array([-0.77459667,  0.        ,  0.77459667])
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
@@ -681,24 +634,7 @@ array([-0.77459667,  0.        ,  0.77459667])
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_21_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_21_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-array([-9.51056516e-01, -5.87785252e-01, -6.12323400e-17,  5.87785252e-01,
-        9.51056516e-01])
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
@@ -708,24 +644,7 @@ array([-9.51056516e-01, -5.87785252e-01, -6.12323400e-17,  5.87785252e-01,
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_22_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_22_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-array([-8.66025404e-01, -5.00000000e-01, -6.12323400e-17,  5.00000000e-01,
-        8.66025404e-01])
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
@@ -734,23 +653,6 @@ array([-8.66025404e-01, -5.00000000e-01, -6.12323400e-17,  5.00000000e-01,
 <span class="p">(</span><span class="n">quadratures</span><span class="p">[</span><span class="s1">&#39;gauss lobatto&#39;</span><span class="p">](</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">points</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_23_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_23_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-array([-1.00000000e+00, -6.54653671e-01,  6.66133815e-16,  6.54653671e-01,
-        1.00000000e+00])
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
@@ -782,7 +684,7 @@ array([-1.00000000e+00, -6.54653671e-01,  6.66133815e-16,  6.54653671e-01,
 </div>
 </div>
 <p>Some other possible quadratures are shown below.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
@@ -793,27 +695,6 @@ array([-1.00000000e+00, -6.54653671e-01,  6.66133815e-16,  6.54653671e-01,
 <span class="c1">#Gauss-patterson</span>
 <span class="n">quadpy</span><span class="o">.</span><span class="n">c1</span><span class="o">.</span><span class="n">gauss_patterson</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1">#argument is the order n, num pts is [1, 3, 7, 15, 31, 63, 127, 255 or 511]</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_0.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_2.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_28_2.png" />
 </div>
 </div>
 <p>The code below calculates the error of each approach over the number of points used. For the monte-carlo approaches, the results are averaged over 10 simulations and the standard deviation is provided for error bars. The computational cost is also determined by determined by taking the number of simulations needed for each (which is 1 per point (from simulating the nominal) and a fraction based on the injection time of the simulation (faults injected later take less time in simulation)).</p>
@@ -839,7 +720,7 @@ array([-1.00000000e+00, -6.54653671e-01,  6.66133815e-16,  6.54653671e-01,
 <p>This experiment will test how well the quadratures approximate the expected costs of resilience by sampling different points in interval. This is done for the pump model introduced above using the blockage fault.</p>
 <p>Below each of the cost types are shown: - repair costs (which is a step function due to the conditional fault that occurs due to delays) - water costs (which is linear due to the water lost at each timestep) - EE costs (which is constant and then exponentially decreasing due to the interval of adverse high current draw) - all costs together</p>
 <p>where the delay for degradation is 20 time-steps</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
@@ -875,28 +756,13 @@ array([-1.00000000e+00, -6.54653671e-01,  6.66133815e-16,  6.54653671e-01,
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_33_0.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_33_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;costsovertime.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;Figure size 432x288 with 0 Axes&gt;
-</pre></div></div>
 </div>
 </section>
 <section id="Comparing-Quadrature-Error">
@@ -971,7 +837,7 @@ array([-1.00000000e+00, -6.54653671e-01,  6.66133815e-16,  6.54653671e-01,
 </div>
 </div>
 <p>Plotting results:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
@@ -1007,23 +873,7 @@ array([-1.00000000e+00, -6.54653671e-01,  6.66133815e-16,  6.54653671e-01,
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/274113487.py:17: MatplotlibDeprecationWarning: The &#39;linthreshy&#39; parameter of __init__() has been renamed &#39;linthresh&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  ax.set_yscale(&#34;symlog&#34;, linthreshy=0.001)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_43_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_43_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
@@ -1031,15 +881,7 @@ C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/274113487.py:17: MatplotlibD
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;Figure size 432x288 with 0 Axes&gt;
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
@@ -1055,125 +897,7 @@ C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/274113487.py:17: MatplotlibD
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>gauss-legendre</th>
-      <th>fejer 1</th>
-      <th>fejer 2</th>
-      <th>gauss lobatto</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>({'repair'}, 12)</th>
-      <td>0.028688</td>
-      <td>0.033483</td>
-      <td>0.029748</td>
-      <td>0.040842</td>
-    </tr>
-    <tr>
-      <th>({'repair'}, 23)</th>
-      <td>0.031691</td>
-      <td>0.035953</td>
-      <td>0.027976</td>
-      <td>0.040340</td>
-    </tr>
-    <tr>
-      <th>({'repair'}, 34)</th>
-      <td>0.041654</td>
-      <td>0.041307</td>
-      <td>0.039838</td>
-      <td>0.048520</td>
-    </tr>
-    <tr>
-      <th>({'water'}, 12)</th>
-      <td>0.000047</td>
-      <td>0.000085</td>
-      <td>0.000070</td>
-      <td>0.000196</td>
-    </tr>
-    <tr>
-      <th>({'water'}, 23)</th>
-      <td>0.000087</td>
-      <td>0.000152</td>
-      <td>0.000045</td>
-      <td>0.000282</td>
-    </tr>
-    <tr>
-      <th>({'water'}, 34)</th>
-      <td>0.000058</td>
-      <td>0.000068</td>
-      <td>0.000060</td>
-      <td>0.000176</td>
-    </tr>
-    <tr>
-      <th>({'ee'}, 12)</th>
-      <td>0.015633</td>
-      <td>0.031434</td>
-      <td>0.021652</td>
-      <td>0.049239</td>
-    </tr>
-    <tr>
-      <th>({'ee'}, 23)</th>
-      <td>0.020304</td>
-      <td>0.031134</td>
-      <td>0.012642</td>
-      <td>0.046851</td>
-    </tr>
-    <tr>
-      <th>({'ee'}, 34)</th>
-      <td>0.014471</td>
-      <td>0.012037</td>
-      <td>0.008859</td>
-      <td>0.012037</td>
-    </tr>
-    <tr>
-      <th>({'water', 'repair', 'ee'}, 12)</th>
-      <td>0.016882</td>
-      <td>0.021200</td>
-      <td>0.014403</td>
-      <td>0.029028</td>
-    </tr>
-    <tr>
-      <th>({'water', 'repair', 'ee'}, 23)</th>
-      <td>0.009762</td>
-      <td>0.013091</td>
-      <td>0.009398</td>
-      <td>0.013806</td>
-    </tr>
-    <tr>
-      <th>({'water', 'repair', 'ee'}, 34)</th>
-      <td>0.016870</td>
-      <td>0.016790</td>
-      <td>0.007744</td>
-      <td>0.015589</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
@@ -1184,97 +908,13 @@ C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/274113487.py:17: MatplotlibD
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>names</th>
-      <th>gauss-legendre</th>
-      <th>fejer 1</th>
-      <th>fejer 2</th>
-      <th>gauss lobatto</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>repair</td>
-      <td>0.034011</td>
-      <td>0.036915</td>
-      <td>0.032521</td>
-      <td>0.043234</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>water</td>
-      <td>0.000064</td>
-      <td>0.000102</td>
-      <td>0.000058</td>
-      <td>0.000218</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>ee</td>
-      <td>0.016802</td>
-      <td>0.024868</td>
-      <td>0.014384</td>
-      <td>0.036042</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>composite</td>
-      <td>0.014504</td>
-      <td>0.017027</td>
-      <td>0.010515</td>
-      <td>0.019474</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>average</td>
-      <td>0.016345</td>
-      <td>0.019728</td>
-      <td>0.014370</td>
-      <td>0.024742</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">averages</span><span class="o">.</span><span class="n">to_latex</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&#39;\\begin{tabular}{llrrrr}\n\\toprule\n{} &amp;      names &amp;  gauss-legendre &amp;   fejer 1 &amp;   fejer 2 &amp;  gauss lobatto \\\\\n\\midrule\n0 &amp;     repair &amp;        0.034011 &amp;  0.036915 &amp;  0.032521 &amp;       0.043234 \\\\\n1 &amp;      water &amp;        0.000064 &amp;  0.000102 &amp;  0.000058 &amp;       0.000218 \\\\\n2 &amp;         ee &amp;        0.016802 &amp;  0.024868 &amp;  0.014384 &amp;       0.036042 \\\\\n3 &amp;  composite &amp;        0.014504 &amp;  0.017027 &amp;  0.010515 &amp;       0.019474 \\\\\n4 &amp;    average &amp;        0.016345 &amp;  0.019728 &amp;  0.014370 &amp;       0.024742 \\\\\n\\bottomrule\n\\end{tabular}\n&#39;
-</pre></div></div>
 </div>
 <p>If individual plots are desired:</p>
 <div class="nbinput nblast docutils container">
@@ -1292,7 +932,7 @@ C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/274113487.py:17: MatplotlibD
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
@@ -1306,99 +946,6 @@ C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/274113487.py:17: MatplotlibD
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Error of Sampling Approaches (cost: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; delay: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">delay</span><span class="p">))</span>
         <span class="n">plot_errors</span><span class="p">(</span><span class="n">errs</span><span class="p">,</span> <span class="n">num_samps</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/4080221526.py:6: MatplotlibDeprecationWarning: The &#39;linthreshy&#39; parameter of __init__() has been renamed &#39;linthresh&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  plt.yscale(&#34;symlog&#34;, linthreshy=0.001)
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_1.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_2.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_2.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_3.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_3.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_4.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_4.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_5.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_5.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_6.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_6.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_7.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_7.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_8.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_8.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_9.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_9.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_10.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_10.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_11.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_11.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_12.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_50_12.png" />
 </div>
 </div>
 <p>What if the form of the integral was known beforehand? In that case one would be interested in knowing the points that best represente the space for future iteration. There are two options for that in this model: ‘single-point’ and ‘piecewise’</p>
@@ -1427,7 +974,7 @@ C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/4080221526.py:6: MatplotlibD
 <br/></pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
@@ -1439,24 +986,8 @@ C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/4080221526.py:6: MatplotlibD
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x2772bb01d30&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_53_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_53_1.png" />
-</div>
-</div>
 <p>This may change over the delay time parameters chosen. The code below plots the value over a set of possible delay paremeters.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
@@ -1506,22 +1037,6 @@ C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/4080221526.py:6: MatplotlibD
 <span class="n">postplot</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.88</span><span class="p">)</span>
 <span class="n">postplot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">))</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x27729fb11f0&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_55_1.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_55_1.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -1598,7 +1113,7 @@ C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/4080221526.py:6: MatplotlibD
 <br/></pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
@@ -1650,46 +1165,13 @@ C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/4080221526.py:6: MatplotlibD
 <br/></pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_8704/2632459810.py:40: MatplotlibDeprecationWarning: The &#39;linthreshy&#39; parameter of __init__() has been renamed &#39;linthresh&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  plt.yscale(&#34;symlog&#34;, linthreshy=0.001)
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Text(0.5, 1.0, &#39;Error of Sampling Approaches&#39;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_60_2.png" src="../../../_images/examples_pump_IDETC_Results_IDETC_Figures_60_2.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;hl_error.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;Figure size 432x288 with 0 Axes&gt;
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
@@ -1699,27 +1181,13 @@ Text(0.5, 1.0, &#39;Error of Sampling Approaches&#39;)
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">avgoverallerr</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;evenspacing&#39;: 0.01895966996134437,
- &#39;randtimes&#39;: 0.07498012852547022,
- &#39;symrandtimes&#39;: 0.019694077910216993,
- &#39;quadrature&#39;: 0.006950743750489463,
- &#39;full&#39;: 0.0,
- &#39;likeliest&#39;: 0.39126717428773433}
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:

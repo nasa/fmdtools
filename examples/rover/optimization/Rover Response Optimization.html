@@ -415,7 +415,7 @@ div.rendered_html tbody tr:hover {
 <h1>Rover Response Optimization<a class="headerlink" href="#Rover-Response-Optimization" title="Permalink to this headline"></a></h1>
 <p>This notebook shows how variables in an fmdtools model can be optimized for resilience.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.approach</span> <span class="kn">import</span> <span class="n">SampleApproach</span>
@@ -429,13 +429,26 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <p>Model is in defined rover_model.py</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rover_model</span> <span class="kn">import</span> <span class="n">Rover</span><span class="p">,</span> <span class="n">gen_params</span><span class="p">,</span> <span class="n">plot_map</span><span class="p">,</span> <span class="n">plot_trajectories</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">ModuleNotFoundError</span>                       Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_9680/947193376.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span><span class="ansi-green-intense-fg ansi-bold">from</span> rover_model <span class="ansi-green-intense-fg ansi-bold">import</span> Rover<span class="ansi-yellow-intense-fg ansi-bold">,</span> gen_params<span class="ansi-yellow-intense-fg ansi-bold">,</span> plot_map<span class="ansi-yellow-intense-fg ansi-bold">,</span> plot_trajectories
+
+<span class="ansi-red-intense-fg ansi-bold">ModuleNotFoundError</span>: No module named &#39;rover_model&#39;
+</pre></div></div>
 </div>
 <section id="Optimization">
 <h2>Optimization<a class="headerlink" href="#Optimization" title="Permalink to this headline"></a></h2>
@@ -452,36 +465,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">params</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;linetype&#39;: &#39;turn&#39;,
- &#39;radius&#39;: 20,
- &#39;start&#39;: 20,
- &#39;initangle&#39;: 0.0,
- &#39;end&#39;: [40, 40],
- &#39;ub_f&#39;: 10,
- &#39;lb_f&#39;: -1,
- &#39;ub_t&#39;: 10,
- &#39;lb_t&#39;: -1,
- &#39;ub_d&#39;: 2,
- &#39;lb_d&#39;: -2,
- &#39;cor_f&#39;: 1,
- &#39;cor_d&#39;: 1,
- &#39;cor_t&#39;: 1,
- &#39;degradation&#39;: {&#39;friction&#39;: 0.0, &#39;drift&#39;: 0.0}}
-</pre></div></div>
 </div>
 <p>Here we will be optimizing over faults in the drive system at 3 points during the drive simulation interval:</p>
 <div class="nbinput nblast docutils container">
@@ -523,7 +513,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
@@ -531,17 +521,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-1.0776140689849854
-</pre></div></div>
-</div>
 <p>Alternatively, we can use:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
@@ -549,53 +530,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Simulation Times:
-drive_faults: 1.0858502388000488 s
-set_const: 0.0 s
-total: 1.0858502388000488
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;drive_faults&#39;: 1.0858502388000488, &#39;set_const&#39;: 0.0}
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rover_prob</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem rover_problem                                                   current value
- Variables
- -param cor_f at t=0: (-10, 100)                                               0.7000
- -param cor_d at t=0: (-100, 100)                                              0.5000
- -param cor_t at t=0: (-10, 100)                                               0.5000
- Objectives
- -end_dist: +sum(drive_faults endclass end_dist at t=end)                   3939.6729
- -tot_deviation: +sum(drive_faults endclass tot_deviation at t=end)              0.0000
- Constraints
- -
- Simulations
- -drive_faults: multi scen:
-</pre></div></div>
 </div>
 <section id="Rover-Optimization:">
 <h3>Rover Optimization:<a class="headerlink" href="#Rover-Optimization:" title="Permalink to this headline"></a></h3>
@@ -626,22 +567,13 @@ Problem rover_problem                                                   current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">arg</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;F&#39;: array([[4127.53580878]])}
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
@@ -651,7 +583,7 @@ Problem rover_problem                                                   current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
@@ -659,69 +591,7 @@ Problem rover_problem                                                   current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-=================================================
-n_gen  |  n_eval  |     f_avg     |     f_min
-=================================================
-     1 |        1 |  4.179790E+03 |  4.179790E+03
-     2 |        7 |  4.164173E+03 |  4.148555E+03
-     3 |       13 |  4.142964E+03 |  4.137373E+03
-     4 |       20 |  4.135107E+03 |  4.132841E+03
-     5 |       27 |  4.132841E+03 |  4.132841E+03
-     6 |       33 |  4.083220E+03 |  4.033600E+03
-     7 |       39 |  4.260198E+03 |  4.033600E+03
-     8 |       45 |  4.033600E+03 |  4.033600E+03
-     9 |       50 |  3.973503E+03 |  3.913407E+03
-    10 |       57 |  3.913407E+03 |  3.913407E+03
-    11 |       62 |  3.879254E+03 |  3.845101E+03
-    12 |       69 |  3.845411E+03 |  3.845101E+03
-    13 |       74 |  3.844903E+03 |  3.844706E+03
-    14 |       81 |  3.844706E+03 |  3.844706E+03
-    15 |       86 |  3.820852E+03 |  3.796998E+03
-    16 |       92 |  3.794652E+03 |  3.792305E+03
-    17 |       98 |  3.791594E+03 |  3.790882E+03
-    18 |      104 |  3.791953E+03 |  3.790882E+03
-    19 |      110 |  3.790882E+03 |  3.790882E+03
-    20 |      115 |  3.790057E+03 |  3.789233E+03
-    21 |      121 |  3.790210E+03 |  3.789233E+03
-    22 |      127 |  3.789233E+03 |  3.789233E+03
-    23 |      133 |  3.788399E+03 |  3.787566E+03
-    24 |      138 |  3.789651E+03 |  3.787566E+03
-    25 |      144 |  3.787566E+03 |  3.787566E+03
-    26 |      150 |  3.787563E+03 |  3.787561E+03
-    27 |      156 |  3.787562E+03 |  3.787561E+03
-    28 |      161 |  3.787527E+03 |  3.787494E+03
-    29 |      167 |  3.787406E+03 |  3.787319E+03
-    30 |      174 |  3.787291E+03 |  3.787262E+03
-    31 |      181 |  3.787627E+03 |  3.787262E+03
-    32 |      187 |  3.787262E+03 |  3.787262E+03
-    33 |      193 |  3.787262E+03 |  3.787262E+03
-    34 |      199 |  3.787262E+03 |  3.787262E+03
-    35 |      205 |  3.787262E+03 |  3.787262E+03
-    36 |      210 |  3.787025E+03 |  3.786788E+03
-    37 |      217 |  3.786788E+03 |  3.786788E+03
-    38 |      223 |  3.786788E+03 |  3.786788E+03
-    39 |      229 |  3.786788E+03 |  3.786788E+03
-    40 |      235 |  3.786788E+03 |  3.786788E+03
-    41 |      241 |  3.786788E+03 |  3.786788E+03
-    42 |      246 |  3.786754E+03 |  3.786720E+03
-    43 |      253 |  3.786720E+03 |  3.786720E+03
-    44 |      259 |  3.786720E+03 |  3.786720E+03
-    45 |      265 |  3.786720E+03 |  3.786720E+03
-    46 |      271 |  3.786720E+03 |  3.786720E+03
-    47 |      277 |  3.786720E+03 |  3.786720E+03
-    48 |      283 |  3.786720E+03 |  3.786720E+03
-    49 |      289 |  3.786720E+03 |  3.786720E+03
-    50 |      295 |  3.786720E+03 |  3.786720E+03
-    51 |      301 |  3.786720E+03 |  3.786720E+03
-    52 |      307 |  3.786720E+03 |  3.786720E+03
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
@@ -729,20 +599,11 @@ n_gen  |  n_eval  |     f_avg     |     f_min
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-array([   0.65790489, -100.        ,   -1.45828247])
-</pre></div></div>
-</div>
 </section>
 <section id="Results-visualization">
 <h3>Results visualization<a class="headerlink" href="#Results-visualization" title="Permalink to this headline"></a></h3>
 <p>Here we look at the optimized results and compare with the starting results:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
@@ -750,16 +611,7 @@ array([   0.65790489, -100.        ,   -1.45828247])
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-3786.9304103064123
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
@@ -767,14 +619,7 @@ array([   0.65790489, -100.        ,   -1.45828247])
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_29_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_29_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
@@ -782,36 +627,7 @@ array([   0.65790489, -100.        ,   -1.45828247])
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 432x864 with 12 Axes&gt;,
- array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: x&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: y&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: liney&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: linex&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: lbx&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: lby&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: ubx&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: uby&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: vel&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: line&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: angle&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;Ground: ang&#39;}, xlabel=&#39;time&#39;&gt;],
-       dtype=object))
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_30_1.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_30_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
@@ -820,15 +636,8 @@ array([   0.65790489, -100.        ,   -1.45828247])
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_31_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_31_0.png" />
-</div>
-</div>
 <p>starting solution:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
@@ -836,16 +645,7 @@ array([   0.65790489, -100.        ,   -1.45828247])
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-4179.790437219471
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
@@ -853,27 +653,13 @@ array([   0.65790489, -100.        ,   -1.45828247])
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_34_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_34_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ecs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;endclass&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">rover_prob</span><span class="o">.</span><span class="n">_sims</span><span class="p">[</span><span class="s1">&#39;drive_faults&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">metric_dist</span><span class="p">(</span><span class="n">ecs</span><span class="p">,</span> <span class="s1">&#39;end_dist&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/examples_rover_optimization_Rover_Response_Optimization_35_0.png" src="../../../_images/examples_rover_optimization_Rover_Response_Optimization_35_0.png" />
 </div>
 </div>
 <p>As shown, while the optimized correction factors don’t mitigate all scenarios, they do increase the number of scenarios that are mitigated.</p>
