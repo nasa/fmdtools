@@ -495,10 +495,31 @@ class ModelGraph(Graph)
  |          Graph object corresponding to the figure.
  |
  |  get_multi_edges(self, mdl, subedges)
- |      Used by subclasses to attach functions/flows (subedges arg) to
- |      edges
+ |      Used by subclasses to attach functions/flows (subedges arg) to edges
+ |
+ |      Parameters
+ |      ----------
+ |      mdl: Model
+ |          Model to represent.
+ |      subedges : list
+ |          nodes from the full graph which will become edges in the subgraph (e.g. individual flows)
+ |
+ |      Returns
+ |      -------
+ |      flows : dict
+ |              Dictionary of edges with keys representing each sub-attribute of the edge (e.g., flows)
  |
  |  nx_from_obj(self, mdl)
+ |      Generates the networkx.graph object corresponding to the model.
+ |      Parameters
+ |      ----------
+ |      mdl: Model
+ |          Model to create the graph representation of.
+ |
+ |      Returns
+ |      -------
+ |      g : networkx.Graph
+ |          networkx.Graph representation of model functions and flows (along with their attributes)
  |
  |  set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True, label_tstep=True)
  |      Enables the plotting of ModelGraph execution order.
@@ -522,10 +543,35 @@ class ModelGraph(Graph)
  |          Whether to label each timestep (with a number in the subtitle). The default is True.
  |
  |  set_flow_nodestates(self, mdl)
+ |      Attaches node state attributes to Graph corresponding to the states of the model that belong to flows.
+ |
+ |      Parameters
+ |      ----------
+ |      mdl: Model
+ |          Model to represent.
+ |
+ |      Returns
+ |      -------
  |
  |  set_fxn_nodestates(self, mdl)
+ |      Attaches state attributes to Graph corresponding to the states of the model that belong to functions
+ |      Parameters
+ |      ----------
+ |      mdl: Model
+ |          Model to represent.
+ |
+ |      Returns
+ |      -------
  |
  |  set_nx_states(self, mdl)
+ |      Attaches state attributes to Graph corresponding to the states of the model
+ |      Parameters
+ |      ----------
+ |      mdl: Model
+ |          Model to represent.
+ |
+ |      Returns
+ |      -------
  |
  |  ----------------------------------------------------------------------
  |  Methods inherited from Graph:
@@ -591,17 +637,29 @@ class ModelGraph(Graph)
  |      -------
  |      RC : robustness coefficient
  |
- |  draw(self, figsize=(12, 10), withlegend=True, title=&#39;&#39;, fig=False, ax=False, **kwargs)
+ |  draw(self, figsize=(12, 10), title=&#39;&#39;, fig=False, ax=False, withlegend=True, legend_bbox=(1, 0.5), legend_loc=&#39;center left&#39;, legend_labelspacing=2, legend_borderpad=1, **kwargs)
  |      Draws a networkx graph g with given styles corresponding to the node/edge properties.
  |
  |      Parameters
  |      ----------
  |      figsize : tuple, optional
  |          Size for the figure (plt.figure arg). The default is (12,10).
- |      withlegend : bool, optional
- |          Whether to include a legend. The default is True.
  |      title : str, optional
  |          Title for the plot. The default is &#34;&#34;.
+ |      fig : bool, optional
+ |          matplotlib figure to project on (if provided). The default is False.
+ |      ax : bool, optional
+ |          matplotlib axis to plot on (if provided). The default is False.
+ |      withlegend : bool, optional
+ |          Whether to include a legend. The default is True.
+ |      legend_bbox : tuple, optional
+ |          bbox to anchor the legend to. The default is (1,0.5) (places legend on the right)
+ |      legend_loc : str, optional
+ |          loc argument for plt.legend. the default is &#34;center left&#34;
+ |      legend_labelspacing : float, optional
+ |          labelspacing argument for plt.legend. the default is &#34;2
+ |      legend_borderpad : str, optional
+ |          borderpad argument for plt.legend. the default is 1
  |      **kwargs : kwargs
  |          Arguments for various supporting functions:
  |              (set_pos, set_edge_styles, set_edge_labels, set_node_styles, set_node_labels, etc)
@@ -637,10 +695,6 @@ class ModelGraph(Graph)
  |
  |      Parameters
  |      ----------
- |      g : networkx graph or model
- |          Graph to plot or fmdtools model (which will be used to get the graph)
- |      gtype : &#39;hierarchical&#39;/&#39;fxnflowgraph&#39;/&#39;component&#39;, optional
- |          Type of model graph to plot The default is &#39;hierarchical&#39;.
  |      filename : str, optional
  |          File to save the html to. The default is &#34;typegraph.html&#34;.
  |      width : int, optional
@@ -649,6 +703,8 @@ class ModelGraph(Graph)
  |          Whether to display sliders. The default is True.
  |      physics : Bool, optional
  |          Whether to use physics during node placement. The default is False.
+ |      notebook : Bool, optional
+ |          passes notebook arg to pyviz Network (for displaying in jupyter)
  |      Returns
  |      -------
  |      n : pyvis object
@@ -694,6 +750,7 @@ class ModelGraph(Graph)
  |      ----------
  |      title : str, optional
  |          Title for the plot. The default is &#39;bridging nodes&#39;.
+ |      node_kwargs : TODO : need documentation update.
  |      **kwargs : kwargs
  |          kwargs for Graph.draw
  |
@@ -719,6 +776,7 @@ class ModelGraph(Graph)
  |          percentile of degrees to return, between 0 and 100
  |      title : str, optional
  |          Title for the plot. The default is &#39;High Degree Nodes&#39;.
+ |      node_kwargs : dict : kwargs to overwrite the default NodeStyle
  |      **kwargs : kwargs
  |          kwargs for Graph.draw
  |
@@ -739,6 +797,20 @@ class ModelGraph(Graph)
  |  set_edge_labels(self, title=&#39;label&#39;, title2=&#39;&#39;, subtext=&#39;states&#39;, **edge_label_styles)
  |      Creates labels using Labels.from_iterator for the edges in the graph
  |
+ |      Parameters
+ |      ----------
+ |      title : str, optional
+ |          property to get for title text. The default is &#39;id&#39;.
+ |      title2 : str, optional
+ |          property to get for title text after the colon. The default is &#39;&#39;.
+ |      subtext : str, optional
+ |          property to get for the subtext. The default is &#39;&#39;.
+ |      **node_label_styles : dict
+ |          LabelStyle arguments to overwrite.
+ |
+ |      Returns
+ |      -------
+ |
  |  set_edge_styles(self, **edge_styles)
  |      Sets self.edge_styles and self.edge_groups given the provided edge styles.
  |
@@ -749,7 +821,7 @@ class ModelGraph(Graph)
  |          Has structure {tag:{label:kwargs}}, where kwargs are the keyword arguments to
  |          nx.draw_networkx_edges. The default is {&#34;label&#34;:{}}.
  |
- |  set_heatmap(self, heatmap, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x000001F5EE5CC460&gt;, default_color_val=0.0)
+ |  set_heatmap(self, heatmap, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x000001479A8C4520&gt;, default_color_val=0.0)
  |      Enables the association and plotting of a heatmap on a graph.
  |
  |      e.g. graph.set_heatmap({&#39;node_1&#39;:1.0, &#39;node_2&#39;: 0.0, &#39;node_3&#39;:0.5})
@@ -768,6 +840,16 @@ class ModelGraph(Graph)
  |
  |  set_node_labels(self, title=&#39;id&#39;, title2=&#39;&#39;, subtext=&#39;&#39;, **node_label_styles)
  |      Creates labels using Labels.from_iterator for the nodes in the graph
+ |
+ |      Parameters
+ |      ----------
+ |      title
+ |      title2
+ |      subtext
+ |      node_label_styles
+ |
+ |      Returns
+ |      -------
  |
  |  set_node_styles(self, **node_styles)
  |      Sets self.node_styles and self.edge_groups given the provided node styles.
@@ -806,7 +888,7 @@ class ModelGraph(Graph)
  |          simulation end time
  |      pi : float
  |          infection (failure spread) rate
- |      pf : float
+ |      pr : float
  |          recovery (fix) rate
  |      num_trials : int
  |          number of times to run the epidemic model, default is 100
@@ -846,17 +928,29 @@ class ModelGraph(Graph)
 <div class="highlight"><pre>
 Help on function draw in module fmdtools.analyze.graph:
 
-draw(self, figsize=(12, 10), withlegend=True, title=&#39;&#39;, fig=False, ax=False, **kwargs)
+draw(self, figsize=(12, 10), title=&#39;&#39;, fig=False, ax=False, withlegend=True, legend_bbox=(1, 0.5), legend_loc=&#39;center left&#39;, legend_labelspacing=2, legend_borderpad=1, **kwargs)
     Draws a networkx graph g with given styles corresponding to the node/edge properties.
 
     Parameters
     ----------
     figsize : tuple, optional
         Size for the figure (plt.figure arg). The default is (12,10).
-    withlegend : bool, optional
-        Whether to include a legend. The default is True.
     title : str, optional
         Title for the plot. The default is &#34;&#34;.
+    fig : bool, optional
+        matplotlib figure to project on (if provided). The default is False.
+    ax : bool, optional
+        matplotlib axis to plot on (if provided). The default is False.
+    withlegend : bool, optional
+        Whether to include a legend. The default is True.
+    legend_bbox : tuple, optional
+        bbox to anchor the legend to. The default is (1,0.5) (places legend on the right)
+    legend_loc : str, optional
+        loc argument for plt.legend. the default is &#34;center left&#34;
+    legend_labelspacing : float, optional
+        labelspacing argument for plt.legend. the default is &#34;2
+    legend_borderpad : str, optional
+        borderpad argument for plt.legend. the default is 1
     **kwargs : kwargs
         Arguments for various supporting functions:
             (set_pos, set_edge_styles, set_edge_labels, set_node_styles, set_node_labels, etc)
@@ -1148,15 +1242,15 @@ set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:60: UserWarning: these flows sent from model [&#39;video&#39;, &#39;comms&#39;, &#39;ee&#39;, &#39;force&#39;] not added to class &lt;class &#39;__main__.ControlRover&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;video&#39;, &#39;comms&#39;, &#39;ee&#39;, &#39;force&#39;] not added to class &lt;class &#39;__main__.ControlRover&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:60: UserWarning: these flows sent from model [&#39;force&#39;] not added to class &lt;class &#39;__main__.StoreEnergy&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;force&#39;] not added to class &lt;class &#39;__main__.StoreEnergy&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:60: UserWarning: these flows sent from model [&#39;force&#39;] not added to class &lt;class &#39;__main__.MoveRover&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;force&#39;] not added to class &lt;class &#39;__main__.MoveRover&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:60: UserWarning: these flows sent from model [&#39;ground&#39;, &#39;ee&#39;, &#39;video&#39;, &#39;force&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;ground&#39;, &#39;ee&#39;, &#39;video&#39;, &#39;force&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:60: UserWarning: these flows sent from model [&#39;comms&#39;, &#39;ee&#39;, &#39;force&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;comms&#39;, &#39;ee&#39;, &#39;force&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
 </pre></div></div>
 </div>
@@ -1428,7 +1522,7 @@ set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;fmdtools.analyze.graph.ModelGraph at 0x1f5f1f51a60&gt;
+&lt;fmdtools.analyze.graph.ModelGraph at 0x1479dcee280&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1530,7 +1624,7 @@ draw_from(self, time, history=, **kwargs)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rmg</span> <span class="o">=</span> <span class="n">ModelGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
@@ -1547,7 +1641,7 @@ draw_from(self, time, history=, **kwargs)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rmg</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">mdlhist</span><span class="p">)</span>
@@ -1562,7 +1656,7 @@ draw_from(self, time, history=, **kwargs)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">rmg</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">mdlhist</span><span class="p">)</span>
@@ -1578,7 +1672,7 @@ draw_from(self, time, history=, **kwargs)
 </div>
 <p>This can can be done automatically over a number of different times using <code class="docutils literal notranslate"><span class="pre">Graph.animate_from</span></code>:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ModelGraph</span><span class="o">.</span><span class="n">animate_from</span><span class="p">)</span>
@@ -1613,7 +1707,7 @@ animate_from(self, history, times=&#39;all&#39;, figsize=(6, 4), **kwargs)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ani</span> <span class="o">=</span> <span class="n">rmg</span><span class="o">.</span><span class="n">animate_from</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
@@ -1629,7 +1723,7 @@ animate_from(self, history, times=&#39;all&#39;, figsize=(6, 4), **kwargs)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -1638,16 +1732,7 @@ animate_from(self, history, times=&#39;all&#39;, figsize=(6, 4), **kwargs)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-C:\Users\dhulse\Anaconda3\lib\site-packages\matplotlib\animation.py:973: UserWarning: Animation was deleted without rendering anything. This is most likely unintended. To prevent deletion, assign the Animation to a variable that exists for as long as you need the Animation.
-  warnings.warn(
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1835,42 +1920,42 @@ input[type=range].anim-slider {
 </style>
 
 <div class="animation">
-  <img id="_anim_imgf84e96882d8d4c358e9238301256f089">
+  <img id="_anim_img1d408a90e3224a76928ed292df8fcbfd">
   <div class="anim-controls">
-    <input id="_anim_sliderf84e96882d8d4c358e9238301256f089" type="range" class="anim-slider"
+    <input id="_anim_slider1d408a90e3224a76928ed292df8fcbfd" type="range" class="anim-slider"
            name="points" min="0" max="1" step="1" value="0"
-           oninput="animf84e96882d8d4c358e9238301256f089.set_frame(parseInt(this.value));"></input>
+           oninput="anim1d408a90e3224a76928ed292df8fcbfd.set_frame(parseInt(this.value));"></input>
     <div class="anim-buttons">
-      <button title="Decrease speed" aria-label="Decrease speed" onclick="animf84e96882d8d4c358e9238301256f089.slower()">
+      <button title="Decrease speed" aria-label="Decrease speed" onclick="anim1d408a90e3224a76928ed292df8fcbfd.slower()">
           <i class="fa fa-minus"></i></button>
-      <button title="First frame" aria-label="First frame" onclick="animf84e96882d8d4c358e9238301256f089.first_frame()">
+      <button title="First frame" aria-label="First frame" onclick="anim1d408a90e3224a76928ed292df8fcbfd.first_frame()">
         <i class="fa fa-fast-backward"></i></button>
-      <button title="Previous frame" aria-label="Previous frame" onclick="animf84e96882d8d4c358e9238301256f089.previous_frame()">
+      <button title="Previous frame" aria-label="Previous frame" onclick="anim1d408a90e3224a76928ed292df8fcbfd.previous_frame()">
           <i class="fa fa-step-backward"></i></button>
-      <button title="Play backwards" aria-label="Play backwards" onclick="animf84e96882d8d4c358e9238301256f089.reverse_animation()">
+      <button title="Play backwards" aria-label="Play backwards" onclick="anim1d408a90e3224a76928ed292df8fcbfd.reverse_animation()">
           <i class="fa fa-play fa-flip-horizontal"></i></button>
-      <button title="Pause" aria-label="Pause" onclick="animf84e96882d8d4c358e9238301256f089.pause_animation()">
+      <button title="Pause" aria-label="Pause" onclick="anim1d408a90e3224a76928ed292df8fcbfd.pause_animation()">
           <i class="fa fa-pause"></i></button>
-      <button title="Play" aria-label="Play" onclick="animf84e96882d8d4c358e9238301256f089.play_animation()">
+      <button title="Play" aria-label="Play" onclick="anim1d408a90e3224a76928ed292df8fcbfd.play_animation()">
           <i class="fa fa-play"></i></button>
-      <button title="Next frame" aria-label="Next frame" onclick="animf84e96882d8d4c358e9238301256f089.next_frame()">
+      <button title="Next frame" aria-label="Next frame" onclick="anim1d408a90e3224a76928ed292df8fcbfd.next_frame()">
           <i class="fa fa-step-forward"></i></button>
-      <button title="Last frame" aria-label="Last frame" onclick="animf84e96882d8d4c358e9238301256f089.last_frame()">
+      <button title="Last frame" aria-label="Last frame" onclick="anim1d408a90e3224a76928ed292df8fcbfd.last_frame()">
           <i class="fa fa-fast-forward"></i></button>
-      <button title="Increase speed" aria-label="Increase speed" onclick="animf84e96882d8d4c358e9238301256f089.faster()">
+      <button title="Increase speed" aria-label="Increase speed" onclick="anim1d408a90e3224a76928ed292df8fcbfd.faster()">
           <i class="fa fa-plus"></i></button>
     </div>
-    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selectf84e96882d8d4c358e9238301256f089"
+    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_select1d408a90e3224a76928ed292df8fcbfd"
           class="anim-state">
-      <input type="radio" name="state" value="once" id="_anim_radio1_f84e96882d8d4c358e9238301256f089"
+      <input type="radio" name="state" value="once" id="_anim_radio1_1d408a90e3224a76928ed292df8fcbfd"
              >
-      <label for="_anim_radio1_f84e96882d8d4c358e9238301256f089">Once</label>
-      <input type="radio" name="state" value="loop" id="_anim_radio2_f84e96882d8d4c358e9238301256f089"
+      <label for="_anim_radio1_1d408a90e3224a76928ed292df8fcbfd">Once</label>
+      <input type="radio" name="state" value="loop" id="_anim_radio2_1d408a90e3224a76928ed292df8fcbfd"
              checked>
-      <label for="_anim_radio2_f84e96882d8d4c358e9238301256f089">Loop</label>
-      <input type="radio" name="state" value="reflect" id="_anim_radio3_f84e96882d8d4c358e9238301256f089"
+      <label for="_anim_radio2_1d408a90e3224a76928ed292df8fcbfd">Loop</label>
+      <input type="radio" name="state" value="reflect" id="_anim_radio3_1d408a90e3224a76928ed292df8fcbfd"
              >
-      <label for="_anim_radio3_f84e96882d8d4c358e9238301256f089">Reflect</label>
+      <label for="_anim_radio3_1d408a90e3224a76928ed292df8fcbfd">Reflect</label>
     </form>
   </div>
 </div>
@@ -1880,9 +1965,9 @@ input[type=range].anim-slider {
   /* Instantiate the Animation class. */
   /* The IDs given should match those used in the template above. */
   (function() {
-    var img_id = "_anim_imgf84e96882d8d4c358e9238301256f089";
-    var slider_id = "_anim_sliderf84e96882d8d4c358e9238301256f089";
-    var loop_select_id = "_anim_loop_selectf84e96882d8d4c358e9238301256f089";
+    var img_id = "_anim_img1d408a90e3224a76928ed292df8fcbfd";
+    var slider_id = "_anim_slider1d408a90e3224a76928ed292df8fcbfd";
+    var loop_select_id = "_anim_loop_select1d408a90e3224a76928ed292df8fcbfd";
     var frames = new Array(61);
 
   frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAAEgCAYAAADVKCZpAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
@@ -3354,7 +3439,7 @@ QmCC\
     /* set a timeout to make sure all the above elements are created before
        the object is initialized. */
     setTimeout(function() {
-        animf84e96882d8d4c358e9238301256f089 = new Animation(frames, img_id, slider_id, 200.0,
+        anim1d408a90e3224a76928ed292df8fcbfd = new Animation(frames, img_id, slider_id, 200.0,
                                  loop_select_id);
     }, 0);
   })()
@@ -3364,7 +3449,7 @@ QmCC\
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_rover_Model_Structure_Visualization_Tutorial_65_2.png" src="../../_images/examples_rover_Model_Structure_Visualization_Tutorial_65_2.png" />
+<img alt="../../_images/examples_rover_Model_Structure_Visualization_Tutorial_65_1.png" src="../../_images/examples_rover_Model_Structure_Visualization_Tutorial_65_1.png" />
 </div>
 </div>
 </section>

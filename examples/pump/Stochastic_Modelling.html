@@ -478,7 +478,7 @@ states</em> to function blocks and incorporating them in function behavior - How
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Rand(rng=Generator(PCG64) at 0x14063A5D120, probs=[], probdens=1.0, seed=42, run_stochastic=False)
+Rand(rng=Generator(PCG64) at 0x2042688E120, probs=[], probdens=1.0, seed=42, run_stochastic=False)
 </pre></div></div>
 </div>
 <p>Below, <code class="docutils literal notranslate"><span class="pre">assoc_rand_states</span></code> is used in the ImportEE function to add two random states: - <code class="docutils literal notranslate"><span class="pre">effstate</span></code>, the quality of the input voltage (i.e. large fluctuations from a step change in power) - <code class="docutils literal notranslate"><span class="pre">grid_noise</span></code>, which is meant to be fluctuations in voltage from the power source (i.e., more ordinary noise)</p>
@@ -655,7 +655,7 @@ class MoveWatRandState(State):
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-MoveWatRand(rng=Generator(PCG64) at 0x140640C22E0, probs=[], probdens=1.0, seed=23, run_stochastic=False)
+MoveWatRand(rng=Generator(PCG64) at 0x20426EF1740, probs=[], probdens=1.0, seed=23, run_stochastic=False)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -673,7 +673,7 @@ MoveWatRand(rng=Generator(PCG64) at 0x140640C22E0, probs=[], probdens=1.0, seed=
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-MoveWatRand(rng=Generator(PCG64) at 0x14063AA72E0, probs=[], probdens=1.0, seed=10, run_stochastic=False)
+MoveWatRand(rng=Generator(PCG64) at 0x204268BA2E0, probs=[], probdens=1.0, seed=10, run_stochastic=False)
 </pre></div></div>
 </div>
 </section>
@@ -870,7 +870,7 @@ add_seed_replicates(self, rangeid, seeds)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|████████████████████████████████████████████████████████████| 100/100 [00:02&lt;00:00, 40.00it/s]
+SCENARIOS COMPLETE: 100%|██████████| 100/100 [00:02&lt;00:00, 41.28it/s]
 </pre></div></div>
 </div>
 <p>To evaluate this behavior over time, we can then use <code class="docutils literal notranslate"><span class="pre">an.plot.hist</span></code>, to plot the <em>distribution</em> of behaviors over time. <code class="docutils literal notranslate"><span class="pre">an.plot.hist</span></code> has a number of different options for visualization of distributions. For example, below we plot model states as individual lines:</p>
@@ -979,28 +979,12 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  42%|██████████████████████▋                               | 84/200 [00:10&lt;00:14,  8.05it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████| 200/200 [00:25&lt;00:00,  7.95it/s]
+NESTED SCENARIOS COMPLETE: 100%|██████████| 200/200 [00:24&lt;00:00,  8.04it/s]
 </pre></div></div>
 </div>
 <p>Next, we get just the scenarios of interest:</p>
@@ -1125,27 +1109,27 @@ until the fault time, when pressure increases dramatically. This is also observe
     </tr>
     <tr>
       <th>ave_cost</th>
-      <td>40963.015793</td>
-      <td>40963.015793</td>
-      <td>40963.015793</td>
-      <td>40963.015793</td>
-      <td>40963.015793</td>
-      <td>40963.015793</td>
-      <td>40963.015793</td>
-      <td>40963.015793</td>
-      <td>40963.015793</td>
-      <td>40963.015793</td>
+      <td>40577.669855</td>
+      <td>40577.669855</td>
+      <td>40577.669855</td>
+      <td>40577.669855</td>
+      <td>40577.669855</td>
+      <td>40577.669855</td>
+      <td>40577.669855</td>
+      <td>40577.669855</td>
+      <td>40577.669855</td>
+      <td>40577.669855</td>
       <td>...</td>
-      <td>38906.587712</td>
-      <td>38906.587712</td>
-      <td>38906.587712</td>
-      <td>38906.587712</td>
-      <td>38906.587712</td>
-      <td>38906.587712</td>
-      <td>38906.587712</td>
-      <td>38906.587712</td>
-      <td>38906.587712</td>
-      <td>38906.587712</td>
+      <td>39460.175753</td>
+      <td>39460.175753</td>
+      <td>39460.175753</td>
+      <td>39460.175753</td>
+      <td>39460.175753</td>
+      <td>39460.175753</td>
+      <td>39460.175753</td>
+      <td>39460.175753</td>
+      <td>39460.175753</td>
+      <td>39460.175753</td>
     </tr>
   </tbody>
 </table>
@@ -1190,13 +1174,13 @@ until the fault time, when pressure increases dramatically. This is also observe
   <tbody>
     <tr>
       <th>delay_1</th>
-      <td>100.0</td>
-      <td>16488.984295</td>
+      <td>0.0</td>
+      <td>16512.259893</td>
     </tr>
     <tr>
       <th>delay_10</th>
       <td>0.0</td>
-      <td>14837.051311</td>
+      <td>14827.928420</td>
     </tr>
   </tbody>
 </table>

@@ -582,7 +582,7 @@ set of faults over a set of model parameters)</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 17/17 [00:02&lt;00:00,  7.51it/s]
+SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:02&lt;00:00,  7.81it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -603,7 +603,7 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 C:\Users\dhulse\Anaconda3\lib\multiprocessing\pool.py:265: ResourceWarning: unclosed running multiprocessing pool &lt;multiprocessing.pool.Pool state=RUN pool_size=4&gt;
   _warn(f&#34;unclosed running multiprocessing pool {self!r}&#34;,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-SCENARIOS COMPLETE: 100%|██████████████████████████████████████████████████████████████| 21/21 [00:02&lt;00:00,  9.76it/s]
+SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:02&lt;00:00, 10.08it/s]
 </pre></div></div>
 </div>
 <p>It can also be helpful to verify that the results of parallel simulation and normal serial execution are the same:</p>
@@ -624,8 +624,8 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 21/21 [00:00&lt;00:00, 285.96it/s]
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 21/21 [00:00&lt;00:00, 125.31it/s]
+SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 333.92it/s]
+SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 126.82it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -645,8 +645,8 @@ SCENARIOS COMPLETE: 100%|██████████████████�
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 300.03it/s]
-SCENARIOS COMPLETE: 100%|█████████████████████████████████████████████████████████████| 17/17 [00:00&lt;00:00, 121.98it/s]
+SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 340.55it/s]
+SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 122.63it/s]
 </pre></div></div>
 </div>
 <p>While fmdtools built-in methods are the easiest way to leverage parallelism, it can also be used with custom arguments/methods to meet the needs of simulation. However, (on Windows) these methods need to be defined in an external module with an “if <strong>name</strong>==‘<strong>main</strong>’:” statement, otherwise execution will hang from spawning new processes. This has to do with how multiprocessing works in windows.</p>
@@ -736,37 +736,37 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 6880 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 16980 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=8&gt;
   self.start()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 17824 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 12044 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=10&gt;
   self.start()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 10244 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 12264 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=12&gt;
   self.start()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 14440 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 11992 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=14&gt;
   self.start()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 11584 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 12168 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=16&gt;
   self.start()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 14264 is still running
+C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 19496 is still running
   _warn(&#34;subprocess %s is still running&#34; % self.pid,
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=18&gt;
@@ -777,7 +777,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <p>Below is the baseline comparison, where the the following parameters characterize the sampling approach: - single faults: only the single-fault scenarios are considered - 3 points per phase: an evenly-spaced quadrature is sampled at each phase of operation (start, on, end) for the model - staged: the model is copied at each point in time where faults is injected during the model time to save computation - track: the entire model history is returned for each simulation</p>
 <p>This is typical for a small model like this where the per-model expense is low.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">()</span>
@@ -788,7 +788,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -812,7 +812,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <h3>Comparison: No Histories<a class="headerlink" href="#Comparison:-No-Histories" title="Permalink to this headline"></a></h3>
 <p>In the below comparison, the same simulation approach is run, except without tracking a history of model states through the simulation.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
@@ -822,7 +822,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -838,12 +838,12 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x263c7d8e550&gt;
+&lt;matplotlib.legend.Legend at 0x1e580771130&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -861,7 +861,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <h3>Comparison: Many Faults<a class="headerlink" href="#Comparison:-Many-Faults" title="Permalink to this headline"></a></h3>
 <p>In the below comparison, many faults are injected in the system to increase the number of scenarios (ostensibly making the case better for parallelism)</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
@@ -871,7 +871,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -887,12 +887,12 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x263c5623040&gt;
+&lt;matplotlib.legend.Legend at 0x1e580ab1d00&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -909,7 +909,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <h3>Comparison: Long simulation<a class="headerlink" href="#Comparison:-Long-simulation" title="Permalink to this headline"></a></h3>
 <p>It may be of interest to simulate how the comparative performance changes for longer simulations. In this comparison, the simulation time is extended tenfold.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
@@ -919,7 +919,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -935,12 +935,12 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x263c7eb1d00&gt;
+&lt;matplotlib.legend.Legend at 0x1e580b389d0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -956,7 +956,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <h3>Comparison: Long Simulation No Tracking<a class="headerlink" href="#Comparison:-Long-Simulation-No-Tracking" title="Permalink to this headline"></a></h3>
 <p>Finally, it may be interesting to see how performance is affected in long simulations when there is no tracking. This is because in these simulations, there should be very little overhead from creating the respective data structures, even when there is a long simulation. This comparison is shown below.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
@@ -966,7 +966,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -982,12 +982,12 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x263c5845b50&gt;
+&lt;matplotlib.legend.Legend at 0x1e580ab3370&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1004,7 +1004,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <h3>Comparison: Long Simulation Only Necessary Tracking<a class="headerlink" href="#Comparison:-Long-Simulation-Only-Necessary-Tracking" title="Permalink to this headline"></a></h3>
 <p>In practice, it can be necessary to track some states over time. Here we perform the same comparison using the ‘valstates’ option, which only tracks states which have been defined in the model to be necessary to track (using ‘valparams’)</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
@@ -1014,7 +1014,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1030,12 +1030,12 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x263c5613100&gt;
+&lt;matplotlib.legend.Legend at 0x1e5806a5dc0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1053,7 +1053,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <h2>Comparison: Lower Tracking Time Resolution<a class="headerlink" href="#Comparison:-Lower-Tracking-Time-Resolution" title="Permalink to this headline"></a></h2>
 <p>Finally, the number of recorded timesteps can be lowered to lower computational costs while still returning all relevant variables.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">jointfaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;faults&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
@@ -1063,7 +1063,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),)</span>
@@ -1079,12 +1079,12 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x263c56df520&gt;
+&lt;matplotlib.legend.Legend at 0x1e58001f4c0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1109,7 +1109,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 <p>While parallelism and staged execution are helpful and relatively easy-to-implement methods of computational cost reduction, it can be helpful (especially for more complex models) to see what aspects of the model are taking the most computational time.</p>
 <p>Python’s builtin <code class="docutils literal notranslate"><span class="pre">cProfile</span></code> package can ge used to see the relative computational times of different functions/processes.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span>
@@ -1117,7 +1117,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cProfile</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;propagate.nominal(mdl)&#39;</span><span class="p">)</span>
@@ -1129,14 +1129,14 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-         187348 function calls (184256 primitive calls) in 0.103 seconds
+         187381 function calls (184289 primitive calls) in 0.115 seconds
 
    Ordered by: standard name
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
         1    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(amin)
        28    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(concatenate)
-       28    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(sort)
+       28    0.000    0.000    0.001    0.000 &lt;__array_function__ internals&gt;:2(sort)
         1    0.000    0.000    0.000    0.000 &lt;string&gt;:1(&lt;module&gt;)
        18    0.000    0.000    0.000    0.000 __init__.py:1043(__init__)
        14    0.000    0.000    0.000    0.000 __init__.py:1050(__len__)
@@ -1152,29 +1152,31 @@ effect, it does not because the overhead is less to do with filling the underlyi
        28    0.000    0.000    0.000    0.000 _ufunc_config.py:433(__enter__)
        28    0.000    0.000    0.000    0.000 _ufunc_config.py:438(__exit__)
        45    0.000    0.000    0.000    0.000 abc.py:117(__instancecheck__)
-       12    0.000    0.000    0.003    0.000 block.py:100(__init__)
-       10    0.000    0.000    0.004    0.000 block.py:1051(__init__)
-       10    0.000    0.000    0.000    0.000 block.py:1127(return_faultmodes)
-       10    0.000    0.000    0.000    0.000 block.py:1138(&lt;listcomp&gt;)
-       30    0.000    0.000    0.001    0.000 block.py:1178(update_seed)
-     5042    0.005    0.000    0.031    0.000 block.py:1227(return_mutables)
-     2526    0.008    0.000    0.025    0.000 block.py:1236(__call__)
+       12    0.000    0.000    0.007    0.001 block.py:100(__init__)
+       10    0.000    0.000    0.009    0.001 block.py:1051(__init__)
+       10    0.000    0.000    0.000    0.000 block.py:1103(return_faultmodes)
+       10    0.000    0.000    0.000    0.000 block.py:1114(&lt;listcomp&gt;)
+       30    0.000    0.000    0.001    0.000 block.py:1122(update_seed)
+     5042    0.006    0.000    0.031    0.000 block.py:1171(return_mutables)
+     2526    0.009    0.000    0.026    0.000 block.py:1180(__call__)
+        5    0.000    0.000    0.000    0.000 block.py:1244(reset)
         1    0.000    0.000    0.000    0.000 block.py:129(add_flow_hist)
-        5    0.000    0.000    0.000    0.000 block.py:1300(reset)
        32    0.000    0.000    0.001    0.000 block.py:150(update_seed)
-        2    0.000    0.000    0.001    0.000 block.py:181(new_params)
-       10    0.000    0.000    0.003    0.000 block.py:287(__init__)
-       10    0.000    0.000    0.001    0.000 block.py:32(assoc_flows)
-        5    0.000    0.000    0.000    0.000 block.py:418(reset)
+        2    0.000    0.000    0.001    0.001 block.py:181(new_params)
+       10    0.000    0.000    0.008    0.001 block.py:287(__init__)
+       10    0.001    0.000    0.002    0.000 block.py:32(assoc_flows)
+       10    0.000    0.000    0.000    0.000 block.py:344(is_static)
+       10    0.000    0.000    0.000    0.000 block.py:350(is_dynamic)
+        5    0.000    0.000    0.000    0.000 block.py:430(reset)
        10    0.000    0.000    0.000    0.000 block.py:48(&lt;dictcomp&gt;)
-     5042    0.010    0.000    0.024    0.000 block.py:495(return_mutables)
-       30    0.000    0.000    0.004    0.000 common.py:115(init_obj_attr)
-5010/2004    0.005    0.000    0.006    0.000 common.py:12(get_var)
+     5042    0.010    0.000    0.024    0.000 block.py:507(return_mutables)
+       30    0.000    0.000    0.009    0.000 common.py:115(init_obj_attr)
+5010/2004    0.005    0.000    0.007    0.000 common.py:12(get_var)
         2    0.000    0.000    0.000    0.000 common.py:139(get_dataobj_track)
         5    0.000    0.000    0.000    0.000 common.py:164(get_obj_track)
        27    0.000    0.000    0.000    0.000 common.py:57(get_true_fields)
        28    0.000    0.000    0.000    0.000 contextlib.py:63(_recreate_cm)
-       28    0.000    0.000    0.001    0.000 contextlib.py:76(inner)
+       28    0.000    0.000    0.002    0.000 contextlib.py:76(inner)
      1010    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
      31/3    0.000    0.000    0.000    0.000 copy.py:128(deepcopy)
        19    0.000    0.000    0.000    0.000 copy.py:182(_deepcopy_atomic)
@@ -1186,20 +1188,20 @@ effect, it does not because the overhead is less to do with filling the underlyi
      6052    0.004    0.000    0.006    0.000 copy.py:66(copy)
       130    0.000    0.000    0.000    0.000 enum.py:358(__call__)
       130    0.000    0.000    0.000    0.000 enum.py:670(__new__)
-      505    0.000    0.000    0.000    0.000 ex_pump.py:121(condfaults)
-      504    0.001    0.000    0.002    0.000 ex_pump.py:129(behavior)
-      504    0.000    0.000    0.001    0.000 ex_pump.py:148(behavior)
-      504    0.000    0.000    0.001    0.000 ex_pump.py:164(behavior)
-      504    0.001    0.000    0.001    0.000 ex_pump.py:178(behavior)
-      506    0.000    0.000    0.001    0.000 ex_pump.py:221(condfaults)
-      506    0.000    0.000    0.000    0.000 ex_pump.py:237(indicate_over_pressure)
-      505    0.002    0.000    0.007    0.000 ex_pump.py:244(behavior)
-        2    0.000    0.000    0.006    0.003 ex_pump.py:289(__init__)
-      501    0.000    0.000    0.000    0.000 ex_pump.py:316(indicate_finished)
-      501    0.000    0.000    0.000    0.000 ex_pump.py:328(indicate_on)
-        1    0.000    0.000    0.000    0.000 ex_pump.py:330(find_classification)
+      505    0.000    0.000    0.000    0.000 ex_pump.py:139(condfaults)
+      504    0.001    0.000    0.002    0.000 ex_pump.py:148(behavior)
+      504    0.000    0.000    0.001    0.000 ex_pump.py:174(behavior)
+      504    0.000    0.000    0.001    0.000 ex_pump.py:196(behavior)
+      504    0.001    0.000    0.001    0.000 ex_pump.py:215(behavior)
+      506    0.000    0.000    0.001    0.000 ex_pump.py:270(condfaults)
+      506    0.000    0.000    0.000    0.000 ex_pump.py:286(indicate_over_pressure)
+      505    0.002    0.000    0.007    0.000 ex_pump.py:293(behavior)
+        2    0.000    0.000    0.013    0.007 ex_pump.py:331(__init__)
+      501    0.000    0.000    0.000    0.000 ex_pump.py:358(indicate_finished)
+      501    0.000    0.000    0.000    0.000 ex_pump.py:370(indicate_on)
+        1    0.000    0.000    0.000    0.000 ex_pump.py:372(find_classification)
         8    0.000    0.000    0.001    0.000 flow.py:27(__init__)
-        8    0.000    0.000    0.000    0.000 flow.py:394(init_flow)
+        8    0.000    0.000    0.001    0.000 flow.py:394(init_flow)
        12    0.000    0.000    0.000    0.000 flow.py:51(reset)
      4044    0.001    0.000    0.002    0.000 flow.py:54(return_mutables)
         4    0.000    0.000    0.000    0.000 flow.py:78(create_hist)
@@ -1215,58 +1217,58 @@ effect, it does not because the overhead is less to do with filling the underlyi
         4    0.000    0.000    0.000    0.000 graph.py:526(add_nodes_from)
         2    0.000    0.000    0.000    0.000 graph.py:895(add_edges_from)
        72    0.000    0.000    0.000    0.000 inspect.py:159(isfunction)
-       36    0.000    0.000    0.000    0.000 inspect.py:1838(_signature_bound_method)
-       36    0.000    0.000    0.001    0.000 inspect.py:2150(_signature_from_function)
-    72/36    0.000    0.000    0.002    0.000 inspect.py:2244(_signature_from_callable)
-      130    0.000    0.000    0.000    0.000 inspect.py:2496(__init__)
+       36    0.000    0.000    0.001    0.000 inspect.py:1838(_signature_bound_method)
+       36    0.001    0.000    0.002    0.000 inspect.py:2150(_signature_from_function)
+    72/36    0.001    0.000    0.004    0.000 inspect.py:2244(_signature_from_callable)
+      130    0.000    0.000    0.001    0.000 inspect.py:2496(__init__)
       224    0.000    0.000    0.000    0.000 inspect.py:2546(name)
       354    0.000    0.000    0.000    0.000 inspect.py:2558(kind)
        94    0.000    0.000    0.000    0.000 inspect.py:2580(__str__)
-       72    0.000    0.000    0.000    0.000 inspect.py:2779(__init__)
+       72    0.000    0.000    0.001    0.000 inspect.py:2779(__init__)
       166    0.000    0.000    0.000    0.000 inspect.py:2828(&lt;genexpr&gt;)
-       36    0.000    0.000    0.002    0.000 inspect.py:2857(from_callable)
+       36    0.000    0.000    0.004    0.000 inspect.py:2857(from_callable)
        72    0.000    0.000    0.000    0.000 inspect.py:2863(parameters)
        36    0.000    0.000    0.000    0.000 inspect.py:2867(return_annotation)
        36    0.000    0.000    0.000    0.000 inspect.py:2871(replace)
-       36    0.000    0.000    0.000    0.000 inspect.py:3063(__str__)
-       36    0.000    0.000    0.002    0.000 inspect.py:3109(signature)
+       36    0.000    0.000    0.001    0.000 inspect.py:3063(__str__)
+       36    0.000    0.000    0.004    0.000 inspect.py:3109(signature)
        36    0.000    0.000    0.000    0.000 inspect.py:494(unwrap)
        36    0.000    0.000    0.000    0.000 inspect.py:514(_is_wrapper)
        76    0.000    0.000    0.000    0.000 inspect.py:73(isclass)
         2    0.000    0.000    0.000    0.000 isolate.py:40(isolates)
         2    0.000    0.000    0.000    0.000 isolate.py:82(&lt;genexpr&gt;)
        10    0.000    0.000    0.000    0.000 mode.py:110(__init__)
-     5042    0.003    0.000    0.008    0.000 mode.py:142(return_mutables)
+     5042    0.003    0.000    0.007    0.000 mode.py:142(return_mutables)
        10    0.000    0.000    0.000    0.000 mode.py:144(init_faultmodes)
        14    0.000    0.000    0.000    0.000 mode.py:165(&lt;dictcomp&gt;)
      3530    0.003    0.000    0.004    0.000 mode.py:260(has_fault)
         5    0.000    0.000    0.000    0.000 mode.py:337(remove_any_faults)
-        8    0.000    0.000    0.000    0.000 model.py:109(add_flow)
-       10    0.000    0.000    0.004    0.000 model.py:128(add_fxn)
+        8    0.000    0.000    0.001    0.000 model.py:109(add_flow)
+       10    0.000    0.000    0.009    0.001 model.py:128(add_fxn)
        10    0.000    0.000    0.000    0.000 model.py:161(get_flows)
        10    0.000    0.000    0.000    0.000 model.py:163(&lt;dictcomp&gt;)
-        2    0.000    0.000    0.001    0.000 model.py:184(build)
+        2    0.000    0.000    0.001    0.001 model.py:184(build)
         2    0.000    0.000    0.000    0.000 model.py:196(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:199(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:203(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:204(construct_graph)
-        2    0.000    0.000    0.000    0.000 model.py:213(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 model.py:215(calc_repaircost)
-        1    0.000    0.000    0.000    0.000 model.py:237(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:240(return_faultmodes)
-        2    0.000    0.000    0.007    0.003 model.py:273(new_with_params)
-        1    0.000    0.000    0.000    0.000 model.py:320(reset)
-      501    0.000    0.000    0.000    0.000 model.py:333(set_vars)
-        1    0.000    0.000    0.000    0.000 model.py:394(create_hist)
-      501    0.002    0.000    0.077    0.000 model.py:410(propagate)
-      501    0.010    0.000    0.072    0.000 model.py:441(prop_static)
-       12    0.000    0.000    0.000    0.000 model.py:479(&lt;listcomp&gt;)
-        2    0.000    0.000    0.001    0.000 model.py:52(__init__)
+        2    0.000    0.000    0.000    0.000 model.py:198(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:201(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:202(construct_graph)
+        2    0.000    0.000    0.000    0.000 model.py:211(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 model.py:213(calc_repaircost)
+        1    0.000    0.000    0.000    0.000 model.py:235(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 model.py:238(return_faultmodes)
+        2    0.000    0.000    0.015    0.007 model.py:271(new_with_params)
+        1    0.000    0.000    0.000    0.000 model.py:318(reset)
+      501    0.000    0.000    0.001    0.000 model.py:331(set_vars)
+        1    0.000    0.000    0.000    0.000 model.py:392(create_hist)
+      501    0.002    0.000    0.080    0.000 model.py:408(propagate)
+      501    0.010    0.000    0.075    0.000 model.py:439(prop_static)
+       12    0.000    0.000    0.000    0.000 model.py:477(&lt;listcomp&gt;)
+        2    0.000    0.000    0.001    0.001 model.py:52(__init__)
         2    0.000    0.000    0.001    0.000 model.py:72(update_seed)
        28    0.000    0.000    0.000    0.000 multiarray.py:143(concatenate)
-      501    0.000    0.000    0.005    0.000 ordered_set.py:122(copy)
+      501    0.000    0.000    0.004    0.000 ordered_set.py:122(copy)
        40    0.000    0.000    0.000    0.000 ordered_set.py:157(__contains__)
-     2525    0.002    0.000    0.002    0.000 ordered_set.py:169(add)
+     2525    0.002    0.000    0.003    0.000 ordered_set.py:169(add)
        10    0.000    0.000    0.000    0.000 ordered_set.py:190(update)
      2004    0.001    0.000    0.001    0.000 ordered_set.py:287(__iter__)
       501    0.001    0.000    0.003    0.000 ordered_set.py:336(union)
@@ -1274,28 +1276,28 @@ effect, it does not because the overhead is less to do with filling the underlyi
      2505    0.001    0.000    0.001    0.000 ordered_set.py:71(__len__)
        36    0.000    0.000    0.000    0.000 parameter.py:102(check_type)
         4    0.000    0.000    0.001    0.000 parameter.py:117(copy_with_vals)
-       36    0.000    0.000    0.002    0.000 parameter.py:120(check_pickle)
-       14    0.000    0.000    0.001    0.000 parameter.py:156(__init__)
-       14    0.000    0.000    0.000    0.000 parameter.py:161(find_any_phase_overlap)
+       36    0.000    0.000    0.005    0.000 parameter.py:120(check_pickle)
+       14    0.000    0.000    0.003    0.000 parameter.py:156(__init__)
+       14    0.000    0.000    0.001    0.000 parameter.py:161(find_any_phase_overlap)
        14    0.000    0.000    0.000    0.000 parameter.py:162(&lt;dictcomp&gt;)
        14    0.000    0.000    0.000    0.000 parameter.py:164(&lt;listcomp&gt;)
        14    0.000    0.000    0.000    0.000 parameter.py:165(&lt;listcomp&gt;)
-       36    0.000    0.000    0.002    0.000 parameter.py:35(__init__)
+       36    0.000    0.000    0.006    0.000 parameter.py:35(__init__)
        34    0.000    0.000    0.000    0.000 parameter.py:59(check_lim)
        36    0.000    0.000    0.000    0.000 parameter.py:84(check_immutable)
-        1    0.000    0.000    0.103    0.103 propagate.py:142(nominal)
+        1    0.000    0.000    0.115    0.115 propagate.py:142(nominal)
         1    0.000    0.000    0.000    0.000 propagate.py:168(save_helper)
-        1    0.000    0.000    0.103    0.103 propagate.py:349(nom_helper)
+        1    0.000    0.000    0.115    0.115 propagate.py:349(nom_helper)
         1    0.000    0.000    0.000    0.000 propagate.py:544(check_overwrite)
-        1    0.000    0.000    0.000    0.000 propagate.py:656(init_histrange)
+        1    0.000    0.000    0.001    0.001 propagate.py:656(init_histrange)
       501    0.000    0.000    0.000    0.000 propagate.py:703(check_end_condition)
-        1    0.002    0.002    0.096    0.096 propagate.py:711(prop_one_scen)
+        1    0.002    0.002    0.100    0.100 propagate.py:711(prop_one_scen)
         1    0.000    0.000    0.000    0.000 propagate.py:790(get_result)
         1    0.000    0.000    0.000    0.000 propagate.py:814(&lt;listcomp&gt;)
         1    0.000    0.000    0.000    0.000 propagate.py:83(unpack_sim_kwargs)
         7    0.000    0.000    0.000    0.000 propagate.py:85(&lt;genexpr&gt;)
        10    0.000    0.000    0.001    0.000 rand.py:103(update_seed)
-       17    0.000    0.000    0.001    0.000 rand.py:46(__init__)
+       17    0.000    0.000    0.003    0.000 rand.py:46(__init__)
      5042    0.001    0.000    0.001    0.000 rand.py:59(return_mutables)
      2500    0.001    0.000    0.001    0.000 rand.py:90(update_stochastic_states)
         1    0.000    0.000    0.000    0.000 rand.py:98(reset)
@@ -1316,9 +1318,11 @@ effect, it does not because the overhead is less to do with filling the underlyi
         3    0.000    0.000    0.000    0.000 result.py:743(init_indicator_hist)
         1    0.000    0.000    0.000    0.000 result.py:765(&lt;listcomp&gt;)
         5    0.000    0.000    0.000    0.000 result.py:843(init_att)
-      501    0.007    0.000    0.016    0.000 result.py:887(log)
+      501    0.007    0.000    0.017    0.000 result.py:887(log)
         1    0.000    0.000    0.000    0.000 result.py:942(cut)
        10    0.000    0.000    0.000    0.000 result.py:95(get_dict_attr)
+        1    0.000    0.000    0.000    0.000 scenario.py:27(create_sequence)
+        1    0.000    0.000    0.000    0.000 scenario.py:29(&lt;dictcomp&gt;)
         2    0.000    0.000    0.000    0.000 state.py:217(create_hist)
       505    0.002    0.000    0.004    0.000 state.py:62(assign)
       505    0.000    0.000    0.000    0.000 state.py:81(&lt;dictcomp&gt;)
@@ -1332,9 +1336,9 @@ effect, it does not because the overhead is less to do with filling the underlyi
        45    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
      3539    0.001    0.000    0.001    0.000 {built-in method builtins.any}
        80    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
-       11    0.000    0.000    0.000    0.000 {built-in method builtins.dir}
+       11    0.001    0.000    0.001    0.000 {built-in method builtins.dir}
        20    0.000    0.000    0.000    0.000 {built-in method builtins.eval}
-        1    0.000    0.000    0.103    0.103 {built-in method builtins.exec}
+        1    0.000    0.000    0.115    0.115 {built-in method builtins.exec}
     10589    0.002    0.000    0.002    0.000 {built-in method builtins.getattr}
     27870    0.004    0.000    0.004    0.000 {built-in method builtins.hasattr}
        93    0.000    0.000    0.000    0.000 {built-in method builtins.id}
@@ -1351,14 +1355,14 @@ effect, it does not because the overhead is less to do with filling the underlyi
        12    0.000    0.000    0.000    0.000 {built-in method fromkeys}
         1    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
        28    0.000    0.000    0.000    0.000 {built-in method numpy.array}
-       57    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
+       57    0.000    0.000    0.001    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
         5    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
       112    0.000    0.000    0.000    0.000 {built-in method numpy.geterrobj}
        56    0.000    0.000    0.000    0.000 {built-in method numpy.seterrobj}
         8    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.asdict}
      9086    0.001    0.000    0.001    0.000 {built-in method recordclass._dataobject.astuple}
        36    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
-       28    0.000    0.000    0.000    0.000 {function SeedSequence.generate_state at 0x00000263BF9A2430}
+       28    0.001    0.000    0.001    0.000 {function SeedSequence.generate_state at 0x000001E5FA0169D0}
         2    0.000    0.000    0.000    0.000 {method &#39;__reduce_ex__&#39; of &#39;object&#39; objects}
      2777    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
         1    0.000    0.000    0.000    0.000 {method &#39;clear&#39; of &#39;list&#39; objects}
@@ -1369,7 +1373,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
         1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
         4    0.000    0.000    0.000    0.000 {method &#39;endswith&#39; of &#39;str&#39; objects}
        58    0.000    0.000    0.000    0.000 {method &#39;format&#39; of &#39;str&#39; objects}
-     6441    0.001    0.000    0.001    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
+     6442    0.001    0.000    0.001    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
      1002    0.000    0.000    0.000    0.000 {method &#39;index&#39; of &#39;list&#39; objects}
        15    0.000    0.000    0.000    0.000 {method &#39;index&#39; of &#39;tuple&#39; objects}
      3530    0.001    0.000    0.001    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
@@ -1382,19 +1386,19 @@ effect, it does not because the overhead is less to do with filling the underlyi
         1    0.000    0.000    0.000    0.000 {method &#39;reduce&#39; of &#39;numpy.ufunc&#39; objects}
        28    0.000    0.000    0.000    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
      3016    0.001    0.000    0.001    0.000 {method &#39;split&#39; of &#39;str&#39; objects}
-     2934    0.001    0.000    0.001    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
+     2944    0.001    0.000    0.001    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
        52    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
        12    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
      5078    0.001    0.000    0.001    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
        72    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
-       18    0.000    0.000    0.001    0.000 {numpy.random._generator.default_rng}
+       18    0.001    0.000    0.003    0.000 {numpy.random._generator.default_rng}
 
 
 </pre></div></div>
 </div>
 <p>This is difficult to vizualize, although there are methods to store and sort through this output if needed. The <code class="docutils literal notranslate"><span class="pre">pycallgraph</span></code> package (requires a graphviz installation) can give a more immediate and insightful picture of where the code bottlenecks are.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycallgraph2</span> <span class="kn">import</span> <span class="n">PyCallGraph</span>
@@ -1404,7 +1408,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">PyCallGraph</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">GraphvizOutput</span><span class="p">()):</span>
@@ -1413,7 +1417,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;pycallgraph.png&#39;</span><span class="p">)</span>
@@ -1421,7 +1425,7 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
