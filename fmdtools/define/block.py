@@ -449,12 +449,17 @@ class Block(Simulable):
 
         Parameters
         ----------
-        flows  :
-        args   :
+        flows  : dict
+            Dictionary of new flows to add to the block
+        args   : tuple
+            New arguments to use to instantiate the block
         kwargs :
+            New kwargs to use to instantiate the block 
 
         Returns
         -------
+        cop : Block
+            copy of the exising block
 
         """
         cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
@@ -679,7 +684,8 @@ class CompArch(dataobject, mapping=True):
             cop_comp.s = cop_comp._init_s(**asdict(component.s))
             cop_comp.m.mirror(component.m)
             cop_comp.t = component.t.copy()
-            cop_comp.h = component.h.copy()
+            if hasattr(component, 'h'):
+                cop_comp.h = component.h.copy()
         return cop
 
     def update_seed(self, seed):
@@ -1157,15 +1163,20 @@ class FxnBlock(Block):
         if hasattr(self, 'a'): 
             cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)
         if hasattr(self, 'h'):
-            for k in cop.h:
-                if k.startswith('c.components'):
-                    cname = k.split('.')[2]
-                    atname = '.'.join(k.split('.')[3:])
-                    cop.h[k] = cop.c.components[cname].h[atname]
-                elif k.startswith('a.actions'):
-                    cname = k.split('.')[2]
-                    atname = '.'.join(k.split('.')[3:])
-                    cop.h[k] = cop.a.actions[cname].h[atname]
+            if hasattr(self, 'c'): 
+                for compname, comp in cop.c.components.items():
+                    ex_hist = self.h.get("c.components."+compname)
+                    if ex_hist: 
+                        comp.h = ex_hist.copy()
+                        for k, v in comp.h.items():
+                            cop.h["c.components."+compname+"."+k] = v
+            if hasattr(self, 'a'):
+                for actname, act in cop.a.actions.items():
+                    ex_hist = self.h.get("a.actions."+actname)
+                    if ex_hist: 
+                        act.h = ex_hist.copy()
+                        for k, v in act.h.items():
+                            cop.h["a.actions."+actname+"."+k] = v
         return cop
 
     def return_mutables(self):
