@@ -297,13 +297,14 @@ class ProblemInterface:
         """
         self.add_objectives(simname, *args, objtype=objtype, t=t, obj_const='constraints', agg=threshold, **kwargs)
 
-    def _get_var_obj_time(self):
+    def _get_var_obj_time(self, simname):
         var_times = [v[3] for v in self.variables]
         if 'start' in var_times:
             var_time = 0
         else:
             var_time = min(var_times)
-        obj_times = [v[3] for v in [*self.objectives.values(),*self.constraints.values()] if v[3]!='na']
+        obj_times = [v[3] for v in [*self.objectives.values(),*self.constraints.values()] 
+                     if v[3]!='na' and v[0]==simname]
         if 'end' in obj_times:
             obj_time = self.mdl.sp.times[-1]
         else:
@@ -417,8 +418,13 @@ class ProblemInterface:
             new_scenlist.append(newscen)
         scenlist = new_scenlist
         if pool: 
-            if staged:  inputs = [(self._check_new_mdl(simname, var_time, c_mdls[scen.name][var_time], x, obj_time), scen, {**kwargs, 'prevhist':prevhists[scen.name]},  str(i)) for i, scen in enumerate(scenlist)]
-            else:       inputs = [(self._check_new_mdl(simname, var_time, mdl, x, obj_time), scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
+            if staged:  
+                inputs = [(self._check_new_mdl(simname, var_time, c_mdls[scen.name][var_time], x, obj_time), scen, 
+                           {**kwargs, 'nomhist':prevhists[scen.name]},  str(i)) 
+                          for i, scen in enumerate(scenlist)]
+            else:       
+                inputs = [(self._check_new_mdl(simname, var_time, mdl, x, obj_time), scen,  kwargs, str(i)) 
+                          for i, scen in enumerate(scenlist)]
             res_list = list(pool.imap(prop.exec_scen_par, inputs))
             results, mh = prop.unpack_res_list(scenlist, res_list)
         else:
@@ -456,7 +462,8 @@ class ProblemInterface:
             elif connames:  cons = {[*connames][0]:returns}
         return objs, cons
     def _update_sequence(self, existing_sequence, simname, x):
-        new_sequence = {t:{k:{var: x[ind] for var,ind in v.items()} for k,v in v.items()} for t,v in self.var_mapping[simname].items() if isinstance(t, (int, float, np.number))}
+        new_sequence = {t:{k:{var: x[ind] for var,ind in v.items()} for k,v in v.items()} 
+                        for t,v in self.var_mapping[simname].items() if isinstance(t, (int, float, np.number))}
         return {**existing_sequence, **new_sequence}
     def _eval_mult_objs(self, objname, values):
         pos_fact = get_pos_negative(self.objectives[objname][-1][0])
@@ -760,12 +767,15 @@ class ProblemInterface:
         self.clear(simname, clearvars=False, clearhist=False)
         if 'p' in self.simulations[simname][2]: self.simulations[simname][2]['p'].update(new_p)
         else:   self.simulations[simname][2]['p'] = new_p
-        update_sequence(newsequence, {0:{'disturbances':newvars}})
+        newsequence.update({0:{'disturbances':newvars}})
         if self.simulations[simname][0]=='single':
-            update_sequence(self.simulations[simname][2].get('sequence',{}), newsequence)
+            seq = self.simulations[simname][2].get('sequence',{})
+            seq.update(newsequence)
         elif self.simulations[simname][0]=='multi':
             for i,_ in enumerate(self.simulations[simname][1][0]):
-                update_sequence(self.simulations[simname][1][0][i].sequence, newsequence)
+                seq = self.simulations[simname][1][0][i].sequence
+                seq.update(newsequence)
+
     def update_sim_options(self, simnames, **kwargs):
         """
         Update options for simulation kwargs. Useful for changing simulation parameters, e.g.:
@@ -795,13 +805,7 @@ class ProblemInterface:
         nx.draw_networkx_edge_labels(self.sim_graph, pos, edge_labels=nx.get_edge_attributes(self.sim_graph, "label"))
         return fig
 
-def update_sequence(sequence_to_update, new_sequence):
-    for i in new_sequence:
-        if i not in sequence_to_update:             sequence_to_update[i]=new_sequence[i]
-        else:
-            for j in new_sequence[i]:
-                if j not in sequence_to_update[i]:  sequence_to_update[i][j]=new_sequence[i][j]
-                else:                               sequence_to_update[i][j].update(new_sequence[i][j])
+
 
 def eval_con(value, threshold, greater_less, negative_form):
     g_factor = greater_to_factor(greater_less)
