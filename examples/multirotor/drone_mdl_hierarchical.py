@@ -109,7 +109,6 @@ class DroneParam(Parameter, readonly=True):
     arch_set = ('quad', 'oct', 'hex')
 
 class Drone(DynDrone):
-    __slots__=()
     _init_p = DroneParam
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -171,13 +170,14 @@ graph_pos = {'store_ee': [-1.0787279392101061, -0.06903523859088145],
  'view_env': [1.1035500215472247, 0.9373523025760659]}
 
 if __name__=="__main__":
+    import multiprocessing as mp
     
     hierarchical_model = Drone(p=DroneParam(arch='quad'))
     endclass, mdlhist = fs.propagate.one_fault(hierarchical_model,'affect_dof', 'rf_mechbreak', time=50)
     
     mdl = Drone(p=DroneParam(arch='oct'))
     app = SampleApproach(mdl, faults=[('affect_dof', 'rr2_propstuck')])
-    endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=True)
+    endclasses, mdlhists = fs.propagate.approach(mdl, app, staged=True, pool = mp.Pool(4))
     an.plot.hist(mdlhists.get('nominal', 'affect_dof_rr2_propstuck_t49p0').flatten(),
                  'flows.env.s.x', 'env.s.y', 'env.s.z', 'store_ee.s.soc')
 
