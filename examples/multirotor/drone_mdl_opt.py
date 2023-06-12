@@ -566,11 +566,11 @@ def viewable_area(z):
 
 ## PLOTTING
 def plot_nomtraj(mdlhist, params, title='Trajectory'):
-    xnom=mdlhist['flows']['dofs']['x']
-    ynom=mdlhist['flows']['dofs']['y']
-    znom=mdlhist['flows']['dofs']['z']
+    xnom=mdlhist.flows.dofs.s.x
+    ynom=mdlhist.flows.dofs.s.y
+    znom=mdlhist.flows.dofs.s.z
     
-    time = mdlhist['time']
+    time = mdlhist.time
     
     fig2 = plt.figure()
     
@@ -584,7 +584,7 @@ def plot_nomtraj(mdlhist, params, title='Trajectory'):
         if tt%20==0:
             ax2.text(xx,yy,zz, 't='+str(tt), fontsize=8)
     
-    for goal,loc in params['flightplan'].items():
+    for goal,loc in enumerate(params.flightplan):
         ax2.text(loc[0],loc[1],loc[2], str(goal), fontweight='bold', fontsize=12)
         ax2.plot([loc[0]],[loc[1]],[loc[2]], marker='o', markersize=10, color='red', alpha=0.5)
     

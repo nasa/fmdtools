@@ -34,7 +34,7 @@ import dill
 import os
 from fmdtools.define.common import get_var, t_key
 from .approach import SampleApproach
-from .scenario import create_sequence, Scenario, SingleFaultScenario
+from .scenario import Sequence, Scenario, SingleFaultScenario
 from fmdtools.analyze.result import Result, History,  create_indiv_filename, file_check
 from fmdtools.analyze.graph import graph_factory
 
@@ -288,7 +288,7 @@ def one_fault(mdl, *fxnfault, time=1, **kwargs):
     if len(fxnfault)==2:  fxnname, fault = fxnfault
     elif len(fxnfault)==3:fxnname, fault, time = fxnfault
     else:                 fxnname, fault = mdl.name, fxnfault[0] 
-    seq = create_sequence(faultseq={time:{fxnname:[fault]}})
+    seq = Sequence(faultseq={time:{fxnname:[fault]}})
     
     scen= SingleFaultScenario(sequence = seq,
                               fault = fault,
@@ -333,7 +333,7 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
     run_kwarg = pack_run_kwargs(**kwargs)
     
     if not scen: 
-        if not seq: seq = create_sequence(faultseq=faultseq, disturbances=disturbances)
+        if not seq: seq = Sequence(faultseq=faultseq, disturbances=disturbances)
         scen = Scenario(sequence=seq, rate=rate, name='faulty', times=tuple([*seq.keys()]))
     
     nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, [min(scen.sequence)], **{**sim_kwarg, 'use_end_condition':False}, **run_kwarg)
@@ -377,7 +377,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, 
     #run model nominally, get relevant results
     if isinstance(mdl, type):       mdl = mdl(**mdl_kwargs)  
     elif protect or mdl_kwargs:     mdl = mdl.new_with_params(**mdl_kwargs)
-    if not scen:    nomscen=Scenario(sequence=create_sequence(disturbances=kwargs.get('disturbances', {})))
+    if not scen:    nomscen=Scenario(sequence = Sequence(disturbances=kwargs.get('disturbances', {})))
     else:           nomscen=scen
     if staged:  
         if type(ctimes) in [float, int]:ctimes=[ctimes]
@@ -521,8 +521,10 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
             ctime= np.copy(mdl.h.time)
             mdl = mdl.copy()
             mdl.h.time=ctime
-        else: mdl = mdl.copy()
-    else:                           mdl = mdl.new_with_params()
+        else: 
+            mdl = mdl.copy()
+    else:                        
+        mdl = mdl.new_with_params()
     result, mdlhist, _, t_end,  =prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
     return result, mdlhist, t_end
@@ -534,6 +536,7 @@ def check_hist_memory(mdlhist, nscens, max_mem=2e9):
     if total_memory > max_mem:
         raise Exception("Mdlhist has size: "+str(mem_total)+" bytes. With "+str(nscens)+" scenarios, it is expected that this run will pass the user-defined max_mem="+str(max_mem)+\
                         " byte limit by a factor of: "+str(total_memory/max_mem)+". To avoid, use the track= option to track less information in the mdlhist")
+
 def check_mdl_memory(mdl, nscens, max_mem=2e9):
     mem_total, mem_profile = mdl.get_memory()
     total_memory = int(mem_total) * int(nscens)
@@ -697,7 +700,8 @@ def init_histrange(mdl, start_time, staged, track, track_times):
     elif track_times[0]=='times':       histrange = track_times[1]
     
     mdlhist = mdl.create_hist(histrange, track)
-    if 'time' not in mdlhist: mdlhist.init_att('time', timerange[0], timerange=timerange, track='all', dtype=float)
+    if 'time' not in mdlhist: 
+        mdlhist.init_att('time', timerange[0], timerange=timerange, track='all', dtype=float)
     return mdlhist, histrange, timerange, shift
 
 def check_end_condition(mdl, use_end_condition, t):
@@ -708,7 +712,7 @@ def check_end_condition(mdl, use_end_condition, t):
     else:                    return False
     
 
-def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, prevhist={}, cut_hist=True, **kwargs):
+def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True, **kwargs):
     """
     Runs a fault scenario in the model over time
 
