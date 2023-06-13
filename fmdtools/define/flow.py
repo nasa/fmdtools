@@ -212,12 +212,12 @@ class MultiFlow(Flow):
         super().reset()
         for local in self.locals:
             getattr(self, local).reset()
-    def copy(self, glob=[], params={}):
-        states = super().status()
-        cop = self.__class__(states, self.name, glob=glob, params=params)
+    def copy(self, glob=[], p={}, s={}):
+        if not s: s=asdict(self.s)
+        cop = self.__class__(self.name, glob=glob, p=p, s=s)
         for loc in self.locals:
             local = getattr(self, loc)
-            cop.create_local(local.name, attrs=local.status())
+            cop.create_local(local.name, s=asdict(local.s))
         return cop
     def create_hist(self, timerange, track):
         super().create_hist(timerange, track)
@@ -228,6 +228,9 @@ class MultiFlow(Flow):
         return self.h
     def get_typename(self):
         return "MultiFlow"
+    def return_mutables(self):
+        local_mutes = [getattr(self, l).return_mutables() for l in self.locals]
+        return (super().return_mutables(), *local_mutes)
 
 class CommsFlow(MultiFlow):
     """
@@ -380,9 +383,8 @@ class CommsFlow(MultiFlow):
         for fxn in self.fxns:
             self.fxns[fxn]["in"] = {}
             self.fxns[fxn]["received"] = {}
-    def copy(self, glob=[], p={}):
-        states = super().status()
-        cop = self.__class__(self.name, glob=glob, p=p, s=states)
+    def copy(self, glob=[], p={}, s={}):
+        cop = super().copy(glob=glob, p=p, s=s)
         for fxn in self.fxns:
             cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status(),
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]),
@@ -390,6 +392,12 @@ class CommsFlow(MultiFlow):
         return cop
     def get_typename(self):
         return "CommsFlow"
+    def return_mutables(self):
+        mutes = super().return_mutables()
+        comms_mutes = []
+        for f in self.fxns.values():
+            comms_mutes.append([f['in'], f['received']])
+        return (*mutes, *comms_mutes)
 
 def init_flow(flowname, fclass=Flow, p={}, s={}):
     """Factory method for flows. Enables one to instantiate different types of flows with given states/parameters

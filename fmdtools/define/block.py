@@ -444,7 +444,7 @@ class Block(Simulable):
         for flow in self.flows.values():
             flow.reset()
 
-    def copy(self, flows={}, *args, **kwargs):
+    def copy(self, flows, *args, **kwargs):
         """
 
         Parameters
