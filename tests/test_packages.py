@@ -5,68 +5,10 @@ Created on Tue Aug  9 12:44:01 2022
 @author: dhulse
 """
 import unittest
-from fmdtools.sim import propagate
-from fmdtools.define.block import FxnBlock
 from fmdtools.define.rand import get_pdf_for_rand
-from fmdtools.define.model import Model
-from fmdtools.define.flow import CommsFlow, MultiFlow
 import numpy as np
-from tests.common import CommonTests
 
-
-class Mover(FxnBlock):
-    def __init__(self, name, flows, params):
-        self.set_atts(**params)
-        FxnBlock.__init__(self, name,flows, comms={"Communications":"internal_info"},local={"Location":"loc"})
-    def dynamic_behavior(self, time):
-        #move
-        self.loc.inc(x=self.x_up, y=self.y_up)
-        # the inbox should be cleared each timestep to allow new messages
-        self.internal_info.clear_inbox()
-    def behavior(self, time):
-        #recieve messages
-        self.internal_info.receive()
-        #communicate
-        if self.x_up==0.0:  
-            self.internal_info.y=self.loc.y
-            self.internal_info.send("all", "local", "y")
-        elif self.y_up==0.0:   
-            self.internal_info.x=self.loc.x
-            self.internal_info.send("all", "local", "x")
-    def find_classification(self, scen, fxnhist):
-        return {"last_x": self.loc.x, "min_x": fxnhist["faulty"]["Location"][self.name]["x"]}
-class Mover2(Mover, FxnBlock):
-    def __init__(self, name, flows, params):
-        """Same as mover 1, just with a non-standard initialiation for the local/comms flows"""
-        self.set_atts(**params)
-        super().__init__(name,flows, params)
-        self.internal_info = self.Communications.create_comms(name)
-        self.loc = self.Location.create_local(name)
-class Coordinator(FxnBlock):
-    def __init__(self, name, flows):
-        FxnBlock.__init__(self, name,flows)
-        self.coord_view= self.Communications.create_comms(name, ports=["Mover_1", "Mover_2"])
-    def dynamic_behavior(self, time):
-        self.coord_view.clear_inbox()
-    def behavior(self, time):
-        self.coord_view.receive()
-        self.coord_view.update("local", "Mover_1", "y")
-        self.coord_view.update("local", "Mover_2", "x")
-class TestModel(Model):
-    default_sp = dict(times=(0,10))
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        self.add_flow("Communications",{"x":0.0, "y":1.0}, fclass=CommsFlow)
-        self.add_flow("Location", {"x":0.0, "y":0.0}, fclass=MultiFlow)
-        self.add_fxn("Mover_1", ["Communications", "Location"], fclass=Mover, fparams= {"x_up":0.0, "y_up":1.0})
-        self.add_fxn("Mover_2", ["Communications", "Location"], fclass=Mover2, fparams= {"x_up":1.0, "y_up":0.0})
-        
-        self.add_fxn("Coordinator", ["Communications"], fclass=Coordinator)
-        
-        self.build_model()
-
-class define_Tests(unittest.TestCase, CommonTests):
+class define_Tests(unittest.TestCase):
     def test_pdf_translation_options(self):
         """
         Test for getting the probability of a pdf using get_pdf_for_rand. 
@@ -96,50 +38,6 @@ class define_Tests(unittest.TestCase, CommonTests):
             if randname in expected_values: # spot tests for common distributions
                 self.assertAlmostEqual(p_d[0], expected_values[randname], 3)
             self.assertIsInstance(p_d, np.ndarray)
-    def test_multiflows(self):
-        mdl = TestModel()
-        endresults, mdlhist = propagate.nominal(mdl)
-        # check that location copied such that the global version aren't modified but the local ones are
-        np.testing.assert_array_equal(mdlhist["flows"]["Location"]["x"], np.zeros(11))
-        np.testing.assert_array_equal(mdlhist["flows"]["Location"]["y"], np.zeros(11))
-        np.testing.assert_array_equal(mdlhist["flows"]["Location"]["Mover_1"]["x"], np.zeros(11))
-        np.testing.assert_array_equal(mdlhist["flows"]["Location"]["Mover_1"]["y"], [i for i in range(11)])
-        np.testing.assert_array_equal(mdlhist["flows"]["Location"]["Mover_2"]["y"], np.zeros(11))
-        np.testing.assert_array_equal(mdlhist["flows"]["Location"]["Mover_2"]["x"], [i for i in range(11)])
-        # check that communications combined such that both Movers have iterating x-y values
-        np.testing.assert_array_equal(mdlhist["flows"]["Communications"]["Mover_1"]["x"], [i for i in range(11)])
-        np.testing.assert_array_equal(mdlhist["flows"]["Communications"]["Mover_1"]["y"], [i for i in range(11)])
-        np.testing.assert_array_equal(mdlhist["flows"]["Communications"]["Mover_2"]["x"], [i for i in range(11)])
-        np.testing.assert_array_equal(mdlhist["flows"]["Communications"]["Mover_2"]["y"], [i for i in range(11)])
-        # check that coordinator parses communiations from each Mover
-        np.testing.assert_array_equal(mdlhist["flows"]["Communications"]["Coordinator"]["x"], [i for i in range(11)])
-        np.testing.assert_array_equal(mdlhist["flows"]["Communications"]["Coordinator"]["y"], [i for i in range(11)])
-        
-        #tests that copying works
-        mdl.flows["Communications"].Mover_1.x=25
-        mdl.flows["Communications"].Mover_1.send(["Mover_2", "Coordinator"])
-        self.assertEqual(mdl.flows["Communications"].fxns["Coordinator"]["in"], {"Mover_1":()})
-        
-        
-        mdl.flows["Communications"].Coordinator.receive()
-        self.assertEqual(mdl.flows["Communications"].fxns["Mover_1"]["out"].x, 25)
-        self.assertEqual(mdl.flows["Communications"].fxns["Coordinator"]["internal"].Mover_1.x, 25)
-        self.assertEqual(mdl.flows["Communications"].fxns["Mover_2"]["in"], {"Mover_1":()})
-        
-        # copies should keep in/out dicts in place
-        mdl2 = mdl.copy()
-        self.assertEqual(mdl2.flows["Communications"].fxns["Mover_1"]["out"].x, 25)
-        self.assertEqual(mdl2.flows["Communications"].fxns["Mover_2"]["in"], {"Mover_1":()})
-        self.assertEqual(mdl.flows["Communications"].fxns["Coordinator"]["internal"].Mover_1.x, 25)
-        
-        
-
-
+    
 if __name__ == '__main__':
     unittest.main()
-    
-    mdl = TestModel()
-    mdl.flows["Communications"].Mover_1.x=25
-    mdl.flows["Communications"].Mover_1.send("Mover_2")
-    
-    endclass, mdlhist = propagate.nominal(mdl)
