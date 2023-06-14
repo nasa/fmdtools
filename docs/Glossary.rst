@@ -67,7 +67,7 @@ Glossary
 		A specific sequence of variable values over time which may modify system behavior.
 
 	Approach
-		A set of :term:` scenario` s to simulate a model over to represent certain hazards or parameters of interest. May be generated using :class:`fmdtools.sim.approach.SampleApproach` for fault modes or :class:`fmdtools.sim.approach.NominalApproach` for nominal parameters. 
+		A set of :term:`scenario` s to simulate a model over to represent certain hazards or parameters of interest. May be generated using :class:`fmdtools.sim.approach.SampleApproach` for fault modes or :class:`fmdtools.sim.approach.NominalApproach` for nominal parameters. 
 	
 	Nested Approach
 		The result of simulating a fault sampling :term:`Approach` (:class:`fmdtools.sim.approach.SampleApproach`) within a nominal :term:`Approach` (:class:`fmdtools.sim.approach.NominalApproach`). Created in :func:`fmdtools.sim.propagate.nested_approach`
@@ -82,13 +82,13 @@ Glossary
 		The simulation of :class:`fmdtools.define.model.Model` :term:`behavior` s, including the passing of :term:`flow` s between :term:`function` s and the progression of model states over time.
 	
 	Resilience
-		The expectation of defined performance metrics over time over a set of hazardous :term:` scenario` s, often defined in terms of the deviation from their nominal values.
+		The expectation of defined performance metrics over time over a set of hazardous :term:`scenario` s, often defined in terms of the deviation from their nominal values.
 	
 	End-state
 		The state of a :class:`fmdtools.define.block.Simulable` at the final time-step of a simulation.
 	
 	FMEA
-		A table outlining the risks of hazardous :term:` scenario` s in terms of their rate, severity, and expected risk. By default, the :mod:`fmdtools.analyze.tabulate` module produces cost-based FMEAS, with the metrics of interest being :term:`rate`, :term:`cost`, and :term:`expected cost`, however these functions can be tailored to the metrics of interest.
+		A table outlining the risks of hazardous :term:`scenario` s in terms of their rate, severity, and expected risk. By default, the :mod:`fmdtools.analyze.tabulate` module produces cost-based FMEAS, with the metrics of interest being :term:`rate`, :term:`cost`, and :term:`expected cost`, however these functions can be tailored to the metrics of interest.
 	
 	Behavior Over Time
 		How a the states of a system unfold over time. Defined using :term:`behavior`.
