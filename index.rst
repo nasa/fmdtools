@@ -127,7 +127,7 @@ TABLE OF CONTENTS
  
  README
  docs/Development Guide
- docs/Examples
+ Examples
  docs/Glossary
  docs/fmdtools
  
