@@ -2,15 +2,14 @@
 Description: Plots quantities of interest over time using matplotlib.
 
 Uses the following methods:
-    - :func:`mdlhist`:         plots function and flow histories over time (with different plots for each function/flow)
-    - :func:`mdlhists`:        plots function and flow histories over time on the same plot
+    - :func:`hist`:         plots function and flow histories over time (with different plots for each function/flow)
     - :func:`metric_dist`:     Plots the histogram of given metric(s) separated by comparison groups over a set of scenarios
     - :func:`metric_dist_from`:Plot the distribution of model history function/flow value over at defined time(s) over a number of scenarios.
     - :func:`nominal_vals_1d`: plots the end-state classification of a system over a (1-D) range of nominal runs
     - :func:`nominal_vals_2d`: plots the end-state classification of a system over a (2-D) range of nominal runs
     - :func:`nominal_vals_3d`: plots the end-state classification of a system over a (3-D) range of nominal runs
     - :func:`nominal_factor_comparison`:    gives a bar plot of nominal simulation statistics over given factors
-    - :func:`resilience_factor_comparison`: gives a bar plot of fault simulation statistics over given factors
+    - :func:`nested_factor_comparison`: gives a bar plot of fault simulation statistics over given factors
     - :func:`phases`:          plots the phases of operation that the model progresses through.
     - :func:`samplemetric`:      plots a metric for a single fault sampled by a SampleApproach over time with rates
     - :func:`samplemetrics`:     plots a metric for a set of faults sampled by a SampleApproach over time with rates on separate plots
@@ -896,14 +895,14 @@ def nominal_factor_comparison(comparison_table, metric, ylabel='proportion', fig
     else:       plt.bar(xs,bar, tick_label=labels, linewidth=4)
     return figure
 
-def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False, xlabel=True, error_bars=False):
+def nested_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion', figsize=(12,8), title='', maxy='max', legend="single", stack=False, xlabel=True, error_bars=False):
     """
-    Plots a comparison_table from tabulate.resilience_factor_comparison as a bar plot for each fault scenario/set of fault scenarios.
+    Plots a comparison_table from tabulate.nested_factor_comparison as a bar plot for each fault scenario/set of fault scenarios.
 
     Parameters
     ----------
     comparison_table : pandas table
-        Table from tabulate.resilience_factor_test with factors as rows and fault scenarios as columns
+        Table from tabulate.nested_factor_comparison with factors as rows and fault scenarios as columns
     faults : list, optional
         iterable of faults/fault types to include in the bar plot (the columns of the table). The default is 'all'.
         a dictionary {'fault':'title'} will associate the given fault with a title (otherwise 'fault' is used)
@@ -989,7 +988,7 @@ def resilience_factor_comparison(comparison_table, faults='all', rows=1, stat='p
     return figure
 
 def multibar_helper(ax, bar_index, maxy):
-    """Shared plotting helper for resilience_factor_comparison and nominal_factor_comparison.
+    """Shared plotting helper for nested_factor_comparison and nominal_factor_comparison.
     Adds seperators to table groups (if any), limits the bounds of the plot, adds a grid, etc."""
     ax.set_ylim(top=maxy)
     plt.grid(axis='y')

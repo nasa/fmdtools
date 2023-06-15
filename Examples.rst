@@ -1,14 +1,16 @@
 Examples
 ==============================================
 
-This repository provides several examples models in the `/examples` directory, with some corresponding documentation in the form of notebooks (which may be accessed here). The best place to start on getting acquanted with basic syntax and functionality is the `Pump` example (see below), which demonstrates most of the basic methods/classes in a very basic case study. Other models are further helpful to help demonstrate the full variety of methods/approaches supported in fmdtools and their applcation more advanced use-cases.
+This repository provides several examples models in the `/examples` directory, with some corresponding documentation in the form of notebooks (which may be accessed here). 
+
+**The best place to start** to getting acquanted with basic syntax and functionality is the `Intro to fmdtools <docs/Intro_to_fmdtools.md>`_ workshop, which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to help demonstrate the full variety of methods/approaches supported in fmdtools and their applcation more advanced use-cases.
 
 Pump
 +++++++++++++++++++++++++++++++++++++++++++++
 
 The pump example model is located in `examples/pump/ex_pump.py`, which is then used in the following notebooks:
 
-- **Tutorial** which was designed to provide a basic interactive tutorial for learning basic fmdtools functions (along with the Intro to fmdtools workshop). This tutorial has two components: 
+- **Tutorial** which was designed to provide a basic interactive tutorial for learning basic fmdtools functions (along with the `Intro to fmdtools <docs/Intro_to_fmdtools.md>`_ workshop). This tutorial has two components: 
 
   - `Tutorial_unfilled.ipynb <examples/pump/Tutorial_unfilled.ipynb>`_, which is to be used by students, and has the basic structure without the code filled in
 
