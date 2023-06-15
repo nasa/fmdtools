@@ -1,6 +1,15 @@
 Development Guide
 ===========================
 
+Intro to fmdtools
+--------------------------------
+**The best place to start** to getting acquanted with basic syntax and functionality is the `Intro to fmdtools <Intro_to_fmdtools.md>`_ workshop, which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to help demonstrate the full variety of methods/approaches supported in fmdtools and their applcation more advanced use-cases.
+
+.. toctree::
+   :hidden:
+   
+   Intro_to_fmdtools.md
+
 Contributions
 --------------------------------
 
@@ -122,6 +131,16 @@ There are two major types of tests:
 
 - quantitative tests, which are testing running ``run_all_tests.py``, and
 - qualitative tests, which are the example notebooks
+
+Contributors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See: `CONTRIBUTORS.md <../CONTRIBUTORS.md>`_
+
+.. toctree::
+   :hidden:
+   
+   ../CONTRIBUTORS.md
 
 
 Model Development Best Practices

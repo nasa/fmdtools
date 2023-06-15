@@ -1,4 +1,4 @@
-fmdtools Version |release|.
+fmdtools Version |release|
 ==============================================
 
 .. image:: /docs/figures/logo_detailed.jpg
@@ -6,7 +6,7 @@ fmdtools Version |release|.
    :alt: fmdtools logo (detailed)
 
 Overview
-====================================
+////////////////////////////////////
 
 The main impetus for the development of the fmdtools project was a lack existing tools to enable early function-based fault simulation for early functional hazard assessment. Researchers thus had to re-implement modelling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools resolves this problem by separating resilience modelling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. Towards this end, the fmdtools package provides three major pieces of functionality:
 
@@ -62,7 +62,7 @@ An overview of an earlier version of fmdtools (0.6.2) is provided in the paper:
 fmdtools is a research code and is under active development. As a result, Some use-cases may not work as desired and may change. If you find a bug or would like to contribute, contact the contributors. 
 
 Getting Started
-====================================
+////////////////////////////////////
 
 The latest public version of fmdtools can be downloaded from the `fmdtools github repository <https://github.com/nasa/fmdtools/>`_ e.g., using:
 
@@ -111,8 +111,15 @@ These packages are optional but recommended to enable specific fmdtools use-case
 
 These must be installed (e.g. using ``pip install packagename`` or ``conda install packagename``) them before running any of the codes in the repository. 
 
+
+README
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+See: `README.md <README.md>`_
+
+
 Licenses
-====================================
+////////////////////////////////////
 
 :download:`NASA Open Source Agreement 1.3 <NASA_Open_Source_Agreement_fmdtools.pdf>`
 
@@ -120,12 +127,12 @@ Licenses
    :literal:
 
 TABLE OF CONTENTS
-==============================================
+////////////////////////////////////
 
 .. toctree::
  :glob:
  
- README
+ index
  docs/Development Guide
  Examples
  docs/Glossary

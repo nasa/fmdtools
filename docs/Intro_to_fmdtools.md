@@ -1,11 +1,14 @@
 ---
+title: Intro to fmdtools
+description: Intro to resilience modelling, simulation, and visualization in Python with fmdtools.
+paginate: true
 marp: true
 ---
 ![fmdtools logo](/docs/figures/logo.png)
 
 # Intro to resilience modelling, simulation, and visualization in Python with fmdtools.
-## Author: Daniel Hulse 
-## Version: 2.0-alpha
+### Author: Daniel Hulse 
+### Version: 2.0-alpha
 
 -----------------
 
@@ -212,3 +215,109 @@ In a single timestep:
 
 - Model increments (simulated + history updated) over each time-step until a **defined final time-step** or **specified indicator returns true**. 
 
+-----------------
+
+# Simulation Concepts: Types of Simulations
+
+![Dynamic Propagation](/docs/figures/simulation_types.png)
+
+For more info, (syntax/arguments), see documentation for [`fmdtools.sim.propagate`](https://nasa.github.io/fmdtools/docs/fmdtools.sim.html#fmdtools-sim-propagate)
+
+-----------------
+
+# Simulation Concepts: Sampling Approaches
+
+These classes define **multi-run simulations** which can be used to quantify uncertain performance/resiliences:
+
+- **SampleApproach**: Which faults to sample and when
+    - Relies on **mode** information encoded in the model
+    - Simulated using `propagate.approach()`
+
+- **NominalApproach**: Nominal parameters or random seeds to sample
+    - Can be simulated in `propagate.nominal_approach()`
+    - Can be simulated in conjunction with faults using `propagate.nested_approach`
+
+See docs for: [`fmdtools.sim.approach`](https://nasa.github.io/fmdtools/docs/fmdtools.sim.html#module-fmdtools.sim.approach)
+
+-----------------
+
+# Simulation Concepts: Things to Consider
+
+**Static/Dynamic propagation:** How function states propagate to each other in a single time-step and multiple time-steps
+- Undirected graph representation—states can effect all other connected states, and vice versa, in any order
+
+**Stochastic Propagation:** Whether and how stochastic states are instantiated over time
+- e.g. do we run with the “default” values of parameters, or do we sample from a random number generator?
+
+**Breadth of Scenarios:** How hazards are represented as discrete scenarios to simulate
+- What set of joint faults do we use? How many times are sampled?
+- Operational scenarios and joint operational/fault scenarios
+
+-----------------
+
+# Activity: Simulate the Model
+
+Run fault propagation methods:
+- `propagate.nominal()`
+- `propagate.one_fault()`
+- `propagate.approach()`
+
+What do the results look like? Explore data structures:
+- `analyze.result.Result`
+- `analyze.result.History`
+
+Explore:
+- What happens when you change `SampleApproach` parameters?
+- What happens when you change `Model` parameters?
+- How do these methods compare in terms of computational time?
+
+-----------------
+
+# Analysis Modules
+
+![Analyze Modules width:960px](/docs/figures/analyze_module_structure.png)
+
+See docs for: [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs/fmdtools.analyze.html)
+
+-----------------
+
+# Analysis Activity
+
+**Visualize the results:**
+- Show model graph
+- Show nominal performances
+- Show performances in a nominal scenario
+- Make a scenario-based fmea
+
+**Explore:**
+- How can you show only the parameters you want? Or change the formatting?
+- What does the behavior under other faults look like?
+- What other analyses can you perform with these results?
+
+-----------------
+
+# Conclusions/Summary
+
+- **fmdtools** is an environment for designing resilient systems
+    - `/define` enables model definition
+    - `/sim` is used to define simulations
+    - `/analyze` is used to analyze and visualize simulation results
+- I hope you agree that it has some powerful features!
+    - Modelling expressiveness and clarity
+    - Types of simulations that can be run
+    - Powerful but easy-to-leverage plug-and-play analyses
+
+-----------------
+
+# Further Reading/Links
+
+- More advanced topics ([see examples](https://nasa.github.io/fmdtools/docs/Examples.html)):
+    - Search and optimization
+    - Human/AI Modelling
+    - Systems-of-Systems modeling
+    - Modelling Stochastic Behavior
+    - ... and more
+- [Model Development Guide](https://nasa.github.io/fmdtools/docs/Development%20Guide.html#model-development-best-practices): Has best practices for developing models in a strategic way (especially helpful for compelx models)
+- Overview Paper: 
+    - [Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., & Goebel, K. (2021). fmdtools: A fault propagation toolkit for resilience assessment in early design. International Journal of Prognostics and Health Management, 12(3).](http://papers.phmsociety.org/index.php/ijphm/article/view/2954)
+ 
