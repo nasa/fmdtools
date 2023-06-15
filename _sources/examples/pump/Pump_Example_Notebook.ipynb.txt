@@ -15,10 +15,10 @@
    "execution_count": 1,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:40.331035Z",
-     "iopub.status.busy": "2023-06-09T23:34:40.330038Z",
-     "iopub.status.idle": "2023-06-09T23:34:41.507190Z",
-     "shell.execute_reply": "2023-06-09T23:34:41.506284Z"
+     "iopub.execute_input": "2023-06-15T17:19:25.612449Z",
+     "iopub.status.busy": "2023-06-15T17:19:25.612449Z",
+     "iopub.status.idle": "2023-06-15T17:19:26.846438Z",
+     "shell.execute_reply": "2023-06-15T17:19:26.846438Z"
     }
    },
    "outputs": [],
@@ -43,10 +43,10 @@
    "execution_count": 2,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:41.510202Z",
-     "iopub.status.busy": "2023-06-09T23:34:41.510202Z",
-     "iopub.status.idle": "2023-06-09T23:34:41.523532Z",
-     "shell.execute_reply": "2023-06-09T23:34:41.521522Z"
+     "iopub.execute_input": "2023-06-15T17:19:26.848566Z",
+     "iopub.status.busy": "2023-06-15T17:19:26.848566Z",
+     "iopub.status.idle": "2023-06-15T17:19:26.868983Z",
+     "shell.execute_reply": "2023-06-15T17:19:26.866910Z"
     }
    },
    "outputs": [],
@@ -66,17 +66,17 @@
    "execution_count": 3,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:41.530015Z",
-     "iopub.status.busy": "2023-06-09T23:34:41.530015Z",
-     "iopub.status.idle": "2023-06-09T23:34:41.536809Z",
-     "shell.execute_reply": "2023-06-09T23:34:41.536809Z"
+     "iopub.execute_input": "2023-06-15T17:19:26.877050Z",
+     "iopub.status.busy": "2023-06-15T17:19:26.868983Z",
+     "iopub.status.idle": "2023-06-15T17:19:26.887436Z",
+     "shell.execute_reply": "2023-06-15T17:19:26.887436Z"
     }
    },
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "Pump model at 0x192a5ccda00 \n",
+       "Pump model at 0x21605fb1940 \n",
        "FUNCTIONS: \n",
        "import_ee ImportEE\n",
        "- ImportEEState(effstate=1.0)\n",
@@ -125,10 +125,10 @@
    "execution_count": 4,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:41.539409Z",
-     "iopub.status.busy": "2023-06-09T23:34:41.539409Z",
-     "iopub.status.idle": "2023-06-09T23:34:41.553495Z",
-     "shell.execute_reply": "2023-06-09T23:34:41.552493Z"
+     "iopub.execute_input": "2023-06-15T17:19:26.887436Z",
+     "iopub.status.busy": "2023-06-15T17:19:26.887436Z",
+     "iopub.status.idle": "2023-06-15T17:19:26.903558Z",
+     "shell.execute_reply": "2023-06-15T17:19:26.903558Z"
     }
    },
    "outputs": [],
@@ -141,10 +141,10 @@
    "execution_count": 5,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:41.556356Z",
-     "iopub.status.busy": "2023-06-09T23:34:41.556356Z",
-     "iopub.status.idle": "2023-06-09T23:34:41.790659Z",
-     "shell.execute_reply": "2023-06-09T23:34:41.789609Z"
+     "iopub.execute_input": "2023-06-15T17:19:26.903558Z",
+     "iopub.status.busy": "2023-06-15T17:19:26.903558Z",
+     "iopub.status.idle": "2023-06-15T17:19:27.150742Z",
+     "shell.execute_reply": "2023-06-15T17:19:27.150742Z"
     }
    },
    "outputs": [
@@ -176,10 +176,10 @@
    "execution_count": 6,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:41.797633Z",
-     "iopub.status.busy": "2023-06-09T23:34:41.796642Z",
-     "iopub.status.idle": "2023-06-09T23:34:41.916206Z",
-     "shell.execute_reply": "2023-06-09T23:34:41.915310Z"
+     "iopub.execute_input": "2023-06-15T17:19:27.150742Z",
+     "iopub.status.busy": "2023-06-15T17:19:27.150742Z",
+     "iopub.status.idle": "2023-06-15T17:19:27.282573Z",
+     "shell.execute_reply": "2023-06-15T17:19:27.282573Z"
     }
    },
    "outputs": [
@@ -238,10 +238,10 @@
    "execution_count": 7,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:41.918212Z",
-     "iopub.status.busy": "2023-06-09T23:34:41.918212Z",
-     "iopub.status.idle": "2023-06-09T23:34:41.949126Z",
-     "shell.execute_reply": "2023-06-09T23:34:41.947125Z"
+     "iopub.execute_input": "2023-06-15T17:19:27.288620Z",
+     "iopub.status.busy": "2023-06-15T17:19:27.288620Z",
+     "iopub.status.idle": "2023-06-15T17:19:27.320239Z",
+     "shell.execute_reply": "2023-06-15T17:19:27.320239Z"
     }
    },
    "outputs": [],
@@ -261,17 +261,17 @@
    "execution_count": 8,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:41.954111Z",
-     "iopub.status.busy": "2023-06-09T23:34:41.954111Z",
-     "iopub.status.idle": "2023-06-09T23:34:41.962090Z",
-     "shell.execute_reply": "2023-06-09T23:34:41.962090Z"
+     "iopub.execute_input": "2023-06-15T17:19:27.320239Z",
+     "iopub.status.busy": "2023-06-15T17:19:27.320239Z",
+     "iopub.status.idle": "2023-06-15T17:19:27.351507Z",
+     "shell.execute_reply": "2023-06-15T17:19:27.351507Z"
     }
    },
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "graph: <fmdtools.analyze.graph.ModelGraph object at 0x00000192A65F4EE0>"
+       "graph: <fmdtools.analyze.graph.ModelGraph object at 0x00000216068E57F0>"
       ]
      },
      "execution_count": 8,
@@ -288,17 +288,17 @@
    "execution_count": 9,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:41.965117Z",
-     "iopub.status.busy": "2023-06-09T23:34:41.964118Z",
-     "iopub.status.idle": "2023-06-09T23:34:41.978817Z",
-     "shell.execute_reply": "2023-06-09T23:34:41.977906Z"
+     "iopub.execute_input": "2023-06-15T17:19:27.351507Z",
+     "iopub.status.busy": "2023-06-15T17:19:27.351507Z",
+     "iopub.status.idle": "2023-06-15T17:19:27.367135Z",
+     "shell.execute_reply": "2023-06-15T17:19:27.367135Z"
     }
    },
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<fmdtools.analyze.graph.ModelGraph at 0x192a65f4ee0>"
+       "<fmdtools.analyze.graph.ModelGraph at 0x216068e57f0>"
       ]
      },
      "execution_count": 9,
@@ -322,10 +322,10 @@
    "execution_count": 10,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:41.981167Z",
-     "iopub.status.busy": "2023-06-09T23:34:41.981167Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.168966Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.167907Z"
+     "iopub.execute_input": "2023-06-15T17:19:27.367135Z",
+     "iopub.status.busy": "2023-06-15T17:19:27.367135Z",
+     "iopub.status.idle": "2023-06-15T17:19:27.582956Z",
+     "shell.execute_reply": "2023-06-15T17:19:27.582956Z"
     }
    },
    "outputs": [
@@ -363,10 +363,10 @@
    "execution_count": 11,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.171253Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.171253Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.184623Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.183393Z"
+     "iopub.execute_input": "2023-06-15T17:19:27.589501Z",
+     "iopub.status.busy": "2023-06-15T17:19:27.589501Z",
+     "iopub.status.idle": "2023-06-15T17:19:27.605169Z",
+     "shell.execute_reply": "2023-06-15T17:19:27.605169Z"
     }
    },
    "outputs": [
@@ -420,10 +420,10 @@
    "execution_count": 12,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.186847Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.186847Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.204167Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.199146Z"
+     "iopub.execute_input": "2023-06-15T17:19:27.605169Z",
+     "iopub.status.busy": "2023-06-15T17:19:27.605169Z",
+     "iopub.status.idle": "2023-06-15T17:19:27.636593Z",
+     "shell.execute_reply": "2023-06-15T17:19:27.636593Z"
     }
    },
    "outputs": [
@@ -463,10 +463,10 @@
    "execution_count": 13,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.210046Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.210046Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.483401Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.481801Z"
+     "iopub.execute_input": "2023-06-15T17:19:27.636593Z",
+     "iopub.status.busy": "2023-06-15T17:19:27.636593Z",
+     "iopub.status.idle": "2023-06-15T17:19:27.943298Z",
+     "shell.execute_reply": "2023-06-15T17:19:27.943298Z"
     }
    },
    "outputs": [
@@ -505,10 +505,10 @@
    "execution_count": 14,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.490137Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.490137Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.561302Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.560265Z"
+     "iopub.execute_input": "2023-06-15T17:19:27.945347Z",
+     "iopub.status.busy": "2023-06-15T17:19:27.945347Z",
+     "iopub.status.idle": "2023-06-15T17:19:27.984456Z",
+     "shell.execute_reply": "2023-06-15T17:19:27.984456Z"
     }
    },
    "outputs": [
@@ -933,10 +933,10 @@
    "execution_count": 15,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.563669Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.563669Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.592993Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.591992Z"
+     "iopub.execute_input": "2023-06-15T17:19:27.986525Z",
+     "iopub.status.busy": "2023-06-15T17:19:27.986525Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.020360Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.020360Z"
     }
    },
    "outputs": [],
@@ -957,10 +957,10 @@
    "execution_count": 16,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.595260Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.595260Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.608891Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.607892Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.020360Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.020360Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.035970Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.035970Z"
     }
    },
    "outputs": [
@@ -1000,10 +1000,10 @@
    "execution_count": 17,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.611886Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.611886Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.624832Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.623831Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.035970Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.035970Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.051599Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.051599Z"
     }
    },
    "outputs": [],
@@ -1016,10 +1016,10 @@
    "execution_count": 18,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.627021Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.627021Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.640679Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.639679Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.051599Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.051599Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.082843Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.082843Z"
     }
    },
    "outputs": [
@@ -1046,10 +1046,10 @@
    "execution_count": 19,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.643705Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.642708Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.662100Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.656131Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.082843Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.082843Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.120776Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.120776Z"
     }
    },
    "outputs": [
@@ -1558,10 +1558,10 @@
    "execution_count": 20,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.665095Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.664097Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.671956Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.671956Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.120776Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.120776Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.136465Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.136465Z"
     }
    },
    "outputs": [
@@ -1573,7 +1573,7 @@
        "endclass.expected cost: 1595000.0000000005\n",
        "endfaults: {'import_ee': ['no_v'], 'move_water': ['short']}\n",
        "faultprops: {'import_ee': {'no_v': Fault(dist=0.8, oppvect=[0, 1, 0], rcost=10000, probtype='rate', units='hr')}, 'move_water': {'short': Fault(dist=1.0, oppvect=[1.5, 1.0, 1.0], rcost=10000, probtype='rate', units='hr')}}\n",
-       "graph: <fmdtools.analyze.graph.ModelGraph object at 0x00000192A6879520>"
+       "graph: <fmdtools.analyze.graph.ModelGraph object at 0x0000021606B5B4C0>"
       ]
      },
      "execution_count": 20,
@@ -1597,10 +1597,10 @@
    "execution_count": 21,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.675176Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.675176Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.910004Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.909387Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.136465Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.136465Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.383938Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.383938Z"
     }
    },
    "outputs": [
@@ -1624,10 +1624,10 @@
    "execution_count": 22,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.912488Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.912488Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.926202Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.925176Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.383938Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.383938Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.399434Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.399434Z"
     }
    },
    "outputs": [
@@ -1676,10 +1676,10 @@
    "execution_count": 23,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.928397Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.928397Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.941848Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.940834Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.405450Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.405450Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.421304Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.421304Z"
     }
    },
    "outputs": [],
@@ -1699,10 +1699,10 @@
    "execution_count": 24,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.944865Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.944865Z",
-     "iopub.status.idle": "2023-06-09T23:34:42.989284Z",
-     "shell.execute_reply": "2023-06-09T23:34:42.988246Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.421304Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.421304Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.468421Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.468421Z"
     }
    },
    "outputs": [],
@@ -1723,10 +1723,10 @@
    "execution_count": 25,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:42.992274Z",
-     "iopub.status.busy": "2023-06-09T23:34:42.992274Z",
-     "iopub.status.idle": "2023-06-09T23:34:43.258012Z",
-     "shell.execute_reply": "2023-06-09T23:34:43.257000Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.468421Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.468421Z",
+     "iopub.status.idle": "2023-06-15T17:19:28.718446Z",
+     "shell.execute_reply": "2023-06-15T17:19:28.718446Z"
     }
    },
    "outputs": [
@@ -1764,10 +1764,10 @@
    "execution_count": 26,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:43.260992Z",
-     "iopub.status.busy": "2023-06-09T23:34:43.260992Z",
-     "iopub.status.idle": "2023-06-09T23:34:52.585831Z",
-     "shell.execute_reply": "2023-06-09T23:34:52.584826Z"
+     "iopub.execute_input": "2023-06-15T17:19:28.720571Z",
+     "iopub.status.busy": "2023-06-15T17:19:28.720571Z",
+     "iopub.status.idle": "2023-06-15T17:19:38.408857Z",
+     "shell.execute_reply": "2023-06-15T17:19:38.408857Z"
     }
    },
    "outputs": [
@@ -1959,42 +1959,42 @@
        "</style>\n",
        "\n",
        "<div class=\"animation\">\n",
-       "  <img id=\"_anim_img5b57c94a9b9a44378e8b26a2af51a7cc\">\n",
+       "  <img id=\"_anim_img77b81fced0d545958cf2e55c20091c82\">\n",
        "  <div class=\"anim-controls\">\n",
-       "    <input id=\"_anim_slider5b57c94a9b9a44378e8b26a2af51a7cc\" type=\"range\" class=\"anim-slider\"\n",
+       "    <input id=\"_anim_slider77b81fced0d545958cf2e55c20091c82\" type=\"range\" class=\"anim-slider\"\n",
        "           name=\"points\" min=\"0\" max=\"1\" step=\"1\" value=\"0\"\n",
-       "           oninput=\"anim5b57c94a9b9a44378e8b26a2af51a7cc.set_frame(parseInt(this.value));\"></input>\n",
+       "           oninput=\"anim77b81fced0d545958cf2e55c20091c82.set_frame(parseInt(this.value));\"></input>\n",
        "    <div class=\"anim-buttons\">\n",
-       "      <button title=\"Decrease speed\" aria-label=\"Decrease speed\" onclick=\"anim5b57c94a9b9a44378e8b26a2af51a7cc.slower()\">\n",
+       "      <button title=\"Decrease speed\" aria-label=\"Decrease speed\" onclick=\"anim77b81fced0d545958cf2e55c20091c82.slower()\">\n",
        "          <i class=\"fa fa-minus\"></i></button>\n",
-       "      <button title=\"First frame\" aria-label=\"First frame\" onclick=\"anim5b57c94a9b9a44378e8b26a2af51a7cc.first_frame()\">\n",
+       "      <button title=\"First frame\" aria-label=\"First frame\" onclick=\"anim77b81fced0d545958cf2e55c20091c82.first_frame()\">\n",
        "        <i class=\"fa fa-fast-backward\"></i></button>\n",
-       "      <button title=\"Previous frame\" aria-label=\"Previous frame\" onclick=\"anim5b57c94a9b9a44378e8b26a2af51a7cc.previous_frame()\">\n",
+       "      <button title=\"Previous frame\" aria-label=\"Previous frame\" onclick=\"anim77b81fced0d545958cf2e55c20091c82.previous_frame()\">\n",
        "          <i class=\"fa fa-step-backward\"></i></button>\n",
-       "      <button title=\"Play backwards\" aria-label=\"Play backwards\" onclick=\"anim5b57c94a9b9a44378e8b26a2af51a7cc.reverse_animation()\">\n",
+       "      <button title=\"Play backwards\" aria-label=\"Play backwards\" onclick=\"anim77b81fced0d545958cf2e55c20091c82.reverse_animation()\">\n",
        "          <i class=\"fa fa-play fa-flip-horizontal\"></i></button>\n",
-       "      <button title=\"Pause\" aria-label=\"Pause\" onclick=\"anim5b57c94a9b9a44378e8b26a2af51a7cc.pause_animation()\">\n",
+       "      <button title=\"Pause\" aria-label=\"Pause\" onclick=\"anim77b81fced0d545958cf2e55c20091c82.pause_animation()\">\n",
        "          <i class=\"fa fa-pause\"></i></button>\n",
-       "      <button title=\"Play\" aria-label=\"Play\" onclick=\"anim5b57c94a9b9a44378e8b26a2af51a7cc.play_animation()\">\n",
+       "      <button title=\"Play\" aria-label=\"Play\" onclick=\"anim77b81fced0d545958cf2e55c20091c82.play_animation()\">\n",
        "          <i class=\"fa fa-play\"></i></button>\n",
-       "      <button title=\"Next frame\" aria-label=\"Next frame\" onclick=\"anim5b57c94a9b9a44378e8b26a2af51a7cc.next_frame()\">\n",
+       "      <button title=\"Next frame\" aria-label=\"Next frame\" onclick=\"anim77b81fced0d545958cf2e55c20091c82.next_frame()\">\n",
        "          <i class=\"fa fa-step-forward\"></i></button>\n",
-       "      <button title=\"Last frame\" aria-label=\"Last frame\" onclick=\"anim5b57c94a9b9a44378e8b26a2af51a7cc.last_frame()\">\n",
+       "      <button title=\"Last frame\" aria-label=\"Last frame\" onclick=\"anim77b81fced0d545958cf2e55c20091c82.last_frame()\">\n",
        "          <i class=\"fa fa-fast-forward\"></i></button>\n",
-       "      <button title=\"Increase speed\" aria-label=\"Increase speed\" onclick=\"anim5b57c94a9b9a44378e8b26a2af51a7cc.faster()\">\n",
+       "      <button title=\"Increase speed\" aria-label=\"Increase speed\" onclick=\"anim77b81fced0d545958cf2e55c20091c82.faster()\">\n",
        "          <i class=\"fa fa-plus\"></i></button>\n",
        "    </div>\n",
-       "    <form title=\"Repetition mode\" aria-label=\"Repetition mode\" action=\"#n\" name=\"_anim_loop_select5b57c94a9b9a44378e8b26a2af51a7cc\"\n",
+       "    <form title=\"Repetition mode\" aria-label=\"Repetition mode\" action=\"#n\" name=\"_anim_loop_select77b81fced0d545958cf2e55c20091c82\"\n",
        "          class=\"anim-state\">\n",
-       "      <input type=\"radio\" name=\"state\" value=\"once\" id=\"_anim_radio1_5b57c94a9b9a44378e8b26a2af51a7cc\"\n",
+       "      <input type=\"radio\" name=\"state\" value=\"once\" id=\"_anim_radio1_77b81fced0d545958cf2e55c20091c82\"\n",
        "             >\n",
-       "      <label for=\"_anim_radio1_5b57c94a9b9a44378e8b26a2af51a7cc\">Once</label>\n",
-       "      <input type=\"radio\" name=\"state\" value=\"loop\" id=\"_anim_radio2_5b57c94a9b9a44378e8b26a2af51a7cc\"\n",
+       "      <label for=\"_anim_radio1_77b81fced0d545958cf2e55c20091c82\">Once</label>\n",
+       "      <input type=\"radio\" name=\"state\" value=\"loop\" id=\"_anim_radio2_77b81fced0d545958cf2e55c20091c82\"\n",
        "             checked>\n",
-       "      <label for=\"_anim_radio2_5b57c94a9b9a44378e8b26a2af51a7cc\">Loop</label>\n",
-       "      <input type=\"radio\" name=\"state\" value=\"reflect\" id=\"_anim_radio3_5b57c94a9b9a44378e8b26a2af51a7cc\"\n",
+       "      <label for=\"_anim_radio2_77b81fced0d545958cf2e55c20091c82\">Loop</label>\n",
+       "      <input type=\"radio\" name=\"state\" value=\"reflect\" id=\"_anim_radio3_77b81fced0d545958cf2e55c20091c82\"\n",
        "             >\n",
-       "      <label for=\"_anim_radio3_5b57c94a9b9a44378e8b26a2af51a7cc\">Reflect</label>\n",
+       "      <label for=\"_anim_radio3_77b81fced0d545958cf2e55c20091c82\">Reflect</label>\n",
        "    </form>\n",
        "  </div>\n",
        "</div>\n",
@@ -2004,9 +2004,9 @@
        "  /* Instantiate the Animation class. */\n",
        "  /* The IDs given should match those used in the template above. */\n",
        "  (function() {\n",
-       "    var img_id = \"_anim_img5b57c94a9b9a44378e8b26a2af51a7cc\";\n",
-       "    var slider_id = \"_anim_slider5b57c94a9b9a44378e8b26a2af51a7cc\";\n",
-       "    var loop_select_id = \"_anim_loop_select5b57c94a9b9a44378e8b26a2af51a7cc\";\n",
+       "    var img_id = \"_anim_img77b81fced0d545958cf2e55c20091c82\";\n",
+       "    var slider_id = \"_anim_slider77b81fced0d545958cf2e55c20091c82\";\n",
+       "    var loop_select_id = \"_anim_loop_select77b81fced0d545958cf2e55c20091c82\";\n",
        "    var frames = new Array(56);\n",
        "    \n",
        "  frames[0] = \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAAEgCAYAAADVKCZpAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\\\n",
@@ -22400,7 +22400,7 @@
        "    /* set a timeout to make sure all the above elements are created before\n",
        "       the object is initialized. */\n",
        "    setTimeout(function() {\n",
-       "        anim5b57c94a9b9a44378e8b26a2af51a7cc = new Animation(frames, img_id, slider_id, 200.0,\n",
+       "        anim77b81fced0d545958cf2e55c20091c82 = new Animation(frames, img_id, slider_id, 200.0,\n",
        "                                 loop_select_id);\n",
        "    }, 0);\n",
        "  })()\n",
@@ -22443,10 +22443,10 @@
    "execution_count": 27,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:52.592851Z",
-     "iopub.status.busy": "2023-06-09T23:34:52.592851Z",
-     "iopub.status.idle": "2023-06-09T23:34:52.775122Z",
-     "shell.execute_reply": "2023-06-09T23:34:52.774051Z"
+     "iopub.execute_input": "2023-06-15T17:19:38.408857Z",
+     "iopub.status.busy": "2023-06-15T17:19:38.408857Z",
+     "iopub.status.idle": "2023-06-15T17:19:38.609476Z",
+     "shell.execute_reply": "2023-06-15T17:19:38.609476Z"
     }
    },
    "outputs": [
@@ -22477,10 +22477,10 @@
    "execution_count": 28,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:52.777257Z",
-     "iopub.status.busy": "2023-06-09T23:34:52.777257Z",
-     "iopub.status.idle": "2023-06-09T23:34:52.791070Z",
-     "shell.execute_reply": "2023-06-09T23:34:52.790069Z"
+     "iopub.execute_input": "2023-06-15T17:19:38.609476Z",
+     "iopub.status.busy": "2023-06-15T17:19:38.609476Z",
+     "iopub.status.idle": "2023-06-15T17:19:38.625083Z",
+     "shell.execute_reply": "2023-06-15T17:19:38.625083Z"
     }
    },
    "outputs": [
@@ -22513,10 +22513,10 @@
    "execution_count": 29,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:52.793178Z",
-     "iopub.status.busy": "2023-06-09T23:34:52.793178Z",
-     "iopub.status.idle": "2023-06-09T23:34:52.948297Z",
-     "shell.execute_reply": "2023-06-09T23:34:52.948297Z"
+     "iopub.execute_input": "2023-06-15T17:19:38.625083Z",
+     "iopub.status.busy": "2023-06-15T17:19:38.625083Z",
+     "iopub.status.idle": "2023-06-15T17:19:38.810078Z",
+     "shell.execute_reply": "2023-06-15T17:19:38.810078Z"
     }
    },
    "outputs": [
@@ -22552,10 +22552,10 @@
    "execution_count": 30,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:52.951039Z",
-     "iopub.status.busy": "2023-06-09T23:34:52.951039Z",
-     "iopub.status.idle": "2023-06-09T23:34:52.996355Z",
-     "shell.execute_reply": "2023-06-09T23:34:52.995353Z"
+     "iopub.execute_input": "2023-06-15T17:19:38.810078Z",
+     "iopub.status.busy": "2023-06-15T17:19:38.810078Z",
+     "iopub.status.idle": "2023-06-15T17:19:38.856952Z",
+     "shell.execute_reply": "2023-06-15T17:19:38.856952Z"
     },
     "scrolled": true
    },
@@ -23581,10 +23581,10 @@
    "execution_count": 31,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:52.999380Z",
-     "iopub.status.busy": "2023-06-09T23:34:52.998384Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.012389Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.011384Z"
+     "iopub.execute_input": "2023-06-15T17:19:38.863502Z",
+     "iopub.status.busy": "2023-06-15T17:19:38.863502Z",
+     "iopub.status.idle": "2023-06-15T17:19:38.880481Z",
+     "shell.execute_reply": "2023-06-15T17:19:38.879183Z"
     }
    },
    "outputs": [],
@@ -23597,10 +23597,10 @@
    "execution_count": 32,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.021409Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.020422Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.042381Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.042381Z"
+     "iopub.execute_input": "2023-06-15T17:19:38.885826Z",
+     "iopub.status.busy": "2023-06-15T17:19:38.885826Z",
+     "iopub.status.idle": "2023-06-15T17:19:38.902053Z",
+     "shell.execute_reply": "2023-06-15T17:19:38.902053Z"
     }
    },
    "outputs": [
@@ -23990,10 +23990,10 @@
    "execution_count": 33,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.045299Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.045299Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.058328Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.058328Z"
+     "iopub.execute_input": "2023-06-15T17:19:38.902053Z",
+     "iopub.status.busy": "2023-06-15T17:19:38.902053Z",
+     "iopub.status.idle": "2023-06-15T17:19:38.933288Z",
+     "shell.execute_reply": "2023-06-15T17:19:38.933288Z"
     }
    },
    "outputs": [
@@ -24300,10 +24300,10 @@
    "execution_count": 34,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.062254Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.062254Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.075362Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.074318Z"
+     "iopub.execute_input": "2023-06-15T17:19:38.933288Z",
+     "iopub.status.busy": "2023-06-15T17:19:38.933288Z",
+     "iopub.status.idle": "2023-06-15T17:19:38.948853Z",
+     "shell.execute_reply": "2023-06-15T17:19:38.948853Z"
     }
    },
    "outputs": [
@@ -24328,10 +24328,10 @@
    "execution_count": 35,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.080348Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.080348Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.090657Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.089607Z"
+     "iopub.execute_input": "2023-06-15T17:19:38.948853Z",
+     "iopub.status.busy": "2023-06-15T17:19:38.948853Z",
+     "iopub.status.idle": "2023-06-15T17:19:38.979595Z",
+     "shell.execute_reply": "2023-06-15T17:19:38.979595Z"
     }
    },
    "outputs": [
@@ -24364,10 +24364,10 @@
    "execution_count": 36,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.098590Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.097593Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.137893Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.136838Z"
+     "iopub.execute_input": "2023-06-15T17:19:38.979595Z",
+     "iopub.status.busy": "2023-06-15T17:19:38.979595Z",
+     "iopub.status.idle": "2023-06-15T17:19:39.026459Z",
+     "shell.execute_reply": "2023-06-15T17:19:39.026459Z"
     }
    },
    "outputs": [],
@@ -24382,10 +24382,10 @@
    "execution_count": 37,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.144856Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.143877Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.153902Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.152855Z"
+     "iopub.execute_input": "2023-06-15T17:19:39.026459Z",
+     "iopub.status.busy": "2023-06-15T17:19:39.026459Z",
+     "iopub.status.idle": "2023-06-15T17:19:39.042080Z",
+     "shell.execute_reply": "2023-06-15T17:19:39.042080Z"
     }
    },
    "outputs": [
@@ -24409,10 +24409,10 @@
    "execution_count": 38,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.160877Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.159894Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.169579Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.168529Z"
+     "iopub.execute_input": "2023-06-15T17:19:39.042080Z",
+     "iopub.status.busy": "2023-06-15T17:19:39.042080Z",
+     "iopub.status.idle": "2023-06-15T17:19:39.057704Z",
+     "shell.execute_reply": "2023-06-15T17:19:39.057704Z"
     }
    },
    "outputs": [
@@ -24436,10 +24436,10 @@
    "execution_count": 39,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.176549Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.175567Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.358879Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.357878Z"
+     "iopub.execute_input": "2023-06-15T17:19:39.064266Z",
+     "iopub.status.busy": "2023-06-15T17:19:39.064266Z",
+     "iopub.status.idle": "2023-06-15T17:19:39.258364Z",
+     "shell.execute_reply": "2023-06-15T17:19:39.258364Z"
     }
    },
    "outputs": [
@@ -24463,10 +24463,10 @@
    "execution_count": 40,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.361099Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.361099Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.374738Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.373657Z"
+     "iopub.execute_input": "2023-06-15T17:19:39.258364Z",
+     "iopub.status.busy": "2023-06-15T17:19:39.258364Z",
+     "iopub.status.idle": "2023-06-15T17:19:39.280591Z",
+     "shell.execute_reply": "2023-06-15T17:19:39.280591Z"
     }
    },
    "outputs": [
@@ -24499,10 +24499,10 @@
    "execution_count": 41,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.376963Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.376963Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.534543Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.531551Z"
+     "iopub.execute_input": "2023-06-15T17:19:39.280591Z",
+     "iopub.status.busy": "2023-06-15T17:19:39.280591Z",
+     "iopub.status.idle": "2023-06-15T17:19:39.443382Z",
+     "shell.execute_reply": "2023-06-15T17:19:39.443382Z"
     }
    },
    "outputs": [
@@ -24539,10 +24539,10 @@
    "execution_count": 42,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.539530Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.539530Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.547509Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.547509Z"
+     "iopub.execute_input": "2023-06-15T17:19:39.443382Z",
+     "iopub.status.busy": "2023-06-15T17:19:39.443382Z",
+     "iopub.status.idle": "2023-06-15T17:19:39.458982Z",
+     "shell.execute_reply": "2023-06-15T17:19:39.458982Z"
     }
    },
    "outputs": [],
@@ -24556,10 +24556,10 @@
    "execution_count": 43,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.550501Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.550501Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.563466Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.563466Z"
+     "iopub.execute_input": "2023-06-15T17:19:39.465524Z",
+     "iopub.status.busy": "2023-06-15T17:19:39.465524Z",
+     "iopub.status.idle": "2023-06-15T17:19:39.481248Z",
+     "shell.execute_reply": "2023-06-15T17:19:39.481248Z"
     }
    },
    "outputs": [
@@ -24600,10 +24600,10 @@
    "execution_count": 44,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.566458Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.566458Z",
-     "iopub.status.idle": "2023-06-09T23:34:53.767919Z",
-     "shell.execute_reply": "2023-06-09T23:34:53.767919Z"
+     "iopub.execute_input": "2023-06-15T17:19:39.481248Z",
+     "iopub.status.busy": "2023-06-15T17:19:39.481248Z",
+     "iopub.status.idle": "2023-06-15T17:19:39.697433Z",
+     "shell.execute_reply": "2023-06-15T17:19:39.697433Z"
     },
     "scrolled": true
    },
@@ -24647,10 +24647,10 @@
    "execution_count": 45,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:53.770911Z",
-     "iopub.status.busy": "2023-06-09T23:34:53.770911Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.007780Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.006750Z"
+     "iopub.execute_input": "2023-06-15T17:19:39.697433Z",
+     "iopub.status.busy": "2023-06-15T17:19:39.697433Z",
+     "iopub.status.idle": "2023-06-15T17:19:39.928915Z",
+     "shell.execute_reply": "2023-06-15T17:19:39.928915Z"
     }
    },
    "outputs": [
@@ -24675,10 +24675,10 @@
    "execution_count": 46,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.014734Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.014734Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.244975Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.243970Z"
+     "iopub.execute_input": "2023-06-15T17:19:39.928915Z",
+     "iopub.status.busy": "2023-06-15T17:19:39.928915Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.160492Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.160492Z"
     }
    },
    "outputs": [
@@ -24715,10 +24715,10 @@
    "execution_count": 47,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.251022Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.251022Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.511289Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.511289Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.166997Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.166997Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.460155Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.460155Z"
     }
    },
    "outputs": [
@@ -24735,7 +24735,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  33%|███▎      | 7/21 [00:00<00:00, 65.60it/s]"
+      "SCENARIOS COMPLETE:  29%|██▊       | 6/21 [00:00<00:00, 59.82it/s]"
      ]
     },
     {
@@ -24743,7 +24743,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  90%|█████████ | 19/21 [00:00<00:00, 94.08it/s]"
+      "SCENARIOS COMPLETE:  67%|██████▋   | 14/21 [00:00<00:00, 70.11it/s]"
      ]
     },
     {
@@ -24751,7 +24751,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00<00:00, 95.19it/s]"
+      "SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00<00:00, 85.35it/s]"
      ]
     },
     {
@@ -24778,10 +24778,10 @@
    "execution_count": 48,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.514185Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.514185Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.527153Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.526205Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.460155Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.460155Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.483530Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.483530Z"
     }
    },
    "outputs": [
@@ -24813,60 +24813,6 @@
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>move_water_mech_break_t20</th>\n",
-       "      <td>0.000330</td>\n",
-       "      <td>11750.0</td>\n",
-       "      <td>387750.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_ee_no_v_t20</th>\n",
-       "      <td>0.000440</td>\n",
-       "      <td>16750.0</td>\n",
-       "      <td>737000.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>move_water_short_t0</th>\n",
-       "      <td>0.000550</td>\n",
-       "      <td>30125.0</td>\n",
-       "      <td>1656875.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_water_no_wat_t20</th>\n",
-       "      <td>0.000550</td>\n",
-       "      <td>7750.0</td>\n",
-       "      <td>426250.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_ee_inf_v_t20</th>\n",
-       "      <td>0.000110</td>\n",
-       "      <td>21750.0</td>\n",
-       "      <td>239250.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_ee_no_v_t55</th>\n",
-       "      <td>0.000440</td>\n",
-       "      <td>10000.0</td>\n",
-       "      <td>440000.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_ee_inf_v_t55</th>\n",
-       "      <td>0.000110</td>\n",
-       "      <td>5000.0</td>\n",
-       "      <td>55000.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_ee_inf_v_t0</th>\n",
-       "      <td>0.000110</td>\n",
-       "      <td>25125.0</td>\n",
-       "      <td>276375.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_signal_no_sig_t55</th>\n",
-       "      <td>0.000055</td>\n",
-       "      <td>10000.0</td>\n",
-       "      <td>55000.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
        "      <th>move_water_mech_break_t0</th>\n",
        "      <td>0.000330</td>\n",
        "      <td>15125.0</td>\n",
@@ -24879,46 +24825,10 @@
        "      <td>55000.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>import_signal_no_sig_t0</th>\n",
-       "      <td>0.000055</td>\n",
-       "      <td>7525.0</td>\n",
-       "      <td>41387.5</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>move_water_short_t20</th>\n",
+       "      <th>import_water_no_wat_t20</th>\n",
        "      <td>0.000550</td>\n",
-       "      <td>26750.0</td>\n",
-       "      <td>1471250.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>export_water_block_t0</th>\n",
-       "      <td>0.000550</td>\n",
-       "      <td>20102.5</td>\n",
-       "      <td>1105637.5</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_signal_no_sig_t20</th>\n",
-       "      <td>0.000055</td>\n",
-       "      <td>8650.0</td>\n",
-       "      <td>47575.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>nominal</th>\n",
-       "      <td>1.000000</td>\n",
-       "      <td>0.0</td>\n",
-       "      <td>0.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>export_water_block_t20</th>\n",
-       "      <td>0.000550</td>\n",
-       "      <td>16727.5</td>\n",
-       "      <td>920012.5</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>move_water_short_t55</th>\n",
-       "      <td>0.000550</td>\n",
-       "      <td>10000.0</td>\n",
-       "      <td>550000.0</td>\n",
+       "      <td>7750.0</td>\n",
+       "      <td>426250.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>export_water_block_t55</th>\n",
@@ -24927,16 +24837,88 @@
        "      <td>275000.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
+       "      <th>import_signal_no_sig_t55</th>\n",
+       "      <td>0.000055</td>\n",
+       "      <td>10000.0</td>\n",
+       "      <td>55000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_ee_inf_v_t20</th>\n",
+       "      <td>0.000110</td>\n",
+       "      <td>21750.0</td>\n",
+       "      <td>239250.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>export_water_block_t0</th>\n",
+       "      <td>0.000550</td>\n",
+       "      <td>20102.5</td>\n",
+       "      <td>1105637.5</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>move_water_short_t0</th>\n",
+       "      <td>0.000550</td>\n",
+       "      <td>30125.0</td>\n",
+       "      <td>1656875.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_ee_no_v_t55</th>\n",
+       "      <td>0.000440</td>\n",
+       "      <td>10000.0</td>\n",
+       "      <td>440000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_ee_inf_v_t0</th>\n",
+       "      <td>0.000110</td>\n",
+       "      <td>25125.0</td>\n",
+       "      <td>276375.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>export_water_block_t20</th>\n",
+       "      <td>0.000550</td>\n",
+       "      <td>16727.5</td>\n",
+       "      <td>920012.5</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>move_water_mech_break_t20</th>\n",
+       "      <td>0.000330</td>\n",
+       "      <td>11750.0</td>\n",
+       "      <td>387750.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>move_water_short_t55</th>\n",
+       "      <td>0.000550</td>\n",
+       "      <td>10000.0</td>\n",
+       "      <td>550000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>nominal</th>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_signal_no_sig_t20</th>\n",
+       "      <td>0.000055</td>\n",
+       "      <td>8650.0</td>\n",
+       "      <td>47575.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_ee_inf_v_t55</th>\n",
+       "      <td>0.000110</td>\n",
+       "      <td>5000.0</td>\n",
+       "      <td>55000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_ee_no_v_t20</th>\n",
+       "      <td>0.000440</td>\n",
+       "      <td>16750.0</td>\n",
+       "      <td>737000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
        "      <th>move_water_mech_break_t55</th>\n",
        "      <td>0.000330</td>\n",
        "      <td>5000.0</td>\n",
        "      <td>165000.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_water_no_wat_t0</th>\n",
-       "      <td>0.000550</td>\n",
-       "      <td>11125.0</td>\n",
-       "      <td>611875.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>import_ee_no_v_t0</th>\n",
@@ -24944,34 +24926,52 @@
        "      <td>20125.0</td>\n",
        "      <td>885500.0</td>\n",
        "    </tr>\n",
+       "    <tr>\n",
+       "      <th>move_water_short_t20</th>\n",
+       "      <td>0.000550</td>\n",
+       "      <td>26750.0</td>\n",
+       "      <td>1471250.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_signal_no_sig_t0</th>\n",
+       "      <td>0.000055</td>\n",
+       "      <td>7525.0</td>\n",
+       "      <td>41387.5</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_water_no_wat_t0</th>\n",
+       "      <td>0.000550</td>\n",
+       "      <td>11125.0</td>\n",
+       "      <td>611875.0</td>\n",
+       "    </tr>\n",
        "  </tbody>\n",
        "</table>\n",
        "</div>"
       ],
       "text/plain": [
        "                               rate     cost  expected cost\n",
-       "move_water_mech_break_t20  0.000330  11750.0       387750.0\n",
-       "import_ee_no_v_t20         0.000440  16750.0       737000.0\n",
-       "move_water_short_t0        0.000550  30125.0      1656875.0\n",
-       "import_water_no_wat_t20    0.000550   7750.0       426250.0\n",
-       "import_ee_inf_v_t20        0.000110  21750.0       239250.0\n",
-       "import_ee_no_v_t55         0.000440  10000.0       440000.0\n",
-       "import_ee_inf_v_t55        0.000110   5000.0        55000.0\n",
-       "import_ee_inf_v_t0         0.000110  25125.0       276375.0\n",
-       "import_signal_no_sig_t55   0.000055  10000.0        55000.0\n",
        "move_water_mech_break_t0   0.000330  15125.0       499125.0\n",
        "import_water_no_wat_t55    0.000550   1000.0        55000.0\n",
-       "import_signal_no_sig_t0    0.000055   7525.0        41387.5\n",
-       "move_water_short_t20       0.000550  26750.0      1471250.0\n",
-       "export_water_block_t0      0.000550  20102.5      1105637.5\n",
-       "import_signal_no_sig_t20   0.000055   8650.0        47575.0\n",
-       "nominal                    1.000000      0.0            0.0\n",
-       "export_water_block_t20     0.000550  16727.5       920012.5\n",
-       "move_water_short_t55       0.000550  10000.0       550000.0\n",
+       "import_water_no_wat_t20    0.000550   7750.0       426250.0\n",
        "export_water_block_t55     0.000550   5000.0       275000.0\n",
+       "import_signal_no_sig_t55   0.000055  10000.0        55000.0\n",
+       "import_ee_inf_v_t20        0.000110  21750.0       239250.0\n",
+       "export_water_block_t0      0.000550  20102.5      1105637.5\n",
+       "move_water_short_t0        0.000550  30125.0      1656875.0\n",
+       "import_ee_no_v_t55         0.000440  10000.0       440000.0\n",
+       "import_ee_inf_v_t0         0.000110  25125.0       276375.0\n",
+       "export_water_block_t20     0.000550  16727.5       920012.5\n",
+       "move_water_mech_break_t20  0.000330  11750.0       387750.0\n",
+       "move_water_short_t55       0.000550  10000.0       550000.0\n",
+       "nominal                    1.000000      0.0            0.0\n",
+       "import_signal_no_sig_t20   0.000055   8650.0        47575.0\n",
+       "import_ee_inf_v_t55        0.000110   5000.0        55000.0\n",
+       "import_ee_no_v_t20         0.000440  16750.0       737000.0\n",
        "move_water_mech_break_t55  0.000330   5000.0       165000.0\n",
-       "import_water_no_wat_t0     0.000550  11125.0       611875.0\n",
-       "import_ee_no_v_t0          0.000440  20125.0       885500.0"
+       "import_ee_no_v_t0          0.000440  20125.0       885500.0\n",
+       "move_water_short_t20       0.000550  26750.0      1471250.0\n",
+       "import_signal_no_sig_t0    0.000055   7525.0        41387.5\n",
+       "import_water_no_wat_t0     0.000550  11125.0       611875.0"
       ]
      },
      "execution_count": 48,
@@ -24995,10 +24995,10 @@
    "execution_count": 49,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.531277Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.531277Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.575372Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.574423Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.483530Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.483530Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.514600Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.514600Z"
     }
    },
    "outputs": [
@@ -25032,28 +25032,20 @@
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>move_water_mech_break_t20</th>\n",
+       "      <th>move_water_mech_break_t0</th>\n",
        "      <td>['move_water', 'ee_1', 'wat_1', 'wat_2']</td>\n",
        "      <td>['move_water']</td>\n",
        "      <td>0.00033</td>\n",
-       "      <td>11750.0</td>\n",
-       "      <td>387750.0</td>\n",
+       "      <td>15125.0</td>\n",
+       "      <td>499125.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>import_ee_no_v_t20</th>\n",
-       "      <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>\n",
-       "      <td>['import_ee']</td>\n",
-       "      <td>0.00044</td>\n",
-       "      <td>16750.0</td>\n",
-       "      <td>737000.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>move_water_short_t0</th>\n",
-       "      <td>['import_ee', 'move_water', 'ee_1', 'wat_1', '...</td>\n",
-       "      <td>['import_ee', 'move_water']</td>\n",
+       "      <th>import_water_no_wat_t55</th>\n",
+       "      <td>['import_water', 'wat_1']</td>\n",
+       "      <td>['import_water']</td>\n",
        "      <td>0.00055</td>\n",
-       "      <td>30125.0</td>\n",
-       "      <td>1656875.0</td>\n",
+       "      <td>1000.0</td>\n",
+       "      <td>55000.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>import_water_no_wat_t20</th>\n",
@@ -25064,36 +25056,12 @@
        "      <td>426250.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>import_ee_inf_v_t20</th>\n",
-       "      <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>\n",
-       "      <td>['import_ee']</td>\n",
-       "      <td>0.00011</td>\n",
-       "      <td>21750.0</td>\n",
-       "      <td>239250.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_ee_no_v_t55</th>\n",
-       "      <td>['import_ee', 'ee_1']</td>\n",
-       "      <td>['import_ee']</td>\n",
-       "      <td>0.00044</td>\n",
-       "      <td>10000.0</td>\n",
-       "      <td>440000.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_ee_inf_v_t55</th>\n",
-       "      <td>['import_ee', 'ee_1']</td>\n",
-       "      <td>['import_ee']</td>\n",
-       "      <td>0.00011</td>\n",
+       "      <th>export_water_block_t55</th>\n",
+       "      <td>['export_water', 'wat_2']</td>\n",
+       "      <td>['export_water']</td>\n",
+       "      <td>0.00055</td>\n",
        "      <td>5000.0</td>\n",
-       "      <td>55000.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>import_ee_inf_v_t0</th>\n",
-       "      <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>\n",
-       "      <td>['import_ee']</td>\n",
-       "      <td>0.00011</td>\n",
-       "      <td>25125.0</td>\n",
-       "      <td>276375.0</td>\n",
+       "      <td>275000.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>import_signal_no_sig_t55</th>\n",
@@ -25104,53 +25072,85 @@
        "      <td>55000.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>move_water_mech_break_t0</th>\n",
-       "      <td>['move_water', 'ee_1', 'wat_1', 'wat_2']</td>\n",
-       "      <td>['move_water']</td>\n",
-       "      <td>0.00033</td>\n",
-       "      <td>15125.0</td>\n",
-       "      <td>499125.0</td>\n",
+       "      <th>import_ee_inf_v_t20</th>\n",
+       "      <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>\n",
+       "      <td>['import_ee']</td>\n",
+       "      <td>0.00011</td>\n",
+       "      <td>21750.0</td>\n",
+       "      <td>239250.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>export_water_block_t0</th>\n",
+       "      <td>['move_water', 'export_water', 'ee_1', 'wat_1'...</td>\n",
+       "      <td>['move_water', 'export_water']</td>\n",
+       "      <td>0.00055</td>\n",
+       "      <td>20102.5</td>\n",
+       "      <td>1105637.5</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>move_water_short_t0</th>\n",
+       "      <td>['import_ee', 'move_water', 'ee_1', 'wat_1', '...</td>\n",
+       "      <td>['import_ee', 'move_water']</td>\n",
+       "      <td>0.00055</td>\n",
+       "      <td>30125.0</td>\n",
+       "      <td>1656875.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_ee_no_v_t55</th>\n",
+       "      <td>['import_ee', 'ee_1']</td>\n",
+       "      <td>['import_ee']</td>\n",
+       "      <td>0.00044</td>\n",
+       "      <td>10000.0</td>\n",
+       "      <td>440000.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_ee_inf_v_t0</th>\n",
+       "      <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>\n",
+       "      <td>['import_ee']</td>\n",
+       "      <td>0.00011</td>\n",
+       "      <td>25125.0</td>\n",
+       "      <td>276375.0</td>\n",
        "    </tr>\n",
        "  </tbody>\n",
        "</table>\n",
        "</div>"
       ],
       "text/plain": [
-       "                                                                    degraded  \\\n",
-       "move_water_mech_break_t20           ['move_water', 'ee_1', 'wat_1', 'wat_2']   \n",
-       "import_ee_no_v_t20                   ['import_ee', 'ee_1', 'wat_1', 'wat_2']   \n",
-       "move_water_short_t0        ['import_ee', 'move_water', 'ee_1', 'wat_1', '...   \n",
-       "import_water_no_wat_t20           ['import_water', 'ee_1', 'wat_1', 'wat_2']   \n",
-       "import_ee_inf_v_t20                  ['import_ee', 'ee_1', 'wat_1', 'wat_2']   \n",
-       "import_ee_no_v_t55                                     ['import_ee', 'ee_1']   \n",
-       "import_ee_inf_v_t55                                    ['import_ee', 'ee_1']   \n",
-       "import_ee_inf_v_t0                   ['import_ee', 'ee_1', 'wat_1', 'wat_2']   \n",
-       "import_signal_no_sig_t55                                   ['import_signal']   \n",
-       "move_water_mech_break_t0            ['move_water', 'ee_1', 'wat_1', 'wat_2']   \n",
+       "                                                                   degraded  \\\n",
+       "move_water_mech_break_t0           ['move_water', 'ee_1', 'wat_1', 'wat_2']   \n",
+       "import_water_no_wat_t55                           ['import_water', 'wat_1']   \n",
+       "import_water_no_wat_t20          ['import_water', 'ee_1', 'wat_1', 'wat_2']   \n",
+       "export_water_block_t55                            ['export_water', 'wat_2']   \n",
+       "import_signal_no_sig_t55                                  ['import_signal']   \n",
+       "import_ee_inf_v_t20                 ['import_ee', 'ee_1', 'wat_1', 'wat_2']   \n",
+       "export_water_block_t0     ['move_water', 'export_water', 'ee_1', 'wat_1'...   \n",
+       "move_water_short_t0       ['import_ee', 'move_water', 'ee_1', 'wat_1', '...   \n",
+       "import_ee_no_v_t55                                    ['import_ee', 'ee_1']   \n",
+       "import_ee_inf_v_t0                  ['import_ee', 'ee_1', 'wat_1', 'wat_2']   \n",
        "\n",
-       "                                                faulty      rate     cost  \\\n",
-       "move_water_mech_break_t20               ['move_water']   0.00033  11750.0   \n",
-       "import_ee_no_v_t20                       ['import_ee']   0.00044  16750.0   \n",
-       "move_water_short_t0        ['import_ee', 'move_water']   0.00055  30125.0   \n",
-       "import_water_no_wat_t20               ['import_water']   0.00055   7750.0   \n",
-       "import_ee_inf_v_t20                      ['import_ee']   0.00011  21750.0   \n",
-       "import_ee_no_v_t55                       ['import_ee']   0.00044  10000.0   \n",
-       "import_ee_inf_v_t55                      ['import_ee']   0.00011   5000.0   \n",
-       "import_ee_inf_v_t0                       ['import_ee']   0.00011  25125.0   \n",
-       "import_signal_no_sig_t55             ['import_signal']  0.000055  10000.0   \n",
-       "move_water_mech_break_t0                ['move_water']   0.00033  15125.0   \n",
+       "                                                  faulty      rate     cost  \\\n",
+       "move_water_mech_break_t0                  ['move_water']   0.00033  15125.0   \n",
+       "import_water_no_wat_t55                 ['import_water']   0.00055   1000.0   \n",
+       "import_water_no_wat_t20                 ['import_water']   0.00055   7750.0   \n",
+       "export_water_block_t55                  ['export_water']   0.00055   5000.0   \n",
+       "import_signal_no_sig_t55               ['import_signal']  0.000055  10000.0   \n",
+       "import_ee_inf_v_t20                        ['import_ee']   0.00011  21750.0   \n",
+       "export_water_block_t0     ['move_water', 'export_water']   0.00055  20102.5   \n",
+       "move_water_short_t0          ['import_ee', 'move_water']   0.00055  30125.0   \n",
+       "import_ee_no_v_t55                         ['import_ee']   0.00044  10000.0   \n",
+       "import_ee_inf_v_t0                         ['import_ee']   0.00011  25125.0   \n",
        "\n",
-       "                          expected cost  \n",
-       "move_water_mech_break_t20      387750.0  \n",
-       "import_ee_no_v_t20             737000.0  \n",
-       "move_water_short_t0           1656875.0  \n",
-       "import_water_no_wat_t20        426250.0  \n",
-       "import_ee_inf_v_t20            239250.0  \n",
-       "import_ee_no_v_t55             440000.0  \n",
-       "import_ee_inf_v_t55             55000.0  \n",
-       "import_ee_inf_v_t0             276375.0  \n",
-       "import_signal_no_sig_t55        55000.0  \n",
-       "move_water_mech_break_t0       499125.0  "
+       "                         expected cost  \n",
+       "move_water_mech_break_t0      499125.0  \n",
+       "import_water_no_wat_t55        55000.0  \n",
+       "import_water_no_wat_t20       426250.0  \n",
+       "export_water_block_t55        275000.0  \n",
+       "import_signal_no_sig_t55       55000.0  \n",
+       "import_ee_inf_v_t20           239250.0  \n",
+       "export_water_block_t0        1105637.5  \n",
+       "move_water_short_t0          1656875.0  \n",
+       "import_ee_no_v_t55            440000.0  \n",
+       "import_ee_inf_v_t0            276375.0  "
       ]
      },
      "execution_count": 49,
@@ -25176,10 +25176,10 @@
    "execution_count": 50,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.577677Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.577677Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.590811Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.589830Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.514600Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.514600Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.530667Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.530667Z"
     }
    },
    "outputs": [],
@@ -25192,10 +25192,10 @@
    "execution_count": 51,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.593151Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.593151Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.811786Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.811786Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.530667Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.530667Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.762042Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.762042Z"
     }
    },
    "outputs": [
@@ -25212,7 +25212,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  59%|█████▉    | 10/17 [00:00<00:00, 89.52it/s]"
+      "SCENARIOS COMPLETE:  47%|████▋     | 8/17 [00:00<00:00, 79.76it/s]"
      ]
     },
     {
@@ -25220,7 +25220,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00<00:00, 99.68it/s]"
+      "SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00<00:00, 91.90it/s]"
      ]
     },
     {
@@ -25258,24 +25258,6 @@
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>import_signal_no_sig_t27p0</th>\n",
-       "      <td>0.000013</td>\n",
-       "      <td>8650.0</td>\n",
-       "      <td>11121.428571</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>move_water_short_t2p0</th>\n",
-       "      <td>0.000021</td>\n",
-       "      <td>30125.0</td>\n",
-       "      <td>64553.571429</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>move_water_mech_break_t52p0</th>\n",
-       "      <td>0.000003</td>\n",
-       "      <td>5000.0</td>\n",
-       "      <td>1285.714286</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
        "      <th>import_ee_no_v_t27p0</th>\n",
        "      <td>0.000360</td>\n",
        "      <td>15175.0</td>\n",
@@ -25287,17 +25269,35 @@
        "      <td>25175.0</td>\n",
        "      <td>323678.571429</td>\n",
        "    </tr>\n",
+       "    <tr>\n",
+       "      <th>move_water_short_t2p0</th>\n",
+       "      <td>0.000021</td>\n",
+       "      <td>30125.0</td>\n",
+       "      <td>64553.571429</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>import_signal_no_sig_t27p0</th>\n",
+       "      <td>0.000013</td>\n",
+       "      <td>8650.0</td>\n",
+       "      <td>11121.428571</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>export_water_block_t2p0</th>\n",
+       "      <td>0.000021</td>\n",
+       "      <td>20102.5</td>\n",
+       "      <td>43076.785714</td>\n",
+       "    </tr>\n",
        "  </tbody>\n",
        "</table>\n",
        "</div>"
       ],
       "text/plain": [
-       "                                 rate     cost  expected cost\n",
-       "import_signal_no_sig_t27p0   0.000013   8650.0   11121.428571\n",
-       "move_water_short_t2p0        0.000021  30125.0   64553.571429\n",
-       "move_water_mech_break_t52p0  0.000003   5000.0    1285.714286\n",
-       "import_ee_no_v_t27p0         0.000360  15175.0  546300.000000\n",
-       "move_water_short_t27p0       0.000129  25175.0  323678.571429"
+       "                                rate     cost  expected cost\n",
+       "import_ee_no_v_t27p0        0.000360  15175.0  546300.000000\n",
+       "move_water_short_t27p0      0.000129  25175.0  323678.571429\n",
+       "move_water_short_t2p0       0.000021  30125.0   64553.571429\n",
+       "import_signal_no_sig_t27p0  0.000013   8650.0   11121.428571\n",
+       "export_water_block_t2p0     0.000021  20102.5   43076.785714"
       ]
      },
      "execution_count": 51,
@@ -25323,10 +25323,10 @@
    "execution_count": 52,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.814779Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.814779Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.873397Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.873397Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.762042Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.762042Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.823224Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.823224Z"
     }
    },
    "outputs": [
@@ -25534,10 +25534,10 @@
    "execution_count": 53,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.877386Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.876389Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.889354Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.889354Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.823224Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.823224Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.838846Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.838846Z"
     }
    },
    "outputs": [
@@ -25658,10 +25658,10 @@
    "execution_count": 54,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.892346Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.892346Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.904314Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.904314Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.838846Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.838846Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.854467Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.854467Z"
     }
    },
    "outputs": [],
@@ -25681,10 +25681,10 @@
    "execution_count": 55,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.907307Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.907307Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.920271Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.920271Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.854467Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.854467Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.884215Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.884215Z"
     }
    },
    "outputs": [],
@@ -25697,10 +25697,10 @@
    "execution_count": 56,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.923263Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.923263Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.936228Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.936228Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.884215Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.884215Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.899815Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.899815Z"
     }
    },
    "outputs": [
@@ -25734,10 +25734,10 @@
    "execution_count": 57,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.939221Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.939221Z",
-     "iopub.status.idle": "2023-06-09T23:34:54.952194Z",
-     "shell.execute_reply": "2023-06-09T23:34:54.951189Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.899815Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.899815Z",
+     "iopub.status.idle": "2023-06-15T17:19:40.915457Z",
+     "shell.execute_reply": "2023-06-15T17:19:40.915457Z"
     }
    },
    "outputs": [],
@@ -25757,10 +25757,10 @@
    "execution_count": 58,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:54.955178Z",
-     "iopub.status.busy": "2023-06-09T23:34:54.955178Z",
-     "iopub.status.idle": "2023-06-09T23:34:55.157637Z",
-     "shell.execute_reply": "2023-06-09T23:34:55.157637Z"
+     "iopub.execute_input": "2023-06-15T17:19:40.915457Z",
+     "iopub.status.busy": "2023-06-15T17:19:40.915457Z",
+     "iopub.status.idle": "2023-06-15T17:19:41.116937Z",
+     "shell.execute_reply": "2023-06-15T17:19:41.115762Z"
     }
    },
    "outputs": [
@@ -25811,10 +25811,10 @@
    "execution_count": 59,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:55.160628Z",
-     "iopub.status.busy": "2023-06-09T23:34:55.160628Z",
-     "iopub.status.idle": "2023-06-09T23:34:55.173594Z",
-     "shell.execute_reply": "2023-06-09T23:34:55.173594Z"
+     "iopub.execute_input": "2023-06-15T17:19:41.120103Z",
+     "iopub.status.busy": "2023-06-15T17:19:41.119478Z",
+     "iopub.status.idle": "2023-06-15T17:19:41.138787Z",
+     "shell.execute_reply": "2023-06-15T17:19:41.138787Z"
     }
    },
    "outputs": [
@@ -26402,10 +26402,10 @@
    "execution_count": 60,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:55.176586Z",
-     "iopub.status.busy": "2023-06-09T23:34:55.176586Z",
-     "iopub.status.idle": "2023-06-09T23:34:55.314567Z",
-     "shell.execute_reply": "2023-06-09T23:34:55.314567Z"
+     "iopub.execute_input": "2023-06-15T17:19:41.138787Z",
+     "iopub.status.busy": "2023-06-15T17:19:41.138787Z",
+     "iopub.status.idle": "2023-06-15T17:19:41.184566Z",
+     "shell.execute_reply": "2023-06-15T17:19:41.184566Z"
     }
    },
    "outputs": [
@@ -26433,10 +26433,10 @@
    "execution_count": 61,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:55.318558Z",
-     "iopub.status.busy": "2023-06-09T23:34:55.318558Z",
-     "iopub.status.idle": "2023-06-09T23:34:55.330525Z",
-     "shell.execute_reply": "2023-06-09T23:34:55.330525Z"
+     "iopub.execute_input": "2023-06-15T17:19:41.184566Z",
+     "iopub.status.busy": "2023-06-15T17:19:41.184566Z",
+     "iopub.status.idle": "2023-06-15T17:19:41.200221Z",
+     "shell.execute_reply": "2023-06-15T17:19:41.200221Z"
     }
    },
    "outputs": [],
@@ -26449,10 +26449,10 @@
    "execution_count": 62,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-06-09T23:34:55.333517Z",
-     "iopub.status.busy": "2023-06-09T23:34:55.333517Z",
-     "iopub.status.idle": "2023-06-09T23:34:55.346483Z",
-     "shell.execute_reply": "2023-06-09T23:34:55.346483Z"
+     "iopub.execute_input": "2023-06-15T17:19:41.200221Z",
+     "iopub.status.busy": "2023-06-15T17:19:41.200221Z",
+     "iopub.status.idle": "2023-06-15T17:19:41.215810Z",
+     "shell.execute_reply": "2023-06-15T17:19:41.215810Z"
     }
    },
    "outputs": [

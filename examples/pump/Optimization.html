@@ -21,7 +21,9 @@
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Stochastic Modelling in fmdtools" href="Stochastic_Modelling.html" />
+    <link rel="prev" title="Using Parallel Computing in fmdtools" href="Parallelism_Tutorial.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,19 +42,62 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a><ul>
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../README.html#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../README.html#notices">Notices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#disclaimers">Disclaimers</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#why-fmdtools">Why fmdtools?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#key-features">Key Features</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-fmdtools-pros">Why fmdtools? Pros:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#activity-download-and-install-fmdtools">Activity: Download and Install fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#simulation-concepts-static-undirected-propagation">Simulation Concepts: Static/Undirected Propagation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#simulation-concepts-propagation-over-time">Simulation Concepts: Propagation over Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#simulation-concepts-sampling-approaches">Simulation Concepts: Sampling Approaches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#simulation-concepts-things-to-consider">Simulation Concepts: Things to Consider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#activity-simulate-the-model">Activity: Simulate the Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-modules">Analysis Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-activity">Analysis Activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#conclusions-summary">Conclusions/Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#further-reading-links">Further Reading/Links</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#repo-structure">Repo Structure</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#remote-structure">Remote Structure</a></li>
@@ -65,6 +110,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#contributors">Contributors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
@@ -82,7 +131,157 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../docs/Examples.html">Examples</a><ul class="simple">
+<li class="toctree-l1 current"><a class="reference internal" href="../../docs/Examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../docs/Examples.html#pump">Pump</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Tutorial_complete.html">fmdtools Tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#5.)-Saving-Work">5.) Saving Work</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Pump_Example_Notebook.html">Pump Example Notebook</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Pump_Example_Notebook.html#Initial-Model-Checks">Initial Model Checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Pump_Example_Notebook.html#History">History</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Pump_Example_Notebook.html#Propagating-and-Viewing-Results-for-Individual-Faults">Propagating and Viewing Results for Individual Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Pump_Example_Notebook.html#Visualization-of-resilience-metrics">Visualization of resilience metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Pump_Example_Notebook.html#Running-a-List-of-Faults">Running a List of Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Pump_Example_Notebook.html#Running-a-Fault-Sampling-Approach">Running a Fault Sampling Approach</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Parallelism_Tutorial.html">Using Parallel Computing in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Model-Checks">Model Checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Using-Parallelism-in-Simulation">Using Parallelism in Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Performance-Comparison">Performance Comparison</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Comparison:-Lower-Tracking-Time-Resolution">Comparison: Lower Tracking Time Resolution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Comparison-Conclusions:">Comparison Conclusions:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Parallelism_Tutorial.html#Further-Computational-Cost-Reduction-via-Profiling">Further Computational Cost Reduction via Profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Optimization using the ProblemInterface class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ProblemInterface-Setup">ProblemInterface Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Problem-interfaces">Problem interfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Optimization:">Optimization:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Python-setup:">Python setup:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#MCTS">MCTS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Pump">Pump</a></li>
+<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Simulator">Simulator</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html">Probability Modelling in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Theory-and-Goals">Theory and Goals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Model-Description">Model Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Experiments">Experiments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Network-Model">Network Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Static-Model">Static Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html#Design-Model">Design Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html#Operational-Model">Operational Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html#Resilience-Model">Resilience Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html#Combined-Simulation/Optimization">Combined Simulation/Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Fault-Simulation">Fault Simulation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../rover/Approach_Use-Cases.html">Defining Fault Sampling Approaches in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Basics">Basics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Setting-up-an-approach">Setting up an approach</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Propagating-Faults">Propagating Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Pruning">Pruning</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html">Defining Nominal Approaches in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html#Quantifying-probabilities">Quantifying probabilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html#Random-input-generation">Random input generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html#Nested-Scenario-Sampling">Nested Scenario Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../rover/HFAC_Analyses/HFAC_Analyses.html">More Human Failure Analyses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html">Human Failure Representation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-behavioral-simulation">Testing behavioral simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-Faults">Testing Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Examining-Performance-Shaping-Factors">Examining Performance Shaping Factors</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../rover/degradation_modelling/Degradation_Modelling_Notebook.html">Degradation Modelling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rover/degradation_modelling/Degradation_Modelling_Notebook.html#Drive-Degradation">Drive Degradation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/degradation_modelling/Degradation_Modelling_Notebook.html#Human-Degradation">Human Degradation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/degradation_modelling/Degradation_Modelling_Notebook.html#Combined-Degradation">Combined Degradation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../rover/optimization/Search_Comparison.html">Faulty State-Space Search Method Comparison</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rover/optimization/Search_Comparison.html#Performance-Comparison">Performance Comparison</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Fault-Space-Formulation">Comparing Solutions over weights - Fault-Space Formulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Result-Space-Formulation">Comparing Solutions over weights - Result-Space Formulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../rover/optimization/Rover_Response_Optimization.html">Rover Response Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rover/optimization/Rover_Response_Optimization.html#Optimization">Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multiflow-demo">Multiflow Demo</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
@@ -131,6 +330,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../docs/Examples.html">Examples</a> &raquo;</li>
       <li>Optimization using the ProblemInterface class</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/examples/pump/Optimization.ipynb.txt" rel="nofollow"> View page source</a>
@@ -730,54 +930,42 @@ Problem new_problem                                                     current 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">TypeError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_20208/2166557829.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>new_problem<span class="ansi-yellow-intense-fg ansi-bold">.</span>obj_1<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">3</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">newobj</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
-<span class="ansi-green-fg">    252</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _assoc_obj_con<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> objname<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_const<span class="ansi-yellow-intense-fg ansi-bold">,</span> arg<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    253</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newobj<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 254</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
-<span class="ansi-green-fg">    255</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newconst<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    256</span>             <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">1</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">x_to_obj_const</span><span class="ansi-blue-intense-fg ansi-bold">(self, x, simnames)</span>
-<span class="ansi-green-fg">    621</span>             <span class="ansi-red-intense-fg ansi-bold"># prep sims</span>
-<span class="ansi-green-fg">    622</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> simname <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">in</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">.</span>get<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 623</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    624</span>                 self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>add<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    625</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_prep_sim_type</span><span class="ansi-blue-intense-fg ansi-bold">(self, simtype, simname, x)</span>
-<span class="ansi-green-fg">    485</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>ubs<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>lbs<span class="ansi-yellow-intense-fg ansi-bold">}</span>
-<span class="ansi-green-fg">    486</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _prep_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 487</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;single&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_single_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    488</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;multi&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_multi_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    489</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _run_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_prep_single_sim</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, x)</span>
-<span class="ansi-green-fg">    313</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _prep_single_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    314</span>         <span class="ansi-red-intense-fg ansi-bold"># Get variable and objective times for the simulation</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 315</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>var_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_get_var_obj_time<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    316</span>         <span class="ansi-red-intense-fg ansi-bold"># Get keyword arguments for the simulation</span>
-<span class="ansi-green-fg">    317</span>         kwar <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">]</span>
-
-<span class="ansi-red-intense-fg ansi-bold">TypeError</span>: _get_var_obj_time() takes 1 positional argument but 2 were given
+2.6999999999999997
 </pre></div></div>
 </div>
 <p>Note that despite being different callables, to reduce simulation costs, <code class="docutils literal notranslate"><span class="pre">obj_1</span></code> and <code class="docutils literal notranslate"><span class="pre">con_1</span></code> only <em>simulate the model</em> when a new variable value is entered into the problem. This can be seen by looking at the <code class="docutils literal notranslate"><span class="pre">current_iter</span></code> <strong>repr</strong>, which shows the values of the objectives/constraints a the current variable value.</p>
 <p>Additionally, provided the tracking options are set to on, the <code class="docutils literal notranslate"><span class="pre">plot_obj_const</span></code> method enables rapid visualization of objectives, constraints, and variables (and where they are queried):</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">plot_obj_const</span><span class="p">(</span><span class="s1">&#39;test_sim&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 432x288 with 4 Axes&gt;,
+ array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.total_flow&#39;}&gt;,
+        &lt;AxesSubplot:title={&#39;center&#39;:&#39;wat_1.s.pressure&#39;}&gt;,
+        &lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
+        &lt;AxesSubplot:&gt;], dtype=object))
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Optimization_29_1.png" src="../../_images/examples_pump_Optimization_29_1.png" />
 </div>
 </div>
 </section>
@@ -785,77 +973,153 @@ Problem new_problem                                                     current 
 <h2>Optimization:<a class="headerlink" href="#Optimization:" title="Permalink to this headline"></a></h2>
 <p>Now, we will demonstrate optimization using this problem as it is set up:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">current_iter</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;vars&#39;: array([3]),
+ &#39;objs&#39;: {&#39;obj_1&#39;: 2.6999999999999997},
+ &#39;consts&#39;: {&#39;con_1&#39;: 20.0},
+ &#39;sims&#39;: {&#39;test_sim&#39;},
+ &#39;sims_to_update&#39;: {&#39;set_const&#39;}}
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">constraints</span><span class="o">=</span><span class="n">new_problem</span><span class="o">.</span><span class="n">get_constraint_list</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">constraints</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;fun&#39;</span><span class="p">]([</span><span class="mi">8</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+8
+</pre></div></div>
+</div>
 <p>Note that scipy minimize assumes that: - objectives are to be minimized, and - constraints must be held positive</p>
 <p>The problem should thus be set up to accomodate this, by stating whether objectives should be positive/negative and by setting <code class="docutils literal notranslate"><span class="pre">negative_form=False</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">new_problem</span><span class="o">.</span><span class="n">obj_1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">constraints</span><span class="o">=</span><span class="n">new_problem</span><span class="o">.</span><span class="n">get_constraint_list</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+     fun: 2.6999999999999997
+     jac: array([0.])
+ message: &#39;Optimization terminated successfully&#39;
+    nfev: 2
+     nit: 1
+    njev: 1
+  status: 0
+ success: True
+       x: array([1.])
+</pre></div></div>
+</div>
 <p>As shown, the variables are optimized to a value of x=0.0, the minimum possible value of MoveWater.eff which was put in the problem. We can further verify the optimized result by looking at the problem:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Problem new_problem                                                     current value
+ Variables
+ -vars move_water.s.eff at t=10: [0, 5]                                        1.0000
+ Objectives
+ -obj_1: +sum(test_sim vars move_water.s.total_flow at t=25)                   2.7000
+ Constraints
+ -con_1: -(test_sim vars wat_1.s.pressure at t=11 -20)                        20.0000
+ Simulations
+ -test_sim: single scen: {20: {&#39;faults&#39;: {&#39;import_ee&#39;: &#39;no_v&#39;}}}
+</pre></div></div>
+</div>
 <p>As shown, the bound set constraint x&gt;0 is active at the found minimum, as we would expect.</p>
 <p>We can further visualize this solution using:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">plot_obj_const</span><span class="p">(</span><span class="s1">&#39;test_sim&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 432x288 with 4 Axes&gt;,
+ array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.total_flow&#39;}&gt;,
+        &lt;AxesSubplot:title={&#39;center&#39;:&#39;wat_1.s.pressure&#39;}&gt;,
+        &lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
+        &lt;AxesSubplot:&gt;], dtype=object))
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Optimization_41_1.png" src="../../_images/examples_pump_Optimization_41_1.png" />
+</div>
+</div>
 <p>This result for this minimization is somewhat obvious. Alternatively, it may be interesting to see what would happen if we instead maximized the objective (as in, searched for the <code class="docutils literal notranslate"><span class="pre">eff</span></code> value that maximized total flow despite constraints/fault modes).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">=</span><span class="n">Pump</span><span class="p">()</span>
@@ -867,62 +1131,151 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">problem_2</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Problem new_problem                                                     current value
+ Variables
+ -vars move_water.s.eff at t=10: [0, 5]                                           nan
+ Objectives
+ -obj_1: -sum(test_sim vars move_water.s.total_flow at t=25)                      nan
+ Constraints
+ -con_1: -(test_sim vars wat_1.s.pressure at t=11 -20)                            nan
+ Simulations
+ -test_sim: single scen: {20: {&#39;faults&#39;: {&#39;import_ee&#39;: &#39;no_v&#39;}}}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">problem_2</span><span class="o">.</span><span class="n">con_1</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+20.0
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">problem_2</span><span class="o">.</span><span class="n">x_to_obj_const</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;set_const&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+({&#39;obj_1&#39;: -0.0}, {&#39;con_1&#39;: 20.0, &#39;set_var_0_ub&#39;: 4, &#39;set_var_0_lb&#39;: 1})
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">problem_2</span><span class="o">.</span><span class="n">obj_1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">constraints</span><span class="o">=</span><span class="n">problem_2</span><span class="o">.</span><span class="n">get_constraint_list</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+     fun: -0.0
+     jac: array([0.])
+ message: &#39;Optimization terminated successfully&#39;
+    nfev: 2
+     nit: 1
+    njev: 1
+  status: 0
+ success: True
+       x: array([1.])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">problem_2</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Problem new_problem                                                     current value
+ Variables
+ -vars move_water.s.eff at t=10: [0, 5]                                        1.0000
+ Objectives
+ -obj_1: -sum(test_sim vars move_water.s.total_flow at t=25)                  -0.0000
+ Constraints
+ -con_1: -(test_sim vars wat_1.s.pressure at t=11 -20)                        20.0000
+ Simulations
+ -test_sim: single scen: {20: {&#39;faults&#39;: {&#39;import_ee&#39;: &#39;no_v&#39;}}}
+</pre></div></div>
+</div>
 <p>As shown, the constraint <code class="docutils literal notranslate"><span class="pre">con_1</span></code> is active, meaning the optimal presure at <code class="docutils literal notranslate"><span class="pre">t=11</span></code> is just at the threshold of 20. This corresponds to the optimized <code class="docutils literal notranslate"><span class="pre">MoveWater.eff</span></code> value of 2.0.</p>
 <p>We can see this below:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">problem_2</span><span class="o">.</span><span class="n">plot_obj_const</span><span class="p">(</span><span class="s1">&#39;test_sim&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 432x288 with 4 Axes&gt;,
+ array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.total_flow&#39;}&gt;,
+        &lt;AxesSubplot:title={&#39;center&#39;:&#39;wat_1.s.pressure&#39;}&gt;,
+        &lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
+        &lt;AxesSubplot:&gt;], dtype=object))
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_pump_Optimization_51_1.png" src="../../_images/examples_pump_Optimization_51_1.png" />
 </div>
 </div>
 </section>
@@ -932,24 +1285,40 @@ Problem new_problem                                                     current 
 <p>Here we define a slightly different problem, where instead of optimizing variable changes at specific times (e.g., faults), we instead optimize the model parameter <code class="docutils literal notranslate"><span class="pre">delay</span></code>, which changes how long of a delay there is before a fault when there is adverse pressure.</p>
 <p>To see the effect of this accross scenarios, we first define an approach:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="s2">&quot;export_water&quot;</span><span class="p">,</span> <span class="n">phases</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;on&quot;</span><span class="p">],</span> <span class="n">defaultsamp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;samp&#39;</span><span class="p">:</span><span class="s1">&#39;evenspacing&#39;</span><span class="p">,</span><span class="s1">&#39;numpts&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SampleApproach for Pump model with 1 modes:
+ -export_water: block
+None joint modes (0 combinations),
+in 1 phases:
+ -(&#39;global&#39;, &#39;on&#39;): [5, 49]
+sampled at 4 times:
+ -[14.0, 23.0, 31.0, 40.0]
+resulting in 4 total fault scenarios.
+</pre></div></div>
+</div>
 <p>The scenlist from this approach is given to the same model.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multi_problem</span> <span class="o">=</span> <span class="n">ProblemInterface</span><span class="p">(</span><span class="s2">&quot;multi_problem&quot;</span><span class="p">,</span> <span class="n">mdl</span><span class="p">,</span> <span class="n">negative_form</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1">#, track=&#39;valparams&#39;)</span>
@@ -959,7 +1328,7 @@ Problem new_problem                                                     current 
 </div>
 <p>Next the delay parameter is added. Note that since this a model parameter (set at the beginning of the simulation), <code class="docutils literal notranslate"><span class="pre">vartype</span></code> is set to “param”.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multi_problem</span><span class="o">.</span><span class="n">add_variables</span><span class="p">(</span><span class="s2">&quot;test_multi&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;delay&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">45</span><span class="p">]),</span> <span class="n">vartype</span><span class="o">=</span><span class="s1">&#39;param&#39;</span><span class="p">)</span>
@@ -968,7 +1337,7 @@ Problem new_problem                                                     current 
 </div>
 <p>Our objective for this problem will be to minimize the cost model overall scenarios that is defined in <code class="docutils literal notranslate"><span class="pre">mdl.find_classification</span></code>. Note that this means <code class="docutils literal notranslate"><span class="pre">objtype</span></code> must be set to “endclass”, since the objective will be a value of the endclass dictionary corresponding to the key “expected cost”.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multi_problem</span><span class="o">.</span><span class="n">add_objectives</span><span class="p">(</span><span class="s2">&quot;test_multi&quot;</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="s2">&quot;expected cost&quot;</span><span class="p">,</span> <span class="n">objtype</span><span class="o">=</span><span class="s1">&#39;endclass&#39;</span><span class="p">)</span>
@@ -976,22 +1345,171 @@ Problem new_problem                                                     current 
 </div>
 </div>
 <p>We can then verify the problem setup. Note that no constraints will be used in this problem:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multi_problem</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Problem multi_problem                                                   current value
+ Variables
+ -param delay at t=0: [0, 45]                                                     nan
+ Objectives
+ -cost: +sum(test_multi endclass expected cost at t=end)                          nan
+ Constraints
+ -
+ Simulations
+ -test_multi: multi scen:
+</pre></div></div>
+</div>
 <p>We may now minimize the objective function:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">multi_problem</span><span class="o">.</span><span class="n">cost</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;SLSQP&quot;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">]])</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_8984/2162782049.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>res <span class="ansi-yellow-intense-fg ansi-bold">=</span> minimize<span class="ansi-yellow-intense-fg ansi-bold">(</span>multi_problem<span class="ansi-yellow-intense-fg ansi-bold">.</span>cost<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">5</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> method<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#34;SLSQP&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> bounds<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-cyan-intense-fg ansi-bold">40</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_minimize.py</span> in <span class="ansi-cyan-fg">minimize</span><span class="ansi-blue-intense-fg ansi-bold">(fun, x0, args, method, jac, hess, hessp, bounds, constraints, tol, callback, options)</span>
+<span class="ansi-green-fg">    629</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> _minimize_cobyla<span class="ansi-yellow-intense-fg ansi-bold">(</span>fun<span class="ansi-yellow-intense-fg ansi-bold">,</span> x0<span class="ansi-yellow-intense-fg ansi-bold">,</span> args<span class="ansi-yellow-intense-fg ansi-bold">,</span> constraints<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>options<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    630</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> meth <span class="ansi-yellow-intense-fg ansi-bold">==</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;slsqp&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 631</span><span class="ansi-yellow-intense-fg ansi-bold">         return _minimize_slsqp(fun, x0, args, jac, bounds,
+</span><span class="ansi-green-fg">    632</span>                                constraints, callback=callback, **options)
+<span class="ansi-green-fg">    633</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> meth <span class="ansi-yellow-intense-fg ansi-bold">==</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;trust-constr&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\slsqp.py</span> in <span class="ansi-cyan-fg">_minimize_slsqp</span><span class="ansi-blue-intense-fg ansi-bold">(func, x0, args, jac, bounds, constraints, maxiter, ftol, iprint, disp, eps, callback, finite_diff_rel_step, **unknown_options)</span>
+<span class="ansi-green-fg">    373</span>
+<span class="ansi-green-fg">    374</span>     <span class="ansi-red-intense-fg ansi-bold"># ScalarFunction provides function and gradient evaluation</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 375</span><span class="ansi-yellow-intense-fg ansi-bold">     sf = _prepare_scalar_function(func, x, jac=jac, args=args, epsilon=eps,
+</span><span class="ansi-green-fg">    376</span>                                   finite_diff_rel_step<span class="ansi-yellow-intense-fg ansi-bold">=</span>finite_diff_rel_step<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+<span class="ansi-green-fg">    377</span>                                   bounds=new_bounds)
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\optimize.py</span> in <span class="ansi-cyan-fg">_prepare_scalar_function</span><span class="ansi-blue-intense-fg ansi-bold">(fun, x0, jac, args, bounds, epsilon, finite_diff_rel_step, hess)</span>
+<span class="ansi-green-fg">    259</span>     <span class="ansi-red-intense-fg ansi-bold"># ScalarFunction caches. Reuse of fun(x) during grad</span>
+<span class="ansi-green-fg">    260</span>     <span class="ansi-red-intense-fg ansi-bold"># calculation reduces overall function evaluations.</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 261</span><span class="ansi-yellow-intense-fg ansi-bold">     sf = ScalarFunction(fun, x0, args, grad, hess,
+</span><span class="ansi-green-fg">    262</span>                         finite_diff_rel_step, bounds, epsilon=epsilon)
+<span class="ansi-green-fg">    263</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, fun, x0, args, grad, hess, finite_diff_rel_step, finite_diff_bounds, epsilon)</span>
+<span class="ansi-green-fg">    138</span>
+<span class="ansi-green-fg">    139</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl <span class="ansi-yellow-intense-fg ansi-bold">=</span> update_fun
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 140</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    141</span>
+<span class="ansi-green-fg">    142</span>         <span class="ansi-red-intense-fg ansi-bold"># Gradient evaluation</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">_update_fun</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
+<span class="ansi-green-fg">    231</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    232</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f_updated<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 233</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    234</span>             self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f_updated <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-green-intense-fg ansi-bold">True</span>
+<span class="ansi-green-fg">    235</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">update_fun</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-fg">    135</span>
+<span class="ansi-green-fg">    136</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 137</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f <span class="ansi-yellow-intense-fg ansi-bold">=</span> fun_wrapped<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    138</span>
+<span class="ansi-green-fg">    139</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl <span class="ansi-yellow-intense-fg ansi-bold">=</span> update_fun
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">fun_wrapped</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
+<span class="ansi-green-fg">    132</span>             <span class="ansi-red-intense-fg ansi-bold"># Overwriting results in undefined behaviour because</span>
+<span class="ansi-green-fg">    133</span>             <span class="ansi-red-intense-fg ansi-bold"># fun(self.x) will change self.x, with the two no longer linked.</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 134</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> fun<span class="ansi-yellow-intense-fg ansi-bold">(</span>np<span class="ansi-yellow-intense-fg ansi-bold">.</span>copy<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    135</span>
+<span class="ansi-green-fg">    136</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">newobj</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
+<span class="ansi-green-fg">    252</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _assoc_obj_con<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> objname<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_const<span class="ansi-yellow-intense-fg ansi-bold">,</span> arg<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    253</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newobj<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 254</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
+<span class="ansi-green-fg">    255</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> newconst<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    256</span>             <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x_to_obj_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">1</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>objname<span class="ansi-yellow-intense-fg ansi-bold">]</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">x_to_obj_const</span><span class="ansi-blue-intense-fg ansi-bold">(self, x, simnames)</span>
+<span class="ansi-green-fg">    628</span>             <span class="ansi-red-intense-fg ansi-bold"># prep sims</span>
+<span class="ansi-green-fg">    629</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> simname <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">in</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">.</span>get<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 630</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    631</span>                 self<span class="ansi-yellow-intense-fg ansi-bold">.</span>current_iter<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;sims&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>add<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    632</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_prep_sim_type</span><span class="ansi-blue-intense-fg ansi-bold">(self, simtype, simname, x)</span>
+<span class="ansi-green-fg">    493</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _prep_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    494</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;single&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_single_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 495</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;multi&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_prep_multi_sim<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    496</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _run_sim_type<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    497</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> simtype<span class="ansi-yellow-intense-fg ansi-bold">==</span><span class="ansi-blue-intense-fg ansi-bold">&#39;set_const&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>    <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_get_set_const<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_prep_multi_sim</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, x)</span>
+<span class="ansi-green-fg">    338</span>         var_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_get_var_obj_time<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    339</span>         kwar <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>simulations<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">]</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 340</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>mdl <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_check_new_mdl<span class="ansi-yellow-intense-fg ansi-bold">(</span>simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> x<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> default_p <span class="ansi-yellow-intense-fg ansi-bold">=</span> kwar<span class="ansi-yellow-intense-fg ansi-bold">.</span>get<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;p&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    341</span>         result<span class="ansi-yellow-intense-fg ansi-bold">,</span> nomhist<span class="ansi-yellow-intense-fg ansi-bold">,</span> nomscen<span class="ansi-yellow-intense-fg ansi-bold">,</span> c_mdls_nom<span class="ansi-yellow-intense-fg ansi-bold">,</span> t_end <span class="ansi-yellow-intense-fg ansi-bold">=</span> prop<span class="ansi-yellow-intense-fg ansi-bold">.</span>nom_helper<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span>var_time<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>kwar<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;scen&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;use_end_condition&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span><span class="ansi-green-intense-fg ansi-bold">False</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    342</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">_check_new_mdl</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, var_time, mdl, x, obj_time, staged, default_p)</span>
+<span class="ansi-green-fg">    372</span>             <span class="ansi-green-intense-fg ansi-bold">for</span> func<span class="ansi-yellow-intense-fg ansi-bold">,</span> fvars <span class="ansi-green-intense-fg ansi-bold">in</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>var_mapping<span class="ansi-yellow-intense-fg ansi-bold">[</span>simname<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>get<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;paramfunc&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>items<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    373</span>                 p<span class="ansi-yellow-intense-fg ansi-bold">.</span>update<span class="ansi-yellow-intense-fg ansi-bold">(</span>func<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span><span class="ansi-yellow-intense-fg ansi-bold">[</span>x<span class="ansi-yellow-intense-fg ansi-bold">[</span>ind<span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-green-intense-fg ansi-bold">for</span> ind <span class="ansi-green-intense-fg ansi-bold">in</span> fvars<span class="ansi-yellow-intense-fg ansi-bold">.</span>values<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 374</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>mdl <span class="ansi-yellow-intense-fg ansi-bold">=</span> mdl<span class="ansi-yellow-intense-fg ansi-bold">.</span>new_with_params<span class="ansi-yellow-intense-fg ansi-bold">(</span>p<span class="ansi-yellow-intense-fg ansi-bold">=</span>p<span class="ansi-yellow-intense-fg ansi-bold">,</span> sp<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-blue-intense-fg ansi-bold">&#39;times&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span><span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_time<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    375</span>
+<span class="ansi-green-fg">    376</span>         prop<span class="ansi-yellow-intense-fg ansi-bold">.</span>init_histrange<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> var_time<span class="ansi-yellow-intense-fg ansi-bold">,</span> staged<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#34;all&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#34;all&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\model.py</span> in <span class="ansi-cyan-fg">new_with_params</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
+<span class="ansi-green-fg">    274</span>         <span class="ansi-green-intense-fg ansi-bold">with</span> changes to params <span class="ansi-yellow-intense-fg ansi-bold">(</span>p<span class="ansi-yellow-intense-fg ansi-bold">,</span> sp<span class="ansi-yellow-intense-fg ansi-bold">,</span> track<span class="ansi-yellow-intense-fg ansi-bold">,</span> rand etc<span class="ansi-yellow-intense-fg ansi-bold">.</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    275</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 276</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>p<span class="ansi-yellow-intense-fg ansi-bold">,</span> sp<span class="ansi-yellow-intense-fg ansi-bold">,</span> r<span class="ansi-yellow-intense-fg ansi-bold">,</span> track <span class="ansi-yellow-intense-fg ansi-bold">=</span> super<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>new_params<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    277</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>__class__<span class="ansi-yellow-intense-fg ansi-bold">(</span>p<span class="ansi-yellow-intense-fg ansi-bold">=</span>p<span class="ansi-yellow-intense-fg ansi-bold">,</span> sp<span class="ansi-yellow-intense-fg ansi-bold">=</span>sp<span class="ansi-yellow-intense-fg ansi-bold">,</span> r<span class="ansi-yellow-intense-fg ansi-bold">=</span>r<span class="ansi-yellow-intense-fg ansi-bold">,</span> track<span class="ansi-yellow-intense-fg ansi-bold">=</span>track<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    278</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> copy<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py</span> in <span class="ansi-cyan-fg">new_params</span><span class="ansi-blue-intense-fg ansi-bold">(self, p, sp, r, track)</span>
+<span class="ansi-green-fg">    204</span>             track args
+<span class="ansi-green-fg">    205</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 206</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>p <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>p<span class="ansi-yellow-intense-fg ansi-bold">.</span>copy_with_vals<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>p<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    207</span>         sp <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>sp<span class="ansi-yellow-intense-fg ansi-bold">.</span>copy_with_vals<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>sp<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    208</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> r<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py</span> in <span class="ansi-cyan-fg">copy_with_vals</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
+<span class="ansi-green-fg">    117</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> copy_with_vals<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    118</span>         <span class="ansi-blue-intense-fg ansi-bold">&#34;&#34;&#34;Creates a copy of itself with modified values given by kwargs&#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 119</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>__class__<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">**</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>asdict<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    120</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> check_pickle<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    121</span>         <span class="ansi-blue-intense-fg ansi-bold">&#34;&#34;&#34;Checks to make sure pickled object will get *args and **kwargs&#34;&#34;&#34;</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, strict_immutability, *args, **kwargs)</span>
+<span class="ansi-green-fg">     55</span>             <span class="ansi-green-intense-fg ansi-bold">raise</span> Exception<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#34;Invalid args/kwargs: &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>args<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; , &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; in &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>__class__<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     56</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> strict_immutability<span class="ansi-yellow-intense-fg ansi-bold">:</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>check_immutable<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 57</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>check_type<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     58</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>check_pickle<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     59</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> check_lim<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> k<span class="ansi-yellow-intense-fg ansi-bold">,</span> v<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py</span> in <span class="ansi-cyan-fg">check_type</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
+<span class="ansi-green-fg">    114</span>             if ((true_type and not attr_type==true_type) and
+<span class="ansi-green-fg">    115</span>                 str(true_type).split(&#34;&#39;&#34;)[1] not in str(attr_type)): # weaker, but enables use of np.str, np.float, etc
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 116</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span><span class="ansi-green-intense-fg ansi-bold">raise</span> Exception<span class="ansi-yellow-intense-fg ansi-bold">(</span>typed_field<span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; in &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>__class__<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; assigned incorrect type: &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>attr_type<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34; (should be &#34;</span><span class="ansi-yellow-intense-fg ansi-bold">+</span>str<span class="ansi-yellow-intense-fg ansi-bold">(</span>true_type<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-blue-intense-fg ansi-bold">&#34;)&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    117</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> copy_with_vals<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    118</span>         <span class="ansi-blue-intense-fg ansi-bold">&#34;&#34;&#34;Creates a copy of itself with modified values given by kwargs&#34;&#34;&#34;</span>
+
+<span class="ansi-red-intense-fg ansi-bold">Exception</span>: delay in &lt;class &#39;examples.pump.ex_pump.PumpParam&#39;&gt; assigned incorrect type: &lt;class &#39;numpy.float64&#39;&gt; (should be &lt;class &#39;int&#39;&gt;)
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
@@ -1128,7 +1646,10 @@ Problem new_problem                                                     current 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Parallelism_Tutorial.html" class="btn btn-neutral float-left" title="Using Parallel Computing in fmdtools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Stochastic_Modelling.html" class="btn btn-neutral float-right" title="Stochastic Modelling in fmdtools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
