@@ -1,4 +1,4 @@
-# README
+# Overview
 
 ![PyPI](https://img.shields.io/pypi/v/fmdtools)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release)
@@ -6,9 +6,57 @@
 
 **fmdtools** (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
 
-For full reference and examples, please see the [documentation page](https://nasa.github.io/fmdtools/).
-
 Note: This version (**2.0-alpha**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. [Click here to view the status of our test results.](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/pytest_report.html). For stable versions, download packages releases without the -alpha or -beta tags.
+
+## Getting Started
+
+The latest public version of fmdtools can be downloaded from the [fmdtools github repository](https://github.com/nasa/fmdtools/) e.g., using:
+
+```
+   git clone https://github.com/nasa/fmdtools.git
+```
+   
+For development and use of this version (e.g., for tutorials and models), we recommended then installing this package using `pip`:
+
+```
+   pip install -e /path/to/fmdtools 
+```
+
+A version of the fmdtools toolkit can also be installed directly from the [PyPI package repository](https://pypi.org/project/fmdtools/) using ``pip install fmdtools``.
+
+
+### Prerequisites
+
+fmdtools requires Python 3 and depends directly on these packages (see requirements.txt):
+
+```
+   scipy
+   tqdm
+   networkx
+   numpy
+   matplotlib
+   pandas
+   ordered-set
+   dill 
+   recordclass >=0.14.4
+   pytest
+```
+
+These packages are optional but recommended to enable specific fmdtools use-cases and to work with examples in the repository:
+
+```
+   jupyter notebook			#(for repository notebooks)
+   graphviz					#(to plot using graphviz options)
+   pyvis					#(for interactive html views of model graphs)
+   quadpy 					#(for quadrature sampling)
+   ffmpeg 					#(for animations)
+   shapely					#(for multirotor model)
+   deap						#(for optimization of rover faults)
+   pycallgraph2				#(for model profiling)
+```
+
+These must be installed (e.g. using ``pip install packagename`` or ``conda install packagename``) them before running any of the codes in the repository. 
+
 
 ## Contributions
 fmdtools is developed primarily by researchers at NASA Ames Research Center. External contributions are welcome under a Contributor License Agreement:
@@ -25,7 +73,7 @@ fmdtools is developed primarily by researchers at NASA Ames Research Center. Ext
 
 See: [CONTRIBUTORS.md](https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md)
 
-## Notices
+## License/Notices
 
 Released under the [NASA Open Source Agreement Version 1.3](https://github.com/nasa/fmdtools/blob/main/NASA_Open_Source_Agreement_fmdtools.pdf)
 

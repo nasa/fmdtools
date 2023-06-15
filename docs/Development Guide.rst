@@ -1,8 +1,61 @@
 Development Guide
 ===========================
 
-Intro to fmdtools
+Why fmdtools?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The main impetus for the development of the fmdtools project was a lack existing tools to enable early function-based fault simulation for early functional hazard assessment. Researchers thus had to re-implement modelling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools resolves this problem by separating resilience modelling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. Towards this end, the fmdtools package provides three major pieces of functionality:
+
+1. Model definition constructs which enable systematic early specification of the high level structure and behaviors of a system with concise syntax (fmdtools.define).
+
+2. Simulation methods which enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios and model types (fmdtools.sim).
+
+3. Analysis methods for quantifying resilience and summarizing and visualizing behaviors and properties of interest (fmdtools.analyze).
+
+An overview of an earlier version of fmdtools (0.6.2) is provided in the paper:
+
+`Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., & Goebel, K. (2021). fmdtools: A Fault Propagation Toolkit for Resilience Assessment in Early Design. International Journal of Prognostics and Health Management, 12(3). <https://doi.org/10.36001/ijphm.2021.v12i3.2954>`_
+
+Key Features
 --------------------------------
+
+fmdtools was developed with a number of unique features that differentiate it from existing safety/resilience simulation tools. 
+
+- fmdtools uses an object-oriented undirected graph-based model representation which enables arbitrary propagation of flow states through a model graph. As opposed to a *procedural* *directed* graph-based model representation (a typical strategy for developing fault models in code in which each function or component is represented by a method, the inputs and outputs are which are connected with connected functions/components in a larger model method), this enables one to:
+  
+  - propagate behaviors in multiple directions in a model graph, e.g., closing a valve will not just reduce flow in the downstream pipe but also increase pressure in upstream pipes.
+  
+  - define the data structures defining a function/component (e.g. states, faults, timed events) with the behavioral methods in a single logical structure that can be re-used and modified for similar components and methods (that is, a class, instead of a set of unstructured variables and methods)
+
+- fmdtools can represent the system at varying levels of fidelity through the design process so that one can start with a simple model and analysis and make it more detailed as the design is elaborated. A typical process of representing the system (from less to more detail) would involve:
+  
+  - Creating a network representation of the model functions and flows to visualize the system and identify structurally-important parts of the model's causal structure
+  
+  - Elaborating the flow attributes and function failure logic in a static propagation to simulate the timeless effects of faults in the model
+  
+  - Adding dynamic states and behaviors to the functions as well as a simulation times and operational phases in a dynamic propagation model to simulate the dynamic effects of faults simulated during different time-steps
+  
+  - Instantiating functions with component architectures to compare the expected resilience and behaviors of each
+  
+  - Defining stochastic behavioral and input parameters to simulate and analyze system resilience throughout the operational envelope
+  
+  - Using optimization methods to search the space of potential hazardous scenarios and find the optimal response parameters to mitigate these scenarios
+
+- fmdtools provides convenient methods for quickly visualizing the results of fault simulations with commonly-used Python libraries to enable one to quickly assess:
+  
+  - effects of faults on functions and flows in the model graph at a given time-step
+  
+  - the behavior of system states over time in nominal and faulty scenarios over a range of operational parameters
+  
+  - the effect of model input parameters (e.g., ranges, stochastic inputs) on nominal/faulty operations
+  
+  - the high-level results of a set of simulations in an FMEA-style table of faults, effects, rates, costs, and overall risk
+  
+  - simulation responses over a range or distribution of model and scenario parameters
+
+
+Intro to fmdtools
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **The best place to start** to getting acquanted with basic syntax and functionality is the `Intro to fmdtools <Intro_to_fmdtools.md>`_ workshop, which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to help demonstrate the full variety of methods/approaches supported in fmdtools and their applcation more advanced use-cases.
 
 .. toctree::
@@ -11,13 +64,14 @@ Intro to fmdtools
    Intro_to_fmdtools.md
 
 Contributions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 --------------------------------
 
 Development of fmdtools is coordinated by the `fmdtools team <https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests) external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
 
 Repo Structure
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 .. image:: /docs/figures/repo_structure.svg
    :width: 800
@@ -51,7 +105,7 @@ The fmdtools team is responsible for coordinating the development between the in
 - propagating changes between repositories during development using `git push` and `git pull` from each repository
 
 Development Process
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 .. image:: /docs/figures/dev_process.svg
    :width: 800
@@ -107,7 +161,7 @@ After upload, test the deployment by:
 2. Updating the package (``pip install –upgrade pip``) and
 
 Roles
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 - team lead: 		coordinates all activities and has technical authority over project direction
 - full developer: 	can make changes off of version and main branches and has full ability to perform the release process
@@ -115,7 +169,7 @@ Roles
 
 
 Documentation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 Documentation is generated using Sphinx, which generates html from rst files. The process for generating documentation (after sphinx has been set up) is to open powershell and run::
 	
@@ -125,7 +179,7 @@ Documentation is generated using Sphinx, which generates html from rst files. Th
 
 
 Testing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 There are two major types of tests:
 
@@ -133,7 +187,7 @@ There are two major types of tests:
 - qualitative tests, which are the example notebooks
 
 Contributors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 See: `CONTRIBUTORS.md <../CONTRIBUTORS.md>`_
 
@@ -144,16 +198,17 @@ See: `CONTRIBUTORS.md <../CONTRIBUTORS.md>`_
 
 
 Model Development Best Practices
---------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Plan your model to avoid technical debt
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
+
 Simple, small models are relatively easy to define in fmdtools with a few functions, flows, and behaviors. As such, it can be easy to get in the habit of not planning or organizing development in a systematic, which leads to issues when developing larger models: specifically, code that is *written into existence* instead of designed, planned, edited, tested, and documented. This leads to `Technical debt <https://en.wikipedia.org/wiki/Technical_debt/>`_, which is the inherent difficulty of modifying code that was written ad-hoc rather than designed. Unless this technical debt is resolved, the ability to modify a model (e.g., to add new behaviors, conduct analyses, etc) will be limited by the complicated and unwieldy existing code. 
 
 The next subsections give some advice to help avoid technical debt, based on lessons learned developing fmdtools models over the past few years.
 
 Don't copy, inherit and functionalize
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 Copy-and-paste can be a useful concept, but often gets over-relied upon by novice model developers who want to create several variants of the same programming structure. However, in the world of systems engineering (and software development), there are many cases where developers should be using `class inheritance <https://www.w3schools.com/python/python_inheritance.asp/>`_ and `writing functions <https://swcarpentry.github.io/python-novice-gapminder/16-writing-functions/index.html/>`_ instead. 
 
 The advantages of inheritance are: 
@@ -172,7 +227,7 @@ In fmdtools, these patterns can be helpful:
 This is an incomplete list. In general, it can be a helpful limitation to *try to avoid using copy-and-paste as much as possible.* Instead if a piece of code needs to be run more than once in more than once place, write a function or method which will be used everywhere. The idea should be to *write the code once, and run it everywhere.*
 
 Document your code, sometimes *before* your write it
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 In general, Python coding style aspires to be `as self-documenting <https://en.wikipedia.org/wiki/Self-documenting_code/>`_ as possible. However, this is not a replacement for documentation. In general, novice developers think of documentation as something which happens at the end of the software development process, as something to primarily assist users. 
 
@@ -195,7 +250,7 @@ For fmdtools models, documentation should at the very least take the following f
 Documentation can best be thought of as a *contract that your code should fulfill*. As such, it can be very helpful to think of the documentation first, as a way of specifying your work. Tests (formal and informal) can then be defined based on the stated behavior of the function. It is thus recommended to *document your code as you write it*, instead of waiting until the end of the development process, to avoid technical debt. 
 
 Don't get ahead of yourself--try to get a running simulation first
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 In the model development process, it can often be tempting to try to model every single mode or behavior in immense detail from the get-go. This is motivated by a desire to acheive realism, but can lead to issues from a project management and integration perspective. A model does not have much meaning outside a simulation or analysis, and, as such, development needs to be motivated *first* by getting a working simulation and *then* by adding detail. These simulations are the key feedback loop for determining whether model code is embodying desired behavior. 
 
@@ -213,7 +268,7 @@ In general, it is bad to spend a lot of time developing a model without running 
 Finally, *smaller, incremental iterations are better than large iterations.* Instead of spending time implementing large sections of code at once (with documentation and testing TBD), instead implement small sections of code that you can then document, test, and edit immediately after. Using these small iterative cycles can increase code quality by ensuring that large blocks of undocumented/untested (and ultimately unreliable) code don't make it into your project, only for you to have to deal with it later.
 
 Preserve your prototype setup by formalizing it as a test
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 Testing code is something which is often neglected in the development process, as something to do when the project is finished (i.e., as an assurance rather than development task). Simultaneously, developers often iterate over temporary scripts and code snippets during development to ensure that it works as expected in what is essentially an informal testing process. The major problem with this process is that these tests are easily lost and are only run one at a time, making it difficult to verify that code works after it has been modified.
 
@@ -224,7 +279,7 @@ While testing is an assurance activity, it should also be considered a developme
 Finally, don't create tests solely to create tests. Tests should have a specific purpose in mind ideally single tests should cover as many considerations as possible, rather than creating new tests for each individual consideration. As in model development, try to avoid bloat as much as possible. If the desire is to cover every edge-case, try to parameterize tests over these cases instead of creating individual test methods.
 
 Edit your code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 The nature of writing code is a messy process--often we spend a considerable amount of time getting code to a place where it "works" (i.e., runs) and leave it as-is. The problem with doing this over and over is that it neglects the syntax, documetation, and structural aspects of coding and thus contributes to technical debt. One of the best ways to avoid this from impacting development too much is to edit code after writing it.
 
@@ -243,7 +298,7 @@ Editing is the process of reviewing the code, recognizing potential (functional 
 This is an incomplete list. The point is to regularly review and improve code *after it is implemented to minimize future technical debt*. Waiting to edit will cause more hardship down the line.
 
 Structuring a model
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 fmdtools was originally developed around a very simple use-case of modelling physical behaviors using a Function/Flow ontology, where Functions (referred to as "technical functions") are supposed to be the high-level roles to be performed in the system, while flows are the data passed between these roles (energy, material, or signal).  Many of the models in the repository were developed to follow this form, or some variation on it, however, more complex modelling use-cases have led us to need to expand our conception of what can/should be modelled with a function or flow. More generally, 
 - Flows define *shared data structures*, meaning interacting variables
@@ -297,7 +352,7 @@ Systems of Systems models involve the interaction of multiple systems in a singl
 Note that, unlike other model types, System of Systems models very often will have multiple copies of functions and flows instantiated in the model. As a result, it is important to use dedicated model structures to the overall structure from being intractible. Specifically multiple copies of flows can be handled using the `MultiFlow` class while Communications between agents can be handled using the `CommsFlow` class. The `ModelTypeGraph` graph representation can be used to represent the model as just the types involved (rather than all instantiations). In general, it can be helpful to create tests/analyses for individual agents in addition to the overall system.
 
 Use model constructs to simplify your code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 The fmdtools codebase is quite large, and, as a result, it can be tempting to dive into modelling before learning about all of its capabilities. The problem with this is that many of these capabilities and interfaces are there to make your life easier, provided you understand and use them correctly. Below are some commonly-misunderstood constructs to integrate into your code:
 
 * :class:`fmdtools.define.Common` has a number of very basic operations which can be used in all model structures to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.
@@ -309,7 +364,7 @@ The fmdtools codebase is quite large, and, as a result, it can be tempting to di
 * If there's something that you'd like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing you own ad-hoc solution. Alternatively, try devoping your solution as a *feature* rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.
 
 Style advice
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 Development of fmdtools models should follow the `PEP 8 Style Guide <https://peps.python.org/pep-0008/#introduction>`_ as much as possible. While this won't be entirely re-iterated here, the following applies:
 
@@ -323,7 +378,7 @@ Development of fmdtools models should follow the `PEP 8 Style Guide <https://pep
 * It's `fmdtools`. Not `Fmdtools` or `fmd tool`. Even when it starts the sentence.
 
 See also
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
 
 * `PEP 8 Style Guide <https://peps.python.org/pep-0008/#introduction>`_
 * `Technical debt <https://en.wikipedia.org/wiki/Technical_debt/>`_
