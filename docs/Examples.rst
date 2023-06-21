@@ -41,7 +41,7 @@ In addition to `ex_pump.py`, more use-cases are demonstrated in the derivative m
   
   - Simulating stochastic models using the `run_stochastic` parameter in :mod:`fmdtools.sim.propagate` functions, as well as setting up a :class:`fmdtools.define.NominalApproach` with multiple seeds to run a set of random simulations.
   
-  - Using :func:`fmdtools.analyze.plot.mdlhists()` to visualize the results of multiple stochastic simulations over time, and analyze quantities of interest using :func:`fmdtools.analyze.tabulate.nested_stats()`, :func:`fmdtools.analyze.tabulate.resilience_factor_comparison()`
+  - Using :func:`fmdtools.analyze.plot.mdlhists()` to visualize the results of multiple stochastic simulations over time, and analyze quantities of interest using :func:`fmdtools.analyze.tabulate.nested_stats()`, :func:`fmdtools.analyze.tabulate.nested_factor_comparison()`
 
 - `AST Sampling <../examples/pump/AST_Sampling.ipynb>`_, shows how fmdtools models called from the AdaSress Julia package to leverage the adaptive stress testing methodology using the :class:`fmdtools.sim.search.DynamicInterface` class.
 
@@ -131,7 +131,7 @@ The Rover model showcases more advanced methodologies that can be used in fmdtoo
 
   - Using analysis functions like :func:`fmdtools.analyze.tabulate.nominal_vals_1d()` and :func:`fmdtools.analyze.plot.nominal_factor_comparison()` to visualize quantities of interest for the simulation over a range of nominal parameters.
 
-  - Using analysis functions like :func:`fmdtools.analyze.tabulate.resilience_factor_comparison()` and :func:`fmdtools.analyze.plot.resilience_factor_comparison()` to visualize resilience metrics of the model to a set of fault modes over a range of nominal parameters.
+  - Using analysis functions like :func:`fmdtools.analyze.tabulate.nested_factor_comparison()` and :func:`fmdtools.analyze.plot.nested_factor_comparison()` to visualize resilience metrics of the model to a set of fault modes over a range of nominal parameters.
   
 - `Defining Fault Sampling Approaches in fmdtools <../examples/rover/Approach_Use-Cases.ipynb>`_ covers how to set up a fault sampling approach and use it to simulate a large number of hazardous scenarios in a model. This includes:
 

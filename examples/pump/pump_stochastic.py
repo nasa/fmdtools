@@ -152,7 +152,7 @@ if __name__=="__main__":
     
     an.tabulate.nested_stats(app_comp, endclasses, average_metrics=['cost'], inputparams=['delay'])
     
-    an.tabulate.resilience_factor_comparison(app_comp, endclasses, ['delay'], 'cost',  difference=False, percent=False)
+    an.tabulate.nested_factor_comparison(app_comp, endclasses, ['delay'], 'cost',  difference=False, percent=False)
     
     #endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water','block')], staged=True) #pool=mp.Pool(4)
     
@@ -216,7 +216,7 @@ if __name__=="__main__":
     fig = an.plot.mdlhists(comp_mdlhists, {'MoveWater':['eff','total_flow'], 'Wat_2':['flowrate','pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
     
     
-    tab = an.tabulate.resilience_factor_comparison(app_comp, endclasses, ['delay'], 'cost')
+    tab = an.tabulate.nested_factor_comparison(app_comp, endclasses, ['delay'], 'cost')
     """
     # app = NominalApproach()
     # app.add_seed_replicates('test_seeds', 100)

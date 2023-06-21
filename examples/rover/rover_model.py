@@ -720,8 +720,8 @@ if __name__=="__main__":
 
     #behave_endclasses_nested, behave_mdlhists_nested = prop.nested_approach(mdl, behave_nomapp, pool=mp.Pool(5), faults='drive')
 
-    #res_comp = an.tabulate.resilience_factor_comparison(behave_nomapp, behave_endclasses_nested, ['t'], 'at_finish', percent=False)
-    #fig = an.plot.resilience_factor_comparison(res_comp, stack=True)
+    #res_comp = an.tabulate.nested_factor_comparison(behave_nomapp, behave_endclasses_nested, ['t'], 'at_finish', percent=False)
+    #fig = an.plot.nested_factor_comparison(res_comp, stack=True)
 
     #endresults,  mdlhist = prop.one_fault(mdl, 'drive','hmode_34', time=1, staged=False)
     #an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})
