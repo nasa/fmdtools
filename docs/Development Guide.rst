@@ -4,13 +4,19 @@ Development Guide
 Why fmdtools?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The main impetus for the development of the fmdtools project was a lack existing tools to enable early function-based fault simulation for early functional hazard assessment. Researchers thus had to re-implement modelling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools resolves this problem by separating resilience modelling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. Towards this end, the fmdtools package provides three major pieces of functionality:
+.. image:: figures/resilience_importance.png
+   :width: 800
+   :alt: importance of considering resilience 
 
-1. Model definition constructs which enable systematic early specification of the high level structure and behaviors of a system with concise syntax (fmdtools.define).
+The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. As shown above, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome). 
 
-2. Simulation methods which enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios and model types (fmdtools.sim).
+The main reason fmdtools was developed to study this, was a lack of existing open-source tools to model these dynamics in at a high level (i.e., functions and flows) in the design process. Researchers in this area thus had to re-implement modelling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolves this problem by separating resilience modelling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. Towards this end, the fmdtools package provides three major pieces of functionality:
 
-3. Analysis methods for quantifying resilience and summarizing and visualizing behaviors and properties of interest (fmdtools.analyze).
+1. Model definition constructs which enable systematic early specification of the high level structure and behaviors of a system with concise syntax (:mod:`fmdtools.define`).
+
+2. Simulation methods which enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios and model types (:mod:`fmdtools.sim`).
+
+3. Analysis methods for quantifying resilience and summarizing and visualizing behaviors and properties of interest (:mod:`fmdtools.analyze`).
 
 An overview of an earlier version of fmdtools (0.6.2) is provided in the paper:
 
@@ -56,7 +62,7 @@ fmdtools was developed with a number of unique features that differentiate it fr
 
 Intro to fmdtools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-**The best place to start** to getting acquanted with basic syntax and functionality is the `Intro to fmdtools <Intro_to_fmdtools.md>`_ workshop, which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to help demonstrate the full variety of methods/approaches supported in fmdtools and their applcation more advanced use-cases.
+**The best place to start** to getting acquanted with basic syntax and functionality is the `Intro to fmdtools <Intro_to_fmdtools.md>`_ workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to help demonstrate the full variety of methods/approaches supported in fmdtools and their applcation more advanced use-cases.
 
 .. toctree::
    :hidden:
