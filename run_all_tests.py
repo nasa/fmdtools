@@ -10,14 +10,14 @@ if __name__=="__main__":
     # requires pytest, nbmake, pytest-html
     #retcode = pytest.main(["--html=pytest_report.html", "--nbmake"])
     
-    fast_notebooks = ["examples/asg_demo/Action Sequence Graph.ipynb",
+    fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
                       "examples/eps/EPS_Example_Notebook.ipynb", 
                       "examples/pump/Pump_Example_Notebook.ipynb",
                       "examples/pump/Stochastic_Modelling.ipynb",
                       "examples/rover/Approach_Use-Cases.ipynb",
                       "examples/rover/Model_Structure_Visualization_Tutorial.ipynb",
                       "examples/rover/Nominal_Approach_Use-Cases.ipynb",
-                      "examples/rover/Rover Setup Notebook.ipynb",
+                      "examples/rover/Rover_Setup_Notebook.ipynb",
                       "examples/tank/Tank_Analysis.ipynb"
                       ]
     
@@ -25,7 +25,7 @@ if __name__=="__main__":
     retcode = pytest.main(["--nbmake", *fast_notebooks])
     
     slow_notebooks = ["examples/multirotor/Demonstration.ipynb",
-                      "examples/multirotor/Multirotor Optimization.ipynb",
+                      "examples/multirotor/Multirotor_Optimization.ipynb",
                       "examples/pump/AST_Sampling.ipynb",
                       "examples/pump/Optimization.ipynb",
                       "examples/pump/Parallelism_Tutorial.ipynb",
@@ -42,7 +42,7 @@ if __name__=="__main__":
     #retcode = pytest.main(["--nbmake", *slow_notebooks])
     
     # for testing all unittests
-    retcode = pytest.main()
+    #retcode = pytest.main()
     
     
     # for creating comprehensive test report:
