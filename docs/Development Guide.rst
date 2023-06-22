@@ -4,9 +4,11 @@ Development Guide
 Why fmdtools?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: figures/resilience_importance.png
+.. figure:: figures/resilience_importance.png
    :width: 800
    :alt: importance of considering resilience 
+   
+   Resilience is important to consider when dynamics of system behavior can lead to hazardous or unsafe outcomes.
 
 The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. As shown above, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome). 
 
@@ -314,13 +316,13 @@ These functions and flows are connected via containment relationships in an undi
 
 **Small Models**
 
-Small models have a few functions with simple behaviors that are being loaded in simple ways. A good example of this is the `Pump Example <example_pump/Pump_Example_Notebook.ipynb>`_ and `EPS Example <example_eps/EPS_Example_Notebook.ipynb>`_ , where the model is a simple translation of inputs to (defined in input functions) outputs (defined in output functions. These models have the most ability to follow the functional basis modelling ontology (with `import_x` loadings and `output_x` outputs) , as well as use static_behavior methods. It is also possible to model many different modes with full behavioral detail, since the system itself is not too complicated. Technical debt and development process is less of a consideration in these models, but should still not be ignored. A typical structure for a model would be:
+Small models have a few functions with simple behaviors that are being loaded in simple ways. A good example of this is the `Pump Example <../examples/pump/Pump_Example_Notebook.ipynb>`_ and `EPS Example <../examples/eps/EPS_Example_Notebook.ipynb>`_ , where the model is a simple translation of inputs to (defined in input functions) outputs (defined in output functions. These models have the most ability to follow the functional basis modelling ontology (with `import_x` loadings and `output_x` outputs) , as well as use static_behavior methods. It is also possible to model many different modes with full behavioral detail, since the system itself is not too complicated. Technical debt and development process is less of a consideration in these models, but should still not be ignored. A typical structure for a model would be:
 
 * Model
-	*flows
+	* flows
 		* X
 		* Y
-	*functions
+	* functions
 		* Import_X
 		* Change_X_to_Y
 		* Export_Y
@@ -330,11 +332,11 @@ Small models have a few functions with simple behaviors that are being loaded in
 Moderate-size system models are models which have a control/planning system (e.g., something that tells it what to do at any given time). They also often interact with their environment in complex ways. A typical structure for a model would be: 
 
 * Model
-	*flows
+	* flows
 		* Environment, Location, etc 		(place the system is located in and its place in it)
 		* Power, Actions, etc				(internal power/other physical states)
 		* Commands,Communications, etc 	(external commands/comms with an operator)
-	*functions
+	* functions
 		* Affect_Environment 				(Physical behaviors the system performs on the environment)
 		* Control_System 					(Controls, Planning, Perception, etc)
 		* Distribute_Energy, Hold_X, etc 	(Internal components, etc)
@@ -347,11 +349,11 @@ A good example of this are the Drone and Rover models. Models like this are simp
 Systems of Systems models involve the interaction of multiple systems in a single model. These models are much more complex and thus require very good development practices to develop to maturity. A typical structure for a model for this might be:
 
 * Model
-	*flows
+	* flows
 		* Environment						(place the systems are located in)
 		* Location(s)						(individual states of the agents)
 		* Communication(s) 				(agent interactions with each other
-	*functions
+	* functions
 		* Asset/Agent(s)					(individual system models)
 		* AgentController(s)				(coordinator which issues commans to each system)
 
