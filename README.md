@@ -48,7 +48,6 @@ These packages are optional but recommended to enable specific fmdtools use-case
    jupyter notebook			#(for repository notebooks)
    graphviz					#(to plot using graphviz options)
    pyvis					#(for interactive html views of model graphs)
-   quadpy 					#(for quadrature sampling)
    ffmpeg 					#(for animations)
    shapely					#(for multirotor model)
    deap						#(for optimization of rover faults)

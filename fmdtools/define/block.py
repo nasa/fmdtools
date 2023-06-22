@@ -9,7 +9,6 @@ Description: A module to define Functions, Components, Actions, and other classe
 - :class:`CompArch`:    Class for defining Component Architectures, or sets of components to be contained by a FxnBlock
 - :class:`ASG`:         Class for defining Action Sequence Graphs, or sets of actions with specific relationships.
 """
-import numpy as np
 from decimal import Decimal
 import sys
 import itertools
@@ -1234,6 +1233,8 @@ class FxnBlock(Block):
         elif proptype == 'reset':
             if hasattr(self, 'static_behavior'):
                 self.static_behavior(time)
+            if hasattr(self, 'behavior'):
+                self.behavior(time)
             if hasattr(self, 'dynamic_behavior'):
                 self.dynamic_behavior(time)
         
