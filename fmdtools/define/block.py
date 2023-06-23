@@ -995,9 +995,9 @@ class ASG(dataobject, mapping=True):
     def copy(self, flows={}, **kwargs):
         new_flows = {**{fn: flow.copy() for fn, flow in self.flows.items() if fn not in flows}, **flows}
         
-        cop = self.__init__(flows=new_flows, **kwargs)
+        cop = self.__class__(flows=new_flows, **kwargs)
         for action in self.actions: 
-            cop.actions[action] = self.actions[action].copy()
+            cop.actions[action] = self.actions[action].copy(flows=new_flows)
         cop.active_actions = copy.deepcopy(self.active_actions)
         return cop
 
@@ -1160,7 +1160,7 @@ class FxnBlock(Block):
         if hasattr(self, 'c'): 
             cop.c = self.c.copy_with_arg(**self._args_c)
         if hasattr(self, 'a'): 
-            cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)
+            cop.a = self.a.copy(flows=cop.flows, **self._args_a)
         if hasattr(self, 'h'):
             if hasattr(self, 'c'): 
                 for compname, comp in cop.c.components.items():

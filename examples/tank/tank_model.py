@@ -76,17 +76,18 @@ class ExportLiquid(FxnBlock):
         self.sig.s.indicator = self.s.amt_open
 
 class GuideLiquidMode(Mode):
-    faultparams = {'Leak':(1e-5,[1,0],0), 
-                   'Clogged':(1e-5,[1,0],0)}
+    faultparams = {'leak':(1e-5,[1,0],0), 
+                   'clogged':(1e-5,[1,0],0)}
     key_phases_by='global'
 class GuideLiquid(FxnBlock):
     __slots__=('watin', 'watout')
     _init_watin=Water
     _init_watout=Water 
+    _init_m = GuideLiquidMode
     def static_behavior(self,time):
-        if self.m.has_fault('Clogged'):
+        if self.m.has_fault('clogged'):
             self.watin.s.put(rate=0.0,effort=0.0)
-        elif self.m.has_fault('Leak'):
+        elif self.m.has_fault('leak'):
             self.watout.s.effort = self.watin.s.effort - 1.0
             self.watin.s.rate = self.watout.s.rate - 1.0
         else:
@@ -263,7 +264,7 @@ class Tank(Model):
         self.add_fxn('human',           HumanActions,  'valve1_sig','tank_sig', 'valve2_sig', a={'reacttime':self.p.reacttime})
         
         self.build()
-    def find_classification(self, scen, mdlhists):
+    def find_classification(self, scen, hist):
         # here we define failure in terms of the water level getting too low or too high
         if any(self.h.fxns.store_water.s.level>=20):    totcost = 1000000
         elif any(self.h.fxns.store_water.s.level<=0):   totcost = 1000000
@@ -282,45 +283,47 @@ if __name__ == '__main__':
     endclass, mdlhist = propagate.one_fault(mdl,'human','look_not_visible', time=2)
     
     ## nominal run
-    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','fxnflowgraph'])
-    an.plot.mdlhists(mdlhist, fxnflowvals={'fxns':'store_water'})
-    an.graph.show(endresults['fxnflowgraph'])
+    endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass','graph'])
+    an.plot.hist(mdlhist, "fxns.store_water.s.level")
+    endresults.graph.draw()
     
     
     ## faulty run
-    resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='fxnflowgraph')
-    an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals={'fxns':'store_water'}, time_slice=2)
-    an.graph.show(resgraph,faultscen='leak response', time='end')
+    endres, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='graph')
+    an.plot.hist(mdlhist,  "fxns.store_water.s.level",title='Leak Response', time_slice=2)
+    endres.graph.draw(title="leak response at time=end")
     
     
-    resgraph, mdlhist = propagate.one_fault(mdl,'human','detect_false_high', time=2, desired_result='fxnflowgraph')
+    resgraph, mdlhist = propagate.one_fault(mdl,'human','detect_false_high', time=2, desired_result='graph')
     
-    an.plot.mdlhists(mdlhist, title='detect_false_high', fxnflowvals={'fxns':'store_water'}, time_slice=2)
-    an.graph.show(resgraph,faultscen='detect_false_high', time=2)
+    an.plot.hist(mdlhist, "fxns.store_water.s.level", title='detect_false_high', time_slice=2)
+    resgraph.graph.draw(title='detect_false_high, t=2')
     
-    resgraph, mdlhist = propagate.one_fault(mdl,'human','turn_wrong_valve', time=2, desired_result='fxnflowgraph')
+    resgraph, mdlhist = propagate.one_fault(mdl,'human','turn_wrong_valve', time=2, desired_result='graph')
     
-    an.plot.mdlhists(mdlhist,title='turn_wrong_valve', fxnflowvals={'fxns':'store_water'}, time_slice=2)
-    an.graph.show(resgraph,faultscen='turn_wrong_valve', time=2)
+    an.plot.hist(mdlhist, "fxns.store_water.s.level", title='turn_wrong_valve', time_slice=2)
+    resgraph.graph.draw(title='turn_wrong_valve, t=2')
     
     
     mdl = Tank(p=TankParam(reacttime=2), sp = dict(dt=3.0))
-    resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='fxnflowgraph')
-    an.plot.mdlhists(mdlhist, title='Leak Response', fxnflowvals={'fxns':'store_water'}, time_slice=2)
-    an.graph.show(resgraph,faultscen='turn_wrong_valve', time='end')
+    resgraph, mdlhist = propagate.one_fault(mdl,'store_water','leak', time=2, desired_result='graph')
+    an.plot.hist(mdlhist, "fxns.store_water.s.level", title='Leak Response', time_slice=2)
+    resgraph.graph.draw(title='turn_wrong_valve, t=end')
     
     ## run all faults - note: all faults get caught!
-    endclasses, mdlhists = propagate.single_faults(mdl)
+    endclasses, hist = propagate.single_faults(mdl)
     
     app_full = SampleApproach(mdl)
-    endclasses, mdlhists = propagate.approach(mdl, app_full)
+    endclasses, hist = propagate.approach(mdl, app_full)
     
-    mdl.fxns['human'].dt=2.0
-    an.graph.exec_order(mdl, renderer='graphviz')
-    an.graph.exec_order(mdl, show_dyn_tstep=False)
-    an.graph.exec_order(mdl, show_dyn_order=False)
-    an.graph.exec_order(mdl, show_dyn_order=False, show_dyn_tstep=False)
+    from fmdtools.analyze.graph import ModelGraph
+    mdl.fxns['human'].t.dt=2.0
+    mg = ModelGraph(mdl)
+    mg.set_exec_order(mdl)
+    mg.draw()
     
-    a = HumanASG("hi")
-    a.show()
+    from fmdtools.analyze.graph import ASGGraph
+    ag = ASGGraph(mdl.fxns['human'].a)
+    ag.draw()
+
              
