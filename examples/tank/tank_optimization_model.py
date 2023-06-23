@@ -25,7 +25,7 @@ class TankParam(Parameter, readonly=True):
     policymap:      dict=dict()
     def __init__(self, *args, **kwargs):
         args = self.get_true_fields(*args, **kwargs)
-        super().__init__(*args, strict_immutability=False)
+        super().__init__(*args, strict_immutability=False, check_type=False, check_pickle=False)
         if not self.policymap: 
             self.policymap.update(self.get_faultpolicy())
     def get_faultpolicy(self):
