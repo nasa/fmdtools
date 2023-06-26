@@ -1008,6 +1008,11 @@ class ASG(dataobject, mapping=True):
         cop.active_actions = copy.deepcopy(self.active_actions)
         return cop
 
+    def reset(self):
+        for name, action in self.actions.items():
+            action.reset()
+        self.build()
+
     def create_hist(self, timerange, track):
         """
         Creates a history corresponding to ASG attributes.
@@ -1048,6 +1053,7 @@ class ASG(dataobject, mapping=True):
             am.extend(f.return_mutables())
         am.append(copy.copy(self.active_actions))
         return am
+        
 
 # Function superclass
 
@@ -1264,6 +1270,8 @@ class FxnBlock(Block):
         super().reset()
         if hasattr(self, 'c'):
             self.c.reset()
+        if hasattr(self, 'a'):
+            self.a.reset()
         self('reset', faults=[], time=0)
 
 
