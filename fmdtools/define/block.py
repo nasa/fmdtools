@@ -996,8 +996,15 @@ class ASG(dataobject, mapping=True):
         new_flows = {**{fn: flow.copy() for fn, flow in self.flows.items() if fn not in flows}, **flows}
         
         cop = self.__class__(flows=new_flows, **kwargs)
-        for action in self.actions: 
-            cop.actions[action] = self.actions[action].copy(flows=new_flows)
+        for actname, action in self.actions.items(): 
+            cop_act = cop.actions[actname]
+            
+            cop_act.s = action._init_s(**asdict(action.s))
+            cop_act.m.mirror(action.m)
+            cop_act.t = action.t.copy()
+            if hasattr(action, 'h'):
+                cop_act.h = action.copy()
+            
         cop.active_actions = copy.deepcopy(self.active_actions)
         return cop
 

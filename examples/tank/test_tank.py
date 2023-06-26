@@ -71,17 +71,20 @@ class TankTests(unittest.TestCase, CommonTests):
                 self.assertAlmostEqual(inter_totcost, func_totcost)
                 
     def test_comp_mode_inj(self):
-        """ Tests that component modes injected in functions end up in their respective
-        components."""
+        """ Tests that action modes injected in functions end up in their respective
+        actions."""
         mdl = Tank()
-        amodes = [mode for a in mdl.fxns['human'].a.actions.values() for mode in a.m.faultmodes]
-        aname = {mode:aname for aname,a in mdl.fxns['human'].a.actions.items() for mode in a.m.faultmodes}
-        for amode in amodes:
+        amodes = [aname+"_"+mode for aname, a in mdl.fxns['human'].a.actions.items() for mode in a.m.faultmodes]
+        fmodes = [*mdl.fxns['human'].m.faultmodes.keys()]
+        self.assertListEqual(amodes, fmodes)
+        
+        anames = {mode:aname for aname,a in mdl.fxns['human'].a.actions.items() for mode in a.m.faultmodes}
+        for amode, aname in anames.items():
             mdl = Tank()
-            scen = {'human': amode}
+            scen = {'human': aname+"_"+amode}
             mdl.propagate(1, fxnfaults=scen)
-            self.assertIn(amode, mdl.fxns['human'].m.faults)
-            self.assertIn(amode, mdl.fxns['human'].a.actions[aname[amode]].m.faults)
+            self.assertIn(aname+"_"+amode, mdl.fxns['human'].m.faults)
+            self.assertIn(amode, mdl.fxns['human'].a.actions[aname].m.faults)
     def test_different_components(self):
         """ Tests that model copies have different components"""
         mdl=Tank()
