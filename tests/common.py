@@ -54,9 +54,12 @@ class CommonTests():
         staged_par_flat = mdlhists_staged_par.flatten()
         
         for k in mdlhists_flat:
-            np.testing.assert_array_equal(mdlhists_flat[k],staged_flat[k])
-            np.testing.assert_array_equal(mdlhists_flat[k],par_flat[k])
-            np.testing.assert_array_equal(mdlhists_flat[k],staged_par_flat[k])
+            try:
+                np.testing.assert_array_equal(mdlhists_flat[k],staged_flat[k])
+                np.testing.assert_array_equal(mdlhists_flat[k],par_flat[k])
+                np.testing.assert_array_equal(mdlhists_flat[k],staged_par_flat[k])
+            except AssertionError as e:
+                raise AssertionError("Problem with hist value: "+k) from e
         
     def check_model_reset(self, mdl, mdl_reset, inj_times, max_time=55, run_stochastic=False):
         """ Tests to see if model attributes reset with the reset() method such that
@@ -74,7 +77,10 @@ class CommonTests():
                 for t in range(max_time):
                     mdl_reset.propagate(t,run_stochastic=run_stochastic)  
                     mdl.propagate(t,run_stochastic=run_stochastic)  
-                    self.check_same_model(mdl, mdl_reset)
+                    try:
+                        self.check_same_model(mdl, mdl_reset)
+                    except AssertionError as e:
+                        raise AssertionError("Problem at time: "+str(t)+" and faultscen: "+str(faultscen)+" injected at t="+str(inj_time)) from e
     def check_model_copy_different(self,mdl, inj_times, max_time=55, run_stochastic=False):
         """ Tests to see that a copied model has different states from the model
         it was copied from after fault injection/etc"""
@@ -90,9 +96,15 @@ class CommonTests():
     def check_same_model(self, mdl, mdl2):
         """Checks if models mdl and mdl2 have the same attributes"""
         for flname, fl in mdl.flows.items():
-            self.assertEqual(fl.return_mutables(), mdl2.flows[flname].return_mutables())
+            try:
+                self.assertEqual(fl.return_mutables(), mdl2.flows[flname].return_mutables())
+            except AssertionError as e:
+                raise AssertionError("Problem in flow "+flname) from e
         for fxnname, fxn in mdl.fxns.items():
-            self.assertEqual(fxn.return_mutables(), mdl2.fxns[fxnname].return_mutables())
+            try:
+                self.assertEqual(fxn.return_mutables(), mdl2.fxns[fxnname].return_mutables())
+            except AssertionError as e:
+                raise AssertionError("Problem in fxn "+fxnname) from e
     def check_diff_model(self, mdl, mdl2):
         """Checks if models mdl and mdl2 have different attributes"""
         same=1
