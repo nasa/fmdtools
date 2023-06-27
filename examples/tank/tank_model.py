@@ -54,8 +54,8 @@ class ImportLiquid(FxnBlock):
     _init_watout = Water
     flownames = {'wat_in_1':'watout', 'valve1_sig':'sig'}
     def static_behavior(self,time):
-        if not self.m.has_fault('Stuck'):
-            if   self.sig.s.action>=2:    self.s.amt_open=2
+        if not self.m.has_fault('stuck'):
+            if   self.sig.s.action>=2:    self.s.amt_open = 2
             elif self.sig.s.action==1:    self.s.amt_open = 1
             elif self.sig.s.action==-1:   self.s.amt_open = 0
         self.watout.s.effort=self.s.amt_open
@@ -69,9 +69,9 @@ class ExportLiquid(FxnBlock):
     _init_watin = Water
     flownames = {'wat_out_2':'watin', 'valve2_sig':'sig'}
     def static_behavior(self,time):
-        if not self.m.has_fault('Stuck'):
-            if self.sig.s.action>=1:      self.s.open = 1
-            elif self.sig.s.action==-1:   self.s.open = 0
+        if not self.m.has_fault('stuck'):
+            if self.sig.s.action>=1:      self.s.amt_open = 1
+            elif self.sig.s.action==-1:   self.s.amt_open = 0
         self.watin.s.rate=self.s.amt_open*self.watin.s.effort
         self.sig.s.indicator = self.s.amt_open
 
