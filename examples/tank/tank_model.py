@@ -29,19 +29,19 @@ from fmdtools.define.model import Model
 from fmdtools.define.block import FxnBlock, Action, ASG
 
 class WatState(State):
-    effort: float=1.0
-    rate:   float=1.0
+    effort: float = 1.0
+    rate: float = 1.0
 class Water(Flow):
     _init_s=WatState
 
 class SigState(State):
-    indicator:  int=1
-    action:     int=0
+    indicator: int = 1
+    action: int = 0
 class Signal(Flow):
     _init_s = SigState
 
 class TransportLiquidState(State):
-    amt_open: int=1
+    amt_open: int = 1
 class TransportLiquidMode(Mode):
     faultparams={'stuck':(1e-5,[1,0],0)}
     units='hr'
@@ -55,9 +55,12 @@ class ImportLiquid(FxnBlock):
     flownames = {'wat_in_1':'watout', 'valve1_sig':'sig'}
     def static_behavior(self,time):
         if not self.m.has_fault('stuck'):
-            if   self.sig.s.action>=2:    self.s.amt_open = 2
-            elif self.sig.s.action==1:    self.s.amt_open = 1
-            elif self.sig.s.action==-1:   self.s.amt_open = 0
+            if   self.sig.s.action>=2:    
+                self.s.amt_open = 2
+            elif self.sig.s.action==1:    
+                self.s.amt_open = 1
+            elif self.sig.s.action==-1:   
+                self.s.amt_open = 0
         self.watout.s.effort=self.s.amt_open
         self.sig.s.indicator = self.s.amt_open
 
@@ -70,15 +73,17 @@ class ExportLiquid(FxnBlock):
     flownames = {'wat_out_2':'watin', 'valve2_sig':'sig'}
     def static_behavior(self,time):
         if not self.m.has_fault('stuck'):
-            if self.sig.s.action>=1:      self.s.amt_open = 1
-            elif self.sig.s.action==-1:   self.s.amt_open = 0
+            if self.sig.s.action>=1:      
+                self.s.amt_open = 1
+            elif self.sig.s.action==-1:   
+                self.s.amt_open = 0
         self.watin.s.rate=self.s.amt_open*self.watin.s.effort
         self.sig.s.indicator = self.s.amt_open
 
 class GuideLiquidMode(Mode):
     faultparams = {'leak':(1e-5,[1,0],0), 
                    'clogged':(1e-5,[1,0],0)}
-    key_phases_by='global'
+    key_phases_by = 'global'
 class GuideLiquid(FxnBlock):
     __slots__=('watin', 'watout')
     _init_watin=Water
@@ -122,9 +127,12 @@ class StoreLiquid(FxnBlock):
             self.watin.s.rate = self.watin.s.effort
         else: 
             self.watin.s.put(rate=self.watin.s.effort, effort = 1.0)
-        if self.s.level > 12:   self.sig.s.indicator = -1
-        elif self.s.level < 8:  self.sig.s.indicator = 1
-        else:                   self.sig.s.indicator = 0
+        if self.s.level > 12:  
+            self.sig.s.indicator = -1
+        elif self.s.level < 8:
+            self.sig.s.indicator = 1
+        else:
+            self.sig.s.indicator = 0
         
         if self.m.has_fault('leak'):    
             self.s.net_flow = self.watin.s.rate - self.watout.s.rate - 1.0
@@ -146,17 +154,17 @@ class HumanASG(ASG):
     initial_action = "look"
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.add_act('look',  Look)
-        self.add_act('detect',Detect, 'detect_sig','tank_sig','valve1_sig', duration=self.reacttime)
+        self.add_act('look', Look)
+        self.add_act('detect', Detect, 'detect_sig', 'tank_sig', 'valve1_sig', duration=self.reacttime)
         self.add_act('reach', Reach)
         self.add_act('grasp', Grasp)
-        self.add_act('turn',  Turn, 'detect_sig','valve1_sig', 'valve2_sig', duration=1.0)
+        self.add_act('turn', Turn, 'detect_sig', 'valve1_sig', 'valve2_sig', duration=1.0)
         
-        self.add_cond('look', 'detect', 'looked',    condition=self.actions['look'].looked)
+        self.add_cond('look', 'detect', 'looked', condition=self.actions['look'].looked)
         self.add_cond('detect', 'reach', 'detected', condition=self.actions['detect'].detected)
-        self.add_cond('reach', 'grasp', 'reached',   condition=self.actions['reach'].reached)
-        self.add_cond('grasp', 'turn', 'grasped',    condition=self.actions['grasp'].grasped)
-        self.add_cond('turn', 'look', 'done',        condition=self.actions['turn'].turned)
+        self.add_cond('reach', 'grasp', 'reached', condition=self.actions['reach'].reached)
+        self.add_cond('grasp', 'turn', 'grasped', condition=self.actions['grasp'].grasped)
+        self.add_cond('turn', 'look', 'done', condition=self.actions['turn'].turned)
 class HumanActions(FxnBlock): 
     _init_p = HumanParam
     _init_a = HumanASG
@@ -174,8 +182,8 @@ class Look(Action):
         return not self.m.has_fault('not_visible')
 
 class DetectMode(Mode):
-    faultparams = {'not_detected':(1,[1,0],0),
-                   'false_high':(1,[1,1],0),
+    faultparams = {'not_detected': (1,[1,0],0),
+                   'false_high': (1,[1,1],0),
                    'false_low': (1,[1,1],0)}
     probtype='prob'
     he_args = (0.03, {2:[11,0.1],10:[10,0.2],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0.6]})
@@ -185,9 +193,12 @@ class Detect(Action):
     _init_tank_sig = Signal
     _init_valve1_sig = Signal
     def behavior(self, time):
-        if self.m.has_fault('not_detected'):    self.detect_sig.s.put(indicator = 0, action=0)
-        elif self.m.has_fault('false_high'):    self.detect_sig.s.put(indicator = 1, action=-1)
-        elif self.m.has_fault('false_low'):     self.detect_sig.s.put(indicator = -1, action=2)
+        if self.m.has_fault('not_detected'):    
+            self.detect_sig.s.put(indicator = 0, action=0)
+        elif self.m.has_fault('false_high'):    
+            self.detect_sig.s.put(indicator = 1, action=-1)
+        elif self.m.has_fault('false_low'):     
+            self.detect_sig.s.put(indicator = -1, action=2)
         else:                                   
             self.detect_sig.s.indicator = self.tank_sig.s.indicator
             if self.detect_sig.s.indicator >= 1: 
@@ -248,27 +259,30 @@ class Tank(Model):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
-        self.add_flow('wat_in_1',  Water)
-        self.add_flow('wat_in_2',  Water)
+        self.add_flow('wat_in_1', Water)
+        self.add_flow('wat_in_2', Water)
         self.add_flow('wat_out_1', Water)
         self.add_flow('wat_out_2', Water)
         self.add_flow('valve1_sig',Signal, s={'indicator':1, 'action':0})
         self.add_flow('tank_sig',  Signal, s={'indicator':0, 'action':0})
         self.add_flow('valve2_sig',Signal, s={'indicator':1, 'action':0})
         
-        self.add_fxn('import_water',    ImportLiquid,  'wat_in_1', 'valve1_sig')
+        self.add_fxn('import_water', ImportLiquid, 'wat_in_1', 'valve1_sig')
         self.add_fxn('guide_water_in',  GuideLiquidIn, 'wat_in_1', 'wat_in_2')
-        self.add_fxn('store_water',     StoreLiquid,   'wat_in_2', 'wat_out_1', 'tank_sig')
+        self.add_fxn('store_water',     StoreLiquid, 'wat_in_2', 'wat_out_1', 'tank_sig')
         self.add_fxn('guide_water_out', GuideLiquidOut,'wat_out_1','wat_out_2')
-        self.add_fxn('export_water',    ExportLiquid,  'wat_out_2','valve2_sig')
-        self.add_fxn('human',           HumanActions,  'valve1_sig','tank_sig', 'valve2_sig', a={'reacttime':self.p.reacttime})
+        self.add_fxn('export_water', ExportLiquid, 'wat_out_2','valve2_sig')
+        self.add_fxn('human', HumanActions, 'valve1_sig','tank_sig', 'valve2_sig', a={'reacttime':self.p.reacttime})
         
         self.build()
     def find_classification(self, scen, hist):
         # here we define failure in terms of the water level getting too low or too high
-        if any(self.h.fxns.store_water.s.level>=20):    totcost = 1000000
-        elif any(self.h.fxns.store_water.s.level<=0):   totcost = 1000000
-        else:                                           totcost = 0
+        if any(self.h.fxns.store_water.s.level>=20):
+            totcost = 1000000
+        elif any(self.h.fxns.store_water.s.level<=0):
+            totcost = 1000000
+        else: 
+            totcost = 0
         rate=scen.rate
         life=1e5
         return {'rate':rate, 'cost': totcost, 'expected cost': rate*life*totcost}
@@ -280,6 +294,17 @@ if __name__ == '__main__':
     
     mdl = Tank()
     
+    app = SampleApproach(mdl)
+    import multiprocessing as mp
+    
+    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False, staged=True, track='all')
+    
+    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
+    
+    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
+    
+    
+    """
     endclass, mdlhist = propagate.one_fault(mdl,'human','look_not_visible', time=2)
     
     ## nominal run
@@ -325,5 +350,5 @@ if __name__ == '__main__':
     from fmdtools.analyze.graph import ASGGraph
     ag = ASGGraph(mdl.fxns['human'].a)
     ag.draw()
-
+    """
              
