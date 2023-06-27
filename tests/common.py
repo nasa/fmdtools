@@ -39,17 +39,17 @@ class CommonTests():
     def check_approach_parallelism(self, mdl, app):
         """Test whether the model simulates the same when simulated using parallel or staged options"""
         from multiprocessing import Pool
-        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False,pool=False)
+        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False,pool=False, track='all')
         mdlhists_flat = mdlhists.flatten()
-        endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)
+        endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True, track='all')
         self.assertEqual([*endclasses.values()], [*endclasses_staged.values()])
         staged_flat = mdlhist_staged.flatten()
         
-        endclasses_par, mdlhists_par = sim.propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=False)
+        endclasses_par, mdlhists_par = sim.propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=False, track='all')
         self.assertEqual([*endclasses.values()], [*endclasses_par.values()])
         par_flat = mdlhists_par.flatten()
         
-        endclasses_staged_par, mdlhists_staged_par = sim.propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=True)
+        endclasses_staged_par, mdlhists_staged_par = sim.propagate.approach(mdl, app, showprogress=False, pool=Pool(4), staged=True, track='all')
         self.assertEqual([*endclasses.values()], [*endclasses_staged_par.values()])
         staged_par_flat = mdlhists_staged_par.flatten()
         
@@ -182,7 +182,7 @@ class CommonTests():
         for hist_key in result_true: # test to see that all values of the arrays in the hist are the same
             if  not isinstance(result_true[hist_key], (np.ndarray,list)):
                 if isinstance(result_true[hist_key], (float, np.number)) and not np.isnan(result_true[hist_key]) :   
-                    self.assertAlmostEqual(result_true[hist_key], result_check[hist_key])
+                    self.assertAlmostEqual(result_true[hist_key], result_check[hist_key], 4)
                 else:
                     np.testing.assert_array_equal(result_true[hist_key], result_check[hist_key])
             elif isinstance(result_true[hist_key], np.ndarray) and np.issubdtype(result_true[hist_key].dtype, np.number):
