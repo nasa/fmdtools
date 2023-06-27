@@ -375,14 +375,22 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, 
     staged = kwargs.get('staged',False)
     check_overwrite(save_args)
     #run model nominally, get relevant results
-    if isinstance(mdl, type):       mdl = mdl(**mdl_kwargs)  
-    elif protect or mdl_kwargs:     mdl = mdl.new_with_params(**mdl_kwargs)
-    if not scen:    nomscen=Scenario(sequence = Sequence(disturbances=kwargs.get('disturbances', {})))
-    else:           nomscen=scen
+    if isinstance(mdl, type): 
+        mdl = mdl(**mdl_kwargs)  
+    elif protect or mdl_kwargs: 
+        mdl = mdl.new_with_params(**mdl_kwargs)
+    
+    if not scen: 
+        nomscen=Scenario(sequence = Sequence(disturbances=kwargs.get('disturbances', {})))
+    else: 
+        nomscen=scen
     if staged:  
-        if type(ctimes) in [float, int]:ctimes=[ctimes]
-        else:                           ctimes=ctimes
-    else:                               ctimes=[]
+        if type(ctimes) in [float, int]:
+            ctimes=[ctimes]
+        else: 
+            ctimes=ctimes
+    else: 
+        ctimes=[]
     result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)
     
     endfaults, endfaultprops = mdl.return_faultmodes()
@@ -426,6 +434,8 @@ def approach(mdl, app,  **kwargs):
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     save_helper(kwargs['save_args'], results, mdlhists)
+    if kwargs.get('pool', False): 
+        kwargs['pool'].close() 
     return results.flatten(), mdlhists.flatten()
 
 def single_faults(mdl, **kwargs):
@@ -466,6 +476,8 @@ def single_faults(mdl, **kwargs):
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     save_helper(kwargs['save_args'], results, mdlhists)
+    if kwargs.get('pool', False): 
+        kwargs['pool'].close() 
     return results.flatten(), mdlhists.flatten()
 
 def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
@@ -615,6 +627,8 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     if save_app:
         with open(save_app['filename'], 'wb') as file_handle:
             dill.dump(apps, file_handle)
+    if kwargs.get('pool', False): 
+        kwargs['pool'].close() 
     return nest_results.flatten(), nest_mdlhists.flatten(), apps
 
 def phases_from_hist(get_phases, t_end, nomhist):

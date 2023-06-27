@@ -32,7 +32,8 @@ class CommonTests():
                     mdl.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen)       
                     mdl2.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen) 
                     self.check_same_model(mdl, mdl2)
-                    if t==copy_time: mdl_copy = mdl.copy()
+                    if t==copy_time: 
+                        mdl_copy = mdl.copy()
                     if t>copy_time: 
                         mdl_copy.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen)
                         self.check_same_model(mdl, mdl_copy)
@@ -40,26 +41,53 @@ class CommonTests():
         """Test whether the model simulates the same when simulated using parallel or staged options"""
         from multiprocessing import Pool
         endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False,pool=False, track='all')
-        mdlhists_flat = mdlhists.flatten()
+        mdlhists_by_scen = mdlhists.nest(1)
+        
         endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True, track='all')
         self.assertEqual([*endclasses.values()], [*endclasses_staged.values()])
-        staged_flat = mdlhist_staged.flatten()
+        staged_by_scen = mdlhist_staged.nest(1)
         
         endclasses_par, mdlhists_par = sim.propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=False, track='all')
         self.assertEqual([*endclasses.values()], [*endclasses_par.values()])
-        par_flat = mdlhists_par.flatten()
+        par_by_scen = mdlhists_par.nest(1)
         
         endclasses_staged_par, mdlhists_staged_par = sim.propagate.approach(mdl, app, showprogress=False, pool=Pool(4), staged=True, track='all')
         self.assertEqual([*endclasses.values()], [*endclasses_staged_par.values()])
-        staged_par_flat = mdlhists_staged_par.flatten()
+        par_staged_by_scen = mdlhists_staged_par.nest(1)
         
-        for k in mdlhists_flat:
-            try:
-                np.testing.assert_array_equal(mdlhists_flat[k],staged_flat[k])
-                np.testing.assert_array_equal(mdlhists_flat[k],par_flat[k])
-                np.testing.assert_array_equal(mdlhists_flat[k],staged_par_flat[k])
+        for scen in mdlhists_by_scen.keys():
+            mdlhist = mdlhists_by_scen[scen]
+            staged = staged_by_scen[scen]
+            par = par_by_scen[scen]
+            par_staged = par_staged_by_scen[scen]
+            try: 
+                try:
+                    self.check_same_hist(mdlhist, staged)
+                except AssertionError as e:
+                    raise AssertionError("staged execution inconsistent")
+                try:
+                    self.check_same_hist(mdlhist, par)
+                except AssertionError as e:
+                    raise AssertionError("parallel execution inconsistent")
+                try:
+                    self.check_same_hist(mdlhist, par_staged)
+                except AssertionError as e:
+                    raise AssertionError("staged-parallel execution inconsistent")
             except AssertionError as e:
-                raise AssertionError("Problem with hist value: "+k) from e
+                raise AssertionError("Problem with scenario: "+scen) from e
+                    
+    def check_same_hist(self, hist, hist1):
+        earliest = np.inf
+        err_key = ''
+        for k in hist:
+            err = np.where(hist[k]!=hist1[k])[0]
+            if any(err) and err[0] < earliest:
+                earliest = err[0]
+                err_key = k
+        if err_key:
+            raise AssertionError("Histories inconsistent starting at key k="+err_key 
+                                 +" t="+str(earliest)+" \n hist = "+str(hist[err_key])
+                                 +"\n hist1 = "+str(hist1[err_key]))
         
     def check_model_reset(self, mdl, mdl_reset, inj_times, max_time=55, run_stochastic=False):
         """ Tests to see if model attributes reset with the reset() method such that
@@ -69,8 +97,10 @@ class CommonTests():
         for faultscen in faultscens:
             for inj_time in inj_times:
                 for t in range(max_time):
-                    if t==inj_time:     scen=faultscen
-                    else:               scen={}
+                    if t==inj_time:     
+                        scen=faultscen
+                    else:               
+                        scen={}
                     mdl_reset.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen)       
                 mdl_reset.reset()
                 mdl = mdls.pop()
