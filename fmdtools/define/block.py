@@ -993,17 +993,19 @@ class ASG(dataobject, mapping=True):
                 act.update_seed(seed)
 
     def copy(self, flows={}, **kwargs):
-        new_flows = {**{fn: flow.copy() for fn, flow in self.flows.items() if fn not in flows}, **flows}
+        #new_flows = {**{fn: flow.copy() for fn, flow in self.flows.items() if fn not in flows}, **flows}
+        cop = self.__class__(flows=flows, **kwargs)
+        for flowname, flow in self.flows.items():
+            if flowname not in flows:
+                cop.flows[flowname].s.assign(self.flows[flowname].s)
         
-        cop = self.__class__(flows=new_flows, **kwargs)
         for actname, action in self.actions.items(): 
             cop_act = cop.actions[actname]
-            
             cop_act.s = action._init_s(**asdict(action.s))
             cop_act.m.mirror(action.m)
             cop_act.t = action.t.copy()
             if hasattr(action, 'h'):
-                cop_act.h = action.copy()
+                cop_act.h = action.h.copy()
             
         cop.active_actions = copy.deepcopy(self.active_actions)
         return cop

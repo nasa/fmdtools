@@ -791,6 +791,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
     #if len(result)==1: result = [*result.values()][0]
     if None in c_mdl.values(): raise Exception("Approach times"+str(ctimes)+" go beyond simulation time "+str(t))
     return  result, mdlhist, c_mdl, t_ind+shift
+
 def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     desired_result = copy.deepcopy(desired_result)
     if type(desired_result)==str:               desired_result = {desired_result:None}
