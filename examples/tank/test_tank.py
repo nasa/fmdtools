@@ -17,6 +17,13 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_model_copy_same(Tank(),Tank(), [5,10,15], 10, max_time=20)
     def test_model_copy_different(self):
         self.check_model_copy_different(Tank(), [5,10,15], max_time=20)
+    def test_tank_copy_args(self):
+        mdl_cop = self.mdl.copy()
+        mdl_cop_2 = mdl_cop.copy()
+        
+        assert self.mdl.fxns['human']._args_a==mdl_cop.fxns['human']._args_a
+        assert self.mdl.fxns['human']._args_a==mdl_cop_2.fxns['human']._args_a
+        
     def test_model_reset(self):
         mdl = Tank()
         mdl2 = Tank()
@@ -140,7 +147,7 @@ if __name__ == '__main__':
     #runner.run(suite)
     
     #suite = unittest.TestSuite()
-    #suite.addTest(TankTests("test_same_rcost"))
+    #suite.addTest(TankTests("test_tank_copy_args"))
     #runner = unittest.TextTestRunner()
     #runner.run(suite)
     

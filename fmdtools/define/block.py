@@ -270,13 +270,13 @@ class Simulable(object):
             Dictionary of saved arguments.
         """
         args = {}
-        for at in self.__slots__:
+        for at in dir(self):
             if at.startswith("_args"):
-                role = at[5:]
+                role = at[6:]
                 if role in kwargs:
                     args[role] = kwargs[role]
                 else:
-                    saved_arg = getattr(self, role, {})
+                    saved_arg = getattr(self, at, {})
                     if saved_arg:
                         args[role] = saved_arg
         return args
@@ -491,7 +491,7 @@ class Block(Simulable):
         cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         cop.is_copy=True
         try:
-            saved_kwargs = cop.get_args(**kwargs)
+            saved_kwargs = self.get_args(**kwargs)
             cop.__init__(self.name, flows, *args, **saved_kwargs)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
