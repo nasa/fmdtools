@@ -711,16 +711,22 @@ def init_histrange(mdl, start_time, staged, track, track_times):
     if staged:
         timerange=np.arange(start_time, mdl.sp.times[-1]+mdl.sp.dt, mdl.sp.dt)
         prevtimerange = np.arange(mdl.sp.times[0], start_time, mdl.sp.dt)
-        if track_times == "all":            shift = len(prevtimerange)
-        elif track_times[0]=='interval':    shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
-        elif track_times[0]=='times':       shift=0
+        if track_times == "all": 
+            shift = len(prevtimerange)
+        elif track_times[0]=='interval':
+            shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
+        elif track_times[0]=='times':
+            shift=0
     else: 
         timerange=np.arange(mdl.sp.times[0], mdl.sp.times[-1]+mdl.sp.dt, mdl.sp.dt)
         shift = 0
     
-    if track_times == "all":            histrange = timerange
-    elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
-    elif track_times[0]=='times':       histrange = track_times[1]
+    if track_times == "all":
+        histrange = timerange
+    elif track_times[0]=='interval':
+        histrange = timerange[0:len(timerange):track_times[1]]
+    elif track_times[0]=='times':
+        histrange = track_times[1]
     
     mdlhist = mdl.create_hist(histrange, track)
     if 'time' not in mdlhist: 
@@ -730,9 +736,12 @@ def init_histrange(mdl, start_time, staged, track, track_times):
 def check_end_condition(mdl, use_end_condition, t):
     if use_end_condition and mdl.sp.end_condition:
         end_condition = get_var(mdl, mdl.sp.end_condition)
-        if end_condition(t): return True
-        else:                return False
-    else:                    return False
+        if end_condition(t):
+            return True
+        else:
+            return False
+    else:
+        return False
     
 
 def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True, **kwargs):
@@ -862,9 +871,12 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
         else:
             rgraph = graph_factory(obj, **kwargs)
     
-        if nomresult and g in nomresult:  rgraph.set_resgraph(nomresult[g])
-        elif nomresult:                   rgraph.set_resgraph(nomresult)
-        else:                             rgraph.set_resgraph()
+        if nomresult and g in nomresult:
+            rgraph.set_resgraph(nomresult[g])
+        elif nomresult:
+            rgraph.set_resgraph(nomresult)
+        else:
+            rgraph.set_resgraph()
         result[g] = rgraph
         
     if desired_result:

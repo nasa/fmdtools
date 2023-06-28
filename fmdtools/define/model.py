@@ -192,7 +192,8 @@ class Model(Simulable):
         """
         self.update_seed()
         if not getattr(self, 'is_copy', False):
-            if functionorder: self.set_functionorder(functionorder)
+            if functionorder:
+                self.set_functionorder(functionorder)
             self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
                                           if fxn.is_static()])
             self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
@@ -293,7 +294,7 @@ class Model(Simulable):
             flownames=self._fxninput[fxnname]['flows']
             args_f=self._fxninput[fxnname]['args_f']
             kwargs = self._fxninput[fxnname]['kwargs']
-            flows = copy.get_flows(flownames)
+            flows = copy.get_flows(flownames).copy()
             if args_f=='None':     
                 copy.fxns[fxnname]=fxn.copy(flows, **kwargs)
             else:                   
@@ -399,7 +400,8 @@ class Model(Simulable):
                 hist['fxns'] = History()
                 for fxnname, fxn in self.fxns.items():
                     fh = fxn.create_hist(timerange, get_sub_include(fxnname, fxn_track))
-                    if fh: hist.fxns[fxnname]=fh
+                    if fh: 
+                        hist.fxns[fxnname]=fh
             self.add_flow_hist(hist, timerange, track)
             #if len(hist)<len(track) and track!='all': #TODO: this warning should be valid for all hists
             #    raise Exception("History doesn't match tracking options (are names correct?): \n track="+str(track)+"\n hist= \n"+str(hist))

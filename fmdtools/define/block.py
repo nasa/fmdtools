@@ -1034,9 +1034,10 @@ class ASG(dataobject, mapping=True):
 
     def copy(self, flows={}, **kwargs):
         #new_flows = {**{fn: flow.copy() for fn, flow in self.flows.items() if fn not in flows}, **flows}
+        aflows = flows.copy()
         cop = self.__class__(flows=flows, **kwargs)
         for flowname, flow in self.flows.items():
-            if flowname not in flows:
+            if flowname not in aflows:
                 cop.flows[flowname].s.assign(self.flows[flowname].s)
         
         for actname, action in self.actions.items(): 
@@ -1211,11 +1212,12 @@ class FxnBlock(Block):
         copy : FxnBlock
             Copy of the given function with new flows
         """
+        aflows=newflows.copy()
         cop = super().copy(newflows, *args, **kwargs)
         if hasattr(self, 'c'): 
             cop.c = self.c.copy_with_arg(**self._args_c)
         if hasattr(self, 'a'): 
-            cop.a = self.a.copy(flows=cop.flows, **self._args_a)
+            cop.a = self.a.copy(flows=aflows, **self._args_a)
         if hasattr(self, 'h'):
             if hasattr(self, 'c'): 
                 for compname, comp in cop.c.components.items():
@@ -1226,7 +1228,7 @@ class FxnBlock(Block):
                             cop.h["c.components."+compname+"."+k] = v
             if hasattr(self, 'a'):
                 if "a.active_actions" in self.h.keys():
-                    cop.h["a.active_actions"] = self.h['a.active_actions']
+                    cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
                 for actname, act in cop.a.actions.items():
                     ex_hist = self.h.get("a.actions."+actname)
                     if ex_hist: 
