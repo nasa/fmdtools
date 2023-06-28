@@ -153,10 +153,12 @@ class HumanASG(ASG):
     _init_tank_sig = Signal
     _init_valve1_sig = Signal 
     _init_valve2_sig = Signal
-    _init_detect_sig = Signal
     initial_action = "look"
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
+        self.add_flow("detect_sig", fclass=Signal)
+        
         self.add_act('look', Look)
         self.add_act('detect', Detect, 'detect_sig', 'tank_sig', 'valve1_sig', duration=self.reacttime)
         self.add_act('reach', Reach)
@@ -168,14 +170,23 @@ class HumanASG(ASG):
         self.add_cond('reach', 'grasp', 'reached', condition=self.actions['reach'].reached)
         self.add_cond('grasp', 'turn', 'grasped', condition=self.actions['grasp'].grasped)
         self.add_cond('turn', 'look', 'done', condition=self.actions['turn'].turned)
+        
+        self.build()
 class HumanActions(FxnBlock): 
     _init_p = HumanParam
     _init_a = HumanASG
     _init_valve1_sig = Signal
     _init_tank_sig = Signal
     _init_valve2_sig = Signal
-    #def behavior(self, time):
-    #    print(self.a.faultmodes)
+    def behavior(self, time):
+        #if self.valve1_sig.s.indicator:
+            #print(self.a.flows['valve1_sig'].s.indicator==self.valve1_sig.s.indicator, flush=True)
+            #print(self.a.flows['valve2_sig'].s.indicator==self.valve2_sig.s.indicator, flush=True)
+        
+        #assert self.a.actions['turn'].valve1_sig.s.indicator==self.valve1_sig.s.indicator
+        #assert self.a.actions['turn'].valve2_sig.s.indicator==self.valve2_sig.s.indicator
+        if not  self.a.actions['turn'].valve1_sig.s.action==self.valve1_sig.s.action:
+            print("invalid connection")
 
 class LookMode(Mode):
     faultparams={'not_visible':(1,[1,0],0)}
@@ -308,7 +319,7 @@ if __name__ == '__main__':
     
     endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
     
-    endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
+    #endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
     
     
     """

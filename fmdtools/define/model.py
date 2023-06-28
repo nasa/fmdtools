@@ -287,7 +287,10 @@ class Model(Simulable):
         """
         copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         copy.is_copy=True
-        copy.__init__(p=getattr(self, 'p', {}),sp=getattr(self, 'sp', {}),track=getattr(self, 'track', {}), r={'seed':self.r.seed})
+        copy.__init__(p=getattr(self, 'p', {}),
+                      sp=getattr(self, 'sp', {}),
+                      track=getattr(self, 'track', {}),
+                      r={'seed':self.r.seed})
         for flowname, flow in self.flows.items():
             copy.flows[flowname]=flow.copy()
         for fxnname, fxn in self.fxns.items():

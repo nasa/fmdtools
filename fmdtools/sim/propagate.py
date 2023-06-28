@@ -646,8 +646,10 @@ def phases_from_hist(get_phases, t_end, nomhist):
     if get_phases=='global':      phases={'global':[0,t_end]}
     else:
         phases, modephases = nomhist.get_modephases()
-        if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
-        elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
+        if type(get_phases)==list:
+            phases= {fxnname:phases[fxnname] for fxnname in get_phases}
+        elif type(get_phases)==dict:
+            phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
     return phases
 
 def list_init_faults(mdl):
@@ -733,6 +735,7 @@ def init_histrange(mdl, start_time, staged, track, track_times):
     mdlhist = mdl.create_hist(histrange, track)
     if 'time' not in mdlhist: 
         mdlhist.init_att('time', timerange[0], timerange=timerange, track='all', dtype=float)
+    
     return mdlhist, histrange, timerange, shift
 
 def check_end_condition(mdl, use_end_condition, t):
@@ -863,8 +866,10 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     graphs_to_get = [g for g in desired_result if type(g)==str and (g.startswith('graph') or g.startswith('Graph'))]
     for g in graphs_to_get:
         arg = desired_result.pop(g)
-        if isinstance(arg, tuple):  Gclass, kwargs = arg
-        else:                       Gclass = False; kwargs={}
+        if isinstance(arg, tuple):
+            Gclass, kwargs = arg
+        else:
+            Gclass = False; kwargs={}
 
         if '.' in g:
             strs = g.split(".")
