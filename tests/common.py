@@ -27,8 +27,10 @@ class CommonTests():
         for faultscen in faultscens:
             for inj_time in inj_times:
                 for t in range(max_time):
-                    if t==inj_time:   scen=faultscen
-                    else:       scen={}
+                    if t==inj_time:   
+                        scen=faultscen
+                    else:       
+                        scen={}
                     mdl.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen)       
                     mdl2.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen) 
                     self.check_same_model(mdl, mdl2)
