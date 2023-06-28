@@ -27,7 +27,16 @@ class TankTests(unittest.TestCase, CommonTests):
         self.assertEqual(self.mdl.fxns['human'].a.actions['detect'].duration, 2)
         self.assertEqual(mdl_cop.fxns['human'].a.actions['detect'].duration, 2)
         self.assertEqual(mdl_cop_2.fxns['human'].a.actions['detect'].duration, 2)
-        
+    def test_approach(self):
+        app = SampleApproach(self.mdl)
+        endresults, mdlhists = propagate.approach(self.mdl, app, track="all")
+        for scen in app.scenlist:
+            seq = scen.sequence
+            name = scen.name
+            endresult, mdlhist = propagate.sequence(self.mdl, seq=seq)
+            faulthist=mdlhist.faulty
+            self.check_same_hist(faulthist, mdlhists.get(name), "approach")
+            
     def test_model_reset(self):
         mdl = Tank()
         mdl2 = Tank()
