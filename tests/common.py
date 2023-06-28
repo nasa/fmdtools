@@ -57,26 +57,19 @@ class CommonTests():
         
         for scen in mdlhists_by_scen.keys():
             mdlhist = mdlhists_by_scen[scen]
-            staged = staged_by_scen[scen]
-            par = par_by_scen[scen]
-            par_staged = par_staged_by_scen[scen]
             try: 
-                try:
-                    self.check_same_hist(mdlhist, staged)
-                except AssertionError as e:
-                    raise AssertionError("staged execution inconsistent")
-                try:
-                    self.check_same_hist(mdlhist, par)
-                except AssertionError as e:
-                    raise AssertionError("parallel execution inconsistent")
-                try:
-                    self.check_same_hist(mdlhist, par_staged)
-                except AssertionError as e:
-                    raise AssertionError("staged-parallel execution inconsistent")
+                staged = staged_by_scen[scen]
+                self.check_same_hist(mdlhist, staged, hist1name="staged")
+                
+                par = par_by_scen[scen]
+                self.check_same_hist(mdlhist, par, hist1name="parallel")
+                
+                par_staged = par_staged_by_scen[scen]
+                self.check_same_hist(mdlhist, par_staged, hist1name="staged-parallel")
             except AssertionError as e:
                 raise AssertionError("Problem with scenario: "+scen) from e
                     
-    def check_same_hist(self, hist, hist1):
+    def check_same_hist(self, hist, hist1, hist1name="hist1"):
         earliest = np.inf
         err_key = ''
         for k in hist:
@@ -87,7 +80,7 @@ class CommonTests():
         if err_key:
             raise AssertionError("Histories inconsistent starting at key k="+err_key 
                                  +" t="+str(earliest)+" \n hist = "+str(hist[err_key])
-                                 +"\n hist1 = "+str(hist1[err_key]))
+                                 +"\n"+hist1name+"= "+str(hist1[err_key]))
         
     def check_model_reset(self, mdl, mdl_reset, inj_times, max_time=55, run_stochastic=False):
         """ Tests to see if model attributes reset with the reset() method such that
