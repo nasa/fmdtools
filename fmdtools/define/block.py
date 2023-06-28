@@ -1225,6 +1225,8 @@ class FxnBlock(Block):
                         for k, v in comp.h.items():
                             cop.h["c.components."+compname+"."+k] = v
             if hasattr(self, 'a'):
+                if "a.active_actions" in self.h.keys():
+                    cop.h["a.active_actions"] = self.h['a.active_actions']
                 for actname, act in cop.a.actions.items():
                     ex_hist = self.h.get("a.actions."+actname)
                     if ex_hist: 

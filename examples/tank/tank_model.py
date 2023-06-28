@@ -241,8 +241,10 @@ class Turn(Action):
     _init_valve1_sig = Signal
     _init_valve2_sig = Signal
     def behavior(self, time):
-        if self.m.has_fault('cannot'):  turned =  0
-        else:                           turned = 1
+        if self.m.has_fault('cannot'):
+            turned =  0
+        else:
+            turned = 1
         if turned and self.m.has_fault('wrong_valve'):
             self.valve2_sig.s.assign(self.detect_sig.s, 'action')
         elif turned:
@@ -251,8 +253,8 @@ class Turn(Action):
         return not self.m.has_fault('cannot')
     
 class TankParam(Parameter, readonly=True):
-    reacttime:      int = 2
-    store_tstep:    float = 1.0
+    reacttime: int = 2
+    store_tstep: float = 1.0
 
 class Tank(Model):
     __slots__=()
@@ -300,9 +302,9 @@ if __name__ == '__main__':
     app = SampleApproach(mdl)
     import multiprocessing as mp
     
-    #endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
+    endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
     
-    #endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
+    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
     
     endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
     

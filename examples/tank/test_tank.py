@@ -24,6 +24,10 @@ class TankTests(unittest.TestCase, CommonTests):
         assert self.mdl.fxns['human']._args_a==mdl_cop.fxns['human']._args_a
         assert self.mdl.fxns['human']._args_a==mdl_cop_2.fxns['human']._args_a
         
+        self.assertEqual(self.mdl.fxns['human'].a.actions['detect'].duration, 2)
+        self.assertEqual(mdl_cop.fxns['human'].a.actions['detect'].duration, 2)
+        self.assertEqual(mdl_cop_2.fxns['human'].a.actions['detect'].duration, 2)
+        
     def test_model_reset(self):
         mdl = Tank()
         mdl2 = Tank()
