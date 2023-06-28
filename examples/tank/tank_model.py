@@ -91,7 +91,8 @@ class GuideLiquid(FxnBlock):
     _init_m = GuideLiquidMode
     def static_behavior(self,time):
         if self.m.has_fault('clogged'):
-            self.watin.s.put(rate=0.0,effort=0.0)
+            self.watin.s.put(rate=0.0)
+            self.watout.s.put(effort=0.0)
         elif self.m.has_fault('leak'):
             self.watout.s.effort = self.watin.s.effort - 1.0
             self.watin.s.rate = self.watout.s.rate - 1.0
@@ -99,8 +100,10 @@ class GuideLiquid(FxnBlock):
             self.watout.s.effort = self.watin.s.effort
             self.watin.s.rate = self.watout.s.rate
 class GuideLiquidIn(GuideLiquid):
+    __slots__=()
     flownames = {'wat_in_1':'watin', 'wat_in_2':'watout'}
 class GuideLiquidOut(GuideLiquid):
+    __slots__=()
     flownames = {'wat_out_1':'watin', 'wat_out_2':'watout'}
 
 class StoreLiquidState(State):
@@ -268,8 +271,8 @@ class Tank(Model):
         self.add_flow('valve2_sig',Signal, s={'indicator':1, 'action':0})
         
         self.add_fxn('import_water', ImportLiquid, 'wat_in_1', 'valve1_sig')
-        self.add_fxn('guide_water_in',  GuideLiquidIn, 'wat_in_1', 'wat_in_2')
-        self.add_fxn('store_water',     StoreLiquid, 'wat_in_2', 'wat_out_1', 'tank_sig')
+        self.add_fxn('guide_water_in', GuideLiquidIn, 'wat_in_1', 'wat_in_2')
+        self.add_fxn('store_water', StoreLiquid, 'wat_in_2', 'wat_out_1', 'tank_sig')
         self.add_fxn('guide_water_out', GuideLiquidOut,'wat_out_1','wat_out_2')
         self.add_fxn('export_water', ExportLiquid, 'wat_out_2','valve2_sig')
         self.add_fxn('human', HumanActions, 'valve1_sig','tank_sig', 'valve2_sig', a={'reacttime':self.p.reacttime})
@@ -297,11 +300,11 @@ if __name__ == '__main__':
     app = SampleApproach(mdl)
     import multiprocessing as mp
     
-    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False, staged=True, track='all')
+    endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
     
     endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
     
-    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
+    endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
     
     
     """

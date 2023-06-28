@@ -26,7 +26,8 @@ class TankTests(unittest.TestCase, CommonTests):
     def test_model_copy_different(self):
         self.check_model_copy_different(Tank(), [5,10,15], max_time=20)
     def test_model_reset(self):
-        mdl = Tank(); mdl2 = Tank()
+        mdl = Tank()
+        mdl2 = Tank()
         self.check_model_reset(mdl, mdl2, [5,10,15], max_time=20)
     def test_approach_parallelism(self):
         """Test whether the pump simulates the same when simulated using parallel or staged options"""

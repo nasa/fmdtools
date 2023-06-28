@@ -771,7 +771,8 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
        try:
            if t in ctimes: 
                c_mdl[t]=mdl.copy()
-               if 'time' in mdl.h: c_mdl[t].h['time'] = np.copy(mdl.h.time)
+               if 'time' in mdl.h: 
+                   c_mdl[t].h['time'] = np.copy(mdl.h.time)
            if t in scen['sequence']: 
                fxnfaults = scen['sequence'][t].get('faults',{})
                disturbances = scen['sequence'][t].get('disturbances', {})
@@ -780,12 +781,18 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
                mdl.propagate(t, fxnfaults, disturbances, run_stochastic=run_stochastic)
            except Exception as e:
                raise Exception("Error in scenario "+str(scen)) from e
+               
            if track_times:
-               if track_times=='all':           t_ind_rec = t_ind+shift
-               elif track_times[0]=='interval': t_ind_rec = t_ind//track_times[1]+shift
-               elif track_times[0]=='times':    t_ind_rec = track_times[1].index(t)
-               else: raise Exception("Invalid argument, track_times="+str(track_times))
+               if track_times=='all':
+                   t_ind_rec = t_ind+shift
+               elif track_times[0]=='interval': 
+                   t_ind_rec = t_ind//track_times[1]+shift
+               elif track_times[0]=='times':
+                   t_ind_rec = track_times[1].index(t)
+               else: 
+                   raise Exception("Invalid argument, track_times="+str(track_times))
                mdlhist.log(mdl, t_ind_rec, time=t)
+               
            if type(desired_result)==dict: 
                if "all" in desired_result: 
                    result[t] = get_result(scen,mdl,desired_result['all'], mdlhist,nomhist, nomresult)

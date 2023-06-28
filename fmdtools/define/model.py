@@ -428,7 +428,8 @@ class Model(Simulable):
         for fxnname in self.dynamicfxns.union(fxnfaults.keys()):
             fxn=self.fxns[fxnname]
             faults = fxnfaults.get(fxnname, [])
-            if type(faults)!=list: faults=[faults]
+            if type(faults)!=list: 
+                faults=[faults]
             fxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
             
         #Step 2: Run Static Propagation Methods
