@@ -785,7 +785,8 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
     # using a copy of the input model (which is the nominal run) at this time
     mdlhist, histrange, timerange, shift = init_histrange(mdl, scen.time, staged, track, track_times)
     # run model through the time range defined in the object
-    c_mdl=dict.fromkeys(ctimes); result=Result()
+    c_mdl=dict.fromkeys(ctimes)
+    result=Result()
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
@@ -795,8 +796,10 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
                    c_mdl[t].h['time'] = np.copy(mdl.h.time)
            if t in scen['sequence']: 
                fxnfaults = scen['sequence'][t].get('faults',{})
-               disturbances = scen['sequence'][t].get('disturbances', {})
-           else: fxnfaults, disturbances = {}, {}
+               disturbances = scen['sequence'][t].get('disturbances',{})
+           else: 
+               fxnfaults = {}
+               disturbances = {}
            try:
                mdl.propagate(t, fxnfaults, disturbances, run_stochastic=run_stochastic)
            except Exception as e:
