@@ -332,7 +332,7 @@ class Block(Simulable):
             FxnBlock must have an _init_a property.
         r : dict, optional
             Internal Rand fields/arguments override from defaults. The default is {}.
-        r : dict, optional
+        m : dict, optional
             Internal Mode fields/arguments override from defaults. The default is {}.
         t : dict, optional
             Internal Time fields/arguments to override from defaults. The defautl is {}
@@ -588,6 +588,8 @@ class Block(Simulable):
                 hist = History()
                 init_indicator_hist(self, hist, timerange, track)
                 self.add_flow_hist(hist, timerange, track)
+                if 'flows' in track:
+                    print(self.name)
                 other_tracks = [t for t in track if t not in ('i', 'flows')]
                 for at in other_tracks:
                     at_track = get_sub_include(at, track)
@@ -1221,16 +1223,16 @@ class FxnBlock(Block):
         if hasattr(self, 'h'):
             if hasattr(self, 'c'): 
                 for compname, comp in cop.c.components.items():
-                    ex_hist = self.h.get("c.components."+compname)
+                    ex_hist = cop.h.get("c.components."+compname)
                     if ex_hist: 
                         comp.h = ex_hist.copy()
                         for k, v in comp.h.items():
                             cop.h["c.components."+compname+"."+k] = v
             if hasattr(self, 'a'):
-                if "a.active_actions" in self.h.keys():
-                    cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
+                #if "a.active_actions" in self.h.keys():
+                #    cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
                 for actname, act in cop.a.actions.items():
-                    ex_hist = self.h.get("a.actions."+actname)
+                    ex_hist = cop.h.get("a.actions."+actname)
                     if ex_hist: 
                         act.h = ex_hist.copy()
                         for k, v in act.h.items():

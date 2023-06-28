@@ -174,6 +174,8 @@ class HumanActions(FxnBlock):
     _init_valve1_sig = Signal
     _init_tank_sig = Signal
     _init_valve2_sig = Signal
+    #def behavior(self, time):
+    #    print(self.a.faultmodes)
 
 class LookMode(Mode):
     faultparams={'not_visible':(1,[1,0],0)}

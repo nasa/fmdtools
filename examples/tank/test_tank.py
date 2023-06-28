@@ -29,7 +29,7 @@ class TankTests(unittest.TestCase, CommonTests):
         self.assertEqual(mdl_cop_2.fxns['human'].a.actions['detect'].duration, 2)
     def test_approach(self):
         app = SampleApproach(self.mdl)
-        endresults, mdlhists = propagate.approach(self.mdl, app, track="all")
+        endresults, mdlhists = propagate.approach(self.mdl, app, track="all", showprogress=False)
         for scen in app.scenlist:
             seq = scen.sequence
             name = scen.name
@@ -41,6 +41,10 @@ class TankTests(unittest.TestCase, CommonTests):
         mdl = Tank()
         mdl2 = Tank()
         self.check_model_reset(mdl, mdl2, [5,10,15], max_time=20)
+    def test_approach_parallelism_notrack(self):
+        """Test whether the pump simulates the same when simulated using parallel or staged options"""
+        app = SampleApproach(self.mdl)
+        self.check_approach_parallelism(self.mdl, app,track="default")
     def test_approach_parallelism_0(self):
         """Test whether the pump simulates the same when simulated using parallel or staged options"""
         app = SampleApproach(self.mdl)
@@ -159,12 +163,14 @@ if __name__ == '__main__':
     #runner = unittest.TextTestRunner()
     #runner.run(suite)
     
-    #suite = unittest.TestSuite()
-    #suite.addTest(TankTests("test_tank_copy_args"))
-    #runner = unittest.TextTestRunner()
-    #runner.run(suite)
+    suite = unittest.TestSuite()
+    suite.addTest(TankTests("test_approach_parallelism_notrack"))
+    suite.addTest(TankTests("test_approach_parallelism_0"))
+    suite.addTest(TankTests("test_approach_parallelism_1"))
+    runner = unittest.TextTestRunner()
+    runner.run(suite)
     
-    unittest.main()
+    #unittest.main()
     
     #mdl = Tank()
     #scen = {'human': 'NotDetected'}

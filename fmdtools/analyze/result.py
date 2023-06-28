@@ -935,7 +935,8 @@ class History(Result):
                             raise Exception(obj_str+"Time beyond range of model history--check staged execution " 
                                             "and simulation time settings (end condition, mdl.sp.times)") from e
                         elif not np.can_cast(type(val), type(hist[t_ind])):
-                            raise Exception(obj_str+str(att)+" changed type: "+str(type(hist[t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind)) from e
+                            raise Exception(obj_str+str(att)+" changed type: "+str(type(hist[t_ind]))+
+                                            " to "+str(type(val))+" at t_ind="+str(t_ind)) from e
                         else:
                             raise Exception(obj_str+"Value too large to represent: "+att+"="+str(val)) from e
 
