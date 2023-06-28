@@ -805,14 +805,14 @@ class ASG(dataobject, mapping=True):
     per_timestep : bool
         Defines whether the action sequence graph is reset to the initial state each time-step (True) or stays in the current action (False). Default is False
     """
-    actions:            dict = {}
-    action_graph:       nx.DiGraph = nx.DiGraph()
-    flow_graph:         nx.DiGraph = nx.DiGraph()
-    conditions:         dict = {}
-    faultmodes:         dict = {}
-    flows:              dict = {}
-    active_actions:     set = {}
-    pos:                dict = {}
+    actions: dict = {}
+    action_graph: nx.DiGraph = nx.DiGraph()
+    flow_graph: nx.DiGraph = nx.DiGraph()
+    conditions: dict = {}
+    faultmodes: dict = {}
+    flows: dict = {}
+    active_actions: set = {}
+    pos: dict = {}
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"

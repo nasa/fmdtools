@@ -72,15 +72,21 @@ class CommonTests():
     def check_same_hist(self, hist, hist1, hist1name="hist1"):
         earliest = np.inf
         err_key = ''
+        err_keys = []
         for k in hist:
             err = np.where(hist[k]!=hist1[k])[0]
-            if any(err) and err[0] < earliest:
+            if any(err) and err[0] <= earliest:
+                if err[0] == earliest:
+                    err_keys.append(err[0])
+                else:
+                    err_keys = []
                 earliest = err[0]
                 err_key = k
+                
         if err_key:
             raise AssertionError("Histories inconsistent starting at key k="+err_key 
                                  +" t="+str(earliest)+" \n hist = "+str(hist[err_key])
-                                 +"\n"+hist1name+"= "+str(hist1[err_key]))
+                                 +"\n"+hist1name+"= "+str(hist1[err_key])+" \n see also: "+"\n".join(err_keys))
         
     def check_model_reset(self, mdl, mdl_reset, inj_times, max_time=55, run_stochastic=False):
         """ Tests to see if model attributes reset with the reset() method such that
