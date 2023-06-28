@@ -304,7 +304,7 @@ if __name__ == '__main__':
     app = SampleApproach(mdl)
     import multiprocessing as mp
     
-    endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
+    #endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
     
     endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
     

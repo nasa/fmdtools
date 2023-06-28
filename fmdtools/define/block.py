@@ -45,6 +45,7 @@ def assoc_flows(obj, flows={}):
     """
     if hasattr(obj, 'flownames'):
         flows = {obj.flownames.get(fn, fn): flow for fn, flow in flows.items()}
+    flows = flows.copy()
     for init_att in dir(obj):
         if init_att.startswith("_init_"):
             att = getattr(obj, init_att)
@@ -1002,7 +1003,7 @@ class ASG(dataobject, mapping=True):
             while active_actions:
                 new_active_actions = set(active_actions)
                 for action in active_actions:
-                    self.actions[action](time, run_stochastic, proptype=proptype, )
+                    self.actions[action](time, run_stochastic, proptype=proptype, dt=dt)
                     action_cond_edges = self.action_graph.out_edges(action, data=True)
                     for act_in, act_out, atts in action_cond_edges:
                         try:
@@ -1150,15 +1151,19 @@ class FxnBlock(Block):
                         argstr = ''
                     raise TypeError("Poor specification for : "+str(at_init)+" with kwargs: "+str(at_arg)+argstr) from e
                 setattr(self, '_args_'+at,  at_arg)
-                if at == 'c':
-                    compacts = self.c.components
-                elif at == 'a':
-                    compacts = self.a.actions
-                for ca in compacts.values():
-                    self.m.faultmodes.update({ca.name+"_"+f: vals for f, vals in ca.m.faultmodes.items()})
+                self.update_contained_modes(at)
             elif at_arg: 
                 raise Exception(at+" argument provided: "+str(at_arg)+"without associating a CompArch/ASG to _init_"+at)
         self.update_seed()
+    
+    def update_contained_modes(self, at):
+        if at == 'c':
+            compacts = self.c.components
+        elif at == 'a':
+            compacts = self.a.actions
+        for ca in compacts.values():
+            self.m.faultmodes.update({ca.name+"_"+f: vals for f, vals in ca.m.faultmodes.items()})
+        
 
     def get_typename(self):
         return "FxnBlock"
@@ -1218,8 +1223,10 @@ class FxnBlock(Block):
         cop = super().copy(newflows, *args, **kwargs)
         if hasattr(self, 'c'): 
             cop.c = self.c.copy_with_arg(**self._args_c)
+            cop.update_contained_modes('c')
         if hasattr(self, 'a'): 
             cop.a = self.a.copy(flows=aflows, **self._args_a)
+            cop.update_contained_modes('a')
         if hasattr(self, 'h'):
             if hasattr(self, 'c'): 
                 for compname, comp in cop.c.components.items():
