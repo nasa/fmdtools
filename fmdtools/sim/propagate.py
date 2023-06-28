@@ -384,6 +384,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, 
         nomscen=Scenario(sequence = Sequence(disturbances=kwargs.get('disturbances', {})))
     else: 
         nomscen=scen
+
     if staged:  
         if type(ctimes) in [float, int]:
             ctimes=[ctimes]
@@ -391,13 +392,16 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, 
             ctimes=ctimes
     else: 
         ctimes=[]
+    
     result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)
     
     endfaults, endfaultprops = mdl.return_faultmodes()
     if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
     
     mdl.reset()
-    if not staged:  mdls = {0:mdl.new_with_params()}
+    if not staged:  
+        mdls = {0:mdl.new_with_params()}
+        
     return result, nommdlhist, nomscen, mdls, t_end_nom
 
 def approach(mdl, app,  **kwargs):
@@ -485,7 +489,8 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     max_mem, showprogress, pool = unpack_mult_kwargs(kwargs)
     staged = kwargs.get('staged',False)
     mem, mem_profile = kwargs['nomhist'].get_memory()
-    if mem*len(scenlist)>max_mem: raise Exception("Model history will be too large: "+str(mem)+" > "+str(max_mem))
+    if mem*len(scenlist)>max_mem: 
+        raise Exception("Model history will be too large: "+str(mem)+" > "+str(max_mem))
     results = Result()
     mdlhists = History()
     if pool:
@@ -494,13 +499,17 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
             inputs = [(c_mdl[scen.time], scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
         else:       
             inputs = [(mdl, scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
-        res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
+        res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), 
+                                  total=len(inputs), disable=not(showprogress), 
+                                  desc="SCENARIOS COMPLETE"))
         results, mdlhists = unpack_res_list(scenlist, res_list)
     else:
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
             name = scen.name
-            if staged:  mdl_i = c_mdl[scen.time]
-            else:       mdl_i = mdl
+            if staged:  
+                mdl_i = c_mdl[scen.time]
+            else:      
+                mdl_i = mdl
             ec, mh, t_end = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
             results[name],mdlhists[name] = ec, mh
     return results, mdlhists
@@ -537,7 +546,7 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
             mdl = mdl.copy()
     else:                        
         mdl = mdl.new_with_params()
-    result, mdlhist, _, t_end,  =prop_one_scen(mdl, scen, **kwargs)
+    result, mdlhist, _, t_end,  = prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
     return result, mdlhist, t_end
 

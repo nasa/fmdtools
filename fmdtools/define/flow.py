@@ -71,7 +71,8 @@ class Flow(object):
         Returns a copy of the flow object (used when copying the model)
         """
         cop = self.__class__(self.name, p=asdict(self.p), s=asdict(self.s))
-        if hasattr(self, 'h'): cop.h =self.h.copy()
+        if hasattr(self, 'h'): 
+            cop.h =self.h.copy()
         return cop
     def get_typename(self):
         return "Flow"
@@ -91,7 +92,8 @@ class Flow(object):
         h : History
             History to initialize.
         """
-        if hasattr(self, 'h'): return self.h
+        if hasattr(self, 'h'): 
+            return self.h
         else:
             track = get_obj_track(self, track, all_possible =Flow.default_track)
             if track:
