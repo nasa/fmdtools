@@ -854,6 +854,7 @@ class ASG(dataobject, mapping=True):
     faultmodes: dict = {}
     flows: dict = {}
     active_actions: set = {}
+    is_copy: bool=False
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"
@@ -869,6 +870,7 @@ class ASG(dataobject, mapping=True):
         self.conditions = {}
         self.faultmodes = {}
         self.flows = {}
+        self.is_copy=False
         assoc_flows(self, flows=flows)
         self.active_actions = set()
 
@@ -1281,7 +1283,7 @@ class FxnBlock(Block):
             self.r.update_stochastic_states()
         if hasattr(self, 'c'):    
             inject_faults_internal(self.c, faults)
-        if hasattr(self, 'a'): 
+        if hasattr(self, 'a'):
             inject_faults_internal(self.a, faults)
             try:
                 self.a(time, run_stochastic, proptype, self.t.dt)
