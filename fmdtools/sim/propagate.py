@@ -161,7 +161,8 @@ def nominal(mdl, **kwargs):
         A dictionary with a history of modelstates
     """
     result, mdlhist, _, mdl, t_end = nom_helper(mdl, None, cut_hist=True, **kwargs)
-    if kwargs.get('protect', False): mdl.reset()
+    if kwargs.get('protect', False): 
+        mdl.reset()
     save_helper(kwargs.get('save_args',{}), result, mdlhist)
     return result, mdlhist
 
@@ -233,7 +234,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
     if pool:
         check_mdl_memory(mdl, nomapp.num_scenarios, max_mem=kwargs['max_mem'])
         inputs = [(mdl, scen, name, kwargs) for name, scen in nomapp.scenarios.items()]
-        res_list = list(tqdm.tqdm(pool.imap(exec_nom_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
+        res_list = list(tqdm.tqdm(pool.map(exec_nom_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         n_results, n_mdlhists = unpack_res_list([*nomapp.scenarios.values()], res_list)
     else:
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
@@ -243,7 +244,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
 def unpack_res_list(scenlist, res_list):
     results= Result()
     mdlhists = History()
-    results.data = { scen.name: res_list[i][0] for i, scen in enumerate(scenlist)}
+    results.data = {scen.name: res_list[i][0] for i, scen in enumerate(scenlist)}
     mdlhists.data = {scen.name: res_list[i][1] for i, scen in enumerate(scenlist)}
     return results, mdlhists
 
@@ -342,7 +343,8 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
     result, faulthist, _, t_end = prop_one_scen(mdl, scen, **sim_kwarg, nomhist=nomhist, nomresult=nomresult)
     nomhist.cut(t_end_nom)
     mdlhists = History(nominal=nomhist, faulty=faulthist)
-    if kwargs.get('protect', False): mdl.reset()
+    if kwargs.get('protect', False): 
+        mdl.reset()
     save_helper(kwargs.get('save_args',{}), result, mdlhists)
     return result.flatten(), mdlhists.flatten()
 
@@ -396,7 +398,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, 
     result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)
     
     endfaults, endfaultprops = mdl.return_faultmodes()
-    if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
+    if any(endfaults):
+        print("Faults found during the nominal run "+str(endfaults))
     
     mdl.reset()
     if not staged:  
@@ -496,10 +499,10 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     if pool:
         check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
         if staged:  
-            inputs = [(c_mdl[scen.time], scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
+            inputs = [(copy_staged(c_mdl[scen.time]), scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
         else:       
-            inputs = [(mdl, scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
-        res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), 
+            inputs = [(c_mdl[0].new_with_params(), scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
+        res_list = list(tqdm.tqdm(pool.map(exec_scen_par, inputs), 
                                   total=len(inputs), disable=not(showprogress), 
                                   desc="SCENARIOS COMPLETE"))
         results, mdlhists = unpack_res_list(scenlist, res_list)
@@ -507,12 +510,20 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
             name = scen.name
             if staged:  
-                mdl_i = c_mdl[scen.time]
+                mdl_i = copy_staged(c_mdl[scen.time])
             else:      
-                mdl_i = mdl
+                mdl_i = c_mdl[0].new_with_params()
             ec, mh, t_end = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
             results[name],mdlhists[name] = ec, mh
     return results, mdlhists
+def copy_staged(mdl):
+    if 'time' in mdl.h: 
+        ctime= np.copy(mdl.h.time)
+        mdl = mdl.copy()
+        mdl.h.time=ctime
+    else: 
+        mdl = mdl.copy()
+    return mdl
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
     return exec_scen(args[0], args[1], **args[2], indiv_id=args[3])
@@ -537,15 +548,6 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
             - :data:`sim_kwargs` : kwargs
                 Simulation options for :func:`prop_one_scen
     """
-    if kwargs.get('staged',False): 
-        if 'time' in mdl.h: 
-            ctime= np.copy(mdl.h.time)
-            mdl = mdl.copy()
-            mdl.h.time=ctime
-        else: 
-            mdl = mdl.copy()
-    else:                        
-        mdl = mdl.new_with_params()
     result, mdlhist, _, t_end,  = prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
     return result, mdlhist, t_end

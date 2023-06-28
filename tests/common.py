@@ -39,22 +39,19 @@ class CommonTests():
                     if t>copy_time: 
                         mdl_copy.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen)
                         self.check_same_model(mdl, mdl_copy)
-    def check_approach_parallelism(self, mdl, app):
+    def check_approach_parallelism(self, mdl, app, track="all"):
         """Test whether the model simulates the same when simulated using parallel or staged options"""
         from multiprocessing import Pool
-        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False,pool=False, track='all')
+        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False,pool=False, track=track)
         mdlhists_by_scen = mdlhists.nest(1)
         
-        endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True, track='all')
-        self.assertEqual([*endclasses.values()], [*endclasses_staged.values()])
+        endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True, track=track)
         staged_by_scen = mdlhist_staged.nest(1)
         
-        endclasses_par, mdlhists_par = sim.propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=False, track='all')
-        self.assertEqual([*endclasses.values()], [*endclasses_par.values()])
+        endclasses_par, mdlhists_par = sim.propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=False, track=track)
         par_by_scen = mdlhists_par.nest(1)
         
-        endclasses_staged_par, mdlhists_staged_par = sim.propagate.approach(mdl, app, showprogress=False, pool=Pool(4), staged=True, track='all')
-        self.assertEqual([*endclasses.values()], [*endclasses_staged_par.values()])
+        endclasses_staged_par, mdlhists_staged_par = sim.propagate.approach(mdl, app, showprogress=False, pool=Pool(4), staged=True, track=track)
         par_staged_by_scen = mdlhists_staged_par.nest(1)
         
         for scen in mdlhists_by_scen.keys():
@@ -70,7 +67,14 @@ class CommonTests():
                 self.check_same_hist(mdlhist, par_staged, hist1name="staged-parallel")
             except AssertionError as e:
                 raise AssertionError("Problem with scenario: "+scen) from e
-                    
+        self.check_same_res(endclasses, endclasses_staged, res1name="staged")
+        self.check_same_res(endclasses, endclasses_par, res1name="par")
+        self.check_same_res(endclasses, endclasses_staged_par, res1name="staged-par")
+    def check_same_res(self, res, res1, res1name = "res1"):
+        for k in res:
+            if res[k]!=res1[k]:
+                raise AssertionError("Results inconsistent at key k="+k
+                                     +"\n res="+str(res[k])+"\n "+res1name+"="+str(res1[k]))
     def check_same_hist(self, hist, hist1, hist1name="hist1"):
         earliest = np.inf
         err_key = ''
