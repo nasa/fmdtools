@@ -125,13 +125,13 @@ class Time(dataobject):
     timernames: tuple
         Names of timers to instantiate.
     """
-    time:       float=0.0
-    dt:         float=1.0
-    t_ind:      int=0
-    t_loc:      float=0.0
-    run_times:  int=1
-    timers:     dict = {}
-    use_local:  bool=True
+    time: float=0.0
+    dt: float=1.0
+    t_ind: int=0
+    t_loc: float=0.0
+    run_times: int=1
+    timers: dict = {}
+    use_local: bool=True
     timernames = ()
     default_track = ('timers')
     def __init__(self, *args, **kwargs):
@@ -177,11 +177,11 @@ class Time(dataobject):
         cop = self.__class__(*args, **t_args)
         for timer in self.timers:
             cop.timers[timer] = self.timers[timer].copy()
-        cop.run_times=self.run_times
+        cop.run_times = self.run_times
         cop.time = self.time
-        cop.t_ind=self.t_ind
-        cop.t_loc=self.t_loc
-        cop.dt=self.dt
+        cop.t_ind = self.t_ind
+        cop.t_loc = self.t_loc
+        cop.dt = self.dt
         return cop
     def create_hist(self, timerange, track):
         """

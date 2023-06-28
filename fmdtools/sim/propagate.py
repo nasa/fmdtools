@@ -857,8 +857,10 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
             obj = get_var(mdl,strs[1:])
         else: obj = mdl
         
-        if Gclass:  rgraph = Gclass(obj, **kwargs)
-        else:       rgraph = graph_factory(obj, **kwargs)
+        if Gclass: 
+            rgraph = Gclass(obj, **kwargs)
+        else:
+            rgraph = graph_factory(obj, **kwargs)
     
         if nomresult and g in nomresult:  rgraph.set_resgraph(nomresult[g])
         elif nomresult:                   rgraph.set_resgraph(nomresult)

@@ -77,13 +77,11 @@ class CommonTests():
         err_keys = []
         for k in hist:
             err = np.where(hist[k]!=hist1[k])[0]
-            if any(err) and err[0] <= earliest:
-                if err[0] == earliest:
-                    err_keys.append(err[0])
-                else:
-                    err_keys = []
-                earliest = err[0]
-                err_key = k
+            if any(err):
+                err_keys.append(k)
+                if err[0] <= earliest:
+                    earliest = err[0]
+                    err_key = k
                 
         if err_key:
             raise AssertionError("Histories inconsistent starting at key k="+err_key 
