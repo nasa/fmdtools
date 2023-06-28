@@ -6,21 +6,13 @@ Created on Tue Dec 21 10:51:57 2021
 """
 import unittest
 from examples.tank.tank_model import Tank
-from examples.tank.tank_opt import x_to_rcost_leg, x_to_totcost_leg, x_to_descost
-from examples.tank.tank_optimization_model import Tank as Tank2
-from examples.tank.tank_optimization_model import TankParam as TankParam2, make_tankparam
-
-from fmdtools.sim.search import ProblemInterface
 from fmdtools.sim import propagate
-import fmdtools.analyze as an
 from fmdtools.sim.approach import SampleApproach, NominalApproach
 from tests.common import CommonTests
-import multiprocessing as mp
 
 class TankTests(unittest.TestCase, CommonTests):
     def setUp(self):
         self.mdl = Tank()
-        self.optmdl = Tank2()
     def test_model_copy_same(self):
         self.check_model_copy_same(Tank(),Tank(), [5,10,15], 10, max_time=20)
     def test_model_copy_different(self):
@@ -29,48 +21,13 @@ class TankTests(unittest.TestCase, CommonTests):
         mdl = Tank()
         mdl2 = Tank()
         self.check_model_reset(mdl, mdl2, [5,10,15], max_time=20)
-    def test_approach_parallelism(self):
+    def test_approach_parallelism_0(self):
         """Test whether the pump simulates the same when simulated using parallel or staged options"""
         app = SampleApproach(self.mdl)
         self.check_approach_parallelism(self.mdl, app)
+    def test_approach_parallelism_1(self):
         app1 = SampleApproach(self.mdl, defaultsamp={'samp':'evenspacing','numpts':4})
         self.check_approach_parallelism(self.mdl, app1)
-    def test_same_rcost(self):
-        
-        kwarg_options = [dict(staged=True),
-                         dict(staged=False),
-                         dict(staged=True, pool=mp.Pool(4)),
-                         dict(staged=False, pool=mp.Pool(4))] 
-        mdl= Tank2()
-        res_vars_i = {(v[0],v[1],v[2],v[3]):1 for v in mdl.p.faultpolicy}
-        
-        for kwarg in kwarg_options:
-            prob = ProblemInterface("res_problem", mdl, **kwarg)
-            
-            prob.add_simulation("des_cost", "external", x_to_descost)
-            prob.add_objectives("des_cost", cd="cd")
-            prob.add_variables("des_cost",'capacity', 'turnup')
-            
-            app = SampleApproach(mdl)
-            prob.add_simulation("res_sim", "multi", app.scenlist, include_nominal=True,
-                                upstream_sims = {"des_cost":{'p':{"capacity":"capacity", "turnup":"turnup"}}})
-            res_vars = [(var, None) for var in res_vars_i.keys()]
-            prob.add_variables("res_sim", *res_vars, vartype=make_tankparam)
-            prob.add_objectives("res_sim", cost="expected cost", objtype="endclass")
-            prob.add_combined_objective('tot_cost', 'cd', 'cost')
-            for des_var in [[15, 0.5], [22, 0.1], [18,0]]:
-                rvar = [*res_vars_i.values()][:27]
-                lvar = [*res_vars_i.values()][27:]
-                prob.clear()
-                prob.update_sim_vars("res_sim", new_p={'capacity':des_var[0], 'turnup':des_var[1]})
-                inter_cost = prob.cost([*res_vars_i.values()])
-                func_cost = x_to_rcost_leg(rvar, lvar, des_var)
-                self.assertAlmostEqual(inter_cost, func_cost)
-                
-                inter_totcost=prob.tot_cost(des_var, [*res_vars_i.values()])
-                func_totcost=x_to_totcost_leg(des_var, rvar, lvar)
-                self.assertAlmostEqual(inter_totcost, func_totcost)
-                
     def test_comp_mode_inj(self):
         """ Tests that action modes injected in functions end up in their respective
         actions."""

@@ -224,6 +224,7 @@ class Simulable(object):
         else:
             fxns = {self.name: self}
         return fxns
+    
     def get_scen_rate(self, fxnname, faultmode, time):
         """
         Gets the scenario rate for the given single-fault scenario.
@@ -253,6 +254,32 @@ class Simulable(object):
             elif fm.faultmodes[faultmode].probtype == 'prob':
                 rate = fm.failrate*fm.faultmodes[faultmode]['dist'] 
         return rate
+    
+    def get_args(self, **kwargs):
+        """
+        Gets the current arguments for a given Simulable stored in _at_args
+        
+        Parameters
+        ----------
+        kwargs: dict
+            Attributes to overwrite (and their values)
+
+        Returns
+        -------
+        saved_args : dict
+            Dictionary of saved arguments.
+        """
+        args = {}
+        for at in self.__slots__:
+            if at.startswith("_args"):
+                role = at[5:]
+                if role in kwargs:
+                    args[role] = kwargs[role]
+                else:
+                    saved_arg = getattr(self, role, {})
+                    if saved_arg:
+                        args[role] = saved_arg
+        return args
 
 
 class Block(Simulable):
@@ -464,7 +491,8 @@ class Block(Simulable):
         cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         cop.is_copy=True
         try:
-            cop.__init__(self.name, flows, *args, **kwargs)
+            saved_kwargs = cop.get_args(**kwargs)
+            cop.__init__(self.name, flows, *args, **saved_kwargs)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
         cop.m.mirror(self.m)
@@ -644,9 +672,9 @@ class Component(Block):
 
 class CompArch(dataobject, mapping=True):
     """Container for holding component architectures"""
-    archtype:       str = 'default'
-    components:     dict = dict()
-    faultmodes:     dict = dict()
+    archtype: str = 'default'
+    components: dict = dict()
+    faultmodes: dict = dict()
     default_track = ('i', 'components')
     def make_components(self, CompClass, *args, **kwargs): # noqa
         """
@@ -752,9 +780,14 @@ class CompArch(dataobject, mapping=True):
 
 
 class Action(Block):
+    __slots__ = ('duration',)
     """
     Superclass for actions (most attributes and methods inherited from Block superclass)
     """
+    def __init__(self, duration=0.0, **kwargs):
+        self.duration=duration
+        super().__init__(**kwargs)
+
     def __call__(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
         Updates the behaviors, faults, times, etc of the action 
@@ -770,11 +803,17 @@ class Action(Block):
             self.r.update_stochastic_states()
         if proptype == 'dynamic':
             if self.t.time < time:
-                self.behavior(time); self.t.t_loc += dt
+                self.behavior(time)
+                self.t.t_loc += dt
         else:
-            self.behavior(time); self.t.t_loc += dt
+            self.behavior(time)
+            self.t.t_loc += dt
         self.t.time = time
-
+    
+    def copy(self, *args, **kwargs):
+        cop = super().copy(*args, **kwargs)
+        cop.duration = self.duration
+        return cop
     def behavior(self, time):
         """Placeholder behavior method for actions"""
         a = 0
@@ -812,7 +851,6 @@ class ASG(dataobject, mapping=True):
     faultmodes: dict = {}
     flows: dict = {}
     active_actions: set = {}
-    pos: dict = {}
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"
@@ -876,14 +914,16 @@ class ASG(dataobject, mapping=True):
         *flownames : flow
             Flows (optional) which connect the actions
         duration:
-            Not documented
+            Duration of the action. Default is 0.0
         **params : any
             parameters to instantiate the Action with. 
         """
         flows = {fl: self.flows[fl] for fl in flownames}
         action = actclass(name=name, flows={**flows}, **params)
         self.actions[name] = action
+        
         self.actions[name].duration = duration
+        
         self.action_graph.add_node(name)
         self.flow_graph.add_node(name, bipartite=0)
         for flow in flows:

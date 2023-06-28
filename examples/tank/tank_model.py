@@ -31,7 +31,7 @@ from fmdtools.define.block import FxnBlock, Action, ASG
 class WatState(State):
     effort: float = 1.0
     rate: float = 1.0
-class Water(Flow):
+class Liquid(Flow):
     _init_s=WatState
 
 class SigState(State):
@@ -51,7 +51,7 @@ class ImportLiquid(FxnBlock):
     _init_s = TransportLiquidState
     _init_m = TransportLiquidMode
     _init_sig = Signal
-    _init_watout = Water
+    _init_watout = Liquid
     flownames = {'wat_in_1':'watout', 'valve1_sig':'sig'}
     def static_behavior(self,time):
         if not self.m.has_fault('stuck'):
@@ -69,7 +69,7 @@ class ExportLiquid(FxnBlock):
     _init_s = TransportLiquidState 
     _init_m = TransportLiquidMode
     _init_sig = Signal
-    _init_watin = Water
+    _init_watin = Liquid
     flownames = {'wat_out_2':'watin', 'valve2_sig':'sig'}
     def static_behavior(self,time):
         if not self.m.has_fault('stuck'):
@@ -86,8 +86,8 @@ class GuideLiquidMode(Mode):
     key_phases_by = 'global'
 class GuideLiquid(FxnBlock):
     __slots__=('watin', 'watout')
-    _init_watin=Water
-    _init_watout=Water 
+    _init_watin=Liquid
+    _init_watout=Liquid 
     _init_m = GuideLiquidMode
     def static_behavior(self,time):
         if self.m.has_fault('clogged'):
@@ -116,8 +116,8 @@ class StoreLiquid(FxnBlock):
     __slots__=('watin', 'watout', 'sig')
     _init_s = StoreLiquidState
     _init_m = StoreLiquidMode
-    _init_watin = Water
-    _init_watout = Water
+    _init_watin = Liquid
+    _init_watout = Liquid
     _init_sig = Signal
     flownames = {'wat_in_2':'watin', 'wat_out_1':'watout', 'tank_sig':'sig'}
     def static_behavior(self, time):
@@ -149,7 +149,7 @@ class StoreLiquid(FxnBlock):
 class HumanParam(Parameter):
     reacttime: int=1
 class HumanASG(ASG):
-    reacttime:  float=0.0
+    reacttime:  int=0
     _init_tank_sig = Signal
     _init_valve1_sig = Signal 
     _init_valve2_sig = Signal
@@ -262,10 +262,10 @@ class Tank(Model):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
-        self.add_flow('wat_in_1', Water)
-        self.add_flow('wat_in_2', Water)
-        self.add_flow('wat_out_1', Water)
-        self.add_flow('wat_out_2', Water)
+        self.add_flow('wat_in_1', Liquid)
+        self.add_flow('wat_in_2', Liquid)
+        self.add_flow('wat_out_1', Liquid)
+        self.add_flow('wat_out_2', Liquid)
         self.add_flow('valve1_sig',Signal, s={'indicator':1, 'action':0})
         self.add_flow('tank_sig',  Signal, s={'indicator':0, 'action':0})
         self.add_flow('valve2_sig',Signal, s={'indicator':1, 'action':0})
@@ -300,9 +300,9 @@ if __name__ == '__main__':
     app = SampleApproach(mdl)
     import multiprocessing as mp
     
-    endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
+    #endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
     
-    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
+    #endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
     
     endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
     
