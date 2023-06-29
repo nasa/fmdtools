@@ -349,20 +349,33 @@ class Model(Simulable):
             mdl.set_vars(**{'fxnname.varname':value})
         """
         if len(args)>0: 
-            varlist=args[0]; varvalues=args[1]
-            if type(varlist)==str:                      varlist = [varlist]
-            if type(varvalues) in [str, float, int]:    varvalues= [varvalues]
-            if len(varlist)!=len(varvalues): raise Exception("length of varlist and varvalues do not correspond: "+str(len(varlist))+", "+str(len(varvalues)))
-        else: varlist=[]; varvalues=[]
-        if kwargs: varlist = varlist+[*kwargs.keys()]; varvalues = varvalues + [*kwargs.values()]
+            varlist=args[0]
+            varvalues=args[1]
+            if type(varlist)==str:
+                varlist = [varlist]
+            if type(varvalues) in [str, float, int]:
+                varvalues= [varvalues]
+            if len(varlist)!=len(varvalues):
+                raise Exception("length of varlist and varvalues do not correspond: "+str(len(varlist))+", "+str(len(varvalues)))
+        else:
+            varlist=[]
+            varvalues=[]
+        if kwargs:
+            varlist = varlist+[*kwargs.keys()]; varvalues = varvalues + [*kwargs.values()]
         for i,var in enumerate(varlist):
-            if var=='seed':  self.update_seed(seed=varvalues[i])
+            if var=='seed':
+                self.update_seed(seed=varvalues[i])
             else:
-                if type(var)==str: var=var.split(".")             
-                if var[0] in ['functions', 'fxns']: f=self.fxns[var[1]]; var=var[2:]
-                elif var[0]=='flows':               f=self.flows[var[1]]; var=var[2:]
-                elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
-                elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]             
+                if type(var)==str:
+                    var=var.split(".")             
+                if var[0] in ['functions', 'fxns']:
+                    f=self.fxns[var[1]]; var=var[2:]
+                elif var[0]=='flows':
+                    f=self.flows[var[1]]; var=var[2:]
+                elif var[0] in self.fxns:
+                    f=self.fxns[var[0]]; var=var[1:]
+                elif var[0] in self.flows:
+                    f=self.flows[var[0]]; var=var[1:]             
                 else: raise Exception(var[0]+" not a function, flow, or seed")
                 set_var(f, var, varvalues[i])
     def get_vars(self, *variables, trunc_tuple=True):

@@ -60,7 +60,6 @@ def assoc_flows(obj, flows={}):
     if flows:
         warnings.warn("these flows sent from model "+str([*flows.keys()])+" not added to class "+str(obj.__class__))
 
-
 def inject_faults_internal(obj, faults):
     """
     Injects faults in the CompArch/ASG object obj.
@@ -862,16 +861,14 @@ class ASG(dataobject, mapping=True):
     per_timestep = False
     default_track = ('actions', 'active_actions', 'i')
 
-    def __init__(self, *args, flows={}, **kwargs):
+    def __init__(self, *args, is_copy=False, **kwargs):
         super().__init__(*args, **kwargs)
         self.actions = {}  # TODO: remove restatement of defaults when fixed in recordclass
         self.action_graph = nx.DiGraph()
         self.flow_graph = nx.DiGraph()
         self.conditions = {}
         self.faultmodes = {}
-        self.flows = {}
-        self.is_copy=False
-        assoc_flows(self, flows=flows)
+        self.is_copy=is_copy
         self.active_actions = set()
 
     def build(self):
@@ -903,7 +900,7 @@ class ASG(dataobject, mapping=True):
         s : dict, optional
             State dictionary to overwrite Flow default state values with
         """
-        if not getattr(self, 'is_copy', False):
+        if flowname not in self.flows:
             self.flows[flowname] = init_flow(flowname, fclass, p=p, s=s)
 
     def add_act(self, name, actclass, *flownames, duration=0.0, **params):
@@ -1038,12 +1035,10 @@ class ASG(dataobject, mapping=True):
                 act.update_seed(seed)
 
     def copy(self, flows={}, **kwargs):
-        #new_flows = {**{fn: flow.copy() for fn, flow in self.flows.items() if fn not in flows}, **flows}
-        aflows = flows.copy()
-        cop = self.__class__(flows=flows, **kwargs)
-        for flowname, flow in self.flows.items():
-            if flowname not in aflows:
-                cop.flows[flowname].s.assign(self.flows[flowname].s)
+        cop = self.__class__(flows=flows, is_copy=True, **kwargs)
+        for flowname, flow in flows.items():
+            if flow.__hash__()!=cop.flows[flowname].__hash__():
+                raise Exception("Flow not associated with lower level of ASG: "+flowname)
         
         for actname, action in self.actions.items(): 
             cop_act = cop.actions[actname]
@@ -1136,15 +1131,8 @@ class FxnBlock(Block):
             at_arg = eval(at)
             at_init = getattr(self, '_init_'+at, False)
             if at_init:
-                at_flows = dict()
-                for flowname, flow in self.flows.items():
-                    if hasattr(at_init, '_init_'+flowname):
-                        at_flows[flowname] = flow
                 try:
-                    if at_flows:
-                        setattr(self, at,  at_init(flows=at_flows, **at_arg))
-                    else:
-                        setattr(self, at,  at_init(**at_arg))
+                    setattr(self, at, at_init(flows=flows, **at_arg))
                 except TypeError as e:
                     invalid_args = [a for a in at_arg if a not in at_init.__fields__]
                     if invalid_args:
@@ -1221,13 +1209,12 @@ class FxnBlock(Block):
         copy : FxnBlock
             Copy of the given function with new flows
         """
-        aflows=newflows.copy()
         cop = super().copy(newflows, *args, **kwargs)
         if hasattr(self, 'c'): 
-            cop.c = self.c.copy_with_arg(**self._args_c)
+            cop.c = self.c.copy_with_arg(flows = cop.flows.copy(), **self._args_c)
             cop.update_contained_modes('c')
         if hasattr(self, 'a'): 
-            cop.a = self.a.copy(flows=aflows, **self._args_a)
+            cop.a = self.a.copy(flows=cop.flows.copy(), **self._args_a)
             cop.update_contained_modes('a')
         if hasattr(self, 'h'):
             if hasattr(self, 'c'): 

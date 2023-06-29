@@ -150,14 +150,14 @@ class HumanParam(Parameter):
     reacttime: int=1
 class HumanASG(ASG):
     reacttime:  int=0
-    _init_tank_sig = Signal
-    _init_valve1_sig = Signal 
-    _init_valve2_sig = Signal
     initial_action = "look"
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        self.add_flow("detect_sig", fclass=Signal)
+        self.add_flow("tank_sig", Signal)
+        self.add_flow("valve1_sig", Signal)
+        self.add_flow("valve2_sig", Signal)
+        self.add_flow("detect_sig", Signal)
         
         self.add_act('look', Look)
         self.add_act('detect', Detect, 'detect_sig', 'tank_sig', 'valve1_sig', duration=self.reacttime)
@@ -185,8 +185,18 @@ class HumanActions(FxnBlock):
         
         #assert self.a.actions['turn'].valve1_sig.s.indicator==self.valve1_sig.s.indicator
         #assert self.a.actions['turn'].valve2_sig.s.indicator==self.valve2_sig.s.indicator
+        if self.a.flows['valve1_sig'].__hash__()!=self.valve1_sig.__hash__():
+            raise Exception("Invalid connection hash in asg.flows")
+        if self.a.flows['valve2_sig'].__hash__()!=self.valve2_sig.__hash__():
+            raise Exception("Invalid connection hash in asg.flows")
+        if self.a.actions['turn'].valve2_sig.__hash__()!=self.valve2_sig.__hash__():
+            raise Exception("Invalid connection hash")
+        
+        if not  self.a.actions['turn'].valve2_sig.s.action==self.valve2_sig.s.action:
+            raise Exception("invalid connection: valve2_sig")
+        
         if not  self.a.actions['turn'].valve1_sig.s.action==self.valve1_sig.s.action:
-            print("invalid connection")
+            raise Exception("invalid connection: valve1_sig")
 
 class LookMode(Mode):
     faultparams={'not_visible':(1,[1,0],0)}
@@ -315,11 +325,11 @@ if __name__ == '__main__':
     app = SampleApproach(mdl)
     import multiprocessing as mp
     
-    #endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
+    endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
     
-    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
+    #endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
     
-    #endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
+    endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
     
     
     """
