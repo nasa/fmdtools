@@ -160,7 +160,7 @@ class HumanASG(ASG):
         self.add_flow("detect_sig", Signal)
         
         self.add_act('look', Look)
-        self.add_act('detect', Detect, 'detect_sig', 'tank_sig', 'valve1_sig', duration=self.reacttime)
+        self.add_act('detect', Detect, 'detect_sig', 'tank_sig', duration=self.reacttime)
         self.add_act('reach', Reach)
         self.add_act('grasp', Grasp)
         self.add_act('turn', Turn, 'detect_sig', 'valve1_sig', 'valve2_sig', duration=1.0)
@@ -217,7 +217,6 @@ class Detect(Action):
     _init_m = DetectMode
     _init_detect_sig = Signal
     _init_tank_sig = Signal
-    _init_valve1_sig = Signal
     def behavior(self, time):
         if self.m.has_fault('not_detected'):    
             self.detect_sig.s.put(indicator = 0, action=0)
