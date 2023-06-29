@@ -202,7 +202,12 @@ class Result(UserDict):
 
     def __eq__(self, other):
         return all([all(v == other[k]) if isinstance(v, np.ndarray) else v == other[k] for k, v in self.data.items()])
-
+    
+    def __sub__(self, other):
+        ret = Result()
+        ret.data = {k: self[k]-other[k] if is_numeric(self[k]) else self[k]!=other[k] for k in self.keys()}
+        return ret
+    
     def keys(self):
         return self.data.keys()
 
@@ -873,6 +878,10 @@ class History(Result):
             hist.update(History.load(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
         if renest_dict==False: hist = hist.flatten()
         return hist
+    def __sub__(self, other):
+        ret = History()
+        ret.data = {k: self[k]-other[k] if self[k].dtype in ['float', 'int'] else any(self[k]!=other[k]) for k in self.keys()}
+        return ret
 
     def copy(self):
         """Creates a new independent copy of the current history dict"""
