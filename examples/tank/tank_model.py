@@ -323,15 +323,19 @@ if __name__ == '__main__':
     mdl = Tank()
     
     app = SampleApproach(mdl)
+    
+    app = SampleApproach(mdl, defaultsamp={'samp':'evenspacing','numpts':4})
     import multiprocessing as mp
     
     endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
     
-    #endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
+    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
+    
+    assert endclasses==endclasses_par
     
     endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
     
-    
+    assert endclasses==endclasses_par_staged
     """
     endclass, mdlhist = propagate.one_fault(mdl,'human','look_not_visible', time=2)
     
