@@ -19,9 +19,23 @@ Shared Method Parameters:
 Private Methods:
     - :func:`list_init_faults()`:   Creates a list of single-fault scenarios for the graph, given the modes set up in the fault model
     - :func:`prop_one_scen()`:      Runs a fault scenario in the model over time
-    - :func:`propagate()`:          Injects and propagates faults through the graph at one time-step
-    - :func:`prop_time()`:          Propagates faults through model graph.
     - :func:`save_helper()`:        Helper function for inline results saving.
+    -:func:`unpack _res_list`:      Helper function for unpacking results
+    -:func:`exec_nom_par`:          Helper function for executing nominal scenarios in parallel
+    -:func:`exec_nom_helper`:       Helper function for executing nominal scenarios
+    -:func:`nom_helper`:            Helper function for initial run of nominal scenario
+    -:func:`scenlist_helper`:       Helper function for `approach`
+    -:func:`exec_scen_par`:         Helper function for executing the scenario in parallel
+    -:func:`exec_scen`:             Executes a scenario and generates results and classifications given a model and nominal model history
+    -:func:`check_hist_memory`:     Checks if the memory will be exhausted given the size of the mdlhist and number of scenarios
+    -:func:`check_mdl_memory`:      Raises exception if model size is too large.
+    -:func:`check_overwrite`:       Checks if file can be overwritten
+    -:func:`phases_from_hist`:      Helper function for `nested_approach`
+    -:func:`check_end_condition`:   Helper function for `prop_one_scen` to end simulation earlier.
+    -:func:`get_result`:            Helper function for `prop_one_scen` to get result at specific timestep
+    -:func:`get_endclass_vars`:     Helper function for `get_result`
+
+
 """
 #File name: propagate.py
 #Author: Daniel Hulse

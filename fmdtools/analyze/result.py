@@ -8,6 +8,34 @@ Description: A module defining how simulation results (histories) structured and
 And functions:
 - :func:`load`:             Loads a given file to a Result/History
 - :func:`load_folder`:      Loads a given folder to a Result/History
+
+Private Methods:
+- :func:`file_check`:           Check if files exists and whether to overwrite the file
+- :func:`auto_filetype`:        Helper function that automatically determines the filetype (pickle, csv, 
+                                or json) of a given filename
+- :func:`create_indiv_filename`:Helper function that creates an individualized name for a file given the 
+                                general filename and an individual id
+- :func:`clean_resultdict_keys`:Helper function for recreating results dictionary keys (tuples) from a 
+                                dictionary loaded from a file (where keys are strings) (used in csv/json results)
+- :func:`get_dict_attr`:        Gets attributes *attr from a given nested dict dict_in of class des_class
+- :func:`fromdict`:             Creates new history/result from given dictionary
+- :func:`check_include_errors`: Helper function for Result Class, Cycles through `check_include_error`.
+- :func:`check_include_error`:  Helper function to raise exceptions for errors.
+- :func:`bootstrap_confidence_interval`:Convenience wrapper for scipy.bootstrap
+- :func:`diff`:                 Helper function for finding inconsistent states between val1, val2, with the difftype option
+- :func:`nan_to_x`:             Helper function for Result Class, returns nan as zero if present, otherwise returns the number
+- :func:`is_numeric`:           Helper function for Result Class, checks if a given value is numeric
+- :func:`join_key`:             Helper function for Result Class
+- :func:`is_known_immutable`:   Helper function for History Class
+- :func:`is_known_mutable`:     Helper function for History Class
+- :func:`to_include_keys`:      Determine what dict keys to include from Result given nested to_include dictionary
+- :func:`get_sub_include`:      Determines what attributes of att to include based on the provided dict/str/list/set to_include
+- :func:`init_indicator_hist`:  Creates a history for an object with indicator methods (e.g., obj.indicate_XX)
+- :func:`init_hist_iter`:       Initializes the history for a given attribute att with value val. Enables the recursive 
+                                definition of a history as a nested structure.
+- :func:`init_dicthist`:        Initializes histories for dictionary attributes (if any)
+
+
 """
 
 import numpy as np
