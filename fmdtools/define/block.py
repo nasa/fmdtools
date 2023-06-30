@@ -821,7 +821,7 @@ class Action(Block):
         a = 0
 
 
-class ASG(dataobject, mapping=True):
+class ASG(object):
     """
     Constructs the Action Sequence Graph with the given parameters.
     
@@ -845,15 +845,7 @@ class ASG(dataobject, mapping=True):
             - 'manual' means that the propagation is performed manually (defined in a behavior method)
     per_timestep : bool
         Defines whether the action sequence graph is reset to the initial state each time-step (True) or stays in the current action (False). Default is False
-    """
-    actions: dict = {}
-    action_graph: nx.DiGraph = nx.DiGraph()
-    flow_graph: nx.DiGraph = nx.DiGraph()
-    conditions: dict = {}
-    faultmodes: dict = {}
-    flows: dict = {}
-    active_actions: set = set()
-    is_copy: bool=False
+    """    
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"
@@ -861,15 +853,16 @@ class ASG(dataobject, mapping=True):
     per_timestep = False
     default_track = ('actions', 'active_actions', 'i')
 
-    def __init__(self, *args, is_copy=False, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.actions = {}  # TODO: remove restatement of defaults when fixed in recordclass
+    def __init__(self, flows={}, is_copy=False):
+        self.actions = {}
+        self.flows = flows 
+        self.conditions = {}
         self.action_graph = nx.DiGraph()
         self.flow_graph = nx.DiGraph()
         self.conditions = {}
         self.faultmodes = {}
         self.is_copy=is_copy
-        #self.active_actions = set()
+        self.active_actions = set()
 
     def build(self):
         if self.initial_action == 'auto':
@@ -1305,8 +1298,7 @@ class FxnBlock(Block):
             if hasattr(self, 'dynamic_behavior'):
                 self.dynamic_behavior(time)
         
-        actions = getattr(self, 'a', {'actions': {}})['actions']
-        if actions:     # propagate faults from component level to function level
+        if hasattr(self, 'a') and self.a.actions: # propagate faults from component level to function level
             self.m.faults.difference_update(self.a.faultmodes)
             self.m.faults.update(self.a.get_faults())
         comps = getattr(self, 'c', {'components': {}})['components']

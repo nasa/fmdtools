@@ -149,9 +149,8 @@ class StoreLiquid(FxnBlock):
 class HumanParam(Parameter):
     reacttime: int=1
 class HumanASG(ASG):
-    reacttime:  int=0
     initial_action = "look"
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, reacttime=0, **kwargs):
         super().__init__(*args, **kwargs)
         
         self.add_flow("tank_sig", Signal)
@@ -160,7 +159,7 @@ class HumanASG(ASG):
         self.add_flow("detect_sig", Signal)
         
         self.add_act('look', Look)
-        self.add_act('detect', Detect, 'detect_sig', 'tank_sig', duration=self.reacttime)
+        self.add_act('detect', Detect, 'detect_sig', 'tank_sig', duration=reacttime)
         self.add_act('reach', Reach)
         self.add_act('grasp', Grasp)
         self.add_act('turn', Turn, 'detect_sig', 'valve1_sig', 'valve2_sig', duration=1.0)
@@ -188,9 +187,6 @@ class HumanActions(FxnBlock):
         
         if self.a.actions['look'].looked.__self__.__hash__()!=self.a.conditions['looked'].__self__.__hash__():
             raise Exception("Condition not passed")
-        
-        if self.a.reacttime==0:
-            raise Exception("React time not passed")
         
         if self.m.has_fault("detect_false_high") and time==5.0 and not self.h.m.faults.detect_false_high[4]:
             if 'turn' not in self.a.active_actions:
