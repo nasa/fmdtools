@@ -105,7 +105,8 @@ class Model(Simulable):
         s : dict, optional
             State dictionary to overwrite Flow default state values with
         """
-        for flowname in flownames: self.add_flow(flowname, fclass, p=p, s=s)
+        for flowname in flownames:
+            self.add_flow(flowname, fclass, p=p, s=s)
     def add_flow(self,flowname, fclass=Flow, p={}, s={}):
         """
         Adds a flow with given attributes to the model.
@@ -285,40 +286,45 @@ class Model(Simulable):
         copy : Model
             Copy of the curent model.
         """
-        copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
-        copy.is_copy=True
-        copy.__init__(p=getattr(self, 'p', {}),
+        cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
+        cop.is_copy=True
+        cop.__init__(p=getattr(self, 'p', {}),
                       sp=getattr(self, 'sp', {}),
                       track=getattr(self, 'track', {}),
                       r={'seed':self.r.seed})
+        
         for flowname, flow in self.flows.items():
-            copy.flows[flowname]=flow.copy()
+            cop.flows[flowname]=flow.copy()
+        
         for fxnname, fxn in self.fxns.items():
-            flownames=self._fxninput[fxnname]['flows']
-            args_f=self._fxninput[fxnname]['args_f']
-            kwargs = self._fxninput[fxnname]['kwargs']
-            flows = copy.get_flows(flownames).copy()
+            flownames=copy.deepcopy(self._fxninput[fxnname]['flows'])
+            args_f=copy.deepcopy(self._fxninput[fxnname]['args_f'])
+            kwargs = copy.deepcopy(self._fxninput[fxnname]['kwargs'])
+            flows = cop.get_flows(flownames)
             if args_f=='None':     
-                copy.fxns[fxnname]=fxn.copy(flows, **kwargs)
+                cop.fxns[fxnname]=fxn.copy(flows, **kwargs)
             else:                   
-                copy.fxns[fxnname]=fxn.copy(flows, args_f, **kwargs)
-        copy._fxninput=self._fxninput
-        copy._fxnflows=self._fxnflows
-        copy.is_copy=False
-        copy.build(functionorder = self.functionorder)
-        copy.is_copy=True
+                cop.fxns[fxnname]=fxn.copy(flows, args_f, **kwargs)
+
+        cop._fxninput=copy.deepcopy(self._fxninput)
+        cop._fxnflows=copy.deepcopy(self._fxnflows)
+        cop._flowstates=copy.deepcopy(self._flowstates)
+        
+        cop.is_copy=False
+        cop.build(functionorder = copy.deepcopy(self.functionorder))
+        cop.is_copy=True
         if hasattr(self, 'h'): 
             hist = History()
             for k in self.h:
                 for att in ['fxns', 'flows']:
                     if k.startswith(att):
                         fname = k.split('.')[1]
-                        copy_f = getattr(copy, att)[fname]
+                        copy_f = getattr(cop, att)[fname]
                         hist[att+'.'+fname]=copy_f.h
                 if k=='time' or k.startswith('i.'):
                     hist[k]=self.h[k].copy()
-            copy.h = hist.flatten()
-        return copy
+            cop.h = hist.flatten()
+        return cop
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
         for flowname, flow in self.flows.items():
@@ -500,7 +506,7 @@ class Model(Simulable):
             activefxns=nextfxns.copy()
             nextfxns.clear()
             n+=1
-            if n>1000: #break if this is going for too long
+            if n>100: #break if this is going for too long
                 raise Exception("Undesired looping between functions in static propagation step",
                                 "at t="+str(time)+", these functions remain active:"+str(activefxns))
         

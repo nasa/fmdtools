@@ -136,15 +136,18 @@ class Time(dataobject):
     default_track = ('timers')
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if not self.timers: self.timers = {}
+        if not self.timers:
+            self.timers = {}
         for timername in self.timernames:
             self.timers[timername]=Timer(timername)
         self.set_timestep()
     def __getattr__(self, item):
-        if item in self.timers: return self.timers[item]
-        else:                   return super().__getattribute__(item)
+        if item in self.timers:
+            return self.timers[item]
+        else:
+            return super().__getattribute__(item)
     def return_mutables(self):
-        return (t.time for t in self.timers.values())
+        return (*(t.time for t in self.timers.values()), self.time, self.t_ind, self.t_loc, self.run_times)
     def set_timestep(self):
         """Sets the timestep of the function given the option use_local 
         (which selects whether it uses local_timestep or global_timestep)"""

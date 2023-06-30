@@ -204,9 +204,16 @@ class Result(UserDict):
         return all([all(v == other[k]) if isinstance(v, np.ndarray) else v == other[k] for k, v in self.data.items()])
     
     def __sub__(self, other):
-        ret = Result()
-        ret.data = {k: self[k]-other[k] if is_numeric(self[k]) else self[k]!=other[k] for k in self.keys()}
+        ret = self.__class__()
+        ret.data = {k: np.subtract(self[k], other[k], dtype=np.int32) if is_bool(self[k])
+                    else self[k]-other[k] if is_numeric(self[k])
+                    else self[k]!=other[k] for k in self.keys()}
         return ret
+    def get_different(self, other):
+        diff = self-other
+        different = self.__class__()
+        different.data ={k:v for k,v in diff.items() if v} 
+        return different
     
     def keys(self):
         return self.data.keys()
@@ -688,7 +695,12 @@ def nan_to_x(metric, x=0.0):
         return x
     else:
         return metric
-
+def is_bool(val):
+    try:
+        return val.dtype in ['bool']
+    except:
+        return type(val) in [bool]
+    
 
 def is_numeric(val):
     """Checks if a given value is numeric"""
@@ -878,10 +890,11 @@ class History(Result):
             hist.update(History.load(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
         if renest_dict==False: hist = hist.flatten()
         return hist
-    def __sub__(self, other):
-        ret = History()
-        ret.data = {k: self[k]-other[k] if self[k].dtype in ['float', 'int'] else any(self[k]!=other[k]) for k in self.keys()}
-        return ret
+    def get_different(self, other):
+        diff = self-other
+        different = self.__class__()
+        different.data ={k:v for k,v in diff.items() if any(v)} 
+        return different
 
     def copy(self):
         """Creates a new independent copy of the current history dict"""

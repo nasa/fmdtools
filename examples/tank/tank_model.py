@@ -89,7 +89,7 @@ class GuideLiquid(FxnBlock):
     _init_watin=Liquid
     _init_watout=Liquid 
     _init_m = GuideLiquidMode
-    def static_behavior(self,time):
+    def static_behavior(self,time):      
         if self.m.has_fault('clogged'):
             self.watin.s.put(rate=0.0)
             self.watout.s.put(effort=0.0)
@@ -178,14 +178,34 @@ class HumanActions(FxnBlock):
     _init_valve1_sig = Signal
     _init_tank_sig = Signal
     _init_valve2_sig = Signal
-    def behavior(self, time):
+    def dynamic_behavior(self, time):
         #if self.valve1_sig.s.indicator:
             #print(self.a.flows['valve1_sig'].s.indicator==self.valve1_sig.s.indicator, flush=True)
             #print(self.a.flows['valve2_sig'].s.indicator==self.valve2_sig.s.indicator, flush=True)
         
         #assert self.a.actions['turn'].valve1_sig.s.indicator==self.valve1_sig.s.indicator
         #assert self.a.actions['turn'].valve2_sig.s.indicator==self.valve2_sig.s.indicator
+        
+        if self.a.actions['look'].looked.__self__.__hash__()!=self.a.conditions['looked'].__self__.__hash__():
+            raise Exception("Condition not passed")
+        
+        if self.a.reacttime==0:
+            raise Exception("React time not passed")
+        
+        if self.m.has_fault("detect_false_high") and time==5.0 and not self.h.m.faults.detect_false_high[4]:
+            if 'turn' not in self.a.active_actions:
+                raise Exception("Invalid behavior, detect.t.t_loc="+str(self.a.actions['detect'].t.t_loc))
+            print(self.a.actions['detect'].t.t_loc, flush=True)
+            print(self.a.active_actions)
+            
+            if not self.a.actions['detect'].m.has_fault("false_high"):
+                raise Exception("detect_false_high")
+        
         if self.a.flows['valve1_sig'].__hash__()!=self.valve1_sig.__hash__():
+            raise Exception("Invalid connection hash in asg.flows")
+        if self.a.actions['detect'].tank_sig.__hash__()!=self.tank_sig.__hash__():
+            raise Exception("Invalid connection hash in asg.flows")
+        if self.a.flows['detect_sig'].__hash__()!=self.a.actions['detect'].detect_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
         if self.a.flows['valve2_sig'].__hash__()!=self.valve2_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
@@ -290,7 +310,7 @@ class Tank(Model):
         self.add_flow('wat_in_2', Liquid)
         self.add_flow('wat_out_1', Liquid)
         self.add_flow('wat_out_2', Liquid)
-        self.add_flow('valve1_sig',Signal, s={'indicator':1, 'action':0})
+        self.add_flow('valve1_sig',Signal, s={'indicator':1, 'action':0}) # Need to make sure this info is passed during copy!!
         self.add_flow('tank_sig',  Signal, s={'indicator':0, 'action':0})
         self.add_flow('valve2_sig',Signal, s={'indicator':1, 'action':0})
         
@@ -325,16 +345,31 @@ if __name__ == '__main__':
     
     app = SampleApproach(mdl, defaultsamp={'samp':'evenspacing','numpts':4})
     import multiprocessing as mp
+    print("normal")
+    endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all', staged=True)
+    print("staged")
+    endclasses_staged, mdlhists_staged = propagate.approach(mdl, app, showprogress=False, track='all', staged=True)
     
-    endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all')
-    
+    assert endclasses==endclasses_staged
+    print("parallel")
     endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
     
     assert endclasses==endclasses_par
-    
+    print("staged-parallel")
     endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
     
+    mc_diff = mdlhists.get_different(mdlhists_par_staged)
+    ec_diff = endclasses.get_different(endclasses_par_staged)
+    
+    mc_diff.guide_water_out_leak_t0p0.flows.wat_in_2.s.effort
+    
+    #mc_diff.guide_water_in_leak_t0p0.flows.wat_in_2.s.effort
+    
+    mc_diff.human_detect_false_low_t16p0.fxns.human.a.active_actions[16]
+    
     assert endclasses==endclasses_par_staged
+    
+    
     """
     endclass, mdlhist = propagate.one_fault(mdl,'human','look_not_visible', time=2)
     

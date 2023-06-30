@@ -786,9 +786,9 @@ class Action(Block):
     """
     Superclass for actions (most attributes and methods inherited from Block superclass)
     """
-    def __init__(self, duration=0.0, **kwargs):
+    def __init__(self, name, duration=0.0, **kwargs):
         self.duration=duration
-        super().__init__(**kwargs)
+        super().__init__(name, **kwargs)
 
     def __call__(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
@@ -852,7 +852,7 @@ class ASG(dataobject, mapping=True):
     conditions: dict = {}
     faultmodes: dict = {}
     flows: dict = {}
-    active_actions: set = {}
+    active_actions: set = set()
     is_copy: bool=False
     initial_action = "auto"
     state_rep = "finite-state"
@@ -869,7 +869,7 @@ class ASG(dataobject, mapping=True):
         self.conditions = {}
         self.faultmodes = {}
         self.is_copy=is_copy
-        self.active_actions = set()
+        #self.active_actions = set()
 
     def build(self):
         if self.initial_action == 'auto':
@@ -922,8 +922,8 @@ class ASG(dataobject, mapping=True):
         """
         flows = {fl: self.flows[fl] for fl in flownames}
         action = actclass(name=name, flows={**flows}, **params)
-        self.actions[name] = action
         
+        self.actions[name] = action
         self.actions[name].duration = duration
         
         self.action_graph.add_node(name)
@@ -992,10 +992,11 @@ class ASG(dataobject, mapping=True):
         dt : float
             Timestep to propagate over.
         """
-        if not self.per_timestep: 
+        if self.per_timestep: 
             self.set_active_actions(self.initial_action)
             for action in self.active_actions:
                 self.actions[action].t.t_loc = 0.0
+
         if proptype == self.proptype:
             active_actions = self.active_actions
             num_prop = 0
@@ -1035,13 +1036,21 @@ class ASG(dataobject, mapping=True):
                 act.update_seed(seed)
 
     def copy(self, flows={}, **kwargs):
-        cop = self.__class__(flows=flows, is_copy=True, **kwargs)
-        for flowname, flow in flows.items():
+        newflows = {}
+        for flowname, flow in self.flows.items():
+            if flowname in flows:
+                newflows[flowname]=flows[flowname]
+            else:
+                newflows[flowname]=self.flows[flowname].copy()
+
+        cop = self.__class__(flows=newflows, is_copy=True, **kwargs)
+        for flowname, flow in newflows.items():
             if flow.__hash__()!=cop.flows[flowname].__hash__():
                 raise Exception("Flow not associated with lower level of ASG: "+flowname)
         
         for actname, action in self.actions.items(): 
             cop_act = cop.actions[actname]
+            cop_act.duration = action.duration
             cop_act.s = action._init_s(**asdict(action.s))
             cop_act.m.mirror(action.m)
             cop_act.t = action.t.copy()
@@ -1049,6 +1058,7 @@ class ASG(dataobject, mapping=True):
                 cop_act.h = action.h.copy()
             
         cop.active_actions = copy.deepcopy(self.active_actions)
+        print(self.active_actions)
         return cop
 
     def reset(self):
@@ -1211,7 +1221,7 @@ class FxnBlock(Block):
         """
         cop = super().copy(newflows, *args, **kwargs)
         if hasattr(self, 'c'): 
-            cop.c = self.c.copy_with_arg(flows = cop.flows.copy(), **self._args_c)
+            cop.c = self.c.copy_with_arg(**self._args_c)
             cop.update_contained_modes('c')
         if hasattr(self, 'a'): 
             cop.a = self.a.copy(flows=cop.flows.copy(), **self._args_a)
