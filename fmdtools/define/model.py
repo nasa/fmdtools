@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module for defining Models, which are aggregations of Functions and Flows. Has Classes:
+Description: A module for defining Models, which are aggregations of Functions and Flows. Has Classes and Functions:
     
 - :class:`Model`:                       Superclass for defining simulation models.
-- :class:`ModelParam`:                  Class for defining model simulation parameters.
+
 - :func:`check_model_pickleability` :   Checks if a model is pickleable (and thus able to be parallelized)
 """
 import numpy as np
