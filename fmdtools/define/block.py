@@ -8,6 +8,12 @@ Description: A module to define Functions, Components, Actions, and other classe
 - :class:`Action`:      Class for defining Actions (which have behaviors and live in a function, but have __call__ method for updating)
 - :class:`CompArch`:    Class for defining Component Architectures, or sets of components to be contained by a FxnBlock
 - :class:`ASG`:         Class for defining Action Sequence Graphs, or sets of actions with specific relationships.
+- :class:`Simulable`:   Base class for object which simulate (blocks and models).
+- :class:`GenericFxn`:  Generic function block. For use when the user has not yet defined a class for the given (to be implemented) 
+                        function block. Acts as a placeholder that enables simulation.
+
+- :func:`assoc_flows`:  Associates flows with the given object (Block, ASG, etc.) 
+- :func:`inject_faults_internal`: Injects faults in the CompArch/ASG object obj.
 """
 import numpy as np
 from decimal import Decimal

@@ -3,6 +3,7 @@
 Description: A module for defining Parameters, which are (generic) containers for system attributes that do not change
     
 - :class:`Parameter`: Superclass for Parameters
+- :class:`SimParam`: Class defining Simulation Parameters
 """
 
 import inspect
