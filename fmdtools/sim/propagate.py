@@ -401,9 +401,9 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, 
     if any(endfaults):
         print("Faults found during the nominal run "+str(endfaults))
     
-    mdl.reset()
+    #mdl.reset()
     if not staged:  
-        mdls = {0:mdl.new_with_params()}
+        mdls = {0:mdl.new_with_params(**mdl_kwargs)}
         
     return result, nommdlhist, nomscen, mdls, t_end_nom
 
@@ -830,24 +830,28 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
             print("Error at t="+str(t)+' in scenario '+str(scen))
             raise
             break
-    if cut_hist: mdlhist.cut(t_ind+shift)
+    if cut_hist:
+        mdlhist.cut(t_ind+shift)
     if type(desired_result)==dict and 'end' in desired_result: 
         result['end'] = get_result(scen,mdl,desired_result['end'],mdlhist,nomhist, nomresult)
     else:                       
         result.update(get_result(scen,mdl,desired_result,mdlhist,nomhist, nomresult))
     #if len(result)==1: result = [*result.values()][0]
-    if None in c_mdl.values(): raise Exception("Approach times"+str(ctimes)+" go beyond simulation time "+str(t))
+    if None in c_mdl.values():
+        raise Exception("Approach times"+str(ctimes)+" go beyond simulation time "+str(t))
     return  result, mdlhist, c_mdl, t_ind+shift
 
 def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     desired_result = copy.deepcopy(desired_result)
-    if type(desired_result)==str:               desired_result = {desired_result:None}
+    if type(desired_result)==str:
+        desired_result = {desired_result:None}
     elif type(desired_result) in [list, set]:   
         des_res = desired_result
         desired_result = {str(k):k for k in des_res if type(k)!=str}
         desired_result.update({k:None for k in des_res if type(k)==str})
     result=Result()
-    if not nomhist: nomhist=mdlhist
+    if not nomhist:
+        nomhist=mdlhist
     elif len(nomhist['time'])!=len(mdlhist['time']):
         nomhist = nomhist.cut(start_ind=len(nomhist['time'])-len(mdlhist['time']), newcopy=True)
     if 'endclass' in desired_result:   
