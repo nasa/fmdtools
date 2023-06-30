@@ -499,9 +499,9 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     if pool:
         check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
         if staged:  
-            inputs = [(copy_staged(c_mdl[scen.time]), scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
+            inputs = [(c_mdl[scen.time], scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
         else:       
-            inputs = [(c_mdl[0].new_with_params(), scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
+            inputs = [(c_mdl[0], scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
         res_list = list(tqdm.tqdm(pool.map(exec_scen_par, inputs), 
                                   total=len(inputs), disable=not(showprogress), 
                                   desc="SCENARIOS COMPLETE"))
@@ -517,6 +517,19 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
             results[name],mdlhists[name] = ec, mh
     return results, mdlhists
 def copy_staged(mdl):
+    """
+    Copies the model when used in staged execution.     
+
+    Parameters
+    ----------
+    mdl : Simulable
+        Model to copy.
+
+    Returns
+    -------
+    mdl : Simulable
+        Copy of the model with corresponding history
+    """
     if 'time' in mdl.h: 
         ctime= np.copy(mdl.h.time)
         mdl = mdl.copy()
@@ -526,7 +539,12 @@ def copy_staged(mdl):
     return mdl
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
-    return exec_scen(args[0], args[1], **args[2], indiv_id=args[3])
+    mdl_in = args[0]
+    if args[2].get('staged', False):
+        mdl_out = copy_staged(mdl_in)
+    else:
+        mdl_out = mdl_in.new_with_params()
+    return exec_scen(mdl_out, args[1], **args[2], indiv_id=args[3])
 def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
     """ 
     Executes a scenario and generates results and classifications given a model and nominal model history

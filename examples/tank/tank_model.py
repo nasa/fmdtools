@@ -98,11 +98,7 @@ class GuideLiquid(FxnBlock):
             self.watin.s.rate = self.watout.s.rate - 1.0
         else:
             self.watout.s.effort = self.watin.s.effort
-            self.watin.s.rate = self.watout.s.rate
-    def dynamic_behavior(self, time):
-        if self.m.has_fault('clogged') and self.watout.s.effort==1.0:
-            raise Exception("Clog not happening, t="+str(time))
-            
+            self.watin.s.rate = self.watout.s.rate        
         
 class GuideLiquidIn(GuideLiquid):
     __slots__=()
@@ -183,25 +179,11 @@ class HumanActions(FxnBlock):
     _init_tank_sig = Signal
     _init_valve2_sig = Signal
     def dynamic_behavior(self, time):
-        #if self.valve1_sig.s.indicator:
-            #print(self.a.flows['valve1_sig'].s.indicator==self.valve1_sig.s.indicator, flush=True)
-            #print(self.a.flows['valve2_sig'].s.indicator==self.valve2_sig.s.indicator, flush=True)
-        
-        #assert self.a.actions['turn'].valve1_sig.s.indicator==self.valve1_sig.s.indicator
-        #assert self.a.actions['turn'].valve2_sig.s.indicator==self.valve2_sig.s.indicator
-        
+        """
+        Some testing code for ASG behavior and copying, etc. Raises exceptions when flows aren't copied correctly
+        """
         if self.a.actions['look'].looked.__self__.__hash__()!=self.a.conditions['looked'].__self__.__hash__():
             raise Exception("Condition not passed")
-        
-        if self.m.has_fault("detect_false_high") and time==5.0 and not self.h.m.faults.detect_false_high[4]:
-            if 'turn' not in self.a.active_actions:
-                raise Exception("Invalid behavior, detect.t.t_loc="+str(self.a.actions['detect'].t.t_loc))
-            print(self.a.actions['detect'].t.t_loc, flush=True)
-            print(self.a.active_actions)
-            
-            if not self.a.actions['detect'].m.has_fault("false_high"):
-                raise Exception("detect_false_high")
-        
         if self.a.flows['valve1_sig'].__hash__()!=self.valve1_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
         if self.a.actions['detect'].tank_sig.__hash__()!=self.tank_sig.__hash__():
@@ -344,34 +326,7 @@ if __name__ == '__main__':
     
     app = SampleApproach(mdl)
     
-    app = SampleApproach(mdl, defaultsamp={'samp':'evenspacing','numpts':4})
-    import multiprocessing as mp
-    print("normal")
-    endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all', staged=True)
-    print("staged")
-    endclasses_staged, mdlhists_staged = propagate.approach(mdl, app, showprogress=False, track='all', staged=True)
     
-    assert endclasses==endclasses_staged
-    print("parallel")
-    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
-    
-    assert endclasses==endclasses_par
-    print("staged-parallel")
-    endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
-    
-    mc_diff = mdlhists.get_different(mdlhists_par_staged)
-    ec_diff = endclasses.get_different(endclasses_par_staged)
-    
-    mc_diff.guide_water_out_leak_t0p0.flows.wat_in_2.s.effort
-    
-    #mc_diff.guide_water_in_leak_t0p0.flows.wat_in_2.s.effort
-    
-    mc_diff.human_detect_false_low_t16p0.fxns.human.a.active_actions[16]
-    
-    assert endclasses==endclasses_par_staged
-    
-    
-    """
     endclass, mdlhist = propagate.one_fault(mdl,'human','look_not_visible', time=2)
     
     ## nominal run
@@ -417,5 +372,4 @@ if __name__ == '__main__':
     from fmdtools.analyze.graph import ASGGraph
     ag = ASGGraph(mdl.fxns['human'].a)
     ag.draw()
-    """
              

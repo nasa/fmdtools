@@ -588,8 +588,6 @@ class Block(Simulable):
                 hist = History()
                 init_indicator_hist(self, hist, timerange, track)
                 self.add_flow_hist(hist, timerange, track)
-                if 'flows' in track:
-                    print(self.name)
                 other_tracks = [t for t in track if t not in ('i', 'flows')]
                 for at in other_tracks:
                     at_track = get_sub_include(at, track)
@@ -1051,7 +1049,6 @@ class ASG(object):
                 cop_act.h = action.h.copy()
             
         cop.active_actions = copy.deepcopy(self.active_actions)
-        print(self.active_actions)
         return cop
 
     def reset(self):
