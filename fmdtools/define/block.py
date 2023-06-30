@@ -1124,7 +1124,7 @@ class FxnBlock(Block):
         args_f : dict, optional
             arguments to pass to custom __init__ function 
         """        
-        super().__init__(name=name, flows=flows, **kwargs)
+        super().__init__(name=name, flows=flows.copy(), **kwargs)
         self.args_f = args_f
         
         for at in ['c', 'a']:  # NOTE: similar to init_obj_attr()
@@ -1132,7 +1132,10 @@ class FxnBlock(Block):
             at_init = getattr(self, '_init_'+at, False)
             if at_init:
                 try:
-                    setattr(self, at, at_init(flows=flows, **at_arg))
+                    if at=="a":
+                        setattr(self, at, at_init(flows=self.flows.copy(), **at_arg))
+                    elif at=="c":
+                        setattr(self, at, at_init(**at_arg))
                 except TypeError as e:
                     invalid_args = [a for a in at_arg if a not in at_init.__fields__]
                     if invalid_args:
