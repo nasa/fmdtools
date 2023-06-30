@@ -61,7 +61,7 @@ class ImportLiquid(FxnBlock):
                 self.s.amt_open = 1
             elif self.sig.s.action==-1:   
                 self.s.amt_open = 0
-        self.watout.s.effort=self.s.amt_open
+        self.watout.s.effort=float(self.s.amt_open)
         self.sig.s.indicator = self.s.amt_open
 
 class ExportLiquid(FxnBlock):
@@ -99,6 +99,11 @@ class GuideLiquid(FxnBlock):
         else:
             self.watout.s.effort = self.watin.s.effort
             self.watin.s.rate = self.watout.s.rate
+    def dynamic_behavior(self, time):
+        if self.m.has_fault('clogged') and self.watout.s.effort==1.0:
+            raise Exception("Clog not happening, t="+str(time))
+            
+        
 class GuideLiquidIn(GuideLiquid):
     __slots__=()
     flownames = {'wat_in_1':'watin', 'wat_in_2':'watout'}
@@ -129,7 +134,7 @@ class StoreLiquid(FxnBlock):
             self.watout.s.effort = 0.0
             self.watin.s.rate = self.watin.s.effort
         else: 
-            self.watin.s.put(rate=self.watin.s.effort, effort = 1.0)
+            self.watin.s.put(rate=self.watin.s.effort)
         if self.s.level > 12:  
             self.sig.s.indicator = -1
         elif self.s.level < 8:
