@@ -151,6 +151,39 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_save_load_approach_indiv(self.mdl,"tank_mdlhists", "tank_endclasses", "csv", 'approach', app=app)
         self.check_save_load_approach_indiv(self.mdl,"tank_mdlhists", "tank_endclasses", "json", 'approach', app=app)
 
+def check_parallel():
+    """Informal test setup for checking that parallel execution is working/consistent"""
+    mdl = Tank()
+    app = SampleApproach(mdl, defaultsamp={'samp':'evenspacing','numpts':4})
+    import multiprocessing as mp
+    print("normal")
+    endclasses, mdlhists = propagate.approach(mdl, app, showprogress=False, track='all', staged=True)
+    print("staged")
+    endclasses_staged, mdlhists_staged = propagate.approach(mdl, app, showprogress=False, track='all', staged=True)
+    
+    assert endclasses==endclasses_staged
+    print("parallel")
+    endclasses_par, mdlhists_par = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=False, track='all')
+    
+    assert endclasses==endclasses_par
+    print("staged-parallel")
+    endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
+    print("staged-parallel")
+    endclasses_par_staged, mdlhists_par_staged = propagate.approach(mdl, app, showprogress=False,pool=mp.Pool(4), staged=True, track='all')
+        
+
+    mc_diff = mdlhists.get_different(mdlhists_par_staged)
+    ec_diff = endclasses.get_different(endclasses_par_staged)
+    
+    mc_diff.guide_water_out_leak_t0p0.flows.wat_in_2.s.effort
+    
+    #mc_diff.guide_water_in_leak_t0p0.flows.wat_in_2.s.effort
+    
+    mc_diff.human_detect_false_low_t16p0.fxns.human.a.active_actions[16]
+    
+    assert endclasses==endclasses_par_staged
+
+
 if __name__ == '__main__':
     
     #suite = unittest.TestSuite()
@@ -163,14 +196,14 @@ if __name__ == '__main__':
     #runner = unittest.TextTestRunner()
     #runner.run(suite)
     
-    suite = unittest.TestSuite()
-    suite.addTest(TankTests("test_approach_parallelism_notrack"))
-    suite.addTest(TankTests("test_approach_parallelism_0"))
-    suite.addTest(TankTests("test_approach_parallelism_1"))
-    runner = unittest.TextTestRunner()
-    runner.run(suite)
+    #suite = unittest.TestSuite()
+    #suite.addTest(TankTests("test_approach_parallelism_notrack"))
+    #suite.addTest(TankTests("test_approach_parallelism_0"))
+    #suite.addTest(TankTests("test_approach_parallelism_1"))
+    #runner = unittest.TextTestRunner()
+    #runner.run(suite)
     
-    #unittest.main()
+    unittest.main()
     
     #mdl = Tank()
     #scen = {'human': 'NotDetected'}
