@@ -2,9 +2,11 @@
 """
 Description: A module for defining ways of sampling model faults/parameters.
 
-Has classes:
+Has classes and functions:
     - :class:`NominalApproach`:     Class for defining a set of nominal scenarios (i.e., parameters) to simulate over.
     - :class:`SampleApproach`:      Class for defining a set of fault scenarios (modes and times) to sample over.
+    - :func:`find_overlap_n`:       Function for finding overlap between given intervals. Used to sample joint fault modes.
+
 """
 
 import numpy as np
