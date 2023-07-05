@@ -35,7 +35,7 @@ class Flow(object):
         name : str
             name of the flow
         """
-        self.name=name
+        self.name = name
         init_obj_attr(self, s=s, p=p)
 
         # TODO : add to module for safety-checking. Alternatively, run these checks prior to use
@@ -72,7 +72,7 @@ class Flow(object):
         """
         cop = self.__class__(self.name, p=asdict(self.p), s=asdict(self.s))
         if hasattr(self, 'h'): 
-            cop.h =self.h.copy()
+            cop.h = self.h.copy()
         return cop
     def get_typename(self):
         return "Flow"
@@ -216,7 +216,7 @@ class MultiFlow(Flow):
             getattr(self, local).reset()
     def copy(self, glob=[], p={}, s={}):
         if not s: 
-            s=asdict(self.s)
+            s = asdict(self.s)
         cop = self.__class__(self.name, glob=glob, p=p, s=s)
         for loc in self.locals:
             local = getattr(self, loc)

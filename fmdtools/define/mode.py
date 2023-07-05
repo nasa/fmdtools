@@ -92,11 +92,11 @@ class Mode(dataobject, readonly=False):
     faultmodes : dict 
             Dictionary of :class:`Fault` defining possible fault modes and their properties   
     """
-    mode:               str = 'nominal'
-    faults:             set = set()
-    faultmodes:         dict = {}
-    mode_state_dict:    dict={}
-    failrate:           float=1.0
+    mode: str = 'nominal'
+    faults: set = set()
+    faultmodes: dict = {}
+    mode_state_dict: dict = {}
+    failrate: float = 1.0
     faultparams = {}
     he_args = tuple()
     opermodes = ('nominal',)
@@ -112,10 +112,14 @@ class Mode(dataobject, readonly=False):
             kwargs['failrate']=self.add_he_rate(*self.he_args)
         args = get_true_fields(self, *args, **kwargs)
         super().__init__(*args)
-        if not self.mode:            self.mode='nominal'
-        if not self.faults:          self.faults=set()
-        if not self.faultmodes:      self.faultmodes=dict()
-        if not self.mode_state_dict: self.mode_state_dict=dict()
+        if not self.mode: 
+            self.mode = 'nominal'
+        if not self.faults:
+            self.faults = set()
+        if not self.faultmodes:
+            self.faultmodes = dict()
+        if not self.mode_state_dict:
+            self.mode_state_dict = dict()
         
         if 's' in self.__fields__:
             self.s.set_atts(**s_kwargs)
