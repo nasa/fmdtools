@@ -371,12 +371,12 @@ class Block(Simulable):
         """Checks if Block has static execution step"""
         return (getattr(self, 'behavior', False) or 
                 getattr(self, 'static_behavior', False) or
-                (hasattr(self, 'a') and getattr(self.a, 'proptype','')=='static'))
+                (hasattr(self, 'a') and getattr(self.a, 'proptype','') == 'static'))
         
     def is_dynamic(self):
         """Checks if Block has dynamic execution step"""
         return (getattr(self, 'dynamic_behavior', False) or
-                (hasattr(self, 'a') and getattr(self.a, 'proptype','')=='dynamic'))
+                (hasattr(self, 'a') and getattr(self.a, 'proptype','') == 'dynamic'))
         
 
     def __repr__(self):
@@ -859,7 +859,7 @@ class ASG(object):
         self.flow_graph = nx.DiGraph()
         self.conditions = {}
         self.faultmodes = {}
-        self.is_copy=is_copy
+        self.is_copy = is_copy
         self.active_actions = set()
 
     def build(self):
@@ -1030,14 +1030,14 @@ class ASG(object):
         newflows = {}
         for flowname, flow in self.flows.items():
             if flowname in flows:
-                newflows[flowname]=flows[flowname]
+                newflows[flowname] = flows[flowname]
             else:
-                newflows[flowname]=self.flows[flowname].copy()
+                newflows[flowname] = self.flows[flowname].copy()
 
         cop = self.__class__(flows=newflows, is_copy=True, **kwargs)
         for flowname, flow in newflows.items():
-            if flow.__hash__()!=cop.flows[flowname].__hash__():
-                raise Exception("Flow not associated with lower level of ASG: "+flowname)
+            if flow.__hash__() != cop.flows[flowname].__hash__():
+                raise Exception("Flow not associated with lower level of ASG: " + flowname)
         
         for actname, action in self.actions.items(): 
             cop_act = cop.actions[actname]
@@ -1132,9 +1132,9 @@ class FxnBlock(Block):
             at_init = getattr(self, '_init_'+at, False)
             if at_init:
                 try:
-                    if at=="a":
+                    if at == "a":
                         setattr(self, at, at_init(flows=self.flows.copy(), **at_arg))
-                    elif at=="c":
+                    elif at == "c":
                         setattr(self, at, at_init(**at_arg))
                 except TypeError as e:
                     invalid_args = [a for a in at_arg if a not in at_init.__fields__]
@@ -1142,20 +1142,29 @@ class FxnBlock(Block):
                         argstr = ", Invalid args: "+', '.join(invalid_args)
                     else:
                         argstr = ''
-                    raise TypeError("Poor specification for : "+str(at_init)+" with kwargs: "+str(at_arg)+argstr) from e
-                setattr(self, '_args_'+at,  at_arg)
+                    raise TypeError("Poor specification for : " + str(at_init) + " with kwargs: " + str(at_arg) + argstr) from e
+                setattr(self, '_args_' + at,  at_arg)
                 self.update_contained_modes(at)
             elif at_arg: 
-                raise Exception(at+" argument provided: "+str(at_arg)+"without associating a CompArch/ASG to _init_"+at)
+                raise Exception(at + " argument provided: " + str(at_arg) + "without associating a CompArch/ASG to _init_" + at)
         self.update_seed()
     
     def update_contained_modes(self, at):
+        """
+        Adds contained faultmodes for the role at to the FxnBlock model.
+
+        Parameters
+        ----------
+        at : str ('c' or 'a')
+            Role to update (for CompArch or ASG roles)
+        """
         if at == 'c':
             compacts = self.c.components
         elif at == 'a':
             compacts = self.a.actions
         for ca in compacts.values():
-            self.m.faultmodes.update({ca.name+"_"+f: vals for f, vals in ca.m.faultmodes.items()})
+            self.m.faultmodes.update({ca.name + "_" + f: vals 
+                                      for f, vals in ca.m.faultmodes.items()})
         
 
     def get_typename(self):
@@ -1222,20 +1231,20 @@ class FxnBlock(Block):
         if hasattr(self, 'h'):
             if hasattr(self, 'c'): 
                 for compname, comp in cop.c.components.items():
-                    ex_hist = cop.h.get("c.components."+compname)
+                    ex_hist = cop.h.get("c.components." + compname)
                     if ex_hist: 
                         comp.h = ex_hist.copy()
                         for k, v in comp.h.items():
-                            cop.h["c.components."+compname+"."+k] = v
+                            cop.h["c.components." + compname + "." + k] = v
             if hasattr(self, 'a'):
                 #if "a.active_actions" in self.h.keys():
                 #    cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
                 for actname, act in cop.a.actions.items():
-                    ex_hist = cop.h.get("a.actions."+actname)
+                    ex_hist = cop.h.get("a.actions." + actname)
                     if ex_hist: 
                         act.h = ex_hist.copy()
                         for k, v in act.h.items():
-                            cop.h["a.actions."+actname+"."+k] = v
+                            cop.h["a.actions." + actname + "." + k] = v
         return cop
 
     def return_mutables(self):
