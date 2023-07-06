@@ -132,7 +132,8 @@ def pack_run_kwargs(**kwargs):
     return {k:copy.deepcopy(kwargs.get(k,v)) for k,v in run_kwargs.items()}
 mult_kwargs = {'max_mem':2e9,
                'showprogress': True,
-               'pool': False}
+               'pool': False,
+               'close_pool': True}
 """
 Multi-scenario keyword arguments.
 
@@ -242,7 +243,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
     """
     kwargs.update(pack_run_kwargs(**kwargs))
     check_overwrite(kwargs['save_args'] )
-    kwargs['max_mem'], showprogress, pool = unpack_mult_kwargs(kwargs)
+    kwargs['max_mem'], showprogress, pool, close_p = unpack_mult_kwargs(kwargs)
     kwargs['num_scens']=nomapp.num_scenarios
     n_mdlhists, n_results = History.fromkeys(nomapp.scenarios), Result.fromkeys(nomapp.scenarios)
     if pool:
@@ -254,6 +255,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
             n_results[scenname], n_mdlhists[scenname]= exec_nom_helper(mdl, scen, scenname, **{**kwargs, 'use_end_condition':False})
     save_helper(kwargs['save_args'] , n_results, n_mdlhists)
+    close_pool(kwargs)
     return n_results.flatten(), n_mdlhists.flatten()
 def unpack_res_list(scenlist, res_list):
     results= Result()
@@ -449,14 +451,15 @@ def approach(mdl, app,  **kwargs):
     kwargs.update(pack_run_kwargs(**kwargs))
     nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **{**kwargs, 'use_end_condition':False})
     scenlist = app.scenlist
+    
     results, mdlhists = scenlist_helper(mdl, scenlist, c_mdl, **kwargs, nomhist=nomhist, nomresult=nomresult)
+    
     nomhist.cut(t_end_nom)
     mdlhists['nominal'] = nomhist 
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     save_helper(kwargs['save_args'], results, mdlhists)
-    if kwargs.get('pool', False): 
-        kwargs['pool'].close() 
+    close_pool(kwargs)
     return results.flatten(), mdlhists.flatten()
 
 def single_faults(mdl, **kwargs):
@@ -497,13 +500,12 @@ def single_faults(mdl, **kwargs):
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     save_helper(kwargs['save_args'], results, mdlhists)
-    if kwargs.get('pool', False): 
-        kwargs['pool'].close() 
+    close_pool(kwargs)
     return results.flatten(), mdlhists.flatten()
 
 def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     #nomhist, track, track_times, desired_result, run_stochastic, save_args
-    max_mem, showprogress, pool = unpack_mult_kwargs(kwargs)
+    max_mem, showprogress, pool, close_p = unpack_mult_kwargs(kwargs)
     staged = kwargs.get('staged',False)
     mem, mem_profile = kwargs['nomhist'].get_memory()
     if mem * len(scenlist) > max_mem: 
@@ -551,6 +553,11 @@ def copy_staged(mdl):
     else: 
         mdl = mdl.copy()
     return mdl
+def close_pool(kwargs):
+    """Closes pool to avoid memory problems"""
+    if kwargs.get('pool', False) and kwargs.get('close_pool', True): 
+        kwargs['pool'].close()
+        kwargs['pool'].join()
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
     mdl_in = args[0]
@@ -647,7 +654,7 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     save_args = kwargs.get('save_args', {})
     check_overwrite(save_args)
     save_app = save_args.pop("apps", False)
-    max_mem, showprogress, pool = unpack_mult_kwargs(kwargs)
+    max_mem, showprogress, pool, close_p = unpack_mult_kwargs(kwargs)
     sim_kwarg = pack_sim_kwargs(**kwargs)
     run_kwargs_nest = pack_run_kwargs(**kwargs)
     app_args = {k:v for k,v in kwargs.items() if k not in [*sim_kwarg,*run_kwargs_nest, 'max_mem', 'showprogress', 'pool']}
@@ -664,14 +671,13 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
         apps[scenname]=app
         check_hist_memory(nomhist,len(app.scenlist)*nomapp.num_scenarios, max_mem=max_mem)
         
-        nest_results[scenname], nest_mdlhists[scenname] = approach(mdl, app, pool=pool, showprogress=False, **{**sim_kwarg, 'p':scen.p, 'r':scen.r})
+        nest_results[scenname], nest_mdlhists[scenname] = approach(mdl, app, pool=pool, close_pool=False, showprogress=False, **{**sim_kwarg, 'p':scen.p, 'r':scen.r})
         save_helper(save_args, nest_results[scenname], nest_mdlhists[scenname], indiv_id=scenname, result_id=scenname)
     save_helper(save_args, nest_results, nest_mdlhists)
     if save_app:
         with open(save_app['filename'], 'wb') as file_handle:
             dill.dump(apps, file_handle)
-    if kwargs.get('pool', False): 
-        kwargs['pool'].close() 
+    close_pool(kwargs)
     return nest_results.flatten(), nest_mdlhists.flatten(), apps
 
 def phases_from_hist(get_phases, t_end, nomhist):

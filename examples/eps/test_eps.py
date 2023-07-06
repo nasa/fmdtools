@@ -65,9 +65,9 @@ class epsTests(unittest.TestCase, CommonTests):
             faultscen = {0:{'Store_EE':['no_storage'], 'Distribute_EE':'short'}}
             self.check_save_load_onerun(self.mdl, "eps_mdlhist"+extension, "eps_endclass"+extension, 'mult_fault', faultscen =faultscen )
     def test_save_load_singlefaults(self):
-        self.check_save_load_approach(self.mdl, "eps_mdlhists.pkl", "eps_endclasses.pkl", 'single_faults')
-        self.check_save_load_approach(self.mdl, "eps_mdlhists.csv", "eps_endclasses.csv", 'single_faults')
-        self.check_save_load_approach(self.mdl, "eps_mdlhists.json", "eps_endclasses.json", 'single_faults')
+        self.check_save_load_singlefaults(self.mdl, "eps_mdlhists.pkl", "eps_endclasses.pkl")
+        self.check_save_load_singlefaults(self.mdl, "eps_mdlhists.csv", "eps_endclasses.csv")
+        self.check_save_load_singlefaults(self.mdl, "eps_mdlhists.json", "eps_endclasses.json")
 if __name__ == '__main__':
     unittest.main()
     

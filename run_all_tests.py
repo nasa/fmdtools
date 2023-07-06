@@ -42,8 +42,8 @@ if __name__=="__main__":
     #retcode = pytest.main(["--nbmake", *slow_notebooks])
     
     # for testing all unittests
-    #retcode = pytest.main()
+    retcode = pytest.main()
     
     
     # for creating comprehensive test report:
-    retcode = pytest.main(["--html=pytest_report.html", "--nbmake", "--overwrite", "--continue-on-collection-errors"])
+    #retcode = pytest.main(["--html=pytest_report.html", "--nbmake", "--overwrite", "--continue-on-collection-errors"])
