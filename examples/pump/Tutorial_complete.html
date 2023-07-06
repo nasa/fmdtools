@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Tutorial &mdash; fmdtools 2.0-alpha documentation</title>
+  <title>fmdtools Tutorial &mdash; fmdtools 2.0-alpha3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -31,12 +33,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html">
-            <img src="../../_static/logo_glow.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo_glow.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -83,6 +89,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
@@ -177,12 +185,6 @@
 <li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html">Probability Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Theory-and-Goals">Theory and Goals</a></li>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Model-Description">Model Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Experiments">Experiments</a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multirotor">Multirotor</a><ul>
@@ -207,6 +209,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#tank">Tank</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#History">History</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
@@ -287,29 +290,239 @@
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.ASG"><code class="docutils literal notranslate"><span class="pre">ASG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Action"><code class="docutils literal notranslate"><span class="pre">Action</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Block"><code class="docutils literal notranslate"><span class="pre">Block</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.CompArch"><code class="docutils literal notranslate"><span class="pre">CompArch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.FxnBlock"><code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.GenericFxn"><code class="docutils literal notranslate"><span class="pre">GenericFxn</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Simulable"><code class="docutils literal notranslate"><span class="pre">Simulable</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.assoc_flows"><code class="docutils literal notranslate"><span class="pre">assoc_flows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.inject_faults_internal"><code class="docutils literal notranslate"><span class="pre">inject_faults_internal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.check_pickleability"><code class="docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_dataobj_track"><code class="docutils literal notranslate"><span class="pre">get_dataobj_track()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_track"><code class="docutils literal notranslate"><span class="pre">get_obj_track()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_field"><code class="docutils literal notranslate"><span class="pre">get_true_field()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_fields"><code class="docutils literal notranslate"><span class="pre">get_true_fields()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_attr"><code class="docutils literal notranslate"><span class="pre">init_obj_attr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow"><code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.Flow"><code class="docutils literal notranslate"><span class="pre">Flow</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.MultiFlow"><code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.init_flow"><code class="docutils literal notranslate"><span class="pre">init_flow()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Fault"><code class="docutils literal notranslate"><span class="pre">Fault</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.check_model_pickleability"><code class="docutils literal notranslate"><span class="pre">check_model_pickleability()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.SimParam"><code class="docutils literal notranslate"><span class="pre">SimParam</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.Rand"><code class="docutils literal notranslate"><span class="pre">Rand</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_dist"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_rand"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_scipy_pdf_helper"><code class="docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.state.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Time"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.approach"><code class="docutils literal notranslate"><span class="pre">approach()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.copy_staged"><code class="docutils literal notranslate"><span class="pre">copy_staged()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.init_histrange"><code class="docutils literal notranslate"><span class="pre">init_histrange()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nested_approach"><code class="docutils literal notranslate"><span class="pre">nested_approach()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal_approach"><code class="docutils literal notranslate"><span class="pre">nominal_approach()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.phases_from_hist"><code class="docutils literal notranslate"><span class="pre">phases_from_hist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection"><code class="docutils literal notranslate"><span class="pre">Injection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario"><code class="docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario"><code class="docutils literal notranslate"><span class="pre">NominalScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario"><code class="docutils literal notranslate"><span class="pre">ParamScenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario"><code class="docutils literal notranslate"><span class="pre">Scenario</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.NominalApproach"><code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.SampleApproach"><code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.find_overlap_n"><code class="docutils literal notranslate"><span class="pre">find_overlap_n()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface"><code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.eval_con"><code class="docutils literal notranslate"><span class="pre">eval_con()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_negative"><code class="docutils literal notranslate"><span class="pre">get_pos_negative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_str"><code class="docutils literal notranslate"><span class="pre">get_pos_str()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_text_time"><code class="docutils literal notranslate"><span class="pre">get_text_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.greater_to_factor"><code class="docutils literal notranslate"><span class="pre">greater_to_factor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.n_to_factor"><code class="docutils literal notranslate"><span class="pre">n_to_factor()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_hist_iter"><code class="docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_indicator_hist"><code class="docutils literal notranslate"><span class="pre">init_indicator_hist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.to_include_keys"><code class="docutils literal notranslate"><span class="pre">to_include_keys()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.dyn_order"><code class="docutils literal notranslate"><span class="pre">dyn_order()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.make_consolidated_legend"><code class="docutils literal notranslate"><span class="pre">make_consolidated_legend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist"><code class="docutils literal notranslate"><span class="pre">metric_dist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist_from"><code class="docutils literal notranslate"><span class="pre">metric_dist_from()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multibar_helper"><code class="docutils literal notranslate"><span class="pre">multibar_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_1d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_1d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_2d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_2d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_3d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_3d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.phases"><code class="docutils literal notranslate"><span class="pre">phases()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_line_and_err"><code class="docutils literal notranslate"><span class="pre">plot_line_and_err()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetrics"><code class="docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.suite_for_plots"><code class="docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ASGActGraph"><code class="docutils literal notranslate"><span class="pre">ASGActGraph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ASGFlowGraph"><code class="docutils literal notranslate"><span class="pre">ASGFlowGraph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ASGGraph"><code class="docutils literal notranslate"><span class="pre">ASGGraph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.CommsFlowGraph"><code class="docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeLabelStyle"><code class="docutils literal notranslate"><span class="pre">EdgeLabelStyle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeStyle"><code class="docutils literal notranslate"><span class="pre">EdgeStyle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor"><code class="docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.LabelStyle"><code class="docutils literal notranslate"><span class="pre">LabelStyle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Labels"><code class="docutils literal notranslate"><span class="pre">Labels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelCompGraph"><code class="docutils literal notranslate"><span class="pre">ModelCompGraph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFlowGraph"><code class="docutils literal notranslate"><span class="pre">ModelFlowGraph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFxnGraph"><code class="docutils literal notranslate"><span class="pre">ModelFxnGraph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelGraph"><code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelTypeGraph"><code class="docutils literal notranslate"><span class="pre">ModelTypeGraph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.MultiFlowGraph"><code class="docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.NodeStyle"><code class="docutils literal notranslate"><span class="pre">NodeStyle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.add_g_nested"><code class="docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_average"><code class="docutils literal notranslate"><span class="pre">data_average()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_error"><code class="docutils literal notranslate"><span class="pre">data_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_label_groups"><code class="docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_style_kwargs"><code class="docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.graph_factory"><code class="docutils literal notranslate"><span class="pre">graph_factory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.gv_import_check"><code class="docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.node_is_tagged"><code class="docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.sff_one_trial"><code class="docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.to_legend_label"><code class="docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.dicttab"><code class="docutils literal notranslate"><span class="pre">dicttab()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.fmea"><code class="docutils literal notranslate"><span class="pre">fmea()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.label_faults"><code class="docutils literal notranslate"><span class="pre">label_faults()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.maptab"><code class="docutils literal notranslate"><span class="pre">maptab()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_stats"><code class="docutils literal notranslate"><span class="pre">nested_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_stats"><code class="docutils literal notranslate"><span class="pre">nominal_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.phasefmea"><code class="docutils literal notranslate"><span class="pre">phasefmea()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary"><code class="docutils literal notranslate"><span class="pre">result_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea"><code class="docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.samptime"><code class="docutils literal notranslate"><span class="pre">samptime()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.summfmea"><code class="docutils literal notranslate"><span class="pre">summfmea()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -329,9 +542,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../docs/Examples.html">Examples</a> &raquo;</li>
-      <li>fmdtools Tutorial</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../docs/Examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">fmdtools Tutorial</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/examples/pump/Tutorial_complete.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -341,278 +554,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt .copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="fmdtools-Tutorial">
-<h1>fmdtools Tutorial<a class="headerlink" href="#fmdtools-Tutorial" title="Permalink to this headline"></a></h1>
+  <section id="fmdtools-Tutorial">
+<h1>fmdtools Tutorial<a class="headerlink" href="#fmdtools-Tutorial" title="Permalink to this heading"></a></h1>
 <p>This tutorial notebook will show some of the basic commands needed to perform resilience analysis in fmdtools.</p>
 <p>For some context, it may be helpful to look through the accompanying presentation. This notebook uses the model defined in <code class="docutils literal notranslate"><span class="pre">ex_pump.py</span></code>. In this notebook, we will:</p>
 <ul class="simple">
@@ -621,7 +564,7 @@ div.rendered_html tbody tr:hover {
 <li><p>Visualize and quantify the results</p></li>
 </ul>
 <section id="1.)-Loading-the-environment-and-model">
-<h2>1.) Loading the environment and model<a class="headerlink" href="#1.)-Loading-the-environment-and-model" title="Permalink to this headline"></a></h2>
+<h2>1.) Loading the environment and model<a class="headerlink" href="#1.)-Loading-the-environment-and-model" title="Permalink to this heading"></a></h2>
 <p>To load the <code class="docutils literal notranslate"><span class="pre">fmdtools</span></code> environment, we have to install and import it. This can be accomplished using <code class="docutils literal notranslate"><span class="pre">pip</span></code> for both the stable and development versions:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -635,7 +578,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>There are a number of different syntaxes for importing modules. Because of the long names of the module trees, it is often helpful to load the modules individually and abbreviate (e.g. <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">fmdtools.sim.propagate</span> <span class="pre">as</span> <span class="pre">propagate</span></code>). Below, import the propagate <code class="docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code> and <code class="docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code> modules, as well as the <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> from <code class="docutils literal notranslate"><span class="pre">fmdtools.define</span></code></p>
+<p>There are a number of different syntaxes for importing modules. Because of the long names of the module trees, it is often helpful to load the modules individually and abbreviate (e.g. <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">fmdtools.sim.propagate</span> <span class="pre">as</span> <span class="pre">propagate</span></code>). Below, import the propagate <code class="docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code> and <code class="docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code> modules, as well as the <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> from <code class="docutils literal notranslate"><span class="pre">fmdtools.define</span></code></p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -727,7 +670,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(&lt;Figure size 864x720 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
+(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -809,7 +752,7 @@ PumpParam(cost=(&#39;repair&#39;, &#39;water&#39;), delay=10)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Pump model at 0x1a39fd1c400
+Pump model at 0x19cbf0b4580
 FUNCTIONS:
 import_ee ImportEE
 - ImportEEState(effstate=1.0)
@@ -836,12 +779,12 @@ wat_2 Water flow: WaterStates(flowrate=1.0, pressure=1.0, area=1.0, level=1.0)
 <p>Note that, for a model: - <code class="docutils literal notranslate"><span class="pre">p</span></code> is the <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> defining non-mutable attributes (which do not change over a simulation) - <code class="docutils literal notranslate"><span class="pre">sp</span></code> is the <code class="docutils literal notranslate"><span class="pre">SimParam</span></code> defining the simulation start, end, and end conditions - <code class="docutils literal notranslate"><span class="pre">r</span></code> is the <code class="docutils literal notranslate"><span class="pre">Rand</span></code> defining random variables (e.g., for setting a seed)</p>
 </section>
 <section id="2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">
-<h2>2.), 3.), and 4.) Simulate and visualize the results!<a class="headerlink" href="#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!" title="Permalink to this headline"></a></h2>
+<h2>2.), 3.), and 4.) Simulate and visualize the results!<a class="headerlink" href="#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!" title="Permalink to this heading"></a></h2>
 <p>Now, we will use the methods in <code class="docutils literal notranslate"><span class="pre">propagate</span></code> and the visualization modules in <code class="docutils literal notranslate"><span class="pre">rd</span></code> to simulate the model and visualize the results.</p>
 <section id="2a.)-Simulate-nominal">
-<h3>2a.) Simulate nominal<a class="headerlink" href="#2a.)-Simulate-nominal" title="Permalink to this headline"></a></h3>
-<p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code> method, which returns: endresults, which is a result (or a dict of multiple results) specified by the <code class="docutils literal notranslate"><span class="pre">desired_result</span></code> option, e.g.: - ‘endclass’ (default), which provides the dict from <code class="docutils literal notranslate"><span class="pre">mdl.find_classification</span></code> - ‘fxngraph’/‘fxnflowgraph’/‘typegraph’,‘component’, which provides a networkx graph view of the model with degraded faults and functions highlighted (e.g., for <code class="docutils literal notranslate"><span class="pre">Graph.show</span></code>) -
-‘fxnname.varname’/‘flowname.varname’: which gets the values of these variables at a the end - a list of the above arguments (to return a dict of multiple) - a dict of lists (for multiple over time), e.g. <code class="docutils literal notranslate"><span class="pre">{time:[varnames,...</span> <span class="pre">'endclass']}</span></code></p>
+<h3>2a.) Simulate nominal<a class="headerlink" href="#2a.)-Simulate-nominal" title="Permalink to this heading"></a></h3>
+<p>To simulate the model in the nominal scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.nominal</span></code> method, which returns: endresults, which is a result (or a dict of multiple results) specified by the <code class="docutils literal notranslate"><span class="pre">desired_result</span></code> option, e.g.: - ‘endclass’ (default), which provides the dict from <code class="docutils literal notranslate"><span class="pre">mdl.find_classification</span></code> - ‘fxngraph’/’fxnflowgraph’/’typegraph’,’component’, which provides a networkx graph view of the model with degraded faults and functions highlighted (e.g., for <code class="docutils literal notranslate"><span class="pre">Graph.show</span></code>) -
+‘fxnname.varname’/’flowname.varname’: which gets the values of these variables at a the end - a list of the above arguments (to return a dict of multiple) - a dict of lists (for multiple over time), e.g. <code class="docutils literal notranslate"><span class="pre">{time:[varnames,...</span> <span class="pre">'endclass']}</span></code></p>
 <p>and mdlhist, which is a history of model states specified by the <code class="docutils literal notranslate"><span class="pre">track</span></code> option. Some of these options include: - fxns’ - ‘flows’ - ‘all’ - ‘none’ - ‘valparams’ (model states specified in mdl.valparams), - or a dict of form: <code class="docutils literal notranslate"><span class="pre">{'functions':{'fxn1':'att1'},</span> <span class="pre">'flows':{'flow1':'att1'}}</span></code></p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -872,7 +815,7 @@ endclass:
 --expected cost:                     0.0
 </pre></div></div>
 </div>
-<p>Note that an <code class="docutils literal notranslate"><span class="pre">endclass</span></code> dictionary can take arbitrary form based on what is produced in <code class="docutils literal notranslate"><span class="pre">find_classification</span></code>. By default, we often return: - <code class="docutils literal notranslate"><span class="pre">rate</span></code>, which is the rate for the scenario calculated from the underlying fault probability model (defined in the <code class="docutils literal notranslate"><span class="pre">Mode</span></code> for each <code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code>), - <code class="docutils literal notranslate"><span class="pre">cost</span></code>, which is some cost calculated based on the consequences of the scenario - <code class="docutils literal notranslate"><span class="pre">expected</span> <span class="pre">cost</span></code>, which is the expected value of the cost of the scenario (i.e. <code class="docutils literal notranslate"><span class="pre">rate*cost</span></code>).</p>
+<p>Note that an <code class="docutils literal notranslate"><span class="pre">endclass</span></code> dictionary can take arbitrary form based on what is produced in <code class="docutils literal notranslate"><span class="pre">find_classification</span></code>. By default, we often return: - <code class="docutils literal notranslate"><span class="pre">rate</span></code>, which is the rate for the scenario calculated from the underlying fault probability model (defined in the <code class="docutils literal notranslate"><span class="pre">Mode</span></code> for each <code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code>), - <code class="docutils literal notranslate"><span class="pre">cost</span></code>, which is some cost calculated based on the consequences of the scenario - <code class="docutils literal notranslate"><span class="pre">expected</span> <span class="pre">cost</span></code>, which is the expected value of the cost of the scenario (i.e. <code class="docutils literal notranslate"><span class="pre">rate*cost</span></code>).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
@@ -922,7 +865,7 @@ time:                          array(56)
 </div>
 </section>
 <section id="2b.)-Visualize-nominal-model">
-<h3>2b.) Visualize nominal model<a class="headerlink" href="#2b.)-Visualize-nominal-model" title="Permalink to this headline"></a></h3>
+<h3>2b.) Visualize nominal model<a class="headerlink" href="#2b.)-Visualize-nominal-model" title="Permalink to this heading"></a></h3>
 <p>First, we can show the model graph using <code class="docutils literal notranslate"><span class="pre">Graph.draw</span></code> to see that it was set up correctly. We can do this both on the model graph itself (using <code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code>) and the results of the nominal run (by passing <code class="docutils literal notranslate"><span class="pre">graph</span></code> as an argument in <code class="docutils literal notranslate"><span class="pre">desired_result</span></code>) to verify both are fault-free.</p>
 <p>Note that the underlyign <code class="docutils literal notranslate"><span class="pre">Graph</span></code> class is very flexible and enables a wide range of display options: - <a class="reference external" href="https://nasa.github.io/fmdtools/docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph">Graph docs</a> - <a class="reference external" href="https://nasa.github.io/fmdtools/docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph.draw">Graph.draw</a></p>
 <div class="nbinput docutils container">
@@ -940,7 +883,7 @@ time:                          array(56)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(&lt;Figure size 864x720 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
+(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -970,7 +913,7 @@ time:                          array(56)
 <p>Note: for quick access to the syntax and options for these methods, type the <code class="docutils literal notranslate"><span class="pre">?method</span></code> or <code class="docutils literal notranslate"><span class="pre">help(method)</span></code> in the terminal. For example <code class="docutils literal notranslate"><span class="pre">?an.plot.mdlhists</span></code></p>
 </section>
 <section id="2b.)-Simulate-a-fault-mode">
-<h3>2b.) Simulate a fault mode<a class="headerlink" href="#2b.)-Simulate-a-fault-mode" title="Permalink to this headline"></a></h3>
+<h3>2b.) Simulate a fault mode<a class="headerlink" href="#2b.)-Simulate-a-fault-mode" title="Permalink to this heading"></a></h3>
 <p>To simulate the model in a fault scenario, use the <code class="docutils literal notranslate"><span class="pre">propagate.one_fault</span></code> method. The set of possible faults is defined in the function definitions in <code class="docutils literal notranslate"><span class="pre">ex_pump.py</span></code>, and we can propagate a fault at any time in the operational interval (0-55 seconds).</p>
 <p>For example, below we simulate a short in the <code class="docutils literal notranslate"><span class="pre">MoveWater</span></code> function at time t=10:</p>
 <div class="nbinput nblast docutils container">
@@ -997,10 +940,10 @@ time:                          array(56)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-endclass.rate:                   0.00055
+endclass.rate:                      55.0
 endclass.cost:        29000.000000000007
-endclass.expected cost: 1595000.0000000005
-graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x000001A39FE505E0&gt;
+endclass.expected cost: 159500000000.00003
+graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x0000019CBFA59BD0&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1083,7 +1026,7 @@ faulty.time:                   array(56)
 </div>
 </section>
 <section id="3b.)-Visualize-fault-model-states">
-<h3>3b.) Visualize fault model states<a class="headerlink" href="#3b.)-Visualize-fault-model-states" title="Permalink to this headline"></a></h3>
+<h3>3b.) Visualize fault model states<a class="headerlink" href="#3b.)-Visualize-fault-model-states" title="Permalink to this heading"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">an.plot.mdlhistvals</span></code> also works for a mdlhists given from <code class="docutils literal notranslate"><span class="pre">propagate.one_fault</span></code>. We can view these results below. As shown, the function will give the nominal result in a blue dotted line and the faulty result in a red line.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
@@ -1117,7 +1060,7 @@ faulty.time:                   array(56)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(&lt;Figure size 864x720 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
+(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1153,16 +1096,33 @@ faulty.time:                   array(56)
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\graph.py:643: UserWarning:
+
+The arrowstyle keyword argument is not applicable when drawing edges
+with LineCollection.
+
+To make this warning go away, either specify `arrows=True` to
+force FancyArrowPatches or use the default value for arrowstyle.
+Note that using FancyArrowPatches may be slow for large graphs.
+
+  nx.draw_networkx_edges(self.g, self.pos, edges, **self.edge_styles[label].kwargs(), label=legend_label, ax=ax)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Tutorial_complete_48_0.png" src="../../_images/examples_pump_Tutorial_complete_48_0.png" />
+<img alt="../../_images/examples_pump_Tutorial_complete_48_1.png" src="../../_images/examples_pump_Tutorial_complete_48_1.png" />
 </div>
 </div>
 </section>
 <section id="4a.)-Simulate-set-of-fault-modes">
-<h3>4a.) Simulate set of fault modes<a class="headerlink" href="#4a.)-Simulate-set-of-fault-modes" title="Permalink to this headline"></a></h3>
+<h3>4a.) Simulate set of fault modes<a class="headerlink" href="#4a.)-Simulate-set-of-fault-modes" title="Permalink to this heading"></a></h3>
 <p>To simulate the set of fault modes, we first choose a <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code>. For simplicity, we can choose default parameters at first.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
@@ -1185,7 +1145,7 @@ faulty.time:                   array(56)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 115.49it/s]
+SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 129.71it/s]
 </pre></div></div>
 </div>
 <p>It can be helpful to view what these results look like–a <code class="docutils literal notranslate"><span class="pre">Result</span></code> of faults injected at particular times with their correspnding <code class="docutils literal notranslate"><span class="pre">Result</span></code> dictionaries.</p>
@@ -1203,57 +1163,57 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-import_ee_no_v_t27p0.endclass.rate: 0.0003600000000000001
+import_ee_no_v_t27p0.endclass.rate: 36.0
 import_ee_no_v_t27p0.endclass.cost: 15174.999999999998
-import_ee_no_v_t27p0            546300.0
-import_ee_inf_v_t27p0.endclass.rate: 9.000000000000002e-05
+import_ee_no_v_t27p0   54629999999.99999
+import_ee_inf_v_t27p0.endclass.rate: 9.0
 import_ee_inf_v_t27p0.endclass.cost: 20175.0
-import_ee_inf_v_t27p  181575.00000000003
-import_water_no_wat_             0.00015
+import_ee_inf_v_t27p       18157500000.0
+import_water_no_wat_                15.0
 import_water_no_wat_   6174.999999999998
-import_water_no_wat_   92624.99999999996
-import_signal_no_sig1.2857142857142856e-05
+import_water_no_wat_   9262499999.999998
+import_signal_no_sig  12.857142857142856
 import_signal_no_sig              8650.0
-import_signal_no_sig   11121.42857142857
-move_water_mech_brea0.00023142857142857142
+import_signal_no_sig  11121428571.428572
+move_water_mech_brea  23.142857142857135
 move_water_mech_brea  10174.999999999998
-move_water_mech_brea   235478.5714285714
-move_water_short_t27p0.endclass.rate: 0.00012857142857142858
+move_water_mech_brea  23547857142.857132
+move_water_short_t27p0.endclass.rate: 12.857142857142856
 move_water_short_t27p0.endclass.cost: 25175.0
-move_water_short_t27   323678.5714285714
-export_water_block_t27p0.endclass.rate: 0.00012857142857142858
+move_water_short_t27  32367857142.857143
+export_water_block_t27p0.endclass.rate: 12.857142857142856
 export_water_block_t27p0.endclass.cost: 15152.5
-export_water_block_t  194817.85714285716
-import_water_no_wat_t2p0.endclass.rate: 1.6666666666666667e-05
+export_water_block_t  19481785714.285713
+import_water_no_wat_t2p0.endclass.rate: 1.6666666666666665
 import_water_no_wat_t2p0.endclass.cost: 11125.000000000007
-import_water_no_wat_   18541.66666666668
-import_signal_no_sig2.1428571428571427e-06
+import_water_no_wat_  1854166666.6666677
+import_signal_no_sig   2.142857142857143
 import_signal_no_sig  20125.000000000007
-import_signal_no_sig   4312.500000000001
-move_water_mech_brea2.1428571428571427e-06
+import_signal_no_sig   4312500000.000002
+move_water_mech_brea 0.21428571428571425
 move_water_mech_brea  15125.000000000007
-move_water_mech_brea    3241.07142857143
-move_water_short_t2p0.endclass.rate: 2.1428571428571428e-05
+move_water_mech_brea   324107142.8571429
+move_water_short_t2p0.endclass.rate: 2.142857142857143
 move_water_short_t2p0.endclass.cost: 30125.000000000007
-move_water_short_t2p   64553.57142857144
-export_water_block_t2p0.endclass.rate: 2.1428571428571428e-05
+move_water_short_t2p   6455357142.857144
+export_water_block_t2p0.endclass.rate: 2.142857142857143
 export_water_block_t2p0.endclass.cost: 20102.500000000007
-export_water_block_t   43076.78571428573
-import_water_no_wat_1.9999999999999998e-05
+export_water_block_t   4307678571.428573
+import_water_no_wat_                 2.0
 import_water_no_wat_              1000.0
-import_water_no_wat_  1999.9999999999998
-import_signal_no_sig1.7142857142857143e-06
+import_water_no_wat_         200000000.0
+import_signal_no_sig  1.7142857142857142
 import_signal_no_sig             10000.0
-import_signal_no_sig  1714.2857142857142
-move_water_mech_brea2.5714285714285716e-06
+import_signal_no_sig  1714285714.2857141
+move_water_mech_brea  0.2571428571428571
 move_water_mech_brea              5000.0
-move_water_mech_brea  1285.7142857142858
-move_water_short_t52p0.endclass.rate: 1.7142857142857145e-05
+move_water_mech_brea  128571428.57142855
+move_water_short_t52p0.endclass.rate: 1.7142857142857142
 move_water_short_t52p0.endclass.cost: 10000.0
-move_water_short_t52  17142.857142857145
-export_water_block_t52p0.endclass.rate: 1.7142857142857145e-05
+move_water_short_t52  1714285714.2857141
+export_water_block_t52p0.endclass.rate: 1.7142857142857142
 export_water_block_t52p0.endclass.cost: 5000.0
-export_water_block_t   8571.428571428572
+export_water_block_t   857142857.1428571
 nominal.endclass.rate:               1.0
 nominal.endclass.cost:               0.0
 nominal.endclass.expected cost:      0.0
@@ -1275,99 +1235,99 @@ nominal.endclass.expected cost:      0.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-import_water_no_wat_t2p0:
---endclass:
-----rate:         1.6666666666666667e-05
-----expected cost:     18541.66666666668
-----cost:             11125.000000000007
-move_water_mech_break_t2p0:
---endclass:
-----rate:         2.1428571428571427e-06
-----expected cost:      3241.07142857143
-----cost:             15125.000000000007
-import_signal_no_sig_t27p0:
---endclass:
-----rate:         1.2857142857142856e-05
-----expected cost:     11121.42857142857
-----cost:                         8650.0
-import_ee_no_v_t27p0:
---endclass:
-----rate:          0.0003600000000000001
-----expected cost:              546300.0
-----cost:             15174.999999999998
-import_signal_no_sig_t2p0:
---endclass:
-----rate:         2.1428571428571427e-06
-----expected cost:     4312.500000000001
-----cost:             20125.000000000007
-export_water_block_t27p0:
---endclass:
-----rate:         0.00012857142857142858
-----expected cost:    194817.85714285716
-----cost:                        15152.5
-import_water_no_wat_t52p0:
---endclass:
-----rate:         1.9999999999999998e-05
-----expected cost:    1999.9999999999998
-----cost:                         1000.0
-nominal:
---endclass:
-----rate:                            1.0
-----expected cost:                   0.0
-----cost:                            0.0
-move_water_mech_break_t27p0:
---endclass:
-----rate:         0.00023142857142857142
-----expected cost:     235478.5714285714
-----cost:             10174.999999999998
 move_water_short_t27p0:
 --endclass:
-----rate:         0.00012857142857142858
-----expected cost:     323678.5714285714
 ----cost:                        25175.0
+----expected cost:    32367857142.857143
+----rate:             12.857142857142856
+import_water_no_wat_t2p0:
+--endclass:
+----cost:             11125.000000000007
+----expected cost:    1854166666.6666677
+----rate:             1.6666666666666665
+import_ee_no_v_t27p0:
+--endclass:
+----cost:             15174.999999999998
+----expected cost:     54629999999.99999
+----rate:                           36.0
+import_signal_no_sig_t2p0:
+--endclass:
+----cost:             20125.000000000007
+----expected cost:     4312500000.000002
+----rate:              2.142857142857143
 move_water_short_t2p0:
 --endclass:
-----rate:         2.1428571428571428e-05
-----expected cost:     64553.57142857144
 ----cost:             30125.000000000007
-import_ee_inf_v_t27p0:
---endclass:
-----rate:          9.000000000000002e-05
-----expected cost:    181575.00000000003
-----cost:                        20175.0
-move_water_mech_break_t52p0:
---endclass:
-----rate:         2.5714285714285716e-06
-----expected cost:    1285.7142857142858
-----cost:                         5000.0
-export_water_block_t52p0:
---endclass:
-----rate:         1.7142857142857145e-05
-----expected cost:     8571.428571428572
-----cost:                         5000.0
-import_water_no_wat_t27p0:
---endclass:
-----rate:                        0.00015
-----expected cost:     92624.99999999996
-----cost:              6174.999999999998
-export_water_block_t2p0:
---endclass:
-----rate:         2.1428571428571428e-05
-----expected cost:     43076.78571428573
-----cost:             20102.500000000007
-move_water_short_t52p0:
---endclass:
-----rate:         1.7142857142857145e-05
-----expected cost:    17142.857142857145
-----cost:                        10000.0
+----expected cost:     6455357142.857144
+----rate:              2.142857142857143
 import_signal_no_sig_t52p0:
 --endclass:
-----rate:         1.7142857142857143e-06
-----expected cost:    1714.2857142857142
 ----cost:                        10000.0
+----expected cost:    1714285714.2857141
+----rate:             1.7142857142857142
+move_water_mech_break_t52p0:
+--endclass:
+----cost:                         5000.0
+----expected cost:    128571428.57142855
+----rate:             0.2571428571428571
+import_water_no_wat_t52p0:
+--endclass:
+----cost:                         1000.0
+----expected cost:           200000000.0
+----rate:                            2.0
+move_water_mech_break_t2p0:
+--endclass:
+----cost:             15125.000000000007
+----expected cost:     324107142.8571429
+----rate:            0.21428571428571425
+import_signal_no_sig_t27p0:
+--endclass:
+----cost:                         8650.0
+----expected cost:    11121428571.428572
+----rate:             12.857142857142856
+import_ee_inf_v_t27p0:
+--endclass:
+----cost:                        20175.0
+----expected cost:         18157500000.0
+----rate:                            9.0
+export_water_block_t2p0:
+--endclass:
+----cost:             20102.500000000007
+----expected cost:     4307678571.428573
+----rate:              2.142857142857143
+move_water_short_t52p0:
+--endclass:
+----cost:                        10000.0
+----expected cost:    1714285714.2857141
+----rate:             1.7142857142857142
+export_water_block_t52p0:
+--endclass:
+----cost:                         5000.0
+----expected cost:     857142857.1428571
+----rate:             1.7142857142857142
+move_water_mech_break_t27p0:
+--endclass:
+----cost:             10174.999999999998
+----expected cost:    23547857142.857132
+----rate:             23.142857142857135
+nominal:
+--endclass:
+----cost:                            0.0
+----expected cost:                   0.0
+----rate:                            1.0
+export_water_block_t27p0:
+--endclass:
+----cost:                        15152.5
+----expected cost:    19481785714.285713
+----rate:             12.857142857142856
+import_water_no_wat_t27p0:
+--endclass:
+----cost:              6174.999999999998
+----expected cost:     9262499999.999998
+----rate:                           15.0
 </pre></div></div>
 </div>
-<p>It can be helpful to explore different approach parameters (e.g. focussing on single faults, different numbers of sample points, etc)</p>
+<p>It can be helpful to explore different approach parameters (e.g. focussing on single faults, different numbers of sample points, etc)</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
@@ -1436,7 +1396,7 @@ import_signal_no_sig_t52p0:
 </div>
 </section>
 <section id="4b.)-Visualize-set-of-fault-modes">
-<h3>4b.) Visualize set of fault modes<a class="headerlink" href="#4b.)-Visualize-set-of-fault-modes" title="Permalink to this headline"></a></h3>
+<h3>4b.) Visualize set of fault modes<a class="headerlink" href="#4b.)-Visualize-set-of-fault-modes" title="Permalink to this heading"></a></h3>
 <p>Using this fault approach, we can now make an FMEA-like analyses of the different fault modes. <code class="docutils literal notranslate"><span class="pre">an.tabulate.summfmea</span></code> organizes endclasses into a table for each fault.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
@@ -1480,49 +1440,49 @@ import_signal_no_sig_t52p0:
     <tr>
       <th>move_water</th>
       <th>short</th>
-      <td>0.000167</td>
-      <td>405375.000000</td>
+      <td>16.714286</td>
+      <td>4.053750e+10</td>
       <td>21766.666667</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">import_ee</th>
       <th>inf_v</th>
-      <td>0.000090</td>
-      <td>181575.000000</td>
+      <td>9.000000</td>
+      <td>1.815750e+10</td>
       <td>20175.000000</td>
     </tr>
     <tr>
       <th>no_v</th>
-      <td>0.000360</td>
-      <td>546300.000000</td>
+      <td>36.000000</td>
+      <td>5.463000e+10</td>
       <td>15175.000000</td>
     </tr>
     <tr>
       <th>export_water</th>
       <th>block</th>
-      <td>0.000167</td>
-      <td>246466.071429</td>
+      <td>16.714286</td>
+      <td>2.464661e+10</td>
       <td>13418.333333</td>
     </tr>
     <tr>
       <th>import_signal</th>
       <th>no_sig</th>
-      <td>0.000017</td>
-      <td>17148.214286</td>
+      <td>16.714286</td>
+      <td>1.714821e+10</td>
       <td>12925.000000</td>
     </tr>
     <tr>
       <th>move_water</th>
       <th>mech_break</th>
-      <td>0.000236</td>
-      <td>240005.357143</td>
+      <td>23.614286</td>
+      <td>2.400054e+10</td>
       <td>10100.000000</td>
     </tr>
     <tr>
       <th>import_water</th>
       <th>no_wat</th>
-      <td>0.000187</td>
-      <td>113166.666667</td>
+      <td>18.666667</td>
+      <td>1.131667e+10</td>
       <td>6100.000000</td>
     </tr>
   </tbody>
@@ -1570,60 +1530,124 @@ import_signal_no_sig_t52p0:
   </thead>
   <tbody>
     <tr>
+      <th>move_water_short_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>12.857143</td>
+      <td>25175.0</td>
+      <td>32367857142.857143</td>
+    </tr>
+    <tr>
       <th>import_water_no_wat_t2p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
-      <td>0.000017</td>
+      <td>1.666667</td>
       <td>11125.0</td>
-      <td>18541.666667</td>
-    </tr>
-    <tr>
-      <th>move_water_mech_break_t2p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>15125.0</td>
-      <td>3241.071429</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_sig_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000013</td>
-      <td>8650.0</td>
-      <td>11121.428571</td>
+      <td>1854166666.666668</td>
     </tr>
     <tr>
       <th>import_ee_no_v_t27p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
-      <td>0.00036</td>
+      <td>36.0</td>
       <td>15175.0</td>
-      <td>546300.0</td>
+      <td>54629999999.999992</td>
     </tr>
     <tr>
       <th>import_signal_no_sig_t2p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
-      <td>0.000002</td>
+      <td>2.142857</td>
       <td>20125.0</td>
-      <td>4312.5</td>
+      <td>4312500000.000002</td>
     </tr>
     <tr>
-      <th>export_water_block_t27p0</th>
+      <th>move_water_short_t2p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
-      <td>0.000129</td>
-      <td>15152.5</td>
-      <td>194817.857143</td>
+      <td>2.142857</td>
+      <td>30125.0</td>
+      <td>6455357142.857144</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t52p0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>1.714286</td>
+      <td>10000.0</td>
+      <td>1714285714.285714</td>
+    </tr>
+    <tr>
+      <th>move_water_mech_break_t52p0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.257143</td>
+      <td>5000.0</td>
+      <td>128571428.571429</td>
     </tr>
     <tr>
       <th>import_water_no_wat_t52p0</th>
       <td>[]</td>
       <td>[]</td>
-      <td>0.00002</td>
+      <td>2.0</td>
       <td>1000.0</td>
-      <td>2000.0</td>
+      <td>200000000.0</td>
+    </tr>
+    <tr>
+      <th>move_water_mech_break_t2p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.214286</td>
+      <td>15125.0</td>
+      <td>324107142.857143</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>12.857143</td>
+      <td>8650.0</td>
+      <td>11121428571.428572</td>
+    </tr>
+    <tr>
+      <th>import_ee_inf_v_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>9.0</td>
+      <td>20175.0</td>
+      <td>18157500000.0</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t2p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>2.142857</td>
+      <td>20102.5</td>
+      <td>4307678571.428573</td>
+    </tr>
+    <tr>
+      <th>move_water_short_t52p0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>1.714286</td>
+      <td>10000.0</td>
+      <td>1714285714.285714</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t52p0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>1.714286</td>
+      <td>5000.0</td>
+      <td>857142857.142857</td>
+    </tr>
+    <tr>
+      <th>move_water_mech_break_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>23.142857</td>
+      <td>10175.0</td>
+      <td>23547857142.857132</td>
     </tr>
     <tr>
       <th>nominal</th>
@@ -1634,84 +1658,20 @@ import_signal_no_sig_t52p0:
       <td>0.0</td>
     </tr>
     <tr>
-      <th>move_water_mech_break_t27p0</th>
+      <th>export_water_block_t27p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
-      <td>0.000231</td>
-      <td>10175.0</td>
-      <td>235478.571429</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000129</td>
-      <td>25175.0</td>
-      <td>323678.571429</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t2p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000021</td>
-      <td>30125.0</td>
-      <td>64553.571429</td>
-    </tr>
-    <tr>
-      <th>import_ee_inf_v_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.00009</td>
-      <td>20175.0</td>
-      <td>181575.0</td>
-    </tr>
-    <tr>
-      <th>move_water_mech_break_t52p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000003</td>
-      <td>5000.0</td>
-      <td>1285.714286</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t52p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000017</td>
-      <td>5000.0</td>
-      <td>8571.428571</td>
+      <td>12.857143</td>
+      <td>15152.5</td>
+      <td>19481785714.285713</td>
     </tr>
     <tr>
       <th>import_water_no_wat_t27p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
-      <td>0.00015</td>
+      <td>15.0</td>
       <td>6175.0</td>
-      <td>92625.0</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t2p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000021</td>
-      <td>20102.5</td>
-      <td>43076.785714</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t52p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000017</td>
-      <td>10000.0</td>
-      <td>17142.857143</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_sig_t52p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>10000.0</td>
-      <td>1714.285714</td>
+      <td>9262499999.999998</td>
     </tr>
   </tbody>
 </table>
@@ -1733,7 +1693,7 @@ import_signal_no_sig_t52p0:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 66.99it/s]
+SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 87.59it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1768,60 +1728,124 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 
   </thead>
   <tbody>
     <tr>
+      <th>move_water_short_t27p0</th>
+      <td>['import_ee', 'move_water', 'ee_1', 'wat_1', '...</td>
+      <td>['import_ee', 'move_water']</td>
+      <td>12.857143</td>
+      <td>25175.0</td>
+      <td>32367857142.857143</td>
+    </tr>
+    <tr>
       <th>import_water_no_wat_t2p0</th>
       <td>['import_water', 'ee_1', 'wat_1', 'wat_2']</td>
       <td>['import_water']</td>
-      <td>0.000017</td>
+      <td>1.666667</td>
       <td>11125.0</td>
-      <td>18541.666667</td>
-    </tr>
-    <tr>
-      <th>move_water_mech_break_t2p0</th>
-      <td>['move_water', 'ee_1', 'wat_1', 'wat_2']</td>
-      <td>['move_water']</td>
-      <td>0.000002</td>
-      <td>15125.0</td>
-      <td>3241.071429</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_sig_t27p0</th>
-      <td>['import_signal', 'ee_1', 'sig_1', 'wat_1', 'w...</td>
-      <td>['import_signal']</td>
-      <td>0.000013</td>
-      <td>8650.0</td>
-      <td>11121.428571</td>
+      <td>1854166666.666668</td>
     </tr>
     <tr>
       <th>import_ee_no_v_t27p0</th>
       <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>
       <td>['import_ee']</td>
-      <td>0.00036</td>
+      <td>36.0</td>
       <td>15175.0</td>
-      <td>546300.0</td>
+      <td>54629999999.999992</td>
     </tr>
     <tr>
       <th>import_signal_no_sig_t2p0</th>
       <td>['import_signal', 'ee_1', 'sig_1', 'wat_1', 'w...</td>
       <td>['import_signal']</td>
-      <td>0.000002</td>
+      <td>2.142857</td>
       <td>20125.0</td>
-      <td>4312.5</td>
+      <td>4312500000.000002</td>
     </tr>
     <tr>
-      <th>export_water_block_t27p0</th>
-      <td>['move_water', 'export_water', 'ee_1', 'wat_1'...</td>
-      <td>['move_water', 'export_water']</td>
-      <td>0.000129</td>
-      <td>15152.5</td>
-      <td>194817.857143</td>
+      <th>move_water_short_t2p0</th>
+      <td>['import_ee', 'move_water', 'ee_1', 'wat_1', '...</td>
+      <td>['import_ee', 'move_water']</td>
+      <td>2.142857</td>
+      <td>30125.0</td>
+      <td>6455357142.857144</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t52p0</th>
+      <td>['import_signal']</td>
+      <td>['import_signal']</td>
+      <td>1.714286</td>
+      <td>10000.0</td>
+      <td>1714285714.285714</td>
+    </tr>
+    <tr>
+      <th>move_water_mech_break_t52p0</th>
+      <td>['move_water']</td>
+      <td>['move_water']</td>
+      <td>0.257143</td>
+      <td>5000.0</td>
+      <td>128571428.571429</td>
     </tr>
     <tr>
       <th>import_water_no_wat_t52p0</th>
       <td>['import_water', 'wat_1']</td>
       <td>['import_water']</td>
-      <td>0.00002</td>
+      <td>2.0</td>
       <td>1000.0</td>
-      <td>2000.0</td>
+      <td>200000000.0</td>
+    </tr>
+    <tr>
+      <th>move_water_mech_break_t2p0</th>
+      <td>['move_water', 'ee_1', 'wat_1', 'wat_2']</td>
+      <td>['move_water']</td>
+      <td>0.214286</td>
+      <td>15125.0</td>
+      <td>324107142.857143</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t27p0</th>
+      <td>['import_signal', 'ee_1', 'sig_1', 'wat_1', 'w...</td>
+      <td>['import_signal']</td>
+      <td>12.857143</td>
+      <td>8650.0</td>
+      <td>11121428571.428572</td>
+    </tr>
+    <tr>
+      <th>import_ee_inf_v_t27p0</th>
+      <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>
+      <td>['import_ee']</td>
+      <td>9.0</td>
+      <td>20175.0</td>
+      <td>18157500000.0</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t2p0</th>
+      <td>['move_water', 'export_water', 'ee_1', 'wat_1'...</td>
+      <td>['move_water', 'export_water']</td>
+      <td>2.142857</td>
+      <td>20102.5</td>
+      <td>4307678571.428573</td>
+    </tr>
+    <tr>
+      <th>move_water_short_t52p0</th>
+      <td>['move_water']</td>
+      <td>['move_water']</td>
+      <td>1.714286</td>
+      <td>10000.0</td>
+      <td>1714285714.285714</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t52p0</th>
+      <td>['export_water', 'wat_2']</td>
+      <td>['export_water']</td>
+      <td>1.714286</td>
+      <td>5000.0</td>
+      <td>857142857.142857</td>
+    </tr>
+    <tr>
+      <th>move_water_mech_break_t27p0</th>
+      <td>['move_water', 'ee_1', 'wat_1', 'wat_2']</td>
+      <td>['move_water']</td>
+      <td>23.142857</td>
+      <td>10175.0</td>
+      <td>23547857142.857132</td>
     </tr>
     <tr>
       <th>nominal</th>
@@ -1832,84 +1856,20 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 
       <td>0.0</td>
     </tr>
     <tr>
-      <th>move_water_mech_break_t27p0</th>
-      <td>['move_water', 'ee_1', 'wat_1', 'wat_2']</td>
-      <td>['move_water']</td>
-      <td>0.000231</td>
-      <td>10175.0</td>
-      <td>235478.571429</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t27p0</th>
-      <td>['import_ee', 'move_water', 'ee_1', 'wat_1', '...</td>
-      <td>['import_ee', 'move_water']</td>
-      <td>0.000129</td>
-      <td>25175.0</td>
-      <td>323678.571429</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t2p0</th>
-      <td>['import_ee', 'move_water', 'ee_1', 'wat_1', '...</td>
-      <td>['import_ee', 'move_water']</td>
-      <td>0.000021</td>
-      <td>30125.0</td>
-      <td>64553.571429</td>
-    </tr>
-    <tr>
-      <th>import_ee_inf_v_t27p0</th>
-      <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>
-      <td>['import_ee']</td>
-      <td>0.00009</td>
-      <td>20175.0</td>
-      <td>181575.0</td>
-    </tr>
-    <tr>
-      <th>move_water_mech_break_t52p0</th>
-      <td>['move_water']</td>
-      <td>['move_water']</td>
-      <td>0.000003</td>
-      <td>5000.0</td>
-      <td>1285.714286</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t52p0</th>
-      <td>['export_water', 'wat_2']</td>
-      <td>['export_water']</td>
-      <td>0.000017</td>
-      <td>5000.0</td>
-      <td>8571.428571</td>
+      <th>export_water_block_t27p0</th>
+      <td>['move_water', 'export_water', 'ee_1', 'wat_1'...</td>
+      <td>['move_water', 'export_water']</td>
+      <td>12.857143</td>
+      <td>15152.5</td>
+      <td>19481785714.285713</td>
     </tr>
     <tr>
       <th>import_water_no_wat_t27p0</th>
       <td>['import_water', 'ee_1', 'wat_1', 'wat_2']</td>
       <td>['import_water']</td>
-      <td>0.00015</td>
+      <td>15.0</td>
       <td>6175.0</td>
-      <td>92625.0</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t2p0</th>
-      <td>['move_water', 'export_water', 'ee_1', 'wat_1'...</td>
-      <td>['move_water', 'export_water']</td>
-      <td>0.000021</td>
-      <td>20102.5</td>
-      <td>43076.785714</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t52p0</th>
-      <td>['move_water']</td>
-      <td>['move_water']</td>
-      <td>0.000017</td>
-      <td>10000.0</td>
-      <td>17142.857143</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_sig_t52p0</th>
-      <td>['import_signal']</td>
-      <td>['import_signal']</td>
-      <td>0.000002</td>
-      <td>10000.0</td>
-      <td>1714.285714</td>
+      <td>9262499999.999998</td>
     </tr>
   </tbody>
 </table>
@@ -1918,7 +1878,7 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 
 </section>
 </section>
 <section id="5.)-Saving-Work">
-<h2>5.) Saving Work<a class="headerlink" href="#5.)-Saving-Work" title="Permalink to this headline"></a></h2>
+<h2>5.) Saving Work<a class="headerlink" href="#5.)-Saving-Work" title="Permalink to this heading"></a></h2>
 <p>In computationally expensive simulations, running a lot of computational simulations can take a considerable amount of time. As a result, it becomes impractical to run a new simulation every time one wishes to analyse its data. Results from fmdtools simulations (endclasses or mdlhists) can be saved as pickle, csv, or json files in this instance using either: - <code class="docutils literal notranslate"><span class="pre">Result.save</span></code>/<code class="docutils literal notranslate"><span class="pre">History.save</span></code> or - passing a save_args dictionary to the respective propagate functions (e.g.,
 <code class="docutils literal notranslate"><span class="pre">{'endclass':{'filename':'file.pkl','overwrite':True}</span></code>)</p>
 <p>and then loaded using: - <code class="docutils literal notranslate"><span class="pre">Result.load</span></code>/<code class="docutils literal notranslate"><span class="pre">History.load</span></code></p>
@@ -1937,57 +1897,57 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-import_ee_no_v_t27p0.endclass.rate: 0.0003600000000000001
+import_ee_no_v_t27p0.endclass.rate: 36.0
 import_ee_no_v_t27p0.endclass.cost: 15174.999999999998
-import_ee_no_v_t27p0            546300.0
-import_ee_inf_v_t27p0.endclass.rate: 9.000000000000002e-05
+import_ee_no_v_t27p0   54629999999.99999
+import_ee_inf_v_t27p0.endclass.rate: 9.0
 import_ee_inf_v_t27p0.endclass.cost: 20175.0
-import_ee_inf_v_t27p  181575.00000000003
-import_water_no_wat_             0.00015
+import_ee_inf_v_t27p       18157500000.0
+import_water_no_wat_                15.0
 import_water_no_wat_   6174.999999999998
-import_water_no_wat_   92624.99999999996
-import_signal_no_sig1.2857142857142856e-05
+import_water_no_wat_   9262499999.999998
+import_signal_no_sig  12.857142857142856
 import_signal_no_sig              8650.0
-import_signal_no_sig   11121.42857142857
-move_water_mech_brea0.00023142857142857142
+import_signal_no_sig  11121428571.428572
+move_water_mech_brea  23.142857142857135
 move_water_mech_brea  10174.999999999998
-move_water_mech_brea   235478.5714285714
-move_water_short_t27p0.endclass.rate: 0.00012857142857142858
+move_water_mech_brea  23547857142.857132
+move_water_short_t27p0.endclass.rate: 12.857142857142856
 move_water_short_t27p0.endclass.cost: 25175.0
-move_water_short_t27   323678.5714285714
-export_water_block_t27p0.endclass.rate: 0.00012857142857142858
+move_water_short_t27  32367857142.857143
+export_water_block_t27p0.endclass.rate: 12.857142857142856
 export_water_block_t27p0.endclass.cost: 15152.5
-export_water_block_t  194817.85714285716
-import_water_no_wat_t2p0.endclass.rate: 1.6666666666666667e-05
+export_water_block_t  19481785714.285713
+import_water_no_wat_t2p0.endclass.rate: 1.6666666666666665
 import_water_no_wat_t2p0.endclass.cost: 11125.000000000007
-import_water_no_wat_   18541.66666666668
-import_signal_no_sig2.1428571428571427e-06
+import_water_no_wat_  1854166666.6666677
+import_signal_no_sig   2.142857142857143
 import_signal_no_sig  20125.000000000007
-import_signal_no_sig   4312.500000000001
-move_water_mech_brea2.1428571428571427e-06
+import_signal_no_sig   4312500000.000002
+move_water_mech_brea 0.21428571428571425
 move_water_mech_brea  15125.000000000007
-move_water_mech_brea    3241.07142857143
-move_water_short_t2p0.endclass.rate: 2.1428571428571428e-05
+move_water_mech_brea   324107142.8571429
+move_water_short_t2p0.endclass.rate: 2.142857142857143
 move_water_short_t2p0.endclass.cost: 30125.000000000007
-move_water_short_t2p   64553.57142857144
-export_water_block_t2p0.endclass.rate: 2.1428571428571428e-05
+move_water_short_t2p   6455357142.857144
+export_water_block_t2p0.endclass.rate: 2.142857142857143
 export_water_block_t2p0.endclass.cost: 20102.500000000007
-export_water_block_t   43076.78571428573
-import_water_no_wat_1.9999999999999998e-05
+export_water_block_t   4307678571.428573
+import_water_no_wat_                 2.0
 import_water_no_wat_              1000.0
-import_water_no_wat_  1999.9999999999998
-import_signal_no_sig1.7142857142857143e-06
+import_water_no_wat_         200000000.0
+import_signal_no_sig  1.7142857142857142
 import_signal_no_sig             10000.0
-import_signal_no_sig  1714.2857142857142
-move_water_mech_brea2.5714285714285716e-06
+import_signal_no_sig  1714285714.2857141
+move_water_mech_brea  0.2571428571428571
 move_water_mech_brea              5000.0
-move_water_mech_brea  1285.7142857142858
-move_water_short_t52p0.endclass.rate: 1.7142857142857145e-05
+move_water_mech_brea  128571428.57142855
+move_water_short_t52p0.endclass.rate: 1.7142857142857142
 move_water_short_t52p0.endclass.cost: 10000.0
-move_water_short_t52  17142.857142857145
-export_water_block_t52p0.endclass.rate: 1.7142857142857145e-05
+move_water_short_t52  1714285714.2857141
+export_water_block_t52p0.endclass.rate: 1.7142857142857142
 export_water_block_t52p0.endclass.cost: 5000.0
-export_water_block_t   8571.428571428572
+export_water_block_t   857142857.1428571
 nominal.endclass.rate:               1.0
 nominal.endclass.cost:               0.0
 nominal.endclass.expected cost:      0.0
@@ -2031,57 +1991,57 @@ File already exists: tutorial_endclasses.csv, writing anyway...
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-import_ee_no_v_t27p0.endclass.rate: 0.00036
+import_ee_no_v_t27p0.endclass.rate: 36.0
 import_ee_no_v_t27p0.endclass.cost: 15174.999999999998
-import_ee_no_v_t27p0            546300.0
-import_ee_inf_v_t27p0.endclass.rate: 9.000000000000002e-05
+import_ee_no_v_t27p0   54629999999.99999
+import_ee_inf_v_t27p0.endclass.rate: 9.0
 import_ee_inf_v_t27p0.endclass.cost: 20175.0
-import_ee_inf_v_t27p  181575.00000000003
-import_water_no_wat_             0.00015
+import_ee_inf_v_t27p       18157500000.0
+import_water_no_wat_                15.0
 import_water_no_wat_   6174.999999999998
-import_water_no_wat_   92624.99999999996
-import_signal_no_sig1.2857142857142856e-05
+import_water_no_wat_   9262499999.999998
+import_signal_no_sig  12.857142857142856
 import_signal_no_sig              8650.0
-import_signal_no_sig   11121.42857142857
-move_water_mech_brea  0.0002314285714285
+import_signal_no_sig  11121428571.428572
+move_water_mech_brea   23.14285714285713
 move_water_mech_brea  10174.999999999998
-move_water_mech_brea   235478.5714285714
-move_water_short_t27p0.endclass.rate: 0.0001285714285714
+move_water_mech_brea   23547857142.85713
+move_water_short_t27p0.endclass.rate: 12.857142857142856
 move_water_short_t27p0.endclass.cost: 25175.0
-move_water_short_t27   323678.5714285714
-export_water_block_t27p0.endclass.rate: 0.0001285714285714
+move_water_short_t27  32367857142.857143
+export_water_block_t27p0.endclass.rate: 12.857142857142856
 export_water_block_t27p0.endclass.cost: 15152.5
-export_water_block_t   194817.8571428572
-import_water_no_wat_t2p0.endclass.rate: 1.6666666666666667e-05
+export_water_block_t  19481785714.285717
+import_water_no_wat_t2p0.endclass.rate: 1.6666666666666663
 import_water_no_wat_t2p0.endclass.cost: 11125.000000000007
-import_water_no_wat_   18541.66666666668
-import_signal_no_sig2.1428571428571427e-06
+import_water_no_wat_   1854166666.666668
+import_signal_no_sig   2.142857142857143
 import_signal_no_sig  20125.000000000007
-import_signal_no_sig   4312.500000000001
-move_water_mech_brea2.1428571428571427e-06
+import_signal_no_sig   4312500000.000002
+move_water_mech_brea  0.2142857142857142
 move_water_mech_brea  15125.000000000007
-move_water_mech_brea    3241.07142857143
-move_water_short_t2p0.endclass.rate: 2.1428571428571428e-05
+move_water_mech_brea   324107142.8571429
+move_water_short_t2p0.endclass.rate: 2.142857142857143
 move_water_short_t2p0.endclass.cost: 30125.000000000007
-move_water_short_t2p   64553.57142857144
-export_water_block_t2p0.endclass.rate: 2.1428571428571428e-05
+move_water_short_t2p   6455357142.857144
+export_water_block_t2p0.endclass.rate: 2.142857142857143
 export_water_block_t2p0.endclass.cost: 20102.500000000007
-export_water_block_t   43076.78571428573
-import_water_no_wat_               2e-05
+export_water_block_t   4307678571.428573
+import_water_no_wat_                 2.0
 import_water_no_wat_              1000.0
-import_water_no_wat_              2000.0
-import_signal_no_sig1.7142857142857145e-06
+import_water_no_wat_         200000000.0
+import_signal_no_sig  1.7142857142857142
 import_signal_no_sig             10000.0
-import_signal_no_sig  1714.2857142857142
-move_water_mech_brea2.571428571428572e-06
+import_signal_no_sig   1714285714.285714
+move_water_mech_brea  0.2571428571428571
 move_water_mech_brea              5000.0
-move_water_mech_brea  1285.7142857142858
-move_water_short_t52p0.endclass.rate: 1.7142857142857145e-05
+move_water_mech_brea  128571428.57142857
+move_water_short_t52p0.endclass.rate: 1.7142857142857142
 move_water_short_t52p0.endclass.cost: 10000.0
-move_water_short_t52  17142.857142857145
-export_water_block_t52p0.endclass.rate: 1.7142857142857145e-05
+move_water_short_t52   1714285714.285714
+export_water_block_t52p0.endclass.rate: 1.7142857142857142
 export_water_block_t52p0.endclass.cost: 5000.0
-export_water_block_t   8571.428571428572
+export_water_block_t   857142857.1428571
 nominal.endclass.rate:               1.0
 nominal.endclass.cost:               0.0
 nominal.endclass.expected cost:      0.0
