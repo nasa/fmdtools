@@ -173,25 +173,3 @@ Multiflow Demo
 
 The multiflows example is limited to the model in the file `multiflows_demo.py`, which shows basic usage of the :class:`fmdtools.define.flow.MultiFlow` and :class:`fmdtools.define.flow.CommsFlow` flow structures.
 
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
- 
-
-  
-  - 
-
-
-
-
