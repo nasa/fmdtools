@@ -242,7 +242,18 @@ class CommonTests():
         if check_link:
             result_flattened['time'][0]=100 #check to see that they aren't linked somehow
             self.assertNotEqual(result_flattened['time'][0], result_saved['time'][0])
-    def check_save_load_approach(self,mdl, mfile, ecfile, runtype, app={}, **kwargs):
+    def start_approach_test(self, mfile, ecfile):
+        if os.path.exists(mfile): 
+            os.remove(mfile)
+        if os.path.exists(ecfile): 
+            os.remove(ecfile)
+    def end_approach_test(self, mdlhists, mfile, endclasses, ecfile):
+        self.check_same_file(mdlhists,mfile)
+        self.check_same_file(endclasses, ecfile)
+        
+        os.remove(mfile), os.remove(ecfile)
+        
+    def check_save_load_approach(self, mdl, mfile, ecfile, app={}, **kwargs):
         """
         Checks to see if saved results are the same as the direct outputs of a given propagate method
 
@@ -255,30 +266,49 @@ class CommonTests():
         app : nominal/sampleapproach to send to the method (if any)
         **kwargs : kwargs to send to the propagate method (if any)
         """
-        if os.path.exists(mfile):   os.remove(mfile)
-        if os.path.exists(ecfile):  os.remove(ecfile)
+        self.start_approach_test(mfile, ecfile)
         
-        if runtype=='single_faults':
-            endclasses, mdlhists = sim.propagate.single_faults(mdl, showprogress=False, \
+        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False, \
+                                                  save_args={'mdlhist':{'filename':mfile},\
+                                                             'endclass':{'filename':ecfile}}, **kwargs)
+        
+        self.end_approach_test(mdlhists, mfile, endclasses, ecfile)
+    def check_save_load_singlefaults(self, mdl, mfile, ecfile, app={}, **kwargs):
+        self.start_approach_test(mfile, ecfile)
+        
+        endclasses, mdlhists = sim.propagate.single_faults(mdl, showprogress=False, \
+                                                    save_args={'mdlhist':{'filename':mfile},\
+                                                               'endclass':{'filename':ecfile}}, **kwargs)
+        
+        self.end_approach_test(mdlhists, mfile, endclasses, ecfile)
+    def check_save_load_nomapproach(self, mdl, mfile, ecfile, app={}, **kwargs):
+        self.start_approach_test(mfile, ecfile)
+        
+        endclasses, mdlhists = sim.propagate.nominal_approach(mdl, app, showprogress=False, \
                                                         save_args={'mdlhist':{'filename':mfile},\
                                                                    'endclass':{'filename':ecfile}}, **kwargs)
-        elif runtype=='nominal_approach':
-            endclasses, mdlhists = sim.propagate.nominal_approach(mdl, app, showprogress=False, \
-                                                            save_args={'mdlhist':{'filename':mfile},\
-                                                                       'endclass':{'filename':ecfile}}, **kwargs)
-        elif runtype=='nested_approach':
-            endclasses, mdlhists, apps = sim.propagate.nested_approach(mdl, app, showprogress=False, \
-                                                            save_args={'mdlhist':{'filename':mfile},\
-                                                                       'endclass':{'filename':ecfile}}, **kwargs)
-        elif runtype=='approach':
-            endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False, \
-                                                      save_args={'mdlhist':{'filename':mfile},\
-                                                                 'endclass':{'filename':ecfile}}, **kwargs)
-        else: raise Exception("Invalid run type:"+runtype)
-        self.check_same_file(mdlhists,mfile)
-        self.check_same_file(endclasses, ecfile)
-        os.remove(mfile), os.remove(ecfile)
-    def check_save_load_approach_indiv(self, mdl, mfolder, ecfolder, ext, runtype, app={}, **kwargs):
+        
+        self.end_approach_test(mdlhists, mfile, endclasses, ecfile)
+    def check_save_load_nestapproach(self, mdl, mfile, ecfile, app={}, **kwargs):
+        self.start_approach_test(mfile, ecfile)
+        endclasses, mdlhists, apps = sim.propagate.nested_approach(mdl, app, showprogress=False, \
+                                                        save_args={'mdlhist':{'filename':mfile},\
+                                                                   'endclass':{'filename':ecfile}}, **kwargs)
+        self.end_approach_test(mdlhists, mfile, endclasses, ecfile)
+    def start_save_load_indiv(self, mfolder, ecfolder):
+        if os.path.exists(mfolder): 
+            shutil.rmtree(mfolder)
+        if os.path.exists(ecfolder):
+            shutil.rmtree(ecfolder)
+    def end_save_load_indiv(self, mdlhists, mfolder, endclasses, ecfolder, ext):
+        if ext=='pkl': 
+            ext="pickle"
+        self.check_same_files(mdlhists,mfolder, ext)
+        self.check_same_files(endclasses, ecfolder, ext)
+        shutil.rmtree(mfolder), shutil.rmtree(ecfolder)
+        
+
+    def check_save_load_singlefaults_indiv(self, mdl, mfolder, ecfolder, ext, **kwargs):
         """
         Checks to see if saved results are the same as the direct outputs of a given propagate method when using individual saving option
 
@@ -292,33 +322,37 @@ class CommonTests():
         app : nominal/sampleapproach to send to the method (if any)
         **kwargs : kwargs to send to the propagate method (if any)
         """
-        if os.path.exists(mfolder):   shutil.rmtree(mfolder)
-        if os.path.exists(ecfolder):  shutil.rmtree(ecfolder)
+        self.start_save_load_indiv(mfolder, ecfolder)
+        endclasses, mdlhists = sim.propagate.single_faults(mdl, showprogress=False, \
+                                                        save_args={'mdlhist':{'filename':mfolder+"."+ext},\
+                                                                   'endclass':{'filename':ecfolder+"."+ext},
+                                                                   'indiv':True}, **kwargs)
+        self.end_save_load_indiv(mdlhists, mfolder, endclasses, ecfolder, ext)
+    
+    def check_save_load_approach_indiv(self, mdl, mfolder, ecfolder, ext, app={}, **kwargs):
+        self.start_save_load_indiv(mfolder, ecfolder)
+        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False, \
+                                                  save_args={'mdlhist':{'filename':mfolder+"."+ext},\
+                                                             'endclass':{'filename':ecfolder+"."+ext},\
+                                                            'indiv':True}, **kwargs)
+        self.end_save_load_indiv(mdlhists, mfolder, endclasses, ecfolder, ext)
         
-        if runtype=='single_faults':
-            endclasses, mdlhists = sim.propagate.single_faults(mdl, showprogress=False, \
-                                                            save_args={'mdlhist':{'filename':mfolder+"."+ext},\
-                                                                       'endclass':{'filename':ecfolder+"."+ext},
-                                                                       'indiv':True}, **kwargs)
-        elif runtype=='nominal_approach':
-            endclasses, mdlhists = sim.propagate.nominal_approach(mdl, app, showprogress=False, \
-                                                            save_args={'mdlhist':{'filename':mfolder+"."+ext},\
-                                                                       'endclass':{'filename':ecfolder+"."+ext},\
-                                                                       'indiv':True}, **kwargs)
-        elif runtype=='nested_approach':
-            endclasses, mdlhists, apps = sim.propagate.nested_approach(mdl, app, showprogress=False, \
-                                                            save_args={'mdlhist':{'filename':mfolder+"."+ext},\
-                                                                       'endclass':{'filename':ecfolder+"."+ext},\
-                                                                       'indiv':True}, **kwargs)
-        elif runtype=='approach':
-            endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False, \
-                                                      save_args={'mdlhist':{'filename':mfolder+"."+ext},\
-                                                                 'endclass':{'filename':ecfolder+"."+ext},\
-                                                                'indiv':True}, **kwargs)
-        else: raise Exception("Invalid run type:"+runtype)
-        if ext=='pkl': ext="pickle"
-        self.check_same_files(mdlhists,mfolder, ext)
-        self.check_same_files(endclasses, ecfolder, ext)
-        shutil.rmtree(mfolder), shutil.rmtree(ecfolder)
+    def check_save_load_nomapproach_indiv(self, mdl, mfolder, ecfolder, ext, app={}, **kwargs):
+        self.start_save_load_indiv(mfolder, ecfolder)
+        endclasses, mdlhists = sim.propagate.nominal_approach(mdl, app, showprogress=False, \
+                                                        save_args={'mdlhist':{'filename':mfolder+"."+ext},\
+                                                                   'endclass':{'filename':ecfolder+"."+ext},\
+                                                                   'indiv':True}, **kwargs)
+        self.end_save_load_indiv(mdlhists, mfolder, endclasses, ecfolder, ext)
+        
+    def check_save_load_nestapproach_indiv(self, mdl, mfolder, ecfolder, ext, app={}, **kwargs):
+        self.start_save_load_indiv(mfolder, ecfolder)
+        endclasses, mdlhists, apps = sim.propagate.nested_approach(mdl, app, showprogress=False, \
+                                                                   save_args={'mdlhist':{'filename':mfolder+"."+ext},\
+                                                                              'endclass':{'filename':ecfolder+"."+ext},\
+                                                                            'indiv':True}, **kwargs)
+        self.end_save_load_indiv(mdlhists, mfolder, endclasses, ecfolder, ext)
+        
+
         
 

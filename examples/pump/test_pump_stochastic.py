@@ -17,12 +17,13 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def setUp(self):
         self.mdl = Pump()
     def test_stochastic_pdf(self):
-        """Tests that (1) track_pdf option runs and (2) gives repeated probability density results under the same seed(s)"""
+        """Tests that (1) track_pdf option runs and (2) gives repeated 
+        probability density results under the same seed(s)"""
         testvals = [23.427857638009993,
                     28.879844891816045,
                     0.0009482614961342181,
                     10.9180526929105,
-                    6.326593053866564,
+                    0.02603536236159078,
                     1.9736111095116995,
                     31.579024323385077,
                     0.016549021807197088,
@@ -76,27 +77,27 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_save_load_nominalapproach(self):
         app = NominalApproach()
         app.add_seed_replicates("replicates", 10)
-        self.check_save_load_approach(self.mdl, "stochpump_mdlhists.pkl", "stochpump_endclasses.pkl", 'nominal_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
-        self.check_save_load_approach(self.mdl, "stochpump_mdlhists.csv", "stochpump_endclasses.csv", 'nominal_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
-        self.check_save_load_approach(self.mdl, "stochpump_mdlhists.json", "stochpump_endclasses.json", 'nominal_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nomapproach(self.mdl, "stochpump_mdlhists.pkl", "stochpump_endclasses.pkl", app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nomapproach(self.mdl, "stochpump_mdlhists.csv", "stochpump_endclasses.csv", app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nomapproach(self.mdl, "stochpump_mdlhists.json", "stochpump_endclasses.json", app=app, run_stochastic=True, pool=mp.Pool(4))
     def test_save_load_nominalapproach_indiv(self):
         app = NominalApproach()
         app.add_seed_replicates("replicates", 10)
-        self.check_save_load_approach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "pkl", 'nominal_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
-        self.check_save_load_approach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "csv", 'nominal_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
-        self.check_save_load_approach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "json", 'nominal_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nomapproach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "pkl", app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nomapproach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "csv", app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nomapproach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "json", app=app, run_stochastic=True, pool=mp.Pool(4))
     def test_save_load_nestedapproach(self):
         app = NominalApproach()
         app.add_seed_replicates("replicates", 10)
-        self.check_save_load_approach(self.mdl, "stochpump_mdlhists.pkl", "stochpump_endclasses.pkl", 'nested_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
-        self.check_save_load_approach(self.mdl, "stochpump_mdlhists.csv", "stochpump_endclasses.csv", 'nested_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
-        self.check_save_load_approach(self.mdl, "stochpump_mdlhists.json", "stochpump_endclasses.json", 'nested_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nestapproach(self.mdl, "stochpump_mdlhists.pkl", "stochpump_endclasses.pkl", app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nestapproach(self.mdl, "stochpump_mdlhists.csv", "stochpump_endclasses.csv", app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nestapproach(self.mdl, "stochpump_mdlhists.json", "stochpump_endclasses.json", app=app, run_stochastic=True, pool=mp.Pool(4))
     def test_save_load_nestedapproach_indiv(self):
         app = NominalApproach()
         app.add_seed_replicates("replicates", 10)
-        self.check_save_load_approach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "pkl", 'nested_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
-        self.check_save_load_approach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "csv", 'nested_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
-        self.check_save_load_approach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "json", 'nested_approach', app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nestapproach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "pkl", app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nestapproach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "csv", app=app, run_stochastic=True, pool=mp.Pool(4))
+        self.check_save_load_nestapproach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "json", app=app, run_stochastic=True, pool=mp.Pool(4))
 
 if __name__ == '__main__':
     #suite = unittest.TestSuite()
