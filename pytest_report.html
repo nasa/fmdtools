@@ -253,7 +253,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>pytest_report.html</h1>
-    <p>Report generated on 12-Jun-2023 at 17:58:25 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <p>Report generated on 15-Jun-2023 at 10:27:12 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -269,8 +269,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>Python</td>
         <td>3.9.7</td></tr></table>
     <h2>Summary</h2>
-    <p>12 tests ran in 291.23 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">6 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">6 failed</span>, <input checked="true" class="filter" data-test-result="error" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">1 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>115 tests ran in 1297.96 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">78 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">37 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -281,24 +281,15 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <th class="sortable links" col="links">Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="4">No results found. Try to check the filters</th></tr></thead>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/multiflow_demo/test_multiflow.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">ImportError while importing test module &#x27;C:\Users\dhulse\Documents\GitHub\fmdtools\examples\multiflow_demo\test_multiflow.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>..\..\..\Anaconda3\lib\importlib\__init__.py:127: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>examples\multiflow_demo\test_multiflow.py:9: in &lt;module&gt;<br/>    from comms_demo import TestModel<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;comms_demo&#x27;</span><br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_all_faults</td>
-          <td class="col-duration">0.44</td>
+          <td class="col-duration">0.45</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_all_faults&gt;<br/><br/>    def test_all_faults(self):<br/>        &quot;&quot;&quot; Some basic tests for propagating lists of faults in the model--<br/>        that histories have length 1, endresults have &gt;0 costs, and total costs are higher<br/>        than repairs&quot;&quot;&quot;<br/>        mdl=self.mdl<br/>        endclasses, reshists = propagate.single_faults(mdl, showprogress=False)<br/>&gt;       actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><br/>examples\eps\test_eps.py:38: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x000001B7700FE310&gt;<br/><br/>&gt;   actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:38: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_all_faults&gt;<br/><br/>    def test_all_faults(self):<br/>        &quot;&quot;&quot; Some basic tests for propagating lists of faults in the model--<br/>        that histories have length 1, endresults have &gt;0 costs, and total costs are higher<br/>        than repairs&quot;&quot;&quot;<br/>        mdl=self.mdl<br/>        endclasses, reshists = propagate.single_faults(mdl, showprogress=False)<br/>&gt;       actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><br/>examples\eps\test_eps.py:38: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x0000021E88C22F90&gt;<br/><br/>&gt;   actual_num_faults = np.sum([len(f.faultmodes) for f in mdl.fxns.values()])<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:38: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -307,7 +298,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_1&gt;<br/><br/>    def test_backward_fault_prop_1(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - distributor short leads to empty battery<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;Distribute_EE&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:23: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x1b76ffd4280 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;Distribute_EE&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Distribute_EE&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_1&gt;<br/><br/>    def test_backward_fault_prop_1(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - distributor short leads to empty battery<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;Distribute_EE&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:23: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x21e89dd5d00 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;Distribute_EE&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Distribute_EE&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -316,7 +307,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_2&gt;<br/><br/>    def test_backward_fault_prop_2(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - motor short leads to distributor short<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;EE_to_ME&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x1b769737ac0 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;EE_to_ME&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;EE_to_ME&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_backward_fault_prop_2&gt;<br/><br/>    def test_backward_fault_prop_2(self):<br/>        &quot;&quot;&quot; Tests that defined fault cases that require reverse propagation propagate<br/>        backwards through the graph as expected - motor short leads to distributor short<br/>        &quot;&quot;&quot;<br/>&gt;       endresults, mdlhist = propagate.one_fault(self.mdl, &#x27;EE_to_ME&#x27;, &#x27;short&#x27;, desired_result=&quot;endfaults&quot;)<br/><br/>examples\eps\test_eps.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x21e88a211c0 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;EE_to_ME&#x27;, faultmode = &#x27;short&#x27;, time = 1<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;EE_to_ME&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -325,7 +316,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_fault_app&gt;<br/><br/>    def test_fault_app(self):<br/>        &quot;&quot;&quot; Tests that the expected number of scenarios are generated for a given approach &quot;&quot;&quot;<br/>&gt;       actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><br/>examples\eps\test_eps.py:49: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x000001B76F5AA540&gt;<br/><br/>&gt;   actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:49: AttributeError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_fault_app&gt;<br/><br/>    def test_fault_app(self):<br/>        &quot;&quot;&quot; Tests that the expected number of scenarios are generated for a given approach &quot;&quot;&quot;<br/>&gt;       actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><br/>examples\eps\test_eps.py:49: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_valueiterator object at 0x0000021E88BA4270&gt;<br/><br/>&gt;   actual_num_faults = int(np.sum([len(f.faultmodes) for f in self.mdl.fxns.values()]))<br/><span class="error">E   AttributeError: &#x27;ImportEE&#x27; object has no attribute &#x27;faultmodes&#x27;</span><br/><br/>examples\eps\test_eps.py:49: AttributeError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -334,7 +325,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {0:{&#x27;Store_EE&#x27;:[&#x27;no_storage&#x27;], &#x27;Distribute_EE&#x27;:&#x27;short&#x27;}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\eps\test_eps.py:66: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/>mdl = EPS model at 0x1b76ffd5d00 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>mfile = &#x27;eps_mdlhist.pkl&#x27;, ecfile = &#x27;eps_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {0: {&#x27;Distribute_EE&#x27;: &#x27;short&#x27;, &#x27;Store_EE&#x27;: [&#x27;no_storage&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;sequence&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for sequence, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;sequence&#x27;:<br/>            endresult, mdlhist=sim.propagate.sequence(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>&gt;       else: raise Exception(&quot;Invalid Run Type&quot;+runtype)<br/><span class="error">E       Exception: Invalid Run Typemult_fault</span><br/><br/>tests\common.py:141: Exception<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {0:{&#x27;Store_EE&#x27;:[&#x27;no_storage&#x27;], &#x27;Distribute_EE&#x27;:&#x27;short&#x27;}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\eps\test_eps.py:66: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_multfault&gt;<br/>mdl = EPS model at 0x21e89df2f40 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>mfile = &#x27;eps_mdlhist.pkl&#x27;, ecfile = &#x27;eps_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {0: {&#x27;Distribute_EE&#x27;: &#x27;short&#x27;, &#x27;Store_EE&#x27;: [&#x27;no_storage&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;sequence&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for sequence, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;sequence&#x27;:<br/>            endresult, mdlhist=sim.propagate.sequence(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>&gt;       else: raise Exception(&quot;Invalid Run Type&quot;+runtype)<br/><span class="error">E       Exception: Invalid Run Typemult_fault</span><br/><br/>tests\common.py:141: Exception<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -343,12 +334,293 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Store_EE&#x27;, &#x27;no_storage&#x27;,0))<br/><br/>examples\eps\test_eps.py:62: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:134: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x1b767e8c7c0 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;Store_EE&#x27;, faultmode = &#x27;no_storage&#x27;, time = 0<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Store_EE&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
+            <div class="log">self = &lt;examples.eps.test_eps.epsTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;eps_mdlhist&quot;+extension, &quot;eps_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Store_EE&#x27;, &#x27;no_storage&#x27;,0))<br/><br/>examples\eps\test_eps.py:62: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:134: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = EPS model at 0x21e89df2d00 <br/>FUNCTIONS: <br/>import_ee ImportEE<br/>- State()<br/>- ImportEEModes(mode=nominal, faults=set())<br/>suppl...0, effort=1.0)<br/>waste_he_m GenericFlow flow: GenericState(rate=1.0, effort=1.0)<br/>sig_in Signal flow: SigState(value=1.0)<br/><br/>fxnname = &#x27;Store_EE&#x27;, faultmode = &#x27;no_storage&#x27;, time = 0<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Store_EE&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/multirotor/Multirotor_Optimization.ipynb::</td>
+          <td class="col-duration">324.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">A cell timed out while it was being executed, after 300 seconds.<br/>The message was: Cell execution timed out.<br/>Here is a preview of the cell contents:<br/>-------------------<br/>opt_hist = brute_search()<br/>-------------------<br/> ------------------------------Captured stderr call------------------------------ <br/>[SpyderKernelApp] ERROR | Timeout waiting for execute reply (300s).
+<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/pump/AST_Sampling.ipynb::</td>
+          <td class="col-duration">37.36</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>Random.seed!(0)<br/>sol = mcs(() -&gt; mdp)<br/>PyError ($(Expr(:escape, :(ccall(#= C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:43 =# @pysym(:PyObject_Call), PyPtr, (PyPtr, PyPtr, PyPtr), o, pyargsptr, kw))))) &lt;class &#x27;AttributeError&#x27;&gt;<br/>AttributeError(&quot;module &#x27;fmdtools.sim.propagate&#x27; has no attribute &#x27;cut_mdlhist&#x27;&quot;)<br/>  File &quot;C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\sim\search.py&quot;, line 939, in check_sim_end<br/>    prop.cut_mdlhist(self.log, self.t_ind)<br/><br/><br/>Stacktrace:<br/>  [1] pyerr_check<br/>    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:62 [inlined]<br/>  [2] pyerr_check<br/>    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:66 [inlined]<br/>  [3] _handle_error(msg::String)<br/>    @ PyCall C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:83<br/>  [4] macro expansion<br/>    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:97 [inlined]<br/>  [5] #107<br/>    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:43 [inlined]<br/>  [6] disable_sigint<br/>    @ .\c.jl:458 [inlined]<br/>  [7] __pycall!<br/>    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:42 [inlined]<br/>  [8] _pycall!(ret::PyObject, o::PyObject, args::Tuple{}, nargs::Int64, kw::PyObject)<br/>    @ PyCall C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:29<br/>  [9] _pycall!<br/>    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:11 [inlined]<br/> [10] (::PyObject)(; kwargs::Base.Pairs{Symbol, Bool, Tuple{Symbol}, NamedTuple{(:external_condition,), Tuple{Bool}}})<br/>    @ PyCall C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:86<br/> [11] isterminal!(sim::PumpSim)<br/>    @ Main .\In[15]:3<br/> [12] isterminal<br/>    @ .\In[17]:3 [inlined]<br/> [13] terminated(mdp::AdaStress.Interface.ASTMDP{AdaStress.Interface.UnobservableState, AdaStress.Interface.SeedAction})<br/>    @ AdaStress.Interface C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\interface\RL.jl:99<br/> [14] terminated(mdp::AdaStress.Interface.ASTMDP{AdaStress.Interface.UnobservableState, AdaStress.Interface.SeedAction})<br/>    @ AdaStress.Interface C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\interface\RL.jl:111<br/> [15] macro expansion<br/>    @ C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\solvers\local\MonteCarloSearch\MonteCarloSearch.jl:78 [inlined]<br/> [16] macro expansion<br/>    @ C:\Users\dhulse\.julia\packages\ProgressMeter\sN2xr\src\ProgressMeter.jl:938 [inlined]<br/> [17] solve(mcs::AdaStress.Solvers.MonteCarloSearch.MCS, env_fn::var&quot;#2#3&quot;)<br/>    @ AdaStress.Solvers.MonteCarloSearch C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\solvers\local\MonteCarloSearch\MonteCarloSearch.jl:72<br/> [18] (::AdaStress.Solvers.MonteCarloSearch.MCS)(env_fn::Function)<br/>    @ AdaStress.Solvers C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\solvers\types.jl:74<br/> [19] top-level scope<br/>    @ In[21]:2<br/> [20] eval<br/>    @ .\boot.jl:373 [inlined]<br/> [21] include_string(mapexpr::typeof(REPL.softscope), mod::Module, code::String, filename::String)<br/>    @ Base .\loading.jl:1196<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/pump/Optimization.ipynb::</td>
+          <td class="col-duration">5.62</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>res = minimize(multi_problem.cost, [5], method=&quot;SLSQP&quot;, bounds=[[0,40]])<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mException[0m                                 Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_8984/2162782049.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [0mres[0m [1;33m=[0m [0mminimize[0m[1;33m([0m[0mmulti_problem[0m[1;33m.[0m[0mcost[0m[1;33m,[0m [1;33m[[0m[1;36m5[0m[1;33m][0m[1;33m,[0m [0mmethod[0m[1;33m=[0m[1;34m&quot;SLSQP&quot;[0m[1;33m,[0m [0mbounds[0m[1;33m=[0m[1;33m[[0m[1;33m[[0m[1;36m0[0m[1;33m,[0m[1;36m40[0m[1;33m][0m[1;33m][0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m<br/>[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_minimize.py[0m in [0;36mminimize[1;34m(fun, x0, args, method, jac, hess, hessp, bounds, constraints, tol, callback, options)[0m<br/>[0;32m    629[0m         [1;32mreturn[0m [0m_minimize_cobyla[0m[1;33m([0m[0mfun[0m[1;33m,[0m [0mx0[0m[1;33m,[0m [0margs[0m[1;33m,[0m [0mconstraints[0m[1;33m,[0m [1;33m**[0m[0moptions[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    630[0m     [1;32melif[0m [0mmeth[0m [1;33m==[0m [1;34m&#x27;slsqp&#x27;[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 631[1;33m         return _minimize_slsqp(fun, x0, args, jac, bounds,<br/>[0m[0;32m    632[0m                                constraints, callback=callback, **options)<br/>[0;32m    633[0m     [1;32melif[0m [0mmeth[0m [1;33m==[0m [1;34m&#x27;trust-constr&#x27;[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\slsqp.py[0m in [0;36m_minimize_slsqp[1;34m(func, x0, args, jac, bounds, constraints, maxiter, ftol, iprint, disp, eps, callback, finite_diff_rel_step, **unknown_options)[0m<br/>[0;32m    373[0m [1;33m[0m[0m<br/>[0;32m    374[0m     [1;31m# ScalarFunction provides function and gradient evaluation[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 375[1;33m     sf = _prepare_scalar_function(func, x, jac=jac, args=args, epsilon=eps,<br/>[0m[0;32m    376[0m                                   [0mfinite_diff_rel_step[0m[1;33m=[0m[0mfinite_diff_rel_step[0m[1;33m,[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    377[0m                                   bounds=new_bounds)<br/><br/>[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\optimize.py[0m in [0;36m_prepare_scalar_function[1;34m(fun, x0, jac, args, bounds, epsilon, finite_diff_rel_step, hess)[0m<br/>[0;32m    259[0m     [1;31m# ScalarFunction caches. Reuse of fun(x) during grad[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    260[0m     [1;31m# calculation reduces overall function evaluations.[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 261[1;33m     sf = ScalarFunction(fun, x0, args, grad, hess,<br/>[0m[0;32m    262[0m                         finite_diff_rel_step, bounds, epsilon=epsilon)<br/>[0;32m    263[0m [1;33m[0m[0m<br/><br/>[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py[0m in [0;36m__init__[1;34m(self, fun, x0, args, grad, hess, finite_diff_rel_step, finite_diff_bounds, epsilon)[0m<br/>[0;32m    138[0m [1;33m[0m[0m<br/>[0;32m    139[0m         [0mself[0m[1;33m.[0m[0m_update_fun_impl[0m [1;33m=[0m [0mupdate_fun[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 140[1;33m         [0mself[0m[1;33m.[0m[0m_update_fun[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    141[0m [1;33m[0m[0m<br/>[0;32m    142[0m         [1;31m# Gradient evaluation[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py[0m in [0;36m_update_fun[1;34m(self)[0m<br/>[0;32m    231[0m     [1;32mdef[0m [0m_update_fun[0m[1;33m([0m[0mself[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    232[0m         [1;32mif[0m [1;32mnot[0m [0mself[0m[1;33m.[0m[0mf_updated[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 233[1;33m             [0mself[0m[1;33m.[0m[0m_update_fun_impl[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    234[0m             [0mself[0m[1;33m.[0m[0mf_updated[0m [1;33m=[0m [1;32mTrue[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    235[0m [1;33m[0m[0m<br/><br/>[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py[0m in [0;36mupdate_fun[1;34m()[0m<br/>[0;32m    135[0m [1;33m[0m[0m<br/>[0;32m    136[0m         [1;32mdef[0m [0mupdate_fun[0m[1;33m([0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 137[1;33m             [0mself[0m[1;33m.[0m[0mf[0m [1;33m=[0m [0mfun_wrapped[0m[1;33m([0m[0mself[0m[1;33m.[0m[0mx[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    138[0m [1;33m[0m[0m<br/>[0;32m    139[0m         [0mself[0m[1;33m.[0m[0m_update_fun_impl[0m [1;33m=[0m [0mupdate_fun[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py[0m in [0;36mfun_wrapped[1;34m(x)[0m<br/>[0;32m    132[0m             [1;31m# Overwriting results in undefined behaviour because[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    133[0m             [1;31m# fun(self.x) will change self.x, with the two no longer linked.[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 134[1;33m             [1;32mreturn[0m [0mfun[0m[1;33m([0m[0mnp[0m[1;33m.[0m[0mcopy[0m[1;33m([0m[0mx[0m[1;33m)[0m[1;33m,[0m [1;33m*[0m[0margs[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    135[0m [1;33m[0m[0m<br/>[0;32m    136[0m         [1;32mdef[0m [0mupdate_fun[0m[1;33m([0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py[0m in [0;36mnewobj[1;34m(x)[0m<br/>[0;32m    252[0m     [1;32mdef[0m [0m_assoc_obj_con[0m[1;33m([0m[0mself[0m[1;33m,[0m [0msimname[0m[1;33m,[0m [0mobjname[0m[1;33m,[0m [0mobj_const[0m[1;33m,[0m [0marg[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    253[0m         [1;32mdef[0m [0mnewobj[0m[1;33m([0m[0mx[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 254[1;33m             [1;32mreturn[0m [0mself[0m[1;33m.[0m[0mx_to_obj_const[0m[1;33m([0m[0mx[0m[1;33m,[0m [0msimname[0m[1;33m)[0m[1;33m[[0m[1;36m0[0m[1;33m][0m[1;33m[[0m[0mobjname[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    255[0m         [1;32mdef[0m [0mnewconst[0m[1;33m([0m[0mx[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    256[0m             [1;32mreturn[0m [0mself[0m[1;33m.[0m[0mx_to_obj_const[0m[1;33m([0m[0mx[0m[1;33m,[0m [0msimname[0m[1;33m)[0m[1;33m[[0m[1;36m1[0m[1;33m][0m[1;33m[[0m[0mobjname[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py[0m in [0;36mx_to_obj_const[1;34m(self, x, simnames)[0m<br/>[0;32m    628[0m             [1;31m# prep sims[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    629[0m             [1;32mif[0m [0msimname[0m [1;32mnot[0m [1;32min[0m [0mself[0m[1;33m.[0m[0mcurrent_iter[0m[1;33m.[0m[0mget[0m[1;33m([0m[1;34m&#x27;sims&#x27;[0m[1;33m,[0m [1;33m{[0m[1;33m}[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 630[1;33m                 [0mself[0m[1;33m.[0m[0m_prep_sim_type[0m[1;33m([0m[0mself[0m[1;33m.[0m[0msimulations[0m[1;33m[[0m[0msimname[0m[1;33m][0m[1;33m[[0m[1;36m0[0m[1;33m][0m[1;33m,[0m [0msimname[0m[1;33m,[0m [0mx[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    631[0m                 [0mself[0m[1;33m.[0m[0mcurrent_iter[0m[1;33m[[0m[1;34m&#x27;sims&#x27;[0m[1;33m][0m[1;33m.[0m[0madd[0m[1;33m([0m[0msimname[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    632[0m [1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py[0m in [0;36m_prep_sim_type[1;34m(self, simtype, simname, x)[0m<br/>[0;32m    493[0m     [1;32mdef[0m [0m_prep_sim_type[0m[1;33m([0m[0mself[0m[1;33m,[0m [0msimtype[0m[1;33m,[0m [0msimname[0m[1;33m,[0m [0mx[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    494[0m         [1;32mif[0m [0msimtype[0m[1;33m==[0m[1;34m&#x27;single&#x27;[0m[1;33m:[0m [0mself[0m[1;33m.[0m[0m_prep_single_sim[0m[1;33m([0m[0msimname[0m[1;33m,[0m [0mx[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 495[1;33m         [1;32mif[0m [0msimtype[0m[1;33m==[0m[1;34m&#x27;multi&#x27;[0m[1;33m:[0m [0mself[0m[1;33m.[0m[0m_prep_multi_sim[0m[1;33m([0m[0msimname[0m[1;33m,[0m [0mx[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    496[0m     [1;32mdef[0m [0m_run_sim_type[0m[1;33m([0m[0mself[0m[1;33m,[0m [0msimtype[0m[1;33m,[0m [0msimname[0m[1;33m,[0m [0mx[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    497[0m         [1;32mif[0m [0msimtype[0m[1;33m==[0m[1;34m&#x27;set_const&#x27;[0m[1;33m:[0m    [1;32mreturn[0m [0mself[0m[1;33m.[0m[0m_get_set_const[0m[1;33m([0m[0mx[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py[0m in [0;36m_prep_multi_sim[1;34m(self, simname, x)[0m<br/>[0;32m    338[0m         [0mvar_time[0m[1;33m,[0m [0mobj_time[0m [1;33m=[0m [0mself[0m[1;33m.[0m[0m_get_var_obj_time[0m[1;33m([0m[0msimname[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    339[0m         [0mkwar[0m [1;33m=[0m [0mself[0m[1;33m.[0m[0msimulations[0m[1;33m[[0m[0msimname[0m[1;33m][0m[1;33m[[0m[1;36m2[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 340[1;33m         [0mmdl[0m [1;33m=[0m [0mself[0m[1;33m.[0m[0m_check_new_mdl[0m[1;33m([0m[0msimname[0m[1;33m,[0m [1;36m0[0m[1;33m,[0m [0mself[0m[1;33m.[0m[0mmdl[0m[1;33m,[0m [0mx[0m[1;33m,[0m [0mobj_time[0m[1;33m,[0m [0mdefault_p[0m [1;33m=[0m [0mkwar[0m[1;33m.[0m[0mget[0m[1;33m([0m[1;34m&#x27;p&#x27;[0m[1;33m,[0m [1;33m{[0m[1;33m}[0m[1;33m)[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    341[0m         [0mresult[0m[1;33m,[0m [0mnomhist[0m[1;33m,[0m [0mnomscen[0m[1;33m,[0m [0mc_mdls_nom[0m[1;33m,[0m [0mt_end[0m [1;33m=[0m [0mprop[0m[1;33m.[0m[0mnom_helper[0m[1;33m([0m[0mmdl[0m[1;33m,[0m [1;33m[[0m[0mvar_time[0m[1;33m][0m[1;33m,[0m [1;33m**[0m[1;33m{[0m[1;33m**[0m[0mkwar[0m[1;33m,[0m [1;34m&#x27;scen&#x27;[0m[1;33m:[0m[1;33m{[0m[1;33m}[0m[1;33m,[0m [1;34m&#x27;use_end_condition&#x27;[0m[1;33m:[0m[1;32mFalse[0m[1;33m}[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    342[0m [1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py[0m in [0;36m_check_new_mdl[1;34m(self, simname, var_time, mdl, x, obj_time, staged, default_p)[0m<br/>[0;32m    372[0m             [1;32mfor[0m [0mfunc[0m[1;33m,[0m [0mfvars[0m [1;32min[0m [0mself[0m[1;33m.[0m[0mvar_mapping[0m[1;33m[[0m[0msimname[0m[1;33m][0m[1;33m.[0m[0mget[0m[1;33m([0m[1;34m&#x27;paramfunc&#x27;[0m[1;33m,[0m[1;33m{[0m[1;33m}[0m[1;33m)[0m[1;33m.[0m[0mitems[0m[1;33m([0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    373[0m                 [0mp[0m[1;33m.[0m[0mupdate[0m[1;33m([0m[0mfunc[0m[1;33m([0m[1;33m*[0m[1;33m[[0m[0mx[0m[1;33m[[0m[0mind[0m[1;33m][0m [1;32mfor[0m [0mind[0m [1;32min[0m [0mfvars[0m[1;33m.[0m[0mvalues[0m[1;33m([0m[1;33m)[0m[1;33m][0m[1;33m)[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 374[1;33m             [0mmdl[0m [1;33m=[0m [0mmdl[0m[1;33m.[0m[0mnew_with_params[0m[1;33m([0m[0mp[0m[1;33m=[0m[0mp[0m[1;33m,[0m [0msp[0m[1;33m=[0m[1;33m{[0m[1;34m&#x27;times&#x27;[0m[1;33m:[0m[1;33m([0m[1;36m0[0m[1;33m,[0m [0mobj_time[0m[1;33m)[0m[1;33m}[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    375[0m [1;33m[0m[0m<br/>[0;32m    376[0m         [0mprop[0m[1;33m.[0m[0minit_histrange[0m[1;33m([0m[0mmdl[0m[1;33m,[0m [0mvar_time[0m[1;33m,[0m [0mstaged[0m[1;33m,[0m [1;34m&quot;all&quot;[0m[1;33m,[0m [1;34m&quot;all&quot;[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\model.py[0m in [0;36mnew_with_params[1;34m(self, **kwargs)[0m<br/>[0;32m    274[0m         [1;32mwith[0m [0mchanges[0m [0mto[0m [0mparams[0m [1;33m([0m[0mp[0m[1;33m,[0m [0msp[0m[1;33m,[0m [0mtrack[0m[1;33m,[0m [0mrand[0m [0metc[0m[1;33m.[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    275[0m         &quot;&quot;&quot;<br/>[1;32m--&gt; 276[1;33m         [0mp[0m[1;33m,[0m [0msp[0m[1;33m,[0m [0mr[0m[1;33m,[0m [0mtrack[0m [1;33m=[0m [0msuper[0m[1;33m([0m[1;33m)[0m[1;33m.[0m[0mnew_params[0m[1;33m([0m[1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    277[0m         [1;32mreturn[0m [0mself[0m[1;33m.[0m[0m__class__[0m[1;33m([0m[0mp[0m[1;33m=[0m[0mp[0m[1;33m,[0m [0msp[0m[1;33m=[0m[0msp[0m[1;33m,[0m [0mr[0m[1;33m=[0m[0mr[0m[1;33m,[0m [0mtrack[0m[1;33m=[0m[0mtrack[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    278[0m     [1;32mdef[0m [0mcopy[0m[1;33m([0m[0mself[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py[0m in [0;36mnew_params[1;34m(self, p, sp, r, track)[0m<br/>[0;32m    204[0m             [0mtrack[0m [0margs[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    205[0m         &quot;&quot;&quot;<br/>[1;32m--&gt; 206[1;33m         [0mp[0m [1;33m=[0m [0mself[0m[1;33m.[0m[0mp[0m[1;33m.[0m[0mcopy_with_vals[0m[1;33m([0m[1;33m**[0m[0mp[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    207[0m         [0msp[0m [1;33m=[0m [0mself[0m[1;33m.[0m[0msp[0m[1;33m.[0m[0mcopy_with_vals[0m[1;33m([0m[1;33m**[0m[0msp[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    208[0m         [1;32mif[0m [1;32mnot[0m [0mr[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py[0m in [0;36mcopy_with_vals[1;34m(self, **kwargs)[0m<br/>[0;32m    117[0m     [1;32mdef[0m [0mcopy_with_vals[0m[1;33m([0m[0mself[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    118[0m         [1;34m&quot;&quot;&quot;Creates a copy of itself with modified values given by kwargs&quot;&quot;&quot;[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 119[1;33m         [1;32mreturn[0m [0mself[0m[1;33m.[0m[0m__class__[0m[1;33m([0m[1;33m**[0m[1;33m{[0m[1;33m**[0m[0masdict[0m[1;33m([0m[0mself[0m[1;33m)[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m}[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    120[0m     [1;32mdef[0m [0mcheck_pickle[0m[1;33m([0m[0mself[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    121[0m         [1;34m&quot;&quot;&quot;Checks to make sure pickled object will get *args and **kwargs&quot;&quot;&quot;[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py[0m in [0;36m__init__[1;34m(self, strict_immutability, *args, **kwargs)[0m<br/>[0;32m     55[0m             [1;32mraise[0m [0mException[0m[1;33m([0m[1;34m&quot;Invalid args/kwargs: &quot;[0m[1;33m+[0m[0mstr[0m[1;33m([0m[0margs[0m[1;33m)[0m[1;33m+[0m[1;34m&quot; , &quot;[0m[1;33m+[0m[0mstr[0m[1;33m([0m[0mkwargs[0m[1;33m)[0m[1;33m+[0m[1;34m&quot; in &quot;[0m[1;33m+[0m[0mstr[0m[1;33m([0m[0mself[0m[1;33m.[0m[0m__class__[0m[1;33m)[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m     56[0m         [1;32mif[0m [0mstrict_immutability[0m[1;33m:[0m [0mself[0m[1;33m.[0m[0mcheck_immutable[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m---&gt; 57[1;33m         [0mself[0m[1;33m.[0m[0mcheck_type[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m     58[0m         [0mself[0m[1;33m.[0m[0mcheck_pickle[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m     59[0m     [1;32mdef[0m [0mcheck_lim[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mk[0m[1;33m,[0m [0mv[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py[0m in [0;36mcheck_type[1;34m(self)[0m<br/>[0;32m    114[0m             if ((true_type and not attr_type==true_type) and<br/>[0;32m    115[0m                 str(true_type).split(&quot;&#x27;&quot;)[1] not in str(attr_type)): # weaker, but enables use of np.str, np.float, etc<br/>[1;32m--&gt; 116[1;33m                 [1;32mraise[0m [0mException[0m[1;33m([0m[0mtyped_field[0m[1;33m+[0m[1;34m&quot; in &quot;[0m[1;33m+[0m[0mstr[0m[1;33m([0m[0mself[0m[1;33m.[0m[0m__class__[0m[1;33m)[0m[1;33m+[0m[1;34m&quot; assigned incorrect type: &quot;[0m[1;33m+[0m[0mstr[0m[1;33m([0m[0mattr_type[0m[1;33m)[0m[1;33m+[0m[1;34m&quot; (should be &quot;[0m[1;33m+[0m[0mstr[0m[1;33m([0m[0mtrue_type[0m[1;33m)[0m[1;33m+[0m[1;34m&quot;)&quot;[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    117[0m     [1;32mdef[0m [0mcopy_with_vals[0m[1;33m([0m[0mself[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    118[0m         [1;34m&quot;&quot;&quot;Creates a copy of itself with modified values given by kwargs&quot;&quot;&quot;[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;31mException[0m: delay in &lt;class &#x27;examples.pump.ex_pump.PumpParam&#x27;&gt; assigned incorrect type: &lt;class &#x27;numpy.float64&#x27;&gt; (should be &lt;class &#x27;int&#x27;&gt;)<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/pump/Stochastic_Modelling.ipynb::</td>
+          <td class="col-duration">50.56</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>an.tabulate.resilience_factor_comparison(app_comp, endclasses, [&#x27;delay&#x27;], &#x27;cost&#x27;,  difference=False, percent=False)<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mAttributeError[0m                            Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_3724/82623819.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [0man[0m[1;33m.[0m[0mtabulate[0m[1;33m.[0m[0mresilience_factor_comparison[0m[1;33m([0m[0mapp_comp[0m[1;33m,[0m [0mendclasses[0m[1;33m,[0m [1;33m[[0m[1;34m&#x27;delay&#x27;[0m[1;33m][0m[1;33m,[0m [1;34m&#x27;cost&#x27;[0m[1;33m,[0m  [0mdifference[0m[1;33m=[0m[1;32mFalse[0m[1;33m,[0m [0mpercent[0m[1;33m=[0m[1;32mFalse[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m<br/>[1;31mAttributeError[0m: module &#x27;fmdtools.analyze.tabulate&#x27; has no attribute &#x27;resilience_factor_comparison&#x27;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/pump/Tutorial_unfilled.ipynb::</td>
+          <td class="col-duration">3.34</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>                                                 desired_result=[&#x27;endclass&#x27;, &#x27;graph&#x27;], track=&quot;all&quot;)<br/>[1;36m  File [1;32m&quot;C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_19356/2080439979.py&quot;[1;36m, line [1;32m1[0m<br/>[1;33m    desired_result=[&#x27;endclass&#x27;, &#x27;graph&#x27;], track=&quot;all&quot;)[0m<br/>[1;37m                    ^[0m<br/>[1;31mSyntaxError[0m[1;31m:[0m cannot assign to literal<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_cost_calc</td>
+          <td class="col-duration">3.81</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_cost_calc&gt;<br/><br/>    def test_approach_cost_calc(self):<br/>        &quot;&quot;&quot;Test that the (linear) resilience loss function is perfectly approximated<br/>        using the given sampling methods&quot;&quot;&quot;<br/>        mdl = Pump(p={&#x27;cost&#x27;:(&#x27;ee&#x27;, &#x27;repair&#x27;, &#x27;water&#x27;), &#x27;delay&#x27;:0})<br/>        app_full = SampleApproach(mdl, defaultsamp={&#x27;samp&#x27;:&#x27;fullint&#x27;})<br/>        full_util=exp_cost_quant(app_full,mdl)<br/>    <br/>        app_multipt = SampleApproach(mdl, defaultsamp={&#x27;samp&#x27;:&#x27;evenspacing&#x27;, &#x27;numpts&#x27;:3})<br/>        multipt_util=exp_cost_quant(app_multipt,mdl)<br/>&gt;       self.assertAlmostEqual(full_util, multipt_util)<br/><span class="error">E       AssertionError: 1799299.0952380951 != 1799153.8095238095 within 7 places (145.28571428568102 difference)</span><br/><br/>examples\pump\test_pump.py:79: AssertionError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_pruning</td>
+          <td class="col-duration">1.95</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_pruning&gt;<br/><br/>    def test_approach_pruning(self):<br/>        &quot;&quot;&quot;Tests that sample approach pruning places points in the center of their<br/>        respective intervals for linear resilience loss functions.&quot;&quot;&quot;<br/>        mdl = Pump(p={&#x27;cost&#x27;:(&#x27;ee&#x27;, &#x27;repair&#x27;, &#x27;water&#x27;), &#x27;delay&#x27;:0})<br/>        app_full = SampleApproach(mdl, phases= [&quot;on&quot;], defaultsamp={&#x27;samp&#x27;:&#x27;fullint&#x27;})<br/>        app_center = SampleApproach(mdl, phases=[&quot;on&quot;], defaultsamp={&#x27;samp&#x27;:&#x27;evenspacing&#x27;, &#x27;numpts&#x27;:1})<br/>        endclasses, mdlhists = propagate.approach(mdl, app_full, showprogress=False)<br/>        self.assertNotEqual(app_full.times, app_center.times)<br/>        app_full.prune_scenarios(endclasses)<br/>&gt;       self.assertEqual(app_full.times, app_center.times)<br/><span class="error">E       AssertionError: Lists differ: [5.0, 6.0, 27.0] != [27.0]</span><br/><span class="error">E       </span><br/><span class="error">E       First differing element 0:</span><br/><span class="error">E       5.0</span><br/><span class="error">E       27.0</span><br/><span class="error">E       </span><br/><span class="error">E       First list contains 2 additional elements.</span><br/><span class="error">E       First extra element 1:</span><br/><span class="error">E       6.0</span><br/><span class="error">E       </span><br/><span class="error">E       - [5.0, 6.0, 27.0]</span><br/><span class="error">E       + [27.0]</span><br/><br/>examples\pump\test_pump.py:103: AssertionError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/pump/IDETC_Results/IDETC_Figures.ipynb::</td>
+          <td class="col-duration">4.60</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>import matplotlib.pyplot as plt<br/>import numpy as np<br/>import pandas as pd<br/><br/>import quadpy<br/>from ex_pump import *<br/>from IPython.display import HTML<br/>mdl = Pump()<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mTypeError[0m                                 Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_19168/4258221960.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[0;32m      6[0m [1;32mfrom[0m [0mex_pump[0m [1;32mimport[0m [1;33m*[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m      7[0m [1;32mfrom[0m [0mIPython[0m[1;33m.[0m[0mdisplay[0m [1;32mimport[0m [0mHTML[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m----&gt; 8[1;33m [0mmdl[0m [1;33m=[0m [0mPump[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m<br/>[1;32m~\Documents\GitHub\fmdtools\examples\pump\IDETC_Results\ex_pump.py[0m in [0;36m__init__[1;34m(self, params, modelparams, valparams)[0m<br/>[0;32m    213[0m         [0msuper[0m[1;33m([0m[1;33m)[0m[1;33m.[0m[0m__init__[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    214[0m [1;33m[0m[0m<br/>[1;32m--&gt; 215[1;33m         [0msuper[0m[1;33m([0m[1;33m)[0m[1;33m.[0m[0m__init__[0m[1;33m([0m[0mparams[0m[1;33m=[0m[0mparams[0m[1;33m,[0m [0mmodelparams[0m[1;33m=[0m[0mmodelparams[0m[1;33m,[0m [0mvalparams[0m[1;33m=[0m[0mvalparams[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    216[0m         [1;31m#Stepsize: (change at your own risk, because this changes how the model will execute)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    217[0m         [1;31m# Timestep at the moment must be an integer.[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;31mTypeError[0m: __init__() got an unexpected keyword argument &#x27;params&#x27;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/rover/Approach_Use-Cases.ipynb::</td>
+          <td class="col-duration">3.91</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>help(FxnBlock.assoc_modes)<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mAttributeError[0m                            Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_15216/414845463.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [0mhelp[0m[1;33m([0m[0mFxnBlock[0m[1;33m.[0m[0massoc_modes[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m<br/>[1;31mAttributeError[0m: type object &#x27;FxnBlock&#x27; has no attribute &#x27;assoc_modes&#x27;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/rover/Nominal_Approach_Use-Cases.ipynb::</td>
+          <td class="col-duration">3.89</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>mdl = Rover(params=gen_params(&#x27;turn&#x27;))<br/>results, mdlhist = prop.nominal(mdl)<br/>plot_map(mdl, mdlhist)<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mTypeError[0m                                 Traceback (most recent call last)<br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py[0m in [0;36m__init__[1;34m(self, strict_immutability, *args, **kwargs)[0m<br/>[0;32m     52[0m         [1;32mtry[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m---&gt; 53[1;33m             [0msuper[0m[1;33m([0m[1;33m)[0m[1;33m.[0m[0m__init__[0m[1;33m([0m[1;33m*[0m[0margs[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m     54[0m         [1;32mexcept[0m [0mTypeError[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;31mTypeError[0m: Invalid kwarg<br/><br/>During handling of the above exception, another exception occurred:<br/><br/>[1;31mException[0m                                 Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_18264/3250322124.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [0mmdl[0m [1;33m=[0m [0mRover[0m[1;33m([0m[0mparams[0m[1;33m=[0m[0mgen_params[0m[1;33m([0m[1;34m&#x27;turn&#x27;[0m[1;33m)[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m      2[0m [0mresults[0m[1;33m,[0m [0mmdlhist[0m [1;33m=[0m [0mprop[0m[1;33m.[0m[0mnominal[0m[1;33m([0m[0mmdl[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m      3[0m [0mplot_map[0m[1;33m([0m[0mmdl[0m[1;33m,[0m [0mmdlhist[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32m~\AppData\Local\Temp\1/ipykernel_18264/2935710477.py[0m in [0;36m__init__[1;34m(self, params, modelparams, valparams)[0m<br/>[0;32m    152[0m                  [0mmodelparams[0m[1;33m=[0m[1;33m{[0m[1;34m&#x27;times&#x27;[0m[1;33m:[0m[1;33m[[0m[1;36m0[0m[1;33m,[0m[1;36m60[0m[1;33m][0m[1;33m,[0m [1;34m&#x27;tstep&#x27;[0m[1;33m:[0m[1;36m1[0m[1;33m,[0m [1;34m&#x27;phases&#x27;[0m[1;33m:[0m[1;33m{[0m[1;34m&#x27;start&#x27;[0m[1;33m:[0m[1;33m[[0m[1;36m1[0m[1;33m,[0m[1;36m30[0m[1;33m][0m[1;33m,[0m [1;34m&#x27;end&#x27;[0m[1;33m:[0m[1;33m[[0m[1;36m31[0m[1;33m,[0m [1;36m60[0m[1;33m][0m[1;33m}[0m[1;33m}[0m[1;33m,[0m[0;31m\[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    153[0m                      valparams={}):<br/>[1;32m--&gt; 154[1;33m         [0msuper[0m[1;33m([0m[1;33m)[0m[1;33m.[0m[0m__init__[0m[1;33m([0m[0mparams[0m[1;33m,[0m [0mmodelparams[0m[1;33m,[0m [0mvalparams[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    155[0m [1;33m[0m[0m<br/>[0;32m    156[0m         [0mself[0m[1;33m.[0m[0madd_flow[0m[1;33m([0m[1;34m&#x27;Ground&#x27;[0m[1;33m,[0m [1;33m{[0m[1;34m&#x27;x&#x27;[0m[1;33m:[0m[1;36m0.0[0m[1;33m,[0m[1;34m&#x27;y&#x27;[0m[1;33m:[0m[1;36m0.0[0m[1;33m,[0m[1;34m&#x27;liney&#x27;[0m[1;33m:[0m[1;36m0.0[0m[1;33m,[0m[1;34m&#x27;linex&#x27;[0m[1;33m:[0m[1;36m0.0[0m[1;33m,[0m [1;34m&#x27;vel&#x27;[0m[1;33m:[0m[1;36m0.0[0m[1;33m,[0m [1;34m&#x27;line&#x27;[0m[1;33m:[0m[1;36m0.0[0m[1;33m,[0m [1;34m&#x27;angle&#x27;[0m[1;33m:[0m[0mparams[0m[1;33m[[0m[1;34m&#x27;initangle&#x27;[0m[1;33m][0m[1;33m,[0m [1;34m&#x27;ang&#x27;[0m[1;33m:[0m[1;36m0.0[0m[1;33m}[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\model.py[0m in [0;36m__init__[1;34m(self, name, p, sp, r, track)[0m<br/>[0;32m     51[0m     &quot;&quot;&quot;<br/>[0;32m     52[0m     [1;32mdef[0m [0m__init__[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mname[0m[1;33m=[0m[1;34m&#x27;&#x27;[0m[1;33m,[0m [0mp[0m[1;33m=[0m[1;33m{[0m[1;33m}[0m[1;33m,[0m [0msp[0m[1;33m=[0m[1;33m{[0m[1;33m}[0m[1;33m,[0m [0mr[0m[1;33m=[0m[1;33m{[0m[1;33m}[0m[1;33m,[0m [0mtrack[0m[1;33m=[0m[1;34m&#x27;&#x27;[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m---&gt; 53[1;33m         [0msuper[0m[1;33m([0m[1;33m)[0m[1;33m.[0m[0m__init__[0m[1;33m([0m[0mname[0m[1;33m=[0m[0mname[0m[1;33m,[0m [0mp[0m[1;33m=[0m[0mp[0m[1;33m,[0m [0msp[0m[1;33m=[0m[0msp[0m[1;33m,[0m [0mr[0m[1;33m=[0m[0mr[0m[1;33m,[0m [0mtrack[0m[1;33m=[0m[0mtrack[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m     54[0m [1;33m[0m[0m<br/>[0;32m     55[0m         [0mself[0m[1;33m.[0m[0mfxns[0m[1;33m=[0m[0mdict[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py[0m in [0;36m__init__[1;34m(self, name, p, sp, r, track)[0m<br/>[0;32m    125[0m         [1;32mif[0m [1;32mnot[0m [0msp[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    126[0m             [0msp[0m [1;33m=[0m [0mself[0m[1;33m.[0m[0mdefault_sp[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 127[1;33m         [0minit_obj_attr[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mp[0m[1;33m=[0m[0mp[0m[1;33m,[0m [0msp[0m[1;33m=[0m[0msp[0m[1;33m,[0m [0mr[0m[1;33m=[0m[0mr[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    128[0m [1;33m[0m[0m<br/>[0;32m    129[0m     [1;32mdef[0m [0madd_flow_hist[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mhist[0m[1;33m,[0m [0mtimerange[0m[1;33m,[0m [0mtrack[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\common.py[0m in [0;36minit_obj_attr[1;34m(obj, **attrs)[0m<br/>[0;32m    135[0m         [0msetattr[0m[1;33m([0m[0mobj[0m[1;33m,[0m [1;34m&#x27;_args_&#x27;[0m[1;33m+[0m[0mat[0m[1;33m,[0m [0mat_arg[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    136[0m         [0minit_at[0m [1;33m=[0m [0mgetattr[0m[1;33m([0m[0mobj[0m[1;33m,[0m [1;34m&#x27;_init_&#x27;[0m[1;33m+[0m[0mat[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 137[1;33m         [0msetattr[0m[1;33m([0m[0mobj[0m[1;33m,[0m [0mat[0m[1;33m,[0m [0minit_at[0m[1;33m([0m[1;33m**[0m[0mat_arg[0m[1;33m)[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    138[0m [1;33m[0m[0m<br/>[0;32m    139[0m [1;32mdef[0m [0mget_dataobj_track[0m[1;33m([0m[0mobj[0m[1;33m,[0m [0mtrack[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py[0m in [0;36m__init__[1;34m(self, strict_immutability, *args, **kwargs)[0m<br/>[0;32m     53[0m             [0msuper[0m[1;33m([0m[1;33m)[0m[1;33m.[0m[0m__init__[0m[1;33m([0m[1;33m*[0m[0margs[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m     54[0m         [1;32mexcept[0m [0mTypeError[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m---&gt; 55[1;33m             [1;32mraise[0m [0mException[0m[1;33m([0m[1;34m&quot;Invalid args/kwargs: &quot;[0m[1;33m+[0m[0mstr[0m[1;33m([0m[0margs[0m[1;33m)[0m[1;33m+[0m[1;34m&quot; , &quot;[0m[1;33m+[0m[0mstr[0m[1;33m([0m[0mkwargs[0m[1;33m)[0m[1;33m+[0m[1;34m&quot; in &quot;[0m[1;33m+[0m[0mstr[0m[1;33m([0m[0mself[0m[1;33m.[0m[0m__class__[0m[1;33m)[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m     56[0m         [1;32mif[0m [0mstrict_immutability[0m[1;33m:[0m [0mself[0m[1;33m.[0m[0mcheck_immutable[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m     57[0m         [0mself[0m[1;33m.[0m[0mcheck_type[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;31mException[0m: Invalid args/kwargs: () , {&#x27;times&#x27;: [0, 60], &#x27;tstep&#x27;: 1, &#x27;phases&#x27;: {&#x27;start&#x27;: [1, 30], &#x27;end&#x27;: [31, 60]}} in &lt;class &#x27;fmdtools.define.parameter.Parameter&#x27;&gt;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/rover/Rover_Setup_Notebook.ipynb::</td>
+          <td class="col-duration">3.82</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>from rover_model import Rover, gen_params, plot_map, plot_trajectories<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mImportError[0m                               Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_18992/947193376.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [1;32mfrom[0m [0mrover_model[0m [1;32mimport[0m [0mRover[0m[1;33m,[0m [0mgen_params[0m[1;33m,[0m [0mplot_map[0m[1;33m,[0m [0mplot_trajectories[0m[1;33m[0m[1;33m[0m[0m<br/>[0m<br/>[1;31mImportError[0m: cannot import name &#x27;gen_params&#x27; from &#x27;rover_model&#x27; (C:\Users\dhulse\Documents\GitHub\fmdtools\examples\rover\rover_model.py)<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/rover/test_rover.py::RoverTests::test_obj_values</td>
+          <td class="col-duration">0.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.rover.test_rover.RoverTests testMethod=test_obj_values&gt;<br/><br/>    def test_obj_values(self):<br/>    <br/>        testvalues = [[1.0,0.5,0.0],[0.0,0.0,0.0], [1.0,1.0,1.0], [0.5,0.5,0.5]]<br/>        for testvalue in testvalues:<br/>            dist_int,enddist_int, endpt_int = line_dist_faster(testvalue)<br/>            dist,enddist, endpt = line_dist(testvalue)<br/>    <br/>&gt;           self.assertEqual(dist, dist_int)<br/><span class="error">E           AssertionError: 0.11329848698471573 != 0.5763384838180136</span><br/><br/>examples\rover\test_rover.py:20: AssertionError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb::</td>
+          <td class="col-duration">3.88</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>from rover_model_human import *<br/>from rover_model import plot_trajectories, plot_map<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_18536/4227275924.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [1;32mfrom[0m [0mrover_model_human[0m [1;32mimport[0m [1;33m*[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m      2[0m [1;32mfrom[0m [0mrover_model[0m [1;32mimport[0m [0mplot_trajectories[0m[1;33m,[0m [0mplot_map[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;rover_model_human&#x27;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb::</td>
+          <td class="col-duration">4.09</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>from rover_model_human import Rover, gen_params<br/>from rover_model import plot_map, plot_trajectories<br/>import fmdtools.analyze as an<br/>import fmdtools.sim.propagate as prop<br/>from fmdtools.sim.approach import SampleApproach, NominalApproach<br/><br/>import numpy as np<br/>import matplotlib.pyplot as plt<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_17168/1671020471.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [1;32mfrom[0m [0mrover_model_human[0m [1;32mimport[0m [0mRover[0m[1;33m,[0m [0mgen_params[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m      2[0m [1;32mfrom[0m [0mrover_model[0m [1;32mimport[0m [0mplot_map[0m[1;33m,[0m [0mplot_trajectories[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m      3[0m [1;32mimport[0m [0mfmdtools[0m[1;33m.[0m[0manalyze[0m [1;32mas[0m [0man[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m      4[0m [1;32mimport[0m [0mfmdtools[0m[1;33m.[0m[0msim[0m[1;33m.[0m[0mpropagate[0m [1;32mas[0m [0mprop[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m      5[0m [1;32mfrom[0m [0mfmdtools[0m[1;33m.[0m[0msim[0m[1;33m.[0m[0mapproach[0m [1;32mimport[0m [0mSampleApproach[0m[1;33m,[0m [0mNominalApproach[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;rover_model_human&#x27;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb::</td>
+          <td class="col-duration">3.86</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>from rover_model_human import *<br/>from rover_model import plot_trajectories, plot_map<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_14680/4227275924.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [1;32mfrom[0m [0mrover_model_human[0m [1;32mimport[0m [1;33m*[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m      2[0m [1;32mfrom[0m [0mrover_model[0m [1;32mimport[0m [0mplot_trajectories[0m[1;33m,[0m [0mplot_map[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;rover_model_human&#x27;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb::</td>
+          <td class="col-duration">3.87</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>from rover_model import Rover, gen_params, plot_map, plot_trajectories, compare_trajectories, plot_course<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_1976/2381073313.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [1;32mfrom[0m [0mrover_model[0m [1;32mimport[0m [0mRover[0m[1;33m,[0m [0mgen_params[0m[1;33m,[0m [0mplot_map[0m[1;33m,[0m [0mplot_trajectories[0m[1;33m,[0m [0mcompare_trajectories[0m[1;33m,[0m [0mplot_course[0m[1;33m[0m[1;33m[0m[0m<br/>[0m<br/>[1;31mModuleNotFoundError[0m: No module named &#x27;rover_model&#x27;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/rover/optimization/Rover_Response_Optimization.ipynb::</td>
+          <td class="col-duration">3.81</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>from rover_model import Rover, gen_params, plot_map, plot_trajectories<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_1416/947193376.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [1;32mfrom[0m [0mrover_model[0m [1;32mimport[0m [0mRover[0m[1;33m,[0m [0mgen_params[0m[1;33m,[0m [0mplot_map[0m[1;33m,[0m [0mplot_trajectories[0m[1;33m[0m[1;33m[0m[0m<br/>[0m<br/>[1;31mModuleNotFoundError[0m: No module named &#x27;rover_model&#x27;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/rover/optimization/Search_Comparison.ipynb::</td>
+          <td class="col-duration">201.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>result_mc, sol_mc= montecarlo(ngen=50, weight=0.5, filename=&#x27;results/rslt_random.csv&#x27;)<br/>result_ea, sol_ea= ea(ngen=50, weight=0.5, filename=&#x27;results/rslt_ea.csv&#x27;)<br/>result_ccea, sol_ccea, pop= ccea(ngen=50, weight=0.5, filename=&quot;results/rslt_ccea.csv&quot;)<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mTypeError[0m                                 Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_19128/2259828233.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[1;32m----&gt; 1[1;33m [0mresult_mc[0m[1;33m,[0m [0msol_mc[0m[1;33m=[0m [0mmontecarlo[0m[1;33m([0m[0mngen[0m[1;33m=[0m[1;36m50[0m[1;33m,[0m [0mweight[0m[1;33m=[0m[1;36m0.5[0m[1;33m,[0m [0mfilename[0m[1;33m=[0m[1;34m&#x27;results/rslt_random.csv&#x27;[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m      2[0m [0mresult_ea[0m[1;33m,[0m [0msol_ea[0m[1;33m=[0m [0mea[0m[1;33m([0m[0mngen[0m[1;33m=[0m[1;36m50[0m[1;33m,[0m [0mweight[0m[1;33m=[0m[1;36m0.5[0m[1;33m,[0m [0mfilename[0m[1;33m=[0m[1;34m&#x27;results/rslt_ea.csv&#x27;[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m      3[0m [0mresult_ccea[0m[1;33m,[0m [0msol_ccea[0m[1;33m,[0m [0mpop[0m[1;33m=[0m [0mccea[0m[1;33m([0m[0mngen[0m[1;33m=[0m[1;36m50[0m[1;33m,[0m [0mweight[0m[1;33m=[0m[1;36m0.5[0m[1;33m,[0m [0mfilename[0m[1;33m=[0m[1;34m&quot;results/rslt_ccea.csv&quot;[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32m~\Documents\GitHub\fmdtools\examples\rover\optimization\search_rover.py[0m in [0;36mmontecarlo[1;34m(verbose, ngen, show_sol, weight, filename, formulation)[0m<br/>[0;32m    313[0m [1;33m[0m[0m<br/>[0;32m    314[0m     [0msoln[0m [1;33m=[0m [0msol_hist[0m[1;33m[[0m[1;33m-[0m[1;36m1[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 315[1;33m     [1;32mif[0m [0mshow_sol[0m[1;33m:[0m [0mvisualizations[0m[1;33m([0m[0mlist[0m[1;33m([0m[0msoln[0m[1;33m)[0m[1;33m,[0m [0mmethod[0m[1;33m=[0m[1;34m&quot;MC&quot;[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    316[0m [1;33m[0m[0m<br/>[0;32m    317[0m     [1;32mreturn[0m [0mrslt[0m[1;33m,[0m [0msoln[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32m~\Documents\GitHub\fmdtools\examples\rover\optimization\search_rover.py[0m in [0;36mvisualizations[1;34m(soln, method, figsize, ax, legend, xlim, ylim)[0m<br/>[0;32m    547[0m [1;32mdef[0m [0mvisualizations[0m[1;33m([0m[0msoln[0m[1;33m,[0m [0mmethod[0m[1;33m=[0m[1;34m&quot;EA&quot;[0m[1;33m,[0m [0mfigsize[0m[1;33m=[0m[1;33m([0m[1;36m4[0m[1;33m,[0m[1;36m4[0m[1;33m)[0m[1;33m,[0m [0max[0m[1;33m=[0m[1;32mFalse[0m[1;33m,[0m [0mlegend[0m[1;33m=[0m[1;32mTrue[0m[1;33m,[0m [0mxlim[0m[1;33m=[0m[1;33m[[0m[1;36m15[0m[1;33m,[0m[1;36m25[0m[1;33m][0m[1;33m,[0m [0mylim[0m[1;33m=[0m[1;33m[[0m[1;36m0[0m[1;33m,[0m[1;36m10[0m[1;33m][0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    548[0m [1;33m[0m[0m<br/>[1;32m--&gt; 549[1;33m     [0mmdl_range[0m [1;33m=[0m [0mrvr[0m[1;33m.[0m[0mRover[0m[1;33m([0m[0mparams[0m[1;33m=[0m[0mrvr[0m[1;33m.[0m[0mRoverParam[0m[1;33m([0m[0mlinetype[0m[1;33m=[0m[1;34m&#x27;turn&#x27;[0m[1;33m,[0m [0mstart[0m[1;33m=[0m[1;36m5.0[0m[1;33m)[0m[1;33m,[0m [0mvalparams[0m[1;33m=[0m[1;33m{[0m[1;34m&#x27;drive_modes&#x27;[0m[1;33m:[0m[0mlist[0m[1;33m([0m[0msoln[0m[1;33m)[0m[1;33m}[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    550[0m     [0m_[0m[1;33m,[0m [0mmdlhists[0m [1;33m=[0m [0mprop[0m[1;33m.[0m[0mnominal[0m[1;33m([0m[0mmdl_range[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    551[0m     [0mphases[0m[1;33m,[0m [0mmodephases[0m [1;33m=[0m [0mmdlhists[0m[1;33m.[0m[0mget_modephases[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;32mc:\users\dhulse\documents\github\fmdtools\examples\rover\rover_model.py[0m in [0;36m__init__[1;34m(self, **kwargs)[0m<br/>[0;32m    454[0m     [0mdefault_sp[0m [1;33m=[0m [0mdict[0m[1;33m([0m[0mtimes[0m[1;33m=[0m[1;33m([0m[1;36m0[0m[1;33m,[0m [1;36m100[0m[1;33m)[0m[1;33m,[0m [0mphases[0m[1;33m=[0m[1;33m([0m[1;33m([0m[1;34m&#x27;start&#x27;[0m[1;33m,[0m[1;36m0[0m[1;33m,[0m [1;36m30[0m[1;33m)[0m[1;33m,[0m [1;33m([0m[1;34m&#x27;end&#x27;[0m[1;33m,[0m [1;36m31[0m[1;33m,[0m [1;36m60[0m[1;33m)[0m[1;33m)[0m[1;33m,[0m [0mend_condition[0m[1;33m=[0m[1;34m&#x27;indicate_finished&#x27;[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m    455[0m     [1;32mdef[0m [0m__init__[0m[1;33m([0m[0mself[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m--&gt; 456[1;33m         [0msuper[0m[1;33m([0m[1;33m)[0m[1;33m.[0m[0m__init__[0m[1;33m([0m[1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m    457[0m [1;33m[0m[0m<br/>[0;32m    458[0m         [0mself[0m[1;33m.[0m[0madd_flow[0m[1;33m([0m[1;34m&#x27;ground&#x27;[0m[1;33m,[0m             [0mGround[0m[1;33m,[0m [0ms[0m[1;33m=[0m[1;33m{[0m[1;34m&#x27;angle&#x27;[0m[1;33m:[0m[0mself[0m[1;33m.[0m[0mp[0m[1;33m.[0m[0minitangle[0m[1;33m}[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;31mTypeError[0m: __init__() got an unexpected keyword argument &#x27;params&#x27;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/Tank_Analysis.ipynb::</td>
+          <td class="col-duration">3.95</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>import fmdtools.sim.propagate as propagate<br/>import fmdtools.analyze as an<br/>from tank_model import Tank<br/>from fmdtools.define import SampleApproach<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mImportError[0m                               Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_16920/1046824624.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[0;32m      2[0m [1;32mimport[0m [0mfmdtools[0m[1;33m.[0m[0manalyze[0m [1;32mas[0m [0man[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m      3[0m [1;32mfrom[0m [0mtank_model[0m [1;32mimport[0m [0mTank[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m----&gt; 4[1;33m [1;32mfrom[0m [0mfmdtools[0m[1;33m.[0m[0mdefine[0m [1;32mimport[0m [0mSampleApproach[0m[1;33m[0m[1;33m[0m[0m<br/>[0m<br/>[1;31mImportError[0m: cannot import name &#x27;SampleApproach&#x27; from &#x27;fmdtools.define&#x27; (c:\users\dhulse\documents\github\fmdtools\fmdtools\define\__init__.py)<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/Tank_Optimization.ipynb::</td>
+          <td class="col-duration">3.88</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">---------------------------------------------------------------------------<br/>import numpy as np<br/>import time<br/>import pandas as pd<br/><br/>import fmdtools.sim.propagate as propagate<br/>import fmdtools.analyze as an<br/>import fmdtools.sim.search as search<br/>from tank_optimization_model import Tank<br/>from fmdtools.define import SampleApproach<br/>import matplotlib.pyplot as plt<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mImportError[0m                               Traceback (most recent call last)<br/>[1;32m~\AppData\Local\Temp\1/ipykernel_19036/2072176068.py[0m in [0;36m&lt;module&gt;[1;34m[0m<br/>[0;32m      7[0m [1;32mimport[0m [0mfmdtools[0m[1;33m.[0m[0msim[0m[1;33m.[0m[0msearch[0m [1;32mas[0m [0msearch[0m[1;33m[0m[1;33m[0m[0m<br/>[0;32m      8[0m [1;32mfrom[0m [0mtank_optimization_model[0m [1;32mimport[0m [0mTank[0m[1;33m[0m[1;33m[0m[0m<br/>[1;32m----&gt; 9[1;33m [1;32mfrom[0m [0mfmdtools[0m[1;33m.[0m[0mdefine[0m [1;32mimport[0m [0mSampleApproach[0m[1;33m[0m[1;33m[0m[0m<br/>[0m[0;32m     10[0m [1;32mimport[0m [0mmatplotlib[0m[1;33m.[0m[0mpyplot[0m [1;32mas[0m [0mplt[0m[1;33m[0m[1;33m[0m[0m<br/><br/>[1;31mImportError[0m: cannot import name &#x27;SampleApproach&#x27; from &#x27;fmdtools.define&#x27; (c:\users\dhulse\documents\github\fmdtools\fmdtools\define\__init__.py)<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism</td>
+          <td class="col-duration">0.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_approach_parallelism&gt;<br/><br/>    def test_approach_parallelism(self):<br/>        &quot;&quot;&quot;Test whether the pump simulates the same when simulated using parallel or staged options&quot;&quot;&quot;<br/>        app = SampleApproach(self.mdl)<br/>&gt;       self.check_approach_parallelism(self.mdl, app)<br/><br/>examples\tank\test_tank.py:33: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:44: in check_approach_parallelism<br/>    endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)<br/>fmdtools\sim\propagate.py:421: in approach<br/>    nomresult, nomhist, nomscen, c_mdl, t_end_nom = nom_helper(mdl, copy.copy(app.times), **{**kwargs, &#x27;use_end_condition&#x27;:False})<br/>fmdtools\sim\propagate.py:386: in nom_helper<br/>    result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)<br/>fmdtools\sim\propagate.py:759: in prop_one_scen<br/>    c_mdl[t]=mdl.copy()<br/>fmdtools\define\model.py:298: in copy<br/>    copy.fxns[fxnname]=fxn.copy(flows, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/>newflows = {}, args = ()<br/>kwargs = {&#x27;a&#x27;: {&#x27;reacttime&#x27;: 2}, &#x27;r&#x27;: {&#x27;seed&#x27;: 42}, &#x27;t&#x27;: {&#x27;dt&#x27;: 1.0}}<br/>cop = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/><br/>    def copy(self, newflows, *args, **kwargs):<br/>        &quot;&quot;&quot;<br/>        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when<br/>        copying the model.<br/>    <br/>        Parameters<br/>        ----------<br/>        newflows : list<br/>            list of new flow objects to be associated with the copy of the function<br/>    <br/>        Returns<br/>        -------<br/>        copy : FxnBlock<br/>            Copy of the given function with new flows<br/>        &quot;&quot;&quot;<br/>        cop = super().copy(newflows, *args, **kwargs)<br/>        if hasattr(self, &#x27;c&#x27;):<br/>            cop.c = self.c.copy_with_arg(**self._args_c)<br/>        if hasattr(self, &#x27;a&#x27;):<br/>&gt;           cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)<br/><span class="error">E           AttributeError: &#x27;HumanASG&#x27; object has no attribute &#x27;copy_with_arg&#x27;</span><br/><br/>fmdtools\define\block.py:1164: AttributeError<br/> ------------------------------Captured stdout call------------------------------ <br/>Error at t=0.0 in scenario Scenario(sequence={}, rate=1.0, name=&#x27;nominal&#x27;, times=(), time=0.0)
+<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_comp_mode_inj</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_comp_mode_inj&gt;<br/><br/>    def test_comp_mode_inj(self):<br/>        &quot;&quot;&quot; Tests that component modes injected in functions end up in their respective<br/>        components.&quot;&quot;&quot;<br/>        mdl = Tank()<br/>&gt;       compmodes = [mode for c in mdl.fxns[&#x27;Human&#x27;].components.values() for mode in c.faultmodes]<br/><span class="error">E       KeyError: &#x27;Human&#x27;</span><br/><br/>examples\tank\test_tank.py:76: KeyError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_different_components</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_different_components&gt;<br/><br/>    def test_different_components(self):<br/>        &quot;&quot;&quot; Tests that model copies have different components&quot;&quot;&quot;<br/>        mdl=Tank()<br/>&gt;       mdl_copy = mdl.copy()<br/><br/>examples\tank\test_tank.py:87: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>fmdtools\define\model.py:298: in copy<br/>    copy.fxns[fxnname]=fxn.copy(flows, **kwargs)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/>newflows = {}, args = ()<br/>kwargs = {&#x27;a&#x27;: {&#x27;reacttime&#x27;: 2}, &#x27;r&#x27;: {&#x27;seed&#x27;: 42}, &#x27;t&#x27;: {&#x27;dt&#x27;: 1.0}}<br/>cop = human HumanActions<br/>- State()<br/>- Mode(mode=nominal, faults=set())<br/><br/><br/>    def copy(self, newflows, *args, **kwargs):<br/>        &quot;&quot;&quot;<br/>        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when<br/>        copying the model.<br/>    <br/>        Parameters<br/>        ----------<br/>        newflows : list<br/>            list of new flow objects to be associated with the copy of the function<br/>    <br/>        Returns<br/>        -------<br/>        copy : FxnBlock<br/>            Copy of the given function with new flows<br/>        &quot;&quot;&quot;<br/>        cop = super().copy(newflows, *args, **kwargs)<br/>        if hasattr(self, &#x27;c&#x27;):<br/>            cop.c = self.c.copy_with_arg(**self._args_c)<br/>        if hasattr(self, &#x27;a&#x27;):<br/>&gt;           cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)<br/><span class="error">E           AttributeError: &#x27;HumanASG&#x27; object has no attribute &#x27;copy_with_arg&#x27;</span><br/><br/>fmdtools\define\block.py:1164: AttributeError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_epc_math</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_epc_math&gt;<br/><br/>    def test_epc_math(self):<br/>        &quot;&quot;&quot;Spot check of epc math work in human error calculation&quot;&quot;&quot;<br/>        mdl=Tank()<br/>        ratecalc = 0.02 * ((4-1)*0.1+1)* ((4-1)*0.6+1)* ((1.1-1)*0.9+1)<br/>&gt;       self.assertEqual(mdl.fxns[&#x27;Human&#x27;].components[&#x27;look&#x27;].failrate, ratecalc)<br/><span class="error">E       KeyError: &#x27;Human&#x27;</span><br/><br/>examples\tank\test_tank.py:114: KeyError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_local_tstep</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_local_tstep&gt;<br/><br/>    def test_local_tstep(self):<br/>        &quot;&quot;&quot; Tests running the model with a different local timestep in the Store_Liquid function&quot;&quot;&quot;<br/>&gt;       mdl_global = Tank(modelparams = {&#x27;phases&#x27;:{&#x27;na&#x27;:[0],&#x27;operation&#x27;:[1,20]}, &#x27;times&#x27;:[0,5,10,15,20], &#x27;tstep&#x27;:1, &#x27;units&#x27;:&#x27;min&#x27;, &#x27;use_local&#x27;:False})<br/><br/>examples\tank\test_tank.py:93: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;[AttributeError(&#x27;fxns&#x27;) raised in repr()] Tank object at 0x21e8a3da400&gt;<br/>kwargs = {&#x27;modelparams&#x27;: {&#x27;phases&#x27;: {&#x27;na&#x27;: [0], &#x27;operation&#x27;: [1, 20]}, &#x27;times&#x27;: [0, 5, 10, 15, 20], &#x27;tstep&#x27;: 1, &#x27;units&#x27;: &#x27;min&#x27;, ...}}<br/><br/>    def __init__(self, **kwargs):<br/>&gt;       super().__init__(**kwargs)<br/><span class="error">E       TypeError: __init__() got an unexpected keyword argument &#x27;modelparams&#x27;</span><br/><br/>examples\tank\tank_model.py:248: TypeError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_different</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_copy_different&gt;<br/><br/>    def test_model_copy_different(self):<br/>&gt;       self.check_model_copy_different(Tank(), [5,10,15], max_time=20)<br/><br/>examples\tank\test_tank.py:26: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:81: in check_model_copy_different<br/>    faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x0000021E8A4F96D0&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   IndexError: list index out of range</span><br/><br/>tests\common.py:81: IndexError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_same</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_copy_same&gt;<br/><br/>    def test_model_copy_same(self):<br/>&gt;       self.check_model_copy_same(Tank(),Tank(), [5,10,15], 10, max_time=20)<br/><br/>examples\tank\test_tank.py:24: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:26: in check_model_copy_same<br/>    faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x0000021E88B02B80&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   IndexError: list index out of range</span><br/><br/>tests\common.py:26: IndexError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_reset</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;<br/><br/>    def test_model_reset(self):<br/>        mdl = Tank(); mdl2 = Tank()<br/>&gt;       self.check_model_reset(mdl, mdl2, [5,10,15], max_time=20)<br/><br/>examples\tank\test_tank.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:64: in check_model_reset<br/>    faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>.0 = &lt;dict_itemiterator object at 0x0000021E8AC2F270&gt;<br/><br/>&gt;   faultscens = [{fname: [*f.m.faultmodes][0]} for fname, f in mdl.fxns.items()]<br/><span class="error">E   IndexError: list index out of range</span><br/><br/>tests\common.py:64: IndexError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_same_rcost</td>
+          <td class="col-duration">0.09</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_same_rcost&gt;<br/><br/>    def test_same_rcost(self):<br/>    <br/>        kwarg_options = [dict(staged=True),<br/>                         dict(staged=False),<br/>                         dict(staged=True, pool=mp.Pool(4)),<br/>                         dict(staged=False, pool=mp.Pool(4))]<br/>        mdl= Tank2()<br/>&gt;       res_vars_i = {param:1 for param,v in mdl.params.items() if param not in [&#x27;capacity&#x27;,&#x27;turnup&#x27;]}<br/><span class="error">E       AttributeError: &#x27;Tank&#x27; object has no attribute &#x27;params&#x27;</span><br/><br/>examples\tank\test_tank.py:43: AttributeError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_multfault</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_multfault&gt;<br/><br/>    def test_save_load_multfault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>            faultscen = {5:{&quot;Import_Water&quot;: [&#x27;Stuck&#x27;]},10:{&quot;Store_Water&quot;:[&quot;Leak&quot;]}}<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;tank_mdlhist&quot;+extension, &quot;tank_endclass&quot;+extension, &#x27;mult_fault&#x27;, faultscen =faultscen )<br/><br/>examples\tank\test_tank.py:124: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_multfault&gt;<br/>mdl = Tank model at 0x21e8a2fc100 <br/>FUNCTIONS: <br/>import_water ImportLiquid<br/>- TransportLiquidState(amt_open=1)<br/>- TransportLiqui...ction=0)<br/>tank_sig Signal flow: SigState(indicator=0, action=0)<br/>valve2_sig Signal flow: SigState(indicator=1, action=0)<br/><br/>mfile = &#x27;tank_mdlhist.pkl&#x27;, ecfile = &#x27;tank_endclass.pkl&#x27;, runtype = &#x27;mult_fault&#x27;<br/>faultscen = {5: {&#x27;Import_Water&#x27;: [&#x27;Stuck&#x27;]}, 10: {&#x27;Store_Water&#x27;: [&#x27;Leak&#x27;]}}<br/><br/>    def check_save_load_onerun(self, mdl, mfile, ecfile, runtype, faultscen={}):<br/>        &quot;&quot;&quot;<br/>        Checks if the results from the mdl are the same when saved from a given one-run propagate method as<br/>        the direct output.<br/>    <br/>        Parameters<br/>        ----------<br/>        mdl : Model<br/>        mfile : name of file to save mdlhists in<br/>        ecfile : name of file to save endclasses in<br/>        runtype : propagate method to test (&#x27;nominal&#x27;, &#x27;one_fault&#x27;, &#x27;sequence&#x27;)<br/>        faultscen : dict/tuple, optional<br/>            - for one_fault, the (functionname, faultname, faulttime)<br/>            - for sequence, the faultseq dict input<br/>        &quot;&quot;&quot;<br/>        if os.path.exists(mfile):   os.remove(mfile)<br/>        if os.path.exists(ecfile):  os.remove(ecfile)<br/>        check_link=False<br/>        if runtype==&#x27;nominal&#x27;:<br/>            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>            check_link=True<br/>        elif runtype==&#x27;one_fault&#x27;:<br/>            fxnname, faultmode, faulttime = faultscen<br/>            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>        elif runtype==&#x27;sequence&#x27;:<br/>            endresult, mdlhist=sim.propagate.sequence(mdl, faultscen, {}, \<br/>                                                        save_args={&#x27;mdlhist&#x27;:{&#x27;filename&#x27;:mfile},\<br/>                                                                   &#x27;endclass&#x27;:{&#x27;filename&#x27;:ecfile}})<br/>&gt;       else: raise Exception(&quot;Invalid Run Type&quot;+runtype)<br/><span class="error">E       Exception: Invalid Run Typemult_fault</span><br/><br/>tests\common.py:141: Exception<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_onefault</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;examples.tank.test_tank.TankTests testMethod=test_save_load_onefault&gt;<br/><br/>    def test_save_load_onefault(self):<br/>        for extension in [&quot;.pkl&quot;,&quot;.csv&quot;,&quot;.json&quot;]:<br/>&gt;           self.check_save_load_onerun(self.mdl, &quot;tank_mdlhist&quot;+extension, &quot;tank_endclass&quot;+extension, &#x27;one_fault&#x27;, faultscen=(&#x27;Import_Water&#x27;, &#x27;Stuck&#x27;, 5))<br/><br/>examples\tank\test_tank.py:120: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>tests\common.py:134: in check_save_load_onerun<br/>    endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\<br/>fmdtools\sim\propagate.py:297: in one_fault<br/>    rate = mdl.get_scen_rate(fxnname, fault, time))<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>self = Tank model at 0x21e89df2d00 <br/>FUNCTIONS: <br/>import_water ImportLiquid<br/>- TransportLiquidState(amt_open=1)<br/>- TransportLiqui...ction=0)<br/>tank_sig Signal flow: SigState(indicator=0, action=0)<br/>valve2_sig Signal flow: SigState(indicator=1, action=0)<br/><br/>fxnname = &#x27;Import_Water&#x27;, faultmode = &#x27;Stuck&#x27;, time = 5<br/><br/>    def get_scen_rate(self, fxnname, faultmode, time):<br/>        &quot;&quot;&quot;<br/>        Gets the scenario rate for the given single-fault scenario.<br/>    <br/>        Parameters<br/>        ----------<br/>        fxnname: str<br/>            Name of the function with the fault<br/>        faultmode: str<br/>            Name of the fault mode<br/>        time: int<br/>            Time when the scenario is to occur<br/>    <br/>        Returns<br/>        -------<br/>        rate: float<br/>            Rate of the scenario<br/>        &quot;&quot;&quot;<br/>&gt;       fxn = self.get_fxns()[fxnname]<br/><span class="error">E       KeyError: &#x27;Import_Water&#x27;</span><br/><br/>fmdtools\define\block.py:246: KeyError<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">examples/asg_demo/Action Sequence Graph.ipynb::</td>
-          <td class="col-duration">7.94</td>
+          <td class="col-name">examples/asg_demo/Action_Sequence_Graph.ipynb::</td>
+          <td class="col-duration">7.89</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -357,7 +629,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/EPS_Example_Notebook.ipynb::</td>
-          <td class="col-duration">6.04</td>
+          <td class="col-duration">5.74</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -384,7 +656,16 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_singlefaults</td>
-          <td class="col-duration">1.56</td>
+          <td class="col-duration">1.53</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/multiflow_demo/test_multiflow.py::define_Tests::test_multiflows</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -393,7 +674,668 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/Demonstration.ipynb::</td>
+          <td class="col-duration">352.72</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneTests::test_interface_values</td>
+          <td class="col-duration">11.31</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneTests::test_sim_types</td>
+          <td class="col-duration">8.34</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/Parallelism_Tutorial.ipynb::</td>
+          <td class="col-duration">71.49</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stderr call------------------------------ <br/>Error in atexit._run_exitfuncs:
+Traceback (most recent call last):
+  File &quot;C:\Users\dhulse\Anaconda3\lib\logging\__init__.py&quot;, line 2141, in shutdown
+    h.flush()
+  File &quot;C:\Users\dhulse\Anaconda3\lib\logging\__init__.py&quot;, line 1067, in flush
+    self.stream.flush()
+  File &quot;C:\Users\dhulse\Anaconda3\lib\site-packages\ipykernel\iostream.py&quot;, line 471, in flush
+    self._flush()
+  File &quot;C:\Users\dhulse\Anaconda3\lib\site-packages\ipykernel\iostream.py&quot;, line 497, in _flush
+    self.session.send(self.pub_thread, &#x27;stream&#x27;, content=content,
+  File &quot;C:\Users\dhulse\Anaconda3\lib\site-packages\jupyter_client\session.py&quot;, line 753, in send
+    stream.send_multipart(to_send, copy=copy)
+  File &quot;C:\Users\dhulse\Anaconda3\lib\site-packages\ipykernel\iostream.py&quot;, line 223, in send_multipart
+    self.schedule(lambda : self._really_send(*args, **kwargs))
+  File &quot;C:\Users\dhulse\Anaconda3\lib\site-packages\ipykernel\iostream.py&quot;, line 216, in schedule
+    f()
+  File &quot;C:\Users\dhulse\Anaconda3\lib\site-packages\ipykernel\iostream.py&quot;, line 223, in &lt;lambda&gt;
+    self.schedule(lambda : self._really_send(*args, **kwargs))
+  File &quot;C:\Users\dhulse\Anaconda3\lib\site-packages\ipykernel\iostream.py&quot;, line 231, in _really_send
+    self.socket.send_multipart(msg, *args, **kwargs)
+AttributeError: &#x27;NoneType&#x27; object has no attribute &#x27;send_multipart&#x27;
+C:\Users\dhulse\Anaconda3\lib\site-packages\multiprocess\pool.py:265: ResourceWarning: unclosed running multiprocessing pool &lt;multiprocess.pool.ThreadPool state=RUN pool_size=4&gt;
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/Pump_Example_Notebook.ipynb::</td>
+          <td class="col-duration">17.87</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/Tutorial_complete.ipynb::</td>
+          <td class="col-duration">7.15</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_app_prop_values</td>
+          <td class="col-duration">0.06</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_parallelism</td>
+          <td class="col-duration">11.23</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values</td>
+          <td class="col-duration">0.05</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values_2</td>
+          <td class="col-duration">0.13</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fmea_options</td>
+          <td class="col-duration">0.42</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_different</td>
+          <td class="col-duration">0.23</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_same</td>
+          <td class="col-duration">0.37</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_reset</td>
+          <td class="col-duration">0.43</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_csv</td>
+          <td class="col-duration">0.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_json</td>
+          <td class="col-duration">0.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_pickle</td>
+          <td class="col-duration">0.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_pickleability</td>
           <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_approach</td>
+          <td class="col-duration">0.55</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_approach_indiv</td>
+          <td class="col-duration">0.82</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_multfault</td>
+          <td class="col-duration">0.06</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nestedapproach</td>
+          <td class="col-duration">5.48</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nestedapproach_indiv</td>
+          <td class="col-duration">5.79</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominal</td>
+          <td class="col-duration">0.04</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominalapproach</td>
+          <td class="col-duration">0.32</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominalapproach_indiv</td>
+          <td class="col-duration">0.41</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_onefault</td>
+          <td class="col-duration">0.06</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_singlefaults</td>
+          <td class="col-duration">0.63</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_singlefaults_indiv</td>
+          <td class="col-duration">0.96</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_value_setting</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_value_setting_dict</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_behave_inf_v</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_behave_no_v</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_behave_nom</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_condfaults_hi</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_condfaults_nom</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_initialization</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::MoveWat_Tests::test_condfaults_dynamic</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::MoveWat_Tests::test_initialization</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::MoveWat_Tests::test_nom</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_blockage_results</td>
+          <td class="col-duration">0.05</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_blockage_static</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_nominal_results</td>
+          <td class="col-duration">0.03</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_different</td>
+          <td class="col-duration">0.40</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_same</td>
+          <td class="col-duration">0.37</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_reset</td>
+          <td class="col-duration">0.63</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_approach</td>
+          <td class="col-duration">17.85</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_safety</td>
+          <td class="col-duration">3.37</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nestedapproach</td>
+          <td class="col-duration">17.19</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nestedapproach_indiv</td>
+          <td class="col-duration">17.84</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nominalapproach</td>
+          <td class="col-duration">7.80</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nominalapproach_indiv</td>
+          <td class="col-duration">7.82</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_set_seeds</td>
+          <td class="col-duration">0.03</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_stochastic_pdf</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/rover/Model_Structure_Visualization_Tutorial.ipynb::</td>
+          <td class="col-duration">23.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_approach</td>
+          <td class="col-duration">0.47</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_approach_indiv</td>
+          <td class="col-duration">0.52</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nestedapproach</td>
+          <td class="col-duration">3.81</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nestedapproach_indiv</td>
+          <td class="col-duration">3.88</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominal</td>
+          <td class="col-duration">0.05</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominalapproach</td>
+          <td class="col-duration">0.27</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominalapproach_indiv</td>
+          <td class="col-duration">0.34</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults</td>
+          <td class="col-duration">1.37</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults_indiv</td>
+          <td class="col-duration">2.19</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fault_plot</td>
+          <td class="col-duration">0.14</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_flowgraph_plot</td>
+          <td class="col-duration">0.21</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fxngraph_plot</td>
+          <td class="col-duration">0.14</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_modelgraph_plot</td>
+          <td class="col-duration">0.23</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_result_from_plot</td>
+          <td class="col-duration">0.08</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_typegraph_plot</td>
+          <td class="col-duration">0.05</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_mode.py::ModeTests::test_mode_generation</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_packages.py::define_Tests::test_pdf_translation_options</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
