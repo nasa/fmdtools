@@ -96,7 +96,7 @@ class Simulable(object):
     
     Note that classes soley based on Simulable may not themselves be able to be simulated.
     """
-    __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows',  'name', 'is_copy')
+    __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'name', 'is_copy')
     default_sp = {}
     _init_p = Parameter
     _init_r = Rand
@@ -1149,7 +1149,7 @@ class FxnBlock(Block):
                     else:
                         argstr = ''
                     raise TypeError("Poor specification for : " + str(at_init) + " with kwargs: " + str(at_arg) + argstr) from e
-                setattr(self, '_args_' + at,  at_arg)
+                setattr(self, '_args_' + at, at_arg)
                 self.update_contained_modes(at)
             elif at_arg: 
                 raise Exception(at + " argument provided: " + str(at_arg) + "without associating a CompArch/ASG to _init_" + at)
