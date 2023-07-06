@@ -1,7 +1,6 @@
 ---
 title: Intro to fmdtools
 description: Intro to resilience modelling, simulation, and visualization in Python with fmdtools.
-paginate: true
 marp: true
 ---
 ![fmdtools logo](/docs/figures/logo.png)
@@ -160,6 +159,15 @@ Repository (https://github.com/nasa/fmdtools/)
 
 ![formalism example](/docs/figures/formalism_example.png)
 
+-----------------
+# Function Code Template
+
+![Function Code Template](/docs/figures/fxnblock_structure.png)
+
+-----------------
+# Model Code Template
+
+![Model Code Template](/docs/figures/model_structure.png)
 
 -----------------
 # Demo Model Activity: examples/pump/ex_pump.py
