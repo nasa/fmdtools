@@ -105,7 +105,8 @@ class Model(Simulable):
         s : dict, optional
             State dictionary to overwrite Flow default state values with
         """
-        for flowname in flownames: self.add_flow(flowname, fclass, p=p, s=s)
+        for flowname in flownames:
+            self.add_flow(flowname, fclass, p=p, s=s)
     def add_flow(self,flowname, fclass=Flow, p={}, s={}):
         """
         Adds a flow with given attributes to the model.
@@ -150,7 +151,7 @@ class Model(Simulable):
                 self.fxns[name] = fclass(name, flows=flows, args_f=args_f, **fkwargs)
             except TypeError as e:
                 raise TypeError("Poorly specified class "+str(fclass)+" (or poor arguments) ") from e
-            self._fxninput[name]={'name':name,'flows': flownames, 'args_f': args_f, 'kwargs': fkwargs}
+            self._fxninput[name]={'name':name, 'flows': flownames, 'args_f': args_f, 'kwargs': fkwargs}
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
             self.functionorder.update([name])
@@ -192,7 +193,8 @@ class Model(Simulable):
         """
         self.update_seed()
         if not getattr(self, 'is_copy', False):
-            if functionorder: self.set_functionorder(functionorder)
+            if functionorder:
+                self.set_functionorder(functionorder)
             self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
                                           if fxn.is_static()])
             self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
@@ -284,37 +286,45 @@ class Model(Simulable):
         copy : Model
             Copy of the curent model.
         """
-        copy = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
-        copy.is_copy=True
-        copy.__init__(p=getattr(self, 'p', {}),sp=getattr(self, 'sp', {}),track=getattr(self, 'track', {}), r={'seed':self.r.seed})
+        cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
+        cop.is_copy = True
+        cop.__init__(p=getattr(self, 'p', {}),
+                      sp=getattr(self, 'sp', {}),
+                      track=getattr(self, 'track', {}),
+                      r={'seed':self.r.seed})
+        
         for flowname, flow in self.flows.items():
-            copy.flows[flowname]=flow.copy()
+            cop.flows[flowname] = flow.copy()
+        
         for fxnname, fxn in self.fxns.items():
-            flownames=self._fxninput[fxnname]['flows']
-            args_f=self._fxninput[fxnname]['args_f']
-            kwargs = self._fxninput[fxnname]['kwargs']
-            flows = copy.get_flows(flownames)
-            if args_f=='None':     
-                copy.fxns[fxnname]=fxn.copy(flows, **kwargs)
+            flownames = copy.deepcopy(self._fxninput[fxnname]['flows'])
+            args_f = copy.deepcopy(self._fxninput[fxnname]['args_f'])
+            kwargs = copy.deepcopy(self._fxninput[fxnname]['kwargs'])
+            flows = cop.get_flows(flownames)
+            if args_f == 'None':     
+                cop.fxns[fxnname] = fxn.copy(flows, **kwargs)
             else:                   
-                copy.fxns[fxnname]=fxn.copy(flows, args_f, **kwargs)
-        copy._fxninput=self._fxninput
-        copy._fxnflows=self._fxnflows
-        copy.is_copy=False
-        copy.build(functionorder = self.functionorder)
-        copy.is_copy=True
+                cop.fxns[fxnname] = fxn.copy(flows, args_f, **kwargs)
+
+        cop._fxninput = copy.deepcopy(self._fxninput)
+        cop._fxnflows = copy.deepcopy(self._fxnflows)
+        cop._flowstates = copy.deepcopy(self._flowstates)
+        
+        cop.is_copy = False
+        cop.build(functionorder=copy.deepcopy(self.functionorder))
+        cop.is_copy = True
         if hasattr(self, 'h'): 
             hist = History()
             for k in self.h:
                 for att in ['fxns', 'flows']:
                     if k.startswith(att):
                         fname = k.split('.')[1]
-                        copy_f = getattr(copy, att)[fname]
-                        hist[att+'.'+fname]=copy_f.h
-                if k=='time' or k.startswith('i.'):
-                    hist[k]=self.h[k].copy()
-            copy.h = hist.flatten()
-        return copy
+                        copy_f = getattr(cop, att)[fname]
+                        hist[att+'.'+fname] = copy_f.h
+                if k == 'time' or k.startswith('i.'):
+                    hist[k] = self.h[k].copy()
+            cop.h = hist.flatten()
+        return cop
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
         for flowname, flow in self.flows.items():
@@ -336,7 +346,7 @@ class Model(Simulable):
         ----------
         varlist : list of lists/tuples
             List of variables to set, with possible structures:
-                [['fxnname', 'att1'], ['fxnname2', 'comp1','att2'], ['flowname', 'att3']]
+                [['fxnname', 'att1'], ['fxnname2', 'comp1', 'att2'], ['flowname', 'att3']]
                 ['fxnname.att1', 'fxnname.comp1.att2', 'flowname.att3']
         varvalues : list
             List of values corresponding to varlist
@@ -344,22 +354,42 @@ class Model(Simulable):
             attribute-value pairs. If provided, must be passed using ** syntax:
             mdl.set_vars(**{'fxnname.varname':value})
         """
-        if len(args)>0: 
-            varlist=args[0]; varvalues=args[1]
-            if type(varlist)==str:                      varlist = [varlist]
-            if type(varvalues) in [str, float, int]:    varvalues= [varvalues]
-            if len(varlist)!=len(varvalues): raise Exception("length of varlist and varvalues do not correspond: "+str(len(varlist))+", "+str(len(varvalues)))
-        else: varlist=[]; varvalues=[]
-        if kwargs: varlist = varlist+[*kwargs.keys()]; varvalues = varvalues + [*kwargs.values()]
-        for i,var in enumerate(varlist):
-            if var=='seed':  self.update_seed(seed=varvalues[i])
+        if len(args) > 0: 
+            varlist = args[0]
+            varvalues = args[1]
+            if type(varlist) == str:
+                varlist = [varlist]
+            if type(varvalues) in [str, float, int]:
+                varvalues = [varvalues]
+            if len(varlist) != len(varvalues):
+                raise Exception("length of varlist and varvalues do not correspond: "
+                                + str(len(varlist)) + ", "+str(len(varvalues)))
+        else:
+            varlist=[]
+            varvalues=[]
+        if kwargs:
+            varlist = varlist + [*kwargs.keys()]
+            varvalues = varvalues + [*kwargs.values()]
+        for i, var in enumerate(varlist):
+            if var == 'seed':
+                self.update_seed(seed=varvalues[i])
             else:
-                if type(var)==str: var=var.split(".")             
-                if var[0] in ['functions', 'fxns']: f=self.fxns[var[1]]; var=var[2:]
-                elif var[0]=='flows':               f=self.flows[var[1]]; var=var[2:]
-                elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
-                elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]             
-                else: raise Exception(var[0]+" not a function, flow, or seed")
+                if type(var) == str:
+                    var = var.split(".")             
+                if var[0] in ['functions', 'fxns']:
+                    f = self.fxns[var[1]] 
+                    var = var[2:]
+                elif var[0] == 'flows':
+                    f = self.flows[var[1]] 
+                    var = var[2:]
+                elif var[0] in self.fxns:
+                    f = self.fxns[var[0]] 
+                    var = var[1:]
+                elif var[0] in self.flows:
+                    f = self.flows[var[0]] 
+                    var = var[1:]             
+                else:
+                    raise Exception(var[0] + " not a function, flow, or seed")
                 set_var(f, var, varvalues[i])
     def get_vars(self, *variables, trunc_tuple=True):
         """
@@ -369,7 +399,7 @@ class Model(Simulable):
         ----------
         *variables : list/string
             Variables to get from the model. Can be specifid as: 
-            a list ['fxnname2', 'comp1','att2'], or
+            a list ['fxnname2', 'comp1', 'att2'], or
             a str 'fxnname.comp1.att2'
 
         Returns
@@ -377,15 +407,26 @@ class Model(Simulable):
         variable_values: tuple 
             Values of variables. Passes (non-tuple) single value if only one variable.
         """
-        if type(variables)==str:                      variables = [variables]
+        if type(variables)==str:
+            variables = [variables]
         variable_values = [None]*len(variables)
         for i, var in enumerate(variables):
-            if type(var)==str: var=var.split(".")
-            if var[0] in ['functions', 'fxns']: f=self.fxns[var[1]]; var=var[2:]
-            elif var[0]=='flows':               f=self.flows[var[1]]; var=var[2:]
-            elif var[0] in self.fxns:           f=self.fxns[var[0]]; var=var[1:]
-            elif var[0] in self.flows:          f=self.flows[var[0]]; var=var[1:]
-            else: raise Exception(var[0]+" not a function or flow")
+            if type(var)==str: 
+                var=var.split(".")
+            if var[0] in ['functions', 'fxns']: 
+                f = self.fxns[var[1]] 
+                var=var[2:]
+            elif var[0] == 'flows': 
+                f = self.flows[var[1]] 
+                var = var[2:]
+            elif var[0] in self.fxns:
+                f = self.fxns[var[0]] 
+                var = var[1:]
+            elif var[0] in self.flows:
+                f = self.flows[var[0]] 
+                var = var[1:]
+            else: 
+                raise Exception(var[0] + " not a function or flow")
             variable_values[i]=get_var(f, var)
         if len(variable_values)==1 and trunc_tuple: return variable_values[0]
         else:                                       return tuple(variable_values)
@@ -399,7 +440,8 @@ class Model(Simulable):
                 hist['fxns'] = History()
                 for fxnname, fxn in self.fxns.items():
                     fh = fxn.create_hist(timerange, get_sub_include(fxnname, fxn_track))
-                    if fh: hist.fxns[fxnname]=fh
+                    if fh: 
+                        hist.fxns[fxnname] = fh
             self.add_flow_hist(hist, timerange, track)
             #if len(hist)<len(track) and track!='all': #TODO: this warning should be valid for all hists
             #    raise Exception("History doesn't match tracking options (are names correct?): \n track="+str(track)+"\n hist= \n"+str(hist))
@@ -426,9 +468,10 @@ class Model(Simulable):
         
         #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
         for fxnname in self.dynamicfxns.union(fxnfaults.keys()):
-            fxn=self.fxns[fxnname]
+            fxn = self.fxns[fxnname]
             faults = fxnfaults.get(fxnname, [])
-            if type(faults)!=list: faults=[faults]
+            if type(faults) != list: 
+                faults = [faults]
             fxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
             
         #Step 2: Run Static Propagation Methods
@@ -480,10 +523,10 @@ class Model(Simulable):
                 self._flowstates[flowname]=self.flows[flowname].return_mutables()
             activefxns=nextfxns.copy()
             nextfxns.clear()
-            n+=1
-            if n>1000: #break if this is going for too long
+            n += 1
+            if n > 1000: #break if this is going for too long
                 raise Exception("Undesired looping between functions in static propagation step",
-                                "at t="+str(time)+", these functions remain active:"+str(activefxns))
+                                "at t=" + str(time) + ", these functions remain active:" + str(activefxns))
         
 def check_model_pickleability(model, try_pick=False):
     """ Checks to see which attributes of a model object will pickle, providing more detail about functions/flows"""

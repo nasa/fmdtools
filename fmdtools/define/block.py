@@ -45,6 +45,7 @@ def assoc_flows(obj, flows={}):
     """
     if hasattr(obj, 'flownames'):
         flows = {obj.flownames.get(fn, fn): flow for fn, flow in flows.items()}
+    flows = flows.copy()
     for init_att in dir(obj):
         if init_att.startswith("_init_"):
             att = getattr(obj, init_att)
@@ -58,7 +59,6 @@ def assoc_flows(obj, flows={}):
                     setattr(obj, attname, obj.flows[attname])
     if flows:
         warnings.warn("these flows sent from model "+str([*flows.keys()])+" not added to class "+str(obj.__class__))
-
 
 def inject_faults_internal(obj, faults):
     """
@@ -224,6 +224,7 @@ class Simulable(object):
         else:
             fxns = {self.name: self}
         return fxns
+    
     def get_scen_rate(self, fxnname, faultmode, time):
         """
         Gets the scenario rate for the given single-fault scenario.
@@ -253,6 +254,32 @@ class Simulable(object):
             elif fm.faultmodes[faultmode].probtype == 'prob':
                 rate = fm.failrate*fm.faultmodes[faultmode]['dist'] 
         return rate
+    
+    def get_args(self, **kwargs):
+        """
+        Gets the current arguments for a given Simulable stored in _at_args
+        
+        Parameters
+        ----------
+        kwargs: dict
+            Attributes to overwrite (and their values)
+
+        Returns
+        -------
+        saved_args : dict
+            Dictionary of saved arguments.
+        """
+        args = {}
+        for at in dir(self):
+            if at.startswith("_args"):
+                role = at[6:]
+                if role in kwargs:
+                    args[role] = kwargs[role]
+                else:
+                    saved_arg = getattr(self, at, {})
+                    if saved_arg:
+                        args[role] = saved_arg
+        return args
 
 
 class Block(Simulable):
@@ -305,7 +332,7 @@ class Block(Simulable):
             FxnBlock must have an _init_a property.
         r : dict, optional
             Internal Rand fields/arguments override from defaults. The default is {}.
-        r : dict, optional
+        m : dict, optional
             Internal Mode fields/arguments override from defaults. The default is {}.
         t : dict, optional
             Internal Time fields/arguments to override from defaults. The defautl is {}
@@ -344,12 +371,12 @@ class Block(Simulable):
         """Checks if Block has static execution step"""
         return (getattr(self, 'behavior', False) or 
                 getattr(self, 'static_behavior', False) or
-                (hasattr(self, 'a') and getattr(self.a, 'proptype','')=='static'))
+                (hasattr(self, 'a') and getattr(self.a, 'proptype','') == 'static'))
         
     def is_dynamic(self):
         """Checks if Block has dynamic execution step"""
         return (getattr(self, 'dynamic_behavior', False) or
-                (hasattr(self, 'a') and getattr(self.a, 'proptype','')=='dynamic'))
+                (hasattr(self, 'a') and getattr(self.a, 'proptype','') == 'dynamic'))
         
 
     def __repr__(self):
@@ -464,7 +491,8 @@ class Block(Simulable):
         cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         cop.is_copy=True
         try:
-            cop.__init__(self.name, flows, *args, **kwargs)
+            saved_kwargs = self.get_args(**kwargs)
+            cop.__init__(self.name, flows, *args, **saved_kwargs)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
         cop.m.mirror(self.m)
@@ -644,9 +672,9 @@ class Component(Block):
 
 class CompArch(dataobject, mapping=True):
     """Container for holding component architectures"""
-    archtype:       str = 'default'
-    components:     dict = dict()
-    faultmodes:     dict = dict()
+    archtype: str = 'default'
+    components: dict = dict()
+    faultmodes: dict = dict()
     default_track = ('i', 'components')
     def make_components(self, CompClass, *args, **kwargs): # noqa
         """
@@ -752,9 +780,14 @@ class CompArch(dataobject, mapping=True):
 
 
 class Action(Block):
+    __slots__ = ('duration',)
     """
     Superclass for actions (most attributes and methods inherited from Block superclass)
     """
+    def __init__(self, name, duration=0.0, **kwargs):
+        self.duration=duration
+        super().__init__(name, **kwargs)
+
     def __call__(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
         Updates the behaviors, faults, times, etc of the action 
@@ -770,17 +803,23 @@ class Action(Block):
             self.r.update_stochastic_states()
         if proptype == 'dynamic':
             if self.t.time < time:
-                self.behavior(time); self.t.t_loc += dt
+                self.behavior(time)
+                self.t.t_loc += dt
         else:
-            self.behavior(time); self.t.t_loc += dt
+            self.behavior(time)
+            self.t.t_loc += dt
         self.t.time = time
-
+    
+    def copy(self, *args, **kwargs):
+        cop = super().copy(*args, **kwargs)
+        cop.duration = self.duration
+        return cop
     def behavior(self, time):
         """Placeholder behavior method for actions"""
         a = 0
 
 
-class ASG(dataobject, mapping=True):
+class ASG(object):
     """
     Constructs the Action Sequence Graph with the given parameters.
     
@@ -804,15 +843,7 @@ class ASG(dataobject, mapping=True):
             - 'manual' means that the propagation is performed manually (defined in a behavior method)
     per_timestep : bool
         Defines whether the action sequence graph is reset to the initial state each time-step (True) or stays in the current action (False). Default is False
-    """
-    actions:            dict = {}
-    action_graph:       nx.DiGraph = nx.DiGraph()
-    flow_graph:         nx.DiGraph = nx.DiGraph()
-    conditions:         dict = {}
-    faultmodes:         dict = {}
-    flows:              dict = {}
-    active_actions:     set = {}
-    pos:                dict = {}
+    """    
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"
@@ -820,15 +851,15 @@ class ASG(dataobject, mapping=True):
     per_timestep = False
     default_track = ('actions', 'active_actions', 'i')
 
-    def __init__(self, *args, flows={}, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.actions = {}  # TODO: remove restatement of defaults when fixed in recordclass
+    def __init__(self, flows={}, is_copy=False):
+        self.actions = {}
+        self.flows = flows 
+        self.conditions = {}
         self.action_graph = nx.DiGraph()
         self.flow_graph = nx.DiGraph()
         self.conditions = {}
         self.faultmodes = {}
-        self.flows = {}
-        assoc_flows(self, flows=flows)
+        self.is_copy = is_copy
         self.active_actions = set()
 
     def build(self):
@@ -860,7 +891,7 @@ class ASG(dataobject, mapping=True):
         s : dict, optional
             State dictionary to overwrite Flow default state values with
         """
-        if not getattr(self, 'is_copy', False):
+        if flowname not in self.flows:
             self.flows[flowname] = init_flow(flowname, fclass, p=p, s=s)
 
     def add_act(self, name, actclass, *flownames, duration=0.0, **params):
@@ -876,14 +907,16 @@ class ASG(dataobject, mapping=True):
         *flownames : flow
             Flows (optional) which connect the actions
         duration:
-            Not documented
+            Duration of the action. Default is 0.0
         **params : any
             parameters to instantiate the Action with. 
         """
         flows = {fl: self.flows[fl] for fl in flownames}
         action = actclass(name=name, flows={**flows}, **params)
+        
         self.actions[name] = action
         self.actions[name].duration = duration
+        
         self.action_graph.add_node(name)
         self.flow_graph.add_node(name, bipartite=0)
         for flow in flows:
@@ -950,17 +983,18 @@ class ASG(dataobject, mapping=True):
         dt : float
             Timestep to propagate over.
         """
-        if not self.per_timestep: 
+        if self.per_timestep: 
             self.set_active_actions(self.initial_action)
             for action in self.active_actions:
                 self.actions[action].t.t_loc = 0.0
+
         if proptype == self.proptype:
             active_actions = self.active_actions
             num_prop = 0
             while active_actions:
                 new_active_actions = set(active_actions)
                 for action in active_actions:
-                    self.actions[action](time, run_stochastic, proptype=proptype, )
+                    self.actions[action](time, run_stochastic, proptype=proptype, dt=dt)
                     action_cond_edges = self.action_graph.out_edges(action, data=True)
                     for act_in, act_out, atts in action_cond_edges:
                         try:
@@ -993,13 +1027,34 @@ class ASG(dataobject, mapping=True):
                 act.update_seed(seed)
 
     def copy(self, flows={}, **kwargs):
-        new_flows = {**{fn: flow.copy() for fn, flow in self.flows.items() if fn not in flows}, **flows}
+        newflows = {}
+        for flowname, flow in self.flows.items():
+            if flowname in flows:
+                newflows[flowname] = flows[flowname]
+            else:
+                newflows[flowname] = self.flows[flowname].copy()
+
+        cop = self.__class__(flows=newflows, is_copy=True, **kwargs)
+        for flowname, flow in newflows.items():
+            if flow.__hash__() != cop.flows[flowname].__hash__():
+                raise Exception("Flow not associated with lower level of ASG: " + flowname)
         
-        cop = self.__init__(flows=new_flows, **kwargs)
-        for action in self.actions: 
-            cop.actions[action] = self.actions[action].copy()
+        for actname, action in self.actions.items(): 
+            cop_act = cop.actions[actname]
+            cop_act.duration = action.duration
+            cop_act.s = action._init_s(**asdict(action.s))
+            cop_act.m.mirror(action.m)
+            cop_act.t = action.t.copy()
+            if hasattr(action, 'h'):
+                cop_act.h = action.h.copy()
+            
         cop.active_actions = copy.deepcopy(self.active_actions)
         return cop
+
+    def reset(self):
+        for name, action in self.actions.items():
+            action.reset()
+        self.build()
 
     def create_hist(self, timerange, track):
         """
@@ -1041,6 +1096,7 @@ class ASG(dataobject, mapping=True):
             am.extend(f.return_mutables())
         am.append(copy.copy(self.active_actions))
         return am
+        
 
 # Function superclass
 
@@ -1068,39 +1124,48 @@ class FxnBlock(Block):
         args_f : dict, optional
             arguments to pass to custom __init__ function 
         """        
-        super().__init__(name=name, flows=flows, **kwargs)
+        super().__init__(name=name, flows=flows.copy(), **kwargs)
         self.args_f = args_f
         
         for at in ['c', 'a']:  # NOTE: similar to init_obj_attr()
             at_arg = eval(at)
             at_init = getattr(self, '_init_'+at, False)
             if at_init:
-                at_flows = dict()
-                for flowname, flow in self.flows.items():
-                    if hasattr(at_init, '_init_'+flowname):
-                        at_flows[flowname] = flow
                 try:
-                    if at_flows:
-                        setattr(self, at,  at_init(flows=at_flows, **at_arg))
-                    else:
-                        setattr(self, at,  at_init(**at_arg))
+                    if at == "a":
+                        setattr(self, at, at_init(flows=self.flows.copy(), **at_arg))
+                    elif at == "c":
+                        setattr(self, at, at_init(**at_arg))
                 except TypeError as e:
                     invalid_args = [a for a in at_arg if a not in at_init.__fields__]
                     if invalid_args:
                         argstr = ", Invalid args: "+', '.join(invalid_args)
                     else:
                         argstr = ''
-                    raise TypeError("Poor specification for : "+str(at_init)+" with kwargs: "+str(at_arg)+argstr) from e
-                setattr(self, '_args_'+at,  at_arg)
-                if at == 'c':
-                    compacts = self.c.components
-                elif at == 'a':
-                    compacts = self.a.actions
-                for ca in compacts.values():
-                    self.m.faultmodes.update({ca.name+"_"+f: vals for f, vals in ca.m.faultmodes.items()})
+                    raise TypeError("Poor specification for : " + str(at_init) + " with kwargs: " + str(at_arg) + argstr) from e
+                setattr(self, '_args_' + at,  at_arg)
+                self.update_contained_modes(at)
             elif at_arg: 
-                raise Exception(at+" argument provided: "+str(at_arg)+"without associating a CompArch/ASG to _init_"+at)
+                raise Exception(at + " argument provided: " + str(at_arg) + "without associating a CompArch/ASG to _init_" + at)
         self.update_seed()
+    
+    def update_contained_modes(self, at):
+        """
+        Adds contained faultmodes for the role at to the FxnBlock model.
+
+        Parameters
+        ----------
+        at : str ('c' or 'a')
+            Role to update (for CompArch or ASG roles)
+        """
+        if at == 'c':
+            compacts = self.c.components
+        elif at == 'a':
+            compacts = self.a.actions
+        for ca in compacts.values():
+            self.m.faultmodes.update({ca.name + "_" + f: vals 
+                                      for f, vals in ca.m.faultmodes.items()})
+        
 
     def get_typename(self):
         return "FxnBlock"
@@ -1159,23 +1224,27 @@ class FxnBlock(Block):
         cop = super().copy(newflows, *args, **kwargs)
         if hasattr(self, 'c'): 
             cop.c = self.c.copy_with_arg(**self._args_c)
+            cop.update_contained_modes('c')
         if hasattr(self, 'a'): 
-            cop.a = self.a.copy_with_arg(flows=cop.flows, **self._args_a)
+            cop.a = self.a.copy(flows=cop.flows.copy(), **self._args_a)
+            cop.update_contained_modes('a')
         if hasattr(self, 'h'):
             if hasattr(self, 'c'): 
                 for compname, comp in cop.c.components.items():
-                    ex_hist = self.h.get("c.components."+compname)
+                    ex_hist = cop.h.get("c.components." + compname)
                     if ex_hist: 
                         comp.h = ex_hist.copy()
                         for k, v in comp.h.items():
-                            cop.h["c.components."+compname+"."+k] = v
+                            cop.h["c.components." + compname + "." + k] = v
             if hasattr(self, 'a'):
+                #if "a.active_actions" in self.h.keys():
+                #    cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
                 for actname, act in cop.a.actions.items():
-                    ex_hist = self.h.get("a.actions."+actname)
+                    ex_hist = cop.h.get("a.actions." + actname)
                     if ex_hist: 
                         act.h = ex_hist.copy()
                         for k, v in act.h.items():
-                            cop.h["a.actions."+actname+"."+k] = v
+                            cop.h["a.actions." + actname + "." + k] = v
         return cop
 
     def return_mutables(self):
@@ -1213,7 +1282,7 @@ class FxnBlock(Block):
             self.r.update_stochastic_states()
         if hasattr(self, 'c'):    
             inject_faults_internal(self.c, faults)
-        if hasattr(self, 'a'): 
+        if hasattr(self, 'a'):
             inject_faults_internal(self.a, faults)
             try:
                 self.a(time, run_stochastic, proptype, self.t.dt)
@@ -1238,8 +1307,7 @@ class FxnBlock(Block):
             if hasattr(self, 'dynamic_behavior'):
                 self.dynamic_behavior(time)
         
-        actions = getattr(self, 'a', {'actions': {}})['actions']
-        if actions:     # propagate faults from component level to function level
+        if hasattr(self, 'a') and self.a.actions: # propagate faults from component level to function level
             self.m.faults.difference_update(self.a.faultmodes)
             self.m.faults.update(self.a.get_faults())
         comps = getattr(self, 'c', {'components': {}})['components']
@@ -1257,6 +1325,8 @@ class FxnBlock(Block):
         super().reset()
         if hasattr(self, 'c'):
             self.c.reset()
+        if hasattr(self, 'a'):
+            self.a.reset()
         self('reset', faults=[], time=0)
 
 

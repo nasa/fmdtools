@@ -201,8 +201,75 @@ class Result(UserDict):
         return tuple(self.data.values())
 
     def __eq__(self, other):
-        return all([all(v == other[k]) if isinstance(v, np.ndarray) else v == other[k] for k, v in self.data.items()])
+        """
+        Checks that the two values of the dictionary are equal. Enables the syntax
+        result1 == result2, which returns True/False depending on if the keys/values
+        are the same.
 
+        Parameters
+        ----------
+        other : Result
+            Result dictionary to compare against
+
+        Returns
+        -------
+        equality : Bool
+            Whether the results are equal
+        """
+        return all([all(v == other[k]) 
+                    if isinstance(v, np.ndarray) 
+                    else v == other[k] 
+                    for k, v in self.data.items()])
+    
+    def __sub__(self, other):
+        """
+        Magic subtraction methods for Results. Used to enable uses such as: 
+            result1 - result2 = result3, where result3 is the difference between
+            result1 and result2
+            
+            If the values are numeric (e.g., 1.5 and 1.0), the value returned will
+            be the numeric difference (e.g., 0.5). Otherwise the value returned
+            is a true/false value corresponding to whether or not they are the same
+            (e.g. "yes", "no" -> False)
+
+        Parameters
+        ----------
+        other : Result/History
+            Result to subtract from the given result
+
+        Returns
+        -------
+        ret : Result/History
+            Result with values correspnding to the difference between the two. 
+        """
+        ret = self.__class__()
+        # creates a dict where the values are the mathematical difference if the 
+        # values are 
+        ret.data = {k: np.subtract(self[k], other[k], dtype=np.int32) 
+                    if is_bool(self[k])
+                    else self[k]-other[k] if is_numeric(self[k])
+                    else self[k]!=other[k] for k in self.keys()}
+        return ret
+    def get_different(self, other):
+        """
+        Finds the values of two results which are different.
+
+        Parameters
+        ----------
+        other : Result
+            Result to compare against
+
+        Returns
+        -------
+        different : Result
+            Result with entries corresponding to the difference between the two 
+            Results.
+        """
+        diff = self-other
+        different = self.__class__()
+        different.data = {k: v for k, v in diff.items() if v} 
+        return different
+    
     def keys(self):
         return self.data.keys()
 
@@ -683,7 +750,12 @@ def nan_to_x(metric, x=0.0):
         return x
     else:
         return metric
-
+def is_bool(val):
+    try:
+        return val.dtype in ['bool']
+    except:
+        return type(val) in [bool]
+    
 
 def is_numeric(val):
     """Checks if a given value is numeric"""
@@ -873,6 +945,25 @@ class History(Result):
             hist.update(History.load(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
         if renest_dict==False: hist = hist.flatten()
         return hist
+    def get_different(self, other):
+        """
+        Finds the values of two histories which are different.
+
+        Parameters
+        ----------
+        other : History
+            History to compare against
+
+        Returns
+        -------
+        different : History
+            History with entries corresponding to the difference between the two 
+            histories.
+        """
+        diff = self-other
+        different = self.__class__()
+        different.data = {k: v for k, v in diff.items() if any(v)} 
+        return different
 
     def copy(self):
         """Creates a new independent copy of the current history dict"""
@@ -932,12 +1023,13 @@ class History(Result):
                     except Exception as e:
                         obj_str = "Error logging obj "+obj.__class__.__name__+": "
                         if t_ind >= len(hist):
-                            raise Exception(obj_str+"Time beyond range of model history--check staged execution " 
+                            raise Exception(obj_str + "Time beyond range of model history--check staged execution " 
                                             "and simulation time settings (end condition, mdl.sp.times)") from e
                         elif not np.can_cast(type(val), type(hist[t_ind])):
-                            raise Exception(obj_str+str(att)+" changed type: "+str(type(hist[t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind)) from e
+                            raise Exception(obj_str + str(att)+" changed type: "+str(type(hist[t_ind])) +
+                                            " to " + str(type(val)) + " at t_ind=" + str(t_ind)) from e
                         else:
-                            raise Exception(obj_str+"Value too large to represent: "+att+"="+str(val)) from e
+                            raise Exception(obj_str + "Value too large to represent: " + att + "=" + str(val)) from e
 
     def cut(self, end_ind=None, start_ind=None, newcopy=False):
         """Cuts the history to a given index"""

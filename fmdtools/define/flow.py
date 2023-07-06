@@ -35,7 +35,7 @@ class Flow(object):
         name : str
             name of the flow
         """
-        self.name=name
+        self.name = name
         init_obj_attr(self, s=s, p=p)
 
         # TODO : add to module for safety-checking. Alternatively, run these checks prior to use
@@ -71,7 +71,8 @@ class Flow(object):
         Returns a copy of the flow object (used when copying the model)
         """
         cop = self.__class__(self.name, p=asdict(self.p), s=asdict(self.s))
-        if hasattr(self, 'h'): cop.h =self.h.copy()
+        if hasattr(self, 'h'): 
+            cop.h = self.h.copy()
         return cop
     def get_typename(self):
         return "Flow"
@@ -91,7 +92,8 @@ class Flow(object):
         h : History
             History to initialize.
         """
-        if hasattr(self, 'h'): return self.h
+        if hasattr(self, 'h'): 
+            return self.h
         else:
             track = get_obj_track(self, track, all_possible =Flow.default_track)
             if track:
@@ -213,7 +215,8 @@ class MultiFlow(Flow):
         for local in self.locals:
             getattr(self, local).reset()
     def copy(self, glob=[], p={}, s={}):
-        if not s: s=asdict(self.s)
+        if not s: 
+            s = asdict(self.s)
         cop = self.__class__(self.name, glob=glob, p=p, s=s)
         for loc in self.locals:
             local = getattr(self, loc)

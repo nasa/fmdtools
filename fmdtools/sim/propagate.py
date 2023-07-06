@@ -161,7 +161,8 @@ def nominal(mdl, **kwargs):
         A dictionary with a history of modelstates
     """
     result, mdlhist, _, mdl, t_end = nom_helper(mdl, None, cut_hist=True, **kwargs)
-    if kwargs.get('protect', False): mdl.reset()
+    if kwargs.get('protect', False): 
+        mdl.reset()
     save_helper(kwargs.get('save_args',{}), result, mdlhist)
     return result, mdlhist
 
@@ -233,7 +234,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
     if pool:
         check_mdl_memory(mdl, nomapp.num_scenarios, max_mem=kwargs['max_mem'])
         inputs = [(mdl, scen, name, kwargs) for name, scen in nomapp.scenarios.items()]
-        res_list = list(tqdm.tqdm(pool.imap(exec_nom_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
+        res_list = list(tqdm.tqdm(pool.map(exec_nom_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
         n_results, n_mdlhists = unpack_res_list([*nomapp.scenarios.values()], res_list)
     else:
         for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(), disable=not(showprogress), desc="SCENARIOS COMPLETE"):
@@ -243,7 +244,7 @@ def nominal_approach(mdl,nomapp, **kwargs):
 def unpack_res_list(scenlist, res_list):
     results= Result()
     mdlhists = History()
-    results.data = { scen.name: res_list[i][0] for i, scen in enumerate(scenlist)}
+    results.data = {scen.name: res_list[i][0] for i, scen in enumerate(scenlist)}
     mdlhists.data = {scen.name: res_list[i][1] for i, scen in enumerate(scenlist)}
     return results, mdlhists
 
@@ -342,7 +343,8 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
     result, faulthist, _, t_end = prop_one_scen(mdl, scen, **sim_kwarg, nomhist=nomhist, nomresult=nomresult)
     nomhist.cut(t_end_nom)
     mdlhists = History(nominal=nomhist, faulty=faulthist)
-    if kwargs.get('protect', False): mdl.reset()
+    if kwargs.get('protect', False): 
+        mdl.reset()
     save_helper(kwargs.get('save_args',{}), result, mdlhists)
     return result.flatten(), mdlhists.flatten()
 
@@ -375,21 +377,34 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={}, 
     staged = kwargs.get('staged',False)
     check_overwrite(save_args)
     #run model nominally, get relevant results
-    if isinstance(mdl, type):       mdl = mdl(**mdl_kwargs)  
-    elif protect or mdl_kwargs:     mdl = mdl.new_with_params(**mdl_kwargs)
-    if not scen:    nomscen=Scenario(sequence = Sequence(disturbances=kwargs.get('disturbances', {})))
-    else:           nomscen=scen
+    if isinstance(mdl, type): 
+        mdl = mdl(**mdl_kwargs)  
+    elif protect or mdl_kwargs: 
+        mdl = mdl.new_with_params(**mdl_kwargs)
+    
+    if not scen: 
+        nomscen = Scenario(sequence = Sequence(disturbances=kwargs.get('disturbances', {})))
+    else: 
+        nomscen = scen
+
     if staged:  
-        if type(ctimes) in [float, int]:ctimes=[ctimes]
-        else:                           ctimes=ctimes
-    else:                               ctimes=[]
+        if type(ctimes) in [float, int]:
+            ctimes = [ctimes]
+        else: 
+            ctimes = ctimes
+    else: 
+        ctimes = []
+    
     result, nommdlhist, mdls, t_end_nom = prop_one_scen(mdl, nomscen, ctimes = ctimes, **kwargs)
     
     endfaults, endfaultprops = mdl.return_faultmodes()
-    if any(endfaults): print("Faults found during the nominal run "+str(endfaults))
+    if any(endfaults):
+        print("Faults found during the nominal run " + str(endfaults))
     
-    mdl.reset()
-    if not staged:  mdls = {0:mdl.new_with_params()}
+    #mdl.reset()
+    if not staged:  
+        mdls = {0: mdl.new_with_params(**mdl_kwargs)}
+        
     return result, nommdlhist, nomscen, mdls, t_end_nom
 
 def approach(mdl, app,  **kwargs):
@@ -426,6 +441,8 @@ def approach(mdl, app,  **kwargs):
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     save_helper(kwargs['save_args'], results, mdlhists)
+    if kwargs.get('pool', False): 
+        kwargs['pool'].close() 
     return results.flatten(), mdlhists.flatten()
 
 def single_faults(mdl, **kwargs):
@@ -433,7 +450,7 @@ def single_faults(mdl, **kwargs):
     Creates and propagates a list of failure scenarios in a model.
     
     NOTE: When calling in a script using parallel=True, keep the script in the if statement:
-        "if __name__=='main':
+        "if __name__ == 'main':
             endclasses, mdlhists = single_faults(mdl)"
         Otherwise, the method will keep spawning parallel processes. See multiprocessing documentation.
 
@@ -466,6 +483,8 @@ def single_faults(mdl, **kwargs):
     results['nominal'] = nomresult
     save_helper(kwargs.get('save_args',{}), nomresult, mdlhists['nominal'], indiv_id=str(len(results)-1),result_id='nominal')
     save_helper(kwargs['save_args'], results, mdlhists)
+    if kwargs.get('pool', False): 
+        kwargs['pool'].close() 
     return results.flatten(), mdlhists.flatten()
 
 def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
@@ -473,7 +492,8 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     max_mem, showprogress, pool = unpack_mult_kwargs(kwargs)
     staged = kwargs.get('staged',False)
     mem, mem_profile = kwargs['nomhist'].get_memory()
-    if mem*len(scenlist)>max_mem: raise Exception("Model history will be too large: "+str(mem)+" > "+str(max_mem))
+    if mem * len(scenlist) > max_mem: 
+        raise Exception("Model history will be too large: " + str(mem) + " > " + str(max_mem))
     results = Result()
     mdlhists = History()
     if pool:
@@ -481,20 +501,50 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
         if staged:  
             inputs = [(c_mdl[scen.time], scen, kwargs,  str(i)) for i, scen in enumerate(scenlist)]
         else:       
-            inputs = [(mdl, scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
-        res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs), total=len(inputs), disable=not(showprogress), desc="SCENARIOS COMPLETE"))
+            inputs = [(c_mdl[0], scen,  kwargs, str(i)) for i, scen in enumerate(scenlist)]
+        res_list = list(tqdm.tqdm(pool.map(exec_scen_par, inputs), 
+                                  total=len(inputs), disable=not(showprogress), 
+                                  desc="SCENARIOS COMPLETE"))
         results, mdlhists = unpack_res_list(scenlist, res_list)
     else:
         for i, scen in enumerate(tqdm.tqdm(scenlist, disable=not(showprogress), desc="SCENARIOS COMPLETE")):
             name = scen.name
-            if staged:  mdl_i = c_mdl[scen.time]
-            else:       mdl_i = mdl
+            if staged:  
+                mdl_i = copy_staged(c_mdl[scen.time])
+            else:      
+                mdl_i = c_mdl[0].new_with_params()
             ec, mh, t_end = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
             results[name],mdlhists[name] = ec, mh
     return results, mdlhists
+def copy_staged(mdl):
+    """
+    Copies the model when used in staged execution.     
+
+    Parameters
+    ----------
+    mdl : Simulable
+        Model to copy.
+
+    Returns
+    -------
+    mdl : Simulable
+        Copy of the model with corresponding history
+    """
+    if 'time' in mdl.h: 
+        ctime = np.copy(mdl.h.time)
+        mdl = mdl.copy()
+        mdl.h.time = ctime
+    else: 
+        mdl = mdl.copy()
+    return mdl
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
-    return exec_scen(args[0], args[1], **args[2], indiv_id=args[3])
+    mdl_in = args[0]
+    if args[2].get('staged', False):
+        mdl_out = copy_staged(mdl_in)
+    else:
+        mdl_out = mdl_in.new_with_params()
+    return exec_scen(mdl_out, args[1], **args[2], indiv_id=args[3])
 def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
     """ 
     Executes a scenario and generates results and classifications given a model and nominal model history
@@ -516,16 +566,7 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
             - :data:`sim_kwargs` : kwargs
                 Simulation options for :func:`prop_one_scen
     """
-    if kwargs.get('staged',False): 
-        if 'time' in mdl.h: 
-            ctime= np.copy(mdl.h.time)
-            mdl = mdl.copy()
-            mdl.h.time=ctime
-        else: 
-            mdl = mdl.copy()
-    else:                        
-        mdl = mdl.new_with_params()
-    result, mdlhist, _, t_end,  =prop_one_scen(mdl, scen, **kwargs)
+    result, mdlhist, _, t_end,  = prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
     return result, mdlhist, t_end
 
@@ -615,14 +656,19 @@ def nested_approach(mdl, nomapp, get_phases = False, **kwargs):
     if save_app:
         with open(save_app['filename'], 'wb') as file_handle:
             dill.dump(apps, file_handle)
+    if kwargs.get('pool', False): 
+        kwargs['pool'].close() 
     return nest_results.flatten(), nest_mdlhists.flatten(), apps
 
 def phases_from_hist(get_phases, t_end, nomhist):
-    if get_phases=='global':      phases={'global':[0,t_end]}
+    if get_phases == 'global': 
+        phases = {'global': [0,t_end]}
     else:
         phases, modephases = nomhist.get_modephases()
-        if type(get_phases)==list:      phases= {fxnname:phases[fxnname] for fxnname in get_phases}
-        elif type(get_phases)==dict:    phases= {phase:phases[fxnname][phase] for fxnname,phase in get_phases.items()}
+        if type(get_phases) == list:
+            phases = {fxnname: phases[fxnname] for fxnname in get_phases}
+        elif type(get_phases) == dict:
+            phases = {phase: phases[fxnname][phase] for fxnname, phase in get_phases.items()}
     return phases
 
 def list_init_faults(mdl):
@@ -647,12 +693,12 @@ def list_init_faults(mdl):
             fm=fxn.m
             for mode in fm.faultmodes:
                 rate = mdl.get_scen_rate(fxnname, mode, time)
-                newscen = SingleFaultScenario(sequence = {time:{'faults':{fxnname:mode}}},
+                newscen = SingleFaultScenario(sequence = {time: {'faults': {fxnname: mode}}},
                                               function = fxnname,
                                               fault = mode,
                                               rate = rate ,
                                               time = time,
-                                              name = fxnname+'_'+mode+'_'+t_key(time))
+                                              name = fxnname + '_' + mode + '_' + t_key(time))
                 faultlist.append(newscen)
     return faultlist
 
@@ -686,30 +732,57 @@ def init_histrange(mdl, start_time, staged, track, track_times):
         Time index to shift the history by.
     """
     if staged:
-        timerange=np.arange(start_time, mdl.sp.times[-1]+mdl.sp.dt, mdl.sp.dt)
+        timerange=np.arange(start_time, mdl.sp.times[-1] + mdl.sp.dt, mdl.sp.dt)
         prevtimerange = np.arange(mdl.sp.times[0], start_time, mdl.sp.dt)
-        if track_times == "all":            shift = len(prevtimerange)
-        elif track_times[0]=='interval':    shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
-        elif track_times[0]=='times':       shift=0
+        if track_times == "all": 
+            shift = len(prevtimerange)
+        elif track_times[0] == 'interval':
+            shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
+        elif track_times[0] == 'times':
+            shift = 0
     else: 
-        timerange=np.arange(mdl.sp.times[0], mdl.sp.times[-1]+mdl.sp.dt, mdl.sp.dt)
+        timerange = np.arange(mdl.sp.times[0], mdl.sp.times[-1] + mdl.sp.dt, mdl.sp.dt)
         shift = 0
     
-    if track_times == "all":            histrange = timerange
-    elif track_times[0]=='interval':    histrange = timerange[0:len(timerange):track_times[1]]
-    elif track_times[0]=='times':       histrange = track_times[1]
+    if track_times == "all":
+        histrange = timerange
+    elif track_times[0] == 'interval':
+        histrange = timerange[0:len(timerange):track_times[1]]
+    elif track_times[0] == 'times':
+        histrange = track_times[1]
     
     mdlhist = mdl.create_hist(histrange, track)
     if 'time' not in mdlhist: 
         mdlhist.init_att('time', timerange[0], timerange=timerange, track='all', dtype=float)
+    
     return mdlhist, histrange, timerange, shift
 
 def check_end_condition(mdl, use_end_condition, t):
+    """
+    Checks if the end condition of the simulate has been met.
+
+    Parameters
+    ----------
+    mdl : Simulable
+        Model with or without a given end condition and simparam
+    use_end_condition : bool
+        Whether to use the end condition
+    t : float
+        time.
+
+    Returns
+    -------
+    end_condition : bool
+        Whether to end the simulation.
+    """
     if use_end_condition and mdl.sp.end_condition:
         end_condition = get_var(mdl, mdl.sp.end_condition)
-        if end_condition(t): return True
-        else:                return False
-    else:                    return False
+        if end_condition(t):
+            return True
+        else:
+            return False
+    else:
+        return False
     
 
 def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True, **kwargs):
@@ -751,65 +824,81 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
     # using a copy of the input model (which is the nominal run) at this time
     mdlhist, histrange, timerange, shift = init_histrange(mdl, scen.time, staged, track, track_times)
     # run model through the time range defined in the object
-    c_mdl=dict.fromkeys(ctimes); result=Result()
+    c_mdl = dict.fromkeys(ctimes)
+    result = Result()
     for t_ind, t in enumerate(timerange):
        # inject fault when it occurs, track defined flow states and graph
        try:
            if t in ctimes: 
                c_mdl[t]=mdl.copy()
-               if 'time' in mdl.h: c_mdl[t].h['time'] = np.copy(mdl.h.time)
+               if 'time' in mdl.h: 
+                   c_mdl[t].h['time'] = np.copy(mdl.h.time)
            if t in scen['sequence']: 
                fxnfaults = scen['sequence'][t].get('faults',{})
-               disturbances = scen['sequence'][t].get('disturbances', {})
-           else: fxnfaults, disturbances = {}, {}
+               disturbances = scen['sequence'][t].get('disturbances',{})
+           else: 
+               fxnfaults = {}
+               disturbances = {}
            try:
                mdl.propagate(t, fxnfaults, disturbances, run_stochastic=run_stochastic)
            except Exception as e:
-               raise Exception("Error in scenario "+str(scen)) from e
+               raise Exception("Error in scenario " + str(scen)) from e
+               
            if track_times:
-               if track_times=='all':           t_ind_rec = t_ind+shift
-               elif track_times[0]=='interval': t_ind_rec = t_ind//track_times[1]+shift
-               elif track_times[0]=='times':    t_ind_rec = track_times[1].index(t)
-               else: raise Exception("Invalid argument, track_times="+str(track_times))
+               if track_times == 'all':
+                   t_ind_rec = t_ind + shift
+               elif track_times[0] == 'interval': 
+                   t_ind_rec = t_ind//track_times[1]+shift
+               elif track_times[0] == 'times':
+                   t_ind_rec = track_times[1].index(t)
+               else: 
+                   raise Exception("Invalid argument, track_times=" + str(track_times))
                mdlhist.log(mdl, t_ind_rec, time=t)
+               
            if type(desired_result)==dict: 
                if "all" in desired_result: 
-                   result[t] = get_result(scen,mdl,desired_result['all'], mdlhist,nomhist, nomresult)
+                   result[t] = get_result(scen, mdl ,desired_result['all'], mdlhist, nomhist, nomresult)
                if t in desired_result:
-                   result[t] = get_result(scen,mdl,desired_result[t], mdlhist,nomhist, nomresult.get(t))
+                   result[t] = get_result(scen, mdl, desired_result[t], mdlhist, nomhist, nomresult.get(t))
                    #desired_result.pop(t)
            if check_end_condition(mdl, use_end_condition, t): break
        except:
-            print("Error at t="+str(t)+' in scenario '+str(scen))
+            print("Error at t=" + str(t) + ' in scenario ' + str(scen))
             raise
             break
-    if cut_hist: mdlhist.cut(t_ind+shift)
-    if type(desired_result)==dict and 'end' in desired_result: 
-        result['end'] = get_result(scen,mdl,desired_result['end'],mdlhist,nomhist, nomresult)
+    if cut_hist:
+        mdlhist.cut(t_ind + shift)
+    if type(desired_result) == dict and 'end' in desired_result: 
+        result['end'] = get_result(scen,mdl,desired_result['end'], mdlhist, nomhist, nomresult)
     else:                       
-        result.update(get_result(scen,mdl,desired_result,mdlhist,nomhist, nomresult))
+        result.update(get_result(scen, mdl, desired_result, mdlhist, nomhist, nomresult))
     #if len(result)==1: result = [*result.values()][0]
-    if None in c_mdl.values(): raise Exception("Approach times"+str(ctimes)+" go beyond simulation time "+str(t))
-    return  result, mdlhist, c_mdl, t_ind+shift
+    if None in c_mdl.values():
+        raise Exception("Approach times" + str(ctimes) + " go beyond simulation time " + str(t))
+    return  result, mdlhist, c_mdl, t_ind + shift
+
 def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     desired_result = copy.deepcopy(desired_result)
-    if type(desired_result)==str:               desired_result = {desired_result:None}
+    if type(desired_result) == str:
+        desired_result = {desired_result: None}
     elif type(desired_result) in [list, set]:   
         des_res = desired_result
-        desired_result = {str(k):k for k in des_res if type(k)!=str}
-        desired_result.update({k:None for k in des_res if type(k)==str})
-    result=Result()
-    if not nomhist: nomhist=mdlhist
-    elif len(nomhist['time'])!=len(mdlhist['time']):
-        nomhist = nomhist.cut(start_ind=len(nomhist['time'])-len(mdlhist['time']), newcopy=True)
+        desired_result = {str(k): k for k in des_res if type(k) != str}
+        desired_result.update({k: None for k in des_res if type(k) == str})
+    result = Result()
+    if not nomhist:
+        nomhist = mdlhist
+    elif len(nomhist['time']) != len(mdlhist['time']):
+        nomhist = nomhist.cut(start_ind=len(nomhist['time']) - len(mdlhist['time']), newcopy=True)
     if 'endclass' in desired_result:   
         mdlhists = History()
-        mdlhists['faulty'] =mdlhist
-        mdlhists['nominal']=nomhist
+        mdlhists['faulty'] = mdlhist
+        mdlhists['nominal'] = nomhist
         endclass = Result(**mdl.find_classification(scen, mdlhists))
-        if type(desired_result['endclass'])==dict: 
-            result['endclass'] = {k:v for k,v in endclass if k in desired_result['endclass']}
-        else: result['endclass']=endclass
+        if type(desired_result['endclass']) == dict: 
+            result['endclass'] = {k: v for k, v in endclass if k in desired_result['endclass']}
+        else: 
+            result['endclass'] = endclass
         desired_result.pop('endclass')
     if 'endfaults' in desired_result:  
         result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
@@ -818,37 +907,62 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
     graphs_to_get = [g for g in desired_result if type(g)==str and (g.startswith('graph') or g.startswith('Graph'))]
     for g in graphs_to_get:
         arg = desired_result.pop(g)
-        if isinstance(arg, tuple):  Gclass, kwargs = arg
-        else:                       Gclass = False; kwargs={}
+        if isinstance(arg, tuple):
+            Gclass, kwargs = arg
+        else:
+            Gclass = False 
+            kwargs = {}
 
         if '.' in g:
             strs = g.split(".")
             obj = get_var(mdl,strs[1:])
-        else: obj = mdl
+        else: 
+            obj = mdl
         
-        if Gclass:  rgraph = Gclass(obj, **kwargs)
-        else:       rgraph = graph_factory(obj, **kwargs)
+        if Gclass: 
+            rgraph = Gclass(obj, **kwargs)
+        else:
+            rgraph = graph_factory(obj, **kwargs)
     
-        if nomresult and g in nomresult:  rgraph.set_resgraph(nomresult[g])
-        elif nomresult:                   rgraph.set_resgraph(nomresult)
-        else:                             rgraph.set_resgraph()
+        if nomresult and g in nomresult:
+            rgraph.set_resgraph(nomresult[g])
+        elif nomresult:
+            rgraph.set_resgraph(nomresult)
+        else:
+            rgraph.set_resgraph()
         result[g] = rgraph
         
     if desired_result:
         if 'vars' in desired_result:
             result['vars']={}
-            get_endclass_vars(mdl,desired_result['vars'], result['vars'])
+            get_endclass_vars(mdl, desired_result['vars'], result['vars'])
         else:                           
-            get_endclass_vars(mdl,desired_result, result)
+            get_endclass_vars(mdl, desired_result, result)
     return result
 
     
 def get_endclass_vars(mdl, desired_result, result):
-    if type(desired_result)==str:   vars_to_get = [desired_result]
-    else:                           vars_to_get = [d for d in desired_result if type(d) not in [int,float]]
+    """
+    Gets variables in the model corresponding to the provided desired_result dictionary
+    argument and appends them to result.
+
+    Parameters
+    ----------
+    mdl : Simulable
+        fmdtools Simulation (e.g., Model)
+    desired_result : dict
+        dictionary arguments for desired_result
+    result : Result
+        Result to append results to.
+    """
+    if type(desired_result) == str:
+        vars_to_get = [desired_result]
+    else:
+        vars_to_get = [d for d in desired_result
+                       if type(d) not in [int,float]]
     var_result = mdl.get_vars(*vars_to_get, trunc_tuple=False)
     for i, var in enumerate(vars_to_get):
-        result[var]=var_result[i]   
+        result[var] = var_result[i]   
 
 
 

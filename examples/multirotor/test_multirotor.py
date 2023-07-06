@@ -39,10 +39,6 @@ class DroneTests(unittest.TestCase):
         
         #self.assertAlmostEqual(rcost_manual/10000, rcost_int/10000, 1)
         
-        
-        
-        
-        
 
 if __name__ == '__main__':
     
