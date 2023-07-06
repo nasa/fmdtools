@@ -8,6 +8,8 @@
 
 Note: This version (**2.0-alpha2**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. [Click here to view the status of our test results.](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/pytest_report.html). For stable versions, download packages releases without the -alpha or -beta tags.
 
+[Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
+
 ## Getting Started
 
 The latest public version of fmdtools can be downloaded from the [fmdtools github repository](https://github.com/nasa/fmdtools/) e.g., using:
