@@ -215,7 +215,8 @@ class DetectMode(Mode):
                    'false_high': (1, [1, 1], 0),
                    'false_low': (1, [1, 1], 0)}
     probtype='prob'
-    he_args = (0.03, {2:[11,0.1],10:[10,0.2],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0.6]})
+    he_args = (0.03, {2: [11, 0.1], 10: [10, 0.2], 13: [4, 0],
+                      14: [4, 0.1], 17: [3, 0], 34: [1.1, 0.6]})
 class Detect(Action):
     _init_m = DetectMode
     _init_detect_sig = Signal
@@ -241,7 +242,9 @@ class Detect(Action):
 class ReachMode(Mode):
     faultparams = {'unable': (0.5, [1, 0], 0)}
     probtype='prob'
-    he_args = (0.09, {2:[11,0.1],10:[10,0.0],13:[4,0],14:[4,0.1],17:[3,0],34:[1.1,0]})
+    he_args = (0.09, {2:[11, 0.1], 10: [10, 0.0], 
+                      13:[4, 0], 14: [4, 0.1], 
+                      17: [3, 0], 34:[1.1, 0]})
 class Reach(Action):
     _init_m = ReachMode
     def reached(self):
@@ -260,7 +263,9 @@ class TurnMode(Mode):
     faultparams = {'cannot': (1, [1, 0], 0),
                    'wrong_valve': (0.5, [1, 0], 0)}
     probtype = 'prob'
-    he_args = (0.009, {2:[11,0.4],10:[10,0.2],13:[4,0],14:[4,0],17:[3,0.6],34:[1.1,0]})
+    he_args = (0.009, {2: [11, 0.4], 10: [10, 0.2], 
+                       13: [4, 0], 14: [4, 0], 
+                       17: [3, 0.6], 34: [1.1, 0]})
 class Turn(Action):
     _init_m = TurnMode
     _init_detect_sig = Signal
@@ -285,7 +290,7 @@ class TankParam(Parameter, readonly=True):
 class Tank(Model):
     __slots__ = ()
     _init_p = TankParam
-    default_sp = dict(phases=(('na',0,0),('operation',1,20)),times=(0,5,10,15,20),units='min')
+    default_sp = dict(phases=(('na', 0, 0), ('operation', 1, 20)), times=(0, 5, 10, 15, 20), units='min')
     default_track = {'fxns':{'store_water':{'s':'level'}}}
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
