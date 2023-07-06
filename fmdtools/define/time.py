@@ -33,26 +33,30 @@ class Timer():
         name : str
             Name for the timer
         """
-        self.name=str(name)
-        self.time=0.0
-        self.tstep=-1.0
-        self.mode='standby'
+        self.name = str(name)
+        self.time = 0.0
+        self.tstep = -1.0
+        self.mode = 'standby'
     def __repr__(self):
-        return 'Timer '+self.name+': mode= '+self.mode+', time= '+str(self.time)
+        return 'Timer ' + self.name + ': mode= ' + self.mode + ', time= ' + str(self.time)
     def t(self):
         """ Returns the time elapsed """
         return self.time
     def inc(self, tstep=[]):
         """ Increments the time elapsed by tstep"""
         if self.time>=0.0:
-            if tstep:   self.time+=tstep
-            else:       self.time+=self.tstep
-            self.mode='ticking'
-        if self.time<=0: self.time=0.0; self.mode='complete'
+            if tstep: 
+                self.time += tstep
+            else: 
+                self.time += self.tstep
+            self.mode = 'ticking'
+        if self.time <= 0: 
+            self.time = 0.0 
+            self.mode = 'complete'
     def reset(self):
         """ Resets the time to zero"""
-        self.time=0.0
-        self.mode='standby'
+        self.time = 0.0
+        self.mode = 'standby'
     def set_timer(self,time, tstep=-1.0, overwrite='always'):
         """ Sets timer to a given time
         
@@ -70,29 +74,34 @@ class Timer():
             'never' doesn't overwrite an existing timer unless it has reached 0.0
             'increment' increments the previous time by the new time
         """
-        if overwrite =='always':                        self.time=time
-        elif overwrite=='if_more' and self.time<time:   self.time=time
-        elif overwrite=='if_less' and self.time>time:   self.time=time
-        elif overwrite=='never' and self.time==0.0:     self.time=time
-        elif overwrite=='increment':                    self.time+=time
-        self.tstep=tstep
-        self.mode='set'
+        if overwrite == 'always': 
+            self.time = time
+        elif overwrite == 'if_more' and self.time < time:
+            self.time = time
+        elif overwrite == 'if_less' and self.time > time: 
+            self.time = time
+        elif overwrite == 'never' and self.time == 0.0: 
+            self.time = time
+        elif overwrite == 'increment': 
+            self.time += time
+        self.tstep = tstep
+        self.mode = 'set'
     def in_standby(self):
         """Whether the timer is in standby (time has not been set)"""
-        return self.mode=='standby'
+        return self.mode == 'standby'
     def is_ticking(self):
         """Whether the timer is ticking (time is incrementing)"""
-        return self.mode=='ticking'
+        return self.mode == 'ticking'
     def is_complete(self):
         """Whether the timer is complete (after time is done incrementing)"""
-        return self.mode=='complete'
+        return self.mode == 'complete'
     def is_set(self):
         """Whether the timer is set (before time increments)"""
-        return self.mode=='set'
+        return self.mode == 'set'
     def copy(self):
         cop = self.__class__(self.name)
-        cop.time=self.time
-        cop.mode=self.mode
+        cop.time = self.time
+        cop.mode = self.mode
         cop.dt = self.dt
         return cop
     def create_hist(self, timerange, track):
@@ -125,26 +134,29 @@ class Time(dataobject):
     timernames: tuple
         Names of timers to instantiate.
     """
-    time:       float=0.0
-    dt:         float=1.0
-    t_ind:      int=0
-    t_loc:      float=0.0
-    run_times:  int=1
-    timers:     dict = {}
-    use_local:  bool=True
+    time: float = 0.0
+    dt: float = 1.0
+    t_ind: int = 0
+    t_loc: float=0.0
+    run_times: int = 1
+    timers: dict = {}
+    use_local: bool = True
     timernames = ()
     default_track = ('timers')
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if not self.timers: self.timers = {}
+        if not self.timers:
+            self.timers = {}
         for timername in self.timernames:
-            self.timers[timername]=Timer(timername)
+            self.timers[timername] = Timer(timername)
         self.set_timestep()
     def __getattr__(self, item):
-        if item in self.timers: return self.timers[item]
-        else:                   return super().__getattribute__(item)
+        if item in self.timers:
+            return self.timers[item]
+        else:
+            return super().__getattribute__(item)
     def return_mutables(self):
-        return (t.time for t in self.timers.values())
+        return (*(t.time for t in self.timers.values()), self.time, self.t_ind, self.t_loc, self.run_times)
     def set_timestep(self):
         """Sets the timestep of the function given the option use_local 
         (which selects whether it uses local_timestep or global_timestep)"""
@@ -167,9 +179,9 @@ class Time(dataobject):
             timer.dt=-self.dt
     def reset(self):
         """Resets time to the initial state"""
-        self.time=0.0
-        self.t_ind=0
-        self.t_loc=0.0
+        self.time = 0.0
+        self.t_ind = 0
+        self.t_loc = 0.0
         for timer in self.timers.values():
             timer.reset()
     def copy(self, *args, **t_args):
@@ -177,11 +189,11 @@ class Time(dataobject):
         cop = self.__class__(*args, **t_args)
         for timer in self.timers:
             cop.timers[timer] = self.timers[timer].copy()
-        cop.run_times=self.run_times
+        cop.run_times = self.run_times
         cop.time = self.time
-        cop.t_ind=self.t_ind
-        cop.t_loc=self.t_loc
-        cop.dt=self.dt
+        cop.t_ind = self.t_ind
+        cop.t_loc = self.t_loc
+        cop.dt = self.dt
         return cop
     def create_hist(self, timerange, track):
         """

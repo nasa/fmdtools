@@ -27,36 +27,71 @@ class CommonTests():
         for faultscen in faultscens:
             for inj_time in inj_times:
                 for t in range(max_time):
-                    if t==inj_time:   scen=faultscen
-                    else:       scen={}
-                    mdl.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen)       
-                    mdl2.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen) 
+                    if t == inj_time:   
+                        scen = faultscen
+                    else:       
+                        scen = {}
+                    mdl.propagate(t, run_stochastic=run_stochastic, fxnfaults=scen)       
+                    mdl2.propagate(t, run_stochastic=run_stochastic, fxnfaults=scen) 
                     self.check_same_model(mdl, mdl2)
-                    if t==copy_time: mdl_copy = mdl.copy()
-                    if t>copy_time: 
-                        mdl_copy.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen)
+                    if t == copy_time: 
+                        mdl_copy = mdl.copy()
+                    if t > copy_time: 
+                        mdl_copy.propagate(t, run_stochastic=run_stochastic, fxnfaults=scen)
                         self.check_same_model(mdl, mdl_copy)
-    def check_approach_parallelism(self, mdl, app):
+    def check_approach_parallelism(self, mdl, app, track="all"):
         """Test whether the model simulates the same when simulated using parallel or staged options"""
         from multiprocessing import Pool
-        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False,pool=False)
-        mdlhists_flat = mdlhists.flatten()
-        endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False,pool=False, staged=True)
-        self.assertEqual([*endclasses.values()], [*endclasses_staged.values()])
-        staged_flat = mdlhist_staged.flatten()
+        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False, pool=False, track=track)
+        mdlhists_by_scen = mdlhists.nest(1)
         
-        endclasses_par, mdlhists_par = sim.propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=False)
-        self.assertEqual([*endclasses.values()], [*endclasses_par.values()])
-        par_flat = mdlhists_par.flatten()
+        endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False, pool=False, staged=True, track=track)
+        staged_by_scen = mdlhist_staged.nest(1)
         
-        endclasses_staged_par, mdlhists_staged_par = sim.propagate.approach(mdl, app, showprogress=False,pool=Pool(4), staged=True)
-        self.assertEqual([*endclasses.values()], [*endclasses_staged_par.values()])
-        staged_par_flat = mdlhists_staged_par.flatten()
+        endclasses_par, mdlhists_par = sim.propagate.approach(mdl, app, showprogress=False, pool=Pool(4), staged=False, track=track)
+        par_by_scen = mdlhists_par.nest(1)
         
-        for k in mdlhists_flat:
-            np.testing.assert_array_equal(mdlhists_flat[k],staged_flat[k])
-            np.testing.assert_array_equal(mdlhists_flat[k],par_flat[k])
-            np.testing.assert_array_equal(mdlhists_flat[k],staged_par_flat[k])
+        endclasses_staged_par, mdlhists_staged_par = sim.propagate.approach(mdl, app, showprogress=False, pool=Pool(4), staged=True, track=track)
+        par_staged_by_scen = mdlhists_staged_par.nest(1)
+        
+        for scen in mdlhists_by_scen.keys():
+            mdlhist = mdlhists_by_scen[scen]
+            try: 
+                staged = staged_by_scen[scen]
+                self.check_same_hist(mdlhist, staged, hist1name="staged")
+                
+                par = par_by_scen[scen]
+                self.check_same_hist(mdlhist, par, hist1name="parallel")
+                
+                par_staged = par_staged_by_scen[scen]
+                self.check_same_hist(mdlhist, par_staged, hist1name="staged-parallel")
+            except AssertionError as e:
+                raise AssertionError("Problem with scenario: " + scen) from e
+        self.check_same_res(endclasses, endclasses_staged, res1name="staged")
+        self.check_same_res(endclasses, endclasses_par, res1name="par")
+        self.check_same_res(endclasses, endclasses_staged_par, res1name="staged-par")
+    def check_same_res(self, res, res1, res1name = "res1"):
+        for k in res:
+            if res[k] != res1[k]:
+                raise AssertionError("Results inconsistent at key k=" + k
+                                     + "\n res=" + str(res[k]) + "\n " + res1name + "=" + str(res1[k]))
+    def check_same_hist(self, hist, hist1, hist1name="hist1"):
+        earliest = np.inf
+        err_key = ''
+        err_keys = []
+        for k in hist:
+            err = np.where(hist[k] != hist1[k])[0]
+            if any(err):
+                err_keys.append(k)
+                if err[0] <= earliest:
+                    earliest = err[0]
+                    err_key = k
+                
+        if err_key:
+            raise AssertionError("Histories inconsistent starting at key k=" + err_key 
+                                 + " t=" + str(earliest) + " \n hist = " + str(hist[err_key])
+                                 + "\n" + hist1name + "= " + str(hist1[err_key]) +
+                                 " \n see also: " + "\n".join(err_keys))
         
     def check_model_reset(self, mdl, mdl_reset, inj_times, max_time=55, run_stochastic=False):
         """ Tests to see if model attributes reset with the reset() method such that
@@ -66,15 +101,22 @@ class CommonTests():
         for faultscen in faultscens:
             for inj_time in inj_times:
                 for t in range(max_time):
-                    if t==inj_time:     scen=faultscen
-                    else:               scen={}
-                    mdl_reset.propagate(t,run_stochastic=run_stochastic, fxnfaults=scen)       
+                    if t == inj_time:     
+                        scen = faultscen
+                    else:               
+                        scen = {}
+                    mdl_reset.propagate(t, run_stochastic=run_stochastic, fxnfaults=scen)       
                 mdl_reset.reset()
                 mdl = mdls.pop()
                 for t in range(max_time):
                     mdl_reset.propagate(t,run_stochastic=run_stochastic)  
                     mdl.propagate(t,run_stochastic=run_stochastic)  
-                    self.check_same_model(mdl, mdl_reset)
+                    try:
+                        self.check_same_model(mdl, mdl_reset)
+                    except AssertionError as e:
+                        raise AssertionError("Problem at time: " + str(t) +
+                                             " and faultscen: " + str(faultscen) +
+                                             " injected at t=" + str(inj_time)) from e
     def check_model_copy_different(self,mdl, inj_times, max_time=55, run_stochastic=False):
         """ Tests to see that a copied model has different states from the model
         it was copied from after fault injection/etc"""
@@ -83,16 +125,23 @@ class CommonTests():
             for inj_time in inj_times:
                 for t in range(max_time):
                     mdl.propagate(t,run_stochastic=run_stochastic)       
-                    if t==inj_time: mdl_copy = mdl.copy()
-                    if t>inj_time: 
+                    if t == inj_time: 
+                        mdl_copy = mdl.copy()
+                    if t > inj_time: 
                         mdl_copy.propagate(t, fxnfaults=faultscen)
                         self.check_diff_model(mdl, mdl_copy)
     def check_same_model(self, mdl, mdl2):
         """Checks if models mdl and mdl2 have the same attributes"""
         for flname, fl in mdl.flows.items():
-            self.assertEqual(fl.return_mutables(), mdl2.flows[flname].return_mutables())
+            try:
+                self.assertEqual(fl.return_mutables(), mdl2.flows[flname].return_mutables())
+            except AssertionError as e:
+                raise AssertionError("Problem in flow " + flname) from e
         for fxnname, fxn in mdl.fxns.items():
-            self.assertEqual(fxn.return_mutables(), mdl2.fxns[fxnname].return_mutables())
+            try:
+                self.assertEqual(fxn.return_mutables(), mdl2.fxns[fxnname].return_mutables())
+            except AssertionError as e:
+                raise AssertionError("Problem in fxn " + fxnname) from e
     def check_diff_model(self, mdl, mdl2):
         """Checks if models mdl and mdl2 have different attributes"""
         same=1
@@ -126,21 +175,22 @@ class CommonTests():
         if os.path.exists(ecfile):  os.remove(ecfile)
         check_link=False
         if runtype=='nominal':
-            endresult,  mdlhist=sim.propagate.nominal(mdl,  save_args={'mdlhist':{'filename':mfile},\
-                                                                   'endclass':{'filename':ecfile}})
+            endresult,  mdlhist=sim.propagate.nominal(mdl, 
+                                                      save_args={'mdlhist': {'filename': mfile},
+                                                                 'endclass': {'filename': ecfile}})
             check_link=True
         elif runtype=='one_fault':
             fxnname, faultmode, faulttime = faultscen
-            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,\
-                                                        save_args={'mdlhist':{'filename':mfile},\
-                                                                   'endclass':{'filename':ecfile}})
+            endresult, mdlhist=sim.propagate.one_fault(mdl, fxnname, faultmode, faulttime,
+                                                      save_args={'mdlhist': {'filename': mfile},
+                                                                 'endclass': {'filename': ecfile}})
         elif runtype=='sequence':
-            endresult, mdlhist=sim.propagate.sequence(mdl, faultscen, {}, \
-                                                        save_args={'mdlhist':{'filename':mfile},\
-                                                                   'endclass':{'filename':ecfile}})
-        else: raise Exception("Invalid Run Type"+runtype)
+            endresult, mdlhist=sim.propagate.sequence(mdl, faultscen, {},
+                                                      save_args={'mdlhist': {'filename': mfile},
+                                                                 'endclass': {'filename': ecfile}})
+        else: raise Exception("Invalid Run Type" + runtype)
         
-        self.check_same_file(mdlhist,mfile, check_link=check_link)
+        self.check_same_file(mdlhist, mfile, check_link=check_link)
         self.check_same_file(endresult, ecfile)
 
         os.remove(mfile), os.remove(ecfile)
@@ -170,7 +220,7 @@ class CommonTests():
         for hist_key in result_true: # test to see that all values of the arrays in the hist are the same
             if  not isinstance(result_true[hist_key], (np.ndarray,list)):
                 if isinstance(result_true[hist_key], (float, np.number)) and not np.isnan(result_true[hist_key]) :   
-                    self.assertAlmostEqual(result_true[hist_key], result_check[hist_key])
+                    self.assertAlmostEqual(result_true[hist_key], result_check[hist_key], 4)
                 else:
                     np.testing.assert_array_equal(result_true[hist_key], result_check[hist_key])
             elif isinstance(result_true[hist_key], np.ndarray) and np.issubdtype(result_true[hist_key].dtype, np.number):
