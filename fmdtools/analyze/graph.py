@@ -243,7 +243,7 @@ class Labels(dataobject, mapping=True):
 
     def from_iterator(g, iterator, LabStyle, title='id', title2='', subtext='', **node_label_styles):
         """
-        Condstructs the labels from an interator (nodes or edges)
+        Constructs the labels from an interator (nodes or edges)
 
         Parameters
         ----------
