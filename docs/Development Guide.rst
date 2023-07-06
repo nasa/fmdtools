@@ -185,6 +185,14 @@ Documentation is generated using Sphinx, which generates html from rst files. Th
 	./make clean
 	./make html
 
+Note that sphinx requires the following requirements, which should be installed bepforehand::
+
+	nbsphinx
+	myst_parser
+	sphinx_rtd_theme
+	pandoc
+
+Pandoc must be installed with anaconda (i.e., using `conda install pandoc`) since it is an external program.
 
 Testing
 --------------------------------
