@@ -21,7 +21,7 @@ The latest public version of fmdtools can be downloaded from the [fmdtools githu
 For development and use of this version (e.g., for tutorials and models), we recommended then installing this package using `pip`:
 
 ```
-   pip install -e /path/to/fmdtools 
+   pip install -e "/path/to/fmdtools" 
 ```
 
 A version of the fmdtools toolkit can also be installed directly from the [PyPI package repository](https://pypi.org/project/fmdtools/) using ``pip install fmdtools``.
