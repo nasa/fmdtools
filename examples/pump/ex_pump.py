@@ -191,7 +191,7 @@ class ExportWater(FxnBlock):
     __slots__ = ['wat_in']
     _init_m = ExportWaterMode 
     _init_wat_in = Water
-    flownames = {'wat_2':'wat_in'}
+    flownames = {'wat_2': 'wat_in'}
     
     def behavior(self,time):
         """ Here a blockage changes the area the output water flows through """
@@ -210,7 +210,7 @@ class ImportSig(FxnBlock):
     __slots__ = ['sig_out']
     _init_m = ImportSigMode
     _init_sig_out = Signal
-    flownames = {'sig_1':'sig_out'}
+    flownames = {'sig_1': 'sig_out'}
     
     def behavior(self, time):
         """ This function has time-dependent behavior.
@@ -314,7 +314,7 @@ class Pump(Model):
     __slots__=()
     _init_p = PumpParam
     default_sp = dict(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr')
-    default_track = {'flows':{'wat_2':{'s':'flowrate'}, 'ee_1':{'s':{'current'}}}, 'i':'all'}
+    default_track = {'flows': {'wat_2': {'s': 'flowrate'}, 'ee_1': {'s': {'current'}}}, 'i': 'all'}
     """
         This defines the pump model as a Model.
 
@@ -407,7 +407,7 @@ if __name__=="__main__":
     
     mdl = Pump()
     endclass, mdlhist=propagate.nominal(mdl, track='all')
-    fig, ax = an.plot.hist(mdlhist ,'flows.wat_1.s', 'i.on')
+    fig, ax = an.plot.hist(mdlhist , 'flows.wat_1.s', 'i.on')
     
     mdl = Pump()
     newhist2 = mdl.create_hist(range(10), 'default')
@@ -417,10 +417,10 @@ if __name__=="__main__":
     
     mdl = Pump()
     
-    endclass, mdlhist=propagate.nominal(mdl,  mdl_kwargs={'sp':{'end_condition':'indicate_on'}})
+    endclass, mdlhist=propagate.nominal(mdl,  mdl_kwargs={'sp': {'end_condition': 'indicate_on'}})
     
-    endclass, mdlhist=propagate.one_fault(mdl, 'export_water','block', time=29, 
-                                          mdl_kwargs={'sp':{'end_condition':'indicate_on'}})
+    endclass, mdlhist=propagate.one_fault(mdl, 'export_water', 'block', time=29, 
+                                          mdl_kwargs={'sp': {'end_condition': 'indicate_on'}})
     
     check_model_pickleability(mdl, try_pick=True)
     #from define.common import check_pickleability
@@ -446,17 +446,17 @@ if __name__=="__main__":
     #d = pickle.loads(c)
     
     mdl = Pump()
-    newhist2 = mdl.create_hist(range(10), {'flows':{'ee_1':'all',"wat_1":{'s':('flowrate',)}}})
+    newhist2 = mdl.create_hist(range(10), {'flows': {'ee_1': 'all',"wat_1": {'s':('flowrate',)}}})
     mdl = Pump()
     newhist3 = mdl.create_hist(range(10), "all")
     mdl.flows['ee_1'].s
     
     mdl = Pump()
-    newhist4 = mdl.create_hist(range(10), {'fxns':{'move_water':['s', 't']}})
+    newhist4 = mdl.create_hist(range(10), {'fxns': {'move_water':['s', 't']}})
     mdl.flows['ee_1'].s
     
     #an.graph.exec_order(mdl)
-    endclass, mdlhist=propagate.one_fault(mdl, 'import_water','no_wat', time=29,  staged=True)
+    endclass, mdlhist=propagate.one_fault(mdl, 'import_water', 'no_wat', time=29,  staged=True)
     
     #mdlhist.get_faulty_hist(*mdl.fxns)
     endclass, mdlhist=propagate.one_fault(mdl, 'move_water', 'mech_break', time=0, staged=False)
@@ -478,7 +478,7 @@ if __name__=="__main__":
     [all(flat[k]==flat_staged[k]) for k in flat]
     all([all(flat[k]==flat_staged[k]) for k in flat])
     
-    endclass, mdlhist=propagate.one_fault(mdl, 'import_ee','no_v', time=29,  staged=True, track='all')
+    endclass, mdlhist=propagate.one_fault(mdl, 'import_ee', 'no_v', time=29,  staged=True, track='all')
     
     deghist = mdlhist.get_degraded_hist(*mdl.fxns, *mdl.flows)
     exp = deghist.get_metrics()

@@ -11,6 +11,15 @@ Uses methods:
     - :meth:`nested_stats`:   Makes a table of quantities of interest from endclasses from a nested approach.
     - :meth:`nominal_factor_comparison`: Compares a metric for a given set of model parameters/factors over a set of nominal scenarios.
     - :meth:`nested_factor_comparison`: Compares a metric for a given set of model parameters/factors over a nested set of nominal and fault scenarios.
+    - :meth:`label_faults`:Labels the faults
+    - :meth:`dicttab`:Makes table of a generic dictionary
+    - :meth:`maptab`:Makes table of a generic map
+
+
+Legacy Functions:
+-meth:`phasefmea`:(Use tabulate.fmea with option group_by='phase' instead) Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
+-meth:`summfmea`: (Use tabulate.fmea with group_by='fxnfault' instead.) Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
+    
 """
 # File Name: analyze/tabulate.py
 # Author: Daniel Hulse

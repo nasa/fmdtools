@@ -6,7 +6,9 @@
 
 **fmdtools** (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
 
-Note: This version (**2.0-alpha2**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. [Click here to view the status of our test results.](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/pytest_report.html). For stable versions, download packages releases without the -alpha or -beta tags.
+Note: This version (**2.0-alpha3**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. [Click here to view the status of our test results.](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/pytest_report.html). For stable versions, download packages releases without the -alpha or -beta tags.
+
+[Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
 
 ## Getting Started
 
@@ -19,7 +21,7 @@ The latest public version of fmdtools can be downloaded from the [fmdtools githu
 For development and use of this version (e.g., for tutorials and models), we recommended then installing this package using `pip`:
 
 ```
-   pip install -e /path/to/fmdtools 
+   pip install -e "/path/to/fmdtools" 
 ```
 
 A version of the fmdtools toolkit can also be installed directly from the [PyPI package repository](https://pypi.org/project/fmdtools/) using ``pip install fmdtools``.

@@ -8,6 +8,34 @@ Description: A module defining how simulation results (histories) structured and
 And functions:
 - :func:`load`:             Loads a given file to a Result/History
 - :func:`load_folder`:      Loads a given folder to a Result/History
+
+Private Methods:
+- :func:`file_check`:           Check if files exists and whether to overwrite the file
+- :func:`auto_filetype`:        Helper function that automatically determines the filetype (pickle, csv, 
+                                or json) of a given filename
+- :func:`create_indiv_filename`:Helper function that creates an individualized name for a file given the 
+                                general filename and an individual id
+- :func:`clean_resultdict_keys`:Helper function for recreating results dictionary keys (tuples) from a 
+                                dictionary loaded from a file (where keys are strings) (used in csv/json results)
+- :func:`get_dict_attr`:        Gets attributes *attr from a given nested dict dict_in of class des_class
+- :func:`fromdict`:             Creates new history/result from given dictionary
+- :func:`check_include_errors`: Helper function for Result Class, Cycles through `check_include_error`.
+- :func:`check_include_error`:  Helper function to raise exceptions for errors.
+- :func:`bootstrap_confidence_interval`:Convenience wrapper for scipy.bootstrap
+- :func:`diff`:                 Helper function for finding inconsistent states between val1, val2, with the difftype option
+- :func:`nan_to_x`:             Helper function for Result Class, returns nan as zero if present, otherwise returns the number
+- :func:`is_numeric`:           Helper function for Result Class, checks if a given value is numeric
+- :func:`join_key`:             Helper function for Result Class
+- :func:`is_known_immutable`:   Helper function for History Class
+- :func:`is_known_mutable`:     Helper function for History Class
+- :func:`to_include_keys`:      Determine what dict keys to include from Result given nested to_include dictionary
+- :func:`get_sub_include`:      Determines what attributes of att to include based on the provided dict/str/list/set to_include
+- :func:`init_indicator_hist`:  Creates a history for an object with indicator methods (e.g., obj.indicate_XX)
+- :func:`init_hist_iter`:       Initializes the history for a given attribute att with value val. Enables the recursive 
+                                definition of a history as a nested structure.
+- :func:`init_dicthist`:        Initializes histories for dictionary attributes (if any)
+
+
 """
 
 import numpy as np
@@ -201,8 +229,75 @@ class Result(UserDict):
         return tuple(self.data.values())
 
     def __eq__(self, other):
-        return all([all(v == other[k]) if isinstance(v, np.ndarray) else v == other[k] for k, v in self.data.items()])
+        """
+        Checks that the two values of the dictionary are equal. Enables the syntax
+        result1 == result2, which returns True/False depending on if the keys/values
+        are the same.
 
+        Parameters
+        ----------
+        other : Result
+            Result dictionary to compare against
+
+        Returns
+        -------
+        equality : Bool
+            Whether the results are equal
+        """
+        return all([all(v == other[k]) 
+                    if isinstance(v, np.ndarray) 
+                    else v == other[k] 
+                    for k, v in self.data.items()])
+    
+    def __sub__(self, other):
+        """
+        Magic subtraction methods for Results. Used to enable uses such as: 
+            result1 - result2 = result3, where result3 is the difference between
+            result1 and result2
+            
+            If the values are numeric (e.g., 1.5 and 1.0), the value returned will
+            be the numeric difference (e.g., 0.5). Otherwise the value returned
+            is a true/false value corresponding to whether or not they are the same
+            (e.g. "yes", "no" -> False)
+
+        Parameters
+        ----------
+        other : Result/History
+            Result to subtract from the given result
+
+        Returns
+        -------
+        ret : Result/History
+            Result with values correspnding to the difference between the two. 
+        """
+        ret = self.__class__()
+        # creates a dict where the values are the mathematical difference if the 
+        # values are 
+        ret.data = {k: np.subtract(self[k], other[k], dtype=np.int32) 
+                    if is_bool(self[k])
+                    else self[k]-other[k] if is_numeric(self[k])
+                    else self[k]!=other[k] for k in self.keys()}
+        return ret
+    def get_different(self, other):
+        """
+        Finds the values of two results which are different.
+
+        Parameters
+        ----------
+        other : Result
+            Result to compare against
+
+        Returns
+        -------
+        different : Result
+            Result with entries corresponding to the difference between the two 
+            Results.
+        """
+        diff = self-other
+        different = self.__class__()
+        different.data = {k: v for k, v in diff.items() if v} 
+        return different
+    
     def keys(self):
         return self.data.keys()
 
@@ -683,7 +778,12 @@ def nan_to_x(metric, x=0.0):
         return x
     else:
         return metric
-
+def is_bool(val):
+    try:
+        return val.dtype in ['bool']
+    except:
+        return type(val) in [bool]
+    
 
 def is_numeric(val):
     """Checks if a given value is numeric"""
@@ -873,6 +973,25 @@ class History(Result):
             hist.update(History.load(folder+'/'+filename, filetype, renest_dict=renest_dict, indiv=True))
         if renest_dict==False: hist = hist.flatten()
         return hist
+    def get_different(self, other):
+        """
+        Finds the values of two histories which are different.
+
+        Parameters
+        ----------
+        other : History
+            History to compare against
+
+        Returns
+        -------
+        different : History
+            History with entries corresponding to the difference between the two 
+            histories.
+        """
+        diff = self-other
+        different = self.__class__()
+        different.data = {k: v for k, v in diff.items() if any(v)} 
+        return different
 
     def copy(self):
         """Creates a new independent copy of the current history dict"""
@@ -932,12 +1051,13 @@ class History(Result):
                     except Exception as e:
                         obj_str = "Error logging obj "+obj.__class__.__name__+": "
                         if t_ind >= len(hist):
-                            raise Exception(obj_str+"Time beyond range of model history--check staged execution " 
+                            raise Exception(obj_str + "Time beyond range of model history--check staged execution " 
                                             "and simulation time settings (end condition, mdl.sp.times)") from e
                         elif not np.can_cast(type(val), type(hist[t_ind])):
-                            raise Exception(obj_str+str(att)+" changed type: "+str(type(hist[t_ind]))+" to "+str(type(val))+" at t_ind="+str(t_ind)) from e
+                            raise Exception(obj_str + str(att)+" changed type: "+str(type(hist[t_ind])) +
+                                            " to " + str(type(val)) + " at t_ind=" + str(t_ind)) from e
                         else:
-                            raise Exception(obj_str+"Value too large to represent: "+att+"="+str(val)) from e
+                            raise Exception(obj_str + "Value too large to represent: " + att + "=" + str(val)) from e
 
     def cut(self, end_ind=None, start_ind=None, newcopy=False):
         """Cuts the history to a given index"""

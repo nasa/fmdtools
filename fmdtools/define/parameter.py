@@ -3,6 +3,7 @@
 Description: A module for defining Parameters, which are (generic) containers for system attributes that do not change
     
 - :class:`Parameter`: Superclass for Parameters
+- :class:`SimParam`: Class defining Simulation Parameters
 """
 
 import inspect
@@ -32,7 +33,7 @@ class Parameter(dataobject, readonly=True):
     This parameter can then be instantiated using:
         p = Param(x=1.0, y=0.0)
     """
-    def __init__(self, *args, strict_immutability=True,**kwargs):
+    def __init__(self, *args, strict_immutability=True, check_type=True, check_pickle=True, **kwargs):
         """
         Initializes the parameter with given kwargs.
 
@@ -54,8 +55,10 @@ class Parameter(dataobject, readonly=True):
         except TypeError:
             raise Exception("Invalid args/kwargs: "+str(args)+" , "+str(kwargs)+" in "+str(self.__class__))
         if strict_immutability: self.check_immutable()
-        self.check_type()
-        self.check_pickle()
+        if check_type:
+            self.check_type()
+        if check_pickle:
+            self.check_pickle()
     def check_lim(self, k, v):
         """
         Checks to ensure the value v for field k is within the defined limits

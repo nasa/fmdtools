@@ -131,16 +131,15 @@ class epsTests(unittest.TestCase, CommonTests):
             )
 
     def test_save_load_singlefaults(self):
-        self.check_save_load_approach(
-            self.mdl, "eps_mdlhists.pkl", "eps_endclasses.pkl", "single_faults"
+        self.check_save_load_singlefaults(
+            self.mdl, "eps_mdlhists.pkl", "eps_endclasses.pkl"
         )
-        self.check_save_load_approach(
-            self.mdl, "eps_mdlhists.csv", "eps_endclasses.csv", "single_faults"
+        self.check_save_load_singlefaults(
+            self.mdl, "eps_mdlhists.csv", "eps_endclasses.csv"
         )
-        self.check_save_load_approach(
-            self.mdl, "eps_mdlhists.json", "eps_endclasses.json", "single_faults"
+        self.check_save_load_singlefaults(
+            self.mdl, "eps_mdlhists.json", "eps_endclasses.json"
         )
-
 
 if __name__ == "__main__":
     unittest.main()
