@@ -16,7 +16,7 @@ from fmdtools.define.model import Model
 from fmdtools.define.block import FxnBlock
 import numpy as np
 
-from examples.tank.tank_model import TransportLiquidState, Signal, Water
+from examples.tank.tank_model import TransportLiquidState, Signal, Liquid
 
 class TankParam(Parameter, readonly=True):
     capacity:       np.float64 = np.float64(20.0)
@@ -25,7 +25,7 @@ class TankParam(Parameter, readonly=True):
     policymap:      dict=dict()
     def __init__(self, *args, **kwargs):
         args = self.get_true_fields(*args, **kwargs)
-        super().__init__(*args, strict_immutability=False)
+        super().__init__(*args, strict_immutability=False, check_type=False, check_pickle=False)
         if not self.policymap: 
             self.policymap.update(self.get_faultpolicy())
     def get_faultpolicy(self):
@@ -49,7 +49,7 @@ class ImportLiquid(FxnBlock):
     _init_s = TransportLiquidState
     _init_m = TransportLiquidMode
     _init_sig = Signal
-    _init_wat_out = Water
+    _init_wat_out = Liquid
     flownames = {'coolant_in':'wat_out', 'input_sig':'sig'}
     def behavior(self,time):
         if   self.sig.s.action>=1:        self.s.amt_open= 1 + self.p.turnup
@@ -72,7 +72,7 @@ class ExportLiquid(FxnBlock):
     _init_s = TransportLiquidState
     _init_m = TransportLiquidMode
     _init_sig = Signal
-    _init_wat_in = Water
+    _init_wat_in = Liquid
     flownames = {'coolant_out':'wat_in', 'output_sig':'sig'}
     def behavior(self,time):
         if   self.sig.s.action>=1:      self.s.amt_open=  1 + self.p.turnup
@@ -100,8 +100,8 @@ class StoreLiquid(FxnBlock):
     _init_s = StoreLiquidState
     _init_m = StoreLiquidMode
     _init_p = TankParam
-    _init_wat_in = Water
-    _init_wat_out = Water
+    _init_wat_in = Liquid
+    _init_wat_out = Liquid
     _init_sig = Signal
     flownames = {'coolant_in':'wat_in', 'coolant_out':'wat_out', 'tank_sig':'sig'}
     def behavior(self, time):
@@ -143,8 +143,8 @@ class Tank(Model):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
-        self.add_flow('coolant_in',     Water)
-        self.add_flow('coolant_out',    Water)
+        self.add_flow('coolant_in',     Liquid)
+        self.add_flow('coolant_out',    Liquid)
         self.add_flow('input_sig',      Signal)
         self.add_flow('tank_sig',       Signal)
         self.add_flow('output_sig',     Signal)

@@ -1,22 +1,53 @@
 """
-Description: Gives graph-level visualizations of the model using installed renderers.
+    Description: Gives graph-level visualizations of the model using installed renderers.
 
-Public user-facing methods:
-    - :func:`set_pos`:                      Set graph node positions manually
-    - :func:`show`:                         Plots a single graph object g. Has options for heatmaps/overlays and
-                                            matplotlib/graphviz/pyvis renderers.
-    - :func:`exec_order`:                   Displays the propagation order and type (dynamic/static) in the model. Works
-                                            with matplotlib/graphviz renderers.
-    - :func:`history`:                      Displays plots of the graph over time given a dict history of graph objects.
-                                            Works with matplotlib/graphviz renderers.
-    - :func:`result_from`:                  Plots a representation of the model graph at a specific time in the results
-                                            history. Works with matplotlib/graphviz renderers.
-    - :func:`results_from`:                 Plots a set of representations of the model graph at given times in the
-                                            results history. Works with matplotlib/graphviz renderers.
-    - :func:`animation_from`:               Creates an animation of the model graph using results at given times in the
-                                            results history.  Works with matplotlib renderers.
-Private class:
-    - :class:`GraphInteractor`:             Used to set nodes in set_pos
+
+    Main user-facing individual graphing methods:
+        - :class:`ModelGraph`:                  Graphs Model of functions and flow for display, where both functions 
+                                                and flows are nodes.
+        - :class:`ModelFlowGraph`:              Graphs Model of flows for display, where flows are set as nodes 
+                                                and connections (via functions) are edges
+        - :class:`ModelCompGraph`:              Graphs Model of functions, and flows, with component containment 
+                                                relationships shown for functions.
+        - :class:`ModelFxnGraph`:               Graphs representation of the functions of the model, where functions
+                                                are nodes and flows are edges
+        - :class:`ModelTypeGraph`:              Graph representation of model Classes, showing the containment relationship
+                                                between function classes and flow classes in the model.
+        - :class:`MultiFlowGraph`:              Creates a networkx graph corresponding to the MultiFlow.
+        - :class:`CommsFlowGraph`:              Creates a graph representation of the CommsFlow (assuming no additional locals).
+        - :class:`ASGGraph`:                    Shows a visualization of the internal Action Sequence Graph of the Function Block,
+                                                with Sequences as edges, with Flows (circular) and Actions (square) as nodes.
+        - :class:`ASGActGraph`:                 Variant of ASGGraph where only the sequence between actions is shown.
+        - :class:`ASGFlowGraph`:                Variant of ASGGraph where only the flow relationships between actions is shown.
+
+        Create graph after specifying the individual graph type from the object using the following:
+        - :class:`Graph`: Creates a graph
+
+    Shared Method Parameters:
+        - :data:`default_edge_kwargs`:          Default appearance for edges in model network graphs.
+        - :data:`default_node_kwargs`:          Default appearance for nodes in model network graphs.
+
+
+
+    Private Methods:
+        - :class:`EdgeStyle`:                   Holds kwargs for nx.draw_networkx_edges to be applied to edges
+        - :class:`NodeStyle`:                   Holds kwargs for nx.draw_networkx_nodes to be applied to nodes
+        - :class:`LabelStyle`:                  Holds kwargs for nx.draw_networkx_labels to be applied to labels
+        - :class:`EdgeLabelStyle`:              Controls edge labels to ensure they do not rotate
+        - :class:`Labels`:                      Defines a set of labels to be drawn using draw_networkx_labels. 
+        - :class:`GraphInteractor`:             Used to set nodes in set_pos when creating interactive graph
+
+        - :func:`get_style_kwargs`:             Gets the keywords for networkx plotting
+        - :func:`get_label_groups`:             Creates groups of nodes/edges in terms of discrete values for the given tags.
+        - :func:`to_legend_label`:              Creates a legend label string for the group corresponding to style_labels
+        - :func:`sff_one_trial`:                Calculates one trial of the sff model
+        - :func:`data_average `:                Averages each column in data"
+        - :func:`data_error`:                   Calculates error for each column in data
+        - :func:`gr_import_check`:              Checks if graphviz is installed on the system before plotting.
+        - :func:`node_is_tagged`:               Returns if node is tagged
+        - :func:`add_g_nested`:                 Helper function for MultiFlow.create_multigraph to construct the containment tree.
+        - :func:`graph_factory`:                Creates the default Graph for a given object.
+
 """
 
 # File Name: analyze/graph.py
@@ -212,7 +243,7 @@ class Labels(dataobject, mapping=True):
 
     def from_iterator(g, iterator, LabStyle, title='id', title2='', subtext='', **node_label_styles):
         """
-        Condstructs the labels from an interator (nodes or edges)
+        Constructs the labels from an interator (nodes or edges)
 
         Parameters
         ----------

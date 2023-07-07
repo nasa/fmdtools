@@ -185,6 +185,23 @@ Documentation is generated using Sphinx, which generates html from rst files. Th
 	./make clean
 	./make html
 
+Note that sphinx requires the following requirements, which should be installed bepforehand::
+
+	nbsphinx
+	myst_parser
+	sphinx_rtd_theme
+	pandoc
+
+Pandoc must be installed with anaconda (i.e., using `conda install pandoc`) since it is an external program.
+
+Style/Formatting
+--------------------------------
+
+Generally, we try to follow PEP8 style conventions. These can be followed automatically using the Black code formatter. See resources:
+
+- stand-alone formatter: https://github.com/psf/black
+- VSCode Extension: https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
+- Spyder workflow: https://stackoverflow.com/questions/55698077/how-to-use-code-formatter-black-with-spyder
 
 Testing
 --------------------------------
