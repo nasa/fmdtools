@@ -46,14 +46,13 @@ class Sequence(UserDict):
                 self[i]=new_sequence[i]
             else:
                 self[i].update(new_sequence[i])
-    
 
-class Scenario(dataobject, readonly=True, mapping=True):
+class BaseScenario(dataobject, readonly=True, mapping=True):
     sequence: dict = dict()
+    times: tuple = ()
     rate: ClassVar[float] = 1.0
     name: ClassVar[str] = "nominal"
     time: ClassVar[float] = 0.0
-    times: tuple = ()
     def copy_with(self, **kwargs):
         existing_kwargs = asdict(self)
         return self.__class__(**{**existing_kwargs, **kwargs})
@@ -61,16 +60,21 @@ class Scenario(dataobject, readonly=True, mapping=True):
         if not hasattr(self, entry): 
             return fallback
         else: 
-            return self[entry] 
+            return self[entry]     
 
-class SingleFaultScenario(Scenario):
+class Scenario(BaseScenario):
+    rate: float = 1.0
+    name: str = "nominal"
+    time: float = 0.0
+
+class SingleFaultScenario(BaseScenario):
     function: str=''
     fault: str=''
     rate: float = 1.0
     name: str = 'faulty'
     time: float = 0.0
 
-class JointFaultScenario(Scenario):
+class JointFaultScenario(BaseScenario):
     joint_faults: int=1
     functions: tuple=()
     modes: tuple=()
@@ -78,7 +82,7 @@ class JointFaultScenario(Scenario):
     name: str = 'faulty'
     time: float = 0.0
 
-class NominalScenario(Scenario, readonly=True):
+class NominalScenario(BaseScenario, readonly=True):
     p: dict={}
     r: dict={}
     sp: dict={}

@@ -350,7 +350,8 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
     run_kwarg = pack_run_kwargs(**kwargs)
     
     if not scen: 
-        if not seq: seq = Sequence(faultseq=faultseq, disturbances=disturbances)
+        if not seq:
+            seq = Sequence(faultseq=faultseq, disturbances=disturbances)
         scen = Scenario(sequence=seq, rate=rate, name='faulty', times=tuple([*seq.keys()]))
     
     nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, [min(scen.sequence)], **{**sim_kwarg, 'use_end_condition':False}, **run_kwarg)
