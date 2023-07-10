@@ -133,8 +133,10 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
         phases={}, modephases={}, label_phases=True,  **kwargs):
     """
     #Process data - clip and flatten
-    if 'time' in simhists: 
+    if "time" in simhists:
         simhists = History(nominal=simhists).flatten()
+    else:
+        simhists = simhists.flatten()
     if len(plot_values)==1 and type(plot_values[0])==dict:
         plot_values = to_include_keys(plot_values[0])
     
@@ -142,18 +144,26 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
     # Set up plots and iteration
     if 'nominal' in grouphists.keys() and len(grouphists)>1: 
         indiv_kwargs['nominal'] = indiv_kwargs.get('nominal', {'color':'blue', 'ls':'--'})
-    else: indiv_kwargs.pop('nominal','')
+    else: 
+        indiv_kwargs.pop('nominal','')
+    
     if 'faulty' in grouphists.keys(): 
         indiv_kwargs['faulty'] = indiv_kwargs.get('faulty', {'color':'red'})  
-    else: indiv_kwargs.pop('faulty','')
+    else: 
+        indiv_kwargs.pop('faulty','')
 
     num_plots = len(plot_values)
-    if num_plots==1: cols=1
+    if num_plots==1: 
+        cols=1
     rows = int(np.ceil(num_plots/cols))
-    if figsize=='default': figsize=(cols*3, 2*rows)
+    if figsize=='default': 
+        figsize=(cols*3, 2*rows)
     fig, axs = plt.subplots(rows,cols, sharex=True, figsize=figsize) 
-    if type(axs)==np.ndarray:   axs = axs.flatten()
-    else:                       axs=[axs]
+    
+    if type(axs)==np.ndarray: 
+        axs = axs.flatten()
+    else: 
+        axs=[axs]
     
     subplot_titles = {plot_value:plot_value for plot_value in plot_values}
     subplot_titles.update(titles)
@@ -162,15 +172,18 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
         ax = axs[i]
         ax.set_title(subplot_titles[plot_value])
         ax.grid()
-        if i >= (rows-1)*cols and xlabel: ax.set_xlabel(xlabel)
-        if ylabels.get(plot_value, False): ax.set_ylabel(ylabels[plot_value])
+        if i >= (rows-1)*cols and xlabel: 
+            ax.set_xlabel(xlabel)
+        if ylabels.get(plot_value, False): 
+            ax.set_ylabel(ylabels[plot_value])
         for group, hists in grouphists.items():
             times = hists.get_metric('time', axis=0) #TODO: find a better way to do this that will be compatible with timers
             local_kwargs = {**kwargs, **indiv_kwargs.get(group,{})}
             try:
                 if aggregation=='individual':
                     hist_to_plot = hists.get_values(plot_value)
-                    if 'color' not in local_kwargs: local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
+                    if 'color' not in local_kwargs: 
+                        local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
                     for h in hist_to_plot.values():
                         ax.plot(times, h, label=group, **local_kwargs)
                 elif aggregation=='mean_std':
@@ -196,9 +209,12 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
                     low_perc = hists.get_metric(plot_value, np.percentile, args=(50-kwargs.get('perc_range',50)/2,), axis=0)
                     high_perc = hists.get_metric(plot_value, np.percentile, args=(50+kwargs.get('perc_range',50)/2,), axis=0)
                     plot_line_and_err(ax, times, median, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
-                    if boundtype=='fill':       ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
-                    elif boundtype=='line':     plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
-                else: raise Exception("Invalid aggregation option: "+aggregation)
+                    if boundtype=='fill': 
+                        ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
+                    elif boundtype=='line': 
+                        plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
+                else: 
+                    raise Exception("Invalid aggregation option: "+aggregation)
             except Exception as e:
                 raise Exception("Error at plot_value "+str(plot_value)+" and group: "+str(group))
             if phases.get(plot_value[1]):
@@ -207,11 +223,14 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
                 ax.vlines(phaseseps,ymin, ymax, colors='gray',linestyles='dashed')
                 if label_phases:
                     for phase in phases[plot_value[1]]:
-                        if modephases: phasetext = [m for m,p in modephases[plot_value[1]].items() if phase in p][0]
-                        else: phasetext = phase
+                        if modephases: 
+                            phasetext = [m for m,p in modephases[plot_value[1]].items() if phase in p][0]
+                        else: 
+                            phasetext = phase
                         bbox_props = dict(boxstyle="round,pad=0.3", fc="white", lw=0, alpha=0.5)
                         ax.text(np.average(phases[plot_value[1]][phase]), (ymin+ymax)/2, phasetext, ha='center', bbox=bbox_props)
-        if type(time_slice)==int: ax.axvline(x=time_slice, color='k', label=time_slice_label)
+        if type(time_slice)==int: 
+            ax.axvline(x=time_slice, color='k', label=time_slice_label)
         else:   
             for ts in time_slice: ax.axvline(x=ts, color='k', label=time_slice_label)
     multiplot_legend_title(grouphists, axs, ax, legend_loc, title, v_padding, h_padding, title_padding, legend_title)
