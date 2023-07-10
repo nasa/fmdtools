@@ -7,6 +7,7 @@ Has classes:
 - :Mode:`Mode`: Class for defining the mode property (and associated probability model) held in Blocks. 
 """
 from recordclass import dataobject
+from typing import ClassVar
 import numpy as np
 import itertools
 import copy
@@ -17,11 +18,11 @@ class Fault(dataobject, readonly=True, mapping=True):
     """
     Stores Default Attributes for for modes to use in Mode.faultmodes
     """
-    dist:       float = 1.0
-    oppvect:    dict = {"operating":1.0}
-    rcost:      float = 0.0
-    probtype:   str = 'rate'
-    units:      str = 'hr'
+    dist: float = 1.0
+    oppvect: dict = {"operating":1.0}
+    rcost: float = 0.0
+    probtype: str = 'rate'
+    units: str = 'hr'
 
 class Mode(dataobject, readonly=False):
     """
@@ -92,11 +93,11 @@ class Mode(dataobject, readonly=False):
     faultmodes : dict 
             Dictionary of :class:`Fault` defining possible fault modes and their properties   
     """
-    mode: str = 'nominal'
+    mode: ClassVar[str] = 'nominal'
+    failrate: ClassVar[float] = 1.0
     faults: set = set()
     faultmodes: dict = {}
     mode_state_dict: dict = {}
-    failrate: float = 1.0
     faultparams = {}
     he_args = tuple()
     opermodes = ('nominal',)
