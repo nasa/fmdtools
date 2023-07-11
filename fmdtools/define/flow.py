@@ -124,8 +124,10 @@ class MultiFlow(Flow):
     def __init__(self, name, glob=[], s={}, p={}):
         self.locals=[]
         super().__init__(name,  s=s, p=p)
-        if not glob: self.glob=self
-        else:        self.glob=glob
+        if not glob: 
+            self.glob=self
+        else: 
+            self.glob=glob
     def __repr__(self):
         rep_str = Flow.__repr__(self)
         for l in self.locals:
@@ -158,23 +160,33 @@ class MultiFlow(Flow):
         #elif type(attrs)==str:  attrs = [attrs]
         #if type(attrs)==list:   atts = {k:v for k,v in default_states if k in attrs}
         #elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in default_states}
-        if hasattr(self, name): newflow = getattr(self, name).copy(glob=self, p=p, s=s)
-        else:                   newflow = self.__class__(name, glob=self, p=p, s=s)
+        if hasattr(self, name): 
+            newflow = getattr(self, name).copy(glob=self, p=p, s=s)
+        else: 
+            newflow = self.__class__(name, glob=self, p=p, s=s)
         setattr(self, name, newflow)
         self.locals.append(name)
         return newflow
     def get_local_name(self, name):
         """Gets the name of the view corresponding to the given name (enables "local" or "global" options)"""
-        if name=="local":       return self.name
-        elif name=="global":    return "glob"
-        else:                   return name
+        if name == "local":
+            return self.name
+        elif name == "global":
+            return "glob"
+        else:
+            return name
     def get_view(self, name):
         """Gets the view of the MultiFlow corresponding to the given name"""
-        if name=="":                                raise Exception("Must provide view")
-        elif name=="local":                         view = self
-        elif name=="global":                        view=self.glob
-        elif name in getattr(self, 'locals',[]):    view = getattr(self, name)
-        else:                                       view = getattr(self.glob, name)
+        if name == "":
+            raise Exception("Must provide view")
+        elif name == "local": 
+            view = self
+        elif name == "global": 
+            view = self.glob
+        elif name in getattr(self, 'locals',[]): 
+            view = getattr(self, name)
+        else:
+            view = getattr(self.glob, name)
         return view
     def update(self, to_update="local", to_get="global", *states):
         """
@@ -192,11 +204,16 @@ class MultiFlow(Flow):
         """
         get = self.get_view(to_get)
         if to_update=='all':            
-            if hasattr(self, 'fxns'):   updatelist = [*self.fxns]
-            else:                       updatelist = self.locals
-        elif type(to_update)==str:      updatelist = [to_update]
-        elif type(to_update)==list:     updatelist = to_update
-        else: raise Exception("Invalid to_update: "+str(to_update))
+            if hasattr(self, 'fxns'): 
+                updatelist = [*self.fxns]
+            else:
+                updatelist = self.locals
+        elif type(to_update)==str:
+            updatelist = [to_update]
+        elif type(to_update)==list:
+            updatelist = to_update
+        else: 
+            raise Exception("Invalid to_update: "+str(to_update))
         for to_up in updatelist:
             up = self.get_view(to_update)
             up.s.assign(get.s, *states, as_copy=True)
@@ -306,13 +323,17 @@ class CommsFlow(MultiFlow):
         *states : strs
             Values to send from.
         """
-        fxn_from=self.get_local_name(fxn_from)
+        fxn_from = self.get_local_name(fxn_from)
         f_from = self.get_view(fxn_from)
         
-        if fxn_to=="all":       fxns_to=[f for f in self.glob.fxns if f!=self.name]
-        elif fxn_to=="ports":   fxns_to=[f for f in f_from.locals]
-        elif type(fxn_to)==str: fxns_to = [self.get_local_name(fxn_to)]
-        else:                   fxns_to = fxn_to
+        if fxn_to=="all": 
+            fxns_to = [f for f in self.glob.fxns if f!=self.name]
+        elif fxn_to=="ports":
+            fxns_to = [f for f in f_from.locals]
+        elif type(fxn_to)==str: 
+            fxns_to = [self.get_local_name(fxn_to)]
+        else: 
+            fxns_to = fxn_to
         
         for f_to in fxns_to:
             port_internal = self.get_port(fxn_from, f_to, "internal")
