@@ -45,7 +45,7 @@ import sys
 import os
 from collections import UserDict
 from ordered_set import OrderedSet
-from fmdtools.define.common import get_var, t_key
+from fmdtools.define.common import get_var, t_key, get_obj_indicators
 
 
 def file_check(filename, overwrite):
@@ -862,11 +862,10 @@ def init_indicator_hist(obj, h, timerange, track):
     """
     sub_track = get_sub_include('i', track)
     if sub_track:
-        indicators = [i[9:] for i in dir(obj) if i.startswith('indicate_')]
+        indicators = get_obj_indicators(obj)
         if indicators:
             h['i'] = History()
-            for i in indicators:
-                val = getattr(obj, 'indicate_'+i)
+            for i, val in indicators.items():
                 h['i'].init_att(i, val, timerange, sub_track, dtype=bool)
 
 

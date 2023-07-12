@@ -878,9 +878,9 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
                
            if type(desired_result)==dict: 
                if "all" in desired_result: 
-                   result[t] = get_result(scen, mdl ,desired_result['all'], mdlhist, nomhist, nomresult)
+                   result[t] = get_result(scen, mdl ,desired_result['all'], mdlhist, nomhist, nomresult, time=t)
                if t in desired_result:
-                   result[t] = get_result(scen, mdl, desired_result[t], mdlhist, nomhist, nomresult.get(t))
+                   result[t] = get_result(scen, mdl, desired_result[t], mdlhist, nomhist, nomresult.get(t), time=t)
                    #desired_result.pop(t)
            if check_end_condition(mdl, use_end_condition, t): break
        except:
@@ -890,15 +890,15 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
     if cut_hist:
         mdlhist.cut(t_ind + shift)
     if type(desired_result) == dict and 'end' in desired_result: 
-        result['end'] = get_result(scen,mdl,desired_result['end'], mdlhist, nomhist, nomresult)
+        result['end'] = get_result(scen, mdl, desired_result['end'], mdlhist, nomhist, nomresult, time=t)
     else:                       
-        result.update(get_result(scen, mdl, desired_result, mdlhist, nomhist, nomresult))
+        result.update(get_result(scen, mdl, desired_result, mdlhist, nomhist, nomresult, time=t))
     #if len(result)==1: result = [*result.values()][0]
     if None in c_mdl.values():
         raise Exception("Approach times" + str(ctimes) + " go beyond simulation time " + str(t))
     return  result, mdlhist, c_mdl, t_ind + shift
 
-def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
+def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}, time=0.0):
     desired_result = copy.deepcopy(desired_result)
     if type(desired_result) == str:
         desired_result = {desired_result: None}
@@ -941,9 +941,9 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
             obj = mdl
         
         if Gclass: 
-            rgraph = Gclass(obj, **kwargs)
+            rgraph = Gclass(obj, time=time, **kwargs)
         else:
-            rgraph = graph_factory(obj, **kwargs)
+            rgraph = graph_factory(obj, time=time, **kwargs)
     
         if nomresult and g in nomresult:
             rgraph.set_resgraph(nomresult[g])
