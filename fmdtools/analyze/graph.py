@@ -70,6 +70,7 @@ from matplotlib import get_backend
 from matplotlib.colors import Colormap
 from recordclass import dataobject, asdict
 from .result import Result, History
+from fmdtools.define.common import get_obj_indicators
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -282,6 +283,7 @@ class Labels(dataobject, mapping=True):
                 evals = nx.get_node_attributes(g, entryval)
             else:
                 evals = {}
+            
             if evals:
                 if entry == 'title':
                     labs.title = evals
@@ -478,6 +480,7 @@ class Graph(object):
         for node_group in self.node_groups:
             self.node_styles[node_group] = NodeStyle.from_styles(node_styles, node_group)
         self.node_style_labels = [*node_styles.keys()]
+
     def set_edge_labels(self, title='label', title2='', subtext='states', **edge_label_styles):
         """
         Creates labels using Labels.from_iterator for the edges in the graph
@@ -1746,7 +1749,9 @@ class MultiFlowGraph(Graph):
                                send_connections={"closest": "base"},
                                connections_as_tags=True,
                                include_states=False,
-                               get_states=True):
+                               get_states=True,
+                               get_indicators=True,
+                               time=0.0):
         """
         Creates a networkx graph corresponding to the MultiFlow.
     
@@ -1764,6 +1769,10 @@ class MultiFlowGraph(Graph):
             whether to include states in the graph
         get_states:
             whether to attach state information as node attributes
+        get_indicators : bool, optional
+            Whether to attach indicators as attributs to the graph. The default is False
+        time : float
+            Time to run the indicator methods at.
     
         Returns
         -------
@@ -1772,11 +1781,13 @@ class MultiFlowGraph(Graph):
         """
         g = nx.DiGraph()
         if include_glob:
-            add_g_nested(g, flow, flow.name, include_states=include_states, get_states=get_states)
+            add_g_nested(g, flow, flow.name, include_states=include_states, 
+                         get_states=get_states, get_indicators=get_indicators, time=time)
         else:
             for loc in flow.locals:
                 local_flow = getattr(flow, loc)
-                add_g_nested(g, local_flow, loc, include_states=include_states, get_states=get_states)
+                add_g_nested(g, local_flow, loc, include_states=include_states, 
+                             get_states=get_states, get_indicators=get_indicators, time=time)
         if type(send_connections) == dict:
             send_iter = send_connections.items();
             connections_as_tags = True
@@ -1808,14 +1819,15 @@ class MultiFlowGraph(Graph):
         else:
             self.set_degraded(self)
             self.set_node_styles(degraded={}, faulty={})
-        self.set_node_labels(title='id', subtext='faults')
+        self.set_node_labels(title='id', subtext='indicators')
 
     def draw_graphviz(self, layout="neato", overlap='false', **kwargs):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
 
 class CommsFlowGraph(MultiFlowGraph):
-    def __init__(self, flow, include_glob=False, ports_only=False, get_states=True):
+    def __init__(self, flow, include_glob=False, ports_only=False, 
+                 get_states=True, get_indicators=True, time=0.0):
         """
         Creates a graph representation of the CommsFlow (assuming no additional locals)
     
@@ -1827,7 +1839,10 @@ class CommsFlowGraph(MultiFlowGraph):
             Whether to only include the explicit port connections betwen flows. The default is False
         with_internal: bool, optional
             Whether to include the internal aspect of the commsflow in the commsflow.
-    
+        get_indicators : bool, optional
+            Whether to attach indicators as attributs to the graph. The default is False
+        time : float
+            Time to run the indicator methods at.
         Returns
         -------
         g : networkx.DiGraph
@@ -1863,14 +1878,16 @@ class CommsFlowGraph(MultiFlowGraph):
                         
         super().__init__(flow, include_glob=include_glob, 
                          send_connections=send_connections, 
-                         get_states=get_states)
+                         get_states=get_states,
+                         get_indicators=get_indicators,
+                         time=time)
 
 
 def node_is_tagged(connections_as_tags, tag, node):
     return (connections_as_tags and (tag in node or (tag == "base" and not("_" in node)))) or tag == node
 
 
-def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False):
+def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False, get_indicators=False, time=0.0):
     """
     Helper function for MultiFlow.create_multigraph. Iterates recursively
     through multigraph locals to construct the containment tree.
@@ -1886,13 +1903,15 @@ def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False
     include_states : bool, optional
         Whether to include state attributes in the plot. The default is False.
     get_states : bool, optional
-        Whether to attach states as attributes to the graph. The default is False
+        Whether to attach states as attributes to the graph. The default is False.
+    get_indicators : bool, optional
+        Whether to attach indicators as attributs to the graph. The default is False
+    time : float
+        Time to run the indicator methods at.
     """
-    if not get_states:
-        kwargs = {}
-    else:
-        kwargs = {"states": multiflow.return_states()}
+    kwargs = get_node_info(multiflow, get_states, get_indicators, time)
     g.add_node(base_name, label=multiflow.get_typename(), **kwargs)
+    
     if include_states:
         for state in multiflow.s.__fields__:
             if get_states:
@@ -1902,13 +1921,13 @@ def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False
     for loc in multiflow.locals:
         local_flow = getattr(multiflow, loc)
         local_name = base_name+"_"+loc
-        if get_states:
-            kwargs = {"states": local_flow.return_states()}
-        
+        kwargs = get_node_info(local_flow, get_states, get_indicators, time)
         g.add_node(local_name, label=local_flow.get_typename(), **kwargs)
         g.add_edge(base_name, local_name, label="contains")
         if local_flow.locals:
-            add_g_nested(g, local_flow, local_name)
+            add_g_nested(g, local_flow, local_name, 
+                         include_states=include_states, get_states=get_states, 
+                         get_indicators=get_indicators, time=time)
         if include_states:
             for state in local_flow.s.__fields__:
                 if get_states:
@@ -1916,6 +1935,33 @@ def add_g_nested(g, multiflow, base_name, include_states=False, get_states=False
                 g.add_node(local_name+"_"+state, label="State", **kwargs)
                 g.add_edge(local_name, local_name+"_"+state, label="contains")
 
+def get_node_info(flow, get_states, get_indicators, time):
+    """
+    Gets the state/indicator information for a given flow
+
+    Parameters
+    ----------
+    flow : Flow
+        Flow object to get node info from.
+    get_states : bool
+        Whether to get states for the flow
+    get_indicators : bool
+        Whether to get indicators for the flow
+    time : float
+        Time to execute the indicator functions at
+
+    Returns
+    -------
+    kwargs : kwargs
+        keyword arguments to add_node for the given flow.
+    """
+    kwargs = {}
+    if get_states:
+        kwargs.update({"states": flow.return_states()})
+    if get_indicators:
+        kwargs.update({"indicators": [f for f, ind in get_obj_indicators(flow).items() if ind(time)]})
+    return kwargs
+    
 # ASG
 
 

@@ -211,7 +211,22 @@ def eq_units(rateunit, timeunit):
     factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
     return factors[timeunit]/factors[rateunit]
 
+def get_obj_indicators(obj):
+    """
+    Gets the names of the indicators
 
+    Parameters
+    ----------
+    obj : Simulable or Flow
+        Object with indicators
+
+    Returns
+    -------
+    indicators : dict
+        dict of indicator names and their associated method handles.
+    """
+    indicators = {i[9:]: getattr(obj, i) for i in dir(obj) if i.startswith('indicate_')}
+    return indicators
 
 # def phases(times, names=[]):
 #     """ Creates named phases from a set of times defining the edges of the intervals """
