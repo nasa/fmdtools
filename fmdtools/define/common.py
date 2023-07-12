@@ -36,13 +36,18 @@ def get_var(obj, var):
     var_value: any
         value of the variable
     """
-    if type(var)==str: var=var.split(".")
+    if type(var)==str: 
+        var=var.split(".")
     if len(var)==1:
-        if type(obj)==dict: return obj[var[0]]
-        else:               return getattr(obj, var[0])
+        if type(obj)==dict:
+            return obj[var[0]]
+        else:
+            return getattr(obj, var[0])
     else:
-        if type(obj)==dict: return get_var(obj[var[0]], var[1:])
-        else:               return get_var(getattr(obj, var[0]), var[1:])
+        if type(obj)==dict:
+            return get_var(obj[var[0]], var[1:])
+        else:
+            return get_var(getattr(obj, var[0]), var[1:])
 def set_var(obj, var, val):
     """
     Sets variable of the object to a given value
