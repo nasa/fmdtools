@@ -216,6 +216,7 @@ def eq_units(rateunit, timeunit):
     factors = {'sec':1, 'min':60,'hr':360,'day':8640,'wk':604800,'month':2592000,'year':31556952}
     return factors[timeunit]/factors[rateunit]
 
+
 def get_obj_indicators(obj):
     """
     Gets the names of the indicators
@@ -232,6 +233,26 @@ def get_obj_indicators(obj):
     """
     indicators = {i[9:]: getattr(obj, i) for i in dir(obj) if i.startswith('indicate_')}
     return indicators
+
+
+def return_true_indicators(obj, time):
+    """
+    Gets list of indicators
+
+    Parameters
+    ----------
+    obj : flow/fxn/etc
+        Object with an indicator
+    time : float
+        Time to execute the indicator method at.
+
+    Returns
+    -------
+    list
+        List of inticators that return true at time
+
+    """
+    return [f for f, ind in get_obj_indicators(obj).items() if ind(time)]
 
 # def phases(times, names=[]):
 #     """ Creates named phases from a set of times defining the edges of the intervals """

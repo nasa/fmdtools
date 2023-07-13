@@ -197,7 +197,9 @@ Pandoc must be installed with anaconda (i.e., using `conda install pandoc`) sinc
 Style/Formatting
 --------------------------------
 
-Generally, we try to follow PEP8 style conventions. These can be followed automatically using the Black code formatter. See resources:
+Generally, we try to follow PEP8 style conventions. To catch these errors, it is best to *turn on PEP8 style linting* in your IDE of choice.
+
+Style conventions can additionally be followed/enforced automatically using the Black code formatter. See resources:
 
 - stand-alone formatter: https://github.com/psf/black
 - VSCode Extension: https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
