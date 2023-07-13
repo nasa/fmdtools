@@ -46,7 +46,7 @@ Private Methods:
     - :class:`Labels`: Defines a set of labels to be drawn using draw_networkx_labels.
     - :class:`GraphInteractor`: Used to set nodes in set_pos when creating interactive
     graph
-
+    - :func:`label_for_entry`: Gets the label from an nx.graph for a given entry.
     - :func:`get_style_kwargs`:  Gets the keywords for networkx plotting
     - :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete
     values for the given tags.
@@ -241,14 +241,65 @@ class EdgeLabelStyle(LabelStyle):
     rotate: bool = False
 
 
+def label_for_entry(g, iterator, entryname):
+    """
+    Creates the label dictionary for a given entry value of interest
+
+    Parameters
+    ----------
+    g : nx.graph
+        Networkx graph structure to create labels for
+    iterator : nx.graph.nodes/edges
+        Property to iterate over (e.g., nodes or edges)
+    entryname : str
+        Property to get from the graph attributes. Options are:
+
+        - 'id' : The name of the node/edge
+
+        - 'last' : The last part (after all "_" characters) of the name of the node/edge
+
+        - 'label' : The label property of the node/edge (usually indicates type)
+
+        - 'faults_and_indicators' : Fault and indicator properties from the node/edge
+
+        - <str> : Any other property corresponding to the key in the node/edge dict
+
+    Returns
+    ----------
+    entryvals : dict
+        Dictionary of values to show for the given entry
+    """
+    if entryname == "id":
+        entryvals = {n: n for n in iterator}
+    elif entryname == "last":
+        entryvals = {n: n.split("_")[-1] for n in iterator}
+    elif entryname == 'label':
+        entryvals = {n: '<'+v['label']+'>' for n, v in iterator.items()}
+    elif entryname == 'faults_and_indicators':
+        faults = nx.get_node_attributes(g, 'faults')
+        indicators = nx.get_node_attributes(g, 'indicators')
+        entryvals = {n: v + indicators[n] for n, v in faults.items()}
+    elif 'Edge' in iterator.__class__.__name__:
+        entryvals = nx.get_edge_attributes(g, entryname)
+    elif 'Node' in iterator.__class__.__name__:
+        entryvals = nx.get_node_attributes(g, entryname)
+    else:
+        entryvals = {}
+    return entryvals
+
+
 class Labels(dataobject, mapping=True):
     """
     Defines a set of labels to be drawn using draw_networkx_labels. Labels have
     three distinct parts:
-        - title (upper text for the node/edge)
-        - title2 (if provided, uppder text for the node/edge after a colon)
-        - subtext (lower text of the node/edge)
-    title and subtext may both be given different LabelStyles.
+
+    - title (upper text for the node/edge)
+
+    - title2 (if provided, uppder text for the node/edge after a colon)
+
+    - subtext (lower text of the node/edge)
+
+    Title and subtext may both be given different LabelStyles.
     """
 
     title: dict = {}
@@ -259,20 +310,25 @@ class Labels(dataobject, mapping=True):
     def from_iterator(g, iterator, LabStyle,
                       title='id', title2='', subtext='', **node_label_styles):
         """
-        Constructs the labels from an interator (nodes or edges)
+        Constructs the labels from an interator (nodes or edges).
 
         Parameters
         ----------
         g : nx.graph
+            Networkx graph structure to create labels for
         iterator : nx.graph.nodes/edges
+            Property to iterate over (e.g., nodes or edges)
         LabStyle : class
             Class to use for label styles (e.g. LabelStyle or EdgeStyle)
         title : str, optional
-            property to get for title text. The default is 'id'.
+            entry for title text. (See :func:`label_for_entry` for options).
+            The default is 'id'.
         title2 : str, optional
-            property to get for title text after the colon. The default is ''.
+            entry for title text after the colon. (See :func:`label_for_entry` for
+            options). The default is ''.
         subtext : str, optional
-            property to get for the subtext. The default is ''.
+            entry for the subtext. (See :func:`label_for_entry` for options).
+            The default is ''.
         **node_label_styles : dict
             LabStyle arguments to overwrite.
 
@@ -281,23 +337,10 @@ class Labels(dataobject, mapping=True):
         labs : Labels
             Labels corresponding to the given inputs
         """
-        is_edge = 'Edge' in iterator.__class__.__name__
-        is_node = 'Node' in iterator.__class__.__name__
         labs = Labels()
         for entry in ['title', 'title2', 'subtext']:
             entryval = vars()[entry]
-            if entryval == "id":
-                evals = {n: n for n in iterator}
-            elif entryval == "last":
-                evals = {n: n.split("_")[-1] for n in iterator}
-            elif entryval == 'label':
-                evals = {n: '<'+v['label']+'>' for n, v in iterator.items()}
-            elif is_edge:
-                evals = nx.get_edge_attributes(g, entryval)
-            elif is_node:
-                evals = nx.get_node_attributes(g, entryval)
-            else:
-                evals = {}
+            evals = label_for_entry(g, iterator, entryval)
 
             if evals:
                 if entry == 'title':
@@ -317,7 +360,7 @@ class Labels(dataobject, mapping=True):
                     verticalalignment = 'top'
             else:
                 verticalalignment = 'center'
-            if entry == 'title' and is_node:
+            if entry == 'title' and 'Node' in iterator.__class__.__name__:
                 font_weight = 'bold'
             else:
                 font_weight = 'normal'
@@ -583,7 +626,7 @@ class Graph(object):
             other = self
         self.set_degraded(other)
         self.set_node_styles(degraded={}, faulty={})
-        self.set_node_labels(title='id', subtext='faults')
+        self.set_node_labels(title='id', subtext='faults_and_indicators')
 
     def set_degraded(self, other):
         """
