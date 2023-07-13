@@ -714,28 +714,38 @@ class Graph(object):
             fig = plt.figure(figsize=figsize)
         if not ax:
             ax = plt.gca()
-        for to_set in ['pos', 'edge_styles', 'edge_labels', 'node_styles', 'node_labels']:
+        for to_set in ['pos', 'edge_styles', 'edge_labels',
+                       'node_styles', 'node_labels']:
             if to_set in kwargs or not hasattr(self, to_set):
                 set_func = getattr(self, 'set_'+to_set)
                 set_func(**kwargs.get(to_set, {}))
-        
+
         for label, edges in self.edge_groups.items():
             legend_label = to_legend_label(label, self.edge_style_labels)
-            nx.draw_networkx_edges(self.g, self.pos, edges, **self.edge_styles[label].kwargs(), label=legend_label, ax=ax)
-        
+            nx.draw_networkx_edges(self.g, self.pos, edges,
+                                   **self.edge_styles[label].kwargs(),
+                                   label=legend_label, ax=ax)
+
         for level in self.edge_labels.iter_groups():
-            nx.draw_networkx_edge_labels(self.g, self.pos, self.edge_labels[level], **self.edge_labels[level+'_style'].kwargs(), ax=ax)
-        
+            nx.draw_networkx_edge_labels(self.g, self.pos, self.edge_labels[level],
+                                         **self.edge_labels[level+'_style'].kwargs(),
+                                         ax=ax)
+
         for label, nodes in self.node_groups.items():
             legend_label = to_legend_label(label, self.node_style_labels)
-            nx.draw_networkx_nodes(self.g, self.pos, nodes, **self.node_styles[label].kwargs(), label=legend_label, ax=ax)
-        
+            nx.draw_networkx_nodes(self.g, self.pos, nodes,
+                                   **self.node_styles[label].kwargs(),
+                                   label=legend_label, ax=ax)
+
         for level in self.node_labels.iter_groups():
-            nx.draw_networkx_labels(self.g, self.pos, self.node_labels[level], **self.node_labels[level+'_style'].kwargs(), ax=ax)
-        
+            nx.draw_networkx_labels(self.g, self.pos, self.node_labels[level],
+                                    **self.node_labels[level+'_style'].kwargs(), ax=ax)
+
         if withlegend:
-            legend = plt.legend(labelspacing=legend_labelspacing, borderpad=legend_borderpad, 
-                                bbox_to_anchor=legend_bbox, loc=legend_loc)
+            legend = plt.legend(labelspacing=legend_labelspacing,
+                                borderpad=legend_borderpad,
+                                bbox_to_anchor=legend_bbox,
+                                loc=legend_loc)
         plt.axis('off')
 
         if title:
@@ -835,16 +845,17 @@ class Graph(object):
             t_inds = [i for i in range(len(history.faulty.time))]
         else:
             t_inds = times
-         
+
         fig = plt.figure(figsize=figsize)
-        
-        ani = matplotlib.animation.FuncAnimation(fig, partial(self.draw_from, history=history, fig=fig, withlegend=False, **kwargs), frames=t_inds)
+        partial_draw = partial(self.draw_from, history=history,
+                               fig=fig, withlegend=False, **kwargs)
+        ani = matplotlib.animation.FuncAnimation(fig, partial_draw, frames=t_inds)
         return ani
 
     def draw_graphviz(self, filename='', filetype='png', **kwargs):
         """
         Draws the graph using pygraphviz for publication-quality figures.
-        
+
         Note that the style may not match one-to-one with the defined none/edge styles.
 
         Parameters
@@ -854,7 +865,7 @@ class Graph(object):
         filetype : str, optional
             Type of file to safe. The default is 'png'.
         **kwargs : kwargs
-            kwargs to 
+            kwargs to draw
 
         Returns
         -------
@@ -870,31 +881,31 @@ class Graph(object):
             for node in nodes:
                 label = ""
                 if node in self.node_labels.title:
-                    label+=self.node_labels.title[node]
+                    label += self.node_labels.title[node]
                 if node in self.node_labels.subtext:
-                    label+='\n'+str(self.node_labels.subtext[node])
-                
+                    label += '\n'+str(self.node_labels.subtext[node])
+
                 dot.node(node, style="filled", label=label, **gv_kwargs)
-            
+
         for group, edges in self.edge_groups.items():
             gv_kwargs = self.edge_styles[group].as_gv_kwargs()
             for edge in edges:
                 label = ""
                 if edge in self.edge_labels.title:
-                    label+=self.edge_labels.title[edge]
+                    label += self.edge_labels.title[edge]
                 if edge in self.edge_labels.subtext:
-                    label+='\n'+self.edge_labels.subtext[edge]
-                
+                    label += '\n'+self.edge_labels.subtext[edge]
+
                 dot.edge(edge[0], edge[1], label=label, **gv_kwargs)
-        
+
         if filename:
             dot.render(filename=filename, format=filetype)
         else:
             display(SVG(dot._repr_image_svg_xml()))
-        
         return dot
 
-    def draw_pyvis(self, filename="graph", width=1000, filt=True, physics=False, notebook=False):
+    def draw_pyvis(self, filename="graph", width=1000, filt=True, physics=False,
+                   notebook=False):
         """
         Method for plotting graphs with pyvis. Produces interactive HTML!
 
@@ -918,18 +929,19 @@ class Graph(object):
         from pyvis.network import Network
         width = str(width)+"px"
 
-        if isinstance(self, ModelTypeGraph): 
-            n = Network(directed=True, layout='hierarchical', width=width, notebook=notebook)
+        if isinstance(self, ModelTypeGraph):
+            n = Network(directed=True, layout='hierarchical', width=width,
+                        notebook=notebook)
         else:
             n = Network(width=width, notebook=notebook)
         g = self.g.copy()
         nx.set_node_attributes(g, {g: g for g in g.nodes}, name='label')
-        
+
         for nd in g.nodes():  # fixes JSON serializability needed for pyvis
             for attr in g.nodes[nd]:
                 if type(g.nodes[nd][attr]) in (set, dict):
                     g.nodes[nd][attr] = str(g.nodes[nd][attr])
-        
+
         n.from_nx(g)
         n.toggle_physics(physics)
         if filt:
@@ -951,7 +963,7 @@ class Graph(object):
     def calc_modularity(self):
         """
         Computes network modularity of the graph.
-            
+
         Returns
         -------
         modularity : Modularity
@@ -963,8 +975,8 @@ class Graph(object):
 
     def find_bridging_nodes(self):
         """
-        Determines bridging nodes in a graph representation of model mdl. 
-        
+        Determines bridging nodes in a graph representation of model mdl.
+
         Returns
         -------
         bridgingNodes : list of bridging nodes
@@ -991,9 +1003,10 @@ class Graph(object):
                 else:
                     bridgingNodes.append(nodes[i])
         bridgingNodes = sorted(list(set(bridgingNodes)))
-        return bridgingNodes 
+        return bridgingNodes
 
-    def plot_bridging_nodes(self, title='bridging nodes', node_kwargs={'node_color': 'red'}, **kwargs):
+    def plot_bridging_nodes(self, title='bridging nodes',
+                            node_kwargs={'node_color': 'red'}, **kwargs):
         """
         Plots bridging nodes using self.draw()
 
