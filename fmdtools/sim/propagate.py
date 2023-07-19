@@ -350,7 +350,8 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
     run_kwarg = pack_run_kwargs(**kwargs)
     
     if not scen: 
-        if not seq: seq = Sequence(faultseq=faultseq, disturbances=disturbances)
+        if not seq:
+            seq = Sequence(faultseq=faultseq, disturbances=disturbances)
         scen = Scenario(sequence=seq, rate=rate, name='faulty', times=tuple([*seq.keys()]))
     
     nomresult , nomhist, nomscen, mdls, t_end_nom = nom_helper(mdl, [min(scen.sequence)], **{**sim_kwarg, 'use_end_condition':False}, **run_kwarg)
@@ -877,9 +878,9 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
                
            if type(desired_result)==dict: 
                if "all" in desired_result: 
-                   result[t] = get_result(scen, mdl ,desired_result['all'], mdlhist, nomhist, nomresult)
+                   result[t] = get_result(scen, mdl ,desired_result['all'], mdlhist, nomhist, nomresult, time=t)
                if t in desired_result:
-                   result[t] = get_result(scen, mdl, desired_result[t], mdlhist, nomhist, nomresult.get(t))
+                   result[t] = get_result(scen, mdl, desired_result[t], mdlhist, nomhist, nomresult.get(t), time=t)
                    #desired_result.pop(t)
            if check_end_condition(mdl, use_end_condition, t): break
        except:
@@ -889,15 +890,15 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
     if cut_hist:
         mdlhist.cut(t_ind + shift)
     if type(desired_result) == dict and 'end' in desired_result: 
-        result['end'] = get_result(scen,mdl,desired_result['end'], mdlhist, nomhist, nomresult)
+        result['end'] = get_result(scen, mdl, desired_result['end'], mdlhist, nomhist, nomresult, time=t)
     else:                       
-        result.update(get_result(scen, mdl, desired_result, mdlhist, nomhist, nomresult))
+        result.update(get_result(scen, mdl, desired_result, mdlhist, nomhist, nomresult, time=t))
     #if len(result)==1: result = [*result.values()][0]
     if None in c_mdl.values():
         raise Exception("Approach times" + str(ctimes) + " go beyond simulation time " + str(t))
     return  result, mdlhist, c_mdl, t_ind + shift
 
-def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
+def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}, time=0.0):
     desired_result = copy.deepcopy(desired_result)
     if type(desired_result) == str:
         desired_result = {desired_result: None}
@@ -935,15 +936,15 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
 
         if '.' in g:
             strs = g.split(".")
-            obj = get_var(mdl,strs[1:])
-        else: 
-            obj = mdl
-        
-        if Gclass: 
-            rgraph = Gclass(obj, **kwargs)
+            obj = get_var(mdl, strs[1:])
         else:
-            rgraph = graph_factory(obj, **kwargs)
-    
+            obj = mdl
+
+        if Gclass:
+            rgraph = Gclass(obj, time=time, **kwargs)
+        else:
+            rgraph = graph_factory(obj, time=time, **kwargs)
+
         if nomresult and g in nomresult:
             rgraph.set_resgraph(nomresult[g])
         elif nomresult:
@@ -951,16 +952,16 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}):
         else:
             rgraph.set_resgraph()
         result[g] = rgraph
-        
+
     if desired_result:
         if 'vars' in desired_result:
-            result['vars']={}
+            result['vars'] = {}
             get_endclass_vars(mdl, desired_result['vars'], result['vars'])
-        else:                           
+        else:                    
             get_endclass_vars(mdl, desired_result, result)
     return result
 
-    
+
 def get_endclass_vars(mdl, desired_result, result):
     """
     Gets variables in the model corresponding to the provided desired_result dictionary
@@ -979,11 +980,7 @@ def get_endclass_vars(mdl, desired_result, result):
         vars_to_get = [desired_result]
     else:
         vars_to_get = [d for d in desired_result
-                       if type(d) not in [int,float]]
+                       if type(d) not in [int, float]]
     var_result = mdl.get_vars(*vars_to_get, trunc_tuple=False)
     for i, var in enumerate(vars_to_get):
-        result[var] = var_result[i]   
-
-
-
-    
+        result[var] = var_result[i]
