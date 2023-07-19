@@ -1891,8 +1891,9 @@ class ModelTypeGraph(ModelGraph):
         rg = self.g.copy()
         for node in g.nodes:
             if g.nodes[node]['level'] == 2:
-                faulty = any({fxn for fxn, m in g.nodes[node]['faults'].items()
-                              if m not in [['nom'], []]})
+                n_faults = {fxn for fxn, m in g.nodes[node]['faults'].items()
+                            if m not in [['nom'], []]}
+                faulty = any(n_faults)
                 rg.nodes[node]['faulty'] = faulty
             if g.nodes[node]['level'] >= 2:
                 degraded = g.nodes[node]['states'] != nomg.nodes[node]['states']
@@ -2051,8 +2052,27 @@ class CommsFlowGraph(MultiFlowGraph):
 
 
 def node_is_tagged(connections_as_tags, tag, node):
+    """
+    Returns if a node is tagged, and thus if a connection should be made. If
+    connections_as_tags, cheks if either the tag is in the node string, or, if the
+    tag is "base", connects with all base nodes (without an underscore)
+
+    Parameters
+    ----------
+    connections_as_tags : bool
+        Whether to treat connections as tags. If False, tagged is only True if the
+        node is the tag
+    tag : str
+        tag to query/check if it is in the node string.
+    node : str
+        Name of the node.
+
+    Returns
+    -------
+    tagged : bool
+    """
     return ((connections_as_tags and
-             (tag in node or (tag == "base" and not("_" in node)))) or
+             (tag in node or (tag == "base" and not ("_" in node)))) or
             tag == node)
 
 
