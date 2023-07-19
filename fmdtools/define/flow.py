@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Description: A module to define flows used to conect functions in a model. Contains:
-    
+
 - :class:`Flow`:        Superclass for flows to be instantiated in a model.
 - :class:`MultiFlow`:   Class for flows which enable multiple copies to be instantiated within itself (e.g., for perception)
 - :class:`CommsFlow`:   Class for flows which enable communications (e.g., sending/recieving messages) between functions
@@ -306,10 +306,10 @@ class CommsFlow(MultiFlow):
                                 "in":       kwargs.get("prev_in", {}),
                                 "received": kwargs.get("received", {})}
         return self.fxns[name]["internal"]
-        
+
     def send(self, fxn_to, fxn_from="local", *states):
         """
-        Sends a function's (fxn_from) view for the CommsFlow to another function fxn_to 
+        Sends a function's (fxn_from) view for the CommsFlow to another function fxn_to
         by updating the function's out property and fxn_to's inbox list. Note that the
         other function must call recieve on the other end for the message to be fully
         received (update its internal view).
@@ -325,24 +325,24 @@ class CommsFlow(MultiFlow):
         """
         fxn_from = self.get_local_name(fxn_from)
         f_from = self.get_view(fxn_from)
-        
-        if fxn_to=="all": 
-            fxns_to = [f for f in self.glob.fxns if f!=self.name]
-        elif fxn_to=="ports":
+
+        if fxn_to == "all":
+            fxns_to = [f for f in self.glob.fxns if f != self.name]
+        elif fxn_to == "ports":
             fxns_to = [f for f in f_from.locals]
-        elif type(fxn_to)==str: 
+        elif type(fxn_to) == str:
             fxns_to = [self.get_local_name(fxn_to)]
-        else: 
+        else:
             fxns_to = fxn_to
-        
+
         for f_to in fxns_to:
             port_internal = self.get_port(fxn_from, f_to, "internal")
             port_out = self.get_port(fxn_from, f_to, "out")
             port_out.s.assign(port_internal.s, *states, as_copy=True)
-            
+
             if fxn_from not in self.glob.fxns[f_to]["received"]:
-                newstates = tuple(set([*self.glob.fxns[f_to]["in"].get(fxn_from,()), *states]))
-                self.glob.fxns[f_to]["in"][fxn_from]=newstates
+                newstates = [*self.glob.fxns[f_to]["in"].get(fxn_from, ()), *states]
+                self.glob.fxns[f_to]["in"][fxn_from] = tuple(set(newstates))
     def inbox(self, fxnname="local"):
         """ Provides a list of messages which have not been received by the function yet"""
         fxnname = self.get_local_name(fxnname)
@@ -360,7 +360,7 @@ class CommsFlow(MultiFlow):
         fxnname = self.get_local_name(fxnname)
         return self.glob.fxns[fxnname]["out"]
     def get_port(self, fxnname, portname, box="internal"):
-        """Gets a port with name portname (if it exists), otherwise the default port is riven. 
+        """Gets a port with name portname (if it exists), otherwise the default port is given. 
         The argument is 'internal' or 'out' for the internal state or outbox, respectively"""
         port = self.glob.fxns[fxnname][box]
         if portname in port.locals:
