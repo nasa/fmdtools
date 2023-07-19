@@ -936,15 +936,15 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}, 
 
         if '.' in g:
             strs = g.split(".")
-            obj = get_var(mdl,strs[1:])
-        else: 
+            obj = get_var(mdl, strs[1:])
+        else:
             obj = mdl
-        
-        if Gclass: 
+
+        if Gclass:
             rgraph = Gclass(obj, time=time, **kwargs)
         else:
             rgraph = graph_factory(obj, time=time, **kwargs)
-    
+
         if nomresult and g in nomresult:
             rgraph.set_resgraph(nomresult[g])
         elif nomresult:
@@ -952,16 +952,16 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={}, 
         else:
             rgraph.set_resgraph()
         result[g] = rgraph
-        
+
     if desired_result:
         if 'vars' in desired_result:
-            result['vars']={}
+            result['vars'] = {}
             get_endclass_vars(mdl, desired_result['vars'], result['vars'])
-        else:                           
+        else:                    
             get_endclass_vars(mdl, desired_result, result)
     return result
 
-    
+
 def get_endclass_vars(mdl, desired_result, result):
     """
     Gets variables in the model corresponding to the provided desired_result dictionary
@@ -980,11 +980,7 @@ def get_endclass_vars(mdl, desired_result, result):
         vars_to_get = [desired_result]
     else:
         vars_to_get = [d for d in desired_result
-                       if type(d) not in [int,float]]
+                       if type(d) not in [int, float]]
     var_result = mdl.get_vars(*vars_to_get, trunc_tuple=False)
     for i, var in enumerate(vars_to_get):
-        result[var] = var_result[i]   
-
-
-
-    
+        result[var] = var_result[i]

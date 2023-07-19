@@ -287,3 +287,23 @@ def get_obj_indicators(obj):
     """
     indicators = {i[9:]: getattr(obj, i) for i in dir(obj) if i.startswith('indicate_')}
     return indicators
+
+
+def return_true_indicators(obj, time):
+    """
+    Gets list of indicators
+
+    Parameters
+    ----------
+    obj : flow/fxn/etc
+        Object with an indicator
+    time : float
+        Time to execute the indicator method at.
+
+    Returns
+    -------
+    list
+        List of inticators that return true at time
+
+    """
+    return [f for f, ind in get_obj_indicators(obj).items() if ind(time)]
