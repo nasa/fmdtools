@@ -78,7 +78,6 @@ import copy
 import matplotlib.animation
 import matplotlib.pyplot as plt
 from numpy.random import random
-from matplotlib.patches import Patch
 from matplotlib.widgets import Button
 from matplotlib import get_backend
 from matplotlib.colors import Colormap
@@ -1196,7 +1195,8 @@ class Graph(object):
         num_fail_all_trials = []
         num_fix_all_trials = []
         for trials in range(0, num_trials):
-            num_susc_trial, num_fail_trial, num_fix_trial = sff_one_trial(start_node_selected, g, endtime=endtime, pi=pi, pr=pr)
+            s_f_f = sff_one_trial(start_node_selected, g, endtime=endtime, pi=pi, pr=pr)
+            num_susc_trial, num_fail_trial, num_fix_trial = s_f_f
             num_susc_all_trials.append(num_susc_trial)
             num_fail_all_trials.append(num_fail_trial)
             num_fix_all_trials.append(num_fix_trial)
@@ -1371,7 +1371,8 @@ class GraphInteractor:
             kwargs for Graph.draw
         """
         self.t = 0
-        self.fig, (self.bax, self.ax) = plt.subplots(2, gridspec_kw={'height_ratios': [1, 10]})
+        gridspec_kw = {'height_ratios': [1, 10]}
+        self.fig, (self.bax, self.ax) = plt.subplots(2, gridspec_kw=gridspec_kw)
         self.kwargs = kwargs
         self.g_obj = g_obj
         self.g_obj.set_pos()
@@ -1780,9 +1781,11 @@ class ModelCompGraph(ModelGraph):
         nx.set_node_attributes(self.g, comptypes, 'iscomponent')
         nx.set_node_attributes(self.g, indicators, 'indicators')
 
+
 class ModelFxnGraph(ModelGraph):
     """ Returns a graph representation of the functions of the model, where
     functions are nodes and flows are edges"""
+
     def nx_from_obj(self, mdl):
         g = nx.projected_graph(mdl.graph, mdl.fxns)
         labels = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
@@ -1866,22 +1869,25 @@ class ModelTypeGraph(ModelGraph):
         graph = self.g
         flowstates = {}
         indicators = {}
-        # TODO : are these states for all the objects or just the one lucky one?
         for flowtype in mdl.flowtypes():
-            flowstates[flowtype] = {flow: asdict(mdl.flows[flow].s)
-                                    for flow in mdl.flows_of_type(flowtype)}
-            indicators[flowtype] = {flow: return_true_indicators(flow, self.time)
-                                    for flow in mdl.flows_of_type(flowtype)}
+            flowstates[flowtype] = {}
+            indicators[flowtype] = {}
+            for flow in mdl.flows_of_type(flowtype):
+                flowstates[flowtype][flow] = asdict(mdl.flows[flow].s)
+                indicators[flowtype][flow] = return_true_indicators(flow, self.time)
         nx.set_node_attributes(graph, flowstates, 'states')
 
-        fxnstates, fxnfaults = {}, {}
+        fxnstates = {}
+        fxnfaults = {}
         for fxnclass in mdl.fxnclasses():
-            fxnstates[fxnclass] = {fxn: asdict(mdl.fxns[fxn].s)
-                                   for fxn in mdl.fxns_of_class(fxnclass)}
-            fxnfaults[fxnclass] = {fxn: copy.copy(mdl.fxns[fxn].m.faults)
-                                   for fxn in mdl.fxns_of_class(fxnclass)}
-            indicators[fxnclass] = {fxn: return_true_indicators(fxn, self.time)
-                                    for fxn in mdl.fxns_of_class(fxnclass)}
+            fxnstates[fxnclass] = {}
+            fxnfaults[fxnclass] = {}
+            indicators[fxnclass] = {}
+            for fxn in mdl.fxns_of_class(fxnclass):
+                fxnstates[fxnclass][fxn] = asdict(mdl.fxns[fxn].s)
+                fxnfaults[fxnclass][fxn] = copy.copy(mdl.fxns[fxn].m.faults)
+                indicators[fxnclass][fxn] = return_true_indicators(fxn, self.time)
+
         nx.set_node_attributes(graph, fxnstates, 'states')
         nx.set_node_attributes(graph, fxnfaults, 'faults')
         nx.set_node_attributes(graph, indicators, 'indicators')
@@ -1967,7 +1973,7 @@ class MultiFlowGraph(Graph):
                 if node_is_tagged(connections_as_tags, in_tag, in_node):
                     for out_node in g.nodes:
                         if ((node_is_tagged(connections_as_tags, out_tag, out_node)
-                             and not((in_node, out_node) in g.edges)) and in_node != out_node):
+                             and not ((in_node, out_node) in g.edges)) and in_node != out_node):
                             g.add_edge(in_node, out_node, label="sends")
         self.g = g
 
@@ -2264,7 +2270,9 @@ class ASGGraph(Graph):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
     def draw_from(self, time, history=History(), **kwargs):
-        activities = history._prep_faulty().get_values("a.active_actions").get_slice(time) #TODO: make this so that it works with multiple ASGs
+        # TODO: make this so that it works with multiple ASGs
+        fault_act_hist = history._prep_faulty().get_values("a.active_actions")
+        activities = fault_act_hist.get_slice(time)
         activity = {i for v in activities.values() for i in v}
         for n in self.g.nodes():
             if n in activity:
