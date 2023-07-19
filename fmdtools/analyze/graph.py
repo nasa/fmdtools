@@ -1745,13 +1745,9 @@ class ModelTypeGraph(ModelGraph):
 
 # FLOW/MULTIFLOW/COMMSFLOW
 class MultiFlowGraph(Graph):
-    def __init__(self, flow, include_glob=False,
-                               send_connections={"closest": "base"},
-                               connections_as_tags=True,
-                               include_states=False,
-                               get_states=True,
-                               get_indicators=True,
-                               time=0.0):
+    def __init__(self, flow, include_glob=False, send_connections={"closest": "base"},
+                 connections_as_tags=True, include_states=False, get_states=True,
+                 get_indicators=True, time=0.0):
         """
         Creates a networkx graph corresponding to the MultiFlow.
     

@@ -229,10 +229,11 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
                             phasetext = phase
                         bbox_props = dict(boxstyle="round,pad=0.3", fc="white", lw=0, alpha=0.5)
                         ax.text(np.average(phases[plot_value[1]][phase]), (ymin+ymax)/2, phasetext, ha='center', bbox=bbox_props)
-        if type(time_slice)==int: 
+        if type(time_slice) == int:
             ax.axvline(x=time_slice, color='k', label=time_slice_label)
-        else:   
-            for ts in time_slice: ax.axvline(x=ts, color='k', label=time_slice_label)
+        else:
+            for ts in time_slice:
+                ax.axvline(x=ts, color='k', label=time_slice_label)
     multiplot_legend_title(grouphists, axs, ax, legend_loc, title, v_padding, h_padding, title_padding, legend_title)
     return fig, axs
 def plot_line_and_err(ax, times, line, lows, highs, boundtype, boundcolor='gray', boundlinestyle='--', fillalpha=0.3, **kwargs):
