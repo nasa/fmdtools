@@ -230,13 +230,13 @@ Model Development Best Practices
 Plan your model to avoid technical debt
 --------------------------------
 
-Simple, small models are relatively easy to define in fmdtools with a few functions, flows, and behaviors. As such, it can be easy to get in the habit of not planning or organizing development in a systematic, which leads to issues when developing larger models: specifically, code that is *written into existence* instead of designed, planned, edited, tested, and documented. This leads to `Technical debt <https://en.wikipedia.org/wiki/Technical_debt/>`_, which is the inherent difficulty of modifying code that was written ad-hoc rather than designed. Unless this technical debt is resolved, the ability to modify a model (e.g., to add new behaviors, conduct analyses, etc) will be limited by the complicated and unwieldy existing code. 
+Simple, small models are relatively easy to define in fmdtools with a few functions, flows, and behaviors. As such, it can be easy to get in the habit of not planning or organizing development in a systematic, which leads to issues when developing larger models: specifically, code that is *written into existence* instead of designed, planned, edited, tested, and documented. This leads to `Technical debt <https://en.wikipedia.org/wiki/Technical_debt>`_, which is the inherent difficulty of modifying code that was written ad-hoc rather than designed. Unless this technical debt is resolved, the ability to modify a model (e.g., to add new behaviors, conduct analyses, etc) will be limited by the complicated and unwieldy existing code. 
 
 The next subsections give some advice to help avoid technical debt, based on lessons learned developing fmdtools models over the past few years.
 
 Don't copy, inherit and functionalize
 --------------------------------
-Copy-and-paste can be a useful concept, but often gets over-relied upon by novice model developers who want to create several variants of the same programming structure. However, in the world of systems engineering (and software development), there are many cases where developers should be using `class inheritance <https://www.w3schools.com/python/python_inheritance.asp/>`_ and `writing functions <https://swcarpentry.github.io/python-novice-gapminder/16-writing-functions/index.html/>`_ instead. 
+Copy-and-paste can be a useful concept, but often gets over-relied upon by novice model developers who want to create several variants of the same programming structure. However, in the world of systems engineering (and software development), there are many cases where developers should be using `class inheritance <https://www.w3schools.com/python/python_inheritance.asp>`_ and `writing functions <https://ucsbcarpentry.github.io/2019-10-10-Python-UCSB/14-writing-functions/>`_ instead. 
 
 The advantages of inheritance are: 
 
@@ -256,7 +256,7 @@ This is an incomplete list. In general, it can be a helpful limitation to *try t
 Document your code, sometimes *before* your write it
 --------------------------------
 
-In general, Python coding style aspires to be `as self-documenting <https://en.wikipedia.org/wiki/Self-documenting_code/>`_ as possible. However, this is not a replacement for documentation. In general, novice developers think of documentation as something which happens at the end of the software development process, as something to primarily assist users. 
+In general, Python coding style aspires to be `as self-documenting <https://en.wikipedia.org/wiki/Self-documenting_code>`_ as possible. However, this is not a replacement for documentation. In general, novice developers think of documentation as something which happens at the end of the software development process, as something to primarily assist users. 
 
 This neglects the major benefits of documentation in the development process. Specifically:
 
@@ -408,7 +408,7 @@ See also
 --------------------------------
 
 * `PEP 8 Style Guide <https://peps.python.org/pep-0008/#introduction>`_
-* `Technical debt <https://en.wikipedia.org/wiki/Technical_debt/>`_
+* `Technical debt <https://en.wikipedia.org/wiki/Technical_debt>`_
 * `Code smell <https://en.wikipedia.org/wiki/Code_smell>`_
 * `Anti-patterns <https://en.wikipedia.org/wiki/Anti-pattern>`_
 * `Iterative development <https://en.wikipedia.org/wiki/Iterative_and_incremental_development>`_
