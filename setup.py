@@ -3,7 +3,17 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-required = ["scipy","tqdm","networkx","numpy","matplotlib","pandas","ordered-set","dill","recordclass", "pytest"]
+required = ["scipy",
+            "tqdm",
+            "networkx",
+            "numpy",
+            "matplotlib",
+            "pandas",
+            "ordered-set",
+            "dill",
+            "recordclass",
+            "pytest",
+            "pygraphviz"]
 
 setuptools.setup(
     name="fmdtools",

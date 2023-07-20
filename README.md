@@ -29,7 +29,7 @@ A version of the fmdtools toolkit can also be installed directly from the [PyPI 
 
 ### Prerequisites
 
-fmdtools requires Python 3 and depends directly on these packages (see requirements.txt):
+fmdtools requires Python 3 (anaconda recommended) and depends directly on these packages (see requirements.txt):
 
 ```
    scipy
@@ -42,21 +42,29 @@ fmdtools requires Python 3 and depends directly on these packages (see requireme
    dill 
    recordclass >=0.14.4
    pytest
+   pygraphviz
 ```
 
-These packages are optional but recommended to enable specific fmdtools use-cases and to work with examples in the repository:
+These external (non-python) packages are recommended to enable specific fmdtools use-cases and to test/develop fmdtools as well as work with examples in the repository:
 
 ```
-   jupyter notebook			#(for repository notebooks)
-   graphviz					#(to plot using graphviz options)
-   pyvis					#(for interactive html views of model graphs)
-   ffmpeg 					#(for animations)
-   shapely					#(for multirotor model)
-   deap						#(for optimization of rover faults)
-   pycallgraph2				#(for model profiling)
+   jupyter notebook			# (for repository notebooks)
+   graphviz					# (to plot using graphviz options)
+   pyvis					   # (for interactive html views of model graphs)
+   ffmpeg 					# (for animations)
 ```
 
-These must be installed (e.g. using ``pip install packagename`` or ``conda install packagename``) them before running any of the codes in the repository. 
+These must be installed within the system environment (e.g. using ``conda install packagename``) them to enable the specific features/uses in the repository. 
+
+Additionally, the following python packages are not included but are necessary for development/testing of the code:
+```
+   shapely					# (for multirotor model)
+   deap						# (for optimization of rover faults)
+   pycallgraph2				# (for model profiling)
+   nbmake                # (for notebook tests)
+   pytest-html           # (for test report generation)
+```
+They can be installed using ``pip install packagename``.
 
 
 ## Contributions
